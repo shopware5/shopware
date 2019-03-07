@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dc26d399af53e75bf7f5ad12a4ec18e4",
+    "content-hash": "6dca02f9b419ec311efd1d03ec8eb752",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -1622,13 +1622,13 @@
             "version": "v3.5.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/google/protobuf.git",
-                "reference": "b5fbb742af122b565925987e65c08957739976a7"
+                "url": "https://github.com/protocolbuffers/protobuf-php.git",
+                "reference": "801d776b4e4c9fce294d800974266c616bb2ce40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/protobuf/zipball/b5fbb742af122b565925987e65c08957739976a7",
-                "reference": "b5fbb742af122b565925987e65c08957739976a7",
+                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/801d776b4e4c9fce294d800974266c616bb2ce40",
+                "reference": "801d776b4e4c9fce294d800974266c616bb2ce40",
                 "shasum": ""
             },
             "require": {
@@ -6331,6 +6331,64 @@
                 "webtest"
             ],
             "time": "2017-06-30T04:02:48+00:00"
+        },
+        {
+            "name": "kubawerlos/php-cs-fixer-custom-fixers",
+            "version": "v1.13.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers.git",
+                "reference": "f58eb632e6be3dea937c514e8c5d0cdd63caf2fe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kubawerlos/php-cs-fixer-custom-fixers/zipball/f58eb632e6be3dea937c514e8c5d0cdd63caf2fe",
+                "reference": "f58eb632e6be3dea937c514e8c5d0cdd63caf2fe",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-tokenizer": "*",
+                "friendsofphp/php-cs-fixer": "^2.14",
+                "php": "^7.1"
+            },
+            "require-dev": {
+                "johnkary/phpunit-speedtrap": "^3.0",
+                "kubawerlos/composer-json-fixer": "^2.1",
+                "kubawerlos/types-checker": "^1.1",
+                "phpstan/phpstan": "^0.10.5",
+                "phpstan/phpstan-strict-rules": "^0.10.1",
+                "phpunit/phpunit": "^7.4",
+                "sebastian/diff": "^3.0",
+                "squizlabs/php_codesniffer": "^3.3",
+                "symfony/console": "^4.1",
+                "symfony/finder": "^4.1",
+                "symfony/phpunit-bridge": "^4.2",
+                "symfony/yaml": "^4.1",
+                "vimeo/psalm": "^2.0.11"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PhpCsFixerCustomFixers\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kuba Werłos",
+                    "email": "werlos@gmail.com"
+                }
+            ],
+            "description": "A set of custom fixers for PHP CS Fixer",
+            "keywords": [
+                "fixer",
+                "php-cs-fixer"
+            ],
+            "time": "2019-01-11T16:42:58+00:00"
         },
         {
             "name": "phar-io/manifest",

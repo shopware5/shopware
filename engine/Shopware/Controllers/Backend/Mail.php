@@ -27,9 +27,6 @@ use Shopware\Models\Mail\Attachment;
 use Shopware\Models\Mail\Mail;
 use Shopware\Models\Shop\Shop;
 
-/**
- * Backend Controller for the mail backend module
- */
 class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_ExtJs
 {
     /**

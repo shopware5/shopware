@@ -24,11 +24,6 @@
 
 use Shopware\Models\Article\Esd;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
 {
     /**

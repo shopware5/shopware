@@ -29,9 +29,6 @@ use Shopware\Models\Tax\Tax;
 use Shopware\Models\Voucher\Code;
 use Shopware\Models\Voucher\Voucher;
 
-/**
- * Shopware Backend Controller for the Voucher Module
- */
 class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**

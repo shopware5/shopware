@@ -24,9 +24,6 @@
 
 namespace Shopware\Components\Form\Interfaces;
 
-/**
- * Interface Field
- */
 interface Element
 {
     /**

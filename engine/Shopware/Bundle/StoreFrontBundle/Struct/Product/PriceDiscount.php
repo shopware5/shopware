@@ -27,11 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class PriceDiscount extends Extendable
 {
     /**

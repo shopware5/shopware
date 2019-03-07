@@ -149,8 +149,6 @@ class Element extends ModelEntity
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -159,8 +157,6 @@ class Element extends ModelEntity
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return Element
@@ -173,8 +169,6 @@ class Element extends ModelEntity
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()
@@ -183,8 +177,6 @@ class Element extends ModelEntity
     }
 
     /**
-     * Set value
-     *
      * @param mixed $value
      *
      * @return Element
@@ -197,8 +189,6 @@ class Element extends ModelEntity
     }
 
     /**
-     * Get value
-     *
      * @return mixed
      */
     public function getValue()
@@ -207,8 +197,6 @@ class Element extends ModelEntity
     }
 
     /**
-     * Set description
-     *
      * @param string $description
      *
      * @return Element
@@ -221,8 +209,6 @@ class Element extends ModelEntity
     }
 
     /**
-     * Get description
-     *
      * @return string
      */
     public function getDescription()
@@ -231,8 +217,6 @@ class Element extends ModelEntity
     }
 
     /**
-     * Set label
-     *
      * @param string $label
      *
      * @return Element
@@ -245,8 +229,6 @@ class Element extends ModelEntity
     }
 
     /**
-     * Get label
-     *
      * @return string
      */
     public function getLabel()

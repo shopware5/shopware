@@ -29,11 +29,6 @@ use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Components\Thumbnail\Manager;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class MediaHydrator extends Hydrator
 {
     /**

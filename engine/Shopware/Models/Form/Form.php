@@ -41,9 +41,7 @@ use Shopware\Components\Model\ModelEntity;
  *   - UNIQUE KEY `name` (`name`)
  * </code>
  *
- * @category   Shopware
  *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  * @license    http://shopware.de/license
  *
  * @ORM\Entity(repositoryClass="Repository")
@@ -232,8 +230,6 @@ class Form extends ModelEntity
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -268,8 +264,6 @@ class Form extends ModelEntity
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return \Shopware\Models\Form\Form
@@ -282,8 +276,6 @@ class Form extends ModelEntity
     }
 
     /**
-     * Set text
-     *
      * @param string $text
      *
      * @return \Shopware\Models\Form\Form
@@ -296,8 +288,6 @@ class Form extends ModelEntity
     }
 
     /**
-     * Get text
-     *
      * @return string
      */
     public function getText()
@@ -306,8 +296,6 @@ class Form extends ModelEntity
     }
 
     /**
-     * Set email
-     *
      * @param string $email
      *
      * @return \Shopware\Models\Form\Form
@@ -320,8 +308,6 @@ class Form extends ModelEntity
     }
 
     /**
-     * Get email
-     *
      * @return string
      */
     public function getEmail()
@@ -330,8 +316,6 @@ class Form extends ModelEntity
     }
 
     /**
-     * Set emailTemplate
-     *
      * @param string $emailTemplate
      *
      * @return \Shopware\Models\Form\Form
@@ -344,8 +328,6 @@ class Form extends ModelEntity
     }
 
     /**
-     * Get emailTemplate
-     *
      * @return string
      */
     public function getEmailTemplate()
@@ -354,8 +336,6 @@ class Form extends ModelEntity
     }
 
     /**
-     * Set emailSubject
-     *
      * @param string $emailSubject
      *
      * @return \Shopware\Models\Form\Form
@@ -368,8 +348,6 @@ class Form extends ModelEntity
     }
 
     /**
-     * Get emailSubject
-     *
      * @return string
      */
     public function getEmailSubject()
@@ -378,8 +356,6 @@ class Form extends ModelEntity
     }
 
     /**
-     * Set text2
-     *
      * @param string $text2
      *
      * @return \Shopware\Models\Form\Form
@@ -392,8 +368,6 @@ class Form extends ModelEntity
     }
 
     /**
-     * Get text2
-     *
      * @return string
      */
     public function getText2()
@@ -402,8 +376,6 @@ class Form extends ModelEntity
     }
 
     /**
-     * Set ticketTypeid
-     *
      * @param int $ticketTypeid
      *
      * @return \Shopware\Models\Form\Form
@@ -416,8 +388,6 @@ class Form extends ModelEntity
     }
 
     /**
-     * Get ticketTypeid
-     *
      * @return int
      */
     public function getTicketTypeid()
@@ -426,8 +396,6 @@ class Form extends ModelEntity
     }
 
     /**
-     * Set isocode
-     *
      * @param string $isocode
      *
      * @return \Shopware\Models\Form\Form
@@ -440,8 +408,6 @@ class Form extends ModelEntity
     }
 
     /**
-     * Get isocode
-     *
      * @return string
      */
     public function getIsocode()

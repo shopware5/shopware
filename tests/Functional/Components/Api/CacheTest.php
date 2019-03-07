@@ -26,11 +26,6 @@ namespace Shopware\Tests\Functional\Components\Api;
 
 use Shopware\Components\Api\Resource\Cache;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class CacheTest extends TestCase
 {
     /**

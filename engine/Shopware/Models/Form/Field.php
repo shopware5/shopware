@@ -435,8 +435,6 @@ class Field extends ModelEntity
     }
 
     /**
-     * Set TicketTask
-     *
      * @param string $ticketTask
      *
      * @return \Shopware\Models\Form\Field

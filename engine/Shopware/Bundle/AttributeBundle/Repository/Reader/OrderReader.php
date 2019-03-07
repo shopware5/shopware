@@ -29,11 +29,6 @@ use PDO;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Order\Order;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class OrderReader extends GenericReader
 {
     /**

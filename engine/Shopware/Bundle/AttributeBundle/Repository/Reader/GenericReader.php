@@ -27,11 +27,6 @@ namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class GenericReader implements ReaderInterface
 {
     /**
@@ -45,8 +40,6 @@ class GenericReader implements ReaderInterface
     protected $entityManager;
 
     /**
-     * GenericReader constructor.
-     *
      * @param string       $entity
      * @param ModelManager $entityManager
      */

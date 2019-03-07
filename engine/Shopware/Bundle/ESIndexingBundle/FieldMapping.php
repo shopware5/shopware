@@ -27,9 +27,6 @@ namespace Shopware\Bundle\ESIndexingBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * Class FieldMapping
- */
 class FieldMapping implements FieldMappingInterface
 {
     /**

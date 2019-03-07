@@ -27,11 +27,6 @@ namespace Shopware\Components\HttpClient;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException as GuzzleClientException;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class GuzzleHttpClient implements HttpClientInterface
 {
     /**

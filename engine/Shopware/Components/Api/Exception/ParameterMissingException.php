@@ -26,10 +26,6 @@ namespace Shopware\Components\Api\Exception;
 
 /**
  * API Exception
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ParameterMissingException extends \Enlight_Exception
 {

@@ -24,11 +24,6 @@
 
 use PHPUnit\DbUnit\DataSet\IDataSet;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_RegressionTests_Ticket4609 extends Enlight_Components_Test_Plugin_TestCase
 {
     /**

@@ -42,8 +42,6 @@ class AddressService implements AddressServiceInterface
     private $validator;
 
     /**
-     * AddressService constructor.
-     *
      * @param ModelManager              $modelManager
      * @param AddressValidatorInterface $validator
      */

@@ -30,12 +30,6 @@ use Shopware\Models\Shop\Shop;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class Translation
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- *
  * @ORM\Entity
  * @ORM\Table(name="s_core_translations")
  */

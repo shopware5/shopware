@@ -26,9 +26,6 @@ namespace Shopware\Components\Form\Field;
 
 use Shopware\Components\Form\Field;
 
-/**
- * Class Text
- */
 class Pixel extends Field
 {
     /**

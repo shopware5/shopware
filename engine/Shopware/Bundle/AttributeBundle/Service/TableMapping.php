@@ -27,11 +27,6 @@ namespace Shopware\Bundle\AttributeBundle\Service;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Column;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class TableMapping
 {
     /**
@@ -45,8 +40,6 @@ class TableMapping
     private $tables;
 
     /**
-     * TableMapping constructor.
-     *
      * @param Connection $connection
      * @param array      $tableMapping
      */

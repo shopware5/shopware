@@ -24,9 +24,6 @@
 
 namespace Shopware\Components\Privacy;
 
-/**
- * Interface IpAnonymizerInterface
- */
 interface IpAnonymizerInterface
 {
     /**

@@ -34,9 +34,7 @@ use Doctrine\ORM\Query\Lexer;
  * IFNULL() returns a numeric or string value, depending on the context in
  * which it is used.
  *
- * @category Shopware
  *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  * @author    Andrew Mackrodt <andrew@ajmm.org>
  *
  * @version   2011.06.12

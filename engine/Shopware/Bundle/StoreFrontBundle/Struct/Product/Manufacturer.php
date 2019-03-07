@@ -27,11 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Manufacturer extends Extendable
 {
     /**

@@ -28,11 +28,6 @@ use Shopware\Bundle\AttributeBundle\Repository\Reader\ReaderInterface;
 use Shopware\Bundle\AttributeBundle\Repository\Searcher\SearcherInterface;
 use Shopware\Components\Model\ModelManager;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class GenericRepository implements RepositoryInterface
 {
     /**

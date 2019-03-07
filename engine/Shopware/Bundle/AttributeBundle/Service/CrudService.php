@@ -27,11 +27,6 @@ namespace Shopware\Bundle\AttributeBundle\Service;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Attribute\Configuration;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class CrudService
 {
     const EXT_JS_PREFIX = '__attribute_';

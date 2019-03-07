@@ -26,11 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 use Shopware\Models\Category\Category as CategoryEntity;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Category extends Extendable
 {
     /**

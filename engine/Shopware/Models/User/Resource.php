@@ -88,8 +88,6 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -98,8 +96,6 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return \Shopware\Models\User\Resource
@@ -112,8 +108,6 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()

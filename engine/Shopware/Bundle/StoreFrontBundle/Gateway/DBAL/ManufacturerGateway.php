@@ -31,11 +31,6 @@ use Shopware\Bundle\StoreFrontBundle\Service\Core\MediaService;
 use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
 {
     /**

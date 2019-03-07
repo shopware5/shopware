@@ -27,10 +27,6 @@ use Shopware\Models\Banner\Banner;
 
 /**
  * Deprecated Shopware Class that handles marketing related functions
- *
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class sMarketing
 {
@@ -81,8 +77,6 @@ class sMarketing
     private $db;
 
     /**
-     * Class constructor.
-     *
      * @param StoreFrontBundle\Service\ContextServiceInterface|null        $contextService
      * @param StoreFrontBundle\Service\AdditionalTextServiceInterface|null $additionalTextService
      */

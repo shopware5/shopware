@@ -24,9 +24,6 @@
 
 namespace Shopware\Components\Install;
 
-/**
- * Class Database
- */
 class Database
 {
     /**

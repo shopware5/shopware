@@ -27,7 +27,6 @@ namespace Shopware\Models\Shop;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
-use Shopware\Models\Shop\TemplateConfig\Set;
 
 /**
  * Template Model Entity
@@ -210,8 +209,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -220,8 +217,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return Template
@@ -234,8 +229,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()

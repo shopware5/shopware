@@ -24,11 +24,6 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class ZipUtils
 {
     /**

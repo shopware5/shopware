@@ -35,9 +35,6 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Models\Shop\Shop;
 
-/**
- * Class SubscriptionService
- */
 class SubscriptionService
 {
     /**

@@ -28,9 +28,6 @@ use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 
-/**
- * Shopware Listing Widgets
- */
 class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 {
     /**

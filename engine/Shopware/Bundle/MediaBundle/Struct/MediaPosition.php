@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\MediaBundle\Struct;
 
-/**
- * Class MediaPosition
- */
 class MediaPosition
 {
     /**

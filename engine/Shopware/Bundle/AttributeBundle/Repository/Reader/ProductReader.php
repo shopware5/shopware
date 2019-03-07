@@ -34,11 +34,6 @@ use Shopware\Models\Article\Detail;
 use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class ProductReader extends GenericReader
 {
     /**
@@ -52,8 +47,6 @@ class ProductReader extends GenericReader
     private $additionalTextService;
 
     /**
-     * ProductReader constructor.
-     *
      * @param string                         $entity
      * @param ModelManager                   $entityManager
      * @param ContextServiceInterface        $contextService

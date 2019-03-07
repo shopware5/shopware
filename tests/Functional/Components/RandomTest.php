@@ -24,11 +24,6 @@
 
 use Shopware\Components\Random;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Tests_Components_RandomTest extends Enlight_Components_Test_TestCase
 {
     /**

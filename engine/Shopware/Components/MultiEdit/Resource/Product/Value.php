@@ -26,8 +26,6 @@ namespace Shopware\Components\MultiEdit\Resource\Product;
 
 /**
  * Handles request for values suggested to the user
- *
- * Class Value
  */
 class Value
 {

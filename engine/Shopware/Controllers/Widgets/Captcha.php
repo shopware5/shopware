@@ -24,9 +24,6 @@
 
 use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
 
-/**
- * Shopware Captcha Controller
- */
 class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
 {
     public function refreshCaptchaAction()

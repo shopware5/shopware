@@ -28,11 +28,6 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class RelatedProductsService implements Service\RelatedProductsServiceInterface
 {
     /**

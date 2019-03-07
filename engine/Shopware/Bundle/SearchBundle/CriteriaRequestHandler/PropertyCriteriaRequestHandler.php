@@ -31,9 +31,6 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class PropertyCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 {
     /**

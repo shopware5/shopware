@@ -27,9 +27,6 @@ namespace Shopware\Components\Cart;
 use Shopware\Components\Cart\Struct\DiscountContext;
 use Shopware\Components\Cart\Struct\Price;
 
-/**
- * Class BasketHelper
- */
 class BasketHelper implements BasketHelperInterface
 {
     /**

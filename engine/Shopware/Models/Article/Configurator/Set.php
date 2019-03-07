@@ -115,9 +115,6 @@ class Set extends ModelEntity
      */
     private $type = 0;
 
-    /**
-     * Class constructor, initials the array collections for the associations.
-     */
     public function __construct()
     {
         $this->groups = new ArrayCollection();

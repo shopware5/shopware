@@ -38,10 +38,6 @@ use Shopware\Models\Shop;
  * The class implements different functions to build configurations,
  * template directories or other resources which should include the
  * theme inheritance.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Inheritance
 {

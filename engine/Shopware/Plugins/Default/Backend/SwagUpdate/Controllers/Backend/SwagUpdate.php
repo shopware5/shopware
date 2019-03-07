@@ -45,11 +45,6 @@ use ShopwarePlugins\SwagUpdate\Components\UpdateCheck;
 use ShopwarePlugins\SwagUpdate\Components\Validation;
 use Symfony\Component\Filesystem\Filesystem;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**

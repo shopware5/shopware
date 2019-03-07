@@ -29,9 +29,6 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use Shopware\Bundle\MediaBundle\Struct\MediaPosition;
 
-/**
- * Class GarbageCollectorFactory
- */
 class GarbageCollectorFactory
 {
     /**

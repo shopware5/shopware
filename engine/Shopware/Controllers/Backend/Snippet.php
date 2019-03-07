@@ -24,11 +24,6 @@
 
 use Shopware\Models\Snippet\Snippet;
 
-/**
- * Shopware Backend Controller for the snippet module
- *
- * Controller that provides CRUD-Actions for the Snippet-Model
- */
 class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_ExtJs
 {
     /**

@@ -24,9 +24,6 @@
 
 namespace Shopware\Components\MultiEdit\Resource;
 
-/**
- * Interface ResourceInterface
- */
 interface ResourceInterface
 {
     /**

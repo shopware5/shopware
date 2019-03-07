@@ -52,10 +52,6 @@ use Shopware_Components_Translation;
 
 /**
  * Article API Resource
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Article extends Resource implements BatchInterface
 {

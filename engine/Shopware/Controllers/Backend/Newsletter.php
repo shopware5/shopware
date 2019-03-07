@@ -24,9 +24,6 @@
 
 use Shopware\Components\CSRFWhitelistAware;
 
-/**
- * Newsletter controller
- */
 class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action implements CSRFWhitelistAware
 {
     /**

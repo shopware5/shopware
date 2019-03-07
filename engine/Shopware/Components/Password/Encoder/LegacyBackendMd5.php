@@ -24,11 +24,6 @@
 
 namespace Shopware\Components\Password\Encoder;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class LegacyBackendMd5 implements PasswordEncoderInterface
 {
     /**

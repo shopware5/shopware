@@ -24,11 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 interface FacetInterface extends CriteriaPartInterface
 {
 }

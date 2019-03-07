@@ -27,11 +27,6 @@ namespace Shopware\Bundle\SearchBundle;
 use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 interface StoreFrontCriteriaFactoryInterface
 {
     /**

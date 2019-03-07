@@ -55,10 +55,6 @@ use Shopware\Components\Model\QueryBuilder;
  *  - The backend controller supports additional configuration for the listing or detail actions.
  *  - For example you can limit the sortable fields by using the $sortFields property
  *  - Or you can limit the filterable fields by using the $filterFields property.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Backend_ExtJs
 {

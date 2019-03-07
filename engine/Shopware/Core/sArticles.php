@@ -42,10 +42,6 @@ use Shopware\Models\Media\Album;
 
 /**
  * Shopware Class that handle products
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class sArticles
 {

@@ -33,9 +33,6 @@ use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop;
 
-/**
- * Shopware Performance Controller
- */
 class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Backend_ExtJs
 {
     const PHP_RECOMMENDED_VERSION = '7.3.0';

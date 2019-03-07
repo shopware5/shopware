@@ -24,11 +24,6 @@
 
 namespace Shopware\Recovery\Common\DependencyInjection;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 abstract class Container implements ContainerInterface
 {
     /**

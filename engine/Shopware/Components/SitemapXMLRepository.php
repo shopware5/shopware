@@ -35,10 +35,6 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Category\Category;
 
 /**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- *
  * @deprecated Will be removed in Shopware 5.6
  */
 class SitemapXMLRepository

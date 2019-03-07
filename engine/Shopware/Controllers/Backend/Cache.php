@@ -47,12 +47,6 @@ use Shopware\Components\CacheManager;
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_ExtJs
 {
     /**

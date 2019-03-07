@@ -27,9 +27,6 @@ use Shopware\Models\Property\Group;
 use Shopware\Models\Property\Option;
 use Shopware\Models\Property\Value;
 
-/**
- * Shopware Backend Controller for the property module
- */
 class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend_ExtJs
 {
     /**

@@ -114,8 +114,6 @@ class Value extends ModelEntity
     private $media;
 
     /**
-     * Class constructor.
-     *
      * @param \Shopware\Models\Property\Option $option
      * @param string                           $value
      */
@@ -127,8 +125,6 @@ class Value extends ModelEntity
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -137,8 +133,6 @@ class Value extends ModelEntity
     }
 
     /**
-     * Set value
-     *
      * @param string $value
      *
      * @return Value
@@ -151,8 +145,6 @@ class Value extends ModelEntity
     }
 
     /**
-     * Get value
-     *
      * @return string
      */
     public function getValue()
@@ -161,8 +153,6 @@ class Value extends ModelEntity
     }
 
     /**
-     * Set position
-     *
      * @param int $position
      *
      * @return \Shopware\Models\Property\Value
@@ -175,8 +165,6 @@ class Value extends ModelEntity
     }
 
     /**
-     * Get position
-     *
      * @return int
      */
     public function getPosition()

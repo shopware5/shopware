@@ -30,10 +30,6 @@ use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Plugin\Plugin;
 
 /**
- * @category   Shopware
- *
- * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
- *
  * @ORM\Entity
  * @ORM\Table(name="s_library_component")
  */

@@ -26,11 +26,6 @@ namespace Shopware\Bundle\SearchBundle\Sorting;
 
 use Shopware\Bundle\SearchBundle\SortingInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 abstract class Sorting implements SortingInterface
 {
     /**

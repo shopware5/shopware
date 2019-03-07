@@ -24,11 +24,6 @@
 
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class AccountTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**

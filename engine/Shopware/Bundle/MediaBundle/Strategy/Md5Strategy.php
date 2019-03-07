@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\MediaBundle\Strategy;
 
-/**
- * Class Md5Strategy
- */
 class Md5Strategy implements StrategyInterface
 {
     /**

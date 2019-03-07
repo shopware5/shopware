@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-/**
- * Class LocaleStruct
- */
 class LocaleStruct implements \JsonSerializable
 {
     /**

@@ -26,11 +26,6 @@ namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 
 use Doctrine\DBAL\Connection;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class CategoryReader extends GenericReader
 {
     /**

@@ -27,11 +27,6 @@ namespace Shopware\Bundle\AttributeBundle\Repository\Searcher;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Models\Premium\Premium;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class PremiumSearcher extends GenericSearcher
 {
     /**

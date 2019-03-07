@@ -68,8 +68,6 @@ class Area extends ModelEntity
     private $active = null;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -78,8 +76,6 @@ class Area extends ModelEntity
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return Area
@@ -92,8 +88,6 @@ class Area extends ModelEntity
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()
@@ -102,8 +96,6 @@ class Area extends ModelEntity
     }
 
     /**
-     * Set active
-     *
      * @param int $active
      *
      * @return Area
@@ -116,8 +108,6 @@ class Area extends ModelEntity
     }
 
     /**
-     * Get active
-     *
      * @return int
      */
     public function getActive()

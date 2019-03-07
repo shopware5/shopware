@@ -30,11 +30,6 @@ use Shopware\Components\Cart\Struct\DiscountContext;
 use Shopware\Components\CSRFGetProtectionAware;
 use Shopware\Models\Customer\Address;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action implements CSRFGetProtectionAware
 {
     /**

@@ -27,9 +27,6 @@ namespace Shopware\Bundle\MediaBundle\Subscriber;
 use Enlight\Event\SubscriberInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * Class ServiceSubscriber
- */
 class ServiceSubscriber implements SubscriberInterface
 {
     /**

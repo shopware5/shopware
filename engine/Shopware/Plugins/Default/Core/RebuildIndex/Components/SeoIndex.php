@@ -22,11 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Components_SeoIndex extends Enlight_Class
 {
     /**

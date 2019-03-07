@@ -27,11 +27,6 @@ namespace Shopware\Components\Log\Handler;
 use Monolog\Handler\MailHandler;
 use Monolog\Logger;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class EnlightMailHandler extends MailHandler
 {
     /**

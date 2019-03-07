@@ -41,10 +41,6 @@ use Shopware\Components\Model\QueryBuilder;
  * Affected tables
  *  - s_core_tax
  *  - s_core_tax_rules
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Repository extends ModelRepository
 {

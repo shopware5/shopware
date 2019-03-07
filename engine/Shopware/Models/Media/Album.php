@@ -45,9 +45,7 @@ use Shopware\Components\Model\ModelEntity;
  *   - PRIMARY KEY (`id`)
  * </code>
  *
- * @category   Shopware
  *
- * @copyright  Copyright (c) 20, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  *
  * @ORM\Entity

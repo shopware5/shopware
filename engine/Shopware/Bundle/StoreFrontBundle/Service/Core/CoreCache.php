@@ -27,11 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 use Doctrine\Common\Cache\Cache;
 use Shopware\Bundle\StoreFrontBundle\Service\CacheInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class CoreCache implements CacheInterface
 {
     /**

@@ -126,8 +126,6 @@ class Comment extends ModelEntity
     private $blog;
 
     /**
-     * Set id
-     *
      * @return int
      */
     public function getId()
@@ -136,8 +134,6 @@ class Comment extends ModelEntity
     }
 
     /**
-     * Set Active
-     *
      * @param bool $active
      */
     public function setActive($active)
@@ -146,8 +142,6 @@ class Comment extends ModelEntity
     }
 
     /**
-     * Get Active
-     *
      * @return bool
      */
     public function getActive()
@@ -156,8 +150,6 @@ class Comment extends ModelEntity
     }
 
     /**
-     * Set comment
-     *
      * @param string $comment
      */
     public function setComment($comment)
@@ -166,8 +158,6 @@ class Comment extends ModelEntity
     }
 
     /**
-     * Get comment
-     *
      * @return string
      */
     public function getComment()
@@ -176,8 +166,6 @@ class Comment extends ModelEntity
     }
 
     /**
-     * Set creationDate
-     *
      * @param \DateTimeInterface|string $creationDate
      */
     public function setCreationDate($creationDate)
@@ -189,8 +177,6 @@ class Comment extends ModelEntity
     }
 
     /**
-     * Get creationDate
-     *
      * @return \DateTimeInterface
      */
     public function getCreationDate()
@@ -199,8 +185,6 @@ class Comment extends ModelEntity
     }
 
     /**
-     * Set eMail
-     *
      * @param string $email
      */
     public function setEmail($email)
@@ -209,8 +193,6 @@ class Comment extends ModelEntity
     }
 
     /**
-     * Get email
-     *
      * @return string
      */
     public function getEmail()
@@ -219,8 +201,6 @@ class Comment extends ModelEntity
     }
 
     /**
-     * Set headline
-     *
      * @param string $headline
      */
     public function setHeadline($headline)
@@ -229,8 +209,6 @@ class Comment extends ModelEntity
     }
 
     /**
-     * Get headline
-     *
      * @return string
      */
     public function getHeadline()
@@ -239,8 +217,6 @@ class Comment extends ModelEntity
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      */
     public function setName($name)
@@ -249,8 +225,6 @@ class Comment extends ModelEntity
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()
@@ -259,8 +233,6 @@ class Comment extends ModelEntity
     }
 
     /**
-     * Set blog
-     *
      * @param \Shopware\Models\Blog\Blog $blog
      */
     public function setBlog($blog)
@@ -269,8 +241,6 @@ class Comment extends ModelEntity
     }
 
     /**
-     * Get blog
-     *
      * @return \Shopware\Models\Blog\Blog
      */
     public function getBlog()
@@ -279,8 +249,6 @@ class Comment extends ModelEntity
     }
 
     /**
-     * Get points
-     *
      * @return float
      */
     public function getPoints()
@@ -289,8 +257,6 @@ class Comment extends ModelEntity
     }
 
     /**
-     * Set points
-     *
      * @param float $points
      */
     public function setPoints($points)

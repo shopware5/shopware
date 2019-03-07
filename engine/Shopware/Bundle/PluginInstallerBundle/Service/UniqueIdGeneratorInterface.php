@@ -25,8 +25,6 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 /**
- * Interface UniqueIdInterface.
- *
  * A simple interface for services capable of generating unique ids.
  */
 interface UniqueIdGeneratorInterface

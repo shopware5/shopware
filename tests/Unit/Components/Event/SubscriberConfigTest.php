@@ -26,11 +26,6 @@ namespace Shopware\Tests\Unit\Components\Event;
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class SubscriberConfigTest extends TestCase
 {
     /**

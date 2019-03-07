@@ -47,12 +47,6 @@ use Shopware\Models\Payment\Payment;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Tax\Tax;
 
-/**
- * Backend Controller for the order backend module.
- *
- * Displays all orders in an Ext.grid.Panel and allows to delete,
- * add and edit orders.
- */
 class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**

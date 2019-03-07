@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-/**
- * Class AccessTokenStruct
- */
 class AccessTokenStruct implements \JsonSerializable
 {
     /**

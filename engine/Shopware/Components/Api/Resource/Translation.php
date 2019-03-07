@@ -44,10 +44,6 @@ use Shopware\Models\Translation\Translation as TranslationModel;
 
 /**
  * Translation API Resource
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Translation extends Resource implements BatchInterface
 {

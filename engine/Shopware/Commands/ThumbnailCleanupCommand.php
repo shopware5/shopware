@@ -35,10 +35,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  *
  * This class is used as a command to delete thumbnails from defined
  * media albums. If no album is defined, all album thumbnails will be removed.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ThumbnailCleanupCommand extends ShopwareCommand
 {

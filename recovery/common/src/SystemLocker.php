@@ -24,11 +24,6 @@
 
 namespace Shopware\Recovery\Common;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class SystemLocker
 {
     /**

@@ -28,14 +28,6 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- *
- * NOTICE:  When doing changes on this file, please remember to do those changes in the CheapestPriceESGateway as well!
- *          Otherwise there could be problems with the ES Indexing
- */
 class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
 {
     /**

@@ -28,11 +28,6 @@ use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Locale;
 use Shopware\Models\Shop\Shop;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Manager
 {
     /**

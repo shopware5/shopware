@@ -27,11 +27,6 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 use Assert\Assertion;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class ReleaseDateCondition implements ConditionInterface, \JsonSerializable
 {
     const DIRECTION_PAST = 'past';

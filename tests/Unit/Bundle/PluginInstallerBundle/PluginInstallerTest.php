@@ -36,9 +36,6 @@ use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Kernel;
 
-/**
- * Class PluginInstallerTest
- */
 class PluginInstallerTest extends TestCase
 {
     public function testRefreshPluginList()

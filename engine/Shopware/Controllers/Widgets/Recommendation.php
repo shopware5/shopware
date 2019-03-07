@@ -22,9 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Shopware Application
- */
 class Shopware_Controllers_Widgets_Recommendation extends Enlight_Controller_Action
 {
     /** @var Shopware_Components_Config */

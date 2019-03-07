@@ -22,13 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Shopware ExtJs Controller
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
 {
     /**

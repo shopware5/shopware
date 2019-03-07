@@ -25,9 +25,7 @@
 /**
  * Mobile sitemap controller
  *
- * @category Shopware
  *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @deprecated Will be removed in Shopware 5.6
  */

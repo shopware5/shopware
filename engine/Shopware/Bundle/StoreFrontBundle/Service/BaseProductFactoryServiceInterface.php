@@ -26,9 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Service;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 
-/**
- * Class BaseProductFactory
- */
 interface BaseProductFactoryServiceInterface
 {
     /**

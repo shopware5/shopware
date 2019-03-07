@@ -27,11 +27,6 @@ namespace Shopware\Bundle\SearchBundle\FacetResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class MediaListItem extends ValueListItem
 {
     /**

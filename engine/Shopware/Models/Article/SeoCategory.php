@@ -30,9 +30,7 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware Article SeoCategory Model
  *
- * @category Shopware
  *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
  * @ORM\Table(name="s_articles_categories_seo")

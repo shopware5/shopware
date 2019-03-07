@@ -38,10 +38,6 @@ use Shopware\Models\Shop\Shop as ShopModel;
 
 /**
  * Customer API Resource
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Customer extends Resource
 {

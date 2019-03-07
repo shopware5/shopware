@@ -25,8 +25,6 @@
 use Shopware\Models\Banner\Banner;
 
 /**
- * Shopware Backend Banner Management
- *
  * This controller is used to create, update, delete and get banner data from the database.
  * Any prior live shopping code has been removed. Only non live shopping banners are used by this controller.
  * The frontend part is handled direct in engine/core/class/sMarketing.php in the method sBanner().

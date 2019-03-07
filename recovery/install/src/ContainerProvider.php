@@ -40,11 +40,6 @@ use Shopware\Recovery\Install\Service\ThemeService;
 use Shopware\Recovery\Install\Service\TranslationService;
 use Shopware\Recovery\Install\Service\WebserverCheck;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class ContainerProvider implements ServiceProviderInterface
 {
     /**

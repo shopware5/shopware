@@ -28,9 +28,6 @@ use Enlight\Event\SubscriberInterface;
 use Enlight_Controller_ActionEventArgs as ActionEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * Class CSRFTokenValidator
- */
 class CSRFTokenValidator implements SubscriberInterface
 {
     /**

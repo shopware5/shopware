@@ -45,8 +45,6 @@ class CookieRemoveSubscriber implements SubscriberInterface
     private $config;
 
     /**
-     * CookieRemoveSubscriber constructor.
-     *
      * @param Config $config
      */
     public function __construct(Config $config)

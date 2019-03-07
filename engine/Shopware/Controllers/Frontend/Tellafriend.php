@@ -24,11 +24,6 @@
 
 use Shopware\Components\Random;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Action
 {
     public $sSYSTEM;

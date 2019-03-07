@@ -27,11 +27,6 @@ namespace Shopware\Components\Model\Query\Mysql;
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\Query\Lexer;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class DateFormat extends FunctionNode
 {
     public $firstDateExpression;

@@ -29,11 +29,6 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Components\ContainerAwareEventManager;
 use Symfony\Component\DependencyInjection\Container;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class ContainerAwareEventManagerTest extends TestCase
 {
     /**

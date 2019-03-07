@@ -35,10 +35,6 @@ namespace Shopware\Components\Model;
  * plus additional assignments for each child category.
  *
  * Most write operations take place in s_articles_categories_ro.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CategoryDenormalization
 {

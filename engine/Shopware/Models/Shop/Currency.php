@@ -94,8 +94,6 @@ class Currency extends ModelEntity
     private $position = 0;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -104,8 +102,6 @@ class Currency extends ModelEntity
     }
 
     /**
-     * Set currency
-     *
      * @param string $currency
      *
      * @return Currency
@@ -118,8 +114,6 @@ class Currency extends ModelEntity
     }
 
     /**
-     * Get currency
-     *
      * @return string
      */
     public function getCurrency()
@@ -128,8 +122,6 @@ class Currency extends ModelEntity
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return Currency
@@ -142,8 +134,6 @@ class Currency extends ModelEntity
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()
@@ -152,8 +142,6 @@ class Currency extends ModelEntity
     }
 
     /**
-     * Set default
-     *
      * @param int $default
      *
      * @return Currency
@@ -166,8 +154,6 @@ class Currency extends ModelEntity
     }
 
     /**
-     * Get default
-     *
      * @return int
      */
     public function getDefault()
@@ -176,8 +162,6 @@ class Currency extends ModelEntity
     }
 
     /**
-     * Set factor
-     *
      * @param float $factor
      *
      * @return Currency
@@ -190,8 +174,6 @@ class Currency extends ModelEntity
     }
 
     /**
-     * Get factor
-     *
      * @return float
      */
     public function getFactor()
@@ -200,8 +182,6 @@ class Currency extends ModelEntity
     }
 
     /**
-     * Set symbol
-     *
      * @param string $symbol
      *
      * @return Currency
@@ -214,8 +194,6 @@ class Currency extends ModelEntity
     }
 
     /**
-     * Get symbol
-     *
      * @return string
      */
     public function getSymbol()
@@ -224,8 +202,6 @@ class Currency extends ModelEntity
     }
 
     /**
-     * Set symbolPosition
-     *
      * @param int $symbolPosition
      *
      * @return Currency
@@ -238,8 +214,6 @@ class Currency extends ModelEntity
     }
 
     /**
-     * Get symbolPosition
-     *
      * @return int
      */
     public function getSymbolPosition()
@@ -248,8 +222,6 @@ class Currency extends ModelEntity
     }
 
     /**
-     * Set position
-     *
      * @param int $position
      *
      * @return Currency
@@ -262,8 +234,6 @@ class Currency extends ModelEntity
     }
 
     /**
-     * Get position
-     *
      * @return int
      */
     public function getPosition()

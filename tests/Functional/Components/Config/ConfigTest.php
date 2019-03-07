@@ -22,11 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class ConfigTest extends Enlight_Components_Test_TestCase
 {
     /**

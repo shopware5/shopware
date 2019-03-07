@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-/**
- * Class ProducerStruct
- */
 class ProducerStruct implements \JsonSerializable
 {
     /**

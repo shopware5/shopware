@@ -29,13 +29,6 @@ use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
 use Shopware\Components\Model\DBAL\Result;
 use Shopware\Models\Shop\Shop;
 
-/**
- * Class Repository
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Repository
 {
     /**
@@ -49,8 +42,6 @@ class Repository
     protected $eventManager;
 
     /**
-     * Class constructor which allows to inject all dependencies of this class.
-     *
      * @param Connection                  $connection
      * @param \Enlight_Event_EventManager $eventManager
      */

@@ -33,10 +33,6 @@ namespace Shopware\Components\Migrations;
  * $migrationManager = new Manager($conn, '/path/to/migrations');
  * $migrationManager->run();
  * </code>
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Manager
 {

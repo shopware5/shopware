@@ -31,11 +31,6 @@ use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 use Symfony\Component\DomCrawler\Crawler;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class AddressTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**

@@ -24,11 +24,6 @@
 
 use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexerInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     /**

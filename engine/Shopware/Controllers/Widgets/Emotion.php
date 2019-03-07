@@ -33,11 +33,6 @@ use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactory;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 {
     /**

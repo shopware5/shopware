@@ -34,11 +34,6 @@ use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class QueryBuilderFactory implements QueryBuilderFactoryInterface
 {
     /**

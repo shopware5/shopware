@@ -24,9 +24,6 @@
 
 namespace Shopware\Components\Cart\Struct;
 
-/**
- * Class Price
- */
 class Price
 {
     /**
@@ -50,8 +47,6 @@ class Price
     private $tax;
 
     /**
-     * Price constructor.
-     *
      * @param float $price
      * @param float $netPrice
      * @param float $taxRate

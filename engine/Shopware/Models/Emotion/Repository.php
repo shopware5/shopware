@@ -29,11 +29,6 @@ use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Attribute\Emotion as EmotionAttribute;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Repository extends ModelRepository
 {
     /**

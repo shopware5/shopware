@@ -31,10 +31,6 @@ use Shopware\Models\Shop\Currency;
 
 /**
  * Shopware Class to provide product export feeds
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class sExport
 {

@@ -28,11 +28,6 @@ use Enlight_Controller_Dispatcher_Default as EnlightDispatcher;
 use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\MatcherInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class DefaultMatcher implements MatcherInterface
 {
     /**

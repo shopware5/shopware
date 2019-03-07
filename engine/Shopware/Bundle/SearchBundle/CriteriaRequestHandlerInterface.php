@@ -27,9 +27,6 @@ namespace Shopware\Bundle\SearchBundle;
 use Enlight_Controller_Request_RequestHttp as Request;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * Interface CriteriaRequestHandlerInterface
- */
 interface CriteriaRequestHandlerInterface
 {
     /**

@@ -26,12 +26,6 @@ use Shopware\Models\Country\Country;
 use Shopware\Models\Payment\Payment;
 use Shopware\Models\Shop\Shop;
 
-/**
- * Shopware Payment Controller
- *
- * This controller handles all actions made by the user in the payment module.
- * It reads all payments, creates new ones, edits the existing payments and deletes them.
- */
 class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_ExtJs
 {
     /**

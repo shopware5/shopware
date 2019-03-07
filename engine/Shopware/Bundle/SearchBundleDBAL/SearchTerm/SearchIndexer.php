@@ -27,11 +27,6 @@ namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\MemoryLimit;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class SearchIndexer implements SearchIndexerInterface
 {
     /**

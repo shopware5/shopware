@@ -39,10 +39,6 @@ use Shopware\Models\Shop;
  * Within the synchronization process the installer class
  * uses the Theme\Configurator class to synchronize the
  * theme configuration with the database.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Installer
 {

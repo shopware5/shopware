@@ -25,12 +25,6 @@
 use Doctrine\DBAL\Connection;
 use Shopware\Models\Article\Vote;
 
-/**
- * Shopware Vote Controller
- *
- * This controller handles all actions made by the user in the premium module.
- * It reads out all votes, accepts/declines them or sets an answer.
- */
 class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_Application
 {
     protected $model = Vote::class;

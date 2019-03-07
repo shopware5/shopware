@@ -25,8 +25,6 @@
 namespace Shopware\Tests\Mink;
 
 /**
- * Interface: HelperSelectorInterface
- *
  * Required to use Helper class
  */
 interface HelperSelectorInterface

@@ -44,8 +44,6 @@ class SimilarProductConditionHandler implements PartialConditionHandlerInterface
     protected $connection;
 
     /**
-     * SimilarProductConditionHandler constructor.
-     *
      * @param Connection $connection
      */
     public function __construct(Connection $connection)

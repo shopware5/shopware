@@ -29,11 +29,6 @@ use Enlight_Event_EventManager as EnlightEventManager;
 use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\MatcherInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class EventMatcher implements MatcherInterface
 {
     /**

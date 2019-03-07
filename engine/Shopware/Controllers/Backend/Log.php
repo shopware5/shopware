@@ -24,12 +24,6 @@
 
 use Shopware\Components\CSRFWhitelistAware;
 
-/**
- * Shopware Log Controller
- *
- * This controller handles all actions made by the user or the server in the log module or the backend.
- * It reads all logs, creates new ones or deletes them.
- */
 class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**

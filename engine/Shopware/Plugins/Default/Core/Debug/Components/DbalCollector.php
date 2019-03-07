@@ -28,11 +28,6 @@ use Doctrine\DBAL\Logging\DebugStack;
 use Shopware\Components\Logger;
 use Shopware\Components\Model\Configuration;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class DbalCollector implements CollectorInterface
 {
     /**

@@ -31,9 +31,7 @@ use Shopware\Models\Shop\Template;
 /**
  * Shopware Router Plugin
  *
- * @category   Shopware
  *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  * @license    http://shopware.de/license
  */
 class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_Bootstrap

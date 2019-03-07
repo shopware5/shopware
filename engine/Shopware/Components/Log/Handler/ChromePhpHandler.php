@@ -30,10 +30,6 @@ use Monolog\Handler\ChromePHPHandler as BaseChromePhpHandler;
 
 /**
  * ChromePhpHandler.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ChromePhpHandler extends BaseChromePhpHandler
 {

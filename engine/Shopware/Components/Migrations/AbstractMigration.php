@@ -24,11 +24,6 @@
 
 namespace Shopware\Components\Migrations;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 abstract class AbstractMigration
 {
     public const MODUS_UPDATE = 'update';

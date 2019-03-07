@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\MediaBundle\Strategy;
 
-/**
- * Class StrategyFactory
- */
 class StrategyFactory
 {
     /**

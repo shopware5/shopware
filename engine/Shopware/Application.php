@@ -26,10 +26,6 @@ use Shopware\Components\DependencyInjection\Container;
 
 /**
  * Shopware Application
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware extends Enlight_Application
 {

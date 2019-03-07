@@ -163,8 +163,6 @@ class Rule extends ModelEntity
     private $customerGroup;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()

@@ -26,11 +26,6 @@ namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 
 use Shopware\Models\Shop\Shop;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class ShopReader extends GenericReader
 {
     protected function createListQuery()

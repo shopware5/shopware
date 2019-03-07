@@ -45,10 +45,6 @@ use Shopware\Models\Tax\Tax;
 
 /**
  * Variant API Resource
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Variant extends Resource implements BatchInterface
 {

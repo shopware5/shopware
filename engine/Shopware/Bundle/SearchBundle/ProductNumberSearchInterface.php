@@ -26,11 +26,6 @@ namespace Shopware\Bundle\SearchBundle;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 interface ProductNumberSearchInterface
 {
     /**
