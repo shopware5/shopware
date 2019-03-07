@@ -352,10 +352,10 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         var me = this,
             subApps = Shopware.app.Application.subApplications,
             articleList = subApps.findBy(function(item) {
-            if(item.$className == 'Shopware.apps.ArticleList') {
-                return true;
-            }
-        });
+                if(item.$className == 'Shopware.apps.ArticleList') {
+                    return true;
+                }
+            });
         if(articleList) {
             var grid = articleList.articleGrid,
                 selModel = grid.getSelectionModel(),
@@ -587,8 +587,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         }
 
         var url = '{url action=previewDetail}'
-                + '?shopId=' + shopId
-                + '&articleId=' + article.get('id');
+            + '?shopId=' + shopId
+            + '&articleId=' + article.get('id');
         window.open(url);
     },
 
@@ -794,7 +794,9 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             price = record.get('price'),
             row = Ext.get(event.row),
             icon = Ext.get(row.query('.x-action-col-icon')),
-            percent;
+            percent,
+            pseudoPrice = record.get('pseudoPrice'),
+            percentPseudo = record.get('percentPseudo');
 
         me.removeCloneFlag(store);
 
@@ -828,14 +830,48 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             } else {
                 record.set('percent', null);
             }
-        //if the user has edit the percent column, we have to calculate the price
-        } else if (event.field == 'percent') {
-            if (firstPrice == price) {
+
+            if(price && pseudoPrice > 0) {
+                percentPseudo = 100 - 100 / pseudoPrice * price;
+                percentPseudo = percentPseudo.toFixed(2);
+                record.set('percentPseudo', percentPseudo);
+            }
+
+            //if the user has edit the percent column, we have to calculate the price
+        } else if (event.field === 'percent') {
+            if (firstPrice === price) {
                 firstRecord.set('percent', null);
             } else if(event.value > 0) {
                 price = firstPrice / 100 * (100 - event.value);
                 price = price.toFixed(2);
                 record.set('price', price);
+            }
+        } else if (event.field === 'percentPseudo') {
+            if(pseudoPrice > 0) {
+                //if the user enters 0 or nothing, the price has to be the pseudoPrice
+                if(!Ext.isNumeric(event.value) || event.value === 0) {
+                    record.set('price', pseudoPrice);
+                } else if(event.value > 0) {
+                    price = pseudoPrice * ((100 - event.value) / 100);
+                    price = price.toFixed(2);
+                    record.set('price', price);
+                }
+            } else {
+                /**
+                 * if user enters value, when no pseudoPrice exists,
+                 * we have to discard it.
+                 * Cause we stricly calculate by pseudoPrice - not revers by price
+                 */
+                record.set('percentPseudo', 0);
+            }
+        } else if (event.field === 'pseudoPrice') {
+            //if the user enters 0 or nothing, the percentPseudo has to be 0
+            if(!Ext.isNumeric(event.value) || event.value === 0) {
+                record.set('percentPseudo', 0);
+            } else if(event.value > 0) {
+                percentPseudo = 100 - (100 / event.value * price);
+                percentPseudo = percentPseudo.toFixed(2);
+                record.set('percentPseudo', percentPseudo);
             }
         }
     },
