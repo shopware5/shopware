@@ -492,6 +492,7 @@ class ProductListingVariationLoader
         $query->innerJoin('availableVariant', 's_article_configurator_option_relations', 'relations', 'relations.article_id = availableVariant.id');
         $query->innerJoin('relations', 's_article_configurator_options', 'options', 'relations.option_id = options.id');
         $query->andWhere('availableVariant.active = 1');
+        $query->andWhere('availableVariant.id IN (:variants)');
 
         $availability = $query->execute()->fetchAll(\PDO::FETCH_GROUP);
 
