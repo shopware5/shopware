@@ -270,7 +270,6 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             }
 
             if (empty($mailingID)) {
-                //echo "Send mail to ".$user['email']."\n";
                 $sql = 'UPDATE s_campaigns_mailaddresses SET lastmailing=? WHERE email=?';
                 Shopware()->Db()->query($sql, [$mailing['id'], $user['email']]);
             }

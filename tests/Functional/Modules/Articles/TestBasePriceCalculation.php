@@ -50,7 +50,7 @@ class Shopware_Tests_Modules_Articles_TestBasePriceCalculation extends Enlight_C
     {
         parent::tearDown();
 
-//        // Restore old main detail
+        // Restore old main detail
         $sql = "UPDATE `s_articles_details` SET `kind` = '2' WHERE `ordernumber` = 'SW10002.1'";
         Shopware()->Db()->query($sql);
 

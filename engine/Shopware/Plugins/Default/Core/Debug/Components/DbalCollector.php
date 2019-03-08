@@ -90,7 +90,6 @@ class DbalCollector implements CollectorInterface
             }
         }
 
-        //array_multisort($counts, SORT_NUMERIC, SORT_DESC, $rows);
         $rows = array_values($rows);
         $totalTime = round($totalTime, 5);
         $totalCount = count($queries);
