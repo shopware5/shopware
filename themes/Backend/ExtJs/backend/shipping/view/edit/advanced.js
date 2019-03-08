@@ -199,21 +199,25 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
         return [
             me.getBoxSelect(ids),
             {
-                xtype       : 'textarea',
+                xtype       : 'ace-editor',
                 name        : 'bindSql',
                 hidden: true,
                 /*{if {acl_is_allowed privilege=sql_rule}}*/
                     hidden: false,
                 /*{/if}*/
-                fieldLabel  : '{s name=bind_sql_label}Own terms{/s}'
+                fieldLabel  : '{s name=bind_sql_label}Own terms{/s}',
+                mode: 'sql',
+                height: 80,
             }, {
-                xtype       : 'textarea',
+                xtype       : 'ace-editor',
                 name        : 'calculationSql',
                 hidden: true,
                 /*{if {acl_is_allowed privilege=sql_rule}}*/
                     hidden: false,
                 /*{/if}*/
-                fieldLabel  : '{s name=bind_calculation_sql_label}Own calculations{/s}'
+                fieldLabel  : '{s name=bind_calculation_sql_label}Own calculations{/s}',
+                mode: 'sql',
+                height: 80,
             }
         ];
     },
