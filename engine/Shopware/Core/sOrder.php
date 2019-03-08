@@ -253,7 +253,7 @@ class sOrder
             ['subject' => $this]
         );
 
-        return $number;
+        return (string) $number;
     }
 
     /**
