@@ -89,7 +89,7 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
      *
      * @depends testCreateLog
      *
-     * @param $lastId
+     * @param string $lastId
      */
     public function testDeleteLogs($lastId)
     {

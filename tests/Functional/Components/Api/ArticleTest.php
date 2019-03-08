@@ -3084,7 +3084,7 @@ class ArticleTest extends TestCase
      * Combinations merge the result of dimensional arrays not perfectly
      * so we have to clean up the first array level.
      *
-     * @param $combinations
+     * @param array $combinations
      *
      * @return mixed
      */
@@ -3105,8 +3105,8 @@ class ArticleTest extends TestCase
      * Helper function which combines all array elements
      * of the passed arrays.
      *
-     * @param $arrays
-     * @param int $i
+     * @param array $arrays
+     * @param int   $i
      *
      * @return array
      */
@@ -3191,7 +3191,7 @@ class ArticleTest extends TestCase
      * Helper function which creates all variants for
      * the passed groups with options.
      *
-     * @param $groups
+     * @param array $groups
      * @param array $groupMapping
      * @param array $optionMapping
      *

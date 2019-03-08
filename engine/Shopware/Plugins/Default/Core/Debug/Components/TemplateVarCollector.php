@@ -33,6 +33,9 @@ class TemplateVarCollector implements CollectorInterface
      */
     protected $eventManager;
 
+    /**
+     * @var array
+     */
     protected $results = [];
 
     /**
@@ -54,8 +57,6 @@ class TemplateVarCollector implements CollectorInterface
 
     /**
      * @param Logger $log
-     *
-     * @return mixed
      */
     public function logResults(Logger $log)
     {
@@ -118,8 +119,8 @@ class TemplateVarCollector implements CollectorInterface
     /**
      * Encode data method
      *
-     * @param     $data
-     * @param int $length
+     * @param array|string|object $data
+     * @param int                 $length
      *
      * @return array|string
      */

@@ -32,8 +32,6 @@ interface CollectorInterface
 
     /**
      * @param Logger $log
-     *
-     * @return mixed
      */
     public function logResults(Logger $log);
 }

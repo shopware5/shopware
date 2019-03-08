@@ -79,7 +79,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
     /**
      * Checks the aggregation
      *
-     * @param $aggregation
+     * @param array $aggregation
      *
      * @throws \Exception
      */

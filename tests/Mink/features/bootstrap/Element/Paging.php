@@ -61,8 +61,8 @@ class Paging extends Element implements \Shopware\Tests\Mink\HelperSelectorInter
     }
 
     /**
-     * @param $direction
-     * @param int $steps
+     * @param string $direction
+     * @param int    $steps
      */
     public function moveDirection($direction, $steps = 1)
     {

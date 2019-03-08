@@ -101,8 +101,8 @@ class Utils
     }
 
     /**
-     * @param      $dir
-     * @param bool $includeDir
+     * @param string $dir
+     * @param bool   $includeDir
      */
     public static function deleteDir($dir, $includeDir = false)
     {

@@ -103,7 +103,7 @@ class Homepage extends Page implements HelperSelectorInterface
     /**
      * Search the given term using live search
      *
-     * @param $searchTerm
+     * @param string $searchTerm
      */
     public function receiveSearchResultsFor($searchTerm)
     {

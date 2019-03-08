@@ -101,7 +101,7 @@ class GenericPage extends Page implements HelperSelectorInterface
     /**
      * Checks if the robots meta exists and matches the expected content
      *
-     * @param $content
+     * @param array $content
      */
     public function checkRobots($content = [])
     {

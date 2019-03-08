@@ -33,7 +33,7 @@ class CriteriaTest extends TestCase
      * @dataProvider invalidCriteriaLimit
      * @expectedException \InvalidArgumentException
      *
-     * @param $limit
+     * @param int $limit
      */
     public function testInvalidCriteriaLimit($limit)
     {
@@ -44,7 +44,7 @@ class CriteriaTest extends TestCase
     /**
      * @dataProvider validCriteriaLimit
      *
-     * @param $limit
+     * @param int $limit
      */
     public function testValidCriteriaLimit($limit)
     {
@@ -57,7 +57,7 @@ class CriteriaTest extends TestCase
      * @dataProvider invalidCriteriaOffset
      * @expectedException \InvalidArgumentException
      *
-     * @param $offset
+     * @param int $offset
      */
     public function testInvalidCriteriaOffset($offset)
     {
@@ -68,7 +68,7 @@ class CriteriaTest extends TestCase
     /**
      * @dataProvider validCriteriaOffset
      *
-     * @param $offset
+     * @param int $offset
      */
     public function testValidCriteriaOffset($offset)
     {

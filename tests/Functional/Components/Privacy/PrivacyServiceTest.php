@@ -138,7 +138,7 @@ class PrivacyServiceTest extends TestCase
     /**
      * Reads a user from the database
      *
-     * @param $id
+     * @param string $id
      *
      * @return array
      */
@@ -150,7 +150,7 @@ class PrivacyServiceTest extends TestCase
     /**
      * Reads orders of a user from the database
      *
-     * @param $userId
+     * @param string $userId
      *
      * @return array
      */
@@ -162,7 +162,7 @@ class PrivacyServiceTest extends TestCase
     /**
      * Reads baskets of a user from the database
      *
-     * @param $userId
+     * @param string $userId
      *
      * @return array
      */

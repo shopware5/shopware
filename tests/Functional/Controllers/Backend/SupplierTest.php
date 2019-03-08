@@ -91,7 +91,7 @@ class Shopware_Tests_Controllers_Backend_SupplierTest extends Enlight_Components
     /**
      * @depends testAddSupplier
      *
-     * @param $lastSupplier
+     * @param array $lastSupplier
      *
      * @return array
      */

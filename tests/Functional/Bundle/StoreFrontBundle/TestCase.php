@@ -220,7 +220,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
      * @param int         $number
      * @param ShopContext $context
      * @param Category    $category
-     * @param $additionally
+     * @param array       $additionally
      *
      * @return Article
      */

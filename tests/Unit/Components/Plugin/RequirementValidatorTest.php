@@ -206,7 +206,7 @@ class RequirementValidatorTest extends TestCase
     }
 
     /**
-     * @param $args
+     * @param array $args
      *
      * @return Plugin|null
      */

@@ -111,7 +111,7 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
     /**
      * Function to test updating a payment
      *
-     * @param $data Contains the data of the created payment
+     * @param array $data Contains the data of the created payment
      * @depends testCreatePayments
      */
     public function testUpdatePayments($data)
@@ -131,7 +131,7 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
     /**
      * Function to test deleting a payment
      *
-     * @param $data Contains the data of the created payment
+     * @param array $data Contains the data of the created payment
      * @depends testCreatePayments
      */
     public function testDeletePayment($data)

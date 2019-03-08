@@ -293,7 +293,7 @@ class VariantTest extends TestCase
     /**
      * @depends testGetOneShouldBeSuccessful
      *
-     * @param $article\Shopware\Models\Article\Article
+     * @param \Shopware\Models\Article\Article $article
      */
     public function testDeleteShouldBeSuccessful($article)
     {
@@ -368,7 +368,7 @@ class VariantTest extends TestCase
     /**
      * @depends testVariantCreate
      *
-     * @param $articleId
+     * @param int $articleId
      */
     public function testVariantUpdate($articleId)
     {
@@ -424,7 +424,7 @@ class VariantTest extends TestCase
     /**
      * @depends testVariantImageAssignByMediaId
      *
-     * @param $variantId
+     * @param int $variantId
      *
      * @return int
      */
@@ -455,7 +455,7 @@ class VariantTest extends TestCase
     /**
      * @depends testVariantImageReset
      *
-     * @param $variantId
+     * @param int $variantId
      */
     public function testVariantAddImage($variantId)
     {

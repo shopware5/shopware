@@ -213,7 +213,7 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
     /**
      * Creates a new address and saves it
      *
-     * @param $values
+     * @param array $values
      */
     public function createArbitraryAddress($values)
     {
@@ -225,7 +225,7 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
     /**
      * Changes the values in a modal address form and saves the form
      *
-     * @param $values
+     * @param array $values
      */
     public function changeModalAddress($values)
     {
