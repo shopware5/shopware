@@ -585,7 +585,7 @@
     {/block}
 
     {* Additional feature which can be enabled / disabled in the base configuration *}
-    {if {config name=commentvoucherarticle}||{config name=bonussystem} && {config name=bonus_system_active} && {config name=displaySlider}}
+    {if {config name=commentArticle}||{config name=bonussystem} && {config name=bonus_system_active} && {config name=displaySlider}}
         {block name="frontend_checkout_confirm_additional_features"}
             <div class="panel has--border additional--features">
                 {block name="frontend_checkout_confirm_additional_features_headline"}
