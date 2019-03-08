@@ -586,6 +586,34 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $this->View()->assign(['success' => true, 'data' => $nodes]);
     }
 
+    public function getMailVariablesAction()
+    {
+        $prefix = ltrim($this->Request()->getParam('prefix'), '$');
+
+        /** @var Mail $mail */
+        $mail = $this->getRepository()->find((int) $this->Request()->getParam('mailId'));
+        $shop = $this->get('models')->getRepository(Shop::class)->getActiveDefault();
+        $shop->registerResources();
+
+        $context = array_merge($this->getDefaultMailContext($shop), $mail->getContext());
+
+        $completer = $this->container->get('shopware_bundle_mail.auto_complete_resolver');
+
+        $context = $completer->completer($context, $this->Request()->getParam('smartyCode'));
+        $context = $mail->arrayGetPath($context);
+
+        $result = [];
+
+        foreach ($context as $key => $value) {
+            if (strpos($key, $prefix) !== false || !$prefix) {
+                $result[] = ['word' => '$' . $key, 'value' => is_array($value) ? 'Array' : (string) $value];
+            }
+        }
+
+        $this->View()->assign('data', $result);
+        $this->View()->assign('success', true);
+    }
+
     /**
      * Method to define acl dependencies in backend controllers
      */

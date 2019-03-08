@@ -80,8 +80,10 @@ Ext.define('Shopware.apps.Translation.view.main.Form',
            var elementType = currentField.xtype || '';
 
            switch(elementType) {
+                case 'ace-editor' :
+                case 'codemirror' :
                 case 'codemirrorfield' :
-                    currentField.height = "100";
+                    currentField.height = 200;
                     break;
                 case 'textfield':
                     currentField.emptyText = Ext.util.Format.htmlEncode(
