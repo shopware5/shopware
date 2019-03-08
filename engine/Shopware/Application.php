@@ -30,19 +30,6 @@ use Shopware\Components\DependencyInjection\Container;
 class Shopware extends Enlight_Application
 {
     /**
-     * @Deprecated to be removed in 5.6
-     *
-     * Use the following parameters from the DIC instead:
-     *      'shopware.release.version'
-     *      'shopware.release.revision'
-     *      'shopware.release.version_text'
-     *      'shopware.release' (a Struct containing all the above parameters)
-     */
-    const VERSION = '___VERSION___';
-    const VERSION_TEXT = '___VERSION_TEXT___';
-    const REVISION = '___REVISION___';
-
-    /**
      * @var string
      */
     protected $appPath;

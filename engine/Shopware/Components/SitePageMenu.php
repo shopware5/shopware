@@ -85,42 +85,16 @@ class SitePageMenu
         $menu = [];
         $links = [];
 
-        /**
-         * @deprecated
-         *
-         * Only necessary for mapping legacy page groups from e.g. "gLeft" to "left"
-         * To be removed in version 5.6
-         */
-        $legacyGroups = [
-            'gLeft',
-            'gBottom',
-            'gBottom2',
-            'gDisabled',
-        ];
-
         foreach ($data as $site) {
-            /*
-             * @deprecated
-             *
-             * Only necessary for mapping legacy page groups from e.g. "gLeft" to "left"
-             * To be removed in version 5.6
-             */
             if (isset($site['mapping'])) {
                 /**
                  * If there's a mapping present, we're dealing with one of the
                  * english legacy groups, so rename it to make it usable in the frontend.
                  */
                 $key = $site['mapping'];
-                if (in_array($site['mapping'], $legacyGroups, true)) {
-                    $key = strtolower(substr($site['mapping'], 1));
-                }
             } else {
                 /** group either contains the new or the legacy group key */
                 $key = $site['group'];
-                if (in_array($site['group'], $legacyGroups, true)) {
-                    /** If its a legacy group key, rename like above */
-                    $key = strtolower(substr($site['group'], 1));
-                }
             }
 
             if ($this->overrideExisting($menu, $key, $site)) {

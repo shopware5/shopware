@@ -66,26 +66,13 @@ use Symfony\Component\HttpKernel\TerminableInterface;
 class Kernel implements HttpKernelInterface, TerminableInterface
 {
     /**
-     * @Deprecated Since 5.4, to be removed in 5.6
-     *
-     * Use the following parameters from the DIC instead:
-     *      'shopware.release.version'
-     *      'shopware.release.revision'
-     *      'shopware.release.version_text'
-     *      'shopware.release' (a Struct containing all the parameters below)
-     */
-    const VERSION = \Shopware::VERSION;
-    const VERSION_TEXT = \Shopware::VERSION_TEXT;
-    const REVISION = \Shopware::REVISION;
-
-    /**
      * Shopware Version definition. Is being replaced by the correct release information in release packages.
      * Is available in the DIC as parameter 'shopware.release.*' or a Struct containing all the parameters below.
      */
     protected $release = [
-        'version' => self::VERSION,
-        'version_text' => self::VERSION_TEXT,
-        'revision' => self::REVISION,
+        'version' => '___VERSION___',
+        'version_text' => '___VERSION_TEXT___',
+        'revision' => '___REVISION___',
     ];
 
     /**
@@ -490,9 +477,9 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         $this->plugins = $initializer->initializePlugins();
 
         /*
-         * @deprecated since 5.5, sorting will be default in Shopware 5.6
+         * @deprecated since 5.5, is true by default since 5.6 will be removed in Shopware 5.7
          */
-        if ($this->config['backward_compatibility']['predictable_plugin_order'] !== false) {
+        if ($this->config['backward_compatibility']['predictable_plugin_order'] === true) {
             ksort($this->plugins);
         }
 
