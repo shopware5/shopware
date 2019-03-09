@@ -39,7 +39,7 @@ class Text extends ModelEntity
      * OWNING SIDE
      * Owning side of relation between container type 'text' and parent container
      *
-     * @var \Shopware\Models\Newsletter\Container
+     * @var \Shopware\Models\Newsletter\Container|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="text")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
@@ -60,7 +60,7 @@ class Text extends ModelEntity
     /**
      * ID of the container this model belongs to
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="parentID", type="integer", length=11, nullable=true)
      */
@@ -132,7 +132,7 @@ class Text extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Newsletter\Container
+     * @return \Shopware\Models\Newsletter\Container|null
      */
     public function getContainer()
     {

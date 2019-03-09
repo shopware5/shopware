@@ -68,7 +68,7 @@ class Group extends ModelEntity
     private $active = true;
 
     /**
-     * @var \Shopware\Models\Site\Group
+     * @var \Shopware\Models\Site\Group|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Site\Group")
      * @ORM\JoinColumn(name="mapping_id", nullable=true, referencedColumnName="id")

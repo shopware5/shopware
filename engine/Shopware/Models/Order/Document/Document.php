@@ -303,7 +303,7 @@ class Document extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Document
+     * @return \Shopware\Models\Attribute\Document|null
      */
     public function getAttribute()
     {

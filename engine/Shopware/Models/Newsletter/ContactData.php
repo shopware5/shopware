@@ -54,49 +54,49 @@ class ContactData extends ModelEntity
     protected $groupId;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="salutation", type="string", nullable=true)
      */
     protected $salutation;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="title", type="string", nullable=true)
      */
     protected $title;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="firstname", type="string", nullable=true)
      */
     protected $firstName;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="lastname", type="string", nullable=true)
      */
     protected $lastName;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="street", type="string", length=255, nullable=true)
      */
     protected $street;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="zipcode", type="string", nullable=true)
      */
     protected $zipCode;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="city", type="string", nullable=true)
      */
@@ -117,7 +117,7 @@ class ContactData extends ModelEntity
     protected $doubleOptinConfirmed;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="deleted", type="datetime", nullable=true)
      */
@@ -159,7 +159,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getCity()
     {
@@ -167,7 +167,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $deleted
+     * @param \DateTimeInterface|null $deleted
      */
     public function setDeleted($deleted)
     {
@@ -175,7 +175,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getDeleted()
     {
@@ -207,7 +207,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getFirstName()
     {
@@ -247,7 +247,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getLastName()
     {
@@ -263,7 +263,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getSalutation()
     {
@@ -279,7 +279,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getStreet()
     {
@@ -287,7 +287,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @param string $title
+     * @param string|null $title
      */
     public function setTitle($title)
     {
@@ -295,7 +295,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getTitle()
     {
@@ -311,7 +311,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getZipCode()
     {

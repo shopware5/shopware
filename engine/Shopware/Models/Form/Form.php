@@ -62,7 +62,7 @@ class Form extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\Form
+     * @var \Shopware\Models\Attribute\Form|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Form", mappedBy="form", orphanRemoval=true, cascade={"persist"})
      */
@@ -141,21 +141,21 @@ class Form extends ModelEntity
     private $isocode = 'de';
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="meta_title", type="string", length=255, nullable=true)
      */
     private $metaTitle = '';
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="meta_keywords", type="string", length=255, nullable=true)
      */
     private $metaKeywords = '';
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="meta_description", type="text", nullable=true)
      */
@@ -416,7 +416,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @param string $metaTitle
+     * @param string|null $metaTitle
      */
     public function setMetaTitle($metaTitle)
     {
@@ -424,7 +424,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getMetaTitle()
     {
@@ -432,7 +432,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @param string $metaDescription
+     * @param string|null $metaDescription
      */
     public function setMetaDescription($metaDescription)
     {
@@ -440,7 +440,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getMetaDescription()
     {
@@ -448,7 +448,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @param string $metaKeywords
+     * @param string|null $metaKeywords
      */
     public function setMetaKeywords($metaKeywords)
     {
@@ -456,7 +456,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getMetaKeywords()
     {
@@ -464,7 +464,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Form
+     * @return \Shopware\Models\Attribute\Form|null
      */
     public function getAttribute()
     {

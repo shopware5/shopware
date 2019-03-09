@@ -52,7 +52,7 @@ class Address extends LazyFetchModelEntity
      * The group property is the owning side of the association between group and newsletter group
      * The association is joined over the address groupId and the group's id
      *
-     * @var \Shopware\Models\Newsletter\Group
+     * @var \Shopware\Models\Newsletter\Group|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\Group")
      * @ORM\JoinColumn(name="groupID", referencedColumnName="id")
@@ -82,7 +82,7 @@ class Address extends LazyFetchModelEntity
     /**
      * ID of the newsletter-group this mail address belongs to
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="groupID", type="integer", length=11, nullable=true)
      */
@@ -130,7 +130,7 @@ class Address extends LazyFetchModelEntity
     /**
      * The Double-Opt-In registration date
      *
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="added", type="datetime", nullable=true)
      */
@@ -139,7 +139,7 @@ class Address extends LazyFetchModelEntity
     /**
      * The Double-Opt-In confirmation date
      *
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="double_optin_confirmed", type="datetime", nullable=true)
      */
@@ -246,7 +246,7 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Newsletter\Group $newsletterGroup
+     * @param \Shopware\Models\Newsletter\Group|null $newsletterGroup
      *
      * @return Address
      */
@@ -258,7 +258,7 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Newsletter\Group
+     * @return \Shopware\Models\Newsletter\Group|null
      */
     public function getNewsletterGroup()
     {
@@ -266,7 +266,7 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @param int $groupId
+     * @param int|null $groupId
      */
     public function setGroupId($groupId)
     {
@@ -274,7 +274,7 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getGroupId()
     {
@@ -293,7 +293,7 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getAdded()
     {
@@ -309,7 +309,7 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getDoubleOptinConfirmed()
     {
@@ -317,7 +317,7 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $doubleOptinConfirmed
+     * @param \DateTimeInterface|null $doubleOptinConfirmed
      */
     public function setDoubleOptinConfirmed($doubleOptinConfirmed)
     {

@@ -68,7 +68,7 @@ class Blog extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\Blog
+     * @var \Shopware\Models\Attribute\Blog|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Blog", mappedBy="blog", cascade={"persist"})
      */
@@ -100,7 +100,7 @@ class Blog extends ModelEntity
     private $title;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="author_id", type="integer", nullable=true)
      */
@@ -130,7 +130,7 @@ class Blog extends ModelEntity
     private $description;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="views", type="integer", nullable=true)
      */
@@ -144,7 +144,7 @@ class Blog extends ModelEntity
     private $displayDate;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="category_id", type="integer", nullable=true)
      */
@@ -166,21 +166,21 @@ class Blog extends ModelEntity
     private $template;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="meta_keywords", type="string", nullable=true)
      */
     private $metaKeyWords;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="meta_description", type="string", nullable=true)
      */
     private $metaDescription;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="meta_title", type="string", nullable=true)
      */
@@ -196,7 +196,7 @@ class Blog extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\User\User
+     * @var \Shopware\Models\User\User|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\User\User", inversedBy="blog")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
@@ -300,7 +300,7 @@ class Blog extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getViews()
     {
@@ -308,6 +308,8 @@ class Blog extends ModelEntity
     }
 
     /**
+     * Set Views
+     *
      * @param int $views
      */
     public function setViews($views)
@@ -335,7 +337,7 @@ class Blog extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getCategoryId()
     {
@@ -423,7 +425,7 @@ class Blog extends ModelEntity
     /**
      * Set the metaKeyWords
      *
-     * @return string
+     * @return string|null
      */
     public function getMetaKeyWords()
     {
@@ -433,7 +435,7 @@ class Blog extends ModelEntity
     /**
      * Get the metaKeyWords
      *
-     * @param string $metaKeyWords
+     * @param string|null $metaKeyWords
      */
     public function setMetaKeyWords($metaKeyWords)
     {
@@ -443,7 +445,7 @@ class Blog extends ModelEntity
     /**
      * Get the metaDescription
      *
-     * @return string
+     * @return string|null
      */
     public function getMetaDescription()
     {
@@ -453,7 +455,7 @@ class Blog extends ModelEntity
     /**
      * Set the metaDescription
      *
-     * @param string $metaDescription
+     * @param string|null $metaDescription
      */
     public function setMetaDescription($metaDescription)
     {
@@ -463,7 +465,7 @@ class Blog extends ModelEntity
     /**
      * Returns the Attributes
      *
-     * @return \Shopware\Models\Attribute\Blog
+     * @return \Shopware\Models\Attribute\Blog|null
      */
     public function getAttribute()
     {
@@ -503,7 +505,7 @@ class Blog extends ModelEntity
     /**
      * Returns the author
      *
-     * @return \Shopware\Models\User\User
+     * @return \Shopware\Models\User\User|null
      */
     public function getAuthor()
     {
@@ -513,7 +515,7 @@ class Blog extends ModelEntity
     /**
      * Sets the author
      *
-     * @param \Shopware\Models\User\User $author
+     * @param \Shopware\Models\User\User|null $author
      */
     public function setAuthor($author)
     {
@@ -523,7 +525,7 @@ class Blog extends ModelEntity
     /**
      * Set the metaTitle
      *
-     * @param string $metaTitle
+     * @param string|null $metaTitle
      */
     public function setMetaTitle($metaTitle)
     {
@@ -533,7 +535,7 @@ class Blog extends ModelEntity
     /**
      * Returns the metaTitle
      *
-     * @return string
+     * @return string|null
      */
     public function getMetaTitle()
     {

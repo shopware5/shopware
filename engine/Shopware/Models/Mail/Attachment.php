@@ -51,7 +51,7 @@ class Attachment extends File
     /**
      * The role property is the owning side of the association between attachment and shop.
      *
-     * @var \Shopware\Models\Shop\Shop
+     * @var \Shopware\Models\Shop\Shop|null
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="shopID", referencedColumnName="id", nullable=true)
@@ -93,7 +93,7 @@ class Attachment extends File
     }
 
     /**
-     * @return \Shopware\Models\Shop\Shop
+     * @return \Shopware\Models\Shop\Shop|null
      */
     public function getShop()
     {
@@ -112,7 +112,10 @@ class Attachment extends File
         return null;
     }
 
-    public function setShop(\Shopware\Models\Shop\Shop $shop)
+    /**
+     * @param \Shopware\Models\Shop\Shop|null $shop
+     */
+    public function setShop($shop)
     {
         $this->shop = $shop;
     }

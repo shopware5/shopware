@@ -58,7 +58,7 @@ class Rule extends ModelEntity
     /**
      * The resource property is the owning side of the association between rule and permission.
      *
-     * @var \Shopware\Models\User\Resource
+     * @var \Shopware\Models\User\Resource|null
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\User\Resource", fetch="EAGER")
      * @ORM\JoinColumn(name="resourceID", referencedColumnName="id", nullable=true)
@@ -68,7 +68,7 @@ class Rule extends ModelEntity
     /**
      * The privilege property is the owning side of the association between rule and permission.
      *
-     * @var \Shopware\Models\User\Privilege
+     * @var \Shopware\Models\User\Privilege|null
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\User\Privilege", fetch="EAGER")
      * @ORM\JoinColumn(name="privilegeID", referencedColumnName="id", nullable=true)
@@ -78,21 +78,21 @@ class Rule extends ModelEntity
     /**
      * @ORM\Column(name="privilegeID", type="integer", nullable=true)
      *
-     * @var int
+     * @var int|null
      */
     private $privilegeId;
 
     /**
      * @ORM\Column(name="roleID", type="integer", nullable=true)
      *
-     * @var int
+     * @var int|null
      */
     private $roleId;
 
     /**
      * @ORM\Column(name="resourceID", type="integer", nullable=true)
      *
-     * @var int
+     * @var int|null
      */
     private $resourceId;
 
@@ -130,7 +130,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getPrivilegeId()
     {
@@ -138,7 +138,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param int $privilegeId
+     * @param int|null $privilegeId
      */
     public function setPrivilegeId($privilegeId)
     {
@@ -146,7 +146,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getRoleId()
     {
@@ -162,7 +162,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getResourceId()
     {
@@ -170,7 +170,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param int $resourceId
+     * @param int|null $resourceId
      */
     public function setResourceId($resourceId)
     {
@@ -186,7 +186,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\User\Resource $resource
+     * @param \Shopware\Models\User\Resource|null $resource
      */
     public function setResource($resource)
     {

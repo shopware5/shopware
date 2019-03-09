@@ -64,7 +64,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
     private $name;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="pluginID", type="integer", nullable=true)
      */
@@ -119,7 +119,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
     /**
      * Getter function for the pluginId property
      *
-     * @return int
+     * @return int|null
      */
     public function getPluginId()
     {

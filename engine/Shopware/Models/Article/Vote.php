@@ -75,7 +75,7 @@ class Vote extends ModelEntity
     private $articleId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="shop_id", type="integer", nullable=true)
      */
@@ -138,7 +138,7 @@ class Vote extends ModelEntity
     private $answer;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="answer_date", type="datetime", nullable=true)
      */
@@ -356,7 +356,7 @@ class Vote extends ModelEntity
     /**
      * Sets the datum of the answer
      *
-     * @param \DateTimeInterface|string $answer_date
+     * @param \DateTimeInterface|string|null $answer_date
      *
      * @return Vote
      */
@@ -373,7 +373,7 @@ class Vote extends ModelEntity
     /**
      * Gets the datum of the answer
      *
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getAnswerDate()
     {
@@ -392,7 +392,7 @@ class Vote extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Article|array|null $article
+     * @param \Shopware\Models\Article\Article|array $article
      *
      * @return \Shopware\Models\Article\Vote
      */

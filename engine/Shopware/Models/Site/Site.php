@@ -41,7 +41,7 @@ class Site extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var SiteAttribute
+     * @var SiteAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Site", mappedBy="site", orphanRemoval=true, cascade={"persist"})
      */
@@ -193,7 +193,7 @@ class Site extends ModelEntity
     /**
      * The parent category
      *
-     * @var Site
+     * @var Site|null
      *
      * @ORM\ManyToOne(targetEntity="Site", inversedBy="children")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
@@ -201,7 +201,7 @@ class Site extends ModelEntity
     private $parent;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="parentID", type="integer", nullable=true)
      */
@@ -479,7 +479,7 @@ class Site extends ModelEntity
     }
 
     /**
-     * @return Site
+     * @return Site|null
      */
     public function getParent()
     {
@@ -487,7 +487,7 @@ class Site extends ModelEntity
     }
 
     /**
-     * @param Site $parent
+     * @param Site|null $parent
      *
      * @return Site
      */
@@ -519,7 +519,7 @@ class Site extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getParentId()
     {
@@ -539,7 +539,7 @@ class Site extends ModelEntity
     }
 
     /**
-     * @return SiteAttribute
+     * @return SiteAttribute|null
      */
     public function getAttribute()
     {

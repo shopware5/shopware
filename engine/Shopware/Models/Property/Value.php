@@ -41,7 +41,7 @@ class Value extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var PropertyValueAttribute
+     * @var PropertyValueAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyValue", mappedBy="propertyValue", orphanRemoval=true, cascade={"persist"})
      */
@@ -101,14 +101,14 @@ class Value extends ModelEntity
     private $articles;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="media_id", type="integer", nullable=true)
      */
     private $mediaId;
 
     /**
-     * @var Media
+     * @var Media|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Media\Media", inversedBy="properties")
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
@@ -190,7 +190,7 @@ class Value extends ModelEntity
     }
 
     /**
-     * @return Media
+     * @return Media|null
      */
     public function getMedia()
     {
@@ -198,7 +198,7 @@ class Value extends ModelEntity
     }
 
     /**
-     * @param Media $media
+     * @param Media|null $media
      */
     public function setMedia($media)
     {
@@ -206,7 +206,7 @@ class Value extends ModelEntity
     }
 
     /**
-     * @return PropertyValueAttribute
+     * @return PropertyValueAttribute|null
      */
     public function getAttribute()
     {

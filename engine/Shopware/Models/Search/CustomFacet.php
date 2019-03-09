@@ -41,7 +41,7 @@ class CustomFacet extends ModelEntity
     protected $name;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="unique_key", nullable=true)
      */
@@ -196,7 +196,7 @@ class CustomFacet extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getUniqueKey()
     {

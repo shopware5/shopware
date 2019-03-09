@@ -100,7 +100,7 @@ class Album extends ModelEntity
     /**
      * Id of the parent album
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="parentID", type="integer", nullable=true)
      */

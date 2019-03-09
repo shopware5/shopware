@@ -44,7 +44,7 @@ class Menu extends ModelEntity
     public $label;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="onclick", type="string", length=255, nullable=true)
      */
@@ -58,28 +58,28 @@ class Menu extends ModelEntity
     public $class;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="controller", type="string", length=255, nullable=true)
      */
     public $controller;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="action", type="string", length=255, nullable=true)
      */
     public $action;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="shortcut", type="string", length=255, nullable=true)
      */
     public $shortcut;
 
     /**
-     * @var \Shopware\Models\Plugin\Plugin
+     * @var \Shopware\Models\Plugin\Plugin|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="menuItems")
      * @ORM\JoinColumn(name="pluginID", referencedColumnName="id")
@@ -110,21 +110,21 @@ class Menu extends ModelEntity
     private $active = true;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="pluginID", type="integer", nullable=true)
      */
     private $pluginId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="parent", type="integer", nullable=true)
      */
     private $parentId;
 
     /**
-     * @var Menu
+     * @var Menu|null
      *
      * @ORM\ManyToOne(targetEntity="Menu", inversedBy="children", cascade={"persist"})
      * @ORM\JoinColumn(name="parent", nullable=true, referencedColumnName="id", onDelete="SET NULL")
@@ -176,7 +176,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getOnclick()
     {
@@ -184,7 +184,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @param string $onclick
+     * @param string|null $onclick
      */
     public function setOnclick($onclick)
     {
@@ -240,7 +240,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getPluginId()
     {
@@ -248,7 +248,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @param int $pluginId
+     * @param int|null $pluginId
      */
     public function setPluginId($pluginId)
     {
@@ -256,7 +256,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getController()
     {
@@ -264,7 +264,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @param string $controller
+     * @param string|null $controller
      */
     public function setController($controller)
     {
@@ -272,7 +272,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getAction()
     {
@@ -280,7 +280,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @param string $action
+     * @param string|null $action
      */
     public function setAction($action)
     {
@@ -288,7 +288,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getShortcut()
     {
@@ -296,7 +296,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @param string $shortcut
+     * @param string|null $shortcut
      */
     public function setShortcut($shortcut)
     {
@@ -304,16 +304,13 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @return Menu
+     * @return Menu|null
      */
     public function getParent()
     {
         return $this->parent;
     }
 
-    /**
-     * @param Menu $parent
-     */
     public function setParent(Menu $parent = null)
     {
         // Parent may be null when this menu item should be a main menu item
@@ -356,7 +353,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Plugin\Plugin
+     * @return \Shopware\Models\Plugin\Plugin|null
      */
     public function getPlugin()
     {
@@ -364,7 +361,7 @@ class Menu extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Plugin\Plugin $plugin
+     * @param \Shopware\Models\Plugin\Plugin|null $plugin
      */
     public function setPlugin($plugin)
     {

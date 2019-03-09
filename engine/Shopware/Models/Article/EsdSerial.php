@@ -62,7 +62,7 @@ class EsdSerial extends ModelEntity
     private $id;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="serialnumber", type="string", length=255, nullable=true)
      */
@@ -103,7 +103,7 @@ class EsdSerial extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getSerialnumber()
     {

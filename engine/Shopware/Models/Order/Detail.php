@@ -80,7 +80,7 @@ class Detail extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\OrderDetail
+     * @var \Shopware\Models\Attribute\OrderDetail|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderDetail", mappedBy="orderDetail", orphanRemoval=true, cascade={"persist"})
      */
@@ -159,7 +159,7 @@ class Detail extends ModelEntity
     private $articleDetailID;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="ordernumber", type="string", length=255, nullable=true)
      */
@@ -216,7 +216,7 @@ class Detail extends ModelEntity
     private $shippedGroup = 0;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="releasedate", type="date", nullable=true)
      */
@@ -244,21 +244,21 @@ class Detail extends ModelEntity
     private $config = '';
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="ean", type="string", length=255, nullable=true)
      */
     private $ean;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="unit", type="string", length=255, nullable=true)
      */
     private $unit;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="pack_unit", type="string", length=255, nullable=true)
      */
@@ -285,7 +285,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getNumber()
     {
@@ -438,7 +438,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getReleaseDate()
     {
@@ -683,7 +683,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\OrderDetail
+     * @return \Shopware\Models\Attribute\OrderDetail|null
      */
     public function getAttribute()
     {
@@ -749,7 +749,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param string $ean
+     * @param string|null $ean
      */
     public function setEan($ean)
     {
@@ -757,7 +757,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getEan()
     {
@@ -765,7 +765,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param string $unit
+     * @param string|null $unit
      */
     public function setUnit($unit)
     {
@@ -773,7 +773,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getUnit()
     {
@@ -781,7 +781,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param string $packUnit
+     * @param string|null $packUnit
      */
     public function setPackUnit($packUnit)
     {
@@ -789,7 +789,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPackUnit()
     {

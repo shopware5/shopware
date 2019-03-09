@@ -92,7 +92,7 @@ class Emotion extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\Emotion
+     * @var \Shopware\Models\Attribute\Emotion|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Emotion", mappedBy="emotion", orphanRemoval=true, cascade={"persist"})
      */
@@ -106,14 +106,14 @@ class Emotion extends ModelEntity
     protected $showListing;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="template_id", type="integer", nullable=true)
      */
     protected $templateId = null;
 
     /**
-     * @var Template
+     * @var Template|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Template", inversedBy="emotions")
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
@@ -132,7 +132,7 @@ class Emotion extends ModelEntity
     private $id;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
@@ -174,7 +174,7 @@ class Emotion extends ModelEntity
     private $position = 1;
 
     /**
-     * @var int
+     * @var string|null
      *
      * @ORM\Column(name="device", type="string", length=255, nullable=true)
      */
@@ -191,7 +191,7 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="valid_from", type="datetime", nullable=true)
      */
@@ -229,7 +229,7 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="valid_to", type="datetime", nullable=true)
      */
@@ -316,14 +316,14 @@ class Emotion extends ModelEntity
     private $mode;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="preview_id", type="integer", nullable=true)
      */
     private $previewId;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="preview_secret", type="string", nullable=true)
      */
@@ -340,7 +340,7 @@ class Emotion extends ModelEntity
     private $listingVisibility = self::LISTING_VISIBILITY_ONLY_START;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="customer_stream_ids", type="string", nullable=true)
      */
@@ -435,7 +435,7 @@ class Emotion extends ModelEntity
     /**
      * Create date of the emotion.
      *
-     * @param \DateTimeInterface|string|null $createDate
+     * @param \DateTimeInterface|string $createDate
      */
     public function setCreateDate($createDate = 'now')
     {
@@ -475,7 +475,7 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getValidFrom()
     {
@@ -501,7 +501,7 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getValidTo()
     {
@@ -543,7 +543,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string|null $modified
+     * @param \DateTimeInterface|string $modified
      */
     public function setModified($modified)
     {
@@ -728,7 +728,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @return Template
+     * @return Template|null
      */
     public function getTemplate()
     {
@@ -744,7 +744,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @param int $device
+     * @param string $device
      */
     public function setDevice($device)
     {
@@ -752,7 +752,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return string|null
      */
     public function getDevice()
     {
@@ -888,7 +888,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getParentId()
     {
@@ -896,7 +896,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @param int $parentId
+     * @param int|null $parentId
      */
     public function setParentId($parentId)
     {
@@ -904,7 +904,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getPreviewId()
     {
@@ -912,7 +912,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @param int $previewId
+     * @param int|null $previewId
      */
     public function setPreviewId($previewId)
     {
@@ -920,7 +920,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPreviewSecret()
     {
@@ -928,7 +928,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @param string $previewSecret
+     * @param string|null $previewSecret
      */
     public function setPreviewSecret($previewSecret)
     {
@@ -967,11 +967,17 @@ class Emotion extends ModelEntity
         $this->replacement = $replacement;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCustomerStreamIds()
     {
         return $this->customerStreamIds;
     }
 
+    /**
+     * @param string|null $customerStreamIds
+     */
     public function setCustomerStreamIds($customerStreamIds)
     {
         $this->customerStreamIds = $customerStreamIds;

@@ -67,14 +67,14 @@ class Layout extends ModelEntity
     protected $template;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
     protected $parentId;
 
     /**
-     * @var Layout
+     * @var Layout|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\TemplateConfig\Layout", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", nullable=true, referencedColumnName="id")
@@ -150,7 +150,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\TemplateConfig\Layout $parent
+     * @param \Shopware\Models\Shop\TemplateConfig\Layout|null $parent
      */
     public function setParent($parent)
     {
@@ -158,7 +158,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\TemplateConfig\Layout
+     * @return \Shopware\Models\Shop\TemplateConfig\Layout|null
      */
     public function getParent()
     {
@@ -166,7 +166,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @param int $parentId
+     * @param int|null $parentId
      */
     public function setParentId($parentId)
     {
@@ -174,7 +174,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getParentId()
     {

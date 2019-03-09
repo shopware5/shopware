@@ -88,7 +88,7 @@ class Container extends ModelEntity
      * OWNING SIDE
      * Owning side of the newsletter-container association
      *
-     * @var \Shopware\Models\Newsletter\Newsletter
+     * @var \Shopware\Models\Newsletter\Newsletter|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Newsletter\Newsletter", inversedBy="containers")
      * @ORM\JoinColumn(name="promotionID", referencedColumnName="id")
@@ -109,7 +109,7 @@ class Container extends ModelEntity
     /**
      * Newsletter ID
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="promotionID", type="integer", length=11, nullable=true)
      */
@@ -214,7 +214,7 @@ class Container extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Newsletter\Newsletter
+     * @return \Shopware\Models\Newsletter\Newsletter|null
      */
     public function getNewsletter()
     {
