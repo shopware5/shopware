@@ -181,4 +181,22 @@ class CustomerStream extends ModelEntity
     {
         $this->static = $static;
     }
+
+    /**
+     * @return \Shopware\Models\Attribute\CustomerStream
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * @param \Shopware\Models\Attribute\CustomerStream|array|null $attribute
+     *
+     * @return \Shopware\Models\Attribute\CustomerStream
+     */
+    public function setAttribute($attribute)
+    {
+        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\CustomerStream', 'attribute', 'customerStream');
+    }
 }
