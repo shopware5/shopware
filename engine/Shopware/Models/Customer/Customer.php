@@ -76,7 +76,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * Contains the unique customer number
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="customernumber", type="string", length=30, nullable=true)
      */
@@ -118,7 +118,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var CustomerAttribute
+     * @var CustomerAttribute|null
      *
      * @Assert\Valid()
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Customer", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
@@ -130,7 +130,7 @@ class Customer extends LazyFetchModelEntity
      * The price group property represents the owning side for the association between customer and customer price group.
      * The association is joined over the pricegroup id field and the pricegroupID field of the customer.
      *
-     * @var PriceGroup
+     * @var PriceGroup|null
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\PriceGroup", inversedBy="customers")
      * @ORM\JoinColumn(name="pricegroupID", referencedColumnName="id")
@@ -237,7 +237,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * Id of the price group, which the customer is assigned
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="pricegroupID", type="integer", nullable=true)
      */
@@ -423,7 +423,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * Contains the time, since the customer is logged into a session.
      *
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="lockedUntil", type="datetime", nullable=true)
      */
@@ -462,7 +462,7 @@ class Customer extends LazyFetchModelEntity
     private $lastname;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="birthday", type="date", nullable=true)
      */
@@ -476,14 +476,14 @@ class Customer extends LazyFetchModelEntity
     private $doubleOptinRegister;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="doubleOptinEmailSentDate", type="datetime", nullable=true)
      */
     private $doubleOptinEmailSentDate;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="doubleOptinConfirmDate", type="datetime", nullable=true)
      */
@@ -927,7 +927,7 @@ class Customer extends LazyFetchModelEntity
      * Setter function for the lockedUntil column property, which contains the time since the customer is logged into a session.
      * Expects a \DateTimeInterface object or a time string which will be converted to a \DateTime object.
      *
-     * @param string|\DateTimeInterface $lockedUntil
+     * @param string|\DateTimeInterface|null $lockedUntil
      *
      * @return Customer
      */
@@ -944,7 +944,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * Getter function for the lockedUntil column property, which contains the time since the customer is logged into a session.
      *
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getLockedUntil()
     {
@@ -994,7 +994,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return CustomerAttribute
+     * @return CustomerAttribute|null
      */
     public function getAttribute()
     {
@@ -1097,7 +1097,7 @@ class Customer extends LazyFetchModelEntity
      * the Customer.group property (OWNING SIDE) and the Group.customers (INVERSE SIDE) property.
      * The group data is joined over the s_core_customergroup.id field.
      *
-     * @param Group|array|null $group
+     * @param Group|array $group
      *
      * @return Customer
      */
@@ -1123,7 +1123,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return PriceGroup
+     * @return PriceGroup|null
      */
     public function getPriceGroup()
     {
@@ -1131,7 +1131,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @param PriceGroup $priceGroup
+     * @param PriceGroup|null $priceGroup
      */
     public function setPriceGroup($priceGroup)
     {
@@ -1313,7 +1313,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getBirthday()
     {
@@ -1349,7 +1349,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getNumber()
     {
@@ -1357,7 +1357,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @param string $number
+     * @param string|null $number
      */
     public function setNumber($number)
     {
@@ -1413,7 +1413,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getDoubleOptinEmailSentDate()
     {
@@ -1421,7 +1421,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $doubleOptinEmailSentDate
+     * @param \DateTimeInterface|null $doubleOptinEmailSentDate
      */
     public function setDoubleOptinEmailSentDate($doubleOptinEmailSentDate)
     {

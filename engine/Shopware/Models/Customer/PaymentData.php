@@ -65,49 +65,49 @@ class PaymentData extends ModelEntity
     protected $customer;
 
     /**
-     * @var bool
+     * @var bool|null
      *
      * @ORM\Column(name="use_billing_data", type="boolean", nullable=true)
      */
     protected $useBillingData;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="bankname", type="string", length=255, nullable=true)
      */
     protected $bankName;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="bic", type="string", length=50, nullable=true)
      */
     protected $bic;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="iban", type="string", length=50, nullable=true)
      */
     protected $iban;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="account_number", type="string", length=50, nullable=true)
      */
     protected $accountNumber;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="bank_code", type="string", length=50, nullable=true)
      */
     protected $bankCode;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="account_holder", type="string", length=50, nullable=true)
      */
@@ -153,7 +153,7 @@ class PaymentData extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getBankName()
     {
@@ -169,7 +169,7 @@ class PaymentData extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getBic()
     {
@@ -217,7 +217,7 @@ class PaymentData extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getIban()
     {
@@ -249,7 +249,7 @@ class PaymentData extends ModelEntity
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
     public function getUseBillingData()
     {
@@ -265,7 +265,7 @@ class PaymentData extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getAccountHolder()
     {
@@ -281,7 +281,7 @@ class PaymentData extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getAccountNumber()
     {
@@ -297,7 +297,7 @@ class PaymentData extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getBankCode()
     {

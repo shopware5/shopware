@@ -73,77 +73,77 @@ class PaymentInstance extends ModelEntity
     protected $customer;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="firstname", type="string", length=255, nullable=true)
      */
     protected $firstName;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="lastname", type="string", length=255, nullable=true)
      */
     protected $lastName;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="address", type="string", length=255, nullable=true)
      */
     protected $address;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="zipcode", type="string", length=15, nullable=true)
      */
     protected $zipCode;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="city", type="string", length=50, nullable=true)
      */
     protected $city;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="bank_name", type="string", length=255, nullable=true)
      */
     protected $bankName;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="bank_code", type="string", length=255, nullable=true)
      */
     protected $bankCode;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="account_number", type="string", length=50, nullable=true)
      */
     protected $accountNumber;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="account_holder", type="string", length=255, nullable=true)
      */
     protected $accountHolder;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="bic", type="string", length=50, nullable=true)
      */
     protected $bic;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="iban", type="string", length=50, nullable=true)
      */
@@ -196,7 +196,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getAddress()
     {
@@ -212,7 +212,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getBankName()
     {
@@ -228,7 +228,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getBic()
     {
@@ -244,7 +244,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getCity()
     {
@@ -292,7 +292,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getFirstName()
     {
@@ -308,7 +308,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getIban()
     {
@@ -324,7 +324,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getLastName()
     {
@@ -372,7 +372,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getZipCode()
     {
@@ -404,7 +404,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getAccountHolder()
     {
@@ -420,7 +420,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getAccountNumber()
     {
@@ -436,7 +436,7 @@ class PaymentInstance extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getBankCode()
     {

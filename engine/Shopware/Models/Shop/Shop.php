@@ -46,14 +46,14 @@ class Shop extends ModelEntity
     protected $id;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="main_id", type="integer", nullable=true)
      */
     protected $mainId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="category_id", type="integer", nullable=true)
      */
@@ -74,7 +74,7 @@ class Shop extends ModelEntity
     protected $name;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
@@ -88,21 +88,21 @@ class Shop extends ModelEntity
     protected $position = 0;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="host", type="string", length=255, nullable=true)
      */
     protected $host;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="base_path", type="string", length=255, nullable=true)
      */
     protected $basePath;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="base_url", type="string", length=255, nullable=true)
      */
@@ -123,14 +123,14 @@ class Shop extends ModelEntity
     protected $secure = false;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="template_id", type="integer", nullable=true)
      */
     protected $templateId;
 
     /**
-     * @var Template
+     * @var Template|null
      *
      * @ORM\ManyToOne(targetEntity="Template", inversedBy="shops")
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
@@ -232,7 +232,7 @@ class Shop extends ModelEntity
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Shop", mappedBy="shop", orphanRemoval=true, cascade={"persist"})
      *
-     * @var \Shopware\Models\Attribute\Shop
+     * @var \Shopware\Models\Attribute\Shop|null
      */
     protected $attribute;
 
@@ -270,7 +270,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getTitle()
     {
@@ -278,7 +278,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param string $title
+     * @param string|null $title
      */
     public function setTitle($title)
     {
@@ -302,7 +302,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getHost()
     {
@@ -310,7 +310,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param string $host
+     * @param string|null $host
      */
     public function setHost($host)
     {
@@ -318,7 +318,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getBasePath()
     {
@@ -326,7 +326,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param string $basePath
+     * @param string|null $basePath
      */
     public function setBasePath($basePath)
     {
@@ -334,7 +334,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getBaseUrl()
     {
@@ -342,7 +342,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param string $baseUrl
+     * @param string|null $baseUrl
      */
     public function setBaseUrl($baseUrl)
     {
@@ -374,7 +374,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param Template $template
+     * @param Template|null $template
      */
     public function setTemplate($template)
     {
@@ -606,7 +606,7 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Shop
+     * @return \Shopware\Models\Attribute\Shop|null
      */
     public function getAttribute()
     {

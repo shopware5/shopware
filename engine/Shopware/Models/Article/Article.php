@@ -47,12 +47,10 @@ class Article extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Tax\Tax
+     * @var \Shopware\Models\Tax\Tax|null
      *
      * @Assert\NotBlank()
      * @Assert\Valid()
-     *
-     * @var \Shopware\Models\Tax\Tax
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Tax\Tax")
      * @ORM\JoinColumn(name="taxID", referencedColumnName="id")
@@ -134,7 +132,7 @@ class Article extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Property\Group
+     * @var \Shopware\Models\Property\Group|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Property\Group", inversedBy="articles")
      * @ORM\JoinColumn(name="filtergroupID", referencedColumnName="id")
@@ -174,7 +172,7 @@ class Article extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var Supplier
+     * @var Supplier|null
      *
      * @Assert\Valid()
      *
@@ -198,7 +196,7 @@ class Article extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var Detail
+     * @var Detail|null
      *
      * @Assert\NotBlank()
      * @Assert\Valid()
@@ -245,7 +243,7 @@ class Article extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Price\Group
+     * @var \Shopware\Models\Price\Group|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Price\Group")
      * @ORM\JoinColumn(name="pricegroupID", referencedColumnName="id")
@@ -264,7 +262,7 @@ class Article extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ProductAttribute
+     * @var ProductAttribute|null
      *
      * @Assert\Valid()
      *
@@ -275,7 +273,7 @@ class Article extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var Configurator\Set
+     * @var Configurator\Set|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Set", inversedBy="articles", cascade={"persist"})
      * @ORM\JoinColumn(name="configurator_set_id", referencedColumnName="id")
@@ -325,42 +323,42 @@ class Article extends ModelEntity
     private $id;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="main_detail_id", type="integer", nullable=true)
      */
     private $mainDetailId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="supplierID", type="integer", nullable=true)
      */
     private $supplierId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="taxID", type="integer", nullable=true)
      */
     private $taxId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="pricegroupID", type="integer", nullable=true)
      */
     private $priceGroupId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="filtergroupID", type="integer", nullable=true)
      */
     private $filterGroupId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="configurator_set_id", type="integer", nullable=true)
      */
@@ -376,21 +374,21 @@ class Article extends ModelEntity
     private $name;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="description_long", type="text", nullable=true)
      */
     private $descriptionLong;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @Assert\DateTime()
      *
@@ -420,14 +418,14 @@ class Article extends ModelEntity
     private $highlight = false;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="keywords", type="string", length=255, nullable=true)
      */
     private $keywords;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="metaTitle", type="string", length=255, nullable=true)
      */
@@ -470,7 +468,7 @@ class Article extends ModelEntity
     private $notification = false;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="template", type="string", length=255, nullable=true)
      */
@@ -484,14 +482,14 @@ class Article extends ModelEntity
     private $mode = 0;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="available_from", type="datetime", nullable=true)
      */
     private $availableFrom;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="available_to", type="datetime", nullable=true)
      */
@@ -567,7 +565,7 @@ class Article extends ModelEntity
     /**
      * Get description
      *
-     * @return string
+     * @return string|null
      */
     public function getDescription()
     {
@@ -591,7 +589,7 @@ class Article extends ModelEntity
     /**
      * Get descriptionLong
      *
-     * @return string
+     * @return string|null
      */
     public function getDescriptionLong()
     {
@@ -619,7 +617,7 @@ class Article extends ModelEntity
     /**
      * Get date
      *
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getAdded()
     {
@@ -715,7 +713,7 @@ class Article extends ModelEntity
     /**
      * Get keywords
      *
-     * @return string
+     * @return string|null
      */
     public function getKeywords()
     {
@@ -739,7 +737,7 @@ class Article extends ModelEntity
     /**
      * Get metaTitle
      *
-     * @return string
+     * @return string|null
      */
     public function getMetaTitle()
     {
@@ -849,7 +847,7 @@ class Article extends ModelEntity
     /**
      * Set template
      *
-     * @param string $template
+     * @param string|null $template
      *
      * @return Article
      */
@@ -863,7 +861,7 @@ class Article extends ModelEntity
     /**
      * Get template
      *
-     * @return string
+     * @return string|null
      */
     public function getTemplate()
     {
@@ -973,7 +971,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Property\Group $propertyGroup
+     * @param \Shopware\Models\Property\Group|null $propertyGroup
      *
      * @return Article
      */
@@ -1025,7 +1023,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Tax\Tax
+     * @return \Shopware\Models\Tax\Tax|null
      */
     public function getTax()
     {
@@ -1104,7 +1102,7 @@ class Article extends ModelEntity
      * OWNING SIDE
      * of the association between articles and supplier
      *
-     * @return Supplier
+     * @return Supplier|null
      */
     public function getSupplier()
     {
@@ -1112,7 +1110,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param Supplier|array|null $supplier
+     * @param Supplier|array $supplier
      *
      * @return \Shopware\Components\Model\ModelEntity
      */
@@ -1165,7 +1163,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Price\Group
+     * @return \Shopware\Models\Price\Group|null
      */
     public function getPriceGroup()
     {
@@ -1205,7 +1203,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return ProductAttribute
+     * @return ProductAttribute|null
      */
     public function getAttribute()
     {
@@ -1245,7 +1243,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getAvailableFrom()
     {
@@ -1253,7 +1251,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $availableFrom
+     * @param \DateTimeInterface|null $availableFrom
      *
      * @return Article
      */
@@ -1265,7 +1263,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getAvailableTo()
     {
@@ -1273,7 +1271,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $availableTo
+     * @param \DateTimeInterface|null $availableTo
      *
      * @return Article
      */
@@ -1293,7 +1291,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param Configurator\Set $configuratorSet
+     * @param Configurator\Set|null $configuratorSet
      *
      * @return Article
      */

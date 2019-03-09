@@ -54,7 +54,7 @@ class Supplier extends ModelEntity
     /**
      * Title for the page - SEO metadata
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="meta_title", type="string", nullable=true)
      */
@@ -63,7 +63,7 @@ class Supplier extends ModelEntity
     /**
      * Description for the page - SEO metadata
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="meta_description", type="string", nullable=true)
      */
@@ -72,7 +72,7 @@ class Supplier extends ModelEntity
     /**
      * Meta keywords for the page - SEO metadata
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="meta_keywords", type="string", nullable=true)
      */
@@ -92,7 +92,7 @@ class Supplier extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ProductSupplierAttribute
+     * @var ProductSupplierAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleSupplier", mappedBy="articleSupplier", cascade={"persist"})
      */
@@ -139,7 +139,7 @@ class Supplier extends ModelEntity
     /**
      * Description text which can be used e.g. for a special supplier page
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
@@ -255,7 +255,7 @@ class Supplier extends ModelEntity
     /**
      * Returns suppliers description. This description may contains HTML Code.
      *
-     * @return string
+     * @return string|null
      */
     public function getDescription()
     {
@@ -265,7 +265,7 @@ class Supplier extends ModelEntity
     /**
      * Sets the description of the supplier. This description may contains HTML codes.
      *
-     * @param string $description
+     * @param string|null $description
      *
      * @return Supplier
      */
@@ -301,7 +301,7 @@ class Supplier extends ModelEntity
     }
 
     /**
-     * @return ProductSupplierAttribute
+     * @return ProductSupplierAttribute|null
      */
     public function getAttribute()
     {
@@ -319,7 +319,7 @@ class Supplier extends ModelEntity
     }
 
     /**
-     * @param string $metaTitle
+     * @param string|null $metaTitle
      */
     public function setMetaTitle($metaTitle)
     {
@@ -327,7 +327,7 @@ class Supplier extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getMetaTitle()
     {
@@ -335,7 +335,7 @@ class Supplier extends ModelEntity
     }
 
     /**
-     * @param string $metaDescription
+     * @param string|null $metaDescription
      */
     public function setMetaDescription($metaDescription)
     {
@@ -343,7 +343,7 @@ class Supplier extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getMetaDescription()
     {
@@ -351,7 +351,7 @@ class Supplier extends ModelEntity
     }
 
     /**
-     * @param string $metaKeywords
+     * @param string|null $metaKeywords
      */
     public function setMetaKeywords($metaKeywords)
     {
@@ -359,7 +359,7 @@ class Supplier extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getMetaKeywords()
     {

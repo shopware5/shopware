@@ -90,7 +90,7 @@ class ArticleImpression extends ModelEntity
     private $impressions;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="deviceType", type="string", length=50, nullable=true)
      */
@@ -101,7 +101,7 @@ class ArticleImpression extends ModelEntity
      * @param int                     $shopId
      * @param \DateTimeInterface|null $date
      * @param int                     $impressions
-     * @param string                  $deviceType
+     * @param string|null             $deviceType
      */
     public function __construct($articleId, $shopId, $date = null, $impressions = 1, $deviceType = null)
     {
@@ -218,7 +218,7 @@ class ArticleImpression extends ModelEntity
     }
 
     /**
-     * @param string $deviceType
+     * @param string|null $deviceType
      */
     public function setDeviceType($deviceType)
     {
@@ -226,7 +226,7 @@ class ArticleImpression extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDeviceType()
     {

@@ -72,7 +72,7 @@ class Banner extends ModelEntity
     /**
      * ID of the banner which should be tracked
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="bannerID", type="integer", nullable=true)
      */
@@ -81,7 +81,7 @@ class Banner extends ModelEntity
     /**
      * Accumulated number of clicks
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="clicks", type="integer", nullable=true)
      */
@@ -90,7 +90,7 @@ class Banner extends ModelEntity
     /**
      * Accumulated number of views
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="views", type="integer", nullable=true)
      */
@@ -136,7 +136,7 @@ class Banner extends ModelEntity
     /**
      * Returns the ID of the banner which should be tracked.
      *
-     * @return int
+     * @return int|null
      */
     public function getBannerId()
     {
@@ -160,7 +160,7 @@ class Banner extends ModelEntity
     /**
      * Returns the amount of clicks on a particular banner.
      *
-     * @return int
+     * @return int|null
      */
     public function getClicks()
     {
@@ -170,7 +170,7 @@ class Banner extends ModelEntity
     /**
      * Sets the numbers of clicks this banner received
      *
-     * @param int $clicks
+     * @param int|null $clicks
      *
      * @return Banner
      */
@@ -184,7 +184,7 @@ class Banner extends ModelEntity
     /**
      * Return the number of times a banner has been shown
      *
-     * @return int
+     * @return int|null
      */
     public function getViews()
     {
@@ -194,7 +194,7 @@ class Banner extends ModelEntity
     /**
      * Sets the number of times the banner has been displayed.
      *
-     * @param int $views
+     * @param int|null $views
      *
      * @return Banner
      */

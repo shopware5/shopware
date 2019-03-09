@@ -70,7 +70,7 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
          *
          * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Document", mappedBy="document", orphanRemoval=true, cascade={"persist"})
          *
-         * @var \Shopware\Models\Attribute\Document
+         * @var \Shopware\Models\Attribute\Document|null
          */
         protected $attribute;
 
@@ -351,7 +351,7 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * @return \Shopware\Models\Attribute\Document
+         * @return \Shopware\Models\Attribute\Document|null
          */
         public function getAttribute()
         {
@@ -390,7 +390,7 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         /**
          * INVERSE SIDE
          *
-         * @var \Shopware\Models\Attribute\Document
+         * @var \Shopware\Models\Attribute\Document|null
          *
          * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Document", mappedBy="document", orphanRemoval=true, cascade={"persist"})
          */
@@ -673,7 +673,7 @@ if ($documentIdConversion->isDocumentIdUpperCase()) {
         }
 
         /**
-         * @return \Shopware\Models\Attribute\Document
+         * @return \Shopware\Models\Attribute\Document|null
          */
         public function getAttribute()
         {

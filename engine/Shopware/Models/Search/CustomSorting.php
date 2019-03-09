@@ -62,7 +62,7 @@ class CustomSorting extends ModelEntity
     protected $position;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(nullable=true)
      */
@@ -118,7 +118,7 @@ class CustomSorting extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getSortings()
     {

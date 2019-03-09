@@ -61,14 +61,14 @@ class Form extends ModelEntity
     private $id;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
     private $parentId;
 
     /**
-     * @var Form
+     * @var Form|null
      *
      * @ORM\ManyToOne(targetEntity="Form", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", nullable=true, referencedColumnName="id", onDelete="SET NULL")
@@ -83,7 +83,7 @@ class Form extends ModelEntity
     private $name;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="label", type="string", nullable=true)
      */
@@ -179,7 +179,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getLabel()
     {
@@ -338,7 +338,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return Form
+     * @return Form|null
      */
     public function getParent()
     {
@@ -346,7 +346,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @param Form $parent
+     * @param Form|null $parent
      */
     public function setParent($parent)
     {

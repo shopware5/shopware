@@ -58,7 +58,7 @@ class PriceVariation extends ModelEntity
     private $id;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="options", type="text", nullable=true)
      */
@@ -72,7 +72,7 @@ class PriceVariation extends ModelEntity
     private $variation;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="configurator_set_id", type="integer", nullable=true)
      */
@@ -103,7 +103,7 @@ class PriceVariation extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Configurator\Set
+     * @return \Shopware\Models\Article\Configurator\Set|null
      */
     public function getConfiguratorSet()
     {
@@ -127,7 +127,7 @@ class PriceVariation extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getOptions()
     {

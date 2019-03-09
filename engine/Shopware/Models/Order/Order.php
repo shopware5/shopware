@@ -95,7 +95,7 @@ class Order extends ModelEntity
     protected $payment;
 
     /**
-     * @var \Shopware\Models\Dispatch\Dispatch
+     * @var \Shopware\Models\Dispatch\Dispatch|null
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Dispatch\Dispatch")
      * @ORM\JoinColumn(name="dispatchID", referencedColumnName="id")
@@ -128,7 +128,7 @@ class Order extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\Order
+     * @var \Shopware\Models\Attribute\Order|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Order", mappedBy="order", orphanRemoval=true, cascade={"persist"})
      */
@@ -241,7 +241,7 @@ class Order extends ModelEntity
     /**
      * Contains the alphanumeric order number. If the
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="ordernumber", type="string", length=255, nullable=true)
      */
@@ -276,7 +276,7 @@ class Order extends ModelEntity
     private $paymentId;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="dispatchID", type="integer", nullable=true)
      */
@@ -333,7 +333,7 @@ class Order extends ModelEntity
     private $invoiceShippingNet;
 
     /**
-     * @var float
+     * @var float|null
      *
      * @ORM\Column(name="invoice_shipping_tax_rate", type="decimal", nullable=true)
      */
@@ -407,7 +407,7 @@ class Order extends ModelEntity
     private $referer;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="cleareddate", type="datetime", nullable=true)
      */
@@ -458,14 +458,14 @@ class Order extends ModelEntity
     private $currencyFactor;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="remote_addr", type="string", length=255, nullable=true)
      */
     private $remoteAddress;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="deviceType", type="string", length=50, nullable=true)
      */
@@ -521,7 +521,7 @@ class Order extends ModelEntity
     /**
      * Get number
      *
-     * @return string
+     * @return string|null
      */
     public function getNumber()
     {
@@ -625,7 +625,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getInvoiceShippingTaxRate()
     {
@@ -633,7 +633,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param float $invoiceShippingTaxRate
+     * @param float|null $invoiceShippingTaxRate
      */
     public function setInvoiceShippingTaxRate($invoiceShippingTaxRate)
     {
@@ -862,7 +862,7 @@ class Order extends ModelEntity
     /**
      * Set clearedDate
      *
-     * @param \DateTimeInterface|string $clearedDate
+     * @param \DateTimeInterface|string|null $clearedDate
      *
      * @return Order
      */
@@ -879,7 +879,7 @@ class Order extends ModelEntity
     /**
      * Get clearedDate
      *
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getClearedDate()
     {
@@ -999,7 +999,7 @@ class Order extends ModelEntity
     /**
      * Get remoteAddress
      *
-     * @return string
+     * @return string|null
      */
     public function getRemoteAddress()
     {
@@ -1039,7 +1039,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Dispatch\Dispatch
+     * @return \Shopware\Models\Dispatch\Dispatch|null
      */
     public function getDispatch()
     {
@@ -1111,7 +1111,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Order\Shipping|null $shipping
+     * @param \Shopware\Models\Order\Shipping $shipping
      *
      * @return Order
      */
@@ -1129,7 +1129,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Order\Billing|null $billing
+     * @param \Shopware\Models\Order\Billing $billing
      *
      * @return Order
      */
@@ -1217,7 +1217,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Order
+     * @return \Shopware\Models\Attribute\Order|null
      */
     public function getAttribute()
     {
@@ -1317,7 +1317,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param string $deviceType
+     * @param string|null $deviceType
      */
     public function setDeviceType($deviceType)
     {
@@ -1325,7 +1325,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDeviceType()
     {

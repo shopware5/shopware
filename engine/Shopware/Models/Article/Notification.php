@@ -64,7 +64,7 @@ class Notification extends LazyFetchModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ProductNotificationAttribute
+     * @var ProductNotificationAttribute|null
      *
      * @Assert\Valid()
      *
@@ -226,7 +226,7 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * @return ProductNotificationAttribute
+     * @return ProductNotificationAttribute|null
      */
     public function getAttribute()
     {

@@ -110,7 +110,7 @@ class BenchmarkConfig extends ModelEntity
     /**
      * The most recent date to figure out which orders have been updated since they have last been transmitted
      *
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="last_updated_orders_date", type="datetime", nullable=true)
      */
@@ -146,7 +146,7 @@ class BenchmarkConfig extends ModelEntity
     /**
      * The latest token provided by the server
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="response_token", type="string", length=200, nullable=true)
      */
@@ -171,7 +171,7 @@ class BenchmarkConfig extends ModelEntity
     /**
      * Flag which defines if the current shop is locked for transmitting data.
      *
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="locked", type="datetime", nullable=true)
      */
@@ -302,14 +302,17 @@ class BenchmarkConfig extends ModelEntity
     }
 
     /**#
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getLastUpdatedOrdersDate()
     {
         return $this->lastUpdatedOrdersDate;
     }
 
-    public function setLastUpdatedOrdersDate(\DateTimeInterface $lastUpdatedOrdersDate)
+    /**
+     * @param \DateTimeInterface|null $lastUpdatedOrdersDate
+     */
+    public function setLastUpdatedOrdersDate($lastUpdatedOrdersDate)
     {
         $this->lastUpdatedOrdersDate = $lastUpdatedOrdersDate;
     }
@@ -363,7 +366,7 @@ class BenchmarkConfig extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getToken()
     {
@@ -371,7 +374,7 @@ class BenchmarkConfig extends ModelEntity
     }
 
     /**
-     * @param string $token
+     * @param string|null $token
      */
     public function setToken($token)
     {
@@ -418,7 +421,10 @@ class BenchmarkConfig extends ModelEntity
         return $this->locked;
     }
 
-    public function setLocked(\DateTimeInterface $locked)
+    /**
+     * @param \DateTimeInterface|null $locked
+     */
+    public function setLocked($locked)
     {
         $this->locked = $locked;
     }

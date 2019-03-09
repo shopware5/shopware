@@ -63,28 +63,28 @@ class Element extends ModelEntity
     private $name;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="value", type="object", nullable=true)
      */
     private $value;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="description", type="string", nullable=true)
      */
     private $description;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="label", type="string", nullable=true)
      */
     private $label;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="type", type="string", nullable=true)
      */
@@ -185,6 +185,8 @@ class Element extends ModelEntity
     /**
      * Set value
      *
+     * @param mixed|null $value
+     *
      * @return Element
      */
     public function setValue($value)
@@ -196,6 +198,8 @@ class Element extends ModelEntity
 
     /**
      * Get value
+     *
+     * @return mixed|null
      */
     public function getValue()
     {
@@ -205,7 +209,7 @@ class Element extends ModelEntity
     /**
      * Set description
      *
-     * @param string $description
+     * @param string|null $description
      *
      * @return Element
      */
@@ -219,7 +223,7 @@ class Element extends ModelEntity
     /**
      * Get description
      *
-     * @return string
+     * @return string|null
      */
     public function getDescription()
     {
@@ -243,7 +247,7 @@ class Element extends ModelEntity
     /**
      * Get label
      *
-     * @return string
+     * @return string|null
      */
     public function getLabel()
     {
@@ -361,7 +365,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getType()
     {

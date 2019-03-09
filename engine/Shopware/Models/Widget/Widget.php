@@ -57,14 +57,14 @@ class Widget extends ModelEntity
     private $views;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="plugin_id", type="integer", nullable=true)
      */
     private $pluginId;
 
     /**
-     * @var \Shopware\Models\Plugin\Plugin
+     * @var \Shopware\Models\Plugin\Plugin|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="widgets")
      * @ORM\JoinColumn(name="plugin_id", referencedColumnName="id")
@@ -112,7 +112,7 @@ class Widget extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Plugin\Plugin $plugin
+     * @param \Shopware\Models\Plugin\Plugin|null $plugin
      */
     public function setPlugin($plugin)
     {
@@ -120,7 +120,7 @@ class Widget extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Plugin\Plugin
+     * @return \Shopware\Models\Plugin\Plugin|null
      */
     public function getPlugin()
     {

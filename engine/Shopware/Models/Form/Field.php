@@ -89,7 +89,7 @@ class Field extends ModelEntity
     /**
      * Addition note to display
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="note", type="string", length=255, nullable=true)
      */
@@ -273,7 +273,7 @@ class Field extends ModelEntity
     /**
      * Get note of field
      *
-     * @return string
+     * @return string|null
      */
     public function getNote()
     {

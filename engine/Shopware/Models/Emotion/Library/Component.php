@@ -40,7 +40,7 @@ use Shopware\Models\Plugin\Plugin;
 class Component extends ModelEntity
 {
     /**
-     * @var Plugin
+     * @var Plugin|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="emotionComponents")
      * @ORM\JoinColumn(name="pluginID", referencedColumnName="id")
@@ -83,7 +83,7 @@ class Component extends ModelEntity
     private $name;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="convert_function", type="string", length=255, nullable=true)
      */
@@ -129,7 +129,7 @@ class Component extends ModelEntity
     /**
      * Contains the plugin id which added this component to the library
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="pluginID", type="integer", nullable=true)
      */
@@ -269,7 +269,7 @@ class Component extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getPluginId()
     {
@@ -277,7 +277,7 @@ class Component extends ModelEntity
     }
 
     /**
-     * @param int $pluginId
+     * @param int|null $pluginId
      */
     public function setPluginId($pluginId)
     {
@@ -301,7 +301,7 @@ class Component extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getConvertFunction()
     {
@@ -309,7 +309,7 @@ class Component extends ModelEntity
     }
 
     /**
-     * @param string $convertFunction
+     * @param string|null $convertFunction
      */
     public function setConvertFunction($convertFunction)
     {
@@ -317,7 +317,7 @@ class Component extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Plugin\Plugin
+     * @return \Shopware\Models\Plugin\Plugin|null
      */
     public function getPlugin()
     {
@@ -325,7 +325,7 @@ class Component extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Plugin\Plugin $plugin
+     * @param \Shopware\Models\Plugin\Plugin|null $plugin
      */
     public function setPlugin($plugin)
     {

@@ -77,21 +77,21 @@ class Rule extends ModelEntity
     private $active = false;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="areaID", type="integer", nullable=true)
      */
     private $areaId = null;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="countryID", type="integer", nullable=true)
      */
     private $countryId = null;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="stateID", type="integer", nullable=true)
      */
@@ -115,7 +115,7 @@ class Rule extends ModelEntity
      * The area property is the owning side of the association between tax rule and area.
      * The association is joined over the tax rule areaID field and the id field of the area.
      *
-     * @var \Shopware\Models\Country\Area
+     * @var \Shopware\Models\Country\Area|null
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Country\Area")
      * @ORM\JoinColumn(name="areaID", referencedColumnName="id")
@@ -126,7 +126,7 @@ class Rule extends ModelEntity
      * The country property is the owning side of the association between tax rule and country.
      * The association is joined over the tax rule countryID field and the id field of the country.
      *
-     * @var \Shopware\Models\Country\Country
+     * @var \Shopware\Models\Country\Country|null
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Country\Country")
      * @ORM\JoinColumn(name="countryID", referencedColumnName="id")
@@ -205,7 +205,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Country\Area $area
+     * @param \Shopware\Models\Country\Area|null $area
      */
     public function setArea($area)
     {
@@ -213,7 +213,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Country\Area
+     * @return \Shopware\Models\Country\Area|null
      */
     public function getArea()
     {
@@ -221,7 +221,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param int $areaId
+     * @param int|null $areaId
      */
     public function setAreaId($areaId)
     {
@@ -229,7 +229,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getAreaId()
     {
@@ -237,7 +237,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Country\Country $country
+     * @param \Shopware\Models\Country\Country|null $country
      */
     public function setCountry($country)
     {
@@ -245,7 +245,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Country\Country
+     * @return \Shopware\Models\Country\Country|null
      */
     public function getCountry()
     {
@@ -253,7 +253,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param int $countryId
+     * @param int|null $countryId
      */
     public function setCountryId($countryId)
     {
@@ -261,7 +261,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getCountryId()
     {
@@ -301,7 +301,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Country\State $state
+     * @param \Shopware\Models\Country\State|null $state
      */
     public function setState($state)
     {
@@ -309,7 +309,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Country\State
+     * @return \Shopware\Models\Country\State|null
      */
     public function getState()
     {
@@ -317,7 +317,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param int $stateId
+     * @param int|null $stateId
      */
     public function setStateId($stateId)
     {
@@ -325,7 +325,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getStateId()
     {

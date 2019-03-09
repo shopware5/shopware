@@ -84,21 +84,21 @@ class Element extends ModelEntity
     protected $defaultValue;
 
     /**
-     * @var array
+     * @var array|null
      *
      * @ORM\Column(name="selection", type="array", nullable=true)
      */
     protected $selection = null;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="field_label", type="string", nullable=true)
      */
     protected $fieldLabel = null;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="support_text", type="string", nullable=true)
      */
@@ -194,7 +194,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param string $supportText
+     * @param string|null $supportText
      */
     public function setSupportText($supportText)
     {
@@ -202,7 +202,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getSupportText()
     {
@@ -266,7 +266,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getFieldLabel()
     {
@@ -342,7 +342,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return array
+     * @return array|null
      */
     public function getSelection()
     {
@@ -350,7 +350,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param array $selection
+     * @param array|null $selection
      */
     public function setSelection($selection)
     {

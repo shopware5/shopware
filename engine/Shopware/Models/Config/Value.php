@@ -67,7 +67,7 @@ class Value extends ModelEntity
     private $shopId;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="value", type="object", nullable=true)
      */
@@ -134,6 +134,7 @@ class Value extends ModelEntity
     /**
      * Set value
      *
+     *
      * @return Value
      */
     public function setValue($value)
@@ -145,6 +146,8 @@ class Value extends ModelEntity
 
     /**
      * Get value
+     *
+     * @return mixed|null
      */
     public function getValue()
     {

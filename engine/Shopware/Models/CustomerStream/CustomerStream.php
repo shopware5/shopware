@@ -38,7 +38,7 @@ class CustomerStream extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var CustomerStreamAttribute
+     * @var CustomerStreamAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerStream", mappedBy="customerStream", orphanRemoval=true, cascade={"persist"})
      */
@@ -70,7 +70,7 @@ class CustomerStream extends ModelEntity
     private $description;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="conditions", type="string", nullable=true)
      */
@@ -84,7 +84,7 @@ class CustomerStream extends ModelEntity
     private $static = false;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @Assert\DateTime()
      *

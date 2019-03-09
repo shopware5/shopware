@@ -64,7 +64,7 @@ class Configuration extends ModelEntity
     private $columnType;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="default_value", type="string", nullable=true)
      */
@@ -78,21 +78,21 @@ class Configuration extends ModelEntity
     private $entity;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="label", type="string", nullable=true)
      */
     private $label;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="help_text", type="string", nullable=true)
      */
     private $helpText;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="support_text", type="string", nullable=true)
      */
@@ -127,7 +127,7 @@ class Configuration extends ModelEntity
     private $position = 0;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="array_store", type="text", nullable=true)
      */
@@ -190,7 +190,7 @@ class Configuration extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getLabel()
     {
@@ -206,7 +206,7 @@ class Configuration extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getHelpText()
     {
@@ -222,7 +222,7 @@ class Configuration extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getSupportText()
     {
@@ -318,7 +318,7 @@ class Configuration extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getArrayStore()
     {
@@ -326,7 +326,7 @@ class Configuration extends ModelEntity
     }
 
     /**
-     * @param string $arrayStore
+     * @param string|null $arrayStore
      */
     public function setArrayStore($arrayStore)
     {
@@ -334,7 +334,7 @@ class Configuration extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDefaultValue()
     {
@@ -342,7 +342,7 @@ class Configuration extends ModelEntity
     }
 
     /**
-     * @param string $defaultValue
+     * @param string|null $defaultValue
      */
     public function setDefaultValue($defaultValue)
     {

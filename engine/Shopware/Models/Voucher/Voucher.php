@@ -47,7 +47,7 @@ class Voucher extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\Voucher
+     * @var \Shopware\Models\Attribute\Voucher|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Voucher", mappedBy="voucher", orphanRemoval=true, cascade={"persist"})
      */
@@ -105,21 +105,21 @@ class Voucher extends ModelEntity
     private $shippingFree;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="bindtosupplier", type="integer", nullable=true)
      */
     private $bindToSupplier;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="valid_from", type="date", nullable=true)
      */
     private $validFrom;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="valid_to", type="date", nullable=true)
      */
@@ -154,7 +154,7 @@ class Voucher extends ModelEntity
     private $numOrder;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="customergroup", type="integer", nullable=true)
      */
@@ -175,7 +175,7 @@ class Voucher extends ModelEntity
     private $strict;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="subshopID", type="integer", nullable=true)
      */
@@ -189,7 +189,7 @@ class Voucher extends ModelEntity
     private $taxConfig;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="customer_stream_ids", type="text", nullable=true)
      */
@@ -352,7 +352,7 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the bindToSupplier field from the Model
      *
-     * @param int $bindToSupplier
+     * @param int|null $bindToSupplier
      *
      * @return Voucher
      */
@@ -366,7 +366,7 @@ class Voucher extends ModelEntity
     /**
      * Getter Method to get the bindToSupplier field from the Model
      *
-     * @return int
+     * @return int|null
      */
     public function getBindToSupplier()
     {
@@ -376,7 +376,7 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the validFrom field from the Model
      *
-     * @param \DateTimeInterface|string $validFrom
+     * @param \DateTimeInterface|string|null $validFrom
      *
      * @return Voucher
      */
@@ -393,7 +393,7 @@ class Voucher extends ModelEntity
     /**
      * Getter Method to get the ValidFrom field from the Model
      *
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getValidFrom()
     {
@@ -403,7 +403,7 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the validTo field from the Model
      *
-     * @param \DateTimeInterface|string $validTo
+     * @param \DateTimeInterface|string|null $validTo
      *
      * @return Voucher
      */
@@ -420,7 +420,7 @@ class Voucher extends ModelEntity
     /**
      * Getter Method to get the ValidTo field from the Model
      *
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getValidTo()
     {
@@ -526,7 +526,7 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the customerGroup field from the Model
      *
-     * @param int $customerGroup
+     * @param int|null $customerGroup
      *
      * @return Voucher
      */
@@ -540,7 +540,7 @@ class Voucher extends ModelEntity
     /**
      * Getter Method to get the customerGroup field from the Model
      *
-     * @return int
+     * @return int|null
      */
     public function getCustomerGroup()
     {
@@ -598,7 +598,7 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the shopId field from the Model
      *
-     * @param int $shopId
+     * @param int|null $shopId
      *
      * @return Voucher
      */
@@ -612,7 +612,7 @@ class Voucher extends ModelEntity
     /**
      * Getter Method to get the shopId field from the Model
      *
-     * @return int
+     * @return int|null
      */
     public function getShopId()
     {
@@ -662,7 +662,7 @@ class Voucher extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Voucher
+     * @return \Shopware\Models\Attribute\Voucher|null
      */
     public function getAttribute()
     {
@@ -680,7 +680,7 @@ class Voucher extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getCustomerStreamIds()
     {
@@ -688,7 +688,7 @@ class Voucher extends ModelEntity
     }
 
     /**
-     * @param string $customerStreamIds
+     * @param string|null $customerStreamIds
      */
     public function setCustomerStreamIds($customerStreamIds)
     {

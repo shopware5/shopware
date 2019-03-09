@@ -37,7 +37,7 @@ class ProductStream extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ProductStreamAttribute
+     * @var ProductStreamAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ProductStream", mappedBy="productStream", orphanRemoval=true, cascade={"persist"})
      */
@@ -83,14 +83,14 @@ class ProductStream extends ModelEntity
     private $sorting;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="conditions", type="string", nullable=true)
      */
-    private $conditions = true;
+    private $conditions;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="sorting_id", type="integer", nullable=true)
      */
@@ -137,7 +137,7 @@ class ProductStream extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getConditions()
     {
@@ -187,7 +187,7 @@ class ProductStream extends ModelEntity
     }
 
     /**
-     * @return ProductStreamAttribute
+     * @return ProductStreamAttribute|null
      */
     public function getAttribute()
     {
@@ -205,7 +205,7 @@ class ProductStream extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getSortingId()
     {

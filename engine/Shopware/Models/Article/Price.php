@@ -53,7 +53,7 @@ class Price extends LazyFetchModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ProductPriceAttribute
+     * @var ProductPriceAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticlePrice", orphanRemoval=true, mappedBy="articlePrice", cascade={"persist"})
      */
@@ -107,7 +107,7 @@ class Price extends LazyFetchModelEntity
     private $from = 1;
 
     /**
-     * @var int|string
+     * @var int|string|null
      *
      * @ORM\Column(name="`to`", type="string", nullable=true)
      */
@@ -151,7 +151,7 @@ class Price extends LazyFetchModelEntity
     }
 
     /**
-     * @param Article|array|null $article
+     * @param Article|array $article
      *
      * @return Price
      */
@@ -347,7 +347,7 @@ class Price extends LazyFetchModelEntity
     }
 
     /**
-     * @return ProductPriceAttribute
+     * @return ProductPriceAttribute|null
      */
     public function getAttribute()
     {

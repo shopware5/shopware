@@ -58,7 +58,7 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     private $id;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="parentID", type="integer", nullable=true)
      */
@@ -162,7 +162,7 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     /**
      * Set parentId
      *
-     * @param int $parentId
+     * @param int|null $parentId
      *
      * @return Role
      */
@@ -176,7 +176,7 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     /**
      * Get parentId
      *
-     * @return int
+     * @return int|null
      */
     public function getParentId()
     {
@@ -382,7 +382,7 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      * contains the inherited parent role. The association is defined over
      * the Role.id property and the Role.parentId property.
      *
-     * @return \Shopware\Models\User\Role
+     * @return \Shopware\Models\User\Role|null
      */
     public function getParent()
     {
@@ -395,7 +395,7 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      * contains the inherited parent role. The association is defined over
      * the Role.id property and the Role.parentId property.
      *
-     * @param \Shopware\Models\User\Role $parent
+     * @param \Shopware\Models\User\Role|null $parent
      */
     public function setParent($parent)
     {
