@@ -35,7 +35,7 @@ class RequestParameterResolver implements ArgumentValueResolverInterface
      */
     public function supports(Request $request, ArgumentMetadata $argument)
     {
-        return $request->has($argument->getName());
+        return $request->get($argument->getName()) !== null;
     }
 
     /**
