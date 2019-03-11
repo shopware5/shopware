@@ -179,7 +179,7 @@
             event.preventDefault();
 
             var $this = $(this),
-                $next = $this.next(),
+                $next = $this.parent().find('.table--shipping-costs'),
                 method = ($next.hasClass('is--hidden')) ? 'removeClass' : 'addClass';
 
             $next[method]('is--hidden');

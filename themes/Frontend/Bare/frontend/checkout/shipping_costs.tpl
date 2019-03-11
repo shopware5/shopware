@@ -1,5 +1,5 @@
-<form class="table--shipping-costs{if !$calculateShippingCosts && {config name=basketShowCalculation} != 2} is--hidden{/if}" method="POST" action="{url action='calculateShippingCosts' sTargetAction=$sTargetAction}">
-    {* Delivery country *}
+<form class="table--shipping-costs{if !$calculateShippingCosts && {config name=basketShowCalculation} != 2} is--hidden{/if}{if {config name=showShippingCostsOffCanvas} == 1} context--shipping-costs{/if}" method="POST" action="{url action='calculateShippingCosts' sTargetAction=$sTargetAction}">
+        {* Delivery country *}
     {block name='frontend_checkout_shipping_costs_country'}
         <div class="shipping-costs--country">
             {block name='frontend_checkout_shipping_costs_country_label'}

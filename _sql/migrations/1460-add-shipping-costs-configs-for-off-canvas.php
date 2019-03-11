@@ -30,11 +30,12 @@ class Migrations_Migration1460 extends Shopware\Components\Migrations\AbstractMi
         SET @parent = (SELECT id FROM s_core_config_forms WHERE name = 'Frontend79' LIMIT 1);
         
         INSERT IGNORE INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `options`) VALUES
-        (NULL, @parent, 'showShippingCostsOffCanvas', 'i:1;', 'Versandkostenberechnung im Off-Canvas Warenkorb anzeigen', NULL, 'select', 0, 0, 0, 'a:2:{s:5:"store";s:57:"Shopware.apps.Base.store.ShippingCalculationsDisplayModes";s:9:"queryMode";s:5:"local";}');
+        (NULL, @parent, 'showShippingCostsOffCanvas', 'i:1;', 'Versandkostenberechnung im Mini-/OffCanvas-Warenkorb anzeigen', 'Diese Option aktiviert die Versandkostenberechnung für den Mini- bzw. OffCanvas-Warenkorb.', 'select', 0, 6, 0, 'a:4:{s:5:"store";s:57:"Shopware.apps.Base.store.ShippingCalculationsDisplayModes";s:9:"queryMode";s:5:"local";s:14:"forceSelection";b:1;s:8:"editable";b:0;}');
         
         SET @elementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'showShippingCostsOffCanvas' LIMIT 1);
-		INSERT IGNORE INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`)
-        VALUES (@elementId, '2', 'Display shipping costs pre calculation in off canvas shopping cart');
+		INSERT IGNORE INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`, `description`)
+        VALUES (@elementId, '2', 'Show shipping costs calculation in mini/offcanvas shopping cart', 'If enabled, a shipping cost calculator will be displayed in the mini/offcanvas cart page. This is only available for customers who haven\'t logged in');
+
 SQL;
         $this->addSql($sql);
 

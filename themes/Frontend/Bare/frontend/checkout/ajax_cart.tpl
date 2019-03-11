@@ -81,16 +81,32 @@
                                 </div>
                             {/block}
                             {if !$sUserLoggedIn && !$sUserData.additional.user.id}
-                                {* Shipping costs *}
-                                {block name='frontend_checkout_cart_footer_field_labels_shipping'}
-                                    <div class="small--information">
-                                        <span> {s name="CartFooterLabelShipping" namespace="frontend/checkout/cart_footer"}{/s}
+                                {* Shipping costs & Shipping costs pre-calculation *}
+                                {if {config name=showShippingCostsOffCanvas} == 1}
+                                    {block name='frontend_checkout_shipping_costs_country_trigger'}
+                                        <a href="#show-hide--shipping-costs" class="table--shipping-costs-trigger">
+                                            {s name='CheckoutFooterEstimatedShippingCosts' namespace="frontend/checkout/cart_footer"}{/s}
+                                            <i class="icon--arrow-right"></i>
+                                        </a>
+                                        <span class="small--information">
+                                            <span class="small--prices"> {$sShippingcosts|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
+                                            </span>
                                         </span>
-                                        <span class="small--prices"> {$sShippingcosts|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
-                                        </span>
-                                    </div>
-                                {/block}
-                                <br />
+                                    {/block}
+                                    {block name='frontend_checkout_shipping_costs_country_include'}
+                                        {include file="frontend/checkout/shipping_costs.tpl"}
+                                    {/block}
+                                {/if}
+                                {if {config name=showShippingCostsOffCanvas} == 2}
+                                    {block name='frontend_checkout_shipping_costs_country_include'}
+                                        <div class="small--information">
+                                            <span>{s name='CheckoutFooterEstimatedShippingCosts' namespace="frontend/checkout/cart_footer"}{/s}</span>
+                                            <span class="small--prices"> {$sShippingcosts|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
+                                            </span>
+                                        </div>
+                                        {include file="frontend/checkout/shipping_costs.tpl" calculateShippingCosts=true}
+                                    {/block}
+                                {/if}
                                 {* Total sum *}
                                 {block name='frontend_checkout_cart_footer_field_labels_total'}
                                     <div class="prices--articles">
@@ -107,28 +123,6 @@
                                         {s name="Star" namespace="frontend/listing/box_article"}{/s}{s name="AjaxDetailDataPriceInfo"}{/s}
                                     </p>
                                 {/block}
-                                <br />
-                                {* Shipping costs pre-calculation *}
-                                {if {config name=showShippingCostsOffCanvas} == 1}
-                                    {block name='frontend_checkout_shipping_costs_country_trigger'}
-                                        <a href="#show-hide--shipping-costs" class="table--shipping-costs-trigger">
-                                        {s name='CheckoutFooterEstimatedShippingCosts' namespace="frontend/checkout/cart_footer"}{/s}
-                                        <i class="icon--arrow-right"></i>
-                                        </a>
-                                    {/block}
-                                    {block name='frontend_checkout_shipping_costs_country_include'}
-                                        {include file="frontend/checkout/shipping_costs.tpl"}
-                                    {/block}
-                                {/if}
-                                {if {config name=showShippingCostsOffCanvas} == 2}
-                                    {block name='frontend_checkout_shipping_costs_country_include'}
-                                        <div class="small--information">
-                                            <span class="is--bold">{s name='CheckoutFooterEstimatedShippingCosts' namespace="frontend/checkout/cart_footer"}{/s}</span>
-                                            <br />
-                                        </div>
-                                        {include file="frontend/checkout/shipping_costs.tpl" calculateShippingCosts=true}
-                                    {/block}
-                                {/if}
                             {/if}
                         </div>
                     {/block}

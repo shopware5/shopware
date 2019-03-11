@@ -30,7 +30,8 @@ class Migrations_Migration1459 extends Shopware\Components\Migrations\AbstractMi
         SET @parent = (SELECT id FROM s_core_config_forms WHERE name = 'Frontend79' LIMIT 1);
         SET @elementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'basketShowCalculation' and form_id=@parent LIMIT 1);
         SET @value = (SELECT value FROM `s_core_config_values` WHERE `element_id` = @elementId);
-        UPDATE s_core_config_elements set type='select', options='a:2:{s:5:"store";s:57:"Shopware.apps.Base.store.ShippingCalculationsDisplayModes";s:9:"queryMode";s:5:"local";}', value='i:1;' where id=@elementId;
+        UPDATE s_core_config_elements set `type`='select', `position`=5, options='a:4:{s:5:"store";s:57:"Shopware.apps.Base.store.ShippingCalculationsDisplayModes";s:9:"queryMode";s:5:"local";s:14:"forceSelection";b:1;s:8:"editable";b:0;}', `value`='i:1;', label='Versandkostenberechnung im Warenkorb anzeigen' where id=@elementId;
+        UPDATE `s_core_config_element_translations` set `label`='Show shipping costs calculation in shopping cart' where id=@elementId;
 
 		UPDATE s_core_config_values SET value = 'i:0;'
         FROM s_core_config_values
