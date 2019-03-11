@@ -26,6 +26,7 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 
 use Shopware\Components\Escaper\EscaperInterface;
 use Shopware\Components\Template\Security;
+use Smarty;
 
 /**
  * @category Shopware
@@ -62,14 +63,17 @@ class Template
         $template->setOptions($templateConfig);
         $template->setEventManager($eventManager);
 
-        $template->registerResource('snippet', $snippetResource);
-        $template->setDefaultResourceType('snippet');
+        $template->registerResource('snippet', new \Enlight_Components_Snippet_DummyResource());
 
-        $template->registerPlugin(\Smarty::PLUGIN_MODIFIER, 'escapeHtml', [$escaper, 'escapeHtml']);
-        $template->registerPlugin(\Smarty::PLUGIN_MODIFIER, 'escapeHtmlAttr', [$escaper, 'escapeHtmlAttr']);
-        $template->registerPlugin(\Smarty::PLUGIN_MODIFIER, 'escapeJs', [$escaper, 'escapeJs']);
-        $template->registerPlugin(\Smarty::PLUGIN_MODIFIER, 'escapeCss', [$escaper, 'escapeCss']);
-        $template->registerPlugin(\Smarty::PLUGIN_MODIFIER, 'escapeUrl', [$escaper, 'escapeUrl']);
+        $template->registerPlugin(Smarty::PLUGIN_BLOCK, 'snippet', [$snippetResource, 'compileSnippetBlock']);
+        $template->registerPlugin(Smarty::PLUGIN_MODIFIER, 'snippet', [$snippetResource, 'compileSnippetModifier']);
+        $template->registerFilter(Smarty::FILTER_PRE, [$snippetResource, 'compileSnippetContent']);
+
+        $template->registerPlugin(Smarty::PLUGIN_MODIFIER, 'escapeHtml', [$escaper, 'escapeHtml']);
+        $template->registerPlugin(Smarty::PLUGIN_MODIFIER, 'escapeHtmlAttr', [$escaper, 'escapeHtmlAttr']);
+        $template->registerPlugin(Smarty::PLUGIN_MODIFIER, 'escapeJs', [$escaper, 'escapeJs']);
+        $template->registerPlugin(Smarty::PLUGIN_MODIFIER, 'escapeCss', [$escaper, 'escapeCss']);
+        $template->registerPlugin(Smarty::PLUGIN_MODIFIER, 'escapeUrl', [$escaper, 'escapeUrl']);
 
         return $template;
     }

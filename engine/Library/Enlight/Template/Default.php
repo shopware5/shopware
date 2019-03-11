@@ -162,6 +162,9 @@ class Enlight_Template_Default extends Smarty_Internal_Template
      */
     public function extendsTemplate($templateName)
     {
+        if (strpos($this->template_resource, 'extends:') !== 0) {
+            $this->template_resource = 'extends:' . $this->template_resource;
+        }
         $this->template_resource .= '|' . $templateName;
     }
 

@@ -74,4 +74,51 @@ class TemplateManagerTest extends TestCase
 
         $templateManager->fetch('frontend/detail2/index.tpl');
     }
+
+    /**
+     * Tests snippet resource
+     */
+    public function testSnippets()
+    {
+        /** @var \Enlight_Template_Manager $manager */
+        $manager = Shopware()->Container()->get('template');
+        /** @var \Shopware_Components_Snippet_Manager $snippets */
+        $snippets = Shopware()->Container()->get('snippets');
+
+        $result = $manager->fetch('string:{s name="test"}test{/s}');
+        self::assertSame('test', $result);
+
+        $namespace = $snippets->getNamespace('test');
+        $namespace->set('test', 'test');
+
+        $result = $manager->fetch('string:{namespace name="test"}{s name="test"}{/s}');
+        self::assertSame('test', $result);
+
+        $result = $manager->fetch('string:{s name="test" assign=test}test{/s}{$test}');
+        self::assertSame('test', $result);
+    }
+
+    /**
+     * Tests deprecated message for dummy snippet resource
+     */
+    public function testDeprecated()
+    {
+        /** @var \Enlight_Template_Manager $manager */
+        $manager = Shopware()->Container()->get('template');
+
+        $manager->clearCompiledTemplate();
+
+        $lastError = null;
+        set_error_handler(function ($errno, $errstr, $errfile, $errline) use (&$lastError) {
+            if ($errno === E_USER_DEPRECATED) {
+                $lastError = $errstr;
+            }
+        });
+
+        $result = $manager->fetch('snippet:string:{s name="test"}test{/s}');
+        self::assertSame('test', $result);
+        self::assertSame('Snippet resource is deprecated and will be removed in 5.8. Please remove the usage.', $lastError);
+
+        restore_error_handler();
+    }
 }

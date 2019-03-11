@@ -127,7 +127,7 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
         }
 
         $this->Response()->setHeader('Content-Type', 'application/javascript; charset=utf-8', true);
-        $template = 'snippet:string:';
+        $template = 'string:';
 
         $this->View()->Engine()->setCompileId($this->View()->Engine()->getCompileId() . '_' . $this->Request()->getControllerName());
 
