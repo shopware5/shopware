@@ -56,7 +56,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_user")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Customer extends LazyFetchModelEntity
 {
@@ -119,7 +119,7 @@ class Customer extends LazyFetchModelEntity
      *
      * @var \Shopware\Models\Attribute\Customer
      *
-     * @Assert\Valid
+     * @Assert\Valid()
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Customer", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
@@ -191,7 +191,7 @@ class Customer extends LazyFetchModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -291,7 +291,7 @@ class Customer extends LazyFetchModelEntity
      * @var string
      *
      * @Assert\Email(strict=false)
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      * @ORM\Column(name="email", type="string", length=70, nullable=false)
      */
     private $email;
@@ -431,7 +431,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * @var string
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="salutation", type="text", nullable=false)
      */
@@ -447,7 +447,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * @var string
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      * @ORM\Column(name="firstname", type="text", nullable=false)
      */
     private $firstname;
@@ -455,7 +455,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * @var string
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      * @ORM\Column(name="lastname", type="text", nullable=false)
      */
     private $lastname;
@@ -954,7 +954,7 @@ class Customer extends LazyFetchModelEntity
      * Event listener method which is fired when the model is saved.
      * This method will also initialize the date time fields if these fields are null.
      *
-     * @ORM\PrePersist
+     * @ORM\PrePersist()
      *
      * @throws \LogicException (See AttributeCleanerTrait)
      */
@@ -978,7 +978,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * Event listener method which is fired when the model is updated.
      *
-     * @ORM\PreUpdate
+     * @ORM\PreUpdate()
      *
      * @throws \LogicException (See AttributeCleanerTrait)
      */

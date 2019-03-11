@@ -37,7 +37,7 @@ use Shopware\Components\Model\ModelEntity;
  *
  * @ORM\Entity(repositoryClass="PaymentInstanceRepository")
  * @ORM\Table(name="s_core_payment_instance")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class PaymentInstance extends ModelEntity
 {
@@ -167,7 +167,7 @@ class PaymentInstance extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

@@ -29,7 +29,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_article_configurator_sets")
  */
 class Set extends ModelEntity
@@ -39,12 +39,12 @@ class Set extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Group", inversedBy="sets", cascade={"persist"})
      * @ORM\JoinTable(name="s_article_configurator_set_group_relations",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="set_id", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="group_id", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="set_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="group_id", referencedColumnName="id")
+     *     }
      * )
      */
     protected $groups;
@@ -54,12 +54,12 @@ class Set extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Option", inversedBy="sets", cascade={"persist"})
      * @ORM\JoinTable(name="s_article_configurator_set_option_relations",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="set_id", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="option_id", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="set_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="option_id", referencedColumnName="id")
+     *     }
      * )
      */
     protected $options;
@@ -89,7 +89,7 @@ class Set extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

@@ -30,7 +30,7 @@ use Shopware\Models\Shop\Shop;
 
 /**
  * @ORM\Table(name="s_core_config_values")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Value extends ModelEntity
 {
@@ -38,7 +38,7 @@ class Value extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

@@ -34,9 +34,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * This is the model for s_articles_notification table.
  * The model contains a single row of s_articles_notification.
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_articles_notification")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Notification extends LazyFetchModelEntity
 {
@@ -65,7 +65,7 @@ class Notification extends LazyFetchModelEntity
      *
      * @var \Shopware\Models\Attribute\ArticleNotification
      *
-     * @Assert\Valid
+     * @Assert\Valid()
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleNotification", mappedBy="articleNotification", cascade={"persist"})
      */
@@ -75,7 +75,7 @@ class Notification extends LazyFetchModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

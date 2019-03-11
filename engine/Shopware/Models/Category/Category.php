@@ -47,12 +47,12 @@ class Category extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Customer\Group")
      * @ORM\JoinTable(name="s_categories_avoid_customergroups",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="customergroupID", referencedColumnName="id", unique=true)
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="customergroupID", referencedColumnName="id", unique=true)
+     *     }
      * )
      */
     protected $customerGroups;
@@ -71,12 +71,12 @@ class Category extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Emotion\Emotion", mappedBy="categories")
      * @ORM\JoinTable(name="s_emotion_categories",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="emotion_id", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="emotion_id", referencedColumnName="id")
+     *     }
      * )
      */
     protected $emotions;
@@ -115,7 +115,7 @@ class Category extends ModelEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="shops", type="string",length=255, nullable=false)
+     * @ORM\Column(name="shops", type="string", length=255, nullable=false)
      */
     protected $shops;
 
@@ -125,7 +125,7 @@ class Category extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -321,12 +321,12 @@ class Category extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_articles_categories",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *     }
      * )
      */
     private $articles;
@@ -336,12 +336,12 @@ class Category extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_articles_categories_ro",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *     }
      * )
      */
     private $allArticles;

@@ -32,7 +32,7 @@ use Shopware\Components\Model\ModelEntity;
  *
  * This is the model for the Site module, which represents a single site of the shop.
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_cms_static_groups")
  */
 class Group extends ModelEntity
@@ -41,7 +41,7 @@ class Group extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

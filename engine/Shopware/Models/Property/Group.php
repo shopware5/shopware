@@ -49,7 +49,7 @@ class Group extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -87,9 +87,9 @@ class Group extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Option")
      * @ORM\JoinTable(name="s_filter_relations",
-     *      joinColumns={@ORM\JoinColumn(name="groupID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="optionID", referencedColumnName="id")}
-     *      )
+     *     joinColumns={@ORM\JoinColumn(name="groupID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="optionID", referencedColumnName="id")}
+     * )
      */
     private $options;
 

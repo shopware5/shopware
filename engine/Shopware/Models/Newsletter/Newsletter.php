@@ -52,7 +52,7 @@ class Newsletter extends ModelEntity
      *
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -95,7 +95,7 @@ class Newsletter extends ModelEntity
      *
      * @var string
      *
-     * @ORM\Column(name="sendername", type="string", length=16777215 , nullable=false)
+     * @ORM\Column(name="sendername", type="string", length=16777215, nullable=false)
      */
     private $senderName = '';
 

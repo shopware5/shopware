@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Abstract class to provide proxy methods to the media-model
  *
- * @ORM\MappedSuperclass
+ * @ORM\MappedSuperclass()
  */
 abstract class File extends ModelEntity
 {
@@ -38,7 +38,7 @@ abstract class File extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;

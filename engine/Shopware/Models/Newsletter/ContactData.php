@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware Data model represents a non-customer shop visitor contact data.
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_campaigns_maildata")
  */
 class ContactData extends ModelEntity
@@ -128,7 +128,7 @@ class ContactData extends ModelEntity
      *
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

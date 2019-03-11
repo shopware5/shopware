@@ -46,9 +46,9 @@ use Shopware\Models\Customer\Address;
  *   - UNIQUE KEY `FOREIGN` (`orderID`)
  * </code>
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_order_billingaddress")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Billing extends ModelEntity
 {
@@ -98,7 +98,7 @@ class Billing extends ModelEntity
      *
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

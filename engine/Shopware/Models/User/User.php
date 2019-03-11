@@ -43,7 +43,7 @@ use Shopware\Components\Model\ModelEntity;
  *
  * @ORM\Table(name="s_core_auth")
  * @ORM\Entity(repositoryClass="Repository")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class User extends ModelEntity
 {
@@ -68,7 +68,7 @@ class User extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

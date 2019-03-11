@@ -34,9 +34,9 @@ use Shopware\Components\Model\ModelEntity;
  * The model contains a single row of s_articles_vote, which is a vote of an article.
  * It has a n:1 association to Shopware\Models\Article\Article to get the name of the assigned article.
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_articles_vote")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Vote extends ModelEntity
 {
@@ -62,7 +62,7 @@ class Vote extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

@@ -30,9 +30,9 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware document model represents a document.
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_core_documents")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Document extends ModelEntity
 {
@@ -43,7 +43,7 @@ class Document extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

@@ -31,7 +31,7 @@ use Shopware\Components\Model\ModelEntity;
  * @deprecated since 5.2 will be removed in 6.0, use \Shopware\Models\Attribute\Configuration instead
  *
  * @ORM\Table(name="s_core_engine_elements")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Element extends ModelEntity
 {
@@ -39,7 +39,7 @@ class Element extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

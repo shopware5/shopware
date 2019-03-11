@@ -33,7 +33,7 @@ use Shopware\Models\Shop\TemplateConfig\Set;
  * Template Model Entity
  *
  * @ORM\Table(name="s_core_templates")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Template extends ModelEntity
 {
@@ -49,8 +49,8 @@ class Template extends ModelEntity
      * @var ArrayCollection<\Shopware\Models\Shop\Shop>
      *
      * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\Shop",
-     *      mappedBy="template"
+     *     targetEntity="Shopware\Models\Shop\Shop",
+     *     mappedBy="template"
      * )
      */
     protected $shops;
@@ -59,10 +59,10 @@ class Template extends ModelEntity
      * @var ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Element>
      *
      * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Element",
-     *      mappedBy="template",
-     *      orphanRemoval=true,
-     *      cascade={"persist"}
+     *     targetEntity="Shopware\Models\Shop\TemplateConfig\Element",
+     *     mappedBy="template",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
      * )
      */
     protected $elements;
@@ -71,10 +71,10 @@ class Template extends ModelEntity
      * @var ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Layout>
      *
      * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Layout",
-     *      mappedBy="template",
-     *      orphanRemoval=true,
-     *      cascade={"persist"}
+     *     targetEntity="Shopware\Models\Shop\TemplateConfig\Layout",
+     *     mappedBy="template",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
      * )
      */
     protected $layouts;
@@ -83,10 +83,10 @@ class Template extends ModelEntity
      * @var ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Set>
      *
      * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Set",
-     *      mappedBy="template",
-     *      orphanRemoval=true,
-     *      cascade={"persist"}
+     *     targetEntity="Shopware\Models\Shop\TemplateConfig\Set",
+     *     mappedBy="template",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
      * )
      */
     protected $configSets;
@@ -95,7 +95,7 @@ class Template extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
