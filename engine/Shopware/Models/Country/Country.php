@@ -184,8 +184,8 @@ class Country extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Payment\Payment", mappedBy="countries")
      * @ORM\JoinTable(name="s_core_paymentmeans_countries",
-     *      joinColumns={@ORM\JoinColumn(name="countryID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="paymentID", referencedColumnName="id")}
+     *     joinColumns={@ORM\JoinColumn(name="countryID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="paymentID", referencedColumnName="id")}
      * )
      */
     private $payments;

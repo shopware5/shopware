@@ -92,8 +92,8 @@ class Value extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article", mappedBy="propertyValues")
      * @ORM\JoinTable(name="s_filter_articles",
-     *      joinColumns={@ORM\JoinColumn(name="valueID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="articleID", referencedColumnName="id")}
+     *     joinColumns={@ORM\JoinColumn(name="valueID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="articleID", referencedColumnName="id")}
      * )
      */
     private $articles;

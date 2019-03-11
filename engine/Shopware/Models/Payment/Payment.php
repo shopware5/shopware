@@ -53,12 +53,12 @@ class Payment extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Country\Country", inversedBy="payments")
      * @ORM\JoinTable(name="s_core_paymentmeans_countries",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="paymentID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="countryID", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="paymentID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="countryID", referencedColumnName="id")
+     *     }
      * )
      */
     protected $countries;
@@ -241,13 +241,13 @@ class Payment extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinTable(name="s_core_paymentmeans_subshops",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="paymentID", referencedColumnName="id"
-     *      )},
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="subshopID", referencedColumnName="id")
-     *      }
-     * )
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="paymentID", referencedColumnName="id"
+     *         )},
+     *         inverseJoinColumns={
+     *             @ORM\JoinColumn(name="subshopID", referencedColumnName="id")
+     *         }
+     *     )
      */
     private $shops;
 

@@ -37,8 +37,8 @@ class Value extends ModelEntity
     /**
      * @var Element
      * @ORM\ManyToOne(
-     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Element",
-     *      inversedBy="values"
+     *     targetEntity="Shopware\Models\Shop\TemplateConfig\Element",
+     *     inversedBy="values"
      * )
      * @ORM\JoinColumn(name="element_id", referencedColumnName="id")
      */

@@ -75,8 +75,8 @@ class Set extends ModelEntity
      * @var Template
      *
      * @ORM\ManyToOne(
-     *      targetEntity="Shopware\Models\Shop\Template",
-     *      inversedBy="configSets"
+     *     targetEntity="Shopware\Models\Shop\Template",
+     *     inversedBy="configSets"
      * )
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      */

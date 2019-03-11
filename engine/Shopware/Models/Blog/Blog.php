@@ -59,9 +59,9 @@ class Blog extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_blog_assigned_articles",
-     *      joinColumns={@ORM\JoinColumn(name="blog_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="article_id", referencedColumnName="id")}
-     *      )
+     *     joinColumns={@ORM\JoinColumn(name="blog_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="article_id", referencedColumnName="id")}
+     * )
      */
     protected $assignedArticles;
 

@@ -279,8 +279,8 @@ class ProductFeed extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Supplier")
      * @ORM\JoinTable(name="s_export_suppliers",
-     *      joinColumns={@ORM\JoinColumn(name="feedID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="supplierID", referencedColumnName="id")}
+     *     joinColumns={@ORM\JoinColumn(name="feedID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="supplierID", referencedColumnName="id")}
      * )
      */
     private $suppliers;
@@ -290,8 +290,8 @@ class ProductFeed extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="\Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_export_articles",
-     *      joinColumns={@ORM\JoinColumn(name="feedID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="articleID", referencedColumnName="id")}
+     *     joinColumns={@ORM\JoinColumn(name="feedID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="articleID", referencedColumnName="id")}
      * )
      */
     private $articles;
@@ -301,9 +301,9 @@ class ProductFeed extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category")
      * @ORM\JoinTable(name="s_export_categories",
-     *      joinColumns={@ORM\JoinColumn(name="feedID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="categoryID", referencedColumnName="id")}
-     *      )
+     *     joinColumns={@ORM\JoinColumn(name="feedID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="categoryID", referencedColumnName="id")}
+     * )
      */
     private $categories;
 

@@ -64,12 +64,12 @@ class Article extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category")
      * @ORM\JoinTable(name="s_articles_categories",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
+     *     }
      * )
      */
     protected $categories;
@@ -79,12 +79,12 @@ class Article extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category")
      * @ORM\JoinTable(name="s_articles_categories_ro",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
+     *     }
      * )
      */
     protected $allCategories;
@@ -93,10 +93,10 @@ class Article extends ModelEntity
      * @var ArrayCollection<\Shopware\Models\Article\SeoCategory>
      *
      * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Article\SeoCategory",
-     *      mappedBy="article",
-     *      orphanRemoval=true,
-     *      cascade={"persist"}
+     *     targetEntity="Shopware\Models\Article\SeoCategory",
+     *     mappedBy="article",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
      * )
      */
     protected $seoCategories;
@@ -106,12 +106,12 @@ class Article extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Customer\Group")
      * @ORM\JoinTable(name="s_articles_avoid_customergroups",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="customergroupID", referencedColumnName="id", unique=true)
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="customergroupID", referencedColumnName="id", unique=true)
+     *     }
      * )
      */
     protected $customerGroups;
@@ -121,12 +121,12 @@ class Article extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\ProductStream\ProductStream")
      * @ORM\JoinTable(name="s_product_streams_articles",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="article_id", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="stream_id", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="article_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="stream_id", referencedColumnName="id")
+     *     }
      * )
      */
     protected $relatedProductStreams;
@@ -146,12 +146,12 @@ class Article extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_articles_relationships",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="relatedarticle", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="relatedarticle", referencedColumnName="id")
+     *     }
      * )
      */
     protected $related;
@@ -161,12 +161,12 @@ class Article extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinTable(name="s_articles_similar",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="relatedarticle", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="relatedarticle", referencedColumnName="id")
+     *     }
      * )
      */
     protected $similar;
@@ -287,12 +287,12 @@ class Article extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Property\Value", inversedBy="articles", cascade={"persist"})
      * @ORM\JoinTable(name="s_filter_articles",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="valueID", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="valueID", referencedColumnName="id")
+     *     }
      * )
      */
     protected $propertyValues;

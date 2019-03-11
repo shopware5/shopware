@@ -87,9 +87,9 @@ class Group extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Option")
      * @ORM\JoinTable(name="s_filter_relations",
-     *      joinColumns={@ORM\JoinColumn(name="groupID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="optionID", referencedColumnName="id")}
-     *      )
+     *     joinColumns={@ORM\JoinColumn(name="groupID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="optionID", referencedColumnName="id")}
+     * )
      */
     private $options;
 

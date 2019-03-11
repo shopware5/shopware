@@ -59,8 +59,8 @@ class Layout extends ModelEntity
      * @var \Shopware\Models\Shop\Template
      *
      * @ORM\ManyToOne(
-     *      targetEntity="Shopware\Models\Shop\Template",
-     *      inversedBy="layouts"
+     *     targetEntity="Shopware\Models\Shop\Template",
+     *     inversedBy="layouts"
      * )
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      */

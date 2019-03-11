@@ -47,10 +47,10 @@ class Element extends ModelEntity
      * @var ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Value>
      *
      * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Value",
-     *      mappedBy="element",
-     *      orphanRemoval=true,
-     *      cascade={"persist"}
+     *     targetEntity="Shopware\Models\Shop\TemplateConfig\Value",
+     *     mappedBy="element",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
      * )
      */
     protected $values;

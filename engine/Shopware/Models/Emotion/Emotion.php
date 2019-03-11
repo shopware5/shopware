@@ -54,12 +54,12 @@ class Emotion extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category", inversedBy="emotions")
      * @ORM\JoinTable(name="s_emotion_categories",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="emotion_id", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="emotion_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     *     }
      * )
      */
     protected $categories;
@@ -294,13 +294,13 @@ class Emotion extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinTable(name="s_emotion_shops",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="emotion_id", referencedColumnName="id"
-     *      )},
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
-     *      }
-     * )
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="emotion_id", referencedColumnName="id"
+     *         )},
+     *         inverseJoinColumns={
+     *             @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
+     *         }
+     *     )
      */
     private $shops;
 
