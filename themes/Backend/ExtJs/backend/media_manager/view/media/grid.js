@@ -184,32 +184,41 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
             type = record.get('type').toLowerCase(),
             result;
 
+        if (!record.data.created) {
+            record.data.created = new Date();
+        }
+
         value += '?' + record.data.created.getTime();
 
         switch(type) {
            case 'video':
                result = '<div class="sprite-blue-document-film" style="height:16px; width:16px;display:inline-block"></div>';
                break;
+
            case 'music':
                result = '<div class="sprite-blue-document-music" style="height:16px; width:16px;display:inline-block"></div>';
                break;
+
            case 'archive':
                result = '<div class="sprite-blue-document-zipper" style="height:16px; width:16px;display:inline-block"></div>';
                break;
+
            case 'pdf':
                result = '<div class="sprite-blue-document-pdf-text" style="height:16px; width:16px;display:inline-block"></div>';
                break;
+
            case 'vector':
                result = '<div class="sprite-blue-document-illustrator" style="height:16px; width:16px;display:inline-block"></div>';
             break;
+
            case 'image':
                if (Ext.Array.contains(['tif', 'tiff'], record.data.extension)) {
                    result = '<div class="sprite-blue-document-image" style="height:16px; width:16px;display:inline-block"></div>';
                } else {
                    result = Ext.String.format('<div class="small-preview-image"><img src="[0]" style="max-width:[1]px;max-height:[1]px" alt="[2]" /></div>', value, me.selectedPreviewSize, record.get('name'));
                }
-
                break;
+
            default:
                result = '<div class="sprite-blue-document-text" style="height:16px; width:16px;display:inline-block"></div>';
                break;
@@ -287,7 +296,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
 
     /**
      * Returns the rendered fileSize
-     * @param integer bytes
+     * @param { integer } bytes
      */
     fileSizeRenderer: function(bytes) {
         var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
