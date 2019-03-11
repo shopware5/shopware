@@ -27,6 +27,7 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
 use IteratorAggregate;
+use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -146,7 +147,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
      *
      * @throws \Exception
      */
-    public function createQuery(Criteria $criteria, ShopContextInterface $context)
+    public function createQuery(Criteria $criteria, ShopContextInterface $context, $variant = false)
     {
         $query = $this->createQueryBuilder();
 
@@ -154,7 +155,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
 
         $query->from('s_articles', 'product');
 
-        if ($criteria->hasConditionOfClass(VariantCondition::class)) {
+        if ($variant || $criteria->hasConditionOfClass(ProductAttributeCondition::class) || $criteria->hasConditionOfClass(VariantCondition::class)) {
             $query->innerJoin(
                 'product',
                 's_articles_details',

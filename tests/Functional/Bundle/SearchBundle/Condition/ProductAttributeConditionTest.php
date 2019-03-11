@@ -29,11 +29,110 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
-/**
- * @group elasticSearch
- */
 class ProductAttributeConditionTest extends TestCase
 {
+    public function testVariants()
+    {
+        $condition = new ProductAttributeCondition(
+            'attr1',
+            ProductAttributeCondition::OPERATOR_EQ,
+            10
+        );
+
+        $product = [
+            'mainDetail' => [
+                'number' => '5028568_A001_34',
+                'attribute' => [
+                    'attr1' => 20,
+                ],
+                'configuratorOptions' => [
+                    [
+                        'group' => 'Größe',
+                        'option' => '34',
+                    ],
+                ],
+                'active' => true,
+                'prices' => [
+                    [
+                        'customerGroupKey' => 'EK',
+                        'price' => '899.00',
+                        'pseudoPrice' => null,
+                    ],
+                ],
+            ],
+            'variants' => [
+                [
+                    'number' => 'First-Match',
+                    'attribute' => [
+                        'attr1' => 10,
+                    ],
+                    'configuratorOptions' => [
+                        0 => [
+                            'group' => 'Größe',
+                            'option' => '36',
+                        ],
+                    ],
+                    'active' => true,
+                    'prices' => [
+                        0 => [
+                            'customerGroupKey' => 'EK',
+                            'price' => '899.00',
+                            'pseudoPrice' => null,
+                        ],
+                    ],
+                ],
+                [
+                    'number' => '5028568_A001_38',
+                    'attribute' => [
+                        'attr1' => 30,
+                    ],
+                    'configuratorOptions' => [
+                        0 => [
+                            'group' => 'Größe',
+                            'option' => '38',
+                        ],
+                    ],
+                    'active' => true,
+                    'prices' => [
+                        0 => [
+                            'customerGroupKey' => 'EK',
+                            'price' => '899.00',
+                            'pseudoPrice' => null,
+                        ],
+                    ],
+                ],
+            ],
+            'configuratorSet' => [
+                'groups' => [
+                    'Größe' => [
+                        'name' => 'Größe',
+                        'options' => [
+                            [
+                                'name' => '34',
+                            ],
+                            [
+                                'name' => '36',
+                            ],
+                            [
+                                'name' => '38',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->search(
+            [
+                'First-Match' => $product,
+                'Not-Match' => ['attr1' => 20],
+            ],
+            ['First-Match'],
+            null,
+            [$condition]
+        );
+    }
+
     public function testEquals()
     {
         $condition = new ProductAttributeCondition(
@@ -182,10 +281,14 @@ class ProductAttributeConditionTest extends TestCase
         $number,
         ShopContext $context,
         Category $category = null,
-        $attribute = ['attr1' => 10]
+        $data = ['attr1' => 10]
     ) {
         $product = parent::getProduct($number, $context, $category);
-        $product['mainDetail']['attribute'] = $attribute;
+        if (array_key_exists('attr1', $data)) {
+            $product['mainDetail']['attribute'] = $data;
+        } else {
+            $product = array_merge($product, $data);
+        }
 
         return $product;
     }

@@ -65,10 +65,11 @@ interface QueryBuilderFactoryInterface
      *
      * @param Criteria             $criteria
      * @param ShopContextInterface $context
+     * @param bool                 $variant
      *
      * @return QueryBuilder
      */
-    public function createQuery(Criteria $criteria, ShopContextInterface $context);
+    public function createQuery(Criteria $criteria, ShopContextInterface $context, $variant = false);
 
     /**
      * @return QueryBuilder

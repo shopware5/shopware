@@ -94,7 +94,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
         Criteria $criteria,
         ShopContextInterface $context
     ) {
-        $query = $this->queryBuilderFactory->createQuery($reverted, $context);
+        $query = $this->queryBuilderFactory->createQuery($reverted, $context, true);
         $query->resetQueryPart('orderBy');
         $query->resetQueryPart('groupBy');
 
@@ -319,7 +319,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
                 'product',
                 's_core_translations',
                 'attributeTranslations',
-                'attributeTranslations.objectkey = product.id AND attributeTranslations.objecttype = "article" AND attributeTranslations.objectlanguage = :language'
+                'attributeTranslations.objectkey = IF(variant.id = product.main_detail_id, product.id, variant.id) AND attributeTranslations.objecttype = IF(variant.id = product.main_detail_id, "article", "variant") AND attributeTranslations.objectlanguage = :language'
             )
         ;
         $query->setParameter(':language', $context->getShop()->getId());
@@ -334,7 +334,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
                 'product',
                 's_core_translations',
                 'attributeTranslations_fallback',
-                'attributeTranslations_fallback.objectkey = product.id AND attributeTranslations_fallback.objecttype = "article" AND attributeTranslations_fallback.objectlanguage = :languageFallback'
+                'attributeTranslations_fallback.objectkey = IF(variant.id = product.main_detail_id, product.id, variant.id) AND attributeTranslations_fallback.objecttype = IF(variant.id = product.main_detail_id, "article", "variant") AND attributeTranslations_fallback.objectlanguage = :languageFallback'
             )
         ;
         $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
