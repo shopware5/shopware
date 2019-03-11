@@ -54,6 +54,12 @@ class PluginUpdateCommand extends PluginCommand
                 InputOption::VALUE_REQUIRED,
                 'Batch update several plugins. Possible values are all, inactive, active, installed, uninstalled'
             )
+            ->addOption(
+                'no-refresh',
+                null,
+                InputOption::VALUE_NONE,
+                'Do not refresh plugin list.'
+            )
             ->setHelp(<<<'EOF'
 The <info>%command.name%</info> updates a plugin.
 EOF
@@ -67,6 +73,10 @@ EOF
     {
         /** @var InstallerService $pluginManager */
         $pluginManager = $this->container->get('shopware_plugininstaller.plugin_manager');
+        if (!$input->getOption('no-refresh')) {
+            $pluginManager->refreshPluginList();
+            $output->writeln('Successfully refreshed');
+        }
 
         $pluginNames = $input->getArgument('plugin');
 
