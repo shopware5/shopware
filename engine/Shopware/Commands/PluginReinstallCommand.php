@@ -53,6 +53,12 @@ class PluginReinstallCommand extends PluginCommand
                 InputOption::VALUE_NONE,
                 'if supplied plugin data will be removed'
             )
+            ->addOption(
+                'no-refresh',
+                null,
+                InputOption::VALUE_NONE,
+                'Do not refresh plugin list.'
+            )
         ;
     }
 
@@ -63,6 +69,10 @@ class PluginReinstallCommand extends PluginCommand
     {
         /** @var InstallerService $pluginManager */
         $pluginManager = $this->container->get('shopware_plugininstaller.plugin_manager');
+        if (!$input->getOption('no-refresh')) {
+            $pluginManager->refreshPluginList();
+            $output->writeln('Successfully refreshed');
+        }
         $pluginName = $input->getArgument('plugin');
 
         try {
