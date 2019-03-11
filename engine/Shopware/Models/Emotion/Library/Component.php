@@ -34,7 +34,7 @@ use Shopware\Models\Plugin\Plugin;
  *
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_library_component")
  */
 class Component extends ModelEntity
@@ -67,7 +67,7 @@ class Component extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

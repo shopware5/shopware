@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * @ORM\Table(name="s_benchmark_config")
  * @ORM\Entity(repositoryClass="Repository")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class BenchmarkConfig extends ModelEntity
 {
@@ -39,7 +39,7 @@ class BenchmarkConfig extends ModelEntity
      *
      * @var string
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(name="id", type="guid", nullable=false)
      */
     private $id;

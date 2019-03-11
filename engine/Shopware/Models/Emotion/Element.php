@@ -32,7 +32,7 @@ use Shopware\Components\Model\ModelEntity;
  *
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_emotion_element")
  */
 class Element extends ModelEntity
@@ -88,7 +88,7 @@ class Element extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

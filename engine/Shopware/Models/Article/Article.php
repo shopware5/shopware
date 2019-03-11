@@ -40,7 +40,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_articles")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Article extends ModelEntity
 {
@@ -49,8 +49,8 @@ class Article extends ModelEntity
      *
      * @var \Shopware\Models\Tax\Tax
      *
-     * @Assert\NotBlank
-     * @Assert\Valid
+     * @Assert\NotBlank()
+     * @Assert\Valid()
      *
      * @var \Shopware\Models\Tax\Tax
      *
@@ -176,7 +176,7 @@ class Article extends ModelEntity
      *
      * @var Supplier
      *
-     * @Assert\Valid
+     * @Assert\Valid()
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Supplier", inversedBy="articles", cascade={"persist"})
      * @ORM\JoinColumn(name="supplierID", referencedColumnName="id")
@@ -188,7 +188,7 @@ class Article extends ModelEntity
      *
      * @var ArrayCollection<\Shopware\Models\Article\Detail>
      *
-     * @Assert\Valid
+     * @Assert\Valid()
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Detail", mappedBy="article", cascade={"persist"})
      * @ORM\OrderBy({"position" = "ASC"})
@@ -200,8 +200,8 @@ class Article extends ModelEntity
      *
      * @var Detail
      *
-     * @Assert\NotBlank
-     * @Assert\Valid
+     * @Assert\NotBlank()
+     * @Assert\Valid()
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Detail", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="main_detail_id", referencedColumnName="id")
@@ -213,7 +213,7 @@ class Article extends ModelEntity
      *
      * @var ArrayCollection<\Shopware\Models\Article\Link>
      *
-     * @Assert\Valid
+     * @Assert\Valid()
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Link", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      */
@@ -224,7 +224,7 @@ class Article extends ModelEntity
      *
      * @var ArrayCollection<\Shopware\Models\Article\Download>
      *
-     * @Assert\Valid
+     * @Assert\Valid()
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Download", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      */
@@ -235,7 +235,7 @@ class Article extends ModelEntity
      *
      * @var ArrayCollection<\Shopware\Models\Article\Image>
      *
-     * @Assert\Valid
+     * @Assert\Valid()
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      * @ORM\OrderBy({"position" = "ASC"})
@@ -266,7 +266,7 @@ class Article extends ModelEntity
      *
      * @var ProductAttribute
      *
-     * @Assert\Valid
+     * @Assert\Valid()
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Article", mappedBy="article", cascade={"persist"})
      */
@@ -319,7 +319,7 @@ class Article extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -369,7 +369,7 @@ class Article extends ModelEntity
     /**
      * @var string
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="name", type="string", length=100, nullable=false)
      */

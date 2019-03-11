@@ -38,7 +38,7 @@ use Shopware\Components\Model\ModelEntity;
  *
  * @ORM\Entity(repositoryClass="SnippetRepository")
  * @ORM\Table(name="s_core_snippets")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Snippet extends ModelEntity
 {
@@ -53,7 +53,7 @@ class Snippet extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -296,7 +296,7 @@ class Snippet extends ModelEntity
     /**
      * Sets created on pre persist
      *
-     * @ORM\PrePersist
+     * @ORM\PrePersist()
      */
     public function onPrePersist()
     {
@@ -307,7 +307,7 @@ class Snippet extends ModelEntity
     /**
      * Sets update on pre update
      *
-     * @ORM\PreUpdate
+     * @ORM\PreUpdate()
      */
     public function onPreUpdate()
     {

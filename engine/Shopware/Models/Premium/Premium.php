@@ -35,7 +35,7 @@ use Shopware\Components\Model\LazyFetchModelEntity;
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_addon_premiums")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Premium extends LazyFetchModelEntity
 {
@@ -59,7 +59,7 @@ class Premium extends LazyFetchModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

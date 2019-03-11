@@ -29,7 +29,7 @@ use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Table(name="s_product_streams")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class ProductStream extends ModelEntity
 {
@@ -46,7 +46,7 @@ class ProductStream extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

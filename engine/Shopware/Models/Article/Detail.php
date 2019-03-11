@@ -123,7 +123,7 @@ class Detail extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -145,7 +145,7 @@ class Detail extends ModelEntity
     /**
      * @var string
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      * @Assert\Regex("/^[a-zA-Z0-9-_.]+$/")
      *
      * @ORM\Column(name="ordernumber", type="string", nullable=false, unique = true)

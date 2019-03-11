@@ -29,9 +29,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_articles_esd")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Esd extends ModelEntity
 {
@@ -77,7 +77,7 @@ class Esd extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -304,7 +304,7 @@ class Esd extends ModelEntity
     /**
      * Sets date on pre persist
      *
-     * @ORM\PrePersist
+     * @ORM\PrePersist()
      */
     public function onPrePersist()
     {

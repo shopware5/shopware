@@ -42,9 +42,9 @@ use Doctrine\ORM\Mapping as ORM;
  *   - UNIQUE KEY `name` (`name`, `supportID`)
  * </code>
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_core_config_mails_attachments")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Attachment extends File
 {

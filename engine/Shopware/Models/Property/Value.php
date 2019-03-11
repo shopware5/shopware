@@ -31,7 +31,7 @@ use Shopware\Models\Media\Media;
 /**
  * Shopware Article Property Model
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_filter_values")
  */
 class Value extends ModelEntity
@@ -48,7 +48,7 @@ class Value extends ModelEntity
     /**
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

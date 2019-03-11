@@ -34,7 +34,7 @@ use Shopware\Components\Model\ModelEntity;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_articles_categories_seo")
  */
 class SeoCategory extends ModelEntity
@@ -67,7 +67,7 @@ class SeoCategory extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

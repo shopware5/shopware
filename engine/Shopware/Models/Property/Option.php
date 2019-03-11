@@ -31,7 +31,7 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware Article Model
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_filter_options")
  */
 class Option extends ModelEntity
@@ -55,7 +55,7 @@ class Option extends ModelEntity
     /**
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

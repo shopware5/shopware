@@ -30,7 +30,7 @@ use Shopware\Components\Model\LazyFetchModelEntity;
 /**
  * Shopware text model represents a text container type.
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_campaigns_articles")
  */
 class Article extends LazyFetchModelEntity
@@ -62,7 +62,7 @@ class Article extends LazyFetchModelEntity
      *
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

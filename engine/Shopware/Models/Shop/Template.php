@@ -33,7 +33,7 @@ use Shopware\Models\Shop\TemplateConfig\Set;
  * Template Model Entity
  *
  * @ORM\Table(name="s_core_templates")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Template extends ModelEntity
 {
@@ -95,7 +95,7 @@ class Template extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

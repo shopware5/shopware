@@ -67,7 +67,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_order")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Order extends ModelEntity
 {
@@ -88,7 +88,7 @@ class Order extends ModelEntity
     /**
      * @var \Shopware\Models\Payment\Payment
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Payment\Payment")
      * @ORM\JoinColumn(name="paymentID", referencedColumnName="id")
      */
@@ -100,7 +100,7 @@ class Order extends ModelEntity
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Dispatch\Dispatch")
      * @ORM\JoinColumn(name="dispatchID", referencedColumnName="id")
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      */
     protected $dispatch;
 
@@ -113,7 +113,7 @@ class Order extends ModelEntity
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="subshopID", referencedColumnName="id")
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      */
     protected $shop;
 
@@ -137,7 +137,7 @@ class Order extends ModelEntity
     /**
      * @var \Shopware\Models\Order\Status
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="cleared", referencedColumnName="id")
@@ -145,7 +145,7 @@ class Order extends ModelEntity
     protected $paymentStatus;
 
     /**
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
      * @var \Shopware\Models\Order\Status
      *
@@ -223,7 +223,7 @@ class Order extends ModelEntity
      *
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(name="id", type="integer", nullable=false)
      */
@@ -299,7 +299,7 @@ class Order extends ModelEntity
     /**
      * @var float
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="invoice_amount", type="float", nullable=false)
      */
@@ -308,7 +308,7 @@ class Order extends ModelEntity
     /**
      * @var float
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="invoice_amount_net", type="float", nullable=false)
      */
@@ -317,7 +317,7 @@ class Order extends ModelEntity
     /**
      * @var float
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="invoice_shipping", type="float", nullable=false)
      */
@@ -326,7 +326,7 @@ class Order extends ModelEntity
     /**
      * @var float
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="invoice_shipping_net", type="float", nullable=false)
      */
@@ -375,7 +375,7 @@ class Order extends ModelEntity
     private $internalComment;
 
     /**
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
      * @var int
      *
@@ -386,7 +386,7 @@ class Order extends ModelEntity
     /**
      * @var int
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="taxfree", type="integer", nullable=false)
      */
@@ -423,7 +423,7 @@ class Order extends ModelEntity
     /**
      * @var string
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="language", type="string", length=10, nullable=false)
      */
@@ -445,7 +445,7 @@ class Order extends ModelEntity
      * @var string
      *
      * @ORM\Column(name="currency", type="string", length=5, nullable=false)
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      */
     private $currency;
 
@@ -453,7 +453,7 @@ class Order extends ModelEntity
      * @var float
      *
      * @ORM\Column(name="currencyfactor", type="float", nullable=false)
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      */
     private $currencyFactor;
 

@@ -44,8 +44,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * </code>
  *
  * @ORM\Table(name="s_order_details")
- * @ORM\Entity
- * @ORM\HasLifecycleCallbacks
+ * @ORM\Entity()
+ * @ORM\HasLifecycleCallbacks()
  */
 class Detail extends ModelEntity
 {
@@ -60,7 +60,7 @@ class Detail extends ModelEntity
     /**
      * @var \Shopware\Models\Order\Status
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
      * @var \Shopware\Models\Order\Status
      *
@@ -107,7 +107,7 @@ class Detail extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -122,7 +122,7 @@ class Detail extends ModelEntity
     /**
      * @var int
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="articleID", type="integer", nullable=false)
      */
@@ -138,7 +138,7 @@ class Detail extends ModelEntity
     /**
      * @var float
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="tax_rate", type="float", nullable=false)
      */
@@ -168,7 +168,7 @@ class Detail extends ModelEntity
     /**
      * @var string
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="articleordernumber", type="string", length=255, nullable=false)
      */
@@ -177,7 +177,7 @@ class Detail extends ModelEntity
     /**
      * @var float
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="price", type="float", nullable=false)
      */
@@ -186,7 +186,7 @@ class Detail extends ModelEntity
     /**
      * @var int
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="quantity", type="integer", nullable=false)
      */
@@ -195,7 +195,7 @@ class Detail extends ModelEntity
     /**
      * @var string
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
@@ -607,7 +607,7 @@ class Detail extends ModelEntity
      * The prePersist and preUpdate function call the calculateOrderAmount function to recalculate the
      * order invoice amount, the after remove function can't handle this logic,
      *
-     * @ORM\PreRemove
+     * @ORM\PreRemove()
      */
     public function afterRemove()
     {
@@ -631,7 +631,7 @@ class Detail extends ModelEntity
     /**
      * If an position is added, the order amount has to be recalculated
      *
-     * @ORM\PrePersist
+     * @ORM\PrePersist()
      */
     public function beforeInsert()
     {
@@ -640,7 +640,7 @@ class Detail extends ModelEntity
     /**
      * If an position is added, the stock of the article will be reduced by the ordered quantity.
      *
-     * @ORM\PostPersist
+     * @ORM\PostPersist()
      */
     public function afterInsert()
     {
@@ -662,7 +662,7 @@ class Detail extends ModelEntity
      * If the position article has been changed, the old article stock must be increased based on the (old) ordering quantity.
      * The stock of the new article will be reduced by the (new) ordered quantity.
      *
-     * @ORM\PreUpdate
+     * @ORM\PreUpdate()
      */
     public function beforeUpdate()
     {

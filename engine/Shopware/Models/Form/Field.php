@@ -41,9 +41,9 @@ use Shopware\Components\Model\ModelEntity;
  *   - UNIQUE KEY `name` (`name`, `supportID`)
  * </code>
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_cms_support_fields")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Field extends ModelEntity
 {
@@ -63,7 +63,7 @@ class Field extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -427,7 +427,7 @@ class Field extends ModelEntity
     /**
      * Sets added on pre persist
      *
-     * @ORM\PrePersist
+     * @ORM\PrePersist()
      */
     public function onPrePersist()
     {

@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_article_configurator_templates")
  */
 class Template extends ModelEntity
@@ -77,7 +77,7 @@ class Template extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -99,7 +99,7 @@ class Template extends ModelEntity
     /**
      * @var string
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      * @Assert\Regex("/^[a-zA-Z0-9-_. ]+$/")
      *
      * @ORM\Column(name="order_number", type="string", nullable=false, unique = true)
