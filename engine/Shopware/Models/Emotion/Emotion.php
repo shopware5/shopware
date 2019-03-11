@@ -205,21 +205,21 @@ class Emotion extends ModelEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="seo_title", type="string",length=255, nullable=false)
+     * @ORM\Column(name="seo_title", type="string", length=255, nullable=false)
      */
     private $seoTitle;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="seo_keywords", type="string",length=255, nullable=false)
+     * @ORM\Column(name="seo_keywords", type="string", length=255, nullable=false)
      */
     private $seoKeywords;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="seo_description", type="string",length=255, nullable=false)
+     * @ORM\Column(name="seo_description", type="string", length=255, nullable=false)
      */
     private $seoDescription;
 

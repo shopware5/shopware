@@ -95,7 +95,7 @@ class Newsletter extends ModelEntity
      *
      * @var string
      *
-     * @ORM\Column(name="sendername", type="string", length=16777215 , nullable=false)
+     * @ORM\Column(name="sendername", type="string", length=16777215, nullable=false)
      */
     private $senderName = '';
 

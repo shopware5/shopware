@@ -474,7 +474,7 @@ class Order extends ModelEntity
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_proportional_calculation",type="boolean", nullable=false)
+     * @ORM\Column(name="is_proportional_calculation", type="boolean", nullable=false)
      */
     private $isProportionalCalculation = false;
 

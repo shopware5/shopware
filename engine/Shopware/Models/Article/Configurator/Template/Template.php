@@ -102,7 +102,7 @@ class Template extends ModelEntity
      * @Assert\NotBlank()
      * @Assert\Regex("/^[a-zA-Z0-9-_. ]+$/")
      *
-     * @ORM\Column(name="order_number", type="string", nullable=false, unique = true)
+     * @ORM\Column(name="order_number", type="string", nullable=false, unique=true)
      */
     private $number = '';
 

@@ -115,7 +115,7 @@ class Category extends ModelEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="shops", type="string",length=255, nullable=false)
+     * @ORM\Column(name="shops", type="string", length=255, nullable=false)
      */
     protected $shops;
 

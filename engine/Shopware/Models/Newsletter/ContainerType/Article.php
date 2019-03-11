@@ -82,7 +82,7 @@ class Article extends LazyFetchModelEntity
      *
      * @var string
      *
-     * @ORM\Column(name="articleordernumber", type="string", length=255 , nullable=false)
+     * @ORM\Column(name="articleordernumber", type="string", length=255, nullable=false)
      */
     private $number = '';
 
@@ -92,7 +92,7 @@ class Article extends LazyFetchModelEntity
      *
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=16777215 , nullable=false)
+     * @ORM\Column(name="name", type="string", length=16777215, nullable=false)
      */
     private $name;
 
@@ -101,7 +101,7 @@ class Article extends LazyFetchModelEntity
      *
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=255 , nullable=false)
+     * @ORM\Column(name="type", type="string", length=255, nullable=false)
      */
     private $type;
 
@@ -110,7 +110,7 @@ class Article extends LazyFetchModelEntity
      *
      * @var int
      *
-     * @ORM\Column(name="position", type="string", length=255 , nullable=false)
+     * @ORM\Column(name="position", type="string", length=255, nullable=false)
      */
     private $position;
 

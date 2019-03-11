@@ -51,7 +51,7 @@ class Image extends ModelEntity
      *
      * @var \Shopware\Models\Attribute\ArticleImage
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleImage", mappedBy="articleImage", orphanRemoval=true,cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleImage", mappedBy="articleImage", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
 
