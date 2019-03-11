@@ -12,6 +12,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added configuration for displaying shipping costs pre calculation in off canvas shopping cart
 * Added wrapping smarty blocks to Themes/Frontend/Bare/documents/index.tpl
 * Added condition for not displaying basic price if it is a product with graduated prices
+* Added new block `frontend_account_order_item_detail_info_wrapper` to `account/order_item_details.tpl`
 
 ### Changes
 
