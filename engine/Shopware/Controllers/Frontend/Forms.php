@@ -649,7 +649,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             $elements[$key] = $element;
         }
 
-        $view->sSupport = array_merge($view->sSupport, ['sElements' => $elements]);
+        $view->assign('sSupport', array_merge($view->sSupport, ['sElements' => $elements]));
     }
 
     /**

@@ -58,9 +58,9 @@ class Shopware_Controllers_Widgets_Recommendation extends Enlight_Controller_Act
         $numbers = array_column($products, 'number');
         $result = $this->getPromotions($numbers);
 
-        $this->View()->maxPages = $maxPages;
-        $this->View()->perPage = $perPage;
-        $this->View()->viewedArticles = $result;
+        $this->View()->assign('maxPages', $maxPages);
+        $this->View()->assign('perPage', $perPage);
+        $this->View()->assign('viewedArticles', $result);
     }
 
     /**
@@ -78,9 +78,9 @@ class Shopware_Controllers_Widgets_Recommendation extends Enlight_Controller_Act
         $numbers = array_column($product, 'number');
         $result = $this->getPromotions($numbers);
 
-        $this->View()->maxPages = $maxPages;
-        $this->View()->perPage = $perPage;
-        $this->View()->boughtArticles = $result;
+        $this->View()->assign('maxPages', $maxPages);
+        $this->View()->assign('perPage', $perPage);
+        $this->View()->assign('boughtArticles', $result);
     }
 
     /**

@@ -41,9 +41,9 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
     public function indexAction()
     {
         $view = $this->View();
-        $view->sNotes = Shopware()->Modules()->Basket()->sGetNotes();
-        $view->sUserLoggedIn = Shopware()->Modules()->Admin()->sCheckUser();
-        $view->sOneTimeAccount = Shopware()->Session()->offsetGet('sOneTimeAccount');
+        $view->assign('sNotes', Shopware()->Modules()->Basket()->sGetNotes());
+        $view->assign('sUserLoggedIn', Shopware()->Modules()->Admin()->sCheckUser());
+        $view->assign('sOneTimeAccount', Shopware()->Session()->offsetGet('sOneTimeAccount'));
     }
 
     public function deleteAction()
@@ -59,7 +59,7 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
         $orderNumber = $this->Request()->getParam('ordernumber');
 
         if ($this->addNote($orderNumber)) {
-            $this->View()->sArticleName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($orderNumber);
+            $this->View()->assign('sArticleName', Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($orderNumber));
         }
 
         $this->forward('index');

@@ -259,7 +259,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
             ->getArrayResult();
 
         $menuItems = $this->buildTree($nodes);
-        $this->View()->menu = $menuItems;
+        $this->View()->assign('menu', $menuItems);
     }
 
     /**

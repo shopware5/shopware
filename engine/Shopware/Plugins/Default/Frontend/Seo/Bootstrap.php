@@ -143,10 +143,10 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
         $view->extendsTemplate('frontend/plugins/seo/index.tpl');
 
         if (!empty($metaRobots)) {
-            $view->SeoMetaRobots = $metaRobots;
+            $view->assign('SeoMetaRobots', $metaRobots);
         }
         if (!empty($metaDescription)) {
-            $view->SeoMetaDescription = $metaDescription;
+            $view->assign('SeoMetaDescription', $metaDescription);
         }
 
         if ($this->get('config')->get('hrefLangEnabled')) {
