@@ -33,11 +33,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class PluginLoggerCompilerPass implements CompilerPassInterface
 {
     /**
@@ -53,7 +48,7 @@ class PluginLoggerCompilerPass implements CompilerPassInterface
         $this->plugins = $plugins;
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         foreach ($this->plugins as $plugin) {
             $this->processPlugin($container, $plugin->getContainerPrefix());
