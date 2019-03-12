@@ -30,6 +30,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed `ProductListingVariationLoader::fetchAvailability` to consider only given variants
 * Changed cachebuster parameter for images in backend to contain the datetime of the last change
 * Changed `font-display` value to `swap` for improved font rendering performance
+* Changed `CdnOptimizerService` to work with external filesystems
 
 ### Deprecations
 
