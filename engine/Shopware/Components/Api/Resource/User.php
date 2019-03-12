@@ -80,7 +80,7 @@ class User extends Resource
             ->where('users.id = ?1')
             ->setParameter(1, $id);
 
-        /** @var UserModel|null $user */
+        /** @var UserModel|array|null $user */
         $user = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$user) {

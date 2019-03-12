@@ -1200,6 +1200,7 @@ class sAdmin
     public function sGetDownloads($destinationPage = 1, $perPage = 10)
     {
         $userId = $this->session->offsetGet('sUserId');
+        /** @var array $getOrders */
         $getOrders = $this->db->fetchAll(
             "SELECT
                 id, ordernumber, invoice_amount, invoice_amount_net,
@@ -1226,6 +1227,7 @@ class sAdmin
                     ->sFormatPrice($orderValue['invoice_shipping']);
             }
 
+            /** @var array $getOrderDetails */
             $getOrderDetails = $this->db->fetchAll(
                 'SELECT * FROM s_order_details WHERE orderID = ?',
                 [$orderValue['id']]
@@ -1326,6 +1328,7 @@ class sAdmin
             ORDER BY ordertime DESC
             LIMIT $limitStart, $limitEnd
         ";
+        /** @var array $getOrders */
         $getOrders = $this->db->fetchAll(
             $sql,
             [
@@ -3659,6 +3662,7 @@ SQL;
      */
     private function processOpenOrderDetails($orderValue, $getOrders, $orderKey)
     {
+        /** @var array $getOrderDetails */
         $getOrderDetails = $this->db->fetchAll(
             'SELECT * FROM s_order_details WHERE orderID = ? ORDER BY id ASC',
             [$orderValue['id']]
