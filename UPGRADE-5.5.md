@@ -50,6 +50,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added blocks "frontend_index_header_css_screen_stylesheet" and `frontend_index_header_javascript_jquery_lib_file`
 * Added button to order module detail window, to open customer directly
 * Added new option to AdvancedMenu to improve performance when not using customer groups
+* Added clearing of note entries, that are older than a year, by the "CronRefresh" cronjob
 
 ### Changes
 
