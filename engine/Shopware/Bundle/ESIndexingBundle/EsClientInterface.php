@@ -22,18 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundleES;
+namespace Shopware\Bundle\ESIndexingBundle;
 
-use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Psr\Log\LoggerInterface;
+use Shopware\Bundle\ESIndexingBundle\Console\EvaluationHelperInterface;
 
-interface SearchTermQueryBuilderInterface
+interface EsClientInterface
 {
-    /**
-     * @param ShopContextInterface $context
-     * @param string               $term
-     *
-     * @return BoolQuery
-     */
-    public function buildQuery(ShopContextInterface $context, $term);
+    public function setLogger(LoggerInterface $logger);
+
+    public function setEvaluation(EvaluationHelperInterface $evaluation);
+
+    public function info($params = []);
+
+    public function bulk($params = []);
+
+    public function search($params = []);
 }

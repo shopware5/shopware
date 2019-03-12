@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Query\TermQuery;
+use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
+use ONGR\ElasticsearchDSL\Query\TermLevel\TermQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\CloseoutCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -51,7 +52,7 @@ class CloseoutConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $search->addFilter(new TermQuery('closeouts', true));
+        $search->addQuery(new TermQuery('closeouts', true), BoolQuery::FILTER);
     }
 
     /**

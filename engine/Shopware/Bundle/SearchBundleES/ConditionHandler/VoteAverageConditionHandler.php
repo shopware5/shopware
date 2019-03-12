@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Query\RangeQuery;
+use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
+use ONGR\ElasticsearchDSL\Query\TermLevel\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\VoteAverageCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -52,10 +53,11 @@ class VoteAverageConditionHandler implements PartialConditionHandlerInterface
         ShopContextInterface $context
     ) {
         /* @var VoteAverageCondition $criteriaPart */
-        $search->addFilter(
+        $search->addQuery(
             new RangeQuery('voteAverage.average', [
                 'gte' => $criteriaPart->getAverage() * 2,
-            ])
+            ]),
+            BoolQuery::FILTER
         );
     }
 

@@ -24,8 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Query\BoolQuery;
-use ONGR\ElasticsearchDSL\Query\TermsQuery;
+use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
+use ONGR\ElasticsearchDSL\Query\TermLevel\TermsQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -58,7 +58,7 @@ class CustomerGroupConditionHandler implements PartialConditionHandlerInterface
             new TermsQuery('blockedCustomerGroupIds', $criteriaPart->getCustomerGroupIds()),
             BoolQuery::MUST_NOT
         );
-        $search->addFilter($filter);
+        $search->addQuery($filter);
     }
 
     /**

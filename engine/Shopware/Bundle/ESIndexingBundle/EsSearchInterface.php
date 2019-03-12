@@ -22,21 +22,25 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPass;
+namespace Shopware\Bundle\ESIndexingBundle;
 
-use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use ONGR\ElasticsearchDSL\BuilderInterface;
 
-class SearchHandlerCompilerPass implements CompilerPassInterface
+interface EsSearchInterface
 {
-    use TagReplaceTrait;
+    /**
+     * @deprecated since 5.6, to be removed in 5.7. Use addQuery(EsBuilderInterface, BoolQuery::FILTER)
+     *
+     * @param BuilderInterface $query
+     */
+    public function addFilter(BuilderInterface $query);
 
     /**
-     * @param ContainerBuilder $container
+     * @deprecated since 5.6, to be removed in 5.7. Use addQuery(EsBuilderInterface, BoolQuery::FILTER)
+     *
+     * @param BuilderInterface $query
+     *
+     * @return BuilderInterface
      */
-    public function process(ContainerBuilder $container)
-    {
-        $this->replaceArgumentWithTaggedServices($container, 'shopware_search_es.product_number_search_factory', 'shopware_search_es.search_handler', 0);
-    }
+    public function getFilters(BuilderInterface $query): BuilderInterface;
 }

@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
-use Elasticsearch\Client;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\ESIndexingBundle\FieldMappingInterface;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
@@ -57,11 +56,6 @@ class ProductMapping implements MappingInterface
     private $crudService;
 
     /**
-     * @var Client
-     */
-    private $client;
-
-    /**
      * @var bool
      */
     private $isDynamic;
@@ -71,7 +65,6 @@ class ProductMapping implements MappingInterface
      * @param FieldMappingInterface $fieldMapping
      * @param TextMappingInterface  $textMapping
      * @param CrudService           $crudService
-     * @param Client                $client
      * @param bool                  $isDynamic
      */
     public function __construct(
@@ -79,14 +72,12 @@ class ProductMapping implements MappingInterface
         FieldMappingInterface $fieldMapping,
         TextMappingInterface $textMapping,
         CrudService $crudService,
-        Client $client,
         $isDynamic = true
     ) {
         $this->identifierSelector = $identifierSelector;
         $this->fieldMapping = $fieldMapping;
         $this->textMapping = $textMapping;
         $this->crudService = $crudService;
-        $this->client = $client;
         $this->isDynamic = $isDynamic;
     }
 

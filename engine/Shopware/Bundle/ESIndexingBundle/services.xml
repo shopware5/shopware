@@ -11,12 +11,11 @@
             <factory class="Shopware\Bundle\ESIndexingBundle\ClientFactory" method="createClient"/>
             <argument>%shopware.es.client%</argument>
             <argument type="service" id="eslogger"/>
+            <argument type="service" id="shopware_elastic_search.console.console_evaluation_helper"/>
+            <deprecated>The "shopware_elastic_search.client.logger" service is deprecated. Use "%service_id%" instead</deprecated>
         </service>
 
-        <service id="shopware_elastic_search.client.logger" class="Shopware\Bundle\ESIndexingBundle\EsClientLogger" decorates="shopware_elastic_search.client">
-            <argument type="service" id="shopware_elastic_search.client.logger.inner"/>
-            <argument type="service" id="eslogger"/>
-            <argument type="service" id="shopware_elastic_search.console.console_evaluation_helper"/>
+        <service id="shopware_elastic_search.client.logger" alias="shopware_elastic_search.client">
         </service>
 
         <service id="shopware_elastic_search.shop_indexer_factory"
@@ -157,7 +156,6 @@
             <argument type="service" id="shopware_elastic_search.field_mapping"/>
             <argument type="service" id="shopware_elastic_search.text_mapping"/>
             <argument type="service" id="shopware_attribute.crud_service"/>
-            <argument type="service" id="shopware_elastic_search.client"/>
             <argument>%shopware.es.dynamic_mapping_enabled%</argument>
 
             <tag name="shopware_elastic_search.mapping"/>

@@ -34,6 +34,10 @@ class ProductQueryFactory implements ProductQueryFactoryInterface
      * @var Connection
      */
     private $connection;
+
+    /**
+     * @var VariantHelperInterface
+     */
     private $variantHelper;
 
     /**
