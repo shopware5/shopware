@@ -276,9 +276,6 @@ class RequirementValidatorTest extends TestCase
                     case 'required_plugin_blacklisted':
                         return 'Required plugin %s with version %s is blacklisted';
                 }
-
-                var_dump($arg);
-                die();
             });
 
         $snippetManager = $this->createMock(\Enlight_Components_Snippet_Manager::class);
