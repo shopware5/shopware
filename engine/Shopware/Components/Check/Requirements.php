@@ -42,10 +42,14 @@ class Requirements
     private $connection;
 
     /**
-     * @param string $sourceFile
-     * @param \PDO   $connection
+     * @var \Shopware_Components_Snippet_Manager
      */
-    public function __construct($sourceFile, $connection)
+    private $snippetManager;
+
+    /**
+     * @param string $sourceFile
+     */
+    public function __construct($sourceFile, \PDO $connection, \Shopware_Components_Snippet_Manager $snippetManager)
     {
         if (!is_readable($sourceFile)) {
             throw new \RuntimeException(sprintf('Cannot read requirements file in %s.', $sourceFile));
@@ -53,6 +57,7 @@ class Requirements
 
         $this->sourceFile = $sourceFile;
         $this->connection = $connection;
+        $this->snippetManager = $snippetManager;
     }
 
     /**
@@ -75,9 +80,14 @@ class Requirements
             $check['notice'] = (string) $requirement->notice;
             $check['required'] = (string) $requirement->required;
             $check['version'] = (string) $requirement->version;
+            $check['maxCompatibleVersion'] = (string) $requirement->maxCompatibleVersion;
             $check['check'] = (bool) (string) $requirement->result;
             $check['result'] = (bool) $requirement->result;
             $check['error'] = (bool) $requirement->error;
+
+            if ($check['maxCompatibleVersion'] && $check['check']) {
+                $check = $this->handleMaxCompatibleVersion($check);
+            }
 
             if (!$check['check'] && $check['error']) {
                 $check['status'] = 'error';
@@ -481,5 +491,19 @@ class Requirements
         for ($i = 0; $bytes >= 1024 && $i < (count($types) - 1); $bytes /= 1024, $i++);
 
         return round($bytes, 2) . ' ' . $types[$i];
+    }
+
+    /**
+     * @return array
+     */
+    private function handleMaxCompatibleVersion(array $check)
+    {
+        if (version_compare($check['version'], $check['maxCompatibleVersion'], '>')) {
+            $check['check'] = false;
+            $maxCompatibleVersion = str_replace('.99', '', $check['maxCompatibleVersion']);
+            $check['notice'] = sprintf($this->snippetManager->getNamespace('backend/systeminfo/view')->get('php_version_is_too_new_warning'), $maxCompatibleVersion);
+        }
+
+        return $check;
     }
 }

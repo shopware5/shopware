@@ -133,10 +133,12 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Configlist', {
      * Function to render the status. 1 = a green tick, everything else = a red cross
      * @param value The value of the field
      */
-    renderStatus: function(value){
-        if(value=="ok"){
+    renderStatus: function(value, meta, record){
+        if(value === 'ok') {
             return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-tick"></div>')
-        }else{
+        } else if(value === 'warning') {
+            return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-exclamation" title="' + record.get('notice')  + '"></div>')
+        } else {
             return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-cross"></div>')
         }
     },

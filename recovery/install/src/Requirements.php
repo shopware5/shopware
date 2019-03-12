@@ -24,6 +24,8 @@
 
 namespace Shopware\Recovery\Install;
 
+use Shopware\Recovery\Install\Service\TranslationService;
+
 /**
  * @category Shopware
  *
@@ -37,15 +39,22 @@ class Requirements
     private $sourceFile;
 
     /**
+     * @var string[]
+     */
+    private $translations;
+
+    /**
      * @param string $sourceFile
      */
-    public function __construct($sourceFile)
+    public function __construct($sourceFile, TranslationService $translations)
     {
         if (!is_readable($sourceFile)) {
             throw new \RuntimeException(sprintf('Cannot read requirements file in %s.', $sourceFile));
         }
 
         $this->sourceFile = $sourceFile;
+
+        $this->translations = $translations;
     }
 
     /**
@@ -59,6 +68,7 @@ class Requirements
             'hasErrors' => false,
             'hasWarnings' => false,
             'checks' => [],
+            'phpVersionNotSupported' => false,
         ];
 
         foreach ($this->runChecks() as $requirement) {
@@ -74,8 +84,16 @@ class Requirements
             $check['notice'] = (string) $requirement->notice;
             $check['required'] = (string) $requirement->required;
             $check['version'] = (string) $requirement->version;
+            $check['maxCompatibleVersion'] = (string) $requirement->maxCompatibleVersion;
             $check['check'] = (bool) (string) $requirement->result;
             $check['error'] = (bool) $requirement->error;
+
+            if ($check['maxCompatibleVersion'] && $check['check']) {
+                $check = $this->handleMaxCompatibleVersion($check);
+                if ($check['notice']) {
+                    $result['phpVersionNotSupported'] = $check['notice'];
+                }
+            }
 
             if (!$check['check'] && $check['error']) {
                 $check['status'] = 'error';
@@ -421,5 +439,21 @@ class Requirements
         for ($i = 0; $bytes >= 1024 && $i < (count($types) - 1); $bytes /= 1024, $i++);
 
         return round($bytes, 2) . ' ' . $types[$i];
+    }
+
+    /**
+     * @return array
+     */
+    private function handleMaxCompatibleVersion(array $check)
+    {
+        if (version_compare($check['version'], $check['maxCompatibleVersion'], '>')) {
+            $check['check'] = false;
+            $maxCompatibleVersion = str_replace('.99', '', $check['maxCompatibleVersion']);
+            $key = 'requirements_php_max_compatible_version';
+
+            $check['notice'] = sprintf($this->translations->translate($key), $maxCompatibleVersion);
+        }
+
+        return $check;
     }
 }

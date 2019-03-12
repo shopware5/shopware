@@ -527,6 +527,7 @@
         <service id="shopware.requirements" class="Shopware\Components\Check\Requirements">
             <argument>%kernel.root_dir%/engine/Shopware/Components/Check/Data/System.xml</argument>
             <argument type="service" id="db_connection"/>
+            <argument type="service" id="snippets"/>
         </service>
 
         <service id="shopware.emotion_component_installer" class="Shopware\Components\Emotion\ComponentInstaller">
