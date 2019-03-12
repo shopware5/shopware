@@ -516,7 +516,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
 
                 if ($this->_net == true) {
                     $position['netto'] = round($position['price'], 2);
-                    $position['price'] = round($position['price'], 2) * (1 + $position['tax'] / 100);
+                    $position['price'] = Shopware()->Container()->get('shopware.cart.net_rounding')->round($position['price'], $position['tax']);
                 } else {
                     $position['netto'] = $position['price'] / (100 + $position['tax']) * 100;
                 }
@@ -564,7 +564,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             $this->_amount += $position['amount'];
 
             if (!empty($position['tax'])) {
-                $this->_tax[number_format((float) $position['tax'], 2)] += round($position['amount'] / ($position['tax'] + 100) * $position['tax'], 2);
+                $this->_tax[number_format((float) $position['tax'], 2)] += round($position['amount'] - $position['amount_netto'], 2);
             }
             if ($position['amount'] <= 0) {
                 $this->_discount += $position['amount'];

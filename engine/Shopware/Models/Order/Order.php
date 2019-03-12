@@ -1116,7 +1116,7 @@ class Order extends ModelEntity
             }
 
             if ($this->net) {
-                $invoiceAmountNet += round(($price * $detail->getQuantity()) / 100 * (100 + $taxValue), 2);
+                $invoiceAmountNet += Shopware()->Container()->get('shopware.cart.net_rounding')->round($price, $taxValue, $detail->getQuantity());
             } else {
                 $invoiceAmountNet += round(($price * $detail->getQuantity()) / (100 + $taxValue) * 100, 2);
             }

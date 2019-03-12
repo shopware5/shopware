@@ -2618,7 +2618,7 @@ SQL;
                 || (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])
             ) {
                 if (empty($getProducts[$key]['modus'])) {
-                    $priceWithTax = round($netprice, 2) / 100 * (100 + $tax);
+                    $priceWithTax = Shopware()->Container()->get('shopware.cart.net_rounding')->round($netprice, $tax);
 
                     $getProducts[$key]['amountWithTax'] = $quantity * $priceWithTax;
                     // If basket comprised any discount, calculate brutto-value for the discount

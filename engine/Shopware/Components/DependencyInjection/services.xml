@@ -7,6 +7,7 @@
     <imports>
         <import resource="../HttpCache/services.xml"/>
         <import resource="api_controller.xml"/>
+        <import resource="cart.xml"/>
     </imports>
 
     <parameters>
@@ -861,22 +862,6 @@
         </service>
 
         <service id="shopware.components.privacy.ip_anonymizer_service" class="Shopware\Components\Privacy\IpAnonymizer" public="false"/>
-
-        <service id="shopware.cart.proportional_tax_calculator"
-                 class="Shopware\Components\Cart\ProportionalTaxCalculator"/>
-
-        <service id="shopware.cart.basket_query_helper" class="Shopware\Components\Cart\BasketQueryHelper">
-            <argument type="service" id="dbal_connection"/>
-        </service>
-
-        <service id="shopware.cart.basket_helper" class="Shopware\Components\Cart\BasketHelper">
-            <argument type="service" id="shopware.cart.proportional_tax_calculator"/>
-            <argument type="service" id="shopware.cart.basket_query_helper" />
-        </service>
-
-        <service id="shopware.cart.proportional_cart_merger" class="Shopware\Components\Cart\ProportionalCartMerger">
-            <argument type="service" id="modules"/>
-        </service>
 
         <!-- Filesystem -->
         <service id="shopware.filesystem_factory" class="Shopware\Components\Filesystem\FilesystemFactory">
