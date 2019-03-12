@@ -1623,6 +1623,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $view->assign('sDispatches', $this->getDispatches());
         $accountMode = (int) $this->View()->sUserData['additional']['user']['accountmode'];
         $view->assign('sDispatchNoOrder', ($accountMode === 0 && $this->getDispatchNoOrder()));
+        $view->assign('showShippingCalculation', (bool) $this->Request()->getParam('openShippingCalculations'));
     }
 
     /**

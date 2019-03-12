@@ -30,7 +30,7 @@ class Migrations_Migration1460 extends Shopware\Components\Migrations\AbstractMi
         SET @parent = (SELECT id FROM s_core_config_forms WHERE name = 'Frontend79' LIMIT 1);
         
         INSERT IGNORE INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `options`) VALUES
-        (NULL, @parent, 'showShippingCostsOffCanvas', 'i:1;', 'Versandkostenberechnung im Mini-/OffCanvas-Warenkorb anzeigen', 'Diese Option aktiviert die Versandkostenberechnung für den Mini- bzw. OffCanvas-Warenkorb.', 'select', 0, 6, 0, 'a:4:{s:5:"store";s:57:"Shopware.apps.Base.store.ShippingCalculationsDisplayModes";s:9:"queryMode";s:5:"local";s:14:"forceSelection";b:1;s:8:"editable";b:0;}');
+        (NULL, @parent, 'showShippingCostsOffCanvas', 'i:1;', 'Versandkostenberechnung im Mini-/OffCanvas-Warenkorb anzeigen', 'Diese Option aktiviert die Versandkostenberechnung für den Mini- bzw. OffCanvas-Warenkorb.', 'select', 0, 6, 1, 'a:4:{s:5:"store";s:57:"Shopware.apps.Base.store.ShippingCalculationsDisplayModes";s:9:"queryMode";s:5:"local";s:14:"forceSelection";b:1;s:8:"editable";b:0;}');
         
         SET @elementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'showShippingCostsOffCanvas' LIMIT 1);
 		INSERT IGNORE INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`, `description`)

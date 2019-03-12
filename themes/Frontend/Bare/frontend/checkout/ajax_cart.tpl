@@ -94,7 +94,7 @@
                                         </span>
                                     {/block}
                                     {block name='frontend_checkout_shipping_costs_country_include'}
-                                        {include file="frontend/checkout/shipping_costs.tpl"}
+                                        {include file="frontend/checkout/shipping_costs.tpl" calculateShippingCosts=$showShippingCalculation}
                                     {/block}
                                 {/if}
                                 {if {config name=showShippingCostsOffCanvas} == 2}
@@ -112,9 +112,7 @@
                                     <div class="prices--articles">
                                         <span class="prices--articles-text">{s name="CartFooterLabelTotal" namespace="frontend/checkout/cart_footer"}{/s}</span>
                                         <span class="prices--articles-amount">
-                                            {if $sAmountWithTax && $sUserData.additional.charge_vat}{$sAmountWithTax|currency}
-                                            {else}{$sAmount|currency}
-                                            {/if}
+                                            {$sAmount|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
                                         </span>
                                     </div>
                                 {/block}
