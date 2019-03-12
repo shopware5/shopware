@@ -48,7 +48,6 @@ return PhpCsFixer\Config::create()
         'concat_space' => ['spacing' => 'one'],
         'array_syntax' => ['syntax' => 'short'],
         'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
-        'doctrine_annotation_braces' => ['syntax' => 'with_braces'],
         'doctrine_annotation_indentation' => true,
         'doctrine_annotation_spaces' => true,
     ])
