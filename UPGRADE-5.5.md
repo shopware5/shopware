@@ -29,6 +29,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed availability filter for ES condition
 * Changed `ProductListingVariationLoader::fetchAvailability` to consider only given variants
 * Changed cachebuster parameter for images in backend to contain the datetime of the last change
+* Changed `font-display` value to `swap` for improved font rendering performance
 
 ### Deprecations
 
