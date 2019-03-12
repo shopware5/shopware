@@ -513,6 +513,7 @@
         <service id="shopware.plugin_requirement_validator" class="Shopware\Components\Plugin\RequirementValidator">
             <argument type="service" id="models" />
             <argument type="service" id="shopware.plugin_xml_plugin_info_reader" />
+            <argument type="service" id="snippets"/>
         </service>
 
         <service id="slugify" class="Cocur\Slugify\Slugify" public="false">
