@@ -31,7 +31,7 @@ use Shopware\Tests\Mink\Element\AddressManagementAddressBox;
 class AccountContext extends SubContext
 {
     /**
-     * @Given /^I log in with email "(?P<email>[^"]*)" and password "(?P<password>[^"]*)"$/
+     * @Given() /^I log in with email "(?P<email>[^"]*)" and password "(?P<password>[^"]*)"$/
      */
     public function iLogInAsWithPassword($email, $password)
     {
@@ -39,7 +39,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Given /^I log in successful as "(?P<username>[^"]*)" with email "(?P<email>[^"]*)" and password "(?P<password>[^"]*)"$/
+     * @Given() /^I log in successful as "(?P<username>[^"]*)" with email "(?P<email>[^"]*)" and password "(?P<password>[^"]*)"$/
      */
     public function iLogInSuccessfulAsWithPassword($username, $email, $password)
     {
@@ -48,7 +48,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @When /^I log me out$/
+     * @When() /^I log me out$/
      */
     public function iLogMeOut()
     {
@@ -56,8 +56,8 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Then /^I change my email with password "(?P<password>[^"]*)" to "(?P<new>[^"]*)"$/
-     * @Then /^I change my email with password "(?P<password>[^"]*)" to "(?P<new>[^"]*)" with confirmation "(?P<confirmation>[^"]*)"$/
+     * @Then() /^I change my email with password "(?P<password>[^"]*)" to "(?P<new>[^"]*)"$/
+     * @Then() /^I change my email with password "(?P<password>[^"]*)" to "(?P<new>[^"]*)" with confirmation "(?P<confirmation>[^"]*)"$/
      */
     public function iChangeMyEmailWithPasswordToWithConfirmation($password, $email, $emailConfirmation = null)
     {
@@ -65,8 +65,8 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Then /^I change my password from "(?P<old>[^"]*)" to "(?P<new>[^"]*)"$/
-     * @Then /^I change my password from "(?P<old>[^"]*)" to "(?P<new>[^"]*)" with confirmation "(?P<confirmation>[^"]*)"$/
+     * @Then() /^I change my password from "(?P<old>[^"]*)" to "(?P<new>[^"]*)"$/
+     * @Then() /^I change my password from "(?P<old>[^"]*)" to "(?P<new>[^"]*)" with confirmation "(?P<confirmation>[^"]*)"$/
      */
     public function iChangeMyPasswordFromToWithConfirmation($currentPassword, $password, $passwordConfirmation = null)
     {
@@ -74,7 +74,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Given /^I change my billing address:$/
+     * @Given() /^I change my billing address:$/
      */
     public function iChangeMyBillingAddress(TableNode $table)
     {
@@ -93,7 +93,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Given /^I change my shipping address:$/
+     * @Given() /^I change my shipping address:$/
      */
     public function iChangeMyShippingAddress(TableNode $table)
     {
@@ -112,7 +112,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Given /^the "([^"]*)" address should be "([^"]*)"$/
+     * @Given() /^the "([^"]*)" address should be "([^"]*)"$/
      */
     public function theAddressShouldBe($type, $address)
     {
@@ -120,7 +120,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Given /^I register me:$/
+     * @Given() /^I register me:$/
      */
     public function iRegisterMe(\Behat\Gherkin\Node\TableNode $table)
     {
@@ -128,8 +128,8 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @When /^I change the payment method to (?P<paymentId>\d+)$/
-     * @When /^I change the payment method to (?P<paymentId>\d+):$/
+     * @When() /^I change the payment method to (?P<paymentId>\d+)$/
+     * @When() /^I change the payment method to (?P<paymentId>\d+):$/
      */
     public function iChangeThePaymentMethodTo($payment, TableNode $table = null)
     {
@@ -157,7 +157,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Then /^the current payment method should be "([^"]*)"$/
+     * @Then() /^the current payment method should be "([^"]*)"$/
      */
     public function theCurrentPaymentMethodShouldBe($paymentMethod)
     {
@@ -168,7 +168,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @When /^I choose the address "([^"]*)"$/
+     * @When() /^I choose the address "([^"]*)"$/
      */
     public function iChooseTheAddress($name)
     {
@@ -181,7 +181,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Given /^I change my profile with "([^"]*)" "([^"]*)" "([^"]*)"$/
+     * @Given() /^I change my profile with "([^"]*)" "([^"]*)" "([^"]*)"$/
      */
     public function iChangeMyProfileWith($salutation, $firstname, $lastname)
     {
@@ -189,7 +189,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Given /^I should be welcomed with "([^"]*)"$/
+     * @Given() /^I should be welcomed with "([^"]*)"$/
      */
     public function iShouldBeWelcomedWith($welcome)
     {
@@ -200,7 +200,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Given /^there should be an address "([^"]*)"$/
+     * @Given() /^there should be an address "([^"]*)"$/
      */
     public function thereShouldBeAnAddress($address)
     {
@@ -224,7 +224,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Given /^I create a new address:$/
+     * @Given() /^I create a new address:$/
      */
     public function iCreateANewAddress(TableNode $table)
     {
@@ -236,7 +236,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Given /^I click "([^"]*)" on address "([^"]*)"$/
+     * @Given() /^I click "([^"]*)" on address "([^"]*)"$/
      */
     public function iClickOnAddress($locator, $address)
     {
@@ -270,7 +270,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Then /^I should see only "([^"]*)" with title "([^"]*)"$/
+     * @Then() /^I should see only "([^"]*)" with title "([^"]*)"$/
      */
     public function iShouldSeeOnlyWithTitle($address, $addressTitle)
     {
@@ -298,7 +298,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Given /^I change the current address to:$/
+     * @Given() /^I change the current address to:$/
      */
     public function iChangeTheCurrentAddressTo(TableNode $table)
     {
@@ -312,7 +312,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Given /^I delete the address "([^"]*)"$/
+     * @Given() /^I delete the address "([^"]*)"$/
      */
     public function iDeleteTheAddress($address)
     {
@@ -341,7 +341,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Then /^there must not be an address "([^"]*)"$/
+     * @Then() /^there must not be an address "([^"]*)"$/
      */
     public function thereMustNotBeAnAddress($address)
     {
@@ -363,7 +363,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Then /^I must not see "([^"]*)" in box with "([^"]*)" title$/
+     * @Then() /^I must not see "([^"]*)" in box with "([^"]*)" title$/
      */
     public function iMustNotSeeInBoxWithTitle($elementName, $title)
     {

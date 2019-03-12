@@ -692,7 +692,7 @@ class %className% extends ModelEntity
     /**
      * Helper function to check if the passed column is the primary key
      * column.
-     * In this case doctrine requires the @ORM\ID annotation and a primary key
+     * In this case doctrine requires the @ORM\ID() annotation and a primary key
      * strategy.
      *
      * @param \Doctrine\DBAL\Schema\Table  $table

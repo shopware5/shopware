@@ -31,8 +31,8 @@ use Shopware\Tests\Mink\Page\Note;
 class NoteContext extends SubContext
 {
     /**
-     * @When /^I remove the article from my note$/
-     * @When /^I remove the article on position (?P<num>\d+) of my note$/
+     * @When() /^I remove the article from my note$/
+     * @When() /^I remove the article on position (?P<num>\d+) of my note$/
      */
     public function iRemoveTheArticleOnPositionOfMyNote($position = 1)
     {
@@ -40,7 +40,7 @@ class NoteContext extends SubContext
     }
 
     /**
-     * @When /^I put the article on position (?P<num>\d+) of my note in the basket$/
+     * @When() /^I put the article on position (?P<num>\d+) of my note in the basket$/
      */
     public function iPutTheArticleOnPositionOfMyNoteInTheBasket($position)
     {
@@ -48,7 +48,7 @@ class NoteContext extends SubContext
     }
 
     /**
-     * @When /^I compare the article on position (?P<num>\d+) of my note$/
+     * @When() /^I compare the article on position (?P<num>\d+) of my note$/
      */
     public function iCompareTheArticleOnPositionOfMyNote($position)
     {
@@ -56,7 +56,7 @@ class NoteContext extends SubContext
     }
 
     /**
-     * @When /^I visit the detail page of the article on position (?P<num>\d+) of my note$/
+     * @When() /^I visit the detail page of the article on position (?P<num>\d+) of my note$/
      */
     public function iVisitTheDetailPageOfTheArticleOnPositionOfMyNote($position)
     {
@@ -64,7 +64,7 @@ class NoteContext extends SubContext
     }
 
     /**
-     * @Given /^the note contains the following products:$/
+     * @Given() /^the note contains the following products:$/
      */
     public function theNoteContainsTheFollowingProducts(TableNode $items)
     {
@@ -76,7 +76,7 @@ class NoteContext extends SubContext
     }
 
     /**
-     * @Then /^the note should contain the following products:$/
+     * @Then() /^the note should contain the following products:$/
      */
     public function theNoteShouldContainTheFollowingProducts(TableNode $items)
     {

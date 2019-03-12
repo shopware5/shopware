@@ -29,7 +29,7 @@ use Shopware\Tests\Mink\Page\Backend;
 class BackendContext extends SubContext
 {
     /**
-     * @Given /^I am logged in to the backend as an admin user$/
+     * @Given() /^I am logged in to the backend as an admin user$/
      */
     public function iAmLoggedInToTheBackendAsAnAdminUser()
     {
@@ -49,7 +49,7 @@ class BackendContext extends SubContext
     }
 
     /**
-     * @When /^I open the module "([^"]*)"$/
+     * @When() /^I open the module "([^"]*)"$/
      */
     public function iOpenTheModule($moduleName)
     {
@@ -61,7 +61,7 @@ class BackendContext extends SubContext
     }
 
     /**
-     * @Then /^The module should open a window$/
+     * @Then() /^The module should open a window$/
      */
     public function theModuleShouldOpenAWindow()
     {

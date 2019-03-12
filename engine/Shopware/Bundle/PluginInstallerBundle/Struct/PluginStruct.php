@@ -32,16 +32,16 @@ class PluginStruct implements \JsonSerializable
     /**
      * @var int
      *
-     * @unique
-     * @optional
+     * @unique()
+     * @optional()
      */
     private $id;
 
     /**
      * @var string
      *
-     * @unique
-     * @required
+     * @unique()
+     * @required()
      */
     private $technicalName;
 

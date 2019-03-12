@@ -42,7 +42,7 @@ class Container extends Base implements ContainerInterface
      * Contains additional data for each
      * config field.
      *
-     * @optional
+     * @optional()
      *
      * @var array
      */

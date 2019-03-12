@@ -67,7 +67,7 @@ use Symfony\Component\HttpKernel\TerminableInterface;
 class Kernel implements HttpKernelInterface, TerminableInterface
 {
     /**
-     * @Deprecated Since 5.4, to be removed in 5.6
+     * @Deprecated() Since 5.4, to be removed in 5.6
      *
      * Use the following parameters from the DIC instead:
      *      'shopware.release.version'

@@ -32,8 +32,8 @@ use Shopware\Tests\Mink\Page\Listing;
 class ListingContext extends SubContext
 {
     /**
-     * @Given /^I am on the listing page:$/
-     * @Given /^I go to the listing page:$/
+     * @Given() /^I am on the listing page:$/
+     * @Given() /^I go to the listing page:$/
      */
     public function iAmOnTheListingPage(TableNode $params)
     {
@@ -43,8 +43,8 @@ class ListingContext extends SubContext
     }
 
     /**
-     * @Given /^I am on the listing page for category (?P<categoryId>\d+)$/
-     * @Given /^I am on the listing page for category (?P<categoryId>\d+) on page (?P<page>\d+)$/
+     * @Given() /^I am on the listing page for category (?P<categoryId>\d+)$/
+     * @Given() /^I am on the listing page for category (?P<categoryId>\d+) on page (?P<page>\d+)$/
      */
     public function iAmOnTheListingPageForCategoryOnPage($categoryId, $page = null)
     {
@@ -66,8 +66,8 @@ class ListingContext extends SubContext
     }
 
     /**
-     * @When /^I set the filter to:$/
-     * @When /^I reset all filters$/
+     * @When() /^I set the filter to:$/
+     * @When() /^I reset all filters$/
      */
     public function iSetTheFilterTo(TableNode $filter = null)
     {
@@ -86,7 +86,7 @@ class ListingContext extends SubContext
     }
 
     /**
-     * @Then /^the articles should be shown in a table-view$/
+     * @Then() /^the articles should be shown in a table-view$/
      */
     public function theArticlesShouldBeShownInATableView()
     {
@@ -94,7 +94,7 @@ class ListingContext extends SubContext
     }
 
     /**
-     * @Then /^the articles should be shown in a list-view$/
+     * @Then() /^the articles should be shown in a list-view$/
      */
     public function theArticlesShouldBeShownInAListView()
     {
@@ -102,7 +102,7 @@ class ListingContext extends SubContext
     }
 
     /**
-     * @Then /^the article on position (?P<num>\d+) should have this properties:$/
+     * @Then() /^the article on position (?P<num>\d+) should have this properties:$/
      */
     public function theArticleOnPositionShouldHaveThisProperties($position, TableNode $properties)
     {
@@ -116,7 +116,7 @@ class ListingContext extends SubContext
     }
 
     /**
-     * @When /^I order the article on position (?P<position>\d+)$/
+     * @When() /^I order the article on position (?P<position>\d+)$/
      */
     public function iOrderTheArticleOnPosition($position)
     {
@@ -129,8 +129,8 @@ class ListingContext extends SubContext
     }
 
     /**
-     * @When /^I browse to (previous|next) page$/
-     * @When /^I browse to (previous|next) page (\d+) times$/
+     * @When() /^I browse to (previous|next) page$/
+     * @When() /^I browse to (previous|next) page (\d+) times$/
      */
     public function iBrowseTimesToPage($direction, $steps = 1)
     {
@@ -138,7 +138,7 @@ class ListingContext extends SubContext
     }
 
     /**
-     * @Then /^I should not be able to browse to (previous|next) page$/
+     * @Then() /^I should not be able to browse to (previous|next) page$/
      */
     public function iShouldNotBeAbleToBrowseToPage($direction)
     {
@@ -146,7 +146,7 @@ class ListingContext extends SubContext
     }
 
     /**
-     * @When /^I browse to page (\d+)$/
+     * @When() /^I browse to page (\d+)$/
      */
     public function iBrowseToPage($page)
     {
@@ -154,7 +154,7 @@ class ListingContext extends SubContext
     }
 
     /**
-     * @Given /^I should not be able to browse to page (\d+)$/
+     * @Given() /^I should not be able to browse to page (\d+)$/
      */
     public function iShouldNotBeAbleToBrowseToPage2($page)
     {
@@ -162,7 +162,7 @@ class ListingContext extends SubContext
     }
 
     /**
-     * @Then /^I should see the article "([^"]*)" in listing$/
+     * @Then() /^I should see the article "([^"]*)" in listing$/
      */
     public function iShouldSeeTheArticleInListing($name)
     {
@@ -170,7 +170,7 @@ class ListingContext extends SubContext
     }
 
     /**
-     * @Given /^I should not see the article "([^"]*)" in listing$/
+     * @Given() /^I should not see the article "([^"]*)" in listing$/
      */
     public function iShouldNotSeeTheArticleInListing($name)
     {

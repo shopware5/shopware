@@ -53,7 +53,7 @@ class ExportContext extends SubContext
      *
      * @param string $format
      *
-     * @Given I export the feed in :format format
+     * @Given() I export the feed in :format format
      */
     public function iExportTheFeedFor($format)
     {
@@ -68,7 +68,7 @@ class ExportContext extends SubContext
      *
      * @throws \Exception
      *
-     * @Then /^I should see the feed "(?P<name>[^"]*)" with format "(?P<format>[^"]*)" in the "(?P<subshop>[^"]*)" export:$/
+     * @Then() /^I should see the feed "(?P<name>[^"]*)" with format "(?P<format>[^"]*)" in the "(?P<subshop>[^"]*)" export:$/
      */
     public function iShouldSeeFeedWithFormatInTheExport($name, $format, $subshop, TableNode $entries)
     {
@@ -91,7 +91,7 @@ class ExportContext extends SubContext
     /**
      * Enables exports in DB and changes encodings to UTF8.
      *
-     * @BeforeScenario @productFeeds
+     * @BeforeScenario() @productFeeds()
      */
     public function enableExports()
     {
@@ -107,7 +107,7 @@ SQL;
     /**
      * Disables exports and sets the encoding back to latin1.
      *
-     * @AfterScenario @productFeeds
+     * @AfterScenario() @productFeeds()
      */
     public function disableExports()
     {
@@ -119,7 +119,7 @@ SQL;
     /**
      * Creates a new subshop to test exports for it.
      *
-     * @BeforeScenario @withSubshop
+     * @BeforeScenario() @withSubshop()
      */
     public function createSubshop()
     {

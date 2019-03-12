@@ -31,7 +31,7 @@ use Doctrine\DBAL\Types\Type;
 /**
  * Type that maps an SQL DATETIME/TIMESTAMP to a PHP DateTime object.
  *
- * @licence   This code was originally released under the MIT license
+ * @licence()   This code was originally released under the MIT license
  *
  * @category Shopware
  *

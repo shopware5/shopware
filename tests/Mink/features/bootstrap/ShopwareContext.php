@@ -34,7 +34,7 @@ class ShopwareContext extends SubContext
     /** @var FeatureContext */
     protected $featureContext;
 
-    /** @BeforeScenario */
+    /** @BeforeScenario() */
     public function gatherContexts(BeforeScenarioScope $scope)
     {
         $environment = $scope->getEnvironment();
@@ -43,7 +43,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @When /^I search for "(?P<searchTerm>[^"]*)"$/
+     * @When() /^I search for "(?P<searchTerm>[^"]*)"$/
      */
     public function iSearchFor($searchTerm)
     {
@@ -51,7 +51,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @When /^I received the search-results for "(?P<searchTerm>[^"]*)"$/
+     * @When() /^I received the search-results for "(?P<searchTerm>[^"]*)"$/
      */
     public function iReceivedTheSearchResultsFor($searchTerm)
     {
@@ -59,7 +59,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Then /^I should see the no results message for keyword "([^"]*)"$/
+     * @Then() /^I should see the no results message for keyword "([^"]*)"$/
      */
     public function iShouldSeeTheNoResultsMessageForKeyword($keyword)
     {
@@ -67,7 +67,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @When /^I change the currency to "(?P<currency>[^"]*)"$/
+     * @When() /^I change the currency to "(?P<currency>[^"]*)"$/
      */
     public function iChangeTheCurrencyTo($currency)
     {
@@ -75,7 +75,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Then /^the comparison should contain the following products:$/
+     * @Then() /^the comparison should contain the following products:$/
      */
     public function theComparisonShouldContainTheFollowingProducts(TableNode $items)
     {
@@ -89,7 +89,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Then /^the cart should contain (?P<quantity>\d+) articles with a value of "(?P<amount>[^"]*)"$/
+     * @Then() /^the cart should contain (?P<quantity>\d+) articles with a value of "(?P<amount>[^"]*)"$/
      */
     public function theCartShouldContainArticlesWithAValueOf($quantity, $amount)
     {
@@ -97,8 +97,8 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @When /^I subscribe to the newsletter with "(?P<email>[^"]*)"$/
-     * @When /^I subscribe to the newsletter with "(?P<email>[^"]*)" :$/
+     * @When() /^I subscribe to the newsletter with "(?P<email>[^"]*)"$/
+     * @When() /^I subscribe to the newsletter with "(?P<email>[^"]*)" :$/
      */
     public function iSubscribeToTheNewsletterWith($email, TableNode $additionalData = null)
     {
@@ -123,8 +123,8 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @When /^I unsubscribe the newsletter$/
-     * @When /^I unsubscribe the newsletter with "(?P<email>[^"]*)"$/
+     * @When() /^I unsubscribe the newsletter$/
+     * @When() /^I unsubscribe the newsletter with "(?P<email>[^"]*)"$/
      */
     public function iUnsubscribeTheNewsletter($email = null)
     {
@@ -143,8 +143,8 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @When /^I click the link in my latest email$/
-     * @When /^I click the links in my latest (\d+) emails$/
+     * @When() /^I click the link in my latest email$/
+     * @When() /^I click the links in my latest (\d+) emails$/
      */
     public function iConfirmTheLinkInTheEmail($limit = 1)
     {
@@ -199,7 +199,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @When /^I enable the config "([^"]*)"$/
+     * @When() /^I enable the config "([^"]*)"$/
      */
     public function iEnableTheConfig($configName)
     {
@@ -207,7 +207,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @When /^I disable the config "([^"]*)"$/
+     * @When() /^I disable the config "([^"]*)"$/
      */
     public function iDisableTheConfig($configName)
     {
@@ -215,8 +215,8 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @When /^the config value of "([^"]*)" is (\d+)$/
-     * @When /^the config value of "([^"]*)" is "([^"]*)"$/
+     * @When() /^the config value of "([^"]*)" is (\d+)$/
+     * @When() /^the config value of "([^"]*)" is "([^"]*)"$/
      */
     public function theConfigValueOfIs($configName, $value)
     {
@@ -224,7 +224,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @When the emotion world has loaded
+     * @When() the emotion world has loaded
      */
     public function theEmotionWorldHasLoaded()
     {
@@ -232,8 +232,8 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Given /^I should see a banner with image "(?P<image>[^"]*)"$/
-     * @Given /^I should see a banner with image "(?P<image>[^"]*)" to "(?P<link>[^"]*)"$/
+     * @Given() /^I should see a banner with image "(?P<image>[^"]*)"$/
+     * @Given() /^I should see a banner with image "(?P<image>[^"]*)" to "(?P<link>[^"]*)"$/
      */
     public function iShouldSeeABanner($image, $link = null)
     {
@@ -241,8 +241,8 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Given /^I should see a banner on position (\d+) with image "([^"]*)"$/
-     * @Given /^I should see a banner on position (\d+) with image "([^"]*)" to "([^"]*)"$/
+     * @Given() /^I should see a banner on position (\d+) with image "([^"]*)"$/
+     * @Given() /^I should see a banner on position (\d+) with image "([^"]*)" to "([^"]*)"$/
      */
     public function iShouldSeeABannerOnPositionWithImage($position, $image, $link = null)
     {
@@ -255,7 +255,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Given /^I should see a banner with image "(?P<image>[^"]*)" and mapping:$/
+     * @Given() /^I should see a banner with image "(?P<image>[^"]*)" and mapping:$/
      */
     public function iShouldSeeABannerWithMapping($image, TableNode $mapping)
     {
@@ -263,7 +263,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Given /^I should see a banner on position (\d+) with image "([^"]*)" and mapping:$/
+     * @Given() /^I should see a banner on position (\d+) with image "([^"]*)" and mapping:$/
      */
     public function iShouldSeeABannerOnPositionWithImageAndMapping($position, $image, TableNode $mapping)
     {
@@ -278,7 +278,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Given /^the product box on position (\d+) should have the following properties:$/
+     * @Given() /^the product box on position (\d+) should have the following properties:$/
      */
     public function iShouldSeeAnArticle($position, TableNode $data)
     {
@@ -292,7 +292,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Given /^the category teaser on position (\d+) for "(?P<name>[^"]*)" should have the image "(?P<image>[^"]*)" and link to "(?P<link>[^"]*)"$/
+     * @Given() /^the category teaser on position (\d+) for "(?P<name>[^"]*)" should have the image "(?P<image>[^"]*)" and link to "(?P<link>[^"]*)"$/
      */
     public function iShouldSeeACategoryTeaserWithImageTo($position, $name, $image, $link)
     {
@@ -306,7 +306,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Given /^I should see some blog articles:$/
+     * @Given() /^I should see some blog articles:$/
      */
     public function iShouldSeeSomeBlogArticles(TableNode $articles)
     {
@@ -322,7 +322,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Then /^I should see a banner slider:$/
+     * @Then() /^I should see a banner slider:$/
      */
     public function iShouldSeeABannerSlider(TableNode $slides)
     {
@@ -336,7 +336,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Given /^I should see a YouTube-Video "(?P<code>[^"]*)"$/
+     * @Given() /^I should see a YouTube-Video "(?P<code>[^"]*)"$/
      */
     public function iShouldSeeAYoutubeVideo($code)
     {
@@ -350,7 +350,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Then /^I should see a manufacturer slider:$/
+     * @Then() /^I should see a manufacturer slider:$/
      */
     public function iShouldSeeAManufacturerSlider(TableNode $manufacturers)
     {
@@ -364,7 +364,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Then /^I should see an article slider:$/
+     * @Then() /^I should see an article slider:$/
      */
     public function iShouldSeeAnArticleSlider(TableNode $articles)
     {
@@ -380,7 +380,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Then /^I the language should be "([^"]*)"$/
+     * @Then() /^I the language should be "([^"]*)"$/
      */
     public function iTheLanguageShouldBe($language)
     {
@@ -388,7 +388,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @When I scroll to the bottom of the page
+     * @When() I scroll to the bottom of the page
      */
     public function iScrollToTheBottomOfThePage()
     {

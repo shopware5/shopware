@@ -66,7 +66,7 @@ class SecurityContext extends SubContext
     }
 
     /**
-     * @Then /^The http response code should be "([^"]*)"$/
+     * @Then() /^The http response code should be "([^"]*)"$/
      *
      * @param int $expectedCode
      */

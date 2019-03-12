@@ -36,7 +36,7 @@ use Shopware\Tests\Mink\Page\Homepage;
 class SpecialContext extends SubContext
 {
     /**
-     * @Given /^the articles from "(?P<name>[^"]*)" have tax id (?P<num>\d+)$/
+     * @Given() /^the articles from "(?P<name>[^"]*)" have tax id (?P<num>\d+)$/
      */
     public function theArticlesFromHaveTaxId($supplier, $taxId)
     {
@@ -51,8 +51,8 @@ class SpecialContext extends SubContext
     }
 
     /**
-     * @Given /^I am on the (page "[^"]*")$/
-     * @When /^I go to the (page "[^"]*")$/
+     * @Given() /^I am on the (page "[^"]*")$/
+     * @When() /^I go to the (page "[^"]*")$/
      */
     public function iAmOnThePage(Page $page)
     {
@@ -60,7 +60,7 @@ class SpecialContext extends SubContext
     }
 
     /**
-     * @Then /^I should be on the (page "[^"]*")$/
+     * @Then() /^I should be on the (page "[^"]*")$/
      */
     public function iShouldBeOnThePage(Page $page)
     {
@@ -68,8 +68,8 @@ class SpecialContext extends SubContext
     }
 
     /**
-     * @Then /^I should see (?P<quantity>\d+) element of type "(?P<elementClass>[^"]*)"( eventually)?$/
-     * @Then /^I should see (?P<quantity>\d+) elements of type "(?P<elementClass>[^"]*)"( eventually)?$/
+     * @Then() /^I should see (?P<quantity>\d+) element of type "(?P<elementClass>[^"]*)"( eventually)?$/
+     * @Then() /^I should see (?P<quantity>\d+) elements of type "(?P<elementClass>[^"]*)"( eventually)?$/
      */
     public function iShouldSeeElementsOfType($count, $elementClass, $mode = null)
     {
@@ -98,7 +98,7 @@ class SpecialContext extends SubContext
     }
 
     /**
-     * @When /^I follow the link "(?P<linkName>[^"]*)" of the (page "[^"]*")$/
+     * @When() /^I follow the link "(?P<linkName>[^"]*)" of the (page "[^"]*")$/
      */
     public function iFollowTheLinkOfThePage($linkName, Page $page)
     {
@@ -106,8 +106,8 @@ class SpecialContext extends SubContext
     }
 
     /**
-     * @When /^I follow the link of the element "(?P<elementClass>[^"]*)"$/
-     * @When /^I follow the link of the element "(?P<elementClass>[^"]*)" on position (?P<position>\d+)$/
+     * @When() /^I follow the link of the element "(?P<elementClass>[^"]*)"$/
+     * @When() /^I follow the link of the element "(?P<elementClass>[^"]*)" on position (?P<position>\d+)$/
      */
     public function iFollowTheLinkOfTheElement($elementClass, $position = 1)
     {
@@ -115,8 +115,8 @@ class SpecialContext extends SubContext
     }
 
     /**
-     * @When /^I follow the link "(?P<linkName>[^"]*)" of the element "(?P<elementClass>[^"]*)"$/
-     * @When /^I follow the link "(?P<linkName>[^"]*)" of the element "(?P<elementClass>[^"]*)" on position (?P<position>\d+)$/
+     * @When() /^I follow the link "(?P<linkName>[^"]*)" of the element "(?P<elementClass>[^"]*)"$/
+     * @When() /^I follow the link "(?P<linkName>[^"]*)" of the element "(?P<elementClass>[^"]*)" on position (?P<position>\d+)$/
      */
     public function iFollowTheLinkOfTheElementOnPosition($linkName, $elementClass, $position = 1)
     {
@@ -143,7 +143,7 @@ class SpecialContext extends SubContext
     }
 
     /**
-     * @Given /^the "(?P<field>[^"]*)" field should contain:$/
+     * @Given() /^the "(?P<field>[^"]*)" field should contain:$/
      */
     public function theFieldShouldContain($field, PyStringNode $string)
     {
@@ -152,7 +152,7 @@ class SpecialContext extends SubContext
     }
 
     /**
-     * @When /^I press the button "([^"]*)" of the element "([^"]*)" on position (\d+)$/
+     * @When() /^I press the button "([^"]*)" of the element "([^"]*)" on position (\d+)$/
      */
     public function iPressTheButtonOfTheElementOnPosition($linkName, $elementClass, $position = 1)
     {

@@ -35,7 +35,7 @@ class TransformContext extends SubContext
     }
 
     /**
-     * @Transform /^page "(.*)"$/
+     * @Transform() /^page "(.*)"$/
      */
     public function castPageNameToPage($pageName)
     {

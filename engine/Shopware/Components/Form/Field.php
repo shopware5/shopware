@@ -33,21 +33,21 @@ use Shopware\Components\Form\Interfaces\Validate;
 class Field extends Base implements FieldInterface, Validate
 {
     /**
-     * @optional
+     * @optional()
      *
      * @var string
      */
     protected $label = '';
 
     /**
-     * @required
+     * @required()
      *
      * @var string
      */
     protected $name;
 
     /**
-     * @optional
+     * @optional()
      *
      * @var mixed
      */
@@ -57,7 +57,7 @@ class Field extends Base implements FieldInterface, Validate
      * Contains additional data for each
      * config field.
      *
-     * @optional
+     * @optional()
      *
      * @var array
      */

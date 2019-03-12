@@ -29,7 +29,7 @@ use Behat\Gherkin\Node\TableNode;
 class SitemapContext extends SubContext
 {
     /**
-     * @Given /^I am on the sitemap\.xml$/
+     * @Given() /^I am on the sitemap\.xml$/
      */
     public function iAmOnTheSitemapXml()
     {
@@ -37,7 +37,7 @@ class SitemapContext extends SubContext
     }
 
     /**
-     * @Given /^I am on the sitemap_index\.xml$/
+     * @Given() /^I am on the sitemap_index\.xml$/
      */
     public function iAmOnTheSitemapIndexXml()
     {
@@ -45,8 +45,8 @@ class SitemapContext extends SubContext
     }
 
     /**
-     * @Then /^I should see the group "([^"]*)"$/
-     * @Then /^I should see the group "([^"]*)":$/
+     * @Then() /^I should see the group "([^"]*)"$/
+     * @Then() /^I should see the group "([^"]*)":$/
      */
     public function iShouldSeeTheGroup($name, TableNode $entries = null)
     {
@@ -54,8 +54,8 @@ class SitemapContext extends SubContext
     }
 
     /**
-     * @Then /^I should see the group "([^"]*)" with link "([^"]*)"$/
-     * @Then /^I should see the group "([^"]*)" with link "([^"]*)":$/
+     * @Then() /^I should see the group "([^"]*)" with link "([^"]*)"$/
+     * @Then() /^I should see the group "([^"]*)" with link "([^"]*)":$/
      */
     public function iShouldSeeTheGroupWithLink($name, $link, TableNode $entries = null)
     {
@@ -85,7 +85,7 @@ class SitemapContext extends SubContext
     }
 
     /**
-     * @Then /^I should see the sitemap files:$/
+     * @Then() /^I should see the sitemap files:$/
      */
     public function thereShouldBeTheseLinksInTheXml(TableNode $links)
     {

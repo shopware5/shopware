@@ -31,8 +31,8 @@ use Shopware\Tests\Mink\Page\Detail;
 class DetailContext extends SubContext
 {
     /**
-     * @Given /^I am on the detail page for article (?P<articleId>\d+)$/
-     * @When /^I go to the detail page for article (?P<articleId>\d+)$/
+     * @Given() /^I am on the detail page for article (?P<articleId>\d+)$/
+     * @When() /^I go to the detail page for article (?P<articleId>\d+)$/
      */
     public function iAmOnTheDetailPageForArticle($articleId)
     {
@@ -40,8 +40,8 @@ class DetailContext extends SubContext
     }
 
     /**
-     * @Given /^I am on the detail page for variant "(?P<number>[^"]*)" of article (?P<articleId>\d+)$/
-     * @When /^I go to the detail page for variant "(?P<number>[^"]*)" of article (?P<articleId>\d+)$/
+     * @Given() /^I am on the detail page for variant "(?P<number>[^"]*)" of article (?P<articleId>\d+)$/
+     * @When() /^I go to the detail page for variant "(?P<number>[^"]*)" of article (?P<articleId>\d+)$/
      */
     public function iAmOnTheDetailPageForVariantOfArticle($number, $articleId)
     {
@@ -49,8 +49,8 @@ class DetailContext extends SubContext
     }
 
     /**
-     * @When /^I put the article into the basket$/
-     * @When /^I put the article "(?P<quantity>[^"]*)" times into the basket$/
+     * @When() /^I put the article into the basket$/
+     * @When() /^I put the article "(?P<quantity>[^"]*)" times into the basket$/
      */
     public function iPutTheArticleTimesIntoTheBasket($quantity = 1)
     {
@@ -60,7 +60,7 @@ class DetailContext extends SubContext
     }
 
     /**
-     * @Given /^I should see an average customer evaluation of (?P<average>\d+) from following evaluations:$/
+     * @Given() /^I should see an average customer evaluation of (?P<average>\d+) from following evaluations:$/
      */
     public function iShouldSeeAnAverageCustomerEvaluationOfFromFollowingEvaluations($average, TableNode $evaluations)
     {
@@ -75,7 +75,7 @@ class DetailContext extends SubContext
     }
 
     /**
-     * @When /^I choose the following article configuration:$/
+     * @When() /^I choose the following article configuration:$/
      */
     public function iChooseTheFollowingArticleConfiguration(TableNode $configuration)
     {
@@ -85,7 +85,7 @@ class DetailContext extends SubContext
     }
 
     /**
-     * @Then /^I can not select "([^"]*)" from "([^"]*)"$/
+     * @Then() /^I can not select "([^"]*)" from "([^"]*)"$/
      */
     public function iCanNotSelectFrom($configuratorOption, $configuratorGroup)
     {
@@ -93,7 +93,7 @@ class DetailContext extends SubContext
     }
 
     /**
-     * @When /^I write an evaluation:$/
+     * @When() /^I write an evaluation:$/
      */
     public function iWriteAnEvaluation(TableNode $data)
     {
@@ -101,8 +101,8 @@ class DetailContext extends SubContext
     }
 
     /**
-     * @When /^the shop owner activates my latest evaluation$/
-     * @When /^the shop owner activates my latest (\d+) evaluations$/
+     * @When() /^the shop owner activates my latest evaluation$/
+     * @When() /^the shop owner activates my latest (\d+) evaluations$/
      */
     public function theShopOwnerActivateMyLatestEvaluation($limit = 1)
     {
@@ -111,7 +111,7 @@ class DetailContext extends SubContext
     }
 
     /**
-     * @Given /^I can select every (\d+)\. option of "([^"]*)" from "([^"]*)" to "([^"]*)"$/
+     * @Given() /^I can select every (\d+)\. option of "([^"]*)" from "([^"]*)" to "([^"]*)"$/
      */
     public function iCanSelectEveryOptionOfFromTo($graduation, $select, $min, $max)
     {
@@ -119,7 +119,7 @@ class DetailContext extends SubContext
     }
 
     /**
-     * @When /^I submit the notification form with "([^"]*)"$/
+     * @When() /^I submit the notification form with "([^"]*)"$/
      */
     public function iSubmitTheNotificationFormWith($email)
     {
@@ -127,7 +127,7 @@ class DetailContext extends SubContext
     }
 
     /**
-     * @When /^I open the evaluation form$/
+     * @When() /^I open the evaluation form$/
      */
     public function iOpenTheEvaluationForm()
     {
@@ -137,7 +137,7 @@ class DetailContext extends SubContext
     }
 
     /**
-     * @Given /^The notification plugin is activated$/
+     * @Given() /^The notification plugin is activated$/
      */
     public function theNotificationPluginIsActivated()
     {
@@ -148,7 +148,7 @@ class DetailContext extends SubContext
     }
 
     /**
-     * @Given /^The notification plugin is deactivated$/
+     * @Given() /^The notification plugin is deactivated$/
      */
     public function theNotificationPluginIsDeactivated()
     {

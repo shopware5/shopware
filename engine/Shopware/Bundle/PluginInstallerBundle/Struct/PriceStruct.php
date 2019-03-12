@@ -37,28 +37,28 @@ class PriceStruct implements \JsonSerializable
     /**
      * @var int
      *
-     * @unique
+     * @unique()
      */
     private $id;
 
     /**
      * @var float
      *
-     * @optional
+     * @optional()
      */
     private $price;
 
     /**
      * @var string
      *
-     * @optional
+     * @optional()
      */
     private $duration;
 
     /**
      * @var string
      *
-     * @required
+     * @required()
      */
     private $type;
 
@@ -70,7 +70,7 @@ class PriceStruct implements \JsonSerializable
     /**
      * @var float
      *
-     * @optional
+     * @optional()
      */
     private $discount;
 

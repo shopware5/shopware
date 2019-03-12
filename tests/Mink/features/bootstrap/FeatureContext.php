@@ -77,7 +77,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     }
 
     /**
-     * @BeforeScenario
+     * @BeforeScenario()
      *
      * @param BeforeScenarioScope $scope
      */
@@ -97,7 +97,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     }
 
     /**
-     * @BeforeScenario @captchaInactive
+     * @BeforeScenario() @captchaInactive()
      */
     public function deactivateCaptchas()
     {
@@ -107,7 +107,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     /**
      * Resize Browser Window. Works only with Selenium2Driver.
      *
-     * @BeforeScenario
+     * @BeforeScenario()
      */
     public function setupWindowSize()
     {
@@ -122,7 +122,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     /**
      * Take screenshot when step fails. Works only with Selenium2Driver.
      *
-     * @AfterStep
+     * @AfterStep()
      *
      * @param AfterStepScope $scope
      */
@@ -184,7 +184,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     }
 
     /**
-     * @AfterScenario @captchaInactive,@configChange
+     * @AfterScenario() @captchaInactive(),@configChange
      */
     public function clearConfigValues()
     {
@@ -202,7 +202,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     }
 
     /**
-     * @BeforeScenario @configChange
+     * @BeforeScenario() @configChange()
      *
      * @param ScenarioScope $scope
      */

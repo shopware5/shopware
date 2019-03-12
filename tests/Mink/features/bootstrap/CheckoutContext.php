@@ -40,7 +40,7 @@ use Shopware\Tests\Mink\Page\Detail;
 class CheckoutContext extends SubContext
 {
     /**
-     * @When /^I add the voucher "(?P<code>[^"]*)" to my basket$/
+     * @When() /^I add the voucher "(?P<code>[^"]*)" to my basket$/
      */
     public function iAddTheVoucherToMyBasket($voucher)
     {
@@ -48,7 +48,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @When /^I remove the voucher$/
+     * @When() /^I remove the voucher$/
      */
     public function iRemoveTheVoucher()
     {
@@ -56,7 +56,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @When /^I add the article "(?P<articleNr>[^"]*)" to my basket$/
+     * @When() /^I add the article "(?P<articleNr>[^"]*)" to my basket$/
      */
     public function iAddTheArticleToMyBasket($article)
     {
@@ -64,7 +64,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @When /^I add the article "(?P<articleNr>[^"]*)" to my basket over HTTP GET$/
+     * @When() /^I add the article "(?P<articleNr>[^"]*)" to my basket over HTTP GET$/
      */
     public function iAddTheArticleToMyBasketOverHttpGet($article)
     {
@@ -79,7 +79,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @When /^I remove the article on position (?P<num>\d+)$/
+     * @When() /^I remove the article on position (?P<num>\d+)$/
      */
     public function iRemoveTheArticleOnPosition($position)
     {
@@ -92,7 +92,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Given /^my finished order should look like this:$/
+     * @Given() /^my finished order should look like this:$/
      */
     public function myFinishedOrderShouldLookLikeThis(TableNode $positions)
     {
@@ -111,7 +111,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Given /^the aggregations should look like this:$/
+     * @Given() /^the aggregations should look like this:$/
      */
     public function theAggregationsShouldLookLikeThis(TableNode $aggregations)
     {
@@ -120,7 +120,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @When /^I proceed to order confirmation$/
+     * @When() /^I proceed to order confirmation$/
      */
     public function iProceedToOrderConfirmation()
     {
@@ -128,7 +128,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Given /^I proceed to order confirmation with email "([^"]*)" and password "([^"]*)"$/
+     * @Given() /^I proceed to order confirmation with email "([^"]*)" and password "([^"]*)"$/
      */
     public function iProceedToOrderConfirmationWithEmailAndPassword($email, $password)
     {
@@ -136,7 +136,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Given /^I proceed to checkout as:$/
+     * @Given() /^I proceed to checkout as:$/
      */
     public function iProceedToCheckoutAs(TableNode $table)
     {
@@ -144,7 +144,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @When /^I proceed to checkout$/
+     * @When() /^I proceed to checkout$/
      */
     public function iProceedToCheckout()
     {
@@ -152,7 +152,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @When /^I change the shipping method to (?P<shippingId>\d+)$/
+     * @When() /^I change the shipping method to (?P<shippingId>\d+)$/
      */
     public function iChangeTheShippingMethodTo($shipping)
     {
@@ -167,7 +167,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Given /^the cart contains the following products:$/
+     * @Given() /^the cart contains the following products:$/
      *
      * @param TableNode $items
      */
@@ -187,7 +187,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Then /^the cart should contain the following products:$/
+     * @Then() /^the cart should contain the following products:$/
      */
     public function theCartShouldContainTheFollowingProducts(TableNode $items)
     {
@@ -200,7 +200,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Given /^The article "(?P<articleNr>[^"]*)" is assigned to the price group "([^"]*)"$/
+     * @Given() /^The article "(?P<articleNr>[^"]*)" is assigned to the price group "([^"]*)"$/
      */
     public function theArticleIsAssignedToThePriceGroup($articleNumber, $priceGroupName)
     {
@@ -222,7 +222,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Given /^A price group named "([^"]*)" that grants "([^"]*)" discount$/
+     * @Given() /^A price group named "([^"]*)" that grants "([^"]*)" discount$/
      */
     public function aPriceGroupNamedThatGrantsDiscount($priceGroupName, $grantedDiscount)
     {
@@ -259,7 +259,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Given /^there is a category defined:$/
+     * @Given() /^there is a category defined:$/
      */
     public function thereIsACategoryDefined(TableNode $table)
     {
@@ -286,7 +286,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Given /^the following product exist:$/
+     * @Given() /^the following product exist:$/
      */
     public function theFollowingProductExist(TableNode $table)
     {
@@ -337,7 +337,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Given /^the manufacturer exist:$/
+     * @Given() /^the manufacturer exist:$/
      */
     public function theManufacturerExist(TableNode $table)
     {
@@ -360,7 +360,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Given /^the customer group exist:$/
+     * @Given() /^the customer group exist:$/
      */
     public function theCustomerGroupExist(TableNode $table)
     {
@@ -385,7 +385,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Given /^The article "(?P<articleNr>[^"]*)" has no active price group$/
+     * @Given() /^The article "(?P<articleNr>[^"]*)" has no active price group$/
      */
     public function theArticleHasNoActivePriceGroup($articleNumber)
     {
@@ -406,7 +406,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @When /^I click the link "([^"]*)" in the address box with title "([^"]*)"$/
+     * @When() /^I click the link "([^"]*)" in the address box with title "([^"]*)"$/
      */
     public function iClickTheLinkInTheAddressBoxWithTitle($linkName, $title)
     {
@@ -427,7 +427,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @When /^I click on the link "([^"]*)"$/
+     * @When() /^I click on the link "([^"]*)"$/
      */
     public function iClickOnTheLink($linkName)
     {
@@ -443,7 +443,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @When /^I create the address:$/
+     * @When() /^I create the address:$/
      */
     public function iCreateTheAddress(TableNode $table)
     {
@@ -455,7 +455,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Then /^I should see appear "([^"]*)"$/
+     * @Then() /^I should see appear "([^"]*)"$/
      */
     public function iShouldSeeAppear($text)
     {
@@ -502,7 +502,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @When /^I wait for "([^"]*)" seconds$/
+     * @When() /^I wait for "([^"]*)" seconds$/
      */
     public function iWaitForSeconds($seconds)
     {
@@ -514,7 +514,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Given /^there should be a modal addressbox "([^"]*)"$/
+     * @Given() /^there should be a modal addressbox "([^"]*)"$/
      */
     public function thereShouldBeAModalAddressbox($address)
     {
@@ -538,7 +538,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @When /^I click "([^"]*)" on modal addressbox "([^"]*)"$/
+     * @When() /^I click "([^"]*)" on modal addressbox "([^"]*)"$/
      */
     public function iClickOnModalAddressbox($buttonName, $address)
     {
@@ -564,7 +564,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Then /^I should see appear "([^"]*)" in addressbox "([^"]*)" after "([^"]*)" disappeared$/
+     * @Then() /^I should see appear "([^"]*)" in addressbox "([^"]*)" after "([^"]*)" disappeared$/
      */
     public function iShouldSeeAppearInAddressboxAfterDisappeared($address, $title, $titleToDisappear)
     {
@@ -603,7 +603,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @When /^I change the address:$/
+     * @When() /^I change the address:$/
      */
     public function iChangeTheAddress(TableNode $table)
     {
@@ -615,7 +615,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Given /^I set "([^"]*)" as default after "([^"]*)" disappeared$/
+     * @Given() /^I set "([^"]*)" as default after "([^"]*)" disappeared$/
      */
     public function iSetAsDefaultAfterDisappeared($address, $titleToDisappear)
     {
@@ -653,7 +653,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Then /^the "([^"]*)" addressbox must contain "([^"]*)"$/
+     * @Then() /^the "([^"]*)" addressbox must contain "([^"]*)"$/
      */
     public function theAddressboxMustContain($title, $address)
     {
@@ -677,7 +677,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @When /^I click "([^"]*)" to add the article to the cart$/
+     * @When() /^I click "([^"]*)" to add the article to the cart$/
      */
     public function iClickToAddTheArticleToTheCart($locator)
     {
@@ -687,7 +687,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Given /^I open the cart page$/
+     * @Given() /^I open the cart page$/
      */
     public function iOpenTheCartPage()
     {
@@ -695,7 +695,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Then /^I open the order confirmation page$/
+     * @Then() /^I open the order confirmation page$/
      */
     public function iOpenTheOrderConfirmationPage()
     {
@@ -703,7 +703,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @BeforeScenario @taxation
+     * @BeforeScenario() @taxation()
      */
     public function addCustomTaxation()
     {
@@ -717,7 +717,7 @@ EOD;
     }
 
     /**
-     * @AfterScenario @taxation
+     * @AfterScenario() @taxation()
      */
     public function removeCustomTaxation()
     {
@@ -731,7 +731,7 @@ EOD;
     }
 
     /**
-     * @BeforeScenario @dispatchsurcharge
+     * @BeforeScenario() @dispatchsurcharge()
      */
     public function addCustomDispatchSurcharge()
     {
@@ -766,7 +766,7 @@ EOD;
     }
 
     /**
-     * @AfterScenario @dispatchsurcharge
+     * @AfterScenario() @dispatchsurcharge()
      */
     public function removeCustomDispatchSurcharge()
     {
@@ -845,7 +845,7 @@ EOD;
     }
 
     /**
-     * @BeforeScenario @paymentsurcharge
+     * @BeforeScenario() @paymentsurcharge()
      */
     public function addCustomPaymentSurcharge()
     {
@@ -858,7 +858,7 @@ EOD;
     }
 
     /**
-     * @AfterScenario @paymentsurcharge
+     * @AfterScenario() @paymentsurcharge()
      */
     public function removeCustomPaymentSurcharge()
     {
@@ -871,7 +871,7 @@ EOD;
     }
 
     /**
-     * @Given I checkout using GET
+     * @Given() I checkout using GET
      *
      * @param string $path
      */

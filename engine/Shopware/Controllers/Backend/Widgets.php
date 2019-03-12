@@ -36,7 +36,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      * Returns the list of active widgets for the current logged
      * in user as an JSON string.
      *
-     * @public
+     * @public()
      */
     public function getListAction()
     {
@@ -195,7 +195,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      * Gets the turnover and visitors amount for the
      * chart and the grid in the "Turnover - Yesterday and today"-widget.
      *
-     * @public
+     * @public()
      */
     public function getTurnOverVisitorsAction()
     {
@@ -340,7 +340,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      * Gets the last visitors and customers for
      * the chart and the grid in the "Customers and visitors"-widget.
      *
-     * @public
+     * @public()
      */
     public function getVisitorsAction()
     {
@@ -421,7 +421,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     /**
      * Gets the latest orders for the "last orders" widget.
      *
-     * @public
+     * @public()
      */
     public function getLastOrdersAction()
     {
@@ -472,7 +472,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      * Gets the saved notice from the database and
      * assigns it to the view-
      *
-     * @public
+     * @public()
      */
     public function getNoticeAction()
     {
@@ -491,7 +491,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     /**
      * Saves the notice text from the notice widget.
      *
-     * @public
+     * @public()
      */
     public function saveNoticeAction()
     {
@@ -528,7 +528,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     /**
      * Gets the last registered merchant for the "merchant unlock" widget.
      *
-     * @public
+     * @public()
      */
     public function getLastMerchantAction()
     {
@@ -563,7 +563,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      * Creates the deny or allow mail from the db and assigns it to
      * the view.
      *
-     * @public
+     * @public()
      *
      * @return bool
      */
@@ -643,7 +643,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      * Sends the mail to the merchant if the inquiry was
      * successful or was declined.
      *
-     * @public
+     * @public()
      *
      * @return bool
      */

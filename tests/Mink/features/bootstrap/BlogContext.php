@@ -31,8 +31,8 @@ use Shopware\Tests\Mink\Page\Blog;
 class BlogContext extends SubContext
 {
     /**
-     * @Given /^I am on the blog category (?P<categoryId>\d+)$/
-     * @Given /^I go to the blog category (?P<categoryId>\d+)$/
+     * @Given() /^I am on the blog category (?P<categoryId>\d+)$/
+     * @Given() /^I go to the blog category (?P<categoryId>\d+)$/
      */
     public function iAmOnTheBlogCategory($categoryId)
     {
@@ -40,7 +40,7 @@ class BlogContext extends SubContext
     }
 
     /**
-     * @Given /^I click to read the blog article on position (\d+)$/
+     * @Given() /^I click to read the blog article on position (\d+)$/
      */
     public function iClickToReadTheBlogArticleOnPosition($position)
     {
@@ -53,7 +53,7 @@ class BlogContext extends SubContext
     }
 
     /**
-     * @When /^I write a comment:$/
+     * @When() /^I write a comment:$/
      */
     public function iWriteAComment(TableNode $data)
     {
@@ -61,7 +61,7 @@ class BlogContext extends SubContext
     }
 
     /**
-     * @When /^the shop owner activates my latest comment$/
+     * @When() /^the shop owner activates my latest comment$/
      */
     public function theShopOwnerActivateMyLatestComment()
     {
@@ -71,7 +71,7 @@ class BlogContext extends SubContext
     }
 
     /**
-     * @Then /^I should see an average evaluation of (\d+) from following comments:$/
+     * @Then() /^I should see an average evaluation of (\d+) from following comments:$/
      */
     public function iShouldSeeAnAverageEvaluationOfFromFollowingComments($average, TableNode $comments)
     {
@@ -85,7 +85,7 @@ class BlogContext extends SubContext
     }
 
     /**
-     * @When /^I open the comment form$/
+     * @When() /^I open the comment form$/
      */
     public function iOpenTheCommentForm()
     {

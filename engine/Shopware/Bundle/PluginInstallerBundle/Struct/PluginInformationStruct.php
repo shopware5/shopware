@@ -30,7 +30,7 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 class PluginInformationStruct implements \JsonSerializable
 {
     /**
-     * @const array
+     * @const() array
      */
     const TYPE_MAPPING = [
         'buy' => 1,

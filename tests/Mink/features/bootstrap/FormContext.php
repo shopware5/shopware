@@ -29,7 +29,7 @@ use Behat\Gherkin\Node\TableNode;
 class FormContext extends SubContext
 {
     /**
-     * @Given /^I am on form (\d+)$/
+     * @Given() /^I am on form (\d+)$/
      */
     public function iAmOnForm($id)
     {
@@ -37,7 +37,7 @@ class FormContext extends SubContext
     }
 
     /**
-     * @Given /^I should see a captcha$/
+     * @Given() /^I should see a captcha$/
      */
     public function iShouldSeeACaptcha()
     {
@@ -45,7 +45,7 @@ class FormContext extends SubContext
     }
 
     /**
-     * @When I submit the inquiry form with:
+     * @When() I submit the inquiry form with:
      */
     public function iSubmitTheInquiryFormWith(TableNode $data)
     {
