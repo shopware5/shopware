@@ -83,8 +83,8 @@ class User extends Resource
             throw new ApiException\NotFoundException(sprintf('User by id %s not found', $id));
         }
 
-        if (!$this->hasPrivilege('create', 'usermanager') &&
-            !$this->hasPrivilege('update', 'usermanager')) {
+        if (!$this->hasPrivilege('create', 'usermanager')
+            && !$this->hasPrivilege('update', 'usermanager')) {
             if (is_array($user)) {
                 unset($user['apiKey'], $user['sessionId'], $user['password'], $user['encoder']);
             } else {
@@ -128,8 +128,8 @@ class User extends Resource
 
         $users = $paginator->getIterator()->getArrayCopy();
 
-        if (!$this->hasPrivilege('create', 'usermanager') &&
-            !$this->hasPrivilege('update', 'usermanager')) {
+        if (!$this->hasPrivilege('create', 'usermanager')
+            && !$this->hasPrivilege('update', 'usermanager')) {
             foreach ($users as &$user) {
                 unset($user['apiKey'], $user['sessionId'], $user['password'], $user['encoder']);
             }

@@ -443,8 +443,8 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             Shopware()->Models()->flush();
             $data = $this->getMedia($media->getId())->getQuery()->getArrayResult();
 
-            if ($media->getType() === Media::TYPE_IMAGE && // GD doesn't support the following image formats
-                !in_array($media->getExtension(), ['tif', 'tiff'], true)) {
+            if ($media->getType() === Media::TYPE_IMAGE // GD doesn't support the following image formats
+                && !in_array($media->getExtension(), ['tif', 'tiff'], true)) {
                 $manager = Shopware()->Container()->get('thumbnail_manager');
                 $manager->createMediaThumbnail($media, [], true);
             }

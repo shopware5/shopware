@@ -100,8 +100,8 @@ class StatisticsService
         $analyticsCount = count($benchmarkData['analytics']['list']);
 
         // If all entity counts are below the batch size (or the batch size is null), we are likely to be in the last iteration
-        if ($batchSize === null ||
-            ($ordersCount < $batchSize && $customersCount < $batchSize && $productsCount < $batchSize && $analyticsCount < $batchSize)) {
+        if ($batchSize === null
+            || ($ordersCount < $batchSize && $customersCount < $batchSize && $productsCount < $batchSize && $analyticsCount < $batchSize)) {
             $config->setLastSent(new \DateTime('now', new \DateTimeZone('UTC')));
             $this->benchmarkRepository->save($config);
         }

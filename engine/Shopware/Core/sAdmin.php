@@ -4397,8 +4397,8 @@ SQL;
      */
     private function shouldVerifyCaptcha($config)
     {
-        return $config->get('newsletterCaptcha') !== 'nocaptcha' &&
-            !($config->get('noCaptchaAfterLogin') && Shopware()->Modules()->Admin()->sCheckUser());
+        return $config->get('newsletterCaptcha') !== 'nocaptcha'
+            && !($config->get('noCaptchaAfterLogin') && Shopware()->Modules()->Admin()->sCheckUser());
     }
 
     /**

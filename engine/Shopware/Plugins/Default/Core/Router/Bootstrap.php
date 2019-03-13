@@ -414,9 +414,8 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
                 && $request->getQuery('__shop') !== null
                 && $request->getQuery('__shop') != $shop->getId()
             )
-            ||
             //for example: shop language switch
-            (
+            || (
                 $request->isPost()
                 && $request->getPost('__shop') !== null
                 && $request->getPost('__redirect') !== null

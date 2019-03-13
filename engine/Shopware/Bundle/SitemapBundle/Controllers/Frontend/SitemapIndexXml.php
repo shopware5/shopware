@@ -79,8 +79,8 @@ class SitemapIndexXml extends Controller
         $refreshInterval = $this->config->get('sitemapRefreshTime');
 
         // If there are no sitemaps yet (or they are too old) and the generation strategy is "live", generate sitemaps
-        if ((empty($sitemaps) || time() > $refreshInterval + $lastGenerated) &&
-            $this->config->get('sitemapRefreshStrategy') === SitemapExporterInterface::STRATEGY_LIVE) {
+        if ((empty($sitemaps) || time() > $refreshInterval + $lastGenerated)
+            && $this->config->get('sitemapRefreshStrategy') === SitemapExporterInterface::STRATEGY_LIVE) {
             // Close session to prevent session locking from waiting in case there is another request coming in
             session_write_close();
 

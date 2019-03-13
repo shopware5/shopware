@@ -238,8 +238,7 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         }
 
         return array_key_exists('min' . $facet->getFormFieldName(), $params)
-            ||
-            array_key_exists('max' . $facet->getFormFieldName(), $params)
+            || array_key_exists('max' . $facet->getFormFieldName(), $params)
         ;
     }
 }

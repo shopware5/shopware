@@ -480,8 +480,8 @@ class Order extends Resource
             }
 
             // If no order number was specified for the details we use the one from the order if there is one
-            if ((!array_key_exists('number', $detail) || $detail['number'] !== $params['number']) &&
-                !empty($params['number'])) {
+            if ((!array_key_exists('number', $detail) || $detail['number'] !== $params['number'])
+                && !empty($params['number'])) {
                 $detail['number'] = $params['number'];
             }
 

@@ -56,9 +56,9 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         $calledAction = $this->Request()->getActionName();
 
         if (
-            Shopware()->Plugins()->Backend()->Auth()->shouldAuth() &&
-            $this->isPasswordConfirmProtectedAction($calledAction) &&
-            !$this->container->get('backendsession')->offsetGet('passwordVerified')
+            Shopware()->Plugins()->Backend()->Auth()->shouldAuth()
+            && $this->isPasswordConfirmProtectedAction($calledAction)
+            && !$this->container->get('backendsession')->offsetGet('passwordVerified')
         ) {
             return $this->forward('passwordConfirmationRequired');
         }
@@ -92,9 +92,9 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         $backendSession = $this->container->get('backendsession');
 
         if (
-            Shopware()->Plugins()->Backend()->Auth()->shouldAuth() &&
-            $this->isPasswordConfirmProtectedAction($calledAction) &&
-            $backendSession->offsetGet('passwordVerified')
+            Shopware()->Plugins()->Backend()->Auth()->shouldAuth()
+            && $this->isPasswordConfirmProtectedAction($calledAction)
+            && $backendSession->offsetGet('passwordVerified')
         ) {
             $backendSession->offsetUnset('passwordVerified');
         }

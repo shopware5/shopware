@@ -113,8 +113,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
 
                 $option->setActive(
                     $isValid
-                    ||
-                    ($onlyOneGroup && isset($combinations[$option->getId()]))
+                    || ($onlyOneGroup && isset($combinations[$option->getId()]))
                 );
 
                 if (isset($media[$option->getId()])) {

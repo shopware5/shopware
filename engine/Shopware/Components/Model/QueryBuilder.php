@@ -257,9 +257,9 @@ class QueryBuilder extends BaseQueryBuilder
                     continue;
                 }
 
-                if (isset($select[0], $this->alias) &&
-                    $select[0]->count() === 1 &&
-                    strpos($order['property'], '.') === false) {
+                if (isset($select[0], $this->alias)
+                    && $select[0]->count() === 1
+                    && strpos($order['property'], '.') === false) {
                     $order['property'] = $this->alias . '.' . $order['property'];
                 }
 

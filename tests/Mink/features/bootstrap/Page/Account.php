@@ -443,11 +443,11 @@ class Account extends Page implements HelperSelectorInterface
      */
     protected function verifyPageLogin()
     {
-        return $this->hasField('email') &&
-            $this->hasField('password') &&
-            Helper::hasNamedLink($this, 'forgotPasswordLink') &&
-            Helper::hasNamedButton($this, 'loginButton') &&
-            $this->verifyPageRegister()
+        return $this->hasField('email')
+            && $this->hasField('password')
+            && Helper::hasNamedLink($this, 'forgotPasswordLink')
+            && Helper::hasNamedButton($this, 'loginButton')
+            && $this->verifyPageRegister()
         ;
     }
 
@@ -458,34 +458,34 @@ class Account extends Page implements HelperSelectorInterface
      */
     protected function verifyPageRegister()
     {
-        return $this->hasSelect('register[personal][customer_type]') &&
-            $this->hasSelect('register[personal][salutation]') &&
-            $this->hasField('register[personal][firstname]') &&
-            $this->hasField('register[personal][lastname]') &&
-            $this->hasField('register[personal][email]') &&
-            $this->hasField('register[personal][password]') &&
+        return $this->hasSelect('register[personal][customer_type]')
+            && $this->hasSelect('register[personal][salutation]')
+            && $this->hasField('register[personal][firstname]')
+            && $this->hasField('register[personal][lastname]')
+            && $this->hasField('register[personal][email]')
+            && $this->hasField('register[personal][password]')
 
-            $this->hasField('register[billing][company]') &&
-            $this->hasField('register[billing][department]') &&
-            $this->hasField('register[billing][vatId]') &&
+            && $this->hasField('register[billing][company]')
+            && $this->hasField('register[billing][department]')
+            && $this->hasField('register[billing][vatId]')
 
-            $this->hasField('register[billing][street]') &&
-            $this->hasField('register[billing][zipcode]') &&
-            $this->hasField('register[billing][city]') &&
-            $this->hasSelect('register[billing][country]') &&
-            $this->hasField('register[billing][shippingAddress]') &&
+            && $this->hasField('register[billing][street]')
+            && $this->hasField('register[billing][zipcode]')
+            && $this->hasField('register[billing][city]')
+            && $this->hasSelect('register[billing][country]')
+            && $this->hasField('register[billing][shippingAddress]')
 
-            $this->hasSelect('register[shipping][salutation]') &&
-            $this->hasField('register[shipping][company]') &&
-            $this->hasField('register[shipping][department]') &&
-            $this->hasField('register[shipping][firstname]') &&
-            $this->hasField('register[shipping][lastname]') &&
-            $this->hasField('register[shipping][street]') &&
-            $this->hasField('register[shipping][zipcode]') &&
-            $this->hasField('register[shipping][city]') &&
-            $this->hasSelect('register[shipping][country]') &&
+            && $this->hasSelect('register[shipping][salutation]')
+            && $this->hasField('register[shipping][company]')
+            && $this->hasField('register[shipping][department]')
+            && $this->hasField('register[shipping][firstname]')
+            && $this->hasField('register[shipping][lastname]')
+            && $this->hasField('register[shipping][street]')
+            && $this->hasField('register[shipping][zipcode]')
+            && $this->hasField('register[shipping][city]')
+            && $this->hasSelect('register[shipping][country]')
 
-            Helper::hasNamedButton($this, 'sendButton')
+            && Helper::hasNamedButton($this, 'sendButton')
         ;
     }
 

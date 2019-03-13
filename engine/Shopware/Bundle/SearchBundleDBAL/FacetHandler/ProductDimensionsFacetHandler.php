@@ -120,12 +120,9 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
     public function supportsFacet(FacetInterface $facet)
     {
         return $facet instanceof WeightFacet
-            ||
-            $facet instanceof WidthFacet
-            ||
-            $facet instanceof LengthFacet
-            ||
-            $facet instanceof HeightFacet
+            || $facet instanceof WidthFacet
+            || $facet instanceof LengthFacet
+            || $facet instanceof HeightFacet
         ;
     }
 

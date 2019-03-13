@@ -120,10 +120,10 @@ class RegisterService implements RegisterServiceInterface
         try {
             $this->saveCustomer($shop, $customer);
             if (
-                ($optinAttribute = $shop->getAttribute('sendOptinMail')) !== null &&
-                $optinAttribute->get('sendOptinMail') === true &&
-                $customer->getDoubleOptinRegister() &&
-                $customer->getDoubleOptinConfirmDate() === null
+                ($optinAttribute = $shop->getAttribute('sendOptinMail')) !== null
+                && $optinAttribute->get('sendOptinMail') === true
+                && $customer->getDoubleOptinRegister()
+                && $customer->getDoubleOptinConfirmDate() === null
             ) {
                 $hash = Random::getAlphanumericString(32);
 

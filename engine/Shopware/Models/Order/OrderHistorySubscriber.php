@@ -53,8 +53,8 @@ class OrderHistorySubscriber implements EventSubscriber
 
         // Order or payment status changed?
         if (
-            !$eventArgs->hasChangedField('paymentStatus') &&
-            !$eventArgs->hasChangedField('orderStatus')
+            !$eventArgs->hasChangedField('paymentStatus')
+            && !$eventArgs->hasChangedField('orderStatus')
         ) {
             return;
         }
@@ -96,8 +96,8 @@ class OrderHistorySubscriber implements EventSubscriber
      */
     private function hasIdentity()
     {
-        return Shopware()->Container()->initialized('auth') &&
-            Shopware()->Container()->get('Auth')->getIdentity() &&
-            Shopware()->Container()->get('Auth')->getIdentity()->id;
+        return Shopware()->Container()->initialized('auth')
+            && Shopware()->Container()->get('Auth')->getIdentity()
+            && Shopware()->Container()->get('Auth')->getIdentity()->id;
     }
 }

@@ -72,8 +72,7 @@ class StoreFrontEmotionDeviceConfiguration implements StoreFrontEmotionDeviceCon
                 $ids = array_filter(explode('|', $config['customer_stream_ids']));
 
                 return $config['customer_stream_ids'] === null
-                    ||
-                    !empty(array_intersect($context->getActiveCustomerStreamIds(), $ids))
+                    || !empty(array_intersect($context->getActiveCustomerStreamIds(), $ids))
                 ;
             }
         );
