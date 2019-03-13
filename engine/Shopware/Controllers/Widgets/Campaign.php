@@ -25,6 +25,14 @@
 class Shopware_Controllers_Widgets_Campaign extends Shopware_Controllers_Widgets_Emotion
 {
     /**
+     * Pre dispatch method
+     */
+    public function preDispatch()
+    {
+        $this->Response()->setHeader('x-robots', 'noindex');
+    }
+
+    /**
      * The getEmotion method for the emotion landing page
      *
      * @param \Shopware\Models\Emotion\Repository $repository
