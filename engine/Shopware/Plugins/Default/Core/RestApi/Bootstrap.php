@@ -169,7 +169,6 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
      * Initiate shopware auth resource
      * database adapter by default
      *
-     * @param Enlight_Event_EventArgs $args
      *
      * @return \Zend_Auth|null
      */

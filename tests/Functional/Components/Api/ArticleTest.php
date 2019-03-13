@@ -2982,8 +2982,6 @@ class ArticleTest extends TestCase
      * so we have to clean up the first array level.
      *
      * @param $combinations
-     *
-     * @return mixed
      */
     protected function cleanUpCombinations($combinations)
     {

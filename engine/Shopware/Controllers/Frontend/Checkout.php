@@ -1339,7 +1339,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     /**
      * Get all dispatches available in selected country from sAdmin object
      *
-     * @param null $paymentId
      *
      * @return array|false list of dispatches
      */
@@ -1692,8 +1691,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     }
 
     /**
-     * @param array   $basket
-     * @param Request $request
+     * @param array $basket
      *
      * @return array
      */
@@ -1870,7 +1868,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      * Selects the default payment method defined in the backend. If no payment method is defined,
      * the first payment method of the provided list will be returned.
      *
-     * @param array $paymentMethods
      *
      * @return array
      */
@@ -1997,9 +1994,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     }
 
     /**
-     * @param array $addressA
-     * @param array $addressB
-     *
      * @return bool
      */
     private function areAddressesEqual(array $addressA, array $addressB)

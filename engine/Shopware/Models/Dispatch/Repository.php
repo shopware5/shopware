@@ -440,9 +440,8 @@ class Repository extends ModelRepository
     /**
      * Helper function which set the orderBy path for the order list query.
      *
-     * @param \Doctrine\ORM\QueryBuilder $builder
-     * @param string                     $modelPrefix
-     * @param array|null                 $orderBy
+     * @param string     $modelPrefix
+     * @param array|null $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

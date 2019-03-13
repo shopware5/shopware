@@ -34,8 +34,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class VoteHydrator extends Hydrator
 {
     /**
-     * @param array $data
-     *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage
      */
     public function hydrateAverage(array $data)
@@ -60,8 +58,6 @@ class VoteHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return Struct\Product\Vote
      */
     public function hydrate(array $data)

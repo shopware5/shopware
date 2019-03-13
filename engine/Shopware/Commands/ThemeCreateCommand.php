@@ -148,8 +148,6 @@ EOF
     /**
      * Helper function to ask for optional data
      *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      *
      * @return array
      */
@@ -167,11 +165,7 @@ EOF
     /**
      * Helper function to ask the user a question
      *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param string          $optionKey
-     *
-     * @return mixed
+     * @param string $optionKey
      */
     private function askForOptionalData(InputInterface $input, OutputInterface $output, $optionKey)
     {

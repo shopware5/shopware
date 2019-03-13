@@ -47,10 +47,6 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
      */
     private $listProductService;
 
-    /**
-     * @param RelatedProductsGatewayInterface $gateway
-     * @param ListProductServiceInterface     $listProductService
-     */
     public function __construct(
         RelatedProductsGatewayInterface $gateway,
         ListProductServiceInterface $listProductService

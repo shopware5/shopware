@@ -30,8 +30,6 @@ use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse;
 interface StatisticsClientInterface
 {
     /**
-     * @param StatisticsRequest $statisticsRequest
-     *
      * @return StatisticsResponse
      */
     public function sendStatistics(StatisticsRequest $statisticsRequest);

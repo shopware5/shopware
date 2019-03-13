@@ -94,9 +94,7 @@ EOF
     }
 
     /**
-     * @param InstallerService $pluginManager
-     * @param string           $batchUpdate
-     * @param OutputInterface  $output
+     * @param string $batchUpdate
      *
      * @return int 0 if everything went fine, or an error code
      */
@@ -151,10 +149,7 @@ EOF
     }
 
     /**
-     * @param InstallerService $pluginManager
-     * @param string           $pluginName
-     * @param InputInterface   $input
-     * @param OutputInterface  $output
+     * @param string $pluginName
      *
      * @return int 0 if everything went fine, or an error code
      */

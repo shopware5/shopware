@@ -42,17 +42,12 @@ class CompositeSynchronizerFactory
      */
     private $synchronizer;
 
-    /**
-     * @param IteratorAggregate $synchronizer
-     */
     public function __construct(IteratorAggregate $synchronizer)
     {
         $this->synchronizer = iterator_to_array($synchronizer, false);
     }
 
     /**
-     * @param Container $container
-     *
      * @return CompositeSynchronizer
      */
     public function factory(Container $container)

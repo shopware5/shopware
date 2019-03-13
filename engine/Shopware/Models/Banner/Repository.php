@@ -57,8 +57,6 @@ class Repository extends ModelRepository
      * @param int|null $filter    Category ID
      * @param int      $limit     Limit
      * @param bool     $randomize
-     *
-     * @return mixed
      */
     public function getAllActiveBanners($filter = null, $limit = 0, $randomize = false)
     {

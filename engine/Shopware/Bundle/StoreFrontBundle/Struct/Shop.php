@@ -123,8 +123,6 @@ class Shop extends Extendable
     protected $customerScope;
 
     /**
-     * @param ShopEntity $shop
-     *
      * @return Shop
      */
     public static function createFromShopEntity(ShopEntity $shop)
@@ -371,9 +369,6 @@ class Shop extends Extendable
         return $this->currency;
     }
 
-    /**
-     * @param Currency $currency
-     */
     public function setCurrency(Currency $currency)
     {
         $this->currency = $currency;
@@ -387,9 +382,6 @@ class Shop extends Extendable
         return $this->customerGroup;
     }
 
-    /**
-     * @param CustomerGroup $customerGroup
-     */
     public function setCustomerGroup(CustomerGroup $customerGroup)
     {
         $this->customerGroup = $customerGroup;
@@ -403,9 +395,6 @@ class Shop extends Extendable
         return $this->locale;
     }
 
-    /**
-     * @param Locale $locale
-     */
     public function setLocale(Locale $locale)
     {
         $this->locale = $locale;
@@ -419,9 +408,6 @@ class Shop extends Extendable
         return $this->template;
     }
 
-    /**
-     * @param Template $template
-     */
     public function setTemplate(Template $template)
     {
         $this->template = $template;

@@ -49,9 +49,7 @@ class TemplateCollector implements CollectorInterface
     private $utils;
 
     /**
-     * @param \Enlight_Template_Manager $template
-     * @param Utils                     $utils
-     * @param string                    $rootDir
+     * @param string $rootDir
      */
     public function __construct(\Enlight_Template_Manager $template, Utils $utils, $rootDir)
     {
@@ -70,8 +68,6 @@ class TemplateCollector implements CollectorInterface
      * Logs all rendered templates into the internal log object.
      * Each logged template contains the template name, the required compile time,
      * the required render time and the required cache time.
-     *
-     * @param Logger $log
      */
     public function logResults(Logger $log)
     {

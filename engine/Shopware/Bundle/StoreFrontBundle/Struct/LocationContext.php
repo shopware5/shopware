@@ -51,11 +51,6 @@ class LocationContext extends Extendable implements LocationContextInterface
      */
     protected $state;
 
-    /**
-     * @param Area|null    $area
-     * @param Country|null $country
-     * @param State|null   $state
-     */
     public function __construct(Area $area = null, Country $country = null, State $state = null)
     {
         $this->area = $area;

@@ -36,9 +36,6 @@ class LastIdQuery
      */
     private $query;
 
-    /**
-     * @param QueryBuilder $query
-     */
     public function __construct(QueryBuilder $query)
     {
         $this->query = $query;

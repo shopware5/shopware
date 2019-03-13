@@ -61,10 +61,6 @@ class CustomerValidator implements CustomerValidatorInterface
 
     /**
      * CustomerValidator constructor.
-     *
-     * @param ValidatorInterface          $validator
-     * @param ContextServiceInterface     $context
-     * @param \Shopware_Components_Config $config
      */
     public function __construct(
         ValidatorInterface $validator,
@@ -77,8 +73,6 @@ class CustomerValidator implements CustomerValidatorInterface
     }
 
     /**
-     * @param Customer $customer
-     *
      * @throws ValidationException
      */
     public function validate(Customer $customer)

@@ -88,7 +88,6 @@ class InstallContext implements \JsonSerializable
     private $shopwareVersion;
 
     /**
-     * @param Plugin $plugin
      * @param string $shopwareVersion
      * @param string $currentVersion
      */

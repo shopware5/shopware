@@ -43,8 +43,7 @@ interface BlogGatewayInterface
      * - Assigned media objects
      * - Core attribute of the media object
      *
-     * @param int[]                       $ids
-     * @param Struct\ShopContextInterface $context
+     * @param int[] $ids
      *
      * @return Struct\Blog\Blog[]
      */

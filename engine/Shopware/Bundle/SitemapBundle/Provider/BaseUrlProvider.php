@@ -45,10 +45,6 @@ abstract class BaseUrlProvider implements UrlProviderInterface
      */
     protected $allExported = false;
 
-    /**
-     * @param ModelManager            $modelManager
-     * @param Routing\RouterInterface $router
-     */
     public function __construct(ModelManager $modelManager, Routing\RouterInterface $router)
     {
         $this->modelManager = $modelManager;

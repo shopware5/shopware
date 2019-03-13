@@ -40,9 +40,6 @@ class RelatedProductStreamsService implements Service\RelatedProductStreamsServi
      */
     private $gateway;
 
-    /**
-     * @param Gateway\RelatedProductStreamsGatewayInterface $gateway
-     */
     public function __construct(
         Gateway\RelatedProductStreamsGatewayInterface $gateway
     ) {

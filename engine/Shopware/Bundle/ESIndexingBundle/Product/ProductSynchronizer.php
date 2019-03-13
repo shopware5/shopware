@@ -50,11 +50,6 @@ class ProductSynchronizer implements SynchronizerInterface
      */
     private $indexFactory;
 
-    /**
-     * @param ProductQueryFactoryInterface $queryFactory
-     * @param ProductIndexer               $productIndexer
-     * @param IndexFactoryInterface        $indexFactory
-     */
     public function __construct(
         ProductQueryFactoryInterface $queryFactory,
         ProductIndexer $productIndexer,

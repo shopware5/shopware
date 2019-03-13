@@ -36,17 +36,12 @@ class EmotionHydrator extends Hydrator
      */
     private $attributeHydrator;
 
-    /**
-     * @param AttributeHydrator $attributeHydrator
-     */
     public function __construct(AttributeHydrator $attributeHydrator)
     {
         $this->attributeHydrator = $attributeHydrator;
     }
 
     /**
-     * @param array $data
-     *
      * @return Emotion
      */
     public function hydrate(array $data)
@@ -93,10 +88,6 @@ class EmotionHydrator extends Hydrator
         return $emotion;
     }
 
-    /**
-     * @param Emotion $emotion
-     * @param array   $data
-     */
     private function assignTemplate(Emotion $emotion, array $data)
     {
         $template = new EmotionTemplate();

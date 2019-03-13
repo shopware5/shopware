@@ -60,11 +60,6 @@ class BlogGateway implements Gateway\BlogGatewayInterface
      */
     private $connection;
 
-    /**
-     * @param Connection            $connection
-     * @param FieldHelper           $fieldHelper
-     * @param Hydrator\BlogHydrator $blogHydrator
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,

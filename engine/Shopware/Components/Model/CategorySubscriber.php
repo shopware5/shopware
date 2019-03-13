@@ -76,9 +76,6 @@ class CategorySubscriber implements BaseEventSubscriber
      */
     private $container;
 
-    /**
-     * @param Container $container
-     */
     public function __construct(Container $container)
     {
         $this->container = $container;
@@ -116,9 +113,6 @@ class CategorySubscriber implements BaseEventSubscriber
         return [Events::onFlush, Events::postFlush];
     }
 
-    /**
-     * @param OnFlushEventArgs $eventArgs
-     */
     public function onFlush(OnFlushEventArgs $eventArgs)
     {
         if ($this->disabledForNextFlush) {
@@ -255,9 +249,6 @@ class CategorySubscriber implements BaseEventSubscriber
         }
     }
 
-    /**
-     * @param PostFlushEventArgs $eventArgs
-     */
     public function postFlush(/* @noinspection PhpUnusedParameterInspection */ PostFlushEventArgs $eventArgs)
     {
         if ($this->disabledForNextFlush) {
@@ -302,7 +293,6 @@ class CategorySubscriber implements BaseEventSubscriber
     /**
      * Sets the internal path field for given category based on it's parents
      *
-     * @param Category $category
      *
      * @return Category
      */
@@ -369,10 +359,6 @@ class CategorySubscriber implements BaseEventSubscriber
         $component->rebuildAssignments($categoryId);
     }
 
-    /**
-     * @param Article  $article
-     * @param Category $category
-     */
     protected function addPendingAddAssignment(Article $article, Category $category)
     {
         $this->pendingAddAssignments[$category->getId() . '_' . $article->getId()] = [
@@ -381,10 +367,6 @@ class CategorySubscriber implements BaseEventSubscriber
         ];
     }
 
-    /**
-     * @param Article  $article
-     * @param Category $category
-     */
     protected function addPendingRemoveAssignment(Article $article, Category $category)
     {
         $this->pendingRemoveAssignments[$category->getId() . '_' . $article->getId()] = [
@@ -393,9 +375,6 @@ class CategorySubscriber implements BaseEventSubscriber
         ];
     }
 
-    /**
-     * @param Category $category
-     */
     protected function addPendingMove(Category $category)
     {
         $this->pendingMoves[$category->getId()] = [

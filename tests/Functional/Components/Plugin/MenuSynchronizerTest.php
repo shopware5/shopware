@@ -107,10 +107,6 @@ class MenuSynchronizerTest extends TestCase
             ]);
     }
 
-    /**
-     * @param array $menu
-     * @param array $expectedQueryParameters
-     */
     protected function executeTestAndCheckResult(array $menu, array $expectedQueryParameters)
     {
         $connection = $this->createMock(Connection::class);

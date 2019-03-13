@@ -53,12 +53,6 @@ class MediaReplaceService implements MediaReplaceServiceInterface
      */
     private $mappingService;
 
-    /**
-     * @param MediaServiceInterface                 $mediaService
-     * @param Manager                               $thumbnailManager
-     * @param ModelManager                          $modelManager
-     * @param MediaExtensionMappingServiceInterface $mappingService
-     */
     public function __construct(MediaServiceInterface $mediaService, Manager $thumbnailManager, ModelManager $modelManager, MediaExtensionMappingServiceInterface $mappingService)
     {
         $this->mediaService = $mediaService;
@@ -115,9 +109,6 @@ class MediaReplaceService implements MediaReplaceServiceInterface
     }
 
     /**
-     * @param Media        $media
-     * @param UploadedFile $file
-     *
      * @return bool
      */
     private function validateMediaType(Media $media, UploadedFile $file)
@@ -128,8 +119,6 @@ class MediaReplaceService implements MediaReplaceServiceInterface
     }
 
     /**
-     * @param UploadedFile $file
-     *
      * @return string
      */
     private function getExtension(UploadedFile $file)

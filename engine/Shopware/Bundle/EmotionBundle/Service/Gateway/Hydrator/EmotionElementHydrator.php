@@ -33,10 +33,6 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\Hydrator;
 class EmotionElementHydrator extends Hydrator
 {
     /**
-     * @param array $data
-     * @param array $config
-     * @param array $viewports
-     *
      * @return Element
      */
     public function hydrate(array $data, array $config = [], array $viewports = [])
@@ -51,8 +47,6 @@ class EmotionElementHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return Element
      */
     private function assignData(array $data)
@@ -71,10 +65,6 @@ class EmotionElementHydrator extends Hydrator
         return $element;
     }
 
-    /**
-     * @param Element $element
-     * @param array   $data
-     */
     private function assignComponent(Element $element, array $data)
     {
         $component = new Component();
@@ -91,10 +81,6 @@ class EmotionElementHydrator extends Hydrator
         $element->setComponent($component);
     }
 
-    /**
-     * @param Element $element
-     * @param array   $config
-     */
     private function assignConfig(Element $element, array $config = [])
     {
         $config = $this->assignConfigTranslation($config);
@@ -104,10 +90,6 @@ class EmotionElementHydrator extends Hydrator
         $element->setConfig($elementConfig);
     }
 
-    /**
-     * @param Element $element
-     * @param array   $viewports
-     */
     private function assignViewports(Element $element, array $viewports = [])
     {
         $elementViewports = [];
@@ -131,8 +113,6 @@ class EmotionElementHydrator extends Hydrator
     }
 
     /**
-     * @param array $config
-     *
      * @return array
      */
     private function assignConfigTranslation(array $config)

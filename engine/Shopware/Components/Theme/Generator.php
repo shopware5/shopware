@@ -180,11 +180,6 @@ EOD;
         ],
     ];
 
-    /**
-     * @param PathResolver                $pathResolver
-     * @param Filesystem                  $fileSystem
-     * @param \Enlight_Event_EventManager $eventManager
-     */
     public function __construct(PathResolver $pathResolver, Filesystem $fileSystem, \Enlight_Event_EventManager $eventManager)
     {
         $this->pathResolver = $pathResolver;
@@ -196,7 +191,6 @@ EOD;
      * Function which generates a new shopware theme
      * into the engine/Shopware/Themes directory.
      *
-     * @param array    $data
      * @param Template $parent
      *
      * @throws \Exception
@@ -285,7 +279,6 @@ EOD;
     /**
      * Generates the Theme.php file for the theme.
      *
-     * @param array    $data
      * @param Template $parent
      */
     private function generateThemePhp(array $data, Template $parent = null)
@@ -325,8 +318,6 @@ EOD;
      * @param string $content     Content which should be placed into the source
      * @param string $source      source template where the content should be injected
      * @param string $default     Fallback if the passed content is empty or isn't set
-     *
-     * @return mixed
      */
     private function replacePlaceholder($placeholder, $content, $source, $default = '')
     {

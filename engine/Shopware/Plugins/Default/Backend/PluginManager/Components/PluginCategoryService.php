@@ -51,11 +51,6 @@ class PluginCategoryService
      */
     private $hydrator;
 
-    /**
-     * @param PluginStoreService $pluginService
-     * @param Connection         $connection
-     * @param StructHydrator     $hydrator
-     */
     public function __construct(
         PluginStoreService $pluginService,
         Connection $connection,

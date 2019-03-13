@@ -40,8 +40,6 @@ class PaymentHydrator extends Hydrator
 
     /**
      * PaymentHydrator constructor.
-     *
-     * @param AttributeHydrator $attributeHydrator
      */
     public function __construct(AttributeHydrator $attributeHydrator)
     {
@@ -49,8 +47,6 @@ class PaymentHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return Struct\Payment
      */
     public function hydrate(array $data)

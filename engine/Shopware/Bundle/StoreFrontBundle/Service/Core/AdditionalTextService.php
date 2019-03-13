@@ -42,9 +42,6 @@ class AdditionalTextService implements AdditionalTextServiceInterface
      */
     private $configuratorService;
 
-    /**
-     * @param ConfiguratorServiceInterface $configuratorService
-     */
     public function __construct(ConfiguratorServiceInterface $configuratorService)
     {
         $this->configuratorService = $configuratorService;

@@ -78,9 +78,6 @@ class Translation extends Resource implements BatchInterface
      */
     private $translationComponent;
 
-    /**
-     * @param \Shopware_Components_Translation|null $translationComponent
-     */
     public function __construct(\Shopware_Components_Translation $translationComponent = null)
     {
         $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
@@ -128,10 +125,8 @@ class Translation extends Resource implements BatchInterface
     /**
      * Returns a list of translation objects.
      *
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $criteria
-     * @param array $orderBy
+     * @param int $offset
+     * @param int $limit
      *
      * @return array
      */
@@ -175,7 +170,6 @@ class Translation extends Resource implements BatchInterface
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
-     * @param array $data
      *
      * @throws ApiException\ParameterMissingException
      *
@@ -208,7 +202,6 @@ class Translation extends Resource implements BatchInterface
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
-     * @param array $data
      *
      * @throws ApiException\ParameterMissingException
      *
@@ -246,8 +239,7 @@ class Translation extends Resource implements BatchInterface
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
-     * @param int   $id   - Identifier of the translated object, like the s_articles.id.
-     * @param array $data
+     * @param int $id - Identifier of the translated object, like the s_articles.id.
      *
      * @throws ApiException\ParameterMissingException
      *
@@ -285,7 +277,6 @@ class Translation extends Resource implements BatchInterface
      * @param string $number - Alphanumeric identifier of the translatable entity.
      *                       This can be a product number, configurator group name or some thing else.
      *                       For more information which number fields are supported, look into the #getIdByNumber
-     * @param array  $data
      *
      * @throws ApiException\ParameterMissingException
      *
@@ -409,10 +400,8 @@ class Translation extends Resource implements BatchInterface
     /**
      * Helper function which creates the query builder for the getList function.
      *
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $criteria
-     * @param array $orderBy
+     * @param int $offset
+     * @param int $limit
      *
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
@@ -439,7 +428,6 @@ class Translation extends Resource implements BatchInterface
     /**
      * Helper function which handles the update and create process of translations.
      *
-     * @param array $data
      *
      * @return array|TranslationModel|null
      */

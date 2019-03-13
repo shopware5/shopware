@@ -51,11 +51,6 @@ class RewriteGenerator implements GeneratorListInterface
      */
     private $eventManager;
 
-    /**
-     * @param Connection                  $connection
-     * @param QueryAliasMapper            $queryAliasMapper
-     * @param \Enlight_Event_EventManager $eventManager
-     */
     public function __construct(
         Connection $connection,
         QueryAliasMapper $queryAliasMapper,
@@ -111,9 +106,6 @@ class RewriteGenerator implements GeneratorListInterface
     }
 
     /**
-     * @param array   $list
-     * @param Context $context
-     *
      * @return array
      */
     public function generateList(array $list, Context $context)
@@ -237,9 +229,6 @@ class RewriteGenerator implements GeneratorListInterface
     }
 
     /**
-     * @param array   $params
-     * @param Context $context
-     *
      * @return array|bool
      */
     private function preAssemble(array $params, Context $context)
@@ -260,9 +249,6 @@ class RewriteGenerator implements GeneratorListInterface
     }
 
     /**
-     * @param array   $list
-     * @param Context $context
-     *
      * @throws \Doctrine\DBAL\DBALException
      *
      * @return array
@@ -296,8 +282,6 @@ class RewriteGenerator implements GeneratorListInterface
     }
 
     /**
-     * @param array $query
-     *
      * @return string
      */
     private function rewriteQuery(array $query)

@@ -76,8 +76,7 @@ class OrdersProvider implements BatchableProviderInterface
     }
 
     /**
-     * @param array $config
-     * @param int   $batch
+     * @param int $batch
      *
      * @return array
      */
@@ -121,8 +120,7 @@ class OrdersProvider implements BatchableProviderInterface
     }
 
     /**
-     * @param array $config
-     * @param int   $batch
+     * @param int $batch
      *
      * @return array
      */
@@ -205,8 +203,6 @@ class OrdersProvider implements BatchableProviderInterface
     }
 
     /**
-     * @param array $orderData
-     *
      * @return array
      */
     private function hydrateData(array $orderData)
@@ -287,8 +283,6 @@ class OrdersProvider implements BatchableProviderInterface
     }
 
     /**
-     * @param array $orderIds
-     *
      * @return array
      */
     private function getOrderDetails(array $orderIds)
@@ -313,8 +307,6 @@ class OrdersProvider implements BatchableProviderInterface
     }
 
     /**
-     * @param array $dispatchIds
-     *
      * @return array
      */
     private function getDispatchData(array $dispatchIds)
@@ -332,8 +324,6 @@ class OrdersProvider implements BatchableProviderInterface
     }
 
     /**
-     * @param array $paymentIds
-     *
      * @return array
      */
     private function getPaymentData(array $paymentIds)
@@ -370,8 +360,6 @@ class OrdersProvider implements BatchableProviderInterface
     }
 
     /**
-     * @param array $customerIds
-     *
      * @return array
      */
     private function getCustomerData(array $customerIds)
@@ -400,8 +388,6 @@ class OrdersProvider implements BatchableProviderInterface
     }
 
     /**
-     * @param array $orderIds
-     *
      * @return array
      */
     private function getBillingCountry(array $orderIds)
@@ -418,8 +404,6 @@ class OrdersProvider implements BatchableProviderInterface
     }
 
     /**
-     * @param array $orderIds
-     *
      * @return array
      */
     private function getShippingCountry(array $orderIds)
@@ -436,8 +420,6 @@ class OrdersProvider implements BatchableProviderInterface
     }
 
     /**
-     * @param array $customer
-     *
      * @return array
      */
     private function matchGenders(array $customer)
@@ -462,7 +444,6 @@ class OrdersProvider implements BatchableProviderInterface
     /**
      * Fetches a column of an associative array and returns the unique values.
      *
-     * @param array  $dataSet
      * @param string $column
      *
      * @return array

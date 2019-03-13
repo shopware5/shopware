@@ -402,9 +402,6 @@ class Detail extends ModelEntity
         return $this->articleDetail;
     }
 
-    /**
-     * @param ArticleDetail|null $articleDetail
-     */
     public function setArticleDetail(ArticleDetail $articleDetail = null)
     {
         $this->articleDetail = $articleDetail;

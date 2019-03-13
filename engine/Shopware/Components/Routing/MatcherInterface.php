@@ -32,8 +32,7 @@ namespace Shopware\Components\Routing;
 interface MatcherInterface
 {
     /**
-     * @param string  $pathInfo
-     * @param Context $context
+     * @param string $pathInfo
      *
      * @return string|array|false
      */

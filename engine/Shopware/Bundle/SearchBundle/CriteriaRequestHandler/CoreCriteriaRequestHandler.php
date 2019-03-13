@@ -58,10 +58,6 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private $searchTermPreProcessor;
 
-    /**
-     * @param \Shopware_Components_Config     $config
-     * @param SearchTermPreProcessorInterface $searchTermPreProcessor
-     */
     public function __construct(
         \Shopware_Components_Config $config,
         SearchTermPreProcessorInterface $searchTermPreProcessor
@@ -70,11 +66,6 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $this->searchTermPreProcessor = $searchTermPreProcessor;
     }
 
-    /**
-     * @param Request              $request
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
-     */
     public function handleRequest(Request $request, Criteria $criteria, ShopContextInterface $context)
     {
         $this->addLimit($request, $criteria);
@@ -97,10 +88,6 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $this->addLengthCondition($request, $criteria);
     }
 
-    /**
-     * @param Request  $request
-     * @param Criteria $criteria
-     */
     private function addCategoryCondition(Request $request, Criteria $criteria)
     {
         if ($request->has('sCategory')) {
@@ -118,10 +105,6 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         }
     }
 
-    /**
-     * @param Request  $request
-     * @param Criteria $criteria
-     */
     private function addManufacturerCondition(Request $request, Criteria $criteria)
     {
         if (!$request->has('sSupplier')) {
@@ -138,10 +121,6 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         }
     }
 
-    /**
-     * @param Request  $request
-     * @param Criteria $criteria
-     */
     private function addShippingFreeCondition(Request $request, Criteria $criteria)
     {
         $shippingFree = $request->getParam('shippingFree');
@@ -152,10 +131,6 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $criteria->addCondition(new ShippingFreeCondition());
     }
 
-    /**
-     * @param Request  $request
-     * @param Criteria $criteria
-     */
     private function addImmediateDeliveryCondition(Request $request, Criteria $criteria)
     {
         $immediateDelivery = $request->getParam('immediateDelivery');
@@ -166,10 +141,6 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $criteria->addCondition(new ImmediateDeliveryCondition());
     }
 
-    /**
-     * @param Request  $request
-     * @param Criteria $criteria
-     */
     private function addRatingCondition(Request $request, Criteria $criteria)
     {
         $average = $request->getParam('rating');
@@ -180,10 +151,6 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $criteria->addCondition(new VoteAverageCondition($average));
     }
 
-    /**
-     * @param Request  $request
-     * @param Criteria $criteria
-     */
     private function addPriceCondition(Request $request, Criteria $criteria)
     {
         $min = $request->getParam('priceMin');
@@ -197,10 +164,6 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $criteria->addCondition($condition);
     }
 
-    /**
-     * @param Request  $request
-     * @param Criteria $criteria
-     */
     private function addSearchCondition(Request $request, Criteria $criteria)
     {
         $term = $request->getParam('sSearch');
@@ -211,10 +174,6 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $criteria->addBaseCondition(new SearchTermCondition($term));
     }
 
-    /**
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
-     */
     private function addCustomerGroupCondition(Criteria $criteria, ShopContextInterface $context)
     {
         $condition = new CustomerGroupCondition(
@@ -223,10 +182,6 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $criteria->addBaseCondition($condition);
     }
 
-    /**
-     * @param Request  $request
-     * @param Criteria $criteria
-     */
     private function addOffset(Request $request, Criteria $criteria)
     {
         $page = (int) $request->getParam('sPage', 1);
@@ -238,10 +193,6 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         );
     }
 
-    /**
-     * @param Request  $request
-     * @param Criteria $criteria
-     */
     private function addLimit(Request $request, Criteria $criteria)
     {
         $limit = (int) $request->getParam('sPerPage', $this->config->get('articlesPerPage'));
@@ -253,9 +204,6 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $criteria->limit($limit);
     }
 
-    /**
-     * @param Criteria $criteria
-     */
     private function addIsAvailableCondition(Criteria $criteria)
     {
         if (!$this->config->get('hideNoInStock')) {

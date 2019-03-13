@@ -37,8 +37,7 @@ interface RelatedProductsServiceInterface
     /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\RelatedProductsServiceInterface::get()
      *
-     * @param BaseProduct[]           $products
-     * @param ProductContextInterface $context
+     * @param BaseProduct[] $products
      *
      * @return array indexed with the product number, each array element contains a BaseProduct array
      */
@@ -55,9 +54,6 @@ interface RelatedProductsServiceInterface
      * please refer to the linked classes.
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::get()
-     *
-     * @param BaseProduct             $product
-     * @param ProductContextInterface $context
      *
      * @return BaseProduct[] indexed by the product order number
      */

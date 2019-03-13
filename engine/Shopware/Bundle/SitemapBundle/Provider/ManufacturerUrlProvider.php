@@ -49,10 +49,6 @@ class ManufacturerUrlProvider implements UrlProviderInterface
      */
     private $allExported;
 
-    /**
-     * @param ConnectionInterface     $connection
-     * @param Routing\RouterInterface $router
-     */
     public function __construct(ConnectionInterface $connection, Routing\RouterInterface $router)
     {
         $this->router = $router;
@@ -104,7 +100,6 @@ class ManufacturerUrlProvider implements UrlProviderInterface
     /**
      * Gets all suppliers that have products for the current shop
      *
-     * @param ShopContextInterface $shopContext
      *
      * @return array
      */

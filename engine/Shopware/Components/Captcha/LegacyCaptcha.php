@@ -41,10 +41,6 @@ class LegacyCaptcha implements CaptchaInterface
      */
     private $templateManager;
 
-    /**
-     * @param \Shopware_Components_Config $config
-     * @param \Enlight_Template_Manager   $templateManager
-     */
     public function __construct(
         \Shopware_Components_Config $config,
         \Enlight_Template_Manager $templateManager

@@ -265,7 +265,6 @@ class BatchProductNumberSearchTest extends TestCase
     }
 
     /**
-     * @param array    $result
      * @param string[] $numbers
      */
     private function assertProductNumbersExists(array $result, array $numbers)

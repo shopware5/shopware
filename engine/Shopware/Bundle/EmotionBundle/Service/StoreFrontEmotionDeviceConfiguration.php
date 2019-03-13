@@ -34,9 +34,6 @@ class StoreFrontEmotionDeviceConfiguration implements StoreFrontEmotionDeviceCon
      */
     private $deviceConfiguration;
 
-    /**
-     * @param DeviceConfigurationInterface $deviceConfiguration
-     */
     public function __construct(DeviceConfigurationInterface $deviceConfiguration)
     {
         $this->deviceConfiguration = $deviceConfiguration;
@@ -92,8 +89,6 @@ class StoreFrontEmotionDeviceConfiguration implements StoreFrontEmotionDeviceCon
     }
 
     /**
-     * @param array $configurations
-     *
      * @return array
      */
     private function getReplacements(array $configurations)

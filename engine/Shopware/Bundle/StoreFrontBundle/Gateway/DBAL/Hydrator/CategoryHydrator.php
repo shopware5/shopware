@@ -48,11 +48,6 @@ class CategoryHydrator extends Hydrator
      */
     private $productStreamHydrator;
 
-    /**
-     * @param AttributeHydrator     $attributeHydrator
-     * @param MediaHydrator         $mediaHydrator
-     * @param ProductStreamHydrator $productStreamHydrator
-     */
     public function __construct(
         AttributeHydrator $attributeHydrator,
         MediaHydrator $mediaHydrator,
@@ -64,8 +59,6 @@ class CategoryHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return Struct\Category
      */
     public function hydrate(array $data)
@@ -99,10 +92,6 @@ class CategoryHydrator extends Hydrator
         return $category;
     }
 
-    /**
-     * @param Struct\Category $category
-     * @param array           $data
-     */
     private function assignCategoryData(Struct\Category $category, array $data)
     {
         if (isset($data['__category_id'])) {

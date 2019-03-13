@@ -32,10 +32,6 @@ use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
  */
 interface DataIndexerInterface
 {
-    /**
-     * @param ShopIndex               $index
-     * @param ProgressHelperInterface $progress
-     */
     public function populate(ShopIndex $index, ProgressHelperInterface $progress);
 
     /**

@@ -92,9 +92,6 @@ class Filter extends ModelEntity
      */
     private $isSimple = false;
 
-    /**
-     * @param \DateTimeInterface $created
-     */
     public function setCreated(\DateTimeInterface $created)
     {
         $this->created = $created;

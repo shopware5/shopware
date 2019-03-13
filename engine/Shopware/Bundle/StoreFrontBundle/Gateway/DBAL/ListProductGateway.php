@@ -65,12 +65,6 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
      */
     private $connection;
 
-    /**
-     * @param Connection                  $connection
-     * @param FieldHelper                 $fieldHelper
-     * @param Hydrator\ProductHydrator    $hydrator
-     * @param \Shopware_Components_Config $config
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
@@ -114,9 +108,6 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
     }
 
     /**
-     * @param array                       $numbers
-     * @param Struct\ShopContextInterface $context
-     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function getQuery(array $numbers, Struct\ShopContextInterface $context)

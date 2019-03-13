@@ -33,15 +33,11 @@ use Shopware\Models\Customer\Address;
 interface AddressValidatorInterface
 {
     /**
-     * @param Address $address
-     *
      * @throws ValidationException
      */
     public function validate(Address $address);
 
     /**
-     * @param Address $address
-     *
      * @return bool
      */
     public function isValid(Address $address);

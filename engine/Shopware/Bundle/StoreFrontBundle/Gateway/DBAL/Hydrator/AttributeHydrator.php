@@ -41,8 +41,6 @@ class AttributeHydrator extends Hydrator
 
     /**
      * AttributeHydrator constructor.
-     *
-     * @param FieldHelper $fieldHelper
      */
     public function __construct(FieldHelper $fieldHelper)
     {
@@ -50,8 +48,6 @@ class AttributeHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return Struct\Attribute
      */
     public function hydrate(array $data)
@@ -74,11 +70,10 @@ class AttributeHydrator extends Hydrator
     }
 
     /**
-     * @param Struct\Extendable $struct
-     * @param array             $data
-     * @param string            $arrayKey
-     * @param string            $attributeKey
-     * @param string|null       $translationKey
+     * @param array       $data
+     * @param string      $arrayKey
+     * @param string      $attributeKey
+     * @param string|null $translationKey
      */
     public function addAttribute(Struct\Extendable $struct, $data, $arrayKey, $attributeKey = null, $translationKey = null)
     {

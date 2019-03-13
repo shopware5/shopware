@@ -39,8 +39,6 @@ interface RepositoryInterface
     public function supports($entity);
 
     /**
-     * @param SearchCriteria $criteria
-     *
      * @return SearchResult
      */
     public function search(SearchCriteria $criteria);

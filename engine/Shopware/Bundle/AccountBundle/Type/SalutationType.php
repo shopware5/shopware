@@ -35,17 +35,11 @@ class SalutationType extends AbstractType
      */
     private $config;
 
-    /**
-     * @param \Shopware_Components_Config $config
-     */
     public function __construct(\Shopware_Components_Config $config)
     {
         $this->config = $config;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $salutations = explode(',', $this->config->get('shopsalutations'));

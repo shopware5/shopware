@@ -129,7 +129,6 @@ class FilterTest extends TestCase
      * @dataProvider striptagsDataProvider
      *
      * @param string $input
-     * @param array  $expected
      */
     public function testStripTagsEnabled($input, array $expected)
     {
@@ -143,7 +142,6 @@ class FilterTest extends TestCase
      * @dataProvider striptagsDataProvider
      *
      * @param string $input
-     * @param array  $expected
      */
     public function testStripTagsDisabled($input, array $expected)
     {

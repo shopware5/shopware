@@ -43,10 +43,6 @@ class ManufacturerProvider implements UrlProviderInterface
      */
     private $router;
 
-    /**
-     * @param Connection      $connection
-     * @param RouterInterface $router
-     */
     public function __construct(Connection $connection, RouterInterface $router)
     {
         $this->connection = $connection;

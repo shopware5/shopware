@@ -37,8 +37,6 @@ interface ProductSearchInterface
      * Creates a search request on the internal search gateway to
      * get the product result for the passed criteria object.
      *
-     * @param Criteria                $criteria
-     * @param ProductContextInterface $context
      *
      * @return ProductSearchResult
      */

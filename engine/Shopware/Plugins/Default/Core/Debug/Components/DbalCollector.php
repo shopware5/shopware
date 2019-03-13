@@ -44,9 +44,6 @@ class DbalCollector implements CollectorInterface
      */
     protected $modelLogger;
 
-    /**
-     * @param Configuration $modelConfig
-     */
     public function __construct(Configuration $modelConfig)
     {
         $this->modelConfig = $modelConfig;
@@ -62,8 +59,6 @@ class DbalCollector implements CollectorInterface
      * Logs all database process to the internal log object.
      * Iterates all queries of the query profiler and writes the query,
      * the parameter and the elapsed seconds for the query into a new row of the log.
-     *
-     * @param Logger $log
      */
     public function logResults(Logger $log)
     {

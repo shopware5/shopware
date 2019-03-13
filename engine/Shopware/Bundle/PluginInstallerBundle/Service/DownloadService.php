@@ -57,12 +57,6 @@ class DownloadService
      */
     private $pluginExtractor;
 
-    /**
-     * @param array           $pluginDirectories
-     * @param StoreClient     $storeClient
-     * @param Connection      $connection
-     * @param PluginExtractor $pluginExtractor
-     */
     public function __construct(
         array $pluginDirectories,
         StoreClient $storeClient,
@@ -76,8 +70,6 @@ class DownloadService
     }
 
     /**
-     * @param RangeDownloadRequest $request
-     *
      * @return FinishResult|ValidResult
      */
     public function downloadRange(RangeDownloadRequest $request)
@@ -123,8 +115,6 @@ class DownloadService
     }
 
     /**
-     * @param MetaRequest $request
-     *
      * @throws \Exception
      *
      * @return MetaStruct
@@ -163,8 +153,6 @@ class DownloadService
     }
 
     /**
-     * @param DownloadRequest $request
-     *
      * @throws \Exception
      *
      * @return bool

@@ -53,11 +53,6 @@ class IOHelper
      */
     private $questionHelper;
 
-    /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param QuestionHelper  $questionHelper
-     */
     public function __construct(
         InputInterface $input,
         OutputInterface $output,
@@ -142,7 +137,6 @@ class IOHelper
      * Ask a $question
      *
      * @param string|Question $question
-     * @param null            $default
      *
      * @return string
      */
@@ -157,7 +151,6 @@ class IOHelper
      * Ask for confirmation
      *
      * @param string|Question $question
-     * @param null            $default
      *
      * @return string
      */
@@ -196,8 +189,6 @@ class IOHelper
     }
 
     /**
-     * @param Question $question
-     *
      * @return string
      */
     public function askMultiLineQuestion(Question $question)

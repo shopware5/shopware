@@ -87,9 +87,6 @@ class ORMBacklogSubscriber implements EventSubscriber
      */
     private $container;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -110,9 +107,6 @@ class ORMBacklogSubscriber implements EventSubscriber
         return [Events::onFlush, Events::postFlush];
     }
 
-    /**
-     * @param OnFlushEventArgs $eventArgs
-     */
     public function onFlush(OnFlushEventArgs $eventArgs)
     {
         /** @var ModelManager $em */
@@ -143,9 +137,6 @@ class ORMBacklogSubscriber implements EventSubscriber
         }
     }
 
-    /**
-     * @param PostFlushEventArgs $eventArgs
-     */
     public function postFlush(PostFlushEventArgs $eventArgs)
     {
         foreach ($this->inserts as $entity) {

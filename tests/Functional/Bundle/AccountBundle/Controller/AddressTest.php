@@ -293,7 +293,6 @@ Nordrhein-WestfalenDeutschland';
     /**
      * @param string $method
      * @param string $url
-     * @param array  $data
      *
      * @return Crawler
      */
@@ -407,8 +406,6 @@ Nordrhein-WestfalenDeutschland';
     }
 
     /**
-     * @param Country $country
-     *
      * @return State
      */
     private static function createState(Country $country)

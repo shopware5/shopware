@@ -36,22 +36,16 @@ interface BasketQueryHelperInterface
     const BASKET_TABLE_ALIAS = 'basket';
 
     /**
-     * @param DiscountContext $discountContext
-     *
      * @return QueryBuilder
      */
     public function getPositionPricesQuery(DiscountContext $discountContext);
 
     /**
-     * @param DiscountContext $discountContext
-     *
      * @return QueryBuilder
      */
     public function getInsertDiscountQuery(DiscountContext $discountContext);
 
     /**
-     * @param DiscountContext $discountContext
-     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     public function getInsertDiscountAttributeQuery(DiscountContext $discountContext);

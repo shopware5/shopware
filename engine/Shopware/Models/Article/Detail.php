@@ -591,8 +591,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param Article $article
-     *
      * @return Detail
      */
     public function setArticle(Article $article)

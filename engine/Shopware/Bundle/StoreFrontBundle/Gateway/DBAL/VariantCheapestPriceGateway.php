@@ -74,13 +74,6 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
      */
     private $variantHelper;
 
-    /**
-     * @param Connection                  $connection
-     * @param FieldHelper                 $fieldHelper
-     * @param Hydrator\PriceHydrator      $priceHydrator
-     * @param \Shopware_Components_Config $config
-     * @param VariantHelperInterface      $variantHelper
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
@@ -231,8 +224,6 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
     /**
      * Pre selection of the cheapest prices.
      *
-     * @param QueryBuilder $mainQuery
-     * @param Criteria     $criteria
      *
      * @return QueryBuilder
      */

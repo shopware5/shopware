@@ -36,9 +36,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ResetPasswordFormType extends AbstractType
 {
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -47,10 +44,6 @@ class ResetPasswordFormType extends AbstractType
         ]);
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('password', PasswordType::class, [

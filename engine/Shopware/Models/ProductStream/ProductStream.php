@@ -169,8 +169,6 @@ class ProductStream extends ModelEntity
 
     /**
      * @deprecated since version 5.3, to be removed in 6.0 - Use \Shopware\Models\ProductStream\ProductStream::$sortingId instead
-     *
-     * @return mixed
      */
     public function getSorting()
     {

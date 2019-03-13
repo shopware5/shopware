@@ -38,9 +38,6 @@ class CocurSlugifyAdapter implements SlugInterface
      */
     private $slugify;
 
-    /**
-     * @param SlugifyInterface $slugify
-     */
     public function __construct(SlugifyInterface $slugify)
     {
         $this->slugify = $slugify;

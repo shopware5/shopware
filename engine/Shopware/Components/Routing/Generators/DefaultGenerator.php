@@ -48,8 +48,7 @@ class DefaultGenerator implements GeneratorInterface
     protected $separator;
 
     /**
-     * @param EnlightDispatcher $dispatcher
-     * @param string            $separator
+     * @param string $separator
      */
     public function __construct(EnlightDispatcher $dispatcher, $separator = '/')
     {

@@ -34,7 +34,6 @@ interface PartialConditionHandlerInterface
     /**
      * Validates if the criteria part can be handled by this handler
      *
-     * @param CriteriaPartInterface $criteriaPart
      *
      * @return bool
      */
@@ -42,11 +41,6 @@ interface PartialConditionHandlerInterface
 
     /**
      * Handles the criteria part and adds the provided condition as post filter.
-     *
-     * @param CriteriaPartInterface $criteriaPart
-     * @param Criteria              $criteria
-     * @param Search                $search
-     * @param ShopContextInterface  $context
      */
     public function handleFilter(
         CriteriaPartInterface $criteriaPart,
@@ -57,11 +51,6 @@ interface PartialConditionHandlerInterface
 
     /**
      * Handles the criteria part and extends the provided search.
-     *
-     * @param CriteriaPartInterface $criteriaPart
-     * @param Criteria              $criteria
-     * @param Search                $search
-     * @param ShopContextInterface  $context
      */
     public function handlePostFilter(
         CriteriaPartInterface $criteriaPart,

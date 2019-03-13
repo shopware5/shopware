@@ -45,11 +45,6 @@ class AddressGateway implements AddressGatewayInterface
      */
     private $hydrator;
 
-    /**
-     * @param Connection      $connection
-     * @param FieldHelper     $fieldHelper
-     * @param AddressHydrator $hydrator
-     */
     public function __construct(Connection $connection, FieldHelper $fieldHelper, AddressHydrator $hydrator)
     {
         $this->connection = $connection;

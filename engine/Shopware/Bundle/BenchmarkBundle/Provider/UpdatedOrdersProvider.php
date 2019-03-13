@@ -32,8 +32,7 @@ class UpdatedOrdersProvider extends OrdersProvider
     }
 
     /**
-     * @param array $config
-     * @param int   $batch
+     * @param int $batch
      *
      * @return array
      */

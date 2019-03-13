@@ -111,9 +111,6 @@ class Queue extends ModelEntity
         $this->articleDetails = new ArrayCollection();
     }
 
-    /**
-     * @param \DateTimeInterface $created
-     */
     public function setCreated(\DateTimeInterface $created)
     {
         $this->created = $created;

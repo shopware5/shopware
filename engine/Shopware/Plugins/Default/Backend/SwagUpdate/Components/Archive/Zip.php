@@ -40,7 +40,6 @@ class Zip extends Adapter
 
     /**
      * @param string $fileName
-     * @param null   $flags
      *
      * @throws \Exception
      */
@@ -81,8 +80,6 @@ class Zip extends Adapter
 
     /**
      * @param string $name
-     *
-     * @return mixed
      */
     public function getContents($name)
     {
@@ -91,8 +88,6 @@ class Zip extends Adapter
 
     /**
      * @param int $position
-     *
-     * @return mixed
      */
     public function getEntry($position)
     {

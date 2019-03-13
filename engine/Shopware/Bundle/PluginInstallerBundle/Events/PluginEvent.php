@@ -40,10 +40,6 @@ abstract class PluginEvent extends \Enlight_Event_EventArgs
     const PRE_DEACTIVATE = PrePluginDeactivateEvent::class;
     const POST_DEACTIVATE = PostPluginDeactivateEvent::class;
 
-    /**
-     * @param InstallContext $context
-     * @param Plugin         $plugin
-     */
     public function __construct(InstallContext $context, Plugin $plugin)
     {
         parent::__construct(['context' => $context, 'plugin' => $plugin]);

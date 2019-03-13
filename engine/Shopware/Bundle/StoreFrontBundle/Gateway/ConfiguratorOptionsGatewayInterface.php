@@ -36,8 +36,6 @@ interface ConfiguratorOptionsGatewayInterface
     /**
      * Get groups with options by option-ids
      *
-     * @param array                $optionIds
-     * @param ShopContextInterface $context
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group[]
      */

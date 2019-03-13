@@ -105,10 +105,8 @@ class User extends Resource
     /**
      * Returns a list of user objects.
      *
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $criteria
-     * @param array $orderBy
+     * @param int $offset
+     * @param int $limit
      *
      * @return array
      */
@@ -146,8 +144,6 @@ class User extends Resource
     }
 
     /**
-     * @param array $params
-     *
      * @return UserModel
      */
     public function create(array $params)
@@ -170,8 +166,7 @@ class User extends Resource
     }
 
     /**
-     * @param int   $id
-     * @param array $params
+     * @param int $id
      *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
@@ -301,9 +296,6 @@ class User extends Resource
     }
 
     /**
-     * @param array     $data
-     * @param UserModel $user
-     *
      * @throws ApiException\CustomValidationException
      *
      * @return array

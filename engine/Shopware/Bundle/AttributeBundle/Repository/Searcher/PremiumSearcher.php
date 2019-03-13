@@ -50,8 +50,6 @@ class PremiumSearcher extends GenericSearcher
     }
 
     /**
-     * @param SearchCriteria $criteria
-     *
      * @return array
      */
     protected function getSearchFields(SearchCriteria $criteria)

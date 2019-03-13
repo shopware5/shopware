@@ -47,8 +47,6 @@ class XmlPluginInfoReader
     }
 
     /**
-     * @param \DOMDocument $xml
-     *
      * @return array|void
      */
     private function parseInfo(\DOMDocument $xml)
@@ -110,8 +108,6 @@ class XmlPluginInfoReader
     /**
      * Get child elements by name.
      *
-     * @param \DOMNode $node
-     * @param mixed    $name
      *
      * @return \DOMElement[]
      */
@@ -128,8 +124,7 @@ class XmlPluginInfoReader
     }
 
     /**
-     * @param \DOMNode $node
-     * @param string   $name
+     * @param string $name
      *
      * @return \DOMElement|null
      */
@@ -145,8 +140,6 @@ class XmlPluginInfoReader
     /**
      * Get child element values by name.
      *
-     * @param \DOMNode $node
-     * @param mixed    $name
      *
      * @return string[]
      */

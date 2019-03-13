@@ -39,9 +39,6 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
      */
     private $connection;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
@@ -318,8 +315,6 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
     }
 
     /**
-     * @param DateTime $date
-     *
      * @return QueryBuilder
      */
     private function createAmountPerMonthQuery(DateTime $date)
@@ -346,7 +341,6 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
     }
 
     /**
-     * @param DateTime $date
      * @param int|null $streamId
      *
      * @return QueryBuilder

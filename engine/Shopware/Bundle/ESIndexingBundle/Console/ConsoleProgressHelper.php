@@ -49,9 +49,6 @@ class ConsoleProgressHelper implements ProgressHelperInterface
      */
     private $current;
 
-    /**
-     * @param OutputInterface $output
-     */
     public function __construct(OutputInterface $output)
     {
         $this->output = $output;

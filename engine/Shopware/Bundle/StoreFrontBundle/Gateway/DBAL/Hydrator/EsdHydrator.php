@@ -38,17 +38,12 @@ class EsdHydrator extends Hydrator
      */
     private $attributeHydrator;
 
-    /**
-     * @param AttributeHydrator $attributeHydrator
-     */
     public function __construct(AttributeHydrator $attributeHydrator)
     {
         $this->attributeHydrator = $attributeHydrator;
     }
 
     /**
-     * @param array $data
-     *
      * @return Struct\Product\Esd
      */
     public function hydrate(array $data)

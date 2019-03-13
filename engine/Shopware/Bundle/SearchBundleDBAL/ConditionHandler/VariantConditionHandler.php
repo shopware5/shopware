@@ -43,9 +43,6 @@ class VariantConditionHandler implements ConditionHandlerInterface
      */
     private $helper;
 
-    /**
-     * @param VariantHelperInterface $helper
-     */
     public function __construct(VariantHelperInterface $helper)
     {
         $this->helper = $helper;

@@ -37,19 +37,11 @@ class SortingCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private $customSortingService;
 
-    /**
-     * @param CustomSortingServiceInterface $customSortingService
-     */
     public function __construct(CustomSortingServiceInterface $customSortingService)
     {
         $this->customSortingService = $customSortingService;
     }
 
-    /**
-     * @param Request              $request
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
-     */
     public function handleRequest(
         Request $request,
         Criteria $criteria,

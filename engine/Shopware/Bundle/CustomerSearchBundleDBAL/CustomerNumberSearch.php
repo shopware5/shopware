@@ -44,10 +44,6 @@ class CustomerNumberSearch implements CustomerNumberSearchInterface
      */
     private $connection;
 
-    /**
-     * @param HandlerRegistry $handlerRegistry
-     * @param Connection      $connection
-     */
     public function __construct(
         HandlerRegistry $handlerRegistry,
         Connection $connection
@@ -57,8 +53,6 @@ class CustomerNumberSearch implements CustomerNumberSearchInterface
     }
 
     /**
-     * @param Criteria $criteria
-     *
      * @return CustomerNumberSearchResult
      */
     public function search(Criteria $criteria)
@@ -99,8 +93,6 @@ class CustomerNumberSearch implements CustomerNumberSearchInterface
     }
 
     /**
-     * @param Criteria $criteria
-     *
      * @return QueryBuilder
      */
     private function buildQuery(Criteria $criteria)
@@ -119,9 +111,6 @@ class CustomerNumberSearch implements CustomerNumberSearchInterface
     }
 
     /**
-     * @param Criteria     $criteria
-     * @param QueryBuilder $query
-     *
      * @return array[]
      */
     private function fetchCustomers(Criteria $criteria, QueryBuilder $query)

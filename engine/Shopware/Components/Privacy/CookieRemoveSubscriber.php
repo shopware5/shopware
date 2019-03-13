@@ -46,8 +46,6 @@ class CookieRemoveSubscriber implements SubscriberInterface
 
     /**
      * CookieRemoveSubscriber constructor.
-     *
-     * @param Config $config
      */
     public function __construct(Config $config)
     {
@@ -66,9 +64,6 @@ class CookieRemoveSubscriber implements SubscriberInterface
         ];
     }
 
-    /**
-     * @param Enlight_Event_EventArgs $args
-     */
     public function onPostDispatch(Enlight_Event_EventArgs $args)
     {
         if (!$this->cookieRemovalActive) {

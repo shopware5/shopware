@@ -540,8 +540,6 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
      * Translate filter name and description
      *
      * @param array $filter
-     *
-     * @return mixed
      */
     private function translateFilter($filter)
     {
@@ -689,8 +687,6 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     }
 
     /**
-     * @param Enlight_Controller_Request_Request $request
-     *
      * @return SearchCriteria
      */
     private function createCriteria(Enlight_Controller_Request_Request $request)

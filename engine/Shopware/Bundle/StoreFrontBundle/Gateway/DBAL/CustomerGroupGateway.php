@@ -59,11 +59,6 @@ class CustomerGroupGateway implements Gateway\CustomerGroupGatewayInterface
      */
     private $connection;
 
-    /**
-     * @param Connection                     $connection
-     * @param FieldHelper                    $fieldHelper
-     * @param Hydrator\CustomerGroupHydrator $customerGroupHydrator
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,

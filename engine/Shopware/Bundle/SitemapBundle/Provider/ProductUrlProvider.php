@@ -69,11 +69,7 @@ class ProductUrlProvider implements UrlProviderInterface
     private $batchSize;
 
     /**
-     * @param Routing\RouterInterface            $router
-     * @param ProductNumberSearchInterface       $productNumberSearch
-     * @param StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory
-     * @param ConnectionInterface                $connection
-     * @param int                                $batchSize
+     * @param int $batchSize
      */
     public function __construct(
         Routing\RouterInterface $router,

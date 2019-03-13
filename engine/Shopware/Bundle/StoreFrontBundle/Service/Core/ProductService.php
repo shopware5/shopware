@@ -97,18 +97,6 @@ class ProductService implements ProductServiceInterface
      */
     private $listProductService;
 
-    /**
-     * @param ListProductServiceInterface           $listProductService
-     * @param VoteServiceInterface                  $voteService
-     * @param MediaServiceInterface                 $mediaService
-     * @param RelatedProductsServiceInterface       $relatedProductsService
-     * @param RelatedProductStreamsServiceInterface $relatedProductStreamsService
-     * @param SimilarProductsServiceInterface       $similarProductsService
-     * @param ProductDownloadServiceInterface       $downloadService
-     * @param ProductLinkServiceInterface           $linkService
-     * @param PropertyServiceInterface              $propertyService
-     * @param ConfiguratorServiceInterface          $configuratorService
-     */
     public function __construct(
         ListProductServiceInterface $listProductService,
         VoteServiceInterface $voteService,
@@ -154,8 +142,7 @@ class ProductService implements ProductServiceInterface
     }
 
     /**
-     * @param ListProduct[]        $listProducts
-     * @param ShopContextInterface $context
+     * @param ListProduct[] $listProducts
      *
      * @return Product[] indexed by order number
      */

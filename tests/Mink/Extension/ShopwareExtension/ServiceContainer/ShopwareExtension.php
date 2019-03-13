@@ -47,17 +47,12 @@ class ShopwareExtension implements ExtensionInterface
         return 'shopware';
     }
 
-    /**
-     * @param ExtensionManager $extensionManager
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
     /**
      * Setups configuration for the extension.
-     *
-     * @param ArrayNodeDefinition $builder
      */
     public function configure(ArrayNodeDefinition $builder)
     {
@@ -99,9 +94,6 @@ class ShopwareExtension implements ExtensionInterface
 
     /**
      * Loads extension services into temporary container.
-     *
-     * @param ContainerBuilder $container
-     * @param array            $config
      */
     public function load(ContainerBuilder $container, array $config)
     {
@@ -112,7 +104,6 @@ class ShopwareExtension implements ExtensionInterface
     /**
      * You can modify the container here before it is dumped to PHP code.
      *
-     * @param ContainerBuilder $container
      *
      * @api
      */

@@ -60,11 +60,6 @@ class SitemapWriter implements SitemapWriterInterface
      */
     private $logger;
 
-    /**
-     * @param SitemapNameGenerator $sitemapNameGenerator
-     * @param FilesystemInterface  $filesystem
-     * @param LoggerInterface|null $logger
-     */
     public function __construct(
         SitemapNameGenerator $sitemapNameGenerator,
         FilesystemInterface $filesystem,
@@ -76,7 +71,6 @@ class SitemapWriter implements SitemapWriterInterface
     }
 
     /**
-     * @param Shop  $shop
      * @param Url[] $urls
      *
      * @return bool

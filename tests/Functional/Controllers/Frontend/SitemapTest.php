@@ -37,8 +37,7 @@ class Shopware_Tests_Controllers_Frontend_SitemapTest extends Enlight_Components
     }
 
     /**
-     * @param int   $shopId
-     * @param array $sitemapData
+     * @param int $shopId
      *
      * @dataProvider sitemapDataprovider
      */

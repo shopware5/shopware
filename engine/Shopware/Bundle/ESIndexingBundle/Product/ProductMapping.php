@@ -67,12 +67,7 @@ class ProductMapping implements MappingInterface
     private $isDynamic;
 
     /**
-     * @param IdentifierSelector    $identifierSelector
-     * @param FieldMappingInterface $fieldMapping
-     * @param TextMappingInterface  $textMapping
-     * @param CrudService           $crudService
-     * @param Client                $client
-     * @param bool                  $isDynamic
+     * @param bool $isDynamic
      */
     public function __construct(
         IdentifierSelector $identifierSelector,
@@ -180,8 +175,6 @@ class ProductMapping implements MappingInterface
     }
 
     /**
-     * @param Shop $shop
-     *
      * @return array
      */
     private function getPropertyMapping(Shop $shop)
@@ -217,8 +210,6 @@ class ProductMapping implements MappingInterface
     }
 
     /**
-     * @param Shop $shop
-     *
      * @return array
      */
     private function getManufacturerMapping(Shop $shop)
@@ -286,8 +277,6 @@ class ProductMapping implements MappingInterface
     }
 
     /**
-     * @param Shop $shop
-     *
      * @return array
      */
     private function getCalculatedPricesMapping(Shop $shop)
@@ -379,8 +368,6 @@ class ProductMapping implements MappingInterface
     }
 
     /**
-     * @param Shop $shop
-     *
      * @return array
      */
     private function getVariantOptionsMapping(Shop $shop)

@@ -483,7 +483,6 @@ class ModelEntityTest extends TestCase
     /**
      * @param object $entity
      * @param string $key
-     * @param mixed  $value
      */
     protected function setProperty($entity, $key, $value)
     {

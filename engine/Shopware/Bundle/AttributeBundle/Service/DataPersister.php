@@ -51,11 +51,6 @@ class DataPersister
      */
     private $dataLoader;
 
-    /**
-     * @param Connection   $connection
-     * @param TableMapping $mapping
-     * @param DataLoader   $dataLoader
-     */
     public function __construct(Connection $connection, TableMapping $mapping, DataLoader $dataLoader)
     {
         $this->connection = $connection;
@@ -259,8 +254,6 @@ class DataPersister
     }
 
     /**
-     * @param Column $column
-     *
      * @return bool
      */
     private function isDateColumn(Column $column)

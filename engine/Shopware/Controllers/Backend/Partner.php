@@ -333,7 +333,6 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
     /**
      * Helper function returns total count of the passed query builder
      *
-     * @param \Doctrine\ORM\Query $dataQuery
      *
      * @return int|null
      */

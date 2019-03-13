@@ -71,8 +71,6 @@ class CreateDateConditionHandler implements PartialConditionHandlerInterface
     }
 
     /**
-     * @param CriteriaPartInterface $criteriaPart
-     *
      * @return RangeQuery
      */
     private function createQuery(CriteriaPartInterface $criteriaPart)

@@ -34,8 +34,6 @@ use Shopware\Recovery\Install\Struct\DatabaseConnectionInformation;
 class DatabaseFactory
 {
     /**
-     * @param DatabaseConnectionInformation $info
-     *
      * @throws \Exception
      * @throws \PDOException
      *
@@ -63,17 +61,12 @@ class DatabaseFactory
         return $conn;
     }
 
-    /**
-     * @param \PDO $conn
-     */
     protected function setNonStrictSQLMode(\PDO $conn)
     {
         $conn->exec("SET @@session.sql_mode = ''");
     }
 
     /**
-     * @param DatabaseConnectionInformation $info
-     *
      * @return string
      */
     private function buildDsn(DatabaseConnectionInformation $info)
@@ -98,7 +91,6 @@ class DatabaseFactory
      * Is given MySQL storage engine available?
      *
      * @param string $engineName
-     * @param \PDO   $conn
      *
      * @return bool
      */
@@ -119,8 +111,6 @@ class DatabaseFactory
     }
 
     /**
-     * @param \PDO $conn
-     *
      * @throws \RuntimeException
      */
     private function checkVersion(\PDO $conn)
@@ -133,8 +123,6 @@ class DatabaseFactory
     }
 
     /**
-     * @param \PDO $conn
-     *
      * @throws \RuntimeException
      */
     private function checkEngineSupport(\PDO $conn)
@@ -146,8 +134,6 @@ class DatabaseFactory
     }
 
     /**
-     * @param \PDO $conn
-     *
      * @throws \RuntimeException
      */
     private function checkSQLMode(\PDO $conn)

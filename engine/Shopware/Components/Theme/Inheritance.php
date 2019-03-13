@@ -70,13 +70,6 @@ class Inheritance
      */
     private $mediaService;
 
-    /**
-     * @param ModelManager                $entityManager
-     * @param Util                        $util
-     * @param PathResolver                $pathResolver
-     * @param \Enlight_Event_EventManager $eventManager
-     * @param MediaServiceInterface       $mediaService
-     */
     public function __construct(
         ModelManager $entityManager,
         Util $util,
@@ -92,8 +85,6 @@ class Inheritance
     }
 
     /**
-     * @param Shop\Template $template
-     *
      * @throws \Exception
      *
      * @return array
@@ -253,8 +244,6 @@ class Inheritance
     }
 
     /**
-     * @param Shop\Template $template
-     *
      * @throws \Exception
      *
      * @return string[]
@@ -274,8 +263,6 @@ class Inheritance
     }
 
     /**
-     * @param Shop\Template $template
-     *
      * @throws \Exception
      *
      * @return string[]
@@ -296,8 +283,6 @@ class Inheritance
     }
 
     /**
-     * @param Shop\Template $template
-     *
      * @throws \Exception
      *
      * @return Theme
@@ -311,7 +296,6 @@ class Inheritance
      * Helper function which creates an array with all shop templates
      * inside which should be included in the frontend inheritance.
      *
-     * @param Shop\Template $template
      *
      * @return array
      */
@@ -371,7 +355,6 @@ class Inheritance
      * over a shopware event.
      *
      * @param int     $templateId
-     * @param array   $templates
      * @param array[] $configs
      * @param bool    $lessCompatible
      *
@@ -410,8 +393,7 @@ class Inheritance
      * as value. If no shop config saved, the value will fallback to
      * the default value.
      *
-     * @param array $config
-     * @param bool  $lessCompatible
+     * @param bool $lessCompatible
      *
      * @return array
      */

@@ -60,10 +60,6 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
      */
     private $crudService;
 
-    /**
-     * @param QueryBuilderFactoryInterface $queryBuilderFactory
-     * @param CrudService                  $crudService
-     */
     public function __construct(
         QueryBuilderFactoryInterface $queryBuilderFactory,
         CrudService $crudService
@@ -82,9 +78,6 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param FacetInterface|ProductAttributeFacet $facet
-     * @param Criteria                             $reverted
-     * @param Criteria                             $criteria
-     * @param ShopContextInterface                 $context
      *
      * @return FacetResultInterface|null
      */
@@ -144,11 +137,6 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param QueryBuilder                $query
-     * @param ProductAttributeFacet       $facet
-     * @param Criteria                    $criteria
-     * @param Struct\ShopContextInterface $context
-     *
      * @return RadioFacetResult|ValueListFacetResult|null
      */
     private function createValueListFacetResult(
@@ -212,10 +200,6 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param QueryBuilder          $query
-     * @param ProductAttributeFacet $facet
-     * @param Criteria              $criteria
-     *
      * @return RangeFacetResult|null
      */
     private function createRangeFacetResult(
@@ -272,10 +256,6 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param QueryBuilder          $query
-     * @param ProductAttributeFacet $facet
-     * @param Criteria              $criteria
-     *
      * @return BooleanFacetResult|null
      */
     private function createBooleanFacetResult(

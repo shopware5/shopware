@@ -67,9 +67,6 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
     private $connection;
 
     /**
-     * @param Connection                                                      $connection
-     * @param FieldHelper                                                     $fieldHelper
-     * @param Hydrator\ConfiguratorHydrator                                   $configuratorHydrator
      * @param \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface $mediaGateway
      */
     public function __construct(

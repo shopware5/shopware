@@ -63,12 +63,6 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
      */
     private $categoryTreeFacetResultBuilder;
 
-    /**
-     * @param CategoryServiceInterface       $categoryService
-     * @param CategoryDepthService           $categoryDepthService
-     * @param \Shopware_Components_Config    $config
-     * @param CategoryTreeFacetResultBuilder $categoryTreeFacetResultBuilder
-     */
     public function __construct(
         CategoryServiceInterface $categoryService,
         CategoryDepthService $categoryDepthService,
@@ -150,9 +144,6 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
     }
 
     /**
-     * @param array                $ids
-     * @param ShopContextInterface $context
-     *
      * @return array
      */
     private function filterSystemCategories(array $ids, ShopContextInterface $context)
@@ -168,8 +159,6 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
     }
 
     /**
-     * @param Criteria $criteria
-     *
      * @return int[]
      */
     private function getFilteredIds(Criteria $criteria)

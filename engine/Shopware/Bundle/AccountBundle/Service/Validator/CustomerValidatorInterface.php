@@ -33,15 +33,11 @@ use Shopware\Models\Customer\Customer;
 interface CustomerValidatorInterface
 {
     /**
-     * @param Customer $customer
-     *
      * @throws ValidationException
      */
     public function validate(Customer $customer);
 
     /**
-     * @param Customer $customer
-     *
      * @return bool
      */
     public function isValid(Customer $customer);

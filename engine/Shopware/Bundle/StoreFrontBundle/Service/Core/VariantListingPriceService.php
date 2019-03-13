@@ -66,13 +66,6 @@ class VariantListingPriceService implements VariantListingPriceServiceInterface
      */
     private $config;
 
-    /**
-     * @param QueryBuilderFactoryInterface         $factory
-     * @param VariantHelperInterface               $helper
-     * @param VariantCheapestPriceGatewayInterface $variantCheapestPriceGateway
-     * @param PriceCalculationServiceInterface     $priceCalculationService
-     * @param Shopware_Components_Config           $config
-     */
     public function __construct(
         QueryBuilderFactoryInterface $factory,
         VariantHelperInterface $helper,
@@ -106,11 +99,6 @@ class VariantListingPriceService implements VariantListingPriceServiceInterface
         $this->loadPrices($criteria, $result, $context);
     }
 
-    /**
-     * @param Criteria             $criteria
-     * @param ProductSearchResult  $result
-     * @param ShopContextInterface $context
-     */
     private function loadPrices(Criteria $criteria, ProductSearchResult $result, ShopContextInterface $context)
     {
         $cheapestPriceData = $this->variantCheapestPriceGateway->getList($result->getProducts(), $context, $context->getCurrentCustomerGroup(), $criteria);
@@ -173,9 +161,7 @@ class VariantListingPriceService implements VariantListingPriceServiceInterface
      * If the product has no configured price group or the price group has no discount defined for the
      * current customer group, the function returns null.
      *
-     * @param ListProduct $product
-     * @param ShopContext $context
-     * @param int         $quantity
+     * @param int $quantity
      *
      * @return PriceDiscount|null
      */

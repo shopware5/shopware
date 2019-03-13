@@ -44,7 +44,6 @@ class StoreApi
     private $baseUrl;
 
     /**
-     * @param Client $client
      * @param string $baseUrl
      */
     public function __construct(Client $client, $baseUrl)

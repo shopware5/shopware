@@ -52,10 +52,6 @@ class PluginStoreService
      */
     private $hydrator;
 
-    /**
-     * @param StoreClient    $storeClient
-     * @param StructHydrator $hydrator
-     */
     public function __construct(
         StoreClient $storeClient,
         StructHydrator $hydrator
@@ -65,8 +61,6 @@ class PluginStoreService
     }
 
     /**
-     * @param ListingRequest $context
-     *
      * @throws \Exception
      *
      * @return ListingResultStruct
@@ -96,8 +90,6 @@ class PluginStoreService
     }
 
     /**
-     * @param PluginsByTechnicalNameRequest $context
-     *
      * @return PluginStruct|null
      */
     public function getPlugin(PluginsByTechnicalNameRequest $context)
@@ -108,8 +100,6 @@ class PluginStoreService
     }
 
     /**
-     * @param PluginsByTechnicalNameRequest $context
-     *
      * @return PluginStruct[]
      */
     public function getPlugins(PluginsByTechnicalNameRequest $context)
@@ -129,8 +119,6 @@ class PluginStoreService
     }
 
     /**
-     * @param UpdateListingRequest $context
-     *
      * @throws \Exception
      *
      * @return UpdateResultStruct
@@ -155,8 +143,6 @@ class PluginStoreService
     }
 
     /**
-     * @param PluginLicenceRequest $context
-     *
      * @return LicenceStruct
      */
     public function getPluginLicence(PluginLicenceRequest $context)
@@ -177,8 +163,6 @@ class PluginStoreService
     }
 
     /**
-     * @param LicenceRequest $context
-     *
      * @throws \Exception
      *
      * @return array

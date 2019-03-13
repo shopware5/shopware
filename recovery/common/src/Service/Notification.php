@@ -46,7 +46,6 @@ class Notification
     /**
      * @param string $apiEndPoint
      * @param string $uniqueId
-     * @param Client $client
      */
     public function __construct($apiEndPoint, $uniqueId, Client $client)
     {

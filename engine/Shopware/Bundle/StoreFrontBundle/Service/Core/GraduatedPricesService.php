@@ -44,9 +44,6 @@ class GraduatedPricesService implements GraduatedPricesServiceInterface
      */
     private $graduatedPricesGateway;
 
-    /**
-     * @param GraduatedPricesGatewayInterface $graduatedPricesGateway
-     */
     public function __construct(
         GraduatedPricesGatewayInterface $graduatedPricesGateway
     ) {
@@ -151,8 +148,6 @@ class GraduatedPricesService implements GraduatedPricesServiceInterface
      * This function is used to override the normal graduated prices
      * with a definition of the product price group discounts.
      *
-     * @param PriceRule       $reference
-     * @param Group           $customerGroup
      * @param PriceDiscount[] $discounts
      *
      * @return array
@@ -210,7 +205,6 @@ class GraduatedPricesService implements GraduatedPricesServiceInterface
      *
      * @param ListProduct[] $products
      * @param PriceRule[]   $priceRules
-     * @param Group         $group
      *
      * @return array
      */

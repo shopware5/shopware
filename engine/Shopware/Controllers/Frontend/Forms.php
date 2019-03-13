@@ -287,7 +287,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     /**
      * Create input element method
      *
-     * @param array  $element
      * @param string $post
      *
      * @return string
@@ -453,8 +452,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      *
      * Populates $this->_postData
      *
-     * @param array $inputs
-     * @param array $elements
      *
      * @throws \Exception
      *
@@ -554,9 +551,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     }
 
     /**
-     * @param Form  $form
-     * @param array $fields
-     *
      * @return Form
      */
     protected function translateForm(Form $form, array &$fields)
@@ -630,8 +624,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     }
 
     /**
-     * @param Enlight_View_Default $view
-     *
      * @throws \Exception
      */
     private function renderElementNote(Enlight_View_Default $view)

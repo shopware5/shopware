@@ -263,8 +263,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     }
 
     /**
-     * @param Emotion $emotion
-     *
      * @return array
      */
     private function getLegacyEmotion(Emotion $emotion)

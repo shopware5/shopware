@@ -45,9 +45,6 @@ class SearchTermConditionHandler implements ConditionHandlerInterface
      */
     private $searchTermQueryBuilder;
 
-    /**
-     * @param SearchTermQueryBuilderInterface $searchTermQueryBuilder
-     */
     public function __construct(SearchTermQueryBuilderInterface $searchTermQueryBuilder)
     {
         $this->searchTermQueryBuilder = $searchTermQueryBuilder;

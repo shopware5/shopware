@@ -44,11 +44,6 @@ class CategoryDuplicator
      */
     private $attributePersister;
 
-    /**
-     * @param \PDO                    $connection
-     * @param CategoryDenormalization $categoryDenormalization
-     * @param DataPersister           $attributePersister
-     */
     public function __construct(
         \PDO $connection,
         CategoryDenormalization $categoryDenormalization,

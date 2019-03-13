@@ -150,8 +150,6 @@ class ThumbnailGenerateCommand extends ShopwareCommand
     }
 
     /**
-     * @param Album $album
-     *
      * @throws Exception
      */
     private function createAlbumThumbnails(Album $album)
@@ -193,7 +191,6 @@ class ThumbnailGenerateCommand extends ShopwareCommand
     /**
      * Check each single thumbnail to skip already existing thumbnails
      *
-     * @param Media $media
      *
      * @throws Exception
      */
@@ -229,8 +226,6 @@ class ThumbnailGenerateCommand extends ShopwareCommand
     }
 
     /**
-     * @param Media $media
-     *
      * @throws Exception
      *
      * @return bool

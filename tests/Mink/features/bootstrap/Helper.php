@@ -49,8 +49,7 @@ class Helper
      * If not, the key of the element will be returned (can be used for more detailed descriptions of faults)
      * Throws an exception if $check has an incorrect format
      *
-     * @param array $check
-     * @param bool  $strict
+     * @param bool $strict
      *
      * @throws \Exception
      *
@@ -114,8 +113,6 @@ class Helper
     /**
      * Converts values with key in $keys to floats
      *
-     * @param array $values
-     * @param array $keys
      *
      * @return array
      */
@@ -215,7 +212,6 @@ class Helper
      * Finds elements by their selectors
      *
      * @param Page|Element|HelperSelectorInterface $parent
-     * @param array                                $keys
      * @param bool                                 $throwExceptions
      *
      * @throws \Exception|PendingException
@@ -258,7 +254,6 @@ class Helper
      * Finds all elements of their selectors
      *
      * @param Page|Element|HelperSelectorInterface $parent
-     * @param array                                $keys
      * @param bool                                 $throwExceptions
      *
      * @throws \Exception|PendingException
@@ -301,7 +296,6 @@ class Helper
      * Returns the requested element css selectors
      *
      * @param Page|Element|HelperSelectorInterface $parent
-     * @param array                                $keys
      * @param bool                                 $throwExceptions
      *
      * @throws \Exception
@@ -348,8 +342,7 @@ class Helper
     /**
      * Returns the css selector of the element
      *
-     * @param HelperSelectorInterface $parent
-     * @param string                  $key
+     * @param string $key
      *
      * @return string|bool
      */
@@ -535,7 +528,6 @@ EOD
     /**
      * Helper method that returns the content block of a page
      *
-     * @param Page $parent
      *
      * @throws \Exception
      *
@@ -637,8 +629,6 @@ EOD
      * Possible modes are 'controller', 'action' and 'template' or a combination of them
      * Please note, that 'template' only works in combination with 'controller' and/or 'action'.
      *
-     * @param \Behat\Mink\Session $session
-     * @param array               $selectionMode
      *
      * @return array|bool
      */
@@ -699,8 +689,7 @@ EOD
     }
 
     /**
-     * @param HelperSelectorInterface $element
-     * @param bool                    $throwExceptions
+     * @param bool $throwExceptions
      *
      * @return array
      */
@@ -723,7 +712,6 @@ EOD
     }
 
     /**
-     * @param array  $hash
      * @param string $keyKey
      * @param string $valueKey
      *
@@ -768,8 +756,7 @@ EOD
     }
 
     /**
-     * @param Element $element
-     * @param string  $propertyName
+     * @param string $propertyName
      *
      * @return string|float|array
      */
@@ -781,9 +768,6 @@ EOD
     }
 
     /**
-     * @param Element $element
-     * @param array   $properties
-     *
      * @return bool|array
      */
     public static function assertElementProperties(Element $element, array $properties)
@@ -809,9 +793,6 @@ EOD
     }
 
     /**
-     * @param array           $needles
-     * @param MultipleElement $haystack
-     *
      * @return bool|array
      */
     public static function searchElements(array $needles, MultipleElement $haystack)
@@ -827,9 +808,6 @@ EOD
     }
 
     /**
-     * @param array           $needles
-     * @param MultipleElement $haystack
-     *
      * @return array|bool
      */
     public static function assertElements(array $needles, MultipleElement $haystack)
@@ -858,8 +836,7 @@ EOD
     /**
      * Global method to check the count of an MultipleElement
      *
-     * @param MultipleElement $elements
-     * @param int             $count
+     * @param int $count
      */
     public static function assertElementCount(MultipleElement $elements, $count = 0)
     {

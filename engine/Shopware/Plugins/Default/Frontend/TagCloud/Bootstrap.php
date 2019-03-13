@@ -47,11 +47,6 @@ class Shopware_Plugins_Frontend_TagCloud_Bootstrap extends Shopware_Components_P
         ];
     }
 
-    /**
-     * @param Enlight_Event_EventArgs $args
-     *
-     * @return mixed
-     */
     public function onPostDispatch(Enlight_Event_EventArgs $args)
     {
         $view = $args->getSubject()->View();

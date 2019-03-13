@@ -41,8 +41,7 @@ class PrefixFilesystem implements FilesystemInterface
     private $prefix;
 
     /**
-     * @param FilesystemInterface $filesystem
-     * @param string              $prefix
+     * @param string $prefix
      */
     public function __construct(FilesystemInterface $filesystem, $prefix)
     {

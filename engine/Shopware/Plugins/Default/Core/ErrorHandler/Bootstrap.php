@@ -266,9 +266,6 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
         return $this;
     }
 
-    /**
-     * @param Enlight_Controller_EventArgs $args
-     */
     public function onDispatchLoopShutdown(Enlight_Controller_EventArgs $args)
     {
         $response = $args->getSubject()->Response();

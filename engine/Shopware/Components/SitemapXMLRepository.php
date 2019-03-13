@@ -74,11 +74,7 @@ class SitemapXMLRepository
     private $batchSize;
 
     /**
-     * @param ProductNumberSearchInterface       $productNumberSearch
-     * @param StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory
-     * @param ModelManager                       $em
-     * @param ContextServiceInterface            $contextService
-     * @param int                                $batchSize
+     * @param int $batchSize
      */
     public function __construct(
         ProductNumberSearchInterface $productNumberSearch,
@@ -187,7 +183,6 @@ class SitemapXMLRepository
     /**
      * Reads all product urls recursive
      *
-     * @param Criteria $criteria
      *
      * @return array
      */

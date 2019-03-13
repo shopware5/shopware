@@ -43,10 +43,6 @@ class LegacyEventManager
      */
     private $contextService;
 
-    /**
-     * @param \Enlight_Event_EventManager $eventManager
-     * @param ContextServiceInterface     $contextService
-     */
     public function __construct(
         \Enlight_Event_EventManager $eventManager,
         ContextServiceInterface $contextService
@@ -59,11 +55,7 @@ class LegacyEventManager
      * Following events are deprecated and only implemented for backward compatibility to shopware 4
      * Removed with shopware 5.1
      *
-     * @param array      $result
-     * @param int        $categoryId
-     * @param \sArticles $module
-     *
-     * @return mixed
+     * @param int $categoryId
      */
     public function fireArticlesByCategoryEvents(
         array $result,
@@ -95,8 +87,6 @@ class LegacyEventManager
      * Following events are deprecated and only implemented for backward compatibility to shopware 4
      * Removed with shopware 5.1
      *
-     * @param array      $product
-     * @param \sArticles $module
      *
      * @return array|mixed
      */

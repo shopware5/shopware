@@ -97,11 +97,6 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param FacetInterface       $facet
-     * @param Criteria             $reverted
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
-     *
      * @return FacetResultInterface|null
      */
     public function generatePartialFacet(
@@ -166,10 +161,6 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param Criteria             $reverted
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
-     *
      * @return \Shopware\Bundle\SearchBundleDBAL\QueryBuilder
      */
     private function buildQuery(Criteria $reverted, Criteria $criteria, ShopContextInterface $context)

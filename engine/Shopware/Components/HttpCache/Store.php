@@ -55,7 +55,6 @@ class Store extends BaseStore
      * @param string   $root
      * @param string[] $cacheCookies
      * @param bool     $lookupOptimization
-     * @param array    $ignoredUrlParameters
      */
     public function __construct(
         $root,
@@ -172,8 +171,6 @@ class Store extends BaseStore
      * When saving a page, also save the page's cacheKey in an optimized version
      * so we can look it up more quickly
      *
-     * @param Request  $request
-     * @param Response $response
      *
      * @return string
      */
@@ -233,7 +230,6 @@ class Store extends BaseStore
      * Verify the URL parameters for a better cache hit rate
      * Removes ignored URL parameters set in the Shopware configuration.
      *
-     * @param Request $request
      *
      * @return string
      */

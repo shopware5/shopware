@@ -112,8 +112,6 @@ class ModelRepository extends EntityRepository
      *      )));
      * </code>
      *
-     * @param QueryBuilder $builder
-     * @param array        $filter
      *
      * @return QueryBuilder
      */
@@ -132,8 +130,6 @@ class ModelRepository extends EntityRepository
      *      )));
      * </code>
      *
-     * @param QueryBuilder $builder
-     * @param array        $orderBy
      *
      * @return QueryBuilder
      */

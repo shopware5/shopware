@@ -43,8 +43,6 @@ class ControllerPathListener
     }
 
     /**
-     * @param Enlight_Event_EventArgs $args
-     *
      * @return string|null
      */
     public function getControllerPath(Enlight_Event_EventArgs $args)

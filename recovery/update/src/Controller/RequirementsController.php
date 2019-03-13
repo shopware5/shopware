@@ -58,11 +58,6 @@ class RequirementsController
      */
     private $app;
 
-    /**
-     * @param Request   $request
-     * @param Response  $response
-     * @param Container $container
-     */
     public function __construct(Request $request, Response $response, Container $container, Slim $app)
     {
         $this->request = $request;

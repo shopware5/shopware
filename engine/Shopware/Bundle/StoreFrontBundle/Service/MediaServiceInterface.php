@@ -39,8 +39,7 @@ interface MediaServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::get()
      *
-     * @param int                         $id
-     * @param Struct\ShopContextInterface $context
+     * @param int $id
      *
      * @return Struct\Media
      */
@@ -52,8 +51,7 @@ interface MediaServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::get()
      *
-     * @param int[]                       $ids
-     * @param Struct\ShopContextInterface $context
+     * @param int[] $ids
      *
      * @return Struct\Media[] Indexed by the media id
      */
@@ -62,8 +60,7 @@ interface MediaServiceInterface
     /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface::getProductMedia()
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[] $products
      *
      * @return array indexed by the product order number, each array element contains a \Shopware\Bundle\StoreFrontBundle\Struct\Media array
      */
@@ -81,9 +78,6 @@ interface MediaServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VariantMediaGatewayInterface::getCover()
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::getCover()
-     *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Media
      */
@@ -108,9 +102,6 @@ interface MediaServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::get()
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VariantMediaGatewayInterface::get()
-     *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Media[]
      */

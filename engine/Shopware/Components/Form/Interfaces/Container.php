@@ -45,8 +45,5 @@ interface Container
      */
     public function getElements();
 
-    /**
-     * @param Element $element
-     */
     public function addElement(Element $element);
 }

@@ -43,9 +43,6 @@ class CachedConfigReader implements ConfigReader
      */
     private $configStorage;
 
-    /**
-     * @param ConfigReader $reader
-     */
     public function __construct(ConfigReader $reader)
     {
         $this->reader = $reader;

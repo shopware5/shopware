@@ -52,8 +52,6 @@ class XmlMenuReader
     }
 
     /**
-     * @param \DOMDocument $xml
-     *
      * @return array
      */
     private function parseMenu(\DOMDocument $xml)
@@ -75,8 +73,6 @@ class XmlMenuReader
     }
 
     /**
-     * @param \DOMElement $entry
-     *
      * @return array
      */
     private function parseEntry(\DOMElement $entry)
@@ -120,8 +116,7 @@ class XmlMenuReader
     }
 
     /**
-     * @param \DOMNode $node
-     * @param string   $name
+     * @param string $name
      *
      * @return string|null
      */
@@ -137,8 +132,6 @@ class XmlMenuReader
     /**
      * Get child elements by name.
      *
-     * @param \DOMNode $node
-     * @param mixed    $name
      *
      * @return \DOMElement[]
      */

@@ -50,8 +50,6 @@ interface ConfiguratorGatewayInterface
      * - Option position
      * - Option name
      *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Configurator\Set
      */
@@ -91,7 +89,6 @@ interface ConfiguratorGatewayInterface
      *     'red'   => array()
      * )
      *
-     * @param Struct\BaseProduct $product
      *
      * @return array Indexed by the option id
      */

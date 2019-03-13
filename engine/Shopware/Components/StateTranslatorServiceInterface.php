@@ -28,7 +28,6 @@ interface StateTranslatorServiceInterface
 {
     /**
      * @param string $type
-     * @param array  $state
      *
      * @return array
      */

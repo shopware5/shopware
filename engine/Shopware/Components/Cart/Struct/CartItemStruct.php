@@ -117,9 +117,6 @@ class CartItemStruct
         return $this->updatedPrice;
     }
 
-    /**
-     * @param array $updatedPrice
-     */
     public function setUpdatedPrice(array $updatedPrice)
     {
         $this->updatedPrice = $updatedPrice;

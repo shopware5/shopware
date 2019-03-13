@@ -624,8 +624,6 @@ class Shipping extends ModelEntity
 
     /**
      * Transfer values from the new address object
-     *
-     * @param Address $address
      */
     public function fromAddress(Address $address)
     {

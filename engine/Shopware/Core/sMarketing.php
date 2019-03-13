@@ -82,9 +82,6 @@ class sMarketing
 
     /**
      * Class constructor.
-     *
-     * @param StoreFrontBundle\Service\ContextServiceInterface|null        $contextService
-     * @param StoreFrontBundle\Service\AdditionalTextServiceInterface|null $additionalTextService
      */
     public function __construct(
         StoreFrontBundle\Service\ContextServiceInterface $contextService = null,

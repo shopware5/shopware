@@ -54,9 +54,7 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     private $requestHandlers;
 
     /**
-     * @param \Shopware_Components_Config $config
-     * @param \Enlight_Event_EventManager $eventManager
-     * @param \IteratorAggregate          $requestHandlers
+     * @param \IteratorAggregate $requestHandlers
      */
     public function __construct(
         \Shopware_Components_Config $config,
@@ -69,8 +67,7 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     }
 
     /**
-     * @param int[]                $categoryIds
-     * @param ShopContextInterface $context
+     * @param int[] $categoryIds
      *
      * @return Criteria
      */
@@ -98,9 +95,6 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     }
 
     /**
-     * @param Request              $request
-     * @param ShopContextInterface $context
-     *
      * @return Criteria
      */
     public function createSearchCriteria(Request $request, ShopContextInterface $context)
@@ -117,9 +111,6 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     }
 
     /**
-     * @param Request              $request
-     * @param ShopContextInterface $context
-     *
      * @return Criteria
      */
     public function createListingCriteria(Request $request, ShopContextInterface $context)
@@ -138,9 +129,6 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     }
 
     /**
-     * @param Request              $request
-     * @param ShopContextInterface $context
-     *
      * @return Criteria
      */
     public function createAjaxSearchCriteria(Request $request, ShopContextInterface $context)
@@ -161,9 +149,6 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     }
 
     /**
-     * @param Request              $request
-     * @param ShopContextInterface $context
-     *
      * @return Criteria
      */
     public function createAjaxListingCriteria(Request $request, ShopContextInterface $context)
@@ -182,9 +167,6 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     }
 
     /**
-     * @param Request              $request
-     * @param ShopContextInterface $context
-     *
      * @return Criteria
      */
     public function createAjaxCountCriteria(Request $request, ShopContextInterface $context)
@@ -207,9 +189,7 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     }
 
     /**
-     * @param Request              $request
-     * @param ShopContextInterface $context
-     * @param int                  $categoryId
+     * @param int $categoryId
      *
      * @return \Shopware\Bundle\SearchBundle\Criteria
      */
@@ -239,9 +219,6 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     }
 
     /**
-     * @param Request              $request
-     * @param ShopContextInterface $context
-     *
      * @return Criteria
      */
     private function getSearchCriteria(Request $request, ShopContextInterface $context)
@@ -269,9 +246,6 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     }
 
     /**
-     * @param Request              $request
-     * @param ShopContextInterface $context
-     *
      * @return Criteria
      */
     private function createCriteriaFromRequest(Request $request, ShopContextInterface $context)

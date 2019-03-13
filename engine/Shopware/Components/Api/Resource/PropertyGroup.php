@@ -73,10 +73,8 @@ class PropertyGroup extends Resource
     }
 
     /**
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $criteria
-     * @param array $orderBy
+     * @param int $offset
+     * @param int $limit
      *
      * @return array
      */
@@ -99,8 +97,6 @@ class PropertyGroup extends Resource
     }
 
     /**
-     * @param array $params
-     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Exception
      *
@@ -127,8 +123,7 @@ class PropertyGroup extends Resource
     }
 
     /**
-     * @param int   $id
-     * @param array $params
+     * @param int $id
      *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
@@ -194,7 +189,6 @@ class PropertyGroup extends Resource
     }
 
     /**
-     * @param array      $params
      * @param array|null $propertyGroup
      *
      * @throws ApiException\CustomValidationException

@@ -37,8 +37,7 @@ abstract class Container implements ContainerInterface
     protected $pimple;
 
     /**
-     * @param \Pimple\Container $pimple
-     * @param array             $config
+     * @param array $config
      */
     public function __construct(\Pimple\Container $pimple, $config)
     {
@@ -48,9 +47,6 @@ abstract class Container implements ContainerInterface
         $this->setup($pimple);
     }
 
-    /**
-     * @param \Pimple\Container $pimple
-     */
     abstract public function setup(\Pimple\Container $pimple);
 
     /**

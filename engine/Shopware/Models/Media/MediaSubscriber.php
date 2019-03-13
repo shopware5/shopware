@@ -64,8 +64,6 @@ class MediaSubscriber implements EventSubscriber
 
     /**
      * Set meta data on load
-     *
-     * @param LifecycleEventArgs $eventArgs
      */
     public function postLoad(LifecycleEventArgs $eventArgs)
     {
@@ -74,8 +72,6 @@ class MediaSubscriber implements EventSubscriber
 
     /**
      * Set meta data on save
-     *
-     * @param LifecycleEventArgs $eventArgs
      */
     public function prePersist(LifecycleEventArgs $eventArgs)
     {
@@ -85,7 +81,6 @@ class MediaSubscriber implements EventSubscriber
     /**
      * Live migration to fill width/height
      *
-     * @param LifecycleEventArgs $eventArgs
      *
      * @throws \Exception
      */

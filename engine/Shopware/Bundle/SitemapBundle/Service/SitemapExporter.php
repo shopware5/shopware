@@ -74,13 +74,7 @@ class SitemapExporter implements SitemapExporterInterface
     private $urlFilter;
 
     /**
-     * @param SitemapWriterInterface                   $sitemapWriter
-     * @param ContextServiceInterface                  $contextService
-     * @param ShopwareConfig                           $shopwareConfig
      * @param \IteratorAggregate<UrlProviderInterface> $urlProvider
-     * @param ConfigWriter                             $configWriter
-     * @param SitemapLockInterface                     $sitemapLock
-     * @param UrlFilterInterface                       $urlFilter
      */
     public function __construct(
         SitemapWriterInterface $sitemapWriter,

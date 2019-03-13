@@ -218,8 +218,6 @@ abstract class Random
      * Return a random element from an array
      *
      * @param array $array
-     *
-     * @return mixed
      */
     public static function getRandomArrayElement($array)
     {

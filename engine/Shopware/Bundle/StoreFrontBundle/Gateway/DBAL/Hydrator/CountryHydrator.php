@@ -38,17 +38,12 @@ class CountryHydrator extends Hydrator
      */
     private $attributeHydrator;
 
-    /**
-     * @param AttributeHydrator $attributeHydrator
-     */
     public function __construct(AttributeHydrator $attributeHydrator)
     {
         $this->attributeHydrator = $attributeHydrator;
     }
 
     /**
-     * @param array $data
-     *
      * @return Struct\Country\Area
      */
     public function hydrateArea(array $data)
@@ -61,8 +56,6 @@ class CountryHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return Struct\Country
      */
     public function hydrateCountry(array $data)
@@ -127,8 +120,6 @@ class CountryHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Country\State
      */
     public function hydrateState(array $data)

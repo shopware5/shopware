@@ -119,9 +119,6 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
         return $token;
     }
 
-    /**
-     * @param Exception $e
-     */
     private function handleException(Exception $e)
     {
         if (!($e instanceof StoreException)) {
@@ -143,8 +140,6 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
     }
 
     /**
-     * @param StoreException $exception
-     *
      * @return mixed|string
      */
     private function getExceptionMessage(StoreException $exception)

@@ -43,10 +43,6 @@ class DataLoader
      */
     private $mapping;
 
-    /**
-     * @param Connection   $connection
-     * @param TableMapping $mapping
-     */
     public function __construct(Connection $connection, TableMapping $mapping)
     {
         $this->connection = $connection;

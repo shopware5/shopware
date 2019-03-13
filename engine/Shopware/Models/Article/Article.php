@@ -923,8 +923,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param ArticleCategory $category
-     *
      * @return Article
      */
     public function addCategory(ArticleCategory $category)
@@ -937,8 +935,6 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param ArticleCategory $category
-     *
      * @return Article
      */
     public function removeCategory(ArticleCategory $category)

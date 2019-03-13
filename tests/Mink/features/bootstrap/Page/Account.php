@@ -308,9 +308,7 @@ class Account extends Page implements HelperSelectorInterface
     }
 
     /**
-     * @param AccountOrder $order
-     * @param string       $orderNumber
-     * @param array        $articles
+     * @param string $orderNumber
      */
     public function checkOrder(AccountOrder $order, $orderNumber, array $articles)
     {
@@ -370,8 +368,6 @@ class Account extends Page implements HelperSelectorInterface
 
     /**
      * Fills the fields of the registration form and submits it
-     *
-     * @param array $data
      */
     public function register(array $data)
     {
@@ -382,8 +378,7 @@ class Account extends Page implements HelperSelectorInterface
     }
 
     /**
-     * @param AddressBox $addresses
-     * @param string     $name
+     * @param string $name
      */
     public function chooseAddress(AddressBox $addresses, $name)
     {
@@ -391,7 +386,6 @@ class Account extends Page implements HelperSelectorInterface
     }
 
     /**
-     * @param string $title
      * @param string $salutation
      * @param string $firstname
      * @param string $lastname
@@ -492,8 +486,7 @@ class Account extends Page implements HelperSelectorInterface
     }
 
     /**
-     * @param AddressBox $addresses
-     * @param string     $name
+     * @param string $name
      *
      * @throws \Exception
      */
@@ -523,8 +516,7 @@ class Account extends Page implements HelperSelectorInterface
     /**
      * Helper method checks the order number
      *
-     * @param AccountOrder $order
-     * @param string       $orderNumber
+     * @param string $orderNumber
      */
     private function checkOrderNumber(AccountOrder $order, $orderNumber)
     {
@@ -550,8 +542,6 @@ class Account extends Page implements HelperSelectorInterface
     /**
      * Helper method checks the order positions
      *
-     * @param AccountOrder $order
-     * @param array        $articles
      *
      * @throws \Exception
      */
@@ -586,7 +576,6 @@ class Account extends Page implements HelperSelectorInterface
      * Helper method checks the ESD articles
      *
      * @param string $date
-     * @param array  $articles
      *
      * @throws \Exception
      */

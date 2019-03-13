@@ -50,11 +50,6 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
      */
     private $hydrator;
 
-    /**
-     * @param Connection             $connection
-     * @param FieldHelper            $fieldHelper
-     * @param Hydrator\MediaHydrator $hydrator
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
@@ -152,7 +147,6 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
     }
 
     /**
-     * @param array                $media
      * @param Struct\BaseProduct[] $products
      *
      * @return array

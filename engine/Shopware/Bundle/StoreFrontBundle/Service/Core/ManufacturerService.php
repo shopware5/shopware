@@ -47,10 +47,6 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
      */
     private $router;
 
-    /**
-     * @param Gateway\ManufacturerGatewayInterface $manufacturerGateway
-     * @param RouterInterface                      $router
-     */
     public function __construct(
         Gateway\ManufacturerGatewayInterface $manufacturerGateway,
         RouterInterface $router

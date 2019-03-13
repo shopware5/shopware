@@ -46,8 +46,6 @@ class LicenseServiceSubscriber implements SubscriberInterface
 
     /**
      * LicenseServiceSubscriber constructor.
-     *
-     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -64,9 +62,6 @@ class LicenseServiceSubscriber implements SubscriberInterface
         ];
     }
 
-    /**
-     * @param Enlight_Event_EventArgs $args
-     */
     public function onPostDispatchBackendIndex(Enlight_Event_EventArgs $args)
     {
         /** @var Enlight_View_Default $view */

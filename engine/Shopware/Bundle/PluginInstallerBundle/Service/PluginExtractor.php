@@ -56,11 +56,8 @@ class PluginExtractor
     private $requirementsValidator;
 
     /**
-     * @param string                $pluginDir
-     * @param Filesystem            $filesystem
-     * @param string[]              $pluginDirectories
-     * @param ShopwareReleaseStruct $release
-     * @param RequirementValidator  $requirementValidator
+     * @param string   $pluginDir
+     * @param string[] $pluginDirectories
      */
     public function __construct(
         $pluginDir,
@@ -121,8 +118,7 @@ class PluginExtractor
      * path and validates the plugin namespace, directory traversal
      * and multiple plugin directories.
      *
-     * @param string      $prefix
-     * @param \ZipArchive $archive
+     * @param string $prefix
      */
     private function validatePluginZip($prefix, \ZipArchive $archive)
     {
@@ -135,8 +131,6 @@ class PluginExtractor
     }
 
     /**
-     * @param \ZipArchive $archive
-     *
      * @return string
      */
     private function getPluginPrefix(\ZipArchive $archive)
@@ -232,8 +226,7 @@ class PluginExtractor
     }
 
     /**
-     * @param string      $prefix
-     * @param \ZipArchive $archive
+     * @param string $prefix
      */
     private function validatePluginRequirements($prefix, \ZipArchive $archive)
     {

@@ -35,8 +35,6 @@ class ProportionalCartMerger implements ProportionalCartMergerInterface
 
     /**
      * ProportionalCartMerger constructor.
-     *
-     * @param Shopware_Components_Modules $modules
      */
     public function __construct(Shopware_Components_Modules $modules)
     {
@@ -93,8 +91,6 @@ class ProportionalCartMerger implements ProportionalCartMergerInterface
     }
 
     /**
-     * @param array  $item1
-     * @param array  $item2
      * @param string $property
      *
      * @return float

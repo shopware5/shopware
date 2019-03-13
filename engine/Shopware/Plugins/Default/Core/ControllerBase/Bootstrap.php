@@ -47,8 +47,6 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
      * Event listener method
      *
      * Read base controller data
-     *
-     * @param Enlight_Event_EventArgs $args
      */
     public function onPostDispatch(Enlight_Event_EventArgs $args)
     {

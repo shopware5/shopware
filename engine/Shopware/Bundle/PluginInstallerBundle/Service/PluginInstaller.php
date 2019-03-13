@@ -100,13 +100,7 @@ class PluginInstaller
     private $events;
 
     /**
-     * @param ModelManager               $em
-     * @param DatabaseHandler            $snippetHandler
-     * @param RequirementValidator       $requirementValidator
-     * @param \PDO                       $pdo
-     * @param Enlight_Event_EventManager $events
-     * @param string|string[]            $pluginDirectories
-     * @param ShopwareReleaseStruct      $release
+     * @param string|string[] $pluginDirectories
      */
     public function __construct(
         ModelManager $em,
@@ -128,8 +122,6 @@ class PluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      *
      * @return InstallContext
@@ -168,8 +160,7 @@ class PluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
-     * @param bool   $removeData
+     * @param bool $removeData
      *
      * @throws \Exception
      * @throws \Doctrine\DBAL\DBALException
@@ -212,8 +203,6 @@ class PluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      *
      * @return UpdateContext
@@ -251,8 +240,6 @@ class PluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      * @throws \Doctrine\ORM\OptimisticLockException
      *
@@ -278,8 +265,6 @@ class PluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      * @throws \Doctrine\ORM\OptimisticLockException
      *
@@ -303,8 +288,6 @@ class PluginInstaller
     }
 
     /**
-     * @param \DateTimeInterface $refreshDate
-     *
      * @throws \RuntimeException
      */
     public function refreshPluginList(\DateTimeInterface $refreshDate)
@@ -392,8 +375,6 @@ class PluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      *
      * @return string
@@ -407,8 +388,7 @@ class PluginInstaller
     }
 
     /**
-     * @param PluginBootstrap $bootstrap
-     * @param bool            $removeDirty
+     * @param bool $removeDirty
      */
     private function removeSnippets(PluginBootstrap $bootstrap, $removeDirty)
     {
@@ -416,9 +396,6 @@ class PluginInstaller
     }
 
     /**
-     * @param PluginBootstrap $bootstrap
-     * @param Plugin          $plugin
-     *
      * @throws \Exception
      */
     private function installResources(PluginBootstrap $bootstrap, Plugin $plugin)
@@ -440,16 +417,12 @@ class PluginInstaller
         }
     }
 
-    /**
-     * @param PluginBootstrap $bootstrap
-     */
     private function installSnippets(PluginBootstrap $bootstrap)
     {
         $this->snippetHandler->loadToDatabase($bootstrap->getPath() . '/Resources/snippets/');
     }
 
     /**
-     * @param Plugin $plugin
      * @param string $file
      *
      * @throws \Exception
@@ -464,7 +437,6 @@ class PluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
      * @param string $file
      *
      * @throws \InvalidArgumentException
@@ -479,7 +451,6 @@ class PluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
      * @param string $file
      *
      * @throws \InvalidArgumentException

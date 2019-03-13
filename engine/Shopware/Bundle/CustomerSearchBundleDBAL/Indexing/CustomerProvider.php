@@ -38,10 +38,6 @@ class CustomerProvider implements CustomerProviderInterface
      */
     private $customerOrderGateway;
 
-    /**
-     * @param CustomerServiceInterface $customerService
-     * @param CustomerOrderGateway     $customerOrderGateway
-     */
     public function __construct(
         CustomerServiceInterface $customerService,
         CustomerOrderGateway $customerOrderGateway

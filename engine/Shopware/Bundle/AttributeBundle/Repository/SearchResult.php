@@ -42,8 +42,7 @@ class SearchResult
     private $data;
 
     /**
-     * @param int   $count
-     * @param array $data
+     * @param int $count
      */
     public function __construct($count, array $data)
     {

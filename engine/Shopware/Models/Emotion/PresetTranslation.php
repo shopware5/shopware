@@ -157,9 +157,6 @@ class PresetTranslation extends ModelEntity
         return $this->preset;
     }
 
-    /**
-     * @param Preset $preset
-     */
     public function setPreset(Preset $preset)
     {
         $this->preset = $preset;

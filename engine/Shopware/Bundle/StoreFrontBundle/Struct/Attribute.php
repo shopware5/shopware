@@ -69,7 +69,6 @@ class Attribute extends Struct implements \JsonSerializable
      * values which allows shopware to serialize the struct elements.
      *
      * @param string $name
-     * @param mixed  $value
      *
      * @throws \Exception
      */
@@ -96,8 +95,6 @@ class Attribute extends Struct implements \JsonSerializable
      * Returns a single storage value.
      *
      * @param string $name
-     *
-     * @return mixed
      */
     public function get($name)
     {
@@ -113,8 +110,6 @@ class Attribute extends Struct implements \JsonSerializable
     }
 
     /**
-     * @param mixed $value
-     *
      * @return bool
      */
     private function isValid($value)

@@ -56,13 +56,6 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
      */
     private $termHelper;
 
-    /**
-     * @param \Shopware_Components_Config $config
-     * @param Connection                  $connection
-     * @param KeywordFinderInterface      $keywordFinder
-     * @param SearchIndexerInterface      $searchIndexer
-     * @param TermHelperInterface         $termHelper
-     */
     public function __construct(
         \Shopware_Components_Config $config,
         Connection $connection,
@@ -191,8 +184,6 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
     /**
      * Calculates the search tolerance and adds an where condition
      * to the query.
-     *
-     * @param QueryBuilder $query
      */
     private function addToleranceCondition(QueryBuilder $query)
     {

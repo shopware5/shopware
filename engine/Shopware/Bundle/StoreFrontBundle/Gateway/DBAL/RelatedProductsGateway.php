@@ -40,9 +40,6 @@ class RelatedProductsGateway implements Gateway\RelatedProductsGatewayInterface
      */
     private $connection;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;

@@ -67,9 +67,6 @@ class ThemeDumpConfigurationCommand extends ShopwareCommand
     }
 
     /**
-     * @param Shop          $shop
-     * @param Configuration $configuration
-     *
      * @throws \Exception
      *
      * @return string

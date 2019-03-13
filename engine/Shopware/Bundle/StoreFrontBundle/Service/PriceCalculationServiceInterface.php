@@ -45,9 +45,6 @@ interface PriceCalculationServiceInterface
      *
      * The calculated \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule structs are wrapped into a \Shopware\Bundle\StoreFrontBundle\Struct\Product\Price
      * struct which contains only the calculated price values and the reference to his rule.
-     *
-     * @param ListProduct             $product
-     * @param ProductContextInterface $context
      */
     public function calculateProduct(ListProduct $product, ProductContextInterface $context);
 }

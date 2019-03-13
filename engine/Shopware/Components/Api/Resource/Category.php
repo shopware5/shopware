@@ -46,9 +46,6 @@ class Category extends Resource
      */
     private $translationComponent;
 
-    /**
-     * @param TranslationComponent|null $translationComponent
-     */
     public function __construct(TranslationComponent $translationComponent = null)
     {
         $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
@@ -119,10 +116,8 @@ class Category extends Resource
     }
 
     /**
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $criteria
-     * @param array $orderBy
+     * @param int $offset
+     * @param int $limit
      *
      * @return array
      */
@@ -145,8 +140,6 @@ class Category extends Resource
     }
 
     /**
-     * @param array $params
-     *
      * @throws ApiException\ValidationException
      * @throws \Exception
      *
@@ -186,8 +179,7 @@ class Category extends Resource
     }
 
     /**
-     * @param int   $id
-     * @param array $params
+     * @param int $id
      *
      * @throws ApiException\ValidationException
      * @throws ApiException\NotFoundException
@@ -355,8 +347,6 @@ class Category extends Resource
     }
 
     /**
-     * @param array $params
-     *
      * @throws ApiException\CustomValidationException
      *
      * @return array
@@ -395,9 +385,6 @@ class Category extends Resource
     }
 
     /**
-     * @param array         $data
-     * @param CategoryModel $categoryModel
-     *
      * @throws ApiException\CustomValidationException
      *
      * @return array

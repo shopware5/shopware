@@ -39,8 +39,7 @@ interface ProductConfigurationGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[] $products
      *
      * @return array indexed by the product order number, each array element contains a Struct\Configurator\Group array
      */
@@ -55,8 +54,6 @@ interface ProductConfigurationGatewayInterface
      * - Configurator groups
      * - Configurator options
      *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Configurator\Group[]
      */

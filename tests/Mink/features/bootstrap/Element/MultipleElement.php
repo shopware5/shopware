@@ -43,9 +43,6 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
 
     /**
      * Constructor
-     *
-     * @param Session $session
-     * @param Factory $factory
      */
     public function __construct(Session $session, Factory $factory)
     {
@@ -92,7 +89,6 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     /**
      * Have to be called after get the MultipleElement to find all its siblings
      *
-     * @param \Behat\Mink\Element\Element $parent
      *
      * @return $this
      */

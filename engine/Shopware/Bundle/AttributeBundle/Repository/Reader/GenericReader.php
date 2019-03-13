@@ -47,8 +47,7 @@ class GenericReader implements ReaderInterface
     /**
      * GenericReader constructor.
      *
-     * @param string       $entity
-     * @param ModelManager $entityManager
+     * @param string $entity
      */
     public function __construct($entity, ModelManager $entityManager)
     {

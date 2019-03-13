@@ -692,8 +692,6 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     }
 
     /**
-     * @param Shop $shop
-     *
      * @return array
      */
     private function getDefaultMailContext(Shop $shop)

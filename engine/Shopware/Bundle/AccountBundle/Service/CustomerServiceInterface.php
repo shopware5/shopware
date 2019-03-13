@@ -31,8 +31,5 @@ use Shopware\Models\Customer\Customer;
  */
 interface CustomerServiceInterface
 {
-    /**
-     * @param Customer $customer
-     */
     public function update(Customer $customer);
 }

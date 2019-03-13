@@ -31,9 +31,6 @@ interface SitemapWriterInterface
     const SITEMAP_URL_LIMIT = 49999;
 
     /**
-     * @param Shop  $shop
-     * @param array $urls
-     *
      * @return bool
      */
     public function writeFile(Shop $shop, array $urls = []);

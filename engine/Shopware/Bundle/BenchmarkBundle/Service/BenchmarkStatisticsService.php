@@ -52,11 +52,6 @@ class BenchmarkStatisticsService
     private $biService;
 
     /**
-     * @param BenchmarkRepository         $benchmarkRepository
-     * @param StatisticsService           $statistics
-     * @param BusinessIntelligenceService $biService
-     * @param DateInterval|null           $interval
-     *
      * @throws \Exception
      */
     public function __construct(

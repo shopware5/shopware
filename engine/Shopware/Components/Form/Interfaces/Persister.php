@@ -34,7 +34,6 @@ interface Persister
     /**
      * Saves the given container to the database, files or wherever.
      *
-     * @param Form\Interfaces\Container      $container
      * @param \Shopware\Models\Shop\Template $reference
      */
     public function save(Form\Interfaces\Container $container, $reference);

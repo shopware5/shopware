@@ -99,8 +99,7 @@ class TagReplaceTraitTest extends TestCase
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param array[]          $services
+     * @param array[] $services
      */
     private function registerServices(ContainerBuilder $container, array $services)
     {

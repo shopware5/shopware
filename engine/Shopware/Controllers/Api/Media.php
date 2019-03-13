@@ -130,8 +130,6 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
     }
 
     /**
-     * @param array $params
-     *
      * @throws ApiException\CustomValidationException
      * @throws Exception
      *
@@ -175,7 +173,6 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
     /**
      * Use the ID of the authenticated user as a fallback 'userId'
      *
-     * @param array $params
      *
      * @return array
      */

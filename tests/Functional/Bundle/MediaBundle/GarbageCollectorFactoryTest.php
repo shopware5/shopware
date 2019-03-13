@@ -48,8 +48,6 @@ class GarbageCollectorFactoryTest extends TestCase
     }
 
     /**
-     * @param GarbageCollector $collector
-     *
      * @return \Shopware\Bundle\MediaBundle\Struct\MediaPosition[]
      */
     private function getMediaPositionsFromGarbageCollector(GarbageCollector $collector)

@@ -69,11 +69,6 @@ class Attachment extends File
      */
     protected $mail;
 
-    /**
-     * @param \Shopware\Models\Mail\Mail      $mail
-     * @param \Shopware\Models\Media\Media    $media
-     * @param \Shopware\Models\Shop\Shop|null $shop
-     */
     public function __construct(\Shopware\Models\Mail\Mail $mail, \Shopware\Models\Media\Media $media, \Shopware\Models\Shop\Shop $shop = null)
     {
         $this->mail = $mail;
@@ -117,9 +112,6 @@ class Attachment extends File
         return null;
     }
 
-    /**
-     * @param \Shopware\Models\Shop\Shop $shop
-     */
     public function setShop(\Shopware\Models\Shop\Shop $shop)
     {
         $this->shop = $shop;

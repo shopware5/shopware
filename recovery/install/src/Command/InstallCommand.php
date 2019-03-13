@@ -197,9 +197,6 @@ class InstallCommand extends Command
     }
 
     /**
-     * @param Container $container
-     * @param Shop      $shop
-     *
      * @return bool
      */
     protected function webserverCheck(Container $container, Shop $shop)
@@ -238,7 +235,6 @@ class InstallCommand extends Command
 
     /**
      * @param string[] $locales
-     * @param null     $default
      *
      * @return string
      */
@@ -253,9 +249,6 @@ class InstallCommand extends Command
     }
 
     /**
-     * @param InputInterface $input
-     * @param AdminUser      $adminUser
-     *
      * @return AdminUser
      */
     protected function getAdminInfoFromArgs(InputInterface $input, AdminUser $adminUser)
@@ -274,8 +267,6 @@ class InstallCommand extends Command
     }
 
     /**
-     * @param AdminUser $adminUser
-     *
      * @return AdminUser
      */
     protected function getAdminInfoFromInteractiveShell(AdminUser $adminUser)
@@ -310,8 +301,6 @@ class InstallCommand extends Command
     }
 
     /**
-     * @param Shop $shop
-     *
      * @return Shop
      */
     protected function getShopInfoFromInteractiveShell(Shop $shop)
@@ -341,9 +330,6 @@ class InstallCommand extends Command
     }
 
     /**
-     * @param InputInterface $input
-     * @param Shop           $shop
-     *
      * @return Shop
      */
     protected function getShopInfoFromArgs(InputInterface $input, Shop $shop)
@@ -363,9 +349,6 @@ class InstallCommand extends Command
     }
 
     /**
-     * @param DatabaseConnectionInformation $connectionInfo
-     * @param Container                     $container
-     *
      * @return \PDO
      */
     protected function initDatabaseConnection(DatabaseConnectionInformation $connectionInfo, Container $container)
@@ -395,9 +378,6 @@ class InstallCommand extends Command
     }
 
     /**
-     * @param IOHelper                      $IOHelper
-     * @param DatabaseConnectionInformation $connectionInfo
-     *
      * @return DatabaseConnectionInformation
      */
     protected function getConnectionInfoFromInteractiveShell(
@@ -468,8 +448,7 @@ class InstallCommand extends Command
     }
 
     /**
-     * @param string                        $configPath
-     * @param DatabaseConnectionInformation $connectionInfo
+     * @param string $configPath
      *
      * @return DatabaseConnectionInformation
      */
@@ -489,9 +468,6 @@ class InstallCommand extends Command
     }
 
     /**
-     * @param InputInterface                $input
-     * @param DatabaseConnectionInformation $connectionInfo
-     *
      * @return DatabaseConnectionInformation
      */
     protected function getConnectionInfoFromArgs(InputInterface $input, DatabaseConnectionInformation $connectionInfo)
@@ -717,10 +693,6 @@ EOT;
         $this->dumpProgress($conn, $dump);
     }
 
-    /**
-     * @param \PDO         $conn
-     * @param DumpIterator $dump
-     */
     private function dumpProgress(\PDO $conn, DumpIterator $dump)
     {
         $totalCount = $dump->count();
@@ -739,11 +711,6 @@ EOT;
         $this->IOHelper->writeln('');
     }
 
-    /**
-     * @param Shop                 $shop
-     * @param LicenseUnpackService $licenseService
-     * @param LicenseInstaller     $licenseInstaller
-     */
     private function askShopwareEdition(
         Shop $shop,
         LicenseUnpackService $licenseService,

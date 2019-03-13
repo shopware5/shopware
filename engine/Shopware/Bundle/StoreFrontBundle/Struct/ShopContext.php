@@ -93,15 +93,8 @@ class ShopContext extends Extendable implements ShopContextInterface, ProductCon
 
     /**
      * @param string       $baseUrl
-     * @param Shop         $shop
-     * @param Currency     $currency
-     * @param Group        $currentCustomerGroup
-     * @param Group        $fallbackCustomerGroup
      * @param Tax[]        $taxRules
      * @param PriceGroup[] $priceGroups
-     * @param Area|null    $area
-     * @param Country|null $country
-     * @param State|null   $state
      * @param int[]        $customerStreamIds
      */
     public function __construct(

@@ -297,9 +297,6 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         return $query->execute()->fetchAll(PDO::FETCH_COLUMN);
     }
 
-    /**
-     * @param ProductSearchResult $result
-     */
     private function setSearchResultResponse(ProductSearchResult $result)
     {
         $body = [
@@ -446,8 +443,6 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @param ProductSearchResult $result
-     *
      * @return string
      */
     private function fetchListing(ProductSearchResult $result)
@@ -486,8 +481,6 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @param ProductSearchResult $result
-     *
      * @return string
      */
     private function fetchPagination(ProductSearchResult $result)
@@ -516,8 +509,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @param ProductSearchResult $result
-     * @param int|null            $categoryId
+     * @param int|null $categoryId
      *
      * @return array
      */

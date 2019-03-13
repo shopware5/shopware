@@ -170,9 +170,8 @@ class StoreDownloadCommand extends StoreCommand
     }
 
     /**
-     * @param PluginStruct $plugin
-     * @param string       $domain
-     * @param string       $version
+     * @param string $domain
+     * @param string $version
      *
      * @throws \Exception
      */
@@ -198,9 +197,8 @@ class StoreDownloadCommand extends StoreCommand
     }
 
     /**
-     * @param PluginStruct $plugin
-     * @param string       $version
-     * @param string       $domain
+     * @param string $version
+     * @param string $domain
      *
      * @throws \Exception
      */
@@ -214,7 +212,6 @@ class StoreDownloadCommand extends StoreCommand
     }
 
     /**
-     * @param PluginStruct      $plugin
      * @param string            $domain
      * @param string            $version
      * @param AccessTokenStruct $token
@@ -243,7 +240,6 @@ class StoreDownloadCommand extends StoreCommand
     }
 
     /**
-     * @param PluginStruct      $plugin
      * @param string            $domain
      * @param string            $version
      * @param AccessTokenStruct $token

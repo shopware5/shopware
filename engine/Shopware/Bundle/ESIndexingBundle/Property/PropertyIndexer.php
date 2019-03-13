@@ -50,11 +50,6 @@ class PropertyIndexer implements DataIndexerInterface
      */
     private $queryFactory;
 
-    /**
-     * @param Client                    $client
-     * @param PropertyQueryFactory      $queryFactory
-     * @param PropertyProviderInterface $provider
-     */
     public function __construct(
         Client $client,
         PropertyQueryFactory $queryFactory,
@@ -65,10 +60,6 @@ class PropertyIndexer implements DataIndexerInterface
         $this->queryFactory = $queryFactory;
     }
 
-    /**
-     * @param ShopIndex               $index
-     * @param ProgressHelperInterface $progress
-     */
     public function populate(ShopIndex $index, ProgressHelperInterface $progress)
     {
         $query = $this->queryFactory->createQuery(100);
@@ -82,8 +73,7 @@ class PropertyIndexer implements DataIndexerInterface
     }
 
     /**
-     * @param ShopIndex $index
-     * @param int[]     $groupIds
+     * @param int[] $groupIds
      */
     public function indexProperties(ShopIndex $index, $groupIds)
     {

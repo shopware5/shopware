@@ -34,8 +34,6 @@ use Shopware\Components\DependencyInjection\Container;
 class TemplateMail
 {
     /**
-     * @param Container $container
-     *
      * @return \Shopware_Components_TemplateMail
      */
     public function factory(Container $container)

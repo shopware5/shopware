@@ -64,10 +64,6 @@ class ListingPriceSwitcher
         $this->variantHelper->joinPrices($query, $context, $criteria);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     private function joinCheapestProductPrice(QueryBuilder $query, ShopContextInterface $context)
     {
         $table = $this->listingPriceTable->get($context);

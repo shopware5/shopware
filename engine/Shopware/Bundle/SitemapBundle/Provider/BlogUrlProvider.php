@@ -57,11 +57,6 @@ class BlogUrlProvider implements UrlProviderInterface
      */
     private $allExported = false;
 
-    /**
-     * @param ModelManager            $modelManager
-     * @param Routing\RouterInterface $router
-     * @param Translation             $translation
-     */
     public function __construct(ModelManager $modelManager, Routing\RouterInterface $router, Translation $translation)
     {
         $this->modelManager = $modelManager;
@@ -150,9 +145,6 @@ class BlogUrlProvider implements UrlProviderInterface
     }
 
     /**
-     * @param array                $ids
-     * @param ShopContextInterface $shopContext
-     *
      * @return array
      */
     private function fetchTranslations(array $ids, ShopContextInterface $shopContext)

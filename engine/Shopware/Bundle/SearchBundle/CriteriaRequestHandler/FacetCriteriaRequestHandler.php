@@ -53,11 +53,6 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private $connection;
 
-    /**
-     * @param \Shopware_Components_Config $config
-     * @param CustomFacetServiceInterface $facetService
-     * @param Connection                  $connection
-     */
     public function __construct(
         \Shopware_Components_Config $config,
         CustomFacetServiceInterface $facetService,
@@ -105,8 +100,6 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     }
 
     /**
-     * @param Request $request
-     *
      * @return bool
      */
     private function isCategoryListing(Request $request)
@@ -115,8 +108,6 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     }
 
     /**
-     * @param Request $request
-     *
      * @return bool
      */
     private function isSearchPage(Request $request)
@@ -126,11 +117,6 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         return array_key_exists('sSearch', $params);
     }
 
-    /**
-     * @param Request               $request
-     * @param Criteria              $criteria
-     * @param ProductAttributeFacet $facet
-     */
     private function handleProductAttributeFacet(
         Request $request,
         Criteria $criteria,
@@ -200,11 +186,6 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         }
     }
 
-    /**
-     * @param Request                $request
-     * @param Criteria               $criteria
-     * @param CombinedConditionFacet $facet
-     */
     private function handleCombinedConditionFacet(
         Request $request,
         Criteria $criteria,
@@ -221,9 +202,6 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     }
 
     /**
-     * @param ProductAttributeFacet $facet
-     * @param Request               $request
-     *
      * @return bool
      */
     private function isAttributeInRequest(ProductAttributeFacet $facet, Request $request)

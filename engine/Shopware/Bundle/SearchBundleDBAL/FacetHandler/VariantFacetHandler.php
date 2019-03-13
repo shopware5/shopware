@@ -65,12 +65,6 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
      */
     private $gateway;
 
-    /**
-     * @param ConfiguratorOptionsGatewayInterface $gateway
-     * @param QueryBuilderFactoryInterface        $queryBuilderFactory
-     * @param QueryAliasMapper                    $queryAliasMapper
-     * @param PriceHelperInterface                $helper
-     */
     public function __construct(
         ConfiguratorOptionsGatewayInterface $gateway,
         QueryBuilderFactoryInterface $queryBuilderFactory,
@@ -96,9 +90,6 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param FacetInterface|VariantFacet $facet
-     * @param Criteria                    $reverted
-     * @param Criteria                    $criteria
-     * @param ShopContextInterface        $context
      *
      * @return FacetResultInterface|null
      */
@@ -122,10 +113,6 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param ShopContextInterface $context
-     * @param Criteria             $queryCriteria
-     * @param VariantFacet         $facet
-     *
      * @return Group[]|null
      */
     protected function getOptions(ShopContextInterface $context, Criteria $queryCriteria, VariantFacet $facet)
@@ -147,10 +134,6 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * Modifies the query reading products from the database to reflect the selected options
-     *
-     * @param Criteria     $criteria
-     * @param QueryBuilder $query
-     * @param VariantFacet $facet
      */
     private function rebuildQuery(Criteria $criteria, QueryBuilder $query, VariantFacet $facet)
     {
@@ -176,8 +159,6 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param Criteria $criteria
-     *
      * @return array
      */
     private function getFilteredValues(Criteria $criteria)
@@ -195,9 +176,8 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param VariantFacet $facet
-     * @param Group[]      $groups
-     * @param int[]        $actives
+     * @param Group[] $groups
+     * @param int[]   $actives
      *
      * @return FacetResultGroup|FacetResultInterface
      */

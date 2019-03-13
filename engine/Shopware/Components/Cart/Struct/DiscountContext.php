@@ -244,9 +244,6 @@ class DiscountContext extends Extendable
         return $this->price;
     }
 
-    /**
-     * @param Price $price
-     */
     public function setPrice(Price $price)
     {
         $this->price = $price;

@@ -58,8 +58,6 @@ class EnlightRequestHandler implements RequestHandlerInterface
     }
 
     /**
-     * @param mixed $data
-     *
      * @return bool
      */
     public function isFileUpload($data)
@@ -70,7 +68,6 @@ class EnlightRequestHandler implements RequestHandlerInterface
     /**
      * remove shopware GET parameters from the request
      *
-     * @param array $data
      *
      * @return array
      */
@@ -82,10 +79,9 @@ class EnlightRequestHandler implements RequestHandlerInterface
     }
 
     /**
-     * @param string                              $name
-     * @param string                              $method
-     * @param \Enlight_Controller_Request_Request $request
-     * @param array|null                          $defaultValue
+     * @param string     $name
+     * @param string     $method
+     * @param array|null $defaultValue
      *
      * @return array|bool
      */
@@ -107,8 +103,6 @@ class EnlightRequestHandler implements RequestHandlerInterface
     /**
      * Checks if the form has at least one field present
      *
-     * @param FormInterface $form
-     * @param array         $data
      *
      * @return bool
      */
@@ -120,8 +114,7 @@ class EnlightRequestHandler implements RequestHandlerInterface
     /**
      * Gather data from request query strings based on the form name
      *
-     * @param \Enlight_Controller_Request_Request $request
-     * @param string                              $name
+     * @param string $name
      *
      * @return bool|array
      */
@@ -145,9 +138,8 @@ class EnlightRequestHandler implements RequestHandlerInterface
     /**
      * Gather data from request body based on the form name
      *
-     * @param \Enlight_Controller_Request_Request $request
-     * @param string                              $name
-     * @param array|null                          $defaultValue
+     * @param string     $name
+     * @param array|null $defaultValue
      *
      * @return array|bool
      */

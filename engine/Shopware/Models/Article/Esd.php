@@ -196,9 +196,6 @@ class Esd extends ModelEntity
         return $this->article;
     }
 
-    /**
-     * @param \Shopware\Models\Article\Detail $articleDetail
-     */
     public function setArticleDetail(\Shopware\Models\Article\Detail $articleDetail)
     {
         $this->articleDetail = $articleDetail;

@@ -55,10 +55,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     private $rootDir;
 
     /**
-     * @param ModelManager                $modelManager
-     * @param \Enlight_Event_EventManager $eventManager
-     * @param IteratorAggregate           $componentHandlers
-     * @param string                      $rootDir
+     * @param string $rootDir
      */
     public function __construct(ModelManager $modelManager, \Enlight_Event_EventManager $eventManager, IteratorAggregate $componentHandlers, $rootDir)
     {
@@ -155,9 +152,6 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     }
 
     /**
-     * @param Preset $preset
-     * @param array  $element
-     *
      * @throws PresetAssetImportException
      */
     private function synchronizeData(Preset $preset, array $element)
@@ -179,7 +173,6 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     }
 
     /**
-     * @param array  $presetData
      * @param string $elementSyncKey
      *
      * @return array
@@ -196,8 +189,6 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     }
 
     /**
-     * @param array $defaultComponentHandlers
-     *
      * @return array
      */
     private function registerComponentHandlers(array $defaultComponentHandlers)
@@ -212,8 +203,6 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     }
 
     /**
-     * @param array $element
-     *
      * @return ComponentHandlerInterface|bool
      */
     private function findComponentHandler(array $element)
@@ -235,8 +224,6 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
 
     /**
      * Sets paths for assets coming from plugins which use relative paths.
-     *
-     * @param ParameterBag $syncData
      */
     private function setAssetPaths(ParameterBag $syncData)
     {

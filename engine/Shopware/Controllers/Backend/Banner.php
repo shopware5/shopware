@@ -165,8 +165,6 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
 
     /**
      * Universal Method to save a Banner model. If there is an id provided the model with that id will be updated.
-     *
-     * @return mixed
      */
     public function saveBanner()
     {

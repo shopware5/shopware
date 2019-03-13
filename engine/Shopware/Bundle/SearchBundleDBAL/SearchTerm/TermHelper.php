@@ -111,7 +111,6 @@ class TermHelper implements TermHelperInterface
     /**
      * Filter out bad keywords before starting search
      *
-     * @param array $words
      *
      * @return array|bool
      */

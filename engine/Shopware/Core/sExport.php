@@ -1254,8 +1254,6 @@ class sExport
     /**
      * @param int|string|null $dispatch
      * @param int|string|null $country
-     *
-     * @return mixed
      */
     public function sGetDispatch($dispatch = null, $country = null)
     {
@@ -1424,7 +1422,6 @@ class sExport
      * @param array  $article
      * @param string $payment
      * @param string $country
-     * @param null   $dispatch
      *
      * @return bool|float
      */
@@ -1777,8 +1774,6 @@ class sExport
 
     /**
      * @param int|string $id
-     *
-     * @return mixed
      */
     private function getShopData($id)
     {

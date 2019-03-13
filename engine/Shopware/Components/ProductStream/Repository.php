@@ -43,10 +43,6 @@ class Repository implements RepositoryInterface
      */
     private $reflector;
 
-    /**
-     * @param Connection               $conn
-     * @param LogawareReflectionHelper $reflector
-     */
     public function __construct(Connection $conn, LogawareReflectionHelper $reflector)
     {
         $this->conn = $conn;
@@ -54,8 +50,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @param Criteria $criteria
-     * @param int      $productStreamId
+     * @param int $productStreamId
      */
     public function prepareCriteria(Criteria $criteria, $productStreamId)
     {
@@ -84,10 +79,6 @@ class Repository implements RepositoryInterface
         return $this->reflector->unserialize($serializedConditions, 'Serialization error in Product stream');
     }
 
-    /**
-     * @param array    $productStream
-     * @param Criteria $criteria
-     */
     private function prepareConditionStream(array $productStream, Criteria $criteria)
     {
         $this->assignConditions($productStream, $criteria);
@@ -98,10 +89,6 @@ class Repository implements RepositoryInterface
         }
     }
 
-    /**
-     * @param array    $productStream
-     * @param Criteria $criteria
-     */
     private function prepareSelectionStream(array $productStream, Criteria $criteria)
     {
         $productIds = $this->getProductIds($productStream['id']);
@@ -149,10 +136,6 @@ class Repository implements RepositoryInterface
         return $row;
     }
 
-    /**
-     * @param array    $productStream
-     * @param Criteria $criteria
-     */
     private function assignSortings(array $productStream, Criteria $criteria)
     {
         $sorting = $productStream['sorting'];
@@ -169,10 +152,6 @@ class Repository implements RepositoryInterface
         }
     }
 
-    /**
-     * @param array    $productStream
-     * @param Criteria $criteria
-     */
     private function assignConditions(array $productStream, Criteria $criteria)
     {
         $serializedConditions = json_decode($productStream['conditions'], true);

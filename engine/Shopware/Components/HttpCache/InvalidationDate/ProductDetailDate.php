@@ -47,9 +47,7 @@ class ProductDetailDate implements InvalidationDateInterface
     private $front;
 
     /**
-     * @param Connection                $connection
-     * @param \Enlight_Controller_Front $front
-     * @param string                    $route
+     * @param string $route
      */
     public function __construct(Connection $connection, \Enlight_Controller_Front $front, $route = 'frontend/detail/index')
     {

@@ -48,10 +48,6 @@ class MySQLVersionCheck implements CheckInterface
      */
     private $namespace;
 
-    /**
-     * @param Connection       $connection
-     * @param SnippetNamespace $namespace
-     */
     public function __construct(Connection $connection, SnippetNamespace $namespace)
     {
         $this->connection = $connection;

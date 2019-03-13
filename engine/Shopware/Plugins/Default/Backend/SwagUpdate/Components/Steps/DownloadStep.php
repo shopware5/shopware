@@ -45,8 +45,7 @@ class DownloadStep
     private $destination;
 
     /**
-     * @param Version $version
-     * @param string  $destination
+     * @param string $destination
      */
     public function __construct(Version $version, $destination)
     {

@@ -29,8 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface EmotionElementServiceInterface
 {
     /**
-     * @param int[]                $emotionIds
-     * @param ShopContextInterface $context
+     * @param int[] $emotionIds
      *
      * @return array Contains sub-arrays with elements indexed by emotion id
      */

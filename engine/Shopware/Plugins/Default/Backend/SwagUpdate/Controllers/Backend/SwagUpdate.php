@@ -559,8 +559,6 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     }
 
     /**
-     * @param Version $version
-     *
      * @return string path to update file
      */
     private function createDestinationFromVersion(Version $version)
@@ -585,8 +583,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     }
 
     /**
-     * @param Version $version
-     * @param array   $languages
+     * @param array $languages
      *
      * @return string
      */
@@ -602,8 +599,6 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     }
 
     /**
-     * @param stdClass $user
-     *
      * @return string
      */
     private function getUserLanguage(stdClass $user)

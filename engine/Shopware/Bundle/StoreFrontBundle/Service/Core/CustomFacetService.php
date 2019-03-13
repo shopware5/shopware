@@ -35,9 +35,6 @@ class CustomFacetService implements CustomFacetServiceInterface
      */
     private $gateway;
 
-    /**
-     * @param CustomFacetGatewayInterface $gateway
-     */
     public function __construct(CustomFacetGatewayInterface $gateway)
     {
         $this->gateway = $gateway;

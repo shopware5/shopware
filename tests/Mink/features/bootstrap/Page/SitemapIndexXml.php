@@ -35,8 +35,6 @@ class SitemapIndexXml extends Page
     protected $path = '/sitemap_index.xml';
 
     /**
-     * @param array $links
-     *
      * @throws \Exception
      */
     public function checkXml(array $links)

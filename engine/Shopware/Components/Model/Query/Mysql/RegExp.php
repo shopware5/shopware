@@ -41,8 +41,6 @@ class RegExp extends FunctionNode
 
     /**
      * Parse
-     *
-     * @param Parser $parser
      */
     public function parse(Parser $parser)
     {
@@ -57,7 +55,6 @@ class RegExp extends FunctionNode
     /**
      * Return SQL expression
      *
-     * @param SqlWalker $sqlWalker
      *
      * @return string
      */

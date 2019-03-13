@@ -62,10 +62,6 @@ class MediaService implements Service\MediaServiceInterface
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface $mediaGateway
-     * @param Gateway\ProductMediaGatewayInterface                            $productMedia
-     * @param Gateway\VariantMediaGatewayInterface                            $variantMedia
-     * @param \Shopware_Components_Config                                     $shopwareConfig
-     * @param Service\VariantCoverServiceInterface                            $variantCoverService
      */
     public function __construct(
         Gateway\MediaGatewayInterface $mediaGateway,
@@ -82,8 +78,7 @@ class MediaService implements Service\MediaServiceInterface
     }
 
     /**
-     * @param int                         $id
-     * @param Struct\ShopContextInterface $context
+     * @param int $id
      *
      * @return Struct\Media
      */
@@ -93,8 +88,7 @@ class MediaService implements Service\MediaServiceInterface
     }
 
     /**
-     * @param int[]                       $ids
-     * @param Struct\ShopContextInterface $context
+     * @param int[] $ids
      *
      * @return Struct\Media[] Indexed by the media id
      */

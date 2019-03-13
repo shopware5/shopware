@@ -64,11 +64,6 @@ class Configuration extends BaseConfiguration
     protected $release;
 
     /**
-     * @param array                 $options
-     * @param \Zend_Cache_Core      $cache
-     * @param RepositoryFactory     $repositoryFactory
-     * @param ShopwareReleaseStruct $release
-     *
      * @throws \Exception
      * @throws \RuntimeException
      * @throws \Doctrine\ORM\ORMException
@@ -115,8 +110,6 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @param CacheProvider $cache
-     *
      * @return Configuration
      */
     public function setCache(CacheProvider $cache)
@@ -151,8 +144,6 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @param array $options
-     *
      * @throws \Exception
      */
     public function setCacheProvider(array $options)
@@ -177,9 +168,6 @@ class Configuration extends BaseConfiguration
         }
     }
 
-    /**
-     * @param \Zend_Cache_Core $cacheResource
-     */
     public function setCacheResource(\Zend_Cache_Core $cacheResource)
     {
         $cache = new Cache($cacheResource, 'Shopware_Models_' . $this->release->getRevision() . '_', ['Shopware_Models']);
@@ -256,8 +244,6 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @param array $options
-     *
      * @return RedisCache
      */
     private function createRedisCacheProvider(array $options)
@@ -288,8 +274,6 @@ class Configuration extends BaseConfiguration
      * @param string $provider
      *
      * @throws \Exception
-     *
-     * @return mixed
      */
     private function createDefaultProvider($provider)
     {

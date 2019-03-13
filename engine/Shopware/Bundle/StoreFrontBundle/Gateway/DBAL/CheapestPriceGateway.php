@@ -68,12 +68,6 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
      */
     private $connection;
 
-    /**
-     * @param Connection                  $connection
-     * @param FieldHelper                 $fieldHelper
-     * @param Hydrator\PriceHydrator      $priceHydrator
-     * @param \Shopware_Components_Config $config
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
@@ -147,8 +141,7 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
     /**
      * Pre selection of the cheapest prices ids.
      *
-     * @param Struct\BaseProduct[]  $products
-     * @param Struct\Customer\Group $customerGroup
+     * @param Struct\BaseProduct[] $products
      *
      * @return array
      */

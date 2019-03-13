@@ -75,9 +75,6 @@ class Price extends Extendable
      */
     protected $rule;
 
-    /**
-     * @param PriceRule $rule
-     */
     public function __construct(PriceRule $rule)
     {
         $this->rule = $rule;

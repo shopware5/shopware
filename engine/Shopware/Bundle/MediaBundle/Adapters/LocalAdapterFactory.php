@@ -30,8 +30,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class LocalAdapterFactory implements AdapterFactoryInterface
 {
     /**
-     * @param array $config
-     *
      * @return Local
      */
     public function create(array $config)
@@ -60,8 +58,6 @@ class LocalAdapterFactory implements AdapterFactoryInterface
     }
 
     /**
-     * @param array $config
-     *
      * @return array
      */
     private function resolveOptions(array $config)
@@ -89,8 +85,6 @@ class LocalAdapterFactory implements AdapterFactoryInterface
     }
 
     /**
-     * @param array $permissions
-     *
      * @return array
      */
     private function resolveFilePermissions(array $permissions)
@@ -109,8 +103,6 @@ class LocalAdapterFactory implements AdapterFactoryInterface
     }
 
     /**
-     * @param array $permissions
-     *
      * @return array
      */
     private function resolveDirectoryPermissions(array $permissions)

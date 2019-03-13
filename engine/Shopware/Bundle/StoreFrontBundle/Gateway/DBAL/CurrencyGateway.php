@@ -46,11 +46,6 @@ class CurrencyGateway implements CurrencyGatewayInterface
      */
     private $connection;
 
-    /**
-     * @param CurrencyHydrator $hydrator
-     * @param FieldHelper      $fieldHelper
-     * @param Connection       $connection
-     */
     public function __construct(
         CurrencyHydrator $hydrator,
         FieldHelper $fieldHelper,

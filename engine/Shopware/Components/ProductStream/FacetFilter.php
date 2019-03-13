@@ -35,9 +35,6 @@ use Shopware\Bundle\SearchBundle\FacetResultInterface;
 
 class FacetFilter implements FacetFilterInterface
 {
-    /**
-     * @param Criteria $criteria
-     */
     public function add(Criteria $criteria)
     {
         if ($criteria->hasBaseCondition('immediate_delivery')) {
@@ -59,7 +56,6 @@ class FacetFilter implements FacetFilterInterface
 
     /**
      * @param FacetResultInterface[] $facets
-     * @param Criteria               $criteria
      *
      * @return FacetResultInterface[]
      */
@@ -78,8 +74,7 @@ class FacetFilter implements FacetFilterInterface
     }
 
     /**
-     * @param string   $class
-     * @param Criteria $criteria
+     * @param string $class
      *
      * @return CriteriaPartInterface[]
      */
@@ -114,7 +109,6 @@ class FacetFilter implements FacetFilterInterface
 
     /**
      * @param FacetResultInterface[] $facets
-     * @param Criteria               $criteria
      */
     private function switchActivePriceFilter(array $facets, Criteria $criteria)
     {
@@ -138,7 +132,6 @@ class FacetFilter implements FacetFilterInterface
 
     /**
      * @param FacetResultInterface[] $facets
-     * @param Criteria               $criteria
      */
     private function switchPriceFilterValues(array $facets, Criteria $criteria)
     {
@@ -158,7 +151,6 @@ class FacetFilter implements FacetFilterInterface
 
     /**
      * @param FacetResultInterface[] $facets
-     * @param Criteria               $criteria
      */
     private function removeStreamPropertyConditions(array $facets, Criteria $criteria)
     {
