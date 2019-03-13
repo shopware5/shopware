@@ -59,10 +59,8 @@ class LicenseCheck implements CheckInterface
     private $endpoint;
 
     /**
-     * @param Connection       $connection
-     * @param string           $endpoint
-     * @param string           $shopwareVersion
-     * @param SnippetNamespace $namespace
+     * @param string $endpoint
+     * @param string $shopwareVersion
      */
     public function __construct(Connection $connection, $endpoint, $shopwareVersion, SnippetNamespace $namespace)
     {

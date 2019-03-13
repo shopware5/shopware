@@ -61,13 +61,6 @@ class EmotionElementService implements EmotionElementServiceInterface
      */
     private $eventManager;
 
-    /**
-     * @param IteratorAggregate               $componentHandler
-     * @param EmotionElementGateway           $gateway
-     * @param EventComponentHandler           $eventComponentHandler
-     * @param DataCollectionResolverInterface $dataCollectionResolver
-     * @param \Enlight_Event_EventManager     $eventManager
-     */
     public function __construct(
         IteratorAggregate $componentHandler,
         EmotionElementGateway $gateway,
@@ -83,8 +76,7 @@ class EmotionElementService implements EmotionElementServiceInterface
     }
 
     /**
-     * @param int[]                $emotionIds
-     * @param ShopContextInterface $context
+     * @param int[] $emotionIds
      *
      * @return \Shopware\Bundle\EmotionBundle\Struct\Emotion[]
      */
@@ -97,10 +89,6 @@ class EmotionElementService implements EmotionElementServiceInterface
         return $elements;
     }
 
-    /**
-     * @param array                $elementList
-     * @param ShopContextInterface $context
-     */
     private function handleElements(array $elementList, ShopContextInterface $context)
     {
         $prepareCollection = new PrepareDataCollection();
@@ -124,22 +112,12 @@ class EmotionElementService implements EmotionElementServiceInterface
         }
     }
 
-    /**
-     * @param PrepareDataCollection $collection
-     * @param Element               $element
-     * @param ShopContextInterface  $context
-     */
     private function prepareElement(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
         $handler = $this->findElementHandler($element);
         $handler->prepare($collection, $element, $context);
     }
 
-    /**
-     * @param ResolvedDataCollection $collection
-     * @param Element                $element
-     * @param ShopContextInterface   $context
-     */
     private function handleElement(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
         $handler = $this->findElementHandler($element);
@@ -147,8 +125,6 @@ class EmotionElementService implements EmotionElementServiceInterface
     }
 
     /**
-     * @param Element $element
-     *
      * @return ComponentHandlerInterface
      */
     private function findElementHandler(Element $element)
@@ -164,8 +140,6 @@ class EmotionElementService implements EmotionElementServiceInterface
     }
 
     /**
-     * @param array $serviceComponentHandlers
-     *
      * @throws \Enlight_Event_Exception
      *
      * @return array

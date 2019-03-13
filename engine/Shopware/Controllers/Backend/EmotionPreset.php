@@ -219,8 +219,6 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
     }
 
     /**
-     * @param array $presets
-     *
      * @return array
      */
     private function enrichImagePaths(array $presets)

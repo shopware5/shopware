@@ -26,10 +26,5 @@ namespace Shopware\Bundle\BenchmarkBundle\Hydrator;
 
 interface HydratorInterface
 {
-    /**
-     * @param array $data
-     *
-     * @return mixed
-     */
     public function hydrate(array $data);
 }

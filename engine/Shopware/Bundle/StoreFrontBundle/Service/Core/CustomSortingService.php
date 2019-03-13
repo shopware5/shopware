@@ -35,9 +35,6 @@ class CustomSortingService implements CustomSortingServiceInterface
      */
     private $gateway;
 
-    /**
-     * @param CustomSortingGatewayInterface $gateway
-     */
     public function __construct(CustomSortingGatewayInterface $gateway)
     {
         $this->gateway = $gateway;

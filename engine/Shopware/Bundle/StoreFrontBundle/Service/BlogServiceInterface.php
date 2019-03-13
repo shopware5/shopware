@@ -39,8 +39,7 @@ interface BlogServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\BlogGatewayInterface::getList()
      *
-     * @param int[]                       $ids
-     * @param Struct\ShopContextInterface $context
+     * @param int[] $ids
      *
      * @return Struct\Blog\Blog[] indexed by the blog id
      */

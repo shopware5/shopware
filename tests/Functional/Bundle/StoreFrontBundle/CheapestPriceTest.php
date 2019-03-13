@@ -415,11 +415,10 @@ class CheapestPriceTest extends TestCase
      * Each variant has a price of 100,-
      * The price of the last variant (not the main variant) can be provided over $cheapestVariantPrice.
      *
-     * @param string      $number
-     * @param TestContext $context
-     * @param bool        $configurator
-     * @param array       $discounts
-     * @param float|int   $cheapestVariantPrice
+     * @param string    $number
+     * @param bool      $configurator
+     * @param array     $discounts
+     * @param float|int $cheapestVariantPrice
      *
      * @return array
      */

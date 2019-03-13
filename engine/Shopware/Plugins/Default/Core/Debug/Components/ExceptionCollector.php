@@ -48,10 +48,6 @@ class ExceptionCollector implements CollectorInterface
      */
     private $utils;
 
-    /**
-     * @param \Enlight_Event_EventManager $eventManager
-     * @param Utils                       $utils
-     */
     public function __construct(\Enlight_Event_EventManager $eventManager, Utils $utils)
     {
         $this->eventManager = $eventManager;
@@ -66,9 +62,6 @@ class ExceptionCollector implements CollectorInterface
         );
     }
 
-    /**
-     * @param \Enlight_Controller_EventArgs $args
-     */
     public function onPostDispatch(\Enlight_Controller_EventArgs $args)
     {
         $exceptions = $args->getResponse()->getException();
@@ -81,11 +74,6 @@ class ExceptionCollector implements CollectorInterface
         }
     }
 
-    /**
-     * @param Logger $log
-     *
-     * @return mixed
-     */
     public function logResults(Logger $log)
     {
         if (empty($this->exceptions)) {

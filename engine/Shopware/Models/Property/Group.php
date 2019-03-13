@@ -232,8 +232,6 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param Option $option
-     *
      * @return \Shopware\Models\Property\Group
      */
     public function removeOption(Option $option)
@@ -244,8 +242,6 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param Option $option
-     *
      * @return \Shopware\Models\Property\Group
      */
     public function addOption(Option $option)

@@ -60,11 +60,6 @@ class PriceGroupDiscountGateway implements Gateway\PriceGroupDiscountGatewayInte
      */
     private $connection;
 
-    /**
-     * @param Connection             $connection
-     * @param FieldHelper            $fieldHelper
-     * @param Hydrator\PriceHydrator $priceHydrator
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
@@ -76,9 +71,6 @@ class PriceGroupDiscountGateway implements Gateway\PriceGroupDiscountGatewayInte
     }
 
     /**
-     * @param Struct\Customer\Group       $customerGroup
-     * @param Struct\ShopContextInterface $context
-     *
      * @return array|Struct\Product\PriceGroup[]
      */
     public function getPriceGroups(

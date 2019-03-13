@@ -29,8 +29,6 @@ interface StringRendererServiceInterface
 {
     /**
      * @param string $string
-     * @param array  $viewVariables
-     * @param array  $sElement
      *
      * @return string
      */

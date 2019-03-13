@@ -204,10 +204,6 @@ class StructHydrator
         }
     }
 
-    /**
-     * @param PluginStruct $storePlugin
-     * @param PluginStruct $localPlugin
-     */
     public function assignLocalPluginStruct(PluginStruct $storePlugin, PluginStruct $localPlugin)
     {
         $storePlugin->setId($localPlugin->getId());
@@ -333,8 +329,7 @@ class StructHydrator
     }
 
     /**
-     * @param PluginStruct $plugin
-     * @param array        $data
+     * @param array $data
      */
     public function assignLocalData(PluginStruct $plugin, $data)
     {
@@ -501,8 +496,7 @@ class StructHydrator
     }
 
     /**
-     * @param PluginStruct $plugin
-     * @param array        $data
+     * @param array $data
      */
     private function assignStoreData(PluginStruct $plugin, $data)
     {

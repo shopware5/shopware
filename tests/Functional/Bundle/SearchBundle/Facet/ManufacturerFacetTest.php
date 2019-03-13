@@ -104,7 +104,6 @@ class ManufacturerFacetTest extends TestCase
 
     /**
      * @param string                             $number
-     * @param ShopContext                        $context
      * @param \Shopware\Models\Category\Category $category
      * @param Supplier                           $manufacturer
      *

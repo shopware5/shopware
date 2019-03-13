@@ -50,10 +50,7 @@ class UnpackStep
     private $isDebug;
 
     /**
-     * @param Filesystem  $localFilesyste
-     * @param Filesystem  $remoteFilesyste
-     * @param PathBuilder $pathBuilder
-     * @param bool        $isDebug
+     * @param bool $isDebug
      */
     public function __construct(Filesystem $localFilesyste, Filesystem $remoteFilesyste, PathBuilder $pathBuilder, $isDebug = false)
     {

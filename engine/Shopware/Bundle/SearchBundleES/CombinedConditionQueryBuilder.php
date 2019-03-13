@@ -38,19 +38,12 @@ class CombinedConditionQueryBuilder
      */
     private $container;
 
-    /**
-     * @param Container $container
-     */
     public function __construct(Container $container)
     {
         $this->container = $container;
     }
 
     /**
-     * @param array                $conditions
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
-     *
      * @return BoolQuery
      */
     public function build(array $conditions, Criteria $criteria, ShopContextInterface $context)
@@ -83,8 +76,6 @@ class CombinedConditionQueryBuilder
     }
 
     /**
-     * @param CriteriaPartInterface $condition
-     *
      * @return PartialConditionHandlerInterface|HandlerInterface
      */
     private function getHandler(CriteriaPartInterface $condition)

@@ -43,10 +43,6 @@ class CategoryProvider implements UrlProviderInterface
      */
     protected $router;
 
-    /**
-     * @param Connection      $connection
-     * @param RouterInterface $router
-     */
     public function __construct(Connection $connection, RouterInterface $router)
     {
         $this->connection = $connection;

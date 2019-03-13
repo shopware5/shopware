@@ -47,9 +47,6 @@ class EsClientLogger extends Client
 
     /**
      * EsClient constructor.
-     *
-     * @param Client          $client
-     * @param LoggerInterface $logger
      */
     public function __construct(Client $client, LoggerInterface $logger, EvaluationHelperInterface $evaluation)
     {
@@ -451,8 +448,6 @@ class EsClientLogger extends Client
 
     /**
      * @param string $method
-     * @param array  $result
-     * @param array  $request
      */
     protected function handleResult($method, array $result = [], array $request = [])
     {

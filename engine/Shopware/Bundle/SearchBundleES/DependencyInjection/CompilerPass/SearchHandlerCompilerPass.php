@@ -32,9 +32,6 @@ class SearchHandlerCompilerPass implements CompilerPassInterface
 {
     use TagReplaceTrait;
 
-    /**
-     * @param ContainerBuilder $container
-     */
     public function process(ContainerBuilder $container)
     {
         $this->replaceArgumentWithTaggedServices($container, 'shopware_search_es.product_number_search_factory', 'shopware_search_es.search_handler', 0);

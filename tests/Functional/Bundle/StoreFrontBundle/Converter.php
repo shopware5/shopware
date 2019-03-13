@@ -30,8 +30,6 @@ use Shopware\Models;
 class Converter
 {
     /**
-     * @param Models\Tax\Tax $tax
-     *
      * @return Struct\Tax
      */
     public function convertTax(Models\Tax\Tax $tax)
@@ -45,8 +43,6 @@ class Converter
     }
 
     /**
-     * @param Models\Price\Group $entity
-     *
      * @return Struct\Product\PriceGroup
      */
     public function convertPriceGroup(Models\Price\Group $entity)
@@ -144,8 +140,6 @@ class Converter
     }
 
     /**
-     * @param Models\Customer\Group $group
-     *
      * @return Struct\Customer\Group
      */
     public function convertCustomerGroup(Models\Customer\Group $group)

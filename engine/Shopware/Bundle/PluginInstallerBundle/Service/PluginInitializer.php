@@ -46,7 +46,6 @@ class PluginInitializer
     private $activePlugins = [];
 
     /**
-     * @param PDO             $connection
      * @param string|string[] $pluginDirectories
      */
     public function __construct(PDO $connection, $pluginDirectories)

@@ -55,11 +55,6 @@ class ShopIndexerFactory
      */
     private $settings;
 
-    /**
-     * @param IteratorAggregate $indexer
-     * @param IteratorAggregate $mappings
-     * @param IteratorAggregate $settings
-     */
     public function __construct(IteratorAggregate $indexer, IteratorAggregate $mappings, IteratorAggregate $settings)
     {
         $this->indexer = iterator_to_array($indexer, false);
@@ -68,8 +63,6 @@ class ShopIndexerFactory
     }
 
     /**
-     * @param ContainerInterface $container
-     *
      * @throws \Exception
      *
      * @return ShopIndexerInterface

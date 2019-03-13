@@ -32,11 +32,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  */
 interface CriteriaRequestHandlerInterface
 {
-    /**
-     * @param Request              $request
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
-     */
     public function handleRequest(
         Request $request,
         Criteria $criteria,

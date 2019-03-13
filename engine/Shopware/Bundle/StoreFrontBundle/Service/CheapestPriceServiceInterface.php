@@ -38,8 +38,7 @@ interface CheapestPriceServiceInterface
     /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\Core\CheapestPriceServiceInterface::get()
      *
-     * @param ListProduct[]           $products
-     * @param ProductContextInterface $context
+     * @param ListProduct[] $products
      *
      * @return PriceRule[] Indexed by product number
      */
@@ -55,9 +54,6 @@ interface CheapestPriceServiceInterface
      * please refer to the linked classes.
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CheapestPriceGatewayInterface::get()
-     *
-     * @param ListProduct             $product
-     * @param ProductContextInterface $context
      *
      * @return PriceRule
      */

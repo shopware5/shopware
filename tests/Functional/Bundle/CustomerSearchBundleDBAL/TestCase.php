@@ -68,7 +68,6 @@ class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param Criteria $criteria
      * @param array[]  $customers
      * @param string[] $expectedNumbers
      *
@@ -190,7 +189,6 @@ class TestCase extends \Enlight_Components_Test_TestCase
 
     /**
      * @param string $table
-     * @param array  $data
      *
      * @return string
      */

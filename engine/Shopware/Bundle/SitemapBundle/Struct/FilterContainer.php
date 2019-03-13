@@ -38,7 +38,6 @@ class FilterContainer
 
     /**
      * @param string $resourceName
-     * @param array  $filters
      */
     public function __construct($resourceName, array $filters)
     {

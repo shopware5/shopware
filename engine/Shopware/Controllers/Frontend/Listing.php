@@ -245,9 +245,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @param string               $categoryId
-     * @param ShopContextInterface $context
-     * @param string               $streamId
+     * @param string $categoryId
+     * @param string $streamId
      *
      * @return bool
      */
@@ -334,7 +333,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      * Result can be merged with "sCategoryContent" to override relevant seo category data with
      * manufacturer data.
      *
-     * @param Manufacturer $manufacturer
      *
      * @return array
      */
@@ -406,7 +404,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     /**
      * Determines if the product listing has to be loaded/shown at all
      *
-     * @param array $emotions
      *
      * @return bool
      */
@@ -429,7 +426,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     /**
      * Filters the device types down to which have to show the product listing
      *
-     * @param array $emotions
      *
      * @return int[]
      */
@@ -509,8 +505,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @param int   $categoryId
-     * @param array $categoryContent
+     * @param int $categoryId
      *
      * @throws \Enlight_Exception
      */

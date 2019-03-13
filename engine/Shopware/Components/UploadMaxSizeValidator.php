@@ -42,8 +42,6 @@ class UploadMaxSizeValidator implements SubscriberInterface
     }
 
     /**
-     * @param Enlight_Controller_EventArgs $args
-     *
      * @throws UploadMaxSizeException
      */
     public function validateContentLength(Enlight_Controller_EventArgs $args)
@@ -65,7 +63,6 @@ class UploadMaxSizeValidator implements SubscriberInterface
     /**
      * Returns true if the POST max size has been exceeded in the request.
      *
-     * @param Enlight_Controller_Request_Request $request
      *
      * @return bool
      */
@@ -123,8 +120,6 @@ class UploadMaxSizeValidator implements SubscriberInterface
     }
 
     /**
-     * @param Enlight_Controller_Response_Response $response
-     *
      * @return bool
      */
     private function hasUploadMaxSizeExceptions(Enlight_Controller_Response_Response $response)

@@ -117,7 +117,6 @@ class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_
     /**
      * Returns to controller path to our SwagUpdate backend controller
      *
-     * @param Enlight_Event_EventArgs $args
      *
      * @return string
      */

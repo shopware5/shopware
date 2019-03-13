@@ -69,12 +69,6 @@ class Service
      */
     private $mediaService;
 
-    /**
-     * @param ModelManager                         $entityManager
-     * @param \Shopware_Components_Snippet_Manager $snippets
-     * @param Util                                 $util
-     * @param MediaServiceInterface                $mediaService
-     */
     public function __construct(
         ModelManager $entityManager,
         \Shopware_Components_Snippet_Manager $snippets,
@@ -133,8 +127,7 @@ class Service
      * If a shop instance passed, the function selects additionally the
      * element values of the passed shop.
      *
-     * @param Shop\Template $template
-     * @param Shop\Shop     $shop
+     * @param Shop\Shop $shop
      *
      * @return array
      */
@@ -160,9 +153,8 @@ class Service
      * will also be returned.
      * If provided, only option in $optionNames will be returned
      *
-     * @param Shop\Template $template
-     * @param Shop\Shop     $shop
-     * @param array         $optionNames
+     * @param Shop\Shop $shop
+     * @param array     $optionNames
      *
      * @return array
      */
@@ -196,7 +188,6 @@ class Service
      * configuration sets of the passed template.
      * The sets are translated automatically.
      *
-     * @param Shop\Template $template
      *
      * @return array
      */
@@ -276,9 +267,6 @@ class Service
      * element name.
      * The values array can contains multiple sub shop values,
      * which identified over the shopId parameter inside the values array.
-     *
-     * @param Shop\Template $template
-     * @param array         $values
      */
     public function saveConfig(Shop\Template $template, array $values)
     {
@@ -325,8 +313,6 @@ class Service
     /**
      * Translates the theme meta data.
      *
-     * @param Shop\Template $template
-     * @param array         $data
      *
      * @return array
      */
@@ -341,8 +327,7 @@ class Service
     /**
      * Translates the passed config set data.
      *
-     * @param array                                 $set
-     * @param \Enlight_Components_Snippet_Namespace $namespace
+     * @param array $set
      *
      * @return array
      */
@@ -368,9 +353,6 @@ class Service
      * This is required because the theme configuration are copied
      * from the extended theme but the snippets are not copied.
      *
-     * @param array                                 $container
-     * @param Shop\Template                         $template
-     * @param \Enlight_Components_Snippet_Namespace $namespace
      *
      * @return array
      */
@@ -449,9 +431,7 @@ class Service
      * If a shop instance passed, the function selects additionally the
      * element values of the passed shop.
      *
-     * @param Shop\Template $template
-     * @param Shop\Shop     $shop
-     * @param null          $parentId
+     * @param Shop\Shop $shop
      *
      * @return array
      */
@@ -500,8 +480,6 @@ class Service
     /**
      * Internal helper function which translates the theme meta data.
      *
-     * @param array                                 $data
-     * @param \Enlight_Components_Snippet_Namespace $namespace
      *
      * @return array
      */
@@ -518,10 +496,7 @@ class Service
     /**
      * Helper function to translate nested arrays recursive.
      *
-     * @param string|array                          $data
-     * @param \Enlight_Components_Snippet_Namespace $namespace
-     *
-     * @return mixed
+     * @param string|array $data
      */
     private function translateRecursive($data, \Enlight_Components_Snippet_Namespace $namespace)
     {
@@ -540,10 +515,7 @@ class Service
      * Helper function to check, convert and load the translation for
      * the passed value.
      *
-     * @param string                                $snippet
-     * @param \Enlight_Components_Snippet_Namespace $namespace
-     *
-     * @return mixed
+     * @param string $snippet
      */
     private function convertSnippet($snippet, \Enlight_Components_Snippet_Namespace $namespace)
     {
@@ -589,8 +561,7 @@ class Service
      * Helper function which checks if the element name is already exists in the
      * passed collection of config elements.
      *
-     * @param Collection $collection
-     * @param string     $name
+     * @param string $name
      *
      * @return Shop\TemplateConfig\Element|null
      */
@@ -611,8 +582,7 @@ class Service
      * value collection.
      * If no shop value exist, the function creates a new value object.
      *
-     * @param Collection $collection
-     * @param int        $shopId
+     * @param int $shopId
      *
      * @return Shop\TemplateConfig\Value
      */
@@ -633,7 +603,6 @@ class Service
     /**
      * Returns the snippet namespace for the passed template.
      *
-     * @param Shop\Template $template
      *
      * @return \Enlight_Components_Snippet_Namespace
      */

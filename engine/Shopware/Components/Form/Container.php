@@ -89,8 +89,6 @@ class Container extends Base implements ContainerInterface
     }
 
     /**
-     * @param Element $element
-     *
      * @return $this
      */
     public function addElement(Element $element)

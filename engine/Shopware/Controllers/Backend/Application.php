@@ -154,8 +154,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     /**
      * Allows to set the repository property of this class.
      * The repository is used for find queries for the configured model.
-     *
-     * @param \Shopware\Components\Model\ModelRepository $repository
      */
     public function setRepository(\Shopware\Components\Model\ModelRepository $repository)
     {
@@ -165,8 +163,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     /**
      * Allows to set the manager property of this class.
      * The manager is used for each data operation with doctrine models.
-     *
-     * @param \Shopware\Components\Model\ModelManager $manager
      */
     public function setManager(\Shopware\Components\Model\ModelManager $manager)
     {
@@ -794,8 +790,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *      => 'article' => array('id' => 1, 'categories' => array($this->getManager()->find(Model, 1), $this->getManager()->find(Model, 2), ...)
      *
      * @param array $data
-     *
-     * @return mixed
      */
     protected function resolveExtJsData($data)
     {
@@ -920,8 +914,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *
      *          return $data;
      *      }
-     *
-     * @param array $data
      *
      * @return array
      */
@@ -1124,7 +1116,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * the search value.
      *
      * @param string      $value
-     * @param array       $field
      * @param string|null $expression
      *
      * @return string
@@ -1236,9 +1227,8 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * Filters the search association query by the identifier field.
      * Used for form loading if the raw value is set to the value.
      *
-     * @param string       $association
-     * @param int          $id
-     * @param QueryBuilder $builder
+     * @param string $association
+     * @param int    $id
      */
     private function addIdentifierCondition($association, $id, QueryBuilder $builder)
     {

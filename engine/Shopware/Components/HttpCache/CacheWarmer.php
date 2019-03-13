@@ -31,7 +31,6 @@ use GuzzleHttp\Pool;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\HttpClient\GuzzleFactory;
-use Shopware\Components\Logger;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing\Context;
 use Shopware\Models\Shop\Repository;
@@ -88,12 +87,6 @@ class CacheWarmer
 
     /**
      * standard constructor
-     *
-     * @param LoggerInterface            $logger
-     * @param GuzzleFactory              $guzzleFactory
-     * @param Config                     $config
-     * @param ModelManager               $modelManager
-     * @param ContainerAwareEventManager $eventManager
      */
     public function __construct(LoggerInterface $logger, GuzzleFactory $guzzleFactory, Config $config, ModelManager $modelManager, ContainerAwareEventManager $eventManager)
     {
@@ -109,7 +102,6 @@ class CacheWarmer
      * Calls every URL given with the specific context
      *
      * @param string[] $urls
-     * @param Context  $context
      * @param int      $concurrentRequests
      */
     public function warmUpUrls($urls, Context $context, $concurrentRequests = 1)

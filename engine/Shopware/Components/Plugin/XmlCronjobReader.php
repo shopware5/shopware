@@ -52,8 +52,6 @@ class XmlCronjobReader
     }
 
     /**
-     * @param \DOMDocument $xml
-     *
      * @return array|void
      */
     private function parseInfo(\DOMDocument $xml)
@@ -75,8 +73,6 @@ class XmlCronjobReader
     }
 
     /**
-     * @param \DOMElement $entry
-     *
      * @return array
      */
     private function parseEntry(\DOMElement $entry)
@@ -93,8 +89,7 @@ class XmlCronjobReader
     }
 
     /**
-     * @param \DOMNode $node
-     * @param string   $name
+     * @param string $name
      *
      * @return string|null
      */
@@ -110,8 +105,6 @@ class XmlCronjobReader
     /**
      * Get child elements by name.
      *
-     * @param \DOMNode $node
-     * @param mixed    $name
      *
      * @return \DOMElement[]
      */

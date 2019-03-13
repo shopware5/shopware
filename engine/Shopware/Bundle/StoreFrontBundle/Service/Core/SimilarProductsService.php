@@ -67,13 +67,6 @@ class SimilarProductsService implements SimilarProductsServiceInterface
      */
     private $factory;
 
-    /**
-     * @param SimilarProductsGatewayInterface    $gateway
-     * @param ListProductServiceInterface        $listProductService
-     * @param Shopware_Components_Config         $config
-     * @param ProductSearchInterface             $search
-     * @param StoreFrontCriteriaFactoryInterface $factory
-     */
     public function __construct(
         SimilarProductsGatewayInterface $gateway,
         ListProductServiceInterface $listProductService,
@@ -164,7 +157,6 @@ class SimilarProductsService implements SimilarProductsServiceInterface
 
     /**
      * @param BaseProduct[] $products
-     * @param array         $numbers
      *
      * @return BaseProduct[]
      */

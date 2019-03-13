@@ -31,9 +31,6 @@ class RequirementsPathResult
      */
     private $result;
 
-    /**
-     * @param array $result
-     */
     public function __construct(array $result)
     {
         $this->result = $result;

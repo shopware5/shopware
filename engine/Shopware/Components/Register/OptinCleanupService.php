@@ -40,10 +40,6 @@ class OptinCleanupService implements OptinCleanupServiceInterface
      */
     private $connection;
 
-    /**
-     * @param \Shopware_Components_Config $config
-     * @param Connection                  $connection
-     */
     public function __construct(\Shopware_Components_Config $config, Connection $connection)
     {
         $this->config = $config;

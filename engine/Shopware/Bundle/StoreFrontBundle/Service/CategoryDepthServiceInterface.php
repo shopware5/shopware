@@ -29,9 +29,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 interface CategoryDepthServiceInterface
 {
     /**
-     * @param Category $category
-     * @param int      $depth
-     * @param int[]    $filterIds
+     * @param int   $depth
+     * @param int[] $filterIds
      *
      * @return int[]
      */

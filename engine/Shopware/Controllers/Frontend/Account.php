@@ -745,8 +745,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     }
 
     /**
-     * @param array $orderData
-     *
      * @return array
      */
     private function applyTrackingUrl(array $orderData)

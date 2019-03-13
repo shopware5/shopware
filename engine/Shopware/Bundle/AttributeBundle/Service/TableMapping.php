@@ -46,9 +46,6 @@ class TableMapping
 
     /**
      * TableMapping constructor.
-     *
-     * @param Connection $connection
-     * @param array      $tableMapping
      */
     public function __construct(Connection $connection, array $tableMapping)
     {

@@ -79,13 +79,6 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
      */
     private $indexFactory;
 
-    /**
-     * @param QueryAliasMapper      $queryAliasMapper
-     * @param Client                $client
-     * @param Connection            $connection
-     * @param StructHydrator        $hydrator
-     * @param IndexFactoryInterface $indexFactory
-     */
     public function __construct(
         QueryAliasMapper $queryAliasMapper,
         Client $client,
@@ -274,8 +267,6 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
     }
 
     /**
-     * @param Criteria $criteria
-     *
      * @return array
      */
     private function getFilteredValues(Criteria $criteria)

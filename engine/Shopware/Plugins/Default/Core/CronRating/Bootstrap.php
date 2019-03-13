@@ -45,8 +45,6 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
     }
 
     /**
-     * @param Enlight_Components_Cron_EventArgs $job
-     *
      * @throws \Exception
      *
      * @return void|string

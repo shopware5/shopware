@@ -40,9 +40,6 @@ class ConfigWriter
      */
     private $connection;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
@@ -52,8 +49,6 @@ class ConfigWriter
      * @param string      $name
      * @param string|null $namespace
      * @param int         $shopId
-     *
-     * @return mixed
      */
     public function get($name, $namespace = null, $shopId = 1)
     {
@@ -70,7 +65,6 @@ class ConfigWriter
 
     /**
      * @param string      $name
-     * @param mixed       $value
      * @param string|null $namespace
      * @param int         $shopId
      */

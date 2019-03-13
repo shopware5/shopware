@@ -45,7 +45,6 @@ class LegacyPluginInstaller
     private $pluginDirectories;
 
     /**
-     * @param ModelManager                  $em
      * @param \Enlight_Plugin_PluginManager $plugins
      * @param array                         $pluginDirectories
      */
@@ -59,7 +58,6 @@ class LegacyPluginInstaller
     /**
      * Returns a certain plugin by plugin id.
      *
-     * @param Plugin $plugin
      *
      * @throws \RuntimeException
      *
@@ -82,8 +80,6 @@ class LegacyPluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      *
      * @return array
@@ -114,8 +110,7 @@ class LegacyPluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
-     * @param bool   $removeData
+     * @param bool $removeData
      *
      * @throws \Exception
      *
@@ -147,8 +142,6 @@ class LegacyPluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      *
      * @return array
@@ -179,8 +172,6 @@ class LegacyPluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      *
      * @return array
@@ -204,8 +195,6 @@ class LegacyPluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Doctrine\ORM\OptimisticLockException
      *
      * @return array
@@ -228,8 +217,6 @@ class LegacyPluginInstaller
     }
 
     /**
-     * @param \DateTimeInterface $refreshDate
-     *
      * @throws \Enlight_Config_Exception
      */
     public function refreshPluginList(\DateTimeInterface $refreshDate)
@@ -282,8 +269,6 @@ class LegacyPluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      *
      * @return string

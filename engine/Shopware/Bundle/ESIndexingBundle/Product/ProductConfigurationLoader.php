@@ -62,7 +62,6 @@ class ProductConfigurationLoader
     /**
      * Get possible combinations of all products
      *
-     * @param array $articleIds
      *
      * @return array
      */
@@ -108,8 +107,6 @@ class ProductConfigurationLoader
     /**
      * Fetches  all groups with all options for provided products
      *
-     * @param array                $articleIds
-     * @param ShopContextInterface $context
      *
      * @return array<int, array<\Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group>>
      */

@@ -29,33 +29,19 @@ use Shopware\Models\Customer\Customer;
 
 interface AddressServiceInterface
 {
-    /**
-     * @param Address  $address
-     * @param Customer $customer
-     */
     public function create(Address $address, Customer $customer);
 
-    /**
-     * @param Address $address
-     */
     public function update(Address $address);
 
-    /**
-     * @param Address $address
-     */
     public function delete(Address $address);
 
     /**
      * Sets the address to the default billing address in the customer model
-     *
-     * @param Address $address
      */
     public function setDefaultBillingAddress(Address $address);
 
     /**
      * Sets the address to the default shipping address in the customer model
-     *
-     * @param Address $address
      */
     public function setDefaultShippingAddress(Address $address);
 }

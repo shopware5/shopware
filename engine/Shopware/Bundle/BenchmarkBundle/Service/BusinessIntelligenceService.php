@@ -42,10 +42,6 @@ class BusinessIntelligenceService
      */
     private $benchmarkRepository;
 
-    /**
-     * @param BusinessIntelligenceClientInterface $biClient
-     * @param BenchmarkRepository                 $benchmarkRepository
-     */
     public function __construct(
         BusinessIntelligenceClientInterface $biClient,
         BenchmarkRepository $benchmarkRepository)
@@ -55,8 +51,6 @@ class BusinessIntelligenceService
     }
 
     /**
-     * @param BenchmarkConfig $config
-     *
      * @return BusinessIntelligenceResponse
      */
     public function transmit(BenchmarkConfig $config)

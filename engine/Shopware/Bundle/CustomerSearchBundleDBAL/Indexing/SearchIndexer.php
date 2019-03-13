@@ -38,10 +38,6 @@ class SearchIndexer implements SearchIndexerInterface
      */
     private $provider;
 
-    /**
-     * @param Connection                $connection
-     * @param CustomerProviderInterface $provider
-     */
     public function __construct(Connection $connection, CustomerProviderInterface $provider)
     {
         $this->connection = $connection;
@@ -78,8 +74,6 @@ class SearchIndexer implements SearchIndexerInterface
     }
 
     /**
-     * @param AnalyzedCustomer $customer
-     *
      * @return array
      */
     private function buildData(AnalyzedCustomer $customer)
@@ -249,8 +243,7 @@ class SearchIndexer implements SearchIndexerInterface
     }
 
     /**
-     * @param \DateTimeInterface|null $date
-     * @param string                  $format
+     * @param string $format
      *
      * @return string|null
      */

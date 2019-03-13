@@ -78,14 +78,6 @@ class InstallerService
      */
     private $release;
 
-    /**
-     * @param ModelManager          $em
-     * @param PluginInstaller       $pluginInstaller
-     * @param LegacyPluginInstaller $legacyPluginInstaller
-     * @param ConfigWriter          $configWriter
-     * @param ConfigReader          $configReader
-     * @param ShopwareReleaseStruct $release
-     */
     public function __construct(
         ModelManager $em,
         PluginInstaller $pluginInstaller,
@@ -147,7 +139,6 @@ class InstallerService
     /**
      * Returns a certain plugin by plugin id.
      *
-     * @param Plugin $plugin
      *
      * @return \Shopware_Components_Plugin_Bootstrap|null
      */
@@ -157,8 +148,6 @@ class InstallerService
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      *
      * @return InstallContext
@@ -181,8 +170,7 @@ class InstallerService
     }
 
     /**
-     * @param Plugin $plugin
-     * @param bool   $removeData
+     * @param bool $removeData
      *
      * @throws \Exception
      *
@@ -206,8 +194,6 @@ class InstallerService
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      *
      * @return UpdateContext
@@ -230,8 +216,6 @@ class InstallerService
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      *
      * @return ActivateContext
@@ -258,8 +242,6 @@ class InstallerService
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      *
      * @return DeactivateContext
@@ -282,8 +264,7 @@ class InstallerService
     }
 
     /**
-     * @param Plugin $plugin
-     * @param Shop   $shop
+     * @param Shop $shop
      *
      * @return array
      */
@@ -293,9 +274,8 @@ class InstallerService
     }
 
     /**
-     * @param Plugin $plugin
-     * @param array  $elements
-     * @param Shop   $shop
+     * @param array $elements
+     * @param Shop  $shop
      */
     public function savePluginConfig(Plugin $plugin, $elements, Shop $shop = null)
     {
@@ -308,9 +288,7 @@ class InstallerService
     }
 
     /**
-     * @param Plugin $plugin
      * @param string $name
-     * @param mixed  $value
      * @param Shop   $shop
      *
      * @throws \Exception

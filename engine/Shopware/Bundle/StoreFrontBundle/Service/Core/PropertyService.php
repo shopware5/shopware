@@ -40,9 +40,6 @@ class PropertyService implements Service\PropertyServiceInterface
      */
     private $productPropertyGateway;
 
-    /**
-     * @param Gateway\ProductPropertyGatewayInterface $productPropertyGateway
-     */
     public function __construct(Gateway\ProductPropertyGatewayInterface $productPropertyGateway)
     {
         $this->productPropertyGateway = $productPropertyGateway;

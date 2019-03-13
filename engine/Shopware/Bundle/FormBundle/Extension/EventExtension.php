@@ -38,8 +38,6 @@ class EventExtension extends AbstractTypeExtension
 
     /**
      * FormTypeEventExtension constructor.
-     *
-     * @param \Enlight_Event_EventManager $eventManager
      */
     public function __construct(\Enlight_Event_EventManager $eventManager)
     {
@@ -71,8 +69,6 @@ class EventExtension extends AbstractTypeExtension
 
     /**
      * Trigger general form builder event with reference to the \Symfony\Component\Form\FormInterface type
-     *
-     * @param FormEvent $event
      */
     public function triggerEvent(FormEvent $event)
     {

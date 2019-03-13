@@ -73,8 +73,6 @@ class ReleaseDateConditionHandler implements PartialConditionHandlerInterface
     }
 
     /**
-     * @param ReleaseDateCondition $criteriaPart
-     *
      * @return RangeQuery
      */
     private function createQuery(ReleaseDateCondition $criteriaPart)

@@ -38,9 +38,6 @@ class CombinedConditionHandler implements ConditionHandlerInterface
      */
     private $container;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -72,8 +69,6 @@ class CombinedConditionHandler implements ConditionHandlerInterface
     }
 
     /**
-     * @param ConditionInterface $condition
-     *
      * @throws \Exception
      *
      * @return ConditionHandlerInterface

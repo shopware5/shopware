@@ -50,9 +50,6 @@ class FormSynchronizer
      */
     private $localeRepository;
 
-    /**
-     * @param ModelManager $em
-     */
     public function __construct(ModelManager $em)
     {
         $this->em = $em;
@@ -60,10 +57,6 @@ class FormSynchronizer
         $this->localeRepository = $this->em->getRepository(Locale::class);
     }
 
-    /**
-     * @param Plugin $plugin
-     * @param array  $config
-     */
     public function synchronize(Plugin $plugin, array $config)
     {
         $form = $this->getForm($plugin);
@@ -129,7 +122,6 @@ class FormSynchronizer
     /**
      * Removes no more existing form elements and their translations
      *
-     * @param Plugin   $plugin
      * @param string[] $names
      */
     private function removeNotExistingElements(Plugin $plugin, array $names)
@@ -173,7 +165,6 @@ class FormSynchronizer
     /**
      * Returns plugin form
      *
-     * @param Plugin $plugin
      *
      * @return Form
      */
@@ -192,8 +183,6 @@ class FormSynchronizer
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @return Form
      */
     private function initForm(Plugin $plugin)
@@ -238,9 +227,6 @@ class FormSynchronizer
      * )
      * )
      * </code>
-     *
-     * @param array $translations
-     * @param Form  $form
      */
     private function addFormTranslations(array $translations, Form $form)
     {
@@ -300,11 +286,6 @@ class FormSynchronizer
         }
     }
 
-    /**
-     * @param Form   $form
-     * @param array  $translationArray
-     * @param Locale $locale
-     */
     private function addFormTranslation(Form $form, array $translationArray, Locale $locale)
     {
         $isUpdate = false;

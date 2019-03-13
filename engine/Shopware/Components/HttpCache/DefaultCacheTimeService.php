@@ -33,9 +33,6 @@ class DefaultCacheTimeService implements CacheTimeServiceInterface
      */
     private $defaultRoute;
 
-    /**
-     * @param DefaultRouteService $defaultRoute
-     */
     public function __construct(DefaultRouteService $defaultRoute)
     {
         $this->defaultRoute = $defaultRoute;
@@ -44,7 +41,6 @@ class DefaultCacheTimeService implements CacheTimeServiceInterface
     /**
      * getCacheTime returns the time span for which the cache of the given route remains valid.
      *
-     * @param Request $request
      *
      * @return int|null
      */

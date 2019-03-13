@@ -42,9 +42,6 @@ class CustomUrlProvider implements UrlProviderInterface
      */
     private $allExported;
 
-    /**
-     * @param ConfigHandler $configHandler
-     */
     public function __construct(ConfigHandler $configHandler)
     {
         $this->configHandler = $configHandler;
@@ -91,8 +88,7 @@ class CustomUrlProvider implements UrlProviderInterface
     }
 
     /**
-     * @param array $url
-     * @param int   $shopId
+     * @param int $shopId
      *
      * @return bool
      */

@@ -43,10 +43,6 @@ class EmotionTranslationImporter
      */
     private $translator;
 
-    /**
-     * @param Connection                           $connection
-     * @param Shopware_Components_Translation|null $translationComponent
-     */
     public function __construct(Connection $connection, Shopware_Components_Translation $translationComponent = null)
     {
         $this->connection = $connection;
@@ -54,9 +50,8 @@ class EmotionTranslationImporter
     }
 
     /**
-     * @param int   $emotionId
-     * @param array $translations
-     * @param bool  $autoMapping
+     * @param int  $emotionId
+     * @param bool $autoMapping
      */
     public function importTranslations($emotionId, array $translations, $autoMapping = true)
     {
@@ -87,9 +82,8 @@ class EmotionTranslationImporter
     }
 
     /**
-     * @param int   $emotionId
-     * @param array $translations
-     * @param bool  $autoMapping
+     * @param int  $emotionId
+     * @param bool $autoMapping
      *
      * @return array
      */
@@ -130,8 +124,6 @@ class EmotionTranslationImporter
     }
 
     /**
-     * @param array $translations
-     *
      * @throws MappingRequiredException
      *
      * @return array

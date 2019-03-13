@@ -67,9 +67,6 @@ class Zip
         return $this->stream->getStream($this->name);
     }
 
-    /**
-     * @return mixed
-     */
     public function getContents()
     {
         return $this->stream->getFromIndex($this->position);

@@ -39,17 +39,12 @@ class LicenseInstaller
      */
     private $connection;
 
-    /**
-     * @param Connection $pdo
-     */
     public function __construct(Connection $pdo)
     {
         $this->connection = $pdo;
     }
 
     /**
-     * @param LicenseInformation $license
-     *
      * @throws \RuntimeException
      */
     public function installLicense(LicenseInformation $license)

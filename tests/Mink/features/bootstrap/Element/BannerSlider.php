@@ -59,7 +59,6 @@ class BannerSlider extends SliderElement implements \Shopware\Tests\Mink\HelperS
     /**
      * Returns the slide image
      *
-     * @param NodeElement $slide
      *
      * @return string
      */
@@ -73,7 +72,6 @@ class BannerSlider extends SliderElement implements \Shopware\Tests\Mink\HelperS
     /**
      * Returns the slide link
      *
-     * @param NodeElement $slide
      *
      * @return string|null
      */
@@ -87,7 +85,6 @@ class BannerSlider extends SliderElement implements \Shopware\Tests\Mink\HelperS
     /**
      * Returns the alt-attribute of the slide image
      *
-     * @param NodeElement $slide
      *
      * @return string|null
      */
@@ -101,7 +98,6 @@ class BannerSlider extends SliderElement implements \Shopware\Tests\Mink\HelperS
     /**
      * Returns the title-attribute of the slide
      *
-     * @param NodeElement $slide
      *
      * @return string|null
      */

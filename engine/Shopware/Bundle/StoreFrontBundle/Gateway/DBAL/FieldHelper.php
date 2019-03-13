@@ -54,10 +54,6 @@ class FieldHelper
      */
     private $cache;
 
-    /**
-     * @param Connection     $connection
-     * @param CacheInterface $cache
-     */
     public function __construct(Connection $connection, CacheInterface $cache)
     {
         $this->connection = $connection;
@@ -1067,12 +1063,10 @@ class FieldHelper
     /**
      * Joins the translation table and selects the objectdata for the provided join conditions
      *
-     * @param string               $fromPart        Table which uses as from part
-     * @param string               $joinCondition   Join condition for the objectkey column
-     * @param string               $translationType Type of the translation
-     * @param string               $selectName      Name of the additional selection
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
+     * @param string $fromPart        Table which uses as from part
+     * @param string $joinCondition   Join condition for the objectkey column
+     * @param string $translationType Type of the translation
+     * @param string $selectName      Name of the additional selection
      */
     public function addTranslation(
         $fromPart,
@@ -1115,192 +1109,108 @@ class FieldHelper
         }
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addCountryTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('country', 'config_countries', $query, $context, 1);
         $this->addTranslation('countryAttribute', 's_core_countries_attributes', $query, $context, 'country.id');
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addCountryStateTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('countryState', 'config_country_states', $query, $context, 1);
         $this->addTranslation('countryStateAttribute', 's_core_countries_states_attributes', $query, $context, 'countryStateAttribute.stateID');
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addMediaTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('mediaAttribute', 's_media_attributes', $query, $context, 'mediaAttribute.mediaID');
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addUnitTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('unit', 'config_units', $query, $context, 1);
     }
 
-    /**
-     * @param QueryBuilder         $queryBuilder
-     * @param ShopContextInterface $context
-     */
     public function addEsdTranslation(QueryBuilder $queryBuilder, ShopContextInterface $context)
     {
         $this->addTranslation('esdAttribute', 's_articles_esd_attributes', $queryBuilder, $context, 'esd.id');
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addConfiguratorGroupTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('configuratorGroup', 'configuratorgroup', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addConfiguratorOptionTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('configuratorOption', 'configuratoroption', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addDownloadTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('downloadAttribute', 's_articles_downloads_attributes', $query, $context, 'download.id');
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addLinkTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('linkAttribute', 's_articles_information_attributes', $query, $context, 'link.id');
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addProductTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('product', 'article', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addVariantTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('variant', 'variant', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addPriceTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('priceAttribute', 's_articles_prices_attributes', $query, $context, 'price.id');
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addManufacturerTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('manufacturer', 'supplier', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addImageTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('image', 'articleimage', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addPropertySetTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('propertySet', 'propertygroup', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addPropertyGroupTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('propertyGroup', 'propertyoption', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addPropertyOptionTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('propertyOption', 'propertyvalue', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addProductStreamTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('stream', 'productStream', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addCategoryMainDataTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('category', 'category', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addEmotionElementTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('emotionElementValue', 'emotionElement', $query, $context, 'emotionElementValue.elementID');
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addCustomSortingTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('customSorting', 'custom_sorting', $query, $context, 1);
@@ -1320,19 +1230,11 @@ class FieldHelper
         $this->addTranslation('categoryAttribute', 's_categories_attributes', $query, $context, 'category.id');
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addShopPageTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('page', 'page', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addPaymentTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('payment', 'config_payment', $query, $context, '1');
@@ -1447,13 +1349,12 @@ class FieldHelper
     }
 
     /**
-     * @param string       $fromPart        Table which uses as from part
-     * @param string       $joinCondition   Join condition for the objectkey column
-     * @param string       $translationType Type of the translation
-     * @param string       $selectName      Name of the additional selection
-     * @param QueryBuilder $query
-     * @param int          $shopId
-     * @param string       $suffix
+     * @param string $fromPart        Table which uses as from part
+     * @param string $joinCondition   Join condition for the objectkey column
+     * @param string $translationType Type of the translation
+     * @param string $selectName      Name of the additional selection
+     * @param int    $shopId
+     * @param string $suffix
      */
     private function addTranslationWithSuffix(
         $fromPart,

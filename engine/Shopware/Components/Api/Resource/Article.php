@@ -64,9 +64,6 @@ class Article extends Resource implements BatchInterface
      */
     private $translationComponent;
 
-    /**
-     * @param Shopware_Components_Translation|null $translationComponent
-     */
     public function __construct(Shopware_Components_Translation $translationComponent = null)
     {
         $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
@@ -120,7 +117,6 @@ class Article extends Resource implements BatchInterface
      * Convenience method to get a product by number
      *
      * @param string $number
-     * @param array  $options
      *
      * @return array|ProductModel
      */
@@ -132,8 +128,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param int   $id
-     * @param array $options
+     * @param int $id
      *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
@@ -257,11 +252,8 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $criteria
-     * @param array $orderBy
-     * @param array $options
+     * @param int $offset
+     * @param int $limit
      *
      * @return array
      */
@@ -322,8 +314,6 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array $params
-     *
      * @throws ApiException\CustomValidationException
      * @throws \Shopware\Components\Api\Exception\ValidationException
      *
@@ -379,7 +369,6 @@ class Article extends Resource implements BatchInterface
      * Convenience method to update a article by number
      *
      * @param string $number
-     * @param array  $params
      *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
@@ -395,8 +384,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param int   $id
-     * @param array $params
+     * @param int $id
      *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
@@ -519,8 +507,6 @@ class Article extends Resource implements BatchInterface
     /**
      * Helper function which converts the passed data for the main variant of the product.
      *
-     * @param array        $data
-     * @param ProductModel $article
      *
      * @return array
      */
@@ -542,8 +528,7 @@ class Article extends Resource implements BatchInterface
     /**
      * Short method to completely generate all images from an product, main images and variant images
      *
-     * @param ProductModel $article
-     * @param bool         $force   Force all images to be regenerated
+     * @param bool $force Force all images to be regenerated
      *
      * @see \Shopware\Components\Api\Resource\Article::generateMainThumbnails()
      * @see \Shopware\Components\Api\Resource\Article::generateVariantImages()
@@ -557,8 +542,7 @@ class Article extends Resource implements BatchInterface
     /**
      * Generate the main thumbnails of an product
      *
-     * @param ProductModel $article
-     * @param bool         $force   Force to regenerate main thumbnails
+     * @param bool $force Force to regenerate main thumbnails
      */
     public function generateMainThumbnails(ProductModel $article, $force = false)
     {
@@ -587,8 +571,7 @@ class Article extends Resource implements BatchInterface
      * This method generates all variant image entities for a given product model instance.
      * The method expects that the variants and the mapping of the product images already exist.
      *
-     * @param ProductModel $article
-     * @param bool         $force   Force variant image regeneration
+     * @param bool $force Force variant image regeneration
      */
     public function generateVariantImages(ProductModel $article, $force = false)
     {
@@ -630,8 +613,6 @@ class Article extends Resource implements BatchInterface
     /**
      * Helper function which creates a new product image with the passed media object.
      *
-     * @param ProductModel $article
-     * @param MediaModel   $media
      *
      * @return Image
      */
@@ -652,9 +633,6 @@ class Article extends Resource implements BatchInterface
     /**
      * Helper function to map the media data into an product image
      *
-     * @param ProductModel $article
-     * @param Image        $image
-     * @param MediaModel   $media
      *
      * @return Image
      */
@@ -782,8 +760,6 @@ class Article extends Resource implements BatchInterface
      * The groups are sorted by the position value.
      *
      * @param int $articleId
-     *
-     * @return mixed
      */
     protected function getArticleConfiguratorSet($articleId)
     {
@@ -885,8 +861,6 @@ class Article extends Resource implements BatchInterface
      * Helper function which selects all similar products of the passed product id.
      *
      * @param int $articleId
-     *
-     * @return mixed
      */
     protected function getArticleSimilar($articleId)
     {
@@ -906,8 +880,6 @@ class Article extends Resource implements BatchInterface
      * Helper function which selects all accessory products of the passed product id.
      *
      * @param int $articleId
-     *
-     * @return mixed
      */
     protected function getArticleRelated($articleId)
     {
@@ -988,8 +960,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array        $data
-     * @param ProductModel $article
+     * @param array $data
      *
      * @return array
      */
@@ -1032,8 +1003,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array        $data
-     * @param ProductModel $article
+     * @param array $data
      *
      * @throws ApiException\CustomValidationException
      *
@@ -1192,8 +1162,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array        $data
-     * @param ProductModel $article
+     * @param array $data
      *
      * @throws ApiException\CustomValidationException
      * @throws \Exception
@@ -1306,8 +1275,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array        $data
-     * @param ProductModel $article
+     * @param array $data
      *
      * @throws ApiException\CustomValidationException
      *
@@ -1382,8 +1350,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array        $data
-     * @param ProductModel $article
+     * @param array $data
      *
      * @return array
      */
@@ -1402,8 +1369,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array        $data
-     * @param ProductModel $article
+     * @param array $data
      *
      * @throws ApiException\CustomValidationException
      *
@@ -1463,8 +1429,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array        $data
-     * @param ProductModel $article
+     * @param array $data
      *
      * @throws ApiException\CustomValidationException
      *
@@ -1563,8 +1528,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array        $data
-     * @param ProductModel $article
+     * @param array $data
      *
      * @throws ApiException\CustomValidationException
      *
@@ -1592,8 +1556,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array        $data
-     * @param ProductModel $article
+     * @param array $data
      *
      * @throws ApiException\CustomValidationException
      *
@@ -1656,8 +1619,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array        $data
-     * @param ProductModel $article
+     * @param array $data
      *
      * @throws ApiException\CustomValidationException
      *
@@ -1720,8 +1682,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array        $data
-     * @param ProductModel $article
+     * @param array $data
      *
      * @throws ApiException\CustomValidationException
      *
@@ -1874,8 +1835,6 @@ class Article extends Resource implements BatchInterface
      * Checks if the passed product image is already created
      * as variant image.
      *
-     * @param Detail $variant
-     * @param Image  $image
      *
      * @return bool
      */
@@ -1926,9 +1885,6 @@ class Article extends Resource implements BatchInterface
      *    array('name' => 'blue')
      * )
      *
-     * @param Image        $image
-     * @param ProductModel $article
-     * @param array        $mappings
      *
      * @throws ApiException\CustomValidationException
      */
@@ -1980,8 +1936,6 @@ class Article extends Resource implements BatchInterface
     /**
      * Translate the whole product array.
      *
-     * @param array $data
-     * @param Shop  $shop
      *
      * @return array
      */
@@ -2085,9 +2039,6 @@ class Article extends Resource implements BatchInterface
      * Translates the passed values array with the passed shop entity.
      *
      * @param array $values
-     * @param Shop  $shop
-     *
-     * @return mixed
      */
     protected function translatePropertyValues($values, Shop $shop)
     {
@@ -2120,7 +2071,6 @@ class Article extends Resource implements BatchInterface
      * Translates the passed supplier data.
      *
      * @param array $supplier
-     * @param Shop  $shop
      *
      * @return array
      */
@@ -2149,7 +2099,6 @@ class Article extends Resource implements BatchInterface
      * Translates the passed property group data.
      *
      * @param array $groupData
-     * @param Shop  $shop
      *
      * @return array
      */
@@ -2181,9 +2130,6 @@ class Article extends Resource implements BatchInterface
      * Translates the passed variants array and all associated data.
      *
      * @param array $details
-     * @param Shop  $shop
-     *
-     * @return mixed
      */
     protected function translateVariants($details, Shop $shop)
     {
@@ -2258,8 +2204,6 @@ class Article extends Resource implements BatchInterface
     /**
      * Helper function which translates associated array data.
      *
-     * @param array  $association
-     * @param Shop   $shop
      * @param string $type
      *
      * @return array
@@ -2306,7 +2250,6 @@ class Article extends Resource implements BatchInterface
      * to get a single row of the query builder result for the current resource result mode
      * using the query paginator.
      *
-     * @param QueryBuilder $builder
      *
      * @return array
      */
@@ -2324,7 +2267,6 @@ class Article extends Resource implements BatchInterface
      * to get the full query builder result for the current resource result mode
      * using the query paginator.
      *
-     * @param QueryBuilder $builder
      *
      * @return array
      */
@@ -2343,9 +2285,6 @@ class Article extends Resource implements BatchInterface
      * If the data key __options_categories => replace is set to true,
      * the function removes the assigned product categories from the
      * s_articles_categories and s_articles_categories_ro table.
-     *
-     * @param array        $data
-     * @param ProductModel $product
      */
     private function resetProductCategoryAssignment(array $data, ProductModel $product)
     {
@@ -2373,8 +2312,7 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array        $data
-     * @param ProductModel $product
+     * @param array $data
      *
      * @throws ApiException\CustomValidationException
      *
@@ -2430,8 +2368,7 @@ class Article extends Resource implements BatchInterface
      * Resolves the passed images data to valid Shopware\Models\Article\Image
      * entities.
      *
-     * @param array        $data
-     * @param ProductModel $product
+     * @param array $data
      *
      * @throws ApiException\CustomValidationException
      *

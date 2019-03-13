@@ -446,8 +446,6 @@ class Backup
      * @param string $table
      *
      * @throws \RuntimeException
-     *
-     * @return mixed
      */
     protected function getPrefixFromTable($table)
     {
@@ -466,8 +464,6 @@ class Backup
      * @param string $table
      *
      * @throws \RuntimeException
-     *
-     * @return mixed
      */
     protected function getAffectedColumns($table)
     {

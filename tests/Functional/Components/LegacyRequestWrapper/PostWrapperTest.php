@@ -50,8 +50,6 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
     /**
      * Tests that setting a value inside any core class is equivalent to setting it in the
      * global $_POST
-     *
-     * @return mixed
      */
     public function testSetPost()
     {
@@ -79,7 +77,6 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
      *
      * @param $getData
      *
-     * @return mixed
      * @depends testSetPost
      */
     public function testOverwriteAndClearPost($getData)

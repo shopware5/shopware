@@ -55,8 +55,6 @@ class ProductSearchResult extends ProductNumberSearchResult
      * @param ListProduct[]          $products   Indexed by the product order number
      * @param int                    $totalCount
      * @param FacetResultInterface[] $facets
-     * @param Criteria               $criteria
-     * @param ShopContextInterface   $context
      */
     public function __construct($products, $totalCount, $facets, Criteria $criteria, ShopContextInterface $context)
     {

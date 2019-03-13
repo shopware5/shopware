@@ -70,7 +70,6 @@ class Hydrator
 
     /**
      * @param string $prefix
-     * @param array  $data
      *
      * @return array
      */
@@ -106,9 +105,7 @@ class Hydrator
     }
 
     /**
-     * @param array       $data
      * @param string|null $prefix
-     * @param array       $mapping
      * @param int|null    $id        used for `merged` translations
      * @param bool        $addPrefix
      *
@@ -141,7 +138,6 @@ class Hydrator
     }
 
     /**
-     * @param array    $data
      * @param string   $key
      * @param int|null $id
      *

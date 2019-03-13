@@ -36,9 +36,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface CriteriaFactoryInterface
 {
     /**
-     * @param Request              $request
-     * @param ShopContextInterface $context
-     *
      * @return Criteria
      */
     public function createCriteria(Request $request, ShopContextInterface $context);

@@ -50,11 +50,6 @@ class MediaGateway implements Gateway\MediaGatewayInterface
      */
     private $hydrator;
 
-    /**
-     * @param Connection             $connection
-     * @param FieldHelper            $fieldHelper
-     * @param Hydrator\MediaHydrator $hydrator
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
@@ -99,8 +94,6 @@ class MediaGateway implements Gateway\MediaGatewayInterface
     }
 
     /**
-     * @param Struct\ShopContextInterface $context
-     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function getQuery(Struct\ShopContextInterface $context)

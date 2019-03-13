@@ -131,8 +131,6 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $date
-     *
      * @return Notification
      */
     public function setDate(\DateTimeInterface $date)

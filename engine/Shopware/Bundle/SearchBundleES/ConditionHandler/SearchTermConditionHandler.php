@@ -39,9 +39,6 @@ class SearchTermConditionHandler implements PartialConditionHandlerInterface
      */
     private $queryBuilder;
 
-    /**
-     * @param SearchTermQueryBuilderInterface $queryBuilder
-     */
     public function __construct(SearchTermQueryBuilderInterface $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;

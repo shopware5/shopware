@@ -70,8 +70,6 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
     }
 
     /**
-     * @param ProductSearchResult $result
-     *
      * @return array
      */
     private function convertProducts(ProductSearchResult $result)
@@ -105,9 +103,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
     }
 
     /**
-     * @param string               $term
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
+     * @param string $term
      *
      * @return ProductSearchResult
      */

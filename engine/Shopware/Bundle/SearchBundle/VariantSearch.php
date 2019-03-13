@@ -48,11 +48,6 @@ class VariantSearch implements ProductSearchInterface
      */
     private $configuratorService;
 
-    /**
-     * @param ProductSearchInterface              $decorated
-     * @param VariantListingPriceServiceInterface $listingPriceService
-     * @param ConfiguratorServiceInterface        $configuratorService
-     */
     public function __construct(
         ProductSearchInterface $decorated,
         VariantListingPriceServiceInterface $listingPriceService,

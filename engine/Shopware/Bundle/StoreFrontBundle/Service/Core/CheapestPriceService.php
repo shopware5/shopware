@@ -51,10 +51,6 @@ class CheapestPriceService implements CheapestPriceServiceInterface
      */
     private $config;
 
-    /**
-     * @param CheapestPriceGatewayInterface $cheapestPriceGateway
-     * @param \Shopware_Components_Config   $config
-     */
     public function __construct(
         CheapestPriceGatewayInterface $cheapestPriceGateway,
         \Shopware_Components_Config $config
@@ -155,7 +151,6 @@ class CheapestPriceService implements CheapestPriceServiceInterface
      *
      * @param BaseProduct[] $products
      * @param PriceRule[]   $priceRules
-     * @param Group         $group
      *
      * @return array
      */
@@ -188,9 +183,7 @@ class CheapestPriceService implements CheapestPriceServiceInterface
      * If the product has no configured price group or the price group has no discount defined for the
      * current customer group, the function returns null.
      *
-     * @param ListProduct          $product
-     * @param ShopContextInterface $context
-     * @param int                  $quantity
+     * @param int $quantity
      *
      * @return PriceDiscount|null
      */

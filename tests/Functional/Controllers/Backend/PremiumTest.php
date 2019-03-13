@@ -83,8 +83,6 @@ class Shopware_Tests_Controllers_Backend_PremiumTest extends Enlight_Components_
      * This test tests the creating of a new premium-article.
      * The response has to contain the id of the created article.
      * This function is called before testEditPremiumArticle and testDeletePremiumArticle
-     *
-     * @return mixed
      */
     public function testCreatePremiumArticle()
     {

@@ -48,10 +48,6 @@ class EmotionTemplateCheck implements CheckInterface
      */
     private $connection;
 
-    /**
-     * @param Connection       $connection
-     * @param SnippetNamespace $namespace
-     */
     public function __construct(Connection $connection, SnippetNamespace $namespace)
     {
         $this->namespace = $namespace;

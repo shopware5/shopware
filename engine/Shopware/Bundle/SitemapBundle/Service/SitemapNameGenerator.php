@@ -40,8 +40,7 @@ class SitemapNameGenerator implements SitemapNameGeneratorInterface
     private $pattern;
 
     /**
-     * @param FilesystemInterface $filesystem
-     * @param string              $pattern
+     * @param string $pattern
      */
     public function __construct(FilesystemInterface $filesystem, $pattern = 'sitemap-{number}.xml.gz')
     {

@@ -35,9 +35,6 @@ class Shopware_Components_Translation
      */
     private $connection;
 
-    /**
-     * @param Connection|null $connection
-     */
     public function __construct(Connection $connection = null)
     {
         $this->connection = $connection ?: Shopware()->Container()->get('dbal_connection');
@@ -47,7 +44,6 @@ class Shopware_Components_Translation
      * Filter translation data for saving.
      *
      * @param string      $type
-     * @param array       $data
      * @param string|null $key
      *
      * @return string
@@ -87,7 +83,6 @@ class Shopware_Components_Translation
      * Un filter translation data for output.
      *
      * @param string      $type
-     * @param mixed       $data
      * @param string|null $key
      *
      * @return array
@@ -302,8 +297,7 @@ class Shopware_Components_Translation
     /**
      * Writes multiple translation data to storage.
      *
-     * @param mixed $data
-     * @param bool  $merge
+     * @param bool $merge
      *
      * @throws \Zend_Db_Adapter_Exception
      */
@@ -332,7 +326,6 @@ class Shopware_Components_Translation
      * @param int    $language
      * @param string $type
      * @param int    $key
-     * @param mixed  $data
      * @param bool   $merge
      *
      * @throws \Zend_Db_Adapter_Exception
@@ -546,9 +539,8 @@ class Shopware_Components_Translation
     }
 
     /**
-     * @param int   $productId
-     * @param int   $languageId
-     * @param array $data
+     * @param int $productId
+     * @param int $languageId
      *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Exception
@@ -569,9 +561,8 @@ class Shopware_Components_Translation
     }
 
     /**
-     * @param int   $productId
-     * @param int   $languageId
-     * @param array $data
+     * @param int $productId
+     * @param int $languageId
      *
      * @throws \Exception
      */
@@ -589,8 +580,7 @@ class Shopware_Components_Translation
     }
 
     /**
-     * @param int   $id
-     * @param array $data
+     * @param int $id
      *
      * @throws \Exception
      */

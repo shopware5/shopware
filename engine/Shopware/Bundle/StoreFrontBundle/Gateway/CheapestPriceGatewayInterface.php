@@ -39,9 +39,7 @@ interface CheapestPriceGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CheapestPriceGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
-     * @param Struct\Customer\Group       $customerGroup
+     * @param Struct\BaseProduct[] $products
      *
      * @return Struct\Product\PriceRule[] Indexed by the product id
      */
@@ -67,9 +65,6 @@ interface CheapestPriceGatewayInterface
      *  - The variants has to be active
      *  - Closeout variants can only be selected if the stock > min purchase
      *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
-     * @param Struct\Customer\Group       $customerGroup
      *
      * @return Struct\Product\PriceRule
      */

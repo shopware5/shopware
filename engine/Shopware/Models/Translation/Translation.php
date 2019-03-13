@@ -149,9 +149,6 @@ class Translation extends ModelEntity
         return $this->type;
     }
 
-    /**
-     * @param \Shopware\Models\Shop\Shop $shop
-     */
     public function setShop(Shop $shop)
     {
         $this->shop = $shop;

@@ -39,11 +39,7 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
     private $textMapping;
 
     /**
-     * @param string               $entity
-     * @param ModelManager         $entityManager
-     * @param ReaderInterface      $reader
-     * @param SearcherInterface    $searcher
-     * @param TextMappingInterface $textMapping
+     * @param string $entity
      */
     public function __construct(
         $entity,

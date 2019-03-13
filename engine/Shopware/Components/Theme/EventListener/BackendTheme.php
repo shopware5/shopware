@@ -40,9 +40,6 @@ class BackendTheme
      */
     private $container;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -50,8 +47,6 @@ class BackendTheme
 
     /**
      * Shopware\EventListener: Enlight_Controller_Front_RouteShutdown
-     *
-     * @param \Enlight_Controller_EventArgs $args
      */
     public function registerBackendTheme(\Enlight_Controller_EventArgs $args)
     {

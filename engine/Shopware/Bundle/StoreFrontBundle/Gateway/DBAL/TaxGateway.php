@@ -60,11 +60,6 @@ class TaxGateway implements Gateway\TaxGatewayInterface
      */
     private $connection;
 
-    /**
-     * @param Connection           $connection
-     * @param FieldHelper          $fieldHelper
-     * @param Hydrator\TaxHydrator $taxHydrator
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,

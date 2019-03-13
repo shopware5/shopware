@@ -130,8 +130,6 @@ class Repository extends ModelRepository
      * Returns a list of orders for the passed customer id and filtered by the filter parameter.
      *
      * @param int      $customerId
-     * @param null     $filter
-     * @param null     $orderBy
      * @param int|null $limit
      * @param int|null $offset
      *

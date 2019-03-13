@@ -50,10 +50,6 @@ class ShippingFreeFacetHandler implements HandlerInterface, ResultHydratorInterf
      */
     private $queryAliasMapper;
 
-    /**
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper                     $queryAliasMapper
-     */
     public function __construct(
         \Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper
@@ -117,8 +113,6 @@ class ShippingFreeFacetHandler implements HandlerInterface, ResultHydratorInterf
     }
 
     /**
-     * @param Criteria $criteria
-     *
      * @return BooleanFacetResult
      */
     private function createFacet(Criteria $criteria)

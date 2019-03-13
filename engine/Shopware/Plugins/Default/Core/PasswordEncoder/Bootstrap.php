@@ -90,8 +90,6 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
     }
 
     /**
-     * @param Enlight_Event_EventArgs $args
-     *
      * @return \Shopware\Components\Password\Manager
      */
     public function onInitResourcePasswordEncoder(Enlight_Event_EventArgs $args)

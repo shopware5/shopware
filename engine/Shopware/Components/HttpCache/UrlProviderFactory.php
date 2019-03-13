@@ -34,9 +34,6 @@ class UrlProviderFactory implements UrlProviderFactoryInterface
      */
     private $urlProviders;
 
-    /**
-     * @param IteratorAggregate $urlProviders
-     */
     public function __construct(IteratorAggregate $urlProviders)
     {
         $this->urlProviders = iterator_to_array($urlProviders);

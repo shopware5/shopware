@@ -53,8 +53,6 @@ class TextMappingFactory
     }
 
     /**
-     * @param Client $client
-     *
      * @return TextMappingInterface
      */
     public function factory(Client $client)

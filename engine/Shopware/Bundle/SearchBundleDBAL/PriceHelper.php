@@ -46,9 +46,6 @@ class PriceHelper implements PriceHelperInterface
      */
     private $config;
 
-    /**
-     * @param Shopware_Components_Config $config
-     */
     public function __construct(Shopware_Components_Config $config)
     {
         $this->config = $config;
@@ -205,7 +202,6 @@ SQL;
     /**
      * Builds the tax cases for the price selection query
      *
-     * @param ShopContextInterface $context
      *
      * @return string
      */

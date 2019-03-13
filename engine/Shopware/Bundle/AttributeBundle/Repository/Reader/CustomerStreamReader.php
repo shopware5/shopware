@@ -40,9 +40,7 @@ class CustomerStreamReader extends GenericReader
     private $repository;
 
     /**
-     * @param string                                                            $entity
-     * @param ModelManager                                                      $entityManager
-     * @param \Shopware\Models\CustomerStream\CustomerStreamRepositoryInterface $repository
+     * @param string $entity
      */
     public function __construct($entity, ModelManager $entityManager, CustomerStreamRepositoryInterface $repository)
     {

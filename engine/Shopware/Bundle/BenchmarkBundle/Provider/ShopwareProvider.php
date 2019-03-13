@@ -48,11 +48,6 @@ class ShopwareProvider implements BenchmarkProviderInterface
      */
     private $licenseUnpackService;
 
-    /**
-     * @param Connection                    $connection
-     * @param ShopwareReleaseStruct         $releaseStruct
-     * @param LicenseUnpackServiceInterface $licenseUnpackService
-     */
     public function __construct(
         Connection $connection,
         ShopwareReleaseStruct $releaseStruct,

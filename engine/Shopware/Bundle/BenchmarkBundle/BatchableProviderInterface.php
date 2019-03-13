@@ -29,8 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface BatchableProviderInterface extends BenchmarkProviderInterface
 {
     /**
-     * @param ShopContextInterface $shopContext
-     * @param int                  $batchSize
+     * @param int $batchSize
      *
      * @return array
      */

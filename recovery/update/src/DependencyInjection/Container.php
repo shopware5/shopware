@@ -44,9 +44,6 @@ use Shopware\Recovery\Update\Utils;
 
 class Container extends BaseContainer
 {
-    /**
-     * @param \Pimple\Container $container
-     */
     public function setup(\Pimple\Container $container)
     {
         $backupDir = SW_PATH . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'backup' . DIRECTORY_SEPARATOR . 'auto_update';

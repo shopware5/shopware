@@ -41,8 +41,7 @@ interface UrlFilterInterface
     public function filter(array $urls, $shopId);
 
     /**
-     * @param FilterContainer $filterContainer
-     * @param int             $shopId
+     * @param int $shopId
      */
     public function addFilterContainer(FilterContainer $filterContainer, $shopId);
 

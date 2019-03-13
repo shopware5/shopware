@@ -37,8 +37,7 @@ interface SimilarProductsServiceInterface
     /**
      * @see Shopware\Bundle\StoreFrontBundle\Service\SimilarProductsServiceInterface::get()
      *
-     * @param ListProduct[]           $products
-     * @param ProductContextInterface $context
+     * @param ListProduct[] $products
      *
      * @return array indexed with the product number, the values are a list of ListProduct structs
      */
@@ -58,9 +57,6 @@ interface SimilarProductsServiceInterface
      * please refer to the linked classes.
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::get()
-     *
-     * @param ListProduct             $product
-     * @param ProductContextInterface $context
      *
      * @return ListProduct[] indexed by the product order number
      */

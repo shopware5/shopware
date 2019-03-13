@@ -134,7 +134,6 @@ class Value extends ModelEntity
     /**
      * Set value
      *
-     * @param mixed $value
      *
      * @return Value
      */
@@ -147,8 +146,6 @@ class Value extends ModelEntity
 
     /**
      * Get value
-     *
-     * @return mixed
      */
     public function getValue()
     {

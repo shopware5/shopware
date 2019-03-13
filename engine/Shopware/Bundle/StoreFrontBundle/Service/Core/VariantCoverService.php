@@ -45,10 +45,6 @@ class VariantCoverService implements VariantCoverServiceInterface
      */
     private $variantMediaGateway;
 
-    /**
-     * @param Gateway\ProductMediaGatewayInterface $productMedia
-     * @param Gateway\VariantMediaGatewayInterface $variantMedia
-     */
     public function __construct(
         Gateway\ProductMediaGatewayInterface $productMedia,
         Gateway\VariantMediaGatewayInterface $variantMedia

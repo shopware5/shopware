@@ -91,17 +91,6 @@ class ListProductService implements ListProductServiceInterface
      */
     private $config;
 
-    /**
-     * @param ListProductGatewayInterface      $productGateway
-     * @param GraduatedPricesServiceInterface  $graduatedPricesService
-     * @param CheapestPriceServiceInterface    $cheapestPriceService
-     * @param PriceCalculationServiceInterface $priceCalculationService
-     * @param MediaServiceInterface            $mediaService
-     * @param MarketingServiceInterface        $marketingService
-     * @param VoteServiceInterface             $voteService
-     * @param CategoryServiceInterface         $categoryService
-     * @param Shopware_Components_Config       $config
-     */
     public function __construct(
         ListProductGatewayInterface $productGateway,
         GraduatedPricesServiceInterface $graduatedPricesService,
@@ -206,8 +195,6 @@ class ListProductService implements ListProductServiceInterface
      * Checks if the provided product is allowed to display in the store front for
      * the provided context.
      *
-     * @param ListProduct          $product
-     * @param ShopContextInterface $context
      *
      * @return bool
      */
@@ -234,8 +221,6 @@ class ListProductService implements ListProductServiceInterface
     }
 
     /**
-     * @param ListProduct $product
-     *
      * @return bool
      */
     private function allowBuyInListing(ListProduct $product)

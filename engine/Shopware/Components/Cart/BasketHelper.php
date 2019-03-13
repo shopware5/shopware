@@ -42,10 +42,6 @@ class BasketHelper implements BasketHelperInterface
      */
     private $basketQueryHelper;
 
-    /**
-     * @param ProportionalTaxCalculatorInterface $calculator
-     * @param BasketQueryHelperInterface         $basketQueryHelper
-     */
     public function __construct(
         ProportionalTaxCalculatorInterface $calculator,
         BasketQueryHelperInterface $basketQueryHelper

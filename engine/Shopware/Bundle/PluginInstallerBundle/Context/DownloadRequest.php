@@ -49,10 +49,9 @@ class DownloadRequest
     private $token;
 
     /**
-     * @param string                 $technicalName
-     * @param string                 $shopwareVersion
-     * @param string                 $domain
-     * @param AccessTokenStruct|null $token
+     * @param string $technicalName
+     * @param string $shopwareVersion
+     * @param string $domain
      */
     public function __construct($technicalName, $shopwareVersion, $domain, AccessTokenStruct $token = null)
     {

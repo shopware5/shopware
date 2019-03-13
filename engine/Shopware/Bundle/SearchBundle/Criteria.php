@@ -189,8 +189,6 @@ class Criteria extends Extendable
     }
 
     /**
-     * @param FacetInterface $facet
-     *
      * @return $this
      */
     public function addFacet(FacetInterface $facet)
@@ -201,8 +199,6 @@ class Criteria extends Extendable
     }
 
     /**
-     * @param ConditionInterface $condition
-     *
      * @return $this
      */
     public function addCondition(ConditionInterface $condition)
@@ -213,8 +209,6 @@ class Criteria extends Extendable
     }
 
     /**
-     * @param ConditionInterface $condition
-     *
      * @return $this
      */
     public function addBaseCondition(ConditionInterface $condition)
@@ -225,8 +219,6 @@ class Criteria extends Extendable
     }
 
     /**
-     * @param SortingInterface $sorting
-     *
      * @return $this
      */
     public function addSorting(SortingInterface $sorting)

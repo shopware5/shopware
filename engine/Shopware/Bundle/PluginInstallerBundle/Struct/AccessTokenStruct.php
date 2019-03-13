@@ -55,11 +55,10 @@ class AccessTokenStruct implements \JsonSerializable
     private $shopwareId;
 
     /**
-     * @param string             $token
-     * @param \DateTimeInterface $expire
-     * @param string             $shopwareId
-     * @param int                $userId
-     * @param string             $locale
+     * @param string $token
+     * @param string $shopwareId
+     * @param int    $userId
+     * @param string $locale
      */
     public function __construct(
         $token,

@@ -30,15 +30,9 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 interface ConditionHandlerInterface
 {
     /**
-     * @param ConditionInterface $condition
-     *
      * @return bool
      */
     public function supports(ConditionInterface $condition);
 
-    /**
-     * @param ConditionInterface $condition
-     * @param QueryBuilder       $query
-     */
     public function handle(ConditionInterface $condition, QueryBuilder $query);
 }

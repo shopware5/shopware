@@ -59,9 +59,6 @@ class Application extends BaseApplication
      */
     private $skipDatabase = false;
 
-    /**
-     * @param Kernel $kernel
-     */
     public function __construct(Kernel $kernel)
     {
         $this->kernel = $kernel;
@@ -134,9 +131,6 @@ class Application extends BaseApplication
         return $exitCode;
     }
 
-    /**
-     * @param OutputInterface $output
-     */
     protected function registerCommands(OutputInterface $output)
     {
         $this->registerTaggedServiceIds();

@@ -29,10 +29,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 interface ShopIndexerInterface
 {
-    /**
-     * @param Shop                    $shop
-     * @param ProgressHelperInterface $helper
-     */
     public function index(Shop $shop, ProgressHelperInterface $helper);
 
     /**

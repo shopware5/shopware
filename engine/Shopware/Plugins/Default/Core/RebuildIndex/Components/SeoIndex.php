@@ -143,8 +143,6 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      * Count categories for the current shop
      *
      * @param int $shopId
-     *
-     * @return mixed
      */
     public function countCategories($shopId)
     {

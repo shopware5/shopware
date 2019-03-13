@@ -200,9 +200,6 @@ class Cleanup
 
     /**
      * Deletes a file / directory
-     *
-     * @param \SplFileInfo $file
-     * @param DeleteResult $deleteResult
      */
     private function delete(\SplFileInfo $file, DeleteResult &$deleteResult)
     {

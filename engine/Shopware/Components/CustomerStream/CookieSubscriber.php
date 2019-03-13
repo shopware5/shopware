@@ -41,10 +41,6 @@ class CookieSubscriber implements SubscriberInterface
      */
     private $container;
 
-    /**
-     * @param Connection         $connection
-     * @param ContainerInterface $container
-     */
     public function __construct(Connection $connection, ContainerInterface $container)
     {
         $this->connection = $connection;

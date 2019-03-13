@@ -34,8 +34,6 @@ interface AdapterFactoryInterface
     public function getType();
 
     /**
-     * @param array $config
-     *
      * @return AdapterInterface
      */
     public function create(array $config);

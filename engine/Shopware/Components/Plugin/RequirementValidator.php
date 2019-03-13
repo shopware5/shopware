@@ -47,10 +47,6 @@ class RequirementValidator
 
     /**
      * RequirementValidator constructor.
-     *
-     * @param ModelManager        $em
-     * @param XmlPluginInfoReader $infoReader
-     * @param SnippetManager      $snippetManager
      */
     public function __construct(ModelManager $em, XmlPluginInfoReader $infoReader, SnippetManager $snippetManager)
     {

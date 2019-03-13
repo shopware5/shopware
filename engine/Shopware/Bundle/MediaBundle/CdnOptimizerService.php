@@ -48,11 +48,6 @@ class CdnOptimizerService implements OptimizerServiceInterface
      */
     private $filesystem;
 
-    /**
-     * @param OptimizerServiceInterface $optimizerService
-     * @param MediaServiceInterface     $mediaService
-     * @param FilesystemInterface|null  $filesystem
-     */
     public function __construct(
         OptimizerServiceInterface $optimizerService,
         MediaServiceInterface $mediaService,

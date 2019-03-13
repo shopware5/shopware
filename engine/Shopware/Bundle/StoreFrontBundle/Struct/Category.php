@@ -139,8 +139,6 @@ class Category extends Extendable
     protected $hideSortings;
 
     /**
-     * @param CategoryEntity $category
-     *
      * @return Category
      */
     public static function createFromCategoryEntity(CategoryEntity $category)
@@ -485,9 +483,6 @@ class Category extends Extendable
         return $this->productStream;
     }
 
-    /**
-     * @param ProductStream|null $productStream
-     */
     public function setProductStream(ProductStream $productStream = null)
     {
         $this->productStream = $productStream;

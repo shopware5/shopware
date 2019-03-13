@@ -69,9 +69,6 @@ class ConfigHandler
     }
 
     /**
-     * @param array $urls
-     * @param array $config
-     *
      * @return array
      */
     private function addUrls(array $urls, array $config)

@@ -62,9 +62,7 @@ class Router extends EnlightRouter implements RouterInterface
     /**
      * The DI constructor of shopware router
      *
-     * @param Context               $context
      * @param MatcherInterface[]    $matchers
-     * @param array                 $generators
      * @param PreFilterInterface[]  $preFilters
      * @param PostFilterInterface[] $postFilters
      */
@@ -86,8 +84,6 @@ class Router extends EnlightRouter implements RouterInterface
 
     /**
      * Switch the context
-     *
-     * @param Context $context
      */
     public function setContext(Context $context)
     {
@@ -270,8 +266,6 @@ class Router extends EnlightRouter implements RouterInterface
     }
 
     /**
-     * @param EnlightRequest $request
-     *
      * @deprecated Use self::match()
      *
      * @return EnlightRequest

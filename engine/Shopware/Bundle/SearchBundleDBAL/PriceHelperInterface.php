@@ -37,7 +37,6 @@ interface PriceHelperInterface
     /**
      * Returns the full selection for the cheapest price
      *
-     * @param ProductContextInterface $context
      *
      * @return string
      */
@@ -45,24 +44,16 @@ interface PriceHelperInterface
 
     /**
      * Joins the customer prices to the provided query
-     *
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
      */
     public function joinPrices(QueryBuilder $query, ShopContextInterface $context);
 
     /**
      * Joins the fallback customer group prices for the provided query
-     *
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
      */
     public function joinDefaultPrices(QueryBuilder $query, ShopContextInterface $context);
 
     /**
      * Joins variants to the selected products which are available
-     *
-     * @param QueryBuilder $query
      */
     public function joinAvailableVariant(QueryBuilder $query);
 }

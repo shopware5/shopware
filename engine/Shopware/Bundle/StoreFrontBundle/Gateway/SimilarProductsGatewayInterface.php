@@ -49,8 +49,7 @@ interface SimilarProductsGatewayInterface
      *    'SW200' => array('SW201', 'SW202')
      * )
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[] $products
      *
      * @return array Indexed by the product number
      */
@@ -62,8 +61,6 @@ interface SimilarProductsGatewayInterface
      *
      * Example result: array('SW101', 'SW102')
      *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
      *
      * @return array Array of order numbers
      */

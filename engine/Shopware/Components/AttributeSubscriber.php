@@ -42,9 +42,6 @@ class AttributeSubscriber implements SubscriberInterface
      */
     private $container;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -62,9 +59,6 @@ class AttributeSubscriber implements SubscriberInterface
         ];
     }
 
-    /**
-     * @param EventArgs $args
-     */
     public function onDispatchEvent(EventArgs $args)
     {
         if (!$args->getResponse()->isException()) {
@@ -104,7 +98,6 @@ class AttributeSubscriber implements SubscriberInterface
     /**
      * Helper function to validate if the thrown exception is an shopware attribute model exception.
      *
-     * @param \Exception $exception
      *
      * @return bool
      */

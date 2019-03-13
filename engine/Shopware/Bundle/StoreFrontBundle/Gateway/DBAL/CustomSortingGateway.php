@@ -53,12 +53,6 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
      */
     private $config;
 
-    /**
-     * @param Connection                  $connection
-     * @param FieldHelper                 $fieldHelper
-     * @param CustomListingHydrator       $hydrator
-     * @param \Shopware_Components_Config $config
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
@@ -141,7 +135,6 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
     /**
      * Returns the base query to select the custom sorting data.
      *
-     * @param ShopContextInterface $context
      *
      * @return QueryBuilder
      */
@@ -157,8 +150,6 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
     }
 
     /**
-     * @param array $data
-     *
      * @return CustomSorting[]
      */
     private function hydrate(array $data)

@@ -115,9 +115,6 @@ class DumpIterator implements \SeekableIterator, \Countable
         $this->position = 0;
     }
 
-    /**
-     * @return mixed
-     */
     public function current()
     {
         return $this->current;

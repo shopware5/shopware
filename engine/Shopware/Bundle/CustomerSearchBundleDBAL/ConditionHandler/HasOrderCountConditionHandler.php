@@ -39,10 +39,6 @@ class HasOrderCountConditionHandler implements ConditionHandlerInterface
         return $condition instanceof HasOrderCountCondition;
     }
 
-    /**
-     * @param ConditionInterface $condition
-     * @param QueryBuilder       $query
-     */
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
         /*

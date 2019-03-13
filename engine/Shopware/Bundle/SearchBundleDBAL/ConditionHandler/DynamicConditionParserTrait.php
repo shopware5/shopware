@@ -34,7 +34,6 @@ trait DynamicConditionParserTrait
      * Adds base conditions to a query builder object
      * NOTE: The method will also verify that the column to be compared actually exists in the table.
      *
-     * @param QueryBuilder      $query
      * @param string            $table      table name
      * @param string            $tableAlias table alias in query
      * @param string            $field      Field to be used in the comparisons

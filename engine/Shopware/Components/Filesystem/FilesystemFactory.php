@@ -39,9 +39,6 @@ class FilesystemFactory implements FilesystemFactoryInterface
      */
     private $adapterFactories;
 
-    /**
-     * @param IteratorAggregate $adapterFactories
-     */
     public function __construct(IteratorAggregate $adapterFactories)
     {
         $adapterFactoryArray = iterator_to_array($adapterFactories, false);
@@ -100,8 +97,6 @@ class FilesystemFactory implements FilesystemFactoryInterface
     }
 
     /**
-     * @param array $config
-     *
      * @return array
      */
     private function resolveFilesystemConfig(array $config)

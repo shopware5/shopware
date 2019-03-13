@@ -102,8 +102,6 @@ class ProductDimensionsFacetHandler implements HandlerInterface, ResultHydratorI
 
     /**
      * @param WeightFacet|WidthFacet|LengthFacet|HeightFacet|FacetInterface $facet
-     * @param array                                                         $stats
-     * @param Criteria                                                      $criteria
      *
      * @return RangeFacetResult|null
      */

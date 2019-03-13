@@ -194,8 +194,6 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
     }
 
     /**
-     * @param \Shopware\Components\Model\QueryBuilder $query
-     *
      * @return \Shopware\Components\Model\QueryBuilder
      */
     private function addAssociations(\Shopware\Components\Model\QueryBuilder $query)

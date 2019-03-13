@@ -945,9 +945,8 @@ class HookManagerTest extends TestCase
     }
 
     /**
-     * @param string        $methodName
-     * @param string        $hookType
-     * @param callable|null $callback
+     * @param string $methodName
+     * @param string $hookType
      */
     private function addHookListener($methodName, $hookType, callable $callback = null)
     {
@@ -971,9 +970,6 @@ class HookManagerTest extends TestCase
         return $proxy;
     }
 
-    /**
-     * @param \Enlight_Hook_HookArgs $args
-     */
     private function assertHookArgs(\Enlight_Hook_HookArgs $args)
     {
         $this->assertEquals(self::TEST_NAME_ARG, $args->name);

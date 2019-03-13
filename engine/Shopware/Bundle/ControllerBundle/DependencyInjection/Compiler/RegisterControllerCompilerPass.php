@@ -48,9 +48,6 @@ class RegisterControllerCompilerPass implements CompilerPassInterface
         $this->plugins = $plugins;
     }
 
-    /**
-     * @param ContainerBuilder $container
-     */
     public function process(ContainerBuilder $container)
     {
         $paths = $this->collectControllerPaths($this->plugins);

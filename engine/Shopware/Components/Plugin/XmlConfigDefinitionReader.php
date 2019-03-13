@@ -54,8 +54,6 @@ class XmlConfigDefinitionReader
     }
 
     /**
-     * @param \DOMDocument $xml
-     *
      * @return array|void
      */
     private function parseForm(\DOMDocument $xml)
@@ -96,8 +94,6 @@ class XmlConfigDefinitionReader
     /**
      * Get child elements by name.
      *
-     * @param \DOMNode $node
-     * @param mixed    $name
      *
      * @return \DOMElement[]
      */
@@ -114,8 +110,6 @@ class XmlConfigDefinitionReader
     }
 
     /**
-     * @param \DOMElement $entry
-     *
      * @return array
      */
     private function parseElement(\DOMElement $entry)

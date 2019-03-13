@@ -37,8 +37,6 @@ use Doctrine\DBAL\DriverManager;
 class Db
 {
     /**
-     * @param array $dbConfig
-     *
      * @return \PDO
      */
     public static function createPDO(array $dbConfig)
@@ -82,10 +80,7 @@ class Db
     }
 
     /**
-     * @param array         $options
-     * @param Configuration $config
-     * @param EventManager  $eventManager
-     * @param \PDO          $pdo
+     * @param \PDO $pdo
      *
      * @throws \Doctrine\DBAL\DBALException
      *
@@ -108,9 +103,6 @@ class Db
     }
 
     /**
-     * @param Connection $connection
-     * @param array      $options
-     *
      * @return \Enlight_Components_Db_Adapter_Pdo_Mysql
      */
     public static function createEnlightDbAdapter(Connection $connection, array $options)
@@ -125,8 +117,6 @@ class Db
     }
 
     /**
-     * @param array $dbConfig
-     *
      * @return string
      */
     private static function buildConnectionString(array $dbConfig)

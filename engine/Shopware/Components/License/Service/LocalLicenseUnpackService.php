@@ -39,8 +39,6 @@ use Shopware\Components\License\Struct\ShopwareEdition;
 class LocalLicenseUnpackService implements LicenseUnpackServiceInterface
 {
     /**
-     * @param LicenseUnpackRequest $request
-     *
      * @throws LicenseHostException
      * @throws LicenseProductKeyException
      *

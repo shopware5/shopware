@@ -156,8 +156,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     /**
      * Iterates the given data array and persists all config variables
-     *
-     * @param array $data
      */
     public function saveConfigData(array $data)
     {
@@ -194,7 +192,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     /**
      * Generic helper method which prepares a given array for saving
      *
-     * @param array $data
      *
      * @return array
      */
@@ -208,7 +205,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     /**
      * Prepare seo array for saving
      *
-     * @param array $data
      *
      * @return array
      */
@@ -233,7 +229,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     /**
      * Prepare the http config array so that it can easily be saved
      *
-     * @param array $data
      *
      * @return array
      */
@@ -284,7 +279,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      * Helper method to persist a given config value
      *
      * @param string $name
-     * @param mixed  $value
      */
     public function saveConfig($name, $value)
     {
@@ -612,7 +606,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     /**
      * Generic helper method to build an array of config which needs to be loaded
      *
-     * @param array $config
      *
      * @return array
      */

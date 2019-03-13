@@ -45,10 +45,6 @@ class BatchProductNumberSearch
      */
     private $pointer = [];
 
-    /**
-     * @param ProductNumberSearchInterface       $productNumberSearch
-     * @param BaseProductFactoryServiceInterface $baseProductFactoryService
-     */
     public function __construct(ProductNumberSearchInterface $productNumberSearch, BaseProductFactoryServiceInterface $baseProductFactoryService)
     {
         $this->productNumberSearch = $productNumberSearch;
@@ -56,9 +52,6 @@ class BatchProductNumberSearch
     }
 
     /**
-     * @param BatchProductNumberSearchRequest $request
-     * @param ShopContextInterface            $context
-     *
      * @return BatchProductNumberSearchResult
      */
     public function search(BatchProductNumberSearchRequest $request, ShopContextInterface $context)
@@ -114,9 +107,6 @@ class BatchProductNumberSearch
     }
 
     /**
-     * @param array                $criteriaList
-     * @param ShopContextInterface $context
-     *
      * @return array
      */
     private function getBaseProductsByCriteriaList(array $criteriaList, ShopContextInterface $context)
@@ -182,9 +172,6 @@ class BatchProductNumberSearch
     }
 
     /**
-     * @param Criteria $criteria
-     * @param array    $criteriaList
-     *
      * @return int|false
      */
     private function getOptimizedCriteriaListPosition(Criteria $criteria, array $criteriaList)
@@ -204,8 +191,6 @@ class BatchProductNumberSearch
     }
 
     /**
-     * @param Criteria $criteria
-     *
      * @return Criteria
      */
     private function getComparableCriteria(Criteria $criteria)
@@ -230,8 +215,6 @@ class BatchProductNumberSearch
     }
 
     /**
-     * @param BatchProductNumberSearchRequest $request
-     *
      * @return BaseProduct[]
      */
     private function getBaseProductsByProductNumberRequest(BatchProductNumberSearchRequest $request)

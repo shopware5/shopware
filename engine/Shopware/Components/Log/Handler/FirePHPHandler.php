@@ -47,10 +47,6 @@ class FirePHPHandler extends BaseFirePHPHandler
      */
     private $response;
 
-    /**
-     * @param Request  $request
-     * @param Response $response
-     */
     public function setUp(Request $request, Response $response)
     {
         if (!$this->acceptsRequest($request)) {
@@ -70,8 +66,6 @@ class FirePHPHandler extends BaseFirePHPHandler
 
     /**
      * Adds the headers to the response once it's created
-     *
-     * @param \Enlight_Controller_EventArgs $args
      */
     public function onRouteStartUp(\Enlight_Controller_EventArgs $args)
     {
@@ -82,8 +76,6 @@ class FirePHPHandler extends BaseFirePHPHandler
     }
 
     /**
-     * @param Request $request
-     *
      * @return bool
      */
     public function acceptsRequest(Request $request)
@@ -114,8 +106,6 @@ class FirePHPHandler extends BaseFirePHPHandler
      * Creates message header from record
      *
      * @see createHeader()
-     *
-     * @param array $record
      *
      * @return array
      */
@@ -168,8 +158,6 @@ class FirePHPHandler extends BaseFirePHPHandler
      *
      * @see sendHeader()
      * @see sendInitHeaders()
-     *
-     * @param array $record
      */
     protected function write(array $record)
     {

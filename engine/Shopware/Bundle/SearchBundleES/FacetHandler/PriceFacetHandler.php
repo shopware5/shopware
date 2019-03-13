@@ -121,9 +121,8 @@ class PriceFacetHandler implements HandlerInterface, ResultHydratorInterface
     }
 
     /**
-     * @param Criteria $criteria
-     * @param float    $min
-     * @param float    $max
+     * @param float $min
+     * @param float $max
      *
      * @return RangeFacetResult
      */

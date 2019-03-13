@@ -56,10 +56,7 @@ class GenericRepository implements RepositoryInterface
     protected $entity;
 
     /**
-     * @param string            $entity
-     * @param ModelManager      $entityManager
-     * @param ReaderInterface   $reader
-     * @param SearcherInterface $searcher
+     * @param string $entity
      */
     public function __construct(
         $entity,
@@ -84,8 +81,6 @@ class GenericRepository implements RepositoryInterface
     }
 
     /**
-     * @param SearchCriteria $criteria
-     *
      * @return SearchResult
      */
     public function search(SearchCriteria $criteria)

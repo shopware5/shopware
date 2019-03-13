@@ -36,17 +36,11 @@ interface ComponentHandlerInterface
     public function supports($componentType);
 
     /**
-     * @param array        $element
-     * @param ParameterBag $syncData
-     *
      * @return array
      */
     public function import(array $element, ParameterBag $syncData);
 
     /**
-     * @param array        $element
-     * @param ParameterBag $syncData
-     *
      * @return array
      */
     public function export(array $element, ParameterBag $syncData);

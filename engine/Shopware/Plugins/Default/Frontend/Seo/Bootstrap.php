@@ -62,8 +62,6 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
 
     /**
      * Optimize Sourcecode / Apply SEO rules
-     *
-     * @param Enlight_Controller_ActionEventArgs $args
      */
     public function onPostDispatch(Enlight_Controller_ActionEventArgs $args)
     {
@@ -168,7 +166,6 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
     /**
      * Remove html-comments / whitespaces
      *
-     * @param Enlight_Event_EventArgs $args
      *
      * @return mixed|string
      */

@@ -77,8 +77,6 @@ class EsdSerial extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Esd $esd
-     *
      * @return \Shopware\Models\Article\EsdSerial
      */
     public function setEsd(\Shopware\Models\Article\Esd $esd)

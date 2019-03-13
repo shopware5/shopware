@@ -60,8 +60,7 @@ interface ProductMediaGatewayInterface
      * )
      * </php>
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[] $products
      *
      * @return array Indexed by the product order number. Each element contains a \Shopware\Bundle\StoreFrontBundle\Struct\Media array.
      */
@@ -81,8 +80,6 @@ interface ProductMediaGatewayInterface
      * - Selects only product media which has no configurator configuration and the main flag equals 1
      * - Sorted ascending by the image position
      *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Media
      */
@@ -103,8 +100,6 @@ interface ProductMediaGatewayInterface
      * - Sorted ascending by the image main flag and image position
      *
      *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Media[]
      */
@@ -131,8 +126,7 @@ interface ProductMediaGatewayInterface
      * )
      * </php>
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[] $products
      *
      * @return Struct\Media[] Indexed by the product number
      */

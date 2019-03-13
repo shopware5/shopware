@@ -155,8 +155,6 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
     /**
      * Test user creation, note that this test requires testAdminLogin to pass since it's an action protected
      * by double password verification.
-     *
-     * @return mixed
      */
     public function testUserAdd()
     {
@@ -342,8 +340,6 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
 
     /**
      * Gets a random user from the database
-     *
-     * @return mixed
      */
     public function getRandomUser()
     {
@@ -388,8 +384,6 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
      * Helper method to retrieve username data by username
      *
      * @param string $username
-     *
-     * @return mixed
      */
     private function getUserByUsername($username)
     {

@@ -39,8 +39,6 @@ interface CustomerGroupGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGroupGatewayInterface::get()
      *
-     * @param array $keys
-     *
      * @return Struct\Customer\Group[] Indexed by the customer group key
      */
     public function getList(array $keys);

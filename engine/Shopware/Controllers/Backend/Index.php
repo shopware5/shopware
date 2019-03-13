@@ -280,7 +280,6 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
     }
 
     /**
-     * @param array    $nodes
      * @param int|null $parentId
      *
      * @return array

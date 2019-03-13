@@ -39,10 +39,6 @@ class ORMBacklogSaveSubscriber implements SubscriberInterface
      */
     private $container;
 
-    /**
-     * @param ORMBacklogSubscriber $backlog
-     * @param ContainerInterface   $container
-     */
     public function __construct(
         ORMBacklogSubscriber $backlog,
         ContainerInterface $container

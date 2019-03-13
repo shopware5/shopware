@@ -56,8 +56,6 @@ class BasketSignatureGenerator implements BasketSignatureGeneratorInterface
     }
 
     /**
-     * @param array $items
-     *
      * @return array
      */
     private function sortItems(array $items)

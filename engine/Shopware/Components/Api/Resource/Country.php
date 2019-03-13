@@ -82,10 +82,8 @@ class Country extends Resource
      * Returns an array containing the total count of existing countries as well as the data of countries
      * that match the given criteria.
      *
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $criteria
-     * @param array $orderBy
+     * @param int $offset
+     * @param int $limit
      *
      * @return array
      */
@@ -118,7 +116,6 @@ class Country extends Resource
     /**
      * Creates a new Country entity using the passed params.
      *
-     * @param array $params
      *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      *
@@ -147,8 +144,7 @@ class Country extends Resource
     /**
      * Updates the Country entity with the given ID using the passed params.
      *
-     * @param int   $id
-     * @param array $params
+     * @param int $id
      *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
@@ -214,7 +210,6 @@ class Country extends Resource
     }
 
     /**
-     * @param array                            $params
      * @param \Shopware\Models\Country\Country $country
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
@@ -263,8 +258,6 @@ class Country extends Resource
     }
 
     /**
-     * @param array $params
-     *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException

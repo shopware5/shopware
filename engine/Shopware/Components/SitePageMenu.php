@@ -54,12 +54,6 @@ class SitePageMenu
      */
     private $shopContextService;
 
-    /**
-     * @param Connection              $connection
-     * @param RouterInterface         $router
-     * @param FieldHelper             $fieldHelper
-     * @param ContextServiceInterface $shopContextService
-     */
     public function __construct(Connection $connection, RouterInterface $router, FieldHelper $fieldHelper, ContextServiceInterface $shopContextService)
     {
         $this->connection = $connection;

@@ -220,8 +220,6 @@ class Kernel implements HttpKernelInterface, TerminableInterface
     }
 
     /**
-     * @param SymfonyRequest $request
-     *
      * @return EnlightRequest
      */
     public function transformSymfonyRequestToEnlightRequest(SymfonyRequest $request)
@@ -240,8 +238,6 @@ class Kernel implements HttpKernelInterface, TerminableInterface
     }
 
     /**
-     * @param EnlightResponse $response
-     *
      * @throws \InvalidArgumentException
      *
      * @return SymfonyResponse
@@ -329,7 +325,6 @@ class Kernel implements HttpKernelInterface, TerminableInterface
     /**
      * Sets the php settings from the config
      *
-     * @param array  $settings
      * @param string $prefix
      */
     public function setPhpSettings(array $settings, $prefix = '')
@@ -412,9 +407,6 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         return $this->getRootDir() . '/var/log';
     }
 
-    /**
-     * @param ContainerBuilder $container
-     */
     public function addResources(ContainerBuilder $container)
     {
         $files = [
@@ -696,9 +688,8 @@ class Kernel implements HttpKernelInterface, TerminableInterface
      * Adds all shopware configuration as di container parameter.
      * Each shopware configuration has the alias "shopware."
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string                                                  $alias
-     * @param array                                                   $options
+     * @param string $alias
+     * @param array  $options
      */
     protected function addShopwareConfig(ContainerBuilder $container, $alias, $options)
     {
@@ -775,9 +766,6 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         return sha1($string);
     }
 
-    /**
-     * @param ContainerBuilder $container
-     */
     private function loadPlugins(ContainerBuilder $container)
     {
         if (count($this->plugins) === 0) {

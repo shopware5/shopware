@@ -95,7 +95,6 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand
     /**
      * Exports form labels from the database into a php file containing an array
      *
-     * @param OutputInterface              $output
      * @param \Shopware\Models\Shop\Locale $locale
      * @param string                       $dir
      *
@@ -133,9 +132,8 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand
     /**
      * Exports element labels from the database into a php file containing an array
      *
-     * @param OutputInterface $output
-     * @param Locale          $locale
-     * @param string          $dir
+     * @param Locale $locale
+     * @param string $dir
      *
      * @throws \Exception
      */

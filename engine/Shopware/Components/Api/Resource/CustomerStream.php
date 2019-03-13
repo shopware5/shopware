@@ -84,16 +84,6 @@ class CustomerStream extends Resource
      */
     private $criteriaFactory;
 
-    /**
-     * @param LogawareReflectionHelper               $reflectionHelper
-     * @param CustomerNumberSearchInterface          $customerNumberSearch
-     * @param CustomerStreamRepositoryInterface      $streamRepository
-     * @param ModelManager                           $manager
-     * @param Connection                             $connection
-     * @param SearchIndexer                          $searchIndexer
-     * @param StreamIndexerInterface                 $streamIndexer
-     * @param CustomerStreamCriteriaFactoryInterface $criteriaFactory
-     */
     public function __construct(
         LogawareReflectionHelper $reflectionHelper,
         CustomerNumberSearchInterface $customerNumberSearch,
@@ -117,7 +107,6 @@ class CustomerStream extends Resource
     /**
      * @param int|null $id
      * @param int      $offset
-     * @param null     $limit
      * @param array    $conditions
      * @param string   $sortings
      *
@@ -151,10 +140,8 @@ class CustomerStream extends Resource
     }
 
     /**
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $criteria
-     * @param array $orderBy
+     * @param int $offset
+     * @param int $limit
      *
      * @return array
      */
@@ -209,8 +196,7 @@ class CustomerStream extends Resource
     }
 
     /**
-     * @param array $data
-     * @param bool  $index
+     * @param bool $index
      *
      * @throws CustomValidationException
      *
@@ -247,9 +233,8 @@ class CustomerStream extends Resource
     }
 
     /**
-     * @param int   $id
-     * @param array $data
-     * @param bool  $index
+     * @param int  $id
+     * @param bool $index
      *
      * @throws NotFoundException
      * @throws ParameterMissingException
@@ -345,9 +330,8 @@ class CustomerStream extends Resource
     }
 
     /**
-     * @param CustomerStreamEntity $stream
-     * @param int|null             $offset
-     * @param int|null             $limit
+     * @param int|null $offset
+     * @param int|null $limit
      *
      * @throws \Shopware\Components\Api\Exception\PrivilegeException
      */
@@ -383,9 +367,8 @@ class CustomerStream extends Resource
     /**
      * Returns true if frozen state has changed
      *
-     * @param int                     $streamId
-     * @param \DateTimeInterface|null $freezeUp
-     * @param string                  $conditions
+     * @param int    $streamId
+     * @param string $conditions
      *
      * @return array|bool
      */
@@ -442,8 +425,7 @@ class CustomerStream extends Resource
     }
 
     /**
-     * @param array $customerIds
-     * @param int   $streamId
+     * @param int $streamId
      */
     private function insertCustomers(array $customerIds, $streamId)
     {
@@ -468,8 +450,6 @@ class CustomerStream extends Resource
     }
 
     /**
-     * @param array $data
-     *
      * @return array
      */
     private function prepareData(array $data)
@@ -483,8 +463,6 @@ class CustomerStream extends Resource
     }
 
     /**
-     * @param \Shopware\Models\CustomerStream\CustomerStream $stream
-     *
      * @throws CustomValidationException
      */
     private function validateStream(CustomerStreamEntity $stream)

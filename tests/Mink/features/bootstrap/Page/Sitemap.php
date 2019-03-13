@@ -46,7 +46,6 @@ class Sitemap extends Page
     /**
      * @param SitemapGroup|string $group
      * @param string              $link
-     * @param array               $sites
      *
      * @throws \Exception
      */
@@ -88,7 +87,6 @@ class Sitemap extends Page
     /**
      * @param string $title
      * @param string $link
-     * @param array  $data
      *
      * @throws \Exception
      */
@@ -122,7 +120,6 @@ class Sitemap extends Page
     /**
      * @param string $title
      * @param string $link
-     * @param array  $data
      *
      * @throws \Exception
      */

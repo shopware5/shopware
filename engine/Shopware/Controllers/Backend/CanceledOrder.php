@@ -728,8 +728,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     }
 
     /**
-     * @param Order $order
-     *
      * @return \Shopware\Models\Article\Detail[]
      */
     private function getOutOfStockProducts(Order $order)
@@ -755,9 +753,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     }
 
     /**
-     * @param \Shopware\Models\Article\Detail $variant
-     * @param Order                           $order
-     *
      * @return \Shopware\Models\Order\Detail|null
      */
     private function getOrderPositionByProduct(\Shopware\Models\Article\Detail $variant, Order $order)
@@ -776,8 +771,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     }
 
     /**
-     * @param Order $order
-     *
      * @return \Shopware\Models\Article\Detail[]
      */
     private function getProductsOfOrder(Order $order)
@@ -802,7 +795,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      * Function which calculates, validates and updates the new in stock when a cancelled order will be transformed into
      * a regular order
      *
-     * @param Shopware\Models\Order\Order $orderModel
      *
      * @return bool
      */
@@ -849,7 +841,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     /**
      * Checks if the order position is a regular product
      *
-     * @param Shopware\Models\Order\Detail $orderDetailModel
      *
      * @return bool
      */

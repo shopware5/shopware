@@ -434,7 +434,6 @@ class User extends ModelEntity
     /**
      * Set lockedUntil
      *
-     * @param \DateTimeInterface|string $lockedUntil|
      *
      * @return User
      */

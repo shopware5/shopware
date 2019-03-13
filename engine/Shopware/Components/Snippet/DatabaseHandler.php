@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\Snippet;
 
-use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Snippet\Writer\DatabaseWriter;
@@ -59,9 +58,7 @@ class DatabaseHandler
     protected $output;
 
     /**
-     * @param ModelManager                            $em
-     * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
-     * @param string                                  $kernelRoot
+     * @param string $kernelRoot
      */
     public function __construct(ModelManager $em, \Enlight_Components_Db_Adapter_Pdo_Mysql $db, $kernelRoot)
     {
@@ -70,9 +67,6 @@ class DatabaseHandler
         $this->kernelRoot = $kernelRoot;
     }
 
-    /**
-     * @param OutputInterface $output
-     */
     public function setOutput(OutputInterface $output)
     {
         $this->output = $output;

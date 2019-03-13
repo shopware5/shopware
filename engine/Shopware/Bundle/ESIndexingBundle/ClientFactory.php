@@ -35,8 +35,6 @@ use Elasticsearch\ClientBuilder;
 class ClientFactory
 {
     /**
-     * @param array $config
-     *
      * @return Client
      */
     public static function createClient(array $config)

@@ -30,7 +30,6 @@ use Shopware\Models\Emotion\Preset;
 interface PresetDataSynchronizerInterface
 {
     /**
-     * @param Preset $preset
      * @param string $elementSyncKey
      *
      * @throws PresetAssetImportException
@@ -38,8 +37,6 @@ interface PresetDataSynchronizerInterface
     public function importElementAssets(Preset $preset, $elementSyncKey);
 
     /**
-     * @param Preset $preset
-     *
      * @return Preset
      */
     public function prepareAssetExport(Preset $preset);

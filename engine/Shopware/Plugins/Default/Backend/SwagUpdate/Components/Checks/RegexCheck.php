@@ -47,8 +47,7 @@ class RegexCheck implements CheckInterface
     private $userLang;
 
     /**
-     * @param SnippetNamespace $namespace
-     * @param string           $userLang
+     * @param string $userLang
      */
     public function __construct(SnippetNamespace $namespace, $userLang)
     {

@@ -239,8 +239,6 @@ class VariantTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
-     *
-     * @param \Shopware\Models\Article\Article $article
      */
     public function testCreateWithExistingOrderNumberShouldThrowCustomValidationException(\Shopware\Models\Article\Article $article)
     {
@@ -260,8 +258,6 @@ class VariantTest extends TestCase
 
     /**
      * @depends testCreateShouldBeSuccessful
-     *
-     * @param \Shopware\Models\Article\Article $article
      *
      * @return \Shopware\Models\Article\Article
      */
@@ -297,8 +293,6 @@ class VariantTest extends TestCase
 
     /**
      * @depends testGetOneShouldBeSuccessful
-     *
-     * @param $article\Shopware\Models\Article\Article
      */
     public function testDeleteShouldBeSuccessful($article)
     {

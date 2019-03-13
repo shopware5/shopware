@@ -195,9 +195,8 @@ class %className% extends ModelEntity
     protected $modelPath = '';
 
     /**
-     * @param AbstractSchemaManager $schemaManager
-     * @param string                $path
-     * @param string                $modelPath
+     * @param string $path
+     * @param string $modelPath
      */
     public function __construct(AbstractSchemaManager $schemaManager, $path, $modelPath)
     {
@@ -494,8 +493,6 @@ class %className% extends ModelEntity
      * Returns the class definition for the passed table object
      *
      * @param \Doctrine\DBAL\Schema\Table $table
-     *
-     * @return mixed
      */
     protected function getClassDefinition($table)
     {

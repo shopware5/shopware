@@ -41,9 +41,6 @@ class EventMatcher implements MatcherInterface
      */
     protected $eventManager;
 
-    /**
-     * @param EnlightEventManager $eventManager
-     */
     public function __construct(EnlightEventManager $eventManager)
     {
         $this->eventManager = $eventManager;

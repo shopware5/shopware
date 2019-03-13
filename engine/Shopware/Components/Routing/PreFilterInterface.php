@@ -33,7 +33,6 @@ interface PreFilterInterface
 {
     /**
      * @param array|string $params
-     * @param Context      $context
      *
      * @return array
      */

@@ -45,9 +45,6 @@ class PriceCalculationService implements PriceCalculationServiceInterface
      */
     private $priceCalculatorService;
 
-    /**
-     * @param PriceCalculatorInterface $priceCalculatorService
-     */
     public function __construct(PriceCalculatorInterface $priceCalculatorService)
     {
         $this->priceCalculatorService = $priceCalculatorService;
@@ -101,9 +98,6 @@ class PriceCalculationService implements PriceCalculationServiceInterface
     /**
      * Calculates the cheapest price considering the variant min purchase
      *
-     * @param ListProduct          $product
-     * @param PriceRule            $priceRule
-     * @param ShopContextInterface $context
      *
      * @return Price
      */
@@ -132,9 +126,6 @@ class PriceCalculationService implements PriceCalculationServiceInterface
      * and the cheapest price struct.
      * All price structs will be calculated through this function.
      *
-     * @param PriceRule            $rule
-     * @param Tax                  $tax
-     * @param ShopContextInterface $context
      *
      * @return Price
      */
@@ -169,7 +160,6 @@ class PriceCalculationService implements PriceCalculationServiceInterface
      * Calculates the product unit reference price for the passed
      * product price.
      *
-     * @param Price $price
      *
      * @return float
      */

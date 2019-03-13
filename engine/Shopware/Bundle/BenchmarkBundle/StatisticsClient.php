@@ -67,11 +67,7 @@ class StatisticsClient implements StatisticsClientInterface
     private $connection;
 
     /**
-     * @param string                     $statisticsApiEndpoint
-     * @param HttpClientInterface        $client
-     * @param StatisticsResponseHydrator $statisticsResponseHydrator
-     * @param LoggerInterface            $logger
-     * @param Connection                 $connection
+     * @param string $statisticsApiEndpoint
      */
     public function __construct(
         $statisticsApiEndpoint,
@@ -88,8 +84,6 @@ class StatisticsClient implements StatisticsClientInterface
     }
 
     /**
-     * @param StatisticsRequest $statisticsRequest
-     *
      * @throws StatisticsSendingException
      *
      * @return Struct\StatisticsResponse
@@ -122,8 +116,6 @@ class StatisticsClient implements StatisticsClientInterface
     }
 
     /**
-     * @param Response $response
-     *
      * @throws StatisticsHydratingException
      *
      * @return Struct\StatisticsResponse
@@ -142,9 +134,6 @@ class StatisticsClient implements StatisticsClientInterface
         return $this->statisticsResponseHydrator->hydrate($data);
     }
 
-    /**
-     * @param BenchmarkConfig $config
-     */
     private function resetBenchmarkConfig(BenchmarkConfig $config)
     {
         $this->connection->update('s_benchmark_config', [

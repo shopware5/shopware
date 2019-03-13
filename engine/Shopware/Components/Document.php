@@ -604,8 +604,6 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     }
 
     /**
-     * @param Shopware_Models_Document_Order $order
-     *
      * @throws \Exception
      */
     protected function setOrder(Shopware_Models_Document_Order $order)
@@ -624,8 +622,6 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
     /**
      * Set object configuration from array
-     *
-     * @param array $config
      */
     protected function setConfig(array $config)
     {

@@ -41,8 +41,7 @@ interface ShopPageGatewayInterface
      * Required translation in the provided context language:
      * - Shop page
      *
-     * @param int[]                       $ids
-     * @param Struct\ShopContextInterface $context
+     * @param int[] $ids
      *
      * @return Struct\ShopPage[] Indexed by the shop page id
      */

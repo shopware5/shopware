@@ -40,9 +40,6 @@ class CacheOptimizerService implements OptimizerServiceInterface
      */
     private $optimizerService;
 
-    /**
-     * @param OptimizerServiceInterface $optimizerService
-     */
     public function __construct(OptimizerServiceInterface $optimizerService)
     {
         $this->optimizerService = $optimizerService;

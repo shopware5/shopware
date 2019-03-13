@@ -45,7 +45,6 @@ class ShopIndex
 
     /**
      * @param string $name
-     * @param Shop   $shop
      * @param string $type
      */
     public function __construct($name, Shop $shop, $type)

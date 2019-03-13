@@ -48,11 +48,6 @@ class DataCollectionResolver implements DataCollectionResolverInterface
      */
     private $batchProductSearch;
 
-    /**
-     * @param BatchProductSearch    $batchProductSearch
-     * @param Connection            $connection
-     * @param MediaServiceInterface $mediaService
-     */
     public function __construct(
         BatchProductSearch $batchProductSearch,
         Connection $connection,
@@ -64,9 +59,6 @@ class DataCollectionResolver implements DataCollectionResolverInterface
     }
 
     /**
-     * @param PrepareDataCollection $prepareDataCollection
-     * @param ShopContextInterface  $context
-     *
      * @return ResolvedDataCollection
      */
     public function resolve(PrepareDataCollection $prepareDataCollection, ShopContextInterface $context)
@@ -83,9 +75,6 @@ class DataCollectionResolver implements DataCollectionResolverInterface
     }
 
     /**
-     * @param PrepareDataCollection $prepareDataCollection
-     * @param ShopContextInterface  $context
-     *
      * @return array
      */
     private function resolveMedia(PrepareDataCollection $prepareDataCollection, ShopContextInterface $context)
@@ -128,9 +117,6 @@ class DataCollectionResolver implements DataCollectionResolverInterface
     }
 
     /**
-     * @param PrepareDataCollection $prepareDataCollection
-     * @param ShopContextInterface  $context
-     *
      * @return \Shopware\Bundle\SearchBundle\BatchProductSearchResult
      */
     private function resolveBatchRequest(PrepareDataCollection $prepareDataCollection, ShopContextInterface $context)

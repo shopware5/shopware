@@ -45,11 +45,6 @@ class DynamicCacheTimeService implements CacheTimeServiceInterface
      */
     private $cacheRouteGeneration;
 
-    /**
-     * @param CacheRouteGenerationService $cacheRouteGeneration
-     * @param CacheTimeServiceInterface   $cacheTimeService
-     * @param \IteratorAggregate          $invalidationDateProvider
-     */
     public function __construct(
         CacheRouteGenerationService $cacheRouteGeneration,
         CacheTimeServiceInterface $cacheTimeService,

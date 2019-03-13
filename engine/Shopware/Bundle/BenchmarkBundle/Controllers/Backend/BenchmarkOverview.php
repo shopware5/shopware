@@ -114,9 +114,6 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         $this->addAclPermission('getShops', 'read', 'Insufficient permissions');
     }
 
-    /**
-     * @param BenchmarkConfig|null $config
-     */
     private function handleSettings(BenchmarkConfig $config = null)
     {
         $backendLanguage = $this->get('auth')->getIdentity()->locale->getId() === 1 ? 'de' : 'en';
@@ -158,7 +155,6 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
     /**
      * Checks if "lastReceived" is younger than 24 hours.
      *
-     * @param \DateTimeInterface $lastReceived
      *
      * @return bool
      */
@@ -177,7 +173,6 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
     /**
      * Checks if "lastReceived" is older than 7 days.
      *
-     * @param \DateTimeInterface $lastReceived
      *
      * @return bool
      */

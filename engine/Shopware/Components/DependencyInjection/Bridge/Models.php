@@ -46,11 +46,6 @@ class Models
     /**
      * Creates the entity manager for the application.
      *
-     * @param EventManager     $eventManager
-     * @param Configuration    $config
-     * @param \Enlight_Loader  $loader
-     * @param Connection       $connection
-     * @param AnnotationDriver $modelAnnotation
      *
      * @return ModelManager
      */

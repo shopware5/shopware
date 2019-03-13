@@ -98,10 +98,6 @@ abstract class ProviderTestCase extends BenchmarkTestCase
         return $this->provider;
     }
 
-    /**
-     * @param array $data
-     * @param array $expectedTypes
-     */
     protected function checkForTypes(array $data, array $expectedTypes)
     {
         foreach ($data as $resultKey => $resultItem) {

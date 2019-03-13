@@ -39,9 +39,6 @@ class CombinedConditionFacetHandler implements PartialFacetHandlerInterface
      */
     private $queryBuilderFactory;
 
-    /**
-     * @param QueryBuilderFactoryInterface $queryBuilderFactory
-     */
     public function __construct(QueryBuilderFactoryInterface $queryBuilderFactory)
     {
         $this->queryBuilderFactory = $queryBuilderFactory;

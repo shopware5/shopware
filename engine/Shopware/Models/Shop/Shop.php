@@ -625,8 +625,6 @@ class Shop extends ModelEntity
 
     /**
      * @param string $name
-     *
-     * @return mixed
      */
     public function get($name)
     {
@@ -728,8 +726,6 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param Template $template
-     *
      * @throws \Exception
      */
     private function registerTheme(Template $template)

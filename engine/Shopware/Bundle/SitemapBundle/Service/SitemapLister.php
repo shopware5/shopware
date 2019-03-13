@@ -44,10 +44,6 @@ class SitemapLister implements SitemapListerInterface
      */
     private $publicUrlGenerator;
 
-    /**
-     * @param FilesystemInterface         $filesystem
-     * @param PublicUrlGeneratorInterface $publicUrlGenerator
-     */
     public function __construct(FilesystemInterface $filesystem, PublicUrlGeneratorInterface $publicUrlGenerator)
     {
         $this->filesystem = $filesystem;

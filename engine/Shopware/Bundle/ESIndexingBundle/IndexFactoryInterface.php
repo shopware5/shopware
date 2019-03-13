@@ -34,7 +34,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 interface IndexFactoryInterface
 {
     /**
-     * @param Shop   $shop
      * @param string $mappingType
      *
      * @return IndexConfiguration
@@ -42,7 +41,6 @@ interface IndexFactoryInterface
     public function createIndexConfiguration(Shop $shop, $mappingType);
 
     /**
-     * @param Shop   $shop
      * @param string $mappingType
      *
      * @return ShopIndex

@@ -38,8 +38,6 @@ interface PriceGroupDiscountGatewayInterface
      * - Price group base data
      * - Price group discounts for the provided customer group
      *
-     * @param Struct\Customer\Group       $customerGroup
-     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Product\PriceGroup[] Indexed by the price group id
      */

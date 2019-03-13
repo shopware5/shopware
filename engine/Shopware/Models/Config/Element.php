@@ -185,7 +185,6 @@ class Element extends ModelEntity
     /**
      * Set value
      *
-     * @param mixed $value
      *
      * @return Element
      */
@@ -198,8 +197,6 @@ class Element extends ModelEntity
 
     /**
      * Get value
-     *
-     * @return mixed
      */
     public function getValue()
     {
@@ -270,9 +267,6 @@ class Element extends ModelEntity
         return $this->form;
     }
 
-    /**
-     * @param array $options
-     */
     public function setOptions(array $options)
     {
         $fields = ['label', 'value', 'description', 'required', 'scope', 'position'];

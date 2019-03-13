@@ -51,8 +51,7 @@ class SliderElement extends MultipleElement
     /**
      * Default method to get a slide property
      *
-     * @param NodeElement $slide
-     * @param string      $property
+     * @param string $property
      *
      * @return string|null
      */

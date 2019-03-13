@@ -219,9 +219,6 @@ class BenchmarkConfig extends ModelEntity
         return $this->lastSent;
     }
 
-    /**
-     * @param \DateTimeInterface $lastSent
-     */
     public function setLastSent(\DateTimeInterface $lastSent)
     {
         $this->lastSent = $lastSent;
@@ -235,9 +232,6 @@ class BenchmarkConfig extends ModelEntity
         return $this->lastReceived;
     }
 
-    /**
-     * @param \DateTimeInterface $lastReceived
-     */
     public function setLastReceived(\DateTimeInterface $lastReceived)
     {
         $this->lastReceived = $lastReceived;
@@ -315,9 +309,6 @@ class BenchmarkConfig extends ModelEntity
         return $this->lastUpdatedOrdersDate;
     }
 
-    /**
-     * @param \DateTimeInterface $lastUpdatedOrdersDate
-     */
     public function setLastUpdatedOrdersDate(\DateTimeInterface $lastUpdatedOrdersDate)
     {
         $this->lastUpdatedOrdersDate = $lastUpdatedOrdersDate;
@@ -427,9 +418,6 @@ class BenchmarkConfig extends ModelEntity
         return $this->locked;
     }
 
-    /**
-     * @param \DateTimeInterface $locked
-     */
     public function setLocked(\DateTimeInterface $locked)
     {
         $this->locked = $locked;

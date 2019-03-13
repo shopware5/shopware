@@ -33,9 +33,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class FormFactory
 {
     /**
-     * @param ValidatorInterface           $validator
-     * @param DependencyInjectionExtension $dependencyInjectionExtension
-     *
      * @return FormFactoryInterface
      */
     public static function factory(ValidatorInterface $validator, DependencyInjectionExtension $dependencyInjectionExtension)

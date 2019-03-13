@@ -55,10 +55,6 @@ class RewriteMatcher implements MatcherInterface
      */
     private $queryAliasMapper;
 
-    /**
-     * @param Connection       $connection
-     * @param QueryAliasMapper $queryAliasMapper
-     */
     public function __construct(Connection $connection, QueryAliasMapper $queryAliasMapper)
     {
         $this->connection = $connection;

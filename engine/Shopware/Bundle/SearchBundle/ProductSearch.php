@@ -46,10 +46,6 @@ class ProductSearch implements ProductSearchInterface
      */
     private $productService;
 
-    /**
-     * @param ListProductServiceInterface  $productService
-     * @param ProductNumberSearchInterface $searchGateway
-     */
     public function __construct(
         ListProductServiceInterface $productService,
         ProductNumberSearchInterface $searchGateway

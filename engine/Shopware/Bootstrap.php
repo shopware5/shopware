@@ -38,9 +38,6 @@ class Shopware_Bootstrap
      */
     protected $container;
 
-    /**
-     * @param Container $container
-     */
     public function __construct(Container $container)
     {
         $this->container = $container;
@@ -86,7 +83,6 @@ class Shopware_Bootstrap
      * @deprecated since 5.2 will be removed in 6.0
      *
      * @param string $name
-     * @param mixed  $resource
      *
      * @return Shopware_Bootstrap
      */
@@ -140,8 +136,6 @@ class Shopware_Bootstrap
      * @deprecated since 5.2 will be removed in 6.0
      *
      * @param string $name
-     *
-     * @return mixed
      */
     public function getResource($name)
     {

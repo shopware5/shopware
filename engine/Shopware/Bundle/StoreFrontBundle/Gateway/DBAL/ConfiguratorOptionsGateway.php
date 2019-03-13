@@ -66,9 +66,6 @@ class ConfiguratorOptionsGateway implements Gateway\ConfiguratorOptionsGatewayIn
     private $mediaGateway;
 
     /**
-     * @param Connection                                                      $connection
-     * @param FieldHelper                                                     $fieldHelper
-     * @param Hydrator\ConfiguratorHydrator                                   $configuratorHydrator
      * @param \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface $mediaGateway
      */
     public function __construct(

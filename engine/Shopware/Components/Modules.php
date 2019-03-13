@@ -43,9 +43,6 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
 
     /**
      * @param string $name
-     * @param null   $value
-     *
-     * @return mixed
      */
     public function __call($name, $value = null)
     {
@@ -66,8 +63,6 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
      * Reformat module name and return reference to module
      *
      * @param string $name
-     *
-     * @return mixed
      */
     public function getModule($name)
     {
@@ -89,7 +84,6 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
 
     /**
      * @param string $offset
-     * @param mixed  $value
      */
     public function offsetSet($offset, $value)
     {
@@ -114,8 +108,6 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
 
     /**
      * @param string $offset
-     *
-     * @return mixed
      */
     public function offsetGet($offset)
     {

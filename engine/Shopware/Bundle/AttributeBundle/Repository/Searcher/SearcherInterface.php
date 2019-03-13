@@ -34,8 +34,6 @@ use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 interface SearcherInterface
 {
     /**
-     * @param SearchCriteria $criteria
-     *
      * @return SearcherResult
      */
     public function search(SearchCriteria $criteria);

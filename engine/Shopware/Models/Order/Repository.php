@@ -617,8 +617,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param QueryBuilder $builder
-     * @param string       $alias
+     * @param string $alias
      */
     protected function addAliasJoin(QueryBuilder $builder, $alias)
     {

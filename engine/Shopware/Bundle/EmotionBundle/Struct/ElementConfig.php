@@ -38,9 +38,6 @@ class ElementConfig implements \JsonSerializable
      */
     protected $storage = [];
 
-    /**
-     * @param array $data
-     */
     public function __construct(array $data = [])
     {
         $storage = [];
@@ -69,9 +66,6 @@ class ElementConfig implements \JsonSerializable
      * Returns a single storage value.
      *
      * @param string $name
-     * @param mixed  $default
-     *
-     * @return mixed
      */
     public function get($name, $default = null)
     {
@@ -80,7 +74,6 @@ class ElementConfig implements \JsonSerializable
 
     /**
      * @param string $name
-     * @param mixed  $value
      */
     public function set($name, $value)
     {

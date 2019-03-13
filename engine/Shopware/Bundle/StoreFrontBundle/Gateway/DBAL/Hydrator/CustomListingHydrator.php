@@ -35,17 +35,12 @@ class CustomListingHydrator extends Hydrator
      */
     private $reflector;
 
-    /**
-     * @param LogawareReflectionHelper $reflector
-     */
     public function __construct(LogawareReflectionHelper $reflector)
     {
         $this->reflector = $reflector;
     }
 
     /**
-     * @param array $data
-     *
      * @return CustomSorting
      */
     public function hydrateSorting(array $data)
@@ -71,9 +66,6 @@ class CustomListingHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     * @param array $streams
-     *
      * @return CustomFacet|null
      */
     public function hydrateFacet(array $data, array $streams)

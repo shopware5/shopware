@@ -48,8 +48,6 @@ abstract class PluginCommand extends ShopwareCommand
     }
 
     /**
-     * @param InputInterface   $input
-     * @param OutputInterface  $output
      * @param InstallContext[] ...$contexts
      */
     protected function clearCachesIfRequested(InputInterface $input, OutputInterface $output, ...$contexts)
@@ -65,7 +63,6 @@ abstract class PluginCommand extends ShopwareCommand
     }
 
     /**
-     * @param OutputInterface  $output
      * @param InstallContext[] ...$contexts
      */
     protected function clearCaches(OutputInterface $output, ...$contexts)

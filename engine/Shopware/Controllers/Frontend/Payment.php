@@ -273,8 +273,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
     }
 
     /**
-     * @param string      $signature
-     * @param ArrayObject $basket
+     * @param string $signature
      *
      * @throws RuntimeException if signature does not match with provided basket
      */

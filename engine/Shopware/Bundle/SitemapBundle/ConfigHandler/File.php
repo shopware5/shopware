@@ -50,8 +50,6 @@ class File implements ConfigHandlerInterface
     }
 
     /**
-     * @param array $customUrls
-     *
      * @return array
      */
     private function getSitemapCustomUrls(array $customUrls)

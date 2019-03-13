@@ -49,11 +49,6 @@ class PluginLicenceService
      */
     private $unpackService;
 
-    /**
-     * @param Connection                $connection
-     * @param StoreClient               $storeClient
-     * @param LocalLicenseUnpackService $unpackService
-     */
     public function __construct(
         Connection $connection,
         StoreClient $storeClient,
@@ -65,8 +60,6 @@ class PluginLicenceService
     }
 
     /**
-     * @param UpdateLicencesRequest $request
-     *
      * @return \Shopware\Components\HttpClient\Response
      */
     public function updateLicences(UpdateLicencesRequest $request)
@@ -153,8 +146,6 @@ class PluginLicenceService
     }
 
     /**
-     * @param array $licenses
-     *
      * @return array
      */
     private function getExpirations(array $licenses)
@@ -205,8 +196,7 @@ class PluginLicenceService
     }
 
     /**
-     * @param PluginInformationStruct $plugin
-     * @param string                  $domain
+     * @param string $domain
      */
     private function createLocalLicenseInformation(PluginInformationStruct $plugin, $domain)
     {
@@ -236,10 +226,6 @@ class PluginLicenceService
         $this->connection->insert('s_core_licenses', $data);
     }
 
-    /**
-     * @param array                   $license
-     * @param PluginInformationStruct $plugin
-     */
     private function updateLocalLicenseExpirationInformation(array $license, PluginInformationStruct $plugin)
     {
         $expirationDate = $plugin->getLicenseExpiration();
@@ -268,8 +254,6 @@ class PluginLicenceService
     }
 
     /**
-     * @param \DateTimeInterface $expirationDate
-     *
      * @return bool
      */
     private function isExpired(\DateTimeInterface $expirationDate)
@@ -280,8 +264,7 @@ class PluginLicenceService
     }
 
     /**
-     * @param \DateTimeInterface $expirationDate
-     * @param int                $daysTillExpiration
+     * @param int $daysTillExpiration
      *
      * @return bool
      */
@@ -293,8 +276,6 @@ class PluginLicenceService
     }
 
     /**
-     * @param array $data
-     *
      * @return PluginInformationStruct
      */
     private function createPluginInformationStruct(array $data)

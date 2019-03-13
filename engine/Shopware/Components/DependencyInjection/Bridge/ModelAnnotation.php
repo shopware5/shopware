@@ -39,8 +39,7 @@ class ModelAnnotation
     /**
      * Creates the entity manager for the application.
      *
-     * @param Configuration $config
-     * @param string        $modelPath
+     * @param string $modelPath
      *
      * @return AnnotationDriver
      */

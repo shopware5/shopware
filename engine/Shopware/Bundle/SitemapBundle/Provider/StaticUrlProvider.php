@@ -48,10 +48,6 @@ class StaticUrlProvider implements UrlProviderInterface
      */
     private $allExported;
 
-    /**
-     * @param Routing\RouterInterface $router
-     * @param ConnectionInterface     $connection
-     */
     public function __construct(Routing\RouterInterface $router, ConnectionInterface $connection)
     {
         $this->router = $router;

@@ -61,10 +61,9 @@ class ExportContext extends SubContext
     }
 
     /**
-     * @param TableNode $entries
-     * @param string    $name
-     * @param string    $format
-     * @param string    $subshop Anything else than "subshop" will be treated as "shop"
+     * @param string $name
+     * @param string $format
+     * @param string $subshop Anything else than "subshop" will be treated as "shop"
      *
      * @throws \Exception
      *
@@ -147,7 +146,6 @@ SQL;
     /**
      * Builds a feed-url for a given row from the s_export table.
      *
-     * @param array $feed
      *
      * @return string
      */
@@ -203,9 +201,8 @@ SQL;
     }
 
     /**
-     * @param TableNode $entries
-     * @param array     $export
-     * @param bool      $shopType
+     * @param array $export
+     * @param bool  $shopType
      */
     private function validate(TableNode $entries, $export, $shopType)
     {
@@ -240,10 +237,6 @@ SQL;
         }
     }
 
-    /**
-     * @param mixed $key
-     * @param array $row
-     */
     private function assertKeyExists($key, array $row)
     {
         if (!array_key_exists($key, $row)) {

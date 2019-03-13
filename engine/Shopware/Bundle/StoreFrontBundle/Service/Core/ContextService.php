@@ -86,15 +86,6 @@ class ContextService implements ContextServiceInterface
      */
     private $countryGateway;
 
-    /**
-     * @param ContainerInterface                 $container
-     * @param CustomerGroupGatewayInterface      $customerGroupGateway
-     * @param TaxGatewayInterface                $taxGateway
-     * @param CountryGatewayInterface            $countryGateway
-     * @param PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway
-     * @param ShopGatewayInterface               $shopGateway
-     * @param CurrencyGatewayInterface           $currencyGateway
-     */
     public function __construct(
         ContainerInterface $container,
         CustomerGroupGatewayInterface $customerGroupGateway,

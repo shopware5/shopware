@@ -43,9 +43,6 @@ class MenuSynchronizer
      */
     private $menuRepository;
 
-    /**
-     * @param ModelManager $em
-     */
     public function __construct(ModelManager $em)
     {
         $this->em = $em;
@@ -53,9 +50,6 @@ class MenuSynchronizer
     }
 
     /**
-     * @param Plugin $plugin
-     * @param array  $menu
-     *
      * @throws \InvalidArgumentException
      */
     public function synchronize(Plugin $plugin, array $menu)
@@ -91,7 +85,6 @@ class MenuSynchronizer
     }
 
     /**
-     * @param array  $labels
      * @param string $name
      *
      * @throws \Exception
@@ -115,10 +108,6 @@ class MenuSynchronizer
     }
 
     /**
-     * @param Plugin    $plugin
-     * @param Menu|null $parent
-     * @param array     $menuItem
-     *
      * @throws \RuntimeException
      *
      * @return Menu
@@ -196,8 +185,7 @@ class MenuSynchronizer
     }
 
     /**
-     * @param int   $pluginId
-     * @param array $menuNames
+     * @param int $pluginId
      */
     private function removeNotExistingEntries($pluginId, array $menuNames)
     {

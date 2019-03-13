@@ -291,8 +291,6 @@ class ProductProvider implements ProductProviderInterface
     }
 
     /**
-     * @param \DateTimeInterface|null $date
-     *
      * @return string|null
      */
     private function formatDate(\DateTimeInterface $date = null)
@@ -339,8 +337,7 @@ class ProductProvider implements ProductProviderInterface
     }
 
     /**
-     * @param ListProduct[]        $products
-     * @param ShopContextInterface $context
+     * @param ListProduct[] $products
      *
      * @return array[]
      */
@@ -472,7 +469,6 @@ class ProductProvider implements ProductProviderInterface
     }
 
     /**
-     * @param Shop    $shop
      * @param Product $product
      *
      * @return bool
@@ -488,8 +484,6 @@ class ProductProvider implements ProductProviderInterface
     }
 
     /**
-     * @param Shop $shop
-     *
      * @return array
      */
     private function getPriceContexts(Shop $shop)
@@ -543,8 +537,6 @@ class ProductProvider implements ProductProviderInterface
     }
 
     /**
-     * @param array $attributes
-     *
      * @return array
      */
     private function parseAttributes(array $attributes)

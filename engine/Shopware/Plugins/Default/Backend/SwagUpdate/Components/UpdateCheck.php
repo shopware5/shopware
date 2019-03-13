@@ -61,11 +61,9 @@ class UpdateCheck
     private $release;
 
     /**
-     * @param string                $apiEndpoint
-     * @param string                $channel
-     * @param bool                  $verifySignature
-     * @param OpenSSLVerifier       $verificator
-     * @param ShopwareReleaseStruct $release
+     * @param string $apiEndpoint
+     * @param string $channel
+     * @param bool   $verifySignature
      */
     public function __construct($apiEndpoint, $channel, $verifySignature, OpenSSLVerifier $verificator, ShopwareReleaseStruct $release)
     {
@@ -86,7 +84,6 @@ class UpdateCheck
 
     /**
      * @param string $shopwareVersion
-     * @param array  $params
      *
      * @return Version|null
      */

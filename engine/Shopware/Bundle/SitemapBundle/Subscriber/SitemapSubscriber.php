@@ -53,8 +53,6 @@ class SitemapSubscriber implements SubscriberInterface
      * when they are requested
      *
      * @deprecated Will be removed in 5.6 without replacement
-     *
-     * @param Enlight_Event_EventArgs $args
      */
     public function onKernelTerminate(Enlight_Event_EventArgs $args)
     {

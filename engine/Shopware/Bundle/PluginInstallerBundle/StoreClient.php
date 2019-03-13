@@ -68,11 +68,7 @@ class StoreClient
     private $uniqueIdGenerator;
 
     /**
-     * @param HttpClientInterface        $httpClient
-     * @param string                     $apiEndPoint
-     * @param Struct\StructHydrator      $structHydrator
-     * @param OpenSSLVerifier            $openSSLVerifier
-     * @param UniqueIdGeneratorInterface $uniqueIdGenerator
+     * @param string $apiEndPoint
      */
     public function __construct(
         HttpClientInterface $httpClient,
@@ -130,10 +126,9 @@ class StoreClient
     }
 
     /**
-     * @param AccessTokenStruct $accessToken
-     * @param string            $resource
-     * @param array             $params
-     * @param array             $headers
+     * @param string $resource
+     * @param array  $params
+     * @param array  $headers
      *
      * @throws \Exception
      *
@@ -161,8 +156,6 @@ class StoreClient
      * @param array  $headers
      *
      * @throws \Exception
-     *
-     * @return mixed
      */
     public function doGetRequestRaw($resource, $params = [], $headers = [])
     {
@@ -176,10 +169,9 @@ class StoreClient
     }
 
     /**
-     * @param AccessTokenStruct $accessToken
-     * @param string            $resource
-     * @param array             $params
-     * @param array             $headers
+     * @param string $resource
+     * @param array  $params
+     * @param array  $headers
      *
      * @throws \Exception
      *
@@ -222,9 +214,8 @@ class StoreClient
     }
 
     /**
-     * @param AccessTokenStruct $accessToken
-     * @param string            $resource
-     * @param array             $params
+     * @param string $resource
+     * @param array  $params
      *
      * @throws \Exception
      *
@@ -246,9 +237,8 @@ class StoreClient
     }
 
     /**
-     * @param AccessTokenStruct $accessToken
-     * @param string            $resource
-     * @param array             $params
+     * @param string $resource
+     * @param array  $params
      *
      * @throws \Exception
      *
@@ -305,10 +295,9 @@ class StoreClient
     }
 
     /**
-     * @param string                 $resource
-     * @param array                  $params
-     * @param array                  $headers
-     * @param accessTokenStruct|null $token
+     * @param string $resource
+     * @param array  $params
+     * @param array  $headers
      *
      * @throws \Exception
      *
@@ -388,7 +377,6 @@ class StoreClient
      * Parses it to detect and extract details provided
      * by SBP about what happened
      *
-     * @param RequestException $requestException
      *
      * @throws \Exception
      * @throws SbpServerException
@@ -519,9 +507,6 @@ class StoreClient
         );
     }
 
-    /**
-     * @param Response $response
-     */
     private function verifyResponseSignature(Response $response)
     {
         $signatureHeaderName = 'x-shopware-signature';

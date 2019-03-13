@@ -42,10 +42,6 @@ class PropertySynchronizer implements SynchronizerInterface
      */
     private $indexFactory;
 
-    /**
-     * @param PropertyIndexer       $propertyIndexer
-     * @param IndexFactoryInterface $indexFactory
-     */
     public function __construct(PropertyIndexer $propertyIndexer, IndexFactoryInterface $indexFactory)
     {
         $this->propertyIndexer = $propertyIndexer;

@@ -229,7 +229,6 @@ class SpecialContext extends SubContext
     /**
      * Tries to click on a named link until the click is successfull or the timeout is reached
      *
-     * @param HelperSelectorInterface $element
      * @param $linkName
      * @param int $timeout Defaults to 60 seconds
      */
@@ -251,8 +250,7 @@ class SpecialContext extends SubContext
     /**
      * Tries to click on an element until the click is successfull or the timeout is reached
      *
-     * @param NodeElement $element
-     * @param int         $timeout Defaults to 60 seconds
+     * @param int $timeout Defaults to 60 seconds
      */
     protected function clickElementWhenClickable(NodeElement $element, $timeout = 60)
     {

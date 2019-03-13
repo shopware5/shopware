@@ -55,8 +55,6 @@ class ManufacturerSlider extends SliderElement implements HelperSelectorInterfac
     }
 
     /**
-     * @param NodeElement $slide
-     *
      * @return string
      */
     public function getImageProperty(NodeElement $slide)
@@ -67,8 +65,6 @@ class ManufacturerSlider extends SliderElement implements HelperSelectorInterfac
     }
 
     /**
-     * @param NodeElement $slide
-     *
      * @return string
      */
     public function getLinkProperty(NodeElement $slide)
@@ -79,8 +75,6 @@ class ManufacturerSlider extends SliderElement implements HelperSelectorInterfac
     }
 
     /**
-     * @param NodeElement $slide
-     *
      * @return string
      */
     public function getNameProperty(NodeElement $slide)

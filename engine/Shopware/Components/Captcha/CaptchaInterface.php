@@ -37,8 +37,6 @@ interface CaptchaInterface
     public function getName();
 
     /**
-     * @param Enlight_Controller_Request_Request $request
-     *
      * @return bool
      */
     public function validate(Enlight_Controller_Request_Request $request);

@@ -457,7 +457,6 @@ class sArticles
     }
 
     /**
-     * @param null     $categoryId
      * @param Criteria $criteria
      *
      * @throws Enlight_Exception
@@ -651,7 +650,6 @@ class sArticles
     /**
      * Get product topsellers for a specific category
      *
-     * @param int $category|null
      *
      * @return array
      */
@@ -726,9 +724,8 @@ class sArticles
      * Read the id from all products that are in the same category as the product specified by parameter
      * (For product navigation in top of detail page)
      *
-     * @param string                                 $orderNumber
-     * @param int                                    $categoryId
-     * @param Enlight_Controller_Request_RequestHttp $request
+     * @param string $orderNumber
+     * @param int    $categoryId
      *
      * @return array
      */
@@ -1067,7 +1064,6 @@ class sArticles
      * @param int         $id          article id
      * @param string|null $sCategoryID
      * @param string|null $number
-     * @param array       $selection
      *
      * @return array
      */
@@ -2035,9 +2031,7 @@ class sArticles
     }
 
     /**
-     * @param int                                    $categoryId
-     * @param ShopContextInterface                   $context
-     * @param Enlight_Controller_Request_RequestHttp $request
+     * @param int $categoryId
      *
      * @throws \Exception
      *
@@ -2080,10 +2074,8 @@ class sArticles
     }
 
     /**
-     * @param ProductNumberSearchResult $searchResult
-     * @param string                    $orderNumber
-     * @param int                       $categoryId
-     * @param ShopContextInterface      $context
+     * @param string $orderNumber
+     * @param int    $categoryId
      *
      * @return array
      */
@@ -2150,8 +2142,7 @@ class sArticles
     }
 
     /**
-     * @param int                                    $categoryId
-     * @param Enlight_Controller_Request_RequestHttp $request
+     * @param int $categoryId
      *
      * @return string
      */
@@ -2364,10 +2355,7 @@ class sArticles
      * Returns a listing of products. Used for the backward compatibility category listings.
      * This function calls the new shopware core and converts the result to the old listing structure.
      *
-     * @param int                                $categoryId
-     * @param ShopContextInterface               $context
-     * @param Enlight_Controller_Request_Request $request
-     * @param Criteria                           $criteria
+     * @param int $categoryId
      *
      * @return array
      */
@@ -2430,9 +2418,7 @@ class sArticles
      * Helper function which loads a full product struct and converts the product struct
      * to the shopware 3 array structure.
      *
-     * @param Product $product
-     * @param int     $categoryId
-     * @param array   $selection
+     * @param int $categoryId
      *
      * @return array
      */
@@ -2535,9 +2521,8 @@ class sArticles
     /**
      * Creates different links for the product like `add to basket`, `add to note`, `view detail page`, ...
      *
-     * @param ListProduct $product
-     * @param int         $categoryId
-     * @param bool        $addNumber
+     * @param int  $categoryId
+     * @param bool $addNumber
      *
      * @return array
      */
@@ -2611,7 +2596,6 @@ class sArticles
      * Array elements of the configuration selection can be empty, if the user resets the
      * different group selections.
      *
-     * @param array $selection
      *
      * @return array
      */

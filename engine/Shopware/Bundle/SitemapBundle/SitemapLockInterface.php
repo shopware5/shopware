@@ -29,23 +29,18 @@ use Shopware\Models\Shop\Shop;
 interface SitemapLockInterface
 {
     /**
-     * @param Shop $shop
-     *
      * @return bool
      */
     public function isLocked(Shop $shop);
 
     /**
-     * @param Shop $shop
-     * @param int  $lifeTime Maximum lifetime of lock in seconds
+     * @param int $lifeTime Maximum lifetime of lock in seconds
      *
      * @return bool
      */
     public function doLock(Shop $shop, $lifeTime = 3600);
 
     /**
-     * @param Shop $shop
-     *
      * @return bool
      */
     public function unLock(Shop $shop);

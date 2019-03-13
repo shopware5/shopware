@@ -30,7 +30,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 interface PropertyProviderInterface
 {
     /**
-     * @param Shop  $shop
      * @param int[] $groupIds
      *
      * @return Group[]
