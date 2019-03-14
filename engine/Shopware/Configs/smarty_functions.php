@@ -362,4 +362,5 @@ return [
     'var_dump',
     'version_compare',
     'wordwrap',
+    'http_build_query',
 ];
