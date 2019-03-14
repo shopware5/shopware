@@ -678,6 +678,7 @@ class sAdmin
 
         Shopware()->Session()->unsetAll();
         $this->regenerateSessionId();
+        $this->contextService->initializeContext();
 
         $this->eventManager->notify('Shopware_Modules_Admin_Logout_Successful');
     }

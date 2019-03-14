@@ -31,6 +31,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed cachebuster parameter for images in backend to contain the datetime of the last change
 * Changed `font-display` value to `swap` for improved font rendering performance
 * Changed `CdnOptimizerService` to work with external filesystems
+* Changed `sAdmin::sLogout` to refresh ShopContext on logout
 
 ### Deprecations
 
