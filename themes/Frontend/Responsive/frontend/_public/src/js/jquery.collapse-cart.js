@@ -68,7 +68,12 @@
              *
              * @type {String} displayMode
              */
-            'displayMode': 'collapsible'
+            'displayMode': 'collapsible',
+
+            /**
+             * @type {String} shippingCalculatorOptions
+             */
+            'shippingCalculatorOptions': '.table--shipping-costs select'
         },
 
         /**
@@ -210,8 +215,8 @@
                 .html(response)
                 .find('.ajax--cart .alert')
                 .removeClass('is--hidden');
-            window.StateManager.addPlugin('*[data-auto-submit="true"]', 'swAutoSubmit');
             picturefill();
+            this._on(this.$el.find(this.opts.shippingCalculatorOptions), 'change', $.proxy(this.onShippingCalculationChange, this));
 
             $.publish('plugin/swCollapseCart/onArticleAdded', [this]);
         },
@@ -418,11 +423,15 @@
          * @public
          * @method loadCart
          * @param {Function} callback
+         * @param {Object|null} settings
          */
-        loadCart: function (callback) {
+        loadCart: function (callback, settings) {
             var me = this,
                 opts = me.opts,
-                $el = me.$el;
+                $el = me.$el,
+                url = opts.ajaxCartURL;
+
+            settings = settings || {};
 
             if (me.isCartLoading()) {
                 return;
@@ -434,13 +443,13 @@
             me._isCartLoading = true;
 
             $.ajax({
-                url: opts.ajaxCartURL,
+                url: url,
                 dataType: 'html',
+                data: settings,
                 success: function (result) {
                     $el.html(result);
-                    window.StateManager.addPlugin('*[data-auto-submit="true"]', 'swAutoSubmit');
                     picturefill();
-
+                    me._on(me.$el.find(me.opts.shippingCalculatorOptions), 'change', $.proxy(me.onShippingCalculationChange, me));
                     if (typeof callback === 'function') {
                         callback();
                     }
@@ -520,6 +529,31 @@
          */
         onMouseHoverEnd: function () {
             this._isOverMe = false;
+        },
+
+        /**
+         * @param {Event} event
+         */
+        onShippingCalculationChange: function(event) {
+            var me = this,
+                form = $(event.target).closest('form');
+
+            $.publish('plugin/swCollapseCart/onShippingCalculationChange', [this]);
+
+            me.showLoadingIndicator();
+
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function(res) {
+                    me.loadCart(function () {}, {
+                        openShippingCalculations: true
+                    });
+                    $.publish('plugin/swCollapseCart/onShippingCalculationChangeFinished', [this]);
+                }
+            });
+
         },
 
         /**

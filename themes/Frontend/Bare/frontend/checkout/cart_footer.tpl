@@ -60,7 +60,7 @@
 					{if {config name=basketShowCalculation} == 2}
                         <span class="is--bold">{s name='CheckoutFooterEstimatedShippingCosts'}{/s}</span>
 					{/if}
-					{include file="frontend/checkout/shipping_costs.tpl"}
+					{include file="frontend/checkout/shipping_costs.tpl" calculateShippingCosts={config name=basketShowCalculation} == 2}
 				{/block}
 			{/if}
         </div>
