@@ -28,6 +28,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added better ExtJS file auto-loading. See [Improved ExtJS auto-loading](###Improved ExtJS auto-loading) for more details
 * Added configuration to show the voucher field on checkout confirm page
 * Added information text to detail page of category filter 
+* Added string type cast in return statement of method `sOrder::sGetOrdernumber`
 
 ### Changes
 
