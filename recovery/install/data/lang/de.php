@@ -75,6 +75,7 @@ EOT
     'requirements_error' => '<h3 class="alert-heading">Achtung!</h3>Es sind nicht alle Voraussetzungen für eine erfolgreiche Installation erfüllt',
     'requirements_success' => '<h3 class="alert-heading">Glückwunsch!</h3>Alle Voraussetzungen für eine erfolgreiche Installation sind erfüllt',
     'requirements_php_info' => 'Dein Server muss die folgenden Systemvoraussetzungen erfüllen, damit Shopware lauffähig ist',
+    'requirements_php_max_compatible_version' => 'Die Shopware Version die Du gerade installierst wurde nur auf Kompatibilität bis PHP Version %s getestet',
     'requirements_system_colcheck' => 'Voraussetzung',
     'requirements_system_colrequired' => 'Erforderlich',
     'requirements_system_colfound' => 'Dein System',

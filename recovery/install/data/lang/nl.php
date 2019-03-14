@@ -75,6 +75,7 @@ EOT
     'requirements_error' => '<h3 class="alert-heading">Let op!</h3>Er is niet aan alle vereisten voor een geslaagde installatie voldaan',
     'requirements_success' => '<h3 class="alert-heading">Gefeliciteerd</h3>Er is aan alle vereisten voor een geslaagde installatie voldaan',
     'requirements_php_info' => 'Je server moet aan de volgende systeemvereisten voldoen om Shopware te kunnen gebruiken',
+    'requirements_php_max_compatible_version' => 'De Shopware versie die je installeert is alleen getest op compatibiliteit tot PHP versie %s.',
     'requirements_system_colcheck' => 'Vereiste',
     'requirements_system_colrequired' => 'Vereist',
     'requirements_system_colfound' => 'Jouw systeem',

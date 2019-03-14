@@ -75,6 +75,7 @@ EOT
     'requirements_error' => '<h3 class="alert-heading">¡Atención!</h3>No se cumplen todos los requisitos necesarios para una instalación correcta',
     'requirements_success' => '<h3 class="alert-heading">¡Felicidades!</h3>Se cumplen todos los requisitos necesarios para una instalación correcta',
     'requirements_php_info' => 'Tu servidor debe cumplir los siguientes requisitos del sistema para que Shopware sea ejecutable',
+    'requirements_php_max_compatible_version' => 'La Shopware versión que instalas sólo ha sido probada para la compatibilidad hasta la versión PHP %s.',
     'requirements_system_colcheck' => 'Requisito',
     'requirements_system_colrequired' => 'Obligatorio',
     'requirements_system_colfound' => 'Tu sistema',
