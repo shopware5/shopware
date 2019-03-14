@@ -199,9 +199,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                         break;
                 }
 
-                if ($entry['name'] === 'file' ||
-                    $entry['name'] === 'image' ||
-                    $entry['name'] === 'fallback_picture'
+                if ($entry['name'] === 'file'
+                    || $entry['name'] === 'image'
+                    || $entry['name'] === 'fallback_picture'
                 ) {
                     $scheme = parse_url($value, PHP_URL_SCHEME);
 
@@ -1170,8 +1170,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
 
         $validFrom = null;
-        if (!empty($data['validFrom']) &&
-            !empty($data['validFromTime'])) {
+        if (!empty($data['validFrom'])
+            && !empty($data['validFromTime'])) {
             $fromDate = new \DateTime($data['validFrom']);
             $fromTime = new \DateTime($data['validFromTime']);
 
@@ -1179,8 +1179,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
 
         $validTo = null;
-        if (!empty($data['validTo']) &&
-            !empty($data['validToTime'])) {
+        if (!empty($data['validTo'])
+            && !empty($data['validToTime'])) {
             $toDate = new \DateTime($data['validTo']);
             $toTime = new \DateTime($data['validToTime']);
 

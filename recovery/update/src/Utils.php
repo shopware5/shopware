@@ -101,8 +101,8 @@ class Utils
     }
 
     /**
-     * @param      $dir
-     * @param bool $includeDir
+     * @param string $dir
+     * @param bool   $includeDir
      */
     public static function deleteDir($dir, $includeDir = false)
     {
@@ -142,7 +142,7 @@ class Utils
      */
     public static function isAllowed($clientIp)
     {
-        $allowed = trim(file_get_contents(UPDATE_PATH . '/' . 'allowed_ip.txt'));
+        $allowed = trim(file_get_contents(UPDATE_PATH . '/allowed_ip.txt'));
         $allowed = explode("\n", $allowed);
         $allowed = array_map('trim', $allowed);
 

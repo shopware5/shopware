@@ -26,7 +26,9 @@ use Shopware\Models\Category\Category;
 
 class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components_Test_Controller_TestCase
 {
-    /** @var Category $repository */
+    /**
+     * @var Category
+     */
     protected $repository = null;
 
     /**
@@ -128,9 +130,9 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
      *
      * @depends testSaveDetail
      *
-     * @param $id
+     * @param string $id
      *
-     * @return the id to for the testGetDetail Method
+     * @return string the id to for the testGetDetail Method
      */
     public function testGetDetail($id)
     {
@@ -198,7 +200,7 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
      *
      * @depends testGetDetail
      *
-     * @param $id
+     * @param string $id
      */
     public function testDelete($id)
     {

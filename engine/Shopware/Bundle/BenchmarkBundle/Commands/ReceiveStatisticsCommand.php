@@ -91,7 +91,7 @@ class ReceiveStatisticsCommand extends ShopwareCommand
      */
     private function isShopValid(BenchmarkConfig $shopConfig)
     {
-        return $shopConfig->isActive() &&
-            $shopConfig->getLastReceived()->add(new \DateInterval('P1D')) < new \DateTime('now', new \DateTimeZone('UTC'));
+        return $shopConfig->isActive()
+            && $shopConfig->getLastReceived()->add(new \DateInterval('P1D')) < new \DateTime('now', new \DateTimeZone('UTC'));
     }
 }

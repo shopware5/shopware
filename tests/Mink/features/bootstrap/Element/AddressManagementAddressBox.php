@@ -77,7 +77,7 @@ class AddressManagementAddressBox extends MultipleElement
     }
 
     /**
-     * @param $givenAddress
+     * @param array $givenAddress
      *
      * @return bool
      */

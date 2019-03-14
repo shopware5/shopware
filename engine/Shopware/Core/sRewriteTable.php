@@ -961,8 +961,8 @@ class sRewriteTable
             $hasSpecificSubShopPath = $this->hasSpecificShopPath($org_path, $path, $shopId);
 
             // If our current form is specific for this subshop OR if we are for all shops and no other form is specific, write URL
-            if (!empty($form['shopIds']) ||
-                (empty($form['shopIds']) && !$hasSpecificSubShopPath)) {
+            if (!empty($form['shopIds'])
+                || (empty($form['shopIds']) && !$hasSpecificSubShopPath)) {
                 $this->sInsertUrl($org_path, $path);
             }
         }
@@ -1002,8 +1002,8 @@ class sRewriteTable
             $hasSpecificSubShopPath = $this->hasSpecificShopPath($org_path, $path, $shopId);
 
             // If our current site is specific for this subshop OR if we are for all shops and no other site is specific, write URL
-            if (!empty($form['shopIds']) ||
-                (empty($form['shopIds']) && !$hasSpecificSubShopPath)) {
+            if (!empty($form['shopIds'])
+                || (empty($form['shopIds']) && !$hasSpecificSubShopPath)) {
                 $this->sInsertUrl($org_path, $path);
             }
         }

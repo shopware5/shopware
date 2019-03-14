@@ -103,7 +103,7 @@ class Shopware_Tests_Controllers_Backend_RiskManagementTest extends Enlight_Comp
      * a premium-article.
      * The testCreatePremiumArticle method is called before.
      *
-     * @param $lastId The id of the last created article
+     * @param string $lastId The id of the last created article
      * @depends testCreateRule
      */
     public function testEditRule($lastId)
@@ -132,7 +132,7 @@ class Shopware_Tests_Controllers_Backend_RiskManagementTest extends Enlight_Comp
      *
      * @depends testCreateRule
      *
-     * @param $lastId
+     * @param string $lastId
      */
     public function testDeleteRule($lastId)
     {

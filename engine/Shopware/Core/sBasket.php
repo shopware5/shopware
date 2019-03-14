@@ -2364,8 +2364,8 @@ SQL;
     private function calculateVoucherValues(array $voucherDetails)
     {
         $taxRate = 0;
-        if ($voucherDetails['taxconfig'] === 'none' ||
-            (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])
+        if ($voucherDetails['taxconfig'] === 'none'
+            || (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])
         ) {
             // if net customer group - calculate without tax
             $tax = $voucherDetails['value'] * -1;
@@ -2996,8 +2996,8 @@ SQL;
                 false
             );
             $grossPrice = $this->moduleManager->Articles()->sRound($grossPrice);
-            if (($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA['tax']) ||
-                (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])
+            if (($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA['tax'])
+                || (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])
             ) {
                 $netPrice = $this->moduleManager->Articles()->sRound(
                     $this->moduleManager->Articles()->sGetPricegroupDiscount(

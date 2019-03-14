@@ -183,8 +183,8 @@ class SpecialContext extends SubContext
      *
      * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
      *
-     * @param $lambda
-     * @param int $wait
+     * @param callable $lambda
+     * @param int      $wait
      *
      * @throws \Exception
      *
@@ -202,8 +202,8 @@ class SpecialContext extends SubContext
      *
      * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
      *
-     * @param $lambda
-     * @param int $wait
+     * @param callable $lambda
+     * @param int      $wait
      *
      * @return bool
      */
@@ -230,8 +230,8 @@ class SpecialContext extends SubContext
      * Tries to click on a named link until the click is successfull or the timeout is reached
      *
      * @param HelperSelectorInterface $element
-     * @param $linkName
-     * @param int $timeout Defaults to 60 seconds
+     * @param string                  $linkName
+     * @param int                     $timeout  Defaults to 60 seconds
      */
     protected function clickNamedLinkWhenClickable(HelperSelectorInterface $element, $linkName, $timeout = 60)
     {

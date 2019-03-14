@@ -745,7 +745,7 @@ EOD
     /**
      * Returns the unique value of an array, throws in exception if there are differences
      *
-     * @param $array
+     * @param array $array
      *
      * @throws \Exception
      *
@@ -879,8 +879,8 @@ EOD
      *
      * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
      *
-     * @param $lambda
-     * @param int $wait
+     * @param callable $lambda
+     * @param int      $wait
      *
      * @throws \Exception
      */
@@ -904,7 +904,7 @@ EOD
     }
 
     /**
-     * @param $var
+     * @param array $var
      *
      * @return bool
      */

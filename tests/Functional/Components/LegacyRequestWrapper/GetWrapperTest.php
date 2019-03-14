@@ -77,7 +77,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
      * Tests that reseting GET data inside any core class is equivalent to resetting it in the
      * global $_GET
      *
-     * @param $getData
+     * @param mixed $getData
      *
      * @return mixed
      * @depends testSetQuery

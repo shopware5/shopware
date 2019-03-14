@@ -52,9 +52,14 @@ return PhpCsFixer\Config::create()
         'general_phpdoc_annotation_remove' => [
             'annotations' => ['copyright', 'category'],
         ],
+        'phpdoc_var_annotation_correct_order' => true,
 
-        PhpCsFixerCustomFixers\Fixer\NoUselessClassCommentFixer::name() => true,
-        PhpCsFixerCustomFixers\Fixer\NoUselessConstructorCommentFixer::name() => true,
+        PhpCsFixerCustomFixers\Fixer\NoUselessCommentFixer::name() => true,
+        PhpCsFixerCustomFixers\Fixer\NoUnneededConcatenationFixer::name() => true,
+        PhpCsFixerCustomFixers\Fixer\SingleSpaceAfterStatementFixer::name() => true,
+        PhpCsFixerCustomFixers\Fixer\SingleSpaceBeforeStatementFixer::name() => true,
+        PhpCsFixerCustomFixers\Fixer\PhpdocParamTypeFixer::name() => true,
+        PhpCsFixerCustomFixers\Fixer\OperatorLinebreakFixer::name() => ['only_booleans' => true]
     ])
     ->setFinder($finder)
 ;

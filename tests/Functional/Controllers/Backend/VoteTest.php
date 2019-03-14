@@ -76,7 +76,7 @@ class Shopware_Tests_Controllers_Backend_VoteTest extends Enlight_Components_Tes
      *
      * @depends testGetVotes
      *
-     * @param $data Contains the article, which is created in testGetVotes
+     * @param array $data Contains the article, which is created in testGetVotes
      */
     public function testAnswerVote($data)
     {
@@ -96,7 +96,7 @@ class Shopware_Tests_Controllers_Backend_VoteTest extends Enlight_Components_Tes
      *
      * @depends testGetVotes
      *
-     * @param $data Contains the article, which is created in testGetVotes
+     * @param array $data Contains the article, which is created in testGetVotes
      */
     public function testAcceptVote($data)
     {
@@ -118,7 +118,7 @@ class Shopware_Tests_Controllers_Backend_VoteTest extends Enlight_Components_Tes
      *
      * @depends testGetVotes
      *
-     * @param $data Contains the article, which is created in testGetVotes
+     * @param array $data Contains the article, which is created in testGetVotes
      */
     public function testDeleteVote($data)
     {

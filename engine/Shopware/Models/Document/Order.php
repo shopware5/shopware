@@ -226,7 +226,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         $array['_paymentInstances'] = $array['_paymentInstances']->getArrayCopy();
         $array['_dispatch'] = $array['_dispatch']->getArrayCopy();
         $array['_currency'] = $array['_currency']->getArrayCopy();
-        //$array["_order"] = current($array["_order"]);
+
         return $array;
     }
 

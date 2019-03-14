@@ -277,12 +277,9 @@ class CrudService
      */
     private function schemaChanged(ConfigurationStruct $config, $name, $type, $defaultValue = null)
     {
-        return
-            $config->getColumnType() !== $type
-            ||
-            $config->getColumnName() !== $name
-            ||
-            $config->getDefaultValue() != $defaultValue
+        return $config->getColumnType() !== $type
+            || $config->getColumnName() !== $name
+            || $config->getDefaultValue() != $defaultValue
         ;
     }
 

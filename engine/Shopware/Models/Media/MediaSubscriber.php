@@ -102,8 +102,8 @@ class MediaSubscriber implements EventSubscriber
 
                 case Media::TYPE_VECTOR:
                     if (
-                        $media->getExtension() === 'svg' &&
-                        $xml = simplexml_load_string($mediaService->read($media->getPath()))
+                        $media->getExtension() === 'svg'
+                        && $xml = simplexml_load_string($mediaService->read($media->getPath()))
                     ) {
                         /** @var \SimpleXMLElement|null $attr */
                         $attr = $xml->attributes();

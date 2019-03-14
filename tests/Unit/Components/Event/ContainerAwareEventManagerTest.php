@@ -132,7 +132,6 @@ class ContainerAwareEventManagerTest extends TestCase
 
     public function testHasListenersOnLazyLoad()
     {
-        //        $eventArgs = new \Enlight_Event_EventArgs(['some' => 'args']);
         $service = $this->createMock(Service::class);
 
         $this->container->set('service.listener', $service);

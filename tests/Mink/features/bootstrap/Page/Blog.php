@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace  Shopware\Tests\Mink\Page;
+namespace Shopware\Tests\Mink\Page;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\BlogComment;
@@ -94,8 +94,8 @@ class Blog extends Page implements HelperSelectorInterface
      * Checks the evaluations of the current article
      *
      * @param BlogComment $blogComments
-     * @param $average
-     * @param array $comments
+     * @param mixed       $average
+     * @param array       $comments
      *
      * @throws \Exception
      */
@@ -139,7 +139,7 @@ class Blog extends Page implements HelperSelectorInterface
      * Helper function to check the rating of a blog comment
      *
      * @param BlogComment $blogComments
-     * @param $average
+     * @param mixed       $average
      *
      * @throws \Exception
      */

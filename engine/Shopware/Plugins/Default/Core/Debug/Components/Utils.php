@@ -29,8 +29,8 @@ class Utils
     /**
      * Encode data method
      *
-     * @param     $data
-     * @param int $length
+     * @param string|array|object $data
+     * @param int                 $length
      *
      * @return array|string
      */
@@ -65,7 +65,7 @@ class Utils
     /**
      * Format memory in a proper way
      *
-     * @param  $size
+     * @param float $size
      *
      * @return string
      */
@@ -82,7 +82,7 @@ class Utils
     /**
      * Format time for human readable
      *
-     * @param  $time
+     * @param float $time
      *
      * @return string
      */

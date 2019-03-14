@@ -286,7 +286,7 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
      */
     public function createMailHandler()
     {
-        /** @var $config Shopware_Components_Config */
+        /** @var Shopware_Components_Config $config */
         $config = $this->get('config');
 
         $logLevel = \Monolog\Logger::toMonologLevel($config->get('logMailLevel'));

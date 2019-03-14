@@ -391,7 +391,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
      */
     private function requiresFallback($instance)
     {
-        if (!$instance instanceof  Enlight_Components_Snippet_Namespace) {
+        if (!$instance instanceof Enlight_Components_Snippet_Namespace) {
             return false;
         }
         if ($instance->getFallback()) {

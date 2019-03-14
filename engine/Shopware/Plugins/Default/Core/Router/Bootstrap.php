@@ -408,16 +408,14 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
      */
     protected function shouldRedirect(Request $request, Shop $shop)
     {
-        return
-            //for example: template preview, direct shop selection via url
+        return //for example: template preview, direct shop selection via url
             (
                 $request->isGet()
                 && $request->getQuery('__shop') !== null
                 && $request->getQuery('__shop') != $shop->getId()
             )
-            ||
             //for example: shop language switch
-            (
+            || (
                 $request->isPost()
                 && $request->getPost('__shop') !== null
                 && $request->getPost('__redirect') !== null

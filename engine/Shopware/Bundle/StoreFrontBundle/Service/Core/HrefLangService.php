@@ -175,11 +175,10 @@ class HrefLangService implements HrefLangServiceInterface
      */
     protected function isCategoryLink(array $parameters)
     {
-        return
-            (isset($parameters['controller']) && $parameters['controller'] === 'listing') ||
-            (isset($parameters['controller']) && $parameters['controller'] === 'cat') ||
-            (isset($parameters['sViewport']) && $parameters['sViewport'] === 'cat') ||
-            (isset($parameters['sViewport']) && $parameters['sViewport'] === 'listing');
+        return (isset($parameters['controller']) && $parameters['controller'] === 'listing')
+            || (isset($parameters['controller']) && $parameters['controller'] === 'cat')
+            || (isset($parameters['sViewport']) && $parameters['sViewport'] === 'cat')
+            || (isset($parameters['sViewport']) && $parameters['sViewport'] === 'listing');
     }
 
     /**

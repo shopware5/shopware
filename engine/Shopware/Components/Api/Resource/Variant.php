@@ -991,8 +991,8 @@ class Variant extends Resource implements BatchInterface
 
         /** @var Group $availableGroup */
         foreach ($availableGroups as $availableGroup) {
-            if (($groupData['id'] !== null && (int) $availableGroup->getId() === (int) $groupData['id']) ||
-                (mb_strtolower($availableGroup->getName()) === $groupName && $groupData['name'] !== null)) {
+            if (($groupData['id'] !== null && (int) $availableGroup->getId() === (int) $groupData['id'])
+                || (mb_strtolower($availableGroup->getName()) === $groupName && $groupData['name'] !== null)) {
                 return $availableGroup;
             }
         }
