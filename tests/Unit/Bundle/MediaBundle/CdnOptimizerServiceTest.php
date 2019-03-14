@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\MediaBundle;
 
-use League\Flysystem\FileExistsException;
+use League\Flysystem\FileNotFoundException;
 use League\Flysystem\Filesystem;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\MediaBundle\CdnOptimizerService;
@@ -57,13 +57,13 @@ class CdnOptimizerServiceTest extends TestCase
 
         $mediaServiceAdapterMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['writeStream', 'readStream'])
+            ->setMethods(['updateStream', 'readStream'])
             ->getMock();
 
         $mediaServiceAdapterMock
             ->expects($this->once())
-            ->method('writeStream')
-            ->willThrowException(new FileExistsException('test.file'));
+            ->method('updateStream')
+            ->willThrowException(new FileNotFoundException('test.file'));
 
         $mediaServiceAdapterMock
             ->expects($this->once())
@@ -96,7 +96,7 @@ class CdnOptimizerServiceTest extends TestCase
             $filesystemMock
         );
 
-        $this->expectException(FileExistsException::class);
+        $this->expectException(FileNotFoundException::class);
         $cdnOptimizerService->optimize('hello.world');
     }
 
@@ -123,12 +123,12 @@ class CdnOptimizerServiceTest extends TestCase
 
         $mediaServiceAdapterMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['writeStream', 'readStream'])
+            ->setMethods(['updateStream', 'readStream'])
             ->getMock();
 
         $mediaServiceAdapterMock
             ->expects($this->once())
-            ->method('writeStream')
+            ->method('updateStream')
             ->withAnyParameters();
 
         $mediaServiceAdapterMock
