@@ -38,10 +38,6 @@ class LocaleSettingsService
      */
     private $container;
 
-    /**
-     * @param \PDO      $connection
-     * @param Container $container
-     */
     public function __construct(\PDO $connection, Container $container)
     {
         $this->connection = $connection;

@@ -38,9 +38,6 @@ class WidthConditionHandler implements ConditionHandlerInterface
      */
     private $variantHelper;
 
-    /**
-     * @param VariantHelperInterface $variantHelper
-     */
     public function __construct(VariantHelperInterface $variantHelper)
     {
         $this->variantHelper = $variantHelper;

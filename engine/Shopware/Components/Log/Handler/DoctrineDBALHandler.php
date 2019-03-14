@@ -45,11 +45,9 @@ class DoctrineDBALHandler extends AbstractProcessingHandler
     protected $table;
 
     /**
-     * @param \Doctrine\DBAL\Connection $conn
-     * @param string                    $table
-     * @param array                     $columnMap
-     * @param int                       $level
-     * @param bool                      $bubble
+     * @param string $table
+     * @param int    $level
+     * @param bool   $bubble
      */
     public function __construct(\Doctrine\DBAL\Connection $conn, $table, array $columnMap, $level = Logger::DEBUG, $bubble = true)
     {

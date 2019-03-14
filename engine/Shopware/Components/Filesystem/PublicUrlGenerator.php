@@ -50,10 +50,9 @@ class PublicUrlGenerator implements PublicUrlGeneratorInterface
     private $publicRootDir;
 
     /**
-     * @param ContainerInterface $container
-     * @param string             $shopwareRootDir
-     * @param string             $publicRootDir
-     * @param string             $publicUrl
+     * @param string $shopwareRootDir
+     * @param string $publicRootDir
+     * @param string $publicUrl
      */
     public function __construct(ContainerInterface $container, $shopwareRootDir, $publicRootDir, $publicUrl = null)
     {

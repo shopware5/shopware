@@ -60,12 +60,6 @@ class VoteGateway implements Gateway\VoteGatewayInterface
      */
     private $config;
 
-    /**
-     * @param Connection                  $connection
-     * @param FieldHelper                 $fieldHelper
-     * @param Hydrator\VoteHydrator       $voteHydrator
-     * @param \Shopware_Components_Config $config
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,

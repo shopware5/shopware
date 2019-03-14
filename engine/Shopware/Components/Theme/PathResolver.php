@@ -63,11 +63,9 @@ class PathResolver
     private $release;
 
     /**
-     * @param string                $rootDir
-     * @param array                 $pluginDirectories
-     * @param string                $templateDir
-     * @param string                $cacheDir
-     * @param ShopwareReleaseStruct $release
+     * @param string $rootDir
+     * @param string $templateDir
+     * @param string $cacheDir
      */
     public function __construct($rootDir, array $pluginDirectories, $templateDir, $cacheDir, ShopwareReleaseStruct $release)
     {
@@ -79,8 +77,6 @@ class PathResolver
     }
 
     /**
-     * @param Shop\Template $template
-     *
      * @return string|null
      */
     public function getDirectory(Shop\Template $template)
@@ -89,8 +85,6 @@ class PathResolver
     }
 
     /**
-     * @param array $template
-     *
      * @return string|null
      */
     public function getDirectoryByArray(array $template)
@@ -127,7 +121,6 @@ class PathResolver
     /**
      * Helper function to build the path to the passed plugin.
      *
-     * @param Plugin $plugin
      *
      * @return string
      */
@@ -177,7 +170,6 @@ class PathResolver
     /**
      * Returns the less directory for the passed theme.
      *
-     * @param Shop\Template $template
      *
      * @return string
      */
@@ -193,7 +185,6 @@ class PathResolver
     /**
      * Returns the fix defined snippet directory of the passed theme.
      *
-     * @param Shop\Template $template
      *
      * @return string
      */
@@ -210,7 +201,6 @@ class PathResolver
     /**
      * Returns the fix defined snippet directory of the passed theme.
      *
-     * @param Shop\Template $template
      *
      * @return string
      */
@@ -227,7 +217,6 @@ class PathResolver
     /**
      * Returns the less directory for the passed theme.
      *
-     * @param Shop\Template $template
      *
      * @return string
      */
@@ -243,7 +232,6 @@ class PathResolver
     /**
      * Returns the less directory for the passed theme.
      *
-     * @param Shop\Template $template
      *
      * @return string
      */
@@ -257,8 +245,6 @@ class PathResolver
     }
 
     /**
-     * @param Shop\Template $template
-     *
      * @return string
      */
     public function getThemeLessFile(Shop\Template $template)
@@ -278,8 +264,7 @@ class PathResolver
     }
 
     /**
-     * @param string    $path
-     * @param Shop\Shop $shop
+     * @param string $path
      *
      * @return string
      */
@@ -301,7 +286,6 @@ class PathResolver
     /**
      * Returns the shop url to the generated compiler source map.
      *
-     * @param Shop\Shop $shop
      *
      * @return string
      */
@@ -318,8 +302,7 @@ class PathResolver
      * already exists, if this isn't the case, the smarty
      * function starts the theme compiler operations.
      *
-     * @param Shop\Shop $shop
-     * @param int       $timestamp
+     * @param int $timestamp
      *
      * @return string
      */
@@ -335,8 +318,7 @@ class PathResolver
      * already exists, if this isn't the case, the smarty
      * function starts the theme compiler operations.
      *
-     * @param Shop\Shop $shop
-     * @param int       $timestamp
+     * @param int $timestamp
      *
      * @return string
      */
@@ -348,9 +330,8 @@ class PathResolver
     /**
      * Helper function to build a unique file name.
      *
-     * @param int       $timestamp
-     * @param Shop\Shop $shop
-     * @param string    $suffix
+     * @param int    $timestamp
+     * @param string $suffix
      *
      * @return string
      */
@@ -377,7 +358,6 @@ class PathResolver
      * Helper function which returns the theme directory for the passed
      * shop template.
      *
-     * @param Shop\Template $theme
      *
      * @return string
      */

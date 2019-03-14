@@ -162,8 +162,6 @@ class DatabaseSetupCommand extends ShopwareCommand
     }
 
     /**
-     * @param array $dbConfig
-     *
      * @return string
      */
     private function buildConnectionString(array $dbConfig)
@@ -192,8 +190,6 @@ class DatabaseSetupCommand extends ShopwareCommand
     }
 
     /**
-     * @param array $dbConfig
-     *
      * @return \PDO
      */
     private function createConnection(array $dbConfig)
@@ -222,8 +218,6 @@ class DatabaseSetupCommand extends ShopwareCommand
     }
 
     /**
-     * @param InputInterface $input
-     *
      * @return string
      */
     private function parseUrl(InputInterface $input)

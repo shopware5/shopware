@@ -321,8 +321,6 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param Country $country
-     *
      * @return State
      */
     private function createState(Country $country)
@@ -342,10 +340,6 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         return self::$modelManager->merge($state);
     }
 
-    /**
-     * @param array    $demoData
-     * @param Customer $customer
-     */
     private function assertCustomer(array $demoData, Customer $customer)
     {
         $this->assertEquals($demoData['salutation'], $customer->getSalutation());
@@ -360,9 +354,7 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param array    $demoData
-     * @param Customer $customer
-     * @param bool     $shipping
+     * @param bool $shipping
      */
     private function assertAddress(array $demoData, Customer $customer, $shipping = false)
     {

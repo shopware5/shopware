@@ -41,21 +41,12 @@ class BacklogProcessor implements BacklogProcessorInterface
      */
     private $synchronizers;
 
-    /**
-     * @var \Enlight_Event_EventManager
-     */
-    private $eventManager;
-
     public function __construct(
         Connection $connection,
-        \Enlight_Event_EventManager $eventManager,
-        \Traversable $synchronizers
+        \IteratorAggregate $synchronizers
     ) {
         $this->connection = $connection;
-        $this->eventManager = $eventManager;
-        $this->synchronizers = iterator_to_array($synchronizers, false);
-
-        $this->collectSynchronizer();
+        $this->synchronizers = iterator_to_array($synchronizers, true);
     }
 
     /**

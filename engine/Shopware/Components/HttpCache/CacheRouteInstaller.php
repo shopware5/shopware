@@ -33,9 +33,6 @@ class CacheRouteInstaller
      */
     private $configWriter;
 
-    /**
-     * @param ConfigWriter $configWriter
-     */
     public function __construct(ConfigWriter $configWriter)
     {
         $this->configWriter = $configWriter;
@@ -44,7 +41,6 @@ class CacheRouteInstaller
     /**
      * @param string $route
      * @param int    $time
-     * @param array  $invalidateTags
      *
      * @return bool
      */

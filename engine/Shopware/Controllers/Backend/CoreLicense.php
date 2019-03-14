@@ -239,7 +239,6 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
     /**
      * Creates a readable string from a minified license key.
      *
-     * @param LicenseInformation $licenseInformation
      *
      * @return LicenseInformation
      */

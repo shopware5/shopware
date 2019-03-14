@@ -68,8 +68,6 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
 
     /**
      * @BeforeSuite
-     *
-     * @param BeforeSuiteScope $scope
      */
     public static function setup(BeforeSuiteScope $scope)
     {
@@ -78,8 +76,6 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
 
     /**
      * @BeforeScenario
-     *
-     * @param BeforeScenarioScope $scope
      */
     public function before(BeforeScenarioScope $scope)
     {
@@ -123,8 +119,6 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
      * Take screenshot when step fails. Works only with Selenium2Driver.
      *
      * @AfterStep
-     *
-     * @param AfterStepScope $scope
      */
     public function takeScreenshotAfterFailedStep(AfterStepScope $scope)
     {
@@ -153,7 +147,6 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
 
     /**
      * @param string $configName
-     * @param mixed  $value
      */
     public function changeConfigValue($configName, $value)
     {
@@ -383,8 +376,6 @@ EOD;
     }
 
     /**
-     * @param Session $session
-     *
      * @return string|null
      */
     private function getRequestDataLogMessage(Session $session)
@@ -401,8 +392,6 @@ EOD;
     }
 
     /**
-     * @param Session $session
-     *
      * @return string|null
      */
     private function getResponseHeadersLogMessage(Session $session)
@@ -415,8 +404,6 @@ EOD;
     }
 
     /**
-     * @param Session $session
-     *
      * @return string|null
      */
     private function getRequestContentLogMessage(Session $session)

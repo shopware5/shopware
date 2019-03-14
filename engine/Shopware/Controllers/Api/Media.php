@@ -132,11 +132,7 @@ class Shopware_Controllers_Api_Media extends RestController
     }
 
     /**
-     * @param array $params
-     *
      * @throws Exception
-     *
-     * @return array
      */
     private function prepareUploadedFile(array $params): array
     {
@@ -175,10 +171,6 @@ class Shopware_Controllers_Api_Media extends RestController
 
     /**
      * Use the ID of the authenticated user as a fallback 'userId'
-     *
-     * @param array $params
-     *
-     * @return array
      */
     private function prepareFallbackUser(array $params): array
     {

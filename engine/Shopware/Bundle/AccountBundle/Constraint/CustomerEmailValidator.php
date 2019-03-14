@@ -61,11 +61,6 @@ class CustomerEmailValidator extends ConstraintValidator
      */
     private $emailValidator;
 
-    /**
-     * @param Shopware_Components_Snippet_Manager $snippets
-     * @param Connection                          $connection
-     * @param EmailValidatorInterface             $emailValidator
-     */
     public function __construct(
         Shopware_Components_Snippet_Manager $snippets,
         Connection $connection,
@@ -77,8 +72,7 @@ class CustomerEmailValidator extends ConstraintValidator
     }
 
     /**
-     * @param string     $email
-     * @param Constraint $constraint
+     * @param string $email
      */
     public function validate($email, Constraint $constraint)
     {
@@ -115,8 +109,6 @@ class CustomerEmailValidator extends ConstraintValidator
     }
 
     /**
-     * @param CustomerEmail $constraint
-     *
      * @return bool
      */
     private function isFastLogin(CustomerEmail $constraint)
@@ -126,7 +118,6 @@ class CustomerEmailValidator extends ConstraintValidator
 
     /**
      * @param string $value
-     * @param Shop   $shop
      * @param int    $customerId
      *
      * @return bool

@@ -58,8 +58,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
     /**
      * Event listener method
-     *
-     * @param Enlight_Controller_EventArgs $args
      */
     public function onRouteStartup(Enlight_Controller_EventArgs $args)
     {
@@ -108,8 +106,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
     /**
      * Event listener method
-     *
-     * @param Enlight_Controller_EventArgs $args
      */
     public function onRouteShutdown(Enlight_Controller_EventArgs $args)
     {
@@ -302,8 +298,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     }
 
     /**
-     * @param Request $request
-     *
      * @return DetachedShop
      */
     protected function getShopByRequest(Request $request)
@@ -339,9 +333,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     }
 
     /**
-     * @param Request $request
-     * @param Shop    $newShop
-     *
      * @return string
      */
     protected function getNewShopUrl(
@@ -401,9 +392,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     }
 
     /**
-     * @param Request $request
-     * @param Shop    $shop
-     *
      * @return bool
      */
     protected function shouldRedirect(Request $request, Shop $shop)
@@ -424,9 +412,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     }
 
     /**
-     * @param Request $request
-     * @param Shop    $shop
-     *
      * @return string|null
      */
     private function createPathInfo(Request $request, Shop $shop)
@@ -467,7 +452,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
     /**
      * @param string $requestUri
-     * @param Shop   $shop
      *
      * @return string
      */
@@ -499,8 +483,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     }
 
     /**
-     * @param Shop $shop
-     *
      * @throws \RuntimeException
      */
     private function validateShop(Shop $shop)

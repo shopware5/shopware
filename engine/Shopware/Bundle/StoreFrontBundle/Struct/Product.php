@@ -75,8 +75,6 @@ class Product extends ListProduct
     protected $configuration = [];
 
     /**
-     * @param ListProduct $listProduct
-     *
      * @return Product
      */
     public static function createFromListProduct(ListProduct $listProduct)

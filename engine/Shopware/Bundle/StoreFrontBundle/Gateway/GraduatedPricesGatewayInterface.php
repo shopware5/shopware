@@ -34,9 +34,7 @@ interface GraduatedPricesGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface::get()
      *
-     * @param Struct\ListProduct[]        $products
-     * @param Struct\ShopContextInterface $context
-     * @param Struct\Customer\Group       $customerGroup
+     * @param Struct\ListProduct[] $products
      *
      * @return array indexed by the product order number, each array element contains a Struct\Product\PriceRule array
      */
@@ -50,9 +48,6 @@ interface GraduatedPricesGatewayInterface
      * Required conditions for the selection:
      * - Sorted ascending with the \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule::from property.
      *
-     * @param Struct\ListProduct          $product
-     * @param Struct\ShopContextInterface $context
-     * @param Struct\Customer\Group       $customerGroup
      *
      * @return Struct\Product\PriceRule[]
      */

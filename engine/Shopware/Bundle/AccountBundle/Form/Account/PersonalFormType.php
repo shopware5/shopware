@@ -70,11 +70,6 @@ class PersonalFormType extends AbstractType
      */
     private $context;
 
-    /**
-     * @param Shopware_Components_Snippet_Manager $snippetManager
-     * @param \Shopware_Components_Config         $config
-     * @param ContextServiceInterface             $context
-     */
     public function __construct(
         Shopware_Components_Snippet_Manager $snippetManager,
         \Shopware_Components_Config $config,
@@ -93,9 +88,6 @@ class PersonalFormType extends AbstractType
         return 'personal';
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -104,10 +96,6 @@ class PersonalFormType extends AbstractType
         ]);
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {

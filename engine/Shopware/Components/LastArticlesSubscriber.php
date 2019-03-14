@@ -34,9 +34,6 @@ class LastArticlesSubscriber implements SubscriberInterface
      */
     private $container;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -54,9 +51,6 @@ class LastArticlesSubscriber implements SubscriberInterface
         ];
     }
 
-    /**
-     * @param \Enlight_Event_EventArgs $args
-     */
     public function refreshSessionId(\Enlight_Event_EventArgs $args)
     {
         $this->container->get('dbal_connection')->executeUpdate(
@@ -65,9 +59,6 @@ class LastArticlesSubscriber implements SubscriberInterface
         );
     }
 
-    /**
-     * @param \Enlight_Controller_ActionEventArgs $args
-     */
     public function onRefreshStatistics(\Enlight_Controller_ActionEventArgs $args)
     {
         $request = $args->getRequest();
@@ -85,9 +76,6 @@ class LastArticlesSubscriber implements SubscriberInterface
         $this->setLastProductById($productId);
     }
 
-    /**
-     * @param \Enlight_Controller_ActionEventArgs $args
-     */
     public function onPostDispatch(\Enlight_Controller_ActionEventArgs $args)
     {
         $this->cleanupLastProducts();

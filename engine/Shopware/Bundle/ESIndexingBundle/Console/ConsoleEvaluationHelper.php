@@ -58,9 +58,6 @@ class ConsoleEvaluationHelper implements EvaluationHelperInterface
      */
     private $success = 0;
 
-    /**
-     * {@inheritdoc}
-     */
     public function setOutput(OutputInterface $output)
     {
         $this->output = $output;
@@ -142,8 +139,6 @@ class ConsoleEvaluationHelper implements EvaluationHelperInterface
     }
 
     /**
-     * @param array $item
-     *
      * @throws \Exception
      */
     private function handleItem(array $item)
@@ -173,8 +168,6 @@ class ConsoleEvaluationHelper implements EvaluationHelperInterface
     }
 
     /**
-     * @param array $item
-     *
      * @throws \Exception
      */
     private function abort(array $item)

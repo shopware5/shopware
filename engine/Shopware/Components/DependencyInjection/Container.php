@@ -35,8 +35,6 @@ class Container extends BaseContainer
     protected $container;
 
     /**
-     * @param \Shopware $application
-     *
      * @return Container
      */
     public function setApplication(\Shopware $application)
@@ -51,7 +49,6 @@ class Container extends BaseContainer
      * The given name will be used as identifier.
      *
      * @param string $name
-     * @param mixed  $resource
      * @param string $scope
      *
      * @return Container
@@ -135,8 +132,6 @@ class Container extends BaseContainer
      *
      * @param string $name
      * @param int    $invalidBehavior
-     *
-     * @return mixed
      */
     public function get($name, $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE)
     {
@@ -198,8 +193,6 @@ class Container extends BaseContainer
      * @param int    $invalidBehavior
      *
      * @throws ServiceCircularReferenceException
-     *
-     * @return mixed
      */
     private function doLoad($id, $fallbackName = null, $invalidBehavior = self::NULL_ON_INVALID_REFERENCE)
     {

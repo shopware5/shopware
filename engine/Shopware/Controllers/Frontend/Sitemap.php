@@ -64,9 +64,6 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
     }
 
     /**
-     * @param array $categoryTree
-     * @param array $translations
-     *
      * @return array
      */
     private function translateCategoryTree(array $categoryTree, array $translations)
@@ -134,7 +131,6 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
     }
 
     /**
-     * @param array  $array
      * @param string $keyField
      * @param string $recursiveField
      *
@@ -197,7 +193,6 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
      * Recursive helper function to convert a site to correct sitemap format
      *
      * @param array $site
-     * @param array $translations
      *
      * @return array
      */
@@ -252,8 +247,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
     }
 
     /**
-     * @param int   $objectKey
-     * @param array $translations
+     * @param int $objectKey
      *
      * @return array
      */

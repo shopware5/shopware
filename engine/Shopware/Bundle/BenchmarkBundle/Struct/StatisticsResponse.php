@@ -47,10 +47,9 @@ class StatisticsResponse
     private $shopId;
 
     /**
-     * @param \DateTimeInterface $dateUpdated
-     * @param string             $token
-     * @param bool               $isFinished
-     * @param int                $shopId
+     * @param string $token
+     * @param bool   $isFinished
+     * @param int    $shopId
      */
     public function __construct(\DateTimeInterface $dateUpdated, $token, $isFinished, $shopId = null)
     {

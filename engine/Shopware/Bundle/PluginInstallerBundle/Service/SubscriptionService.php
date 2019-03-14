@@ -67,13 +67,6 @@ class SubscriptionService
      */
     private $exception;
 
-    /**
-     * @param Connection            $connection
-     * @param StoreClient           $storeClient
-     * @param ModelManager          $models
-     * @param PluginLicenceService  $pluginLicenceService
-     * @param ShopwareReleaseStruct $release
-     */
     public function __construct(Connection $connection, StoreClient $storeClient, ModelManager $models, PluginLicenceService $pluginLicenceService, ShopwareReleaseStruct $release)
     {
         $this->connection = $connection;
@@ -133,8 +126,6 @@ class SubscriptionService
     /**
      * Returns information about shop upgrade state and installed plugins.
      *
-     * @param Response $response
-     * @param Request  $request
      *
      * @return PluginInformationResultStruct|bool
      */
@@ -264,7 +255,6 @@ class SubscriptionService
     /**
      * Check the date of the last subscription-check var
      *
-     * @param Request $request
      *
      * @return bool
      */

@@ -34,9 +34,6 @@ interface CategoryGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGatewayInterface::get()
      *
-     * @param array                       $ids
-     * @param Struct\ShopContextInterface $context
-     *
      * @return Struct\Category[] Indexed by the category id
      */
     public function getList(array $ids, Struct\ShopContextInterface $context);
@@ -48,16 +45,14 @@ interface CategoryGatewayInterface
      * - Assigned media object
      * - Core attribute of the media object
      *
-     * @param int                         $id
-     * @param Struct\ShopContextInterface $context
+     * @param int $id
      *
      * @return Struct\Category
      */
     public function get($id, Struct\ShopContextInterface $context);
 
     /**
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[] $products
      *
      * @return array Indexed by product number, contains all categories of a product
      */

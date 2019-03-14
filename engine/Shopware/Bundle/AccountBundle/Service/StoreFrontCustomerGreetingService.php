@@ -43,11 +43,6 @@ class StoreFrontCustomerGreetingService implements StoreFrontCustomerGreetingSer
      */
     private $config;
 
-    /**
-     * @param \Enlight_Components_Session_Namespace $session
-     * @param Connection                            $connection
-     * @param \Shopware_Components_Config           $config
-     */
     public function __construct(
         \Enlight_Components_Session_Namespace $session,
         Connection $connection,

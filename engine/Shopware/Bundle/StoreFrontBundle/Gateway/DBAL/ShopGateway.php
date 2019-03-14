@@ -46,11 +46,6 @@ class ShopGateway implements ShopGatewayInterface
      */
     private $connection;
 
-    /**
-     * @param ShopHydrator $hydrator
-     * @param FieldHelper  $fieldHelper
-     * @param Connection   $connection
-     */
     public function __construct(
         ShopHydrator $hydrator,
         FieldHelper $fieldHelper,

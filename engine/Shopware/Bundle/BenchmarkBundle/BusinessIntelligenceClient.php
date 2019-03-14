@@ -61,11 +61,7 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
     private $logger;
 
     /**
-     * @param string                               $biEndpoint
-     * @param HttpClientInterface                  $client
-     * @param BusinessIntelligenceResponseHydrator $biResponseHydrator
-     * @param BenchmarkEncryption                  $benchmarkEncryption
-     * @param LoggerInterface|null                 $logger
+     * @param string $biEndpoint
      */
     public function __construct(
         $biEndpoint,
@@ -82,8 +78,6 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
     }
 
     /**
-     * @param BusinessIntelligenceRequest $biRequest
-     *
      * @throws BenchmarkSendingException
      *
      * @return Struct\BusinessIntelligenceResponse
@@ -106,8 +100,6 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
     }
 
     /**
-     * @param Response $response
-     *
      * @throws BenchmarkHydratingException
      *
      * @return Struct\BusinessIntelligenceResponse
@@ -126,8 +118,6 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
     }
 
     /**
-     * @param Response $response
-     *
      * @throws \RuntimeException
      */
     private function verifyResponseSignature(Response $response)

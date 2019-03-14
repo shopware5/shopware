@@ -43,11 +43,6 @@ class MenuHelper
      */
     private $translations;
 
-    /**
-     * @param \Slim\Slim         $slim
-     * @param TranslationService $translations
-     * @param array              $entries
-     */
     public function __construct(\Slim\Slim $slim, TranslationService $translations, array $entries)
     {
         $this->entries = $entries;

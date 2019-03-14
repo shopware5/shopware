@@ -40,8 +40,7 @@ class GenericReader implements ReaderInterface
     protected $entityManager;
 
     /**
-     * @param string       $entity
-     * @param ModelManager $entityManager
+     * @param string $entity
      */
     public function __construct($entity, ModelManager $entityManager)
     {

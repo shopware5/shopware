@@ -44,17 +44,11 @@ class PasswordUpdateFormType extends AbstractType
      */
     protected $config;
 
-    /**
-     * @param Shopware_Components_Config $config
-     */
     public function __construct(Shopware_Components_Config $config)
     {
         $this->config = $config;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -63,10 +57,6 @@ class PasswordUpdateFormType extends AbstractType
         ]);
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         if ($this->config->get('accountPasswordCheck')) {

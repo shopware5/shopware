@@ -234,8 +234,6 @@ class VariantTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
-     *
-     * @param \Shopware\Models\Article\Article $article
      */
     public function testCreateWithExistingOrderNumberShouldThrowCustomValidationException(\Shopware\Models\Article\Article $article)
     {
@@ -255,8 +253,6 @@ class VariantTest extends TestCase
 
     /**
      * @depends testCreateShouldBeSuccessful
-     *
-     * @param \Shopware\Models\Article\Article $article
      *
      * @return \Shopware\Models\Article\Article
      */

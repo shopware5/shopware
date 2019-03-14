@@ -38,9 +38,6 @@ class Shopware_Components_Acl extends Zend_Acl
      */
     private $em;
 
-    /**
-     * @param ModelManager $em
-     */
     public function __construct(ModelManager $em)
     {
         $this->em = $em;

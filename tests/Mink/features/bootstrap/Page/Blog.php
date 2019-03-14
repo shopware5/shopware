@@ -78,8 +78,6 @@ class Blog extends Page implements HelperSelectorInterface
 
     /**
      * Fills out the comment form and submits it
-     *
-     * @param array $data
      */
     public function writeComment(array $data)
     {
@@ -93,9 +91,7 @@ class Blog extends Page implements HelperSelectorInterface
     /**
      * Checks the evaluations of the current article
      *
-     * @param BlogComment $blogComments
-     * @param mixed       $average
-     * @param array       $comments
+     * @param string $average
      *
      * @throws \Exception
      */
@@ -138,8 +134,7 @@ class Blog extends Page implements HelperSelectorInterface
     /**
      * Helper function to check the rating of a blog comment
      *
-     * @param BlogComment $blogComments
-     * @param mixed       $average
+     * @param string $average
      *
      * @throws \Exception
      */

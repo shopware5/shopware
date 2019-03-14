@@ -52,9 +52,6 @@ abstract class ShopwareCommand extends Command implements ContainerAwareInterfac
         return $this->container;
     }
 
-    /**
-     * @param OutputInterface $output
-     */
     public function registerErrorHandler(OutputInterface $output)
     {
         error_reporting(-1);

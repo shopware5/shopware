@@ -30,8 +30,6 @@ interface EvaluationHelperInterface
 {
     /**
      * @param bool $active
-     *
-     * @return mixed
      */
     public function setActive($active);
 
@@ -42,8 +40,6 @@ interface EvaluationHelperInterface
 
     /**
      * @param bool $stopOnError
-     *
-     * @return mixed
      */
     public function setStopOnError($stopOnError);
 
@@ -52,22 +48,9 @@ interface EvaluationHelperInterface
      */
     public function getStopOnError();
 
-    /**
-     * @param OutputInterface $output
-     *
-     * @return mixed
-     */
     public function setOutput(OutputInterface $output);
 
-    /**
-     * @param array $data
-     *
-     * @return mixed
-     */
     public function addResult(array $data);
 
-    /**
-     * @return mixed
-     */
     public function finish();
 }

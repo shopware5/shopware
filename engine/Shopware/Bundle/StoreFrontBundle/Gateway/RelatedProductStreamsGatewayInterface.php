@@ -41,8 +41,7 @@ interface RelatedProductStreamsGatewayInterface
      *    'SW200' => array({Struct\ProductStream}, {Struct\ProductStream})
      * )
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[] $products
      *
      * @return array indexed by the product number
      */
@@ -54,8 +53,6 @@ interface RelatedProductStreamsGatewayInterface
      *
      * Example result: array({Struct\ProductStream}, {Struct\ProductStream})
      *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
      *
      * @return array Array of order numbers
      */

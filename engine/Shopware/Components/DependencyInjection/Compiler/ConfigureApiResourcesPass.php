@@ -31,9 +31,6 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class ConfigureApiResourcesPass implements CompilerPassInterface
 {
-    /**
-     * @param ContainerBuilder $container
-     */
     public function process(ContainerBuilder $container)
     {
         foreach ($container->getServiceIds() as $id) {

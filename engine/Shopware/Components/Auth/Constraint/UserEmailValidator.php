@@ -59,11 +59,6 @@ class UserEmailValidator extends ConstraintValidator
      */
     private $emailValidator;
 
-    /**
-     * @param Shopware_Components_Snippet_Manager $snippets
-     * @param Connection                          $connection
-     * @param EmailValidatorInterface             $emailValidator
-     */
     public function __construct(
         Shopware_Components_Snippet_Manager $snippets,
         Connection $connection,
@@ -75,8 +70,7 @@ class UserEmailValidator extends ConstraintValidator
     }
 
     /**
-     * @param string     $email
-     * @param Constraint $constraint
+     * @param string $email
      */
     public function validate($email, Constraint $constraint)
     {

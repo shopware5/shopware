@@ -29,8 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface BenchmarkCollectorInterface
 {
     /**
-     * @param ShopContextInterface $shopContext
-     * @param int                  $batchSize   - If set, this will be used for the Orders, Customers and ProductsProvider
+     * @param int $batchSize - If set, this will be used for the Orders, Customers and ProductsProvider
      *
      * @return array
      */

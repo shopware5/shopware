@@ -29,9 +29,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface PaymentGatewayInterface
 {
     /**
-     * @param array                $paymentIds
-     * @param ShopContextInterface $context
-     *
      * @return array Indexed by the payment id. Each elements contains a Struct\Payment array.
      */
     public function getList(array $paymentIds, ShopContextInterface $context);

@@ -34,9 +34,6 @@ interface ConfiguratorServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGatewayInterface::get()
      *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
-     *
      * @return Struct\Configurator\Group[]
      */
     public function getProductConfiguration(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
@@ -47,8 +44,7 @@ interface ConfiguratorServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGatewayInterface::getList()
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[] $products
      *
      * @return array Each array element contains a Struct\Configurator\Group[] array. The first level is indexed with the product number
      */
@@ -59,10 +55,6 @@ interface ConfiguratorServiceInterface
      * please refer to the linked classes.
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorGatewayInterface::get()
-     *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
-     * @param array                       $selection
      *
      * @return Struct\Configurator\Set
      */

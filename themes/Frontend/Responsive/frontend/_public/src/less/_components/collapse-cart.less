@@ -64,6 +64,10 @@ The collapse cart element contains the current items in the users shopping cart 
             border-top: 2px solid #333;
         }
     }
+
+    .product--essential-features {
+        .unitize(margin-left, 48);
+    }
 }
 
 .ajax--cart {
@@ -296,6 +300,40 @@ The collapse cart element contains the current items in the users shopping cart 
             display: none;
         }
     }
+
+    .small--information {
+        .unitize(font-size, 12);
+
+        .small--prices {
+            float: right;
+        }
+    }
+
+    .context--shipping-costs{
+        .unitize(margin-left, 10);
+    }
+
+    .table--shipping-costs-trigger {
+        .unitize(font-size, 12);
+        .unitize-margin(0, 0, 5, 0);
+        font-weight: @font-bold-weight;
+    }
+
+    .table--shipping-costs {
+        .unitize(font-size, 12);
+
+        .select-field {
+            .unitize-max-height(40);
+            .unitize-margin(5, 10, 5, 0);
+        }
+
+        label {
+            .unitize(font-size, 12);
+            font-weight: @font-bold-weight;
+            .unitize-margin(5, 100, 0, 0);
+            float: left;
+        }
+    }
 }
 
 .off-canvas .ajax--cart {
@@ -383,6 +421,15 @@ The collapse cart element contains the current items in the users shopping cart 
             }
         }
     }
+
+    .product--essential-features {
+        .unitize(margin-top, 5);
+    }
+}
+
+.product--essential-features {
+    .unitize(line-height, 18);
+    .unitize(font-size, 12);
 }
 
 @media screen and(min-width: @tabletViewportWidth) {

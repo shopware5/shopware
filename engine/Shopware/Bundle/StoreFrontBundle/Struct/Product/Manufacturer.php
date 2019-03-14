@@ -257,8 +257,6 @@ class Manufacturer extends Extendable
     }
 
     /**
-     * @param Media $media
-     *
      * @return Manufacturer
      */
     public function setCoverMedia(Media $media)
@@ -285,8 +283,6 @@ class Manufacturer extends Extendable
     }
 
     /**
-     * @param int $coverId
-     *
      * @return Manufacturer
      */
     public function setCoverId(int $coverId)

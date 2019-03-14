@@ -37,9 +37,6 @@ class VoteAverageConditionHandler implements ConditionHandlerInterface
      */
     private $config;
 
-    /**
-     * @param \Shopware_Components_Config $config
-     */
     public function __construct(\Shopware_Components_Config $config)
     {
         $this->config = $config;
@@ -48,7 +45,6 @@ class VoteAverageConditionHandler implements ConditionHandlerInterface
     /**
      * Checks if the passed condition can be handled by this class.
      *
-     * @param ConditionInterface $condition
      *
      * @return bool
      */

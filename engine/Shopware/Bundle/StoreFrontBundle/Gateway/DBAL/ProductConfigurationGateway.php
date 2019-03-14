@@ -55,11 +55,6 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
      */
     private $connection;
 
-    /**
-     * @param Connection                    $connection
-     * @param FieldHelper                   $fieldHelper
-     * @param Hydrator\ConfiguratorHydrator $configuratorHydrator
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
@@ -111,8 +106,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
     }
 
     /**
-     * @param int[]                       $ids
-     * @param Struct\ShopContextInterface $context
+     * @param int[] $ids
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */

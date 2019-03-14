@@ -33,9 +33,6 @@ class DatabaseCollector implements CollectorInterface
      */
     protected $db;
 
-    /**
-     * @param \Enlight_Components_Db_Adapter_Pdo_Mysql $db
-     */
     public function __construct(\Enlight_Components_Db_Adapter_Pdo_Mysql $db)
     {
         $this->db = $db;
@@ -50,8 +47,6 @@ class DatabaseCollector implements CollectorInterface
      * Logs all database process to the internal log object.
      * Iterates all queries of the query profiler and writes the query,
      * the parameter and the elapsed seconds for the query into a new row of the log.
-     *
-     * @param Logger $log
      */
     public function logResults(Logger $log)
     {

@@ -42,8 +42,7 @@ class ListingDate implements InvalidationDateInterface
     private $route;
 
     /**
-     * @param Connection $connection
-     * @param string     $route
+     * @param string $route
      */
     public function __construct(Connection $connection, $route = 'frontend/listing/index')
     {

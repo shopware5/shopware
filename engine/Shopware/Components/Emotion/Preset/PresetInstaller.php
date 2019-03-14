@@ -41,10 +41,6 @@ class PresetInstaller
      */
     private $slugService;
 
-    /**
-     * @param EmotionPreset $presetResource
-     * @param SlugInterface $slugService
-     */
     public function __construct(EmotionPreset $presetResource, SlugInterface $slugService)
     {
         $this->presetResource = $presetResource;

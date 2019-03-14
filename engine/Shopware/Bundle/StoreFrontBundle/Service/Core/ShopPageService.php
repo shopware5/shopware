@@ -40,10 +40,6 @@ class ShopPageService implements Service\ShopPageServiceInterface
      */
     private $shopGateway;
 
-    /**
-     * @param Gateway\ShopPageGatewayInterface $shopPageGateway
-     * @param Gateway\ShopGatewayInterface     $shopGateway
-     */
     public function __construct(Gateway\ShopPageGatewayInterface $shopPageGateway, Gateway\ShopGatewayInterface $shopGateway)
     {
         $this->shopPageGateway = $shopPageGateway;
@@ -86,8 +82,7 @@ class ShopPageService implements Service\ShopPageServiceInterface
     }
 
     /**
-     * @param Struct\ShopPage[]           $shopPages
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\ShopPage[] $shopPages
      */
     private function resolveChildren(array $shopPages, Struct\ShopContextInterface $context)
     {
@@ -112,8 +107,7 @@ class ShopPageService implements Service\ShopPageServiceInterface
     }
 
     /**
-     * @param Struct\ShopPage[]           $shopPages
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\ShopPage[] $shopPages
      */
     private function resolveParents(array $shopPages, Struct\ShopContextInterface $context)
     {

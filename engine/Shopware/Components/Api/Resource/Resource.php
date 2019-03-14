@@ -100,9 +100,6 @@ abstract class Resource implements ContainerAwareInterface
         return $this->container;
     }
 
-    /**
-     * @param Container $container
-     */
     public function setContainer(Container $container = null)
     {
         $this->container = $container;
@@ -141,9 +138,6 @@ abstract class Resource implements ContainerAwareInterface
         }
     }
 
-    /**
-     * @param ModelManager $manager
-     */
     public function setManager(ModelManager $manager)
     {
         $this->manager = $manager;
@@ -158,8 +152,6 @@ abstract class Resource implements ContainerAwareInterface
     }
 
     /**
-     * @param AclComponent $acl
-     *
      * @return \Shopware\Components\Api\Resource\Resource
      */
     public function setAcl(AclComponent $acl)
@@ -398,10 +390,9 @@ abstract class Resource implements ContainerAwareInterface
      * If the data property contains the "__options_$optionName" value and this value contains
      * the "replace" parameter the collection will be cleared.
      *
-     * @param Collection $collection
-     * @param array      $data
-     * @param string     $optionName
-     * @param bool       $defaultReplace
+     * @param array  $data
+     * @param string $optionName
+     * @param bool   $defaultReplace
      *
      * @return Collection
      */
@@ -422,7 +413,6 @@ abstract class Resource implements ContainerAwareInterface
     /**
      * @param Collection|array $collection
      * @param string           $property
-     * @param mixed            $value
      *
      * @throws Exception
      *
@@ -448,9 +438,6 @@ abstract class Resource implements ContainerAwareInterface
     }
 
     /**
-     * @param Collection $collection
-     * @param array      $conditions
-     *
      * @return mixed|null
      */
     protected function getCollectionElementByProperties(Collection $collection, array $conditions)
@@ -474,7 +461,6 @@ abstract class Resource implements ContainerAwareInterface
      * until a passed entity instance found.
      *
      * @param string $entity
-     * @param array  $conditions
      *
      * @throws Exception
      *
@@ -510,10 +496,9 @@ abstract class Resource implements ContainerAwareInterface
      * If no property is set, the function creates a new entity and adds the instance into the
      * passed collection and persist the entity.
      *
-     * @param Collection $collection
-     * @param array      $data
-     * @param string     $entityType
-     * @param array      $conditions
+     * @param array  $data
+     * @param string $entityType
+     * @param array  $conditions
      *
      * @throws ApiException\CustomValidationException
      *
@@ -555,10 +540,9 @@ abstract class Resource implements ContainerAwareInterface
      * In case that the findOneBy statement finds no entity, the function throws an exception.
      * Otherwise the item will be
      *
-     * @param Collection $collection
-     * @param array      $data
-     * @param string     $entityType
-     * @param array      $conditions
+     * @param array  $data
+     * @param string $entityType
+     * @param array  $conditions
      *
      * @throws ApiException\CustomValidationException
      *

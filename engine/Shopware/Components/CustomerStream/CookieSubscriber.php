@@ -41,10 +41,6 @@ class CookieSubscriber implements SubscriberInterface
      */
     private $container;
 
-    /**
-     * @param Connection         $connection
-     * @param ContainerInterface $container
-     */
     public function __construct(Connection $connection, ContainerInterface $container)
     {
         $this->connection = $connection;
@@ -157,6 +153,7 @@ class CookieSubscriber implements SubscriberInterface
 
         $session = $this->container->get('session');
         $session->offsetSet('auto-user', null);
+        $session->offsetSet('userInfo', null);
 
         $response->setCookie(
             'slt',

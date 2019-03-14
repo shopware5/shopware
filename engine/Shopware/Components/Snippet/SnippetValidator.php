@@ -33,9 +33,6 @@ class SnippetValidator
      */
     private $db;
 
-    /**
-     * @param Connection $db
-     */
     public function __construct(Connection $db)
     {
         $this->db = $db;

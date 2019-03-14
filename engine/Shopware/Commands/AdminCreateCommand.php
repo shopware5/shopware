@@ -114,10 +114,8 @@ class AdminCreateCommand extends ShopwareCommand
     }
 
     /**
-     * @param string          $field
-     * @param string          $label
-     * @param InputInterface  $input
-     * @param OutputInterface $output
+     * @param string $field
+     * @param string $label
      */
     private function fillOption($field, $label, InputInterface $input, OutputInterface $output)
     {
@@ -166,7 +164,6 @@ class AdminCreateCommand extends ShopwareCommand
     }
 
     /**
-     * @param User   $user
      * @param string $plainPassword
      */
     private function setPassword(User $user, $plainPassword)
@@ -181,8 +178,6 @@ class AdminCreateCommand extends ShopwareCommand
     }
 
     /**
-     * @param User $user
-     *
      * @throws \Exception
      */
     private function persistUser(User $user)
@@ -207,9 +202,6 @@ class AdminCreateCommand extends ShopwareCommand
         return $user;
     }
 
-    /**
-     * @param InputInterface $input
-     */
     private function validateInput(InputInterface $input)
     {
         $option = $input->getOption('email');

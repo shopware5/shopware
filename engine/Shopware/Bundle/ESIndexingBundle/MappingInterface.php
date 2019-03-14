@@ -34,8 +34,6 @@ interface MappingInterface
     public function getType();
 
     /**
-     * @param Shop $shop
-     *
      * @return array
      */
     public function get(Shop $shop);

@@ -30,8 +30,6 @@ use GuzzleHttp\ClientInterface;
 class GuzzleFactory
 {
     /**
-     * @param array $guzzleConfig
-     *
      * @return ClientInterface
      */
     public function createClient(array $guzzleConfig = [])

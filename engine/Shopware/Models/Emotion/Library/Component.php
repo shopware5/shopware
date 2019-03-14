@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Plugin\Plugin;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_library_component")
  */
 class Component extends ModelEntity
@@ -63,7 +63,7 @@ class Component extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -331,7 +331,6 @@ class Component extends ModelEntity
     /**
      * Generally function to create a new custom emotion component field.
      *
-     * @param array $data
      *
      * @return Field
      */

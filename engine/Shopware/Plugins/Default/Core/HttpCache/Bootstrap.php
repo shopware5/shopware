@@ -147,8 +147,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     }
 
     /**
-     * @param Enlight_Event_EventArgs $args
-     *
      * @return CacheControl
      */
     public function initCacheControl(Enlight_Event_EventArgs $args)
@@ -343,8 +341,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
     /**
      * On post dispatch we try to find affected articleIds displayed during this request
-     *
-     * @param \Enlight_Controller_ActionEventArgs $args
      */
     public function onPostDispatch(\Enlight_Controller_ActionEventArgs $args)
     {
@@ -406,8 +402,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      * <code>
      * Shopware()->Events()->notify('Shopware_Plugins_HttpCache_ClearCache');
      * </code>
-     *
-     * @param \Enlight_Event_EventArgs $args
      */
     public function onClearCache(\Enlight_Event_EventArgs $args)
     {
@@ -428,8 +422,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      *     array('cacheId' => 'a123')
      * );
      * </code>
-     *
-     * @param \Enlight_Event_EventArgs $args
      */
     public function onInvalidateCacheId(\Enlight_Event_EventArgs $args)
     {
@@ -638,8 +630,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
     /**
      * Execute cache invalidation after Doctrine flush
-     *
-     * @param EventArgs $eventArgs
      */
     public function postFlush(EventArgs $eventArgs)
     {
@@ -652,8 +642,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
     /**
      * Cache invalidation based on model events
-     *
-     * @param Enlight_Event_EventArgs $eventArgs
      */
     public function onPostPersist(Enlight_Event_EventArgs $eventArgs)
     {
@@ -897,9 +885,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
     /**
      * Add context cookie
-     *
-     * @param Request  $request
-     * @param Response $response
      */
     private function addContextCookie(Request $request, Response $response)
     {

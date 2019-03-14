@@ -78,8 +78,6 @@ class HasPseudoPriceConditionHandler implements PartialConditionHandlerInterface
     }
 
     /**
-     * @param ShopContextInterface $context
-     *
      * @return string
      */
     private function getPseudoPriceField(ShopContextInterface $context)

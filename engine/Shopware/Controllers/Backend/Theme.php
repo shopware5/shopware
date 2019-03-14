@@ -318,7 +318,6 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     /**
      * Override to get all snippet definitions for the loaded theme configuration.
      *
-     * @param array $data
      *
      * @return array
      */
@@ -426,8 +425,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     /**
      * Helper function to decompress zip files.
      *
-     * @param UploadedFile $file
-     * @param string       $targetDirectory
+     * @param string $targetDirectory
      *
      * @throws Exception
      */
@@ -442,7 +440,6 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      * Helper function which checks if the passed template
      * or the inheritance templates has configuration sets.
      *
-     * @param Template $template
      *
      * @return bool
      */
@@ -473,8 +470,6 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     }
 
     /**
-     * @param Template $template
-     *
      * @return string|null
      */
     private function getThemeInfo(Template $template)

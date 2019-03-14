@@ -32,9 +32,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class TestPlugin extends Plugin
 {
-    /**
-     * @param ContainerBuilder $container
-     */
     public function build(ContainerBuilder $container)
     {
         $container->setParameter('test_plugin.plugin_dir', $this->getPath());

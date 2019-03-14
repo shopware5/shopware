@@ -60,9 +60,7 @@ class ModelManager extends EntityManager
     /**
      * Factory method to create EntityManager instances.
      *
-     * @param Connection    $conn
-     * @param Configuration $config
-     * @param EventManager  $eventManager
+     * @param EventManager $eventManager
      *
      * @throws \Doctrine\ORM\ORMException
      *
@@ -104,7 +102,6 @@ class ModelManager extends EntityManager
     /**
      * Returns the total count of the passed query builder.
      *
-     * @param Query $query
      *
      * @return int|null
      */
@@ -122,8 +119,6 @@ class ModelManager extends EntityManager
      * As of SW 4.2 $paginator->setUseOutputWalkers(false) will be set here.
      *
      * @since 4.1.4
-     *
-     * @param Query $query
      *
      * @return Paginator
      */
@@ -216,7 +211,6 @@ class ModelManager extends EntityManager
     /**
      * Helper function to add mysql specified command to increase the sql performance.
      *
-     * @param Query      $query
      * @param mixed|null $index        Name of the forced index
      * @param bool       $straightJoin true or false. Allow to add STRAIGHT_JOIN select condition
      * @param bool       $sqlNoCache

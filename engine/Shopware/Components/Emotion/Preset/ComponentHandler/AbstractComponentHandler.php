@@ -41,11 +41,6 @@ abstract class AbstractComponentHandler implements ComponentHandlerInterface
      */
     protected $mediaService;
 
-    /**
-     * @param MediaServiceInterface $mediaService
-     * @param MediaResource         $mediaResource
-     * @param ContainerInterface    $container
-     */
     public function __construct(MediaServiceInterface $mediaService, MediaResource $mediaResource, ContainerInterface $container)
     {
         $this->mediaService = $mediaService;

@@ -126,8 +126,6 @@ class SendStatisticsCommand extends ShopwareCommand
     }
 
     /**
-     * @param BenchmarkConfig $shopConfig
-     *
      * @return bool
      */
     private function isShopValid(BenchmarkConfig $shopConfig)

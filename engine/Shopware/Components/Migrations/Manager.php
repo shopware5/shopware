@@ -47,7 +47,6 @@ class Manager
     protected $migrationPath;
 
     /**
-     * @param \PDO   $connection
      * @param string $migrationPath
      */
     public function __construct(\PDO $connection, $migrationPath)
@@ -58,8 +57,6 @@ class Manager
     }
 
     /**
-     * @param \PDO $connection
-     *
      * @return Manager
      */
     public function setConnection(\PDO $connection)
@@ -89,9 +86,6 @@ class Manager
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getMigrationPath()
     {
         return $this->migrationPath;
@@ -202,8 +196,7 @@ class Manager
     /**
      * Applies given $migration to database
      *
-     * @param AbstractMigration $migration
-     * @param string            $modus
+     * @param string $modus
      *
      * @throws \Exception
      */

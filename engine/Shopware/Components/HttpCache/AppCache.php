@@ -128,8 +128,7 @@ class AppCache extends HttpCache
     /**
      * Invalidates non-safe methods (like POST, PUT, and DELETE).
      *
-     * @param Request $request
-     * @param bool    $catch   Whether to process exceptions
+     * @param bool $catch Whether to process exceptions
      *
      * @return Response A Response instance
      */
@@ -175,8 +174,7 @@ class AppCache extends HttpCache
      *
      * {@inheritdoc}
      *
-     * @param Request $request
-     * @param bool    $catch
+     * @param bool $catch
      *
      * @return Response
      */
@@ -199,9 +197,6 @@ class AppCache extends HttpCache
     }
 
     /**
-     * @param Request  $request
-     * @param Response $response
-     *
      * @throws \Exception
      */
     protected function store(Request $request, Response $response)
@@ -218,8 +213,6 @@ class AppCache extends HttpCache
      * Checks whether or not the response header contains
      * a no-cache header that matches one in the request cookie
      *
-     * @param Request  $request
-     * @param Response $response
      *
      * @return bool
      */
@@ -294,7 +287,6 @@ class AppCache extends HttpCache
     /**
      * Checks if current purge request is allowed.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
      *
      * @return bool
      */
@@ -333,9 +325,6 @@ class AppCache extends HttpCache
         return $this->options['purge_allowed_ips'];
     }
 
-    /**
-     * @param Request $request
-     */
     private function checkSltCookie(Request $request)
     {
         if (!$request->cookies->has('slt')) {
@@ -352,10 +341,6 @@ class AppCache extends HttpCache
         $request->cookies->set('nocache', implode(', ', $noCache));
     }
 
-    /**
-     * @param Request  $request
-     * @param Response $response
-     */
     private function filterHttp2ServerPushHeader(Request $request, Response $response)
     {
         /* We do not want to push the assets with every request, only for new visitors. We therefore check

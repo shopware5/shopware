@@ -47,11 +47,6 @@ class EsBackendIndexer
      */
     private $evaluation;
 
-    /**
-     * @param Client                    $client
-     * @param \IteratorAggregate        $repositories
-     * @param EvaluationHelperInterface $evaluation
-     */
     public function __construct(Client $client, \IteratorAggregate $repositories, EvaluationHelperInterface $evaluation)
     {
         $this->client = $client;
@@ -59,9 +54,6 @@ class EsBackendIndexer
         $this->evaluation = $evaluation;
     }
 
-    /**
-     * @param ProgressHelperInterface $helper
-     */
     public function index(ProgressHelperInterface $helper)
     {
         foreach ($this->repositories as $repository) {
@@ -87,9 +79,7 @@ class EsBackendIndexer
     }
 
     /**
-     * @param string            $index
-     * @param EsAwareRepository $repository
-     * @param array             $ids
+     * @param string $index
      */
     public function indexEntities($index, EsAwareRepository $repository, array $ids)
     {
@@ -180,9 +170,7 @@ class EsBackendIndexer
     }
 
     /**
-     * @param string                  $index
-     * @param EsAwareRepository       $repository
-     * @param ProgressHelperInterface $progress
+     * @param string $index
      */
     private function populateEntity($index, EsAwareRepository $repository, ProgressHelperInterface $progress)
     {
@@ -236,8 +224,7 @@ class EsBackendIndexer
     }
 
     /**
-     * @param EsAwareRepository $entity
-     * @param string            $index
+     * @param string $index
      */
     private function createMapping(EsAwareRepository $entity, $index)
     {

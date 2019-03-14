@@ -37,9 +37,7 @@ class OrderReader extends GenericReader
     private $snippets;
 
     /**
-     * @param string                              $entity
-     * @param ModelManager                        $entityManager
-     * @param \Enlight_Components_Snippet_Manager $snippets
+     * @param string $entity
      */
     public function __construct($entity, ModelManager $entityManager, \Enlight_Components_Snippet_Manager $snippets)
     {
@@ -122,8 +120,6 @@ class OrderReader extends GenericReader
     }
 
     /**
-     * @param array $orders
-     *
      * @return array
      */
     private function getDocuments(array $orders)
@@ -138,9 +134,6 @@ class OrderReader extends GenericReader
     }
 
     /**
-     * @param array $documents
-     * @param array $row
-     *
      * @return array
      */
     private function getOrderDocuments(array $documents, array $row)

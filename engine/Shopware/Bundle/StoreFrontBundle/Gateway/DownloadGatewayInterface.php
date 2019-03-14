@@ -34,8 +34,7 @@ interface DownloadGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\DownloadGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[] $products
      *
      * @return array indexed by the product number, each array element contains a \Shopware\Bundle\StoreFrontBundle\Struct\Product\Download array
      */
@@ -46,8 +45,6 @@ interface DownloadGatewayInterface
      * - Download base data
      * - Core attribute of the download
      *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Product\Download[]
      */

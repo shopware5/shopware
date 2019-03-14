@@ -55,10 +55,6 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
      */
     private $fieldName;
 
-    /**
-     * @param ConfiguratorOptionsGatewayInterface $gateway
-     * @param QueryAliasMapper                    $queryAliasMapper
-     */
     public function __construct(
         ConfiguratorOptionsGatewayInterface $gateway,
         QueryAliasMapper $queryAliasMapper
@@ -73,7 +69,6 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
     /**
      * Validates if the criteria part can be handled by this handler
      *
-     * @param CriteriaPartInterface $criteriaPart
      *
      * @return bool
      */
@@ -84,11 +79,6 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
 
     /**
      * Handles the criteria part and extends the provided search.
-     *
-     * @param CriteriaPartInterface $criteriaPart
-     * @param Criteria              $criteria
-     * @param Search                $search
-     * @param ShopContextInterface  $context
      */
     public function handle(
         CriteriaPartInterface $criteriaPart,
@@ -105,11 +95,6 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
     /**
      * Hydrates the Elasticsearch result to extend the product number search result
      * with facets or attributes.
-     *
-     * @param array                     $elasticResult
-     * @param ProductNumberSearchResult $result
-     * @param Criteria                  $criteria
-     * @param ShopContextInterface      $context
      */
     public function hydrate(
         array $elasticResult,
@@ -151,9 +136,8 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
     }
 
     /**
-     * @param VariantFacet $facet
-     * @param Group[]      $groups
-     * @param int[]        $actives
+     * @param Group[] $groups
+     * @param int[]   $actives
      *
      * @return FacetResultGroup|FacetResultInterface
      */
@@ -209,8 +193,6 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
     }
 
     /**
-     * @param Criteria $criteria
-     *
      * @return array
      */
     private function getFilteredValues(Criteria $criteria)

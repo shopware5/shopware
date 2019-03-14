@@ -55,11 +55,6 @@ class ShopPageGateway implements Gateway\ShopPageGatewayInterface
      */
     private $connection;
 
-    /**
-     * @param Connection                $connection
-     * @param FieldHelper               $fieldHelper
-     * @param Hydrator\ShopPageHydrator $shopPageHydrator
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,

@@ -39,10 +39,6 @@ class TableMapping
      */
     private $tables;
 
-    /**
-     * @param Connection $connection
-     * @param array      $tableMapping
-     */
     public function __construct(Connection $connection, array $tableMapping)
     {
         $this->connection = $connection;

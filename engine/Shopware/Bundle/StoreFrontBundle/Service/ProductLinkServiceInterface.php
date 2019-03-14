@@ -34,8 +34,7 @@ interface ProductLinkServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Service\ProductLinkServiceInterface::get()
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[] $products
      *
      * @return array indexed by the product order number, each array element contains a list of \Shopware\Bundle\StoreFrontBundle\Struct\Product\Link classes
      */
@@ -46,9 +45,6 @@ interface ProductLinkServiceInterface
      * please refer to the linked classes.
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\LinkGatewayInterface::get()
-     *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Product\Link[]
      */

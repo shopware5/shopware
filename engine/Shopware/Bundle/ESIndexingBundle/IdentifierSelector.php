@@ -40,10 +40,6 @@ class IdentifierSelector
      */
     private $shopGateway;
 
-    /**
-     * @param Connection           $connection
-     * @param ShopGatewayInterface $shopGateway
-     */
     public function __construct(
         Connection $connection,
         ShopGatewayInterface $shopGateway

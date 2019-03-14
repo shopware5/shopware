@@ -71,14 +71,6 @@ class CacheControl
      */
     private $cacheRouteGeneration;
 
-    /**
-     * @param Session                     $session
-     * @param array                       $config
-     * @param \Enlight_Event_EventManager $eventManager
-     * @param DefaultRouteService         $defaultRouteService
-     * @param CacheTimeServiceInterface   $cacheTimeService
-     * @param CacheRouteGenerationService $cacheRouteGeneration
-     */
     public function __construct(
         Session $session,
         array $config,
@@ -98,7 +90,6 @@ class CacheControl
     /**
      * Validates if the provided route should be cached
      *
-     * @param Request $request
      *
      * @return bool
      */
@@ -128,7 +119,6 @@ class CacheControl
     /**
      * Returns the cache time for the provided request route
      *
-     * @param Request $request
      *
      * @return int|null
      */
@@ -140,9 +130,7 @@ class CacheControl
     /**
      * Validates if the provided route should get the `private, no-cache` header
      *
-     * @param Request  $request
-     * @param Response $response
-     * @param int      $shopId
+     * @param int $shopId
      *
      * @return bool
      */
@@ -181,8 +169,7 @@ class CacheControl
      * )
      * </code>
      *
-     * @param Request $request
-     * @param int     $shopId
+     * @param int $shopId
      *
      * @return array
      */
@@ -216,8 +203,6 @@ class CacheControl
     /**
      * Returns a list of tags which has to be added to the no cache cookie
      *
-     * @param Request              $request
-     * @param ShopContextInterface $context
      *
      * @return \string[]
      */
@@ -254,8 +239,6 @@ class CacheControl
     /**
      * Returns a list of tags which has to be deleted from the no cache cookie
      *
-     * @param Request              $request
-     * @param ShopContextInterface $context
      *
      * @return \string[]
      */
@@ -282,8 +265,7 @@ class CacheControl
     /**
      * Defines if the provided route should add the nocache parameter for the generated esi url
      *
-     * @param Request $request
-     * @param string  $targetName
+     * @param string $targetName
      *
      * @return bool
      */
@@ -313,8 +295,7 @@ class CacheControl
     }
 
     /**
-     * @param Request $request
-     * @param int     $shopId
+     * @param int $shopId
      *
      * @return bool
      */
@@ -338,7 +319,6 @@ class CacheControl
      * )
      * </code>
      *
-     * @param Request $request
      *
      * @return array
      */
@@ -360,7 +340,6 @@ class CacheControl
      * Validates if the provided request is a cacheable route which should not be cached if a specify tag is set
      * and the request contains the nocache parameter as get parameter
      *
-     * @param Request $request
      *
      * @return bool
      */
@@ -372,10 +351,6 @@ class CacheControl
         return isset($tag) && $request->getQuery('nocache') !== null;
     }
 
-    /**
-     * @param Request  $request
-     * @param Response $response
-     */
     private function resetCookies(Request $request, Response $response)
     {
         $response->setCookie(
@@ -386,11 +361,6 @@ class CacheControl
         );
     }
 
-    /**
-     * @param Request              $request
-     * @param ShopContextInterface $context
-     * @param Response             $response
-     */
     private function setContextCookie(Request $request, ShopContextInterface $context, Response $response)
     {
         $hash = json_encode($context->getTaxRules()) . json_encode($context->getCurrentCustomerGroup());

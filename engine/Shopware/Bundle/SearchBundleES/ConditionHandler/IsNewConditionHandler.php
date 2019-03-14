@@ -41,10 +41,7 @@ class IsNewConditionHandler implements PartialConditionHandlerInterface
      */
     private $config;
 
-    /**
-     * @param Shopware_Components_Config $config
-     */
-    public function __construct(Shopware_Components_Config $config)
+    public function __construct(\Shopware_Components_Config $config)
     {
         $this->config = $config;
     }

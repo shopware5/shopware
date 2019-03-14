@@ -47,10 +47,8 @@ class AddressRepository extends ModelRepository
     }
 
     /**
-     * @param array $criteria
-     * @param array $orderBy
-     * @param int   $limit
-     * @param int   $offset
+     * @param int $limit
+     * @param int $offset
      *
      * @return \Doctrine\ORM\Query
      */
@@ -149,10 +147,6 @@ class AddressRepository extends ModelRepository
      * Helper method to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array $filterBy
-     * @param array $orderBy
-     * @param null  $limit
-     * @param null  $offset
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

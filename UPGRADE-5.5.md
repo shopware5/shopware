@@ -2,6 +2,40 @@
 
 This changelog references changes done in Shopware 5.5 patch versions.
 
+## 5.5.8
+
+[View all changes from v5.5.7...v5.5.8](https://github.com/shopware/shopware/compare/v5.5.7...v5.5.8)
+
+### Additions
+
+* Added new config `alwaysShowMainFeatures` to show the template from `mainfeatures` in the whole checkout process
+* Added configuration for displaying shipping costs pre calculation in off canvas shopping cart
+* Added wrapping smarty blocks to Themes/Frontend/Bare/documents/index.tpl
+* Added condition for not displaying basic price if it is a product with graduated prices
+* Added new block `frontend_account_order_item_detail_info_wrapper` to `account/order_item_details.tpl`
+* Added missing attribute accessor methods to `CustomerStream` model
+
+### Changes
+
+* Changed deprecation on `Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface`. It was deprecated since 5.3.0, that deprecation got removed
+* Changed url plugin to resolve base-url on CLI
+* Changed variant switch to consider url parameters without value
+* Changed `CategoryProvider` to skip excluded categories from sitemap 
+* Changed `CookieSubscriber` to clear session value for `userInfo` after a login
+* Changed article REST api to properly deal with configuration option positions
+* Changed shipping costs pre calculation display configuration
+* Changed `HreflangService` to only consider active subshops
+* Changed HTTPCache to fix issues with the first request of a URL when debugging is active
+* Changed availability filter for ES condition
+* Changed `ProductListingVariationLoader::fetchAvailability` to consider only given variants
+* Changed cachebuster parameter for images in backend to contain the datetime of the last change
+* Changed `font-display` value to `swap` for improved font rendering performance
+
+### Deprecations
+
+* Deprecated the class `Shopware_Components_Benchmark_Point`. It will be removed in 5.6 without replacement.
+* Deprecated the class `Shopware_Components_Benchmark_Container`. It will be removed in 5.6 without replacement.
+
 ## 5.5.7
 
 [View all changes from v5.5.6...v5.5.7](https://github.com/shopware/shopware/compare/v5.5.6...v5.5.7)
@@ -16,6 +50,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added blocks "frontend_index_header_css_screen_stylesheet" and `frontend_index_header_javascript_jquery_lib_file`
 * Added button to order module detail window, to open customer directly
 * Added new option to AdvancedMenu to improve performance when not using customer groups
+* Added clearing of note entries, that are older than a year, by the "CronRefresh" cronjob
 
 ### Changes
 

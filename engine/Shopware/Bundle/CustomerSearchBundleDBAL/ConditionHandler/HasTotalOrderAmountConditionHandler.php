@@ -34,10 +34,6 @@ class HasTotalOrderAmountConditionHandler implements ConditionHandlerInterface
 {
     use DynamicConditionParserTrait;
 
-    /**
-     * @param ConditionInterface $condition
-     * @param QueryBuilder       $query
-     */
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
         /*

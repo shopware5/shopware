@@ -39,10 +39,6 @@ class LandingPageViewLoader
      */
     private $translationComponent;
 
-    /**
-     * @param DeviceConfiguration                  $deviceConfiguration
-     * @param Shopware_Components_Translation|null $translationComponent
-     */
     public function __construct(
         DeviceConfiguration $deviceConfiguration,
         Shopware_Components_Translation $translationComponent = null
@@ -52,8 +48,7 @@ class LandingPageViewLoader
     }
 
     /**
-     * @param string               $emotionId
-     * @param ShopContextInterface $context
+     * @param string $emotionId
      *
      * @throws \Exception
      * @throws \Enlight_Controller_Exception

@@ -73,13 +73,6 @@ class VariantHelper implements VariantHelperInterface
      */
     protected $listingPriceHelper;
 
-    /**
-     * @param Connection                  $connection
-     * @param CustomListingHydrator       $customFacetGateway
-     * @param FieldHelper                 $fieldHelper
-     * @param \Shopware_Components_Config $config
-     * @param ListingPriceHelper          $listingPriceHelper
-     */
     public function __construct(
         Connection $connection,
         CustomListingHydrator $customFacetGateway,
@@ -133,10 +126,6 @@ class VariantHelper implements VariantHelperInterface
     }
 
     /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     * @param Criteria             $criteria
-     *
      * @throws \RuntimeException
      * @throws \InvalidArgumentException
      */
@@ -169,9 +158,6 @@ class VariantHelper implements VariantHelperInterface
     }
 
     /**
-     * @param QueryBuilder     $query
-     * @param VariantCondition $condition
-     *
      * @throws \RuntimeException
      * @throws \InvalidArgumentException
      */
@@ -220,10 +206,6 @@ class VariantHelper implements VariantHelperInterface
     }
 
     /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     * @param Criteria             $criteria
-     *
      * @throws \RuntimeException
      * @throws \InvalidArgumentException
      */
@@ -268,10 +250,6 @@ class VariantHelper implements VariantHelperInterface
     }
 
     /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     * @param Criteria             $criteria
-     *
      * @throws \RuntimeException
      * @throws \InvalidArgumentException
      */
@@ -356,9 +334,6 @@ class VariantHelper implements VariantHelperInterface
     }
 
     /**
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
-     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function createListingPriceTable(Criteria $criteria, ShopContextInterface $context)
@@ -421,9 +396,6 @@ class VariantHelper implements VariantHelperInterface
     }
 
     /**
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
-     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function createOnSaleListingPriceTable(Criteria $criteria, ShopContextInterface $context)
@@ -480,8 +452,6 @@ class VariantHelper implements VariantHelperInterface
     }
 
     /**
-     * @param ShopContextInterface $context
-     *
      * @return bool
      */
     protected function hasDifferentCustomerGroups(ShopContextInterface $context)
@@ -489,9 +459,6 @@ class VariantHelper implements VariantHelperInterface
         return $context->getCurrentCustomerGroup()->getId() !== $context->getFallbackCustomerGroup()->getId();
     }
 
-    /**
-     * @param \Doctrine\DBAL\Query\QueryBuilder $query
-     */
     protected function joinAvailableVariant(\Doctrine\DBAL\Query\QueryBuilder $query)
     {
         $stockCondition = '';

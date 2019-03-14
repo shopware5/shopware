@@ -63,11 +63,6 @@ class ArticleComponentHandler implements ComponentHandlerInterface
      */
     private $additionalTextService;
 
-    /**
-     * @param StoreFrontCriteriaFactoryInterface $criteriaFactory
-     * @param ShopwareConfig                     $shopwareConfig
-     * @param AdditionalTextServiceInterface     $additionalTextService
-     */
     public function __construct(
         StoreFrontCriteriaFactoryInterface $criteriaFactory,
         ShopwareConfig $shopwareConfig,
@@ -129,9 +124,6 @@ class ArticleComponentHandler implements ComponentHandlerInterface
         $element->getData()->set('product', $product);
     }
 
-    /**
-     * @param ListProduct $product
-     */
     private function switchPrice(ListProduct $product)
     {
         $prices = array_values($product->getPrices());
@@ -147,9 +139,6 @@ class ArticleComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param Element              $element
-     * @param ShopContextInterface $context
-     *
      * @return \Shopware\Bundle\SearchBundle\Criteria
      */
     private function generateCriteria(Element $element, ShopContextInterface $context)

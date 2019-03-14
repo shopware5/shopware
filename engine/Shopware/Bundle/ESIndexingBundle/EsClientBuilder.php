@@ -30,9 +30,7 @@ use Elasticsearch\Transport;
 class EsClientBuilder extends ClientBuilder
 {
     /**
-     * @param Transport $transport
-     * @param callable  $endpoint
-     * @param object[]  $registeredNamespaces
+     * @param object[] $registeredNamespaces
      *
      * @return EsClientLogger
      */

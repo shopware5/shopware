@@ -44,7 +44,7 @@ use Shopware\Components\Model\ModelEntity;
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_core_paymentmeans")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Payment extends ModelEntity
 {
@@ -53,12 +53,12 @@ class Payment extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Country\Country", inversedBy="payments")
      * @ORM\JoinTable(name="s_core_paymentmeans_countries",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="paymentID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="countryID", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="paymentID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="countryID", referencedColumnName="id")
+     *     }
      * )
      */
     protected $countries;
@@ -98,7 +98,7 @@ class Payment extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -241,13 +241,13 @@ class Payment extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinTable(name="s_core_paymentmeans_subshops",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="paymentID", referencedColumnName="id"
-     *      )},
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="subshopID", referencedColumnName="id")
-     *      }
-     * )
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="paymentID", referencedColumnName="id"
+     *         )},
+     *         inverseJoinColumns={
+     *             @ORM\JoinColumn(name="subshopID", referencedColumnName="id")
+     *         }
+     *     )
      */
     private $shops;
 

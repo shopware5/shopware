@@ -35,9 +35,6 @@ class ProductLinkService implements Service\ProductLinkServiceInterface
      */
     private $gateway;
 
-    /**
-     * @param Gateway\LinkGatewayInterface $gateway
-     */
     public function __construct(Gateway\LinkGatewayInterface $gateway)
     {
         $this->gateway = $gateway;

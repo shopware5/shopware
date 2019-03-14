@@ -35,18 +35,12 @@ class CronjobSynchronizer
      */
     private $connection;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }
 
     /**
-     * @param Plugin $plugin
-     * @param array  $cronjobs
-     *
      * @throws \InvalidArgumentException
      */
     public function synchronize(Plugin $plugin, array $cronjobs)
@@ -59,8 +53,7 @@ class CronjobSynchronizer
     }
 
     /**
-     * @param Plugin $plugin
-     * @param array  $cronjob
+     * @param array $cronjob
      */
     private function addCronjob(Plugin $plugin, $cronjob)
     {
@@ -104,8 +97,7 @@ class CronjobSynchronizer
     }
 
     /**
-     * @param int   $pluginId
-     * @param array $cronjobActions
+     * @param int $pluginId
      */
     private function removeNotExistingEntries($pluginId, array $cronjobActions)
     {

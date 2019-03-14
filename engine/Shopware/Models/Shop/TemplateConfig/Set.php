@@ -30,7 +30,7 @@ use Shopware\Models\Shop\Template;
 
 /**
  * @ORM\Table(name="s_core_templates_config_set")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Set extends ModelEntity
 {
@@ -38,7 +38,7 @@ class Set extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
@@ -75,8 +75,8 @@ class Set extends ModelEntity
      * @var Template
      *
      * @ORM\ManyToOne(
-     *      targetEntity="Shopware\Models\Shop\Template",
-     *      inversedBy="configSets"
+     *     targetEntity="Shopware\Models\Shop\Template",
+     *     inversedBy="configSets"
      * )
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      */

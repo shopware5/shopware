@@ -45,8 +45,6 @@ interface TextMappingInterface
 
     /**
      * @deprecated Will be removed with Shopware 5.7
-     *
-     * @return array
      */
     public function getAttributeRawField(): array;
 }

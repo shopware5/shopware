@@ -30,15 +30,15 @@ use Shopware\Models\Shop\Shop;
 
 /**
  * @ORM\Table(name="s_core_templates_config_values")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Value extends ModelEntity
 {
     /**
      * @var Element
      * @ORM\ManyToOne(
-     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Element",
-     *      inversedBy="values"
+     *     targetEntity="Shopware\Models\Shop\TemplateConfig\Element",
+     *     inversedBy="values"
      * )
      * @ORM\JoinColumn(name="element_id", referencedColumnName="id")
      */
@@ -54,7 +54,7 @@ class Value extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

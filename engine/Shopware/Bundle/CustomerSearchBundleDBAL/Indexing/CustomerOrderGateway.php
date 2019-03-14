@@ -38,10 +38,6 @@ class CustomerOrderGateway
      */
     private $hydrator;
 
-    /**
-     * @param Connection            $connection
-     * @param CustomerOrderHydrator $hydrator
-     */
     public function __construct(Connection $connection, CustomerOrderHydrator $hydrator)
     {
         $this->connection = $connection;

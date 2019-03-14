@@ -31,7 +31,6 @@ interface CacheTimeServiceInterface
     /**
      * getCacheTime returns the time span for which the cache of the given route remains valid.
      *
-     * @param Request $request
      *
      * @return int|null
      */

@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface ContextServiceInterface
 {
@@ -46,7 +46,7 @@ interface ContextServiceInterface
      * - Use the `shop` service of the di container for the language and current category
      * - Use the `session` service of the di container for the current user data.
      *
-     * @return Struct\ProductContextInterface
+     * @return ShopContextInterface
      */
     public function getContext();
 
@@ -57,7 +57,7 @@ interface ContextServiceInterface
      * - Fallback customer group of the current shop
      * - The currency of the shop
      *
-     * @return Struct\ProductContextInterface
+     * @return ShopContextInterface
      */
     public function getShopContext();
 
@@ -71,7 +71,7 @@ interface ContextServiceInterface
      * - Tax rules of the current customer group
      * - Price group discounts of the current customer group
      *
-     * @return Struct\ProductContextInterface
+     * @return ShopContextInterface
      */
     public function getProductContext();
 
@@ -80,7 +80,7 @@ interface ContextServiceInterface
      * Requires the following data:
      * - Location data of the current state. (area, country, state)
      *
-     * @return Struct\ProductContextInterface
+     * @return ShopContextInterface
      */
     public function getLocationContext();
 
@@ -118,7 +118,7 @@ interface ContextServiceInterface
      * @param int|null    $currencyId
      * @param string|null $customerGroupKey
      *
-     * @return Struct\ProductContextInterface
+     * @return ShopContextInterface
      */
     public function createProductContext($shopId, $currencyId = null, $customerGroupKey = null);
 
@@ -127,7 +127,7 @@ interface ContextServiceInterface
      * @param int|null    $currencyId
      * @param string|null $customerGroupKey
      *
-     * @return Struct\ProductContextInterface
+     * @return ShopContextInterface
      */
     public function createShopContext($shopId, $currencyId = null, $customerGroupKey = null);
 }

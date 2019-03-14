@@ -72,7 +72,6 @@ class IndexFactory implements IndexFactoryInterface
     }
 
     /**
-     * @param Shop   $shop
      * @param string $mappingType
      *
      * @return IndexConfiguration
@@ -90,7 +89,6 @@ class IndexFactory implements IndexFactoryInterface
     }
 
     /**
-     * @param Shop   $shop
      * @param string $mappingType
      *
      * @return ShopIndex
@@ -119,7 +117,6 @@ class IndexFactory implements IndexFactoryInterface
     }
 
     /**
-     * @param Shop   $shop
      * @param string $mappingType
      *
      * @return string

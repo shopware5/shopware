@@ -35,9 +35,7 @@ class MediaReader extends GenericReader
     private $mediaService;
 
     /**
-     * @param string                $entity
-     * @param ModelManager          $entityManager
-     * @param MediaServiceInterface $mediaService
+     * @param string $entity
      */
     public function __construct(
         $entity,

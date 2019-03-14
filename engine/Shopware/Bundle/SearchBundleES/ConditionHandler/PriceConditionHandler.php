@@ -83,13 +83,6 @@ class PriceConditionHandler implements PartialConditionHandlerInterface
         );
     }
 
-    /**
-     * @param Criteria              $criteria
-     * @param CriteriaPartInterface $criteriaPart
-     * @param ShopContextInterface  $context
-     *
-     * @return RangeQuery
-     */
     private function createQuery(Criteria $criteria, CriteriaPartInterface $criteriaPart, ShopContextInterface $context): RangeQuery
     {
         $range = [];

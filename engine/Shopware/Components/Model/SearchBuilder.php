@@ -33,9 +33,6 @@ class SearchBuilder
      */
     private $termHelper;
 
-    /**
-     * @param TermHelperInterface $termHelper
-     */
     public function __construct(TermHelperInterface $termHelper)
     {
         $this->termHelper = $termHelper;

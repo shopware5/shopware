@@ -50,8 +50,6 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
     /**
      * Tests that setting a value inside any core class is equivalent to setting it in the
      * global $_GET
-     *
-     * @return mixed
      */
     public function testSetQuery()
     {
@@ -77,9 +75,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
      * Tests that reseting GET data inside any core class is equivalent to resetting it in the
      * global $_GET
      *
-     * @param mixed $getData
      *
-     * @return mixed
      * @depends testSetQuery
      */
     public function testOverwriteAndClearQuery($getData)

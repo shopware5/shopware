@@ -51,7 +51,7 @@ class Text extends ModelEntity
      *
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -80,28 +80,28 @@ class Text extends ModelEntity
      *
      * @var string
      *
-     * @ORM\Column(name="html", type="string", length=16777215 , nullable=false)
+     * @ORM\Column(name="html", type="string", length=16777215, nullable=false)
      */
     private $content;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="image", type="string", length=255 , nullable=false)
+     * @ORM\Column(name="image", type="string", length=255, nullable=false)
      */
     private $image;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="link", type="string", length=255 , nullable=false)
+     * @ORM\Column(name="link", type="string", length=255, nullable=false)
      */
     private $link;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="alignment", type="string", length=255 , nullable=false)
+     * @ORM\Column(name="alignment", type="string", length=255, nullable=false)
      */
     private $alignment;
 

@@ -26,8 +26,6 @@ class Shopware_Components_Cron_CronJob extends Enlight_Components_Cron_EventArgs
 {
     /**
      * Returns the job data
-     *
-     * @return mixed
      */
     public function getData()
     {
@@ -38,7 +36,6 @@ class Shopware_Components_Cron_CronJob extends Enlight_Components_Cron_EventArgs
      * Sets a value of an element in the list.
      *
      * @param string $key
-     * @param mixed  $value
      *
      * @return Shopware_Components_Cron_CronJob
      */
@@ -57,8 +54,6 @@ class Shopware_Components_Cron_CronJob extends Enlight_Components_Cron_EventArgs
      * Returns a value of an element in the list.
      *
      * @param string $key
-     *
-     * @return mixed
      */
     public function get($key)
     {

@@ -40,17 +40,12 @@ class BannerSliderComponentHandler implements ComponentHandlerInterface
      */
     private $mediaService;
 
-    /**
-     * @param MediaServiceInterface $mediaService
-     */
     public function __construct(MediaServiceInterface $mediaService)
     {
         $this->mediaService = $mediaService;
     }
 
     /**
-     * @param Element $element
-     *
      * @return bool
      */
     public function supports(Element $element)
@@ -59,11 +54,6 @@ class BannerSliderComponentHandler implements ComponentHandlerInterface
             || $element->getComponent()->getConvertFunction() === self::LEGACY_CONVERT_FUNCTION;
     }
 
-    /**
-     * @param PrepareDataCollection $collection
-     * @param Element               $element
-     * @param ShopContextInterface  $context
-     */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
         /** @var array $sliderList */
@@ -80,11 +70,6 @@ class BannerSliderComponentHandler implements ComponentHandlerInterface
         $element->getConfig()->set('banner_slider', $sliderList);
     }
 
-    /**
-     * @param ResolvedDataCollection $collection
-     * @param Element                $element
-     * @param ShopContextInterface   $context
-     */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
         /** @var array $sliderList */

@@ -316,14 +316,14 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $this->View()->loadTemplate('frontend/blog/' . $blogArticleData['template']);
         }
 
-        $this->View()->userLoggedIn = !empty(Shopware()->Session()->sUserId);
+        $this->View()->assign('userLoggedIn', !empty(Shopware()->Session()->sUserId));
         if (!empty(Shopware()->Session()->sUserId) && empty($this->Request()->name)
             && $this->Request()->getParam('__cache') === null) {
             $userData = Shopware()->Modules()->Admin()->sGetUserData();
-            $this->View()->sFormData = [
+            $this->View()->assign('sFormData', [
                 'eMail' => $userData['additional']['user']['email'],
                 'name' => $userData['billingaddress']['firstname'] . ' ' . $userData['billingaddress']['lastname'],
-            ];
+            ]);
         }
 
         $mediaIds = array_column($blogArticleData['media'], 'mediaId');
@@ -394,7 +394,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId);
             $blogArticleData = $blogArticleQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-            $this->View()->sAction = $this->Request()->getActionName();
+            $this->View()->assign('sAction', $this->Request()->getActionName());
 
             if ($hash = $this->Request()->sConfirmation) {
                 // Customer confirmed the link in the mail
@@ -472,8 +472,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                     $this->sSaveComment($commentData, $blogArticleId);
                 }
             } else {
-                $this->View()->sFormData = Shopware()->System()->_POST->toArray();
-                $this->View()->sErrorFlag = $sErrorFlag;
+                $this->View()->assign('sFormData', Shopware()->System()->_POST->toArray());
+                $this->View()->assign('sErrorFlag', $sErrorFlag);
             }
         }
         $this->forward('detail');
@@ -581,11 +581,10 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     /**
      * Returns all data needed to display the pager
      *
-     * @param int   $totalResult
-     * @param int   $limitEnd
-     * @param int   $page
-     * @param int   $categoryId
-     * @param array $filters
+     * @param int $totalResult
+     * @param int $limitEnd
+     * @param int $page
+     * @param int $categoryId
      *
      * @return array
      */
@@ -640,12 +639,9 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     /**
      * Helper method to fill the data set with the right category link
      *
-     * @param array  $filterData
      * @param string $requestParameterName
      * @param string $requestParameterValue
      * @param bool   $addRemoveProperty     | true to add a remove property to remove the selected filters
-     *
-     * @return mixed
      */
     protected function addLinksToFilter(array $filterData, $requestParameterName, $requestParameterValue, $addRemoveProperty = true)
     {
@@ -694,8 +690,6 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     }
 
     /**
-     * @param array $blogArticles
-     *
      * @return array
      */
     private function translateBlogArticles(array $blogArticles)

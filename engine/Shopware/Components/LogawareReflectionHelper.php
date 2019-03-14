@@ -38,9 +38,6 @@ class LogawareReflectionHelper
      */
     private $reflector;
 
-    /**
-     * @param LoggerInterface $logger
-     */
     public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;

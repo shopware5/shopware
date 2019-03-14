@@ -542,6 +542,7 @@
         <service id="shopware.plugin_requirement_validator" class="Shopware\Components\Plugin\RequirementValidator">
             <argument type="service" id="models" />
             <argument type="service" id="shopware.plugin_xml_plugin_reader" />
+            <argument type="service" id="snippets"/>
         </service>
 
         <service id="slugify" class="Cocur\Slugify\Slugify" public="false">
@@ -641,11 +642,11 @@
         <service id="shopware.api.category" class="Shopware\Components\Api\Resource\Category" shared="false" />
         <service id="shopware.api.country" class="Shopware\Components\Api\Resource\Country" shared="false" />
         <service id="shopware.api.customer" class="Shopware\Components\Api\Resource\Customer" shared="false" />
-        <service id="shopware.api.customergroup" class="Shopware\Components\Api\Resource\CustomerGroup" shared="false" />
+        <service id="shopware.api.customer_group" class="Shopware\Components\Api\Resource\CustomerGroup" shared="false" />
         <service id="shopware.api.manufacturer" class="Shopware\Components\Api\Resource\Manufacturer" shared="false" />
         <service id="shopware.api.media" class="Shopware\Components\Api\Resource\Media" shared="false" />
         <service id="shopware.api.order" class="Shopware\Components\Api\Resource\Order" shared="false" />
-        <service id="shopware.api.propertygroup" class="Shopware\Components\Api\Resource\PropertyGroup" shared="false" />
+        <service id="shopware.api.property_group" class="Shopware\Components\Api\Resource\PropertyGroup" shared="false" />
         <service id="shopware.api.shop" class="Shopware\Components\Api\Resource\Shop" shared="false" />
         <service id="shopware.api.translation" class="Shopware\Components\Api\Resource\Translation" shared="false">
             <argument type="service" id="translation" />
@@ -654,7 +655,7 @@
         <service id="shopware.api.payment_methods" class="Shopware\Components\Api\Resource\PaymentMethods" shared="false" />
         <service id="shopware.api.user" class="Shopware\Components\Api\Resource\User" shared="false" />
 
-        <service id="shopware.api.emotionpreset" class="Shopware\Components\Api\Resource\EmotionPreset" shared="false">
+        <service id="shopware.api.emotion_preset" class="Shopware\Components\Api\Resource\EmotionPreset" shared="false">
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="models" />
             <argument type="service" id="shopware.slug" />
@@ -672,7 +673,19 @@
         </service>
 
         <!-- Necessary because of implementation in \Shopware\Components\Api\Manager::getResource() -->
-        <service id="shopware.api.customerstream" alias="shopware.api.customer_stream" />
+        <service id="shopware.api.customerstream" alias="shopware.api.customer_stream" >
+            <deprecated>use shopware.api.customer_stream instead</deprecated>
+        </service>
+        <service id="shopware.api.customergroup" alias="shopware.api.customer_group" >
+            <deprecated>use shopware.api.customer_group instead</deprecated>
+        </service>
+        <service id="shopware.api.propertygroup" alias="shopware.api.property_group" >
+            <deprecated>use shopware.api.property_group instead</deprecated>
+        </service>
+        <service id="shopware.api.emotionpreset" alias="shopware.api.emotion_preset" >
+            <deprecated>use shopware.api.emotion_preset instead</deprecated>
+        </service>
+
 
         <service id="shopware.emotion.emotion_presetdata_transformer" class="Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformer">
             <argument type="service" id="models" />

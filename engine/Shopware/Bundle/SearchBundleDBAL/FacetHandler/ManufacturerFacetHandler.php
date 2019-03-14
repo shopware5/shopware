@@ -60,12 +60,6 @@ class ManufacturerFacetHandler implements PartialFacetHandlerInterface
      */
     private $fieldName;
 
-    /**
-     * @param ManufacturerServiceInterface         $manufacturerService
-     * @param QueryBuilderFactoryInterface         $queryBuilderFactory
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper                     $queryAliasMapper
-     */
     public function __construct(
         ManufacturerServiceInterface $manufacturerService,
         QueryBuilderFactoryInterface $queryBuilderFactory,
@@ -82,11 +76,6 @@ class ManufacturerFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param FacetInterface       $facet
-     * @param Criteria             $reverted
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
-     *
      * @return FacetResultInterface|null
      */
     public function generatePartialFacet(
@@ -128,9 +117,8 @@ class ManufacturerFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param Facet\ManufacturerFacet $facet
-     * @param Manufacturer[]          $manufacturers
-     * @param int[]                   $activeIds
+     * @param Manufacturer[] $manufacturers
+     * @param int[]          $activeIds
      *
      * @return ValueListFacetResult
      */

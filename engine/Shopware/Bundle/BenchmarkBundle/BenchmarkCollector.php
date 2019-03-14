@@ -34,9 +34,6 @@ class BenchmarkCollector implements BenchmarkCollectorInterface
      */
     private $providers;
 
-    /**
-     * @param \IteratorAggregate $providers
-     */
     public function __construct(\IteratorAggregate $providers)
     {
         $this->providers = $providers;
@@ -82,7 +79,6 @@ class BenchmarkCollector implements BenchmarkCollectorInterface
     /**
      * Moves the array element 'shop' to the parent array and deletes the 'shop' element.
      *
-     * @param array $providerData
      *
      * @throws \Exception
      *
@@ -104,7 +100,6 @@ class BenchmarkCollector implements BenchmarkCollectorInterface
     /**
      * Moves the "updated_orders" array into the "orders" key and leaves a hint about that moving
      *
-     * @param array $providerData
      *
      * @return array
      */

@@ -61,11 +61,6 @@ class BatchController
      */
     private $resultMapper;
 
-    /**
-     * @param Request   $request
-     * @param Response  $response
-     * @param Container $container
-     */
     public function __construct(Request $request, Response $response, Container $container)
     {
         $this->request = $request;
@@ -149,9 +144,6 @@ class BatchController
     }
 
     /**
-     * @param Filesystem $localFilesyste
-     * @param Filesystem $remoteFilesyste
-     *
      * @throws \RuntimeException
      */
     private function validateFilesytems(Filesystem $localFilesyste, Filesystem $remoteFilesyste)

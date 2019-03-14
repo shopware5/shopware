@@ -88,7 +88,6 @@ class BlogArticle extends MultipleElement implements \Shopware\Tests\Mink\Helper
     /**
      * Returns the title of the blog article
      *
-     * @param NodeElement $article
      *
      * @return string
      */
@@ -110,7 +109,6 @@ class BlogArticle extends MultipleElement implements \Shopware\Tests\Mink\Helper
     /**
      * Returns the image of the blog article
      *
-     * @param NodeElement $article
      *
      * @return string|null
      */
@@ -124,7 +122,6 @@ class BlogArticle extends MultipleElement implements \Shopware\Tests\Mink\Helper
     /**
      * Returns the link to the blog article
      *
-     * @param NodeElement $article
      *
      * @return string
      */
@@ -143,7 +140,6 @@ class BlogArticle extends MultipleElement implements \Shopware\Tests\Mink\Helper
     /**
      * Returns the text preview of the blog article
      *
-     * @param NodeElement $article
      *
      * @return string|null
      */

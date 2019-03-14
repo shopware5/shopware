@@ -74,10 +74,6 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
 
     /**
      * Plugin event method
-     *
-     * @param Enlight_Event_EventArgs $args
-     *
-     * @return mixed
      */
     public function onFilterRender(Enlight_Event_EventArgs $args)
     {

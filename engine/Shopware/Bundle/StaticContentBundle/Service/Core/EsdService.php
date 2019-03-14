@@ -41,10 +41,6 @@ class EsdService implements EsdServiceInterface
      */
     private $esdGateway;
 
-    /**
-     * @param Shopware_Components_Config $config
-     * @param EsdGatewayInterface        $esdGateway
-     */
     public function __construct(
         Shopware_Components_Config $config,
         EsdGatewayInterface $esdGateway

@@ -30,11 +30,5 @@ use Shopware\Models\Customer\Customer;
 
 interface RegisterServiceInterface
 {
-    /**
-     * @param Shop         $shop
-     * @param Customer     $customer
-     * @param Address      $billing
-     * @param Address|null $shipping
-     */
     public function register(Shop $shop, Customer $customer, Address $billing, Address $shipping = null);
 }

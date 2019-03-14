@@ -27,8 +27,6 @@ namespace Shopware\Bundle\PluginInstallerBundle\Service;
 class PluginZipDetector
 {
     /**
-     * @param \ZipArchive $archive
-     *
      * @return bool
      */
     public function isLegacyPlugin(\ZipArchive $archive)
@@ -40,8 +38,6 @@ class PluginZipDetector
     }
 
     /**
-     * @param \ZipArchive $archive
-     *
      * @return bool
      */
     public function isPlugin(\ZipArchive $archive)

@@ -44,10 +44,6 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
      */
     private $configuratorGateway;
 
-    /**
-     * @param Gateway\ProductConfigurationGatewayInterface $productConfigurationGateway
-     * @param Gateway\ConfiguratorGatewayInterface         $configuratorGateway
-     */
     public function __construct(
         Gateway\ProductConfigurationGatewayInterface $productConfigurationGateway,
         Gateway\ConfiguratorGatewayInterface $configuratorGateway

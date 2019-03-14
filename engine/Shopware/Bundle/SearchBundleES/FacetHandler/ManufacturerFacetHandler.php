@@ -60,11 +60,6 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
      */
     private $queryAliasMapper;
 
-    /**
-     * @param ManufacturerServiceInterface        $manufacturerService
-     * @param Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper                    $queryAliasMapper
-     */
     public function __construct(
         ManufacturerServiceInterface $manufacturerService,
         Shopware_Components_Snippet_Manager $snippetManager,
@@ -127,7 +122,6 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
     }
 
     /**
-     * @param Criteria       $criteria
      * @param Manufacturer[] $manufacturers
      *
      * @return array
@@ -159,7 +153,6 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
     }
 
     /**
-     * @param Criteria        $criteria
      * @param ValueListItem[] $items
      *
      * @return ValueListFacetResult

@@ -193,8 +193,6 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
     }
 
     /**
-     * @param ProductSearchResult $result
-     *
      * @return array|null
      */
     private function convertProducts(ProductSearchResult $result)

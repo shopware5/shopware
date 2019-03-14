@@ -24,22 +24,23 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\GraduatedPricesServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceDiscount;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 
-class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
+class GraduatedPricesService implements GraduatedPricesServiceInterface
 {
     /**
-     * @var Gateway\GraduatedPricesGatewayInterface
+     * @var GraduatedPricesGatewayInterface
      */
     private $graduatedPricesGateway;
 
-    /**
-     * @param Gateway\GraduatedPricesGatewayInterface $graduatedPricesGateway
-     */
     public function __construct(
-        Gateway\GraduatedPricesGatewayInterface $graduatedPricesGateway
+        GraduatedPricesGatewayInterface $graduatedPricesGateway
     ) {
         $this->graduatedPricesGateway = $graduatedPricesGateway;
     }
@@ -47,7 +48,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context)
+    public function get(ListProduct $product, ProductContextInterface $context)
     {
         $prices = $this->getList([$product], $context);
 
@@ -57,7 +58,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ProductContextInterface $context)
+    public function getList($products, ProductContextInterface $context)
     {
         $group = $context->getCurrentCustomerGroup();
         $specify = $this->graduatedPricesGateway->getList(
@@ -76,7 +77,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
         //check if one of the products have no assigned price within the prices variable.
         $fallbackProducts = array_filter(
             $products,
-            function (Struct\ListProduct $product) use ($prices) {
+            function (ListProduct $product) use ($prices) {
                 return !array_key_exists($product->getNumber(), $prices);
             }
         );
@@ -142,22 +143,20 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
      * This function is used to override the normal graduated prices
      * with a definition of the product price group discounts.
      *
-     * @param Struct\Product\PriceRule       $reference
-     * @param Struct\Customer\Group          $customerGroup
-     * @param Struct\Product\PriceDiscount[] $discounts
+     * @param PriceDiscount[] $discounts
      *
      * @return array
      */
     private function buildDiscountGraduations(
-        Struct\Product\PriceRule $reference,
-        Struct\Customer\Group $customerGroup,
+        PriceRule $reference,
+        Group $customerGroup,
         array $discounts
     ) {
         $prices = [];
 
         $firstDiscount = $discounts[0];
 
-        /** @var Struct\Product\PriceRule|null $previous */
+        /** @var PriceRule|null $previous */
         $previous = null;
         if ($firstDiscount->getQuantity() > 1) {
             $firstGraduation = clone $reference;
@@ -199,13 +198,12 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
      * Helper function which iterates the products and builds a price array which indexed
      * with the product order number.
      *
-     * @param Struct\ListProduct[]       $products
-     * @param Struct\Product\PriceRule[] $priceRules
-     * @param Struct\Customer\Group      $group
+     * @param ListProduct[] $products
+     * @param PriceRule[]   $priceRules
      *
      * @return array
      */
-    private function buildPrices($products, array $priceRules, Struct\Customer\Group $group)
+    private function buildPrices($products, array $priceRules, Group $group)
     {
         $prices = [];
 
@@ -216,7 +214,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
                 continue;
             }
 
-            /** @var Struct\Product\PriceRule[] $productPrices */
+            /** @var PriceRule[] $productPrices */
             $productPrices = $priceRules[$key];
 
             foreach ($productPrices as $price) {

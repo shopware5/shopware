@@ -79,7 +79,6 @@ class MediaCleanupCommand extends ShopwareCommand
     /**
      * Handles cleaning process and returns the number of deleted media objects
      *
-     * @param SymfonyStyle $io
      *
      * @throws \Exception
      *

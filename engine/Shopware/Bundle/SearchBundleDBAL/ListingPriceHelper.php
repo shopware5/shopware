@@ -46,8 +46,6 @@ class ListingPriceHelper
     }
 
     /**
-     * @param ShopContextInterface $context
-     *
      * @return string
      */
     public function getSelection(ShopContextInterface $context)
@@ -89,8 +87,6 @@ class ListingPriceHelper
     }
 
     /**
-     * @param ShopContextInterface $context
-     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     public function getPriceTable(ShopContextInterface $context)
@@ -116,9 +112,6 @@ class ListingPriceHelper
         return $priceTable;
     }
 
-    /**
-     * @param \Doctrine\DBAL\Query\QueryBuilder $query
-     */
     public function joinPriceGroup(\Doctrine\DBAL\Query\QueryBuilder $query)
     {
         $discountStart = '1';
@@ -192,8 +185,6 @@ class ListingPriceHelper
     }
 
     /**
-     * @param ShopContextInterface $context
-     *
      * @return bool
      */
     private function hasDifferentCustomerGroups(ShopContextInterface $context)
@@ -204,7 +195,6 @@ class ListingPriceHelper
     /**
      * Builds the tax cases for the price selection query
      *
-     * @param ShopContextInterface $context
      *
      * @return string
      */

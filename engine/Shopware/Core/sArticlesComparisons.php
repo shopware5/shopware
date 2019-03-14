@@ -57,10 +57,6 @@ class sArticlesComparisons
      */
     private $contextService;
 
-    /**
-     * @param sArticles $articleModule
-     * @param Container $container
-     */
     public function __construct(sArticles $articleModule, Container $container)
     {
         $this->articleModule = $articleModule;

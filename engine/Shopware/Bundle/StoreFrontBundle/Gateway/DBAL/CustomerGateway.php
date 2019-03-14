@@ -46,11 +46,6 @@ class CustomerGateway implements CustomerGatewayInterface
      */
     private $hydrator;
 
-    /**
-     * @param Connection       $connection
-     * @param FieldHelper      $fieldHelper
-     * @param CustomerHydrator $hydrator
-     */
     public function __construct(Connection $connection, FieldHelper $fieldHelper, CustomerHydrator $hydrator)
     {
         $this->connection = $connection;

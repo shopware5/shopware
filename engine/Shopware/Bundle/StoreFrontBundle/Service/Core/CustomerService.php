@@ -41,10 +41,6 @@ class CustomerService implements CustomerServiceInterface
      */
     private $addressGateway;
 
-    /**
-     * @param CustomerGatewayInterface $customerGateway
-     * @param AddressGatewayInterface  $addressGateway
-     */
     public function __construct(
         CustomerGatewayInterface $customerGateway,
         AddressGatewayInterface $addressGateway

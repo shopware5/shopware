@@ -82,12 +82,12 @@ class Detail extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Option", inversedBy="articles")
      * @ORM\JoinTable(name="s_article_configurator_option_relations",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="article_id", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="option_id", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="article_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="option_id", referencedColumnName="id")
+     *     }
      * )
      */
     protected $configuratorOptions;
@@ -124,7 +124,7 @@ class Detail extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -146,10 +146,10 @@ class Detail extends ModelEntity
     /**
      * @var string
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      * @ShopwareAssert\OrderNumber
      *
-     * @ORM\Column(name="ordernumber", type="string", nullable=false, unique = true)
+     * @ORM\Column(name="ordernumber", type="string", nullable=false, unique=true)
      */
     private $number = '';
 
@@ -547,8 +547,6 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param Article $article
-     *
      * @return Detail
      */
     public function setArticle(Article $article)

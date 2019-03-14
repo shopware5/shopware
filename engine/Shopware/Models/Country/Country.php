@@ -43,7 +43,7 @@ use Shopware\Components\Model\ModelEntity;
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_core_countries")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Country extends ModelEntity
 {
@@ -82,7 +82,7 @@ class Country extends ModelEntity
     /**
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -184,8 +184,8 @@ class Country extends ModelEntity
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Payment\Payment", mappedBy="countries")
      * @ORM\JoinTable(name="s_core_paymentmeans_countries",
-     *      joinColumns={@ORM\JoinColumn(name="countryID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="paymentID", referencedColumnName="id")}
+     *     joinColumns={@ORM\JoinColumn(name="countryID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="paymentID", referencedColumnName="id")}
      * )
      */
     private $payments;

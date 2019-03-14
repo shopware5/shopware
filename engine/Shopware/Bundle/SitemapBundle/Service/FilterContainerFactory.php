@@ -33,9 +33,6 @@ class FilterContainerFactory
      */
     private $configHandler;
 
-    /**
-     * @param ConfigHandler $configHandler
-     */
     public function __construct(ConfigHandler $configHandler)
     {
         $this->configHandler = $configHandler;
@@ -83,7 +80,6 @@ class FilterContainerFactory
     }
 
     /**
-     * @param array  $filters
      * @param string $resourceName
      * @param int    $shopId
      *

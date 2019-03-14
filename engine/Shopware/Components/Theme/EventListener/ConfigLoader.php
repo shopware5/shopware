@@ -35,9 +35,6 @@ class ConfigLoader implements SubscriberInterface
      */
     private $container;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -55,8 +52,6 @@ class ConfigLoader implements SubscriberInterface
     }
 
     /**
-     * @param \Enlight_Event_EventArgs $args
-     *
      * @throws \Exception
      */
     public function onDispatch(\Enlight_Event_EventArgs $args)

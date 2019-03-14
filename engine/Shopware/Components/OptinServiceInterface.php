@@ -32,7 +32,6 @@ interface OptinServiceInterface
     /**
      * @param string $type
      * @param int    $duration
-     * @param array  $data
      */
     public function add($type, $duration, array $data);
 

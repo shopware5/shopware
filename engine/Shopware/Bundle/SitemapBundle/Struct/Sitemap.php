@@ -42,9 +42,8 @@ class Sitemap
     private $urlCount;
 
     /**
-     * @param string                  $filename
-     * @param int                     $urlCount
-     * @param \DateTimeInterface|null $created
+     * @param string $filename
+     * @param int    $urlCount
      */
     public function __construct($filename, $urlCount, \DateTimeInterface $created = null)
     {

@@ -182,23 +182,6 @@ class sAdmin
         'payment' => [],
     ];
 
-    /**
-     * @param Enlight_Components_Db_Adapter_Pdo_Mysql|null          $db
-     * @param Enlight_Event_EventManager|null                       $eventManager
-     * @param Shopware_Components_Config|null                       $config
-     * @param Enlight_Components_Session_Namespace|null             $session
-     * @param Enlight_Controller_Front|null                         $front
-     * @param \Shopware\Components\Password\Manager|null            $passwordEncoder
-     * @param Shopware_Components_Snippet_Manager|null              $snippetManager
-     * @param Shopware_Components_Modules|null                      $moduleManager
-     * @param \sSystem|null                                         $systemModule
-     * @param StoreFrontBundle\Service\ContextServiceInterface|null $contextService
-     * @param EmailValidatorInterface|null                          $emailValidator
-     * @param AddressServiceInterface|null                          $addressService
-     * @param NumberRangeIncrementerInterface|null                  $numberRangeIncrementer
-     * @param Shopware_Components_Translation|null                  $translationComponent
-     * @param Connection|null                                       $connection
-     */
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
         Enlight_Event_EventManager $eventManager = null,
@@ -3337,7 +3320,6 @@ class sAdmin
     /**
      * Overwrite sUserData['billingaddress'] with chosen address
      *
-     * @param array $userData
      *
      * @return array
      */
@@ -3371,7 +3353,6 @@ class sAdmin
     /**
      * Overwrite sUserData['shippingaddress'] with chosen address
      *
-     * @param array $userData
      *
      * @return array
      */
@@ -3404,7 +3385,6 @@ class sAdmin
     /**
      * Converts an address to the array key structure of a legacy billing or shipping address
      *
-     * @param Address $address
      *
      * @return array
      */
@@ -3443,8 +3423,7 @@ class sAdmin
     }
 
     /**
-     * @param array $userData
-     * @param bool  $isShippingAddress changes keys in sUserData
+     * @param bool $isShippingAddress changes keys in sUserData
      *
      * @return array
      */
@@ -3579,7 +3558,6 @@ SQL;
     }
 
     /**
-     * @param array  $user
      * @param string $hash
      */
     private function refreshOptinHash(array $user, $hash)
@@ -3637,7 +3615,6 @@ SQL;
     }
 
     /**
-     * @param array  $userInfo
      * @param string $hash
      */
     private function resendConfirmationMail(array $userInfo, $hash)
@@ -3827,8 +3804,6 @@ SQL;
      * @param int    $userId
      * @param array  $userData
      * @param string $countryQuery
-     *
-     * @return mixed
      */
     private function getUserShippingData($userId, $userData, $countryQuery)
     {

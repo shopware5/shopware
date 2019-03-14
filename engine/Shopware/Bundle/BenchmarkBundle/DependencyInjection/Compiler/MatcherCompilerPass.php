@@ -29,9 +29,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class MatcherCompilerPass implements CompilerPassInterface
 {
-    /**
-     * @param ContainerBuilder $container
-     */
     public function process(ContainerBuilder $container)
     {
         $container->setParameter('shopware.benchmark_bundle.shipment_mapping', include __DIR__ . '/../Resources/shipment_matchers.php');

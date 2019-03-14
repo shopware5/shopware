@@ -34,7 +34,6 @@ class UpdateContext extends InstallContext
     private $updateVersion;
 
     /**
-     * @param Plugin $plugin
      * @param string $shopwareVersion
      * @param string $currentVersion
      * @param string $updateVersion

@@ -52,12 +52,6 @@ class EmotionService implements EmotionServiceInterface
      */
     private $categoryService;
 
-    /**
-     * @param EmotionGateway                 $gateway
-     * @param EmotionElementServiceInterface $elementService
-     * @param ShopGatewayInterface           $shopGateway
-     * @param CategoryServiceInterface       $categoryService
-     */
     public function __construct(
         EmotionGateway $gateway,
         EmotionElementServiceInterface $elementService,
@@ -71,9 +65,6 @@ class EmotionService implements EmotionServiceInterface
     }
 
     /**
-     * @param array                $emotionIds
-     * @param ShopContextInterface $context
-     *
      * @return Emotion[]
      */
     public function getList(array $emotionIds, ShopContextInterface $context)
@@ -103,8 +94,7 @@ class EmotionService implements EmotionServiceInterface
     }
 
     /**
-     * @param Emotion[]            $emotions
-     * @param ShopContextInterface $context
+     * @param Emotion[] $emotions
      */
     private function resolveCategories(array $emotions, ShopContextInterface $context)
     {

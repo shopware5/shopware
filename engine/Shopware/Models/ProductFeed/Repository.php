@@ -40,7 +40,6 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of defined
      * product feeds.
      *
-     * @param null     $orderBy
      * @param int|null $offset
      * @param int|null $limit
      *
@@ -60,7 +59,6 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array|null $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

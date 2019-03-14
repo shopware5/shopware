@@ -35,7 +35,6 @@ abstract class ModelEntity
      * $model->fromArray($data);
      * $model->setShipping($shippingModel->fromArray($shippingData));
      *
-     * @param array $array
      * @param array $fillable optional property whitelist for mass-assignment
      *
      * @return ModelEntity

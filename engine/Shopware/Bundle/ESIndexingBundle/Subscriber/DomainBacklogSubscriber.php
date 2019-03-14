@@ -36,9 +36,6 @@ class DomainBacklogSubscriber implements SubscriberInterface
      */
     private $container;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -54,9 +51,6 @@ class DomainBacklogSubscriber implements SubscriberInterface
         ];
     }
 
-    /**
-     * @param EventArgs $eventArgs
-     */
     public function onProductStockWasChanged(EventArgs $eventArgs)
     {
         if (!$this->container->getParameter('shopware.es.enabled')) {

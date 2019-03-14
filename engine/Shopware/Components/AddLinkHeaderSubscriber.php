@@ -55,9 +55,6 @@ class AddLinkHeaderSubscriber implements SubscriberInterface
         $this->webLinkManager = $webLinkManager;
     }
 
-    /**
-     * @return array
-     */
     public static function getSubscribedEvents(): array
     {
         return [
@@ -65,9 +62,6 @@ class AddLinkHeaderSubscriber implements SubscriberInterface
         ];
     }
 
-    /**
-     * @param Enlight_Event_EventArgs $args
-     */
     public function onDispatchLoopShutdown(Enlight_Event_EventArgs $args): void
     {
         /** @var \Enlight_Controller_Request_Request $request */

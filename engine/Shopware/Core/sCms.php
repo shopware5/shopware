@@ -66,13 +66,6 @@ class sCms
      */
     private $translationComponent;
 
-    /**
-     * @param Enlight_Components_Db_Adapter_Pdo_Mysql|null $db
-     * @param Shopware_Components_Config|null              $config
-     * @param Enlight_Controller_Front|null                $front
-     * @param Shopware_Components_Modules|null             $moduleManager
-     * @param Shopware_Components_Translation|null         $translationComponent
-     */
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
         Shopware_Components_Config $config = null,
@@ -198,8 +191,6 @@ class sCms
      *
      * @param array    $staticPage
      * @param int|null $shopId
-     *
-     * @return mixed
      */
     private function getRelatedForSubPage($staticPage, $shopId = null)
     {
@@ -261,8 +252,6 @@ class sCms
      *
      * @param array    $staticPage
      * @param int|null $shopId
-     *
-     * @return mixed
      */
     private function getRelatedForPage($staticPage, $shopId = null)
     {

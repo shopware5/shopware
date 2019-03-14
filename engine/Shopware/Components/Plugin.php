@@ -114,8 +114,6 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
     /**
      * This method can be overridden
-     *
-     * @param InstallContext $context
      */
     public function install(InstallContext $context)
     {
@@ -123,8 +121,6 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
     /**
      * This method can be overridden
-     *
-     * @param UpdateContext $context
      */
     public function update(UpdateContext $context)
     {
@@ -133,8 +129,6 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
     /**
      * This method can be overridden
-     *
-     * @param ActivateContext $context
      */
     public function activate(ActivateContext $context)
     {
@@ -143,8 +137,6 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
     /**
      * This method can be overridden
-     *
-     * @param DeactivateContext $context
      */
     public function deactivate(DeactivateContext $context)
     {
@@ -153,8 +145,6 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
     /**
      * This method can be overridden
-     *
-     * @param UninstallContext $context
      */
     public function uninstall(UninstallContext $context)
     {
@@ -229,9 +219,6 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
         return $this->path;
     }
 
-    /**
-     * @param ContainerBuilder $container
-     */
     final protected function loadFiles(ContainerBuilder $container)
     {
         if (!is_file($this->getPath() . '/Resources/services.xml')) {
@@ -256,9 +243,6 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
         return strtolower(ltrim(preg_replace('/[A-Z]/', '_$0', $string), '_'));
     }
 
-    /**
-     * @param ContainerBuilder $container
-     */
     private function registerFilesystems(ContainerBuilder $container)
     {
         $this->registerFilesystem($container, 'private');
@@ -266,8 +250,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param string           $key
+     * @param string $key
      */
     private function registerFilesystem(ContainerBuilder $container, $key)
     {

@@ -39,10 +39,6 @@ class DefaultRouteService
      */
     private $cacheRouteGeneration;
 
-    /**
-     * @param ConfigReader                $configReader
-     * @param CacheRouteGenerationService $cacheRouteGeneration
-     */
     public function __construct(ConfigReader $configReader, CacheRouteGenerationService $cacheRouteGeneration)
     {
         $this->config = $configReader->getByPluginName('HttpCache');
@@ -78,8 +74,6 @@ class DefaultRouteService
      * findRouteValue takes the current Request and tries to find a default max-age value for either the full route,
      * including the action, or at least the controller. If that fails, null is returned.
      *
-     * @param Enlight_Controller_Request_Request $request
-     * @param array|null                         $values
      *
      * @return int|null
      */

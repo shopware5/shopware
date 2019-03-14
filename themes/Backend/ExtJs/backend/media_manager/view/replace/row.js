@@ -36,19 +36,17 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Row', {
     noPictureImageSrc: '{url module=frontend}' + '/themes/Backend/ExtJs/backend/_resources/images/index/no-picture.jpg',
 
     /**
-     * init's all required components
+     * Inits all required components
      */
     initComponent: function() {
-        var me = this;
+        this.items = this.createRow();
+        this.registerEvents();
 
-        me.items = me.createRow();
-        me.registerEvents();
-
-        me.callParent(arguments);
+        this.callParent(arguments);
     },
 
     /**
-     * registers events
+     * Registers events
      */
     registerEvents: function() {
         var me = this;
@@ -61,14 +59,13 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Row', {
     },
 
     onFileSelected: function(dropZone, component, event, files) {
-        var me = this,
-            file = files[0];
+        var file = files[0];
 
-        me.showPreview(dropZone, file);
+        this.showPreview(dropZone, file);
     },
 
     /**
-     * shows the preview of the given file in the previewContainer
+     * Shows the preview of the given file in the previewContainer
      *
      * @param { Shopware.apps.MediaManager.view.replace.Upload } upload
      * @param { File } file
@@ -130,7 +127,7 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Row', {
     },
 
     /**
-     * upload ready event handler
+     * Upload ready event handler
      *
      * @param { Shopware.apps.MediaManager.view.replace.Upload } upload
      */
@@ -141,21 +138,19 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Row', {
     },
 
     /**
-     * on maximum files reached show a growlMessage
+     * On maximum files reached show a growlMessage
      */
     onMaximumReached: function() {
-        var me = this;
-
         Shopware.Notification.createGrowlMessage(
             '{s name="mediaManager/replaceWindow/window/errorTitle"}{/s}',
             '{s name="mediaManager/replaceWindow/dropZone/maximumFiles"}{/s}'
         );
 
-        me.onUploadError();
+        this.onUploadError();
     },
 
     /**
-     * on upload error fire the error event
+     * On upload error fire the error event
      */
     onUploadError: function() {
         var me = this;
@@ -164,22 +159,20 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Row', {
     },
 
     /**
-     * returns the current value object if exists else the boolean "false"
+     * Returns the current value object if exists else the boolean "false"
      *
      * @return { object|boolean }
      */
     getValue: function() {
-        var me = this;
-
-        if (me.hasOwnProperty('replaceData')) {
-            return me.replaceData;
+        if (this.hasOwnProperty('replaceData')) {
+            return this.replaceData;
         }
 
         return false;
     },
 
     /**
-     * creates all components for replace a media
+     * Creates all components for replace a media
      *
      * @return { Array }
      */
@@ -201,21 +194,23 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Row', {
      * @return { Ext.container.Container }
      */
     getMediaTemplate: function(data) {
-        var me = this;
-
         if (data && !data.isRaw) {
-            data.thumbnail += '?' + new Date().getTime();
+            if (!data.created) {
+                data.created = new Date();
+            }
+
+            data.thumbnail += '?' + data.created.getTime();
         }
 
         return Ext.create('Ext.container.Container', {
             data: data,
             width: 100,
-            tpl: me.createMediaViewTemplate()
+            tpl: this.createMediaViewTemplate()
         });
     },
 
     /**
-     * creates and return the replace icon
+     * Creates and return the replace icon
      *
      * @return { Ext.container.Container }
      */
@@ -237,21 +232,19 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Row', {
     },
 
     /**
-     * creates and reutrn the empty media template
+     * Creates and returns the empty media template
      *
      * @return { Ext.container.Container }
      */
     getEmptyMediaTemplate: function() {
-        var me = this;
-
         return Ext.create('Ext.container.Container', {
-            tpl: me.createMediaViewTemplate(),
+            tpl: this.createMediaViewTemplate(),
             data: { thumbnail: '', name: '', isRaw: true, type: 'IMAGE' }
         });
     },
 
     /**
-     * creates a Container for a late handling like clear all and add new content
+     * Creates a Container for a late handling like clear all and add new content
      *
      * @return { Ext.container.Container }
      */
@@ -269,8 +262,8 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Row', {
     },
 
     /**
-     * creates and return the media upload component with drag and drop
-     * requires the media id to replace the media
+     * Creates and return the media upload component with drag and drop
+     * Requires the media id to replace the media
      *
      * @param { string|number } mediaId
      * @return { Ext.container.Container }
@@ -291,7 +284,7 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Row', {
     },
 
     /**
-     * creates the template for the media view panel
+     * Creates the template for the media view panel
      *
      * @return { Ext.XTemplate }
      */
@@ -318,12 +311,10 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Row', {
     },
 
     /**
-     * starts the upload of the selected files
+     * Starts the upload of the selected files
      */
     startUpload: function() {
-        var me = this;
-
-        me.fileUpload.startUpload();
+        this.fileUpload.startUpload();
     }
 });
 //{/block}

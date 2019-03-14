@@ -113,9 +113,6 @@ class SearchBundleDBALSubscriber implements SubscriberInterface
         return $this->criteriaRequestHandlers;
     }
 
-    /**
-     * @param array $handlers
-     */
     private function validateHandlers(array $handlers)
     {
         if (empty($handlers)) {
@@ -139,7 +136,6 @@ class SearchBundleDBALSubscriber implements SubscriberInterface
     }
 
     /**
-     * @param array  $handlers
      * @param string $class
      *
      * @return ArrayCollection

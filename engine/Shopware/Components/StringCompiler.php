@@ -46,8 +46,7 @@ class Shopware_Components_StringCompiler
     protected $context = [];
 
     /**
-     * @param \Enlight_Template_Manager $view
-     * @param array                     $context
+     * @param array $context
      */
     public function __construct(\Enlight_Template_Manager $view, $context = null)
     {

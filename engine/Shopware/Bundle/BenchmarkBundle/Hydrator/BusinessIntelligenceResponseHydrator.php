@@ -29,8 +29,6 @@ use Shopware\Bundle\BenchmarkBundle\Struct\BusinessIntelligenceResponse;
 class BusinessIntelligenceResponseHydrator implements HydratorInterface
 {
     /**
-     * @param array $data
-     *
      * @return BusinessIntelligenceResponse
      */
     public function hydrate(array $data)

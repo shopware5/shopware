@@ -34,8 +34,7 @@ interface VoteGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VoteGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[] $products
      *
      * @return array Indexed by the product number. Each elements contains a Struct\Product\Vote array.
      */
@@ -48,8 +47,6 @@ interface VoteGatewayInterface
      * Required conditions for the selection:
      * - Sorted by the vote create date
      *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Product\Vote[]
      */

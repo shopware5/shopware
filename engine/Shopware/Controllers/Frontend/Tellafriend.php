@@ -123,7 +123,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
                 $mail->addTo($this->sSYSTEM->_POST['sRecipient']);
                 $mail->send();
 
-                $this->View()->sSuccess = true;
+                $this->View()->assign('sSuccess', true);
                 $url = $this->Front()->Router()->assemble(['controller' => 'tellafriend', 'action' => 'success']);
                 $this->redirect($url);
             } else {

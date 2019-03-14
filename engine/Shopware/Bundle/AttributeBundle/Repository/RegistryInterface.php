@@ -29,7 +29,6 @@ interface RegistryInterface
     /**
      * Returns a search repository for the provided criteria class.
      *
-     * @param SearchCriteria $criteria
      *
      * @return GenericRepository|RepositoryInterface
      */

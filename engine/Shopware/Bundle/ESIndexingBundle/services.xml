@@ -77,7 +77,6 @@
         <service id="shopware_elastic_search.backlog_processor"
                  class="Shopware\Bundle\ESIndexingBundle\BacklogProcessor">
             <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="events"/>
             <argument type="tagged" tag="shopware_elastic_search.synchronizer" />
         </service>
 

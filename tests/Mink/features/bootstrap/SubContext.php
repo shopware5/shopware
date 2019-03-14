@@ -72,8 +72,6 @@ class SubContext extends PageObjectContext implements KernelAwareContext, MinkAw
 
     /**
      * Sets parameters provided for Mink.
-     *
-     * @param array $parameters
      */
     public function setMinkParameters(array $parameters)
     {
@@ -84,8 +82,6 @@ class SubContext extends PageObjectContext implements KernelAwareContext, MinkAw
      * Returns specific mink parameter.
      *
      * @param string $name
-     *
-     * @return mixed
      */
     public function getMinkParameter($name)
     {
@@ -108,9 +104,6 @@ class SubContext extends PageObjectContext implements KernelAwareContext, MinkAw
         return $this->getSession()->getDriver();
     }
 
-    /**
-     * @param Kernel $kernel
-     */
     public function setKernel(Kernel $kernel)
     {
         $this->kernel = $kernel;

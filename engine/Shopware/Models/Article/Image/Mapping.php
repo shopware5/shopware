@@ -34,7 +34,7 @@ use Shopware\Components\Model\ModelEntity;
  * rule sets which contains the configured configurator options.
  * Based on the image mapping, the variant images will be extended from the main image of the article.
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_article_img_mappings")
  */
 class Mapping extends ModelEntity
@@ -60,7 +60,7 @@ class Mapping extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

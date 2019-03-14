@@ -53,9 +53,7 @@ class GarbageCollector
     ];
 
     /**
-     * @param MediaPosition[]       $mediaPositions
-     * @param Connection            $dbConnection
-     * @param MediaServiceInterface $mediaService
+     * @param MediaPosition[] $mediaPositions
      */
     public function __construct(array $mediaPositions, Connection $dbConnection, MediaServiceInterface $mediaService)
     {
@@ -129,8 +127,6 @@ class GarbageCollector
     }
 
     /**
-     * @param MediaPosition $mediaPosition
-     *
      * @throws \Doctrine\DBAL\DBALException
      */
     private function find(MediaPosition $mediaPosition)
@@ -159,8 +155,6 @@ class GarbageCollector
 
     /**
      * Handles tables with json content
-     *
-     * @param MediaPosition $mediaPosition
      */
     private function handleJsonTable(MediaPosition $mediaPosition)
     {
@@ -193,8 +187,6 @@ class GarbageCollector
 
     /**
      * Handles tables with serialized content
-     *
-     * @param MediaPosition $mediaPosition
      */
     private function handleSerializeTable(MediaPosition $mediaPosition)
     {
@@ -208,8 +200,6 @@ class GarbageCollector
 
     /**
      * Handles tables with html content
-     *
-     * @param MediaPosition $mediaPosition
      */
     private function handleHtmlTable(MediaPosition $mediaPosition)
     {
@@ -270,8 +260,6 @@ class GarbageCollector
     }
 
     /**
-     * @param MediaPosition $mediaPosition
-     *
      * @throws \Doctrine\DBAL\DBALException
      */
     private function handleTable(MediaPosition $mediaPosition)
@@ -337,8 +325,6 @@ class GarbageCollector
     }
 
     /**
-     * @param MediaPosition $mediaPosition
-     *
      * @return array
      */
     private function fetchColumn(MediaPosition $mediaPosition)

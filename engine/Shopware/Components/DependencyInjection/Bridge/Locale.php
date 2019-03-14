@@ -29,8 +29,6 @@ use Shopware\Components\DependencyInjection\Container;
 class Locale
 {
     /**
-     * @param Container $container
-     *
      * @return \Zend_Locale
      */
     public function factory(Container $container)

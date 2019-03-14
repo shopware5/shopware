@@ -91,7 +91,15 @@
                     {/block}
 
                     {* Additional product information *}
-                    {block name='frontend_checkout_cart_item_details_inline'}{/block}
+                    {block name='frontend_checkout_cart_item_details_inline'}
+                        {block name='frontend_checkout_cart_item_details_essential_features'}
+                            {if {config name=alwaysShowMainFeatures}}
+                                <div class="product--essential-features">
+                                    {include file="string:{config name=mainfeatures}"}
+                                </div>
+                            {/if}
+                        {/block}
+                    {/block}
                 </div>
             {/block}
         </div>

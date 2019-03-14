@@ -175,11 +175,11 @@
             $('.add-voucher--panel')[method]('is--hidden');
         });
 
-        $('.table--shipping-costs-trigger').on('click touchstart', function (event) {
+        $('body').on('click touchstart', '.table--shipping-costs-trigger', function (event) {
             event.preventDefault();
 
             var $this = $(this),
-                $next = $this.next(),
+                $next = $this.parent().find('.table--shipping-costs'),
                 method = ($next.hasClass('is--hidden')) ? 'removeClass' : 'addClass';
 
             $next[method]('is--hidden');

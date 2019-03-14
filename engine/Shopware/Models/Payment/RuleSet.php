@@ -31,7 +31,7 @@ use Shopware\Components\Model\ModelEntity;
  * Shopware ruleSets-model represents a single ruleSet.
  *
  * @ORM\Table(name="s_core_rulesets")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class RuleSet extends ModelEntity
 {
@@ -39,7 +39,7 @@ class RuleSet extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

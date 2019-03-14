@@ -30,7 +30,7 @@ use Shopware\Models\Shop\Shop;
 
 /**
  * @ORM\Table(name="s_core_config_values")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Value extends ModelEntity
 {
@@ -38,7 +38,7 @@ class Value extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -122,8 +122,6 @@ class Value extends ModelEntity
     }
 
     /**
-     * @param mixed $value
-     *
      * @return Value
      */
     public function setValue($value)
@@ -133,9 +131,6 @@ class Value extends ModelEntity
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getValue()
     {
         return $this->value;

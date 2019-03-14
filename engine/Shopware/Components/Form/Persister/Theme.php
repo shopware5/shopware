@@ -38,9 +38,6 @@ class Theme implements Form\Interfaces\Persister
      */
     protected $entityManager;
 
-    /**
-     * @param ModelManager $entityManager
-     */
     public function __construct(ModelManager $entityManager)
     {
         $this->entityManager = $entityManager;
@@ -59,9 +56,7 @@ class Theme implements Form\Interfaces\Persister
     }
 
     /**
-     * @param Form\Interfaces\Container $container
-     * @param Template                  $template
-     * @param TemplateConfig\Layout     $parent
+     * @param TemplateConfig\Layout $parent
      */
     private function saveContainer(Form\Interfaces\Container $container, Template $template, TemplateConfig\Layout $parent = null)
     {
@@ -97,8 +92,6 @@ class Theme implements Form\Interfaces\Persister
     /**
      * Helper function to create a generic ConfigLayout entity.
      *
-     * @param Container             $container
-     * @param Template              $template
      * @param TemplateConfig\Layout $parent
      *
      * @return TemplateConfig\Layout
@@ -122,9 +115,6 @@ class Theme implements Form\Interfaces\Persister
     }
 
     /**
-     * @param TemplateConfig\Layout   $entity
-     * @param Form\Container\FieldSet $container
-     *
      * @return TemplateConfig\Layout
      */
     private function saveFieldSet(TemplateConfig\Layout $entity, Form\Container\FieldSet $container)
@@ -137,8 +127,6 @@ class Theme implements Form\Interfaces\Persister
     }
 
     /**
-     * @param TemplateConfig\Layout $entity
-     *
      * @return TemplateConfig\Layout
      */
     private function saveTabContainer(TemplateConfig\Layout $entity)
@@ -150,9 +138,6 @@ class Theme implements Form\Interfaces\Persister
     }
 
     /**
-     * @param TemplateConfig\Layout $entity
-     * @param Form\Container\Tab    $container
-     *
      * @return TemplateConfig\Layout
      */
     private function saveTab(TemplateConfig\Layout $entity, Form\Container\Tab $container)
@@ -164,11 +149,6 @@ class Theme implements Form\Interfaces\Persister
         return $entity;
     }
 
-    /**
-     * @param Form\Interfaces\Field $field
-     * @param Template              $template
-     * @param TemplateConfig\Layout $parent
-     */
     private function saveField(Form\Interfaces\Field $field, Template $template, TemplateConfig\Layout $parent)
     {
         /** @var Form\Field $field */
@@ -253,8 +233,7 @@ class Theme implements Form\Interfaces\Persister
     }
 
     /**
-     * @param PersistentCollection $collection
-     * @param string               $name
+     * @param string $name
      *
      * @return TemplateConfig\Element
      */
@@ -271,8 +250,7 @@ class Theme implements Form\Interfaces\Persister
     }
 
     /**
-     * @param PersistentCollection $collection
-     * @param string               $name
+     * @param string $name
      *
      * @return TemplateConfig\Layout
      */

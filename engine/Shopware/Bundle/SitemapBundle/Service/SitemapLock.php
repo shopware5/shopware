@@ -41,8 +41,7 @@ class SitemapLock implements SitemapLockInterface
     private $cacheKey;
 
     /**
-     * @param CoreCache $cache
-     * @param string    $cacheKey
+     * @param string $cacheKey
      */
     public function __construct(CoreCache $cache, $cacheKey = 'sitemap-exporter-running-%s')
     {
@@ -51,8 +50,7 @@ class SitemapLock implements SitemapLockInterface
     }
 
     /**
-     * @param Shop $shop
-     * @param int  $lifeTime
+     * @param int $lifeTime
      *
      * @return bool
      */
@@ -70,8 +68,6 @@ class SitemapLock implements SitemapLockInterface
     }
 
     /**
-     * @param Shop $shop
-     *
      * @return bool
      */
     public function unLock(Shop $shop)
@@ -82,8 +78,6 @@ class SitemapLock implements SitemapLockInterface
     }
 
     /**
-     * @param Shop $shop
-     *
      * @return bool
      */
     public function isLocked(Shop $shop)
@@ -94,8 +88,6 @@ class SitemapLock implements SitemapLockInterface
     }
 
     /**
-     * @param Shop $shop
-     *
      * @return string
      */
     private function generateCacheKeyForShop(Shop $shop)

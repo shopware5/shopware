@@ -39,10 +39,9 @@ class UpdateLicencesRequest extends BaseRequest
     private $token;
 
     /**
-     * @param string            $shopwareVersion
-     * @param string            $locale
-     * @param string            $domain
-     * @param AccessTokenStruct $token
+     * @param string $shopwareVersion
+     * @param string $locale
+     * @param string $domain
      */
     public function __construct($shopwareVersion, $locale, $domain, AccessTokenStruct $token)
     {

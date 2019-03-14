@@ -38,9 +38,6 @@ class TemplateVarCollector implements CollectorInterface
      */
     protected $results = [];
 
-    /**
-     * @param \Enlight_Event_EventManager $eventManager
-     */
     public function __construct(\Enlight_Event_EventManager $eventManager)
     {
         $this->eventManager = $eventManager;
@@ -55,9 +52,6 @@ class TemplateVarCollector implements CollectorInterface
         $this->eventManager->registerListener($event);
     }
 
-    /**
-     * @param Logger $log
-     */
     public function logResults(Logger $log)
     {
         foreach ($this->results as $result) {
@@ -68,8 +62,6 @@ class TemplateVarCollector implements CollectorInterface
     /**
      * Listener method of the Enlight_Plugins_ViewRenderer_PostRender event.
      * Logs the template of the given Enlight_Event_EventArgs.
-     *
-     * @param \Enlight_Event_EventArgs $args
      */
     public function onAfterRenderView(\Enlight_Event_EventArgs $args)
     {

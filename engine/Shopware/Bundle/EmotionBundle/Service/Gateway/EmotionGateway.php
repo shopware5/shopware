@@ -46,11 +46,6 @@ class EmotionGateway
      */
     private $connection;
 
-    /**
-     * @param EmotionHydrator $hydrator
-     * @param FieldHelper     $fieldHelper
-     * @param Connection      $connection
-     */
     public function __construct(EmotionHydrator $hydrator, FieldHelper $fieldHelper, Connection $connection)
     {
         $this->hydrator = $hydrator;
@@ -59,8 +54,7 @@ class EmotionGateway
     }
 
     /**
-     * @param int[]                $emotionIds
-     * @param ShopContextInterface $context
+     * @param int[] $emotionIds
      *
      * @return Emotion[]
      */

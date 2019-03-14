@@ -155,10 +155,8 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param array      $filter
-     * @param array|null $order
-     * @param int|null   $offset
-     * @param int|null   $limit
+     * @param int|null $offset
+     * @param int|null $limit
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

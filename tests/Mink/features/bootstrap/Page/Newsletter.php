@@ -108,8 +108,6 @@ class Newsletter extends Page implements HelperSelectorInterface
 
     /**
      * Subscribes to the newsletter
-     *
-     * @param array $data
      */
     public function subscribeNewsletter(array $data)
     {
@@ -128,8 +126,6 @@ class Newsletter extends Page implements HelperSelectorInterface
 
     /**
      * Unsubscribes from the newsletter
-     *
-     * @param array $data
      */
     public function unsubscribeNewsletter(array $data)
     {

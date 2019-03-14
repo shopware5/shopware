@@ -41,10 +41,6 @@ class ProductNumberService implements ProductNumberServiceInterface
      */
     private $config;
 
-    /**
-     * @param Connection                  $connection
-     * @param \Shopware_Components_Config $config
-     */
     public function __construct(
         Connection $connection,
         \Shopware_Components_Config $config
@@ -150,8 +146,7 @@ class ProductNumberService implements ProductNumberServiceInterface
     /**
      * Returns a single order number for the passed product configuration selection.
      *
-     * @param int   $productId
-     * @param array $selection
+     * @param int $productId
      *
      * @return string|false
      */

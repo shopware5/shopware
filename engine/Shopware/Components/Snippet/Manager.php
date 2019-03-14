@@ -70,11 +70,6 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
      */
     private $fallbackLocale;
 
-    /**
-     * @param ModelManager $modelManager
-     * @param array        $pluginDirectories
-     * @param array        $snippetConfig
-     */
     public function __construct(ModelManager $modelManager, array $pluginDirectories, array $snippetConfig)
     {
         $this->snippetConfig = $snippetConfig;
@@ -146,7 +141,6 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     /**
      * Set locale instance
      *
-     * @param Locale $locale
      *
      * @return Shopware_Components_Snippet_Manager
      */
@@ -161,7 +155,6 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     /**
      * Set shop instance
      *
-     * @param Shop $shop
      *
      * @return Shopware_Components_Snippet_Manager
      */

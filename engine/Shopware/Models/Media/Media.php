@@ -49,7 +49,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_media")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Media extends ModelEntity
 {
@@ -139,7 +139,7 @@ class Media extends ModelEntity
      *
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -626,7 +626,7 @@ class Media extends ModelEntity
      * media in the media manager and creates the thumbnails for the
      * configured album thumbnail sizes.
      *
-     * @ORM\PrePersist
+     * @ORM\PrePersist()
      */
     public function onSave()
     {
@@ -640,7 +640,7 @@ class Media extends ModelEntity
      * Removes the thumbnail files if the album or the name changed.
      * Creates the default and album thumbnails if the name or the album changed.
      *
-     * @ORM\PostUpdate
+     * @ORM\PostUpdate()
      */
     public function onUpdate()
     {
@@ -699,7 +699,7 @@ class Media extends ModelEntity
     /**
      * Model event function, which called when the model is loaded.
      *
-     * @ORM\PostLoad
+     * @ORM\PostLoad()
      */
     public function onLoad()
     {
@@ -709,7 +709,7 @@ class Media extends ModelEntity
     /**
      * Removes the media files from the file system
      *
-     * @ORM\PostRemove
+     * @ORM\PostRemove()
      */
     public function onRemove()
     {

@@ -85,9 +85,6 @@ class ImmediateDeliveryConditionHandler implements ConditionHandlerInterface, Cr
         }
     }
 
-    /**
-     * @param Criteria $criteria
-     */
     public function setCriteria(Criteria $criteria)
     {
         $this->criteria = $criteria;

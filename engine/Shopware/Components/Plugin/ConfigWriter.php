@@ -53,9 +53,6 @@ class ConfigWriter
      */
     private $valueRepository;
 
-    /**
-     * @param ModelManager $em
-     */
     public function __construct(ModelManager $em)
     {
         $this->em = $em;
@@ -66,9 +63,7 @@ class ConfigWriter
     }
 
     /**
-     * @param Plugin $plugin
-     * @param array  $elements
-     * @param Shop   $shop
+     * @param array $elements
      */
     public function savePluginConfig(Plugin $plugin, $elements, Shop $shop)
     {
@@ -78,10 +73,7 @@ class ConfigWriter
     }
 
     /**
-     * @param Plugin $plugin
      * @param string $name
-     * @param mixed  $value
-     * @param Shop   $shop
      *
      * @throws \Exception
      */

@@ -42,9 +42,7 @@ class PluginCheck
     private $shopwareVersion;
 
     /**
-     * @param StoreApi $storeApi
-     * @param \PDO     $conn
-     * @param string   $shopwareVersion
+     * @param string $shopwareVersion
      */
     public function __construct(StoreApi $storeApi, \PDO $conn, $shopwareVersion)
     {
@@ -146,8 +144,6 @@ EOT;
     /**
      * @param array $results
      * @param array $localPluginNames
-     *
-     * @return mixed
      */
     private function getCompatiblePlugins($results, &$localPluginNames)
     {
@@ -178,8 +174,6 @@ EOT;
     /**
      * @param array $results
      * @param array $localPluginNames
-     *
-     * @return mixed
      */
     private function getInCompatiblePlugins($results, &$localPluginNames)
     {

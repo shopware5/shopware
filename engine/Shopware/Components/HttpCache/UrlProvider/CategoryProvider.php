@@ -43,10 +43,6 @@ class CategoryProvider implements UrlProviderInterface
      */
     protected $router;
 
-    /**
-     * @param Connection      $connection
-     * @param RouterInterface $router
-     */
     public function __construct(Connection $connection, RouterInterface $router)
     {
         $this->connection = $connection;
@@ -127,8 +123,16 @@ class CategoryProvider implements UrlProviderInterface
                 's_core_shops',
                 'shop',
                 'cat.path LIKE CONCAT("%|",shop.category_id,"|%")
-                OR cat.id = shop.category_id')
+                OR cat.id = shop.category_id'
+            )
+            ->leftJoin(
+                'cat',
+                's_categories_avoid_customergroups',
+                'avoid',
+                'avoid.categoryID = cat.id AND avoid.customergroupID = shop.customer_group_id'
+            )
             ->where('shop.id = :shop')
-            ->andWhere('cat.active = 1');
+            ->andWhere('cat.active = 1')
+            ->andWhere('avoid.customergroupID IS NULL');
     }
 }

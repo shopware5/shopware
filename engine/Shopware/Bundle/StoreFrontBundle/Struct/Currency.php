@@ -59,8 +59,6 @@ class Currency extends Extendable
     protected $symbolPosition;
 
     /**
-     * @param CurrencyEntity $currency
-     *
      * @return Currency
      */
     public static function createFromCurrencyEntity(CurrencyEntity $currency)

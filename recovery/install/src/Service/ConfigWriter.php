@@ -42,8 +42,6 @@ class ConfigWriter
     }
 
     /**
-     * @param DatabaseConnectionInformation $info
-     *
      * @throws \RuntimeException
      */
     public function writeConfig(DatabaseConnectionInformation $info)

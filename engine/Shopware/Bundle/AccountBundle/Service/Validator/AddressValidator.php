@@ -55,11 +55,6 @@ class AddressValidator implements AddressValidatorInterface
      */
     private $validationContext;
 
-    /**
-     * @param ValidatorInterface          $validator
-     * @param ContextServiceInterface     $context
-     * @param \Shopware_Components_Config $config
-     */
     public function __construct(
         ValidatorInterface $validator,
         ContextServiceInterface $context,
@@ -71,8 +66,6 @@ class AddressValidator implements AddressValidatorInterface
     }
 
     /**
-     * @param Address $address
-     *
      * @throws ValidationException
      */
     public function validate(Address $address)

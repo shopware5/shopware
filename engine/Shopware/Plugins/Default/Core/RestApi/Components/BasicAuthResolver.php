@@ -36,9 +36,6 @@ class BasicAuthResolver implements \Zend_Auth_Adapter_Http_Resolver_Interface
      */
     protected $modelManager;
 
-    /**
-     * @param ModelManager $modelManager
-     */
     public function __construct(ModelManager $modelManager)
     {
         $this->modelManager = $modelManager;

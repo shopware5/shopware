@@ -41,10 +41,6 @@ class Repository
      */
     protected $eventManager;
 
-    /**
-     * @param Connection                  $connection
-     * @param \Enlight_Event_EventManager $eventManager
-     */
     public function __construct(Connection $connection, \Enlight_Event_EventManager $eventManager)
     {
         $this->connection = $connection;
@@ -59,9 +55,6 @@ class Repository
      * execute the following code:
      *      $visitors = $repository->getDailyVisitors(... , ...);
      *      $visitors = array_map('reset', $visitors->getData());
-     *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
      *
      * @return Result
      */
@@ -91,10 +84,7 @@ class Repository
      *      $visitors = $repository->getDailyShopVisitors(... , ...);
      *      $visitors = array_map('reset', $visitors->getData());
      *
-     *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     * @param int[]                   $shopIds
+     * @param int[] $shopIds
      *
      * @return Result
      */
@@ -131,9 +121,7 @@ class Repository
      *      $orders = $repository->getDailyShopOrders(... , ...);
      *      $orders = array_map('reset', $orders->getData());
      *
-     * @param \DateTimeInterface $from
-     * @param \DateTimeInterface $to
-     * @param int[]              $shopIds
+     * @param int[] $shopIds
      *
      * @return Result
      */
@@ -161,9 +149,6 @@ class Repository
      *      $registrations = $repository->getDailyRegistrations(... , ...);
      *      $registrations = array_map('reset', $registrations->getData());
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     *
      * @return Result
      */
     public function getDailyRegistrations(\DateTimeInterface $from = null, \DateTimeInterface $to = null)
@@ -190,9 +175,6 @@ class Repository
      *      $turnover = $repository->getDailyTurnover(... , ...);
      *      $turnover = array_map('reset', $turnover->getData());
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     *
      * @return Result
      */
     public function getDailyTurnover(\DateTimeInterface $from = null, \DateTimeInterface $to = null)
@@ -213,10 +195,8 @@ class Repository
     /**
      * Returns a result object which displays all referrers url and the call count.
      *
-     * @param int                     $offset
-     * @param int                     $limit
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
+     * @param int $offset
+     * @param int $limit
      *
      * @return Result
      *                array (
@@ -240,9 +220,6 @@ class Repository
     /**
      * Returns a result which displays the revenue of each referrer.
      *
-     * @param Shop                    $shop
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
      *
      * @return Result
      */
@@ -260,10 +237,8 @@ class Repository
     /**
      * Returns a result which displays the revenue of each partner
      *
-     * @param int                     $offset
-     * @param int                     $limit
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
+     * @param int $offset
+     * @param int $limit
      *
      * @return Result
      */
@@ -283,10 +258,8 @@ class Repository
     /**
      * Returns a result which displays the sell count of each product.
      *
-     * @param int                     $offset
-     * @param int                     $limit
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
+     * @param int $offset
+     * @param int $limit
      *
      * @return Result
      *                array (
@@ -317,8 +290,6 @@ class Repository
     /**
      * Returns a result which displays which kind of user created at which time orders.
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
      *
      * @return Result
      *                array (
@@ -349,9 +320,7 @@ class Repository
     /**
      * Returns a result object which displays the customer age.
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     * @param int[]                   $shopIds
+     * @param int[] $shopIds
      *
      * @return Result
      */
@@ -373,9 +342,7 @@ class Repository
      * date range.
      * The "categoryId" allows to restrict the result to a specify category level.
      *
-     * @param int                     $categoryId
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
+     * @param int $categoryId
      *
      * @return Result
      *                array (
@@ -416,10 +383,8 @@ class Repository
     /**
      * Returns a result which displays which the order count of each manufacturer product.
      *
-     * @param int|null                $offset
-     * @param int|null                $limit
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
+     * @param int|null $offset
+     * @param int|null $limit
      *
      * @return Result
      *                array (
@@ -453,9 +418,7 @@ class Repository
     /**
      * Returns a result which displays count and purchase amount of order for each device type.
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     * @param int[]                   $shopIds
+     * @param int[] $shopIds
      *
      * @return Result
      *                array (
@@ -488,12 +451,10 @@ class Repository
      * The data result contains the executed search term, the count of request
      * which sends this search term and how many result are returned for this term.
      *
-     * @param int                     $offset  numeric value which defines the query start page
-     * @param int                     $limit   numeric value which defines the query limit
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     * @param array                   $sort
-     * @param int[]                   $shopIds
+     * @param int   $offset  numeric value which defines the query start page
+     * @param int   $limit   numeric value which defines the query limit
+     * @param array $sort
+     * @param int[] $shopIds
      *
      * @return Result
      *                array (
@@ -608,12 +569,10 @@ class Repository
      * The described [shopId] placeholder, will be replaced with the passed shop id.
      * The sort parameter allows to sort the data result by different conditions.
      *
-     * @param int                     $offset
-     * @param int                     $limit
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     * @param array                   $sort
-     * @param int[]                   $shopIds
+     * @param int   $offset
+     * @param int   $limit
+     * @param array $sort
+     * @param int[] $shopIds
      *
      * @return Result
      *                array (
@@ -688,9 +647,7 @@ class Repository
      * under the array key "amount[shopId]". The described [shopId] suffix will be replaced with the id of
      * the shop.
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     * @param int[]                   $shopIds
+     * @param int[] $shopIds
      *
      * @return Result
      *                array (
@@ -724,9 +681,7 @@ class Repository
      * under the array key "amount[shopId]". The described [shopId] suffix will be replaced with the id of
      * the shop.
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     * @param int[]                   $shopIds
+     * @param int[] $shopIds
      *
      * @return Result
      *                array (
@@ -760,9 +715,7 @@ class Repository
      * under the array key "amount[shopId]". The described [shopId] suffix will be replaced with the id of
      * the shop.
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     * @param int[]                   $shopIds
+     * @param int[] $shopIds
      *
      * @return Result
      *                array (
@@ -796,9 +749,7 @@ class Repository
      * under the array key "amount[shopId]". The described [shopId] suffix will be replaced with the id of
      * the shop.
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     * @param int[]                   $shopIds
+     * @param int[] $shopIds
      *
      * @return Result
      *                array (
@@ -842,9 +793,7 @@ class Repository
      * under the array key "amount[shopId]". The described [shopId] suffix will be replaced with the id of
      * the shop.
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     * @param int[]                   $shopIds
+     * @param int[] $shopIds
      *
      * @return Result
      *                array (
@@ -888,9 +837,7 @@ class Repository
      * under the array key "amount[shopId]". The described [shopId] suffix will be replaced with the id of
      * the shop.
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     * @param int[]                   $shopIds
+     * @param int[] $shopIds
      *
      * @return Result
      *                array (
@@ -933,9 +880,7 @@ class Repository
      * under the array key "amount[shopId]". The described [shopId] suffix will be replaced with the id of
      * the shop.
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     * @param int[]                   $shopIds
+     * @param int[] $shopIds
      *
      * @return Result
      *                array (
@@ -977,12 +922,9 @@ class Repository
      * under the array key "amount[shopId]". The described [shopId] suffix will be replaced with the id of
      * the shop.
      *
-     * @param int                     $offset
-     * @param int                     $limit
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     * @param array                   $sort
-     * @param int[]                   $shopIds
+     * @param int   $offset
+     * @param int   $limit
+     * @param int[] $shopIds
      *
      * @return Result
      *                array (
@@ -1037,9 +979,7 @@ class Repository
     /**
      * Returns a result which displays the total order amount per customer gorup.
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     * @param int[]                   $shopIds
+     * @param int[] $shopIds
      *
      * @return Result
      */
@@ -1065,9 +1005,7 @@ class Repository
      *      $orders = $repository->getDailyShopOrders(... , ...);
      *      $orders = array_map('reset', $orders->getData());
      *
-     * @param \DateTimeInterface $from
-     * @param \DateTimeInterface $to
-     * @param int[]              $shopIds
+     * @param int[] $shopIds
      *
      * @return DBALQueryBuilder
      */
@@ -1124,8 +1062,6 @@ class Repository
      *      $turnover = $repository->getDailyTurnover(... , ...);
      *      $turnover = array_map('reset', $turnover->getData());
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
      *
      * @return DBALQueryBuilder
      */
@@ -1157,8 +1093,6 @@ class Repository
      *      $visitors = $repository->getDailyVisitors(... , ...);
      *      $visitors = array_map('reset', $visitors->getData());
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
      *
      * @return DBALQueryBuilder
      */
@@ -1190,8 +1124,6 @@ class Repository
      *      $registrations = $repository->getDailyRegistrations(... , ...);
      *      $registrations = array_map('reset', $registrations->getData());
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
      *
      * @return DBALQueryBuilder
      */
@@ -1220,9 +1152,8 @@ class Repository
     /**
      * Returns a result which displays the impressions of each product.
      *
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $sort
+     * @param int $offset
+     * @param int $limit
      *
      * @return DBALQueryBuilder
      */
@@ -1252,8 +1183,6 @@ class Repository
      * This function creates a DBAL query builder, which used to determine the product sale value per order.
      * This is used to display, for example, how much revenue bring the products to a category or a manufacturer.
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
      *
      * @return DBALQueryBuilder
      */
@@ -1283,9 +1212,7 @@ class Repository
      * under the array key "amount[shopId]". The described [shopId] suffix will be replaced with the id of
      * the shop.
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     * @param int[]                   $shopIds
+     * @param int[] $shopIds
      *
      * @return DBALQueryBuilder
      *                          array (
@@ -1336,7 +1263,6 @@ class Repository
      * @param int                $limit
      * @param \DateTimeInterface $from
      * @param \DateTimeInterface $to
-     * @param array              $sort
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
@@ -1369,9 +1295,7 @@ class Repository
     /**
      * Returns a query builder which selects the age of each customer.
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     * @param int[]                   $shopIds
+     * @param int[] $shopIds
      *
      * @return DBALQueryBuilder
      */
@@ -1404,8 +1328,6 @@ class Repository
     /**
      * Returns a query which displays how many orders are each customer done.
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
      *
      * @return DBALQueryBuilder
      */
@@ -1433,8 +1355,6 @@ class Repository
     /**
      * Returns a query which selects the sell count of each product.
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
      *
      * @return DBALQueryBuilder
      */
@@ -1461,8 +1381,6 @@ class Repository
     /**
      * Returns a query which selects the revenue of each partner.
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
      *
      * @return DBALQueryBuilder
      */
@@ -1490,9 +1408,6 @@ class Repository
     /**
      * Returns a query which selects the revenue of each referrer.
      *
-     * @param Shop|null               $shop
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
      *
      * @return DBALQueryBuilder
      */
@@ -1525,8 +1440,6 @@ class Repository
     /**
      * Returns a query which displays how many visits comes from each referrer.
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
      *
      * @return DBALQueryBuilder
      */
@@ -1549,9 +1462,7 @@ class Repository
     /**
      * Returns a query which selects the total order amount of each customer group.
      *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     * @param int[]                   $shopIds
+     * @param int[] $shopIds
      *
      * @return DBALQueryBuilder
      *                          array (
@@ -1577,10 +1488,7 @@ class Repository
     /**
      * Helper function which adds the date range condition to an aggregate order query.
      *
-     * @param DBALQueryBuilder        $builder
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     * @param string|null             $column
+     * @param string|null $column
      *
      * @return $this
      */
@@ -1601,8 +1509,7 @@ class Repository
     /**
      * Helper function which iterates all sort arrays and at them as order by condition.
      *
-     * @param DBALQueryBuilder $builder
-     * @param array            $sort
+     * @param array $sort
      *
      * @return Repository
      */
@@ -1625,9 +1532,8 @@ class Repository
     /**
      * Small helper function which adds the first and max result to the query builder.
      *
-     * @param DBALQueryBuilder $builder
-     * @param int              $offset
-     * @param int              $limit
+     * @param int $offset
+     * @param int $limit
      *
      * @return Repository
      */

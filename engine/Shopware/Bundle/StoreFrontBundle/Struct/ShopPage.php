@@ -416,9 +416,6 @@ class ShopPage extends Extendable
         return $this->changed;
     }
 
-    /**
-     * @param \DateTimeInterface $changed
-     */
     public function setChanged(\DateTimeInterface $changed)
     {
         $this->changed = $changed;

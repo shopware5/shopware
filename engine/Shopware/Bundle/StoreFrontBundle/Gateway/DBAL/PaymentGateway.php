@@ -56,11 +56,6 @@ class PaymentGateway implements Gateway\PaymentGatewayInterface
      */
     private $paymentHydrator;
 
-    /**
-     * @param Connection      $connection
-     * @param FieldHelper     $fieldHelper
-     * @param PaymentHydrator $paymentHydrator
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,

@@ -39,10 +39,6 @@ class UniqueIdPersister
      */
     private $connection;
 
-    /**
-     * @param UniqueIdGenerator $uniqueIdGenerator
-     * @param \PDO              $connection
-     */
     public function __construct(UniqueIdGenerator $uniqueIdGenerator, \PDO $connection)
     {
         $this->uniqueIdGenerator = $uniqueIdGenerator;

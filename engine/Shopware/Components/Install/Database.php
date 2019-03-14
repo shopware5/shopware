@@ -31,9 +31,6 @@ class Database
      */
     protected $connection;
 
-    /**
-     * @param \PDO $connection
-     */
     public function __construct(\PDO $connection)
     {
         $this->connection = $connection;

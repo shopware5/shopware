@@ -38,17 +38,12 @@ class YoutubeComponentHandler implements ComponentHandlerInterface
      */
     private $eventManager;
 
-    /**
-     * @param \Enlight_Event_EventManager $eventManager
-     */
     public function __construct(\Enlight_Event_EventManager $eventManager)
     {
         $this->eventManager = $eventManager;
     }
 
     /**
-     * @param Element $element
-     *
      * @return bool
      */
     public function supports(Element $element)
@@ -56,20 +51,10 @@ class YoutubeComponentHandler implements ComponentHandlerInterface
         return $element->getComponent()->getType() === self::COMPONENT_NAME;
     }
 
-    /**
-     * @param PrepareDataCollection $collection
-     * @param Element               $element
-     * @param ShopContextInterface  $context
-     */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
     }
 
-    /**
-     * @param ResolvedDataCollection $collection
-     * @param Element                $element
-     * @param ShopContextInterface   $context
-     */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
         $elementData = json_decode(json_encode($element), true);

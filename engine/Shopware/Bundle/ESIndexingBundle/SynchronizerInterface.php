@@ -30,13 +30,9 @@ use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
 interface SynchronizerInterface
 {
     /**
-     * @param ShopIndex $shopIndex
      * @param Backlog[] $backlogs
      */
     public function synchronize(ShopIndex $shopIndex, array $backlogs);
 
-    /**
-     * @return string
-     */
     public function supports(): string;
 }

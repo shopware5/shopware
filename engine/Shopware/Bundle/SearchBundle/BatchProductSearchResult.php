@@ -35,9 +35,6 @@ class BatchProductSearchResult
      */
     protected $storage = [];
 
-    /**
-     * @param array $storage
-     */
     public function __construct(array $storage)
     {
         $this->storage = $storage;

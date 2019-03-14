@@ -79,8 +79,6 @@ if (isset($_SESSION['databaseConnectionInfo'])) {
 }
 
 /**
- * @param array $allowedLanguages
- *
  * @return array|string
  */
 function selectLanguage(array $allowedLanguages)
@@ -144,9 +142,6 @@ function localeForLanguage($language)
     return strtolower($language) . '_' . strtoupper($language);
 }
 
-/**
- * @param \Slim\Slim $app
- */
 function prefixSessionVars(\Slim\Slim $app)
 {
     // Save post parameters starting with 'c_' to session

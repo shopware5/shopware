@@ -53,9 +53,6 @@ class Response
         $this->header = $header;
     }
 
-    /**
-     * @return mixed
-     */
     public function getHeader()
     {
         return $this->header;

@@ -116,8 +116,7 @@ class AccountOrder extends MultipleElement
     /**
      * Helper function returns the data of an order position
      *
-     * @param NodeElement $position
-     * @param string[]    $selectors
+     * @param string[] $selectors
      *
      * @return array
      */

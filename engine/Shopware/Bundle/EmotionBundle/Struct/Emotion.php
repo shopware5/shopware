@@ -614,9 +614,6 @@ class Emotion extends Extendable
         return $this->template;
     }
 
-    /**
-     * @param EmotionTemplate $template
-     */
     public function setTemplate(EmotionTemplate $template)
     {
         $this->template = $template;

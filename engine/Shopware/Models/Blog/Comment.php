@@ -31,7 +31,7 @@ use Shopware\Components\Model\ModelEntity;
  * Standard Code Model Entity
  *
  * @ORM\Table(name=" s_blog_comments")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Comment extends ModelEntity
 {
@@ -39,7 +39,7 @@ class Comment extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

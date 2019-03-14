@@ -32,8 +32,6 @@ class Shopware_Components_SimilarShown extends Enlight_Class
 {
     /**
      * Resets the similar show article data.
-     *
-     * @param DateTime|null $validationTime
      */
     public function resetSimilarShown(DateTime $validationTime = null)
     {

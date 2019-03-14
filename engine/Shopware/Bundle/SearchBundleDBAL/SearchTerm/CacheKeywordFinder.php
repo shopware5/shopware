@@ -45,10 +45,6 @@ class CacheKeywordFinder implements KeywordFinderInterface
     private $config;
 
     /**
-     * @param CacheInterface              $cache
-     * @param \Shopware_Components_Config $config
-     * @param KeywordFinderInterface      $keywordFinder
-     *
      * @internal param $CacheInterface
      */
     public function __construct(

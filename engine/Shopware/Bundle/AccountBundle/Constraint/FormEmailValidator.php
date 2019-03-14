@@ -50,10 +50,6 @@ class FormEmailValidator extends ConstraintValidator
      */
     private $customerEmailValidator;
 
-    /**
-     * @param Shopware_Components_Snippet_Manager $snippets
-     * @param CustomerEmailValidator              $customerEmailValidator
-     */
     public function __construct(
         Shopware_Components_Snippet_Manager $snippets,
         CustomerEmailValidator $customerEmailValidator
@@ -63,8 +59,7 @@ class FormEmailValidator extends ConstraintValidator
     }
 
     /**
-     * @param string     $email
-     * @param Constraint $constraint
+     * @param string $email
      */
     public function validate($email, Constraint $constraint)
     {
@@ -105,8 +100,6 @@ class FormEmailValidator extends ConstraintValidator
     }
 
     /**
-     * @param FormInterface $form
-     *
      * @return int
      */
     private function getAccountMode(FormInterface $form)

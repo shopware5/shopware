@@ -89,8 +89,6 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
 
     /**
      * Function to test creating a new payment
-     *
-     * @return mixed
      */
     public function testCreatePayments()
     {

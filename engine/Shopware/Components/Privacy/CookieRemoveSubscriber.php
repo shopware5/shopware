@@ -44,9 +44,6 @@ class CookieRemoveSubscriber implements SubscriberInterface
      */
     private $config;
 
-    /**
-     * @param Config $config
-     */
     public function __construct(Config $config)
     {
         $this->cookieRemovalActive = $config->get('cookie_note_mode') && $config->get('show_cookie_note');
@@ -64,9 +61,6 @@ class CookieRemoveSubscriber implements SubscriberInterface
         ];
     }
 
-    /**
-     * @param Enlight_Event_EventArgs $args
-     */
     public function onPostDispatch(Enlight_Event_EventArgs $args)
     {
         if (!$this->cookieRemovalActive) {

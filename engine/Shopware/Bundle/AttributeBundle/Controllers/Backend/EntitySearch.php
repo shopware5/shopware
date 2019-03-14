@@ -50,8 +50,6 @@ class Shopware_Controllers_Backend_EntitySearch extends Shopware_Controllers_Bac
     }
 
     /**
-     * @param Request $request
-     *
      * @return SearchCriteria
      */
     private function createCriteria(Request $request)

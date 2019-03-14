@@ -34,17 +34,13 @@ class DBALConfigReader implements ConfigReader
      */
     private $connection;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }
 
     /**
-     * @param string    $pluginName
-     * @param Shop|null $shop
+     * @param string $pluginName
      *
      * @return array
      */

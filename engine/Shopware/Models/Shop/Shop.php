@@ -40,7 +40,7 @@ class Shop extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
@@ -622,8 +622,6 @@ class Shop extends ModelEntity
 
     /**
      * @param string $name
-     *
-     * @return mixed
      */
     public function get($name)
     {
@@ -725,8 +723,6 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param Template $template
-     *
      * @throws \Exception
      */
     private function registerTheme(Template $template)

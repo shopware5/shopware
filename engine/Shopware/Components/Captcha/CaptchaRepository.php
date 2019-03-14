@@ -45,11 +45,6 @@ class CaptchaRepository
      */
     private $container;
 
-    /**
-     * @param IteratorAggregate           $captchas
-     * @param \Shopware_Components_Config $config
-     * @param ContainerInterface          $container
-     */
     public function __construct(
         IteratorAggregate $captchas,
         \Shopware_Components_Config $config,

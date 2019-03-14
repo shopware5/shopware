@@ -757,9 +757,6 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         ];
     }
 
-    /**
-     * @param array $parameters
-     */
     private function setParameters(array $parameters)
     {
         $this->_positions = $parameters['positions'];

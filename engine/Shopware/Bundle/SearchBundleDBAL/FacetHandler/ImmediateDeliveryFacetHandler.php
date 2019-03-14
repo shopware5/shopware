@@ -58,12 +58,6 @@ class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
      */
     private $variantHelper;
 
-    /**
-     * @param QueryBuilderFactoryInterface         $queryBuilderFactory
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper                     $queryAliasMapper
-     * @param VariantHelperInterface               $variantHelper
-     */
     public function __construct(
         QueryBuilderFactoryInterface $queryBuilderFactory,
         \Shopware_Components_Snippet_Manager $snippetManager,
@@ -80,11 +74,6 @@ class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param FacetInterface       $facet
-     * @param Criteria             $reverted
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
-     *
      * @return FacetResultInterface|null
      */
     public function generatePartialFacet(

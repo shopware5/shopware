@@ -30,9 +30,9 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware rule model represents a acl rule in shopware.
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_core_acl_roles")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Rule extends ModelEntity
 {
@@ -40,7 +40,7 @@ class Rule extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

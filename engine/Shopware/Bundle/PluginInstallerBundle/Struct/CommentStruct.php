@@ -131,9 +131,6 @@ class CommentStruct implements \JsonSerializable
         return $this->creationDate;
     }
 
-    /**
-     * @param \DateTimeInterface $creationDate
-     */
     public function setCreationDate(\DateTimeInterface $creationDate)
     {
         $this->creationDate = $creationDate;

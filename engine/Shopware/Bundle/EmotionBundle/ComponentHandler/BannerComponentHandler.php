@@ -72,10 +72,6 @@ class BannerComponentHandler implements ComponentHandlerInterface
         $this->resolveMappings($collection, $element);
     }
 
-    /**
-     * @param Element              $element
-     * @param ShopContextInterface $context
-     */
     private function generateLink(Element $element, ShopContextInterface $context)
     {
         $link = $element->getConfig()->get('link');
@@ -92,11 +88,6 @@ class BannerComponentHandler implements ComponentHandlerInterface
         $element->getConfig()->set('link', $link);
     }
 
-    /**
-     * @param PrepareDataCollection $collection
-     * @param Element               $element
-     * @param ShopContextInterface  $context
-     */
     private function addMappings(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
         /** @var array $mappings */
@@ -131,10 +122,6 @@ class BannerComponentHandler implements ComponentHandlerInterface
         $element->getConfig()->set('bannerMapping', $mappings);
     }
 
-    /**
-     * @param ResolvedDataCollection $collection
-     * @param Element                $element
-     */
     private function resolveMappings(ResolvedDataCollection $collection, Element $element)
     {
         /** @var array $mappings */
@@ -173,8 +160,6 @@ class BannerComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param array $mapping
-     *
      * @return string
      */
     private function getMappingKey(array $mapping)

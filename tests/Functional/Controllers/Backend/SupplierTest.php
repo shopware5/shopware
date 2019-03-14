@@ -121,8 +121,6 @@ class Shopware_Tests_Controllers_Backend_SupplierTest extends Enlight_Components
      * The lastId is the id from the last add test
      *
      * @depends testUpdateSupplier
-     *
-     * @param array $lastSupplier
      */
     public function testDeleteSupplier(array $lastSupplier)
     {

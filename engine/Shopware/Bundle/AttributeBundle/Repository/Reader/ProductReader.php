@@ -47,10 +47,7 @@ class ProductReader extends GenericReader
     private $additionalTextService;
 
     /**
-     * @param string                         $entity
-     * @param ModelManager                   $entityManager
-     * @param ContextServiceInterface        $contextService
-     * @param AdditionalTextServiceInterface $additionalTextService
+     * @param string $entity
      */
     public function __construct(
         $entity,

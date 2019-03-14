@@ -425,7 +425,6 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
      * Helper function to build the final array to be handed to the view
      *
      * @param string $idPrefix
-     * @param Site   $site
      *
      * @return array
      */

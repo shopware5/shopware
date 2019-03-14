@@ -60,12 +60,6 @@ class StructConverter
      */
     private $container;
 
-    /**
-     * @param LegacyStructConverter       $converter
-     * @param MediaServiceInterface       $mediaService
-     * @param \Enlight_Event_EventManager $eventManager
-     * @param ContainerInterface          $container
-     */
     public function __construct(LegacyStructConverter $converter, MediaServiceInterface $mediaService, \Enlight_Event_EventManager $eventManager, ContainerInterface $container)
     {
         $this->converter = $converter;
@@ -75,8 +69,6 @@ class StructConverter
     }
 
     /**
-     * @param Emotion $emotion
-     *
      * @return array
      */
     public function convertEmotion(Emotion $emotion)
@@ -112,8 +104,6 @@ class StructConverter
     }
 
     /**
-     * @param Element $element
-     *
      * @return array
      */
     public function convertEmotionElement(Element $element)

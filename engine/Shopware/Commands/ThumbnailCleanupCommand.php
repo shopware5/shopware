@@ -68,9 +68,6 @@ class ThumbnailCleanupCommand extends ShopwareCommand
         $this->removeThumbnails($io);
     }
 
-    /**
-     * @param SymfonyStyle $io
-     */
     private function removeThumbnails(SymfonyStyle $io)
     {
         $mediaService = $this->getContainer()->get('shopware_media.media_service');
@@ -100,9 +97,7 @@ class ThumbnailCleanupCommand extends ShopwareCommand
     }
 
     /**
-     * @param string              $directory
-     * @param FilesystemInterface $filesystem
-     * @param ProgressBar         $progressBar
+     * @param string $directory
      */
     private function processFilesIn($directory, FilesystemInterface $filesystem, ProgressBar $progressBar)
     {
@@ -155,9 +150,6 @@ class ThumbnailCleanupCommand extends ShopwareCommand
     }
 
     /**
-     * @param SymfonyStyle        $io
-     * @param FilesystemInterface $filesystem
-     *
      * @return array
      */
     private function searchThumbnails(SymfonyStyle $io, FilesystemInterface $filesystem)
@@ -185,10 +177,6 @@ class ThumbnailCleanupCommand extends ShopwareCommand
     }
 
     /**
-     * @param SymfonyStyle        $io
-     * @param FilesystemInterface $filesystem
-     * @param array               $thumbnailFiles
-     *
      * @return int
      */
     private function deleteThumbnails(SymfonyStyle $io, FilesystemInterface $filesystem, array $thumbnailFiles)

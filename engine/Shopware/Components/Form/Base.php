@@ -96,7 +96,6 @@ class Base implements Element
      * Helper function to set the object
      * data by array data.
      *
-     * @param array $array
      *
      * @return $this
      */

@@ -76,10 +76,6 @@ class StringRendererService implements StringRendererServiceInterface
     }
 
     /**
-     * @param array $placeholder
-     * @param array $viewVariables
-     * @param array $sElement
-     *
      * @throws \Exception
      *
      * @return string

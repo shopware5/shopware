@@ -51,9 +51,7 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
     private $tags;
 
     /**
-     * @param \Zend_Cache_Core $cache
-     * @param string           $prefix
-     * @param array            $tags
+     * @param string $prefix
      */
     public function __construct(\Zend_Cache_Core $cache, $prefix = null, array $tags = [])
     {

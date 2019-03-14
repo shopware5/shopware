@@ -45,11 +45,6 @@ class RelatedProductStreamsGateway implements Gateway\RelatedProductStreamsGatew
      */
     private $hydrator;
 
-    /**
-     * @param Connection                     $connection
-     * @param FieldHelper                    $fieldHelper
-     * @param Hydrator\ProductStreamHydrator $hydrator
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,

@@ -416,8 +416,6 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param array $item
-     *
      * @return array
      */
     private function removeIds(array $item)
@@ -427,12 +425,6 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         return $item;
     }
 
-    /**
-     * @param array $preset
-     * @param array $translations
-     * @param array $requiredPlugins
-     * @param array $localPlugins
-     */
     private function insertPreset(array $preset, array $translations = [], array $localPlugins = [])
     {
         $this->connection->insert('s_emotion_presets', $preset);

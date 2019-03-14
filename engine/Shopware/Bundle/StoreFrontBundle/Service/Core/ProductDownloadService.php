@@ -35,9 +35,6 @@ class ProductDownloadService implements Service\ProductDownloadServiceInterface
      */
     private $gateway;
 
-    /**
-     * @param Gateway\DownloadGatewayInterface $gateway
-     */
     public function __construct(Gateway\DownloadGatewayInterface $gateway)
     {
         $this->gateway = $gateway;

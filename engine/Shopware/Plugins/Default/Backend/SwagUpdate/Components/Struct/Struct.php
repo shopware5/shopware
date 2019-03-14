@@ -26,9 +26,6 @@ namespace ShopwarePlugins\SwagUpdate\Components\Struct;
 
 abstract class Struct
 {
-    /**
-     * @param array $values
-     */
     public function __construct(array $values = [])
     {
         foreach ($values as $name => $value) {

@@ -40,10 +40,6 @@ class ProductQueryFactory implements ProductQueryFactoryInterface
      */
     private $variantHelper;
 
-    /**
-     * @param Connection             $connection
-     * @param VariantHelperInterface $variantHelper
-     */
     public function __construct(Connection $connection, VariantHelperInterface $variantHelper)
     {
         $this->connection = $connection;

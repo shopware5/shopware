@@ -41,10 +41,6 @@ class Registry implements RegistryInterface
      */
     private $entityManager;
 
-    /**
-     * @param IteratorAggregate $repositories
-     * @param ModelManager      $entityManager
-     */
     public function __construct(IteratorAggregate $repositories, ModelManager $entityManager)
     {
         $this->repositories = iterator_to_array($repositories, false);

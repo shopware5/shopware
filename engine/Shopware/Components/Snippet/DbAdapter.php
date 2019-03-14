@@ -39,8 +39,6 @@ class DbAdapter extends \Enlight_Config_Adapter_DbTable
     /**
      * If there is a snippet missing, set the shopID and localeID to the main shop since all
      * language shops derive from it.
-     *
-     * @param \Enlight_Config $config
      */
     private function overwriteWithDefaultShopValues(\Enlight_Config $config)
     {

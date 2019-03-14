@@ -36,8 +36,6 @@ class CacheIdCollector
     /**
      * Returns an array of affected cache ids for this $controller
      *
-     * @param Controller           $controller
-     * @param ShopContextInterface $context
      *
      * @return array
      */
@@ -86,9 +84,6 @@ class CacheIdCollector
     }
 
     /**
-     * @param Request $request
-     * @param View    $view
-     *
      * @return array
      */
     private function getBlogCacheIds(Request $request, View $view)
@@ -124,8 +119,6 @@ class CacheIdCollector
     }
 
     /**
-     * @param ShopContextInterface $context
-     *
      * @return array
      */
     private function getHomePageCacheIds(ShopContextInterface $context)
@@ -136,8 +129,6 @@ class CacheIdCollector
     }
 
     /**
-     * @param View $view
-     *
      * @return array
      */
     private function getRecommendationCacheIds(View $view)
@@ -156,8 +147,6 @@ class CacheIdCollector
     }
 
     /**
-     * @param Request $request
-     *
      * @return array
      */
     private function getDetailCacheIds(Request $request)
@@ -166,8 +155,6 @@ class CacheIdCollector
     }
 
     /**
-     * @param View $view
-     *
      * @return array
      */
     private function getEmotionCacheIds(View $view)
@@ -200,9 +187,6 @@ class CacheIdCollector
     }
 
     /**
-     * @param Request $request
-     * @param View    $view
-     *
      * @return array
      */
     private function getListingCacheIds(Request $request, View $view)
@@ -220,8 +204,6 @@ class CacheIdCollector
     }
 
     /**
-     * @param Request $request
-     *
      * @return array
      */
     private function getStaticSiteCacheIds(Request $request)

@@ -49,9 +49,7 @@ class ListingDateFrontpage implements InvalidationDateInterface
     private $shop;
 
     /**
-     * @param Connection         $connection
-     * @param ContainerInterface $container
-     * @param string             $route
+     * @param string $route
      */
     public function __construct(Connection $connection, ContainerInterface $container, $route = 'frontend/index/index')
     {

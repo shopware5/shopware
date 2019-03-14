@@ -161,8 +161,6 @@ class CustomersProvider implements BatchableProviderInterface
     }
 
     /**
-     * @param array $customer
-     *
      * @return array
      */
     private function matchGenders(array $customer)

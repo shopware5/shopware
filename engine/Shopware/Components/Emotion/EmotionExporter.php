@@ -70,13 +70,7 @@ class EmotionExporter implements EmotionExporterInterface
     private $slug;
 
     /**
-     * @param EmotionToPresetDataTransformerInterface $transformer
-     * @param PresetDataSynchronizerInterface         $synchronizer
-     * @param EmotionPreset                           $emotionPresetResource
-     * @param MediaServiceInterface                   $mediaService
-     * @param string                                  $rootDirectory
-     * @param Connection                              $connection
-     * @param SlugInterface                           $slug
+     * @param string $rootDirectory
      */
     public function __construct(
         EmotionToPresetDataTransformerInterface $transformer,
@@ -157,8 +151,6 @@ class EmotionExporter implements EmotionExporterInterface
     }
 
     /**
-     * @param array $emotionData
-     *
      * @return \Shopware\Models\Emotion\Preset
      */
     private function createHiddenPreset(array $emotionData)

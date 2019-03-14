@@ -77,8 +77,6 @@ class Shopware_Components_TemplateMail
     ];
 
     /**
-     * @param ModelManager $modelManager
-     *
      * @return \Shopware_Components_TemplateMail
      */
     public function setModelManager(ModelManager $modelManager)
@@ -143,8 +141,6 @@ class Shopware_Components_TemplateMail
     }
 
     /**
-     * @param \Shopware_Components_StringCompiler $stringCompiler
-     *
      * @return \Shopware_Components_TemplateMail
      */
     public function setStringCompiler(\Shopware_Components_StringCompiler $stringCompiler)
@@ -259,9 +255,7 @@ class Shopware_Components_TemplateMail
     /**
      * Loads values from MailModel into Mail
      *
-     * @param \Enlight_Components_Mail $mail
-     * @param Mail                     $mailModel
-     * @param array                    $overrideConfig
+     * @param array $overrideConfig
      *
      * @throws \Enlight_Exception
      *
