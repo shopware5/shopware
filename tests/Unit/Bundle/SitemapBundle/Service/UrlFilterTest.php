@@ -59,7 +59,7 @@ class UrlFilterTest extends TestCase
             ),
         ], 1);
 
-        $this->assertEmpty($urls);
+        static::assertEmpty($urls);
     }
 
     public function testFilterOnlyFiltersWithValidIdentifier()
@@ -96,7 +96,7 @@ class UrlFilterTest extends TestCase
             ),
         ], 1);
 
-        $this->assertCount(1, $urls);
+        static::assertCount(1, $urls);
     }
 
     public function testFilterFiltersWholeResourceEmptyIdentifier()
@@ -133,7 +133,7 @@ class UrlFilterTest extends TestCase
             ),
         ], 1);
 
-        $this->assertEmpty($urls);
+        static::assertEmpty($urls);
     }
 
     public function testFilterHandlesMultipleIdentifiers()
@@ -175,8 +175,8 @@ class UrlFilterTest extends TestCase
             ),
         ], 1);
 
-        $this->assertCount(1, $urls);
-        $this->assertSame(25, $urls[0]->getIdentifier());
+        static::assertCount(1, $urls);
+        static::assertSame(25, $urls[0]->getIdentifier());
     }
 
     public function testFilterShouldNotFilterNoFiltersSet()
@@ -207,7 +207,7 @@ class UrlFilterTest extends TestCase
             ),
         ], 1);
 
-        $this->assertCount(2, $urls);
+        static::assertCount(2, $urls);
     }
 
     public function testFilterShouldThrowExceptionNoFilterHandlerForResource()

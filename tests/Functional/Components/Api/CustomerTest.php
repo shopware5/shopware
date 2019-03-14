@@ -170,34 +170,34 @@ class CustomerTest extends TestCase
         /** @var \Shopware\Models\Customer\Customer $customer */
         $customer = $this->resource->create($testData);
 
-        $this->assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
-        $this->assertGreaterThan(0, $customer->getId());
+        static::assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
+        static::assertGreaterThan(0, $customer->getId());
 
         // Test default values
-        $this->assertEquals($customer->getShop()->getId(), 1);
-        $this->assertEquals($customer->getAccountMode(), 0);
-        $this->assertEquals($customer->getGroup()->getKey(), 'EK');
-        $this->assertEquals($customer->getActive(), true);
+        static::assertEquals($customer->getShop()->getId(), 1);
+        static::assertEquals($customer->getAccountMode(), 0);
+        static::assertEquals($customer->getGroup()->getKey(), 'EK');
+        static::assertEquals($customer->getActive(), true);
 
-        $this->assertEquals($customer->getEmail(), $testData['email']);
+        static::assertEquals($customer->getEmail(), $testData['email']);
 
-        $this->assertEquals($customer->getDefaultBillingAddress()->getFirstName(), $testData['billing']['firstname']);
-        $this->assertEquals($customer->getDefaultBillingAddress()->getFirstname(), $testData['billing']['firstname']);
+        static::assertEquals($customer->getDefaultBillingAddress()->getFirstName(), $testData['billing']['firstname']);
+        static::assertEquals($customer->getDefaultBillingAddress()->getFirstname(), $testData['billing']['firstname']);
 
-        $this->assertEquals($customer->getDefaultBillingAddress()->getAttribute()->getText1(), $testData['billing']['attribute']['text1']);
-        $this->assertEquals($customer->getDefaultBillingAddress()->getAttribute()->getText1(), $testData['billing']['attribute']['text1']);
+        static::assertEquals($customer->getDefaultBillingAddress()->getAttribute()->getText1(), $testData['billing']['attribute']['text1']);
+        static::assertEquals($customer->getDefaultBillingAddress()->getAttribute()->getText1(), $testData['billing']['attribute']['text1']);
 
-        $this->assertEquals($customer->getDefaultShippingAddress()->getFirstName(), $testData['shipping']['firstname']);
-        $this->assertEquals($customer->getDefaultShippingAddress()->getFirstname(), $testData['shipping']['firstname']);
+        static::assertEquals($customer->getDefaultShippingAddress()->getFirstName(), $testData['shipping']['firstname']);
+        static::assertEquals($customer->getDefaultShippingAddress()->getFirstname(), $testData['shipping']['firstname']);
 
-        $this->assertEquals($customer->getDefaultShippingAddress()->getAttribute()->getText1(), $testData['shipping']['attribute']['text1']);
-        $this->assertEquals($customer->getDefaultShippingAddress()->getAttribute()->getText1(), $testData['shipping']['attribute']['text1']);
+        static::assertEquals($customer->getDefaultShippingAddress()->getAttribute()->getText1(), $testData['shipping']['attribute']['text1']);
+        static::assertEquals($customer->getDefaultShippingAddress()->getAttribute()->getText1(), $testData['shipping']['attribute']['text1']);
 
         //test additional address lines
-        $this->assertEquals($customer->getDefaultShippingAddress()->getAdditionalAddressLine1(), $testData['shipping']['additionalAddressLine1']);
-        $this->assertEquals($customer->getDefaultShippingAddress()->getAdditionalAddressLine2(), $testData['shipping']['additionalAddressLine2']);
-        $this->assertEquals($customer->getDefaultBillingAddress()->getAdditionalAddressLine1(), $testData['billing']['additionalAddressLine1']);
-        $this->assertEquals($customer->getDefaultBillingAddress()->getAdditionalAddressLine2(), $testData['billing']['additionalAddressLine2']);
+        static::assertEquals($customer->getDefaultShippingAddress()->getAdditionalAddressLine1(), $testData['shipping']['additionalAddressLine1']);
+        static::assertEquals($customer->getDefaultShippingAddress()->getAdditionalAddressLine2(), $testData['shipping']['additionalAddressLine2']);
+        static::assertEquals($customer->getDefaultBillingAddress()->getAdditionalAddressLine1(), $testData['billing']['additionalAddressLine1']);
+        static::assertEquals($customer->getDefaultBillingAddress()->getAdditionalAddressLine2(), $testData['billing']['additionalAddressLine2']);
 
         return $customer->getId();
     }
@@ -208,7 +208,7 @@ class CustomerTest extends TestCase
     public function testGetOneShouldBeSuccessful($id)
     {
         $customer = $this->resource->getOne($id);
-        $this->assertGreaterThan(0, $customer['id']);
+        static::assertGreaterThan(0, $customer['id']);
     }
 
     /**
@@ -221,7 +221,7 @@ class CustomerTest extends TestCase
         $number = $customer->getNumber();
 
         $customer = $this->resource->getOneByNumber($number);
-        $this->assertEquals($id, $customer->getId());
+        static::assertEquals($id, $customer->getId());
     }
 
     /**
@@ -232,8 +232,8 @@ class CustomerTest extends TestCase
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $customer = $this->resource->getOne($id);
 
-        $this->assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
-        $this->assertGreaterThan(0, $customer->getId());
+        static::assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
+        static::assertGreaterThan(0, $customer->getId());
     }
 
     /**
@@ -243,11 +243,11 @@ class CustomerTest extends TestCase
     {
         $result = $this->resource->getList();
 
-        $this->assertArrayHasKey('data', $result);
-        $this->assertArrayHasKey('total', $result);
+        static::assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('total', $result);
 
-        $this->assertGreaterThanOrEqual(1, $result['total']);
-        $this->assertGreaterThanOrEqual(1, $result['data']);
+        static::assertGreaterThanOrEqual(1, $result['total']);
+        static::assertGreaterThanOrEqual(1, $result['data']);
     }
 
     /**
@@ -258,13 +258,13 @@ class CustomerTest extends TestCase
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $result = $this->resource->getList();
 
-        $this->assertArrayHasKey('data', $result);
-        $this->assertArrayHasKey('total', $result);
+        static::assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('total', $result);
 
-        $this->assertGreaterThanOrEqual(1, $result['total']);
-        $this->assertGreaterThanOrEqual(1, $result['data']);
+        static::assertGreaterThanOrEqual(1, $result['total']);
+        static::assertGreaterThanOrEqual(1, $result['data']);
 
-        $this->assertInstanceOf('\Shopware\Models\Customer\Customer', $result['data'][0]);
+        static::assertInstanceOf('\Shopware\Models\Customer\Customer', $result['data'][0]);
     }
 
     /**
@@ -329,18 +329,18 @@ class CustomerTest extends TestCase
 
         $customer = $this->resource->update($id, $testData);
 
-        $this->assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
-        $this->assertEquals($id, $customer->getId());
+        static::assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
+        static::assertEquals($id, $customer->getId());
 
-        $this->assertEquals($customer->getEmail(), $testData['email']);
-        $this->assertEquals($customer->getDefaultBillingAddress()->getFirstName(), $testData['billing']['firstname']);
+        static::assertEquals($customer->getEmail(), $testData['email']);
+        static::assertEquals($customer->getDefaultBillingAddress()->getFirstName(), $testData['billing']['firstname']);
 
         //test additional fields
-        $this->assertEquals($customer->getDefaultBillingAddress()->getAdditionalAddressLine1(), $testData['billing']['additionalAddressLine1']);
-        $this->assertEquals($customer->getDefaultBillingAddress()->getAdditionalAddressLine2(), $testData['billing']['additionalAddressLine2']);
+        static::assertEquals($customer->getDefaultBillingAddress()->getAdditionalAddressLine1(), $testData['billing']['additionalAddressLine1']);
+        static::assertEquals($customer->getDefaultBillingAddress()->getAdditionalAddressLine2(), $testData['billing']['additionalAddressLine2']);
 
-        $this->assertEquals($customer->getDefaultShippingAddress()->getAdditionalAddressLine1(), $testData['shipping']['additionalAddressLine1']);
-        $this->assertEquals($customer->getDefaultShippingAddress()->getAdditionalAddressLine2(), $testData['shipping']['additionalAddressLine2']);
+        static::assertEquals($customer->getDefaultShippingAddress()->getAdditionalAddressLine1(), $testData['shipping']['additionalAddressLine1']);
+        static::assertEquals($customer->getDefaultShippingAddress()->getAdditionalAddressLine2(), $testData['shipping']['additionalAddressLine2']);
 
         return $id;
     }
@@ -365,11 +365,11 @@ class CustomerTest extends TestCase
 
         $customer = $this->resource->updateByNumber($number, $testData);
 
-        $this->assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
-        $this->assertEquals($id, $customer->getId());
+        static::assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
+        static::assertEquals($id, $customer->getId());
 
-        $this->assertEquals($customer->getEmail(), $testData['email']);
-        $this->assertEquals($customer->getDefaultBillingAddress()->getFirstName(), $testData['billing']['firstname']);
+        static::assertEquals($customer->getEmail(), $testData['email']);
+        static::assertEquals($customer->getDefaultBillingAddress()->getFirstName(), $testData['billing']['firstname']);
 
         return $number;
     }
@@ -415,8 +415,8 @@ class CustomerTest extends TestCase
     {
         $customer = $this->resource->delete($id);
 
-        $this->assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
-        $this->assertEquals(null, $customer->getId());
+        static::assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
+        static::assertEquals(null, $customer->getId());
     }
 
     /**
@@ -499,11 +499,11 @@ class CustomerTest extends TestCase
 
         $paymentData = array_shift($customer->getPaymentData()->toArray());
 
-        $this->assertNotNull($paymentData);
-        $this->assertEquals('Max Mustermann', $paymentData->getAccountHolder());
-        $this->assertEquals('Fake Account', $paymentData->getAccountNumber());
-        $this->assertEquals('Fake Bank', $paymentData->getBankName());
-        $this->assertEquals('55555555', $paymentData->getBankCode());
+        static::assertNotNull($paymentData);
+        static::assertEquals('Max Mustermann', $paymentData->getAccountHolder());
+        static::assertEquals('Fake Account', $paymentData->getAccountNumber());
+        static::assertEquals('Fake Bank', $paymentData->getBankName());
+        static::assertEquals('55555555', $paymentData->getBankCode());
 
         $this->testDeleteShouldBeSuccessful($identifier);
     }
@@ -575,11 +575,11 @@ class CustomerTest extends TestCase
 
         $paymentData = array_shift($customer->getPaymentData()->toArray());
 
-        $this->assertNotNull($paymentData);
-        $this->assertEquals('Max Mustermann', $paymentData->getAccountHolder());
-        $this->assertEquals('Fake Account', $paymentData->getAccountNumber());
-        $this->assertEquals('Fake Bank', $paymentData->getBankName());
-        $this->assertEquals('55555555', $paymentData->getBankCode());
+        static::assertNotNull($paymentData);
+        static::assertEquals('Max Mustermann', $paymentData->getAccountHolder());
+        static::assertEquals('Fake Account', $paymentData->getAccountNumber());
+        static::assertEquals('Fake Bank', $paymentData->getBankName());
+        static::assertEquals('55555555', $paymentData->getBankCode());
 
         $this->testDeleteShouldBeSuccessful($identifier);
     }
@@ -606,7 +606,7 @@ class CustomerTest extends TestCase
         ];
 
         $customer = $this->resource->create($data);
-        $this->assertEquals('H', $customer->getGroup()->getKey());
+        static::assertEquals('H', $customer->getGroup()->getKey());
     }
 
     public function testCreateCustomerWithDefaultShopCustomerGroup()
@@ -632,7 +632,7 @@ class CustomerTest extends TestCase
         ];
 
         $customer = $this->resource->create($data);
-        $this->assertEquals($context->getShop()->getCustomerGroup()->getKey(), $customer->getGroup()->getKey());
+        static::assertEquals($context->getShop()->getCustomerGroup()->getKey(), $customer->getGroup()->getKey());
     }
 
     /**
@@ -659,7 +659,7 @@ class CustomerTest extends TestCase
 
         $customer = $this->resource->create($data);
 
-        $this->assertNotNull($customer->getAttribute());
-        $this->assertInstanceOf(CustomerAttribute::class, $customer->getAttribute());
+        static::assertNotNull($customer->getAttribute());
+        static::assertInstanceOf(CustomerAttribute::class, $customer->getAttribute());
     }
 }

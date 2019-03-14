@@ -51,8 +51,8 @@ class FilterContainerFactoryTest extends TestCase
 
         $filterContainer = $filterContainerFactory->buildFilterContainer('foo', 1);
 
-        $this->assertEquals('foo', $filterContainer->getResourceName());
-        $this->assertEquals([1, 2], $filterContainer->getFilters());
+        static::assertEquals('foo', $filterContainer->getResourceName());
+        static::assertEquals([1, 2], $filterContainer->getFilters());
     }
 
     public function testBuildFilterContainerReturnsNoFiltersWrongShop()
@@ -76,7 +76,7 @@ class FilterContainerFactoryTest extends TestCase
 
         $filterContainer = $filterContainerFactory->buildFilterContainer('foo', 1);
 
-        $this->assertCount(0, $filterContainer->getFilters());
+        static::assertCount(0, $filterContainer->getFilters());
     }
 
     public function testBuildFilterContainerReturnsFiltersForRightShopId()
@@ -100,7 +100,7 @@ class FilterContainerFactoryTest extends TestCase
 
         $filterContainer = $filterContainerFactory->buildFilterContainer('foo', 1);
 
-        $this->assertCount(2, $filterContainer->getFilters());
+        static::assertCount(2, $filterContainer->getFilters());
     }
 
     public function testBuildFilterContainerReturnsMultipleFiltersForRightShopIdAndShopIdZero()
@@ -128,7 +128,7 @@ class FilterContainerFactoryTest extends TestCase
 
         $filterContainer = $filterContainerFactory->buildFilterContainer('foo', 1);
 
-        $this->assertCount(3, $filterContainer->getFilters());
+        static::assertCount(3, $filterContainer->getFilters());
     }
 
     public function testBuildFilterContainerReturnsEmptyIdentifierAsZero()
@@ -156,7 +156,7 @@ class FilterContainerFactoryTest extends TestCase
 
         $filterContainer = $filterContainerFactory->buildFilterContainer('foo', 1);
 
-        $this->assertEquals([1, 2, 0], $filterContainer->getFilters());
+        static::assertEquals([1, 2, 0], $filterContainer->getFilters());
     }
 
     public function testBuildFilterContainerHandlesZeroForIdentifier()
@@ -175,7 +175,7 @@ class FilterContainerFactoryTest extends TestCase
         $filterContainerFactory = $this->getFilterContainerFactory($configHandlerStubEmptyIdentifier);
         $filterContainer = $filterContainerFactory->buildFilterContainer('foo', 1);
 
-        $this->assertEquals([0], $filterContainer->getFilters());
+        static::assertEquals([0], $filterContainer->getFilters());
     }
 
     public function testBuildFilterContainerHandlesZeroForShopId()
@@ -194,10 +194,10 @@ class FilterContainerFactoryTest extends TestCase
         $filterContainerFactory = $this->getFilterContainerFactory($configHandlerStubEmptyIdentifier);
         $filterContainer = $filterContainerFactory->buildFilterContainer('foo', 1);
 
-        $this->assertEquals([13], $filterContainer->getFilters());
+        static::assertEquals([13], $filterContainer->getFilters());
 
         $filterContainer = $filterContainerFactory->buildFilterContainer('foo', 2);
-        $this->assertEquals([13], $filterContainer->getFilters());
+        static::assertEquals([13], $filterContainer->getFilters());
     }
 
     public function testBuildFilterContainerHandlesEmptyStringAsZeroForShopId()
@@ -216,10 +216,10 @@ class FilterContainerFactoryTest extends TestCase
         $filterContainerFactory = $this->getFilterContainerFactory($configHandlerStubEmptyIdentifier);
         $filterContainer = $filterContainerFactory->buildFilterContainer('foo', 1);
 
-        $this->assertEquals([13], $filterContainer->getFilters());
+        static::assertEquals([13], $filterContainer->getFilters());
 
         $filterContainer = $filterContainerFactory->buildFilterContainer('foo', 2);
-        $this->assertEquals([13], $filterContainer->getFilters());
+        static::assertEquals([13], $filterContainer->getFilters());
     }
 
     public function testBuildFilterContainerReturnsMultipleIdentifiersCommaSeparated()
@@ -239,7 +239,7 @@ class FilterContainerFactoryTest extends TestCase
 
         $filterContainer = $filterContainerFactory->buildFilterContainer('foo', 1);
 
-        $this->assertEquals([1, 2, 3], $filterContainer->getFilters());
+        static::assertEquals([1, 2, 3], $filterContainer->getFilters());
     }
 
     private function getFilterContainerFactory(ConfigHandler $configHandlerStub)

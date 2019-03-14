@@ -47,42 +47,42 @@ class ListProductTest extends TestCase
 
         $product = $this->getListProduct($number, $context);
 
-        $this->assertNotEmpty($product->getId());
-        $this->assertNotEmpty($product->getVariantId());
-        $this->assertNotEmpty($product->getName());
-        $this->assertNotEmpty($product->getNumber());
-        $this->assertNotEmpty($product->getManufacturer());
-        $this->assertNotEmpty($product->getTax());
-        $this->assertNotEmpty($product->getUnit());
+        static::assertNotEmpty($product->getId());
+        static::assertNotEmpty($product->getVariantId());
+        static::assertNotEmpty($product->getName());
+        static::assertNotEmpty($product->getNumber());
+        static::assertNotEmpty($product->getManufacturer());
+        static::assertNotEmpty($product->getTax());
+        static::assertNotEmpty($product->getUnit());
 
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\ListProduct', $product);
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit', $product->getUnit());
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer', $product->getManufacturer());
+        static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\ListProduct', $product);
+        static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit', $product->getUnit());
+        static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer', $product->getManufacturer());
 
-        $this->assertNotEmpty($product->getPrices());
-        $this->assertNotEmpty($product->getPriceRules());
+        static::assertNotEmpty($product->getPrices());
+        static::assertNotEmpty($product->getPriceRules());
         foreach ($product->getPrices() as $price) {
-            $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Price', $price);
-            $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit', $price->getUnit());
-            $this->assertGreaterThanOrEqual(1, $price->getUnit()->getMinPurchase());
+            static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Price', $price);
+            static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit', $price->getUnit());
+            static::assertGreaterThanOrEqual(1, $price->getUnit()->getMinPurchase());
         }
 
         foreach ($product->getPriceRules() as $price) {
-            $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule', $price);
+            static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule', $price);
         }
 
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Price', $product->getCheapestPrice());
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule', $product->getCheapestPriceRule());
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit', $product->getCheapestPrice()->getUnit());
-        $this->assertGreaterThanOrEqual(1, $product->getCheapestPrice()->getUnit()->getMinPurchase());
+        static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Price', $product->getCheapestPrice());
+        static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule', $product->getCheapestPriceRule());
+        static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit', $product->getCheapestPrice()->getUnit());
+        static::assertGreaterThanOrEqual(1, $product->getCheapestPrice()->getUnit()->getMinPurchase());
 
-        $this->assertNotEmpty($product->getCheapestPriceRule()->getPrice());
-        $this->assertNotEmpty($product->getCheapestPrice()->getCalculatedPrice());
-        $this->assertNotEmpty($product->getCheapestPrice()->getCalculatedPseudoPrice());
-        $this->assertNotEmpty($product->getCheapestPrice()->getFrom());
+        static::assertNotEmpty($product->getCheapestPriceRule()->getPrice());
+        static::assertNotEmpty($product->getCheapestPrice()->getCalculatedPrice());
+        static::assertNotEmpty($product->getCheapestPrice()->getCalculatedPseudoPrice());
+        static::assertNotEmpty($product->getCheapestPrice()->getFrom());
 
-        $this->assertGreaterThanOrEqual(1, $product->getUnit()->getMinPurchase());
-        $this->assertNotEmpty($product->getManufacturer()->getName());
+        static::assertGreaterThanOrEqual(1, $product->getUnit()->getMinPurchase());
+        static::assertNotEmpty($product->getManufacturer()->getName());
     }
 
     /**

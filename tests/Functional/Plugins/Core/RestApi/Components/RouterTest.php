@@ -50,7 +50,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
     public function testCanGetInstance()
     {
-        $this->assertInstanceOf('ShopwarePlugins\RestApi\Components\Router', $this->router);
+        static::assertInstanceOf('ShopwarePlugins\RestApi\Components\Router', $this->router);
     }
 
     public function routeGetProvider()
@@ -80,11 +80,11 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $request->setPathInfo($uri);
         $this->router->assembleRoute($request, $response);
 
-        $this->assertEquals($expectedController, $request->getControllerName());
-        $this->assertEquals($expectedAction, $request->getActionName());
-        $this->assertEquals($expectedVersion, $request->getParam('version'));
-        $this->assertEquals($expectedId, $request->getParam('id'));
-        $this->assertEquals(200, $response->getHttpResponseCode());
+        static::assertEquals($expectedController, $request->getControllerName());
+        static::assertEquals($expectedAction, $request->getActionName());
+        static::assertEquals($expectedVersion, $request->getParam('version'));
+        static::assertEquals($expectedId, $request->getParam('id'));
+        static::assertEquals(200, $response->getHttpResponseCode());
     }
 
     public function routePostProvider()
@@ -113,11 +113,11 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $request->setPathInfo($uri);
         $this->router->assembleRoute($request, $response);
 
-        $this->assertEquals($expectedController, $request->getControllerName());
-        $this->assertEquals($expectedAction, $request->getActionName());
-        $this->assertEquals($expectedVersion, $request->getParam('version'));
-        $this->assertEquals($expectedId, $request->getParam('id'));
-        $this->assertEquals(201, $response->getHttpResponseCode());
+        static::assertEquals($expectedController, $request->getControllerName());
+        static::assertEquals($expectedAction, $request->getActionName());
+        static::assertEquals($expectedVersion, $request->getParam('version'));
+        static::assertEquals($expectedId, $request->getParam('id'));
+        static::assertEquals(201, $response->getHttpResponseCode());
     }
 
     public function routePutProvider()
@@ -146,11 +146,11 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $request->setPathInfo($uri);
         $this->router->assembleRoute($request, $response);
 
-        $this->assertEquals($expectedController, $request->getControllerName());
-        $this->assertEquals($expectedAction, $request->getActionName());
-        $this->assertEquals($expectedVersion, $request->getParam('version'));
-        $this->assertEquals($expectedId, $request->getParam('id'));
-        $this->assertEquals($expectedCode, $response->getHttpResponseCode());
+        static::assertEquals($expectedController, $request->getControllerName());
+        static::assertEquals($expectedAction, $request->getActionName());
+        static::assertEquals($expectedVersion, $request->getParam('version'));
+        static::assertEquals($expectedId, $request->getParam('id'));
+        static::assertEquals($expectedCode, $response->getHttpResponseCode());
     }
 
     public function routeDeleteProvider()
@@ -180,10 +180,10 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $request->setPathInfo($uri);
         $this->router->assembleRoute($request, $response);
 
-        $this->assertEquals($expectedController, $request->getControllerName());
-        $this->assertEquals($expectedAction, $request->getActionName());
-        $this->assertEquals($expectedVersion, $request->getParam('version'));
-        $this->assertEquals($expectedId, $request->getParam('id'));
-        $this->assertEquals($expectedCode, $response->getHttpResponseCode());
+        static::assertEquals($expectedController, $request->getControllerName());
+        static::assertEquals($expectedAction, $request->getActionName());
+        static::assertEquals($expectedVersion, $request->getParam('version'));
+        static::assertEquals($expectedId, $request->getParam('id'));
+        static::assertEquals($expectedCode, $response->getHttpResponseCode());
     }
 }

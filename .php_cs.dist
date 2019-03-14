@@ -33,6 +33,7 @@ our trademarks remain entirely with us.
 EOF;
 
 return PhpCsFixer\Config::create()
+    ->setRiskyAllowed(true)
     ->setUsingCache(false)
     ->setRules([
         '@PSR2' => true,
@@ -51,6 +52,7 @@ return PhpCsFixer\Config::create()
         'doctrine_annotation_indentation' => true,
         'doctrine_annotation_spaces' => true,
         'no_superfluous_phpdoc_tags' => true,
+        'php_unit_test_case_static_method_calls' => true,
     ])
     ->setFinder($finder)
 ;

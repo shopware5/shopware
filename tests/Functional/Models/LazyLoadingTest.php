@@ -75,8 +75,8 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
         $this->em->flush();
         $this->em->clear();
 
-        $this->assertNotEmpty($customer->getId());
-        $this->assertNotEmpty($customer->getGroup()->getId());
+        static::assertNotEmpty($customer->getId());
+        static::assertNotEmpty($customer->getGroup()->getId());
 
         return $customer;
     }
@@ -98,10 +98,10 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
         /** @var Group $group */
         $group = $this->em->getRepository('Shopware\Models\Customer\Group')->find($groupId);
 
-        $this->assertEquals($customer->getId(), $customerId);
-        $this->assertEquals($customer->getGroupKey(), $groupKey);
-        $this->assertEquals($group->getKey(), $groupKey);
-        $this->assertEquals($customer->getGroupKey(), $group->getKey());
+        static::assertEquals($customer->getId(), $customerId);
+        static::assertEquals($customer->getGroupKey(), $groupKey);
+        static::assertEquals($group->getKey(), $groupKey);
+        static::assertEquals($customer->getGroupKey(), $group->getKey());
     }
 
     /**
@@ -121,10 +121,10 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
         $customer = $query->getOneOrNullResult();
         $group = $customer->getGroup();
 
-        $this->assertEquals($customer->getId(), $customerId);
-        $this->assertEquals($group->getKey(), $groupKey);
-        $this->assertEquals($customer->getGroupKey(), $groupKey);
-        $this->assertEquals($customer->getGroupKey(), $group->getKey());
+        static::assertEquals($customer->getId(), $customerId);
+        static::assertEquals($group->getKey(), $groupKey);
+        static::assertEquals($customer->getGroupKey(), $groupKey);
+        static::assertEquals($customer->getGroupKey(), $group->getKey());
     }
 
     /**
@@ -145,10 +145,10 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
         $customer = $query->getOneOrNullResult();
         $group = $customer->getGroup();
 
-        $this->assertEquals($customer->getId(), $customerId);
-        $this->assertEquals($group->getKey(), $groupKey);
-        $this->assertEquals($customer->getGroupKey(), $groupKey);
-        $this->assertEquals($customer->getGroupKey(), $group->getKey());
+        static::assertEquals($customer->getId(), $customerId);
+        static::assertEquals($group->getKey(), $groupKey);
+        static::assertEquals($customer->getGroupKey(), $groupKey);
+        static::assertEquals($customer->getGroupKey(), $group->getKey());
     }
 
     /**
@@ -168,10 +168,10 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
         $customer = $query->getOneOrNullResult();
         $group = $customer->getGroup();
 
-        $this->assertEquals($customer->getId(), $customerId);
-        $this->assertEquals($group->getKey(), $groupKey);
-        $this->assertEquals($customer->getGroupKey(), $groupKey);
-        $this->assertEquals($customer->getGroupKey(), $group->getKey());
+        static::assertEquals($customer->getId(), $customerId);
+        static::assertEquals($group->getKey(), $groupKey);
+        static::assertEquals($customer->getGroupKey(), $groupKey);
+        static::assertEquals($customer->getGroupKey(), $group->getKey());
     }
 
     /**
@@ -188,10 +188,10 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
         $customer = $this->em->getRepository('Shopware\Models\Customer\Customer')->find($customerId);
         $group = $customer->getGroup();
 
-        $this->assertEquals($customer->getId(), $customerId);
-        $this->assertEquals($group->getKey(), $groupKey);
-        $this->assertEquals($customer->getGroupKey(), $groupKey);
-        $this->assertEquals($customer->getGroupKey(), $group->getKey());
+        static::assertEquals($customer->getId(), $customerId);
+        static::assertEquals($group->getKey(), $groupKey);
+        static::assertEquals($customer->getGroupKey(), $groupKey);
+        static::assertEquals($customer->getGroupKey(), $group->getKey());
     }
 
     /**
@@ -207,9 +207,9 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
         $customer = new Customer();
         $customer->setGroup($this->em->getReference('Shopware\Models\Customer\Group', $groupId));
 
-        $this->assertEmpty($customer->getId());
-        $this->assertEquals($groupId, $customer->getGroup()->getId());
-        $this->assertEquals($groupKey, $customer->getGroup()->getKey());
+        static::assertEmpty($customer->getId());
+        static::assertEquals($groupId, $customer->getGroup()->getId());
+        static::assertEquals($groupKey, $customer->getGroup()->getKey());
 
         return $customer;
     }
@@ -224,10 +224,10 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
         $customer = new Customer();
         $customer->setGroup($group);
 
-        $this->assertEmpty($customer->getId());
-        $this->assertEquals($group, $customer->getGroup());
-        $this->assertEmpty($customer->getGroup()->getId());
-        $this->assertEquals($groupKey, $customer->getGroup()->getKey());
+        static::assertEmpty($customer->getId());
+        static::assertEquals($group, $customer->getGroup());
+        static::assertEmpty($customer->getGroup()->getId());
+        static::assertEquals($groupKey, $customer->getGroup()->getKey());
 
         return $customer;
     }
@@ -253,10 +253,10 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
         $group = $this->em->getReference('Shopware\Models\Customer\Group', $groupId);
         $customer->setGroup($group);
 
-        $this->assertNotEmpty($customer->getId());
-        $this->assertEquals($group, $customer->getGroup());
-        $this->assertNotEmpty($customer->getGroup()->getId());
-        $this->assertEquals($groupKey, $customer->getGroup()->getKey());
+        static::assertNotEmpty($customer->getId());
+        static::assertEquals($group, $customer->getGroup());
+        static::assertNotEmpty($customer->getGroup()->getId());
+        static::assertEquals($groupKey, $customer->getGroup()->getKey());
 
         return $customer;
     }
@@ -265,7 +265,7 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
     {
         $article = $this->em->find('Shopware\Models\Article\Supplier', 2);
 
-        $this->assertNotEmpty(end($article->getArticles()->toArray())->getId());
+        static::assertNotEmpty(end($article->getArticles()->toArray())->getId());
     }
 
     /**
@@ -289,8 +289,8 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
 
         /** @var \Shopware\Models\Article\Notification $notification */
         $notification = $this->em->getRepository('Shopware\Models\Article\Notification')->find($id);
-        $this->assertEquals($ordernumber, $notification->getArticleDetail()->getNumber());
-        $this->assertEquals($email, $notification->getCustomer()->getEmail());
+        static::assertEquals($ordernumber, $notification->getArticleDetail()->getNumber());
+        static::assertEquals($email, $notification->getCustomer()->getEmail());
 
         $conn->delete('s_articles_notification', ['id' => $id]);
     }
@@ -304,7 +304,7 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
         /** @var \Shopware\Models\Article\Price $price */
         $price = $this->em->getRepository('Shopware\Models\Article\Price')->findOneBy(['customerGroupKey' => 'ek']);
         $group = $price->getCustomerGroup();
-        $this->assertEquals('EK', $group->getKey());
+        static::assertEquals('EK', $group->getKey());
     }
 
     /**
@@ -321,7 +321,7 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
 
         /** @var \Shopware\Models\Article\Configurator\Template\Price $templatePrice */
         $templatePrice = $this->em->getRepository('\Shopware\Models\Article\Configurator\Template\Price')->find($id);
-        $this->assertEquals('EK', $templatePrice->getCustomerGroup()->getKey());
+        static::assertEquals('EK', $templatePrice->getCustomerGroup()->getKey());
 
         $conn->delete('s_articles_notification', ['id' => $id]);
     }
@@ -341,7 +341,7 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
 
         /** @var \Shopware\Models\Newsletter\Address $address */
         $address = $this->em->getRepository('Shopware\Models\Newsletter\Address')->find($id);
-        $this->assertEquals($email, $address->getCustomer()->getEmail());
+        static::assertEquals($email, $address->getCustomer()->getEmail());
 
         $conn->delete('s_campaigns_mailaddresses', ['id' => $id]);
     }
@@ -354,7 +354,7 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
     {
         /** @var \Shopware\Models\Premium\Premium $premium */
         $premium = $this->em->getRepository('Shopware\Models\Premium\Premium')->find(1);
-        $this->assertEquals('SW10209', $premium->getArticleDetail()->getNumber());
+        static::assertEquals('SW10209', $premium->getArticleDetail()->getNumber());
     }
 
     /**
@@ -373,7 +373,7 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
 
         /** @var \Shopware\Models\Newsletter\ContainerType\Article $articleContainerType */
         $articleContainerType = $this->em->getRepository('Shopware\Models\Newsletter\ContainerType\Article')->find($id);
-        $this->assertEquals($ordernumber, $articleContainerType->getArticleDetail()->getNumber());
+        static::assertEquals($ordernumber, $articleContainerType->getArticleDetail()->getNumber());
 
         $conn->delete('s_campaigns_articles', ['id' => $id]);
     }

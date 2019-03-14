@@ -115,7 +115,7 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
         $this->Request()->setPost($newTestDocumentType);
         $response = $this->dispatch('backend/Config/saveValues?_repositoryClass=document');
 
-        $this->assertEquals(true, json_decode($response->getBody(), true)['success']);
+        static::assertEquals(true, json_decode($response->getBody(), true)['success']);
 
         Shopware()->Db()->query('DELETE FROM `s_core_documents` WHERE `key`="first_test_document";');
     }
@@ -144,7 +144,7 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
         $this->Request()->setPost($firstTestDocumentType);
         $response = $this->dispatch('backend/Config/saveValues?_repositoryClass=document');
 
-        $this->assertEquals(true, json_decode($response->getBody(), true)['success']);
+        static::assertEquals(true, json_decode($response->getBody(), true)['success']);
 
         // Try to add another document type with the same document type
         $secondTestDocumentType = [
@@ -164,7 +164,7 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
         $this->Request()->setPost($secondTestDocumentType);
         $response = $this->dispatch('backend/Config/saveValues?_repositoryClass=document');
 
-        $this->assertEquals(false, json_decode($response->getBody(), true)['success']);
+        static::assertEquals(false, json_decode($response->getBody(), true)['success']);
 
         $this->resetContainer();
 
@@ -182,8 +182,8 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
         $this->Request()->setMethod('GET');
         $this->dispatch('backend/Config/getTableList/_repositoryClass/' . $tableListName);
         $returnData = $this->View()->getAssign('data');
-        $this->assertGreaterThan(2, count($returnData));
-        $this->assertTrue($this->View()->getAssign('success'));
+        static::assertGreaterThan(2, count($returnData));
+        static::assertTrue($this->View()->getAssign('success'));
     }
 
     /**
@@ -195,10 +195,10 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
     {
         $this->Request()->setMethod('GET');
         $this->dispatch('backend/Config/getTableList/_repositoryClass/' . $tableListName . '?page=1&start=0&limit=2');
-        $this->assertTrue($this->View()->getAssign('success'));
+        static::assertTrue($this->View()->getAssign('success'));
         $returnData = $this->View()->getAssign('data');
-        $this->assertGreaterThan(2, $this->View()->getAssign('total'));
-        $this->assertCount(2, $returnData);
+        static::assertGreaterThan(2, $this->View()->getAssign('total'));
+        static::assertCount(2, $returnData);
     }
 
     /**
@@ -228,9 +228,9 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         $this->dispatch($url . $query);
         $returnData = $this->View()->getAssign('data');
-        $this->assertGreaterThan(0, count($returnData));
-        $this->assertLessThan($totalCount, count($returnData));
-        $this->assertTrue($this->View()->getAssign('success'));
+        static::assertGreaterThan(0, count($returnData));
+        static::assertLessThan($totalCount, count($returnData));
+        static::assertTrue($this->View()->getAssign('success'));
     }
 
     /**
@@ -260,8 +260,8 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         $this->dispatch($url . $query);
         $returnData = $this->View()->getAssign('data');
-        $this->assertCount(2, $returnData);
-        $this->assertTrue($this->View()->getAssign('success'));
+        static::assertCount(2, $returnData);
+        static::assertTrue($this->View()->getAssign('success'));
     }
 
     /**

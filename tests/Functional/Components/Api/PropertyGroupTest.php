@@ -72,12 +72,12 @@ class PropertyGroupTest extends TestCase
 
         $group = $this->resource->create($testData);
 
-        $this->assertInstanceOf('\Shopware\Models\Property\Group', $group);
-        $this->assertGreaterThan(0, $group->getId());
+        static::assertInstanceOf('\Shopware\Models\Property\Group', $group);
+        static::assertGreaterThan(0, $group->getId());
 
-        $this->assertEquals($group->getPosition(), $testData['position']);
-        $this->assertEquals($group->getComparable(), $testData['comparable']);
-        $this->assertEquals($group->getSortMode(), $testData['sortmode']);
+        static::assertEquals($group->getPosition(), $testData['position']);
+        static::assertEquals($group->getComparable(), $testData['comparable']);
+        static::assertEquals($group->getSortMode(), $testData['sortmode']);
 
         return $group->getId();
     }
@@ -88,7 +88,7 @@ class PropertyGroupTest extends TestCase
     public function testGetOneShouldBeSuccessful($id)
     {
         $group = $this->resource->getOne($id);
-        $this->assertGreaterThan(0, $group['id']);
+        static::assertGreaterThan(0, $group['id']);
     }
 
     /**
@@ -99,8 +99,8 @@ class PropertyGroupTest extends TestCase
         $this->resource->setResultMode(1);
         $group = $this->resource->getOne($id);
 
-        $this->assertInstanceOf('\Shopware\Models\Property\Group', $group);
-        $this->assertGreaterThan(0, $group->getId());
+        static::assertInstanceOf('\Shopware\Models\Property\Group', $group);
+        static::assertGreaterThan(0, $group->getId());
     }
 
     /**
@@ -110,11 +110,11 @@ class PropertyGroupTest extends TestCase
     {
         $result = $this->resource->getList();
 
-        $this->assertArrayHasKey('data', $result);
-        $this->assertArrayHasKey('total', $result);
+        static::assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('total', $result);
 
-        $this->assertGreaterThanOrEqual(1, $result['total']);
-        $this->assertGreaterThanOrEqual(1, $result['data']);
+        static::assertGreaterThanOrEqual(1, $result['total']);
+        static::assertGreaterThanOrEqual(1, $result['data']);
     }
 
     /**
@@ -125,13 +125,13 @@ class PropertyGroupTest extends TestCase
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $result = $this->resource->getList();
 
-        $this->assertArrayHasKey('data', $result);
-        $this->assertArrayHasKey('total', $result);
+        static::assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('total', $result);
 
-        $this->assertGreaterThanOrEqual(1, $result['total']);
-        $this->assertGreaterThanOrEqual(1, $result['data']);
+        static::assertGreaterThanOrEqual(1, $result['total']);
+        static::assertGreaterThanOrEqual(1, $result['data']);
 
-        $this->assertInstanceOf('\Shopware\Models\Property\Group', $result['data'][0]);
+        static::assertInstanceOf('\Shopware\Models\Property\Group', $result['data'][0]);
     }
 
     /**
@@ -146,11 +146,11 @@ class PropertyGroupTest extends TestCase
 
         $group = $this->resource->update($id, $testData);
 
-        $this->assertInstanceOf('\Shopware\Models\Property\Group', $group);
-        $this->assertEquals($id, $group->getId());
+        static::assertInstanceOf('\Shopware\Models\Property\Group', $group);
+        static::assertEquals($id, $group->getId());
 
-        $this->assertEquals($group->getName(), $testData['name']);
-        $this->assertEquals($group->getSortMode(), $testData['sortmode']);
+        static::assertEquals($group->getName(), $testData['name']);
+        static::assertEquals($group->getSortMode(), $testData['sortmode']);
 
         return $id;
     }
@@ -178,8 +178,8 @@ class PropertyGroupTest extends TestCase
     {
         $group = $this->resource->delete($id);
 
-        $this->assertInstanceOf('\Shopware\Models\Property\Group', $group);
-        $this->assertEquals(null, $group->getId());
+        static::assertInstanceOf('\Shopware\Models\Property\Group', $group);
+        static::assertEquals(null, $group->getId());
     }
 
     /**

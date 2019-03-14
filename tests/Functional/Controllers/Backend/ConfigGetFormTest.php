@@ -78,7 +78,7 @@ class Shopware_Tests_Controllers_Backend_ConfigGetFormTest extends Enlight_Compo
     {
         $this->createAndLoginAdminUserWithLocaleId($this->getLocaleIdOrCreate(static::TEST_LOCALE_LOCALE));
         $storeSettings = $this->getTranslatedFormElementStoreSettings(static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS);
-        $this->assertEquals(
+        static::assertEquals(
             static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS[static::TEST_LOCALE_LOCALE],
             $storeSettings[0][1]
         );
@@ -88,7 +88,7 @@ class Shopware_Tests_Controllers_Backend_ConfigGetFormTest extends Enlight_Compo
     {
         $this->createAndLoginAdminUserWithLocaleId($this->getLocaleIdOrCreate('fr_FR'));
         $storeSettings = $this->getTranslatedFormElementStoreSettings(static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS);
-        $this->assertEquals(
+        static::assertEquals(
             static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS['en_GB'],
             $storeSettings[0][1],
             'Should be the en_GB translation, as that is the translation of the first, hard-coded fallback locale.'
@@ -99,7 +99,7 @@ class Shopware_Tests_Controllers_Backend_ConfigGetFormTest extends Enlight_Compo
     {
         $this->createAndLoginAdminUserWithLocaleId($this->getLocaleIdOrCreate('de_CH'));
         $storeSettings = $this->getTranslatedFormElementStoreSettings(static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS);
-        $this->assertEquals(
+        static::assertEquals(
             static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS['en_GB'],
             $storeSettings[0][1],
             'Should be the en_GB translation, as that is the translation of the first, hard-coded fallback locale.'
@@ -111,7 +111,7 @@ class Shopware_Tests_Controllers_Backend_ConfigGetFormTest extends Enlight_Compo
     {
         $this->createAndLoginAdminUserWithLocaleId($this->getLocaleIdOrCreate('en_GB'));
         $storeSettings = $this->getTranslatedFormElementStoreSettings(static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITHOUT_FALLBACK);
-        $this->assertEquals(
+        static::assertEquals(
             static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITHOUT_FALLBACK['aa_DJ'],
             $storeSettings[0][1],
             'If no matching translation and no locale-based (en_GB, en) translation exists, should use '
@@ -123,7 +123,7 @@ class Shopware_Tests_Controllers_Backend_ConfigGetFormTest extends Enlight_Compo
     {
         $this->createAndLoginAdminUserWithLocaleId($this->getLocaleIdOrCreate('de_DE'));
         $storeSettings = $this->getTranslatedFormElementStoreSettings(static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_EN_FALLBACK);
-        $this->assertEquals(
+        static::assertEquals(
             static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_EN_FALLBACK['en'],
             $storeSettings[0][1],
             'If neither a matching location, nor the preferred en_GB fallback exist, should fall back to '
@@ -135,7 +135,7 @@ class Shopware_Tests_Controllers_Backend_ConfigGetFormTest extends Enlight_Compo
     {
         $this->createAndLoginAdminUserWithLocaleId($this->getLocaleIdOrCreate(static::TEST_LOCALE_LOCALE));
         $storeSettings = $this->getTranslatedFormElementStoreSettings('A fixed string');
-        $this->assertEquals(
+        static::assertEquals(
             'A fixed string',
             $storeSettings[0][1]
         );
@@ -190,8 +190,8 @@ class Shopware_Tests_Controllers_Backend_ConfigGetFormTest extends Enlight_Compo
             'password' => 'testpassword',
         ]);
         $loginResponse = $this->dispatch('backend/Login/login');
-        $this->assertGreaterThanOrEqual(200, $loginResponse->getHttpResponseCode(), 'Login failed.');
-        $this->assertLessThanOrEqual(299, $loginResponse->getHttpResponseCode(), 'Login failed.');
+        static::assertGreaterThanOrEqual(200, $loginResponse->getHttpResponseCode(), 'Login failed.');
+        static::assertLessThanOrEqual(299, $loginResponse->getHttpResponseCode(), 'Login failed.');
         $this->resetRequest();
         $this->resetResponse();
     }
@@ -305,12 +305,12 @@ class Shopware_Tests_Controllers_Backend_ConfigGetFormTest extends Enlight_Compo
             Shopware()->Plugins()->Backend()->Auth()->setNoAcl(false);
         }
 
-        $this->assertRegExp(',^\s*application/json\s*(;.*)?$,u', $response->getHeader('Content-Type'));
+        static::assertRegExp(',^\s*application/json\s*(;.*)?$,u', $response->getHeader('Content-Type'));
 
         // Only accept 2xx success codes. Here, redirects may be a sign
         // that the login did not work.
-        $this->assertGreaterThanOrEqual(200, $response->getHttpResponseCode());
-        $this->assertLessThanOrEqual(299, $response->getHttpResponseCode());
+        static::assertGreaterThanOrEqual(200, $response->getHttpResponseCode());
+        static::assertLessThanOrEqual(299, $response->getHttpResponseCode());
 
         $responseBody = $response->getBody();
         $responseDataTransferObject = json_decode($responseBody);
@@ -330,22 +330,22 @@ class Shopware_Tests_Controllers_Backend_ConfigGetFormTest extends Enlight_Compo
         }
 
         // Basic assertions about the response to catch non-test-related errors early:
-        $this->assertTrue($responseDataTransferObject->success);
-        $this->assertNotEmpty($responseDataTransferObject->data);
+        static::assertTrue($responseDataTransferObject->success);
+        static::assertNotEmpty($responseDataTransferObject->data);
 
         $formData = $responseDataTransferObject->data;
         $formDataErrorMessageSuffix = ' Form data does not match expectation: '
             . json_encode($formData);
 
-        $this->assertNotEmpty(
+        static::assertNotEmpty(
             $formData->elements,
             'Form elements are missing.' . $formDataErrorMessageSuffix
         );
-        $this->assertNotEmpty(
+        static::assertNotEmpty(
             $formData->elements[0]->options,
             'Form element options are missing.' . $formDataErrorMessageSuffix
         );
-        $this->assertNotEmpty(
+        static::assertNotEmpty(
             $formData->elements[0]->options->store,
             'Form element store options are missing.' . $formDataErrorMessageSuffix
         );

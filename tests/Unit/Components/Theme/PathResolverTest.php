@@ -66,10 +66,10 @@ class PathResolverTest extends TestCase
         $filenameHash = $timestamp . '_' . md5($timestamp . $templateId . $shopId . $release['revision']);
 
         $expected = '/my/root/dir/web/cache/' . $filenameHash . '.css';
-        $this->assertEquals($expected, $this->pathResolver->getCssFilePath($shopMock, $timestamp));
+        static::assertEquals($expected, $this->pathResolver->getCssFilePath($shopMock, $timestamp));
 
         $expected = '/my/root/dir/web/cache/' . $filenameHash . '.js';
-        $this->assertEquals($expected, $this->pathResolver->getJsFilePath($shopMock, $timestamp));
+        static::assertEquals($expected, $this->pathResolver->getJsFilePath($shopMock, $timestamp));
     }
 
     /**

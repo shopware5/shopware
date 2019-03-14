@@ -52,7 +52,7 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
         ";
         Shopware()->Db()->query($sql, ['orderId' => '15315351']);
 
-        $this->assertEquals('126.82', $this->getInvoiceAmount());
+        static::assertEquals('126.82', $this->getInvoiceAmount());
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
 
         //delete the order position
@@ -61,7 +61,7 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
                 ->setPost('id', '15315352')
                 ->setPost('orderID', '15315351');
         $this->dispatch('backend/Order/deletePosition');
-        $this->assertEquals('106.87', $this->getInvoiceAmount());
+        static::assertEquals('106.87', $this->getInvoiceAmount());
 
         // Remove test data
         $sql = '
@@ -91,7 +91,7 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
             ['orderID' => $orderId]
         );
 
-        $this->assertCount(0, $documents);
+        static::assertCount(0, $documents);
 
         $this->Request()
             ->setMethod('POST')
@@ -100,18 +100,18 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
         $response = $this->dispatch('backend/Order/batchProcess');
 
         $data = json_decode($response->getBody(), true);
-        $this->assertArrayHasKey('success', $data);
-        $this->assertTrue($data['success']);
+        static::assertArrayHasKey('success', $data);
+        static::assertTrue($data['success']);
 
         $finalShopCount = Shopware()->Db()->fetchOne('SELECT count(distinct id) FROM s_core_shops');
-        $this->assertEquals($initialShopCount, $finalShopCount);
+        static::assertEquals($initialShopCount, $finalShopCount);
 
         $documents = Shopware()->Db()->fetchAll(
             'SELECT * FROM `s_order_documents` WHERE `orderID` = :orderID',
             ['orderID' => $orderId]
         );
 
-        $this->assertCount(1, $documents);
+        static::assertCount(1, $documents);
 
         // Remove test data
         Shopware()->Db()->query(
@@ -156,13 +156,13 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
         // Try to change the entity with the correct timestamp. This should work
         $this->Request()->setMethod('POST')->setPost($postData);
         $this->dispatch('backend/Order/save');
-        self::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         // Now use an outdated timestamp. The controller should detect this and fail.
         $postData['changed'] = '2008-08-07 18:11:31';
         $this->Request()->setMethod('POST')->setPost($postData);
         $this->dispatch('backend/Order/batchProcess');
-        self::assertFalse($this->View()->success);
+        static::assertFalse($this->View()->success);
     }
 
     public function testSavingOrderWithDifferentTimeZone()
@@ -193,8 +193,8 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
 
         $this->dispatch('/backend/order/save');
 
-        $this->assertTrue($this->View()->getAssign('success'));
-        $this->assertEquals($oldDate, $this->View()->getAssign('data')['orderTime']);
+        static::assertTrue($this->View()->getAssign('success'));
+        static::assertEquals($oldDate, $this->View()->getAssign('data')['orderTime']);
     }
 
     /**

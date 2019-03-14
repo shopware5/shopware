@@ -42,19 +42,19 @@ class XmlConfigDefinitionReaderTest extends TestCase
     public function testCanReadAndVerifyMinimalExample()
     {
         $result = $this->SUT->read(__DIR__ . '/examples/config_minimal.xml');
-        $this->assertInternalType('array', $result);
+        static::assertInternalType('array', $result);
     }
 
     public function testCanReadAndVerify()
     {
         $result = $this->SUT->read(__DIR__ . '/examples/config.xml');
-        $this->assertInternalType('array', $result);
+        static::assertInternalType('array', $result);
     }
 
     public function testCanReadStores()
     {
         $form = $this->SUT->read(__DIR__ . '/examples/config_store.xml');
-        $this->assertInternalType('array', $form);
+        static::assertInternalType('array', $form);
 
         $expected = [
             [
@@ -86,7 +86,7 @@ class XmlConfigDefinitionReaderTest extends TestCase
             ],
         ];
 
-        $this->assertEquals($expected, $form['elements'][0]['store']);
-        $this->assertEquals('Shopware.apps.Base.store.Category', $form['elements'][1]['store']);
+        static::assertEquals($expected, $form['elements'][0]['store']);
+        static::assertEquals('Shopware.apps.Base.store.Category', $form['elements'][1]['store']);
     }
 }

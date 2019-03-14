@@ -56,7 +56,7 @@ class Shopware_Tests_Components_Snippet_DatabaseHandlerTest extends Enlight_Comp
         $advancedMenuSnippets = $em->getRepository(\Shopware\Models\Snippet\Snippet::class)->findBy([
             'namespace' => 'frontend/plugins/advanced_menu/advanced_menu',
         ]);
-        $this->assertCount(0, $advancedMenuSnippets);
+        static::assertCount(0, $advancedMenuSnippets);
 
         // (partial) import snippets of the AdvancedMenu plugin
         $namespace = Shopware()->Plugins()->Frontend();
@@ -68,7 +68,7 @@ class Shopware_Tests_Components_Snippet_DatabaseHandlerTest extends Enlight_Comp
         $advancedMenuSnippets = $em->getRepository(\Shopware\Models\Snippet\Snippet::class)->findBy([
             'namespace' => 'frontend/plugins/advanced_menu/advanced_menu',
         ]);
-        $this->assertCount(3, $advancedMenuSnippets);
+        static::assertCount(3, $advancedMenuSnippets);
 
         // Restore locale
         $sql = "INSERT INTO s_core_locales values (1, 'de_DE', 'Deutsch', 'Deutschland');";

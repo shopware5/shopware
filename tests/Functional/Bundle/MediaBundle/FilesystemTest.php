@@ -109,8 +109,8 @@ class FilesystemTest extends \Enlight_Components_Test_TestCase
         }
         $mediaUrl = $baseUrl . $this->mediaService->encode($file);
 
-        $this->assertEquals($mediaUrl, $this->mediaService->getUrl($file));
-        $this->assertNull($this->mediaService->getUrl(''));
+        static::assertEquals($mediaUrl, $this->mediaService->getUrl($file));
+        static::assertNull($this->mediaService->getUrl(''));
     }
 
     /**
@@ -121,7 +121,7 @@ class FilesystemTest extends \Enlight_Components_Test_TestCase
         $content = json_encode($this->testData);
         $this->mediaService->write($path, $content);
 
-        $this->assertTrue($this->mediaService->has($path));
+        static::assertTrue($this->mediaService->has($path));
     }
 
     /**
@@ -130,7 +130,7 @@ class FilesystemTest extends \Enlight_Components_Test_TestCase
     private function _testRead($path)
     {
         $content = $this->mediaService->read($path);
-        $this->assertJsonStringEqualsJsonString($content, json_encode($this->testData));
+        static::assertJsonStringEqualsJsonString($content, json_encode($this->testData));
     }
 
     /**
@@ -138,9 +138,9 @@ class FilesystemTest extends \Enlight_Components_Test_TestCase
      */
     private function _testDelete($path)
     {
-        $this->assertTrue($this->mediaService->has($path));
+        static::assertTrue($this->mediaService->has($path));
         $this->mediaService->delete($path);
-        $this->assertFalse($this->mediaService->has($path));
+        static::assertFalse($this->mediaService->has($path));
     }
 
     /**
@@ -151,15 +151,15 @@ class FilesystemTest extends \Enlight_Components_Test_TestCase
         $tmpFile = 'media/unknown/_phpunit_tmp_rename.json';
         $this->mediaService->rename($file, $tmpFile);
 
-        $this->assertTrue($this->mediaService->has($tmpFile));
-        $this->assertFalse($this->mediaService->has($file));
+        static::assertTrue($this->mediaService->has($tmpFile));
+        static::assertFalse($this->mediaService->has($file));
 
         $this->_testRead($tmpFile);
 
         $this->mediaService->rename($tmpFile, $file);
 
-        $this->assertTrue($this->mediaService->has($file));
-        $this->assertFalse($this->mediaService->has($tmpFile));
+        static::assertTrue($this->mediaService->has($file));
+        static::assertFalse($this->mediaService->has($tmpFile));
     }
 
     /**
@@ -167,6 +167,6 @@ class FilesystemTest extends \Enlight_Components_Test_TestCase
      */
     private function _testSize($file)
     {
-        $this->assertEquals($this->testFileSize, $this->mediaService->getSize($file));
+        static::assertEquals($this->testFileSize, $this->mediaService->getSize($file));
     }
 }

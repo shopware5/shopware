@@ -47,7 +47,7 @@ class TemplateManagerTest extends TestCase
         $renderingResult = $templateManager->fetch('template.tpl');
 
         // The actual thing to test here is that there is no SmartyException thrown here
-        $this->assertEquals($renderingResult, 'test');
+        static::assertEquals($renderingResult, 'test');
     }
 
     /**

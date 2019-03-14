@@ -48,14 +48,14 @@ class ProductMediaTest extends TestCase
         $mediaList = Shopware()->Container()->get('shopware_storefront.product_media_gateway')
             ->getList($listProducts, $context);
 
-        $this->assertCount(2, $mediaList);
+        static::assertCount(2, $mediaList);
 
         foreach ($numbers as $number) {
-            $this->assertArrayHasKey($number, $mediaList);
+            static::assertArrayHasKey($number, $mediaList);
 
             $productMediaList = $mediaList[$number];
 
-            $this->assertCount(3, $productMediaList);
+            static::assertCount(3, $productMediaList);
 
             /** @var Struct\Media $media */
             foreach ($productMediaList as $media) {
@@ -89,9 +89,9 @@ class ProductMediaTest extends TestCase
         $mediaList = Shopware()->Container()->get('shopware_storefront.variant_media_gateway')
             ->getList($products, $context);
 
-        $this->assertCount(3, $mediaList);
+        static::assertCount(3, $mediaList);
         foreach ($variantNumbers as $number) {
-            $this->assertArrayHasKey($number, $mediaList);
+            static::assertArrayHasKey($number, $mediaList);
 
             $variantMedia = $mediaList[$number];
 
@@ -106,15 +106,15 @@ class ProductMediaTest extends TestCase
         $mediaList = Shopware()->Container()->get('shopware_storefront.product_media_gateway')
             ->getList($products, $context);
 
-        $this->assertCount(2, $mediaList);
+        static::assertCount(2, $mediaList);
 
         foreach ($numbers as $number) {
-            $this->assertArrayHasKey($number, $mediaList);
+            static::assertArrayHasKey($number, $mediaList);
             $media = $mediaList[$number];
 
-            $this->assertCount(1, $media);
+            static::assertCount(1, $media);
             $media = array_shift($media);
-            $this->assertTrue($media->isPreview());
+            static::assertTrue($media->isPreview());
         }
     }
 
@@ -135,7 +135,7 @@ class ProductMediaTest extends TestCase
         $product = Shopware()->Container()->get('shopware_storefront.product_service')
             ->get($variantNumber, $context);
 
-        $this->assertCount(2, $product->getMedia());
+        static::assertCount(2, $product->getMedia());
     }
 
     protected function getProduct(
@@ -184,12 +184,12 @@ class ProductMediaTest extends TestCase
 
     private function assertMediaFile($expected, Struct\Media $media)
     {
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Media', $media);
-        $this->assertNotEmpty($media->getThumbnails());
-        $this->assertContains($expected, $media->getFile());
+        static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Media', $media);
+        static::assertNotEmpty($media->getThumbnails());
+        static::assertContains($expected, $media->getFile());
 
         foreach ($media->getThumbnails() as $thumbnail) {
-            $this->assertContains($expected, $thumbnail->getSource());
+            static::assertContains($expected, $thumbnail->getSource());
         }
     }
 

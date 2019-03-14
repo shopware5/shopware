@@ -57,14 +57,14 @@ class ArticleTest extends AbstractMarketing
         $category = $this->getDemoCategory();
 
         $topSeller = $this->module->sGetArticleCharts($category['id']);
-        $this->assertCount(2, $topSeller);
+        static::assertCount(2, $topSeller);
 
         $topSeller = array_values($topSeller);
 
         //the article "2" pseudo sales are set to 1000 so we expect that this will be the first article
         //in the top seller slider.
-        $this->assertEquals(4, $topSeller[0]['articleID']);
-        $this->assertEquals(3, $topSeller[1]['articleID']);
+        static::assertEquals(4, $topSeller[0]['articleID']);
+        static::assertEquals(3, $topSeller[1]['articleID']);
 
         $this->removeDemoData();
     }

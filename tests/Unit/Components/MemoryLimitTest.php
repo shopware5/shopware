@@ -97,7 +97,7 @@ class MemoryLimitTest extends TestCase
      */
     public function testBytesConversion($limit, $bytes)
     {
-        $this->assertEquals($bytes, MemoryLimit::convertToBytes($limit));
+        static::assertEquals($bytes, MemoryLimit::convertToBytes($limit));
     }
 
     public function testSetMinimuimShouldIncrease()
@@ -106,7 +106,7 @@ class MemoryLimitTest extends TestCase
 
         MemoryLimit::setMinimumMemoryLimit(1024 * 1024 * 20);
 
-        $this->assertEquals(1024 * 1024 * 20, MemoryMock::getLimit());
+        static::assertEquals(1024 * 1024 * 20, MemoryMock::getLimit());
     }
 
     public function testSetMinimuimShouldNotIncrease()
@@ -115,7 +115,7 @@ class MemoryLimitTest extends TestCase
 
         MemoryLimit::setMinimumMemoryLimit(1024 * 1024 * 20);
 
-        $this->assertEquals('1G', MemoryMock::getLimit());
+        static::assertEquals('1G', MemoryMock::getLimit());
     }
 
     public function testSetMinimuimShouldNotIncreaseUnlimited()
@@ -124,6 +124,6 @@ class MemoryLimitTest extends TestCase
 
         MemoryLimit::setMinimumMemoryLimit(1024 * 1024 * 20);
 
-        $this->assertEquals('-1', MemoryMock::getLimit());
+        static::assertEquals('-1', MemoryMock::getLimit());
     }
 }

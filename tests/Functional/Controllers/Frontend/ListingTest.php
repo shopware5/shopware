@@ -41,6 +41,6 @@ class Shopware_Tests_Controllers_Frontend_ListingTest extends Enlight_Components
 
         $this->dispatch('/cat/index/sCategory/' . $mainCategory);
 
-        $this->assertEquals(301, $this->Response()->getHttpResponseCode());
+        static::assertEquals(301, $this->Response()->getHttpResponseCode());
     }
 }

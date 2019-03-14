@@ -59,7 +59,7 @@ class ContainerAwareEventManagerTest extends TestCase
         $eventArgs = new \Enlight_Event_EventArgs(['some' => 'args']);
 
         $service
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('onEvent')
             ->with($eventArgs)
         ;
@@ -77,7 +77,7 @@ class ContainerAwareEventManagerTest extends TestCase
         $eventArgs = new \Enlight_Event_EventArgs(['some' => 'args']);
 
         $service
-            ->expects($this->exactly(2))
+            ->expects(static::exactly(2))
             ->method('onEvent')
             ->with($eventArgs)
         ;
@@ -95,17 +95,17 @@ class ContainerAwareEventManagerTest extends TestCase
 
         $service = $this->createMock(SubscriberService::class);
         $service
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('onEvent')
             ->with($eventArgs)
         ;
         $service
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('onEventWithPriority')
             ->with($eventArgs)
         ;
         $service
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('onEventNested')
             ->with($eventArgs)
         ;
@@ -122,7 +122,7 @@ class ContainerAwareEventManagerTest extends TestCase
         $eventArgs = new \Enlight_Event_EventArgs(['some' => 'args']);
         $service = $this->createMock(Service::class);
         $service
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('onEvent')
             ->with($eventArgs)
         ;
@@ -144,7 +144,7 @@ class ContainerAwareEventManagerTest extends TestCase
 
         $this->eventManager->addListenerService('onEvent', ['service.listener', 'onEvent']);
         $service
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('onEvent')
         ;
 
@@ -161,8 +161,8 @@ class ContainerAwareEventManagerTest extends TestCase
         $this->eventManager->addListenerService('onEvent', ['service.listener', 'onEvent']);
         $listeners = $this->eventManager->getAllListeners();
 
-        $this->assertTrue(isset($listeners['onevent']));
-        $this->assertCount(1, $this->eventManager->getListeners('onEvent'));
+        static::assertTrue(isset($listeners['onevent']));
+        static::assertCount(1, $this->eventManager->getListeners('onEvent'));
     }
 
     public function testRemoveAfterDispatch()
@@ -180,7 +180,7 @@ class ContainerAwareEventManagerTest extends TestCase
 
         $this->eventManager->removeListener($handler);
 
-        $this->assertFalse($this->eventManager->hasListeners('onEvent'));
+        static::assertFalse($this->eventManager->hasListeners('onEvent'));
     }
 
     public function testRemoveBeforeDispatch()
@@ -191,7 +191,7 @@ class ContainerAwareEventManagerTest extends TestCase
 
         $this->eventManager->removeListener(new \Enlight_Event_Handler_Default('onEvent', [$this->container->get('service.listener'), 'onEvent']));
 
-        $this->assertFalse($this->eventManager->hasListeners('onEvent'));
+        static::assertFalse($this->eventManager->hasListeners('onEvent'));
     }
 }
 

@@ -51,7 +51,7 @@ class Shopware_Tests_Components_AclTest extends Enlight_Components_Test_TestCase
     public function testAclShouldContainRoles()
     {
         $roles = $this->acl->getRoles();
-        $this->assertGreaterThan(0, count($roles));
+        static::assertGreaterThan(0, count($roles));
     }
 
     /**
@@ -60,7 +60,7 @@ class Shopware_Tests_Components_AclTest extends Enlight_Components_Test_TestCase
     public function testAclShouldContainResources()
     {
         $resources = $this->acl->getResources();
-        $this->assertGreaterThan(0, count($resources));
+        static::assertGreaterThan(0, count($resources));
     }
 
     /**
@@ -100,7 +100,7 @@ class Shopware_Tests_Components_AclTest extends Enlight_Components_Test_TestCase
         $privilege = 'this_is_a_not_existing_privilege';
         $resource = 'debug_test';
 
-        $this->assertTrue($this->acl->isAllowed($role, $resource, $privilege));
+        static::assertTrue($this->acl->isAllowed($role, $resource, $privilege));
     }
 
     /**
@@ -111,9 +111,9 @@ class Shopware_Tests_Components_AclTest extends Enlight_Components_Test_TestCase
         $role = 'local_admins';
         $resource = 'debug_test';
 
-        $this->assertTrue($this->acl->isAllowed($role, $resource, 'create'));
-        $this->assertTrue($this->acl->isAllowed($role, $resource, 'read'));
-        $this->assertTrue($this->acl->isAllowed($role, $resource, 'update'));
-        $this->assertTrue($this->acl->isAllowed($role, $resource, 'delete'));
+        static::assertTrue($this->acl->isAllowed($role, $resource, 'create'));
+        static::assertTrue($this->acl->isAllowed($role, $resource, 'read'));
+        static::assertTrue($this->acl->isAllowed($role, $resource, 'update'));
+        static::assertTrue($this->acl->isAllowed($role, $resource, 'delete'));
     }
 }

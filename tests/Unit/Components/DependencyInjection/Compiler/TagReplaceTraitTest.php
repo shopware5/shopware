@@ -87,12 +87,12 @@ class TagReplaceTraitTest extends TestCase
             new Reference('my_service13'),
         ];
 
-        $this->assertEquals(
+        static::assertEquals(
             $expected,
             $parentService->getArgument(0)
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             [new Reference('my_other_service1')],
             $parentService->getArgument(1)
         );

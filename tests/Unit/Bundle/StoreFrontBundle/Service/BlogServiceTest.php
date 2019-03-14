@@ -45,9 +45,9 @@ class BlogServiceTest extends TestCase
         }
 
         $gatewayMock = $this->getMockBuilder(BlogGatewayInterface::class)->disableOriginalConstructor()->getMock();
-        $gatewayMock->expects($this->once())
+        $gatewayMock->expects(static::once())
             ->method('getList')
-            ->will($this->returnValue($blogs));
+            ->will(static::returnValue($blogs));
 
         $mediaMock = $this->getMockBuilder(MediaService::class)->disableOriginalConstructor()->getMock();
         $contextMock = $this->getMockBuilder(ShopContextInterface::class)->getMock();
@@ -56,6 +56,6 @@ class BlogServiceTest extends TestCase
 
         $data = $service->getList([1, 2, 3, 4], $contextMock);
 
-        $this->assertEquals([1, 2, 3, 4], array_keys($data));
+        static::assertEquals([1, 2, 3, 4], array_keys($data));
     }
 }

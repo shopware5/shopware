@@ -39,7 +39,7 @@ class StateTranslatorServiceTest extends TestCase
 
         $exampleData = $translator->translateState(StateTranslatorService::STATE_ORDER, $exampleData);
 
-        self::assertArraySubset([
+        static::assertArraySubset([
             'name' => 'none',
             'description' => 'none',
         ], $exampleData);
@@ -55,7 +55,7 @@ class StateTranslatorServiceTest extends TestCase
 
         $exampleData = $translator->translateState(StateTranslatorService::STATE_ORDER, $exampleData);
 
-        self::assertArraySubset([
+        static::assertArraySubset([
             'name' => 'partially_delivered',
             'description' => 'Partially delivered',
         ], $exampleData);
@@ -72,7 +72,7 @@ class StateTranslatorServiceTest extends TestCase
 
         $exampleData = $translator->translateState(StateTranslatorService::STATE_PAYMENT, $exampleData);
 
-        self::assertArraySubset([
+        static::assertArraySubset([
             'name' => 'partially_delivered',
             'description' => 'partially_delivered',
         ], $exampleData);
@@ -83,7 +83,7 @@ class StateTranslatorServiceTest extends TestCase
 
         $exampleData = $translator->translateState(StateTranslatorService::STATE_PAYMENT, $exampleData);
 
-        self::assertArraySubset([
+        static::assertArraySubset([
             'name' => 'no_credit_approved',
             'description' => 'No credit approved',
         ], $exampleData);
@@ -100,7 +100,7 @@ class StateTranslatorServiceTest extends TestCase
 
         $exampleData = $translator->translateState(StateTranslatorService::STATE_PAYMENT, $originalExampleData);
 
-        self::assertArraySubset([
+        static::assertArraySubset([
             'name' => 'partially_invoiced',
             'description' => 'Partially invoiced',
         ], $exampleData);
@@ -109,7 +109,7 @@ class StateTranslatorServiceTest extends TestCase
 
         $exampleData = $translator->translateState(StateTranslatorService::STATE_PAYMENT, $originalExampleData);
 
-        self::assertArraySubset([
+        static::assertArraySubset([
             'name' => 'partially_invoiced',
             'description' => 'Teilweise in Rechnung gestellt',
         ], $exampleData);

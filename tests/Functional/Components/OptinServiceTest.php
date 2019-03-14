@@ -51,8 +51,8 @@ class OptinServiceTest extends TestCase
 
         $hash = $this->service->add('foo', 3600, $expectedData);
 
-        $this->assertEquals($expectedData, $this->service->get('foo', $hash));
-        $this->assertNotEquals($expectedData, $this->service->get('foo2', $hash));
+        static::assertEquals($expectedData, $this->service->get('foo', $hash));
+        static::assertNotEquals($expectedData, $this->service->get('foo2', $hash));
     }
 
     public function testRetriveLeftData()
@@ -61,7 +61,7 @@ class OptinServiceTest extends TestCase
 
         $hash = $this->service->add('foo', -3600, $expectedData);
 
-        $this->assertNull($this->service->get('foo', $hash));
+        static::assertNull($this->service->get('foo', $hash));
     }
 
     public function testAssertAdd()
@@ -84,8 +84,8 @@ class OptinServiceTest extends TestCase
     {
         $testData = ['foo' => 'yes'];
         $hash = $this->service->add('foo', 3600, $testData);
-        $this->assertEquals($testData, $this->service->get('foo', $hash));
+        static::assertEquals($testData, $this->service->get('foo', $hash));
         $this->service->delete('foo', $hash);
-        $this->assertNull($this->service->get('foo', $hash));
+        static::assertNull($this->service->get('foo', $hash));
     }
 }

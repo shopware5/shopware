@@ -122,7 +122,7 @@ class SchemaOperatorTest extends \PHPUnit\Framework\TestCase
 
             $service->update('s_articles_attributes', $name, $type, [], null, false, $default);
 
-            $this->assertTrue($tableMapping->isTableColumn($table, $name));
+            static::assertTrue($tableMapping->isTableColumn($table, $name));
             $service->delete($table, $name);
         }
     }

@@ -63,23 +63,23 @@ class PluginInstallerTest extends TestCase
         ];
 
         $connection = $this->createMock(Connection::class);
-        $connection->expects($this->once())->method('fetchAssoc')->willReturn(null);
-        $connection->expects($this->once())->method('insert')->with('s_core_plugins', $expectedData, [
+        $connection->expects(static::once())->method('fetchAssoc')->willReturn(null);
+        $connection->expects(static::once())->method('insert')->with('s_core_plugins', $expectedData, [
             'added' => 'datetime',
             'refresh_date' => 'datetime',
         ]);
 
         $entityManager = $this->createMock(ModelManager::class);
-        $entityManager->expects($this->any())->method('getConnection')->willReturn($connection);
+        $entityManager->expects(static::any())->method('getConnection')->willReturn($connection);
 
         $databaseHandler = $this->createMock(DatabaseHandler::class);
         $requirementValidator = $this->createMock(RequirementValidator::class);
 
         $statement = $this->createMock(Statement::class);
-        $statement->expects($this->once())->method('fetchAll')->willReturn([]);
+        $statement->expects(static::once())->method('fetchAll')->willReturn([]);
 
         $pdo = $this->createMock(PDO::class);
-        $pdo->expects($this->once())->method('query')->willReturn($statement);
+        $pdo->expects(static::once())->method('query')->willReturn($statement);
 
         $kernel = new Kernel('testing', true);
         $releaseArray = $kernel->getRelease();

@@ -44,7 +44,7 @@ class EventManagerTest extends TestCase
 
     public function testCanCreateInstance()
     {
-        $this->assertInstanceOf(\Enlight_Event_EventManager::class, $this->eventManager);
+        static::assertInstanceOf(\Enlight_Event_EventManager::class, $this->eventManager);
     }
 
     public function testAppendEventWithCallback()
@@ -65,10 +65,10 @@ class EventManagerTest extends TestCase
             new ArrayCollection(['foo', 'bar'])
         );
 
-        $this->assertCount(3, $result->getValues());
-        $this->assertEquals('foo', $result->get(0));
-        $this->assertEquals('bar', $result->get(1));
-        $this->assertEquals('foo', $result->get(2));
+        static::assertCount(3, $result->getValues());
+        static::assertEquals('foo', $result->get(0));
+        static::assertEquals('bar', $result->get(1));
+        static::assertEquals('foo', $result->get(2));
     }
 
     public function testEventHandlerWithHighPosition()
@@ -96,9 +96,9 @@ class EventManagerTest extends TestCase
             new ArrayCollection()
         );
 
-        $this->assertCount(2, $result->getValues());
-        $this->assertEquals('bar', $result->get(0));
-        $this->assertEquals('foo', $result->get(1));
+        static::assertCount(2, $result->getValues());
+        static::assertEquals('bar', $result->get(0));
+        static::assertEquals('foo', $result->get(1));
     }
 
     public function testEventHandlerWithEqualPosition()
@@ -135,10 +135,10 @@ class EventManagerTest extends TestCase
             new ArrayCollection()
         );
 
-        $this->assertCount(3, $result->getValues());
-        $this->assertEquals('foo', $result->get(0));
-        $this->assertEquals('bar', $result->get(1));
-        $this->assertEquals('baz', $result->get(2));
+        static::assertCount(3, $result->getValues());
+        static::assertEquals('foo', $result->get(0));
+        static::assertEquals('bar', $result->get(1));
+        static::assertEquals('baz', $result->get(2));
     }
 
     public function testExceptionIsThrownOnInvalidEventArgs()
@@ -178,11 +178,11 @@ class EventManagerTest extends TestCase
             $values
         );
 
-        $this->assertCount(4, $values->getValues());
-        $this->assertEquals('foo', $values->get(0));
-        $this->assertEquals('bar', $values->get(1));
-        $this->assertEquals(['foo2'], $values->get(2));
-        $this->assertEquals('bar2', $values->get(3));
+        static::assertCount(4, $values->getValues());
+        static::assertEquals('foo', $values->get(0));
+        static::assertEquals('bar', $values->get(1));
+        static::assertEquals(['foo2'], $values->get(2));
+        static::assertEquals('bar2', $values->get(3));
     }
 
     public function appendEventWithArrayListener(\Enlight_Event_EventArgs $args)
@@ -212,10 +212,10 @@ class EventManagerTest extends TestCase
             []
         );
 
-        $this->assertCount(3, $values);
-        $this->assertEquals('foo', $values->get(0));
-        $this->assertEquals('bar', $values->get(1));
-        $this->assertEquals('foo2', $values->get(2));
+        static::assertCount(3, $values);
+        static::assertEquals('foo', $values->get(0));
+        static::assertEquals('bar', $values->get(1));
+        static::assertEquals('foo2', $values->get(2));
     }
 
     public function appendEventWithSingleValueListener(\Enlight_Event_EventArgs $args)
@@ -241,9 +241,9 @@ class EventManagerTest extends TestCase
             $values,
             []
         );
-        $this->assertCount(2, $values->getValues());
-        $this->assertEquals('foo', $values->get(0));
-        $this->assertEquals('bar', $values->get(1));
+        static::assertCount(2, $values->getValues());
+        static::assertEquals('foo', $values->get(0));
+        static::assertEquals('bar', $values->get(1));
     }
 
     public function appendEventWithNullValueListener(\Enlight_Event_EventArgs $args)
@@ -269,10 +269,10 @@ class EventManagerTest extends TestCase
             $values
         );
 
-        $this->assertCount(3, $values->getValues());
-        $this->assertEquals('foo', $values->get(0));
-        $this->assertEquals('bar', $values->get(1));
-        $this->assertEquals(true, $values->get(2));
+        static::assertCount(3, $values->getValues());
+        static::assertEquals('foo', $values->get(0));
+        static::assertEquals('bar', $values->get(1));
+        static::assertEquals(true, $values->get(2));
     }
 
     public function appendEventWithBooleanValueListener(\Enlight_Event_EventArgs $args)
@@ -289,9 +289,9 @@ class EventManagerTest extends TestCase
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithNoListener',
             $values
         );
-        $this->assertCount(2, $values->getValues());
-        $this->assertEquals('foo', $values->get(0));
-        $this->assertEquals('bar', $values->get(1));
+        static::assertCount(2, $values->getValues());
+        static::assertEquals('foo', $values->get(0));
+        static::assertEquals('bar', $values->get(1));
     }
 
     public function testAddSubscriber()
@@ -299,14 +299,14 @@ class EventManagerTest extends TestCase
         $eventSubscriber = new EventSubsciberTest();
         $this->eventManager->addSubscriber($eventSubscriber);
 
-        $this->assertCount(1, $this->eventManager->getListeners('eventName0'));
-        $this->assertCount(1, $this->eventManager->getListeners('eventName1'));
-        $this->assertCount(1, $this->eventManager->getListeners('eventName2'));
-        $this->assertCount(3, $this->eventManager->getListeners('eventName3'));
+        static::assertCount(1, $this->eventManager->getListeners('eventName0'));
+        static::assertCount(1, $this->eventManager->getListeners('eventName1'));
+        static::assertCount(1, $this->eventManager->getListeners('eventName2'));
+        static::assertCount(3, $this->eventManager->getListeners('eventName3'));
 
         $listeners = $this->eventManager->getListeners('eventName3');
         $listener = $listeners[5];
-        $this->assertEquals(5, $listener->getPosition());
+        static::assertEquals(5, $listener->getPosition());
     }
 
     public function testRemoveSubscriber()
@@ -336,8 +336,8 @@ class EventManagerTest extends TestCase
         );
 
         // Only the second one should be left
-        $this->assertCount(1, $result->getValues());
-        $this->assertEquals('bar', $result->get(0));
+        static::assertCount(1, $result->getValues());
+        static::assertEquals('bar', $result->get(0));
     }
 }
 

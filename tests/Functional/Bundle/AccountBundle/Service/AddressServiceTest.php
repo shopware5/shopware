@@ -158,12 +158,12 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
 
         self::$addressService->create($address, $customer);
 
-        $this->assertInstanceOf(Address::class, $address);
-        $this->assertNotNull($address->getId());
+        static::assertInstanceOf(Address::class, $address);
+        static::assertNotNull($address->getId());
 
         foreach ($addressData as $key => $value) {
             $getter = 'get' . ucfirst($key);
-            $this->assertEquals($value, $address->$getter());
+            static::assertEquals($value, $address->$getter());
         }
 
         return $address->getId();
@@ -180,9 +180,9 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
 
         $billing = $address->getCustomer()->getDefaultBillingAddress();
 
-        $this->assertEquals($address->getId(), $billing->getId());
-        $this->assertEquals($address->getFirstname(), $billing->getFirstname());
-        $this->assertEquals($address->getLastname(), $billing->getLastname());
+        static::assertEquals($address->getId(), $billing->getId());
+        static::assertEquals($address->getFirstname(), $billing->getFirstname());
+        static::assertEquals($address->getLastname(), $billing->getLastname());
 
         return $addressId;
     }
@@ -215,9 +215,9 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
 
         $shipping = $address->getCustomer()->getDefaultShippingAddress();
 
-        $this->assertEquals($address->getId(), $shipping->getId());
-        $this->assertEquals($address->getFirstname(), $shipping->getFirstname());
-        $this->assertEquals($address->getLastname(), $shipping->getLastname());
+        static::assertEquals($address->getId(), $shipping->getId());
+        static::assertEquals($address->getFirstname(), $shipping->getFirstname());
+        static::assertEquals($address->getLastname(), $shipping->getLastname());
 
         return $addressId;
     }
@@ -244,18 +244,18 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
         $address = self::$modelManager->find(Address::class, $addressId);
 
         $unusedAddressId = self::$connection->executeQuery('SELECT id FROM s_user_addresses WHERE user_id = ? AND id != ?', [$address->getCustomer()->getId(), $address->getId()])->fetch(\PDO::FETCH_COLUMN);
-        $this->assertGreaterThan(0, $unusedAddressId, 'No unused address found.');
+        static::assertGreaterThan(0, $unusedAddressId, 'No unused address found.');
 
         $unusedAddress = self::$modelManager->find(Address::class, $unusedAddressId);
-        $this->assertNotNull($unusedAddress, 'Unused address entity (' . $unusedAddressId . ') not found.');
+        static::assertNotNull($unusedAddress, 'Unused address entity (' . $unusedAddressId . ') not found.');
 
         self::$addressService->setDefaultBillingAddress($unusedAddress);
         self::$addressService->setDefaultShippingAddress($unusedAddress);
 
         self::$addressService->delete($address);
 
-        $this->assertNull($address->getId());
-        $this->assertNotNull($unusedAddress->getId());
+        static::assertNull($address->getId());
+        static::assertNotNull($unusedAddress->getId());
     }
 
     /**

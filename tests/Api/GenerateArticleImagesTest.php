@@ -38,7 +38,7 @@ class Shopware_Tests_Api_GenerateArticleImagesTest extends PHPUnit\Framework\Tes
 
         $hostname = $helper->Shop()->getHost();
         if (empty($hostname)) {
-            $this->markTestSkipped(
+            static::markTestSkipped(
                 'Hostname is not available.'
             );
         }
@@ -75,16 +75,16 @@ class Shopware_Tests_Api_GenerateArticleImagesTest extends PHPUnit\Framework\Tes
 
         $response = $client->request('DELETE');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(405, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(405, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
-        $this->assertEquals('This resource has no support for batch operations.', $result['message']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
+        static::assertEquals('This resource has no support for batch operations.', $result['message']);
     }
 
     public function testBatchPutShouldFail()
@@ -93,15 +93,15 @@ class Shopware_Tests_Api_GenerateArticleImagesTest extends PHPUnit\Framework\Tes
 
         $response = $client->request('PUT');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(405, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(405, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
-        $this->assertEquals('This resource has no support for batch operations.', $result['message']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
+        static::assertEquals('This resource has no support for batch operations.', $result['message']);
     }
 }

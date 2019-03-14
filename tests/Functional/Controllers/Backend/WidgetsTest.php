@@ -67,8 +67,8 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 
         $response = $this->View()->getAssign();
 
-        $this->assertTrue($response['success']);
-        $this->assertEquals('0.00', $response['conversion']);
+        static::assertTrue($response['success']);
+        static::assertEquals('0.00', $response['conversion']);
     }
 
     public function testConversionIsCalucatedFromBeginningOfDay()
@@ -100,8 +100,8 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 
         $response = $this->View()->getAssign();
 
-        $this->assertTrue($response['success']);
-        $this->assertEquals('100.00', $response['conversion']);
+        static::assertTrue($response['success']);
+        static::assertEquals('100.00', $response['conversion']);
     }
 
     public function testConversionStillWorks()
@@ -133,8 +133,8 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 
         $response = $this->View()->getAssign();
 
-        $this->assertTrue($response['success']);
-        $this->assertEquals('100.00', $response['conversion']);
+        static::assertTrue($response['success']);
+        static::assertEquals('100.00', $response['conversion']);
     }
 
     public function testIfNoConversionAfterEightDays()
@@ -166,8 +166,8 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 
         $response = $this->View()->getAssign();
 
-        $this->assertTrue($response['success']);
-        $this->assertEquals('0.00', $response['conversion']);
+        static::assertTrue($response['success']);
+        static::assertEquals('0.00', $response['conversion']);
     }
 
     /**
@@ -191,15 +191,15 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
         $response = $this->View()->getAssign();
 
         //check if success
-        $this->assertArrayHasKey('success', $response);
+        static::assertArrayHasKey('success', $response);
         //check if has data
-        $this->assertArrayHasKey('data', $response);
+        static::assertArrayHasKey('data', $response);
         //check if data contains customers
-        $this->assertArrayHasKey('customers', $response['data']);
+        static::assertArrayHasKey('customers', $response['data']);
 
         //first customer should be the one we added, ass there isn't any other process adding any s_statistics_currentusers
-        $this->assertEquals($this->userId, $response['data']['customers'][0]['userID']);
-        $this->assertEquals($addressData['company'], $response['data']['customers'][0]['customer']);
+        static::assertEquals($this->userId, $response['data']['customers'][0]['userID']);
+        static::assertEquals($addressData['company'], $response['data']['customers'][0]['customer']);
     }
 
     public function testGetVisitorsWithoutCompanyAction()
@@ -219,15 +219,15 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
         $response = $this->View()->getAssign();
 
         //check if success
-        $this->assertArrayHasKey('success', $response);
+        static::assertArrayHasKey('success', $response);
         //check if has data
-        $this->assertArrayHasKey('data', $response);
+        static::assertArrayHasKey('data', $response);
         //check if data contains customers
-        $this->assertArrayHasKey('customers', $response['data']);
+        static::assertArrayHasKey('customers', $response['data']);
 
         //first customer should be the one we added, ass there isn't any other process adding any s_statistics_currentusers
-        $this->assertEquals($this->userId, $response['data']['customers'][0]['userID']);
-        $this->assertEquals($addressData['firstname'] . ' ' . $addressData['lastname'],
+        static::assertEquals($this->userId, $response['data']['customers'][0]['userID']);
+        static::assertEquals($addressData['firstname'] . ' ' . $addressData['lastname'],
             $response['data']['customers'][0]['customer']);
     }
 
@@ -249,15 +249,15 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
         $response = $this->View()->getAssign();
 
         //check if success
-        $this->assertArrayHasKey('success', $response);
+        static::assertArrayHasKey('success', $response);
         //check if has data
-        $this->assertArrayHasKey('data', $response);
+        static::assertArrayHasKey('data', $response);
         //check if data contains customers
-        $this->assertArrayHasKey('customers', $response['data']);
+        static::assertArrayHasKey('customers', $response['data']);
 
         //first customer should be the one we added, ass there isn't any other process adding any s_statistics_currentusers
-        $this->assertEquals($this->userId, $response['data']['customers'][0]['userID']);
-        $this->assertEquals($addressData['firstname'] . ' ' . $addressData['lastname'], $response['data']['customers'][0]['customer']);
+        static::assertEquals($this->userId, $response['data']['customers'][0]['userID']);
+        static::assertEquals($addressData['firstname'] . ' ' . $addressData['lastname'], $response['data']['customers'][0]['customer']);
     }
 
     private function prepareTestGetVisitors($addressData)

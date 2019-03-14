@@ -112,7 +112,7 @@ class MenuSynchronizerTest extends TestCase
         $connection = $this->createMock(Connection::class);
         $connection->method('createQueryBuilder')
             ->willReturn($this->createMock(QueryBuilder::class));
-        $connection->expects($this->once())
+        $connection->expects(static::once())
             ->method('insert')
             ->with('s_core_snippets', $expectedQueryParameters);
 

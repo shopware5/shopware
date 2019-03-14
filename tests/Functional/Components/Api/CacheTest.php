@@ -75,7 +75,7 @@ class CacheTest extends TestCase
     {
         $caches = $this->getResource()->getList();
 
-        $this->assertEquals(6, count($caches['data']));
+        static::assertEquals(6, count($caches['data']));
     }
 
     /**
@@ -84,7 +84,7 @@ class CacheTest extends TestCase
     public function testGetOneShouldBeSuccessFull()
     {
         $info = $this->getResource()->getOne('template');
-        $this->assertEquals($info['id'], 'template');
+        static::assertEquals($info['id'], 'template');
     }
 
     /**
@@ -95,7 +95,7 @@ class CacheTest extends TestCase
         $this->getResource()->delete('template');
 
         $info = $this->getResource()->getOne('template');
-        $this->assertEquals(0, $info['files']);
+        static::assertEquals(0, $info['files']);
     }
 
     /**
@@ -105,10 +105,10 @@ class CacheTest extends TestCase
     {
         $this->getResource()->delete('http');
         $info = $this->getResource()->getOne('http');
-        $this->assertEquals(0, $info['files']);
+        static::assertEquals(0, $info['files']);
 
         $this->getResource()->delete('template');
         $info = $this->getResource()->getOne('template');
-        $this->assertEquals(0, $info['files']);
+        static::assertEquals(0, $info['files']);
     }
 }

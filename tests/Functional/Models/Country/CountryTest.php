@@ -63,7 +63,7 @@ class CountryTest extends Enlight_Components_Test_Controller_TestCase
 
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $this->assertArraySubset([
+        static::assertArraySubset([
             'id' => $id,
             'countryname' => 'Test Country',
             'countryiso' => 'TS',
@@ -92,9 +92,9 @@ class CountryTest extends Enlight_Components_Test_Controller_TestCase
 
         $testCountry = $modelManager->getRepository(Country::class)->find($id);
 
-        $this->assertEquals(true, $testCountry->getActive());
-        $this->assertEquals(true, $testCountry->getAllowShipping()); // Checking that allowShipping is true
-        $this->assertEquals('TS', $testCountry->getIso());
-        $this->assertEquals('TST', $testCountry->getIso3());
+        static::assertEquals(true, $testCountry->getActive());
+        static::assertEquals(true, $testCountry->getAllowShipping()); // Checking that allowShipping is true
+        static::assertEquals('TS', $testCountry->getIso());
+        static::assertEquals('TST', $testCountry->getIso3());
     }
 }

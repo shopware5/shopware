@@ -51,7 +51,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $next = $this->module->sGetOrderNumber();
 
-        $this->assertEquals($next, $current + 1);
+        static::assertEquals($next, $current + 1);
     }
 
     /**
@@ -96,8 +96,8 @@ class sOrderTest extends PHPUnit\Framework\TestCase
     public function validatePaymentContextData(Enlight_Event_EventArgs $args)
     {
         $context = $args->get('context');
-        $this->assertInternalType('array', $context['sPaymentTable']);
-        $this->assertCount(0, $context['sPaymentTable']);
+        static::assertInternalType('array', $context['sPaymentTable']);
+        static::assertCount(0, $context['sPaymentTable']);
     }
 
     public function testTransactionExistTrue()
@@ -112,19 +112,19 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertTrue($this->invokeMethod($this->module, 'isTransactionExist', [$transaction]));
+        static::assertTrue($this->invokeMethod($this->module, 'isTransactionExist', [$transaction]));
     }
 
     public function testTransactionExistFalse()
     {
-        $this->assertFalse(
+        static::assertFalse(
             $this->invokeMethod($this->module, 'isTransactionExist', [uniqid('TRANS-', true)])
         );
     }
 
     public function testTransactionExistInvalid()
     {
-        $this->assertFalse(
+        static::assertFalse(
             $this->invokeMethod($this->module, 'isTransactionExist', ['ABC'])
         );
     }
@@ -142,8 +142,8 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             ':id' => $detail['id'],
         ]);
 
-        $this->assertEquals($updated['sales'], $detail['sales'] + 10);
-        $this->assertEquals($updated['instock'], $detail['instock'] - 10);
+        static::assertEquals($updated['sales'], $detail['sales'] + 10);
+        static::assertEquals($updated['instock'], $detail['instock'] - 10);
     }
 
     public function testGetOrderDetailsForMail()
@@ -161,16 +161,16 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             [$rows]
         );
 
-        $this->assertTrue(
+        static::assertTrue(
             strpos($rows[0]['articlename'], '€') > 0
         );
-        $this->assertTrue(
+        static::assertTrue(
             strpos($rows[1]['articlename'], "\n") > 0
         );
-        $this->assertTrue(
+        static::assertTrue(
             strpos($rows[2]['articlename'], "\n") > 0
         );
-        $this->assertTrue(
+        static::assertTrue(
             strpos($rows[3]['articlename'], ' ') > 0
         );
     }
@@ -184,21 +184,21 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             [$dummyOrderId]
         );
 
-        $this->assertArrayNotHasKey('orderID', $order['attributes']);
-        $this->assertArrayNotHasKey('id', $order['attributes']);
-        $this->assertArrayHasKey('attribute1', $order['attributes']);
-        $this->assertArrayHasKey('attribute2', $order['attributes']);
-        $this->assertArrayHasKey('attribute3', $order['attributes']);
-        $this->assertArrayHasKey('attribute4', $order['attributes']);
-        $this->assertArrayHasKey('attribute5', $order['attributes']);
-        $this->assertArrayHasKey('attribute6', $order['attributes']);
+        static::assertArrayNotHasKey('orderID', $order['attributes']);
+        static::assertArrayNotHasKey('id', $order['attributes']);
+        static::assertArrayHasKey('attribute1', $order['attributes']);
+        static::assertArrayHasKey('attribute2', $order['attributes']);
+        static::assertArrayHasKey('attribute3', $order['attributes']);
+        static::assertArrayHasKey('attribute4', $order['attributes']);
+        static::assertArrayHasKey('attribute5', $order['attributes']);
+        static::assertArrayHasKey('attribute6', $order['attributes']);
 
-        $this->assertEquals('attribute1', $order['attributes']['attribute1']);
-        $this->assertEquals('attribute2', $order['attributes']['attribute2']);
-        $this->assertEquals('attribute3', $order['attributes']['attribute3']);
-        $this->assertEquals('attribute4', $order['attributes']['attribute4']);
-        $this->assertEquals('attribute5', $order['attributes']['attribute5']);
-        $this->assertEquals('attribute6', $order['attributes']['attribute6']);
+        static::assertEquals('attribute1', $order['attributes']['attribute1']);
+        static::assertEquals('attribute2', $order['attributes']['attribute2']);
+        static::assertEquals('attribute3', $order['attributes']['attribute3']);
+        static::assertEquals('attribute4', $order['attributes']['attribute4']);
+        static::assertEquals('attribute5', $order['attributes']['attribute5']);
+        static::assertEquals('attribute6', $order['attributes']['attribute6']);
     }
 
     public function testGetUserDataForMail()
@@ -236,27 +236,27 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             [$rawUserData]
         );
 
-        $this->assertArrayHasKey('billingaddress', $processedUserData);
-        $this->assertArrayHasKey('attributes', $processedUserData['billingaddress']);
-        $this->assertArrayHasKey('shippingaddress', $processedUserData);
-        $this->assertArrayHasKey('attributes', $processedUserData['shippingaddress']);
-        $this->assertArrayHasKey('additional', $processedUserData);
-        $this->assertArrayHasKey('country', $processedUserData);
+        static::assertArrayHasKey('billingaddress', $processedUserData);
+        static::assertArrayHasKey('attributes', $processedUserData['billingaddress']);
+        static::assertArrayHasKey('shippingaddress', $processedUserData);
+        static::assertArrayHasKey('attributes', $processedUserData['shippingaddress']);
+        static::assertArrayHasKey('additional', $processedUserData);
+        static::assertArrayHasKey('country', $processedUserData);
 
-        $this->assertEquals("I'll \"walk\" the <b>dog</b> now", $processedUserData['billingaddress'][1]);
-        $this->assertEquals("I'll \"walk\" the <b>dog</b> later", $processedUserData['billingaddress'][2]);
+        static::assertEquals("I'll \"walk\" the <b>dog</b> now", $processedUserData['billingaddress'][1]);
+        static::assertEquals("I'll \"walk\" the <b>dog</b> later", $processedUserData['billingaddress'][2]);
 
-        $this->assertEquals("I'll \"walk\" the <b>dog</b> now", $processedUserData['billingaddress']['attributes']['foo']);
-        $this->assertEquals("I'll \"walk\" the <b>dog</b> later", $processedUserData['billingaddress']['attributes']['bar']);
+        static::assertEquals("I'll \"walk\" the <b>dog</b> now", $processedUserData['billingaddress']['attributes']['foo']);
+        static::assertEquals("I'll \"walk\" the <b>dog</b> later", $processedUserData['billingaddress']['attributes']['bar']);
 
-        $this->assertEquals("I won't \"walk\" the <b>dog</b> now", $processedUserData['shippingaddress'][1]);
-        $this->assertEquals("I won't \"walk\" the <b>dog</b> later", $processedUserData['shippingaddress'][2]);
+        static::assertEquals("I won't \"walk\" the <b>dog</b> now", $processedUserData['shippingaddress'][1]);
+        static::assertEquals("I won't \"walk\" the <b>dog</b> later", $processedUserData['shippingaddress'][2]);
 
-        $this->assertEquals("I'll \"walk\" the <b>dog</b> now", $processedUserData['shippingaddress']['attributes']['foo']);
-        $this->assertEquals("I'll \"walk\" the <b>dog</b> later", $processedUserData['shippingaddress']['attributes']['bar']);
+        static::assertEquals("I'll \"walk\" the <b>dog</b> now", $processedUserData['shippingaddress']['attributes']['foo']);
+        static::assertEquals("I'll \"walk\" the <b>dog</b> later", $processedUserData['shippingaddress']['attributes']['bar']);
 
-        $this->assertEquals('<span>dog</span>', $processedUserData['country'][1]);
-        $this->assertEquals('<span>dog</span>', $processedUserData['additional']['payment']['description']);
+        static::assertEquals('<span>dog</span>', $processedUserData['country'][1]);
+        static::assertEquals('<span>dog</span>', $processedUserData['additional']['payment']['description']);
     }
 
     public function testFormatBasketRow()
@@ -271,17 +271,17 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             [$rawBasketRowOne]
         );
 
-        $this->assertArrayHasKey('articlename', $processedBasketRowOne);
-        $this->assertArrayHasKey('price', $processedBasketRowOne);
-        $this->assertArrayHasKey('esdarticle', $processedBasketRowOne);
-        $this->assertArrayHasKey('modus', $processedBasketRowOne);
-        $this->assertArrayHasKey('taxID', $processedBasketRowOne);
+        static::assertArrayHasKey('articlename', $processedBasketRowOne);
+        static::assertArrayHasKey('price', $processedBasketRowOne);
+        static::assertArrayHasKey('esdarticle', $processedBasketRowOne);
+        static::assertArrayHasKey('modus', $processedBasketRowOne);
+        static::assertArrayHasKey('taxID', $processedBasketRowOne);
 
-        $this->assertEquals('This is a very fancy article name', $processedBasketRowOne['articlename']);
-        $this->assertEquals('0,00', $processedBasketRowOne['price']);
-        $this->assertEquals('0', $processedBasketRowOne['esdarticle']);
-        $this->assertEquals('0', $processedBasketRowOne['modus']);
-        $this->assertEquals('0', $processedBasketRowOne['taxID']);
+        static::assertEquals('This is a very fancy article name', $processedBasketRowOne['articlename']);
+        static::assertEquals('0,00', $processedBasketRowOne['price']);
+        static::assertEquals('0', $processedBasketRowOne['esdarticle']);
+        static::assertEquals('0', $processedBasketRowOne['modus']);
+        static::assertEquals('0', $processedBasketRowOne['taxID']);
 
         $rawBasketRowTwo = [
             'articlename' => 'This is a very &lt;tag&gt;fancy&lt;/tag&gt; <br /> article name',
@@ -297,17 +297,17 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             [$rawBasketRowTwo]
         );
 
-        $this->assertArrayHasKey('articlename', $processedBasketRowTwo);
-        $this->assertArrayHasKey('price', $processedBasketRowTwo);
-        $this->assertArrayHasKey('esdarticle', $processedBasketRowTwo);
-        $this->assertArrayHasKey('modus', $processedBasketRowTwo);
-        $this->assertArrayHasKey('taxID', $processedBasketRowTwo);
+        static::assertArrayHasKey('articlename', $processedBasketRowTwo);
+        static::assertArrayHasKey('price', $processedBasketRowTwo);
+        static::assertArrayHasKey('esdarticle', $processedBasketRowTwo);
+        static::assertArrayHasKey('modus', $processedBasketRowTwo);
+        static::assertArrayHasKey('taxID', $processedBasketRowTwo);
 
-        $this->assertEquals('This is a very fancy article name', $processedBasketRowTwo['articlename']);
-        $this->assertEquals('1,00', $processedBasketRowTwo['price']);
-        $this->assertEquals('3', $processedBasketRowTwo['esdarticle']);
-        $this->assertEquals('2', $processedBasketRowTwo['modus']);
-        $this->assertEquals('4', $processedBasketRowTwo['taxID']);
+        static::assertEquals('This is a very fancy article name', $processedBasketRowTwo['articlename']);
+        static::assertEquals('1,00', $processedBasketRowTwo['price']);
+        static::assertEquals('3', $processedBasketRowTwo['esdarticle']);
+        static::assertEquals('2', $processedBasketRowTwo['modus']);
+        static::assertEquals('4', $processedBasketRowTwo['taxID']);
     }
 
     public function testSSaveBillingAddress()
@@ -316,25 +316,25 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         $originalBillingAddress = $user['billingaddress'];
         $orderNumber = mt_rand(111111111, 999999999);
 
-        $this->assertEquals(1, $this->module->sSaveBillingAddress($originalBillingAddress, $orderNumber));
+        static::assertEquals(1, $this->module->sSaveBillingAddress($originalBillingAddress, $orderNumber));
 
         $billing = Shopware()->Models()->getRepository(\Shopware\Models\Order\Billing::class)->findOneBy(['order' => $orderNumber]);
 
-        $this->assertEquals($originalBillingAddress['userID'], $billing->getCustomer()->getId());
-        $this->assertEquals($originalBillingAddress['company'], $billing->getCompany());
-        $this->assertEquals($originalBillingAddress['firstname'], $billing->getFirstName());
-        $this->assertEquals($originalBillingAddress['lastname'], $billing->getLastName());
-        $this->assertEquals($originalBillingAddress['street'], $billing->getStreet());
+        static::assertEquals($originalBillingAddress['userID'], $billing->getCustomer()->getId());
+        static::assertEquals($originalBillingAddress['company'], $billing->getCompany());
+        static::assertEquals($originalBillingAddress['firstname'], $billing->getFirstName());
+        static::assertEquals($originalBillingAddress['lastname'], $billing->getLastName());
+        static::assertEquals($originalBillingAddress['street'], $billing->getStreet());
 
         $billingAttr = $billing->getAttribute();
 
         if ($billingAttr !== null) {
-            $this->assertEquals($originalBillingAddress['text1'], $billingAttr->getText1());
-            $this->assertEquals($originalBillingAddress['text2'], $billingAttr->getText2());
-            $this->assertEquals($originalBillingAddress['text3'], $billingAttr->getText3());
-            $this->assertEquals($originalBillingAddress['text4'], $billingAttr->getText4());
-            $this->assertEquals($originalBillingAddress['text5'], $billingAttr->getText5());
-            $this->assertEquals($originalBillingAddress['text6'], $billingAttr->getText6());
+            static::assertEquals($originalBillingAddress['text1'], $billingAttr->getText1());
+            static::assertEquals($originalBillingAddress['text2'], $billingAttr->getText2());
+            static::assertEquals($originalBillingAddress['text3'], $billingAttr->getText3());
+            static::assertEquals($originalBillingAddress['text4'], $billingAttr->getText4());
+            static::assertEquals($originalBillingAddress['text5'], $billingAttr->getText5());
+            static::assertEquals($originalBillingAddress['text6'], $billingAttr->getText6());
             Shopware()->Models()->remove($billingAttr);
         }
         Shopware()->Models()->remove($billing);
@@ -348,25 +348,25 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $orderNumber = mt_rand(111111111, 999999999);
 
-        $this->assertEquals(1, $this->module->sSaveShippingAddress($originalBillingAddress, $orderNumber));
+        static::assertEquals(1, $this->module->sSaveShippingAddress($originalBillingAddress, $orderNumber));
 
         $shipping = Shopware()->Models()->getRepository(\Shopware\Models\Order\Shipping::class)->findOneBy(['order' => $orderNumber]);
 
-        $this->assertEquals($originalBillingAddress['userID'], $shipping->getCustomer()->getId());
-        $this->assertEquals($originalBillingAddress['company'], $shipping->getCompany());
-        $this->assertEquals($originalBillingAddress['firstname'], $shipping->getFirstName());
-        $this->assertEquals($originalBillingAddress['lastname'], $shipping->getLastName());
-        $this->assertEquals($originalBillingAddress['street'], $shipping->getStreet());
+        static::assertEquals($originalBillingAddress['userID'], $shipping->getCustomer()->getId());
+        static::assertEquals($originalBillingAddress['company'], $shipping->getCompany());
+        static::assertEquals($originalBillingAddress['firstname'], $shipping->getFirstName());
+        static::assertEquals($originalBillingAddress['lastname'], $shipping->getLastName());
+        static::assertEquals($originalBillingAddress['street'], $shipping->getStreet());
 
         $shippingAttr = $shipping->getAttribute();
 
         if ($shippingAttr !== null) {
-            $this->assertEquals($originalBillingAddress['text1'], $shippingAttr->getText1());
-            $this->assertEquals($originalBillingAddress['text2'], $shippingAttr->getText2());
-            $this->assertEquals($originalBillingAddress['text3'], $shippingAttr->getText3());
-            $this->assertEquals($originalBillingAddress['text4'], $shippingAttr->getText4());
-            $this->assertEquals($originalBillingAddress['text5'], $shippingAttr->getText5());
-            $this->assertEquals($originalBillingAddress['text6'], $shippingAttr->getText6());
+            static::assertEquals($originalBillingAddress['text1'], $shippingAttr->getText1());
+            static::assertEquals($originalBillingAddress['text2'], $shippingAttr->getText2());
+            static::assertEquals($originalBillingAddress['text3'], $shippingAttr->getText3());
+            static::assertEquals($originalBillingAddress['text4'], $shippingAttr->getText4());
+            static::assertEquals($originalBillingAddress['text5'], $shippingAttr->getText5());
+            static::assertEquals($originalBillingAddress['text6'], $shippingAttr->getText6());
             Shopware()->Models()->remove($shippingAttr);
         }
 
@@ -396,7 +396,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
     {
         $order = Shopware()->Models()->getRepository(Order::class)->findOneBy(['temporaryId' => self::$sessionId]);
 
-        $this->assertNull($order);
+        static::assertNull($order);
 
         $this->createOrder();
 
@@ -404,14 +404,14 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $order = Shopware()->Models()->getRepository(Order::class)->findOneBy(['temporaryId' => self::$sessionId]);
 
-        $this->assertNotNull($order);
-        $this->assertNotNull($order->getAttribute());
-        $this->assertEquals('1113', $order->getInvoiceAmount());
-        $this->assertEquals('1113', $order->getInvoiceAmountNet());
-        $this->assertEquals('0', $order->getNumber());
+        static::assertNotNull($order);
+        static::assertNotNull($order->getAttribute());
+        static::assertEquals('1113', $order->getInvoiceAmount());
+        static::assertEquals('1113', $order->getInvoiceAmountNet());
+        static::assertEquals('0', $order->getNumber());
 
         foreach ($order->getDetails() as $orderDetail) {
-            $this->assertNotNull($orderDetail->getAttribute());
+            static::assertNotNull($orderDetail->getAttribute());
         }
     }
 
@@ -430,15 +430,15 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             ->getQuery()
             ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        $this->assertEquals('1113', $order['invoiceAmount']);
-        $this->assertEquals('1113', $order['invoiceAmountNet']);
-        $this->assertEquals('0', $order['number']);
+        static::assertEquals('1113', $order['invoiceAmount']);
+        static::assertEquals('1113', $order['invoiceAmountNet']);
+        static::assertEquals('0', $order['number']);
 
         $this->module->sDeleteTemporaryOrder();
 
         $order = Shopware()->Models()->getRepository(Order::class)->findOneBy(['temporaryId' => self::$sessionId]);
 
-        $this->assertNull($order);
+        static::assertNull($order);
     }
 
     public function testHandleESDOrder()
@@ -478,30 +478,30 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
             if (!$esdArticle['id']) {
                 // Not ESD, ensure nothing happened
-                $this->assertFalse(Shopware()->Db()->fetchRow(
+                static::assertFalse(Shopware()->Db()->fetchRow(
                     'SELECT id FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ?',
                     [1234, 4567]
                 ));
             } elseif (!$esdArticle['serials']) {
                 // ESD without serial
-                $this->assertFalse(Shopware()->Db()->fetchRow(
+                static::assertFalse(Shopware()->Db()->fetchRow(
                     'SELECT id FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ? AND serialID = 0',
                     [1234, 4567]
                 ));
             } elseif (count($availableSerials) < $basketRow['quantity']) {
                 // ESD with serial but not enough available, ensure nothing is done
-                $this->assertFalse(Shopware()->Db()->fetchRow(
+                static::assertFalse(Shopware()->Db()->fetchRow(
                     'SELECT id FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ?',
                     [1234, 4567]
                 ));
             } else {
                 // ESD with serial and enough available
                 // Assert serial is used
-                $this->assertEquals($basketRow['quantity'], Shopware()->Db()->fetchRow(
+                static::assertEquals($basketRow['quantity'], Shopware()->Db()->fetchRow(
                     'SELECT id FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ?',
                     [1234, 4567]
                 ));
-                $this->assertCount($basketRow['quantity'], $basketRow['assignedSerials']);
+                static::assertCount($basketRow['quantity'], $basketRow['assignedSerials']);
             }
 
             // Restore previous state
@@ -520,9 +520,9 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $order = Shopware()->Models()->getRepository(Order::class)->findOneBy(['number' => $orderNumber]);
 
-        $this->assertEquals('1113', $order->getInvoiceAmount());
-        $this->assertEquals('1113', $order->getInvoiceAmountNet());
-        $this->assertNotEquals('0', $order->getNumber());
+        static::assertEquals('1113', $order->getInvoiceAmount());
+        static::assertEquals('1113', $order->getInvoiceAmountNet());
+        static::assertNotEquals('0', $order->getNumber());
 
         Shopware()->Models()->remove($order);
         Shopware()->Models()->flush();
@@ -539,7 +539,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             [$user['additional']['user']['email']]
         );
 
-        $this->assertCount(0, $previousTellAFriendCount);
+        static::assertCount(0, $previousTellAFriendCount);
 
         Shopware()->Db()->insert('s_emarketing_tellafriend', [
             'recipient' => $user['additional']['user']['email'],
@@ -554,7 +554,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             [$user['additional']['user']['email']]
         );
 
-        $this->assertCount(1, $afterTellAFriendCount);
+        static::assertCount(1, $afterTellAFriendCount);
 
         Shopware()->Db()->query('
             DELETE FROM s_emarketing_tellafriend WHERE recipient=?',
@@ -566,7 +566,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             [$user['additional']['user']['email']]
         );
 
-        $this->assertCount(0, $cleanTellAFriendCount);
+        static::assertCount(0, $cleanTellAFriendCount);
     }
 
     public function testSetPaymentStatus()
@@ -584,8 +584,8 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             [$orderId]
         );
 
-        $this->assertCount(0, $orderHistory);
-        $this->assertEquals(17, $order->getPaymentStatus()->getId());
+        static::assertCount(0, $orderHistory);
+        static::assertEquals(17, $order->getPaymentStatus()->getId());
 
         $this->module->setPaymentStatus($orderId, 10, false, 'random payment status comment');
 
@@ -596,11 +596,11 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             [$orderId]
         );
 
-        $this->assertNotEmpty($orderHistory);
-        $this->assertEquals(10, $order->getPaymentStatus()->getId());
-        $this->assertEquals(17, $orderHistory['previous_payment_status_id']);
-        $this->assertEquals(10, $orderHistory['payment_status_id']);
-        $this->assertEquals('random payment status comment', $orderHistory['comment']);
+        static::assertNotEmpty($orderHistory);
+        static::assertEquals(10, $order->getPaymentStatus()->getId());
+        static::assertEquals(17, $orderHistory['previous_payment_status_id']);
+        static::assertEquals(10, $orderHistory['payment_status_id']);
+        static::assertEquals('random payment status comment', $orderHistory['comment']);
 
         Shopware()->Models()->remove($order);
         Shopware()->Models()->flush();
@@ -621,8 +621,8 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             [$orderId]
         );
 
-        $this->assertCount(0, $orderHistory);
-        $this->assertEquals(0, $order->getOrderStatus()->getId());
+        static::assertCount(0, $orderHistory);
+        static::assertEquals(0, $order->getOrderStatus()->getId());
 
         $this->module->setOrderStatus($orderId, 10, false, 'random order status comment');
 
@@ -633,11 +633,11 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             [$orderId]
         );
 
-        $this->assertNotEmpty($orderHistory);
-        $this->assertEquals(10, $order->getOrderStatus()->getId());
-        $this->assertEquals(0, $orderHistory['previous_order_status_id']);
-        $this->assertEquals(10, $orderHistory['order_status_id']);
-        $this->assertEquals('random order status comment', $orderHistory['comment']);
+        static::assertNotEmpty($orderHistory);
+        static::assertEquals(10, $order->getOrderStatus()->getId());
+        static::assertEquals(0, $orderHistory['previous_order_status_id']);
+        static::assertEquals(10, $orderHistory['order_status_id']);
+        static::assertEquals('random order status comment', $orderHistory['comment']);
 
         Shopware()->Models()->remove($order);
         Shopware()->Models()->flush();

@@ -45,9 +45,9 @@ class Shopware_Tests_Controllers_Backend_FormTest extends Enlight_Components_Tes
     {
         $this->dispatch('/backend/form/getForms?page=1&start=0&limit=25');
 
-        $this->assertTrue($this->View()->success);
-        $this->assertNotEmpty($this->View()->data);
-        $this->assertGreaterThan(5, $this->View()->total);
+        static::assertTrue($this->View()->success);
+        static::assertNotEmpty($this->View()->data);
+        static::assertGreaterThan(5, $this->View()->total);
     }
 
     public function testGetFormsShouldBeFilterAndSortable()
@@ -80,9 +80,9 @@ class Shopware_Tests_Controllers_Backend_FormTest extends Enlight_Components_Tes
 
         $this->dispatch($url . $query);
 
-        $this->assertTrue($this->View()->success);
-        $this->assertNotEmpty($this->View()->data);
-        $this->assertEquals(2, $this->View()->total);
+        static::assertTrue($this->View()->success);
+        static::assertNotEmpty($this->View()->data);
+        static::assertEquals(2, $this->View()->total);
     }
 
     public function testGetFormsWithIdShouldReturnSingleForm()
@@ -91,25 +91,25 @@ class Shopware_Tests_Controllers_Backend_FormTest extends Enlight_Components_Tes
 
         $data = $this->View()->data;
 
-        $this->assertTrue($this->View()->success);
-        $this->assertNotEmpty($this->View()->data);
-        $this->assertNotEmpty($data[0]['fields']);
-        $this->assertGreaterThan(5, $data[0]['fields']);
-        $this->assertEquals(1, $this->View()->total);
+        static::assertTrue($this->View()->success);
+        static::assertNotEmpty($this->View()->data);
+        static::assertNotEmpty($data[0]['fields']);
+        static::assertGreaterThan(5, $data[0]['fields']);
+        static::assertEquals(1, $this->View()->total);
     }
 
     public function testGetFormsWithInvalidIdShouldReturnFailure()
     {
         $this->dispatch('/backend/form/getForms?&id=99999999');
 
-        $this->assertFalse($this->View()->success);
+        static::assertFalse($this->View()->success);
     }
 
     public function testGetFieldsShouldReturnFields()
     {
         $this->dispatch('/backend/form/getFields?formId=5');
-        $this->assertTrue($this->View()->success);
-        $this->assertNotEmpty($this->View()->data);
-        $this->assertGreaterThan(2, $this->View()->total);
+        static::assertTrue($this->View()->success);
+        static::assertNotEmpty($this->View()->data);
+        static::assertGreaterThan(2, $this->View()->total);
     }
 }

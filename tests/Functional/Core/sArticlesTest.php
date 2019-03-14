@@ -78,7 +78,7 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
         $article = Shopware()->Modules()->Articles()->sGetArticleById(
             2
         );
-        $this->assertEquals($correctPrice, $article['price']);
+        static::assertEquals($correctPrice, $article['price']);
 
         // delete price group
         $sql = '
@@ -96,7 +96,7 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
         $result = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, 9999999);
 
         // a query to a not existing article should return 'false' and not throw an exception
-        $this->assertFalse($result);
+        static::assertFalse($result);
     }
 
     /**
@@ -111,7 +111,7 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
         // Round 1.0E-5
         $result = $sArticles->sRound($input);
 
-        $this->assertEquals(0, $result);
+        static::assertEquals(0, $result);
     }
 
     /**
@@ -127,9 +127,9 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
         // Round -1.0E-5
         $result = $sArticles->sRound($input);
 
-        $this->assertEquals(0, $result);
+        static::assertEquals(0, $result);
         // Make sure we don't get negative zero
-        $this->assertEquals('0', (string) $result);
+        static::assertEquals('0', (string) $result);
     }
 
     /**
@@ -144,14 +144,14 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
         // Round 1.0E14
         $result = $sArticles->sRound($input);
 
-        $this->assertEquals(100000000000000, $result);
+        static::assertEquals(100000000000000, $result);
     }
 
     protected function assertsArticlesState($sArticles, $categoryId, $translationId, $customerGroupId)
     {
-        $this->assertInstanceOf('Shopware\Models\Category\Category', $this->readAttribute($sArticles, 'category'));
-        $this->assertEquals($categoryId, $this->readAttribute($sArticles, 'categoryId'));
-        $this->assertEquals($translationId, $this->readAttribute($sArticles, 'translationId'));
-        $this->assertEquals($customerGroupId, $this->readAttribute($sArticles, 'customerGroupId'));
+        static::assertInstanceOf('Shopware\Models\Category\Category', static::readAttribute($sArticles, 'category'));
+        static::assertEquals($categoryId, static::readAttribute($sArticles, 'categoryId'));
+        static::assertEquals($translationId, static::readAttribute($sArticles, 'translationId'));
+        static::assertEquals($customerGroupId, static::readAttribute($sArticles, 'customerGroupId'));
     }
 }

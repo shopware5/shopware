@@ -65,11 +65,11 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
         $this->dispatch('/account/download');
 
         $header = $this->Response()->getHeaders();
-        $this->assertEquals('Content-Disposition', $header[1]['name']);
-        $this->assertEquals('attachment; filename="shopware_packshot_community_edition_72dpi_rgb.png"', $header[1]['value']);
-        $this->assertEquals('Content-Length', $header[2]['name']);
-        $this->assertGreaterThan(630, (int) $header[2]['value']);
-        $this->assertEquals(strlen($this->Response()->getBody()), (int) $header[2]['value']);
+        static::assertEquals('Content-Disposition', $header[1]['name']);
+        static::assertEquals('attachment; filename="shopware_packshot_community_edition_72dpi_rgb.png"', $header[1]['value']);
+        static::assertEquals('Content-Length', $header[2]['name']);
+        static::assertGreaterThan(630, (int) $header[2]['value']);
+        static::assertEquals(strlen($this->Response()->getBody()), (int) $header[2]['value']);
 
         if ($deleteFolderOnTearDown) {
             $filesystem->delete($filePath);
@@ -84,14 +84,14 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
      */
     public function testNormalLogin()
     {
-        $this->assertEmpty(Shopware()->Session()->sUserId);
+        static::assertEmpty(Shopware()->Session()->sUserId);
         $this->Request()->setMethod('POST')
             ->setPost('email', 'test@example.com')
             ->setPost('password', 'shopware');
 
         $this->dispatch('/account/login');
-        $this->assertNotEmpty(Shopware()->Session()->sUserId);
-        $this->assertEquals(1, Shopware()->Session()->sUserId);
+        static::assertNotEmpty(Shopware()->Session()->sUserId);
+        static::assertEquals(1, Shopware()->Session()->sUserId);
 
         $this->logoutUser();
     }
@@ -105,10 +105,10 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
     public function testHashPostLogin()
     {
         //test with md5 password and without the ignoreAccountMode parameter
-        $this->assertEmpty(Shopware()->Session()->sUserId);
+        static::assertEmpty(Shopware()->Session()->sUserId);
         $this->setUserDataToPost();
         $this->dispatch('/account/login');
-        $this->assertEmpty(Shopware()->Session()->sUserId);
+        static::assertEmpty(Shopware()->Session()->sUserId);
 
         $this->logoutUser();
     }
@@ -126,10 +126,10 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
         $this->setUserDataToPost();
         $this->dispatch('/');
         $result = Shopware()->Modules()->Admin()->sLogin(true);
-        $this->assertNotEmpty(Shopware()->Session()->sUserId);
-        $this->assertEquals(1, Shopware()->Session()->sUserId);
-        $this->assertEmpty($result['sErrorFlag']);
-        $this->assertEmpty($result['sErrorMessages']);
+        static::assertNotEmpty(Shopware()->Session()->sUserId);
+        static::assertEquals(1, Shopware()->Session()->sUserId);
+        static::assertEmpty($result['sErrorFlag']);
+        static::assertEmpty($result['sErrorMessages']);
 
         $this->logoutUser();
         //test the internal call of the method without the $ignoreAccountMode parameter
@@ -138,9 +138,9 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
 
         $this->dispatch('/');
         $result = Shopware()->Modules()->Admin()->sLogin();
-        $this->assertEmpty(Shopware()->Session()->sUserId);
-        $this->assertNotEmpty($result['sErrorFlag']);
-        $this->assertNotEmpty($result['sErrorMessages']);
+        static::assertEmpty(Shopware()->Session()->sUserId);
+        static::assertNotEmpty($result['sErrorFlag']);
+        static::assertNotEmpty($result['sErrorMessages']);
     }
 
     /**
@@ -156,9 +156,9 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
 
         $this->dispatch('/');
         $result = Shopware()->Modules()->Admin()->sLogin();
-        $this->assertEmpty(Shopware()->Session()->sUserId);
-        $this->assertNotEmpty($result['sErrorFlag']);
-        $this->assertNotEmpty($result['sErrorMessages']);
+        static::assertEmpty(Shopware()->Session()->sUserId);
+        static::assertNotEmpty($result['sErrorFlag']);
+        static::assertNotEmpty($result['sErrorMessages']);
 
         $this->logoutUser();
     }

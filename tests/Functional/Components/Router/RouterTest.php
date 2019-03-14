@@ -39,7 +39,7 @@ class Shopware_Tests_Components_Router_RouterTest extends Enlight_Components_Tes
         $seo = $localRouter->assemble(['controller' => 'detail', 'action' => 'index', 'sArticle' => 229]);
         $seoExplicit = $localRouter->assemble(['controller' => 'detail', 'action' => 'index', 'sArticle' => 229, '_seo' => true]);
 
-        $this->assertEquals($seo, $seoExplicit);
+        static::assertEquals($seo, $seoExplicit);
     }
 
     /**
@@ -57,7 +57,7 @@ class Shopware_Tests_Components_Router_RouterTest extends Enlight_Components_Tes
         $seo = $localRouter->assemble(['controller' => 'detail', 'action' => 'index', 'sArticle' => 229]);
         $seoExplicit = $localRouter->assemble(['controller' => 'category', 'sCategory' => 11, '_seo' => false]);
 
-        $this->assertNotEquals($seo, $seoExplicit);
+        static::assertNotEquals($seo, $seoExplicit);
     }
 
     /**
@@ -75,12 +75,12 @@ class Shopware_Tests_Components_Router_RouterTest extends Enlight_Components_Tes
         $seo = $localRouter->assemble(['controller' => 'doesnotexist']);
         $raw = $localRouter->assemble(['controller' => 'doesnotexist', '_seo' => false]);
 
-        $this->assertEquals($raw, $seo);
+        static::assertEquals($raw, $seo);
 
         $raw = $localRouter->assemble(['controller' => 'doesnotexist', '_seo' => false]);
         $seo = $localRouter->assemble(['controller' => 'doesnotexist', '_seo' => true]);
 
-        $this->assertEquals($raw, $seo);
+        static::assertEquals($raw, $seo);
     }
 
     /**
@@ -98,6 +98,6 @@ class Shopware_Tests_Components_Router_RouterTest extends Enlight_Components_Tes
         $withAction = $localRouter->assemble(['controller' => 'doesnotexist', 'action' => 'index']);
         $withoutAction = $localRouter->assemble(['controller' => 'doesnotexist']);
 
-        $this->assertEquals($withAction, $withoutAction);
+        static::assertEquals($withAction, $withoutAction);
     }
 }

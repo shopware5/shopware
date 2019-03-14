@@ -68,17 +68,17 @@ class PropertyFacetTest extends TestCase
             [new PropertyFacet()]
         );
 
-        $this->assertCount(1, $result->getFacets());
+        static::assertCount(1, $result->getFacets());
 
         /** @var FacetResultGroup $facet */
         $facet = $result->getFacets()[0];
-        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup', $facet);
+        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup', $facet);
 
-        $this->assertCount(2, $facet->getFacetResults());
+        static::assertCount(2, $facet->getFacetResults());
         foreach ($facet->getFacetResults() as $result) {
             /* @var $result ValueListFacetResult */
-            $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult', $result);
-            $this->assertCount(3, $result->getValues());
+            static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult', $result);
+            static::assertCount(3, $result->getValues());
         }
     }
 
@@ -105,17 +105,17 @@ class PropertyFacetTest extends TestCase
             [new PropertyFacet()]
         );
 
-        $this->assertCount(1, $result->getFacets());
+        static::assertCount(1, $result->getFacets());
 
         /** @var FacetResultGroup $facet */
         foreach ($result->getFacets() as $facet) {
-            $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup', $facet);
+            static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup', $facet);
 
-            $this->assertCount(4, $facet->getFacetResults());
+            static::assertCount(4, $facet->getFacetResults());
             foreach ($facet->getFacetResults() as $result) {
                 /* @var $result ValueListFacetResult */
-                $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult', $result);
-                $this->assertCount(3, $result->getValues());
+                static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult', $result);
+                static::assertCount(3, $result->getValues());
             }
         }
     }

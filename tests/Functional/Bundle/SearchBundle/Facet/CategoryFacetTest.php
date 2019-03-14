@@ -62,19 +62,19 @@ class CategoryFacetTest extends TestCase
             [new CategoryFacet()]
         );
 
-        $this->assertCount(1, $result->getFacets());
+        static::assertCount(1, $result->getFacets());
 
         $facet = $result->getFacets();
         $facet = $facet[0];
 
         /* @var $facet TreeFacetResult */
-        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult', $facet);
+        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult', $facet);
 
-        $this->assertCount(1, $facet->getValues());
+        static::assertCount(1, $facet->getValues());
 
         /** @var TreeItem $value */
         $value = $facet->getValues()[0];
-        $this->assertEquals('firstLevel', $value->getLabel());
+        static::assertEquals('firstLevel', $value->getLabel());
     }
 
     public function testMultipleCategories()
@@ -110,16 +110,16 @@ class CategoryFacetTest extends TestCase
         $facet = $facet[0];
 
         /* @var $facet TreeFacetResult */
-        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult', $facet);
+        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult', $facet);
 
-        $this->assertCount(1, $facet->getValues());
+        static::assertCount(1, $facet->getValues());
 
         $value = $facet->getValues()[0];
-        $this->assertEquals('firstLevel', $value->getLabel());
-        $this->assertTrue($value->isActive());
+        static::assertEquals('firstLevel', $value->getLabel());
+        static::assertTrue($value->isActive());
 
-        $this->assertEquals('secondLevel-1', $value->getValues()[0]->getLabel());
-        $this->assertEquals('secondLevel-2', $value->getValues()[1]->getLabel());
+        static::assertEquals('secondLevel-1', $value->getValues()[0]->getLabel());
+        static::assertEquals('secondLevel-2', $value->getValues()[1]->getLabel());
     }
 
     public function testNestedCategories()
@@ -161,20 +161,20 @@ class CategoryFacetTest extends TestCase
         $facet = $facet[0];
 
         /* @var $facet TreeFacetResult */
-        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult', $facet);
+        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult', $facet);
 
-        $this->assertCount(1, $facet->getValues());
+        static::assertCount(1, $facet->getValues());
 
         /** @var TreeItem $value */
         $value = $facet->getValues()[0];
-        $this->assertEquals('firstLevel', $value->getLabel());
+        static::assertEquals('firstLevel', $value->getLabel());
 
         $value = $value->getValues()[0];
-        $this->assertEquals('secondLevel-1', $value->getLabel());
-        $this->assertTrue($value->isActive());
+        static::assertEquals('secondLevel-1', $value->getLabel());
+        static::assertTrue($value->isActive());
 
         $value = $value->getValues()[0];
-        $this->assertEquals('thirdLevel-2', $value->getLabel());
+        static::assertEquals('thirdLevel-2', $value->getLabel());
     }
 
     protected function getProduct(

@@ -42,8 +42,8 @@ class Shopware_Tests_Controllers_Frontend_DetailTest extends Enlight_Components_
 
         $article = $this->View()->getAssign('sArticle');
 
-        $this->assertEquals('SW10201.2', $article['ordernumber']);
-        $this->assertEquals(444, $article['articleDetailsID']);
+        static::assertEquals('SW10201.2', $article['ordernumber']);
+        static::assertEquals(444, $article['articleDetailsID']);
     }
 
     /**
@@ -62,7 +62,7 @@ class Shopware_Tests_Controllers_Frontend_DetailTest extends Enlight_Components_
         $this->dispatch('/beispiele/konfiguratorartikel/202/artikel-mit-standardkonfigurator?c=22');
 
         $article = $this->View()->getAssign('sArticle');
-        $this->assertEquals('SW10201.5', $article['ordernumber']);
-        $this->assertEquals('447', $article['articleDetailsID']);
+        static::assertEquals('SW10201.5', $article['ordernumber']);
+        static::assertEquals('447', $article['articleDetailsID']);
     }
 }

@@ -71,6 +71,6 @@ class sArticlesTest extends TestCase
         /** @var \sArticles $sArticles */
         $sArticles = $this->createPartialMock(\sArticles::class, []);
 
-        $this->assertSame($expectedResult, $sArticles->sOptimizeText($input));
+        static::assertSame($expectedResult, $sArticles->sOptimizeText($input));
     }
 }

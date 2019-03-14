@@ -44,7 +44,7 @@ class StatisticsClientTest extends BenchmarkTestCase
             ->getMock();
 
         $httpClient
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('post')
             ->willThrowException($requestException);
 
@@ -69,9 +69,9 @@ class StatisticsClientTest extends BenchmarkTestCase
             $oldConfig = $config;
             $config = Shopware()->Models()->getRepository(BenchmarkConfig::class)->findOneBy(['shopId' => 55]);
 
-            $this->assertNotEquals($config->getId(), $oldConfig->getId());
-            $this->assertEquals(0, $config->getLastProductId());
-            $this->assertEquals(55, $config->getShopId());
+            static::assertNotEquals($config->getId(), $oldConfig->getId());
+            static::assertEquals(0, $config->getLastProductId());
+            static::assertEquals(55, $config->getShopId());
         }
     }
 }

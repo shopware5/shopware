@@ -111,7 +111,7 @@ class Shopware_Tests_Controllers_Backend_ArticleTest extends Enlight_Components_
             ->setPost($postData);
 
         $this->dispatch('backend/Article/save');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         // Now use an outdated timestamp. The controller should detect this and fail.
         $postData['changed'] = '2008-08-07 18:11:31';
@@ -120,6 +120,6 @@ class Shopware_Tests_Controllers_Backend_ArticleTest extends Enlight_Components_
             ->setPost($postData);
 
         $this->dispatch('backend/Article/save');
-        $this->assertFalse($this->View()->success);
+        static::assertFalse($this->View()->success);
     }
 }

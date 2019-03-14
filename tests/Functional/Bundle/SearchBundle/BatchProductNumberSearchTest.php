@@ -91,7 +91,7 @@ class BatchProductNumberSearchTest extends TestCase
 
         $products = $result->get('test-1');
 
-        $this->assertCount(2, $products);
+        static::assertCount(2, $products);
         $this->assertProductNumbersExists($products, ['BATCH-1', 'BATCH-2']);
     }
 
@@ -107,10 +107,10 @@ class BatchProductNumberSearchTest extends TestCase
 
         $result = $this->batchSearch->search($request, $context);
         $products = $result->get('test-1');
-        $this->assertCount(2, $products);
+        static::assertCount(2, $products);
         $this->assertProductNumbersExists($products, ['BATCH-1', 'BATCH-2']);
 
-        $this->assertSame([], $result->get('test-2'));
+        static::assertSame([], $result->get('test-2'));
     }
 
     public function testSearchWithCriteria()
@@ -129,7 +129,7 @@ class BatchProductNumberSearchTest extends TestCase
         $result = $this->batchSearch->search($request, $context);
 
         $products = $result->get('test-criteria-1');
-        $this->assertCount(3, $products);
+        static::assertCount(3, $products);
         $this->assertProductNumbersExists($products, ['BATCH-A', 'BATCH-B', 'BATCH-C']);
     }
 
@@ -168,11 +168,11 @@ class BatchProductNumberSearchTest extends TestCase
         $result = $this->batchSearch->search($request, $context);
 
         $products = $result->get('test-criteria-1');
-        $this->assertCount(3, $products);
+        static::assertCount(3, $products);
         $this->assertProductNumbersExists($products, ['BATCH-A', 'BATCH-B', 'BATCH-C']);
 
         $products = $result->get('test-criteria-2');
-        $this->assertCount(4, $products);
+        static::assertCount(4, $products);
         $this->assertProductNumbersExists($products, ['BATCH-D', 'BATCH-E', 'BATCH-F', 'BATCH-G']);
     }
 
@@ -215,15 +215,15 @@ class BatchProductNumberSearchTest extends TestCase
         $result = $this->batchSearch->search($request, $context);
 
         $products = $result->get('test-criteria-1');
-        $this->assertCount(3, $products);
+        static::assertCount(3, $products);
         $this->assertProductNumbersExists($products, ['BATCH-A', 'BATCH-B', 'BATCH-C']);
 
         $products = $result->get('test-criteria-2');
-        $this->assertCount(4, $products);
+        static::assertCount(4, $products);
         $this->assertProductNumbersExists($products, ['BATCH-D', 'BATCH-E', 'BATCH-F', 'BATCH-G']);
 
         $products = $result->get('test-1');
-        $this->assertCount(3, $products);
+        static::assertCount(3, $products);
         $this->assertProductNumbersExists($products, ['BATCH-A', 'BATCH-H', 'BATCH-J']);
     }
 
@@ -246,7 +246,7 @@ class BatchProductNumberSearchTest extends TestCase
 
         $result = $this->batchSearch->search($request, $context);
 
-        $this->assertSame([], $result->get('test-1'));
+        static::assertSame([], $result->get('test-1'));
     }
 
     public function testNonMatchingConditionShouldReturnEmptyArray()
@@ -261,7 +261,7 @@ class BatchProductNumberSearchTest extends TestCase
 
         $result = $this->batchSearch->search($request, $context);
 
-        $this->assertSame([], $result->get('test-1'));
+        static::assertSame([], $result->get('test-1'));
     }
 
     /**
@@ -270,8 +270,8 @@ class BatchProductNumberSearchTest extends TestCase
     private function assertProductNumbersExists(array $result, array $numbers)
     {
         array_walk($numbers, function ($number) use ($result) {
-            $this->assertArrayHasKey($number, $result, sprintf('Expected "%s" to be in [%s]', $number, implode(', ', array_keys($result))));
-            $this->assertSame($number, $result[$number]->getNumber());
+            static::assertArrayHasKey($number, $result, sprintf('Expected "%s" to be in [%s]', $number, implode(', ', array_keys($result))));
+            static::assertSame($number, $result[$number]->getNumber());
         });
     }
 }

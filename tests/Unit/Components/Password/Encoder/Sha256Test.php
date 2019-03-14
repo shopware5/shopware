@@ -53,7 +53,7 @@ class Sha256Test extends TestCase
      */
     public function testIsAvailable()
     {
-        $this->assertInstanceOf(Sha256::class, $this->hasher);
+        static::assertInstanceOf(Sha256::class, $this->hasher);
     }
 
     /**
@@ -61,7 +61,7 @@ class Sha256Test extends TestCase
      */
     public function testGetNameShouldReturnName()
     {
-        $this->assertEquals('Sha256', $this->hasher->getName());
+        static::assertEquals('Sha256', $this->hasher->getName());
     }
 
     /**
@@ -69,7 +69,7 @@ class Sha256Test extends TestCase
      */
     public function testGenerateShouldReturnString()
     {
-        $this->assertInternalType('string', $this->hasher->encodePassword('foobar'));
+        static::assertInternalType('string', $this->hasher->encodePassword('foobar'));
     }
 
     /**
@@ -77,7 +77,7 @@ class Sha256Test extends TestCase
      */
     public function testGenerateShouldReturnDifferentHashesForSamePlaintextString()
     {
-        $this->assertNotEquals($this->hasher->encodePassword('foobar'), $this->hasher->encodePassword('foobar'));
+        static::assertNotEquals($this->hasher->encodePassword('foobar'), $this->hasher->encodePassword('foobar'));
     }
 
     /**
@@ -87,7 +87,7 @@ class Sha256Test extends TestCase
     {
         $hash = $this->hasher->encodePassword('foobar');
 
-        $this->assertTrue($this->hasher->isPasswordValid('foobar', $hash));
+        static::assertTrue($this->hasher->isPasswordValid('foobar', $hash));
     }
 
     /**
@@ -97,7 +97,7 @@ class Sha256Test extends TestCase
     {
         $hash = $this->hasher->encodePassword('foobar');
 
-        $this->assertFalse($this->hasher->isPasswordValid('notfoo', $hash));
+        static::assertFalse($this->hasher->isPasswordValid('notfoo', $hash));
     }
 
     /**
@@ -107,7 +107,7 @@ class Sha256Test extends TestCase
     {
         $hash = $this->hasher->encodePassword('foobar');
 
-        $this->assertFalse($this->hasher->isReencodeNeeded($hash));
+        static::assertFalse($this->hasher->isReencodeNeeded($hash));
     }
 
     /**
@@ -121,6 +121,6 @@ class Sha256Test extends TestCase
             'salt_len' => 22,
         ]);
 
-        $this->assertTrue($this->hasher->isReencodeNeeded($hash));
+        static::assertTrue($this->hasher->isReencodeNeeded($hash));
     }
 }

@@ -43,13 +43,13 @@ class CategoryServiceTest extends TestCase
         );
 
         foreach ($categories as $id => $category) {
-            $this->assertEquals($id, $category->getId());
+            static::assertEquals($id, $category->getId());
         }
 
         $categories = array_values($categories);
-        $this->assertEquals($second->getId(), $categories[0]->getId());
-        $this->assertEquals($third->getId(), $categories[1]->getId());
-        $this->assertEquals($fourth->getId(), $categories[2]->getId());
+        static::assertEquals($second->getId(), $categories[0]->getId());
+        static::assertEquals($third->getId(), $categories[1]->getId());
+        static::assertEquals($fourth->getId(), $categories[2]->getId());
     }
 
     public function testBlockedCustomerGroups()
@@ -78,9 +78,9 @@ class CategoryServiceTest extends TestCase
             $context
         );
 
-        $this->assertCount(1, $categories);
+        static::assertCount(1, $categories);
 
-        $this->assertArrayHasKey($first->getId(), $categories);
+        static::assertArrayHasKey($first->getId(), $categories);
     }
 
     public function testOnlyActiveCategories()
@@ -98,7 +98,7 @@ class CategoryServiceTest extends TestCase
             $this->getContext()
         );
 
-        $this->assertCount(1, $categories);
-        $this->assertArrayHasKey($third->getId(), $categories);
+        static::assertCount(1, $categories);
+        static::assertArrayHasKey($third->getId(), $categories);
     }
 }

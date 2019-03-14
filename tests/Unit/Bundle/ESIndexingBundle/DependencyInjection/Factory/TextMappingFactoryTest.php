@@ -41,7 +41,7 @@ class TextMappingFactoryTest extends TestCase
 
         $textMapping = $factory->factory($client);
 
-        self::assertInstanceOf(TextMappingES2::class, $textMapping);
+        static::assertInstanceOf(TextMappingES2::class, $textMapping);
     }
 
     public function testReturnsES2WhenClientReturn2()
@@ -51,15 +51,15 @@ class TextMappingFactoryTest extends TestCase
         $client = $this->getMockBuilder(Client::class)
             ->disableOriginalConstructor()->setMethods(['info'])->getMock();
 
-        $client->expects($this->once())
+        $client->expects(static::once())
             ->method('info')
-            ->will($this->returnCallback(function () {
+            ->will(static::returnCallback(function () {
                 return ['version' => ['number' => 2]];
             }));
 
         $textMapping = $factory->factory($client);
 
-        self::assertInstanceOf(TextMappingES2::class, $textMapping);
+        static::assertInstanceOf(TextMappingES2::class, $textMapping);
     }
 
     public function testReturnsES5WhenClientReturn5()
@@ -69,15 +69,15 @@ class TextMappingFactoryTest extends TestCase
         $client = $this->getMockBuilder(Client::class)
             ->disableOriginalConstructor()->setMethods(['info'])->getMock();
 
-        $client->expects($this->once())
+        $client->expects(static::once())
             ->method('info')
-            ->will($this->returnCallback(function () {
+            ->will(static::returnCallback(function () {
                 return ['version' => ['number' => 5]];
             }));
 
         $textMapping = $factory->factory($client);
 
-        self::assertInstanceOf(TextMappingES5::class, $textMapping);
+        static::assertInstanceOf(TextMappingES5::class, $textMapping);
     }
 
     public function testReturnsES6WhenClientReturn6()
@@ -87,15 +87,15 @@ class TextMappingFactoryTest extends TestCase
         $client = $this->getMockBuilder(Client::class)
             ->disableOriginalConstructor()->setMethods(['info'])->getMock();
 
-        $client->expects($this->once())
+        $client->expects(static::once())
             ->method('info')
-            ->will($this->returnCallback(function () {
+            ->will(static::returnCallback(function () {
                 return ['version' => ['number' => 6]];
             }));
 
         $textMapping = $factory->factory($client);
 
-        self::assertInstanceOf(TextMappingES6::class, $textMapping);
+        static::assertInstanceOf(TextMappingES6::class, $textMapping);
     }
 
     public function testReturnsES2WhenVersionIs2()
@@ -106,7 +106,7 @@ class TextMappingFactoryTest extends TestCase
 
         $textMapping = $factory->factory($client);
 
-        self::assertInstanceOf(TextMappingES2::class, $textMapping);
+        static::assertInstanceOf(TextMappingES2::class, $textMapping);
     }
 
     public function testReturnsES5WhenVersionIs5()
@@ -117,7 +117,7 @@ class TextMappingFactoryTest extends TestCase
 
         $textMapping = $factory->factory($client);
 
-        self::assertInstanceOf(TextMappingES5::class, $textMapping);
+        static::assertInstanceOf(TextMappingES5::class, $textMapping);
     }
 
     public function testReturnsES6WhenVersionIs6()
@@ -128,6 +128,6 @@ class TextMappingFactoryTest extends TestCase
 
         $textMapping = $factory->factory($client);
 
-        self::assertInstanceOf(TextMappingES6::class, $textMapping);
+        static::assertInstanceOf(TextMappingES6::class, $textMapping);
     }
 }

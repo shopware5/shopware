@@ -35,13 +35,13 @@ class PriceCalculationTest extends TestCase
         $this->helper->createArticle($data);
         $listProduct = $this->helper->getListProduct($number, $context);
 
-        $this->assertEquals(80, $listProduct->getCheapestPrice()->getCalculatedPrice());
+        static::assertEquals(80, $listProduct->getCheapestPrice()->getCalculatedPrice());
 
         $graduations = $listProduct->getPrices();
 
-        $this->assertEquals(80, $graduations[0]->getCalculatedPrice());
-        $this->assertEquals(60, $graduations[1]->getCalculatedPrice());
-        $this->assertEquals(40, $graduations[2]->getCalculatedPrice());
+        static::assertEquals(80, $graduations[0]->getCalculatedPrice());
+        static::assertEquals(60, $graduations[1]->getCalculatedPrice());
+        static::assertEquals(40, $graduations[2]->getCalculatedPrice());
     }
 
     public function testNetPrices()
@@ -68,19 +68,19 @@ class PriceCalculationTest extends TestCase
         $cheapest = $listProduct->getCheapestPrice();
         $graduations = $listProduct->getPrices();
 
-        $this->assertEquals(67.23, $cheapest->getCalculatedPrice());
-        $this->assertEquals(73.950, $cheapest->getCalculatedPseudoPrice());
-        $this->assertEquals(134.46, $cheapest->getCalculatedReferencePrice());
+        static::assertEquals(67.23, $cheapest->getCalculatedPrice());
+        static::assertEquals(73.950, $cheapest->getCalculatedPseudoPrice());
+        static::assertEquals(134.46, $cheapest->getCalculatedReferencePrice());
 
         $graduation = $graduations[1];
-        $this->assertEquals(50.420, $graduation->getCalculatedPrice());
-        $this->assertEquals(57.14, $graduation->getCalculatedPseudoPrice());
-        $this->assertEquals(100.84, $graduation->getCalculatedReferencePrice());
+        static::assertEquals(50.420, $graduation->getCalculatedPrice());
+        static::assertEquals(57.14, $graduation->getCalculatedPseudoPrice());
+        static::assertEquals(100.84, $graduation->getCalculatedReferencePrice());
 
         $graduation = $graduations[2];
-        $this->assertEquals(33.61, $graduation->getCalculatedPrice());
-        $this->assertEquals(40.34, $graduation->getCalculatedPseudoPrice());
-        $this->assertEquals(67.22, $graduation->getCalculatedReferencePrice());
+        static::assertEquals(33.61, $graduation->getCalculatedPrice());
+        static::assertEquals(40.34, $graduation->getCalculatedPseudoPrice());
+        static::assertEquals(67.22, $graduation->getCalculatedReferencePrice());
     }
 
     public function testCurrencyFactor()
@@ -108,19 +108,19 @@ class PriceCalculationTest extends TestCase
         $cheapest = $listProduct->getCheapestPrice();
         $graduations = $listProduct->getPrices();
 
-        $this->assertEquals(120, $cheapest->getCalculatedPrice());
-        $this->assertEquals(132, $cheapest->getCalculatedPseudoPrice());
-        $this->assertEquals(240, $cheapest->getCalculatedReferencePrice());
+        static::assertEquals(120, $cheapest->getCalculatedPrice());
+        static::assertEquals(132, $cheapest->getCalculatedPseudoPrice());
+        static::assertEquals(240, $cheapest->getCalculatedReferencePrice());
 
         $graduation = $graduations[1];
-        $this->assertEquals(90, $graduation->getCalculatedPrice());
-        $this->assertEquals(102, $graduation->getCalculatedPseudoPrice());
-        $this->assertEquals(180, $graduation->getCalculatedReferencePrice());
+        static::assertEquals(90, $graduation->getCalculatedPrice());
+        static::assertEquals(102, $graduation->getCalculatedPseudoPrice());
+        static::assertEquals(180, $graduation->getCalculatedReferencePrice());
 
         $graduation = $graduations[2];
-        $this->assertEquals(60, $graduation->getCalculatedPrice());
-        $this->assertEquals(72, $graduation->getCalculatedPseudoPrice());
-        $this->assertEquals(120, $graduation->getCalculatedReferencePrice());
+        static::assertEquals(60, $graduation->getCalculatedPrice());
+        static::assertEquals(72, $graduation->getCalculatedPseudoPrice());
+        static::assertEquals(120, $graduation->getCalculatedReferencePrice());
     }
 
     public function testDiscountCurrencyNet()
@@ -148,19 +148,19 @@ class PriceCalculationTest extends TestCase
         $cheapest = $listProduct->getCheapestPrice();
         $graduations = $listProduct->getPrices();
 
-        $this->assertEquals(70.59, $cheapest->getCalculatedPrice());
-        $this->assertEquals(77.65, $cheapest->getCalculatedPseudoPrice());
-        $this->assertEquals(141.18, $cheapest->getCalculatedReferencePrice());
+        static::assertEquals(70.59, $cheapest->getCalculatedPrice());
+        static::assertEquals(77.65, $cheapest->getCalculatedPseudoPrice());
+        static::assertEquals(141.18, $cheapest->getCalculatedReferencePrice());
 
         $graduation = $graduations[1];
-        $this->assertEquals(52.94, $graduation->getCalculatedPrice());
-        $this->assertEquals(60.00, $graduation->getCalculatedPseudoPrice());
-        $this->assertEquals(105.88, $graduation->getCalculatedReferencePrice());
+        static::assertEquals(52.94, $graduation->getCalculatedPrice());
+        static::assertEquals(60.00, $graduation->getCalculatedPseudoPrice());
+        static::assertEquals(105.88, $graduation->getCalculatedReferencePrice());
 
         $graduation = $graduations[2];
-        $this->assertEquals(35.29, $graduation->getCalculatedPrice());
-        $this->assertEquals(42.35, $graduation->getCalculatedPseudoPrice());
-        $this->assertEquals(70.58, $graduation->getCalculatedReferencePrice());
+        static::assertEquals(35.29, $graduation->getCalculatedPrice());
+        static::assertEquals(42.35, $graduation->getCalculatedPseudoPrice());
+        static::assertEquals(70.58, $graduation->getCalculatedReferencePrice());
     }
 
     public function testDiscountCurrencyGross()
@@ -187,19 +187,19 @@ class PriceCalculationTest extends TestCase
         $cheapest = $listProduct->getCheapestPrice();
         $graduations = $listProduct->getPrices();
 
-        $this->assertEquals(122.4, $cheapest->getCalculatedPrice());
-        $this->assertEquals(134.64, $cheapest->getCalculatedPseudoPrice());
-        $this->assertEquals(244.80000, $cheapest->getCalculatedReferencePrice());
+        static::assertEquals(122.4, $cheapest->getCalculatedPrice());
+        static::assertEquals(134.64, $cheapest->getCalculatedPseudoPrice());
+        static::assertEquals(244.80000, $cheapest->getCalculatedReferencePrice());
 
         $graduation = $graduations[1];
-        $this->assertEquals(91.8, $graduation->getCalculatedPrice());
-        $this->assertEquals(104.04, $graduation->getCalculatedPseudoPrice());
-        $this->assertEquals(183.60000, $graduation->getCalculatedReferencePrice());
+        static::assertEquals(91.8, $graduation->getCalculatedPrice());
+        static::assertEquals(104.04, $graduation->getCalculatedPseudoPrice());
+        static::assertEquals(183.60000, $graduation->getCalculatedReferencePrice());
 
         $graduation = $graduations[2];
-        $this->assertEquals(61.2, $graduation->getCalculatedPrice());
-        $this->assertEquals(73.44, $graduation->getCalculatedPseudoPrice());
-        $this->assertEquals(122.40000, $graduation->getCalculatedReferencePrice());
+        static::assertEquals(61.2, $graduation->getCalculatedPrice());
+        static::assertEquals(73.44, $graduation->getCalculatedPseudoPrice());
+        static::assertEquals(122.40000, $graduation->getCalculatedReferencePrice());
     }
 
     /**

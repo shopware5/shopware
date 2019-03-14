@@ -43,12 +43,12 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
         foreach ($botBlackList as $userAgent) {
             if (!empty($userAgent)) {
                 $sessionId = $this->addBasketArticle($userAgent);
-                $this->assertNotEmpty($sessionId);
+                static::assertNotEmpty($sessionId);
                 $basketId = Shopware()->Db()->fetchOne(
                     'SELECT id FROM s_order_basket WHERE sessionID = ?',
                     [$sessionId]
                 );
-                $this->assertEmpty($basketId);
+                static::assertEmpty($basketId);
             }
         }
 
@@ -63,12 +63,12 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
     public function testAddBasketArticle()
     {
         $sessionId = $this->addBasketArticle(include __DIR__ . '/fixtures/UserAgent.php');
-        $this->assertNotEmpty($sessionId);
+        static::assertNotEmpty($sessionId);
         $basketId = Shopware()->Db()->fetchOne(
             'SELECT id FROM s_order_basket WHERE sessionID = ?',
             [$sessionId]
         );
-        $this->assertNotEmpty($basketId);
+        static::assertNotEmpty($basketId);
 
         Shopware()->Modules()->Basket()->sDeleteBasket();
     }
@@ -106,7 +106,7 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
         $this->Request()->setParam('isXHR', 1);
 
         $response = $this->dispatch('/checkout/addArticle');
-        $this->assertContains('<div class="modal--checkout-add-article">', $response->getBody());
+        static::assertContains('<div class="modal--checkout-add-article">', $response->getBody());
 
         Shopware()->Modules()->Basket()->sDeleteBasket();
     }
@@ -143,7 +143,7 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
         $defaultShop = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class)->find(1);
         $previousCustomerGroup = $defaultShop->getCustomerGroup()->getKey();
         $netCustomerGroup = Shopware()->Models()->getRepository(\Shopware\Models\Customer\Group::class)->findOneBy(['tax' => $tax])->getKey();
-        $this->assertNotEmpty($netCustomerGroup);
+        static::assertNotEmpty($netCustomerGroup);
         Shopware()->Db()->query(
             'UPDATE s_user SET customergroup = ? WHERE id = 1',
             [$netCustomerGroup]
@@ -198,8 +198,8 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
         $messageNet = 'InvoiceAmountNet' . ($net ? ' (net shop)' : '') . ': ' . $previousInvoiceAmountNet . ' from sBasket, ' . $order->getInvoiceAmountNet() . ' from getInvoiceAmountNet';
 
         // Test that sBasket calculation matches calculateInvoiceAmount
-        $this->assertEquals($order->getInvoiceAmount(), $previousInvoiceAmount, $message);
-        $this->assertEquals($order->getInvoiceAmountNet(), $previousInvoiceAmountNet, $messageNet);
+        static::assertEquals($order->getInvoiceAmount(), $previousInvoiceAmount, $message);
+        static::assertEquals($order->getInvoiceAmountNet(), $previousInvoiceAmountNet, $messageNet);
 
         Shopware()->Modules()->Basket()->sDeleteBasket();
     }
