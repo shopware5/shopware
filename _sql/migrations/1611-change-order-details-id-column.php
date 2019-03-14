@@ -28,30 +28,21 @@ class Migrations_Migration1611 extends Shopware\Components\Migrations\AbstractMi
     {
         $columns = $this->connection->query('DESCRIBE `s_order_documents`')->fetchAll(\PDO::FETCH_ASSOC);
 
-        $isUpperCase = false;
-        foreach ($columns as $row) {
-            if ($row['Field'] === 'id') {
-                return;
-            }
-            if ($row['Field'] === 'ID') {
-                $isUpperCase = true;
-                break;
-            }
+        if (in_array('id', array_column($columns, 'Field'), true)) {
+            return;
         }
 
         if ($modus === self::MODUS_INSTALL) {
             return;
         }
 
-        if ($isUpperCase === true) {
-            $sql = <<<'SQL'
+        $sql = <<<'SQL'
 ALTER TABLE `s_order_documents` CHANGE COLUMN `ID` `id_tmp` int auto_increment;
 SQL;
-            $this->addSql($sql);
-            $sql = <<<'SQL'
+        $this->addSql($sql);
+        $sql = <<<'SQL'
 ALTER TABLE `s_order_documents` CHANGE COLUMN `id_tmp` `id` int auto_increment;
 SQL;
-            $this->addSql($sql);
-        }
+        $this->addSql($sql);
     }
 }
