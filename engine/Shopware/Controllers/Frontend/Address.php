@@ -366,8 +366,8 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
 
         $response['success'] = empty($response['errors']);
 
-        $this->Response()->setHeader('Content-type', 'application/json', true);
-        $this->Response()->setBody(json_encode($response));
+        $this->Response()->headers->set('content-type', 'application/json', true);
+        $this->Response()->setContent(json_encode($response));
     }
 
     /**

@@ -136,7 +136,7 @@ class SubscriptionService
         }
 
         try {
-            $response->setCookie('lastCheckSubscriptionDate', date('dmY'), time() + 60 * 60 * 24);
+            $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('lastCheckSubscriptionDate', date('dmY'), time() + 60 * 60 * 24));
 
             return $this->getPluginInformationFromApi();
         } catch (ShopSecretException $e) {

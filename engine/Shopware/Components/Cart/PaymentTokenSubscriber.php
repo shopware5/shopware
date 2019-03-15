@@ -72,7 +72,7 @@ class PaymentTokenSubscriber implements SubscriberInterface
         }
 
         if ($restoreData) {
-            $controller->Response()->setCookie($restoreData->getSessionName(), $restoreData->getValue(), 0, $request->getBaseUrl(), null, $request->isSecure(), true);
+            $controller->Response()->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie($restoreData->getSessionName(), $restoreData->getValue(), 0, $request->getBaseUrl(), null, $request->isSecure(), true));
         }
 
         $params = $request->getParams();

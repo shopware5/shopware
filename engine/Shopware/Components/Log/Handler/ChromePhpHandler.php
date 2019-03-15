@@ -54,7 +54,7 @@ class ChromePhpHandler extends BaseChromePhpHandler
 
         $this->response = $response;
         foreach ($this->headers as $header => $content) {
-            $this->response->setHeader($header, $content, true);
+            $this->response->headers->set($header, $content, true);
         }
 
         $this->headers = [];
@@ -89,7 +89,7 @@ class ChromePhpHandler extends BaseChromePhpHandler
         }
 
         if ($this->response) {
-            $this->response->setHeader($header, $content, true);
+            $this->response->headers->set($header, $content, true);
         } else {
             $this->headers[$header] = $content;
         }

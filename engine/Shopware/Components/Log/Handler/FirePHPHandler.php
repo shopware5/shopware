@@ -54,7 +54,7 @@ class FirePHPHandler extends BaseFirePHPHandler
 
         $this->response = $response;
         foreach ($this->headers as $header => $content) {
-            $this->response->setHeader($header, $content, true);
+            $this->response->headers->set($header, $content, true);
         }
 
         $this->headers = [];
@@ -92,7 +92,7 @@ class FirePHPHandler extends BaseFirePHPHandler
         }
 
         if ($this->response) {
-            $this->response->setHeader($header, $content, true);
+            $this->response->headers->set($header, $content, true);
         } else {
             $this->headers[$header] = $content;
         }

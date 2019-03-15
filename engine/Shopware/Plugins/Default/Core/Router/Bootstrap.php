@@ -133,7 +133,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
             if (isset($newPath)) {
                 // reset the cookie so only one valid cookie will be set IE11 fix
-                $response->setCookie('session-' . $shop->getId(), '', 1);
+                $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('session-' . $shop->getId(), '', 1));
                 $response->setRedirect($newPath, 301);
             } else {
                 $this->upgradeShop($request, $response);
@@ -227,7 +227,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
                 // If shop is main, remove the cookie
                 $cookieTime = $newShop->getMain() === null ? time() - 3600 : 0;
 
-                $response->setCookie($cookieKey, $cookieValue, $cookieTime, $cookiePath);
+                $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie($cookieKey, $cookieValue, $cookieTime, $cookiePath));
 
                 return;
             }
@@ -236,7 +236,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         //currency switch
         if ($cookieKey === 'currency') {
             $path = rtrim($shop->getBasePath(), '/') . '/';
-            $response->setCookie($cookieKey, $cookieValue, 0, $path);
+            $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie($cookieKey, $cookieValue, 0, $path));
             $url = sprintf('%s://%s%s',
                 $request->getScheme(),
                 $request->getHttpHost(),

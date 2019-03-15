@@ -1429,7 +1429,7 @@ SQL;
 
         if (!empty($cookieData) && empty($uniqueId)) {
             $uniqueId = Random::getAlphanumericString(32);
-            $this->front->Response()->setCookie('sUniqueID', $uniqueId, time() + (86400 * 360), '/');
+            $this->front->Response()->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sUniqueID', $uniqueId, time() + (86400 * 360), '/'));
         }
 
         // Check if this product is already noted

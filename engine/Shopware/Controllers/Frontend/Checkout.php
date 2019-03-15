@@ -1624,7 +1624,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function ajaxAmountAction()
     {
-        $this->Response()->setHeader('Content-Type', 'application/json');
+        $this->Response()->headers->set('content-type', 'application/json');
 
         $amount = $this->basket->sGetAmount();
         $quantity = $this->basket->sCountBasket();
@@ -1634,7 +1634,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
-        $this->Response()->setBody(
+        $this->Response()->setContent(
             json_encode([
                 'amount' => Shopware()->Template()->fetch('frontend/checkout/ajax_amount.tpl'),
                 'quantity' => $quantity,

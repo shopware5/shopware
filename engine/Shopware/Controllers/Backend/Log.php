@@ -182,12 +182,12 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         $logFilePath = $logDir . '/' . $this->getLogFile($files, $logFile);
 
         $response = $this->Response();
-        $response->setHeader('Cache-Control', 'public');
-        $response->setHeader('Content-Type', 'application/octet-stream');
-        $response->setHeader('Content-Description', 'File Transfer');
-        $response->setHeader('Content-Disposition', 'attachment; filename=' . $logFile);
-        $response->setHeader('Content-Transfer-Encoding', 'binary');
-        $response->setHeader('Content-Length', filesize($logFilePath));
+        $response->headers->set('cache-control', 'public', true);
+        $response->headers->set('content-type', 'application/octet-stream');
+        $response->headers->set('content-description', 'File Transfer');
+        $response->headers->set('content-disposition', 'attachment; filename=' . $logFile);
+        $response->headers->set('content-transfer-encoding', 'binary');
+        $response->headers->set('content-length', filesize($logFilePath));
         $response->sendHeaders();
 
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();

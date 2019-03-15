@@ -90,7 +90,7 @@ class Shopware_Controllers_Api_Countries extends RestController
 
         $this->View()->assign('data', $data);
         $this->View()->assign('success', true);
-        $this->Response()->setHeader('Location', $location);
+        $this->Response()->headers->set('location', $location);
     }
 
     /**

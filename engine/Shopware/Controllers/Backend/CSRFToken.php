@@ -59,6 +59,6 @@ class Shopware_Controllers_Backend_CSRFToken extends Shopware_Controllers_Backen
             $session->offsetSet('X-CSRF-Token', $token);
         }
 
-        $this->Response()->setHeader('X-CSRF-Token', $token);
+        $this->Response()->headers->set('x-csrf-token', $token);
     }
 }

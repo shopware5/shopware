@@ -586,8 +586,8 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             } elseif ($format === 'csvexcel') {
                 $encoding = 'iso-8859-15';
             }
-            $this->Response()->setHeader('Content-Type', 'text/x-comma-separated-values;charset=' . $encoding);
-            $this->Response()->setHeader('Content-Disposition', 'attachment; filename="export.csv"');
+            $this->Response()->headers->set('content-type', 'text/x-comma-separated-values;charset=' . $encoding);
+            $this->Response()->headers->set('content-disposition', 'attachment; filename="export.csv"');
 
             foreach ($result as $row) {
                 foreach ($row as $key => $elem) {
@@ -600,8 +600,8 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         }
 
         if ($format === 'sql') {
-            $this->Response()->setHeader('Content-type: text/plain', '');
-            $this->Response()->setHeader('Content-Disposition', 'attachment; filename="export.sql"');
+            $this->Response()->headers->set('content-type: text/plain', '');
+            $this->Response()->headers->set('content-disposition', 'attachment; filename="export.sql"');
 
             $sql = 'SELECT * FROM s_core_snippets ORDER BY namespace';
             $result = Shopware()->Db()->query($sql);

@@ -26,6 +26,6 @@ class Shopware_Controllers_Frontend_RobotsTxt extends Enlight_Controller_Action
 {
     public function indexAction()
     {
-        $this->Response()->setHeader('Content-Type', 'text/plain; charset=utf-8');
+        $this->Response()->headers->set('content-type', 'text/plain; charset=utf-8');
     }
 }

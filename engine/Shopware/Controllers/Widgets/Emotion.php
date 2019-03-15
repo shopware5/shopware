@@ -80,7 +80,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         $category = (int) $this->Request()->getParam('category');
         if (!$category) {
-            $this->Response()->setHttpResponseCode(404);
+            $this->Response()->setStatusCode(404);
 
             return;
         }

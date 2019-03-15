@@ -98,16 +98,16 @@ class DownloadService implements DownloadServiceInterface
                     break;
                 case 2:
                     $location = $this->privateFilesystemRoot . '/' . $location;
-                    $response
-                        ->setHeader('Content-Type', 'application/octet-stream')
-                        ->setHeader('Content-Disposition', sprintf('attachment; filename="%s"', basename($location)))
-                        ->setHeader('X-Sendfile', $location);
+                    $response->headers
+                        ->set('content-type', 'application/octet-stream')->headers
+                        ->set('content-disposition', sprintf('attachment; filename="%s"', basename($location)))->headers
+                        ->set('x-sendfile', $location);
                     break;
                 case 3:
-                    $response
-                        ->setHeader('Content-Type', 'application/octet-stream')
-                        ->setHeader('Content-Disposition', sprintf('attachment; filename="%s"', basename($location)))
-                        ->setHeader('X-Accel-Redirect', $path);
+                    $response->headers
+                        ->set('content-type', 'application/octet-stream')->headers
+                        ->set('content-disposition', sprintf('attachment; filename="%s"', basename($location)))->headers
+                        ->set('x-accel-redirect', $path);
                     break;
             }
 
@@ -116,10 +116,10 @@ class DownloadService implements DownloadServiceInterface
 
         @set_time_limit(0);
 
-        $response->setHeader('Content-Type', $mimeType);
-        $response->setHeader('Content-Disposition', sprintf('attachment; filename="%s"', basename($location)));
-        $response->setHeader('Content-Length', $meta['size']);
-        $response->setHeader('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('content-type', $mimeType);
+        $response->headers->set('content-disposition', sprintf('attachment; filename="%s"', basename($location)));
+        $response->headers->set('content-length', $meta['size']);
+        $response->headers->set('content-transfer-encoding', 'binary');
         $response->sendHeaders();
 
         $upstream = $filesystem->readStream($location);

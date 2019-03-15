@@ -71,7 +71,7 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
         $this->Request()->setHeader('Content-Type', 'application/json');
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
-        $this->Response()->setBody(json_encode(
+        $this->Response()->setContent(json_encode(
             [
                 'success' => $this->addNote($this->Request()->getParam('ordernumber')),
                 'notesCount' => (int) Shopware()->Modules()->Basket()->sCountNotes(),

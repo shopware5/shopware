@@ -37,7 +37,7 @@ class Shopware_Controllers_Backend_Cron extends Enlight_Controller_Action implem
         if (!Shopware()->Plugins()->Core()->Cron()->authorizeCronAction($this->Request())) {
             $this->Response()
                 ->clearHeaders()
-                ->setHttpResponseCode(403)
+                ->setStatusCode(403)
                 ->appendBody('Forbidden');
 
             return;

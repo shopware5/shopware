@@ -255,8 +255,8 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         $dataQuery = $repository->getStatisticListQuery(null, null, null, $partnerId, false, $this->getFromDate(), $this->getToDate());
         $resultArray = $dataQuery->getArrayResult();
 
-        $this->Response()->setHeader('Content-Type', 'text/csv; charset=utf-8');
-        $this->Response()->setHeader('Content-Disposition', 'attachment;filename=partner_statistic.csv');
+        $this->Response()->headers->set('content-type', 'text/csv; charset=utf-8');
+        $this->Response()->headers->set('content-disposition', 'attachment;filename=partner_statistic.csv');
         // Use this to set the BOM to show it in the right way for excel and stuff
         echo "\xEF\xBB\xBF";
         $fp = fopen('php://output', 'w');

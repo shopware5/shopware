@@ -366,7 +366,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         if (!array_key_exists($defaultShopCategoryId, $categoryPath)) {
             $this->Request()->setQuery('sCategory', $defaultShopCategoryId);
-            $this->Response()->setHttpResponseCode(404);
+            $this->Response()->setStatusCode(404);
 
             return false;
         }
@@ -533,7 +533,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $viewData = $this->View()->getAssign();
 
         if ($this->Request()->getParam('sRss') || $this->Request()->getParam('sAtom')) {
-            $this->Response()->setHeader('Content-Type', 'text/xml');
+            $this->Response()->headers->set('content-type', 'text/xml');
             $type = $this->Request()->getParam('sRss') ? 'rss' : 'atom';
             $this->View()->loadTemplate('frontend/listing/' . $type . '.tpl');
         }

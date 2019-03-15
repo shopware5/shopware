@@ -102,7 +102,7 @@ class Shopware_Controllers_Api_Variants extends RestController
         ];
 
         $this->View()->assign(['success' => true, 'data' => $data]);
-        $this->Response()->setHeader('Location', $location);
+        $this->Response()->headers->set('location', $location);
     }
 
     /**

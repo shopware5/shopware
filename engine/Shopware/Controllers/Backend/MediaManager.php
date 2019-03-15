@@ -144,11 +144,11 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         @set_time_limit(0);
         $response = $this->Response();
-        $response->setHeader('Cache-Control', 'public');
-        $response->setHeader('Content-Description', 'File Transfer');
-        $response->setHeader('Content-disposition', 'attachment; filename=' . $tmpFileName);
-        $response->setHeader('Content-Transfer-Encoding', 'binary');
-        $response->setHeader('Content-Length', $mediaService->getSize($file));
+        $response->headers->set('cache-control', 'public', true);
+        $response->headers->set('content-description', 'File Transfer');
+        $response->headers->set('content-disposition', 'attachment; filename=' . $tmpFileName);
+        $response->headers->set('content-transfer-encoding', 'binary');
+        $response->headers->set('content-length', $mediaService->getSize($file));
         echo $mediaService->read($file);
     }
 
@@ -432,7 +432,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $media->setUserId(0);
         }
 
-        $this->Response()->setHeader('Content-Type', 'text/plain');
+        $this->Response()->headers->set('content-type', 'text/plain');
 
         try {
             // Set the upload file into the model. The model saves the file to the directory

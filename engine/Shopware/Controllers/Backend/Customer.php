@@ -417,9 +417,9 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $emailValidator = $this->container->get('validator.email');
 
         if (empty($customer) && $emailValidator->isValid($mail)) {
-            $this->Response()->setBody(1);
+            $this->Response()->setContent(1);
         } else {
-            $this->Response()->setBody('');
+            $this->Response()->setContent('');
         }
     }
 
@@ -499,8 +499,8 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $path = rtrim($shop->getBasePath(), '/') . '/';
 
         // Update right domain cookies
-        $this->Response()->setCookie('shop', $data['shopId'], 0, $path);
-        $this->Response()->setCookie('session-' . $data['shopId'], $data['sessionId'], 0, '/');
+        $this->Response()->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('shop', $data['shopId'], 0, $path));
+        $this->Response()->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('session-' . $data['shopId'], $data['sessionId'], 0, '/'));
 
         $this->redirect($shop->getBaseUrl());
     }

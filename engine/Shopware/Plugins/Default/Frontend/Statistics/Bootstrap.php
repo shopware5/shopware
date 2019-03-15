@@ -363,7 +363,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
                     } else {
                         $valid = 0;
                     }
-                    $response->setCookie('partner', $row['idcode'], $valid, '/');
+                    $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('partner', $row['idcode'], $valid, '/'));
                 }
                 Shopware()->Session()->sPartner = $partner;
             }
