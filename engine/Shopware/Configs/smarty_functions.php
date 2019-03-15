@@ -185,6 +185,7 @@ return [
     'htmlentities',
     'htmlspecialchars',
     'htmlspecialchars_decode',
+    'http_build_query',
     'hypot',
     'iconv',
     'iconv_get_encoding',
@@ -362,5 +363,4 @@ return [
     'var_dump',
     'version_compare',
     'wordwrap',
-    'http_build_query',
 ];
