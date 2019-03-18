@@ -139,6 +139,7 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.datepicker.js',
         'src/js/jquery.storage-field.js',
         'src/js/jquery.cookie-permission.js',
+        'src/js/jquery.price-group-cart-items-quantity.js',
         'src/js/jquery.shopware-responsive.js',
         'src/js/jquery.invalid-tos-jump.js',
     ];

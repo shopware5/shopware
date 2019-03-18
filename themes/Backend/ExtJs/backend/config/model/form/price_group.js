@@ -37,7 +37,8 @@ Ext.define('Shopware.apps.Config.model.form.PriceGroup', {
     fields:[
         //{block name="backend/config/model/form/price_group/fields"}{/block}
         { name: 'id', type: 'int' },
-        { name: 'name', type: 'string' }
+        { name: 'name', type: 'string' },
+        { name: 'crossProduct', type: 'bool' }
     ],
 
     associations: [{

@@ -150,6 +150,20 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
     }
 
     /**
+     * Calculates the total number of items in the basket that belong to a given pricegroup.
+     */
+    public function getPriceGroupCartItemsQuantityAction(): void
+    {
+        $priceGroupId = (int) $this->Request()->getParam('priceGroupId');
+        $itemsQuantity = $this->get('shopware.components.price_group_cart_items_quantity_calculator')->calculateCartItemsQuantityForPriceGroup($priceGroupId);
+
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+        $this->Front()->Plugins()->Json()->setRenderer();
+        $this->View()->assign('success', true);
+        $this->View()->assign('priceGroupCartItemsQuantity', $itemsQuantity);
+    }
+
+    /**
      * product quick view method
      *
      * Fetches the correct product corresponding to the given order number.

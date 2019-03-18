@@ -39,6 +39,11 @@ class PriceGroup extends Extendable
     protected $name;
 
     /**
+     * @var bool
+     */
+    protected $crossProduct;
+
+    /**
      * @var PriceDiscount[]
      */
     protected $discounts = [];
@@ -73,6 +78,16 @@ class PriceGroup extends Extendable
     public function getName()
     {
         return $this->name;
+    }
+
+    public function isCrossProduct(): bool
+    {
+        return $this->crossProduct;
+    }
+
+    public function setCrossProduct(bool $crossProduct): void
+    {
+        $this->crossProduct = $crossProduct;
     }
 
     /**

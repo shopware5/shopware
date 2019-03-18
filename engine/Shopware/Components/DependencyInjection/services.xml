@@ -948,5 +948,10 @@
             <argument type="service" id="session" on-invalid="null"/>
             <tag name="shopware.event_subscriber"/>
         </service>
+
+        <service id="shopware.components.price_group_cart_items_quantity_calculator" class="Shopware\Components\Cart\PriceGroupCartItemsQuantityCalculator">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="session"/>
+        </service>
     </services>
 </container>

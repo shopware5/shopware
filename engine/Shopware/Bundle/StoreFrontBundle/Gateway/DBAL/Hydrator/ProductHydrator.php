@@ -171,9 +171,13 @@ class ProductHydrator extends Hydrator
     private function assignPriceGroupData(Struct\ListProduct $product, array $data)
     {
         if (!empty($data['__priceGroup_id'])) {
+            $translation = $this->getTranslation($data, '__priceGroup', [], $data['__priceGroup_id']);
+            $data = array_merge($data, $translation);
+
             $product->setPriceGroup(new Struct\Product\PriceGroup());
             $product->getPriceGroup()->setId((int) $data['__priceGroup_id']);
-            $product->getPriceGroup()->setName($data['__priceGroup_description']);
+            $product->getPriceGroup()->setCrossProduct((bool) $data['__priceGroup_crossProduct']);
+            $product->getPriceGroup()->setName($data['__priceGroup_name']);
         }
     }
 

@@ -126,7 +126,8 @@ class PriceHydrator extends Hydrator
         $first = $data[0];
 
         $group->setId((int) $first['__priceGroup_id']);
-        $group->setName($first['__priceGroup_description']);
+        $group->setName($first['__priceGroup_name']);
+        $group->setCrossProduct((bool) $first['__priceGroup_crossProduct']);
 
         $discounts = [];
         foreach ($data as $row) {

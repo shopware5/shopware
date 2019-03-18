@@ -1664,7 +1664,6 @@ SQL;
                 }
 
                 list($taxRate, $netPrice, $grossPrice) = $this->getTaxesForUpdateProduct(
-                    $quantity,
                     $updatedPrice,
                     $additionalInfo
                 );
@@ -2795,24 +2794,60 @@ SQL;
         }
 
         $sql = <<<SQL
-SELECT  s_order_basket.id, s_articles_details.minpurchase, s_articles_details.purchasesteps,
-        s_articles_details.maxpurchase, s_articles_details.purchaseunit,
-        pricegroupID, pricegroupActive, s_order_basket.ordernumber, s_order_basket.articleID,
-        GROUP_CONCAT(avoid.customergroupID SEPARATOR '|') as blocked_customer_groups
-FROM s_articles, s_order_basket, s_articles_details
-LEFT JOIN s_articles_avoid_customergroups avoid 
-  ON avoid.articleID = s_articles_details.articleID    
-WHERE s_order_basket.articleID = s_articles.id
-AND s_order_basket.ordernumber = s_articles_details.ordernumber
-AND s_order_basket.id IN (?)
-AND s_order_basket.sessionID = ?
-GROUP BY s_articles.id, s_order_basket.id
+SELECT 
+    s_order_basket.id,
+    s_articles_details.minpurchase,
+    s_articles_details.purchasesteps,
+    s_articles_details.maxpurchase, 
+    s_articles_details.purchaseunit,
+    s_articles.pricegroupID,
+    s_articles.pricegroupActive,
+    s_order_basket.ordernumber,
+    s_order_basket.articleID,
+    GROUP_CONCAT(avoid.customergroupID SEPARATOR '|') AS blocked_customer_groups,
+    IF (priceGroup.cross_product = 1, IFNULL(priceGroupQuantities.priceGroupCartItemsQuantity, 0), s_order_basket.quantity) AS quantityForPriceGroupDiscountCalculation
+FROM s_articles
+INNER JOIN s_order_basket
+    ON s_order_basket.articleID = s_articles.id
+INNER JOIN s_articles_details
+    ON s_order_basket.ordernumber = s_articles_details.ordernumber
+LEFT JOIN s_articles_avoid_customergroups avoid
+    ON avoid.articleID = s_articles_details.articleID
+LEFT JOIN s_core_pricegroups priceGroup
+    ON pricegroupID = priceGroup.id
+LEFT JOIN (
+    SELECT
+        s_articles.pricegroupID AS priceGroupId,
+        SUM(s_order_basket.quantity) as priceGroupCartItemsQuantity
+    FROM s_order_basket
+    LEFT JOIN s_articles
+        ON s_articles.id = s_order_basket.articleID
+    WHERE
+        s_order_basket.sessionID = ?
+    GROUP BY s_articles.pricegroupID
+) AS priceGroupQuantities
+    ON priceGroupQuantities.priceGroupId = s_articles.pricegroupID
+WHERE 
+    s_order_basket.id IN (?)
+    AND s_order_basket.sessionID = ?
+GROUP BY
+    s_articles.id,
+    s_order_basket.id,
+    quantityForPriceGroupDiscountCalculation
 SQL;
 
         $stmt = $this->connection->executeQuery(
             $sql,
-            [$ids, $this->session->get('sessionId')],
-            [Connection::PARAM_INT_ARRAY, \PDO::PARAM_STR]
+            [
+                $this->session->get('sessionId'),
+                $ids,
+                $this->session->get('sessionId'),
+            ],
+            [
+                \PDO::PARAM_STR,
+                Connection::PARAM_INT_ARRAY,
+                \PDO::PARAM_STR,
+            ]
         );
 
         $additionalInformation = $stmt->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
@@ -2936,16 +2971,8 @@ SQL;
 
     /**
      * Calculates product tax values for sUpdateArticle
-     *
-     * @param int   $quantity
-     * @param array $queryNewPrice
-     * @param array $queryAdditionalInfo
-     *
-     * @throws \Enlight_Exception
-     *
-     * @return array
      */
-    private function getTaxesForUpdateProduct($quantity, array $queryNewPrice, array $queryAdditionalInfo)
+    private function getTaxesForUpdateProduct(array $queryNewPrice, array $queryAdditionalInfo): array
     {
         // Determinate tax rate for this cart position
         $taxRate = $this->moduleManager->Articles()->getTaxRateByConditions($queryNewPrice['taxID']);
@@ -2992,7 +3019,7 @@ SQL;
                 $this->sSYSTEM->sUSERGROUP,
                 $queryAdditionalInfo['pricegroupID'],
                 $grossPrice,
-                $quantity,
+                $queryAdditionalInfo['quantityForPriceGroupDiscountCalculation'],
                 false
             );
             $grossPrice = $this->moduleManager->Articles()->sRound($grossPrice);
@@ -3004,7 +3031,7 @@ SQL;
                         $this->sSYSTEM->sUSERGROUP,
                         $queryAdditionalInfo['pricegroupID'],
                         $netPrice,
-                        $quantity,
+                        $queryAdditionalInfo['quantityForPriceGroupDiscountCalculation'],
                         false
                     )
                 );

@@ -57,6 +57,8 @@ class Converter
 
         $struct->setName($entity->getName());
 
+        $struct->setCrossProduct($entity->isCrossProduct());
+
         $discounts = [];
 
         foreach ($entity->getDiscounts() as $discountEntity) {

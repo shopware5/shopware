@@ -41,7 +41,13 @@ Ext.define('Shopware.apps.Config.view.form.PriceGroup', {
         },{
             xtype: 'config-base-detail',
             store: 'detail.PriceGroup',
-            items: me.getFormItems()
+            items: me.getFormItems(),
+            plugins: [{
+                pluginId: 'translation',
+                ptype: 'translation',
+                translationType: 'config_pricegroups',
+                translationMerge:  true,
+            }]
         }];
     },
 
@@ -60,7 +66,14 @@ Ext.define('Shopware.apps.Config.view.form.PriceGroup', {
         return [{
             name: 'name',
             fieldLabel: '{s name=price_group/detail/name_label}Name{/s}',
-            allowBlank: false
+            allowBlank: false,
+            translatable: true,
+        }, {
+            xtype: 'checkboxfield',
+            name: 'crossProduct',
+            dataIndex: 'crossProduct',
+            fieldLabel: '{s name=price_group/detail/cross_product/label}Cross product{/s}',
+            helpText: '{s name=price_group/detail/cross_product/help_text}This option allows you to define cross-article discount scales. This means that the discount level is determined based on the total number of possibly different articles in the same price group in the shopping basket. These can be different article variants or completely different articles.{/s}'
         }, {
             xtype: 'config-pricegroup-discount'
         }];

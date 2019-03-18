@@ -81,5 +81,26 @@
                 {/block}
             </table>
         {/block}
+
+        {if $sArticle.pricegroupCrossProduct}
+            {block name="frontend_detail_data_block_prices_pricegroup_cross_product"}
+                {assign
+                    var='priceGroupQuantityParagraph'
+                    value="{s name="priceGroupCartItemsQuantity" namespace="frontend/detail/data"}You already have %s items of the price scale %s in your basket.{/s}"
+                }
+                {assign
+                    var='priceGroupQuantity'
+                    value="<strong id='block-prices--price-group--cross-article--basket-items-quantity' data-priceGroupId='{$sArticle.pricegroupID}' data-getPriceGroupCartItemsQuantityUrl='{url controller="detail" action="getPriceGroupCartItemsQuantity" _seo=false}'>-</strong>"
+                }
+                {assign
+                    var='priceGroupName'
+                    value="<strong id='block-prices--price-group--cross-article--name'>{$sArticle.pricegroupName}</strong>"
+                }
+                <p class="block-prices--price-group--cross-article">
+                    {$priceGroupQuantityParagraph|sprintf:$priceGroupQuantity:$priceGroupName}
+                </p>
+            {/block}
+        {/if}
+
     </div>
 {/block}

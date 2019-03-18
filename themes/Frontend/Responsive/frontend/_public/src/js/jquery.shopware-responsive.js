@@ -126,6 +126,7 @@
         .addPlugin('*[data-cookie-permission="true"]', 'swCookiePermission')
         .addPlugin('.navigation--entry.entry--account.with-slt', 'swDropdownMenu', [ 'm', 'l', 'xl' ])
         .addPlugin('*[data-storage-field="true"]', 'swStorageField')
+        .addPlugin('#block-prices--price-group--cross-article--basket-items-quantity', 'swPriceGroupCartItemsQuantity')
     ;
 
     $(function($) {

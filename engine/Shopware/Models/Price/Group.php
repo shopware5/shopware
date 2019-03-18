@@ -55,9 +55,16 @@ class Group extends ModelEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=30, nullable=false)
+     * @ORM\Column(name="description", type="string", length=255, nullable=false)
      */
     private $name;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="cross_product", type="boolean", nullable=false)
+     */
+    private $crossProduct = false;
 
     public function __construct()
     {
@@ -108,5 +115,15 @@ class Group extends ModelEntity
     public function setDiscounts($discounts)
     {
         return $this->setOneToMany($discounts, \Shopware\Models\Price\Discount::class, 'discounts', 'group');
+    }
+
+    public function isCrossProduct(): bool
+    {
+        return $this->crossProduct;
+    }
+
+    public function setCrossProduct(bool $crossProduct): void
+    {
+        $this->crossProduct = $crossProduct;
     }
 }

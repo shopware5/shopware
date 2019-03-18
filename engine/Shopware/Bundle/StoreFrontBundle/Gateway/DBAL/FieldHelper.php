@@ -225,7 +225,8 @@ class FieldHelper
     {
         return [
             'priceGroup.id as __priceGroup_id',
-            'priceGroup.description as __priceGroup_description',
+            'priceGroup.description as __priceGroup_name',
+            'priceGroup.cross_product as __priceGroup_crossProduct',
         ];
     }
 
@@ -1155,6 +1156,11 @@ class FieldHelper
     public function addEsdTranslation(QueryBuilder $queryBuilder, ShopContextInterface $context)
     {
         $this->addTranslation('esdAttribute', 's_articles_esd_attributes', $queryBuilder, $context, 'esd.id');
+    }
+
+    public function addPriceGroupTranslation(QueryBuilder $queryBuilder, ShopContextInterface $context): void
+    {
+        $this->addTranslation('priceGroup', 'config_pricegroups', $queryBuilder, $context, 1);
     }
 
     /**
