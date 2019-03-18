@@ -27,6 +27,7 @@ namespace Shopware\Models\Customer;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Security\AttributeCleanerTrait;
+use Shopware\Models\Attribute\CustomerAddress as CustomerAddressAttribute;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
 
@@ -181,7 +182,7 @@ class Address extends ModelEntity
      *
      * @ORM\Column(name="additional_address_line1", type="string", length=255, nullable=true)
      */
-    protected $additionalAddressLine1 = null;
+    protected $additionalAddressLine1;
 
     /**
      * Contains the additional address line data 2
@@ -190,7 +191,7 @@ class Address extends ModelEntity
      *
      * @ORM\Column(name="additional_address_line2", type="string", length=255, nullable=true)
      */
-    protected $additionalAddressLine2 = null;
+    protected $additionalAddressLine2;
 
     /**
      * Contains the id of the country.
@@ -208,7 +209,7 @@ class Address extends ModelEntity
      *
      * @ORM\Column(name="state_id", type="integer", nullable=true)
      */
-    protected $stateId = null;
+    protected $stateId;
 
     /**
      * OWNING SIDE
@@ -225,7 +226,7 @@ class Address extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\CustomerAddress
+     * @var CustomerAddressAttribute
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerAddress", mappedBy="customerAddress", orphanRemoval=true, cascade={"persist"})
      */
@@ -465,7 +466,7 @@ class Address extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\CustomerAddress|null
+     * @return CustomerAddressAttribute|null
      */
     public function getAttribute()
     {
@@ -473,13 +474,13 @@ class Address extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\CustomerAddress|array|null $attribute
+     * @param CustomerAddressAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\CustomerAddress
+     * @return Address
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\CustomerAddress::class, 'attribute', 'customerAddress');
+        return $this->setOneToOne($attribute, CustomerAddressAttribute::class, 'attribute', 'customerAddress');
     }
 
     /**

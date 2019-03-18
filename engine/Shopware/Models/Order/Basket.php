@@ -26,6 +26,7 @@ namespace Shopware\Models\Order;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\OrderBasket as OrderBasketAttribute;
 
 /**
  * @ORM\Table(name="s_order_basket")
@@ -64,7 +65,7 @@ class Basket extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\OrderBasket
+     * @var OrderBasketAttribute
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderBasket", mappedBy="orderBasket", orphanRemoval=true, cascade={"persist"})
      */
@@ -178,7 +179,7 @@ class Basket extends ModelEntity
     private $currencyFactor = 1;
 
     /**
-     * @return \Shopware\Models\Attribute\OrderBasket
+     * @return OrderBasketAttribute
      */
     public function getAttribute()
     {
@@ -186,13 +187,13 @@ class Basket extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\OrderBasket|array|null $attribute
+     * @param OrderBasketAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\OrderBasket
+     * @return Basket
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\OrderBasket::class, 'attribute', 'orderBasket');
+        return $this->setOneToOne($attribute, OrderBasketAttribute::class, 'attribute', 'orderBasket');
     }
 
     /**

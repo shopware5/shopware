@@ -27,6 +27,7 @@ namespace Shopware\Models\Article;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\Article as ProductAttribute;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -38,7 +39,7 @@ class Detail extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Article
+     * @var Article
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="details")
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
@@ -49,7 +50,7 @@ class Detail extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Price>
+     * @var ArrayCollection<\Shopware\Models\Article\Price>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Price", mappedBy="detail", orphanRemoval=true, cascade={"persist"})
      */
@@ -58,7 +59,7 @@ class Detail extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\Article
+     * @var ProductAttribute
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Article", mappedBy="articleDetail", orphanRemoval=true, cascade={"persist"})
      */
@@ -67,7 +68,7 @@ class Detail extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Unit
+     * @var Unit
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Unit", inversedBy="articles", cascade={"persist"})
      * @ORM\JoinColumn(name="unitID", referencedColumnName="id")
@@ -94,7 +95,7 @@ class Detail extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Article\Esd
+     * @var Esd
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Esd", mappedBy="articleDetail", orphanRemoval=true, cascade={"persist"})
      */
@@ -112,7 +113,7 @@ class Detail extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Image>
+     * @var ArrayCollection<\Shopware\Models\Article\Image>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image", mappedBy="articleDetail", orphanRemoval=true, cascade={"persist"})
      * @ORM\OrderBy({"position" = "ASC"})
@@ -140,7 +141,7 @@ class Detail extends ModelEntity
      *
      * @ORM\Column(name="unitID", type="integer", nullable=true)
      */
-    private $unitId = null;
+    private $unitId;
 
     /**
      * @var string
@@ -157,7 +158,7 @@ class Detail extends ModelEntity
      *
      * @ORM\Column(name="suppliernumber", type="string", nullable=true)
      */
-    private $supplierNumber = null;
+    private $supplierNumber;
 
     /**
      * @var int
@@ -171,7 +172,7 @@ class Detail extends ModelEntity
      *
      * @ORM\Column(name="additionaltext", type="string", nullable=true)
      */
-    private $additionalText = null;
+    private $additionalText;
 
     /**
      * @var int
@@ -192,49 +193,49 @@ class Detail extends ModelEntity
      *
      * @ORM\Column(name="stockmin", type="integer", nullable=true)
      */
-    private $stockMin = null;
+    private $stockMin;
 
     /**
      * @var int
      *
      * @ORM\Column(name="laststock", type="boolean", nullable=false)
      */
-    private $lastStock = null;
+    private $lastStock;
 
     /**
      * @var float
      *
      * @ORM\Column(name="weight", type="decimal", nullable=true, precision=3)
      */
-    private $weight = null;
+    private $weight;
 
     /**
      * @var float
      *
      * @ORM\Column(name="width", type="decimal", nullable=true, precision=3)
      */
-    private $width = null;
+    private $width;
 
     /**
      * @var float
      *
      * @ORM\Column(name="length", type="decimal", nullable=true, precision=3)
      */
-    private $len = null;
+    private $len;
 
     /**
      * @var float
      *
      * @ORM\Column(name="height", type="decimal", nullable=true, precision=3)
      */
-    private $height = null;
+    private $height;
 
     /**
      * @var string
      *
      * @ORM\Column(name="ean", type="string", nullable=true)
      */
-    private $ean = null;
+    private $ean;
 
     /**
      * @var float
@@ -262,35 +263,35 @@ class Detail extends ModelEntity
      *
      * @ORM\Column(name="purchasesteps", type="integer", nullable=true)
      */
-    private $purchaseSteps = null;
+    private $purchaseSteps;
 
     /**
      * @var int
      *
      * @ORM\Column(name="maxpurchase", type="integer", nullable=true)
      */
-    private $maxPurchase = null;
+    private $maxPurchase;
 
     /**
      * @var float
      *
      * @ORM\Column(name="purchaseunit", type="decimal", nullable=true)
      */
-    private $purchaseUnit = null;
+    private $purchaseUnit;
 
     /**
      * @var float
      *
      * @ORM\Column(name="referenceunit", type="decimal", nullable=true)
      */
-    private $referenceUnit = null;
+    private $referenceUnit;
 
     /**
      * @var string
      *
      * @ORM\Column(name="packunit", type="text", nullable=true)
      */
-    private $packUnit = null;
+    private $packUnit;
 
     /**
      * @var int
@@ -304,14 +305,14 @@ class Detail extends ModelEntity
      *
      * @ORM\Column(name="releasedate", type="date", nullable=true)
      */
-    private $releaseDate = null;
+    private $releaseDate;
 
     /**
      * @var string
      *
      * @ORM\Column(name="shippingtime", type="string", length=11, nullable=true)
      */
-    private $shippingTime = null;
+    private $shippingTime;
 
     /**
      * Class constructor. Initials the array collections.
@@ -435,7 +436,7 @@ class Detail extends ModelEntity
      *
      * @param int $active
      *
-     * @return \Shopware\Models\Article\Detail
+     * @return Detail
      */
     public function setActive($active)
     {
@@ -459,7 +460,7 @@ class Detail extends ModelEntity
      *
      * @param int $inStock
      *
-     * @return \Shopware\Models\Article\Detail
+     * @return Detail
      */
     public function setInStock($inStock)
     {
@@ -601,7 +602,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Article|null
+     * @return ProductAttribute|null
      */
     public function getAttribute()
     {
@@ -609,17 +610,17 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\Article|array|null $attribute
+     * @param ProductAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Article
+     * @return Detail
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Article', 'attribute', 'articleDetail');
+        return $this->setOneToOne($attribute, ProductAttribute::class, 'attribute', 'articleDetail');
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getPrices()
     {
@@ -627,13 +628,13 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Price[]|null $prices
+     * @param Price[]|null $prices
      *
      * @return Detail
      */
     public function setPrices($prices)
     {
-        return $this->setOneToMany($prices, \Shopware\Models\Article\Price::class, 'prices', 'detail');
+        return $this->setOneToMany($prices, Price::class, 'prices', 'detail');
     }
 
     /**
@@ -952,7 +953,7 @@ class Detail extends ModelEntity
      * OWNING SIDE
      * of the association between articles and unit
      *
-     * @return \Shopware\Models\Article\Unit
+     * @return Unit
      */
     public function getUnit()
     {
@@ -960,17 +961,17 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Unit|array|null $unit
+     * @param Unit|array|null $unit
      *
-     * @return \Shopware\Models\Article\Article
+     * @return Detail
      */
     public function setUnit($unit)
     {
-        return $this->setManyToOne($unit, '\Shopware\Models\Article\Unit', 'unit');
+        return $this->setManyToOne($unit, Unit::class, 'unit');
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection|null
+     * @return ArrayCollection|null
      */
     public function getConfiguratorOptions()
     {
@@ -978,7 +979,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $configuratorOptions
+     * @param ArrayCollection $configuratorOptions
      */
     public function setConfiguratorOptions($configuratorOptions)
     {
@@ -986,7 +987,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Esd $esd
+     * @param Esd $esd
      */
     public function setEsd($esd)
     {
@@ -994,7 +995,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Esd|null
+     * @return Esd|null
      */
     public function getEsd()
     {
@@ -1002,7 +1003,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getImages()
     {
@@ -1010,12 +1011,12 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Image[]|null $images
+     * @param Image[]|null $images
      *
      * @return Detail
      */
     public function setImages($images)
     {
-        return $this->setOneToMany($images, \Shopware\Models\Article\Image::class, 'images', 'articleDetail');
+        return $this->setOneToMany($images, Image::class, 'images', 'articleDetail');
     }
 }

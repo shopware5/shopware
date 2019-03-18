@@ -49,7 +49,7 @@ class ModelRepository extends EntityRepository
      * @param string $alias
      * @param string $indexBy the index for the from
      *
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function createQueryBuilder($alias, $indexBy = null)
     {

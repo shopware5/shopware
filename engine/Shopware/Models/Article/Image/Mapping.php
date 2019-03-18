@@ -27,6 +27,7 @@ namespace Shopware\Models\Article\Image;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Article\Image;
 
 /**
  * Shopware Article Image Mapping model.
@@ -42,7 +43,7 @@ class Mapping extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Image
+     * @var Image
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Image", inversedBy="mappings")
      * @ORM\JoinColumn(name="image_id", referencedColumnName="id")
@@ -89,7 +90,7 @@ class Mapping extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Image
+     * @return Image
      */
     public function getImage()
     {
@@ -97,7 +98,7 @@ class Mapping extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Image $image
+     * @param Image $image
      */
     public function setImage($image)
     {
@@ -105,7 +106,7 @@ class Mapping extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Image\Rule>
+     * @return ArrayCollection<\Shopware\Models\Article\Image\Rule>
      */
     public function getRules()
     {
@@ -113,10 +114,10 @@ class Mapping extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Image\Rule> $rules
+     * @param ArrayCollection<\Shopware\Models\Article\Image\Rule>|Rule[] $rules
      */
     public function setRules($rules)
     {
-        $this->setOneToMany($rules, \Shopware\Models\Article\Image\Rule::class, 'rules', 'mapping');
+        $this->setOneToMany($rules, Rule::class, 'rules', 'mapping');
     }
 }
