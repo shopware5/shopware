@@ -51,6 +51,7 @@ use Shopware\Models\Property\Group as PropertyGroup;
 use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Tax\Tax;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
@@ -2129,7 +2130,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         );
 
         /* @var Shop $shop */
-        $this->Response()->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('shop', $shopId, 0, $shop->getBasePath()));
+        $this->Response()->headers->setCookie(new Cookie('shop', $shopId, 0, $shop->getBasePath()));
         $this->redirect($url);
     }
 

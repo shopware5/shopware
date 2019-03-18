@@ -31,6 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\HttpCache\CacheRouteGenerationService;
 use Shopware\Components\HttpCache\CacheTimeServiceInterface;
 use Shopware\Components\HttpCache\DefaultRouteService;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class CacheControl
 {
@@ -353,7 +354,7 @@ class CacheControl
 
     private function resetCookies(Request $request, Response $response)
     {
-        $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('x-cache-context-hash', null, strtotime('-1 Year'), $request->getBasePath() . '/'));
+        $response->headers->setCookie(new Cookie('x-cache-context-hash', null, strtotime('-1 Year'), $request->getBasePath() . '/'));
     }
 
     private function setContextCookie(Request $request, ShopContextInterface $context, Response $response)
@@ -367,6 +368,6 @@ class CacheControl
             'response' => $response,
         ]);
 
-        $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('x-cache-context-hash', sha1($hash), 0, $request->getBasePath() . '/'));
+        $response->headers->setCookie(new Cookie('x-cache-context-hash', sha1($hash), 0, $request->getBasePath() . '/'));
     }
 }

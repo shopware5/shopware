@@ -117,7 +117,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
      *
      * @throws Exception
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Enlight_Controller_Response_ResponseHttp
      */
     public function dispatch()
     {

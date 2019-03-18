@@ -25,6 +25,7 @@
 use Shopware\Bundle\EmotionBundle\Service\StoreFrontEmotionDeviceConfiguration;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\OptinServiceInterface;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
 {
@@ -81,7 +82,7 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
 
         $optinService->delete(OptinServiceInterface::TYPE_THEME_PREVIEW, $hash);
 
-        $this->Response()->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie($data['sessionName'], $data['sessionValue'], 0, $this->Request()->getBaseUrl(), null, $this->Request()->isSecure(), true));
+        $this->Response()->headers->setCookie(new Cookie($data['sessionName'], $data['sessionValue'], 0, $this->Request()->getBaseUrl(), null, $this->Request()->isSecure(), true));
 
         // Disable http cache for this Request
         $this->Response()->headers->set('cache-control', 'private', true);

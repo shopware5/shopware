@@ -1,25 +1,20 @@
 <?php
 /**
- * Shopware 5
- * Copyright (c) shopware AG
+ * Enlight
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * LICENSE
  *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/bsd-license.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@shopware.de so we can send you a copy immediately.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
+ * @license    http://opensource.org/licenses/bsd-license.php New BSD License
  */
 
 use Symfony\Component\HttpFoundation\Cookie;
@@ -129,6 +124,7 @@ class Enlight_Controller_Response_ResponseHttp extends Response implements Enlig
      */
     public function sendCookies()
     {
+        trigger_error(__CLASS__ . ':' . __METHOD__ . ' is deprecated. Please use sendHeaders instead', E_USER_DEPRECATED);
         $this->sendHeaders();
     }
 
@@ -218,7 +214,7 @@ class Enlight_Controller_Response_ResponseHttp extends Response implements Enlig
      */
     public function setRawHeader($value)
     {
-        trigger_error(__CLASS__ . ':' . __METHOD__ . ' is deprecated. Please set $response->headers->set instead');
+        trigger_error(__CLASS__ . ':' . __METHOD__ . ' is deprecated. Please set $response->headers->set instead', E_USER_DEPRECATED);
 
         $parts = self::getRawHeaderParts($value);
 
@@ -238,6 +234,7 @@ class Enlight_Controller_Response_ResponseHttp extends Response implements Enlig
      */
     public function getRawHeaders()
     {
+        trigger_error(__CLASS__ . ':' . __METHOD__ . ' is deprecated. Please set $response->headers->all() instead', E_USER_DEPRECATED);
         return $this->headers->all();
     }
 
@@ -248,6 +245,7 @@ class Enlight_Controller_Response_ResponseHttp extends Response implements Enlig
      */
     public function clearRawHeaders()
     {
+        trigger_error(__CLASS__ . ':' . __METHOD__ . ' is deprecated. Please set $response->headers->replace() instead', E_USER_DEPRECATED);
         $this->headers->replace([]);
 
         return $this;
@@ -260,7 +258,7 @@ class Enlight_Controller_Response_ResponseHttp extends Response implements Enlig
      */
     public function clearRawHeader($headerRaw)
     {
-        trigger_error(__CLASS__ . ':' . __METHOD__ . ' is deprecated. Please set clearRawHeader instead');
+        trigger_error(__CLASS__ . ':' . __METHOD__ . ' is deprecated. Please set clearRawHeader instead', E_USER_DEPRECATED);
 
         $parts = self::getRawHeaderParts($headerRaw);
 
@@ -375,6 +373,7 @@ class Enlight_Controller_Response_ResponseHttp extends Response implements Enlig
      */
     public function outputBody()
     {
+        trigger_error(__CLASS__ . ':' . __METHOD__ . ' is deprecated. Please use getContent instead', E_USER_DEPRECATED);
         echo $this->getBody();
     }
 
@@ -512,6 +511,7 @@ class Enlight_Controller_Response_ResponseHttp extends Response implements Enlig
      */
     public function renderExceptions($flag = null)
     {
+        trigger_error(__CLASS__ . ':' . __METHOD__ . ' is deprecated without replacement', E_USER_DEPRECATED);
         return false;
     }
 
@@ -520,6 +520,7 @@ class Enlight_Controller_Response_ResponseHttp extends Response implements Enlig
      */
     public function sendResponse()
     {
+        trigger_error(__CLASS__ . ':' . __METHOD__ . ' is deprecated. Please set send instead', E_USER_DEPRECATED);
         $this->sendHeaders();
         $this->sendContent();
     }

@@ -29,6 +29,7 @@ use Shopware\Components\OptinServiceInterface;
 use Shopware\Components\StateTranslatorService;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\PaymentData;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
@@ -499,8 +500,8 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $path = rtrim($shop->getBasePath(), '/') . '/';
 
         // Update right domain cookies
-        $this->Response()->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('shop', $data['shopId'], 0, $path));
-        $this->Response()->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('session-' . $data['shopId'], $data['sessionId'], 0, '/'));
+        $this->Response()->headers->setCookie(new Cookie('shop', $data['shopId'], 0, $path));
+        $this->Response()->headers->setCookie(new Cookie('session-' . $data['shopId'], $data['sessionId'], 0, '/'));
 
         $this->redirect($shop->getBaseUrl());
     }

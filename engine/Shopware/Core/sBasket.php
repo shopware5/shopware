@@ -29,6 +29,7 @@ use Shopware\Components\Cart\BasketHelperInterface;
 use Shopware\Components\Cart\Struct\CartItemStruct;
 use Shopware\Components\Cart\Struct\DiscountContext;
 use Shopware\Components\Random;
+use Symfony\Component\HttpFoundation\Cookie;
 
 /**
  * Shopware Class that handles cart operations
@@ -1429,7 +1430,7 @@ SQL;
 
         if (!empty($cookieData) && empty($uniqueId)) {
             $uniqueId = Random::getAlphanumericString(32);
-            $this->front->Response()->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('sUniqueID', $uniqueId, time() + (86400 * 360), '/'));
+            $this->front->Response()->headers->setCookie(new Cookie('sUniqueID', $uniqueId, time() + (86400 * 360), '/'));
         }
 
         // Check if this product is already noted

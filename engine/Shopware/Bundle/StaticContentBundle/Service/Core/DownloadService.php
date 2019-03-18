@@ -98,16 +98,14 @@ class DownloadService implements DownloadServiceInterface
                     break;
                 case 2:
                     $location = $this->privateFilesystemRoot . '/' . $location;
-                    $response->headers
-                        ->set('content-type', 'application/octet-stream')->headers
-                        ->set('content-disposition', sprintf('attachment; filename="%s"', basename($location)))->headers
-                        ->set('x-sendfile', $location);
+                    $response->headers->set('content-type', 'application/octet-stream');
+                    $response->headers->set('content-disposition', sprintf('attachment; filename="%s"', basename($location)));
+                    $response->headers->set('x-sendfile', $location);
                     break;
                 case 3:
-                    $response->headers
-                        ->set('content-type', 'application/octet-stream')->headers
-                        ->set('content-disposition', sprintf('attachment; filename="%s"', basename($location)))->headers
-                        ->set('x-accel-redirect', $path);
+                    $response->headers->set('content-type', 'application/octet-stream');
+                    $response->headers->set('content-disposition', sprintf('attachment; filename="%s"', basename($location)));
+                    $response->headers->set('x-accel-redirect', $path);
                     break;
             }
 
