@@ -116,14 +116,14 @@ class Voucher extends ModelEntity
      *
      * @ORM\Column(name="valid_from", type="date", nullable=true)
      */
-    private $validFrom = null;
+    private $validFrom;
 
     /**
      * @var \DateTimeInterface
      *
      * @ORM\Column(name="valid_to", type="date", nullable=true)
      */
-    private $validTo = null;
+    private $validTo;
 
     /**
      * @var string
@@ -654,11 +654,11 @@ class Voucher extends ModelEntity
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Voucher\Code>|array|null $codes
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Voucher\Code>
+     * @return Voucher
      */
     public function setCodes($codes)
     {
-        return $this->setOneToMany($codes, \Shopware\Models\Voucher\Code::class, 'codes', 'voucher');
+        return $this->setOneToMany($codes, Code::class, 'codes', 'voucher');
     }
 
     /**

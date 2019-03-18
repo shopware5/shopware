@@ -26,6 +26,7 @@ namespace Shopware\Models\Article;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\ArticleLink as ProductLinkAttribute;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -37,7 +38,7 @@ class Link extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Article
+     * @var Article
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="links")
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
@@ -47,7 +48,7 @@ class Link extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\ArticleLink
+     * @var ProductLinkAttribute
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleLink", mappedBy="articleLink", cascade={"persist"})
      */
@@ -202,7 +203,7 @@ class Link extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\ArticleLink
+     * @return ProductLinkAttribute
      */
     public function getAttribute()
     {
@@ -210,12 +211,12 @@ class Link extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\ArticleLink|array|null $attribute
+     * @param ProductLinkAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\ArticleLink
+     * @return Link
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\ArticleLink::class, 'attribute', 'articleLink');
+        return $this->setOneToOne($attribute, ProductLinkAttribute::class, 'attribute', 'articleLink');
     }
 }

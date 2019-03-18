@@ -26,6 +26,7 @@ namespace Shopware\Models\CustomerStream;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\CustomerStream as CustomerStreamAttribute;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -37,7 +38,7 @@ class CustomerStream extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\CustomerStream
+     * @var CustomerStreamAttribute
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerStream", mappedBy="customerStream", orphanRemoval=true, cascade={"persist"})
      */
@@ -183,7 +184,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\CustomerStream
+     * @return CustomerStreamAttribute
      */
     public function getAttribute()
     {
@@ -191,12 +192,12 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\CustomerStream|array|null $attribute
+     * @param CustomerStreamAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\CustomerStream
+     * @return CustomerStream
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\CustomerStream', 'attribute', 'customerStream');
+        return $this->setOneToOne($attribute, CustomerStreamAttribute::class, 'attribute', 'customerStream');
     }
 }

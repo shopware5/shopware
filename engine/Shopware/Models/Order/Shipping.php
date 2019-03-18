@@ -27,6 +27,9 @@ namespace Shopware\Models\Order;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Security\AttributeCleanerTrait;
+use Shopware\Models\Attribute\OrderShipping as OrderShippingAttribute;
+use Shopware\Models\Country\Country;
+use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Address;
 
 /**
@@ -71,7 +74,7 @@ class Shipping extends ModelEntity
      *
      * @ORM\Column(name="additional_address_line1", type="string", length=255, nullable=true)
      */
-    protected $additionalAddressLine1 = null;
+    protected $additionalAddressLine1;
 
     /**
      * Contains the additional address line data 2
@@ -80,7 +83,7 @@ class Shipping extends ModelEntity
      *
      * @ORM\Column(name="additional_address_line2", type="string", length=255, nullable=true)
      */
-    protected $additionalAddressLine2 = null;
+    protected $additionalAddressLine2;
 
     /**
      * The customer property is the owning side of the association between customer and shipping.
@@ -97,7 +100,7 @@ class Shipping extends ModelEntity
      * The customer property is the owning side of the association between order and billing.
      * The association is joined over the billing orderID and the order id
      *
-     * @var \Shopware\Models\Order\Order
+     * @var Order
      *
      * @ORM\OneToOne(targetEntity="Order", inversedBy="shipping")
      * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
@@ -105,7 +108,7 @@ class Shipping extends ModelEntity
     protected $order;
 
     /**
-     * @var \Shopware\Models\Country\Country
+     * @var Country
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Country\Country")
      * @ORM\JoinColumn(name="countryID", referencedColumnName="id")
@@ -115,7 +118,7 @@ class Shipping extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\OrderShipping
+     * @var OrderShippingAttribute
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderShipping", mappedBy="orderShipping", orphanRemoval=true, cascade={"persist"})
      */
@@ -253,7 +256,7 @@ class Shipping extends ModelEntity
     private $phone = '';
 
     /**
-     * @var \Shopware\Models\Country\State
+     * @var State
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Country\State")
      * @ORM\JoinColumn(name="stateID", referencedColumnName="id")
@@ -513,7 +516,7 @@ class Shipping extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Order\Order
+     * @return Order
      */
     public function getOrder()
     {
@@ -521,7 +524,7 @@ class Shipping extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Order\Order $order
+     * @param Order $order
      */
     public function setOrder($order)
     {
@@ -531,7 +534,7 @@ class Shipping extends ModelEntity
     /**
      * Setter for the state association
      *
-     * @param \Shopware\Models\Country\State $state
+     * @param State $state
      */
     public function setState($state)
     {
@@ -541,7 +544,7 @@ class Shipping extends ModelEntity
     /**
      * Getter for the state association
      *
-     * @return \Shopware\Models\Country\State
+     * @return State
      */
     public function getState()
     {
@@ -549,7 +552,7 @@ class Shipping extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Country\Country
+     * @return Country
      */
     public function getCountry()
     {
@@ -557,7 +560,7 @@ class Shipping extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Country\Country $country
+     * @param Country $country
      */
     public function setCountry($country)
     {
@@ -565,7 +568,7 @@ class Shipping extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\OrderShipping
+     * @return OrderShippingAttribute
      */
     public function getAttribute()
     {
@@ -573,13 +576,13 @@ class Shipping extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\OrderShipping|array|null $attribute
+     * @param OrderShippingAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\OrderShipping
+     * @return Shipping
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\OrderShipping::class, 'attribute', 'orderShipping');
+        return $this->setOneToOne($attribute, OrderShippingAttribute::class, 'attribute', 'orderShipping');
     }
 
     /**

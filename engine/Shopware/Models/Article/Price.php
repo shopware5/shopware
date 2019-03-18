@@ -26,6 +26,8 @@ namespace Shopware\Models\Article;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\LazyFetchModelEntity;
+use Shopware\Models\Attribute\ArticlePrice as ProductPriceAttribute;
+use Shopware\Models\Customer\Group as CustomerGroup;
 
 /**
  * @category Shopware
@@ -40,7 +42,7 @@ class Price extends LazyFetchModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Detail
+     * @var Detail
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail", inversedBy="prices")
      * @ORM\JoinColumn(name="articledetailsID", referencedColumnName="id")
@@ -51,7 +53,7 @@ class Price extends LazyFetchModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\ArticlePrice
+     * @var ProductPriceAttribute
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticlePrice", orphanRemoval=true, mappedBy="articlePrice", cascade={"persist"})
      */
@@ -60,7 +62,7 @@ class Price extends LazyFetchModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Article
+     * @var Article
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Article")
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
@@ -133,7 +135,7 @@ class Price extends LazyFetchModelEntity
     private $percent = 0;
 
     /**
-     * @var \Shopware\Models\Customer\Group
+     * @var CustomerGroup
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Customer\Group")
      * @ORM\JoinColumn(name="pricegroup", referencedColumnName="groupkey")
@@ -141,7 +143,7 @@ class Price extends LazyFetchModelEntity
     private $customerGroup;
 
     /**
-     * @return \Shopware\Models\Article\Article
+     * @return Article
      */
     public function getArticle()
     {
@@ -149,9 +151,9 @@ class Price extends LazyFetchModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Article|array|null $article
+     * @param Article|array|null $article
      *
-     * @return \Shopware\Models\Article\Price
+     * @return Price
      */
     public function setArticle($article)
     {
@@ -173,7 +175,7 @@ class Price extends LazyFetchModelEntity
     /**
      * Set customerGroup
      *
-     * @param \Shopware\Models\Customer\Group $customerGroup
+     * @param CustomerGroup $customerGroup
      *
      * @return Price
      */
@@ -187,11 +189,11 @@ class Price extends LazyFetchModelEntity
     /**
      * Get customerGroup
      *
-     * @return \Shopware\Models\Customer\Group
+     * @return CustomerGroup
      */
     public function getCustomerGroup()
     {
-        /** @var \Shopware\Models\Customer\Group $return */
+        /** @var CustomerGroup $return */
         $return = $this->fetchLazy($this->customerGroup, ['key' => $this->customerGroupKey]);
 
         return $return;
@@ -345,7 +347,7 @@ class Price extends LazyFetchModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\ArticlePrice
+     * @return ProductPriceAttribute
      */
     public function getAttribute()
     {
@@ -353,12 +355,12 @@ class Price extends LazyFetchModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\ArticlePrice|array|null $attribute
+     * @param ProductPriceAttribute|array|null $attribute
      *
-     * @return \Shopware\Components\Model\ModelEntity
+     * @return Price
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\ArticlePrice::class, 'attribute', 'articlePrice');
+        return $this->setOneToOne($attribute, ProductPriceAttribute::class, 'attribute', 'articlePrice');
     }
 }

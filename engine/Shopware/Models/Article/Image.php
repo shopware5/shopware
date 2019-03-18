@@ -28,6 +28,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Article\Image\Mapping;
+use Shopware\Models\Attribute\ArticleImage as ProductImageAttribute;
 use Shopware\Models\Media\Media;
 
 /**
@@ -49,7 +50,7 @@ class Image extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\ArticleImage
+     * @var ProductImageAttribute
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleImage", mappedBy="articleImage", orphanRemoval=true, cascade={"persist"})
      */
@@ -345,7 +346,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Article
+     * @return Article
      */
     public function getArticle()
     {
@@ -353,7 +354,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Article $article
+     * @param Article $article
      */
     public function setArticle($article)
     {
@@ -361,7 +362,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\ArticleImage
+     * @return ProductImageAttribute
      */
     public function getAttribute()
     {
@@ -369,17 +370,17 @@ class Image extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\ArticleImage|array|null $attribute
+     * @param ProductImageAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\ArticleImage
+     * @return Image
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\ArticleImage::class, 'attribute', 'articleImage');
+        return $this->setOneToOne($attribute, ProductImageAttribute::class, 'attribute', 'articleImage');
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getMappings()
     {
@@ -387,17 +388,17 @@ class Image extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Image\Mapping[]|null $mappings
+     * @param Mapping[]|null $mappings
      *
      * @return Image
      */
     public function setMappings($mappings)
     {
-        return $this->setOneToMany($mappings, \Shopware\Models\Article\Image\Mapping::class, 'mappings', 'image');
+        return $this->setOneToMany($mappings, Mapping::class, 'mappings', 'image');
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<Image>
+     * @return ArrayCollection<Image>
      */
     public function getChildren()
     {
@@ -405,7 +406,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<Image> $children
+     * @param ArrayCollection<Image> $children
      */
     public function setChildren($children)
     {
@@ -429,7 +430,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Detail
+     * @return Detail
      */
     public function getArticleDetail()
     {
@@ -437,7 +438,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Detail $articleDetail
+     * @param Detail $articleDetail
      */
     public function setArticleDetail($articleDetail)
     {

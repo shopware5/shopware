@@ -424,14 +424,14 @@ class Article extends ModelEntity
      *
      * @ORM\Column(name="keywords", type="string", length=255, nullable=true)
      */
-    private $keywords = null;
+    private $keywords;
 
     /**
      * @var string
      *
      * @ORM\Column(name="metaTitle", type="string", length=255, nullable=true)
      */
-    private $metaTitle = null;
+    private $metaTitle;
 
     /**
      * @var \DateTimeInterface

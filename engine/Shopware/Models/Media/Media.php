@@ -24,11 +24,14 @@
 
 namespace Shopware\Models\Media;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionIsBlacklistedException;
 use Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionNotAllowedException;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Random;
+use Shopware\Models\Attribute\Media as MediaAttribute;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -96,14 +99,14 @@ class Media extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\Media
+     * @var MediaAttribute
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Media", mappedBy="media", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Image>
+     * @var ArrayCollection<\Shopware\Models\Article\Image>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image", mappedBy="media")
      */
@@ -112,14 +115,14 @@ class Media extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Blog\Media>
+     * @var ArrayCollection<\Shopware\Models\Blog\Media>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Media", mappedBy="media", orphanRemoval=true, cascade={"persist"})
      */
     protected $blogMedia;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Property\Value>
+     * @var ArrayCollection<\Shopware\Models\Property\Value>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Property\Value", mappedBy="media")
      */
@@ -255,7 +258,7 @@ class Media extends ModelEntity
      * Assigned album association. Is automatically loaded when the standard functions "find" ... be used,
      * or if the Query Builder is specified with the association.
      *
-     * @var \Shopware\Models\Media\Album
+     * @var Album
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Media\Album", inversedBy="media")
      * @ORM\JoinColumn(name="albumID", referencedColumnName="id")
@@ -320,7 +323,7 @@ class Media extends ModelEntity
      *
      * @param string $name
      *
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function setName($name)
     {
@@ -344,7 +347,7 @@ class Media extends ModelEntity
      *
      * @param string $description
      *
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function setDescription($description)
     {
@@ -368,7 +371,7 @@ class Media extends ModelEntity
      *
      * @param string $path
      *
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function setPath($path)
     {
@@ -392,7 +395,7 @@ class Media extends ModelEntity
      *
      * @param string $type
      *
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function setType($type)
     {
@@ -416,7 +419,7 @@ class Media extends ModelEntity
      *
      * @param string $extension
      *
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function setExtension($extension)
     {
@@ -440,7 +443,7 @@ class Media extends ModelEntity
      *
      * @param int $userId
      *
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function setUserId($userId)
     {
@@ -464,7 +467,7 @@ class Media extends ModelEntity
      *
      * @param \DateTimeInterface $created
      *
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function setCreated($created)
     {
@@ -488,7 +491,7 @@ class Media extends ModelEntity
      *
      * @param int $fileSize
      *
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function setFileSize($fileSize)
     {
@@ -531,7 +534,7 @@ class Media extends ModelEntity
     /**
      * Returns the instance of the assigned album
      *
-     * @return \Shopware\Models\Media\Album|null
+     * @return Album|null
      */
     public function getAlbum()
     {
@@ -541,9 +544,8 @@ class Media extends ModelEntity
     /**
      * Sets the assigned album.
      *
-     * @param \Shopware\Models\Media\Album $album
      *
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function setAlbum(Album $album)
     {
@@ -568,7 +570,7 @@ class Media extends ModelEntity
      *
      * @param UploadedFile $file
      *
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function setFile(File $file)
     {
@@ -735,8 +737,6 @@ class Media extends ModelEntity
 
     /**
      * Creates the thumbnail files in the different sizes which configured in the album settings.
-     *
-     * @param \Shopware\Models\Media\Album $album
      */
     public function createAlbumThumbnails(Album $album)
     {
@@ -924,7 +924,7 @@ class Media extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getProperties()
     {
@@ -932,7 +932,7 @@ class Media extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $properties
+     * @param ArrayCollection $properties
      */
     public function setProperties($properties)
     {
@@ -982,7 +982,7 @@ class Media extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Media
+     * @return MediaAttribute
      */
     public function getAttribute()
     {
@@ -990,17 +990,17 @@ class Media extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\Media|array|null $attribute
+     * @param MediaAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Media
+     * @return Media
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Media::class, 'attribute', 'media');
+        return $this->setOneToOne($attribute, MediaAttribute::class, 'attribute', 'media');
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getArticles()
     {
@@ -1008,7 +1008,7 @@ class Media extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $articles
+     * @param ArrayCollection $articles
      */
     public function setArticles($articles)
     {
@@ -1287,7 +1287,9 @@ class Media extends ModelEntity
      */
     private function getAllThumbnailSizes()
     {
-        $joinedSizes = Shopware()->Container()->get('dbal_connection')
+        /** @var Connection $connection */
+        $connection = Shopware()->Container()->get('dbal_connection');
+        $joinedSizes = $connection
             ->query('SELECT DISTINCT thumbnail_size FROM s_media_album_settings WHERE thumbnail_size != ""')
             ->fetchAll(\PDO::FETCH_COLUMN);
 

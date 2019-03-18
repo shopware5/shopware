@@ -31,9 +31,9 @@ use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Proxy\Proxy;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use Shopware\Components\Model\Query\SqlWalker;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -87,7 +87,7 @@ class ModelManager extends EntityManager
     /**
      * Serialize an entity or an array of entities to an array
      *
-     * @param array|\Traversable $entity
+     * @param \Traversable|array|ModelEntity $entity
      *
      * @return array
      */
@@ -112,9 +112,7 @@ class ModelManager extends EntityManager
      */
     public function getQueryCount(Query $query)
     {
-        $pagination = $this->createPaginator($query);
-
-        return $pagination->count();
+        return $this->createPaginator($query)->count();
     }
 
     /**
@@ -191,13 +189,13 @@ class ModelManager extends EntityManager
         $proxyFactory = $this->getProxyFactory();
 
         $attributeMetaData = [];
-        /** @var \Doctrine\ORM\Mapping\ClassMetadata $metaData */
+        /** @var ClassMetadata $metaData */
         foreach ($allMetaData as $metaData) {
             $tableName = $metaData->getTableName();
             if (strpos($tableName, '_attributes') === false) {
                 continue;
             }
-            if (!empty($tableNames) && !in_array($tableName, $tableNames)) {
+            if (!empty($tableNames) && !in_array($tableName, $tableNames, true)) {
                 continue;
             }
             $attributeMetaData[] = $metaData;
@@ -226,10 +224,7 @@ class ModelManager extends EntityManager
      */
     public function addCustomHints(Query $query, $index = null, $straightJoin = false, $sqlNoCache = false)
     {
-        $query->setHint(
-            Query::HINT_CUSTOM_OUTPUT_WALKER,
-            'Shopware\Components\Model\Query\SqlWalker\ForceIndexWalker'
-        );
+        $query->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, SqlWalker\ForceIndexWalker::class);
 
         if ($straightJoin === true) {
             $query->setHint(SqlWalker\ForceIndexWalker::HINT_STRAIGHT_JOIN, true);
@@ -293,7 +288,7 @@ class ModelManager extends EntityManager
      * @see        http://borisguery.github.com/bgylibrary
      * @see         https://gist.github.com/1034079#file_serializable_entity.php
      *
-     * @param object|null $entity
+     * @param ModelEntity|null $entity
      *
      * @return array
      */
@@ -303,8 +298,8 @@ class ModelManager extends EntityManager
             return [];
         }
 
-        if ($entity instanceof \Doctrine\ORM\Proxy\Proxy) {
-            /* @var \Doctrine\ORM\Proxy\Proxy $entity */
+        if ($entity instanceof Proxy) {
+            /* @var Proxy $entity */
             $entity->__load();
             $className = get_parent_class($entity);
         } else {
@@ -326,11 +321,9 @@ class ModelManager extends EntityManager
                 }
             } elseif ($mapping['isOwningSide'] && $mapping['type'] & ClassMetadata::TO_ONE) {
                 if ($metadata->reflFields[$field]->getValue($entity) !== null) {
-                    $data[$key] = $this->getUnitOfWork()
-                        ->getEntityIdentifier(
-                            $metadata->reflFields[$field]
-                                ->getValue($entity)
-                            );
+                    $data[$key] = $this->getUnitOfWork()->getEntityIdentifier(
+                        $metadata->reflFields[$field]->getValue($entity)
+                    );
                 } else {
                     // In some case the relationship may not exist, but we want
                     // to know about it
@@ -340,43 +333,5 @@ class ModelManager extends EntityManager
         }
 
         return $data;
-    }
-
-    /**
-     * Convert SQL column types to attribute bundle type mapping
-     *
-     * @param string $type
-     *
-     * @return string
-     */
-    private function convertColumnType($type)
-    {
-        switch (true) {
-            case (bool) preg_match('#\b(char\b|varchar)\b#i', $type):
-                $type = TypeMapping::TYPE_STRING;
-                break;
-            case (bool) preg_match('#\b(text|blob|array|simple_array|json_array|object|binary|guid)\b#i', $type):
-                $type = TypeMapping::TYPE_TEXT;
-                break;
-            case (bool) preg_match('#\b(datetime|timestamp)\b#i', $type):
-                $type = TypeMapping::TYPE_DATETIME;
-                break;
-            case (bool) preg_match('#\b(date|datetimetz)\b#i', $type):
-                $type = TypeMapping::TYPE_DATE;
-                break;
-            case (bool) preg_match('#\b(int|integer|smallint|tinyint|mediumint|bigint)\b#i', $type):
-                $type = TypeMapping::TYPE_INTEGER;
-                break;
-            case (bool) preg_match('#\b(float|double|decimal|dec|fixed|numeric)\b#i', $type):
-                $type = TypeMapping::TYPE_FLOAT;
-                break;
-            case (bool) preg_match('#\b(bool|boolean)\b#i', $type):
-                $type = TypeMapping::TYPE_BOOLEAN;
-                break;
-            default:
-                throw new \InvalidArgumentException(sprintf('Column type "%s" cannot be converted.', $type));
-        }
-
-        return $type;
     }
 }
