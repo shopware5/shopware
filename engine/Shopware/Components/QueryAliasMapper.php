@@ -47,8 +47,6 @@ class QueryAliasMapper
     }
 
     /**
-     * @param \Shopware_Components_Config $config
-     *
      * @return QueryAliasMapper
      */
     public static function createFromConfig(\Shopware_Components_Config $config)
@@ -114,8 +112,6 @@ class QueryAliasMapper
 
     /**
      * Replaces the query params with their matching long form
-     *
-     * @param \Enlight_Controller_Request_RequestHttp $request
      */
     public function replaceShortRequestQueries(\Enlight_Controller_Request_RequestHttp $request)
     {

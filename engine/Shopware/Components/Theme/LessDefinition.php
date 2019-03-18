@@ -112,25 +112,16 @@ class LessDefinition
         $this->theme = $theme;
     }
 
-    /**
-     * @param mixed $config
-     */
     public function setConfig($config)
     {
         $this->config = $config;
     }
 
-    /**
-     * @return mixed
-     */
     public function getConfig()
     {
         return $this->config;
     }
 
-    /**
-     * @param mixed $files
-     */
     public function setFiles($files)
     {
         $this->files = $files;
@@ -168,9 +159,6 @@ class LessDefinition
         return $this->theme;
     }
 
-    /**
-     * @param Theme $theme
-     */
     public function setTheme(Theme $theme)
     {
         $this->theme = $theme;

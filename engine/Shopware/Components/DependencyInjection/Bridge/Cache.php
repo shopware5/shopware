@@ -35,10 +35,9 @@ use Zend_Locale_Data;
 class Cache
 {
     /**
-     * @param string                $backend
-     * @param array                 $frontendOptions
-     * @param array                 $backendOptions
-     * @param ShopwareReleaseStruct $release
+     * @param string $backend
+     * @param array  $frontendOptions
+     * @param array  $backendOptions
      *
      * @throws \Zend_Cache_Exception
      *

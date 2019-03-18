@@ -77,8 +77,6 @@ class SnippetsValidateCommand extends ShopwareCommand
     }
 
     /**
-     * @param SnippetValidator $validator
-     *
      * @throws \Exception
      *
      * @return string[]
@@ -103,8 +101,7 @@ class SnippetsValidateCommand extends ShopwareCommand
     }
 
     /**
-     * @param SnippetValidator $validator
-     * @param string           $pluginBasePath
+     * @param string $pluginBasePath
      *
      * @return array
      */

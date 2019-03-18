@@ -30,8 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface SearchTermQueryBuilderInterface
 {
     /**
-     * @param ShopContextInterface $context
-     * @param string               $term
+     * @param string $term
      *
      * @return BoolQuery
      */

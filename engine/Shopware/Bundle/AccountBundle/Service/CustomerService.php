@@ -41,10 +41,6 @@ class CustomerService implements CustomerServiceInterface
      */
     private $validator;
 
-    /**
-     * @param ModelManager               $modelManager
-     * @param CustomerValidatorInterface $validator
-     */
     public function __construct(ModelManager $modelManager, CustomerValidatorInterface $validator)
     {
         $this->modelManager = $modelManager;
@@ -52,8 +48,6 @@ class CustomerService implements CustomerServiceInterface
     }
 
     /**
-     * @param Customer $customer
-     *
      * @throws ValidationException
      */
     public function update(Customer $customer)

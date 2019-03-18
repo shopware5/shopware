@@ -34,9 +34,6 @@ interface ShopPageServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ShopPageGatewayInterface::getList()
      *
-     * @param array                       $ids
-     * @param Struct\ShopContextInterface $context
-     *
      * @return Struct\ShopPage[] Indexed by the shop page id
      */
     public function getList(array $ids, Struct\ShopContextInterface $context);

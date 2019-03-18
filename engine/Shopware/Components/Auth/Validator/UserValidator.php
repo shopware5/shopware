@@ -45,17 +45,12 @@ class UserValidator implements UserValidatorInterface
      */
     private $validationContext;
 
-    /**
-     * @param ValidatorInterface $validator
-     */
     public function __construct(ValidatorInterface $validator)
     {
         $this->validator = $validator;
     }
 
     /**
-     * @param User $user
-     *
      * @throws ValidationException
      */
     public function validate(User $user)

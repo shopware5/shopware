@@ -770,8 +770,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     }
 
     /**
-     * @param StoreException $exception
-     *
      * @return mixed|string
      */
     private function getExceptionMessage(StoreException $exception)
@@ -844,10 +842,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         );
     }
 
-    /**
-     * @param BasketStruct $basket
-     * @param array        $positions
-     */
     private function loadBasketPlugins(BasketStruct $basket, array $positions)
     {
         $context = new PluginsByTechnicalNameRequest(
@@ -874,7 +868,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     /**
      * @param string $orderNumber
-     * @param array  $positions
      *
      * @return string|null
      */
@@ -891,9 +884,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         return null;
     }
 
-    /**
-     * @param Exception $e
-     */
     private function handleException(Exception $e)
     {
         if (!($e instanceof StoreException)) {
@@ -938,7 +928,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     /**
      * Gets an array of plugins that are in Safe Mode
      *
-     * @param array $plugins
      *
      * @return Plugin[]
      */

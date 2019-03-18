@@ -30,13 +30,6 @@ use Shopware\Components\Template\Security;
 class Template
 {
     /**
-     * @param \Enlight_Event_EventManager          $eventManager
-     * @param \Enlight_Components_Snippet_Resource $snippetResource
-     * @param EscaperInterface                     $escaper
-     * @param array                                $templateConfig
-     * @param array                                $securityConfig
-     * @param array                                $backendOptions
-     *
      * @return \Enlight_Template_Manager
      */
     public function factory(

@@ -31,7 +31,7 @@ use Shopware\Components\Model\ModelEntity;
  * Locale Model Entity
  *
  * @ORM\Table(name="s_core_locales")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Locale extends ModelEntity
 {
@@ -39,7 +39,7 @@ class Locale extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

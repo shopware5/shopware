@@ -71,7 +71,7 @@ class Address extends ModelEntity
      *
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -490,9 +490,6 @@ class Address extends ModelEntity
         return $this->customer;
     }
 
-    /**
-     * @param Customer $customer
-     */
     public function setCustomer(Customer $customer)
     {
         $this->customer = $customer;
@@ -546,9 +543,6 @@ class Address extends ModelEntity
         return $this->country;
     }
 
-    /**
-     * @param Country $country
-     */
     public function setCountry(Country $country)
     {
         $this->country = $country;
@@ -562,9 +556,6 @@ class Address extends ModelEntity
         return $this->state;
     }
 
-    /**
-     * @param State|null $state
-     */
     public function setState(State $state = null)
     {
         $this->state = $state;

@@ -58,11 +58,6 @@ class MediaService implements MediaServiceInterface
     private $config;
 
     /**
-     * @param FilesystemInterface $filesystem
-     * @param StrategyInterface   $strategy
-     * @param ContainerInterface  $container
-     * @param array               $config
-     *
      * @throws \Exception
      */
     public function __construct(FilesystemInterface $filesystem, StrategyInterface $strategy, ContainerInterface $container, array $config)

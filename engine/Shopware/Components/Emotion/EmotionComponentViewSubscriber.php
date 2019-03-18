@@ -49,9 +49,6 @@ class EmotionComponentViewSubscriber implements SubscriberInterface
         ];
     }
 
-    /**
-     * @param \Enlight_Event_EventArgs $args
-     */
     public function registerBackendTemplates(\Enlight_Event_EventArgs $args)
     {
         /** @var \Enlight_View_Default $view */
@@ -81,9 +78,6 @@ class EmotionComponentViewSubscriber implements SubscriberInterface
         }
     }
 
-    /**
-     * @param \Enlight_Event_EventArgs $args
-     */
     public function registerWidgetTemplates(\Enlight_Event_EventArgs $args)
     {
         /** @var \Enlight_View_Default $view */

@@ -53,7 +53,7 @@ class Queue extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -109,9 +109,6 @@ class Queue extends ModelEntity
         $this->articleDetails = new ArrayCollection();
     }
 
-    /**
-     * @param \DateTimeInterface $created
-     */
     public function setCreated(\DateTimeInterface $created)
     {
         $this->created = $created;

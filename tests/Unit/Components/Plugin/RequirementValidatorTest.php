@@ -245,6 +245,48 @@ class RequirementValidatorTest extends TestCase
 
         $em = $this->createConfiguredMock(ModelManager::class, ['getRepository' => $repo]);
 
-        return new RequirementValidator($em, new XmlPluginReader());
+        return new RequirementValidator($em, new XmlPluginReader(), $this->createSnippetManager());
+    }
+
+    /**
+     * @return \Enlight_Components_Snippet_Manager
+     */
+    private function createSnippetManager()
+    {
+        $snippetNamespace = $this->createMock(\Enlight_Components_Snippet_Namespace::class);
+
+        $snippetNamespace
+            ->expects($this->any())
+            ->method('get')
+            ->willReturnCallback(function ($arg) {
+                switch ($arg) {
+                    case 'plugin_min_shopware_version':
+                        return 'Plugin requires at least Shopware version %s';
+                    case 'plugin_max_shopware_version':
+                        return 'Plugin is only compatible with Shopware version <= %s';
+                    case 'shopware_version_blacklisted':
+                        return 'Shopware version %s is blacklisted by the plugin';
+                    case 'required_plugin_not_found':
+                        return 'Required plugin %s was not found';
+                    case 'required_plugin_not_installed':
+                        return 'Required plugin %s is not installed';
+                    case 'required_plugin_not_active':
+                        return 'Required plugin %s is not active';
+                    case 'plugin_version_required':
+                        return 'Version %s of plugin %s is required.';
+                    case 'plugin_version_max':
+                        return 'Plugin is only compatible with Plugin %s version <= %s';
+                    case 'required_plugin_blacklisted':
+                        return 'Required plugin %s with version %s is blacklisted';
+                }
+            });
+
+        $snippetManager = $this->createMock(\Enlight_Components_Snippet_Manager::class);
+
+        $snippetManager->expects($this->any())
+            ->method('getNamespace')
+            ->willReturn($snippetNamespace);
+
+        return $snippetManager;
     }
 }

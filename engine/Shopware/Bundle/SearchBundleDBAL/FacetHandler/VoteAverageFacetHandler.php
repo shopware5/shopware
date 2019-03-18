@@ -59,12 +59,6 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
      */
     private $config;
 
-    /**
-     * @param QueryBuilderFactoryInterface         $queryBuilderFactory
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper                     $queryAliasMapper
-     * @param \Shopware_Components_Config          $config
-     */
     public function __construct(
         QueryBuilderFactoryInterface $queryBuilderFactory,
         \Shopware_Components_Snippet_Manager $snippetManager,
@@ -81,11 +75,6 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param FacetInterface       $facet
-     * @param Criteria             $reverted
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
-     *
      * @return FacetResultInterface|null
      */
     public function generatePartialFacet(
@@ -146,7 +135,6 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
     /**
      * Checks if the passed facet can be handled by this class.
      *
-     * @param FacetInterface $facet
      *
      * @return bool
      */
@@ -155,10 +143,6 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
         return $facet instanceof VoteAverageFacet;
     }
 
-    /**
-     * @param ShopContextInterface $context
-     * @param QueryBuilder         $query
-     */
     private function joinVoteAverage(ShopContextInterface $context, QueryBuilder $query)
     {
         $shopCondition = '';

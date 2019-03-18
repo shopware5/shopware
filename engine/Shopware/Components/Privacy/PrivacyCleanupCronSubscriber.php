@@ -39,10 +39,6 @@ class PrivacyCleanupCronSubscriber implements SubscriberInterface
      */
     private $config;
 
-    /**
-     * @param PrivacyServiceInterface    $privacyService
-     * @param Shopware_Components_Config $config
-     */
     public function __construct(PrivacyServiceInterface $privacyService, Shopware_Components_Config $config)
     {
         $this->privacyService = $privacyService;

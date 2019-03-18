@@ -30,8 +30,6 @@ use Shopware\Components\License\Struct\LicenseUnpackRequest;
 interface LicenseUnpackServiceInterface
 {
     /**
-     * @param LicenseUnpackRequest $request
-     *
      * @return LicenseInformation
      */
     public function evaluateLicense(LicenseUnpackRequest $request);

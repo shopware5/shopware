@@ -577,7 +577,6 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
     /**
      * Fetches shop domains for the current id
      *
-     * @param AccessTokenStruct $token
      *
      * @throws Exception
      *

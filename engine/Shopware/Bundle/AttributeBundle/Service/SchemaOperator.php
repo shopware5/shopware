@@ -43,10 +43,6 @@ class SchemaOperator
      */
     private $nameBlacklist;
 
-    /**
-     * @param Connection   $connection
-     * @param TableMapping $tableMapping
-     */
     public function __construct(Connection $connection, TableMapping $tableMapping)
     {
         $this->connection = $connection;

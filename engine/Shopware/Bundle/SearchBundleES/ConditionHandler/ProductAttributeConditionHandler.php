@@ -48,9 +48,6 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
      */
     private $attributeService;
 
-    /**
-     * @param CrudService $attributeService
-     */
     public function __construct(CrudService $attributeService)
     {
         $this->attributeService = $attributeService;
@@ -96,8 +93,6 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
     }
 
     /**
-     * @param ProductAttributeCondition $criteriaPart
-     *
      * @return BuilderInterface
      */
     private function createQuery(ProductAttributeCondition $criteriaPart)

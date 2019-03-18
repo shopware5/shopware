@@ -359,8 +359,6 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     }
 
     /**
-     * @param Enlight_Event_EventArgs $args
-     *
      * @throws Exception
      *
      * @return Enlight_Components_Session_Namespace
@@ -382,7 +380,6 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      * Initiate shopware auth resource
      * database adapter by default
      *
-     * @param Enlight_Event_EventArgs $args
      *
      * @throws \Exception
      * @throws \SmartyException
@@ -502,8 +499,6 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     }
 
     /**
-     * @param Container $container
-     *
      * @throws \InvalidArgumentException
      *
      * @return \SessionHandlerInterface|null

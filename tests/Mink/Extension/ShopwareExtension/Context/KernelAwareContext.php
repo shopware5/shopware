@@ -31,8 +31,6 @@ interface KernelAwareContext extends Context
 {
     /**
      * Sets Kernel instance.
-     *
-     * @param Kernel $kernel
      */
     public function setKernel(Kernel $kernel);
 }

@@ -83,8 +83,6 @@ abstract class StoreCommand extends ShopwareCommand
     }
 
     /**
-     * @param array $input
-     *
      * @throws \Exception
      */
     protected function handleError(array $input)
@@ -97,8 +95,6 @@ abstract class StoreCommand extends ShopwareCommand
     }
 
     /**
-     * @param InputInterface $input
-     *
      * @return string
      */
     protected function setupShopwareVersion(InputInterface $input)
@@ -112,9 +108,6 @@ abstract class StoreCommand extends ShopwareCommand
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
      * @throws \Exception
      *
      * @return AccessTokenStruct
@@ -164,9 +157,6 @@ abstract class StoreCommand extends ShopwareCommand
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
      * @throws \Exception
      *
      * @return string

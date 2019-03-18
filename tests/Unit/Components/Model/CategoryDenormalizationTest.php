@@ -80,9 +80,6 @@ class CategoryDenormalizationTest extends TestCase
         parent::setUp();
     }
 
-    /**
-     * @return DefaultConnection
-     */
     public function getConnection(): DefaultConnection
     {
         if (!extension_loaded('sqlite3')) {
@@ -99,8 +96,6 @@ class CategoryDenormalizationTest extends TestCase
      * 3. English
      *   6. World of food
      *     7. Spirits
-     *
-     * @return IDataSet
      */
     public function getDataSet(): IDataSet
     {

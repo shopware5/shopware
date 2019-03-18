@@ -43,7 +43,7 @@ use Shopware\Components\Model\ModelEntity;
  *  -   UNIQUE KEY `name` (`name`)
  * </code>
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_core_auth_roles")
  */
 class Role extends ModelEntity implements \Zend_Acl_Role_Interface
@@ -52,7 +52,7 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

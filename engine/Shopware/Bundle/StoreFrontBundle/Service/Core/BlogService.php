@@ -41,10 +41,6 @@ class BlogService implements Service\BlogServiceInterface
      */
     private $mediaService;
 
-    /**
-     * @param Gateway\BlogGatewayInterface  $blogGateway
-     * @param Service\MediaServiceInterface $mediaService
-     */
     public function __construct(Gateway\BlogGatewayInterface $blogGateway, Service\MediaServiceInterface $mediaService)
     {
         $this->blogGateway = $blogGateway;
@@ -73,8 +69,7 @@ class BlogService implements Service\BlogServiceInterface
     }
 
     /**
-     * @param Blog[]                      $blogs
-     * @param Struct\ShopContextInterface $context
+     * @param Blog[] $blogs
      */
     private function resolveMedias(array $blogs, Struct\ShopContextInterface $context)
     {

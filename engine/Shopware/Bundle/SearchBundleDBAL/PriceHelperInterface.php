@@ -24,42 +24,31 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * @deprecated since version 5.3, to be removed in 6.0 - Use \Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface instead
- */
 interface PriceHelperInterface
 {
     /**
      * Returns the full selection for the cheapest price
      *
-     * @param Struct\ProductContextInterface $context
      *
      * @return string
      */
-    public function getSelection(Struct\ProductContextInterface $context);
+    public function getSelection(ProductContextInterface $context);
 
     /**
      * Joins the customer prices to the provided query
-     *
-     * @param QueryBuilder                $query
-     * @param Struct\ShopContextInterface $context
      */
-    public function joinPrices(QueryBuilder $query, Struct\ShopContextInterface $context);
+    public function joinPrices(QueryBuilder $query, ShopContextInterface $context);
 
     /**
      * Joins the fallback customer group prices for the provided query
-     *
-     * @param QueryBuilder                $query
-     * @param Struct\ShopContextInterface $context
      */
-    public function joinDefaultPrices(QueryBuilder $query, Struct\ShopContextInterface $context);
+    public function joinDefaultPrices(QueryBuilder $query, ShopContextInterface $context);
 
     /**
      * Joins variants to the selected products which are available
-     *
-     * @param QueryBuilder $query
      */
     public function joinAvailableVariant(QueryBuilder $query);
 }

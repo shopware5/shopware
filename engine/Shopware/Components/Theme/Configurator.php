@@ -67,12 +67,6 @@ class Configurator
      */
     protected $eventManager;
 
-    /**
-     * @param Model\ModelManager          $entityManager
-     * @param Util                        $util
-     * @param Form\Persister\Theme        $persister
-     * @param \Enlight_Event_EventManager $eventManager
-     */
     public function __construct(
         Model\ModelManager $entityManager,
         Util $util,
@@ -94,7 +88,6 @@ class Configurator
      *
      * If one of the theme container elements isn't valid the function throws an exception
      *
-     * @param Theme $theme
      *
      * @throws \Exception
      */
@@ -152,7 +145,6 @@ class Configurator
     /**
      * Helper function which validates the passed Shopware\Components\Form\Container.
      *
-     * @param Form\Interfaces\Container $container
      *
      * @throws \Exception
      */
@@ -179,8 +171,6 @@ class Configurator
      * Synchronize the theme configuration sets of the file system and
      * the database.
      *
-     * @param Theme         $theme
-     * @param Shop\Template $template
      *
      * @throws \Exception
      */
@@ -257,10 +247,6 @@ class Configurator
     /**
      * Helper function which removes all unused configuration containers and elements
      * which are stored in the database but not in the passed container.
-     *
-     * @param \Doctrine\Common\Collections\ArrayCollection $containers
-     * @param \Doctrine\Common\Collections\ArrayCollection $fields
-     * @param Form\Container                               $container
      */
     private function removeUnused(
         ArrayCollection $containers,
@@ -297,10 +283,6 @@ class Configurator
      * with only one query.
      *
      * Used to synchronize the theme configuration in the synchronize() function.
-     *
-     * @param Theme $theme
-     *
-     * @return mixed
      */
     private function getTemplate(Theme $theme)
     {
@@ -423,9 +405,6 @@ class Configurator
      *
      * This allows the developer to display the theme configuration of extended
      * themes.
-     *
-     * @param Theme                       $theme
-     * @param Form\Container\TabContainer $container
      */
     private function injectConfig(Theme $theme, Form\Container\TabContainer $container)
     {

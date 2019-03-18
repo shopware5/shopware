@@ -41,8 +41,6 @@ final class KernelAwareInitializer implements ContextInitializer, EventSubscribe
 
     /**
      * Initializes initializer.
-     *
-     * @param Kernel $kernel
      */
     public function __construct(Kernel $kernel)
     {

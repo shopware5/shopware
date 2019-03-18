@@ -32,8 +32,5 @@ interface SitemapExporterInterface
     const STRATEGY_CRON = 2;
     const STRATEGY_LIVE = 3;
 
-    /**
-     * @param Shop $shop
-     */
     public function generate(Shop $shop);
 }

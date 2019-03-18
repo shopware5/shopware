@@ -31,7 +31,6 @@ class StoreExtjsValueParser implements StoreValueParserInterface
     /**
      * Parses store options.
      *
-     * @param DOMElement $element
      *
      * @return string|array
      */

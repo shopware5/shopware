@@ -42,7 +42,7 @@ use Shopware\Components\Model\ModelEntity;
  *   - KEY `groupKey` (`groupKey`)
  * </code>
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_core_customergroups")
  */
 class Group extends ModelEntity
@@ -81,7 +81,7 @@ class Group extends ModelEntity
      *
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

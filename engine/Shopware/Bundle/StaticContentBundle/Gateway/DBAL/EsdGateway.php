@@ -85,9 +85,6 @@ class EsdGateway implements EsdGatewayInterface
         return $this->esdHydrator->hydrate($result);
     }
 
-    /**
-     * @return QueryBuilder
-     */
     protected function getDefaultQuery(): QueryBuilder
     {
         return $this->connection->createQueryBuilder()
@@ -100,9 +97,6 @@ class EsdGateway implements EsdGatewayInterface
         ;
     }
 
-    /**
-     * @return QueryBuilder
-     */
     protected function getFallbackQuery(): QueryBuilder
     {
         return $this->connection->createQueryBuilder()

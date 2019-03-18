@@ -46,7 +46,7 @@ use Shopware\Models\Customer\Address;
  *   - UNIQUE KEY `userID` (`userID`)
  * </code>
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_order_shippingaddress")
  */
 class Shipping extends ModelEntity
@@ -128,7 +128,7 @@ class Shipping extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -624,8 +624,6 @@ class Shipping extends ModelEntity
 
     /**
      * Transfer values from the new address object
-     *
-     * @param Address $address
      */
     public function fromAddress(Address $address)
     {

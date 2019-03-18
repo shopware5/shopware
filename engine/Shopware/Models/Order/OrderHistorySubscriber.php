@@ -40,9 +40,6 @@ class OrderHistorySubscriber implements EventSubscriber
         return [Events::preUpdate];
     }
 
-    /**
-     * @param PreUpdateEventArgs $eventArgs
-     */
     public function preUpdate(PreUpdateEventArgs $eventArgs)
     {
         $order = $eventArgs->getEntity();

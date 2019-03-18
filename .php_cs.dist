@@ -53,13 +53,15 @@ return PhpCsFixer\Config::create()
             'annotations' => ['copyright', 'category'],
         ],
         'phpdoc_var_annotation_correct_order' => true,
-
+        'doctrine_annotation_indentation' => true,
+        'doctrine_annotation_spaces' => true,
+        'no_superfluous_phpdoc_tags' => true,
         PhpCsFixerCustomFixers\Fixer\NoUselessCommentFixer::name() => true,
         PhpCsFixerCustomFixers\Fixer\NoUnneededConcatenationFixer::name() => true,
         PhpCsFixerCustomFixers\Fixer\SingleSpaceAfterStatementFixer::name() => true,
         PhpCsFixerCustomFixers\Fixer\SingleSpaceBeforeStatementFixer::name() => true,
         PhpCsFixerCustomFixers\Fixer\PhpdocParamTypeFixer::name() => true,
-        PhpCsFixerCustomFixers\Fixer\OperatorLinebreakFixer::name() => ['only_booleans' => true]
+        PhpCsFixerCustomFixers\Fixer\OperatorLinebreakFixer::name() => ['only_booleans' => true],
     ])
     ->setFinder($finder)
 ;

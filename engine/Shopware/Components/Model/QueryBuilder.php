@@ -99,8 +99,6 @@ class QueryBuilder extends BaseQueryBuilder
      *
      * @deprecated This method is deprecated since 5.4.
      *
-     * @param array $parameters
-     *
      * @return QueryBuilder this QueryBuilder instance
      */
     public function addParameters(array $parameters)
@@ -150,7 +148,6 @@ class QueryBuilder extends BaseQueryBuilder
      *      )));
      * </code>
      *
-     * @param array $filter
      *
      * @return QueryBuilder
      */

@@ -30,9 +30,6 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class ControllerCompilerPass implements CompilerPassInterface
 {
-    /**
-     * @param ContainerBuilder $container
-     */
     public function process(ContainerBuilder $container)
     {
         $controllers = [];

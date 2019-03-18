@@ -37,17 +37,12 @@ class ProductNumberSearchFactory
      */
     private $handlers;
 
-    /**
-     * @param IteratorAggregate $handlers
-     */
     public function __construct(IteratorAggregate $handlers)
     {
         $this->handlers = iterator_to_array($handlers, false);
     }
 
     /**
-     * @param ContainerInterface $container
-     *
      * @return ProductNumberSearch
      */
     public function factory(ContainerInterface $container)
@@ -60,8 +55,6 @@ class ProductNumberSearchFactory
     }
 
     /**
-     * @param ContainerInterface $container
-     *
      * @return ArrayCollection
      */
     public function registerHandlerCollection(ContainerInterface $container)
@@ -72,8 +65,6 @@ class ProductNumberSearchFactory
     }
 
     /**
-     * @param ContainerInterface $container
-     *
      * @throws \Exception
      *
      * @return \Shopware\Bundle\SearchBundleES\HandlerInterface[]

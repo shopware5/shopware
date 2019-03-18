@@ -44,7 +44,7 @@ use Shopware\Components\Model\ModelEntity;
  * </code>
  *
  * @ORM\Table(name="s_premium_holidays")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Holiday extends ModelEntity
 {
@@ -53,7 +53,7 @@ class Holiday extends ModelEntity
      *
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

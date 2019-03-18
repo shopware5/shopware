@@ -75,15 +75,6 @@ class RegisterService implements RegisterServiceInterface
      */
     private $addressService;
 
-    /**
-     * @param ModelManager                    $modelManager
-     * @param CustomerValidatorInterface      $validator
-     * @param Shopware_Components_Config      $config
-     * @param Manager                         $passwordManager
-     * @param NumberRangeIncrementerInterface $numberIncrementer
-     * @param Connection                      $connection
-     * @param AddressServiceInterface         $addressService
-     */
     public function __construct(
         ModelManager $modelManager,
         CustomerValidatorInterface $validator,
@@ -103,11 +94,6 @@ class RegisterService implements RegisterServiceInterface
     }
 
     /**
-     * @param Shop         $shop
-     * @param Customer     $customer
-     * @param Address      $billing
-     * @param Address|null $shipping
-     *
      * @throws \Exception
      */
     public function register(
@@ -150,9 +136,6 @@ class RegisterService implements RegisterServiceInterface
         }
     }
 
-    /**
-     * @param Customer $customer
-     */
     private function saveReferer(Customer $customer)
     {
         if (!$customer->getReferer()) {
@@ -166,10 +149,6 @@ class RegisterService implements RegisterServiceInterface
         ]);
     }
 
-    /**
-     * @param Shop     $shop
-     * @param Customer $customer
-     */
     private function saveCustomer(Shop $shop, Customer $customer)
     {
         if ($customer->getValidation() !== ContextService::FALLBACK_CUSTOMER_GROUP) {
@@ -240,8 +219,6 @@ class RegisterService implements RegisterServiceInterface
     }
 
     /**
-     * @param Customer $customer
-     *
      * @return int
      */
     private function getPartnerId(Customer $customer)
@@ -250,9 +227,7 @@ class RegisterService implements RegisterServiceInterface
     }
 
     /**
-     * @param Shop     $shop
-     * @param Customer $customer
-     * @param string   $hash
+     * @param string $hash
      *
      * @throws \Doctrine\ORM\ORMException
      */
@@ -298,8 +273,7 @@ class RegisterService implements RegisterServiceInterface
     }
 
     /**
-     * @param Customer $customer
-     * @param string   $hash
+     * @param string $hash
      *
      * @throws \Doctrine\DBAL\DBALException
      */

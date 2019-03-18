@@ -47,10 +47,6 @@ class BlogComponentHandler implements ComponentHandlerInterface
      */
     private $connection;
 
-    /**
-     * @param BlogServiceInterface $blogService
-     * @param Connection           $connection
-     */
     public function __construct(BlogServiceInterface $blogService, Connection $connection)
     {
         $this->blogService = $blogService;
@@ -58,8 +54,6 @@ class BlogComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param Element $element
-     *
      * @return bool
      */
     public function supports(Element $element)
@@ -68,19 +62,12 @@ class BlogComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param PrepareDataCollection            $collection
-     * @param Element                          $element
      * @param ShopContext|ShopContextInterface $context
      */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
     }
 
-    /**
-     * @param ResolvedDataCollection $collection
-     * @param Element                $element
-     * @param ShopContextInterface   $context
-     */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
         $numberOfEntries = $element->getConfig()->get('entry_amount');
@@ -92,9 +79,8 @@ class BlogComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param int                  $numberOfEntries
-     * @param int                  $categoryId
-     * @param ShopContextInterface $context
+     * @param int $numberOfEntries
+     * @param int $categoryId
      *
      * @return Blog[]
      */

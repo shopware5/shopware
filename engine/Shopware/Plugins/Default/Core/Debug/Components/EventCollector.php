@@ -42,10 +42,6 @@ class EventCollector implements CollectorInterface
      */
     private $utils;
 
-    /**
-     * @param \Enlight_Event_EventManager $eventManager
-     * @param Utils                       $utils
-     */
     public function __construct(\Enlight_Event_EventManager $eventManager, Utils $utils)
     {
         $this->eventManager = $eventManager;
@@ -57,11 +53,6 @@ class EventCollector implements CollectorInterface
         $this->eventManager->registerSubscriber($this->getListeners());
     }
 
-    /**
-     * @param Logger $log
-     *
-     * @return mixed
-     */
     public function logResults(Logger $log)
     {
         foreach (array_keys($this->results) as $event) {
@@ -108,11 +99,6 @@ class EventCollector implements CollectorInterface
         $log->table($table);
     }
 
-    /**
-     * @param \Enlight_Event_EventArgs $args
-     *
-     * @return mixed
-     */
     public function onBenchmarkEvent(\Enlight_Event_EventArgs $args)
     {
         $event = $args->getName();

@@ -464,9 +464,6 @@ class ListProduct extends BaseProduct
         $this->shippingFree = $shippingFree;
     }
 
-    /**
-     * @param Unit $unit
-     */
     public function setUnit(Unit $unit)
     {
         $this->unit = $unit;
@@ -1193,9 +1190,6 @@ class ListProduct extends BaseProduct
         $this->categories = $categories;
     }
 
-    /**
-     * @param Price $price
-     */
     public function setListingPrice(Price $price)
     {
         $this->listingPrice = $price;

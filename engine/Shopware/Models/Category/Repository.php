@@ -83,8 +83,6 @@ class Repository extends ModelRepository
     /**
      * Returns the \Doctrine\ORM\Query to select all categories for example for the backend tree
      *
-     * @param array    $filterBy
-     * @param array    $orderBy
      * @param int|null $limit
      * @param int|null $offset
      * @param bool     $selectOnlyActive
@@ -103,8 +101,6 @@ class Repository extends ModelRepository
     /**
      * Returns a query builder object to get all defined categories with an count of sub categories.
      *
-     * @param array    $filterBy
-     * @param array    $orderBy
      * @param int|null $limit
      * @param int|null $offset
      *
@@ -176,8 +172,6 @@ class Repository extends ModelRepository
      * Helper method to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array    $filterBy
-     * @param array    $orderBy
      * @param int|null $limit
      * @param int|null $offset
      * @param bool     $selectOnlyActive
@@ -642,8 +636,6 @@ class Repository extends ModelRepository
     /**
      * @param int          $id
      * @param string|array $fields
-     *
-     * @return mixed
      */
     protected function getCategoryPathQuery($id, $fields)
     {

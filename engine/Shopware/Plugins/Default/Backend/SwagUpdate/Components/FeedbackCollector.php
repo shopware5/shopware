@@ -50,10 +50,8 @@ class FeedbackCollector
     private $release;
 
     /**
-     * @param string                $apiEndpoint
-     * @param OpenSSLEncryption     $encryption
-     * @param string                $uniqueId
-     * @param ShopwareReleaseStruct $release
+     * @param string $apiEndpoint
+     * @param string $uniqueId
      */
     public function __construct($apiEndpoint, OpenSSLEncryption $encryption, $uniqueId, ShopwareReleaseStruct $release)
     {
@@ -74,8 +72,6 @@ class FeedbackCollector
     }
 
     /**
-     * @param array $data
-     *
      * @return \Zend_Http_Response
      */
     private function submitData(array $data)

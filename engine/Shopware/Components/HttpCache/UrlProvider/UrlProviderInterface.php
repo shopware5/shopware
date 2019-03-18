@@ -34,7 +34,6 @@ interface UrlProviderInterface
     public function getName();
 
     /**
-     * @param Context  $context
      * @param int|null $limit
      * @param int|null $offset
      *
@@ -43,8 +42,6 @@ interface UrlProviderInterface
     public function getUrls(Context $context, $limit = null, $offset = null);
 
     /**
-     * @param Context $context
-     *
      * @return int
      */
     public function getCount(Context $context);

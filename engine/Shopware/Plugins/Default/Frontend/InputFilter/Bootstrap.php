@@ -60,8 +60,6 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
 
     /**
      * Event listener method
-     *
-     * @param Enlight_Controller_EventArgs $args
      */
     public function onRouteShutdown(Enlight_Controller_EventArgs $args)
     {

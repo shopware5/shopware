@@ -71,8 +71,7 @@ class Listing extends Page implements HelperSelectorInterface
     /**
      * Opens the listing page
      *
-     * @param array $params
-     * @param bool  $autoPage
+     * @param bool $autoPage
      */
     public function openListing(array $params, $autoPage = true)
     {
@@ -123,8 +122,6 @@ class Listing extends Page implements HelperSelectorInterface
     /**
      * Sets the article filter
      *
-     * @param FilterGroup $filterGroups
-     * @param array       $properties
      *
      * @throws \Exception
      */
@@ -193,8 +190,6 @@ class Listing extends Page implements HelperSelectorInterface
     /**
      * Checks the properties of a product box
      *
-     * @param ArticleBox $articleBox
-     * @param array      $properties
      *
      * @throws \Exception
      */
@@ -278,8 +273,6 @@ class Listing extends Page implements HelperSelectorInterface
     /**
      * Sets the filters
      *
-     * @param FilterGroup $filterGroups
-     * @param array       $properties
      *
      * @throws \Exception
      */

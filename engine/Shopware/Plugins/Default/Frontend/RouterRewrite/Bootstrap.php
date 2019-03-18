@@ -56,8 +56,6 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
 
     /**
      * Loads the plugin before the dispatch.
-     *
-     * @param Enlight_Event_EventArgs $args
      */
     public function onStartDispatch(Enlight_Event_EventArgs $args)
     {
@@ -70,8 +68,6 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
 
     /**
      * Checks the url / the request and passes it around if necessary.
-     *
-     * @param Enlight_Controller_EventArgs $args
      */
     public function onPreDispatch(Enlight_Controller_EventArgs $args)
     {

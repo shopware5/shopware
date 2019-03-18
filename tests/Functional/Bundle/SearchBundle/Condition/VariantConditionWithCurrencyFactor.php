@@ -333,10 +333,9 @@ class VariantConditionWithCurrencyFactor extends TestCase
     /**
      * Get products and set the graduated prices and inStock of the variants.
      *
-     * @param string      $number
-     * @param TestContext $context
-     * @param Category    $category
-     * @param array       $data
+     * @param string   $number
+     * @param Category $category
+     * @param array    $data
      *
      * @return array
      */
@@ -503,7 +502,6 @@ class VariantConditionWithCurrencyFactor extends TestCase
      * Assert the cheapest and pseudo prices of the products / variants.
      *
      * @param ListProduct[] $products
-     * @param array         $prices
      */
     private function assertPrices(array  $products, array $prices)
     {
@@ -525,7 +523,6 @@ class VariantConditionWithCurrencyFactor extends TestCase
      * Assert the counting of the cheapest and pseudo prices.
      *
      * @param ListProduct[] $products
-     * @param array         $prices
      */
     private function assertPriceCount(
         array $products,

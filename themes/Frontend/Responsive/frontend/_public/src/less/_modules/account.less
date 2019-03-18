@@ -155,7 +155,14 @@ It allows the user to directly see and change the important information of their
 
     .column--info-labels,
     .column--info-data {
-        display: none;
+        width: 50%;
+        float: left;
+        text-align: left;
+
+    }
+
+    .column--info-data {
+        .unitize-padding(5, 10, 0, 0);
     }
 
     .column--summary-labels,
@@ -493,6 +500,12 @@ It allows the user to directly see and change the important information of their
             .unitize(margin-right, 0);
         }
 
+    }
+}
+
+@media screen and(max-width: @tabletViewportWidth ) {
+    .column--info-wrapper {
+        .clearfix();
     }
 }
 

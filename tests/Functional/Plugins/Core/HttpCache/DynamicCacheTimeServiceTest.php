@@ -169,8 +169,6 @@ class DynamicCacheTimeServiceTest extends TestCase
     }
 
     /**
-     * @param Blog $blog
-     *
      * @return Enlight_Controller_Request_RequestTestCase
      */
     private function getBlogListingRequest(Blog $blog)
@@ -187,8 +185,6 @@ class DynamicCacheTimeServiceTest extends TestCase
     }
 
     /**
-     * @param Blog $blog
-     *
      * @return Enlight_Controller_Request_RequestTestCase
      */
     private function getBlogRequest(Blog $blog)
@@ -247,8 +243,6 @@ class DynamicCacheTimeServiceTest extends TestCase
     }
 
     /**
-     * @param Category $category
-     *
      * @return Enlight_Controller_Request_RequestTestCase
      */
     private function getcategoryRequest(Category $category)
@@ -317,8 +311,6 @@ class DynamicCacheTimeServiceTest extends TestCase
     }
 
     /**
-     * @param Article $product
-     *
      * @return Enlight_Controller_Request_RequestTestCase
      */
     private function getProductRequest(Article $product)

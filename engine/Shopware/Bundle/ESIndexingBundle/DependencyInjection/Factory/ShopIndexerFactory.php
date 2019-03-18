@@ -62,8 +62,6 @@ class ShopIndexerFactory
     }
 
     /**
-     * @param ContainerInterface $container
-     *
      * @throws \Exception
      *
      * @return ShopIndexerInterface

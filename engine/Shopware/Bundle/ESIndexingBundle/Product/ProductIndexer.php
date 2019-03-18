@@ -52,12 +52,6 @@ class ProductIndexer implements DataIndexerInterface
      */
     private $variantHelper;
 
-    /**
-     * @param Client                       $client
-     * @param ProductProviderInterface     $provider
-     * @param ProductQueryFactoryInterface $queryFactory
-     * @param VariantHelperInterface       $variantHelper
-     */
     public function __construct(
         Client $client,
         ProductProviderInterface $provider,
@@ -70,10 +64,6 @@ class ProductIndexer implements DataIndexerInterface
         $this->variantHelper = $variantHelper;
     }
 
-    /**
-     * @param ShopIndex               $index
-     * @param ProgressHelperInterface $progress
-     */
     public function populate(ShopIndex $index, ProgressHelperInterface $progress)
     {
         $categoryId = $index->getShop()->getCategory()->getId();
@@ -103,8 +93,7 @@ class ProductIndexer implements DataIndexerInterface
     }
 
     /**
-     * @param ShopIndex $index
-     * @param string[]  $numbers
+     * @param string[] $numbers
      */
     public function indexProducts(ShopIndex $index, $numbers)
     {

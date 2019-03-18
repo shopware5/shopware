@@ -86,121 +86,128 @@ td.head  {
         {$Containers.Logo.value}
     </div>
     <div id="header">
-        <div id="head_left">
-        {if $smarty.foreach.pagingLoop.first}
-            {block name="document_index_selectAdress"}
-                {assign var="address" value="billing"}
-            {/block}
-            <div id="head_sender">
-                {block name="document_index_address"}
-                    {block name="document_index_address_sender"}
-                        <p class="sender">{$Containers.Header_Sender.value}</p>
-                    {/block}
-                    {block name="document_index_address_base"}
-                        {if $User.$address.company}{$User.$address.company}<br />{/if}
-                        {if $User.$address.department}{$User.$address.department}<br />{/if}
-                        {$User.$address.salutation|salutation}
-                        {if {config name="displayprofiletitle"}}
-                            {$User.$address.title}<br/>
-                        {/if}
-                        {$User.$address.firstname} {$User.$address.lastname}<br />
-                        {$User.$address.street}<br />
-                    {/block}
-                    {block name="document_index_address_additionalAddressLines"}
-                        {if {config name=showAdditionAddressLine1}}
-                            {$User.$address.additional_address_line1}<br />
-                        {/if}
-                        {if {config name=showAdditionAddressLine2}}
-                            {$User.$address.additional_address_line2}<br />
-                        {/if}
-                    {/block}
-                    {block name="document_index_address_cityZip"}
-                        {if {config name=showZipBeforeCity}}
-                            {$User.$address.zipcode} {$User.$address.city}<br />
-                        {else}
-                            {$User.$address.city} {$User.$address.zipcode}<br />
-                        {/if}
-                    {/block}
-                    {block name="document_index_address_countryData"}
-                        {if $User.$address.state.shortcode}{$User.$address.state.shortcode} - {/if}{$User.$address.country.countryen}<br />
-                    {/block}
+        {block name="document_index_head_left_wrapper"}
+            <div id="head_left">
+            {if $smarty.foreach.pagingLoop.first}
+                {block name="document_index_selectAdress"}
+                    {assign var="address" value="billing"}
                 {/block}
+                <div id="head_sender">
+                    {block name="document_index_address"}
+                        {block name="document_index_address_sender"}
+                            <p class="sender">{$Containers.Header_Sender.value}</p>
+                        {/block}
+                        {block name="document_index_address_base"}
+                            {if $User.$address.company}{$User.$address.company}<br />{/if}
+                            {if $User.$address.department}{$User.$address.department}<br />{/if}
+                            {$User.$address.salutation|salutation}
+                            {if {config name="displayprofiletitle"}}
+                                {$User.$address.title}<br/>
+                            {/if}
+                            {$User.$address.firstname} {$User.$address.lastname}<br />
+                            {$User.$address.street}<br />
+                        {/block}
+                        {block name="document_index_address_additionalAddressLines"}
+                            {if {config name=showAdditionAddressLine1}}
+                                {$User.$address.additional_address_line1}<br />
+                            {/if}
+                            {if {config name=showAdditionAddressLine2}}
+                                {$User.$address.additional_address_line2}<br />
+                            {/if}
+                        {/block}
+                        {block name="document_index_address_cityZip"}
+                            {if {config name=showZipBeforeCity}}
+                                {$User.$address.zipcode} {$User.$address.city}<br />
+                            {else}
+                                {$User.$address.city} {$User.$address.zipcode}<br />
+                            {/if}
+                        {/block}
+                        {block name="document_index_address_countryData"}
+                            {if $User.$address.state.shortcode}{$User.$address.state.shortcode} - {/if}{$User.$address.country.countryen}<br />
+                        {/block}
+                    {/block}
+                </div>
+            {/if}
             </div>
-        {/if}
-        </div>
-        <div id="head_right">
-                <strong>
-                {block name="document_index_head_right"}
-                    {$Containers.Header_Box_Right.value}
-                    {s name="DocumentIndexCustomerID"}{/s} {$User.billing.customernumber|string_format:"%06d"}<br />
-                    {if $User.billing.ustid}
-                    {s name="DocumentIndexUstID"}{/s} {$User.billing.ustid|replace:" ":""|replace:"-":""}<br />
-                    {/if}
-                    {s name="DocumentIndexOrderID"}{/s} {$Order._order.ordernumber}<br />
-                    {s name="DocumentIndexDate"}{/s} {$Document.date}<br />
-                    {if $Document.deliveryDate}{s name="DocumentIndexDeliveryDate"}{/s} {$Document.deliveryDate}<br />{/if}
-                {/block}
-                </strong>
-        </div>
+        {/block}
+        {block name="document_index_head_right_wrapper"}
+            <div id="head_right">
+                    <strong>
+                    {block name="document_index_head_right"}
+                        {$Containers.Header_Box_Right.value}
+                        {s name="DocumentIndexCustomerID"}{/s} {$User.billing.customernumber|string_format:"%06d"}<br />
+                        {if $User.billing.ustid}
+                        {s name="DocumentIndexUstID"}{/s} {$User.billing.ustid|replace:" ":""|replace:"-":""}<br />
+                        {/if}
+                        {s name="DocumentIndexOrderID"}{/s} {$Order._order.ordernumber}<br />
+                        {s name="DocumentIndexDate"}{/s} {$Document.date}<br />
+                        {if $Document.deliveryDate}{s name="DocumentIndexDeliveryDate"}{/s} {$Document.deliveryDate}<br />{/if}
+                    {/block}
+                    </strong>
+            </div>
+        {/block}
     </div>
 
-    <div id="head_bottom" style="clear:both">
-        {block name="document_index_head_bottom"}
-            <h1>{s name="DocumentIndexInvoiceNumber"}Rechnung Nr. {$Document.id}{/s}</h1>
-            {s name="DocumentIndexPageCounter"}Seite {$page+1} von {$Pages|@count}{/s}
-         {/block}
-    </div>
+    {block name="document_index_head_bottom_wrapper"}
+        <div id="head_bottom" style="clear:both">
+            {block name="document_index_head_bottom"}
+                <h1>{s name="DocumentIndexInvoiceNumber"}Rechnung Nr. {$Document.id}{/s}</h1>
+                {s name="DocumentIndexPageCounter"}Seite {$page+1} von {$Pages|@count}{/s}
+             {/block}
+        </div>
+    {/block}
 
     <div id="content">
-
-    <table cellpadding="0" cellspacing="0" width="100%">
-    <tbody valign="top">
-    <tr>
-        {block name="document_index_table_head_pos"}
-            <td align="left" width="5%" class="head">
-                <strong>{s name="DocumentIndexHeadPosition"}{/s}</strong>
-            </td>
+        {block name="document_index_table_header"}
+            <table cellpadding="0" cellspacing="0" width="100%">
+            <tbody valign="top">
+            <tr>
+                {block name="document_index_table_head_pos"}
+                    <td align="left" width="5%" class="head">
+                        <strong>{s name="DocumentIndexHeadPosition"}{/s}</strong>
+                    </td>
+                {/block}
+                {block name="document_index_table_head_nr"}
+                    <td align="left" width="10%" class="head">
+                        <strong>{s name="DocumentIndexHeadArticleID"}{/s}</strong>
+                    </td>
+                {/block}
+                {block name="document_index_table_head_name"}
+                    <td align="left" width="48%" class="head">
+                        <strong>{s name="DocumentIndexHeadName"}{/s}</strong>
+                    </td>
+                {/block}
+                {block name="document_index_table_head_quantity"}
+                    <td align="right" width="5%" class="head">
+                        <strong>{s name="DocumentIndexHeadQuantity"}{/s}</strong>
+                    </td>
+                {/block}
+                {block name="document_index_table_head_tax"}
+                    {if $Document.netto != true}
+                        <td align="right" width="6%" class="head">
+                            <strong>{s name="DocumentIndexHeadTax"}{/s}</strong>
+                        </td>
+                    {/if}
+                {/block}
+                {block name="document_index_table_head_price"}
+                    {if $Document.netto != true && $Document.nettoPositions != true}
+                        <td align="right" width="10%" class="head">
+                            <strong>{s name="DocumentIndexHeadPrice"}{/s}</strong>
+                        </td>
+                        <td align="right" width="12%" class="head">
+                            <strong>{s name="DocumentIndexHeadAmount"}{/s}</strong>
+                        </td>
+                    {else}
+                         <td align="right" width="10%" class="head">
+                            <strong>{s name="DocumentIndexHeadNet"}{/s}</strong>
+                         </td>
+                         <td align="right" width="12%" class="head">
+                            <strong>{s name="DocumentIndexHeadNetAmount"}{/s}</strong>
+                         </td>
+                    {/if}
+                {/block}
+            </tr>
         {/block}
-        {block name="document_index_table_head_nr"}
-            <td align="left" width="10%" class="head">
-                <strong>{s name="DocumentIndexHeadArticleID"}{/s}</strong>
-            </td>
-        {/block}
-        {block name="document_index_table_head_name"}
-            <td align="left" width="48%" class="head">
-                <strong>{s name="DocumentIndexHeadName"}{/s}</strong>
-            </td>
-        {/block}
-        {block name="document_index_table_head_quantity"}
-            <td align="right" width="5%" class="head">
-                <strong>{s name="DocumentIndexHeadQuantity"}{/s}</strong>
-            </td>
-        {/block}
-        {block name="document_index_table_head_tax"}
-            {if $Document.netto != true}
-                <td align="right" width="6%" class="head">
-                    <strong>{s name="DocumentIndexHeadTax"}{/s}</strong>
-                </td>
-            {/if}
-        {/block}
-        {block name="document_index_table_head_price"}
-            {if $Document.netto != true && $Document.nettoPositions != true}
-                <td align="right" width="10%" class="head">
-                    <strong>{s name="DocumentIndexHeadPrice"}{/s}</strong>
-                </td>
-                <td align="right" width="12%" class="head">
-                    <strong>{s name="DocumentIndexHeadAmount"}{/s}</strong>
-                </td>
-            {else}
-                 <td align="right" width="10%" class="head">
-                    <strong>{s name="DocumentIndexHeadNet"}{/s}</strong>
-                 </td>
-                 <td align="right" width="12%" class="head">
-                    <strong>{s name="DocumentIndexHeadNetAmount"}{/s}</strong>
-                 </td>
-            {/if}
-        {/block}
-    </tr>
     {foreach from=$positions item=position key=number}
     {block name="document_index_table_each"}
     <tr>

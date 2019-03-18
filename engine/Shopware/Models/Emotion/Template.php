@@ -33,9 +33,9 @@ use Shopware\Components\Model\ModelEntity;
  *
  *
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_emotion_templates")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Template extends ModelEntity
 {
@@ -52,7 +52,7 @@ class Template extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

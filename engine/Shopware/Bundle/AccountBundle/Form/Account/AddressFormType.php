@@ -56,19 +56,12 @@ class AddressFormType extends AbstractType
      */
     private $models;
 
-    /**
-     * @param \Shopware_Components_Config $config
-     * @param ModelManager                $models
-     */
     public function __construct(\Shopware_Components_Config $config, ModelManager $models)
     {
         $this->config = $config;
         $this->models = $models;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -85,10 +78,6 @@ class AddressFormType extends AbstractType
         return 'address';
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
@@ -218,9 +207,6 @@ class AddressFormType extends AbstractType
         return $constraints;
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     */
     private function addCompanyValidation(FormBuilderInterface $builder)
     {
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
@@ -241,9 +227,6 @@ class AddressFormType extends AbstractType
         });
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     */
     private function addVatIdValidation(FormBuilderInterface $builder)
     {
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
@@ -264,9 +247,6 @@ class AddressFormType extends AbstractType
         });
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     */
     private function addCountryStateValidation(FormBuilderInterface $builder)
     {
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {

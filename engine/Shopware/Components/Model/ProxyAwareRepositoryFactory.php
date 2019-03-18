@@ -63,8 +63,7 @@ class ProxyAwareRepositoryFactory implements RepositoryFactory
     }
 
     /**
-     * @param EntityManagerInterface $entityManager
-     * @param string                 $entityName
+     * @param string $entityName
      *
      * @return ObjectRepository
      */

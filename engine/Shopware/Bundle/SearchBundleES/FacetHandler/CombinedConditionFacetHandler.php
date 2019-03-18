@@ -43,9 +43,6 @@ class CombinedConditionFacetHandler implements HandlerInterface, ResultHydratorI
      */
     private $combinedConditionQueryBuilder;
 
-    /**
-     * @param CombinedConditionQueryBuilder $combinedConditionQueryBuilder
-     */
     public function __construct(CombinedConditionQueryBuilder $combinedConditionQueryBuilder)
     {
         $this->combinedConditionQueryBuilder = $combinedConditionQueryBuilder;

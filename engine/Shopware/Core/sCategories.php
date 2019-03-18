@@ -157,8 +157,7 @@ class sCategories
     }
 
     /**
-     * @param Category $category
-     * @param array    $childrenCounts
+     * @param array $childrenCounts
      *
      * @return array
      */
@@ -220,9 +219,8 @@ class sCategories
      * Returns the leaf category to which the
      * product belongs, inside the category subtree.
      *
-     * @param int  $articleId Id of the product to look for
-     * @param int  $parentId  Category subtree root id. If null, the shop category is used.
-     * @param null $shopId
+     * @param int $articleId Id of the product to look for
+     * @param int $parentId  Category subtree root id. If null, the shop category is used.
      *
      * @return int id of the leaf category, or 0 if none found
      */

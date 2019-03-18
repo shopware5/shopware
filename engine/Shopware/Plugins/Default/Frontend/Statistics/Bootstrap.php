@@ -220,7 +220,6 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     /**
      * Refresh visitor log
      *
-     * @param Enlight_Controller_Request_Request $request
      *
      * @throws \Exception
      */

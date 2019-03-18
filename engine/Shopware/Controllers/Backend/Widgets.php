@@ -738,8 +738,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     }
 
     /**
-     * @param Locale $locale
-     * @param int    $limit
+     * @param int $limit
      *
      * @return array
      */

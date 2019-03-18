@@ -40,10 +40,6 @@ class CachedHrefLangService implements HrefLangServiceInterface
      */
     private $cache;
 
-    /**
-     * @param HrefLangServiceInterface $hrefLangService
-     * @param Cache                    $cache
-     */
     public function __construct(HrefLangServiceInterface $hrefLangService, Cache $cache)
     {
         $this->hrefLangService = $hrefLangService;

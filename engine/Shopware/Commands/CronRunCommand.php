@@ -98,10 +98,8 @@ EOF
     }
 
     /**
-     * @param OutputInterface                 $output
-     * @param Enlight_Components_Cron_Manager $manager
-     * @param string                          $cronjob
-     * @param bool                            $force
+     * @param string $cronjob
+     * @param bool   $force
      */
     private function runSingleCronjob(OutputInterface $output, Enlight_Components_Cron_Manager $manager, $cronjob, $force)
     {
@@ -116,8 +114,7 @@ EOF
     }
 
     /**
-     * @param bool                        $force
-     * @param Enlight_Components_Cron_Job $job
+     * @param bool $force
      *
      * @return bool
      */
@@ -140,8 +137,7 @@ EOF
      * a cronjob action after first run when it is in a
      * unknown format
      *
-     * @param Enlight_Components_Cron_Manager $manager
-     * @param string                          $action
+     * @param string $action
      *
      * @throws \RuntimeException
      *

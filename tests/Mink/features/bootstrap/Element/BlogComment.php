@@ -67,8 +67,6 @@ class BlogComment extends MultipleElement
     }
 
     /**
-     * @param array $locators
-     *
      * @return array
      */
     public function getProperties(array $locators)
@@ -86,8 +84,6 @@ class BlogComment extends MultipleElement
     }
 
     /**
-     * @param NodeElement $element
-     *
      * @return string
      */
     protected function getAuthor(NodeElement $element)
@@ -96,8 +92,6 @@ class BlogComment extends MultipleElement
     }
 
     /**
-     * @param NodeElement $element
-     *
      * @return string
      */
     protected function getDate(NodeElement $element)
@@ -106,8 +100,6 @@ class BlogComment extends MultipleElement
     }
 
     /**
-     * @param NodeElement $element
-     *
      * @return string
      */
     protected function getStars(NodeElement $element)
@@ -116,8 +108,6 @@ class BlogComment extends MultipleElement
     }
 
     /**
-     * @param NodeElement $element
-     *
      * @return string
      */
     protected function getHeadline(NodeElement $element)
@@ -126,8 +116,6 @@ class BlogComment extends MultipleElement
     }
 
     /**
-     * @param NodeElement $element
-     *
      * @return string
      */
     protected function getComment(NodeElement $element)

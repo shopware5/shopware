@@ -31,8 +31,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class GoogleStorageFactory implements AdapterFactoryInterface
 {
     /**
-     * @param array $config
-     *
      * @return GoogleStorageAdapter
      */
     public function create(array $config)
@@ -58,8 +56,6 @@ class GoogleStorageFactory implements AdapterFactoryInterface
     }
 
     /**
-     * @param array $definition
-     *
      * @return array
      */
     private function resolveStorageConfig(array $definition)

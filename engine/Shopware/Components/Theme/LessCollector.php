@@ -44,11 +44,6 @@ class LessCollector
      */
     private $eventManager;
 
-    /**
-     * @param PathResolver                $pathResolver
-     * @param Inheritance                 $inheritance
-     * @param \Enlight_Event_EventManager $eventManager
-     */
     public function __construct(
         PathResolver $pathResolver,
         Inheritance $inheritance,
@@ -60,9 +55,6 @@ class LessCollector
     }
 
     /**
-     * @param Shop\Template $template
-     * @param Shop\Shop     $shop
-     *
      * @throws \Exception
      * @throws \Enlight_Event_Exception
      *
@@ -129,8 +121,6 @@ class LessCollector
     }
 
     /**
-     * @param array $inheritance
-     *
      * @throws \Exception
      *
      * @return LessDefinition[]
@@ -158,8 +148,6 @@ class LessCollector
     }
 
     /**
-     * @param array $inheritance
-     *
      * @throws \Exception
      *
      * @return LessDefinition[]
@@ -184,9 +172,6 @@ class LessCollector
     }
 
     /**
-     * @param Shop\Template $template
-     * @param Shop\Shop     $shop
-     *
      * @throws \Enlight_Event_Exception
      *
      * @return LessDefinition[]
@@ -204,9 +189,6 @@ class LessCollector
     }
 
     /**
-     * @param Shop\Template $template
-     * @param Shop\Shop     $shop
-     *
      * @throws \Enlight_Event_Exception
      *
      * @return LessDefinition[]

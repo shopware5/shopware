@@ -49,10 +49,6 @@ class ManufacturerSliderComponentHandler implements ComponentHandlerInterface
      */
     private $connection;
 
-    /**
-     * @param ManufacturerServiceInterface $manufacturerService
-     * @param Connection                   $connection
-     */
     public function __construct(ManufacturerServiceInterface $manufacturerService, Connection $connection)
     {
         $this->manufacturerService = $manufacturerService;
@@ -106,8 +102,7 @@ class ManufacturerSliderComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param int                  $categoryId
-     * @param ShopContextInterface $context
+     * @param int $categoryId
      *
      * @return int[]
      */

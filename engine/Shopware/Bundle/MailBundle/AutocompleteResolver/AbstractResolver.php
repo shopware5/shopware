@@ -26,9 +26,6 @@ namespace Shopware\Bundle\MailBundle\AutocompleteResolver;
 
 abstract class AbstractResolver implements Resolver
 {
-    /**
-     * @return mixed
-     */
     protected function getValueFromPath(array $context, string $name)
     {
         $currentItem = null;

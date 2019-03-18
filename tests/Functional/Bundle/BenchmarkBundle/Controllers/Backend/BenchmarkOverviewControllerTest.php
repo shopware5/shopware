@@ -174,8 +174,6 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
     }
 
     /**
-     * @param \Enlight_Controller_Response_ResponseHttp $response
-     *
      * @return string
      */
     private function getRedirect(\Enlight_Controller_Response_ResponseHttp $response)

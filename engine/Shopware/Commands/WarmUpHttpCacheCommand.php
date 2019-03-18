@@ -199,8 +199,6 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
     /**
      * Builds an array using input parameters, which is used to know what to warm up
      *
-     * @param array                       $input
-     * @param UrlProviderFactoryInterface $factory
      *
      * @return array
      */

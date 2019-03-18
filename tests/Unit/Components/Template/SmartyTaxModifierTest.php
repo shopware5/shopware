@@ -31,7 +31,6 @@ use PHPUnit\Framework\TestCase;
 class SmartyTaxModifierTest extends TestCase
 {
     /**
-     * @param mixed     $tax
      * @param int|float $expected
      * @param string    $locale
      * @dataProvider taxProvider
@@ -45,7 +44,6 @@ class SmartyTaxModifierTest extends TestCase
     }
 
     /**
-     * @param mixed  $tax
      * @param string $locale
      * @dataProvider taxProviderInvalid
      */

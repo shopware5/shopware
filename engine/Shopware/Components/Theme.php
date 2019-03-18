@@ -177,8 +177,6 @@ class Theme
     /**
      * Helper function which returns the theme
      * directory name
-     *
-     * @return mixed
      */
     public function getTemplate()
     {
@@ -236,8 +234,6 @@ class Theme
      *      $container->addTab($tab);
      *  }
      * </code>
-     *
-     * @param Form\Container\TabContainer $container
      */
     public function createConfig(Form\Container\TabContainer $container)
     {
@@ -261,8 +257,6 @@ class Theme
      *
      *      $collection->add($set);
      *   }
-     *
-     * @param ArrayCollection $collection
      */
     public function createConfigSets(ArrayCollection $collection)
     {
@@ -312,7 +306,6 @@ class Theme
      * Creates a ext js tab panel.
      *
      * @param string $name
-     * @param array  $options
      *
      * @return Form\Container\TabContainer
      */
@@ -329,7 +322,6 @@ class Theme
      *
      * @param string $name
      * @param string $title
-     * @param array  $options
      *
      * @return Form\Container\FieldSet
      */
@@ -347,7 +339,6 @@ class Theme
      *
      * @param string $name
      * @param string $title
-     * @param array  $options
      *
      * @return Form\Container\Tab
      */
@@ -364,8 +355,6 @@ class Theme
      *
      * @param string $name
      * @param string $label
-     * @param mixed  $defaultValue
-     * @param array  $options
      *
      * @return Form\Field\Text
      */
@@ -384,8 +373,6 @@ class Theme
      *
      * @param string $name
      * @param string $label
-     * @param mixed  $defaultValue
-     * @param array  $options
      *
      * @return Form\Field\Number
      */
@@ -404,8 +391,6 @@ class Theme
      *
      * @param string $name
      * @param string $label
-     * @param mixed  $defaultValue
-     * @param array  $options
      *
      * @return Form\Field\Boolean
      */
@@ -424,8 +409,6 @@ class Theme
      *
      * @param string $name
      * @param string $label
-     * @param mixed  $defaultValue
-     * @param array  $options
      *
      * @return Form\Field\Color
      */
@@ -444,8 +427,6 @@ class Theme
      *
      * @param string $name
      * @param string $label
-     * @param mixed  $defaultValue
-     * @param array  $options
      *
      * @return Form\Field\Date
      */
@@ -464,8 +445,6 @@ class Theme
      *
      * @param string $name
      * @param string $label
-     * @param mixed  $defaultValue
-     * @param array  $options
      *
      * @return Form\Field\Em
      */
@@ -484,8 +463,6 @@ class Theme
      *
      * @param string $name
      * @param string $label
-     * @param mixed  $defaultValue
-     * @param array  $options
      *
      * @return Form\Field\Media
      */
@@ -504,8 +481,6 @@ class Theme
      *
      * @param string $name
      * @param string $label
-     * @param mixed  $defaultValue
-     * @param array  $options
      *
      * @return Form\Field\Percent
      */
@@ -524,8 +499,6 @@ class Theme
      *
      * @param string $name
      * @param string $label
-     * @param mixed  $defaultValue
-     * @param array  $options
      *
      * @return Form\Field\Pixel
      */
@@ -544,9 +517,7 @@ class Theme
      *
      * @param string  $name
      * @param string  $label
-     * @param mixed   $defaultValue
-     * @param array[] $store        [['text' => 'displayText', 'value'  => 10], ...]
-     * @param array   $options
+     * @param array[] $store [['text' => 'displayText', 'value'  => 10], ...]
      *
      * @return Form\Field\Selection
      */
@@ -565,8 +536,6 @@ class Theme
      *
      * @param string $name
      * @param string $label
-     * @param mixed  $defaultValue
-     * @param array  $options
      *
      * @return Form\Field\TextArea
      */

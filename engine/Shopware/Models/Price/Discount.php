@@ -31,7 +31,7 @@ use Shopware\Components\Model\ModelEntity;
  * Shopware Price Model
  *
  * @ORM\Table(name="s_core_pricegroups_discounts")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Discount extends ModelEntity
 {
@@ -39,7 +39,7 @@ class Discount extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

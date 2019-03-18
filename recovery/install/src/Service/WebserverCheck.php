@@ -49,7 +49,6 @@ class WebserverCheck
      * @param string $pingUrl
      * @param string $checkUrl
      * @param string $tokenPath
-     * @param Client $httpClient
      */
     public function __construct($pingUrl, $checkUrl, $tokenPath, Client $httpClient)
     {
@@ -60,8 +59,6 @@ class WebserverCheck
     }
 
     /**
-     * @param Shop $shop
-     *
      * @throws \RuntimeException
      *
      * @return bool
@@ -88,8 +85,6 @@ class WebserverCheck
     }
 
     /**
-     * @param Shop $shop
-     *
      * @return string
      */
     public function buildPingUrl(Shop $shop)

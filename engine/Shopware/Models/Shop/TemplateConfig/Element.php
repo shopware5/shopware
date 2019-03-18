@@ -31,7 +31,7 @@ use Shopware\Models\Shop\Template;
 
 /**
  * @ORM\Table(name="s_core_templates_config_elements")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Element extends ModelEntity
 {
@@ -47,10 +47,10 @@ class Element extends ModelEntity
      * @var ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Value>
      *
      * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Value",
-     *      mappedBy="element",
-     *      orphanRemoval=true,
-     *      cascade={"persist"}
+     *     targetEntity="Shopware\Models\Shop\TemplateConfig\Value",
+     *     mappedBy="element",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
      * )
      */
     protected $values;
@@ -144,7 +144,7 @@ class Element extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

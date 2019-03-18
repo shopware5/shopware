@@ -35,11 +35,6 @@ namespace Shopware\Components\DependencyInjection;
  */
 class SimpleFactory
 {
-    /**
-     * @param mixed $class
-     *
-     * @return mixed
-     */
     public function factory($class)
     {
         return $class;

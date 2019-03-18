@@ -34,9 +34,6 @@ class MigrationStep
      */
     private $migrationManager;
 
-    /**
-     * @param Manager $migrationManager
-     */
     public function __construct(Manager $migrationManager)
     {
         $this->migrationManager = $migrationManager;

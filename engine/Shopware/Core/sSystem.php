@@ -207,9 +207,6 @@ class sSystem
      * @deprecated Use Shopware()->Modules()->Core()->(method name)
      *
      * @param string $name
-     * @param null   $params
-     *
-     * @return mixed
      */
     public function __call($name, $params = null)
     {

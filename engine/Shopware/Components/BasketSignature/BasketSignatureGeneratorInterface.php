@@ -31,8 +31,7 @@ interface BasketSignatureGeneratorInterface
      * Signature can be used to verify if basket content changed between
      * payment process and checkout finish.
      *
-     * @param array $basket
-     * @param int   $customerId
+     * @param int $customerId
      *
      * @return string
      */

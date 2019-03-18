@@ -52,12 +52,6 @@ class CrudService
      */
     private $typeMapping;
 
-    /**
-     * @param ModelManager   $entityManager
-     * @param SchemaOperator $schemaOperator
-     * @param TableMapping   $tableMapping
-     * @param TypeMapping    $typeMapping
-     */
     public function __construct(
         ModelManager $entityManager,
         SchemaOperator $schemaOperator,
@@ -119,7 +113,6 @@ class CrudService
      * @param string                $table
      * @param string                $columnName
      * @param string                $unifiedType
-     * @param array                 $data
      * @param string|null           $newColumnName
      * @param bool                  $updateDependingTables
      * @param string|int|float|null $defaultValue
@@ -244,7 +237,6 @@ class CrudService
 
     /**
      * @param int|null $id
-     * @param array    $data
      */
     private function updateConfig($id, array $data)
     {
@@ -268,7 +260,6 @@ class CrudService
     }
 
     /**
-     * @param ConfigurationStruct   $config
      * @param string                $name
      * @param string                $type
      * @param string|int|float|null $defaultValue
@@ -305,7 +296,6 @@ class CrudService
      * @param string                $column
      * @param string                $unifiedType
      * @param string|int|float|null $defaultValue
-     * @param array                 $data
      *
      * @throws \Exception
      */
@@ -339,7 +329,6 @@ class CrudService
      * @param string                $newColumnName
      * @param string                $unifiedType
      * @param string|int|float|null $defaultValue
-     * @param array                 $data
      *
      * @throws \Exception
      */

@@ -46,11 +46,6 @@ class EmotionElementGateway
      */
     private $connection;
 
-    /**
-     * @param EmotionElementHydrator $hydrator
-     * @param FieldHelper            $fieldHelper
-     * @param Connection             $connection
-     */
     public function __construct(EmotionElementHydrator $hydrator, FieldHelper $fieldHelper, Connection $connection)
     {
         $this->hydrator = $hydrator;
@@ -59,8 +54,7 @@ class EmotionElementGateway
     }
 
     /**
-     * @param int[]                $emotionIds
-     * @param ShopContextInterface $context
+     * @param int[] $emotionIds
      *
      * @return array
      */
@@ -127,8 +121,7 @@ class EmotionElementGateway
     }
 
     /**
-     * @param int[]                $elementIds
-     * @param ShopContextInterface $context
+     * @param int[] $elementIds
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */

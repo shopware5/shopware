@@ -59,11 +59,6 @@ class UserNameValidator extends ConstraintValidator
      */
     private $userNameValidator;
 
-    /**
-     * @param Shopware_Components_Snippet_Manager $snippets
-     * @param Connection                          $connection
-     * @param UserNameValidatorInterface          $userNameValidator
-     */
     public function __construct(
         Shopware_Components_Snippet_Manager $snippets,
         Connection $connection,
@@ -75,8 +70,7 @@ class UserNameValidator extends ConstraintValidator
     }
 
     /**
-     * @param string     $userName
-     * @param Constraint $constraint
+     * @param string $userName
      */
     public function validate($userName, Constraint $constraint)
     {

@@ -38,10 +38,6 @@ class ConfiguratorHydrator extends Hydrator
      */
     private $mediaHydrator;
 
-    /**
-     * @param AttributeHydrator $attributeHydrator
-     * @param MediaHydrator     $mediaHydrator
-     */
     public function __construct(AttributeHydrator $attributeHydrator, MediaHydrator $mediaHydrator)
     {
         $this->attributeHydrator = $attributeHydrator;
@@ -49,8 +45,6 @@ class ConfiguratorHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return Struct\Configurator\Set
      */
     public function hydrate(array $data)
@@ -62,8 +56,6 @@ class ConfiguratorHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return Struct\Configurator\Group[]
      */
     public function hydrateGroups(array $data)

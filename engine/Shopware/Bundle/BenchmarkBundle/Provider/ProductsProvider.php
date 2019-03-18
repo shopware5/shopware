@@ -133,8 +133,6 @@ class ProductsProvider implements BatchableProviderInterface
     }
 
     /**
-     * @param array $productIds
-     *
      * @return array
      */
     private function getBasicProductData(array $productIds)
@@ -167,8 +165,6 @@ class ProductsProvider implements BatchableProviderInterface
     }
 
     /**
-     * @param array $productIds
-     *
      * @return array
      */
     private function getVariantsForProducts(array $productIds)
@@ -197,8 +193,6 @@ class ProductsProvider implements BatchableProviderInterface
     }
 
     /**
-     * @param array $productIds
-     *
      * @return array
      */
     private function getImagesPerProduct(array $productIds)

@@ -143,8 +143,6 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
 
     /**
      * Remove a product from the cart
-     *
-     * @param CartPosition $item
      */
     public function removeProduct(CartPosition $item)
     {
@@ -164,8 +162,6 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
 
     /**
      * Removes all products from the cart
-     *
-     * @param CartPosition $items
      */
     public function emptyCart(CartPosition $items)
     {
@@ -177,8 +173,6 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
 
     /**
      * Fills the cart with products
-     *
-     * @param array $items
      */
     public function fillCartWithProducts(array $items)
     {
@@ -195,9 +189,6 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
     /**
      * Checks the cart positions
      * Available properties are: number (required), name (required), quantity, itemPrice, sum
-     *
-     * @param CartPosition $cartPositions
-     * @param array        $items
      */
     public function checkCartProducts(CartPosition $cartPositions, array $items)
     {
@@ -274,8 +265,6 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
 
     /**
      * Proceeds to the confirmation page with registration
-     *
-     * @param array $data
      */
     public function proceedToOrderConfirmationWithRegistration(array $data)
     {
@@ -357,7 +346,6 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
     }
 
     /**
-     * @param array  $labels
      * @param string $labelKey
      * @param string $language
      *

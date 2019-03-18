@@ -150,9 +150,7 @@ class Detail extends Page implements HelperSelectorInterface
     /**
      * Checks the evaluations of the current article
      *
-     * @param ArticleEvaluation $articleEvaluations
-     * @param mixed             $average
-     * @param array             $evaluations
+     * @param string $average
      *
      * @throws \Exception
      */
@@ -242,8 +240,6 @@ class Detail extends Page implements HelperSelectorInterface
 
     /**
      * Writes an evaluation
-     *
-     * @param array $data
      */
     public function writeEvaluation(array $data)
     {
@@ -336,8 +332,7 @@ class Detail extends Page implements HelperSelectorInterface
     }
 
     /**
-     * @param ArticleEvaluation $articleEvaluations
-     * @param mixed             $average
+     * @param string $average
      *
      * @throws \Exception
      */

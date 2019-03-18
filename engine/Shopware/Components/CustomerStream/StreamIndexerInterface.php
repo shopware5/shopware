@@ -31,14 +31,12 @@ use Shopware\Bundle\SearchBundle\Criteria;
 interface StreamIndexerInterface
 {
     /**
-     * @param int                     $streamId
-     * @param ProgressHelperInterface $helper
+     * @param int $streamId
      */
     public function populate($streamId, ProgressHelperInterface $helper);
 
     /**
-     * @param int      $streamId
-     * @param Criteria $criteria
+     * @param int $streamId
      *
      * @return CustomerNumberSearchResult
      */

@@ -68,13 +68,6 @@ class HrefLangService implements HrefLangServiceInterface
      */
     private $preFilters;
 
-    /**
-     * @param Connection         $connection
-     * @param RouterInterface    $router
-     * @param Config             $config
-     * @param ModelManager       $modelManager
-     * @param \IteratorAggregate $preFilters
-     */
     public function __construct(Connection $connection, RouterInterface $router, Config $config, ModelManager $modelManager, \IteratorAggregate $preFilters)
     {
         $this->connection = $connection;
@@ -127,9 +120,7 @@ class HrefLangService implements HrefLangServiceInterface
     }
 
     /**
-     * @param array   $parameters
-     * @param string  $url
-     * @param Context $context
+     * @param string $url
      *
      * @return bool
      */
@@ -148,7 +139,6 @@ class HrefLangService implements HrefLangServiceInterface
 
     /**
      * @param string $url
-     * @param array  $parameters
      *
      * @return string
      */
@@ -169,8 +159,6 @@ class HrefLangService implements HrefLangServiceInterface
     }
 
     /**
-     * @param array $parameters
-     *
      * @return bool
      */
     protected function isCategoryLink(array $parameters)
@@ -182,8 +170,6 @@ class HrefLangService implements HrefLangServiceInterface
     }
 
     /**
-     * @param Shop $shop
-     *
      * @return array
      */
     private function getLanguageShops(Shop $shop)
@@ -197,6 +183,7 @@ class HrefLangService implements HrefLangServiceInterface
             ->innerJoin('shop', 's_core_locales', 'locale', 'locale.id = shop.locale_id')
             ->where('shop.id = :shopId')
             ->orWhere('shop.main_id = :shopId')
+            ->andWhere('active=1')
             ->setParameter('shopId', $parentId)
             ->execute()
             ->fetchAll();

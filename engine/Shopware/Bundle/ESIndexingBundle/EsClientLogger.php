@@ -110,8 +110,6 @@ class EsClientLogger extends Client implements EsClientInterface
 
     /**
      * @param string $method
-     * @param array  $result
-     * @param array  $request
      */
     protected function handleResult($method, array $result = [], array $request = [])
     {

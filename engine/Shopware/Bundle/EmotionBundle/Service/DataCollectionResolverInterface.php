@@ -31,9 +31,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface DataCollectionResolverInterface
 {
     /**
-     * @param PrepareDataCollection $prepareDataCollection
-     * @param ShopContextInterface  $context
-     *
      * @return ResolvedDataCollection
      */
     public function resolve(PrepareDataCollection $prepareDataCollection, ShopContextInterface $context);

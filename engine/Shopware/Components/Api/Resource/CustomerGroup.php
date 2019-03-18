@@ -75,10 +75,8 @@ class CustomerGroup extends Resource
     }
 
     /**
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $criteria
-     * @param array $orderBy
+     * @param int $offset
+     * @param int $limit
      *
      * @return array
      */
@@ -109,8 +107,6 @@ class CustomerGroup extends Resource
     }
 
     /**
-     * @param array $params
-     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Exception
      *
@@ -144,8 +140,7 @@ class CustomerGroup extends Resource
     }
 
     /**
-     * @param int   $id
-     * @param array $params
+     * @param int $id
      *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
@@ -219,7 +214,6 @@ class CustomerGroup extends Resource
     /**
      * Helper function to save discounts for a given group.
      *
-     * @param array                           $discounts
      * @param \Shopware\Models\Customer\Group $group
      */
     private function saveDiscounts(array $discounts, $group)
@@ -239,7 +233,6 @@ class CustomerGroup extends Resource
     }
 
     /**
-     * @param array                                $params
      * @param \Shopware\Models\Customer\Group|null $customerGroup
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException

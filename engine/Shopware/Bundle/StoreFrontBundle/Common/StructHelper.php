@@ -28,10 +28,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 
 class StructHelper
 {
-    /**
-     * @param ListProduct $listProduct
-     * @param ListProduct $product
-     */
     public function assignProductData(ListProduct $listProduct, ListProduct $product)
     {
         $product->setShippingFree($listProduct->isShippingFree());

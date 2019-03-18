@@ -46,11 +46,6 @@ class SitemapIndexXml extends Controller
      */
     private $sitemapExporter;
 
-    /**
-     * @param SitemapListerInterface      $sitemapLister
-     * @param SitemapExporterInterface    $sitemapExporter
-     * @param \Shopware_Components_Config $config
-     */
     public function __construct(SitemapListerInterface $sitemapLister, SitemapExporterInterface $sitemapExporter, \Shopware_Components_Config $config)
     {
         parent::__construct();

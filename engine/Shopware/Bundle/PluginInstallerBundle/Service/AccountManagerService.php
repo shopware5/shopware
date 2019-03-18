@@ -66,12 +66,7 @@ class AccountManagerService
     private $apiEndPoint;
 
     /**
-     * @param StoreClient                          $storeClient
-     * @param StructHydrator                       $structHydrator
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param ModelManager                         $entityManager
-     * @param GuzzleFactory                        $guzzleFactory
-     * @param string                               $apiEndPoint
+     * @param string $apiEndPoint
      *
      * @internal param ClientInterface $guzzleHttpClient
      */
@@ -172,7 +167,6 @@ class AccountManagerService
     /**
      * Get the list of shops (and details) associated to the given user
      *
-     * @param AccessTokenStruct $token
      *
      * @throws \Exception
      *
@@ -193,8 +187,7 @@ class AccountManagerService
      * Requests the domain hash and filename needed to generate the
      * validation key, so that the current domain can be validated
      *
-     * @param string            $domain
-     * @param AccessTokenStruct $token
+     * @param string $domain
      *
      * @throws \Exception
      *
@@ -214,9 +207,8 @@ class AccountManagerService
     /**
      * Requests the validation of the current installation's domain
      *
-     * @param string            $domain
-     * @param string            $shopwareVersion Current Shopware version
-     * @param AccessTokenStruct $token
+     * @param string $domain
+     * @param string $shopwareVersion Current Shopware version
      *
      * @throws \Exception
      *
@@ -257,8 +249,6 @@ class AccountManagerService
     }
 
     /**
-     * @param StoreException $exception
-     *
      * @return \Exception
      */
     private function translateExceptionMessage(StoreException $exception)

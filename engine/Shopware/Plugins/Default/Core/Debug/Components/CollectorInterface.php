@@ -30,8 +30,5 @@ interface CollectorInterface
 {
     public function start();
 
-    /**
-     * @param Logger $log
-     */
     public function logResults(Logger $log);
 }

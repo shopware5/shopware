@@ -81,9 +81,7 @@ class DownloadTest extends TestCase
 
     /**
      * @param string                             $number
-     * @param ShopContext                        $context
      * @param \Shopware\Models\Category\Category $category
-     * @param null                               $additionally
      *
      * @return array
      */

@@ -33,9 +33,6 @@ class OptinCleanupSubscriber implements SubscriberInterface
      */
     private $cleanupService;
 
-    /**
-     * @param OptinCleanupServiceInterface $cleanupService
-     */
     public function __construct(OptinCleanupServiceInterface $cleanupService)
     {
         $this->cleanupService = $cleanupService;

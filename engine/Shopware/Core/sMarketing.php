@@ -76,10 +76,6 @@ class sMarketing
      */
     private $db;
 
-    /**
-     * @param StoreFrontBundle\Service\ContextServiceInterface|null        $contextService
-     * @param StoreFrontBundle\Service\AdditionalTextServiceInterface|null $additionalTextService
-     */
     public function __construct(
         StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
         StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null
@@ -506,50 +502,119 @@ class sMarketing
     {
         $limit = empty($limit) ? 6 : (int) $limit;
         $productId = empty($articleId) ? (int) $this->sSYSTEM->_GET['sArticle'] : (int) $articleId;
+        $sql = <<<SQL
+SELECT u.articleID, u.articleName, u.Rel 
+  FROM (
+    
+    ( 
+    SELECT DISTINCT
+   
+      a.id as articleID, 
+      a.name as articleName, 
+      3 as Rel
+      
+    FROM s_articles a
+    
+      INNER JOIN s_articles_categories_ro ac 
+        ON ac.articleID = a.id 
+        AND ac.categoryID = {$this->categoryId}
+        
+      INNER JOIN s_categories c 
+        ON c.id = ac.categoryID 
+        AND c.active = 1
+      
+      LEFT JOIN s_articles_avoid_customergroups ag 
+        ON ag.articleID = a.id 
+        AND ag.customergroupID = {$this->customerGroupId}
+      
+      INNER JOIN s_articles_similar s 
+        ON s.articleID = a.id 
+        AND s.relatedarticle = a.id
+        
+      INNER JOIN s_articles_categories_ro s1 
+        ON s1.articleID = a.id
+        
+      INNER JOIN s_articles_categories_ro s2 
+        ON s2.categoryID = s1.categoryID 
+        AND s2.articleID = a.id
+        
+      WHERE a.active = 1
+        AND ag.articleID IS NULL
+        AND a.id != {$productId}
+        
+    LIMIT {$limit}
+  ) 
+  UNION ( SELECT DISTINCT
+   
+      a.id as articleID, 
+      a.name as articleName, 
+      2 as Rel
+      
+    FROM s_articles a
+    
+      INNER JOIN s_articles_categories_ro ac 
+        ON ac.articleID = a.id 
+        AND ac.categoryID = {$this->categoryId}
+        
+      INNER JOIN s_categories c 
+        ON c.id = ac.categoryID 
+        AND c.active = 1
+      
+      LEFT JOIN s_articles_avoid_customergroups ag 
+        ON ag.articleID = a.id 
+        AND ag.customergroupID = {$this->customerGroupId}
+      
+      INNER JOIN s_articles_similar s 
+        ON s.articleID = a.id 
+        AND s.relatedarticle = a.id
+        
+      WHERE a.active = 1
+        AND ag.articleID IS NULL
+        AND a.id != {$productId}
+        
+    LIMIT {$limit}
+  
+  ) UNION ( SELECT DISTINCT
+   
+      a.id as articleID, 
+      a.name as articleName, 
+      1 as Rel
+              
+    FROM s_articles a
+    
+      INNER JOIN s_articles_categories_ro ac 
+        ON ac.articleID = a.id 
+        AND ac.categoryID = {$this->categoryId}
+        
+      INNER JOIN s_categories c 
+        ON c.id = ac.categoryID 
+        AND c.active = 1
+      
+      LEFT JOIN s_articles_avoid_customergroups ag 
+        ON ag.articleID = a.id 
+        AND ag.customergroupID = {$this->customerGroupId}
+        
+      INNER JOIN s_articles_categories_ro s1 
+        ON s1.articleID = a.id
+        
+      INNER JOIN s_articles_categories_ro s2 
+        ON s2.categoryID = s1.categoryID 
+        AND s2.articleID = a.id
+        
+      WHERE a.active = 1
+        AND ag.articleID IS NULL
+        AND a.id != {$productId}
+    
+    LIMIT {$limit}
+  ) 
+) AS u    
+GROUP BY u.articleID
+ORDER BY u.Rel DESC
 
-        $sql = "
-            SELECT
-              a.id as articleID,
-              a.name as articleName,
-              IF(s.id, 2, 0) + -- Similar article
-              IF(s2.id, 1, 0)  -- Same category
-                as relevance
+LIMIT {$limit};
 
-            FROM s_articles a
+SQL;
 
-            INNER JOIN s_articles_categories_ro ac
-                ON ac.articleID=a.id
-                AND ac.categoryID = {$this->categoryId}
-            INNER JOIN s_categories c
-                ON c.id = ac.categoryID
-                AND c.active = 1
-
-            LEFT JOIN s_articles_avoid_customergroups ag
-            ON ag.articleID=a.id
-            AND ag.customergroupID={$this->customerGroupId}
-
-            LEFT JOIN s_articles o
-            ON o.id=$productId
-
-            LEFT JOIN s_articles_similar s
-            ON s.articleID=o.id
-            AND s.relatedarticle=a.id
-
-            LEFT JOIN s_articles_categories_ro s1
-            ON s1.articleID=o.id
-
-            LEFT JOIN s_articles_categories_ro s2
-            ON s2.categoryID=s1.categoryID
-            AND s2.articleID=a.id
-
-            WHERE a.active = 1
-            AND ag.articleID IS NULL
-            AND a.id!=$productId
-
-            GROUP BY a.id
-            ORDER BY relevance DESC
-            LIMIT $limit
-        ";
         $similarProductIds = $this->db->fetchCol($sql);
 
         $similarProducts = [];

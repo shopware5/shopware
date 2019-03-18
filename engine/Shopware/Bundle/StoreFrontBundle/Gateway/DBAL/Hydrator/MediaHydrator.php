@@ -51,12 +51,6 @@ class MediaHydrator extends Hydrator
      */
     private $database;
 
-    /**
-     * @param AttributeHydrator                      $attributeHydrator
-     * @param \Shopware\Components\Thumbnail\Manager $thumbnailManager
-     * @param MediaServiceInterface                  $mediaService
-     * @param Connection                             $database
-     */
     public function __construct(AttributeHydrator $attributeHydrator, Manager $thumbnailManager, MediaServiceInterface $mediaService, Connection $database)
     {
         $this->attributeHydrator = $attributeHydrator;
@@ -66,8 +60,6 @@ class MediaHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return Struct\Media
      */
     public function hydrate(array $data)
@@ -132,8 +124,6 @@ class MediaHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Media
      */
     public function hydrateProductImage(array $data)
@@ -154,9 +144,6 @@ class MediaHydrator extends Hydrator
     }
 
     /**
-     * @param Struct\Media $media
-     * @param array        $data
-     *
      * @return bool
      */
     private function isUpdateRequired(Struct\Media $media, array $data)
@@ -215,8 +202,6 @@ class MediaHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return array
      */
     private function updateMedia(array $data)

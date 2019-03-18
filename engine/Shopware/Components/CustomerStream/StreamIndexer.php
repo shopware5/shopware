@@ -47,11 +47,6 @@ class StreamIndexer implements StreamIndexerInterface
      */
     private $connection;
 
-    /**
-     * @param CustomerStreamCriteriaFactory $criteriaFactory
-     * @param CustomerNumberSearchInterface $numberSearch
-     * @param Connection                    $connection
-     */
     public function __construct(
         CustomerStreamCriteriaFactory $criteriaFactory,
         CustomerNumberSearchInterface $numberSearch,
@@ -63,8 +58,7 @@ class StreamIndexer implements StreamIndexerInterface
     }
 
     /**
-     * @param int                     $streamId
-     * @param ProgressHelperInterface $helper
+     * @param int $streamId
      */
     public function populate($streamId, ProgressHelperInterface $helper)
     {
@@ -100,8 +94,7 @@ class StreamIndexer implements StreamIndexerInterface
     }
 
     /**
-     * @param int      $streamId
-     * @param Criteria $criteria
+     * @param int $streamId
      *
      * @return CustomerNumberSearchResult
      */

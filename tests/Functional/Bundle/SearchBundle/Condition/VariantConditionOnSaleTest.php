@@ -600,10 +600,9 @@ class VariantConditionOnSaleTest extends TestCase
     /**
      * Get products and set the graduated prices and inStock of the variants.
      *
-     * @param string      $number
-     * @param ShopContext $context
-     * @param Category    $category
-     * @param array       $data
+     * @param string   $number
+     * @param Category $category
+     * @param array    $data
      *
      * @return array
      */
@@ -669,7 +668,6 @@ class VariantConditionOnSaleTest extends TestCase
      * Assert the cheapest and pseudo prices of the products / variants.
      *
      * @param ListProduct[] $products
-     * @param array         $prices
      */
     private function assertPrices(array  $products, array $prices)
     {

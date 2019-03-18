@@ -197,68 +197,71 @@
     {/block}
 
     <div class="panel--tr is--odd">
+        {block name="frontend_account_order_item_detail_info_wrapper"}
+            <div class="column--info-wrapper">
+                {block name="frontend_account_order_item_detail_info_labels"}
+                    <div class="panel--td column--info-labels">
+                        {* Order date label *}
+                        {block name="frontend_account_order_item_label_date"}
+                            <p class="is--strong">{s name="OrderItemColumnDate"}{/s}</p>
+                        {/block}
 
-        {block name="frontend_account_order_item_detail_info_labels"}
-            <div class="panel--td column--info-labels">
-                {* Order date label *}
-                {block name="frontend_account_order_item_label_date"}
-                    <p class="is--strong">{s name="OrderItemColumnDate"}{/s}</p>
-                {/block}
+                        {* Order number label *}
+                        {block name="frontend_account_order_item_label_ordernumber"}
+                            <p class="is--strong">{s name="OrderItemColumnId"}{/s}</p>
+                        {/block}
 
-                {* Order number label *}
-                {block name="frontend_account_order_item_label_ordernumber"}
-                    <p class="is--strong">{s name="OrderItemColumnId"}{/s}</p>
-                {/block}
-
-                {* Shipping method label  *}
-                {block name="frontend_account_order_item_label_dispatch"}
-                    {if $offerPosition.dispatch}
-                        <p class="is--strong">{s name="OrderItemColumnDispatch"}{/s}</p>
-                    {/if}
-                {/block}
-
-                {* Package tracking code label *}
-                {block name="frontend_account_order_item_label_trackingcode"}
-                    {if $offerPosition.trackingcode}
-                        <p class="is--strong">{s name="OrderItemColumnTracking"}{/s}</p>
-                    {/if}
-                {/block}
-            </div>
-        {/block}
-
-        {block name="frontend_account_order_item_detail_info_data"}
-            <div class="panel--td column--info-data">
-                {* Order date *}
-                {block name='frontend_account_order_item_date'}
-                    <p>{$offerPosition.datum|date}</p>
-                {/block}
-
-                {* Order number *}
-                {block name='frontend_account_order_item_ordernumber'}
-                    <p>{$offerPosition.ordernumber}</p>
-                {/block}
-
-                {* Shipping method *}
-                {block name='frontend_account_order_item_dispatch'}
-                    {if $offerPosition.dispatch}
-                        <p>{$offerPosition.dispatch.name}</p>
-                    {/if}
-                {/block}
-
-                {* Package tracking code *}
-                {block name='frontend_account_order_item_trackingcode'}
-                    {if $offerPosition.trackingcode}
-                        <p>
-                            {if $offerPosition.dispatch.status_link}
-                                <a href="{$offerPosition.dispatch.status_link}"
-                                   title="{$offerPosition.dispatch.name}"
-                                   onclick="return !window.open(this.href, 'popup', 'width=500,height=600,left=20,top=20');"
-                                   target="_blank">{$offerPosition.trackingcode}</a>
-                            {else}
-                                {$offerPosition.trackingcode}
+                        {* Shipping method label  *}
+                        {block name="frontend_account_order_item_label_dispatch"}
+                            {if $offerPosition.dispatch}
+                                <p class="is--strong">{s name="OrderItemColumnDispatch"}{/s}</p>
                             {/if}
-                        </p>
-                    {/if}
+                        {/block}
+
+                        {* Package tracking code label *}
+                        {block name="frontend_account_order_item_label_trackingcode"}
+                            {if $offerPosition.trackingcode}
+                                <p class="is--strong">{s name="OrderItemColumnTracking"}{/s}</p>
+                            {/if}
+                        {/block}
+                    </div>
+                {/block}
+
+                {block name="frontend_account_order_item_detail_info_data"}
+                    <div class="panel--td column--info-data">
+                        {* Order date *}
+                        {block name='frontend_account_order_item_date'}
+                            <p>{$offerPosition.datum|date}</p>
+                        {/block}
+
+                        {* Order number *}
+                        {block name='frontend_account_order_item_ordernumber'}
+                            <p>{$offerPosition.ordernumber}</p>
+                        {/block}
+
+                        {* Shipping method *}
+                        {block name='frontend_account_order_item_dispatch'}
+                            {if $offerPosition.dispatch}
+                                <p>{$offerPosition.dispatch.name}</p>
+                            {/if}
+                        {/block}
+
+                        {* Package tracking code *}
+                        {block name='frontend_account_order_item_trackingcode'}
+                            {if $offerPosition.trackingcode}
+                                <p>
+                                    {if $offerPosition.dispatch.status_link}
+                                        <a href="{$offerPosition.dispatch.status_link}"
+                                           title="{$offerPosition.dispatch.name}"
+                                           onclick="return !window.open(this.href, 'popup', 'width=500,height=600,left=20,top=20');"
+                                           target="_blank">{$offerPosition.trackingcode}</a>
+                                    {else}
+                                        {$offerPosition.trackingcode}
+                                    {/if}
+                                </p>
+                            {/if}
+                        {/block}
+                    </div>
                 {/block}
             </div>
         {/block}

@@ -125,17 +125,6 @@ class sBasket
     private $proportionalTaxCalculation;
 
     /**
-     * @param Enlight_Components_Db_Adapter_Pdo_Mysql|null                 $db
-     * @param Enlight_Event_EventManager|null                              $eventManager
-     * @param Shopware_Components_Snippet_Manager|null                     $snippetManager
-     * @param Shopware_Components_Config|null                              $config
-     * @param Enlight_Components_Session_Namespace|null                    $session
-     * @param Enlight_Controller_Front|null                                $front
-     * @param Shopware_Components_Modules|null                             $moduleManager
-     * @param \sSystem|null                                                $systemModule
-     * @param StoreFrontBundle\Service\ContextServiceInterface|null        $contextService
-     * @param StoreFrontBundle\Service\AdditionalTextServiceInterface|null $additionalTextService
-     *
      * @throws \Exception
      */
     public function __construct(
@@ -2086,9 +2075,6 @@ SQL;
     }
 
     /**
-     * @param ListProduct $product
-     * @param array       $note
-     *
      * @throws \Exception
      *
      * @return array
@@ -2357,8 +2343,6 @@ SQL;
     }
 
     /**
-     * @param array $voucherDetails
-     *
      * @return array
      */
     private function calculateVoucherValues(array $voucherDetails)
@@ -2503,7 +2487,6 @@ SQL;
      * Loads relevant associated data for the provided products
      * Used in sGetBasket
      *
-     * @param array $getProducts
      *
      * @throws \Exception
      * @throws \Enlight_Event_Exception
@@ -2937,9 +2920,7 @@ SQL;
     /**
      * Calculates product tax values for sUpdateArticle
      *
-     * @param int   $quantity
-     * @param array $queryNewPrice
-     * @param array $queryAdditionalInfo
+     * @param int $quantity
      *
      * @throws \Enlight_Exception
      *
@@ -3018,8 +2999,6 @@ SQL;
     }
 
     /**
-     * @param array $product
-     *
      * @throws \Enlight_Exception
      *
      * @return array
@@ -3158,9 +3137,7 @@ SQL;
     }
 
     /**
-     * @param int   $quantity
-     * @param array $basketProduct
-     * @param array $product
+     * @param int $quantity
      *
      * @return int
      */

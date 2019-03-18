@@ -144,9 +144,6 @@ class Homepage extends Page implements HelperSelectorInterface
         $this->selectFieldOption('__currency', $valid[$currency]);
     }
 
-    /**
-     * @param array $data
-     */
     public function subscribeNewsletter(array $data)
     {
         Helper::fillForm($this, 'newsletterForm', $data);
@@ -158,9 +155,6 @@ class Homepage extends Page implements HelperSelectorInterface
     /**
      * Checks the product comparison
      * Available properties are: image, name, ranking, description, price, link
-     *
-     * @param CompareColumn $compareColumns
-     * @param array         $items
      */
     public function checkComparisonProducts(CompareColumn $compareColumns, array $items)
     {
@@ -179,7 +173,6 @@ class Homepage extends Page implements HelperSelectorInterface
     /**
      * Checks an emotion banner with or without link
      *
-     * @param Banner      $banner
      * @param string      $image
      * @param string|null $link
      */
@@ -212,7 +205,6 @@ class Homepage extends Page implements HelperSelectorInterface
     /**
      * Checks an emotion banner with mapping
      *
-     * @param Banner   $banner
      * @param string   $image
      * @param string[] $mapping
      */
@@ -239,8 +231,7 @@ class Homepage extends Page implements HelperSelectorInterface
     /**
      * Checks an emotion blog element
      *
-     * @param BlogArticle $blogArticle
-     * @param array       $articles
+     * @param array $articles
      *
      * @throws \Exception
      */
@@ -268,8 +259,7 @@ class Homepage extends Page implements HelperSelectorInterface
     /**
      * Checks an emotion Youtube element
      *
-     * @param YouTube $youtube
-     * @param string  $code
+     * @param string $code
      *
      * @throws \Exception
      */
@@ -292,9 +282,6 @@ class Homepage extends Page implements HelperSelectorInterface
 
     /**
      * Checks an emotion slider element
-     *
-     * @param SliderElement $slider
-     * @param array         $slides
      */
     public function checkSlider(SliderElement $slider, array $slides)
     {
@@ -319,9 +306,6 @@ class Homepage extends Page implements HelperSelectorInterface
 
     /**
      * Checks an emotion manufacturer slider element
-     *
-     * @param SliderElement $slider
-     * @param array         $slides
      */
     public function checkManufacturerSlider(SliderElement $slider, array $slides)
     {
@@ -354,10 +338,9 @@ class Homepage extends Page implements HelperSelectorInterface
     /**
      * Checks an emotion category teaser element
      *
-     * @param CategoryTeaser $teaser
-     * @param string         $name
-     * @param string         $image
-     * @param string         $link
+     * @param string $name
+     * @param string $image
+     * @param string $link
      */
     public function checkCategoryTeaser(CategoryTeaser $teaser, $name, $image, $link)
     {
@@ -385,9 +368,6 @@ class Homepage extends Page implements HelperSelectorInterface
 
     /**
      * Checks an emotion article element
-     *
-     * @param Article $article
-     * @param array   $data
      */
     public function checkArticle(Article $article, array $data)
     {

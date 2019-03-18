@@ -30,57 +30,39 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface StoreFrontCriteriaFactoryInterface
 {
     /**
-     * @param int[]                $categoryIds
-     * @param ShopContextInterface $context
+     * @param int[] $categoryIds
      *
      * @return Criteria
      */
     public function createBaseCriteria($categoryIds, ShopContextInterface $context);
 
     /**
-     * @param Request              $request
-     * @param ShopContextInterface $context
-     *
      * @return Criteria
      */
     public function createSearchCriteria(Request $request, ShopContextInterface $context);
 
     /**
-     * @param Request              $request
-     * @param ShopContextInterface $context
-     *
      * @return Criteria
      */
     public function createListingCriteria(Request $request, ShopContextInterface $context);
 
     /**
-     * @param Request              $request
-     * @param ShopContextInterface $context
-     *
      * @return Criteria
      */
     public function createAjaxSearchCriteria(Request $request, ShopContextInterface $context);
 
     /**
-     * @param Request              $request
-     * @param ShopContextInterface $context
-     *
      * @return Criteria
      */
     public function createAjaxListingCriteria(Request $request, ShopContextInterface $context);
 
     /**
-     * @param Request              $request
-     * @param ShopContextInterface $context
-     *
      * @return Criteria
      */
     public function createAjaxCountCriteria(Request $request, ShopContextInterface $context);
 
     /**
-     * @param Request              $request
-     * @param ShopContextInterface $context
-     * @param int                  $categoryId
+     * @param int $categoryId
      *
      * @return \Shopware\Bundle\SearchBundle\Criteria
      */

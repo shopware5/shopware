@@ -150,10 +150,8 @@ class Customer extends Resource
     }
 
     /**
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $criteria
-     * @param array $orderBy
+     * @param int $offset
+     * @param int $limit
      *
      * @return array
      */
@@ -184,8 +182,6 @@ class Customer extends Resource
     }
 
     /**
-     * @param array $params
-     *
      * @return \Shopware\Models\Customer\Customer
      */
     public function create(array $params)
@@ -229,7 +225,6 @@ class Customer extends Resource
 
     /**
      * @param string $number
-     * @param array  $params
      *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
@@ -245,8 +240,7 @@ class Customer extends Resource
     }
 
     /**
-     * @param int   $id
-     * @param array $params
+     * @param int $id
      *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
@@ -337,8 +331,7 @@ class Customer extends Resource
     }
 
     /**
-     * @param array                              $data
-     * @param \Shopware\Models\Customer\Customer $customer
+     * @param array $data
      *
      * @return array
      */
@@ -350,8 +343,7 @@ class Customer extends Resource
     }
 
     /**
-     * @param array                              $data
-     * @param \Shopware\Models\Customer\Customer $customer
+     * @param array $data
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      *
@@ -432,9 +424,6 @@ class Customer extends Resource
     }
 
     /**
-     * @param array         $params
-     * @param CustomerModel $customer
-     *
      * @throws ApiException\CustomValidationException
      *
      * @return array
@@ -497,8 +486,6 @@ class Customer extends Resource
     }
 
     /**
-     * @param array|null $data
-     *
      * @throws ApiException\CustomValidationException
      *
      * @return AddressModel|null
@@ -524,8 +511,7 @@ class Customer extends Resource
     /**
      * Resolves ids to models
      *
-     * @param array $data
-     * @param bool  $filter
+     * @param bool $filter
      *
      * @return array
      */
@@ -538,9 +524,6 @@ class Customer extends Resource
     }
 
     /**
-     * @param array         $params
-     * @param CustomerModel $customer
-     *
      * @return array
      */
     private function applyAddressData(array $params, CustomerModel $customer)

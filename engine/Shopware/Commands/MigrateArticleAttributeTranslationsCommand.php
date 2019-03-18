@@ -79,8 +79,7 @@ class MigrateArticleAttributeTranslationsCommand extends ShopwareCommand
     }
 
     /**
-     * @param ProgressBar $progressBar
-     * @param int         $maxId
+     * @param int $maxId
      */
     private function migrate(ProgressBar $progressBar, $maxId)
     {
@@ -149,7 +148,6 @@ EOL
 
     /**
      * @param array $data
-     * @param array $columns
      *
      * @return array|null
      */

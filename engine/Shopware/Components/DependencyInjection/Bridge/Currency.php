@@ -29,9 +29,6 @@ use Shopware\Components\DependencyInjection\Container;
 class Currency
 {
     /**
-     * @param Container    $container
-     * @param \Zend_Locale $locale
-     *
      * @return \Zend_Currency
      */
     public function factory(Container $container, \Zend_Locale $locale)

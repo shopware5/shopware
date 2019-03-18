@@ -77,9 +77,10 @@ class ImmediateDeliveryConditionTest extends TestCase
                 'first' => ['inStock' => 0, 'minPurchase' => 1],
                 'second' => ['inStock' => 0, 'minPurchase' => 1],
                 'third' => ['inStock' => 1, 'minPurchase' => 1],
-                'fourth' => ['createVariants' => true],
+                'fourth' => ['inStock' => 1, 'minPurchase' => 1, 'createVariants' => true],
+                'fifth' => ['inStock' => 2, 'minPurchase' => 1],
             ],
-            ['third', 'fourth'],
+            ['third', 'fifth'],
             null,
             [$condition]
         );
@@ -88,7 +89,6 @@ class ImmediateDeliveryConditionTest extends TestCase
     /**
      * @param string                             $number
      * @param \Shopware\Models\Category\Category $category
-     * @param ShopContext                        $context
      * @param array                              $data
      *
      * @return array
@@ -113,7 +113,7 @@ class ImmediateDeliveryConditionTest extends TestCase
         Category $category,
         $additionally
     ) {
-        if ($additionally['createVariants'] == true) {
+        if ($additionally['createVariants'] === true) {
             $fourth = $this->getProduct('fourth', $context, $category);
             $configurator = $this->helper->getConfigurator(
                 $context->getCurrentCustomerGroup(),
@@ -123,17 +123,17 @@ class ImmediateDeliveryConditionTest extends TestCase
             $fourth = array_merge($fourth, $configurator);
             foreach ($fourth['variants'] as &$variant) {
                 $variant['inStock'] = 4;
-                $variant['minPurchase'] = 3;
+                $variant['minPurchase'] = 1;
             }
 
             return $this->helper->createArticle($fourth);
         }
 
         return parent::createProduct(
-                $number,
-                $context,
-                $category,
-                $additionally
-            );
+            $number,
+            $context,
+            $category,
+            $additionally
+        );
     }
 }

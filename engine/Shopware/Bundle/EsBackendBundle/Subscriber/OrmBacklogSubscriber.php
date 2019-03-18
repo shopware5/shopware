@@ -79,8 +79,6 @@ class OrmBacklogSubscriber implements EventSubscriber
     }
 
     /**
-     * @param mixed $entity
-     *
      * @return array|null
      */
     private function getBacklog($entity)
@@ -116,9 +114,6 @@ class OrmBacklogSubscriber implements EventSubscriber
         return null;
     }
 
-    /**
-     * @param OnFlushEventArgs $eventArgs
-     */
     private function trace(OnFlushEventArgs $eventArgs)
     {
         /** @var ModelManager $em */

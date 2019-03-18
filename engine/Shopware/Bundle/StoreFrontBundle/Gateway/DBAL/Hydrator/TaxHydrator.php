@@ -32,7 +32,6 @@ class TaxHydrator extends Hydrator
      * Creates a new tax struct and assigns the passed
      * data array.
      *
-     * @param array $data
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Tax
      */
@@ -51,7 +50,6 @@ class TaxHydrator extends Hydrator
      * Creates a new tax struct and assigns the passed
      * data array.
      *
-     * @param array $data
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Tax
      */

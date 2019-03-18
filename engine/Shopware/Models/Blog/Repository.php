@@ -40,11 +40,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog articles for the frontend list
      *
-     * @param int[]      $blogCategoryIds
-     * @param int|null   $offset
-     * @param int|null   $limit
-     * @param array|null $filter
-     * @param int|null   $shopId
+     * @param int[]    $blogCategoryIds
+     * @param int|null $offset
+     * @param int|null $limit
+     * @param int|null $shopId
      *
      * @internal param $blogCategory
      *
@@ -337,7 +336,6 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog author filter
      *
      * @param int[]       $blogCategoryIds
-     * @param array|null  $filter
      * @param string|null $order
      * @param int|null    $offset
      * @param int|null    $limit
@@ -362,7 +360,6 @@ class Repository extends ModelRepository
      * This function can be hooked to modify the query builder of the query object.
      *
      * @param int[]  $blogCategoryIds
-     * @param array  $filter
      * @param string $order
      *
      * @return \Doctrine\ORM\QueryBuilder

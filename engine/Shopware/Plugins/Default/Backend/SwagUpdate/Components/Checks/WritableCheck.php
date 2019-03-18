@@ -43,10 +43,6 @@ class WritableCheck implements CheckInterface
      */
     private $fileSystem;
 
-    /**
-     * @param FileSystem       $fileSystem
-     * @param SnippetNamespace $namespace
-     */
     public function __construct(FileSystem $fileSystem, SnippetNamespace $namespace)
     {
         $this->namespace = $namespace;

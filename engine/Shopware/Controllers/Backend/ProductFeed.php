@@ -325,8 +325,6 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
      * Returns an array with feed data for the passed feed id.
      *
      * @param int $id
-     *
-     * @return mixed
      */
     private function getFeed($id)
     {

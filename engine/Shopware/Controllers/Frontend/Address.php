@@ -387,8 +387,6 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     }
 
     /**
-     * @param FormInterface $form
-     *
      * @return array
      */
     private function getFormViewData(FormInterface $form)
@@ -440,9 +438,6 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
      * - sessionKey, set a session variable named the value of the submitted sessionKey containing the address id.
      * - setDefaultBillingAddress, sets the address as new default billing address
      * - setDefaultShippingAddress, sets the address as new default shipping address
-     *
-     * @param array   $extraData
-     * @param Address $address
      */
     private function handleExtraData(array $extraData, Address $address)
     {
@@ -476,9 +471,6 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         }
     }
 
-    /**
-     * @param Address $address
-     */
     private function refreshSession(Address $address)
     {
         $countryId = $address->getCountry()->getId();
@@ -523,8 +515,6 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     }
 
     /**
-     * @param Address $address
-     *
      * @return bool
      */
     private function isValidShippingAddress(Address $address)
@@ -540,8 +530,6 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     }
 
     /**
-     * @param array $addresses
-     *
      * @return array
      */
     private function translateCountries(array $addresses)

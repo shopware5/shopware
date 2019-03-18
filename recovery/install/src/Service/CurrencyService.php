@@ -53,17 +53,12 @@ class CurrencyService
      */
     private $connection;
 
-    /**
-     * @param \PDO $connection
-     */
     public function __construct(\PDO $connection)
     {
         $this->connection = $connection;
     }
 
     /**
-     * @param Shop $shop
-     *
      * @throws \RuntimeException
      */
     public function updateCurrency(Shop $shop)

@@ -38,28 +38,16 @@ class PropertyCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private $connection;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }
 
-    /**
-     * @param Request              $request
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
-     */
     public function handleRequest(Request $request, Criteria $criteria, ShopContextInterface $context)
     {
         $this->addPropertyCondition($request, $criteria);
     }
 
-    /**
-     * @param Request  $request
-     * @param Criteria $criteria
-     */
     private function addPropertyCondition(Request $request, Criteria $criteria)
     {
         $filters = $request->getParam('sFilterProperties', []);

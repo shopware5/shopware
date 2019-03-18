@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="s_articles_information")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Link extends ModelEntity
 {
@@ -57,7 +57,7 @@ class Link extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -72,7 +72,7 @@ class Link extends ModelEntity
     /**
      * @var string
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="description", type="string", nullable=false)
      */
@@ -81,8 +81,8 @@ class Link extends ModelEntity
     /**
      * @var string
      *
-     * @Assert\Url
-     * @Assert\NotBlank
+     * @Assert\Url()
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="link", type="string", nullable=false)
      */

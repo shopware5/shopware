@@ -122,7 +122,6 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
     /**
      * Event listener function of the search index rebuild cron job.
      *
-     * @param Enlight_Event_EventArgs $arguments
      *
      * @return bool
      */
@@ -191,7 +190,6 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
     /**
      * Event listener function of the search index rebuild cron job.
      *
-     * @param Enlight_Event_EventArgs $arguments
      *
      * @return bool
      */
@@ -215,8 +213,6 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
      *
      * The refreshSeoIndex method will only be called, if "live" mode is enabled. Else the process will be
      * triggered via plugin or manually
-     *
-     * @param Enlight_Controller_EventArgs $args
      */
     public function onAfterSendResponse(Enlight_Controller_EventArgs $args)
     {
@@ -245,7 +241,6 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
      * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_Seo
      * event. This event is fired when shopware trying to access the plugin SEO controller.
      *
-     * @param Enlight_Event_EventArgs $arguments
      *
      * @return string
      */
@@ -258,7 +253,6 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
      * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_SearchIndex
      * event. This event is fired when shopware trying to access the plugin SearchIndex controller.
      *
-     * @param Enlight_Event_EventArgs $arguments
      *
      * @return string
      */
@@ -271,7 +265,6 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
      * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_SimilarShown
      * event. This event is fired when shopware trying to access the plugin AlsoBought controller.
      *
-     * @param Enlight_Event_EventArgs $arguments
      *
      * @return string
      */

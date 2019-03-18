@@ -56,9 +56,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     private $indexFactory;
 
     /**
-     * @param Client                $client
-     * @param IndexFactoryInterface $indexFactory
-     * @param HandlerInterface[]    $handlers
+     * @param HandlerInterface[] $handlers
      */
     public function __construct(
         Client $client,
@@ -114,9 +112,6 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     }
 
     /**
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
-     *
      * @throws \Exception
      *
      * @return Search
@@ -141,9 +136,6 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     }
 
     /**
-     * @param Criteria                $criteria
-     * @param ShopContextInterface    $context
-     * @param Search                  $search
      * @param CriteriaPartInterface[] $criteriaParts
      */
     private function addCriteriaParts(
@@ -162,8 +154,6 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     }
 
     /**
-     * @param CriteriaPartInterface $criteriaPart
-     *
      * @return HandlerInterface|null
      */
     private function getHandler(CriteriaPartInterface $criteriaPart)
@@ -208,10 +198,6 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     }
 
     /**
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
-     * @param Search               $search
-     *
      * @throws \Exception
      */
     private function addConditions(
@@ -266,9 +252,6 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     }
 
     /**
-     * @param Criteria                  $criteria
-     * @param ProductNumberSearchResult $result
-     *
      * @return array
      */
     private function sortFacets(Criteria $criteria, ProductNumberSearchResult $result)

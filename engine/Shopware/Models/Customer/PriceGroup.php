@@ -41,7 +41,7 @@ use Shopware\Components\Model\ModelEntity;
  *   - PRIMARY KEY (`id`)
  * </code>
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_core_customerpricegroups")
  */
 class PriceGroup extends ModelEntity
@@ -61,7 +61,7 @@ class PriceGroup extends ModelEntity
      *
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

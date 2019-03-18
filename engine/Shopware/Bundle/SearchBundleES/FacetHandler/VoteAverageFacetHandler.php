@@ -51,10 +51,6 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
      */
     private $queryAliasMapper;
 
-    /**
-     * @param Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper                    $queryAliasMapper
-     */
     public function __construct(
         Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper
@@ -111,9 +107,6 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
     }
 
     /**
-     * @param Criteria $criteria
-     * @param array    $buckets
-     *
      * @return RadioFacetResult
      */
     private function createFacet(Criteria $criteria, array $buckets)

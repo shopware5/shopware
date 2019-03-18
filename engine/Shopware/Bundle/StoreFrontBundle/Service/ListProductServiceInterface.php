@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 
 interface ListProductServiceInterface
 {
@@ -34,21 +35,17 @@ interface ListProductServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::get()
      *
-     * @param array                          $numbers
-     * @param Struct\ProductContextInterface $context
-     *
-     * @return Struct\ListProduct[] indexed by the product order number
+     * @return ListProduct[] indexed by the product order number
      */
-    public function getList(array $numbers, Struct\ProductContextInterface $context);
+    public function getList(array $numbers, ProductContextInterface $context);
 
     /**
      * Returns a full \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct object.
      * A list product contains all required data to display products in small views like listings, sliders or emotions.
      *
-     * @param string                         $number
-     * @param Struct\ProductContextInterface $context
+     * @param string $number
      *
-     * @return Struct\ListProduct|null
+     * @return ListProduct|null
      */
-    public function get($number, Struct\ProductContextInterface $context);
+    public function get($number, ProductContextInterface $context);
 }

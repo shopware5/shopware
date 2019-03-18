@@ -54,7 +54,6 @@ class LegacyPluginExtractor
      * path and validates the plugin namespace, directory traversal
      * and multiple plugin directories.
      *
-     * @param \ZipArchive $archive
      *
      * @throws \Exception
      */
@@ -66,8 +65,7 @@ class LegacyPluginExtractor
     }
 
     /**
-     * @param \ZipArchive $archive
-     * @param string      $prefix
+     * @param string $prefix
      */
     private function assertValid(\ZipArchive $archive, $prefix)
     {
@@ -80,8 +78,6 @@ class LegacyPluginExtractor
     }
 
     /**
-     * @param \ZipArchive $archive
-     *
      * @return string
      */
     private function getLegacyPluginPrefix(\ZipArchive $archive)

@@ -908,7 +908,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
     /**
      * @param string|int $localeId
-     * @param array      $values
      *
      * @return array
      */
@@ -950,10 +949,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      *          );
      *
      * @param string $language        the preferred locale (e.g., the user's locale)
-     * @param mixed  $store
      * @param array  $fallbackLocales a list of locales (e.g., ['en_GB', 'en'])
-     *
-     * @return mixed
      */
     private function translateStore($language, $store, array $fallbackLocales)
     {
@@ -988,9 +984,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * @param array $value
-     * @param array $tryLocales
-     *
      * @return string|null
      */
     private function getTranslation(array $value, array $tryLocales)
@@ -1182,10 +1175,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         return true;
     }
 
-    /**
-     * @param array                    $data
-     * @param \Shopware\Models\Tax\Tax $model
-     */
     private function saveTaxRules(array $data, \Shopware\Models\Tax\Tax $model)
     {
         if (isset($data['rules'])) {
@@ -1278,9 +1267,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
     /**
      * @param array $elementData
-     * @param mixed $value
-     *
-     * @return mixed
      */
     private function prepareValue($elementData, $value)
     {
@@ -1294,10 +1280,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         return $value;
     }
 
-    /**
-     * @param array $elementData
-     * @param Shop  $defaultShop
-     */
     private function saveElement(array $elementData, Shop $defaultShop)
     {
         $shopRepository = $this->getRepository('shop');

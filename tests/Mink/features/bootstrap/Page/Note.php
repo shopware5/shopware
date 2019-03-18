@@ -52,9 +52,6 @@ class Note extends Page
         Helper::throwException($message);
     }
 
-    /**
-     * @param array $items
-     */
     public function fillNoteWithProducts(array $items)
     {
         $originalPath = $this->path;
@@ -67,10 +64,6 @@ class Note extends Page
         $this->path = $originalPath;
     }
 
-    /**
-     * @param NotePosition $notePositions
-     * @param array        $items
-     */
     public function checkNoteProducts(NotePosition $notePositions, array $items)
     {
         foreach ($items as &$item) {

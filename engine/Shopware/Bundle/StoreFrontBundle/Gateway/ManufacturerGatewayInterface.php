@@ -34,9 +34,6 @@ interface ManufacturerGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ManufacturerGatewayInterface::get()
      *
-     * @param array                       $ids
-     * @param Struct\ShopContextInterface $context
-     *
      * @return Struct\Product\Manufacturer[] Indexed by the manufacturer id
      */
     public function getList(array $ids, Struct\ShopContextInterface $context);
@@ -49,8 +46,7 @@ interface ManufacturerGatewayInterface
      * Required translation in the provided context language:
      * - Manufacturer
      *
-     * @param int                         $id
-     * @param Struct\ShopContextInterface $context
+     * @param int $id
      *
      * @return Struct\Product\Manufacturer
      */

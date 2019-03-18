@@ -53,13 +53,6 @@ class ProductHydrator extends Hydrator
      */
     private $esdHydrator;
 
-    /**
-     * @param AttributeHydrator    $attributeHydrator
-     * @param ManufacturerHydrator $manufacturerHydrator
-     * @param TaxHydrator          $taxHydrator
-     * @param UnitHydrator         $unitHydrator
-     * @param EsdHydrator          $esdHydrator
-     */
     public function __construct(
         AttributeHydrator $attributeHydrator,
         ManufacturerHydrator $manufacturerHydrator,
@@ -78,7 +71,6 @@ class ProductHydrator extends Hydrator
      * Hydrates the passed data and converts the ORM
      * array values into a Struct\ListProduct class.
      *
-     * @param array $data
      *
      * @return Struct\ListProduct
      */
@@ -94,8 +86,6 @@ class ProductHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return array
      */
     public function getProductTranslation(array $data)
@@ -123,9 +113,6 @@ class ProductHydrator extends Hydrator
     }
 
     /**
-     * @param Struct\ListProduct $product
-     * @param array              $data
-     *
      * @return Struct\ListProduct
      */
     private function assignData(Struct\ListProduct $product, array $data)
@@ -164,10 +151,6 @@ class ProductHydrator extends Hydrator
         return $product;
     }
 
-    /**
-     * @param Struct\ListProduct $product
-     * @param array              $data
-     */
     private function assignPriceGroupData(Struct\ListProduct $product, array $data)
     {
         if (!empty($data['__priceGroup_id'])) {
@@ -180,9 +163,6 @@ class ProductHydrator extends Hydrator
     /**
      * Helper function which assigns the shopware article
      * data to the product. (data of s_articles)
-     *
-     * @param Struct\ListProduct $product
-     * @param array              $data
      */
     private function assignProductData(Struct\ListProduct $product, array $data)
     {
@@ -250,9 +230,6 @@ class ProductHydrator extends Hydrator
 
     /**
      * Iterates the attribute data and assigns the attribute struct to the product.
-     *
-     * @param Struct\ListProduct $product
-     * @param array              $data
      */
     private function assignAttributeData(Struct\ListProduct $product, array $data)
     {

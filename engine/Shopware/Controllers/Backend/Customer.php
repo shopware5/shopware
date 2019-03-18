@@ -765,7 +765,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      * Helper method to prepare the customer for saving
      *
      * @param array                                      $params
-     * @param Shopware\Models\Customer\Customer          $customer
      * @param \Shopware\Models\Customer\PaymentData|null $paymentData
      *
      * @return array

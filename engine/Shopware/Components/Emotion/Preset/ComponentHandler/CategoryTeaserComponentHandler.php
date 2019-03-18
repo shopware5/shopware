@@ -65,9 +65,6 @@ class CategoryTeaserComponentHandler extends AbstractComponentHandler
     }
 
     /**
-     * @param array        $element
-     * @param ParameterBag $syncData
-     *
      * @return array
      */
     private function processElementData(array $element, ParameterBag $syncData)
@@ -106,9 +103,6 @@ class CategoryTeaserComponentHandler extends AbstractComponentHandler
     }
 
     /**
-     * @param array        $element
-     * @param ParameterBag $syncData
-     *
      * @return array
      */
     private function prepareElementExport(array $element, ParameterBag $syncData)

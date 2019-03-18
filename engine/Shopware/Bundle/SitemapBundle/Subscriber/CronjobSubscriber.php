@@ -48,11 +48,6 @@ class CronjobSubscriber implements SubscriberInterface
      */
     private $sitemapExporter;
 
-    /**
-     * @param Config                   $config
-     * @param ModelManager             $modelManager
-     * @param SitemapExporterInterface $sitemapExporter
-     */
     public function __construct(Config $config, ModelManager $modelManager, SitemapExporterInterface $sitemapExporter)
     {
         $this->config = $config;

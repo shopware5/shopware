@@ -46,9 +46,6 @@ abstract class Adapter implements SeekableIterator, Countable
         $this->position = (int) $position;
     }
 
-    /**
-     * @return mixed
-     */
     public function count()
     {
         return $this->count;
@@ -59,9 +56,6 @@ abstract class Adapter implements SeekableIterator, Countable
         $this->position = 0;
     }
 
-    /**
-     * @return mixed
-     */
     public function key()
     {
         return $this->position;

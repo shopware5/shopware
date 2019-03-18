@@ -1312,8 +1312,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     /**
      * Event listener function of the product store of the backend module.
-     *
-     * @return mixed
      */
     public function deleteAction()
     {
@@ -2979,8 +2977,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      *
      * @param array   $data
      * @param Article $article
-     *
-     * @return mixed
      */
     protected function saveArticle($data, $article)
     {
@@ -3123,9 +3119,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * the cross join sql for all possible variants.
      * Returns an array with the sql and all used group ids
      *
-     * @param array $groups
-     * @param int   $offset
-     * @param int   $limit
+     * @param int $offset
+     * @param int $limit
      *
      * @return array
      */
@@ -3396,8 +3391,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * the generated product variants.
      *
      * @param Article $article
-     *
-     * @return mixed
      */
     protected function getDetailDataForVariantGeneration($article)
     {
@@ -3458,8 +3451,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     /**
      * Copies all translations from an product into the respective configurator template
-     *
-     * @param Template $template
      */
     protected function createConfiguratorTemplateTranslations(Template $template)
     {
@@ -3540,8 +3531,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      *
      * @param array   $data
      * @param Article $article
-     *
-     * @return mixed
      */
     protected function prepareConfiguratorTemplateData($data, $article)
     {
@@ -3576,8 +3565,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * The configured customer groups are not allowed to set the product in the store front.
      *
      * @param array $data
-     *
-     * @return mixed
      */
     protected function prepareAvoidCustomerGroups($data)
     {
@@ -3923,8 +3910,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      *
      * @param array   $data
      * @param Article $article
-     *
-     * @return mixed
      */
     protected function prepareMainPricesAssociatedData($data, $article)
     {
@@ -4171,10 +4156,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Start function for number generation. Iterates the different commands,
      * resolves the cursor or counter and starts the recursive
      *
-     * @param Article $article
-     * @param Detail  $detail
-     * @param array   $commands
-     * @param int     $counter
+     * @param int $counter
      *
      * @return string
      */
@@ -4405,8 +4387,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * @param array $detailData
      * @param array $article
-     *
-     * @return mixed
      */
     private function setDetailDataReferences($detailData, $article)
     {
@@ -4480,8 +4460,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
-     * @param array $result
-     *
      * @return ListProduct[]
      */
     private function buildListProducts(array $result)
@@ -4505,7 +4483,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
-     * @param array         $data
      * @param ListProduct[] $products
      *
      * @return array

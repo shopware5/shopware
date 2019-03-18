@@ -37,9 +37,6 @@ class IonCubeLoaderCheck implements CheckInterface
      */
     private $namespace;
 
-    /**
-     * @param SnippetNamespace $namespace
-     */
     public function __construct(SnippetNamespace $namespace)
     {
         $this->namespace = $namespace;

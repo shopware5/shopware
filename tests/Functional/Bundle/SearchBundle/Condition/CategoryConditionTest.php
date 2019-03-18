@@ -70,10 +70,7 @@ class CategoryConditionTest extends TestCase
     /**
      * Override prevents a default category condition
      *
-     * @param Criteria    $criteria
-     * @param Category    $category
-     * @param array       $conditions
-     * @param ShopContext $context
+     * @param array $conditions
      */
     protected function addCategoryBaseCondition(
         Criteria $criteria,

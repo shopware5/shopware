@@ -126,8 +126,6 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
 
     /**
      * Changes the payment method
-     *
-     * @param array $data
      */
     public function changePaymentMethod(array $data = [])
     {
@@ -137,8 +135,6 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
 
     /**
      * Changes the billing address
-     *
-     * @param array $data
      */
     public function changeBillingAddress(array $data = [])
     {
@@ -152,8 +148,6 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
 
     /**
      * Changes the shipping address
-     *
-     * @param array $data
      */
     public function changeShippingAddress(array $data = [])
     {
@@ -167,8 +161,6 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
 
     /**
      * Changes the shipping method
-     *
-     * @param array $data
      */
     public function changeShippingMethod(array $data = [])
     {

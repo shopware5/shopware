@@ -138,7 +138,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_SimilarShown
      * event. This event is fired when shopware trying to access the plugin SimilarShown controller.
      *
-     * @param Enlight_Event_EventArgs $arguments
      *
      * @return string
      */
@@ -171,10 +170,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      * event. This event is fired after the Shopware_Plugins_LastArticles plugin resets
      * the s_emarketing_lastarticles data for a validation time.
      * This listener is used to update the similar shown article data at the same time.
-     *
-     * @param Enlight_Event_EventArgs $arguments
-     *
-     * @return mixed
      */
     public function afterSimilarShownArticlesReset(Enlight_Event_EventArgs $arguments)
     {
@@ -203,10 +198,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      * This event is fired after a user visit an article detail page.
      * This listener function is used to increment the counter value of
      * the s_articles_similar_shown_ro table.
-     *
-     * @param Enlight_Event_EventArgs $arguments
-     *
-     * @return mixed
      */
     public function beforeSetLastArticle(Enlight_Event_EventArgs $arguments)
     {
@@ -256,7 +247,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      * This event is a configured cron job which is used to update the
      * elapsed similar shown article data.
      *
-     * @param Enlight_Event_EventArgs $arguments
      *
      * @return bool
      */
@@ -281,7 +271,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_SimilarShown
      * event. This event is fired when shopware trying to access the plugin AlsoBought controller.
      *
-     * @param Enlight_Event_EventArgs $arguments
      *
      * @return string
      */
@@ -313,10 +302,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      * Event listener function of the Shopware_Modules_Order_SaveOrder_ProcessDetails event.
      * This event is fired after a customer completed an order.
      * This function is used to add or increment the new also bought articles.
-     *
-     * @param Enlight_Event_EventArgs $arguments
-     *
-     * @return mixed
      */
     public function addNewAlsoBought(Enlight_Event_EventArgs $arguments)
     {
@@ -353,7 +338,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_TopSeller
      * event. This event is fired when shopware trying to access the plugin TopSeller controller.
      *
-     * @param Enlight_Event_EventArgs $arguments
      *
      * @return string
      */
@@ -386,10 +370,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      * has ordered articles in the store front.
      * This function is used to increment the sales count in the
      * s_articles_top_seller table.
-     *
-     * @param Enlight_Event_EventArgs $arguments
-     *
-     * @return mixed
      */
     public function incrementTopSeller(Enlight_Event_EventArgs $arguments)
     {
@@ -440,10 +420,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      * live refresh of the article data.
      * The listener function registers an additional listener on the
      * after_send_response event.
-     *
-     * @param Enlight_Event_EventArgs $arguments
-     *
-     * @return mixed
      */
     public function afterTopSellerSelected(Enlight_Event_EventArgs $arguments)
     {
@@ -467,8 +443,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
 
     /**
      * Refresh the top seller data of a single article.
-     *
-     * @param Enlight_Event_EventArgs $arguments
      */
     public function refreshArticle(Enlight_Event_EventArgs $arguments)
     {
@@ -498,8 +472,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      * after each access on the top seller core function.
      * This function refresh only a minimum stack of the top seller data
      * to prevent long server times.
-     *
-     * @param Enlight_Event_EventArgs $arguments
      */
     public function afterSendResponseOnTopSeller(Enlight_Event_EventArgs $arguments)
     {

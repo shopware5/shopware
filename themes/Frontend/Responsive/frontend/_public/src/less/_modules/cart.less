@@ -372,11 +372,14 @@ Shopware offers two different shopping cart element options that can be selected
         border-width: 1px 0 0 0;
     }
 
+    .table--shipping-costs label{
+        font-weight: @font-bold-weight;
+    }
+
     .table--shipping-costs .select-field {
         .unitize(height, 38);
         .unitize(line-height, 36);
         max-width: 100%;
-        font-weight: @font-bold-weight;
     }
 
     .table--shipping-costs-trigger {
@@ -956,8 +959,6 @@ Shopware offers two different shopping cart element options that can be selected
             .unitize(margin-bottom, 20);
         }
 
-        .product--delivery { float: left }
-
         .row--voucher,
         .row--premium-product { height: 100%; }
 
@@ -1052,7 +1053,7 @@ Shopware offers two different shopping cart element options that can be selected
             }
         }
         .table--content {
-            width: 80%;
+            width: 74%;
         }
 
         .column--quantity {
@@ -1063,8 +1064,8 @@ Shopware offers two different shopping cart element options that can be selected
 
             .select-field {
                 float: right;
-                min-width: 0;
                 font-weight: @font-bold-weight;
+                .unitize-padding(0, 0, 0, 16);
             }
         }
 

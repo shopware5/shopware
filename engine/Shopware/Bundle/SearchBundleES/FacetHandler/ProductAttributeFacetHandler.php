@@ -63,9 +63,6 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
      */
     private $crudService;
 
-    /**
-     * @param CrudService $crudService
-     */
     public function __construct(CrudService $crudService)
     {
         $this->crudService = $crudService;
@@ -193,9 +190,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     }
 
     /**
-     * @param string                $type
-     * @param FacetResultInterface  $result
-     * @param ProductAttributeFacet $facet
+     * @param string $type
      *
      * @return FacetResultInterface
      */
@@ -252,9 +247,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     }
 
     /**
-     * @param ProductAttributeFacet $criteriaPart
-     * @param array                 $data
-     * @param Criteria              $criteria
+     * @param array $data
      *
      * @return RadioFacetResult|ValueListFacetResult|null
      */
@@ -304,9 +297,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     }
 
     /**
-     * @param ProductAttributeFacet $criteriaPart
-     * @param array                 $data
-     * @param Criteria              $criteria
+     * @param array $data
      *
      * @return BooleanFacetResult|null
      */
@@ -328,9 +319,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     }
 
     /**
-     * @param ProductAttributeFacet $criteriaPart
-     * @param array                 $data
-     * @param Criteria              $criteria
+     * @param array $data
      *
      * @return RangeFacetResult
      */
@@ -367,8 +356,6 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     }
 
     /**
-     * @param array $aggregation
-     *
      * @return array
      */
     private function formatDates(array $aggregation)

@@ -29,7 +29,7 @@ use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Table(name="s_search_custom_sorting")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class CustomSorting extends ModelEntity
 {
@@ -72,7 +72,7 @@ class CustomSorting extends ModelEntity
      * @var int
      *
      * @ORM\Column(type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

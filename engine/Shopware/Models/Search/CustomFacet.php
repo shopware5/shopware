@@ -29,7 +29,7 @@ use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Table(name="s_search_custom_facet")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class CustomFacet extends ModelEntity
 {
@@ -86,7 +86,7 @@ class CustomFacet extends ModelEntity
      * @var int
      *
      * @ORM\Column(type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

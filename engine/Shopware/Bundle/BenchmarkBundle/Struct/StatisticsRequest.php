@@ -39,8 +39,7 @@ class StatisticsRequest
     private $config;
 
     /**
-     * @param string          $data
-     * @param BenchmarkConfig $config
+     * @param string $data
      */
     public function __construct($data, BenchmarkConfig $config)
     {

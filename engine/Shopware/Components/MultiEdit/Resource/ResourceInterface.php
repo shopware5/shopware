@@ -28,8 +28,6 @@ interface ResourceInterface
 {
     /**
      * Needs to return the grammar for out lexer
-     *
-     * @return mixed
      */
     public function getGrammar();
 
@@ -39,8 +37,6 @@ interface ResourceInterface
      * @param string $attribute
      * @param string $operator
      * @param array  $queryConfig
-     *
-     * @return mixed
      */
     public function getValuesFor($attribute, $operator, $queryConfig);
 
@@ -50,16 +46,11 @@ interface ResourceInterface
      * @param array $tokens
      * @param int   $offset
      * @param int   $limit
-     * @param null  $orderBy
-     *
-     * @return mixed
      */
     public function filter($tokens, $offset, $limit, $orderBy = null);
 
     /**
      * Returns columns to be shown in the batchProcess window
-     *
-     * @return mixed
      */
     public function getBatchColumns();
 
@@ -67,8 +58,6 @@ interface ResourceInterface
      * The actual batch processing
      *
      * @param int $queueId
-     *
-     * @return mixed
      */
     public function batchProcess($queueId);
 
@@ -80,15 +69,11 @@ interface ResourceInterface
      * @param int    $offset
      * @param int    $limit
      * @param int    $queueId
-     *
-     * @return mixed
      */
     public function createQueue($filterArray, $operations, $offset, $limit, $queueId);
 
     /**
      * Needs to return the columns that can be shown as well as their data type.
-     *
-     * @return mixed
      */
     public function getColumnConfig();
 
@@ -96,8 +81,6 @@ interface ResourceInterface
      * Saves a single modified instance of the entity
      *
      * @param array $params
-     *
-     * @return mixed
      */
     public function save($params);
 
@@ -106,8 +89,6 @@ interface ResourceInterface
      *
      * @param int $offset
      * @param int $limit
-     *
-     * @return mixed
      */
     public function listBackups($offset, $limit);
 
@@ -116,8 +97,6 @@ interface ResourceInterface
      *
      * @param int $id
      * @param int $offset
-     *
-     * @return mixed
      */
     public function restoreBackup($id, $offset);
 
@@ -125,8 +104,6 @@ interface ResourceInterface
      * Delete a given backup
      *
      * @param int $id
-     *
-     * @return mixed
      */
     public function deleteBackup($id);
 }

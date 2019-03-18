@@ -30,15 +30,11 @@ use Shopware\Models\User\User;
 interface UserValidatorInterface
 {
     /**
-     * @param User $user
-     *
      * @throws ValidationException
      */
     public function validate(User $user);
 
     /**
-     * @param User $user
-     *
      * @return bool
      */
     public function isValid(User $user);

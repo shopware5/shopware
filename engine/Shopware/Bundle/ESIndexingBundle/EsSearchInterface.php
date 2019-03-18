@@ -30,17 +30,11 @@ interface EsSearchInterface
 {
     /**
      * @deprecated since 5.6, to be removed in 5.7. Use addQuery(EsBuilderInterface, BoolQuery::FILTER)
-     *
-     * @param BuilderInterface $query
      */
     public function addFilter(BuilderInterface $query);
 
     /**
      * @deprecated since 5.6, to be removed in 5.7. Use addQuery(EsBuilderInterface, BoolQuery::FILTER)
-     *
-     * @param BuilderInterface $query
-     *
-     * @return BuilderInterface
      */
     public function getFilters(BuilderInterface $query): BuilderInterface;
 }

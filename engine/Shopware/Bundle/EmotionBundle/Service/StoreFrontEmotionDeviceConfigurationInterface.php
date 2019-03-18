@@ -29,9 +29,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface StoreFrontEmotionDeviceConfigurationInterface
 {
     /**
-     * @param int                  $categoryId
-     * @param ShopContextInterface $context
-     * @param bool                 $withStreams Consider customer stream emotions?
+     * @param int  $categoryId
+     * @param bool $withStreams Consider customer stream emotions?
      *
      * @return array
      */

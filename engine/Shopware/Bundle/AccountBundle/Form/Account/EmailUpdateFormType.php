@@ -55,11 +55,6 @@ class EmailUpdateFormType extends AbstractType
      */
     private $context;
 
-    /**
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param \Shopware_Components_Config          $config
-     * @param ContextServiceInterface              $context
-     */
     public function __construct(
         \Shopware_Components_Snippet_Manager $snippetManager,
         \Shopware_Components_Config $config,
@@ -70,9 +65,6 @@ class EmailUpdateFormType extends AbstractType
         $this->context = $context;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -89,10 +81,6 @@ class EmailUpdateFormType extends AbstractType
         return 'email';
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('email', EmailType::class, [

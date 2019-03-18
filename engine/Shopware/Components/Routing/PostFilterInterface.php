@@ -27,8 +27,7 @@ namespace Shopware\Components\Routing;
 interface PostFilterInterface
 {
     /**
-     * @param string  $url
-     * @param Context $context
+     * @param string $url
      *
      * @return string
      */

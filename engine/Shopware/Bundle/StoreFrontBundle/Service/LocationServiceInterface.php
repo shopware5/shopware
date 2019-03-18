@@ -33,7 +33,6 @@ interface LocationServiceInterface
      * Returns a list of all available countries and their states for the provided shop context.
      * Countries are sorted first at the position field and as fallback by the name property
      *
-     * @param ShopContextInterface $context
      *
      * @return Country[] indexed by country id
      */

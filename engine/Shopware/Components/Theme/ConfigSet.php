@@ -69,7 +69,6 @@ class ConfigSet
     /**
      * @param string $description
      * @param string $name
-     * @param array  $values
      */
     public function __construct($name = '', array $values = [], $description = '')
     {
@@ -79,8 +78,6 @@ class ConfigSet
     }
 
     /**
-     * @param mixed $description
-     *
      * @return $this
      */
     public function setDescription($description)
@@ -90,17 +87,12 @@ class ConfigSet
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getDescription()
     {
         return $this->description;
     }
 
     /**
-     * @param mixed $name
-     *
      * @return $this
      */
     public function setName($name)
@@ -110,9 +102,6 @@ class ConfigSet
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getName()
     {
         return $this->name;

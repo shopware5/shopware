@@ -32,23 +32,11 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface ComponentHandlerInterface
 {
     /**
-     * @param Element $element
-     *
      * @return bool
      */
     public function supports(Element $element);
 
-    /**
-     * @param PrepareDataCollection $collection
-     * @param Element               $element
-     * @param ShopContextInterface  $context
-     */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context);
 
-    /**
-     * @param ResolvedDataCollection $collection
-     * @param Element                $element
-     * @param ShopContextInterface   $context
-     */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context);
 }

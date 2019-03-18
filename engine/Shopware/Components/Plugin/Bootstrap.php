@@ -296,7 +296,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Create a new menu item instance
      *
-     * @param array $options
      *
      * @return Menu|null
      */
@@ -508,7 +507,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *  2. The 'Snippets' plugin directory is added as a config directory.
      *  3. The 'Components' plugin directory is added as a component namespace.
      *
-     * @param Enlight_Event_EventArgs $arguments
      *
      * @throws Exception
      *
@@ -715,8 +713,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Event listener of the post dispatch event of the backend and widgets emotion controller
      * to load the plugin emotion template extensions.
-     *
-     * @param Enlight_Controller_ActionEventArgs $args
      */
     public function extendsEmotionTemplates(Enlight_Controller_ActionEventArgs $args)
     {
@@ -892,7 +888,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Check if a list of given plugins is currently available
      * and active
      *
-     * @param array $plugins
      *
      * @return bool
      */
@@ -944,7 +939,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * @param string $route
      * @param int    $time
-     * @param array  $invalidateTags
      *
      * @return bool
      */

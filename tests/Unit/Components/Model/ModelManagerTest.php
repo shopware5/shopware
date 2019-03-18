@@ -93,8 +93,6 @@ class ModelManagerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $type
-     *
-     * @return string
      */
     private function convertColumnType($type): string
     {

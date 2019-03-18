@@ -81,8 +81,7 @@
                 {/block}
 
                 {* Unit price is based on a reference unit *}
-                {if $sArticle.purchaseunit && $sArticle.referenceunit && $sArticle.purchaseunit != $sArticle.referenceunit}
-
+                {if $sArticle.purchaseunit && $sArticle.referenceunit && $sArticle.purchaseunit != $sArticle.referenceunit && !$sArticle.sBlockPrices}
                     {* Reference unit price content *}
                     {block name='frontend_detail_data_price_unit_reference_content'}
                         ({$sArticle.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}

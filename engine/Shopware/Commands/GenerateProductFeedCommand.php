@@ -121,8 +121,7 @@ class GenerateProductFeedCommand extends ShopwareCommand
     }
 
     /**
-     * @param \sExport    $export
-     * @param ProductFeed $feedModel
+     * @param \sExport $export
      */
     private function generateFeed($export, ProductFeed $feedModel)
     {

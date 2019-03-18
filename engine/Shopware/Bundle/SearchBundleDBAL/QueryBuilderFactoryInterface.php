@@ -35,8 +35,6 @@ interface QueryBuilderFactoryInterface
      *
      * Adds the sorting and conditions of the provided criteria.
      *
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
      *
      * @return QueryBuilder
      */
@@ -45,8 +43,6 @@ interface QueryBuilderFactoryInterface
     /**
      * Generates the product selection query of the product number search
      *
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
      *
      * @return QueryBuilder
      */
@@ -58,8 +54,6 @@ interface QueryBuilderFactoryInterface
      *
      * Adds only the conditions of the provided criteria.
      *
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
      *
      * @return QueryBuilder
      */

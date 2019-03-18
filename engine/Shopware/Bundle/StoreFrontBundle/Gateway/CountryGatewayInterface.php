@@ -32,8 +32,7 @@ interface CountryGatewayInterface
      * The \Shopware\Bundle\StoreFrontBundle\Struct\Country\State requires the following data:
      * - Country area base data
      *
-     * @param int                         $id
-     * @param Struct\ShopContextInterface $context
+     * @param int $id
      *
      * @return Struct\Country\Area
      */
@@ -45,9 +44,6 @@ interface CountryGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface::getState()
      *
-     * @param array                       $ids
-     * @param Struct\ShopContextInterface $context
-     *
      * @return Struct\Country\State[]
      */
     public function getStates(array $ids, Struct\ShopContextInterface $context);
@@ -58,9 +54,6 @@ interface CountryGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface::getCountry()
      *
-     * @param array                       $ids
-     * @param Struct\ShopContextInterface $context
-     *
      * @return Struct\Country[]
      */
     public function getCountries(array $ids, Struct\ShopContextInterface $context);
@@ -70,9 +63,6 @@ interface CountryGatewayInterface
      * please refer to the linked classes.
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface::getArea()
-     *
-     * @param array                       $ids
-     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Country\Area[]
      */
@@ -86,8 +76,7 @@ interface CountryGatewayInterface
      * Required translation in the provided context language:
      * - Country base data
      *
-     * @param int                         $id
-     * @param Struct\ShopContextInterface $context
+     * @param int $id
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Country
      */
@@ -101,16 +90,14 @@ interface CountryGatewayInterface
      * Required translation in the provided context language:
      * - Country state base data
      *
-     * @param int                         $id
-     * @param Struct\ShopContextInterface $context
+     * @param int $id
      *
      * @return Struct\Country\State
      */
     public function getState($id, Struct\ShopContextInterface $context);
 
     /**
-     * @param int[]                       $countryIds
-     * @param Struct\ShopContextInterface $context
+     * @param int[] $countryIds
      *
      * @return array indexed by country id contains an array of Struct\Country\State
      */

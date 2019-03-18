@@ -42,9 +42,8 @@ class BusinessIntelligenceResponse
     private $shopId;
 
     /**
-     * @param \DateTimeInterface $dateTime
-     * @param string             $html
-     * @param int                $shopId
+     * @param string $html
+     * @param int    $shopId
      */
     public function __construct(\DateTimeInterface $dateTime, $html, $shopId = null)
     {

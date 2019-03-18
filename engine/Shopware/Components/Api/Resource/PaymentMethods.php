@@ -72,10 +72,8 @@ class PaymentMethods extends Resource
     }
 
     /**
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $filter
-     * @param array $orderBy
+     * @param int $offset
+     * @param int $limit
      *
      * @return array
      */
@@ -98,8 +96,6 @@ class PaymentMethods extends Resource
     }
 
     /**
-     * @param array $params
-     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Exception
      *
@@ -130,8 +126,7 @@ class PaymentMethods extends Resource
     }
 
     /**
-     * @param int   $id
-     * @param array $params
+     * @param int $id
      *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException

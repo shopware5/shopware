@@ -35,7 +35,6 @@ interface BacklogProcessorInterface
     public function add($backlogs);
 
     /**
-     * @param ShopIndex $shopIndex
      * @param Backlog[] $backlogs
      */
     public function process(ShopIndex $shopIndex, $backlogs);

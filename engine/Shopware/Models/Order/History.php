@@ -55,7 +55,7 @@ use Shopware\Components\Model\ModelEntity;
  *   - KEY `previous_order_status` (`previous_order_status_id`)
  * </code>
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_order_history")
  */
 class History extends ModelEntity
@@ -67,7 +67,7 @@ class History extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

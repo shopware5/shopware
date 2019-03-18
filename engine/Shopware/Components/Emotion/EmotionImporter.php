@@ -135,8 +135,6 @@ class EmotionImporter implements EmotionImporterInterface
     }
 
     /**
-     * @param array $requiredPlugins
-     *
      * @throws EmotionImportException
      */
     private function checkRequiredPlugins(array $requiredPlugins)
@@ -180,8 +178,7 @@ class EmotionImporter implements EmotionImporterInterface
     }
 
     /**
-     * @param ParameterBag $syncData
-     * @param string       $extractPath
+     * @param string $extractPath
      */
     private function setFilePaths(ParameterBag $syncData, $extractPath)
     {

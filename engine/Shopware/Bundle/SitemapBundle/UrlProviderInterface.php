@@ -31,9 +31,6 @@ use Shopware\Components\Routing;
 interface UrlProviderInterface
 {
     /**
-     * @param Routing\Context      $routingContext
-     * @param ShopContextInterface $shopContext
-     *
      * @return Url[]|null
      */
     public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext);

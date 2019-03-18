@@ -40,9 +40,9 @@ use Shopware\Components\Model\ModelEntity;
  *   - UNIQUE KEY `albumID` (`albumID`)
  * </code>
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_media_album_settings")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Settings extends ModelEntity
 {
@@ -59,7 +59,7 @@ class Settings extends ModelEntity
      *
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

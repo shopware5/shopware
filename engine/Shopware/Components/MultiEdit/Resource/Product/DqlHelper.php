@@ -136,11 +136,6 @@ class DqlHelper
     protected $columns = [];
     protected $columnInfo = [];
 
-    /**
-     * @param \Enlight_Components_Db_Adapter_Pdo_Mysql $db
-     * @param ModelManager                             $em
-     * @param \Enlight_Event_EventManager              $eventManager
-     */
     public function __construct(
         \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
         ModelManager $em,
@@ -196,8 +191,6 @@ class DqlHelper
      * e.g. ARTICLE.ID => id
      *
      * @param string $attribute
-     *
-     * @return mixed
      */
     public function getColumnForAttribute($attribute)
     {
@@ -211,8 +204,6 @@ class DqlHelper
      * e.g. ARTICLE.ID => \Shopware\Models\Article\Article
      *
      * @param string $attribute
-     *
-     * @return mixed
      */
     public function getEntityForAttribute($attribute)
     {
@@ -234,8 +225,6 @@ class DqlHelper
      * e.g. article => \Shopware\Models\Article\Article
      *
      * @param string $prefix
-     *
-     * @return mixed
      */
     public function getEntityForPrefix($prefix)
     {
@@ -247,8 +236,6 @@ class DqlHelper
      * e.g. \Shopware\Models\Article\Article => article
      *
      * @param string $entity
-     *
-     * @return mixed
      */
     public function getPrefixForEntity($entity)
     {
@@ -290,8 +277,6 @@ class DqlHelper
      * Returns a single row with (almost) all possibly relevant information of a product
      *
      * @param int $detailId
-     *
-     * @return mixed
      */
     public function getProductForListing($detailId)
     {
@@ -807,8 +792,6 @@ class DqlHelper
      *
      * @param string $foreignPrefix
      * @param int[]  $detailIds
-     *
-     * @return mixed
      */
     public function getIdForForeignEntity($foreignPrefix, $detailIds)
     {
@@ -830,8 +813,6 @@ class DqlHelper
      *
      * @param string $foreignPrefix
      * @param int[]  $detailIds
-     *
-     * @return mixed
      */
     public function getIdForForeignEntityInternal($foreignPrefix, $detailIds)
     {

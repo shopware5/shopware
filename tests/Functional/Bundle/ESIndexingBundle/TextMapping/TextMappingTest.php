@@ -62,7 +62,7 @@ class TextMappingTest extends TestCase
 
         $products = $this->createProducts(['test9999' => []], $context, $category);
 
-        $this->helper->updateArticle($products[0]->getId(), ['mainDetail' => [
+        $this->helper->updateArticle(current($products)->getId(), ['mainDetail' => [
             'ean' => 444,
             ],
         ]);

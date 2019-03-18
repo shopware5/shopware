@@ -45,11 +45,6 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
      */
     private $config;
 
-    /**
-     * @param Connection                  $connection
-     * @param Hydrator\VoteHydrator       $voteHydrator
-     * @param \Shopware_Components_Config $config
-     */
     public function __construct(
         Connection $connection,
         Hydrator\VoteHydrator $voteHydrator,

@@ -287,7 +287,6 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * @param string $method
      * @param string $url
-     * @param array  $data
      *
      * @return Crawler
      */
@@ -401,8 +400,6 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @param Country $country
-     *
      * @return State
      */
     private static function createState(Country $country)

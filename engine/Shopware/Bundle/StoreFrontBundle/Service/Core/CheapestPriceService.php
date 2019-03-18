@@ -24,14 +24,20 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\CheapestPriceGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\CheapestPriceServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceDiscount;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class CheapestPriceService implements Service\CheapestPriceServiceInterface
+class CheapestPriceService implements CheapestPriceServiceInterface
 {
     /**
-     * @var Gateway\CheapestPriceGatewayInterface
+     * @var CheapestPriceGatewayInterface
      */
     private $cheapestPriceGateway;
 
@@ -40,12 +46,8 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
      */
     private $config;
 
-    /**
-     * @param Gateway\CheapestPriceGatewayInterface $cheapestPriceGateway
-     * @param \Shopware_Components_Config           $config
-     */
     public function __construct(
-        Gateway\CheapestPriceGatewayInterface $cheapestPriceGateway,
+        CheapestPriceGatewayInterface $cheapestPriceGateway,
         \Shopware_Components_Config $config
     ) {
         $this->cheapestPriceGateway = $cheapestPriceGateway;
@@ -55,7 +57,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context)
+    public function get(ListProduct $product, ProductContextInterface $context)
     {
         $cheapestPrices = $this->getList([$product], $context);
 
@@ -65,7 +67,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ProductContextInterface $context)
+    public function getList($products, ProductContextInterface $context)
     {
         $group = $context->getCurrentCustomerGroup();
 
@@ -76,7 +78,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
         //check if one of the products have no assigned price within the prices variable.
         $fallbackProducts = array_filter(
             $products,
-            function (Struct\BaseProduct $product) use ($prices) {
+            function (BaseProduct $product) use ($prices) {
                 return !array_key_exists($product->getNumber(), $prices);
             }
         );
@@ -104,15 +106,15 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
     }
 
     /**
-     * @param Struct\ListProduct[]                         $products
-     * @param array<string, Struct\Product\PriceRule|null> $prices
-     * @param Struct\ProductContextInterface               $context
+     * @param ListProduct[]                 $products
+     * @param array<string, PriceRule|null> $prices
+     * @param ProductContextInterface       $context
      *
-     * @return Struct\Product\PriceRule[]
+     * @return PriceRule[]
      */
     private function calculatePriceGroupDiscounts($products, $prices, $context)
     {
-        /** @var Struct\ListProduct $product */
+        /** @var ListProduct $product */
         foreach ($products as $product) {
             if (!$product->isPriceGroupActive()) {
                 continue;
@@ -124,7 +126,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
                 continue;
             }
 
-            /** @var Struct\Product\PriceRule $price */
+            /** @var PriceRule $price */
             $discount = $this->getHighestQuantityDiscount($product, $context, $price->getFrom());
 
             if (!$discount) {
@@ -142,13 +144,12 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
      * Helper function which iterates the products and builds a price array which indexed
      * with the product order number.
      *
-     * @param Struct\BaseProduct[]       $products
-     * @param Struct\Product\PriceRule[] $priceRules
-     * @param Struct\Customer\Group      $group
+     * @param BaseProduct[] $products
+     * @param PriceRule[]   $priceRules
      *
      * @return array
      */
-    private function buildPrices($products, array $priceRules, Struct\Customer\Group $group)
+    private function buildPrices($products, array $priceRules, Group $group)
     {
         $prices = [];
 
@@ -159,7 +160,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
                 continue;
             }
 
-            /** @var Struct\Product\PriceRule $cheapestPrice */
+            /** @var PriceRule $cheapestPrice */
             $cheapestPrice = $priceRules[$key];
 
             $cheapestPrice->setCustomerGroup($group);
@@ -177,13 +178,11 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
      * If the product has no configured price group or the price group has no discount defined for the
      * current customer group, the function returns null.
      *
-     * @param Struct\ListProduct             $product
-     * @param Struct\ProductContextInterface $context
-     * @param int                            $quantity
+     * @param int $quantity
      *
-     * @return Struct\Product\PriceDiscount|null
+     * @return PriceDiscount|null
      */
-    private function getHighestQuantityDiscount(Struct\ListProduct $product, Struct\ProductContextInterface $context, $quantity)
+    private function getHighestQuantityDiscount(ListProduct $product, ShopContextInterface $context, $quantity)
     {
         $priceGroups = $context->getPriceGroups();
         if (empty($priceGroups)) {
@@ -197,7 +196,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
 
         $priceGroup = $priceGroups[$id];
 
-        /** @var Struct\Product\PriceDiscount|null $highest */
+        /** @var PriceDiscount|null $highest */
         $highest = null;
         foreach ($priceGroup->getDiscounts() as $discount) {
             if ($discount->getQuantity() > $quantity && !$this->config->get('useLastGraduationForCheapestPrice')) {

@@ -67,11 +67,8 @@ class GenericSearcher implements SearcherInterface
     protected $enabled;
 
     /**
-     * @param Client             $client
-     * @param SearcherInterface  $decorated
-     * @param SearchQueryBuilder $searchQueryBuilder
-     * @param string             $domainName
-     * @param bool               $enabled
+     * @param string $domainName
+     * @param bool   $enabled
      */
     public function __construct(
         Client $client,
@@ -88,8 +85,6 @@ class GenericSearcher implements SearcherInterface
     }
 
     /**
-     * @param SearchCriteria $criteria
-     *
      * @return SearcherResult
      */
     public function search(SearchCriteria $criteria)
@@ -106,8 +101,6 @@ class GenericSearcher implements SearcherInterface
     }
 
     /**
-     * @param SearchCriteria $criteria
-     *
      * @return Search
      */
     protected function buildSearchObject(SearchCriteria $criteria)
@@ -145,8 +138,6 @@ class GenericSearcher implements SearcherInterface
     }
 
     /**
-     * @param array $result
-     *
      * @return SearcherResult
      */
     protected function iterate(array $result)
@@ -169,8 +160,6 @@ class GenericSearcher implements SearcherInterface
     }
 
     /**
-     * @param SearchCriteria $criteria
-     *
      * @return BuilderInterface
      */
     protected function buildSearchQuery(SearchCriteria $criteria)
@@ -186,10 +175,6 @@ class GenericSearcher implements SearcherInterface
         return ['swag_all' => 1];
     }
 
-    /**
-     * @param SearchCriteria $criteria
-     * @param Search         $search
-     */
     protected function addSortings(SearchCriteria $criteria, Search $search)
     {
         foreach ($criteria->sortings as $sorting) {

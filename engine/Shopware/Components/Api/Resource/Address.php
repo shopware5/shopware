@@ -84,10 +84,8 @@ class Address extends Resource
     }
 
     /**
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $criteria
-     * @param array $orderBy
+     * @param int $offset
+     * @param int $limit
      *
      * @return array
      */
@@ -110,8 +108,6 @@ class Address extends Resource
     }
 
     /**
-     * @param array $params
-     *
      * @throws ApiException\CustomValidationException
      * @throws ApiException\NotFoundException
      *
@@ -154,8 +150,7 @@ class Address extends Resource
     }
 
     /**
-     * @param int   $id
-     * @param array $params
+     * @param int $id
      *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
@@ -247,7 +242,6 @@ class Address extends Resource
     /**
      * Resolves ids to models
      *
-     * @param array    $data
      * @param int|null $customerId
      * @param bool     $filter
      *

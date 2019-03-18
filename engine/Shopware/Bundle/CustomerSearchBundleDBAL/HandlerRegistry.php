@@ -40,10 +40,6 @@ class HandlerRegistry
      */
     private $sortingHandlers;
 
-    /**
-     * @param IteratorAggregate $conditionHandlers
-     * @param IteratorAggregate $sortingHandlers
-     */
     public function __construct(
         IteratorAggregate $conditionHandlers,
         IteratorAggregate $sortingHandlers
@@ -53,8 +49,6 @@ class HandlerRegistry
     }
 
     /**
-     * @param ConditionInterface $condition
-     *
      * @return ConditionHandlerInterface
      */
     public function getConditionHandler(ConditionInterface $condition)
@@ -76,8 +70,6 @@ class HandlerRegistry
     }
 
     /**
-     * @param SortingInterface $sorting
-     *
      * @return SortingHandlerInterface
      */
     public function getSortingHandler(SortingInterface $sorting)

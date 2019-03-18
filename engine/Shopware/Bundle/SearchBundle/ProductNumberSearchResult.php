@@ -77,9 +77,6 @@ class ProductNumberSearchResult extends Extendable
         return $this->facets;
     }
 
-    /**
-     * @param FacetResultInterface $facet
-     */
     public function addFacet(FacetResultInterface $facet)
     {
         $this->facets[] = $facet;

@@ -33,9 +33,6 @@ class DownloadHydrator extends Hydrator
      */
     private $attributeHydrator;
 
-    /**
-     * @param AttributeHydrator $attributeHydrator
-     */
     public function __construct(AttributeHydrator $attributeHydrator)
     {
         $this->attributeHydrator = $attributeHydrator;
@@ -44,7 +41,6 @@ class DownloadHydrator extends Hydrator
     /**
      * Creates a new Struct\Product\Download struct with the passed data.
      *
-     * @param array $data
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Download
      */

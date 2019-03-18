@@ -108,17 +108,11 @@ class Field extends Base implements FieldInterface, Validate
         return $this->label;
     }
 
-    /**
-     * @return mixed
-     */
     public function getDefaultValue()
     {
         return $this->defaultValue;
     }
 
-    /**
-     * @param mixed $defaultValue
-     */
     public function setDefaultValue($defaultValue)
     {
         $this->defaultValue = $defaultValue;

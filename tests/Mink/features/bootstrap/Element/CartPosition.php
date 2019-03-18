@@ -119,8 +119,6 @@ class CartPosition extends MultipleElement
     }
 
     /**
-     * @param array $names
-     *
      * @throws \Exception
      *
      * @return string

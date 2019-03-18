@@ -38,7 +38,6 @@ class BatchProductNumberSearchRequest
 
     /**
      * @param string $key
-     * @param array  $numbers
      */
     public function setProductNumbers($key, array $numbers = [])
     {
@@ -46,8 +45,7 @@ class BatchProductNumberSearchRequest
     }
 
     /**
-     * @param string   $key
-     * @param Criteria $criteria
+     * @param string $key
      */
     public function setCriteria($key, Criteria $criteria)
     {

@@ -33,6 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Api\Resource;
+use Shopware\Components\Random;
 use Shopware\Kernel;
 use Shopware\Models;
 use Shopware\Models\Article\Configurator\Group as ConfiguratorGroup;
@@ -129,8 +130,6 @@ class Helper
     }
 
     /**
-     * @param StoreFrontBundle\Struct\ListProduct                                   $product
-     * @param StoreFrontBundle\Struct\ShopContext                                   $context
      * @param \Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway $productPropertyGateway
      *
      * @return StoreFrontBundle\Struct\Property\Set
@@ -149,9 +148,7 @@ class Helper
     }
 
     /**
-     * @param string               $numbers
-     * @param ShopContextInterface $context
-     * @param array                $configs
+     * @param string $numbers
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[]
      */
@@ -174,9 +171,7 @@ class Helper
     }
 
     /**
-     * @param string               $number
-     * @param ShopContextInterface $context
-     * @param array                $configs
+     * @param string $number
      *
      * @return StoreFrontBundle\Struct\ListProduct
      */
@@ -319,8 +314,6 @@ class Helper
     }
 
     /**
-     * @param array $data
-     *
      * @return Models\Article\Article
      */
     public function createArticle(array $data)
@@ -332,8 +325,7 @@ class Helper
     }
 
     /**
-     * @param int   $id
-     * @param array $data
+     * @param int $id
      *
      * @return Models\Article\Article
      */
@@ -548,8 +540,6 @@ class Helper
     }
 
     /**
-     * @param array $data
-     *
      * @return Models\Shop\Currency
      */
     public function createCurrency(array $data = [])
@@ -581,8 +571,6 @@ class Helper
     }
 
     /**
-     * @param array $data
-     *
      * @return Models\Category\Category
      */
     public function createCategory(array $data = [])
@@ -599,8 +587,6 @@ class Helper
     }
 
     /**
-     * @param array $data
-     *
      * @return Models\Article\Supplier
      */
     public function createManufacturer(array $data = [])
@@ -734,8 +720,6 @@ class Helper
     }
 
     /**
-     * @param array $data
-     *
      * @return array
      */
     public function getProductData(array $data = [])
@@ -787,15 +771,13 @@ class Helper
     }
 
     /**
-     * @param array $data
-     *
      * @return array
      */
     public function getVariantData(array $data = [])
     {
         return array_merge(
             [
-                'number' => 'Variant-' . uniqid(rand()),
+                'number' => 'Variant-' . uniqid(Random::getInteger(0, PHP_INT_MAX), true),
                 'supplierNumber' => 'kn12lk3nkl213',
                 'active' => 1,
                 'inStock' => 222,
@@ -817,8 +799,6 @@ class Helper
     }
 
     /**
-     * @param array $data
-     *
      * @return array
      */
     public function getUnitData(array $data = [])
@@ -874,7 +854,6 @@ class Helper
 
     /**
      * @param string $image
-     * @param array  $data
      *
      * @return array
      */
@@ -889,10 +868,7 @@ class Helper
     }
 
     /**
-     * @param Models\Customer\Group $currentCustomerGroup
      * @param Models\Customer\Group $fallbackCustomerGroup
-     * @param Models\Shop\Shop      $shop
-     * @param array                 $taxes
      * @param Models\Shop\Currency  $currency
      *
      * @return TestContext
@@ -973,9 +949,6 @@ class Helper
         return $kernel->isElasticSearchEnabled();
     }
 
-    /**
-     * @param Shop $shop
-     */
     public function refreshSearchIndexes(Shop $shop)
     {
         if (!$this->isElasticSearchEnabled()) {
@@ -1070,7 +1043,6 @@ class Helper
      * the passed groups with options.
      *
      * @param array $groups
-     * @param null  $numberPrefix
      * @param array $data
      *
      * @return array
@@ -1332,8 +1304,6 @@ class Helper
      * so we have to clean up the first array level.
      *
      * @param array $combinations
-     *
-     * @return mixed
      */
     private function cleanUpCombinations($combinations)
     {

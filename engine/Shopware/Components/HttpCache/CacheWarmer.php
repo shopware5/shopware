@@ -31,7 +31,6 @@ use GuzzleHttp\Pool;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\HttpClient\GuzzleFactory;
-use Shopware\Components\Logger;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing\Context;
 use Shopware\Models\Shop\Repository;
@@ -82,13 +81,6 @@ class CacheWarmer
      */
     private $eventManager;
 
-    /**
-     * @param LoggerInterface            $logger
-     * @param GuzzleFactory              $guzzleFactory
-     * @param Config                     $config
-     * @param ModelManager               $modelManager
-     * @param ContainerAwareEventManager $eventManager
-     */
     public function __construct(LoggerInterface $logger, GuzzleFactory $guzzleFactory, Config $config, ModelManager $modelManager, ContainerAwareEventManager $eventManager)
     {
         $this->connection = $modelManager->getConnection();
@@ -103,7 +95,6 @@ class CacheWarmer
      * Calls every URL given with the specific context
      *
      * @param string[] $urls
-     * @param Context  $context
      * @param int      $concurrentRequests
      */
     public function warmUpUrls($urls, Context $context, $concurrentRequests = 1)
@@ -130,7 +121,7 @@ class CacheWarmer
                 'error' => function (ErrorEvent $e) use ($shopId, $events) {
                     $events->notify('Shopware_Components_CacheWarmer_ErrorOccured');
                     if ($e->getResponse() !== null && $e->getResponse()->getStatusCode() === 404) {
-                        $this->logger->notice(
+                        $this->logger->error(
                             'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getException()->getMessage()
                         );
                     } else {

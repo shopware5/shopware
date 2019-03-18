@@ -40,17 +40,12 @@ class Html5VideoComponentHandler implements ComponentHandlerInterface
      */
     private $mediaService;
 
-    /**
-     * @param MediaServiceInterface $mediaService
-     */
     public function __construct(MediaServiceInterface $mediaService)
     {
         $this->mediaService = $mediaService;
     }
 
     /**
-     * @param Element $element
-     *
      * @return bool
      */
     public function supports(Element $element)
@@ -59,20 +54,10 @@ class Html5VideoComponentHandler implements ComponentHandlerInterface
             || $element->getComponent()->getConvertFunction() === self::LEGACY_CONVERT_FUNCTION;
     }
 
-    /**
-     * @param PrepareDataCollection $collection
-     * @param Element               $element
-     * @param ShopContextInterface  $context
-     */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
     }
 
-    /**
-     * @param ResolvedDataCollection $collection
-     * @param Element                $element
-     * @param ShopContextInterface   $context
-     */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
         $mediaFields = ['webm_video', 'ogg_video', 'h264_video', 'fallback_picture'];

@@ -74,14 +74,9 @@ class ShopIndexer implements ShopIndexerInterface
     private $backlogProcessor;
 
     /**
-     * @param Client                    $client
-     * @param BacklogReaderInterface    $backlogReader
-     * @param BacklogProcessorInterface $backlogProcessor
-     * @param IndexFactoryInterface     $indexFactory
-     * @param EvaluationHelperInterface $evaluation
-     * @param DataIndexerInterface[]    $indexer
-     * @param MappingInterface[]        $mappings
-     * @param SettingsInterface[]       $settings
+     * @param DataIndexerInterface[] $indexer
+     * @param MappingInterface[]     $mappings
+     * @param SettingsInterface[]    $settings
      */
     public function __construct(
         Client $client,
@@ -143,9 +138,6 @@ class ShopIndexer implements ShopIndexerInterface
     }
 
     /**
-     * @param IndexConfiguration $configuration
-     * @param ShopIndex          $index
-     *
      * @throws \RuntimeException
      */
     private function createIndex(IndexConfiguration $configuration, ShopIndex $index)
@@ -184,10 +176,6 @@ class ShopIndexer implements ShopIndexerInterface
         ]);
     }
 
-    /**
-     * @param ShopIndex        $index
-     * @param MappingInterface $mapping
-     */
     private function updateMapping(ShopIndex $index, MappingInterface $mapping)
     {
         $this->client->indices()->putMapping([
@@ -197,10 +185,6 @@ class ShopIndexer implements ShopIndexerInterface
             ]);
     }
 
-    /**
-     * @param ShopIndex               $index
-     * @param ProgressHelperInterface $progress
-     */
     private function populate(ShopIndex $index, ProgressHelperInterface $progress)
     {
         foreach ($this->indexer as $indexer) {
@@ -214,8 +198,7 @@ class ShopIndexer implements ShopIndexerInterface
     }
 
     /**
-     * @param ShopIndex $shopIndex
-     * @param int       $lastId
+     * @param int $lastId
      */
     private function applyBacklog(ShopIndex $shopIndex, $lastId)
     {
@@ -234,9 +217,6 @@ class ShopIndexer implements ShopIndexerInterface
         $this->backlogReader->setLastBacklogId($lastId);
     }
 
-    /**
-     * @param IndexConfiguration $configuration
-     */
     private function createAlias(IndexConfiguration $configuration)
     {
         $currentAlias = $configuration->getAlias();
@@ -259,9 +239,6 @@ class ShopIndexer implements ShopIndexerInterface
         ]);
     }
 
-    /**
-     * @param IndexConfiguration $configuration
-     */
     private function switchAlias(IndexConfiguration $configuration)
     {
         $actions = [

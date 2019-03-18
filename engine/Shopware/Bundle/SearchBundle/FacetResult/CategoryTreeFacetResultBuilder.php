@@ -40,10 +40,6 @@ class CategoryTreeFacetResultBuilder
      */
     private $queryAliasMapper;
 
-    /**
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper                     $queryAliasMapper
-     */
     public function __construct(
         \Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper
@@ -53,10 +49,9 @@ class CategoryTreeFacetResultBuilder
     }
 
     /**
-     * @param Category[]    $categories
-     * @param int[]         $activeIds
-     * @param int           $systemCategoryId
-     * @param CategoryFacet $facet
+     * @param Category[] $categories
+     * @param int[]      $activeIds
+     * @param int        $systemCategoryId
      *
      * @return TreeFacetResult|null
      */
@@ -127,7 +122,6 @@ class CategoryTreeFacetResultBuilder
 
     /**
      * @param Category[] $categories
-     * @param Category   $category
      * @param int[]      $actives
      *
      * @return \Shopware\Bundle\SearchBundle\FacetResult\TreeItem

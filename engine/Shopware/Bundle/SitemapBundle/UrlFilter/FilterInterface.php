@@ -34,8 +34,7 @@ interface FilterInterface
     public function supports($resourceName);
 
     /**
-     * @param int   $identifier
-     * @param array $filters
+     * @param int $identifier
      *
      * @return bool
      */

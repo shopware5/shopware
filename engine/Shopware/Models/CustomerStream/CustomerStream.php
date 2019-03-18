@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="s_customer_streams")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class CustomerStream extends ModelEntity
 {
@@ -47,7 +47,7 @@ class CustomerStream extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -55,7 +55,7 @@ class CustomerStream extends ModelEntity
     /**
      * @var string
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
@@ -85,7 +85,7 @@ class CustomerStream extends ModelEntity
     /**
      * @var \DateTimeInterface
      *
-     * @Assert\DateTime
+     * @Assert\DateTime()
      *
      * @ORM\Column(name="freeze_up", type="datetime", nullable=true)
      */
@@ -180,5 +180,23 @@ class CustomerStream extends ModelEntity
     public function setStatic($static)
     {
         $this->static = $static;
+    }
+
+    /**
+     * @return \Shopware\Models\Attribute\CustomerStream
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * @param \Shopware\Models\Attribute\CustomerStream|array|null $attribute
+     *
+     * @return \Shopware\Models\Attribute\CustomerStream
+     */
+    public function setAttribute($attribute)
+    {
+        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\CustomerStream', 'attribute', 'customerStream');
     }
 }

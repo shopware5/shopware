@@ -77,7 +77,6 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
     /**
      * Event listener method
      *
-     * @param Enlight_Event_EventArgs $args
      *
      * @return \sSystem
      */
@@ -150,7 +149,6 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
     /**
      * Event listener method
      *
-     * @param Enlight_Event_EventArgs $args
      *
      * @return \Shopware_Components_Modules
      */

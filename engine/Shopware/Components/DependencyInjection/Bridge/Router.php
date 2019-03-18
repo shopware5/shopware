@@ -34,12 +34,6 @@ use Shopware\Components\Routing\RouterInterface;
 class Router
 {
     /**
-     * @param EnlightEventManager $eventManager
-     * @param IteratorAggregate   $matchers
-     * @param IteratorAggregate   $generators
-     * @param IteratorAggregate   $preFilters
-     * @param IteratorAggregate   $postFilters
-     *
      * @return RouterInterface
      */
     public function factory(
@@ -73,9 +67,6 @@ class Router
         return $router;
     }
 
-    /**
-     * @param \Enlight_Event_EventArgs $args
-     */
     public function onAfterRegisterShop(\Enlight_Event_EventArgs $args)
     {
         /** @var Container $container */
@@ -103,9 +94,6 @@ class Router
         $router->setContext($newContext);
     }
 
-    /**
-     * @param \Enlight_Controller_EventArgs $args
-     */
     public function onPreDispatch(\Enlight_Controller_EventArgs $args)
     {
         /** @var \Enlight_Controller_Front $front */

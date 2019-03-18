@@ -121,10 +121,6 @@ class SupplierRepository extends ModelRepository
     /**
      * Returns the \Doctrine\ORM\Query to select all manufacturers for example for the backend tree
      *
-     * @param array $filterBy
-     * @param array $orderBy
-     * @param null  $limit
-     * @param null  $offset
      *
      * @return \Doctrine\ORM\Query
      */
@@ -139,10 +135,6 @@ class SupplierRepository extends ModelRepository
      * Helper method to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array $filterBy
-     * @param array $orderBy
-     * @param null  $limit
-     * @param null  $offset
      *
      * @return \Shopware\Components\Model\QueryBuilder
      */

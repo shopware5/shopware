@@ -43,10 +43,6 @@ class ChromePhpHandler extends BaseChromePhpHandler
      */
     private $response;
 
-    /**
-     * @param Request  $request
-     * @param Response $response
-     */
     public function setUp(Request $request, Response $response)
     {
         if (!$this->acceptsRequest($request)) {
@@ -66,8 +62,6 @@ class ChromePhpHandler extends BaseChromePhpHandler
 
     /**
      * Adds the headers to the response once it's created
-     *
-     * @param \Enlight_Controller_EventArgs $args
      */
     public function onRouteStartUp(\Enlight_Controller_EventArgs $args)
     {
@@ -78,8 +72,6 @@ class ChromePhpHandler extends BaseChromePhpHandler
     }
 
     /**
-     * @param Request $request
-     *
      * @return bool
      */
     public function acceptsRequest(Request $request)

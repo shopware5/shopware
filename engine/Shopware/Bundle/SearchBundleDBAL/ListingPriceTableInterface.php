@@ -27,8 +27,6 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 interface ListingPriceTableInterface
 {
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
-     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     public function get(\Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context);

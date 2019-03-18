@@ -34,8 +34,7 @@ interface ProductDownloadServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Service\ProductDownloadServiceInterface::get()
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[] $products
      *
      * @return array indexed by the product order number, each array element contains a list of \Shopware\Bundle\StoreFrontBundle\Struct\Product\Download classes
      */
@@ -46,9 +45,6 @@ interface ProductDownloadServiceInterface
      * please refer to the linked classes.
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\DownloadGatewayInterface::get()
-     *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Product\Download[]
      */

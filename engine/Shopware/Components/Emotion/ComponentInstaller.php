@@ -41,9 +41,6 @@ class ComponentInstaller
      */
     private $em;
 
-    /**
-     * @param ModelManager $em
-     */
     public function __construct(ModelManager $em)
     {
         $this->em = $em;
@@ -52,7 +49,6 @@ class ComponentInstaller
     /**
      * @param string $pluginName
      * @param string $componentName
-     * @param array  $data
      *
      * @throws \Exception
      *

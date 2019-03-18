@@ -46,9 +46,6 @@ class IsAvailableConditionHandler implements ConditionHandlerInterface, Criteria
      */
     private $criteria;
 
-    /**
-     * @param PriceHelperInterface $priceHelper
-     */
     public function __construct(PriceHelperInterface $priceHelper)
     {
         $this->priceHelper = $priceHelper;

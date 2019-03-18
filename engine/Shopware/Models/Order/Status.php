@@ -36,7 +36,7 @@ use Shopware\Components\Model\ModelEntity;
  *  - PRIMARY KEY (`id`)
  * </code>
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_core_states")
  */
 class Status extends ModelEntity
@@ -97,7 +97,7 @@ class Status extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      */
     private $id;
 

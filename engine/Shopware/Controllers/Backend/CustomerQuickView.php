@@ -215,8 +215,6 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
     }
 
     /**
-     * @param array $ids
-     *
      * @return array
      */
     private function fetchAttributes(array $ids)

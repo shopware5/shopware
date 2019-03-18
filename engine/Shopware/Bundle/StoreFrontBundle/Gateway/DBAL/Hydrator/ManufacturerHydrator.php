@@ -48,10 +48,6 @@ class ManufacturerHydrator extends Hydrator
         'metaKeywords' => 'meta_keywords',
     ];
 
-    /**
-     * @param AttributeHydrator     $attributeHydrator
-     * @param MediaServiceInterface $mediaService
-     */
     public function __construct(AttributeHydrator $attributeHydrator, MediaServiceInterface $mediaService)
     {
         $this->attributeHydrator = $attributeHydrator;
@@ -59,8 +55,6 @@ class ManufacturerHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return Struct\Product\Manufacturer
      */
     public function hydrate(array $data)
@@ -71,10 +65,6 @@ class ManufacturerHydrator extends Hydrator
         return $manufacturer;
     }
 
-    /**
-     * @param Struct\Product\Manufacturer $manufacturer
-     * @param array                       $data
-     */
     private function assignData(Struct\Product\Manufacturer $manufacturer, array $data)
     {
         $translation = $this->getTranslation($data, '__manufacturer', $this->mapping);

@@ -44,8 +44,6 @@ class Repository extends ModelRepository
      * Shopware()->Models()->getQueryCount($query);
      *
      * @param int      $orderId
-     * @param null     $filter
-     * @param null     $orderBy
      * @param int|null $limit
      * @param int|null $offset
      *
@@ -74,7 +72,6 @@ class Repository extends ModelRepository
     /**
      * Helper function which sets the fromPath and the selectPath for the order list query.
      *
-     * @param \Doctrine\ORM\QueryBuilder $builder
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

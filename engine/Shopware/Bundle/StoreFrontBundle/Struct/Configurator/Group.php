@@ -117,9 +117,6 @@ class Group extends Extendable
         $this->options = $options;
     }
 
-    /**
-     * @param Option $option
-     */
     public function addOption(Option $option)
     {
         $this->options[] = $option;

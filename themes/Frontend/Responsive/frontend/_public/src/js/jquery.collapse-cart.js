@@ -210,7 +210,7 @@
                 .html(response)
                 .find('.ajax--cart .alert')
                 .removeClass('is--hidden');
-
+            window.StateManager.addPlugin('*[data-auto-submit="true"]', 'swAutoSubmit');
             picturefill();
 
             $.publish('plugin/swCollapseCart/onArticleAdded', [this]);
@@ -438,6 +438,7 @@
                 dataType: 'html',
                 success: function (result) {
                     $el.html(result);
+                    window.StateManager.addPlugin('*[data-auto-submit="true"]', 'swAutoSubmit');
                     picturefill();
 
                     if (typeof callback === 'function') {

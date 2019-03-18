@@ -95,9 +95,8 @@ class ReflectionHelper
      * Verify that a given ReflectionClass object is within the documentroot (docPath)
      * and (optionally) that said class belongs to certain directories.
      *
-     * @param \ReflectionClass $class
-     * @param string           $docPath     Path to the project's document root
-     * @param array            $directories Optional set of directories in which the class file should be in
+     * @param string $docPath     Path to the project's document root
+     * @param array  $directories Optional set of directories in which the class file should be in
      *
      * @throws \InvalidArgumentException If the class is out of scope (docpath mismatch)   (code: 1)
      * @throws \InvalidArgumentException If the class is out of scope (directory mismatch) (code: 2)

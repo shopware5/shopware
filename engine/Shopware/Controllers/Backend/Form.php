@@ -372,7 +372,6 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     /**
      * Helper method to prefix properties
      *
-     * @param array  $properties
      * @param string $prefix
      *
      * @return array

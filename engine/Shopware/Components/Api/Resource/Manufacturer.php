@@ -71,10 +71,8 @@ class Manufacturer extends Resource
     }
 
     /**
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $criteria
-     * @param array $orderBy
+     * @param int $offset
+     * @param int $limit
      *
      * @return array
      */
@@ -97,8 +95,6 @@ class Manufacturer extends Resource
     }
 
     /**
-     * @param array $params
-     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      *
      * @return \Shopware\Models\Article\Supplier
@@ -132,8 +128,7 @@ class Manufacturer extends Resource
     }
 
     /**
-     * @param int   $id
-     * @param array $params
+     * @param int $id
      *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
@@ -200,8 +195,6 @@ class Manufacturer extends Resource
     }
 
     /**
-     * @param array $params
-     *
      * @throws ApiException\CustomValidationException
      *
      * @return array
@@ -225,9 +218,6 @@ class Manufacturer extends Resource
     }
 
     /**
-     * @param array             $data
-     * @param ManufacturerModel $manufacturerModel
-     *
      * @throws ApiException\CustomValidationException
      *
      * @return array

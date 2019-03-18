@@ -78,8 +78,6 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
 
     /**
      * Sanitizes the passed term and queries the different areas of the search
-     *
-     * @return mixed
      */
     public function indexAction()
     {

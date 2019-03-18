@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
 
 interface PriceCalculatorInterface
 {
@@ -36,11 +37,9 @@ interface PriceCalculatorInterface
      * The function is used for the original price value of a price struct
      * and the pseudo price of a price struct.
      *
-     * @param float                          $price
-     * @param Struct\Tax                     $tax
-     * @param Struct\ProductContextInterface $context
+     * @param float $price
      *
      * @return float
      */
-    public function calculatePrice($price, Struct\Tax $tax, Struct\ProductContextInterface $context);
+    public function calculatePrice($price, Tax $tax, ProductContextInterface $context);
 }

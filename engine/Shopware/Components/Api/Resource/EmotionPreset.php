@@ -51,11 +51,6 @@ class EmotionPreset extends Resource
      */
     private $slugService;
 
-    /**
-     * @param Connection    $connection
-     * @param ModelManager  $models
-     * @param SlugInterface $slugService
-     */
     public function __construct(
         Connection $connection,
         ModelManager $models,
@@ -108,7 +103,6 @@ class EmotionPreset extends Resource
     }
 
     /**
-     * @param array  $data
      * @param string $locale
      *
      * @throws ParameterMissingException
@@ -129,7 +123,6 @@ class EmotionPreset extends Resource
 
     /**
      * @param int    $id
-     * @param array  $data
      * @param string $locale
      *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
@@ -151,8 +144,6 @@ class EmotionPreset extends Resource
     }
 
     /**
-     * @param array  $data
-     * @param Preset $preset
      * @param string $locale
      *
      * @throws ValidationException
@@ -194,8 +185,6 @@ class EmotionPreset extends Resource
     }
 
     /**
-     * @param Preset $preset
-     *
      * @throws CustomValidationException
      */
     private function validateName(Preset $preset)
@@ -242,7 +231,6 @@ class EmotionPreset extends Resource
     }
 
     /**
-     * @param array  $presets
      * @param string $locale
      *
      * @return array[]
@@ -282,7 +270,6 @@ class EmotionPreset extends Resource
     }
 
     /**
-     * @param array  $translations
      * @param string $locale
      *
      * @return array
@@ -326,9 +313,6 @@ class EmotionPreset extends Resource
     }
 
     /**
-     * @param array $preset
-     * @param array $localPlugins
-     *
      * @return array
      */
     private function getPluginsForPreset(array $preset, array $localPlugins)

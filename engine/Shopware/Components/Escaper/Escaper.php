@@ -34,9 +34,6 @@ class Escaper implements EscaperInterface
      */
     private $escaper;
 
-    /**
-     * @param \Zend\Escaper\Escaper $escaper
-     */
     public function __construct(\Zend\Escaper\Escaper $escaper)
     {
         $this->escaper = $escaper;

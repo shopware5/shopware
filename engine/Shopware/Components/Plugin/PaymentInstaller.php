@@ -36,9 +36,6 @@ class PaymentInstaller
      */
     private $em;
 
-    /**
-     * @param ModelManager $em
-     */
     public function __construct(ModelManager $em)
     {
         $this->em = $em;
@@ -48,7 +45,6 @@ class PaymentInstaller
      * Inserts or updates the payment row
      *
      * @param string $pluginName
-     * @param array  $options
      *
      * @return Payment
      */

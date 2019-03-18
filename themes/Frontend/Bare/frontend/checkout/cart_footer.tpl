@@ -54,19 +54,25 @@
 			{/block}
 
 			{* Shipping costs pre-calculation *}
-			{if $sBasket.content && !$sUserLoggedIn && !$sUserData.additional.user.id && {config name=basketShowCalculation}}
+			{if $sBasket.content && !$sUserLoggedIn && !$sUserData.additional.user.id && {config name=basketShowCalculation} != 0}
 
 				{block name='frontend_checkout_shipping_costs_country_trigger'}
-					<a href="#show-hide--shipping-costs" class="table--shipping-costs-trigger">
-						{s name='CheckoutFooterEstimatedShippingCosts'}{/s} <i class="icon--arrow-right"></i>
-					</a>
+					{if {config name=basketShowCalculation} == 1}
+                        <a href="#show-hide--shipping-costs" class="table--shipping-costs-trigger">
+							{s name='CheckoutFooterEstimatedShippingCosts'}{/s}
+                            <i class="icon--arrow-right"></i>
+                        </a>
+					{/if}
 				{/block}
 
 				{block name='frontend_checkout_shipping_costs_country_include'}
+					{if {config name=basketShowCalculation} == 2}
+                        <span class="is--bold">{s name='CheckoutFooterEstimatedShippingCosts'}{/s}</span>
+					{/if}
 					{include file="frontend/checkout/shipping_costs.tpl"}
 				{/block}
 			{/if}
-		</div>
+        </div>
 
 		{block name='frontend_checkout_cart_footer_field_labels'}
 			<ul class="aggregation--list">

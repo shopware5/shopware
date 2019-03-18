@@ -35,9 +35,6 @@ class CategoryService implements Service\CategoryServiceInterface
      */
     private $categoryGateway;
 
-    /**
-     * @param Gateway\CategoryGatewayInterface $categoryGateway
-     */
     public function __construct(Gateway\CategoryGatewayInterface $categoryGateway)
     {
         $this->categoryGateway = $categoryGateway;
@@ -79,8 +76,7 @@ class CategoryService implements Service\CategoryServiceInterface
     }
 
     /**
-     * @param Struct\Category[]           $categories
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\Category[] $categories
      *
      * @return Struct\Category[] $categories Indexed by the category id
      */

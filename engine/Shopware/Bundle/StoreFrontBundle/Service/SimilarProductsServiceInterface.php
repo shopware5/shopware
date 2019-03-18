@@ -24,19 +24,19 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 
 interface SimilarProductsServiceInterface
 {
     /**
      * @see Shopware\Bundle\StoreFrontBundle\Service\SimilarProductsServiceInterface::get()
      *
-     * @param Struct\ListProduct[]           $products
-     * @param Struct\ProductContextInterface $context
+     * @param ListProduct[] $products
      *
      * @return array indexed with the product number, the values are a list of ListProduct structs
      */
-    public function getList($products, Struct\ProductContextInterface $context);
+    public function getList($products, ProductContextInterface $context);
 
     /**
      * Selects all similar products for the provided product.
@@ -53,10 +53,7 @@ interface SimilarProductsServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::get()
      *
-     * @param Struct\ListProduct             $product
-     * @param Struct\ProductContextInterface $context
-     *
-     * @return Struct\ListProduct[] indexed by the product order number
+     * @return ListProduct[] indexed by the product order number
      */
-    public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context);
+    public function get(ListProduct $product, ProductContextInterface $context);
 }

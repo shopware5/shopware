@@ -14,7 +14,7 @@
             <div class="filter-panel--flyout">
 
                 {block name="frontend_listing_filter_facet_date_title"}
-                    <label class="filter-panel--title" for="{$facet->getFieldName()|escape:'htmlall'}">
+                    <label class="filter-panel--title" for="{$facet->getFieldName()|escape:'htmlall'}" title="{$facet->getLabel()|escape:'htmlall'}">
                         {$facet->getLabel()|escape}
                     </label>
                 {/block}
