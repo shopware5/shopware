@@ -1038,12 +1038,15 @@ class MediaExtensionMappingService implements MediaExtensionMappingServiceInterf
     ];
 
     /**
-     * @param string[] $mappings
+     * @param string[] $mapping
      */
-    public function __construct(array $mappings = [])
+    public function __construct(array $mapping = [])
     {
-        foreach ($mappings as $extension) {
-            $this->mapping[strtolower($extension)] = Media::TYPE_UNKNOWN;
+        foreach ($mapping as $extension) {
+            $extension = strtolower($extension);
+            if (!array_key_exists($extension, $this->mapping)) {
+                $this->mapping[$extension] = Media::TYPE_UNKNOWN;
+            }
         }
     }
 
