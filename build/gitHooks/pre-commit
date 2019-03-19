@@ -9,6 +9,12 @@
  */
 class PreCommitChecks
 {
+    const ALLOWED_DIRECTORIES = [
+        'engine/Shopware',
+        'tests',
+        'recovery',
+    ];
+
     /**
      * @var bool
      */
@@ -69,6 +75,16 @@ class PreCommitChecks
     private function getCommittedFileList($extension = 'php')
     {
         exec("git diff --name-only --diff-filter=ACMRTUXB \"HEAD\" | grep -e '\.".$extension."$'", $fileList);
+
+        $fileList = array_filter($fileList, function($filePath) {
+            foreach (self::ALLOWED_DIRECTORIES as $dir) {
+                if (strpos($filePath, $dir) === 0) {
+                    return true;
+                }
+            }
+
+            return false;
+        });
 
         return $fileList;
     }
