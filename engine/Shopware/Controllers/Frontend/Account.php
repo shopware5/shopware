@@ -450,7 +450,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $response->setHeader('Content-Length', $meta['size']);
         $response->setHeader('Content-Transfer-Encoding', 'binary');
         $response->sendHeaders();
-        $response->sendResponse();
 
         $upstream = $filesystem->readStream($filePath);
         $downstream = fopen('php://output', 'wb');
@@ -460,6 +459,10 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         while (!feof($upstream)) {
             fwrite($downstream, fread($upstream, 4096));
             flush();
+        }
+
+        if (!$this->container->hasParameter('session.unitTestEnabled') || !$this->container->getParameter('session.unitTestEnabled')) {
+            exit;
         }
     }
 

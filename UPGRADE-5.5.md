@@ -32,6 +32,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed `font-display` value to `swap` for improved font rendering performance
 * Changed `CdnOptimizerService` to work with external filesystems
 * Changed `sAdmin::sLogout` to refresh ShopContext on logout
+* Changed esd download to send headers only once
 
 ### Deprecations
 
