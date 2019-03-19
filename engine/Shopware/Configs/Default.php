@@ -381,6 +381,9 @@ return array_replace_recursive([
             'format' => 'A4',
         ],
     ],
+    'media' => [
+        'whitelist' => [],
+    ],
     'backward_compatibility' => [
         /*
          * @deprecated since 5.5, sorting will be default and this parameter will be removed with Shopware 5.6

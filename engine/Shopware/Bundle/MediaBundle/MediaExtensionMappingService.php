@@ -1038,6 +1038,16 @@ class MediaExtensionMappingService implements MediaExtensionMappingServiceInterf
     ];
 
     /**
+     * @param string[] $mappings
+     */
+    public function __construct(array $mappings = [])
+    {
+        foreach ($mappings as $extension) {
+            $this->mapping[strtolower($extension)] = Media::TYPE_UNKNOWN;
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function isAllowed($extension)
