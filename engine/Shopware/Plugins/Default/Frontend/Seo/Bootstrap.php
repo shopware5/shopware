@@ -216,10 +216,10 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             return $event->getReturn();
         }
 
-        foreach ($controller->Response()->getHeaders() as $header) {
-            if ($header['name'] === 'Content-Type' && strpos($header['value'], 'application/javascript') === 0) {
-                return false;
-            }
+        $contentType = $controller->Response()->headers->get('content-type', 'text/html');
+
+        if (strpos($contentType, 'text/html') !== 0) {
+            return false;
         }
 
         if (!$controller->View()->hasTemplate() || in_array(strtolower($controller->Request()->getModuleName()), ['backend', 'api'])) {
