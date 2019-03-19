@@ -24,6 +24,7 @@
 
 use ShopwarePlugins\RestApi\Components\BasicAuthResolver;
 use ShopwarePlugins\RestApi\Components\StaticResolver;
+use Symfony\Component\HttpFoundation\Response;
 
 class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -147,7 +148,7 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
                 $input = null;
             }
         } catch (Zend_Json_Exception $e) {
-            $response->setStatusCode(400);
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
 
             $request->setControllerName('error');
             $request->setActionName('invalid');

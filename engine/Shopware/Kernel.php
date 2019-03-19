@@ -191,7 +191,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
             $response->clearHeaders()
                 ->clearBody();
 
-            $response->setStatusCode(200);
+            $response->setStatusCode(SymfonyResponse::HTTP_OK);
             $enlightRequest->setDispatched();
             $dispatcher->dispatch($enlightRequest, $response);
         }
