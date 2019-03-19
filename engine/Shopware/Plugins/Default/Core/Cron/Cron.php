@@ -23,6 +23,7 @@
  */
 
 use Shopware\Components\CSRFWhitelistAware;
+use Symfony\Component\HttpFoundation\Response;
 
 class Shopware_Controllers_Backend_Cron extends Enlight_Controller_Action implements CSRFWhitelistAware
 {
@@ -37,7 +38,7 @@ class Shopware_Controllers_Backend_Cron extends Enlight_Controller_Action implem
         if (!Shopware()->Plugins()->Core()->Cron()->authorizeCronAction($this->Request())) {
             $this->Response()
                 ->clearHeaders()
-                ->setStatusCode(403)
+                ->setStatusCode(Response::HTTP_FORBIDDEN)
                 ->appendBody('Forbidden');
 
             return;

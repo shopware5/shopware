@@ -23,6 +23,7 @@
  */
 
 use Shopware\Components\CSRFWhitelistAware;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * This controller is used by the ProductFeed module.
@@ -96,7 +97,7 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
         if (!file_exists($filePath)) {
             $this->Response()
                 ->clearHeaders()
-                ->setStatusCode(204)
+                ->setStatusCode(Response::HTTP_NO_CONTENT)
                 ->appendBody('Empty feed found.');
 
             return;

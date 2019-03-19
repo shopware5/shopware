@@ -24,8 +24,9 @@
 
 namespace ShopwarePlugins\RestApi\Components;
 
-use Enlight_Controller_Request_Request as Request;
-use Enlight_Controller_Response_Response as Response;
+use Enlight_Controller_Request_RequestHttp as Request;
+use Enlight_Controller_Response_ResponseHttp as Response;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class Router
 {
@@ -61,28 +62,28 @@ class Router
 
         if ($method === 'GET' && $id === false) {
             $action = 'index';
-            $response->setStatusCode(200);
+            $response->setStatusCode(SymfonyResponse::HTTP_OK);
         } elseif ($method === 'GET') {
             $action = 'get';
-            $response->setStatusCode(200);
+            $response->setStatusCode(SymfonyResponse::HTTP_OK);
         } elseif ($method === 'PUT' && $id === false) {
             $action = 'batch';
-            $response->setStatusCode(200);
+            $response->setStatusCode(SymfonyResponse::HTTP_OK);
         } elseif ($method === 'PUT') {
             $action = 'put';
         } elseif ($method === 'POST') {
             $action = 'post';
             // Set default http status code for successful request
-            $response->setStatusCode(201);
+            $response->setStatusCode(SymfonyResponse::HTTP_CREATED);
         } elseif ($method === 'DELETE' && $id === false) {
             $action = 'batchDelete';
-            $response->setStatusCode(200);
+            $response->setStatusCode(SymfonyResponse::HTTP_OK);
         } elseif ($method === 'DELETE') {
-            $response->setStatusCode(200);
+            $response->setStatusCode(SymfonyResponse::HTTP_OK);
             $action = 'delete';
         }
 
-        if ($action == 'invalid') {
+        if ($action === 'invalid') {
             $request->setControllerName('index');
             $request->setActionName($action);
 
@@ -95,13 +96,13 @@ class Router
             return;
         }
 
-        if ($action == 'get' && $subId === false) {
+        if ($action === 'get' && $subId === false) {
             $subAction = $subType . 'Index';
         } else {
             $subAction = $subType;
         }
 
-        $action = $action . ucfirst($subAction);
+        $action .= ucfirst($subAction);
         $request->setActionName($action);
     }
 }

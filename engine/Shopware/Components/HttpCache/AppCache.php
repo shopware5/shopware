@@ -154,15 +154,15 @@ class AppCache extends HttpCache
             }
 
             if ($result) {
-                $response->setStatusCode(200, 'Banned');
+                $response->setStatusCode(Response::HTTP_OK, 'Banned');
             } else {
-                $response->setStatusCode(200, 'Not Banned');
+                $response->setStatusCode(Response::HTTP_OK, 'Not Banned');
             }
         } elseif ($request->getMethod() === 'PURGE') {
             if ($this->getStore()->purge($request->getUri())) {
-                $response->setStatusCode(200, 'Purged');
+                $response->setStatusCode(Response::HTTP_OK, 'Purged');
             } else {
-                $response->setStatusCode(200, 'Not purged');
+                $response->setStatusCode(Response::HTTP_OK, 'Not purged');
             }
         }
 
