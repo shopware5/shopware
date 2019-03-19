@@ -86,6 +86,6 @@ class AddLinkHeaderSubscriber implements SubscriberInterface
             return;
         }
 
-        $response->setHeader('Link', $this->serializer->serialize($links));
+        $response->headers->set('link', $this->serializer->serialize($links));
     }
 }

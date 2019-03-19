@@ -26,6 +26,7 @@ namespace Shopware\Components\Cart;
 
 use Enlight\Event\SubscriberInterface;
 use Enlight_Components_Session_Namespace as Session;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class PaymentTokenSubscriber implements SubscriberInterface
 {
@@ -72,7 +73,7 @@ class PaymentTokenSubscriber implements SubscriberInterface
         }
 
         if ($restoreData) {
-            $controller->Response()->setCookie($restoreData->getSessionName(), $restoreData->getValue(), 0, $request->getBaseUrl(), null, $request->isSecure(), true);
+            $controller->Response()->headers->setCookie(new Cookie($restoreData->getSessionName(), $restoreData->getValue(), 0, $request->getBaseUrl(), null, $request->isSecure(), true));
         }
 
         $params = $request->getParams();

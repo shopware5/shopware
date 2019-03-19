@@ -96,7 +96,7 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
         if (!file_exists($filePath)) {
             $this->Response()
                 ->clearHeaders()
-                ->setHttpResponseCode(204)
+                ->setStatusCode(204)
                 ->appendBody('Empty feed found.');
 
             return;
@@ -152,7 +152,7 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
         $encoding = $this->getExportEncoding();
         $contentType = $this->getExportContentType();
 
-        $this->Response()->setHeader('Content-Type', $contentType . ';charset=' . $encoding);
+        $this->Response()->headers->set('content-type', $contentType . ';charset=' . $encoding);
         $this->Response()->sendHeaders();
     }
 

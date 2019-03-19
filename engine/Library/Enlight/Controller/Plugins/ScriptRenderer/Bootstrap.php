@@ -114,7 +114,7 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
                 $value = 'application/javascript; charset=' . $front->getParam('charset');
             }
 
-            $this->viewRenderer->Action()->Response()->setHeader($name, $value, true);
+            $this->viewRenderer->Action()->Response()->headers->set($name, $value, true);
         }
     }
 

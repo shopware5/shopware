@@ -61,24 +61,24 @@ class Router
 
         if ($method === 'GET' && $id === false) {
             $action = 'index';
-            $response->setHttpResponseCode(200);
+            $response->setStatusCode(200);
         } elseif ($method === 'GET') {
             $action = 'get';
-            $response->setHttpResponseCode(200);
+            $response->setStatusCode(200);
         } elseif ($method === 'PUT' && $id === false) {
             $action = 'batch';
-            $response->setHttpResponseCode(200);
+            $response->setStatusCode(200);
         } elseif ($method === 'PUT') {
             $action = 'put';
         } elseif ($method === 'POST') {
             $action = 'post';
             // Set default http status code for successful request
-            $response->setHttpResponseCode(201);
+            $response->setStatusCode(201);
         } elseif ($method === 'DELETE' && $id === false) {
             $action = 'batchDelete';
-            $response->setHttpResponseCode(200);
+            $response->setStatusCode(200);
         } elseif ($method === 'DELETE') {
-            $response->setHttpResponseCode(200);
+            $response->setStatusCode(200);
             $action = 'delete';
         }
 

@@ -87,7 +87,7 @@ class Shopware_Controllers_Api_Manufacturers extends RestController
         ];
 
         $this->View()->assign(['success' => true, 'data' => $data]);
-        $this->Response()->setHeader('Location', $location);
+        $this->Response()->headers->set('location', $location);
     }
 
     /**

@@ -88,7 +88,7 @@ class SitemapIndexXml extends Controller
             $sitemaps = $this->sitemapLister->getSitemaps($this->get('shop')->getId());
         }
 
-        $this->Response()->setHeader('Content-Type', 'text/xml; charset=utf-8');
+        $this->Response()->headers->set('content-type', 'text/xml; charset=utf-8');
         $this->View()->assign('sitemaps', $sitemaps);
     }
 }

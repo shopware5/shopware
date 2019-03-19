@@ -113,6 +113,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Removed deprecated `Shopware_Components_Benchmark_Point`
 * Removed deprecated `Shopware_Components_Benchmark_Container`
 * Removed unused `Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPassSearchHandlerCompilerPass` which was not used at all.
+* Removed method `Enlight_Controller_Response_ResponseHttp::insert` 
+* Removed method `Shopware\Kernel::transformEnlightResponseToSymfonyResponse` 
 
 ### Deprecations
 
@@ -127,6 +129,10 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Deprecated `Shopware\Models\Article\Article::lastStock`. It will be removed in 5.8, use `Shopware\Models\Article\Detail::lastStock`.
 * Deprecated `EsSearch::addFilter`. Use `EsSearch::addQuery(BuilderInterface, BoolQuery::FILTER)` instead.
 * Deprecated `EsSearch::getFilters`. Use `EsSearch::getQueries(BuilderInterface, BoolQuery::FILTER)` instead.
+* Deprecated `Enlight_Controller_Response_ResponseHttp::setRawHeader`
+* Deprecated `Enlight_Controller_Response_ResponseHttp::clearRawHeader`
+* Deprecated `Enlight_Controller_Response_ResponseHttp::clearRawHeaders`
+* Deprecated `Enlight_Controller_Response_ResponseHttp::outputBody`
 
 ### Improved ExtJS auto-loading
 
@@ -199,9 +205,9 @@ The new controllers tagged with `shopware.controller` tag, can now have paramete
 * $request (e.g Request $request)
 * $requestParameters (e.g int $limit = 0  /action?limit=5)
 
-### Enlight_Controller_Request_RequestHttp is now extending Symfony\Component\HttpFoundation\Request
+### Enlight_Controller_Request_RequestHttp is now extending Symfony\Component\HttpFoundation\Request and Enlight_Controller_Response_ResponseHttp extends Symfony\Component\HttpFoundation\Response
 
-The request instance in Shopware now extends from Symfony Request.
+The request and response instances in Shopware now extend from Symfony Request / Response.
 
 ### Custom validation of order numbers (SKU)
 

@@ -50,7 +50,7 @@ class Shopware_Controllers_Api_Error extends Shopware_Controllers_Api_Rest
         $exception = $error->exception;
 
         if ($exception instanceof Enlight_Controller_Exception) {
-            $this->Response()->setHttpResponseCode(404);
+            $this->Response()->setStatusCode(404);
 
             $this->View()->assign([
                 'success' => false,
@@ -61,7 +61,7 @@ class Shopware_Controllers_Api_Error extends Shopware_Controllers_Api_Rest
         }
 
         if ($exception instanceof ApiException\PrivilegeException) {
-            $this->Response()->setHttpResponseCode(403);
+            $this->Response()->setStatusCode(403);
 
             $this->View()->assign([
                 'success' => false,
@@ -72,7 +72,7 @@ class Shopware_Controllers_Api_Error extends Shopware_Controllers_Api_Rest
         }
 
         if ($exception instanceof ApiException\NotFoundException) {
-            $this->Response()->setHttpResponseCode(404);
+            $this->Response()->setStatusCode(404);
 
             $this->View()->assign([
                 'success' => false,
@@ -83,7 +83,7 @@ class Shopware_Controllers_Api_Error extends Shopware_Controllers_Api_Rest
         }
 
         if ($exception instanceof ApiException\ParameterMissingException) {
-            $this->Response()->setHttpResponseCode(400);
+            $this->Response()->setStatusCode(400);
 
             if ($exception->getMissingParam() === null) {
                 $this->View()->assign([
@@ -103,7 +103,7 @@ class Shopware_Controllers_Api_Error extends Shopware_Controllers_Api_Rest
         }
 
         if ($exception instanceof ApiException\CustomValidationException) {
-            $this->Response()->setHttpResponseCode(400);
+            $this->Response()->setStatusCode(400);
 
             $this->View()->assign([
                 'success' => false,
@@ -115,7 +115,7 @@ class Shopware_Controllers_Api_Error extends Shopware_Controllers_Api_Rest
 
         if ($exception instanceof ApiException\ValidationException) {
             /* @var \Shopware\Components\Api\Exception\ValidationException $exception */
-            $this->Response()->setHttpResponseCode(400);
+            $this->Response()->setStatusCode(400);
 
             $errors = [];
             /** @var \Symfony\Component\Validator\ConstraintViolation $violation */
@@ -137,7 +137,7 @@ class Shopware_Controllers_Api_Error extends Shopware_Controllers_Api_Rest
         }
 
         if ($exception instanceof ApiException\BatchInterfaceNotImplementedException) {
-            $this->Response()->setHttpResponseCode(405);
+            $this->Response()->setStatusCode(405);
             $this->View()->assign([
                 'success' => false,
                 'code' => 405,
@@ -147,7 +147,7 @@ class Shopware_Controllers_Api_Error extends Shopware_Controllers_Api_Rest
             return;
         }
 
-        $this->Response()->setHttpResponseCode(500);
+        $this->Response()->setStatusCode(500);
         $this->View()->assign(['success' => false, 'message' => 'Error message: ' . $exception->getMessage()]);
     }
 }

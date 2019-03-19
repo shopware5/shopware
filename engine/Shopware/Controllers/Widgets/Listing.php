@@ -83,9 +83,9 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             $body = json_encode($result, JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
         }
 
-        $this->Response()->setHeader('Content-type', 'application/json', true);
-        $this->Response()->setHttpResponseCode($responseCode);
-        $this->Response()->setBody($body);
+        $this->Response()->headers->set('content-type', 'application/json', true);
+        $this->Response()->setStatusCode($responseCode);
+        $this->Response()->setContent($body);
     }
 
     /**
@@ -298,8 +298,8 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         }
 
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
-        $this->Response()->setBody(json_encode($body));
-        $this->Response()->setHeader('Content-type', 'application/json', true);
+        $this->Response()->setContent(json_encode($body));
+        $this->Response()->headers->set('content-type', 'application/json', true);
     }
 
     /**

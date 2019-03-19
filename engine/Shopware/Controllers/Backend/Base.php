@@ -965,9 +965,9 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         /** @var \Shopware\Components\Validator\EmailValidatorInterface $emailValidator */
         $emailValidator = $this->container->get('validator.email');
         if ($emailValidator->isValid($email)) {
-            $this->Response()->setBody(1);
+            $this->Response()->setContent(1);
         } else {
-            $this->Response()->setBody('');
+            $this->Response()->setContent('');
         }
     }
 

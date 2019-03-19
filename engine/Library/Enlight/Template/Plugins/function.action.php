@@ -78,7 +78,6 @@ function smarty_function_action($params, Enlight_Template_Default $template)
 
     $request->clearParams();
     $response->clearHeaders()
-             ->clearRawHeaders()
              ->clearBody();
 
     if (isset($params['module'])) {

@@ -147,7 +147,7 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
                 $input = null;
             }
         } catch (Zend_Json_Exception $e) {
-            $response->setHttpResponseCode(400);
+            $response->setStatusCode(400);
 
             $request->setControllerName('error');
             $request->setActionName('invalid');

@@ -113,7 +113,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
         $targetEmotionId = Shopware()->Config()->get('PageNotFoundDestination');
         $targetErrorCode = Shopware()->Config()->get('PageNotFoundCode', 404);
 
-        $response->setHttpResponseCode($targetErrorCode);
+        $response->setStatusCode($targetErrorCode);
 
         // Page not Found should not get logged in error handler
         $response->unsetExceptions();
@@ -156,7 +156,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
     {
         $response = $this->Response();
         $errorCode = $this->Request()->getParam('code', 503);
-        $response->setHttpResponseCode($errorCode);
+        $response->setStatusCode($errorCode);
 
         if ($this->Request()->getModuleName() === 'frontend') {
             $this->View()->assign('Shop', Shopware()->Shop());
@@ -188,7 +188,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
         }
 
         if ($this->View()->getAssign('success') !== null) {
-            $this->Response()->setHttpResponseCode(200);
+            $this->Response()->setStatusCode(200);
             $this->View()->clearAssign('exception');
             $this->View()->assign('message', $error->exception->getMessage());
         }
@@ -196,8 +196,8 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
 
     public function serviceAction()
     {
-        $this->Response()->setHttpResponseCode(503);
-        $this->Response()->setHeader('Retry-After', 1800);
+        $this->Response()->setStatusCode(503);
+        $this->Response()->headers->set('retry-after', 1800);
     }
 
     /**

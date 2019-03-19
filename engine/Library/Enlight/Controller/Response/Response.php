@@ -39,14 +39,7 @@ interface Enlight_Controller_Response_Response
     public function getCookies();
 
     /**
-     * Sends all cookies
-     *
-     * @return \Enlight_Controller_Response_Response
-     */
-    public function sendCookies();
-
-    /**
-     *
+     * @return void
      */
     public function unsetExceptions();
 
@@ -103,38 +96,6 @@ interface Enlight_Controller_Response_Response
      * @return \Enlight_Controller_Response_Response
      */
     public function clearHeader($name);
-
-    /**
-     * Set raw HTTP header
-     *
-     * Allows setting non key => value headers, such as status codes
-     *
-     * @param string $value
-     * @return \Enlight_Controller_Response_Response
-     */
-    public function setRawHeader($value);
-
-    /**
-     * Retrieve all {@link setRawHeader() raw HTTP headers}
-     *
-     * @return array
-     */
-    public function getRawHeaders();
-
-    /**
-     * Clear all {@link setRawHeader() raw HTTP headers}
-     *
-     * @return \Enlight_Controller_Response_Response
-     */
-    public function clearRawHeaders();
-
-    /**
-     * Clears the specified raw HTTP header
-     *
-     * @param  string $headerRaw
-     * @return \Enlight_Controller_Response_Response
-     */
-    public function clearRawHeader($headerRaw);
 
     /**
      * Clear all headers, normal and raw
@@ -250,23 +211,6 @@ interface Enlight_Controller_Response_Response
     public function prepend($name, $content);
 
     /**
-     * Insert a named segment into the body content array
-     *
-     * @param  string $name
-     * @param  string $content
-     * @param  string $parent
-     * @param  boolean $before Whether to insert the new segment before or
-     * after the parent. Defaults to false (after)
-     * @return \Enlight_Controller_Response_Response
-     */
-    public function insert($name, $content, $parent = null, $before = false);
-
-    /**
-     * Echo the body segments
-     */
-    public function outputBody();
-
-    /**
      * Register an exception with the response
      *
      * @param Exception $e
@@ -334,21 +278,4 @@ interface Enlight_Controller_Response_Response
      * @param mixed $code
      */
     public function getExceptionByCode($code);
-
-    /**
-     * Whether or not to render exceptions (off by default)
-     *
-     * If called with no arguments or a null argument, returns the value of the
-     * flag; otherwise, sets it and returns the current value.
-     *
-     * @param boolean $flag Optional
-     * @return boolean
-     */
-    public function renderExceptions($flag = null);
-
-    /**
-     * Send the response, including all headers, rendering exceptions if so
-     * requested.
-     */
-    public function sendResponse();
 }

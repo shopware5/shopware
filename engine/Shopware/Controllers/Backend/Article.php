@@ -51,6 +51,7 @@ use Shopware\Models\Property\Group as PropertyGroup;
 use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Tax\Tax;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
@@ -1917,10 +1918,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
         $response = $this->Response();
-        $response->setHeader('Content-Type', $mimeType);
-        $response->setHeader('Content-Disposition', sprintf('attachment; filename="%s"', basename($path)));
-        $response->setHeader('Content-Length', $meta['size']);
-        $response->setHeader('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('content-type', $mimeType);
+        $response->headers->set('content-disposition', sprintf('attachment; filename="%s"', basename($path)));
+        $response->headers->set('content-length', $meta['size']);
+        $response->headers->set('content-transfer-encoding', 'binary');
         $response->sendHeaders();
         $response->sendResponse();
 
@@ -2129,7 +2130,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         );
 
         /* @var Shop $shop */
-        $this->Response()->setCookie('shop', $shopId, 0, $shop->getBasePath());
+        $this->Response()->headers->setCookie(new Cookie('shop', $shopId, 0, $shop->getBasePath()));
         $this->redirect($url);
     }
 

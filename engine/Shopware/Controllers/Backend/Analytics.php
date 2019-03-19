@@ -871,8 +871,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     protected function exportCSV($data)
     {
         $this->Front()->Plugins()->Json()->setRenderer(false);
-        $this->Response()->setHeader('Content-Type', 'text/csv; charset=utf-8');
-        $this->Response()->setHeader('Content-Disposition', 'attachment;filename=' . $this->getCsvFileName());
+        $this->Response()->headers->set('content-type', 'text/csv; charset=utf-8');
+        $this->Response()->headers->set('content-disposition', 'attachment;filename=' . $this->getCsvFileName());
 
         echo "\xEF\xBB\xBF";
         $fp = fopen('php://output', 'w');

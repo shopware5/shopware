@@ -238,8 +238,8 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $dataQuery = $this->getVoucherRepository()->getVoucherCodeListQuery($voucherId);
         $resultArray = $dataQuery->getArrayResult();
 
-        $this->Response()->setHeader('Content-Type', 'text/csv; charset=utf-8');
-        $this->Response()->setHeader('Content-Disposition', 'attachment;filename=voucherCodes.csv');
+        $this->Response()->headers->set('content-type', 'text/csv; charset=utf-8');
+        $this->Response()->headers->set('content-disposition', 'attachment;filename=voucherCodes.csv');
         //use this to set the BOM to show it in the right way for excel and stuff
         echo "\xEF\xBB\xBF";
         $fp = fopen('php://output', 'w');

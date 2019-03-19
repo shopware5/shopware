@@ -25,7 +25,6 @@
 namespace Shopware;
 
 use Enlight_Controller_Request_RequestHttp as EnlightRequest;
-use Enlight_Controller_Response_ResponseHttp as EnlightResponse;
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\StaticResourcesCompilerPass;
 use Shopware\Bundle\BenchmarkBundle\DependencyInjection\Compiler\MatcherCompilerPass;
 use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\ControllerCompilerPass;
@@ -49,7 +48,6 @@ use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\DependencyInjection\RegisterControllerArgumentLocatorsPass;
@@ -191,15 +189,13 @@ class Kernel implements HttpKernelInterface, TerminableInterface
             $response = clone $front->Response();
 
             $response->clearHeaders()
-                ->clearRawHeaders()
                 ->clearBody();
 
-            $response->setHttpResponseCode(200);
+            $response->setStatusCode(200);
             $enlightRequest->setDispatched();
             $dispatcher->dispatch($enlightRequest, $response);
         }
 
-        $response = $this->transformEnlightResponseToSymfonyResponse($response);
         $response->prepare($request);
 
         return $response;
@@ -214,47 +210,6 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         $request->overrideGlobals();
 
         return EnlightRequest::createFromGlobals();
-    }
-
-    /**
-     * @throws \InvalidArgumentException
-     *
-     * @return SymfonyResponse
-     */
-    public function transformEnlightResponseToSymfonyResponse(EnlightResponse $response)
-    {
-        $rawHeaders = $response->getHeaders();
-        $headers = [];
-        foreach ($rawHeaders as $header) {
-            if (!isset($headers[$header['name']]) || !empty($header['replace'])) {
-                header_remove($header['name']);
-                $headers[$header['name']] = [$header['value']];
-            } else {
-                $headers[$header['name']][] = $header['value'];
-            }
-        }
-
-        $symfonyResponse = new SymfonyResponse(
-            $response->getBody(),
-            $response->getHttpResponseCode(),
-            $headers
-        );
-
-        foreach ($response->getCookies() as $cookieContent) {
-            $sfCookie = new Cookie(
-                $cookieContent['name'],
-                $cookieContent['value'],
-                $cookieContent['expire'],
-                $cookieContent['path'],
-                $cookieContent['domain'],
-                (bool) $cookieContent['secure'],
-                (bool) $cookieContent['httpOnly']
-            );
-
-            $symfonyResponse->headers->setCookie($sfCookie);
-        }
-
-        return $symfonyResponse;
     }
 
     /**

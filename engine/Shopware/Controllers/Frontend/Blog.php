@@ -222,7 +222,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         // RSS and ATOM Feed part
         if ($this->Request()->getParam('sRss') || $this->Request()->getParam('sAtom')) {
-            $this->Response()->setHeader('Content-Type', 'text/xml');
+            $this->Response()->headers->set('content-type', 'text/xml');
             $type = $this->Request()->getParam('sRss') ? 'rss' : 'atom';
             $this->View()->loadTemplate('frontend/blog/' . $type . '.tpl');
         }

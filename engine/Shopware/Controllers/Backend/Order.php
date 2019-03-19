@@ -1166,12 +1166,12 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $orderId = $orderModel[0]['documentId'];
 
         $response = $this->Response();
-        $response->setHeader('Cache-Control', 'public');
-        $response->setHeader('Content-Description', 'File Transfer');
-        $response->setHeader('Content-disposition', 'attachment; filename=' . $orderId . '.pdf');
-        $response->setHeader('Content-Type', 'application/pdf');
-        $response->setHeader('Content-Transfer-Encoding', 'binary');
-        $response->setHeader('Content-Length', $filesystem->getSize($file));
+        $response->headers->set('cache-control', 'public', true);
+        $response->headers->set('content-description', 'File Transfer');
+        $response->headers->set('content-disposition', 'attachment; filename=' . $orderId . '.pdf');
+        $response->headers->set('content-type', 'application/pdf');
+        $response->headers->set('content-transfer-encoding', 'binary');
+        $response->headers->set('content-length', $filesystem->getSize($file));
         $response->sendHeaders();
         $response->sendResponse();
 
@@ -1521,7 +1521,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         $pdf->Output($hash . '.pdf', 'D');
 
-        $this->Response()->setHeader('Content-Type', 'application/x-download');
+        $this->Response()->headers->set('content-type', 'application/x-download');
     }
 
     /**

@@ -397,7 +397,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     /**
      * Returns the response instance.
      *
-     * @return Enlight_Controller_Response_Response
+     * @return Enlight_Controller_Response_ResponseHttp
      */
     public function Response()
     {

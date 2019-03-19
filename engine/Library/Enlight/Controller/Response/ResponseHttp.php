@@ -1,34 +1,26 @@
 <?php
 /**
- * Shopware 5
- * Copyright (c) shopware AG
+ * Enlight
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * LICENSE
  *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/bsd-license.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@shopware.de so we can send you a copy immediately.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
+ * @license    http://opensource.org/licenses/bsd-license.php New BSD License
  */
 
-/**
- * This class is highly based on Zend_Controller_Response_Http
- *
- * @see https://github.com/zendframework/zf1/blob/release-1.12.20/library/Zend/Controller/Response/Http.php
- * @see https://github.com/zendframework/zf1/blob/release-1.12.20/library/Zend/Controller/Response/Abstract.php
- */
-class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Response_Response
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Response;
+
+class Enlight_Controller_Response_ResponseHttp extends Response implements Enlight_Controller_Response_Response
 {
     /**
      * Flag; if true, when header operations are called after headers have been
@@ -40,17 +32,6 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
      * @var bool
      */
     public $headersSentThrowsException = true;
-    /**
-     * @var array contains all cookies, which have been set by the "setCookie" function
-     */
-    protected $_cookies = [];
-
-    /**
-     * Body content
-     *
-     * @var array
-     */
-    protected $_body = [];
 
     /**
      * Exception stack
@@ -58,41 +39,6 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
      * @var Exception[]
      */
     protected $_exceptions = [];
-
-    /**
-     * Array of headers. Each header is an array with keys 'name' and 'value'
-     *
-     * @var array
-     */
-    protected $_headers = [];
-
-    /**
-     * Array of raw headers. Each header is a single string, the entire header to emit
-     *
-     * @var array
-     */
-    protected $_headersRaw = [];
-
-    /**
-     * HTTP response code to use in headers
-     *
-     * @var int
-     */
-    protected $_httpResponseCode = 200;
-
-    /**
-     * Flag; is this response a redirect?
-     *
-     * @var bool
-     */
-    protected $_isRedirect = false;
-
-    /**
-     * Whether or not to render exceptions; off by default
-     *
-     * @var bool
-     */
-    protected $_renderExceptions = false;
 
     /**
      * Magic __toString functionality
@@ -104,10 +50,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
      */
     public function __toString()
     {
-        ob_start();
-        $this->sendResponse();
-
-        return ob_get_clean();
+        return $this->getContent();
     }
 
     /**
@@ -122,17 +65,17 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
         $secure = false,
         $httpOnly = false
     ) {
-        $key = $name . '-' . $path;
+        $cookie = new Cookie(
+            $name,
+            $value,
+            $expire,
+            $path,
+            $domain,
+            $secure,
+            $httpOnly
+        );
 
-        $this->_cookies[$key] = [
-            'name' => $name,
-            'value' => $value,
-            'expire' => $expire,
-            'path' => $path,
-            'domain' => $domain,
-            'secure' => $secure,
-            'httpOnly' => $httpOnly,
-        ];
+        $this->headers->setCookie($cookie);
 
         return $this;
     }
@@ -142,49 +85,47 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
      */
     public function getCookies()
     {
-        return $this->_cookies;
+        $cookies = [];
+
+        foreach ($this->headers->getCookies() as $cookie) {
+            $data = [
+                'name' => $cookie->getName(),
+                'value' => $cookie->getValue(),
+                'expire' => $cookie->getExpiresTime(),
+                'path' => $cookie->getPath(),
+                'domain' => $cookie->getDomain(),
+                'secure' => $cookie->isSecure(),
+                'httpOnly' => $cookie->isHttpOnly(),
+            ];
+
+            $cookies[$cookie->getName() . '-' . $cookie->getPath()] = $data;
+
+            if ($cookie->getPath() === '/') {
+                $cookies[$cookie->getName() . '-'] = $data;
+            }
+        }
+
+        return $cookies;
     }
 
     /**
      * @param string      $name
      * @param string|null $path
-     *
-     * @return bool
      */
     public function removeCookie($name, $path = null)
     {
-        $key = $name . '-' . $path;
-
-        if (isset($this->_cookies[$key])) {
-            unset($this->_cookies[$key]);
-
-            return true;
-        }
-
-        return false;
+        $this->headers->removeCookie($name, $path);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated since 5.6, will be removed with 5.8. Use sendHeaders instead
      */
     public function sendCookies()
     {
-        if (!empty($this->_cookies)) {
-            $this->canSendHeaders(true);
-            foreach ($this->_cookies as $name => $cookie) {
-                setcookie(
-                    $cookie['name'],
-                    $cookie['value'],
-                    $cookie['expire'],
-                    $cookie['path'],
-                    $cookie['domain'],
-                    $cookie['secure'],
-                    $cookie['httpOnly']
-                );
-            }
-        }
-
-        return $this;
+        trigger_error(__CLASS__ . ':' . __METHOD__ . ' is deprecated. Please use sendHeaders instead', E_USER_DEPRECATED);
+        $this->sendHeaders();
     }
 
     /**
@@ -200,23 +141,10 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
      */
     public function setHeader($name, $value, $replace = false)
     {
+        $name = strtolower($name);
         $this->canSendHeaders(true);
-        $name = $this->_normalizeHeader($name);
-        $value = (string) $value;
 
-        if ($replace) {
-            foreach ($this->_headers as $key => $header) {
-                if ($name == $header['name']) {
-                    unset($this->_headers[$key]);
-                }
-            }
-        }
-
-        $this->_headers[] = [
-            'name' => $name,
-            'value' => $value,
-            'replace' => $replace,
-        ];
+        $this->headers->set($name, $value, $replace);
 
         return $this;
     }
@@ -227,8 +155,9 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
     public function setRedirect($url, $code = 302)
     {
         $this->canSendHeaders(true);
-        $this->setHeader('Location', $url, true)
-            ->setHttpResponseCode($code);
+
+        $this->headers->set('Location', $url);
+        $this->setHttpResponseCode($code);
 
         return $this;
     }
@@ -236,17 +165,27 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
     /**
      * {@inheritdoc}
      */
-    public function isRedirect()
-    {
-        return $this->_isRedirect;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getHeaders()
     {
-        return $this->_headers;
+        $headers = [];
+
+        foreach ($this->headers->all() as $key => $header) {
+            $keyFormatted = self::formatHeader($key);
+
+            foreach ($header as $entry) {
+                $headers[] = [
+                    'name' => $key,
+                    'value' => $entry,
+                ];
+
+                $headers[] = [
+                    'name' => $keyFormatted,
+                    'value' => $entry,
+                ];
+            }
+        }
+
+        return $headers;
     }
 
     /**
@@ -254,7 +193,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
      */
     public function clearHeaders()
     {
-        $this->_headers = [];
+        $this->headers->replace([]);
 
         return $this;
     }
@@ -264,64 +203,66 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
      */
     public function clearHeader($name)
     {
-        if (!count($this->_headers)) {
-            return $this;
-        }
-
-        foreach ($this->_headers as $index => $header) {
-            if ($name == $header['name']) {
-                unset($this->_headers[$index]);
-            }
-        }
+        $this->headers->remove($name);
 
         return $this;
     }
 
     /**
      * {@inheritdoc}
+     * @deprecated since 5.6, will be removed in 5.8. Use setHeader instead
      */
     public function setRawHeader($value)
     {
-        $this->canSendHeaders(true);
-        if ('Location' == substr($value, 0, 8)) {
-            $this->_isRedirect = true;
+        trigger_error(__CLASS__ . ':' . __METHOD__ . ' is deprecated. Please set $response->headers->set instead', E_USER_DEPRECATED);
+
+        $parts = self::getRawHeaderParts($value);
+
+        if (count($parts) !== 2) {
+            throw new InvalidArgumentException(sprintf('Given Header "%s" is invalid', $value));
         }
-        $this->_headersRaw[] = (string) $value;
+
+        $this->headers->set($parts[0], $parts[1]);
 
         return $this;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated since 5.6, will be removed in 5.8. Use $response->headers->all() instead
      */
     public function getRawHeaders()
     {
-        return $this->_headersRaw;
+        trigger_error(__CLASS__ . ':' . __METHOD__ . ' is deprecated. Please set $response->headers->all() instead', E_USER_DEPRECATED);
+        return $this->headers->all();
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated since 5.6, will be removed in 5.8. Use $response->headers->replace() instead
      */
     public function clearRawHeaders()
     {
-        $this->_headersRaw = [];
+        trigger_error(__CLASS__ . ':' . __METHOD__ . ' is deprecated. Please set $response->headers->replace() instead', E_USER_DEPRECATED);
+        $this->headers->replace([]);
 
         return $this;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated since 5.6, will be removed in 5.8. Use clearHeader instead
      */
     public function clearRawHeader($headerRaw)
     {
-        if (!count($this->_headersRaw)) {
-            return $this;
-        }
+        trigger_error(__CLASS__ . ':' . __METHOD__ . ' is deprecated. Please set clearRawHeader instead', E_USER_DEPRECATED);
 
-        $key = array_search($headerRaw, $this->_headersRaw);
-        if ($key !== false) {
-            unset($this->_headersRaw[$key]);
-        }
+        $parts = self::getRawHeaderParts($headerRaw);
+
+        $this->headers->remove($parts[0]);
 
         return $this;
     }
@@ -331,8 +272,9 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
      */
     public function clearAllHeaders()
     {
-        return $this->clearHeaders()
-            ->clearRawHeaders();
+        $this->headers->replace([]);
+
+        return $this;
     }
 
     /**
@@ -340,17 +282,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
      */
     public function setHttpResponseCode($code)
     {
-        if (!is_int($code) || (100 > $code) || (599 < $code)) {
-            throw new RuntimeException('Invalid HTTP response code');
-        }
-
-        if ((300 <= $code) && (307 >= $code)) {
-            $this->_isRedirect = true;
-        } else {
-            $this->_isRedirect = false;
-        }
-
-        $this->_httpResponseCode = $code;
+        $this->setStatusCode($code);
 
         return $this;
     }
@@ -360,7 +292,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
      */
     public function getHttpResponseCode()
     {
-        return $this->_httpResponseCode;
+        return $this->getStatusCode();
     }
 
     /**
@@ -379,55 +311,9 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
     /**
      * {@inheritdoc}
      */
-    public function sendHeaders()
-    {
-        $this->sendCookies();
-
-        // Only check if we can send headers if we have headers to send
-        if (count($this->_headersRaw) || count($this->_headers) || (200 != $this->_httpResponseCode)) {
-            $this->canSendHeaders(true);
-        } elseif (200 == $this->_httpResponseCode) {
-            // Haven't changed the response code, and we have no headers
-            return $this;
-        }
-
-        $httpCodeSent = false;
-
-        foreach ($this->_headersRaw as $header) {
-            if (!$httpCodeSent && $this->_httpResponseCode) {
-                header($header, true, $this->_httpResponseCode);
-                $httpCodeSent = true;
-            } else {
-                header($header);
-            }
-        }
-
-        foreach ($this->_headers as $header) {
-            if (!$httpCodeSent && $this->_httpResponseCode) {
-                header($header['name'] . ': ' . $header['value'], $header['replace'], $this->_httpResponseCode);
-                $httpCodeSent = true;
-            } else {
-                header($header['name'] . ': ' . $header['value'], $header['replace']);
-            }
-        }
-
-        if (!$httpCodeSent) {
-            header('HTTP/1.1 ' . $this->_httpResponseCode);
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function setBody($content, $name = null)
     {
-        if ((null === $name) || !is_string($name)) {
-            $this->_body = ['default' => (string) $content];
-        } else {
-            $this->_body[$name] = (string) $content;
-        }
+        $this->content = $content;
 
         return $this;
     }
@@ -437,17 +323,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
      */
     public function appendBody($content, $name = null)
     {
-        if ((null === $name) || !is_string($name)) {
-            if (isset($this->_body['default'])) {
-                $this->_body['default'] .= (string) $content;
-            } else {
-                return $this->append('default', $content);
-            }
-        } elseif (isset($this->_body[$name])) {
-            $this->_body[$name] .= (string) $content;
-        } else {
-            return $this->append($name, $content);
-        }
+        $this->content .= $content;
 
         return $this;
     }
@@ -457,18 +333,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
      */
     public function clearBody($name = null)
     {
-        if (null !== $name) {
-            $name = (string) $name;
-            if (isset($this->_body[$name])) {
-                unset($this->_body[$name]);
-
-                return true;
-            }
-
-            return false;
-        }
-
-        $this->_body = [];
+        $this->content = null;
 
         return true;
     }
@@ -478,18 +343,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
      */
     public function getBody($spec = false)
     {
-        if (false === $spec) {
-            ob_start();
-            $this->outputBody();
-
-            return ob_get_clean();
-        } elseif (true === $spec) {
-            return $this->_body;
-        } elseif (is_string($spec) && isset($this->_body[$spec])) {
-            return $this->_body[$spec];
-        }
-
-        return null;
+        return $this->content;
     }
 
     /**
@@ -497,14 +351,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
      */
     public function append($name, $content)
     {
-        if (!is_string($name)) {
-            throw new RuntimeException('Invalid body segment key ("' . gettype($name) . '")');
-        }
-
-        if (isset($this->_body[$name])) {
-            unset($this->_body[$name]);
-        }
-        $this->_body[$name] = (string) $content;
+        $this->content .= $content;
 
         return $this;
     }
@@ -514,72 +361,20 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
      */
     public function prepend($name, $content)
     {
-        if (!is_string($name)) {
-            throw new RuntimeException('Invalid body segment key ("' . gettype($name) . '")');
-        }
-
-        if (isset($this->_body[$name])) {
-            unset($this->_body[$name]);
-        }
-
-        $new = [$name => (string) $content];
-        $this->_body = $new + $this->_body;
+        $this->content = $content . $this->content;
 
         return $this;
     }
 
     /**
      * {@inheritdoc}
-     */
-    public function insert($name, $content, $parent = null, $before = false)
-    {
-        if (!is_string($name)) {
-            throw new RuntimeException('Invalid body segment key ("' . gettype($name) . '")');
-        }
-
-        if ((null !== $parent) && !is_string($parent)) {
-            throw new RuntimeException('Invalid body segment parent key ("' . gettype($parent) . '")');
-        }
-
-        if (isset($this->_body[$name])) {
-            unset($this->_body[$name]);
-        }
-
-        if ((null === $parent) || !isset($this->_body[$parent])) {
-            return $this->append($name, $content);
-        }
-
-        $ins = [$name => (string) $content];
-        $keys = array_keys($this->_body);
-        $loc = array_search($parent, $keys);
-        if (!$before) {
-            // Increment location if not inserting before
-            ++$loc;
-        }
-
-        if (0 === $loc) {
-            // If location of key is 0, we're prepending
-            $this->_body = $ins + $this->_body;
-        } elseif ($loc >= count($this->_body)) {
-            // If location of key is maximal, we're appending
-            $this->_body = $this->_body + $ins;
-        } else {
-            // Otherwise, insert at location specified
-            $pre = array_slice($this->_body, 0, $loc);
-            $post = array_slice($this->_body, $loc);
-            $this->_body = $pre + $ins + $post;
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
+     *
+     * @deprecated since 5.6, will be removed in 5.8. Use getContent with echo instead
      */
     public function outputBody()
     {
-        $body = implode('', $this->_body);
-        echo $body;
+        trigger_error(__CLASS__ . ':' . __METHOD__ . ' is deprecated. Please use getContent instead', E_USER_DEPRECATED);
+        echo $this->getBody();
     }
 
     /**
@@ -628,7 +423,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
     public function hasExceptionOfMessage($message)
     {
         foreach ($this->_exceptions as $e) {
-            if ($message == $e->getMessage()) {
+            if ($message === $e->getMessage()) {
                 return true;
             }
         }
@@ -643,7 +438,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
     {
         $code = (int) $code;
         foreach ($this->_exceptions as $e) {
-            if ($code == $e->getCode()) {
+            if ($code === $e->getCode()) {
                 return true;
             }
         }
@@ -677,7 +472,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
     {
         $exceptions = [];
         foreach ($this->_exceptions as $e) {
-            if ($message == $e->getMessage()) {
+            if ($message === $e->getMessage()) {
                 $exceptions[] = $e;
             }
         }
@@ -697,7 +492,7 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
         $code = (int) $code;
         $exceptions = [];
         foreach ($this->_exceptions as $e) {
-            if ($code == $e->getCode()) {
+            if ($code === $e->getCode()) {
                 $exceptions[] = $e;
             }
         }
@@ -711,51 +506,32 @@ class Enlight_Controller_Response_ResponseHttp implements Enlight_Controller_Res
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated since 5.6, will be removed in 5.8. Use showException in config.php instead
      */
     public function renderExceptions($flag = null)
     {
-        if (null !== $flag) {
-            $this->_renderExceptions = $flag ? true : false;
-        }
-
-        return $this->_renderExceptions;
+        trigger_error(__CLASS__ . ':' . __METHOD__ . ' is deprecated without replacement', E_USER_DEPRECATED);
+        return false;
     }
 
     /**
-     * {@inheritdoc}
+     * @deprecated since 5.6, will be removed in 5.8. Use send instead
      */
     public function sendResponse()
     {
+        trigger_error(__CLASS__ . ':' . __METHOD__ . ' is deprecated. Please set send instead', E_USER_DEPRECATED);
         $this->sendHeaders();
-
-        if ($this->isException() && $this->renderExceptions()) {
-            $exceptions = '';
-            foreach ($this->getException() as $e) {
-                $exceptions .= $e->__toString() . "\n";
-            }
-            echo $exceptions;
-
-            return;
-        }
-
-        $this->outputBody();
+        $this->sendContent();
     }
 
-    /**
-     * Normalize a header name
-     *
-     * Normalizes a header name to X-Capitalized-Names
-     *
-     * @param string $name
-     *
-     * @return string
-     */
-    protected function _normalizeHeader($name)
+    private static function getRawHeaderParts(string $name): array
     {
-        $filtered = str_replace(['-', '_'], ' ', (string) $name);
-        $filtered = ucwords(strtolower($filtered));
-        $filtered = str_replace(' ', '-', $filtered);
+        return array_map('trim', explode(':', $name, 2));
+    }
 
-        return $filtered;
+    private static function formatHeader(string $header): string
+    {
+        return implode('-', array_map('ucfirst', explode('-', $header)));
     }
 }

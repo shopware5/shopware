@@ -125,7 +125,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
                 $body = $this->trackFilter($body, $mailing['id']);
             }
         } else {
-            $this->Response()->setHeader('Content-Type', 'text/plain');
+            $this->Response()->headers->set('content-type', 'text/plain');
             $body = $this->altFilter($body);
         }
 
@@ -299,13 +299,13 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         if ($cronBootstrap && !$cronBootstrap->authorizeCronAction($this->Request())) {
             $this->Response()
                 ->clearHeaders()
-                ->setHttpResponseCode(403)
+                ->setStatusCode(403)
                 ->appendBody('Forbidden');
 
             return;
         }
 
-        $this->Response()->setHeader('Content-Type', 'text/plain');
+        $this->Response()->headers->set('content-type', 'text/plain');
         $this->mailAction();
     }
 
@@ -343,7 +343,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             Shopware()->Db()->query($sql, [$mailing]);
         }
 
-        $this->Response()->setHeader('Content-Type', 'image/gif');
+        $this->Response()->headers->set('content-type', 'image/gif');
         $bild = imagecreate(1, 1);
         $white = imagecolorallocate($bild, 255, 255, 255);
         imagefill($bild, 1, 1, $white);

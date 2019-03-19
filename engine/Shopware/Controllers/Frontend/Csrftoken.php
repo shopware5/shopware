@@ -39,6 +39,6 @@ class Shopware_Controllers_Frontend_Csrftoken extends Enlight_Controller_Action
     {
         $token = \Shopware\Components\Random::getAlphanumericString(30);
 
-        $this->Response()->setHeader('X-CSRF-Token', $token);
+        $this->Response()->headers->set('x-csrf-token', $token);
     }
 }
