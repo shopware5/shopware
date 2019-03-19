@@ -38,7 +38,7 @@ class MediaExtensionMappingServiceTest extends TestCase
 
     protected function setUp()
     {
-        $this->mappingService = new MediaExtensionMappingService(['xlsx', 'DOCX']);
+        $this->mappingService = new MediaExtensionMappingService(['xlsx', 'DOCX', 'pdf']);
     }
 
     public function testAllowedExtensionShouldPass()
@@ -71,5 +71,11 @@ class MediaExtensionMappingServiceTest extends TestCase
     {
         $this->assertTrue($this->mappingService->isAllowed('XLSX'));
         $this->assertTrue($this->mappingService->isAllowed('docx'));
+    }
+
+    public function testExistingExtensionInCustomFileExtensionsIsStillDefined()
+    {
+        $this->assertTrue($this->mappingService->isAllowed('pdf'));
+        $this->assertSame(Media::TYPE_PDF, $this->mappingService->getType('pdf'));
     }
 }
