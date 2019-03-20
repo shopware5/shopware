@@ -29,7 +29,6 @@ use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media;
 use Shopware\Models\Media\Settings;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\FileBag;
 
 class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
@@ -65,17 +64,6 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         return [
             'download',
         ];
-    }
-
-    /**
-     * Enable json renderer for index / load action
-     * Check acl rules
-     */
-    public function preDispatch()
-    {
-        if ($this->Request()->getActionName() !== 'upload') {
-            parent::preDispatch();
-        }
     }
 
     /**
@@ -384,28 +372,24 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     {
         $params = $this->Request()->getParams();
 
+        if (!$this->Request()->files->has('fileId')) {
+            $this->View()->assign(['success' => false]);
+
+            return;
+        }
+
         // Try to get the transferred file
         try {
-            $file = $_FILES['fileId'];
+            /** @var UploadedFile $file */
+            $file = $this->Request()->files->get('fileId');
 
-            if (($file['size'] < 1 && $file['error'] === 1) || empty($_FILES)) {
+            if (!$file->isValid()) {
                 throw new Exception('The file exceeds the max file size.');
             }
-
-            $fileInfo = pathinfo($file['name']);
-            $fileExtension = strtolower($fileInfo['extension']);
-            $file['name'] = $fileInfo['filename'] . '.' . $fileExtension;
-            $_FILES['fileId']['name'] = $file['name'];
-
-            $fileBag = new FileBag($_FILES);
-
-            /** @var UploadedFile|null $file */
-            $file = $fileBag->get('fileId');
         } catch (Exception $e) {
-            die(json_encode(['success' => false, 'message' => $e->getMessage()]));
-        }
-        if ($file === null) {
-            die(json_encode(['success' => false]));
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+
+            return;
         }
 
         // Create a new model and set the properties
@@ -452,11 +436,11 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $mediaService = Shopware()->Container()->get('shopware_media.media_service');
             $data[0]['path'] = $mediaService->getUrl($data[0]['path']);
 
-            die(json_encode(['success' => true, 'data' => $data[0]]));
+            $this->View()->assign(['success' => true, 'data' => $data[0]]);
         } catch (\Exception $e) {
             unlink($file->getPathname());
 
-            die(json_encode(['success' => false, 'message' => $e->getMessage(), 'exception' => $this->parseExceptionForResponse($e)]));
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage(), 'exception' => $this->parseExceptionForResponse($e)]);
         }
     }
 
@@ -637,8 +621,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      */
     public function singleReplaceAction()
     {
-        $fileBag = new FileBag($_FILES);
-        $file = $fileBag->get('file');
+        $file = $this->Request()->files->get('file');
         $mediaId = $this->request->get('mediaId');
 
         $mediaReplaceService = $this->container->get('shopware_media.replace_service');

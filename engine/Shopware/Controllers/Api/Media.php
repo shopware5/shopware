@@ -25,7 +25,6 @@
 use Shopware\Bundle\ControllerBundle\RestController;
 use Shopware\Components\Api\Resource\Media;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\FileBag;
 
 class Shopware_Controllers_Api_Media extends RestController
 {
@@ -136,12 +135,9 @@ class Shopware_Controllers_Api_Media extends RestController
      */
     private function prepareUploadedFile(array $params): array
     {
-        $fileBag = new FileBag($_FILES);
-
         // Check for a POSTed file
-        if ($fileBag->has('file')) {
-            /** @var UploadedFile $file */
-            $file = $fileBag->get('file');
+        if ($this->Request()->files->has('file')) {
+            $file = $this->Request()->files->get('file');
             $fileExtension = $file->getClientOriginalExtension();
             $fileName = $file->getClientOriginalName();
 

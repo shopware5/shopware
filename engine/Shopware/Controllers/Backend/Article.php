@@ -1843,9 +1843,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function uploadEsdFileAction()
     {
-        $fileBag = new \Symfony\Component\HttpFoundation\FileBag($_FILES);
-        /** @var Symfony\Component\HttpFoundation\File\UploadedFile|null $file */
-        $file = $fileBag->get('fileId');
+        $file = $this->Request()->files->get('fileId');
 
         if ($file === null) {
             $this->View()->assign(['success' => false]);
