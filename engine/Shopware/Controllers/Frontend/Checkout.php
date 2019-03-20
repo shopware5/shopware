@@ -466,12 +466,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function paymentAction()
     {
-        $accountMode = (int) $this->View()->sUserData['additional']['user']['accountmode'];
-
         if (empty($this->session['sOrderVariables'])
                 || $this->getMinimumCharge()
                 || $this->getEsdNote()
-                || ($accountMode === 0 && $this->getDispatchNoOrder())) {
+                || $this->getDispatchNoOrder()) {
             return $this->forward('confirm');
         }
 
