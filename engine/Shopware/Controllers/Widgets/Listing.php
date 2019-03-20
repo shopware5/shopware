@@ -34,6 +34,14 @@ use Shopware\Components\Compatibility\LegacyStructConverter;
 class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 {
     /**
+     * Pre dispatch method
+     */
+    public function preDispatch()
+    {
+        $this->Response()->setHeader('x-robots', 'noindex');
+    }
+
+    /**
      * Product navigation as json string
      */
     public function productNavigationAction()
