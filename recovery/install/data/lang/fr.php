@@ -75,7 +75,7 @@ EOT
     'requirements_error' => '<h3 class="alert-heading">Attention!</h3>L\'installation ne peut être réalisée car la configuration requise n\'est pas satisfaite',
     'requirements_success' => '<h3 class="alert-heading">Félicitations!</h3>L\'installation peut être réalisée car la configuration requise est satisfaite',
     'requirements_php_info' => 'Afin que Shopware soit fonctionnel, ton serveur doit disposer de la configuration requise suivante',
-    'requirements_php_max_compatible_version' => 'La Shopware version que tu installes a été testée que jusqu\'à la version %s de PHP.',
+    'requirements_php_max_compatible_version' => 'Cette version de Shopware supporte PHP jusqu\'à la version %s. La fonctionnalité complète avec les plus nouvelles versions de PHP ne peut être garantie.',
     'requirements_system_colcheck' => 'Configuration requise',
     'requirements_system_colrequired' => 'Nécessaire',
     'requirements_system_colfound' => 'Ton système',
