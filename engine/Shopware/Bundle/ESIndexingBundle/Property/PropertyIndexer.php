@@ -27,6 +27,7 @@ namespace Shopware\Bundle\ESIndexingBundle\Property;
 use Elasticsearch\Client;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\DataIndexerInterface;
+use Shopware\Bundle\ESIndexingBundle\ProviderInterface;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Group;
 
@@ -38,7 +39,7 @@ class PropertyIndexer implements DataIndexerInterface
     private $client;
 
     /**
-     * @var PropertyProviderInterface
+     * @var ProviderInterface
      */
     private $provider;
 
@@ -50,7 +51,7 @@ class PropertyIndexer implements DataIndexerInterface
     public function __construct(
         Client $client,
         PropertyQueryFactory $queryFactory,
-        PropertyProviderInterface $provider
+        ProviderInterface $provider
     ) {
         $this->client = $client;
         $this->provider = $provider;

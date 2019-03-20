@@ -24,15 +24,11 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Property;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Property\Group;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\ESIndexingBundle\ProviderInterface;
 
-interface PropertyProviderInterface
+/**
+ * @deprecated 5.7 Use ProviderInterface
+ */
+interface PropertyProviderInterface extends ProviderInterface
 {
-    /**
-     * @param int[] $groupIds
-     *
-     * @return Group[]
-     */
-    public function get(Shop $shop, $groupIds);
 }
