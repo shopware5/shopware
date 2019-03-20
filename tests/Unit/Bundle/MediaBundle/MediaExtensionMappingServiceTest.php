@@ -43,39 +43,39 @@ class MediaExtensionMappingServiceTest extends TestCase
 
     public function testAllowedExtensionShouldPass()
     {
-        $this->assertTrue($this->mappingService->isAllowed('jpg'));
+        static::assertTrue($this->mappingService->isAllowed('jpg'));
     }
 
     public function testNotAllowedExtensionShouldFail()
     {
-        $this->assertFalse($this->mappingService->isAllowed('does_not_exists'));
+        static::assertFalse($this->mappingService->isAllowed('does_not_exists'));
     }
 
     public function testGetCorrectTypeForKnownExtension()
     {
-        $this->assertSame(Media::TYPE_IMAGE, $this->mappingService->getType('jpg'));
+        static::assertSame(Media::TYPE_IMAGE, $this->mappingService->getType('jpg'));
     }
 
     public function testGetCorrectTypeForUnknownExtension()
     {
-        $this->assertSame(Media::TYPE_UNKNOWN, $this->mappingService->getType('unknown_extension'));
+        static::assertSame(Media::TYPE_UNKNOWN, $this->mappingService->getType('unknown_extension'));
     }
 
     public function testGetUnknownExtensionForCustomType()
     {
-        $this->assertSame(Media::TYPE_UNKNOWN, $this->mappingService->getType('xlsx'));
-        $this->assertSame(Media::TYPE_UNKNOWN, $this->mappingService->getType('docx'));
+        static::assertSame(Media::TYPE_UNKNOWN, $this->mappingService->getType('xlsx'));
+        static::assertSame(Media::TYPE_UNKNOWN, $this->mappingService->getType('docx'));
     }
 
     public function testCustomFileExtensionsAreAllowed()
     {
-        $this->assertTrue($this->mappingService->isAllowed('XLSX'));
-        $this->assertTrue($this->mappingService->isAllowed('docx'));
+        static::assertTrue($this->mappingService->isAllowed('XLSX'));
+        static::assertTrue($this->mappingService->isAllowed('docx'));
     }
 
     public function testExistingExtensionInCustomFileExtensionsIsStillDefined()
     {
-        $this->assertTrue($this->mappingService->isAllowed('pdf'));
-        $this->assertSame(Media::TYPE_PDF, $this->mappingService->getType('pdf'));
+        static::assertTrue($this->mappingService->isAllowed('pdf'));
+        static::assertSame(Media::TYPE_PDF, $this->mappingService->getType('pdf'));
     }
 }

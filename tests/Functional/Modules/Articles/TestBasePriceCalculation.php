@@ -68,16 +68,16 @@ class Shopware_Tests_Modules_Articles_TestBasePriceCalculation extends Enlight_C
     public function testCalculateCheapestBasePriceData()
     {
         $cheapestBasePriceData = Shopware()->Modules()->Articles()->calculateCheapestBasePriceData('19,99', 2, 'EK', 1);
-        $this->assertEquals(0.5, $cheapestBasePriceData['purchaseunit']);
-        $this->assertEquals(1, $cheapestBasePriceData['referenceunit']);
-        $this->assertEquals(39.98, $cheapestBasePriceData['referenceprice']);
-        $this->assertEquals('Liter', $cheapestBasePriceData['sUnit']['description']);
+        static::assertEquals(0.5, $cheapestBasePriceData['purchaseunit']);
+        static::assertEquals(1, $cheapestBasePriceData['referenceunit']);
+        static::assertEquals(39.98, $cheapestBasePriceData['referenceprice']);
+        static::assertEquals('Liter', $cheapestBasePriceData['sUnit']['description']);
 
         $cheapestBasePriceData = Shopware()->Modules()->Articles()->calculateCheapestBasePriceData('10,95', 5, 'EK', 1);
-        $this->assertEquals(0.2, $cheapestBasePriceData['purchaseunit']);
-        $this->assertEquals(1, $cheapestBasePriceData['referenceunit']);
-        $this->assertEquals(54.75, $cheapestBasePriceData['referenceprice']);
-        $this->assertEquals('Liter', $cheapestBasePriceData['sUnit']['description']);
+        static::assertEquals(0.2, $cheapestBasePriceData['purchaseunit']);
+        static::assertEquals(1, $cheapestBasePriceData['referenceunit']);
+        static::assertEquals(54.75, $cheapestBasePriceData['referenceprice']);
+        static::assertEquals('Liter', $cheapestBasePriceData['sUnit']['description']);
     }
 
     /**
@@ -105,7 +105,7 @@ class Shopware_Tests_Modules_Articles_TestBasePriceCalculation extends Enlight_C
                 $data['purchaseUnit'],
                 $data['referenceUnit']
             );
-            $this->assertEquals($expectedData[$key], $referencePrice);
+            static::assertEquals($expectedData[$key], $referencePrice);
         }
     }
 
@@ -122,11 +122,11 @@ class Shopware_Tests_Modules_Articles_TestBasePriceCalculation extends Enlight_C
         ];
         foreach ($testData as $key => $data) {
             $cheapestVariantData = Shopware()->Modules()->Articles()->getCheapestVariant($data, 'EK', 1);
-            $this->assertEquals($expectedData[$key]['purchaseunit'], $cheapestVariantData['purchaseunit']);
-            $this->assertEquals($expectedData[$key]['referenceunit'], $cheapestVariantData['referenceunit']);
+            static::assertEquals($expectedData[$key]['purchaseunit'], $cheapestVariantData['purchaseunit']);
+            static::assertEquals($expectedData[$key]['referenceunit'], $cheapestVariantData['referenceunit']);
             $cheapestVariantData = Shopware()->Modules()->Articles()->getCheapestVariant($data, 'EK', 0);
-            $this->assertEquals($expectedData[$key]['purchaseunit'], $cheapestVariantData['purchaseunit']);
-            $this->assertEquals($expectedData[$key]['referenceunit'], $cheapestVariantData['referenceunit']);
+            static::assertEquals($expectedData[$key]['purchaseunit'], $cheapestVariantData['purchaseunit']);
+            static::assertEquals($expectedData[$key]['referenceunit'], $cheapestVariantData['referenceunit']);
         }
     }
 
@@ -137,7 +137,7 @@ class Shopware_Tests_Modules_Articles_TestBasePriceCalculation extends Enlight_C
     {
         $this->dispatch('/');
         $articleDetailData = Shopware()->Modules()->Articles()->sGetArticleById(2);
-        $this->assertEquals(39.98, $articleDetailData['referenceprice']);
+        static::assertEquals(39.98, $articleDetailData['referenceprice']);
     }
 
     /**
@@ -147,15 +147,15 @@ class Shopware_Tests_Modules_Articles_TestBasePriceCalculation extends Enlight_C
     {
         $this->dispatch('/');
         $articleData = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, 2);
-        $this->assertEquals(1, $articleData['referenceunit']);
-        $this->assertEquals(0.5, $articleData['purchaseunit']);
-        $this->assertEquals(39.98, $articleData['referenceprice']);
+        static::assertEquals(1, $articleData['referenceunit']);
+        static::assertEquals(0.5, $articleData['purchaseunit']);
+        static::assertEquals(39.98, $articleData['referenceprice']);
 
         $this->dispatch('/');
         $articleData = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, 5);
-        $this->assertEquals(0.2, $articleData['purchaseunit']);
-        $this->assertEquals(1, $articleData['referenceunit']);
-        $this->assertEquals(54.75, $articleData['referenceprice']);
+        static::assertEquals(0.2, $articleData['purchaseunit']);
+        static::assertEquals(1, $articleData['referenceunit']);
+        static::assertEquals(54.75, $articleData['referenceprice']);
     }
 
     /**
@@ -165,13 +165,13 @@ class Shopware_Tests_Modules_Articles_TestBasePriceCalculation extends Enlight_C
     {
         $this->dispatch('/');
         $articleData = Shopware()->Modules()->Articles()->sGetProductByOrdernumber('SW10002.2');
-        $this->assertEquals(5, $articleData['purchaseunit']);
-        $this->assertEquals(1, $articleData['referenceunit']);
-        $this->assertEquals(39.8, $articleData['referenceprice']);
+        static::assertEquals(5, $articleData['purchaseunit']);
+        static::assertEquals(1, $articleData['referenceunit']);
+        static::assertEquals(39.8, $articleData['referenceprice']);
 
         $articleData = Shopware()->Modules()->Articles()->sGetProductByOrdernumber('SW10003');
-        $this->assertEquals(0.7, $articleData['purchaseunit']);
-        $this->assertEquals(1, $articleData['referenceunit']);
-        $this->assertEquals(21.357142857143, $articleData['referenceprice']);
+        static::assertEquals(0.7, $articleData['purchaseunit']);
+        static::assertEquals(1, $articleData['referenceunit']);
+        static::assertEquals(21.357142857143, $articleData['referenceprice']);
     }
 }

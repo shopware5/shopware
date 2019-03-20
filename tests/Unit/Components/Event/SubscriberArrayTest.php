@@ -45,8 +45,8 @@ class SubscriberArrayTest extends TestCase
 
     public function testCanCreateInstance()
     {
-        $this->assertInstanceOf(\Enlight_Event_Subscriber_Array::class, $this->eventManager);
-        $this->assertInstanceOf(\Enlight_Event_Subscriber::class, $this->eventManager);
+        static::assertInstanceOf(\Enlight_Event_Subscriber_Array::class, $this->eventManager);
+        static::assertInstanceOf(\Enlight_Event_Subscriber::class, $this->eventManager);
     }
 
     public function testAddSubscriber()
@@ -70,9 +70,9 @@ class SubscriberArrayTest extends TestCase
 
         $result = $this->eventManager->getListeners();
 
-        $this->assertCount(2, $result);
-        $this->assertEquals('foo', $result[0]->execute(new \Enlight_Event_EventArgs()));
-        $this->assertEquals('bar', $result[1]->execute(new \Enlight_Event_EventArgs()));
+        static::assertCount(2, $result);
+        static::assertEquals('foo', $result[0]->execute(new \Enlight_Event_EventArgs()));
+        static::assertEquals('bar', $result[1]->execute(new \Enlight_Event_EventArgs()));
     }
 
     public function testRemoveSubscriber()
@@ -100,7 +100,7 @@ class SubscriberArrayTest extends TestCase
         $result = $this->eventManager->getListeners();
 
         // Only the second one should be left
-        $this->assertCount(1, $result);
-        $this->assertEquals('bar', $result[0]->execute(new \Enlight_Event_EventArgs()));
+        static::assertCount(1, $result);
+        static::assertEquals('bar', $result[0]->execute(new \Enlight_Event_EventArgs()));
     }
 }

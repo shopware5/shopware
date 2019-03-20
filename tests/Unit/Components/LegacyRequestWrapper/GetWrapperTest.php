@@ -52,50 +52,50 @@ class GetWrapperTest extends TestCase
     public function testSet()
     {
         $this->system->_GET->offsetSet('foo', 'bar');
-        $this->assertEquals('bar', $this->request->getQuery('foo'));
+        static::assertEquals('bar', $this->request->getQuery('foo'));
 
         $this->system->_GET->offsetSet('foo', null);
-        $this->assertNull($this->request->getQuery('bar'));
+        static::assertNull($this->request->getQuery('bar'));
 
         $this->system->_GET->offsetSet('foo', []);
-        $this->assertEmpty($this->request->getQuery('bar'));
-        $this->assertInternalType('array', $this->request->getQuery('foo'));
+        static::assertEmpty($this->request->getQuery('bar'));
+        static::assertInternalType('array', $this->request->getQuery('foo'));
     }
 
     public function testGet()
     {
         $this->request->setQuery('foo', 'bar');
-        $this->assertEquals('bar', $this->system->_GET->offsetGet('foo'));
+        static::assertEquals('bar', $this->system->_GET->offsetGet('foo'));
 
         $this->request->setQuery('foo', null);
-        $this->assertNull($this->system->_GET->offsetGet('bar'));
+        static::assertNull($this->system->_GET->offsetGet('bar'));
 
         $this->request->setQuery('foo', []);
-        $this->assertEmpty($this->system->_GET->offsetGet('bar'));
-        $this->assertInternalType('array', $this->system->_GET->offsetGet('foo'));
+        static::assertEmpty($this->system->_GET->offsetGet('bar'));
+        static::assertInternalType('array', $this->system->_GET->offsetGet('foo'));
     }
 
     public function testUnset()
     {
         $this->system->_GET->offsetSet('foo', 'bar');
-        $this->assertEquals('bar', $this->request->getQuery('foo'));
+        static::assertEquals('bar', $this->request->getQuery('foo'));
         unset($this->system->_GET['foo']);
-        $this->assertNull($this->request->getQuery('foo'));
+        static::assertNull($this->request->getQuery('foo'));
     }
 
     public function testSetAll()
     {
         $this->system->_GET->offsetSet('foo', 'bar');
-        $this->assertEquals('bar', $this->request->getQuery('foo'));
+        static::assertEquals('bar', $this->request->getQuery('foo'));
 
         $this->system->_GET = ['foo' => 'too'];
-        $this->assertNull($this->request->getQuery('bar'));
-        $this->assertEquals('too', $this->request->getQuery('foo'));
+        static::assertNull($this->request->getQuery('bar'));
+        static::assertEquals('too', $this->request->getQuery('foo'));
     }
 
     public function testToArray()
     {
         $this->request->setQuery('foo', 'bar');
-        $this->assertEquals(['foo' => 'bar'], $this->system->_GET->toArray());
+        static::assertEquals(['foo' => 'bar'], $this->system->_GET->toArray());
     }
 }

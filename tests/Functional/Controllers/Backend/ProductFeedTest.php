@@ -104,10 +104,10 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
         $feed = $this->createDummy();
         /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/ProductFeed/getFeeds?page=1&start=0&limit=30');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
         $returnData = $this->View()->data;
-        $this->assertNotEmpty($returnData);
-        $this->assertGreaterThan(0, $this->View()->totalCount);
+        static::assertNotEmpty($returnData);
+        static::assertGreaterThan(0, $this->View()->totalCount);
         $foundDummyFeed = [];
         foreach ($returnData as $feedData) {
             if ($feedData['name'] == $feed->getName()) {
@@ -115,7 +115,7 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
             }
         }
 
-        $this->assertEquals($feed->getId(), $foundDummyFeed['id']);
+        static::assertEquals($feed->getId(), $foundDummyFeed['id']);
         $this->manager->remove($feed);
         $this->manager->flush();
     }
@@ -131,9 +131,9 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
         $this->Request()->setParams($params);
 
         $this->dispatch('backend/ProductFeed/saveFeed');
-        $this->assertTrue($this->View()->success);
-        $this->assertNotEmpty($this->View()->data);
-        $this->assertEquals($params['name'], $this->View()->data['name']);
+        static::assertTrue($this->View()->success);
+        static::assertNotEmpty($this->View()->data);
+        static::assertEquals($params['name'], $this->View()->data['name']);
 
         return $this->View()->data['id'];
     }
@@ -152,20 +152,20 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
         $params['feedId'] = $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/ProductFeed/getDetailFeed');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
         $returningData = $this->View()->data;
         $dummyFeedData = $this->feedData;
-        $this->assertEquals($dummyFeedData['name'], $returningData['name']);
-        $this->assertEquals($dummyFeedData['active'], $returningData['active']);
-        $this->assertEquals($dummyFeedData['hash'], $returningData['hash']);
-        $this->assertEquals($dummyFeedData['countArticles'], $returningData['countArticles']);
-        $this->assertEquals($dummyFeedData['formatId'], $returningData['formatId']);
-        $this->assertEquals($dummyFeedData['fileName'], $returningData['fileName']);
-        $this->assertEquals($dummyFeedData['customerGroupId'], $returningData['customerGroupId']);
-        $this->assertEquals($dummyFeedData['header'], $returningData['header']);
-        $this->assertEquals($dummyFeedData['body'], $returningData['body']);
-        $this->assertEquals($dummyFeedData['footer'], $returningData['footer']);
-        $this->assertEquals($dummyFeedData['shopId'], $returningData['shopId']);
+        static::assertEquals($dummyFeedData['name'], $returningData['name']);
+        static::assertEquals($dummyFeedData['active'], $returningData['active']);
+        static::assertEquals($dummyFeedData['hash'], $returningData['hash']);
+        static::assertEquals($dummyFeedData['countArticles'], $returningData['countArticles']);
+        static::assertEquals($dummyFeedData['formatId'], $returningData['formatId']);
+        static::assertEquals($dummyFeedData['fileName'], $returningData['fileName']);
+        static::assertEquals($dummyFeedData['customerGroupId'], $returningData['customerGroupId']);
+        static::assertEquals($dummyFeedData['header'], $returningData['header']);
+        static::assertEquals($dummyFeedData['body'], $returningData['body']);
+        static::assertEquals($dummyFeedData['footer'], $returningData['footer']);
+        static::assertEquals($dummyFeedData['shopId'], $returningData['shopId']);
 
         return $id;
     }
@@ -186,9 +186,9 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
 
         $this->dispatch('backend/ProductFeed/saveFeed');
 
-        $this->assertTrue($this->View()->success);
-        $this->assertNotEmpty($this->View()->data);
-        $this->assertEquals($params['name'], $this->View()->data['name']);
+        static::assertTrue($this->View()->success);
+        static::assertNotEmpty($this->View()->data);
+        static::assertEquals($params['name'], $this->View()->data['name']);
 
         return $id;
     }
@@ -206,8 +206,8 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
         $params['id'] = intval($id);
         $this->Request()->setParams($params);
         $this->dispatch('backend/ProductFeed/deleteFeed');
-        $this->assertTrue($this->View()->success);
-        $this->assertNull($this->repository->find($params['id']));
+        static::assertTrue($this->View()->success);
+        static::assertNull($this->repository->find($params['id']));
     }
 
     /**
@@ -216,8 +216,8 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
     public function testGetSuppliersAction()
     {
         $this->dispatch('backend/ProductFeed/getSuppliers');
-        $this->assertTrue($this->View()->success);
-        $this->assertGreaterThan(0, $this->View()->total);
+        static::assertTrue($this->View()->success);
+        static::assertGreaterThan(0, $this->View()->total);
     }
 
     /**
@@ -226,8 +226,8 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
     public function testGetArticlesAction()
     {
         $this->dispatch('backend/ProductFeed/getArticles');
-        $this->assertTrue($this->View()->success);
-        $this->assertEquals(20, count($this->View()->data));
+        static::assertTrue($this->View()->success);
+        static::assertEquals(20, count($this->View()->data));
     }
 
     /**

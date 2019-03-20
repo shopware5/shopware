@@ -44,7 +44,7 @@ class AnalyticsProviderTest extends ProviderTestCase
 
         $resultData = $this->getBenchmarkData();
 
-        $this->assertSame(26, array_sum(array_column($resultData['list'], 'totalUniqueVisits')));
+        static::assertSame(26, array_sum(array_column($resultData['list'], 'totalUniqueVisits')));
     }
 
     /**
@@ -64,8 +64,8 @@ class AnalyticsProviderTest extends ProviderTestCase
             return $value['deviceType'] === 'mobile';
         });
 
-        $this->assertSame(12, array_sum(array_column($desktopRows, 'totalUniqueVisits')));
-        $this->assertSame(14, array_sum(array_column($mobileRows, 'totalUniqueVisits')));
+        static::assertSame(12, array_sum(array_column($desktopRows, 'totalUniqueVisits')));
+        static::assertSame(14, array_sum(array_column($mobileRows, 'totalUniqueVisits')));
     }
 
     /**
@@ -77,9 +77,9 @@ class AnalyticsProviderTest extends ProviderTestCase
         $provider = $this->getProvider();
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
 
-        $this->assertSame(26, array_sum(array_column($resultData['list'], 'totalUniqueVisits')));
+        static::assertSame(26, array_sum(array_column($resultData['list'], 'totalUniqueVisits')));
 
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
-        $this->assertSame(466, array_sum(array_column($resultData['list'], 'totalUniqueVisits')));
+        static::assertSame(466, array_sum(array_column($resultData['list'], 'totalUniqueVisits')));
     }
 }

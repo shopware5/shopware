@@ -62,7 +62,7 @@ class OrdersProviderTest extends ProviderTestCase
 
         $resultData = $this->getBenchmarkData();
 
-        $this->assertArraySubset([
+        static::assertArraySubset([
             'orderId' => '1',
             'currency' => 'EUR',
             'shippingCosts' => '15',
@@ -129,12 +129,12 @@ class OrdersProviderTest extends ProviderTestCase
         Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=0, batch_size=1;');
         $singleResult = $this->getBenchmarkData();
 
-        $this->assertCount(1, $singleResult['list']);
+        static::assertCount(1, $singleResult['list']);
 
         Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=0, batch_size=5;');
         $multipleResults = $this->getBenchmarkData();
 
-        $this->assertCount(5, $multipleResults['list']);
+        static::assertCount(5, $multipleResults['list']);
     }
 
     /**
@@ -147,7 +147,7 @@ class OrdersProviderTest extends ProviderTestCase
         Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=1;');
         $resultData = $this->getBenchmarkData();
 
-        $this->assertSame(5, $resultData['list'][0]['orderId']);
+        static::assertSame(5, $resultData['list'][0]['orderId']);
     }
 
     /**
@@ -164,8 +164,8 @@ class OrdersProviderTest extends ProviderTestCase
 
         $secondResult = $this->getBenchmarkData();
 
-        $this->assertSame(5, $firstResult['list'][0]['orderId']);
-        $this->assertSame(6, $secondResult['list'][0]['orderId']);
+        static::assertSame(5, $firstResult['list'][0]['orderId']);
+        static::assertSame(6, $secondResult['list'][0]['orderId']);
 
         Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=2;');
         $thirdResultSet = $this->getBenchmarkData();
@@ -174,12 +174,12 @@ class OrdersProviderTest extends ProviderTestCase
 
         $forthResultSet = $this->getBenchmarkData();
 
-        $this->assertSame(5, $thirdResultSet['list'][0]['orderId']);
-        $this->assertSame(6, $thirdResultSet['list'][1]['orderId']);
+        static::assertSame(5, $thirdResultSet['list'][0]['orderId']);
+        static::assertSame(6, $thirdResultSet['list'][1]['orderId']);
 
-        $this->assertSame(7, $forthResultSet['list'][0]['orderId']);
+        static::assertSame(7, $forthResultSet['list'][0]['orderId']);
         // Only seven results possible, no eighth result available
-        $this->assertEmpty($forthResultSet['list'][1]);
+        static::assertEmpty($forthResultSet['list'][1]);
     }
 
     /**
@@ -192,7 +192,7 @@ class OrdersProviderTest extends ProviderTestCase
         Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=1 WHERE shop_id=1;');
         $this->sendStatistics();
 
-        $this->assertSame(5, (int) Shopware()->Db()->fetchOne('SELECT last_order_id FROM s_benchmark_config WHERE shop_id=1'));
+        static::assertSame(5, (int) Shopware()->Db()->fetchOne('SELECT last_order_id FROM s_benchmark_config WHERE shop_id=1'));
     }
 
     /**
@@ -207,9 +207,9 @@ class OrdersProviderTest extends ProviderTestCase
         Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=0, batch_size=10;');
 
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
-        $this->assertCount(7, $resultData['list']);
+        static::assertCount(7, $resultData['list']);
 
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
-        $this->assertCount(2, $resultData['list']);
+        static::assertCount(2, $resultData['list']);
     }
 }

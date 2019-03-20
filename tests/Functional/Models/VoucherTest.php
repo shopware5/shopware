@@ -103,7 +103,7 @@ class Shopware_Tests_Models_VoucherTest extends Enlight_Components_Test_TestCase
             $getMethod = 'get' . ucfirst($field);
 
             $voucher->$setMethod($value);
-            $this->assertEquals($voucher->$getMethod(), $value);
+            static::assertEquals($voucher->$getMethod(), $value);
         }
     }
 
@@ -117,7 +117,7 @@ class Shopware_Tests_Models_VoucherTest extends Enlight_Components_Test_TestCase
 
         foreach ($this->testData as $fieldname => $value) {
             $getMethod = 'get' . ucfirst($fieldname);
-            $this->assertEquals($voucher->$getMethod(), $value);
+            static::assertEquals($voucher->$getMethod(), $value);
         }
     }
 
@@ -142,7 +142,7 @@ class Shopware_Tests_Models_VoucherTest extends Enlight_Components_Test_TestCase
 
         foreach ($this->testData as $fieldname => $value) {
             $getMethod = 'get' . ucfirst($fieldname);
-            $this->assertEquals($voucher->$getMethod(), $value);
+            static::assertEquals($voucher->$getMethod(), $value);
         }
     }
 }

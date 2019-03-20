@@ -34,8 +34,8 @@ class BenchmarkEncryptionTest extends \PHPUnit\Framework\TestCase
 
         $result = $encryption->encryptData('foobar', 'aes128');
 
-        $this->assertCount(4, $result);
-        $this->assertEquals('aes128', $result['encryptionMethod']);
+        static::assertCount(4, $result);
+        static::assertEquals('aes128', $result['encryptionMethod']);
     }
 
     public function testCorrectSignatureIsWorking()
@@ -45,7 +45,7 @@ class BenchmarkEncryptionTest extends \PHPUnit\Framework\TestCase
         $message = 'foobarbaz';
         $signature = $this->sign($message);
 
-        $this->assertTrue($encryption->isSignatureValid($message, $signature));
+        static::assertTrue($encryption->isSignatureValid($message, $signature));
     }
 
     public function testWrongSignatureIsFailing()
@@ -55,28 +55,28 @@ class BenchmarkEncryptionTest extends \PHPUnit\Framework\TestCase
         $message = 'foobarbaz';
         $signature = 'bazbarfoo';
 
-        $this->assertFalse($encryption->isSignatureValid($message, $signature));
+        static::assertFalse($encryption->isSignatureValid($message, $signature));
     }
 
     public function testSignatureIsSupported()
     {
         $encryption = new BenchmarkEncryption(__DIR__ . '/fixtures/public_test_key.pem');
 
-        $this->assertTrue($encryption->isSignatureSupported());
+        static::assertTrue($encryption->isSignatureSupported());
     }
 
     public function testAesEncryptionIsSupported()
     {
         $encryption = new BenchmarkEncryption(__DIR__ . '/fixtures/public_test_key.pem');
 
-        $this->assertTrue($encryption->isEncryptionSupported('aes128'));
+        static::assertTrue($encryption->isEncryptionSupported('aes128'));
     }
 
     public function testUnknownEncryptionIsNotSupported()
     {
         $encryption = new BenchmarkEncryption(__DIR__ . '/fixtures/public_test_key.pem');
 
-        $this->assertFalse($encryption->isEncryptionSupported('foobar'));
+        static::assertFalse($encryption->isEncryptionSupported('foobar'));
     }
 
     /**

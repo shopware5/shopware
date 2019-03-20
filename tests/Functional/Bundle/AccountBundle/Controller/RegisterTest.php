@@ -233,26 +233,26 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
         $this->doubleOptinSet(false);
         $response = $this->dispatch(self::SAVE_URL);
 
-        $this->assertEquals(302, $response->getHttpResponseCode());
+        static::assertEquals(302, $response->getHttpResponseCode());
 
-        $this->assertStringEndsWith(
+        static::assertStringEndsWith(
             '/account',
             $this->getHeaderLocation($response)
         );
 
         $session = Shopware()->Container()->get('session');
-        $this->assertNotEmpty($session->offsetGet('sUserId'));
+        static::assertNotEmpty($session->offsetGet('sUserId'));
 
         $customer = Shopware()->Container()->get('dbal_connection')->fetchAssoc(
             'SELECT * FROM s_user WHERE email = :mail AND active = 1 AND doubleOptinEmailSentDate IS NULL LIMIT 1',
             [':mail' => $email]
         );
-        $this->assertNotEmpty($customer);
+        static::assertNotEmpty($customer);
 
         if (!empty($personal)) {
             foreach ($personal as $key => $value) {
-                $this->assertArrayHasKey($key, $customer);
-                $this->assertEquals($value, $customer[$key]);
+                static::assertArrayHasKey($key, $customer);
+                static::assertEquals($value, $customer[$key]);
             }
         }
 
@@ -278,19 +278,19 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
             [':mail' => $email]
         );
 
-        $this->assertNotEmpty($customer);
+        static::assertNotEmpty($customer);
 
         $optin = $connection->fetchAssoc(
             'SELECT type, data, hash FROM s_core_optin WHERE datum = :datum LIMIT 1',
             [':datum' => $customer['doubleOptinEmailSentDate']]
         );
 
-        $this->assertNotEmpty($optin);
-        $this->assertEquals('swRegister', $optin['type']);
-        $this->assertNotEmpty($optin['data']);
+        static::assertNotEmpty($optin);
+        static::assertEquals('swRegister', $optin['type']);
+        static::assertNotEmpty($optin['data']);
 
         $data = unserialize($optin['data']);
-        $this->assertEquals($customer['id'], $data['customerId']);
+        static::assertEquals($customer['id'], $data['customerId']);
         $this->sendRequestAndAssertDOIConfirmation($email, $optin['hash']);
     }
 
@@ -316,13 +316,13 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
             'SELECT doubleOptinEmailSentDate FROM s_user WHERE email = :mail AND active = 1 AND doubleOptinEmailSentDate IS NOT NULL AND doubleOptinConfirmDate IS NOT NULL LIMIT 1',
             [':mail' => $email]
         );
-        $this->assertNotEmpty($customer);
+        static::assertNotEmpty($customer);
 
         $optin = $connection->fetchAssoc(
             'SELECT * FROM s_core_optin WHERE datum = :datum LIMIT 1',
             [':datum' => $customer['doubleOptinEmailSentDate']]
         );
-        $this->assertEmpty($optin);
+        static::assertEmpty($optin);
 
         // Test broken data
         $this->reset();
@@ -400,11 +400,11 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
             [':mail' => $email]
         );
 
-        $this->assertNotEmpty($address);
+        static::assertNotEmpty($address);
 
         foreach ($data as $key => $value) {
-            $this->assertArrayHasKey($key, $address);
-            $this->assertEquals($value, $address[$key]);
+            static::assertArrayHasKey($key, $address);
+            static::assertEquals($value, $address[$key]);
         }
     }
 

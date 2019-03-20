@@ -53,6 +53,6 @@ class CustomerUnlockServiceTest extends \Enlight_Components_Test_TestCase
 
         $lockedUntil = Shopware()->Db()->fetchOne('SELECT lockeduntil FROM s_user WHERE id = 2048');
 
-        $this->assertNull($lockedUntil);
+        static::assertNull($lockedUntil);
     }
 }

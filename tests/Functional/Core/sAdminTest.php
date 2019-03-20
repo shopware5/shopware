@@ -114,35 +114,35 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     public function testsGetPaymentMeanById()
     {
         // Fetching non-existing payment means returns null
-        $this->assertEmpty($this->module->sGetPaymentMeanById(0));
+        static::assertEmpty($this->module->sGetPaymentMeanById(0));
 
         // Fetching existing inactive payment means returns the data array
         $sepaData = $this->module->sGetPaymentMeanById(6);
-        $this->assertInternalType('array', $sepaData);
-        $this->assertArrayHasKey('id', $sepaData);
-        $this->assertArrayHasKey('name', $sepaData);
-        $this->assertArrayHasKey('description', $sepaData);
-        $this->assertArrayHasKey('debit_percent', $sepaData);
-        $this->assertArrayHasKey('surcharge', $sepaData);
-        $this->assertArrayHasKey('surchargestring', $sepaData);
-        $this->assertArrayHasKey('active', $sepaData);
-        $this->assertArrayHasKey('esdactive', $sepaData);
+        static::assertInternalType('array', $sepaData);
+        static::assertArrayHasKey('id', $sepaData);
+        static::assertArrayHasKey('name', $sepaData);
+        static::assertArrayHasKey('description', $sepaData);
+        static::assertArrayHasKey('debit_percent', $sepaData);
+        static::assertArrayHasKey('surcharge', $sepaData);
+        static::assertArrayHasKey('surchargestring', $sepaData);
+        static::assertArrayHasKey('active', $sepaData);
+        static::assertArrayHasKey('esdactive', $sepaData);
 
         // Fetching existing active payment means returns the data array
         $debitData = $this->module->sGetPaymentMeanById(2);
-        $this->assertInternalType('array', $debitData);
-        $this->assertArrayHasKey('id', $debitData);
-        $this->assertArrayHasKey('name', $debitData);
-        $this->assertArrayHasKey('description', $debitData);
-        $this->assertArrayHasKey('debit_percent', $debitData);
-        $this->assertArrayHasKey('surcharge', $debitData);
-        $this->assertArrayHasKey('surchargestring', $debitData);
-        $this->assertArrayHasKey('active', $debitData);
-        $this->assertArrayHasKey('esdactive', $debitData);
+        static::assertInternalType('array', $debitData);
+        static::assertArrayHasKey('id', $debitData);
+        static::assertArrayHasKey('name', $debitData);
+        static::assertArrayHasKey('description', $debitData);
+        static::assertArrayHasKey('debit_percent', $debitData);
+        static::assertArrayHasKey('surcharge', $debitData);
+        static::assertArrayHasKey('surchargestring', $debitData);
+        static::assertArrayHasKey('active', $debitData);
+        static::assertArrayHasKey('esdactive', $debitData);
 
         $customer = $this->createDummyCustomer();
 
-        $this->assertEquals($this->config->get('defaultPayment'), $customer->getPaymentId());
+        static::assertEquals($this->config->get('defaultPayment'), $customer->getPaymentId());
 
         $this->deleteDummyCustomer($customer);
     }
@@ -154,15 +154,15 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     {
         $result = $this->module->sGetPaymentMeans();
         foreach ($result as $paymentMean) {
-            $this->assertArrayHasKey('id', $paymentMean);
-            $this->assertArrayHasKey('name', $paymentMean);
-            $this->assertArrayHasKey('description', $paymentMean);
-            $this->assertArrayHasKey('debit_percent', $paymentMean);
-            $this->assertArrayHasKey('surcharge', $paymentMean);
-            $this->assertArrayHasKey('surchargestring', $paymentMean);
-            $this->assertArrayHasKey('active', $paymentMean);
-            $this->assertArrayHasKey('esdactive', $paymentMean);
-            $this->assertContains($paymentMean['id'], [3, 5, 6]);
+            static::assertArrayHasKey('id', $paymentMean);
+            static::assertArrayHasKey('name', $paymentMean);
+            static::assertArrayHasKey('description', $paymentMean);
+            static::assertArrayHasKey('debit_percent', $paymentMean);
+            static::assertArrayHasKey('surcharge', $paymentMean);
+            static::assertArrayHasKey('surchargestring', $paymentMean);
+            static::assertArrayHasKey('active', $paymentMean);
+            static::assertArrayHasKey('esdactive', $paymentMean);
+            static::assertContains($paymentMean['id'], [3, 5, 6]);
         }
     }
 
@@ -176,17 +176,17 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         foreach ($payments as $payment) {
             $paymentClass = $this->module->sInitiatePaymentClass($this->module->sGetPaymentMeanById($payment->getId()));
             if (is_bool($paymentClass)) {
-                $this->assertFalse($paymentClass);
+                static::assertFalse($paymentClass);
             } else {
-                $this->assertInstanceOf('ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod', $paymentClass);
+                static::assertInstanceOf('ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod', $paymentClass);
                 Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
 
                 $requestData = Shopware()->Front()->Request()->getParams();
                 $validationResult = $paymentClass->validate($requestData);
-                $this->assertTrue(is_array($validationResult));
+                static::assertTrue(is_array($validationResult));
                 if (count($validationResult)) {
-                    $this->assertArrayHasKey('sErrorFlag', $validationResult);
-                    $this->assertArrayHasKey('sErrorMessages', $validationResult);
+                    static::assertArrayHasKey('sErrorFlag', $validationResult);
+                    static::assertArrayHasKey('sErrorMessages', $validationResult);
                 }
             }
         }
@@ -210,19 +210,19 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->front->Request()->setPost('sPayment', 2);
 
         $result = $this->module->sValidateStep3();
-        $this->assertArrayHasKey('checkPayment', $result);
-        $this->assertArrayHasKey('paymentData', $result);
-        $this->assertArrayHasKey('sProcessed', $result);
-        $this->assertArrayHasKey('sPaymentObject', $result);
+        static::assertArrayHasKey('checkPayment', $result);
+        static::assertArrayHasKey('paymentData', $result);
+        static::assertArrayHasKey('sProcessed', $result);
+        static::assertArrayHasKey('sPaymentObject', $result);
 
-        $this->assertInternalType('array', $result['checkPayment']);
-        $this->assertCount(2, $result['checkPayment']);
-        $this->assertInternalType('array', $result['paymentData']);
-        $this->assertCount(21, $result['paymentData']);
-        $this->assertInternalType('boolean', $result['sProcessed']);
-        $this->assertTrue($result['sProcessed']);
-        $this->assertInternalType('object', $result['sPaymentObject']);
-        $this->assertInstanceOf(BasePaymentMethod::class, $result['sPaymentObject']);
+        static::assertInternalType('array', $result['checkPayment']);
+        static::assertCount(2, $result['checkPayment']);
+        static::assertInternalType('array', $result['paymentData']);
+        static::assertCount(21, $result['paymentData']);
+        static::assertInternalType('boolean', $result['sProcessed']);
+        static::assertTrue($result['sProcessed']);
+        static::assertInternalType('object', $result['sPaymentObject']);
+        static::assertInstanceOf(BasePaymentMethod::class, $result['sPaymentObject']);
     }
 
     /**
@@ -233,40 +233,40 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $email = uniqid(rand()) . 'test@foobar.com';
 
         // Test insertion
-        $this->assertTrue($this->module->sUpdateNewsletter(true, $email));
+        static::assertTrue($this->module->sUpdateNewsletter(true, $email));
         $newsletterSubscription = Shopware()->Db()->fetchRow(
             'SELECT * FROM s_campaigns_mailaddresses WHERE email = ?',
             [$email]
         );
-        $this->assertNotNull($newsletterSubscription);
-        $this->assertEquals(0, $newsletterSubscription['customer']);
-        $this->assertEquals(1, $newsletterSubscription['groupID']);
+        static::assertNotNull($newsletterSubscription);
+        static::assertEquals(0, $newsletterSubscription['customer']);
+        static::assertEquals(1, $newsletterSubscription['groupID']);
 
         // Test removal
-        $this->assertTrue($this->module->sUpdateNewsletter(false, $email));
+        static::assertTrue($this->module->sUpdateNewsletter(false, $email));
         $newsletterSubscription = Shopware()->Db()->fetchRow(
             'SELECT * FROM s_campaigns_mailaddresses WHERE email = ?',
             [$email]
         );
-        $this->assertFalse($newsletterSubscription);
+        static::assertFalse($newsletterSubscription);
 
         // Retest insertion for customers
-        $this->assertTrue($this->module->sUpdateNewsletter(true, $email, true));
+        static::assertTrue($this->module->sUpdateNewsletter(true, $email, true));
         $newsletterSubscription = Shopware()->Db()->fetchRow(
             'SELECT * FROM s_campaigns_mailaddresses WHERE email = ?',
             [$email]
         );
-        $this->assertNotNull($newsletterSubscription);
-        $this->assertEquals(1, $newsletterSubscription['customer']);
-        $this->assertEquals(0, $newsletterSubscription['groupID']);
+        static::assertNotNull($newsletterSubscription);
+        static::assertEquals(1, $newsletterSubscription['customer']);
+        static::assertEquals(0, $newsletterSubscription['groupID']);
 
         // Test removal
-        $this->assertTrue($this->module->sUpdateNewsletter(false, $email));
+        static::assertTrue($this->module->sUpdateNewsletter(false, $email));
         $newsletterSubscription = Shopware()->Db()->fetchRow(
             'SELECT * FROM s_campaigns_mailaddresses WHERE email = ?',
             [$email]
         );
-        $this->assertFalse($newsletterSubscription);
+        static::assertFalse($newsletterSubscription);
     }
 
     /**
@@ -275,14 +275,14 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     public function testsUpdatePayment()
     {
         // Test no user id
-        $this->assertFalse($this->module->sUpdatePayment());
+        static::assertFalse($this->module->sUpdatePayment());
 
         $customer = $this->createDummyCustomer();
         $this->session->offsetSet('sUserId', $customer->getId());
 
         // Test that operation succeeds even without payment id
-        $this->assertTrue($this->module->sUpdatePayment());
-        $this->assertEquals(
+        static::assertTrue($this->module->sUpdatePayment());
+        static::assertEquals(
             0,
             Shopware()->Db()->fetchOne('SELECT paymentID FROM s_user WHERE id = ?', [$customer->getId()])
         );
@@ -291,8 +291,8 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->front->Request()->setPost([
             'sPayment' => 2,
         ]);
-        $this->assertTrue($this->module->sUpdatePayment());
-        $this->assertEquals(
+        static::assertTrue($this->module->sUpdatePayment());
+        static::assertEquals(
             2,
             Shopware()->Db()->fetchOne('SELECT paymentID FROM s_user WHERE id = ?', [$customer->getId()])
         );
@@ -307,18 +307,18 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     {
         // Test with no data, get error
         $result = $this->module->sLogin();
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertCount(1, $result['sErrorMessages']);
-        $this->assertContains(
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertCount(1, $result['sErrorMessages']);
+        static::assertContains(
             $this->snippetManager->getNamespace('frontend/account/internalMessages')
                 ->get('LoginFailure', 'Wrong email or password'),
             $result['sErrorMessages']
         );
-        $this->assertCount(2, $result['sErrorFlag']);
-        $this->assertArrayHasKey('email', $result['sErrorFlag']);
-        $this->assertArrayHasKey('password', $result['sErrorFlag']);
+        static::assertCount(2, $result['sErrorFlag']);
+        static::assertArrayHasKey('email', $result['sErrorFlag']);
+        static::assertArrayHasKey('password', $result['sErrorFlag']);
 
         // Test with wrong data, get error
         $this->front->Request()->setPost([
@@ -326,16 +326,16 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             'password' => uniqid(rand()) . 'test',
         ]);
         $result = $this->module->sLogin();
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertCount(1, $result['sErrorMessages']);
-        $this->assertContains(
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertCount(1, $result['sErrorMessages']);
+        static::assertContains(
             $this->snippetManager->getNamespace('frontend/account/internalMessages')
                 ->get('LoginFailure', 'Wrong email or password'),
             $result['sErrorMessages']
         );
-        $this->assertNull($result['sErrorFlag']);
+        static::assertNull($result['sErrorFlag']);
 
         $customer = $this->createDummyCustomer();
 
@@ -345,11 +345,11 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             'password' => 'fooobar',
         ]);
         $result = $this->module->sLogin();
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertNull($result['sErrorFlag']);
-        $this->assertNull($result['sErrorMessages']);
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertNull($result['sErrorFlag']);
+        static::assertNull($result['sErrorMessages']);
 
         // Test wrong pre-hashed password. Need a user with md5 encoded password
         Shopware()->Db()->update(
@@ -366,12 +366,12 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             'passwordMD5' => uniqid(rand()),
         ]);
         $result = $this->module->sLogin(true);
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertNull($result['sErrorFlag']);
-        $this->assertCount(1, $result['sErrorMessages']);
-        $this->assertContains(
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertNull($result['sErrorFlag']);
+        static::assertCount(1, $result['sErrorMessages']);
+        static::assertContains(
             $this->snippetManager->getNamespace('frontend/account/internalMessages')
                 ->get('LoginFailure', 'Wrong email or password'),
             $result['sErrorMessages']
@@ -383,11 +383,11 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             'passwordMD5' => md5('fooobar'),
         ]);
         $result = $this->module->sLogin(true);
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertNull($result['sErrorFlag']);
-        $this->assertNull($result['sErrorMessages']);
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertNull($result['sErrorFlag']);
+        static::assertNull($result['sErrorMessages']);
 
         $modifiedMd5User = Shopware()->Db()->fetchRow(
             'SELECT * FROM s_user WHERE id = ?',
@@ -395,19 +395,19 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         );
 
         // Test that it's the same user, but with different last login
-        $this->assertEquals($modifiedMd5User['email'], $customer->getEmail());
-        $this->assertEquals($modifiedMd5User['password'], md5('fooobar'));
-        $this->assertNotEquals($modifiedMd5User['lastlogin'], $customer->getLastLogin()->format('Y-m-d H:i:s'));
+        static::assertEquals($modifiedMd5User['email'], $customer->getEmail());
+        static::assertEquals($modifiedMd5User['password'], md5('fooobar'));
+        static::assertNotEquals($modifiedMd5User['lastlogin'], $customer->getLastLogin()->format('Y-m-d H:i:s'));
 
         // Test inactive account
         Shopware()->Db()->update('s_user', ['active' => 0], 'id = ' . $customer->getId());
         $result = $this->module->sLogin(true);
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertNull($result['sErrorFlag']);
-        $this->assertCount(1, $result['sErrorMessages']);
-        $this->assertContains(
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertNull($result['sErrorFlag']);
+        static::assertCount(1, $result['sErrorMessages']);
+        static::assertContains(
             $this->snippetManager->getNamespace('frontend/account/internalMessages')
                 ->get(
                     'LoginFailureActive',
@@ -432,12 +432,12 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->module->sLogin();
         $this->module->sLogin();
         $result = $this->module->sLogin();
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertNull($result['sErrorFlag']);
-        $this->assertCount(1, $result['sErrorMessages']);
-        $this->assertContains(
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertNull($result['sErrorFlag']);
+        static::assertCount(1, $result['sErrorMessages']);
+        static::assertContains(
             $this->snippetManager->getNamespace('frontend/account/internalMessages')
                 ->get(
                     'LoginFailureLocked',
@@ -457,7 +457,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $customer = $this->createDummyCustomer();
 
         // Basic failing case
-        $this->assertFalse($this->module->sCheckUser());
+        static::assertFalse($this->module->sCheckUser());
 
         // Test successful login
         $this->front->Request()->setPost([
@@ -465,29 +465,29 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             'password' => 'fooobar',
         ]);
         $result = $this->module->sLogin();
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertNull($result['sErrorFlag']);
-        $this->assertNull($result['sErrorMessages']);
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertNull($result['sErrorFlag']);
+        static::assertNull($result['sErrorMessages']);
 
         // Test that user is correctly logged in
-        $this->assertTrue($this->module->sCheckUser());
+        static::assertTrue($this->module->sCheckUser());
 
         // Force timeout
         Shopware()->Db()->update('s_user', ['lastlogin' => '2000-01-01 00:00:00'], 'id = ' . $customer->getId());
-        $this->assertFalse($this->module->sCheckUser());
+        static::assertFalse($this->module->sCheckUser());
 
-        $this->assertEquals($customer->getGroup()->getKey(), $this->session->offsetGet('sUserGroup'));
-        $this->assertInternalType('array', $this->session->offsetGet('sUserGroupData'));
-        $this->assertArrayHasKey('groupkey', $this->session->offsetGet('sUserGroupData'));
-        $this->assertArrayHasKey('description', $this->session->offsetGet('sUserGroupData'));
-        $this->assertArrayHasKey('tax', $this->session->offsetGet('sUserGroupData'));
-        $this->assertArrayHasKey('taxinput', $this->session->offsetGet('sUserGroupData'));
-        $this->assertArrayHasKey('mode', $this->session->offsetGet('sUserGroupData'));
-        $this->assertArrayHasKey('discount', $this->session->offsetGet('sUserGroupData'));
-        $this->assertArrayHasKey('minimumorder', $this->session->offsetGet('sUserGroupData'));
-        $this->assertArrayHasKey('minimumordersurcharge', $this->session->offsetGet('sUserGroupData'));
+        static::assertEquals($customer->getGroup()->getKey(), $this->session->offsetGet('sUserGroup'));
+        static::assertInternalType('array', $this->session->offsetGet('sUserGroupData'));
+        static::assertArrayHasKey('groupkey', $this->session->offsetGet('sUserGroupData'));
+        static::assertArrayHasKey('description', $this->session->offsetGet('sUserGroupData'));
+        static::assertArrayHasKey('tax', $this->session->offsetGet('sUserGroupData'));
+        static::assertArrayHasKey('taxinput', $this->session->offsetGet('sUserGroupData'));
+        static::assertArrayHasKey('mode', $this->session->offsetGet('sUserGroupData'));
+        static::assertArrayHasKey('discount', $this->session->offsetGet('sUserGroupData'));
+        static::assertArrayHasKey('minimumorder', $this->session->offsetGet('sUserGroupData'));
+        static::assertArrayHasKey('minimumordersurcharge', $this->session->offsetGet('sUserGroupData'));
 
         $this->deleteDummyCustomer($customer);
     }
@@ -532,29 +532,29 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(2);
 
         $result = $this->module->sGetCountryTranslation();
-        $this->assertCount(2, $result);
-        $this->assertArrayHasKey(2, $result);
-        $this->assertArrayHasKey(5, $result);
-        $this->assertArrayHasKey('active', $result[2]);
-        $this->assertArrayHasKey('countryname', $result[2]);
-        $this->assertEquals(1, $result[2]['active']);
-        $this->assertEquals('Germany', $result[2]['countryname']);
-        $this->assertArrayHasKey('active', $result[5]);
-        $this->assertArrayHasKey('countryname', $result[5]);
-        $this->assertEquals(1, $result[5]['active']);
-        $this->assertEquals('Belgium', $result[5]['countryname']);
+        static::assertCount(2, $result);
+        static::assertArrayHasKey(2, $result);
+        static::assertArrayHasKey(5, $result);
+        static::assertArrayHasKey('active', $result[2]);
+        static::assertArrayHasKey('countryname', $result[2]);
+        static::assertEquals(1, $result[2]['active']);
+        static::assertEquals('Germany', $result[2]['countryname']);
+        static::assertArrayHasKey('active', $result[5]);
+        static::assertArrayHasKey('countryname', $result[5]);
+        static::assertEquals(1, $result[5]['active']);
+        static::assertEquals('Belgium', $result[5]['countryname']);
 
         // Test with just one country
         $result = $this->module->sGetCountryTranslation(['id' => 2, 'randomField' => 'randomValue']);
-        $this->assertCount(4, $result);
-        $this->assertArrayHasKey('id', $result);
-        $this->assertArrayHasKey('active', $result);
-        $this->assertArrayHasKey('countryname', $result);
-        $this->assertArrayHasKey('randomField', $result);
-        $this->assertEquals(2, $result['id']);
-        $this->assertEquals(1, $result['active']);
-        $this->assertEquals('Germany', $result['countryname']);
-        $this->assertEquals('randomValue', $result['randomField']);
+        static::assertCount(4, $result);
+        static::assertArrayHasKey('id', $result);
+        static::assertArrayHasKey('active', $result);
+        static::assertArrayHasKey('countryname', $result);
+        static::assertArrayHasKey('randomField', $result);
+        static::assertEquals(2, $result['id']);
+        static::assertEquals(1, $result['active']);
+        static::assertEquals('Germany', $result['countryname']);
+        static::assertEquals('randomValue', $result['randomField']);
 
         // If backup data exists, restore it
         if ($existingData) {
@@ -608,35 +608,35 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(2);
 
         $result = $this->module->sGetDispatchTranslation();
-        $this->assertCount(2, $result);
-        $this->assertArrayHasKey(9, $result);
-        $this->assertArrayHasKey(10, $result);
-        $this->assertArrayHasKey('dispatch_name', $result[9]);
-        $this->assertArrayHasKey('dispatch_description', $result[9]);
-        $this->assertArrayHasKey('dispatch_status_link', $result[9]);
-        $this->assertArrayHasKey('dispatch_name', $result[10]);
-        $this->assertArrayHasKey('dispatch_description', $result[10]);
-        $this->assertArrayHasKey('dispatch_status_link', $result[10]);
-        $this->assertEquals('Standard shipping', $result[9]['dispatch_name']);
-        $this->assertEquals('Standard shipping description', $result[9]['dispatch_description']);
-        $this->assertEquals('http://www.dhl.com', $result[9]['dispatch_status_link']);
-        $this->assertEquals('Shipping by weight', $result[10]['dispatch_name']);
-        $this->assertEquals('Shipping by weight description', $result[10]['dispatch_description']);
-        $this->assertEquals('url', $result[10]['dispatch_status_link']);
+        static::assertCount(2, $result);
+        static::assertArrayHasKey(9, $result);
+        static::assertArrayHasKey(10, $result);
+        static::assertArrayHasKey('dispatch_name', $result[9]);
+        static::assertArrayHasKey('dispatch_description', $result[9]);
+        static::assertArrayHasKey('dispatch_status_link', $result[9]);
+        static::assertArrayHasKey('dispatch_name', $result[10]);
+        static::assertArrayHasKey('dispatch_description', $result[10]);
+        static::assertArrayHasKey('dispatch_status_link', $result[10]);
+        static::assertEquals('Standard shipping', $result[9]['dispatch_name']);
+        static::assertEquals('Standard shipping description', $result[9]['dispatch_description']);
+        static::assertEquals('http://www.dhl.com', $result[9]['dispatch_status_link']);
+        static::assertEquals('Shipping by weight', $result[10]['dispatch_name']);
+        static::assertEquals('Shipping by weight description', $result[10]['dispatch_description']);
+        static::assertEquals('url', $result[10]['dispatch_status_link']);
 
         // Test with just one shipping method
         $result = $this->module->sGetDispatchTranslation(['id' => 9, 'randomField' => 'randomValue']);
-        $this->assertCount(5, $result);
-        $this->assertArrayHasKey('id', $result);
-        $this->assertArrayHasKey('name', $result);
-        $this->assertArrayHasKey('description', $result);
-        $this->assertArrayHasKey('status_link', $result);
-        $this->assertArrayHasKey('randomField', $result);
-        $this->assertEquals(9, $result['id']);
-        $this->assertEquals('Standard shipping', $result['name']);
-        $this->assertEquals('Standard shipping description', $result['description']);
-        $this->assertEquals('http://www.dhl.com', $result['status_link']);
-        $this->assertEquals('randomValue', $result['randomField']);
+        static::assertCount(5, $result);
+        static::assertArrayHasKey('id', $result);
+        static::assertArrayHasKey('name', $result);
+        static::assertArrayHasKey('description', $result);
+        static::assertArrayHasKey('status_link', $result);
+        static::assertArrayHasKey('randomField', $result);
+        static::assertEquals(9, $result['id']);
+        static::assertEquals('Standard shipping', $result['name']);
+        static::assertEquals('Standard shipping description', $result['description']);
+        static::assertEquals('http://www.dhl.com', $result['status_link']);
+        static::assertEquals('randomValue', $result['randomField']);
 
         // If backup data exists, restore it
         if ($existingData) {
@@ -699,36 +699,36 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(2);
 
         $result = $this->module->sGetPaymentTranslation();
-        $this->assertCount(5, $result);
-        $this->assertArrayHasKey(2, $result);
-        $this->assertArrayHasKey(3, $result);
-        $this->assertArrayHasKey(4, $result);
-        $this->assertArrayHasKey(5, $result);
-        $this->assertArrayHasKey(6, $result);
-        $this->assertArrayHasKey('description', $result[2]);
-        $this->assertArrayHasKey('additionalDescription', $result[2]);
-        $this->assertArrayHasKey('description', $result[3]);
-        $this->assertArrayHasKey('additionalDescription', $result[3]);
-        $this->assertArrayHasKey('description', $result[5]);
-        $this->assertArrayHasKey('additionalDescription', $result[5]);
-        $this->assertEquals('Debit', $result[2]['description']);
-        $this->assertEquals('Additional text', $result[2]['additionalDescription']);
-        $this->assertEquals('Cash on delivery', $result[3]['description']);
-        $this->assertEquals('(including 2.00 Euro VAT)', $result[3]['additionalDescription']);
-        $this->assertEquals('Paid in advance', $result[5]['description']);
-        $this->assertEquals('The goods are delivered directly upon receipt of payment.', $result[5]['additionalDescription']);
+        static::assertCount(5, $result);
+        static::assertArrayHasKey(2, $result);
+        static::assertArrayHasKey(3, $result);
+        static::assertArrayHasKey(4, $result);
+        static::assertArrayHasKey(5, $result);
+        static::assertArrayHasKey(6, $result);
+        static::assertArrayHasKey('description', $result[2]);
+        static::assertArrayHasKey('additionalDescription', $result[2]);
+        static::assertArrayHasKey('description', $result[3]);
+        static::assertArrayHasKey('additionalDescription', $result[3]);
+        static::assertArrayHasKey('description', $result[5]);
+        static::assertArrayHasKey('additionalDescription', $result[5]);
+        static::assertEquals('Debit', $result[2]['description']);
+        static::assertEquals('Additional text', $result[2]['additionalDescription']);
+        static::assertEquals('Cash on delivery', $result[3]['description']);
+        static::assertEquals('(including 2.00 Euro VAT)', $result[3]['additionalDescription']);
+        static::assertEquals('Paid in advance', $result[5]['description']);
+        static::assertEquals('The goods are delivered directly upon receipt of payment.', $result[5]['additionalDescription']);
 
         // Test with just one payment mean
         $result = $this->module->sGetPaymentTranslation(['id' => 2, 'randomField' => 'randomValue']);
-        $this->assertCount(4, $result);
-        $this->assertArrayHasKey('id', $result);
-        $this->assertArrayHasKey('description', $result);
-        $this->assertArrayHasKey('additionaldescription', $result);
-        $this->assertArrayHasKey('randomField', $result);
-        $this->assertEquals(2, $result['id']);
-        $this->assertEquals('Debit', $result['description']);
-        $this->assertEquals('Additional text', $result['additionaldescription']);
-        $this->assertEquals('randomValue', $result['randomField']);
+        static::assertCount(4, $result);
+        static::assertArrayHasKey('id', $result);
+        static::assertArrayHasKey('description', $result);
+        static::assertArrayHasKey('additionaldescription', $result);
+        static::assertArrayHasKey('randomField', $result);
+        static::assertEquals(2, $result['id']);
+        static::assertEquals('Debit', $result['description']);
+        static::assertEquals('Additional text', $result['additionaldescription']);
+        static::assertEquals('randomValue', $result['randomField']);
 
         // If backup data exists, restore it
         if ($existingData) {
@@ -774,19 +774,19 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         }
 
         // Test with default shop, return empty array
-        $this->assertCount(0, $this->module->sGetCountryStateTranslation());
+        static::assertCount(0, $this->module->sGetCountryStateTranslation());
 
         // Hack the current system shop, so we can properly test this
         Shopware()->Shop()->setDefault(false);
 
         $result = $this->module->sGetCountryStateTranslation();
-        $this->assertCount(2, $result);
-        $this->assertArrayHasKey(23, $result);
-        $this->assertArrayHasKey(24, $result);
-        $this->assertArrayHasKey('name', $result[23]);
-        $this->assertArrayHasKey('name', $result[24]);
-        $this->assertEquals('Arkansas (english)', $result[23]['name']);
-        $this->assertEquals('California', $result[24]['name']);
+        static::assertCount(2, $result);
+        static::assertArrayHasKey(23, $result);
+        static::assertArrayHasKey(24, $result);
+        static::assertArrayHasKey('name', $result[23]);
+        static::assertArrayHasKey('name', $result[24]);
+        static::assertEquals('Arkansas (english)', $result[23]['name']);
+        static::assertEquals('California', $result[24]['name']);
 
         // Create a stub of a Shop for fallback.
         $shopFallbackId = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->getFallbackId();
@@ -807,16 +807,16 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Test with fallback
         $result = $this->module->sGetCountryStateTranslation();
-        $this->assertCount(3, $result);
-        $this->assertArrayHasKey(2, $result);
-        $this->assertArrayHasKey(23, $result);
-        $this->assertArrayHasKey(24, $result);
-        $this->assertArrayHasKey('name', $result[2]);
-        $this->assertArrayHasKey('name', $result[23]);
-        $this->assertArrayHasKey('name', $result[24]);
-        $this->assertEquals('asdfasfdasdfa', $result[2]['name']);
-        $this->assertEquals('Arkansas (english)', $result[23]['name']);
-        $this->assertEquals('California', $result[24]['name']);
+        static::assertCount(3, $result);
+        static::assertArrayHasKey(2, $result);
+        static::assertArrayHasKey(23, $result);
+        static::assertArrayHasKey(24, $result);
+        static::assertArrayHasKey('name', $result[2]);
+        static::assertArrayHasKey('name', $result[23]);
+        static::assertArrayHasKey('name', $result[24]);
+        static::assertEquals('asdfasfdasdfa', $result[2]['name']);
+        static::assertEquals('Arkansas (english)', $result[23]['name']);
+        static::assertEquals('California', $result[24]['name']);
 
         // If backup data exists, restore it
         if ($existingData) {
@@ -837,16 +837,16 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         // Test with default country data
         $result = $this->module->sGetCountryList();
         foreach ($result as $country) {
-            $this->assertArrayHasKey('id', $country);
-            $this->assertArrayHasKey('countryname', $country);
-            $this->assertArrayHasKey('countryiso', $country);
-            $this->assertArrayHasKey('areaID', $country);
-            $this->assertArrayHasKey('countryen', $country);
-            $this->assertArrayHasKey('taxfree', $country);
-            $this->assertArrayHasKey('display_state_in_registration', $country);
-            $this->assertArrayHasKey('force_state_in_registration', $country);
-            $this->assertArrayHasKey('states', $country);
-            $this->assertArrayHasKey('flag', $country);
+            static::assertArrayHasKey('id', $country);
+            static::assertArrayHasKey('countryname', $country);
+            static::assertArrayHasKey('countryiso', $country);
+            static::assertArrayHasKey('areaID', $country);
+            static::assertArrayHasKey('countryen', $country);
+            static::assertArrayHasKey('taxfree', $country);
+            static::assertArrayHasKey('display_state_in_registration', $country);
+            static::assertArrayHasKey('force_state_in_registration', $country);
+            static::assertArrayHasKey('states', $country);
+            static::assertArrayHasKey('flag', $country);
         }
 
         // Add translations
@@ -902,18 +902,18 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         // Test with translations but display_states = false
         $result = $this->module->sGetCountryList();
         $country = $result[0]; // Germany
-        $this->assertArrayHasKey('id', $country);
-        $this->assertArrayHasKey('countryname', $country);
-        $this->assertArrayHasKey('countryiso', $country);
-        $this->assertArrayHasKey('areaID', $country);
-        $this->assertArrayHasKey('countryen', $country);
-        $this->assertArrayHasKey('taxfree', $country);
-        $this->assertArrayHasKey('display_state_in_registration', $country);
-        $this->assertArrayHasKey('force_state_in_registration', $country);
-        $this->assertArrayHasKey('states', $country);
-        $this->assertArrayHasKey('flag', $country);
-        $this->assertCount(0, $country['states']);
-        $this->assertEquals('Germany', $country['countryname']);
+        static::assertArrayHasKey('id', $country);
+        static::assertArrayHasKey('countryname', $country);
+        static::assertArrayHasKey('countryiso', $country);
+        static::assertArrayHasKey('areaID', $country);
+        static::assertArrayHasKey('countryen', $country);
+        static::assertArrayHasKey('taxfree', $country);
+        static::assertArrayHasKey('display_state_in_registration', $country);
+        static::assertArrayHasKey('force_state_in_registration', $country);
+        static::assertArrayHasKey('states', $country);
+        static::assertArrayHasKey('flag', $country);
+        static::assertCount(0, $country['states']);
+        static::assertEquals('Germany', $country['countryname']);
 
         // Hack the current system shop, so we can properly test this
         Shopware()->Shop()->setDefault(false);
@@ -932,26 +932,26 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         // Test with translations and states
         $result = $this->module->sGetCountryList();
         $country = $result[0]; // Germany
-        $this->assertArrayHasKey('id', $country);
-        $this->assertArrayHasKey('countryname', $country);
-        $this->assertArrayHasKey('countryiso', $country);
-        $this->assertArrayHasKey('areaID', $country);
-        $this->assertArrayHasKey('countryen', $country);
-        $this->assertArrayHasKey('taxfree', $country);
-        $this->assertArrayHasKey('display_state_in_registration', $country);
-        $this->assertArrayHasKey('force_state_in_registration', $country);
-        $this->assertArrayHasKey('states', $country);
-        $this->assertArrayHasKey('flag', $country);
-        $this->assertCount(16, $country['states']);
-        $this->assertEquals('Germany', $country['countryname']);
+        static::assertArrayHasKey('id', $country);
+        static::assertArrayHasKey('countryname', $country);
+        static::assertArrayHasKey('countryiso', $country);
+        static::assertArrayHasKey('areaID', $country);
+        static::assertArrayHasKey('countryen', $country);
+        static::assertArrayHasKey('taxfree', $country);
+        static::assertArrayHasKey('display_state_in_registration', $country);
+        static::assertArrayHasKey('force_state_in_registration', $country);
+        static::assertArrayHasKey('states', $country);
+        static::assertArrayHasKey('flag', $country);
+        static::assertCount(16, $country['states']);
+        static::assertEquals('Germany', $country['countryname']);
         foreach ($country['states'] as $state) {
-            $this->assertArrayHasKey('id', $state);
-            $this->assertArrayHasKey('countryID', $state);
-            $this->assertArrayHasKey('name', $state);
-            $this->assertArrayHasKey('shortcode', $state);
-            $this->assertArrayHasKey('active', $state);
+            static::assertArrayHasKey('id', $state);
+            static::assertArrayHasKey('countryID', $state);
+            static::assertArrayHasKey('name', $state);
+            static::assertArrayHasKey('shortcode', $state);
+            static::assertArrayHasKey('active', $state);
         }
-        $this->assertContains('111', array_column($country['states'], 'name'));
+        static::assertContains('111', array_column($country['states'], 'name'));
 
         // If backup data exists, restore it
         if ($existingCountryData) {
@@ -984,7 +984,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // New customers don't have available downloads
         $downloads = $this->module->sGetDownloads();
-        $this->assertCount(0, $downloads['orderData']);
+        static::assertCount(0, $downloads['orderData']);
 
         // Inject demo data
         $orderData = [
@@ -1060,39 +1060,39 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $downloads = $this->module->sGetDownloads();
         $result = $downloads['orderData'];
 
-        $this->assertCount(1, $result);
+        static::assertCount(1, $result);
         $esd = end($result);
-        $this->assertArrayHasKey('id', $esd);
-        $this->assertArrayHasKey('ordernumber', $esd);
-        $this->assertArrayHasKey('invoice_amount', $esd);
-        $this->assertArrayHasKey('invoice_amount_net', $esd);
-        $this->assertArrayHasKey('invoice_shipping', $esd);
-        $this->assertArrayHasKey('invoice_shipping_net', $esd);
-        $this->assertArrayHasKey('datum', $esd);
-        $this->assertArrayHasKey('status', $esd);
-        $this->assertArrayHasKey('cleared', $esd);
-        $this->assertArrayHasKey('comment', $esd);
-        $this->assertArrayHasKey('details', $esd);
-        $this->assertEquals($orderData['ordernumber'], $esd['ordernumber']);
-        $this->assertEquals('37,99', $esd['invoice_amount']);
-        $this->assertEquals($orderData['invoice_amount_net'], $esd['invoice_amount_net']);
-        $this->assertEquals($orderData['invoice_shipping'], $esd['invoice_shipping']);
-        $this->assertEquals($orderData['invoice_shipping_net'], $esd['invoice_shipping_net']);
-        $this->assertEquals('14.03.2014 10:26', $esd['datum']);
-        $this->assertEquals($orderData['status'], $esd['status']);
-        $this->assertEquals($orderData['cleared'], $esd['cleared']);
-        $this->assertEquals($orderData['comment'], $esd['comment']);
-        $this->assertCount(1, $esd['details']);
+        static::assertArrayHasKey('id', $esd);
+        static::assertArrayHasKey('ordernumber', $esd);
+        static::assertArrayHasKey('invoice_amount', $esd);
+        static::assertArrayHasKey('invoice_amount_net', $esd);
+        static::assertArrayHasKey('invoice_shipping', $esd);
+        static::assertArrayHasKey('invoice_shipping_net', $esd);
+        static::assertArrayHasKey('datum', $esd);
+        static::assertArrayHasKey('status', $esd);
+        static::assertArrayHasKey('cleared', $esd);
+        static::assertArrayHasKey('comment', $esd);
+        static::assertArrayHasKey('details', $esd);
+        static::assertEquals($orderData['ordernumber'], $esd['ordernumber']);
+        static::assertEquals('37,99', $esd['invoice_amount']);
+        static::assertEquals($orderData['invoice_amount_net'], $esd['invoice_amount_net']);
+        static::assertEquals($orderData['invoice_shipping'], $esd['invoice_shipping']);
+        static::assertEquals($orderData['invoice_shipping_net'], $esd['invoice_shipping_net']);
+        static::assertEquals('14.03.2014 10:26', $esd['datum']);
+        static::assertEquals($orderData['status'], $esd['status']);
+        static::assertEquals($orderData['cleared'], $esd['cleared']);
+        static::assertEquals($orderData['comment'], $esd['comment']);
+        static::assertCount(1, $esd['details']);
         $esdDetail = end($esd['details']);
 
-        $this->assertArrayHasKey('id', $esdDetail);
-        $this->assertArrayHasKey('orderID', $esdDetail);
-        $this->assertArrayHasKey('ordernumber', $esdDetail);
-        $this->assertArrayHasKey('articleID', $esdDetail);
-        $this->assertArrayHasKey('articleordernumber', $esdDetail);
-        $this->assertArrayHasKey('serial', $esdDetail);
-        $this->assertArrayHasKey('esdLink', $esdDetail);
-        $this->assertNotNull($esdDetail['esdLink']);
+        static::assertArrayHasKey('id', $esdDetail);
+        static::assertArrayHasKey('orderID', $esdDetail);
+        static::assertArrayHasKey('ordernumber', $esdDetail);
+        static::assertArrayHasKey('articleID', $esdDetail);
+        static::assertArrayHasKey('articleordernumber', $esdDetail);
+        static::assertArrayHasKey('serial', $esdDetail);
+        static::assertArrayHasKey('esdLink', $esdDetail);
+        static::assertNotNull($esdDetail['esdLink']);
 
         return [
             'customer' => $customer,
@@ -1163,7 +1163,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // At this point, the user is not logged in so we should have no data
         $data = $this->module->sGetOpenOrderData();
-        $this->assertCount(0, $data['orderData']);
+        static::assertCount(0, $data['orderData']);
 
         // Mock a login
         $this->session->offsetSet('sUserId', $customer->getId());
@@ -1172,34 +1172,34 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $result = $this->module->sGetOpenOrderData();
         $result = $result['orderData'];
 
-        $this->assertCount(2, $result);
+        static::assertCount(2, $result);
         foreach ($result as $order) {
-            $this->assertArrayHasKey('id', $order);
-            $this->assertArrayHasKey('ordernumber', $order);
-            $this->assertArrayHasKey('invoice_amount', $order);
-            $this->assertArrayHasKey('invoice_amount_net', $order);
-            $this->assertArrayHasKey('invoice_shipping', $order);
-            $this->assertArrayHasKey('invoice_shipping_net', $order);
-            $this->assertArrayHasKey('datum', $order);
-            $this->assertArrayHasKey('status', $order);
-            $this->assertArrayHasKey('cleared', $order);
-            $this->assertArrayHasKey('comment', $order);
-            $this->assertArrayHasKey('details', $order);
+            static::assertArrayHasKey('id', $order);
+            static::assertArrayHasKey('ordernumber', $order);
+            static::assertArrayHasKey('invoice_amount', $order);
+            static::assertArrayHasKey('invoice_amount_net', $order);
+            static::assertArrayHasKey('invoice_shipping', $order);
+            static::assertArrayHasKey('invoice_shipping_net', $order);
+            static::assertArrayHasKey('datum', $order);
+            static::assertArrayHasKey('status', $order);
+            static::assertArrayHasKey('cleared', $order);
+            static::assertArrayHasKey('comment', $order);
+            static::assertArrayHasKey('details', $order);
             foreach ($order['details'] as $detail) {
-                $this->assertArrayHasKey('id', $detail);
-                $this->assertArrayHasKey('orderID', $detail);
-                $this->assertArrayHasKey('ordernumber', $detail);
-                $this->assertArrayHasKey('articleID', $detail);
-                $this->assertArrayHasKey('articleordernumber', $detail);
-                $this->assertArrayHasKey('amountNumeric', $detail);
-                $this->assertArrayHasKey('priceNumeric', $detail);
+                static::assertArrayHasKey('id', $detail);
+                static::assertArrayHasKey('orderID', $detail);
+                static::assertArrayHasKey('ordernumber', $detail);
+                static::assertArrayHasKey('articleID', $detail);
+                static::assertArrayHasKey('articleordernumber', $detail);
+                static::assertArrayHasKey('amountNumeric', $detail);
+                static::assertArrayHasKey('priceNumeric', $detail);
             }
 
             // This tests SW-5653
             if ($order['id'] == $orderId) {
-                $this->assertNotEmpty($order);
-                $this->assertEquals($orderNumber, $order['ordernumber']);
-                $this->assertEquals($customer->getId(), $order['userID']);
+                static::assertNotEmpty($order);
+                static::assertEquals($orderNumber, $order['ordernumber']);
+                static::assertEquals($customer->getId(), $order['userID']);
                 break;
             }
         }
@@ -1222,17 +1222,17 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $customer = $this->createDummyCustomer();
 
         // Test sGetUserMailById with null and expected cases
-        $this->assertNull($this->module->sGetUserMailById());
+        static::assertNull($this->module->sGetUserMailById());
         $this->session->offsetSet('sUserId', $customer->getId());
-        $this->assertEquals($customer->getEmail(), $this->module->sGetUserMailById());
+        static::assertEquals($customer->getEmail(), $this->module->sGetUserMailById());
 
         // Test sGetUserByMail with null and expected cases
-        $this->assertNull($this->module->sGetUserByMail(uniqid(rand())));
-        $this->assertEquals($customer->getId(), $this->module->sGetUserByMail($customer->getEmail()));
+        static::assertNull($this->module->sGetUserByMail(uniqid(rand())));
+        static::assertEquals($customer->getId(), $this->module->sGetUserByMail($customer->getEmail()));
 
         // Test sGetUserNameById with null and expected cases
-        $this->assertEmpty($this->module->sGetUserNameById(uniqid(rand())));
-        $this->assertEquals(
+        static::assertEmpty($this->module->sGetUserNameById(uniqid(rand())));
+        static::assertEquals(
             ['firstname' => 'Max', 'lastname' => 'Mustermann'],
             $this->module->sGetUserNameById($customer->getId())
         );
@@ -1245,7 +1245,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
      */
     public function testsGetUserDataWithoutLogin()
     {
-        $this->assertEquals(
+        static::assertEquals(
             ['additional' => [
                     'country' => [],
                     'countryShipping' => [],
@@ -1257,7 +1257,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         $this->session->offsetSet('sCountry', 20);
 
-        $this->assertEquals(
+        static::assertEquals(
             ['additional' => [
                     'country' => [
                         'id' => '20',
@@ -1543,7 +1543,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $orderId = Shopware()->Db()->lastInsertId();
 
         // No rules, returns false
-        $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
+        static::assertFalse($this->module->sManageRisks(2, $basket, $user));
 
         // Test all rules
 
@@ -1557,7 +1557,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $firstTestRuleId = Shopware()->Db()->lastInsertId();
-        $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $basket, $user));
 
         // sRiskORDERVALUEMORE
         Shopware()->Db()->insert(
@@ -1569,11 +1569,11 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         // Test 'OR' logic between different rules (only one needs to be true)
-        $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $basket, $user));
 
         // Deleting the first rule, only a false one is left
         Shopware()->Db()->delete('s_core_rulesets', 'id = ' . $firstTestRuleId);
-        $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
+        static::assertFalse($this->module->sManageRisks(2, $basket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskCUSTOMERGROUPIS
@@ -1590,7 +1590,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         );
 
         // Test 'AND' logic between the two parts of the same rule (both need to be true)
-        $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
+        static::assertFalse($this->module->sManageRisks(2, $basket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskZIPCODE
@@ -1602,7 +1602,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => '98765',
             ]
         );
-        $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $basket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskBILLINGZIPCODE
@@ -1615,7 +1615,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $basket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskZONEIS
@@ -1627,7 +1627,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => '12345',
             ]
         );
-        $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
+        static::assertFalse($this->module->sManageRisks(2, $basket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskZONEISNOT
@@ -1639,7 +1639,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => '12345',
             ]
         );
-        $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $basket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskLANDIS
@@ -1654,7 +1654,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value2' => 'UK',
             ]
         );
-        $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $basket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskBILLINGLANDIS
@@ -1669,7 +1669,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value2' => 'UK',
             ]
         );
-        $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $basket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskNEWCUSTOMER
@@ -1680,7 +1680,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'rule1' => 'NEWCUSTOMER',
             ]
         );
-        $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $basket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskORDERPOSITIONSMORE
@@ -1692,7 +1692,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => '2',
             ]
         );
-        $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
+        static::assertFalse($this->module->sManageRisks(2, $basket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
@@ -1710,7 +1710,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         );
 
         $fullBasket = $this->basketModule->sGetBasket();
-        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         $this->basketModule->sAddArticle('SW10118.8');
@@ -1723,7 +1723,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => '17|null',
             ]
         );
-        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskDUNNINGLEVELONE
@@ -1734,7 +1734,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'rule1' => 'DUNNINGLEVELONE',
             ]
         );
-        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskDUNNINGLEVELTWO
@@ -1745,7 +1745,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'rule1' => 'DUNNINGLEVELTWO',
             ]
         );
-        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskDUNNINGLEVELTHREE
@@ -1756,7 +1756,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'rule1' => 'DUNNINGLEVELTHREE',
             ]
         );
-        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskINKASSO
@@ -1767,7 +1767,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'rule1' => 'INKASSO',
             ]
         );
-        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskLASTORDERLESS
@@ -1779,7 +1779,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => '1',
             ]
         );
-        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskARTICLESFROM
@@ -1791,7 +1791,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => '1',
             ]
         );
-        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskARTICLESFROM
@@ -1803,7 +1803,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => '9',
             ]
         );
-        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskLASTORDERSLESS
@@ -1815,7 +1815,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => '9',
             ]
         );
-        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskLASTORDERSLESS
@@ -1827,7 +1827,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => '0',
             ]
         );
-        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskPREGSTREET
@@ -1839,7 +1839,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => 'Merkel',
             ]
         );
-        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskPREGSTREET
@@ -1851,7 +1851,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => 'Google',
             ]
         );
-        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskPREGBILLINGSTREET
@@ -1863,7 +1863,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => 'Google',
             ]
         );
-        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskDIFFER
@@ -1874,7 +1874,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'rule1' => 'DIFFER',
             ]
         );
-        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskCUSTOMERNR
@@ -1886,7 +1886,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => $customer->getNumber(),
             ]
         );
-        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskCUSTOMERNR
@@ -1898,7 +1898,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => 'ThisIsNeverGoingToBeACustomerNumber',
             ]
         );
-        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskLASTNAME
@@ -1910,7 +1910,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => 'Mustermann',
             ]
         );
-        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskLASTNAME
@@ -1922,7 +1922,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => 'NotMustermann',
             ]
         );
-        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskSUBSHOP
@@ -1934,7 +1934,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => '1',
             ]
         );
-        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskSUBSHOP
@@ -1946,7 +1946,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => '2',
             ]
         );
-        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskSUBSHOPNOT
@@ -1958,7 +1958,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => '2',
             ]
         );
-        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskSUBSHOPNOT
@@ -1970,7 +1970,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => '1',
             ]
         );
-        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskCURRENCIESISOIS
@@ -1982,7 +1982,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => 'eur',
             ]
         );
-        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskCURRENCIESISOIS
@@ -1994,7 +1994,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => 'yen',
             ]
         );
-        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskCURRENCIESISOISNOT
@@ -2006,7 +2006,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => 'eur',
             ]
         );
-        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskCURRENCIESISOISNOT
@@ -2018,7 +2018,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => 'yen',
             ]
         );
-        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        static::assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         Shopware()->Db()->delete('s_order', 'id = ' . $orderId);
@@ -2033,7 +2033,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         // Test subscribe with empty post field and empty address, fail validation
         $this->front->Request()->setPost('newsletter', '');
         $result = $this->module->sNewsletterSubscription('');
-        $this->assertEquals(
+        static::assertEquals(
             [
                 'code' => 5,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
@@ -2053,7 +2053,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Test unsubscribe with non existing email, fail
         $result = $this->module->sNewsletterSubscription(uniqid(rand()) . '@shopware.com', true);
-        $this->assertEquals(
+        static::assertEquals(
             [
                 'code' => 4,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
@@ -2064,7 +2064,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Test unsubscribe with empty post field, fail validation
         $result = $this->module->sNewsletterSubscription('', true);
-        $this->assertEquals(
+        static::assertEquals(
             [
                 'code' => 6,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
@@ -2075,7 +2075,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Test with empty field, fail validation
         $result = $this->module->sNewsletterSubscription('');
-        $this->assertEquals(
+        static::assertEquals(
             [
                 'code' => 6,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
@@ -2086,7 +2086,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Test with malformed email, fail validation
         $result = $this->module->sNewsletterSubscription('thisIsNotAValidEmailAddress');
-        $this->assertEquals(
+        static::assertEquals(
             [
                 'code' => 1,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
@@ -2096,7 +2096,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         );
 
         // Check that test email does not exist
-        $this->assertFalse(
+        static::assertFalse(
             Shopware()->Db()->fetchRow(
                 'SELECT email, groupID FROM s_campaigns_mailaddresses WHERE email LIKE ?',
                 [$validAddress]
@@ -2105,7 +2105,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Test with correct unique email, all ok
         $result = $this->module->sNewsletterSubscription($validAddress);
-        $this->assertEquals(
+        static::assertEquals(
             [
                 'code' => 3,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
@@ -2116,7 +2116,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         );
 
         // Check that test email was inserted
-        $this->assertEquals(
+        static::assertEquals(
             [
                 'email' => $validAddress,
                 'groupID' => $this->config->get('sNEWSLETTERDEFAULTGROUP'),
@@ -2126,7 +2126,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 [$validAddress]
             )
         );
-        $this->assertEquals(
+        static::assertEquals(
             [
                 [
                     'email' => $validAddress,
@@ -2141,7 +2141,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Test with same email, fail
         $result = $this->module->sNewsletterSubscription($validAddress);
-        $this->assertEquals(
+        static::assertEquals(
             [
                 'code' => 3,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
@@ -2154,7 +2154,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         // Test with same email in a different list, fail
         $groupId = rand(1, 9999);
         $result = $this->module->sNewsletterSubscription($validAddress, false, $groupId);
-        $this->assertEquals(
+        static::assertEquals(
             [
                 'code' => 3,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
@@ -2165,7 +2165,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         );
 
         // Check that test email address is still there, but now in two groups
-        $this->assertEquals(
+        static::assertEquals(
             [
                 [
                     'email' => $validAddress,
@@ -2177,7 +2177,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 [$validAddress]
             )
         );
-        $this->assertEquals(
+        static::assertEquals(
             [
                 [
                     'email' => $validAddress,
@@ -2196,7 +2196,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Test unsubscribe the same email, all ok
         $result = $this->module->sNewsletterSubscription($validAddress, true);
-        $this->assertEquals(
+        static::assertEquals(
             [
                 'code' => 5,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
@@ -2206,7 +2206,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         );
 
         // Check that test email address was removed
-        $this->assertFalse(
+        static::assertFalse(
             Shopware()->Db()->fetchRow(
                 'SELECT email, groupID FROM s_campaigns_mailaddresses WHERE email LIKE ?',
                 [$validAddress]
@@ -2214,7 +2214,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         );
 
         // But not completely from maildata
-        $this->assertEquals(
+        static::assertEquals(
             [
                 [
                     'email' => $validAddress,
@@ -2239,14 +2239,14 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     public function testsGetCountry()
     {
         // Empty argument, return false
-        $this->assertFalse($this->module->sGetCountry(''));
+        static::assertFalse($this->module->sGetCountry(''));
 
         // No matching country, return empty array
-        $this->assertEquals([], $this->module->sGetCountry(-1));
+        static::assertEquals([], $this->module->sGetCountry(-1));
 
         // Valid country returns valid data
         $result = $this->module->sGetCountry('de');
-        $this->assertEquals(
+        static::assertEquals(
             [
                 'id' => '2',
                 'countryID' => '2',
@@ -2261,7 +2261,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         );
 
         // Fetching for id or iso code gives the same result
-        $this->assertEquals(
+        static::assertEquals(
             $this->module->sGetCountry($result['id']),
             $result
         );
@@ -2273,17 +2273,17 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     public function testsGetPaymentmean()
     {
         // Empty argument, return false
-        $this->assertFalse($this->module->sGetPaymentMean(''));
+        static::assertFalse($this->module->sGetPaymentMean(''));
 
         // No matching payment mean, return empty array
-        $this->assertEquals(['country_surcharge' => []], $this->module->sGetPaymentMean(-1));
+        static::assertEquals(['country_surcharge' => []], $this->module->sGetPaymentMean(-1));
 
         // Valid country returns valid data
         $result = $this->module->sGetPaymentMean(
             Shopware()->Db()->fetchOne('SELECT id FROM s_core_paymentmeans WHERE name = "prepayment"')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             [
                 'id' => '5',
                 'name' => 'prepayment',
@@ -2312,7 +2312,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         );
 
         // Fetching for id or iso code gives the same result
-        $this->assertEquals(
+        static::assertEquals(
             $this->module->sGetPaymentMean($result['name']),
             $result
         );
@@ -2324,7 +2324,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     public function testsGetDispatchBasket()
     {
         // No basket, return false
-        $this->assertFalse($this->module->sGetDispatchBasket());
+        static::assertFalse($this->module->sGetDispatchBasket());
 
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
@@ -2333,29 +2333,29 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         // With the correct data, return properly formatted array
         // This is a big query function
         $result = $this->module->sGetDispatchBasket();
-        $this->assertArrayHasKey('instock', $result);
-        $this->assertArrayHasKey('stockmin', $result);
-        $this->assertArrayHasKey('laststock', $result);
-        $this->assertArrayHasKey('weight', $result);
-        $this->assertArrayHasKey('count_article', $result);
-        $this->assertArrayHasKey('shippingfree', $result);
-        $this->assertArrayHasKey('amount', $result);
-        $this->assertArrayHasKey('amount_net', $result);
-        $this->assertArrayHasKey('amount_display', $result);
-        $this->assertArrayHasKey('length', $result);
-        $this->assertArrayHasKey('height', $result);
-        $this->assertArrayHasKey('width', $result);
-        $this->assertArrayHasKey('userID', $result);
-        $this->assertArrayHasKey('has_topseller', $result);
-        $this->assertArrayHasKey('has_comment', $result);
-        $this->assertArrayHasKey('has_esd', $result);
-        $this->assertArrayHasKey('max_tax', $result);
-        $this->assertArrayHasKey('basketStateId', $result);
-        $this->assertArrayHasKey('countryID', $result);
-        $this->assertArrayHasKey('paymentID', $result);
-        $this->assertArrayHasKey('customergroupID', $result);
-        $this->assertArrayHasKey('multishopID', $result);
-        $this->assertArrayHasKey('sessionID', $result);
+        static::assertArrayHasKey('instock', $result);
+        static::assertArrayHasKey('stockmin', $result);
+        static::assertArrayHasKey('laststock', $result);
+        static::assertArrayHasKey('weight', $result);
+        static::assertArrayHasKey('count_article', $result);
+        static::assertArrayHasKey('shippingfree', $result);
+        static::assertArrayHasKey('amount', $result);
+        static::assertArrayHasKey('amount_net', $result);
+        static::assertArrayHasKey('amount_display', $result);
+        static::assertArrayHasKey('length', $result);
+        static::assertArrayHasKey('height', $result);
+        static::assertArrayHasKey('width', $result);
+        static::assertArrayHasKey('userID', $result);
+        static::assertArrayHasKey('has_topseller', $result);
+        static::assertArrayHasKey('has_comment', $result);
+        static::assertArrayHasKey('has_esd', $result);
+        static::assertArrayHasKey('max_tax', $result);
+        static::assertArrayHasKey('basketStateId', $result);
+        static::assertArrayHasKey('countryID', $result);
+        static::assertArrayHasKey('paymentID', $result);
+        static::assertArrayHasKey('customergroupID', $result);
+        static::assertArrayHasKey('multishopID', $result);
+        static::assertArrayHasKey('sessionID', $result);
     }
 
     /**
@@ -2364,7 +2364,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     public function testsGetPremiumDispatches()
     {
         // No basket, return empty array,
-        $this->assertEquals([], $this->module->sGetPremiumDispatches());
+        static::assertEquals([], $this->module->sGetPremiumDispatches());
 
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
@@ -2372,13 +2372,13 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         $result = $this->module->sGetPremiumDispatches();
 
-        $this->assertGreaterThan(0, count($result));
+        static::assertGreaterThan(0, count($result));
         foreach ($result as $dispatch) {
-            $this->assertArrayHasKey('id', $dispatch);
-            $this->assertArrayHasKey('name', $dispatch);
-            $this->assertArrayHasKey('description', $dispatch);
-            $this->assertArrayHasKey('calculation', $dispatch);
-            $this->assertArrayHasKey('status_link', $dispatch);
+            static::assertArrayHasKey('id', $dispatch);
+            static::assertArrayHasKey('name', $dispatch);
+            static::assertArrayHasKey('description', $dispatch);
+            static::assertArrayHasKey('calculation', $dispatch);
+            static::assertArrayHasKey('status_link', $dispatch);
         }
     }
 
@@ -2388,7 +2388,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     public function testsGetPremiumDispatchSurcharge()
     {
         // No basket, return false,
-        $this->assertFalse($this->module->sGetPremiumDispatchSurcharge(null));
+        static::assertFalse($this->module->sGetPremiumDispatchSurcharge(null));
 
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
@@ -2396,7 +2396,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $fullBasket = $this->module->sGetDispatchBasket();
 
         $result = $this->module->sGetPremiumDispatchSurcharge($fullBasket);
-        $this->assertEquals(0, $result);
+        static::assertEquals(0, $result);
     }
 
     /**
@@ -2405,7 +2405,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     public function testsGetPremiumShippingcosts()
     {
         // No basket, return false,
-        $this->assertFalse($this->module->sGetPremiumShippingcosts());
+        static::assertFalse($this->module->sGetPremiumShippingcosts());
 
         $countries = $this->module->sGetCountryList();
         foreach ($countries as $country) {
@@ -2420,7 +2420,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->basketModule->sAddArticle('SW10010');
 
         // With country data, no dispatch method
-        $this->assertEquals(
+        static::assertEquals(
             ['brutto' => 0, 'netto' => 0],
             $this->module->sGetPremiumShippingcosts($germany)
         );
@@ -2428,12 +2428,12 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         // With dispatch method
         $this->session->offsetSet('sDispatch', 9);
         $result = $this->module->sGetPremiumShippingcosts($germany);
-        $this->assertArrayHasKey('brutto', $result);
-        $this->assertArrayHasKey('netto', $result);
-        $this->assertArrayHasKey('value', $result);
-        $this->assertArrayHasKey('factor', $result);
-        $this->assertArrayHasKey('surcharge', $result);
-        $this->assertArrayHasKey('tax', $result);
+        static::assertArrayHasKey('brutto', $result);
+        static::assertArrayHasKey('netto', $result);
+        static::assertArrayHasKey('value', $result);
+        static::assertArrayHasKey('factor', $result);
+        static::assertArrayHasKey('surcharge', $result);
+        static::assertArrayHasKey('tax', $result);
     }
 
     /**
@@ -2443,13 +2443,13 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     private function assertArray($expected, $actual)
     {
         foreach ($expected as $key => $value) {
-            $this->assertArrayHasKey($key, $actual);
+            static::assertArrayHasKey($key, $actual);
             $currentActual = $actual[$key];
 
             if (is_array($value)) {
                 $this->assertArray($value, $currentActual);
             } else {
-                $this->assertEquals($value, $currentActual);
+                static::assertEquals($value, $currentActual);
             }
         }
     }

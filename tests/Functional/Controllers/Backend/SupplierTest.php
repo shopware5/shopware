@@ -64,13 +64,13 @@ class Shopware_Tests_Controllers_Backend_SupplierTest extends Enlight_Components
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/supplier/getSuppliers');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('total', $jsonBody);
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('total', $jsonBody);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
     }
 
     /**
@@ -83,12 +83,12 @@ class Shopware_Tests_Controllers_Backend_SupplierTest extends Enlight_Components
     {
         $this->Request()->setMethod('POST')->setPost($this->supplierData);
         $this->dispatch('backend/supplier/createSupplier');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
 
         return $jsonBody['data'];
     }
@@ -111,12 +111,12 @@ class Shopware_Tests_Controllers_Backend_SupplierTest extends Enlight_Components
 
         $this->Request()->setMethod('POST')->setPost($supplier);
         $this->dispatch('backend/supplier/updateSupplier');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
 
         return $jsonBody['data'];
     }
@@ -131,6 +131,6 @@ class Shopware_Tests_Controllers_Backend_SupplierTest extends Enlight_Components
     {
         $this->Request()->setMethod('POST')->setPost(['id' => $lastSupplier['id']]);
         $this->dispatch('backend/supplier/deleteSupplier');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
     }
 }

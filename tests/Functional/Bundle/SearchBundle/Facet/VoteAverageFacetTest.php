@@ -69,7 +69,7 @@ class VoteAverageFacetTest extends TestCase
             []
         );
 
-        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult', $result->getFacets()[0]);
+        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult', $result->getFacets()[0]);
     }
 
     public function testVoteFacetWithoutSubshopVotes()
@@ -91,7 +91,7 @@ class VoteAverageFacetTest extends TestCase
             ['displayOnlySubShopVotes' => true]
         );
 
-        $this->assertEmpty($result->getFacets());
+        static::assertEmpty($result->getFacets());
     }
 
     public function testVoteFacetWithSubshopVotes()
@@ -113,7 +113,7 @@ class VoteAverageFacetTest extends TestCase
             ['displayOnlySubShopVotes' => true]
         );
 
-        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult', $result->getFacets()[0]);
+        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult', $result->getFacets()[0]);
     }
 
     public function testVoteFacetWithNotAssignedSubShop()
@@ -136,7 +136,7 @@ class VoteAverageFacetTest extends TestCase
             ['displayOnlySubShopVotes' => true]
         );
 
-        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult', $result->getFacets()[0]);
+        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult', $result->getFacets()[0]);
     }
 
     protected function createProduct(

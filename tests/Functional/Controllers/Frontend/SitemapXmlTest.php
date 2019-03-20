@@ -36,6 +36,6 @@ class Shopware_Tests_Controllers_Frontend_SitemapXmlTest extends Enlight_Compone
     {
         $this->dispatch('/SitemapXml');
 
-        $this->assertEquals(302, $this->Response()->getHttpResponseCode());
+        static::assertEquals(302, $this->Response()->getHttpResponseCode());
     }
 }

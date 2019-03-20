@@ -52,7 +52,7 @@ class CaptchaValidatorTest extends \PHPUnit\Framework\TestCase
         $request = new \Enlight_Controller_Request_RequestTestCase();
         $request->setParams($honeypotParams);
 
-        $this->assertTrue($validator->validateByName($honeypotParams['captchaName'], $request));
+        static::assertTrue($validator->validateByName($honeypotParams['captchaName'], $request));
     }
 
     public function testValidateCustomCaptchaDefault()
@@ -70,7 +70,7 @@ class CaptchaValidatorTest extends \PHPUnit\Framework\TestCase
         $random = Shopware()->Session()->get(DefaultCaptcha::SESSION_KEY);
         $request->setParam('sCaptcha', array_pop(array_keys($random)));
 
-        $this->assertTrue($validator->validateByName($defaultParam['captchaName'], $request));
+        static::assertTrue($validator->validateByName($defaultParam['captchaName'], $request));
     }
 
     public function testInvalidCaptcha()
@@ -88,6 +88,6 @@ class CaptchaValidatorTest extends \PHPUnit\Framework\TestCase
         // set a random false parameter
         $request->setParam('sCaptcha', uniqid());
 
-        $this->assertFalse($validator->validateByName($defaultParam['captchaName'], $request));
+        static::assertFalse($validator->validateByName($defaultParam['captchaName'], $request));
     }
 }

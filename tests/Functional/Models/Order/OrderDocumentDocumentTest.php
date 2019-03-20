@@ -30,8 +30,8 @@ class Shopware_Tests_Models_Order_Document_DocumentTest extends Enlight_Componen
         $attribute = new \Shopware\Models\Attribute\Document();
         $document->setAttribute($attribute);
 
-        $this->assertSame($document, $attribute->getDocument());
-        $this->assertSame($attribute, $document->getAttribute());
+        static::assertSame($document, $attribute->getDocument());
+        static::assertSame($attribute, $document->getAttribute());
     }
 
     /*
@@ -69,7 +69,7 @@ class Shopware_Tests_Models_Order_Document_DocumentTest extends Enlight_Componen
             Shopware()->Models()->flush($shop);
 
             // Check that document was actually created
-            $this->assertNotNull($document);
+            static::assertNotNull($document);
         }
     }
 
@@ -106,7 +106,7 @@ class Shopware_Tests_Models_Order_Document_DocumentTest extends Enlight_Componen
                 'typeId' => 1,
                 'orderId' => 15,
             ]);
-        $this->assertCount(2, $documents);
+        static::assertCount(2, $documents);
 
         // Revert changes of this test
         foreach ($documents as $document) {
@@ -148,7 +148,7 @@ class Shopware_Tests_Models_Order_Document_DocumentTest extends Enlight_Componen
                 'typeId' => 1,
                 'orderId' => 15,
             ]);
-        $this->assertCount(1, $documents);
+        static::assertCount(1, $documents);
 
         // Revert changes of this test
         foreach ($documents as $document) {

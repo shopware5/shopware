@@ -43,7 +43,7 @@ class GoogleStorageFactoryTest extends TestCase
 
     public function testTypeLocal()
     {
-        $this->assertSame('gcp', $this->factory->getType());
+        static::assertSame('gcp', $this->factory->getType());
     }
 
     public function testCreationWithEmptyConfig()
@@ -61,6 +61,6 @@ class GoogleStorageFactoryTest extends TestCase
             'keyFilePath' => __DIR__ . '/../fixtures/google_auth_credentials.json',
         ]);
 
-        $this->assertInstanceOf(GoogleStorageAdapter::class, $filesystem);
+        static::assertInstanceOf(GoogleStorageAdapter::class, $filesystem);
     }
 }

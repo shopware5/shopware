@@ -90,7 +90,7 @@ class Shopware_Tests_Models_SnippetTest extends Enlight_Components_Test_TestCase
 
             $snippet->$setMethod($value);
 
-            $this->assertEquals($snippet->$getMethod(), $value);
+            static::assertEquals($snippet->$getMethod(), $value);
         }
     }
 
@@ -104,7 +104,7 @@ class Shopware_Tests_Models_SnippetTest extends Enlight_Components_Test_TestCase
 
         foreach ($this->testData as $fieldname => $value) {
             $getMethod = 'get' . ucfirst($fieldname);
-            $this->assertEquals($snippet->$getMethod(), $value);
+            static::assertEquals($snippet->$getMethod(), $value);
         }
     }
 
@@ -129,10 +129,10 @@ class Shopware_Tests_Models_SnippetTest extends Enlight_Components_Test_TestCase
 
         foreach ($this->testData as $fieldname => $value) {
             $getMethod = 'get' . ucfirst($fieldname);
-            $this->assertEquals($snippet->$getMethod(), $value);
+            static::assertEquals($snippet->$getMethod(), $value);
         }
 
-        $this->assertInstanceOf('\DateTime', $snippet->getCreated());
-        $this->assertInstanceOf('\DateTime', $snippet->getUpdated());
+        static::assertInstanceOf('\DateTime', $snippet->getCreated());
+        static::assertInstanceOf('\DateTime', $snippet->getUpdated());
     }
 }

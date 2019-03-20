@@ -57,8 +57,8 @@ class BasketQueryHelperTest extends TestCase
 
         $expectedSql = 'SELECT basket.price as end_price, basket.netprice as net_price, basket.tax_rate, basket.quantity FROM s_order_basket basket WHERE (basket.modus = 0) AND (basket.sessionID = :session) AND (basket.tax_rate != 0)';
 
-        $this->assertInstanceOf(QueryBuilder::class, $result);
-        $this->assertSame($expectedSql, $result->getSQL());
+        static::assertInstanceOf(QueryBuilder::class, $result);
+        static::assertSame($expectedSql, $result->getSQL());
     }
 
     public function test_getInsertDiscountAttributeQuery()
@@ -68,8 +68,8 @@ class BasketQueryHelperTest extends TestCase
 
         $expectedSql = 'INSERT INTO s_order_basket_attributes (basketID) VALUES(:basketId)';
 
-        $this->assertInstanceOf(QueryBuilder::class, $result);
-        $this->assertSame($expectedSql, $result->getSQL());
+        static::assertInstanceOf(QueryBuilder::class, $result);
+        static::assertSame($expectedSql, $result->getSQL());
     }
 
     public function test_getInsertDiscountQuery()
@@ -81,8 +81,8 @@ class BasketQueryHelperTest extends TestCase
 
         $expectedSql = 'INSERT INTO s_order_basket (sessionID, articlename, articleID, ordernumber, quantity, price, netprice, tax_rate, datum, modus, currencyFactor) VALUES(:sessionId, :articleName, :articleName, :ordernumber, :quantity, :price, :netPrice, :taxRate, :datum, :mode, :currencyFactor)';
 
-        $this->assertInstanceOf(QueryBuilder::class, $result);
-        $this->assertSame($expectedSql, $result->getSQL());
+        static::assertInstanceOf(QueryBuilder::class, $result);
+        static::assertSame($expectedSql, $result->getSQL());
     }
 
     public function test_getLastInsertId()
@@ -102,7 +102,7 @@ class BasketQueryHelperTest extends TestCase
 
         $result = $this->queryHelper->getLastInsertId();
 
-        $this->assertSame(111, $result);
+        static::assertSame(111, $result);
     }
 
     /**

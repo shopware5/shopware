@@ -38,7 +38,7 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
 
         $hostname = $helper->Shop()->getHost();
         if (empty($hostname)) {
-            $this->markTestSkipped(
+            static::markTestSkipped(
                 'Hostname is not available.'
             );
         }
@@ -74,18 +74,18 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
         $client = new Zend_Http_Client($this->apiBaseUrl . '/articles/');
         $response = $client->request('GET');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(401, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(401, $response->getStatus());
 
         $result = $response->getBody();
 
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     public function testGetArticlesWithInvalidIdShouldReturnMessage()
@@ -95,18 +95,18 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
                          ->setUri($this->apiBaseUrl . '/articles/' . $id)
                          ->request('GET');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(404, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
 
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     public function testPostArticlesShouldBeSuccessful()
@@ -313,21 +313,21 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
 
         $response = $client->request('POST');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(201, $response->getStatus());
-        $this->assertArrayHasKey('Location', $response->getHeaders());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(201, $response->getStatus());
+        static::assertArrayHasKey('Location', $response->getHeaders());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
         $location = $response->getHeader('Location');
         $identifier = (int) array_pop(explode('/', $location));
 
-        $this->assertGreaterThan(0, $identifier);
+        static::assertGreaterThan(0, $identifier);
 
         return $identifier;
     }
@@ -344,16 +344,16 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('POST');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(400, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(400, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
+        static::assertArrayHasKey('message', $result);
     }
 
     /**
@@ -365,24 +365,24 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
                          ->setUri($this->apiBaseUrl . '/articles/' . $id)
                          ->request('GET');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(200, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
-        $this->assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('data', $result);
 
         $data = $result['data'];
-        $this->assertInternalType('array', $data);
-        $this->assertArrayHasKey('id', $data);
-        $this->assertArrayHasKey('active', $data);
+        static::assertInternalType('array', $data);
+        static::assertArrayHasKey('id', $data);
+        static::assertArrayHasKey('active', $data);
 
-        $this->assertEquals('Testartikel', $data['name']);
+        static::assertEquals('Testartikel', $data['name']);
     }
 
     /**
@@ -403,17 +403,17 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(400, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(400, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     /**
@@ -451,13 +451,13 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
 
-        $this->assertEquals(200, $response->getStatus());
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertNull(
+        static::assertEquals(200, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertNull(
             $response->getHeader('Set-Cookie'),
             'There should be no set-cookie header set.'
         );
-        $this->assertNull(
+        static::assertNull(
             $response->getHeader('location',
             'There should be no location header set.'
         ));
@@ -465,10 +465,10 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
-        $this->assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('data', $result);
 
         $response = $this->getHttpClient()
                 ->setUri($this->apiBaseUrl . '/articles/' . $id)
@@ -479,19 +479,19 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
 
         $article = $result['data'];
 
-        $this->assertEquals($id, $article['id']);
-        $this->assertEquals($testData['description'], $article['description']);
-        $this->assertEquals($testData['descriptionLong'], $article['descriptionLong']);
-        $this->assertEquals($testData['supplierId'], $article['supplier']['id']);
+        static::assertEquals($id, $article['id']);
+        static::assertEquals($testData['description'], $article['description']);
+        static::assertEquals($testData['descriptionLong'], $article['descriptionLong']);
+        static::assertEquals($testData['supplierId'], $article['supplier']['id']);
 
         // Categories should be updated
-        $this->assertEquals(1, count($article['categories']));
+        static::assertEquals(1, count($article['categories']));
 
         // Related should be untouched
-        $this->assertEquals(2, count($article['related']));
+        static::assertEquals(2, count($article['related']));
 
         // Similar should be removed
-        $this->assertEquals(0, count($article['similar']));
+        static::assertEquals(0, count($article['similar']));
     }
 
     /**
@@ -508,9 +508,9 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
             ->setUri($this->apiBaseUrl . '/articles/' . $id)
             ->request('GET');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(200, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
@@ -536,28 +536,28 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
 
             $client->setRawData($requestData, 'application/json; charset=UTF-8');
             $response = $client->request('PUT');
-            $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-            $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-            $this->assertEquals(200, $response->getStatus());
+            static::assertEquals('application/json', $response->getHeader('Content-Type'));
+            static::assertEquals(null, $response->getHeader('Set-Cookie'));
+            static::assertEquals(200, $response->getStatus());
             $result = $response->getBody();
             $result = Zend_Json::decode($result);
-            $this->assertArrayHasKey('success', $result);
-            $this->assertTrue($result['success']);
+            static::assertArrayHasKey('success', $result);
+            static::assertTrue($result['success']);
 
             $response = $this->getHttpClient()
                 ->setUri($this->apiBaseUrl . '/articles/' . $id)
                 ->request('GET');
-            $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-            $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-            $this->assertEquals(200, $response->getStatus());
+            static::assertEquals('application/json', $response->getHeader('Content-Type'));
+            static::assertEquals(null, $response->getHeader('Set-Cookie'));
+            static::assertEquals(200, $response->getStatus());
             $result = $response->getBody();
             $result = Zend_Json::decode($result);
 
-            $this->assertEquals($variantNumber, $result['data']['mainDetail']['number']);
+            static::assertEquals($variantNumber, $result['data']['mainDetail']['number']);
 
             foreach ($result['data']['details'] as $variantData) {
                 if ($variantData['number'] == $oldMain) {
-                    $this->assertEquals(2, $variantData['kind']);
+                    static::assertEquals(2, $variantData['kind']);
                 }
             }
 
@@ -593,19 +593,19 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
 
-        $this->assertEquals(200, $response->getStatus());
+        static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
-        $this->assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('data', $result);
 
         $data = $result['data'];
-        $this->assertInternalType('array', $data);
-        $this->assertEquals($articleId, $data['id']);
+        static::assertInternalType('array', $data);
+        static::assertEquals($articleId, $data['id']);
     }
 
     /**
@@ -631,15 +631,15 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
 
-        $this->assertEquals(400, $response->getStatus());
+        static::assertEquals(400, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     /**
@@ -658,15 +658,15 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
 
         $response = $client->request('DELETE');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(200, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
         return $id;
     }
@@ -678,17 +678,17 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
 
         $response = $client->request('DELETE');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(404, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     public function testPutArticlesWithInvalidIdShouldReturnMessage()
@@ -704,17 +704,17 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(404, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     public function testGetArticlesShouldBeSuccessful()
@@ -722,20 +722,20 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles');
         $result = $client->request('GET');
 
-        $this->assertEquals('application/json', $result->getHeader('Content-Type'));
-        $this->assertEquals(null, $result->getHeader('Set-Cookie'));
-        $this->assertEquals(200, $result->getStatus());
+        static::assertEquals('application/json', $result->getHeader('Content-Type'));
+        static::assertEquals(null, $result->getHeader('Set-Cookie'));
+        static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
-        $this->assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('data', $result);
 
-        $this->assertArrayHasKey('total', $result);
-        $this->assertInternalType('int', $result['total']);
+        static::assertArrayHasKey('total', $result);
+        static::assertInternalType('int', $result['total']);
     }
 
     public function getSimpleArticleData()
@@ -839,19 +839,19 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
 
         $response = $client->request('PUT');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(200, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
-        $this->assertEquals('create', $result['data'][0]['operation']);
-        $this->assertEquals('create', $result['data'][1]['operation']);
-        $this->assertEquals('create', $result['data'][2]['operation']);
-        $this->assertEquals('update', $result['data'][3]['operation']);
+        static::assertEquals('create', $result['data'][0]['operation']);
+        static::assertEquals('create', $result['data'][1]['operation']);
+        static::assertEquals('create', $result['data'][2]['operation']);
+        static::assertEquals('update', $result['data'][3]['operation']);
     }
 }

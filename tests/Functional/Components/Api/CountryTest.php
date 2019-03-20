@@ -108,13 +108,13 @@ class CountryTest extends TestCase
 
         $country = $this->resource->create($data);
 
-        $this->assertEquals($country->getName(), $data['name']);
-        $this->assertEquals($country->getIso(), $data['iso']);
-        $this->assertEquals($country->getIso3(), $data['iso3']);
-        $this->assertEquals($country->getIsoName(), $data['isoName']);
+        static::assertEquals($country->getName(), $data['name']);
+        static::assertEquals($country->getIso(), $data['iso']);
+        static::assertEquals($country->getIso3(), $data['iso3']);
+        static::assertEquals($country->getIsoName(), $data['isoName']);
 
-        $this->assertNotNull($country->getArea());
-        $this->assertEquals($country->getArea()->getId(), $area->getId());
+        static::assertNotNull($country->getArea());
+        static::assertEquals($country->getArea()->getId(), $area->getId());
 
         return $country;
     }
@@ -150,19 +150,19 @@ class CountryTest extends TestCase
 
         $country = $this->resource->create($data);
 
-        $this->assertEquals($country->getName(), $data['name']);
-        $this->assertEquals($country->getIso(), $data['iso']);
-        $this->assertEquals($country->getIso3(), $data['iso3']);
-        $this->assertEquals($country->getIsoName(), $data['isoName']);
+        static::assertEquals($country->getName(), $data['name']);
+        static::assertEquals($country->getIso(), $data['iso']);
+        static::assertEquals($country->getIso3(), $data['iso3']);
+        static::assertEquals($country->getIsoName(), $data['isoName']);
 
-        $this->assertNotNull($country->getArea());
-        $this->assertEquals($country->getArea()->getId(), $area->getId());
+        static::assertNotNull($country->getArea());
+        static::assertEquals($country->getArea()->getId(), $area->getId());
 
-        $this->assertEquals($country->getStates()->count(), 1);
+        static::assertEquals($country->getStates()->count(), 1);
         $assignedState = $country->getStates()->first();
-        $this->assertEquals($assignedState->getId(), $data['states'][0]['id']);
-        $this->assertEquals($assignedState->getName(), $data['states'][0]['name']);
-        $this->assertEquals($assignedState->getShortCode(), $data['states'][0]['shortCode']);
+        static::assertEquals($assignedState->getId(), $data['states'][0]['id']);
+        static::assertEquals($assignedState->getName(), $data['states'][0]['name']);
+        static::assertEquals($assignedState->getShortCode(), $data['states'][0]['shortCode']);
 
         return $country;
     }
@@ -176,20 +176,20 @@ class CountryTest extends TestCase
     {
         $countryData = $this->resource->getOne($country->getId());
 
-        $this->assertEquals($countryData['id'], $country->getId());
-        $this->assertEquals($countryData['name'], $country->getName());
-        $this->assertEquals($countryData['iso'], $country->getIso());
-        $this->assertEquals($countryData['iso3'], $country->getIso3());
-        $this->assertEquals($countryData['isoName'], $country->getIsoName());
-        $this->assertEquals($countryData['areaId'], $country->getArea()->getId());
+        static::assertEquals($countryData['id'], $country->getId());
+        static::assertEquals($countryData['name'], $country->getName());
+        static::assertEquals($countryData['iso'], $country->getIso());
+        static::assertEquals($countryData['iso3'], $country->getIso3());
+        static::assertEquals($countryData['isoName'], $country->getIsoName());
+        static::assertEquals($countryData['areaId'], $country->getArea()->getId());
 
-        $this->assertArrayHasKey('states', $countryData);
-        $this->assertCount(1, $countryData['states']);
+        static::assertArrayHasKey('states', $countryData);
+        static::assertCount(1, $countryData['states']);
         $firstState = $country->getStates()->first();
-        $this->assertEquals($countryData['states'][0]['id'], $firstState->getId());
-        $this->assertEquals($countryData['states'][0]['name'], $firstState->getName());
-        $this->assertEquals($countryData['states'][0]['shortCode'], $firstState->getShortCode());
-        $this->assertEquals($countryData['states'][0]['countryId'], $country->getId());
+        static::assertEquals($countryData['states'][0]['id'], $firstState->getId());
+        static::assertEquals($countryData['states'][0]['name'], $firstState->getName());
+        static::assertEquals($countryData['states'][0]['shortCode'], $firstState->getShortCode());
+        static::assertEquals($countryData['states'][0]['countryId'], $country->getId());
 
         return $country;
     }
@@ -231,23 +231,23 @@ class CountryTest extends TestCase
 
         $country = $this->resource->update($country->getId(), $data);
 
-        $this->assertEquals($country->getName(), $data['name']);
-        $this->assertEquals($country->getIso(), $data['iso']);
-        $this->assertEquals($country->getIso3(), $data['iso3']);
-        $this->assertEquals($country->getIsoName(), $data['isoName']);
+        static::assertEquals($country->getName(), $data['name']);
+        static::assertEquals($country->getIso(), $data['iso']);
+        static::assertEquals($country->getIso3(), $data['iso3']);
+        static::assertEquals($country->getIsoName(), $data['isoName']);
 
-        $this->assertNotNull($country->getArea());
-        $this->assertEquals($country->getArea()->getId(), $area->getId());
+        static::assertNotNull($country->getArea());
+        static::assertEquals($country->getArea()->getId(), $area->getId());
 
-        $this->assertEquals($country->getStates()->count(), 2);
+        static::assertEquals($country->getStates()->count(), 2);
         $oldAssignedState = $country->getStates()->first();
-        $this->assertEquals($oldAssignedState->getId(), $data['states'][0]['id']);
-        $this->assertEquals($oldAssignedState->getName(), $oldState->getName());
-        $this->assertEquals($oldAssignedState->getShortCode(), $oldState->getShortCode());
+        static::assertEquals($oldAssignedState->getId(), $data['states'][0]['id']);
+        static::assertEquals($oldAssignedState->getName(), $oldState->getName());
+        static::assertEquals($oldAssignedState->getShortCode(), $oldState->getShortCode());
         $newAssignedState = $country->getStates()->last();
-        $this->assertEquals($newAssignedState->getId(), $data['states'][1]['id']);
-        $this->assertEquals($newAssignedState->getName(), $data['states'][1]['name']);
-        $this->assertEquals($newAssignedState->getShortCode(), $data['states'][1]['shortCode']);
+        static::assertEquals($newAssignedState->getId(), $data['states'][1]['id']);
+        static::assertEquals($newAssignedState->getName(), $data['states'][1]['name']);
+        static::assertEquals($newAssignedState->getShortCode(), $data['states'][1]['shortCode']);
 
         return $country;
     }
@@ -261,10 +261,10 @@ class CountryTest extends TestCase
     {
         $countryData = $this->resource->getList(0, 1000);
 
-        $this->assertArrayHasKey('data', $countryData);
-        $this->assertArrayHasKey('total', $countryData);
-        $this->assertCount((2 + count(static::$existingCountryIds)), $countryData['data']);
-        $this->assertEquals($countryData['total'], (2 + count(static::$existingCountryIds)));
+        static::assertArrayHasKey('data', $countryData);
+        static::assertArrayHasKey('total', $countryData);
+        static::assertCount((2 + count(static::$existingCountryIds)), $countryData['data']);
+        static::assertEquals($countryData['total'], (2 + count(static::$existingCountryIds)));
 
         return $country;
     }
@@ -276,8 +276,8 @@ class CountryTest extends TestCase
     {
         $deletedCountry = $this->resource->delete($country->getId());
 
-        $this->assertInstanceOf('\Shopware\Models\Country\Country', $deletedCountry);
-        $this->assertNull($deletedCountry->getId());
+        static::assertInstanceOf('\Shopware\Models\Country\Country', $deletedCountry);
+        static::assertNull($deletedCountry->getId());
     }
 
     /**

@@ -37,15 +37,15 @@ class TopSellerTest extends AbstractMarketing
     {
         $this->resetTopSeller();
 
-        $this->assertCount(0, $this->getAllTopSeller());
+        static::assertCount(0, $this->getAllTopSeller());
 
         $this->TopSeller()->initTopSeller(50);
 
-        $this->assertCount(50, $this->getAllTopSeller());
+        static::assertCount(50, $this->getAllTopSeller());
 
         $this->TopSeller()->initTopSeller();
 
-        $this->assertCount(
+        static::assertCount(
             count($this->getAllArticles()),
             $this->getAllTopSeller()
         );
@@ -61,21 +61,21 @@ class TopSellerTest extends AbstractMarketing
 
         //check if the update script was successfully
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
-        $this->assertCount(0, $topSeller);
+        static::assertCount(0, $topSeller);
 
         //update only 50 top seller articles to test the limit function
         $this->TopSeller()->updateElapsedTopSeller(50);
 
         //check if only 50 top seller was updated.
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
-        $this->assertCount(
+        static::assertCount(
             50,
             $topSeller
         );
 
         //now we can update the all other top seller data
         $this->TopSeller()->updateElapsedTopSeller();
-        $this->assertCount(
+        static::assertCount(
             count($this->getAllTopSeller()),
             $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ")
         );
@@ -93,10 +93,10 @@ class TopSellerTest extends AbstractMarketing
         $this->TopSeller()->incrementTopSeller($topSeller['article_id'], 10);
 
         $topSeller = $this->getAllTopSeller(' WHERE article_id = ' . $topSeller['article_id']);
-        $this->assertCount(1, $topSeller);
+        static::assertCount(1, $topSeller);
         $topSeller = $topSeller[0];
 
-        $this->assertEquals($initialValue + 10, $topSeller['sales']);
+        static::assertEquals($initialValue + 10, $topSeller['sales']);
     }
 
     public function testRefreshTopSellerForArticleId()
@@ -111,7 +111,7 @@ class TopSellerTest extends AbstractMarketing
         $this->TopSeller()->refreshTopSellerForArticleId($topSeller['article_id']);
 
         $allTopSeller = $this->getAllTopSeller();
-        $this->assertCount(1, $allTopSeller);
+        static::assertCount(1, $allTopSeller);
 
         $this->assertArrayEquals($topSeller, $allTopSeller[0], ['article_id', 'sales']);
     }
@@ -132,7 +132,7 @@ class TopSellerTest extends AbstractMarketing
         Shopware()->Modules()->Articles()->sGetArticleCharts(3);
 
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
-        $this->assertCount(50, $topSeller);
+        static::assertCount(50, $topSeller);
     }
 
     public function testTopSellerCronJobRefresh()
@@ -146,19 +146,19 @@ class TopSellerTest extends AbstractMarketing
         $this->Db()->query("UPDATE s_articles_top_seller_ro SET last_cleared = '2010-01-01'");
 
         $result = $this->dispatch('/genusswelten/?p=1');
-        $this->assertEquals(200, $result->getHttpResponseCode());
+        static::assertEquals(200, $result->getHttpResponseCode());
 
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
-        $this->assertCount(0, $topSeller, 'Topseller wurde durch dispatch aktualisiert');
+        static::assertCount(0, $topSeller, 'Topseller wurde durch dispatch aktualisiert');
 
         $cron = $this->Db()->fetchRow("SELECT * FROM s_crontab WHERE action = 'RefreshTopSeller'");
-        $this->assertNotEmpty($cron);
+        static::assertNotEmpty($cron);
 
         //the cron plugin isn't installed, so we can't use a dispatch on /backend/cron
         $this->Plugin()->refreshTopSeller();
 
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
-        $this->assertCount(
+        static::assertCount(
             count($this->getAllTopSeller()),
             $topSeller
         );
@@ -175,16 +175,16 @@ class TopSellerTest extends AbstractMarketing
         $this->Db()->query("UPDATE s_articles_top_seller_ro SET last_cleared = '2010-01-01'");
 
         $result = $this->dispatch('/genusswelten/?p=1');
-        $this->assertEquals(200, $result->getHttpResponseCode());
+        static::assertEquals(200, $result->getHttpResponseCode());
 
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
-        $this->assertCount(0, $topSeller);
+        static::assertCount(0, $topSeller);
 
         //the cron plugin isn't installed, so we can't use a dispatch on /backend/cron
         $this->Plugin()->refreshTopSeller();
 
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
-        $this->assertCount(0, $topSeller);
+        static::assertCount(0, $topSeller);
     }
 
     protected function resetTopSeller($condition = '')

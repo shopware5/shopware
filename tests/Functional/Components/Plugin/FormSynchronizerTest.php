@@ -102,7 +102,7 @@ class FormSynchronizerTest extends Base
     public function testAddFormItems()
     {
         $this->synchronizer->synchronize(new Plugin(), self::CONFIG_1);
-        $this->assertEquals(1, $this->form->getElements()->count());
+        static::assertEquals(1, $this->form->getElements()->count());
     }
 
     /**
@@ -111,10 +111,10 @@ class FormSynchronizerTest extends Base
     public function testNewFormFieldSorted()
     {
         $this->synchronizer->synchronize(new Plugin(), self::CONFIG_2);
-        $this->assertEquals(2, $this->form->getElements()->count());
+        static::assertEquals(2, $this->form->getElements()->count());
 
-        $this->assertEquals(1, $this->form->getElement('ConfigA')->getPosition());
-        $this->assertEquals(0, $this->form->getElement('ConfigB')->getPosition());
+        static::assertEquals(1, $this->form->getElement('ConfigA')->getPosition());
+        static::assertEquals(0, $this->form->getElement('ConfigB')->getPosition());
     }
 
     /**
@@ -123,7 +123,7 @@ class FormSynchronizerTest extends Base
     protected function getSynchronizer()
     {
         $repository = $this->createMock(EntityRepository::class);
-        $repository->expects($this->any())
+        $repository->expects(static::any())
             ->method('findOneBy')
             ->willReturn($this->form);
 

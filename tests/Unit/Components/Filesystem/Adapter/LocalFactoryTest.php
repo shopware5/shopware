@@ -43,7 +43,7 @@ class LocalFactoryTest extends TestCase
 
     public function testTypeLocal()
     {
-        $this->assertSame('local', $this->factory->getType());
+        static::assertSame('local', $this->factory->getType());
     }
 
     public function testCreationWithEmptyConfig()
@@ -59,13 +59,13 @@ class LocalFactoryTest extends TestCase
             'root' => 'web',
         ]);
 
-        $this->assertInstanceOf(Local::class, $filesystem);
+        static::assertInstanceOf(Local::class, $filesystem);
 
         // Old path usage
         $filesystem = $this->factory->create([
             'path' => 'web',
         ]);
 
-        $this->assertInstanceOf(Local::class, $filesystem);
+        static::assertInstanceOf(Local::class, $filesystem);
     }
 }

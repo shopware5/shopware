@@ -46,10 +46,10 @@ class TranslationTest extends TestCase
         $list = $this->resource->getList(
             0, 5
         );
-        $this->assertCount(5, $list['data']);
+        static::assertCount(5, $list['data']);
 
         foreach ($list['data'] as $item) {
-            $this->assertArrayHasKey('shopId', $item);
+            static::assertArrayHasKey('shopId', $item);
         }
     }
 
@@ -65,9 +65,9 @@ class TranslationTest extends TestCase
         foreach ($list['data'] as $item) {
             $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $item['key']);
 
-            $this->assertInstanceOf('Shopware\Models\Article\Article', $article);
+            static::assertInstanceOf('Shopware\Models\Article\Article', $article);
 
-            $this->assertEquals(
+            static::assertEquals(
                 Translation::TYPE_PRODUCT,
                 $item['type']
             );
@@ -93,16 +93,16 @@ class TranslationTest extends TestCase
             ],
         ]);
 
-        $this->assertCount(1, $list['data']);
+        static::assertCount(1, $list['data']);
         $data = $list['data'][0];
 
-        $this->assertEquals(
+        static::assertEquals(
             Translation::TYPE_PRODUCT,
             $data['type']
         );
 
-        $this->assertArrayHasKey('name', $data['data']);
-        $this->assertArrayHasKey('descriptionLong', $data['data']);
+        static::assertArrayHasKey('name', $data['data']);
+        static::assertArrayHasKey('descriptionLong', $data['data']);
     }
 
     public function testCreateArticle()
@@ -112,18 +112,18 @@ class TranslationTest extends TestCase
         /** @var \Shopware\Models\Translation\Translation $translation */
         $translation = $this->resource->create($data);
 
-        $this->assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
-        $this->assertEquals(
+        static::assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
+        static::assertEquals(
             $data['key'],
             $translation->getKey(),
             'Translation key do not match'
         );
-        $this->assertEquals(
+        static::assertEquals(
             $data['type'],
             $translation->getType(),
             'Translation type do not match'
         );
-        $this->assertEquals(
+        static::assertEquals(
             $data['data'],
             $this->resource->getTranslationComponent()->unFilterData(
                 'article', $translation->getData()
@@ -143,20 +143,20 @@ class TranslationTest extends TestCase
         /** @var \Shopware\Models\Translation\Translation $translation */
         $translation = $this->resource->createByNumber($data);
 
-        $this->assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
+        static::assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
 
-        $this->assertEquals(
+        static::assertEquals(
             $article['articleID'],
             $translation->getKey(),
             'Translation key do not match'
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $data['type'],
             $translation->getType(),
             'Translation type do not match'
         );
-        $this->assertEquals(
+        static::assertEquals(
             $data['data'],
             $this->resource->getTranslationComponent()->unFilterData(
                 'article', $translation->getData()
@@ -182,20 +182,20 @@ class TranslationTest extends TestCase
         /** @var \Shopware\Models\Translation\Translation $translation */
         $translation = $this->resource->createByNumber($data);
 
-        $this->assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
+        static::assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
 
-        $this->assertEquals(
+        static::assertEquals(
             $article['id'],
             $translation->getKey(),
             'Translation key do not match'
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $data['type'],
             $translation->getType(),
             'Translation type do not match'
         );
-        $this->assertEquals(
+        static::assertEquals(
             $data['data'],
             $this->resource->getTranslationComponent()->unFilterData(
                 'article', $translation->getData()
@@ -224,18 +224,18 @@ class TranslationTest extends TestCase
 
         $updated = $this->resource->update($key, $translation);
 
-        $this->assertEquals(
+        static::assertEquals(
             $translation['key'],
             $updated->getKey(),
             'Translation key do not match'
         );
-        $this->assertEquals(
+        static::assertEquals(
             $translation['type'],
             $updated->getType(),
             'Translation type do not match'
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $translation['data'],
             $this->resource->getTranslationComponent()->unFilterData(
                 'article', $updated->getData()
@@ -265,24 +265,24 @@ class TranslationTest extends TestCase
 
         $updated = $this->resource->update($key, $translation);
 
-        $this->assertEquals(
+        static::assertEquals(
             $translation['key'],
             $updated->getKey(),
             'Translation key do not match'
         );
-        $this->assertEquals(
+        static::assertEquals(
             $translation['type'],
             $updated->getType(),
             'Translation type do not match'
         );
 
         $dataTranslation = unserialize($updated->getData());
-        $this->assertEquals(
+        static::assertEquals(
             $translation['data']['txtArtikel'],
             $dataTranslation['txtArtikel']
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             'UPDATE - Dummy Translation',
             $dataTranslation['txtlangbeschreibung']
         );
@@ -324,25 +324,25 @@ class TranslationTest extends TestCase
         $updateData = $update['data'];
         $updatedData = unserialize($updated->getData());
 
-        $this->assertEquals(
+        static::assertEquals(
             $updateData['a1'],
             $updatedData['a1'],
             'First level not updated'
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $updateData['b1']['a2'],
             $updatedData['b1']['a2'],
             'Second level not updated'
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $updateData['b1']['b2']['a3'],
             $updatedData['b1']['b2']['a3'],
             'Third level not updated'
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $create['data']['b1']['b2']['b3']['a4'],
             $updatedData['b1']['b2']['b3']['a4'],
             'Fourth level not updated'
@@ -367,10 +367,10 @@ class TranslationTest extends TestCase
         $results = $this->resource->batch($translations);
 
         foreach ($results as $result) {
-            $this->assertTrue($result['success']);
-            $this->assertEquals('update', $result['operation']);
-            $this->assertNotEmpty($result['data']);
-            $this->assertEquals(2, $result['data']['shopId']);
+            static::assertTrue($result['success']);
+            static::assertEquals('update', $result['operation']);
+            static::assertNotEmpty($result['data']);
+            static::assertEquals(2, $result['data']['shopId']);
         }
     }
 
@@ -396,13 +396,13 @@ class TranslationTest extends TestCase
         /** @var \Shopware\Models\Translation\Translation $result */
         $result = $this->resource->updateByNumber($article['ordernumber'], $translation);
 
-        $this->assertInstanceOf('Shopware\Models\Translation\Translation', $result);
-        $this->assertEquals($result->getKey(), $article['articleID']);
+        static::assertInstanceOf('Shopware\Models\Translation\Translation', $result);
+        static::assertEquals($result->getKey(), $article['articleID']);
         $data = unserialize($result->getData());
 
         foreach ($data as $item) {
             $isInString = (strpos($item, '-UpdateByNumber') !== false);
-            $this->assertTrue($isInString);
+            static::assertTrue($isInString);
         }
     }
 
@@ -411,13 +411,13 @@ class TranslationTest extends TestCase
         $data = $this->getDummyData('article');
         $translation = $this->resource->create($data);
 
-        $this->assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
+        static::assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
 
         unset($data['data']);
 
         $result = $this->resource->delete($data['key'], $data);
 
-        $this->assertTrue($result);
+        static::assertTrue($result);
     }
 
     public function testDeleteByNumber()
@@ -433,13 +433,13 @@ class TranslationTest extends TestCase
 
         $translation = $this->resource->create($data);
 
-        $this->assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
+        static::assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
 
         unset($data['data']);
 
         $result = $this->resource->deleteByNumber($article['ordernumber'], $data);
 
-        $this->assertTrue($result);
+        static::assertTrue($result);
     }
 
     /**
@@ -578,9 +578,9 @@ class TranslationTest extends TestCase
 
         $translation = $this->resource->createByNumber($data);
 
-        $this->assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
+        static::assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
 
-        $this->assertEquals($id, $translation->getKey());
+        static::assertEquals($id, $translation->getKey());
 
         $translated = $this->resource->getTranslationComponent()->unFilterData(
             $type,
@@ -588,7 +588,7 @@ class TranslationTest extends TestCase
         );
 
         foreach ($data['data'] as $key => $value) {
-            $this->assertEquals($value, $translated[$key]);
+            static::assertEquals($value, $translated[$key]);
         }
     }
 
@@ -601,9 +601,9 @@ class TranslationTest extends TestCase
 
         $translation = $this->resource->updateByNumber($number, $data);
 
-        $this->assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
+        static::assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
 
-        $this->assertEquals($id, $translation->getKey());
+        static::assertEquals($id, $translation->getKey());
 
         $translated = $this->resource->getTranslationComponent()->unFilterData(
             $type,
@@ -611,7 +611,7 @@ class TranslationTest extends TestCase
         );
 
         foreach ($data['data'] as $key => $value) {
-            $this->assertEquals($value, $translated[$key]);
+            static::assertEquals($value, $translated[$key]);
         }
     }
 
@@ -619,7 +619,7 @@ class TranslationTest extends TestCase
     {
         $data = $this->getDummyData($type);
         $result = $this->resource->deleteByNumber($number, $data);
-        $this->assertTrue($result);
+        static::assertTrue($result);
     }
 
     /**
@@ -986,7 +986,7 @@ class TranslationTest extends TestCase
      */
     public function testGetOneWithMissingPrivilegeShouldThrowPrivilegeException()
     {
-        $this->assertTrue(true);
+        static::assertTrue(true);
     }
 
     /**
@@ -994,7 +994,7 @@ class TranslationTest extends TestCase
      */
     public function testGetOneWithInvalidIdShouldThrowNotFoundException()
     {
-        $this->assertTrue(true);
+        static::assertTrue(true);
     }
 
     /**
@@ -1002,7 +1002,7 @@ class TranslationTest extends TestCase
      */
     public function testGetOneWithMissingIdShouldThrowParameterMissingException()
     {
-        $this->assertTrue(true);
+        static::assertTrue(true);
     }
 
     protected function getDummyData($type, $shopId = 2)

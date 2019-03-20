@@ -237,14 +237,14 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
         }, $result->getProducts());
 
         foreach ($numbers as $number) {
-            $this->assertContains($number, $expectedNumbers, sprintf('Product with number: `%s` found but not expected', $number));
+            static::assertContains($number, $expectedNumbers, sprintf('Product with number: `%s` found but not expected', $number));
         }
         foreach ($expectedNumbers as $number) {
-            $this->assertContains($number, $numbers, sprintf('Expected product number: `%s` not found', $number));
+            static::assertContains($number, $numbers, sprintf('Expected product number: `%s` not found', $number));
         }
 
-        $this->assertCount(count($expectedNumbers), $result->getProducts());
-        $this->assertEquals(count($expectedNumbers), $result->getTotalCount());
+        static::assertCount(count($expectedNumbers), $result->getProducts());
+        static::assertEquals(count($expectedNumbers), $result->getTotalCount());
     }
 
     protected function assertSearchResultSorting(
@@ -257,7 +257,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
         foreach ($productResult as $index => $product) {
             $expectedProduct = $expectedNumbers[$index];
 
-            $this->assertEquals(
+            static::assertEquals(
                 $expectedProduct,
                 $product->getNumber(),
                 sprintf(

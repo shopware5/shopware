@@ -43,8 +43,8 @@ class InstallContextTest extends TestCase
         $plugin = new MyPlugin(true, 'ShopwarePlugins');
         $plugin->activate($context);
 
-        $this->assertArrayHasKey('cache', $context->getScheduled());
-        $this->assertNotEmpty($context->getScheduled()['cache']);
+        static::assertArrayHasKey('cache', $context->getScheduled());
+        static::assertNotEmpty($context->getScheduled()['cache']);
     }
 
     public function testMessage()
@@ -57,8 +57,8 @@ class InstallContextTest extends TestCase
         $plugin = new MyPlugin(true, 'ShopwarePlugins');
 
         $plugin->deactivate($context);
-        $this->assertArrayHasKey('message', $context->getScheduled());
-        $this->assertEquals($context->getScheduled()['message'], 'Clear the caches');
+        static::assertArrayHasKey('message', $context->getScheduled());
+        static::assertEquals($context->getScheduled()['message'], 'Clear the caches');
     }
 
     public function testCacheCombination()
@@ -71,9 +71,9 @@ class InstallContextTest extends TestCase
         $plugin = new MyPlugin(true, 'ShopwarePlugins');
 
         $plugin->install($context);
-        $this->assertArrayHasKey('cache', $context->getScheduled());
-        $this->assertNotEmpty($context->getScheduled()['cache']);
-        $this->assertCount(count(InstallContext::CACHE_LIST_ALL), $context->getScheduled()['cache']);
+        static::assertArrayHasKey('cache', $context->getScheduled());
+        static::assertNotEmpty($context->getScheduled()['cache']);
+        static::assertCount(count(InstallContext::CACHE_LIST_ALL), $context->getScheduled()['cache']);
     }
 
     public function testDefault()
@@ -86,8 +86,8 @@ class InstallContextTest extends TestCase
         $plugin = new MyPlugin(true, 'ShopwarePlugins');
 
         $plugin->uninstall($context);
-        $this->assertArrayHasKey('cache', $context->getScheduled());
-        $this->assertEquals(InstallContext::CACHE_LIST_DEFAULT, $context->getScheduled()['cache']);
+        static::assertArrayHasKey('cache', $context->getScheduled());
+        static::assertEquals(InstallContext::CACHE_LIST_DEFAULT, $context->getScheduled()['cache']);
     }
 }
 

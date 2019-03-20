@@ -101,10 +101,10 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         $dummy = $this->createDummy();
         /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/Partner/getList?page=1&start=0&limit=30');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
         $returnData = $this->View()->data;
-        $this->assertNotEmpty($returnData);
-        $this->assertGreaterThan(0, $this->View()->totalCount);
+        static::assertNotEmpty($returnData);
+        static::assertGreaterThan(0, $this->View()->totalCount);
         $foundDummy = [];
         foreach ($returnData as $dummyData) {
             if ($dummyData['company'] == $dummy->getCompany()) {
@@ -112,7 +112,7 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
             }
         }
 
-        $this->assertEquals($dummy->getIdCode(), $foundDummy['idCode']);
+        static::assertEquals($dummy->getIdCode(), $foundDummy['idCode']);
         $this->manager->remove($dummy);
         $this->manager->flush();
     }
@@ -128,17 +128,17 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         //test new partner
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/savePartner');
-        $this->assertTrue($this->View()->success);
-        $this->assertCount(19, $this->View()->data);
-        $this->assertEquals('streetDummy', $this->View()->data['street']);
+        static::assertTrue($this->View()->success);
+        static::assertCount(19, $this->View()->data);
+        static::assertEquals('streetDummy', $this->View()->data['street']);
 
         //test update partner
         $params['id'] = $this->View()->data['id'];
         $params['street'] = $this->updateStreet;
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/savePartner');
-        $this->assertTrue($this->View()->success);
-        $this->assertEquals($this->updateStreet, $this->View()->data['street']);
+        static::assertTrue($this->View()->success);
+        static::assertEquals($this->updateStreet, $this->View()->data['street']);
 
         return $this->View()->data['id'];
     }
@@ -159,26 +159,26 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         $this->Request()->setParams($params);
 
         $this->dispatch('backend/Partner/getDetail');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
         $returningData = $this->View()->data;
         $dummyData = $this->dummyData;
 
-        $this->assertEquals($dummyData['idCode'], $returningData['idCode']);
-        $this->assertEquals($dummyData['company'], $returningData['company']);
-        $this->assertEquals($dummyData['contact'], $returningData['contact']);
-        $this->assertEquals($this->updateStreet, $returningData['street']);
-        $this->assertEquals($dummyData['zipCode'], $returningData['zipCode']);
-        $this->assertEquals($dummyData['city'], $returningData['city']);
-        $this->assertEquals($dummyData['phone'], $returningData['phone']);
-        $this->assertEquals($dummyData['fax'], $returningData['fax']);
-        $this->assertEquals($dummyData['countryName'], $returningData['countryName']);
-        $this->assertEquals($dummyData['email'], $returningData['email']);
-        $this->assertEquals($dummyData['web'], $returningData['web']);
-        $this->assertEquals($dummyData['profile'], $returningData['profile']);
-        $this->assertEquals($dummyData['fix'], $returningData['fix']);
-        $this->assertEquals($dummyData['percent'], $returningData['percent']);
-        $this->assertEquals($dummyData['cookieLifeTime'], $returningData['cookieLifeTime']);
-        $this->assertEquals($dummyData['active'], $returningData['active']);
+        static::assertEquals($dummyData['idCode'], $returningData['idCode']);
+        static::assertEquals($dummyData['company'], $returningData['company']);
+        static::assertEquals($dummyData['contact'], $returningData['contact']);
+        static::assertEquals($this->updateStreet, $returningData['street']);
+        static::assertEquals($dummyData['zipCode'], $returningData['zipCode']);
+        static::assertEquals($dummyData['city'], $returningData['city']);
+        static::assertEquals($dummyData['phone'], $returningData['phone']);
+        static::assertEquals($dummyData['fax'], $returningData['fax']);
+        static::assertEquals($dummyData['countryName'], $returningData['countryName']);
+        static::assertEquals($dummyData['email'], $returningData['email']);
+        static::assertEquals($dummyData['web'], $returningData['web']);
+        static::assertEquals($dummyData['profile'], $returningData['profile']);
+        static::assertEquals($dummyData['fix'], $returningData['fix']);
+        static::assertEquals($dummyData['percent'], $returningData['percent']);
+        static::assertEquals($dummyData['cookieLifeTime'], $returningData['cookieLifeTime']);
+        static::assertEquals($dummyData['active'], $returningData['active']);
 
         return $id;
     }
@@ -200,7 +200,7 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         $this->Response()->clearBody();
         $this->dispatch('backend/Partner/validateTrackingCode');
         $body = $this->Response()->getBody();
-        $this->assertEquals('1', $body);
+        static::assertEquals('1', $body);
 
         $newDummy = $this->createDummy();
         $this->Response()->clearBody();
@@ -209,7 +209,7 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/validateTrackingCode');
         $body = $this->Response()->getBody();
-        $this->assertTrue(empty($body));
+        static::assertTrue(empty($body));
 
         //delete the new dummy
         $this->manager->remove($newDummy);
@@ -228,21 +228,21 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/mapCustomerAccount');
         $body = $this->Response()->getBody();
-        $this->assertTrue(!empty($body));
+        static::assertTrue(!empty($body));
 
         $this->Response()->clearBody();
         $params['mapCustomerAccountValue'] = 'test@example.com';
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/mapCustomerAccount');
         $body = $this->Response()->getBody();
-        $this->assertTrue(!empty($body));
+        static::assertTrue(!empty($body));
 
         $this->Response()->clearBody();
         $params['mapCustomerAccountValue'] = '542350';
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/mapCustomerAccount');
         $body = $this->Response()->getBody();
-        $this->assertTrue(empty($body));
+        static::assertTrue(empty($body));
     }
 
     /**
@@ -257,8 +257,8 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         $params['id'] = $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/deletePartner');
-        $this->assertTrue($this->View()->success);
-        $this->assertCount(4, $this->View()->data);
+        static::assertTrue($this->View()->success);
+        static::assertCount(4, $this->View()->data);
     }
 
     /**

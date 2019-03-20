@@ -44,7 +44,7 @@ class sRewriteTest extends PHPUnit\Framework\TestCase
      */
     public function testRewriteString($string, $result)
     {
-        $this->assertEquals($result, $this->rewriteTable->sCleanupPath($string));
+        static::assertEquals($result, $this->rewriteTable->sCleanupPath($string));
     }
 
     public function provider()

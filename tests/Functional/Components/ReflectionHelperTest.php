@@ -45,7 +45,7 @@ class ReflectionHelperTest extends TestCase
     public function testCriteriaCreation()
     {
         $criteria = $this->helper->createInstanceFromNamedArguments(Criteria::class, []);
-        $this->assertInstanceOf(Criteria::class, $criteria);
+        static::assertInstanceOf(Criteria::class, $criteria);
     }
 
     /**

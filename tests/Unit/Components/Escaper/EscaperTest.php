@@ -33,10 +33,10 @@ class EscaperTest extends TestCase
     {
         $escaper = new Escaper(new \Zend\Escaper\Escaper('UTF-8'));
 
-        $this->assertEquals('', $escaper->escapeHtml(null));
-        $this->assertEquals('', $escaper->escapeHtmlAttr(null));
-        $this->assertEquals('', $escaper->escapeCss(null));
-        $this->assertEquals('', $escaper->escapeJs(null));
-        $this->assertEquals('', $escaper->escapeUrl(null));
+        static::assertEquals('', $escaper->escapeHtml(null));
+        static::assertEquals('', $escaper->escapeHtmlAttr(null));
+        static::assertEquals('', $escaper->escapeCss(null));
+        static::assertEquals('', $escaper->escapeJs(null));
+        static::assertEquals('', $escaper->escapeUrl(null));
     }
 }

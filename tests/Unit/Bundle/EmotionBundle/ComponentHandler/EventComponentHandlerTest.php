@@ -45,6 +45,6 @@ class EventComponentHandlerTest extends TestCase
         $element = new Element();
         $element->setComponent($component);
 
-        $this->assertEquals(false, $eventComponentHandler->supports($element));
+        static::assertEquals(false, $eventComponentHandler->supports($element));
     }
 }

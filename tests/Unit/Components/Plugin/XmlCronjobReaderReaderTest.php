@@ -50,13 +50,13 @@ class XmlCronjobReaderReaderTest extends TestCase
     public function testCanReadAndVerify()
     {
         $result = $this->SUT->read(__DIR__ . '/examples/cronjob.xml');
-        $this->assertInternalType('array', $result);
+        static::assertInternalType('array', $result);
     }
 
     public function testReadCronjob()
     {
         $result = $this->SUT->read(__DIR__ . '/examples/cronjob.xml');
 
-        $this->assertArraySubset(current($result), $this->result);
+        static::assertArraySubset(current($result), $this->result);
     }
 }

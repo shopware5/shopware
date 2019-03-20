@@ -41,7 +41,7 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
 
         $hostname = $helper->Shop()->getHost();
         if (empty($hostname)) {
-            $this->markTestSkipped(
+            static::markTestSkipped(
                 'Hostname is not available.'
             );
         }
@@ -78,18 +78,18 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
         $client = new Zend_Http_Client($this->apiBaseUrl . '/media/');
         $response = $client->request('GET');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(401, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(401, $response->getStatus());
 
         $result = $response->getBody();
 
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     public function testGetMediaWithInvalidIdShouldReturnMessage()
@@ -99,18 +99,18 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
             ->setUri($this->apiBaseUrl . '/media/' . $id)
             ->request('GET');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(404, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
 
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     public function testGetMediaShouldBeSuccessful()
@@ -118,23 +118,23 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/media');
         $result = $client->request('GET');
 
-        $this->assertEquals('application/json', $result->getHeader('Content-Type'));
-        $this->assertEquals(null, $result->getHeader('Set-Cookie'));
-        $this->assertEquals(200, $result->getStatus());
+        static::assertEquals('application/json', $result->getHeader('Content-Type'));
+        static::assertEquals(null, $result->getHeader('Set-Cookie'));
+        static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
-        $this->assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('data', $result);
 
-        $this->assertArrayHasKey('total', $result);
-        $this->assertInternalType('int', $result['total']);
+        static::assertArrayHasKey('total', $result);
+        static::assertInternalType('int', $result['total']);
 
         $data = $result['data'];
-        $this->assertInternalType('array', $data);
+        static::assertInternalType('array', $data);
     }
 
     public function testPostMediaWithoutImageShouldFailWithMessage()
@@ -150,17 +150,17 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('POST');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(400, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(400, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     public function testPostMediaShouldBeSuccessful()
@@ -177,9 +177,9 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('POST');
 
-        $this->assertEquals(201, $response->getStatus());
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertNull(
+        static::assertEquals(201, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertNull(
             $response->getHeader('Set-Cookie'),
             'There should be no set-cookie header set.'
         );
@@ -187,17 +187,17 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
         $location = $response->getHeader('Location');
         $identifier = (int) array_pop(explode('/', $location));
 
-        $this->assertGreaterThan(0, $identifier);
+        static::assertGreaterThan(0, $identifier);
 
         // Check userId
         $media = Shopware()->Models()->find('Shopware\Models\Media\Media', $identifier);
-        $this->assertGreaterThan(0, $media->getUserId());
+        static::assertGreaterThan(0, $media->getUserId());
 
         return $identifier;
     }
@@ -210,20 +210,20 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/media/' . $identifier);
         $result = $client->request('GET');
 
-        $this->assertEquals('application/json', $result->getHeader('Content-Type'));
-        $this->assertEquals(null, $result->getHeader('Set-Cookie'));
-        $this->assertEquals(200, $result->getStatus());
+        static::assertEquals('application/json', $result->getHeader('Content-Type'));
+        static::assertEquals(null, $result->getHeader('Set-Cookie'));
+        static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
-        $this->assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('data', $result);
 
         $data = $result['data'];
-        $this->assertInternalType('array', $data);
+        static::assertInternalType('array', $data);
     }
 
     /**
@@ -235,15 +235,15 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
 
         $response = $client->request('DELETE');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(200, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
     }
 
     public function testPostMediaWithFileUploadShouldBeSuccessful()
@@ -260,9 +260,9 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
         $client->setParameterPost($requestData);
         $response = $client->request('POST');
 
-        $this->assertEquals(201, $response->getStatus());
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertNull(
+        static::assertEquals(201, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertNull(
             $response->getHeader('Set-Cookie'),
             'There should be no set-cookie header set.'
         );
@@ -270,13 +270,13 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
         $location = $response->getHeader('Location');
         $identifier = (int) array_pop(explode('/', $location));
 
-        $this->assertGreaterThan(0, $identifier);
+        static::assertGreaterThan(0, $identifier);
 
         return $identifier;
     }
@@ -289,22 +289,22 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/media/' . $identifier);
         $result = $client->request('GET');
 
-        $this->assertEquals('application/json', $result->getHeader('Content-Type'));
-        $this->assertEquals(null, $result->getHeader('Set-Cookie'));
-        $this->assertEquals(200, $result->getStatus());
+        static::assertEquals('application/json', $result->getHeader('Content-Type'));
+        static::assertEquals(null, $result->getHeader('Set-Cookie'));
+        static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
-        $this->assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('data', $result);
 
         $data = $result['data'];
-        $this->assertInternalType('array', $data);
-        $this->assertArrayHasKey('name', $data);
-        $this->assertEquals(0, strpos($data['name'], self::UPLOAD_FILE_NAME));
+        static::assertInternalType('array', $data);
+        static::assertArrayHasKey('name', $data);
+        static::assertEquals(0, strpos($data['name'], self::UPLOAD_FILE_NAME));
     }
 
     public function testPostMediaWithFileUploadAndOverwrittenNameShouldBeSuccessful()
@@ -322,9 +322,9 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
         $client->setParameterPost($requestData);
         $response = $client->request('POST');
 
-        $this->assertEquals(201, $response->getStatus());
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertNull(
+        static::assertEquals(201, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertNull(
             $response->getHeader('Set-Cookie'),
             'There should be no set-cookie header set.'
         );
@@ -332,13 +332,13 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
         $location = $response->getHeader('Location');
         $identifier = (int) array_pop(explode('/', $location));
 
-        $this->assertGreaterThan(0, $identifier);
+        static::assertGreaterThan(0, $identifier);
 
         return $identifier;
     }
@@ -351,22 +351,22 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/media/' . $identifier);
         $result = $client->request('GET');
 
-        $this->assertEquals('application/json', $result->getHeader('Content-Type'));
-        $this->assertEquals(null, $result->getHeader('Set-Cookie'));
-        $this->assertEquals(200, $result->getStatus());
+        static::assertEquals('application/json', $result->getHeader('Content-Type'));
+        static::assertEquals(null, $result->getHeader('Set-Cookie'));
+        static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
-        $this->assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('data', $result);
 
         $data = $result['data'];
-        $this->assertInternalType('array', $data);
-        $this->assertArrayHasKey('name', $data);
-        $this->assertEquals(0, strpos($data['name'], self::UPLOAD_OVERWRITTEN_FILE_NAME));
+        static::assertInternalType('array', $data);
+        static::assertArrayHasKey('name', $data);
+        static::assertEquals(0, strpos($data['name'], self::UPLOAD_OVERWRITTEN_FILE_NAME));
     }
 
     public function testDeleteMediaWithInvalidIdShouldFailWithMessage()
@@ -376,17 +376,17 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
 
         $response = $client->request('DELETE');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(404, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     public function testMediaUploadTraversal()
@@ -394,6 +394,6 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
         $file = '../../image.jpg';
         $media = new \Shopware\Components\Api\Resource\Media();
 
-        return $this->assertEquals('image.jpg', $media->getUniqueFileName('/tmp', $file));
+        return static::assertEquals('image.jpg', $media->getUniqueFileName('/tmp', $file));
     }
 }

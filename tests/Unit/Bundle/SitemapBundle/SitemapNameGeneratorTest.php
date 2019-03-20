@@ -55,11 +55,11 @@ class SitemapNameGeneratorTest extends TestCase
 
     public function testPathGeneration()
     {
-        $this->assertSame('shop-1/sitemap-1.xml.gz', $this->generator->getSitemapFilename(1));
+        static::assertSame('shop-1/sitemap-1.xml.gz', $this->generator->getSitemapFilename(1));
 
         $this->fs->write('shop-1/sitemap-1.xml.gz', '');
 
-        $this->assertSame('shop-1/sitemap-2.xml.gz', $this->generator->getSitemapFilename(1));
+        static::assertSame('shop-1/sitemap-2.xml.gz', $this->generator->getSitemapFilename(1));
 
         $this->fs->delete('shop-1/sitemap-1.xml.gz');
     }

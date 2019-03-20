@@ -83,9 +83,9 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
     public function testDeleteComparison()
     {
         $article = $this->getTestArticleId();
-        $this->assertTrue($this->Module()->sAddComparison($article));
+        static::assertTrue($this->Module()->sAddComparison($article));
         $this->Module()->sDeleteComparison($article);
-        $this->assertEmpty($this->Module()->sGetComparisons());
+        static::assertEmpty($this->Module()->sGetComparisons());
     }
 
     /**
@@ -93,12 +93,12 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
      */
     public function testDeleteComparisons()
     {
-        $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
-        $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
-        $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
+        static::assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
+        static::assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
+        static::assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
 
         $this->Module()->sDeleteComparisons();
-        $this->assertEmpty($this->Module()->sGetComparisons());
+        static::assertEmpty($this->Module()->sGetComparisons());
     }
 
     /**
@@ -106,8 +106,8 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
      */
     public function testAddComparison()
     {
-        $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
-        $this->assertNotEmpty($this->Module()->sGetComparisons());
+        static::assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
+        static::assertNotEmpty($this->Module()->sGetComparisons());
     }
 
     /**
@@ -115,9 +115,9 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
      */
     public function testGetComparisons()
     {
-        $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
-        $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
-        $this->assertEquals(count($this->Module()->sGetComparisons()), 2);
+        static::assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
+        static::assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
+        static::assertEquals(count($this->Module()->sGetComparisons()), 2);
     }
 
     /**
@@ -125,9 +125,9 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
      */
     public function testGetComparisonList()
     {
-        $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
-        $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
-        $this->assertEquals(count($this->Module()->sGetComparisonList()), 2);
+        static::assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
+        static::assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
+        static::assertEquals(count($this->Module()->sGetComparisonList()), 2);
     }
 
     /**

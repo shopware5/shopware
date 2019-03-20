@@ -298,7 +298,7 @@ class VariantConditionOnSaleTest extends TestCase
             true
         );
 
-        $this->assertNotEmpty($result);
+        static::assertNotEmpty($result);
     }
 
     public function testSingleExpandOptionSortByPrice()
@@ -677,7 +677,7 @@ class VariantConditionOnSaleTest extends TestCase
                 continue;
             }
 
-            $this->assertEquals($prices[$number], $product->getCheapestPrice()->getCalculatedPrice());
+            static::assertEquals($prices[$number], $product->getCheapestPrice()->getCalculatedPrice());
         }
     }
 

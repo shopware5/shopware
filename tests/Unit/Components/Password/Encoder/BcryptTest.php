@@ -48,7 +48,7 @@ class BcryptTest extends TestCase
         ]);
 
         if (!$this->hasher->isCompatible()) {
-            $this->markTestSkipped(
+            static::markTestSkipped(
                 'Brypt Hasher is not compatible with current system.'
             );
         }
@@ -59,7 +59,7 @@ class BcryptTest extends TestCase
      */
     public function testIsAvailable()
     {
-        $this->assertInstanceOf(Bcrypt::class, $this->hasher);
+        static::assertInstanceOf(Bcrypt::class, $this->hasher);
     }
 
     /**
@@ -67,7 +67,7 @@ class BcryptTest extends TestCase
      */
     public function testGetNameShouldReturnName()
     {
-        $this->assertEquals('Bcrypt', $this->hasher->getName());
+        static::assertEquals('Bcrypt', $this->hasher->getName());
     }
 
     /**
@@ -75,7 +75,7 @@ class BcryptTest extends TestCase
      */
     public function testGenerateShouldReturnString()
     {
-        $this->assertInternalType('string', $this->hasher->encodePassword('foobar'));
+        static::assertInternalType('string', $this->hasher->encodePassword('foobar'));
     }
 
     /**
@@ -83,7 +83,7 @@ class BcryptTest extends TestCase
      */
     public function testGenerateShouldReturnDifferentHashesForSamePlaintextString()
     {
-        $this->assertNotEquals($this->hasher->encodePassword('foobar'), $this->hasher->encodePassword('foobar'));
+        static::assertNotEquals($this->hasher->encodePassword('foobar'), $this->hasher->encodePassword('foobar'));
     }
 
     /**
@@ -93,7 +93,7 @@ class BcryptTest extends TestCase
     {
         $hash = $this->hasher->encodePassword('foobar');
 
-        $this->assertTrue($this->hasher->isPasswordValid('foobar', $hash));
+        static::assertTrue($this->hasher->isPasswordValid('foobar', $hash));
     }
 
     /**
@@ -103,7 +103,7 @@ class BcryptTest extends TestCase
     {
         $hash = $this->hasher->encodePassword('foobar');
 
-        $this->assertFalse($this->hasher->isPasswordValid('notfoo', $hash));
+        static::assertFalse($this->hasher->isPasswordValid('notfoo', $hash));
     }
 
     /**
@@ -113,7 +113,7 @@ class BcryptTest extends TestCase
     {
         $hash = $this->hasher->encodePassword('foobar');
 
-        $this->assertFalse($this->hasher->isReencodeNeeded($hash));
+        static::assertFalse($this->hasher->isReencodeNeeded($hash));
     }
 
     /**
@@ -126,6 +126,6 @@ class BcryptTest extends TestCase
             'cost' => 5,
         ]);
 
-        $this->assertTrue($this->hasher->isReencodeNeeded($hash));
+        static::assertTrue($this->hasher->isReencodeNeeded($hash));
     }
 }

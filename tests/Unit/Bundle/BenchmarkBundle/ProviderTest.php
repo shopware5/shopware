@@ -44,7 +44,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
 
         $result = $provider->get(new ShopContextMock());
 
-        $this->assertArraySubset([
+        static::assertArraySubset([
             'id' => 1,
             'foo' => [
                 'foo' => 'bar',

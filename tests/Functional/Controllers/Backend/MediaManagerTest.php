@@ -65,7 +65,7 @@ class Shopware_Tests_Controllers_Backend_MediaManagerTest extends Enlight_Compon
         $this->dispatch('/backend/MediaManager/saveAlbum');
 
         $jsonBody = $this->View()->getAssign();
-        $this->assertTrue($jsonBody['success']);
+        static::assertTrue($jsonBody['success']);
 
         $this->resetRequest();
         $this->resetResponse();
@@ -73,19 +73,19 @@ class Shopware_Tests_Controllers_Backend_MediaManagerTest extends Enlight_Compon
         $this->dispatch('/backend/MediaManager/getAlbums');
 
         $jsonBody = $this->View()->getAssign();
-        $this->assertTrue($jsonBody['success']);
+        static::assertTrue($jsonBody['success']);
 
         $parentNode = $jsonBody['data'][0];
         $newAlbum = $parentNode['data'][count($parentNode['data']) - 1];
 
-        $this->assertEquals($parentNode['thumbnailSize'], $newAlbum['thumbnailSize']);
-        $this->assertEquals($parentNode['thumbnailHighDpi'], $newAlbum['thumbnailHighDpi']);
-        $this->assertEquals($parentNode['thumbnailHighDpiQuality'], $newAlbum['thumbnailHighDpiQuality']);
-        $this->assertEquals($parentNode['thumbnailQuality'], $newAlbum['thumbnailQuality']);
-        $this->assertEquals($parentNode['createThumbnails'], $newAlbum['createThumbnails']);
-        $this->assertEquals($parentNode['id'], $newAlbum['parentId']);
-        $this->assertEquals(1, $newAlbum['leaf']);
-        $this->assertEquals('sprite-target', $newAlbum['iconCls']);
+        static::assertEquals($parentNode['thumbnailSize'], $newAlbum['thumbnailSize']);
+        static::assertEquals($parentNode['thumbnailHighDpi'], $newAlbum['thumbnailHighDpi']);
+        static::assertEquals($parentNode['thumbnailHighDpiQuality'], $newAlbum['thumbnailHighDpiQuality']);
+        static::assertEquals($parentNode['thumbnailQuality'], $newAlbum['thumbnailQuality']);
+        static::assertEquals($parentNode['createThumbnails'], $newAlbum['createThumbnails']);
+        static::assertEquals($parentNode['id'], $newAlbum['parentId']);
+        static::assertEquals(1, $newAlbum['leaf']);
+        static::assertEquals('sprite-target', $newAlbum['iconCls']);
 
         $this->resetRequest();
         $this->resetResponse();
@@ -95,6 +95,6 @@ class Shopware_Tests_Controllers_Backend_MediaManagerTest extends Enlight_Compon
         $this->dispatch('/backend/MediaManager/removeAlbum');
 
         $jsonBody = $this->View()->getAssign();
-        $this->assertTrue($jsonBody['success']);
+        static::assertTrue($jsonBody['success']);
     }
 }

@@ -89,7 +89,7 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
 
             $esd->$setMethod($value);
 
-            $this->assertEquals($esd->$getMethod(), $value);
+            static::assertEquals($esd->$getMethod(), $value);
         }
     }
 
@@ -103,7 +103,7 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
 
         foreach ($this->testData as $fieldname => $value) {
             $getMethod = 'get' . ucfirst($fieldname);
-            $this->assertEquals($esd->$getMethod(), $value);
+            static::assertEquals($esd->$getMethod(), $value);
         }
     }
 
@@ -132,10 +132,10 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
 
         foreach ($this->testData as $fieldname => $value) {
             $getMethod = 'get' . ucfirst($fieldname);
-            $this->assertEquals($esd->$getMethod(), $value);
+            static::assertEquals($esd->$getMethod(), $value);
         }
 
-        $this->assertInstanceOf(\DateTime::class, $esd->getDate());
+        static::assertInstanceOf(\DateTime::class, $esd->getDate());
     }
 
     /**
@@ -152,7 +152,7 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
 
         $esd->setDate(new Carbon());
 
-        $this->assertInstanceOf(Carbon::class, $esd->getDate());
+        static::assertInstanceOf(Carbon::class, $esd->getDate());
 
         $this->em->persist($esd);
         $this->em->flush();
@@ -165,7 +165,7 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
 
         $esd = $this->repo->find($esdId);
 
-        $this->assertInstanceOf(\DateTime::class, $esd->getDate());
+        static::assertInstanceOf(\DateTime::class, $esd->getDate());
     }
 }
 

@@ -632,7 +632,7 @@ class VariantConditionWithGraduationTest extends TestCase
                 continue;
             }
 
-            $this->assertEquals($prices[$number], $product->getCheapestPrice()->getCalculatedPrice());
+            static::assertEquals($prices[$number], $product->getCheapestPrice()->getCalculatedPrice());
         }
     }
 

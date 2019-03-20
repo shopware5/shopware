@@ -39,9 +39,9 @@ class GarbageCollectorTest extends TestCase
 
         $propertyValue = $queueProperty->getValue($garbageCollector);
 
-        $this->assertCount(11, $propertyValue['path']);
+        static::assertCount(11, $propertyValue['path']);
 
-        $this->assertArraySubset([
+        static::assertArraySubset([
             'media/image/foo.png',
             'media/image/bar.png',
             'media/pdf/foo.pdf',

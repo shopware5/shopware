@@ -73,9 +73,9 @@ class CacheRouteInstallerTest extends TestCase
         $cacheRoutes = $this->configWriter->get('cacheControllers', 'HttpCache');
         $noCacheRoutes = $this->configWriter->get('noCacheControllers', 'HttpCache');
 
-        $this->assertTrue($result);
-        $this->assertContains('widgets/swag_emotion_test 14400', $cacheRoutes);
-        $this->assertContains('widgets/swag_emotion_test price', $noCacheRoutes);
+        static::assertTrue($result);
+        static::assertContains('widgets/swag_emotion_test 14400', $cacheRoutes);
+        static::assertContains('widgets/swag_emotion_test price', $noCacheRoutes);
     }
 
     public function testAddHttpCacheRouteWithoutTag()
@@ -85,9 +85,9 @@ class CacheRouteInstallerTest extends TestCase
         $cacheRoutes = $this->configWriter->get('cacheControllers', 'HttpCache');
         $noCacheRoutes = $this->configWriter->get('noCacheControllers', 'HttpCache');
 
-        $this->assertTrue($result);
-        $this->assertContains('widgets/swag_emotion_test 14400', $cacheRoutes);
-        $this->assertNotContains('widgets/swag_emotion_test price', $noCacheRoutes);
+        static::assertTrue($result);
+        static::assertContains('widgets/swag_emotion_test 14400', $cacheRoutes);
+        static::assertNotContains('widgets/swag_emotion_test price', $noCacheRoutes);
     }
 
     public function testAddHttpCacheRouteEmptyRoutes()
@@ -97,7 +97,7 @@ class CacheRouteInstallerTest extends TestCase
 
         $result = $this->cacheRouteInstaller->addHttpCacheRoute('widgets/swag_emotion_test', 14400);
 
-        $this->assertFalse($result);
+        static::assertFalse($result);
     }
 
     public function testAddHttpCacheRouteAlreadyExists()
@@ -105,7 +105,7 @@ class CacheRouteInstallerTest extends TestCase
         $this->cacheRouteInstaller->addHttpCacheRoute('widgets/swag_emotion_test', 14400);
         $result = $this->cacheRouteInstaller->addHttpCacheRoute('widgets/swag_emotion_test', 14400);
 
-        $this->assertTrue($result);
+        static::assertTrue($result);
     }
 
     public function testAddHttpCacheRouteAlreadyExistsButDifferentTime()
@@ -115,8 +115,8 @@ class CacheRouteInstallerTest extends TestCase
 
         $cacheRoutes = $this->configWriter->get('cacheControllers', 'HttpCache');
 
-        $this->assertTrue($result);
-        $this->assertContains('widgets/swag_emotion_test 9999', $cacheRoutes);
+        static::assertTrue($result);
+        static::assertContains('widgets/swag_emotion_test 9999', $cacheRoutes);
     }
 
     public function testAddHttpCacheRouteCacheTagAlreadyExists()
@@ -127,9 +127,9 @@ class CacheRouteInstallerTest extends TestCase
 
         $noCacheRoutes = $this->configWriter->get('noCacheControllers', 'HttpCache');
 
-        $this->assertTrue($result1 && $result2 && $result3);
-        $this->assertContains('widgets/swag_emotion_test price', $noCacheRoutes);
-        $this->assertContains('widgets/swag_emotion_test foo', $noCacheRoutes);
+        static::assertTrue($result1 && $result2 && $result3);
+        static::assertContains('widgets/swag_emotion_test price', $noCacheRoutes);
+        static::assertContains('widgets/swag_emotion_test foo', $noCacheRoutes);
     }
 
     public function testAddHttpCacheRouteEmptyRouteReturnsNull()
@@ -139,9 +139,9 @@ class CacheRouteInstallerTest extends TestCase
 
         $cacheRoutes = $this->configWriter->get('cacheControllers', 'HttpCache');
 
-        $this->assertTrue($result);
-        $this->assertContains('widgets/swag_emotion_test 14400', $cacheRoutes);
-        $this->assertNotContains('9999', $cacheRoutes);
+        static::assertTrue($result);
+        static::assertContains('widgets/swag_emotion_test 14400', $cacheRoutes);
+        static::assertNotContains('9999', $cacheRoutes);
     }
 
     public function testRemoveHttpCacheRoute()
@@ -152,9 +152,9 @@ class CacheRouteInstallerTest extends TestCase
         $cacheRoutes = $this->configWriter->get('cacheControllers', 'HttpCache');
         $noCacheRoutes = $this->configWriter->get('noCacheControllers', 'HttpCache');
 
-        $this->assertTrue($result);
-        $this->assertNotContains('widgets/swag_emotion_test 14400', $cacheRoutes);
-        $this->assertNotContains('widgets/swag_emotion_test price', $noCacheRoutes);
+        static::assertTrue($result);
+        static::assertNotContains('widgets/swag_emotion_test 14400', $cacheRoutes);
+        static::assertNotContains('widgets/swag_emotion_test price', $noCacheRoutes);
     }
 
     public function testRemoveHttpCacheRouteEmptyRoutes()
@@ -164,6 +164,6 @@ class CacheRouteInstallerTest extends TestCase
 
         $result = $this->cacheRouteInstaller->removeHttpCacheRoute('widgets/swag_emotion_test');
 
-        $this->assertFalse($result);
+        static::assertFalse($result);
     }
 }

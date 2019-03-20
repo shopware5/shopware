@@ -38,8 +38,8 @@ class EnlightLoaderTest extends TestCase
      */
     public function testEnlightLoaderCheckFile()
     {
-        $this->assertTrue(\Enlight_Loader::checkFile('H:\Apache Group\Apache\htdocs\shopware.php'));
-        $this->assertFalse(\Enlight_Loader::checkFile('H:\Apache Group\Apache\htdocs\shopware.php' . "\0"));
+        static::assertTrue(\Enlight_Loader::checkFile('H:\Apache Group\Apache\htdocs\shopware.php'));
+        static::assertFalse(\Enlight_Loader::checkFile('H:\Apache Group\Apache\htdocs\shopware.php' . "\0"));
     }
 
     /**
@@ -53,7 +53,7 @@ class EnlightLoaderTest extends TestCase
 
         \Enlight_Loader::setIncludePath($old);
 
-        $this->assertEquals('.', $last);
+        static::assertEquals('.', $last);
     }
 
     /**
@@ -67,7 +67,7 @@ class EnlightLoaderTest extends TestCase
 
         \Enlight_Loader::setIncludePath($old);
 
-        $this->assertEquals('.', $first);
+        static::assertEquals('.', $first);
     }
 
     /**
@@ -81,7 +81,7 @@ class EnlightLoaderTest extends TestCase
 
         \Enlight_Loader::setIncludePath($old);
 
-        $this->assertFalse($found);
+        static::assertFalse($found);
     }
 
     /**
@@ -95,7 +95,7 @@ class EnlightLoaderTest extends TestCase
         chdir(__DIR__);
 
         $result = \Enlight_Loader::realpath($path);
-        $this->assertEquals($expected, $result);
+        static::assertEquals($expected, $result);
 
         chdir($oldCWD);
     }

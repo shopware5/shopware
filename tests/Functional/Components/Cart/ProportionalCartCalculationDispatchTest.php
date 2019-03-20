@@ -62,21 +62,21 @@ class ProportionalCartCalculationDispatchTest extends CheckoutTest
 
         $sBasket = $this->View()->getAssign('sBasketProportional');
 
-        $this->assertInternalType('float', $sBasket['sShippingcosts']);
-        $this->assertInternalType('float', $sBasket['sShippingcostsTax']);
-        $this->assertInternalType('float', $sBasket['sShippingcostsNet']);
-        $this->assertInternalType('float', $sBasket['sShippingcostsWithTax']);
-        $this->assertInternalType('array', $sBasket['sTaxRates']);
+        static::assertInternalType('float', $sBasket['sShippingcosts']);
+        static::assertInternalType('float', $sBasket['sShippingcostsTax']);
+        static::assertInternalType('float', $sBasket['sShippingcostsNet']);
+        static::assertInternalType('float', $sBasket['sShippingcostsWithTax']);
+        static::assertInternalType('array', $sBasket['sTaxRates']);
 
-        $this->assertEquals(8.9000000000000004, $sBasket['sShippingcosts']);
-        $this->assertEquals(8.9000000000000004, $sBasket['sShippingcostsWithTax']);
-        $this->assertEquals(19.0, $sBasket['sShippingcostsTax']);
-        $this->assertEquals(7.4800000000000004, $sBasket['sShippingcostsNet']);
+        static::assertEquals(8.9000000000000004, $sBasket['sShippingcosts']);
+        static::assertEquals(8.9000000000000004, $sBasket['sShippingcostsWithTax']);
+        static::assertEquals(19.0, $sBasket['sShippingcostsTax']);
+        static::assertEquals(7.4800000000000004, $sBasket['sShippingcostsNet']);
 
-        $this->assertFalse(isset($sBasket['sShippingcostsTaxProportional']));
-        $this->assertCount(1, $sBasket['sTaxRates']);
+        static::assertFalse(isset($sBasket['sShippingcostsTaxProportional']));
+        static::assertCount(1, $sBasket['sTaxRates']);
 
-        $this->assertCount(1, $sBasket['content']);
+        static::assertCount(1, $sBasket['content']);
     }
 
     public function testSurchargeInDispatchMultipleTaxes()
@@ -91,21 +91,21 @@ class ProportionalCartCalculationDispatchTest extends CheckoutTest
 
         $sBasket = $this->View()->getAssign('sBasketProportional');
 
-        $this->assertInternalType('float', $sBasket['sShippingcosts']);
-        $this->assertInternalType('float', $sBasket['sShippingcostsTax']);
-        $this->assertInternalType('float', $sBasket['sShippingcostsNet']);
-        $this->assertInternalType('float', $sBasket['sShippingcostsWithTax']);
-        $this->assertInternalType('array', $sBasket['sTaxRates']);
+        static::assertInternalType('float', $sBasket['sShippingcosts']);
+        static::assertInternalType('float', $sBasket['sShippingcostsTax']);
+        static::assertInternalType('float', $sBasket['sShippingcostsNet']);
+        static::assertInternalType('float', $sBasket['sShippingcostsWithTax']);
+        static::assertInternalType('array', $sBasket['sTaxRates']);
 
-        $this->assertEquals(8.9000000000000004, $sBasket['sShippingcosts']);
-        $this->assertEquals(8.9000000000000004, $sBasket['sShippingcostsWithTax']);
-        $this->assertEquals(19.0, $sBasket['sShippingcostsTax']);
-        $this->assertEquals(7.9206424112941871, $sBasket['sShippingcostsNet']);
+        static::assertEquals(8.9000000000000004, $sBasket['sShippingcosts']);
+        static::assertEquals(8.9000000000000004, $sBasket['sShippingcostsWithTax']);
+        static::assertEquals(19.0, $sBasket['sShippingcostsTax']);
+        static::assertEquals(7.9206424112941871, $sBasket['sShippingcostsNet']);
 
-        $this->assertTrue(isset($sBasket['sShippingcostsTaxProportional']));
-        $this->assertCount(2, $sBasket['sTaxRates']);
+        static::assertTrue(isset($sBasket['sShippingcostsTaxProportional']));
+        static::assertCount(2, $sBasket['sTaxRates']);
 
-        $this->assertCount(2, $sBasket['content']);
+        static::assertCount(2, $sBasket['content']);
     }
 
     public function testBasketDiscountIntroducedByDispatch()
@@ -119,21 +119,21 @@ class ProportionalCartCalculationDispatchTest extends CheckoutTest
 
         $sBasket = $this->View()->getAssign('sBasketProportional');
 
-        $this->assertInternalType('float', $sBasket['sShippingcosts']);
-        $this->assertInternalType('float', $sBasket['sShippingcostsTax']);
-        $this->assertInternalType('float', $sBasket['sShippingcostsNet']);
-        $this->assertInternalType('float', $sBasket['sShippingcostsWithTax']);
-        $this->assertInternalType('array', $sBasket['sTaxRates']);
+        static::assertInternalType('float', $sBasket['sShippingcosts']);
+        static::assertInternalType('float', $sBasket['sShippingcostsTax']);
+        static::assertInternalType('float', $sBasket['sShippingcostsNet']);
+        static::assertInternalType('float', $sBasket['sShippingcostsWithTax']);
+        static::assertInternalType('array', $sBasket['sTaxRates']);
 
-        $this->assertEquals(3.9, $sBasket['sShippingcosts']);
-        $this->assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
-        $this->assertEquals(19.0, $sBasket['sShippingcostsTax']);
-        $this->assertEquals(3.2799999999999998, $sBasket['sShippingcostsNet']);
+        static::assertEquals(3.9, $sBasket['sShippingcosts']);
+        static::assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
+        static::assertEquals(19.0, $sBasket['sShippingcostsTax']);
+        static::assertEquals(3.2799999999999998, $sBasket['sShippingcostsNet']);
 
-        $this->assertFalse(isset($sBasket['sShippingcostsTaxProportional']));
-        $this->assertCount(1, $sBasket['sTaxRates']);
+        static::assertFalse(isset($sBasket['sShippingcostsTaxProportional']));
+        static::assertCount(1, $sBasket['sTaxRates']);
 
-        $this->assertCount(2, $sBasket['content']);
+        static::assertCount(2, $sBasket['content']);
 
         $this->hasBasketItem($sBasket['content'], 'Warenkorbrabatt', -2, -1.6806722689076, 'SHIPPINGDISCOUNT');
     }
@@ -150,21 +150,21 @@ class ProportionalCartCalculationDispatchTest extends CheckoutTest
 
         $sBasket = $this->View()->getAssign('sBasketProportional');
 
-        $this->assertInternalType('float', $sBasket['sShippingcosts']);
-        $this->assertInternalType('float', $sBasket['sShippingcostsTax']);
-        $this->assertInternalType('float', $sBasket['sShippingcostsNet']);
-        $this->assertInternalType('float', $sBasket['sShippingcostsWithTax']);
-        $this->assertInternalType('array', $sBasket['sTaxRates']);
+        static::assertInternalType('float', $sBasket['sShippingcosts']);
+        static::assertInternalType('float', $sBasket['sShippingcostsTax']);
+        static::assertInternalType('float', $sBasket['sShippingcostsNet']);
+        static::assertInternalType('float', $sBasket['sShippingcostsWithTax']);
+        static::assertInternalType('array', $sBasket['sTaxRates']);
 
-        $this->assertEquals(3.9, $sBasket['sShippingcosts']);
-        $this->assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
-        $this->assertEquals(19.0, $sBasket['sShippingcostsTax']);
-        $this->assertEquals(3.4708433038255415, $sBasket['sShippingcostsNet']);
+        static::assertEquals(3.9, $sBasket['sShippingcosts']);
+        static::assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
+        static::assertEquals(19.0, $sBasket['sShippingcostsTax']);
+        static::assertEquals(3.4708433038255415, $sBasket['sShippingcostsNet']);
 
-        $this->assertTrue(isset($sBasket['sShippingcostsTaxProportional']));
-        $this->assertCount(2, $sBasket['sTaxRates']);
+        static::assertTrue(isset($sBasket['sShippingcostsTaxProportional']));
+        static::assertCount(2, $sBasket['sTaxRates']);
 
-        $this->assertCount(4, $sBasket['content']);
+        static::assertCount(4, $sBasket['content']);
 
         $this->hasBasketItem($sBasket['content'], 'Warenkorbrabatt (19%)', -0.95, -0.79571651669517, 'SHIPPINGDISCOUNT');
         $this->hasBasketItem($sBasket['content'], 'Warenkorbrabatt (7%)', -1.05, -0.98420312629229, 'SHIPPINGDISCOUNT');

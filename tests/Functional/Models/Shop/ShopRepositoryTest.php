@@ -160,8 +160,8 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
 
         $shop = $this->shopRepository->getActiveByRequest($request);
 
-        $this->assertNotNull($shop);
-        $this->assertEquals($shopName, $shop->getName());
+        static::assertNotNull($shop);
+        static::assertEquals($shopName, $shop->getName());
     }
 
     public function getMultiShopLocationTestData()
@@ -209,8 +209,8 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
         $this->Request()->setHttpHost($alias);
         $shop = $this->shopRepository->getActiveByRequest($request);
 
-        $this->assertNotNull($shop);
-        $this->assertEquals($host, $shop->getHost());
+        static::assertNotNull($shop);
+        static::assertEquals($host, $shop->getHost());
 
         // Delete test shops
         $sql = 'DELETE FROM s_core_shops WHERE id IN (10, 11);';
@@ -243,7 +243,7 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
         $numberOfShopsAfter = Shopware()->Db()->fetchOne('SELECT count(*) FROM s_core_shops');
 
         // Check that the number of shops has not changed
-        $this->assertSame($numberOfShopsBefore, $numberOfShopsAfter);
+        static::assertSame($numberOfShopsBefore, $numberOfShopsAfter);
 
         // Clean up comment
         $order->setComment('');
@@ -276,12 +276,12 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
         Shopware()->Db()->exec($sql);
 
         // Only active shops
-        $this->assertNotNull($this->shopRepository->getActiveById(12));
-        $this->assertNull($this->shopRepository->getActiveById(13));
+        static::assertNotNull($this->shopRepository->getActiveById(12));
+        static::assertNull($this->shopRepository->getActiveById(13));
 
         // Also inactive shops
-        $this->assertNotNull($this->shopRepository->getById(12));
-        $this->assertNotNull($this->shopRepository->getById(13));
+        static::assertNotNull($this->shopRepository->getById(12));
+        static::assertNotNull($this->shopRepository->getById(13));
 
         // Delete test shops
         $sql = 'DELETE FROM s_core_shops WHERE id IN (12, 13);';

@@ -68,11 +68,11 @@ class ManufacturerTest extends TestCase
 
         $manufacturer = $this->resource->create($testData);
 
-        $this->assertInstanceOf('\Shopware\Models\Article\Supplier', $manufacturer);
-        $this->assertGreaterThan(0, $manufacturer->getId());
-        $this->assertNotEmpty($manufacturer->getImage());
+        static::assertInstanceOf('\Shopware\Models\Article\Supplier', $manufacturer);
+        static::assertGreaterThan(0, $manufacturer->getId());
+        static::assertNotEmpty($manufacturer->getImage());
 
-        $this->assertEquals($manufacturer->getMetaDescription(), $testData['metaDescription']);
+        static::assertEquals($manufacturer->getMetaDescription(), $testData['metaDescription']);
 
         return $manufacturer->getId();
     }
@@ -83,7 +83,7 @@ class ManufacturerTest extends TestCase
     public function testGetOneShouldBeSuccessful($id)
     {
         $manufacturer = $this->resource->getOne($id);
-        $this->assertGreaterThan(0, $manufacturer['id']);
+        static::assertGreaterThan(0, $manufacturer['id']);
     }
 
     /**
@@ -93,11 +93,11 @@ class ManufacturerTest extends TestCase
     {
         $result = $this->resource->getList();
 
-        $this->assertArrayHasKey('data', $result);
-        $this->assertArrayHasKey('total', $result);
+        static::assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('total', $result);
 
-        $this->assertGreaterThanOrEqual(1, $result['total']);
-        $this->assertGreaterThanOrEqual(1, $result['data']);
+        static::assertGreaterThanOrEqual(1, $result['total']);
+        static::assertGreaterThanOrEqual(1, $result['data']);
     }
 
     /**
@@ -111,10 +111,10 @@ class ManufacturerTest extends TestCase
 
         $manufacturer = $this->resource->update($id, $testData);
 
-        $this->assertInstanceOf('\Shopware\Models\Article\Supplier', $manufacturer);
-        $this->assertEquals($id, $manufacturer->getId());
+        static::assertInstanceOf('\Shopware\Models\Article\Supplier', $manufacturer);
+        static::assertEquals($id, $manufacturer->getId());
 
-        $this->assertEquals($manufacturer->getName(), $testData['name']);
+        static::assertEquals($manufacturer->getName(), $testData['name']);
 
         return $id;
     }
@@ -142,8 +142,8 @@ class ManufacturerTest extends TestCase
     {
         $manufacturer = $this->resource->delete($id);
 
-        $this->assertInstanceOf('\Shopware\Models\Article\Supplier', $manufacturer);
-        $this->assertEquals(null, $manufacturer->getId());
+        static::assertInstanceOf('\Shopware\Models\Article\Supplier', $manufacturer);
+        static::assertEquals(null, $manufacturer->getId());
     }
 
     /**
@@ -171,14 +171,14 @@ class ManufacturerTest extends TestCase
             ],
         ]);
 
-        $this->assertNotEmpty($manufacturer->getImage());
+        static::assertNotEmpty($manufacturer->getImage());
 
         /** @var ModelRepository $repo */
         $repo = Shopware()->Container()->get('models')->getRepository(Media::class);
         /** @var Media $media */
         $media = $repo->findOneBy(['path' => $manufacturer->getImage()]);
 
-        $this->assertEquals($media->getAlbumId(), Album::ALBUM_SUPPLIER);
+        static::assertEquals($media->getAlbumId(), Album::ALBUM_SUPPLIER);
     }
 
     public function testMediaUploadOnUpdate()
@@ -196,7 +196,7 @@ class ManufacturerTest extends TestCase
 
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $manufacturer = $this->resource->getOne($manufacturer->getId());
-        $this->assertNotEmpty($manufacturer->getImage());
+        static::assertNotEmpty($manufacturer->getImage());
 
         /** @var ModelRepository $repo */
         $repo = Shopware()->Container()->get('models')->getRepository(Media::class);
@@ -204,6 +204,6 @@ class ManufacturerTest extends TestCase
         /** @var Media $media */
         $media = $repo->findOneBy(['path' => $manufacturer->getImage()]);
 
-        $this->assertEquals($media->getAlbumId(), Album::ALBUM_SUPPLIER);
+        static::assertEquals($media->getAlbumId(), Album::ALBUM_SUPPLIER);
     }
 }

@@ -103,26 +103,26 @@ class UserTest extends TestCase
         /** @var \Shopware\Models\User\User $user */
         $user = $this->resource->create($testData);
 
-        $this->assertInstanceOf('\Shopware\Models\User\User', $user);
-        $this->assertGreaterThan(0, $user->getId());
+        static::assertInstanceOf('\Shopware\Models\User\User', $user);
+        static::assertGreaterThan(0, $user->getId());
 
         // Test default values
-        $this->assertEquals($user->getActive(), $testData['active']);
+        static::assertEquals($user->getActive(), $testData['active']);
 
-        $this->assertEquals($user->getEmail(), $testData['email']);
-        $this->assertEquals($user->getUsername(), $testData['username']);
-        $this->assertEquals($user->getName(), $testData['name']);
+        static::assertEquals($user->getEmail(), $testData['email']);
+        static::assertEquals($user->getUsername(), $testData['username']);
+        static::assertEquals($user->getName(), $testData['name']);
 
-        $this->assertEquals($user->getRoleId(), $testData['roleId']);
-        $this->assertEquals($user->getLocaleId(), $testData['localeId']);
+        static::assertEquals($user->getRoleId(), $testData['roleId']);
+        static::assertEquals($user->getLocaleId(), $testData['localeId']);
 
-        $this->assertEquals($user->getEncoder(), $testData['encoder']);
-        $this->assertEquals($user->getApiKey(), $testData['apiKey']);
-        $this->assertEquals($user->getLastLogin(), new \DateTime((string) $testData['lastLogin']));
-        $this->assertEquals($user->getFailedLogins(), $testData['failedLogins']);
-        $this->assertEquals($user->getLockedUntil(), new \DateTime((string) $testData['lockedUntil']));
-        $this->assertEquals($user->getExtendedEditor(), $testData['extendedEditor']);
-        $this->assertEquals($user->getDisabledCache(), $testData['disabledCache']);
+        static::assertEquals($user->getEncoder(), $testData['encoder']);
+        static::assertEquals($user->getApiKey(), $testData['apiKey']);
+        static::assertEquals($user->getLastLogin(), new \DateTime((string) $testData['lastLogin']));
+        static::assertEquals($user->getFailedLogins(), $testData['failedLogins']);
+        static::assertEquals($user->getLockedUntil(), new \DateTime((string) $testData['lockedUntil']));
+        static::assertEquals($user->getExtendedEditor(), $testData['extendedEditor']);
+        static::assertEquals($user->getDisabledCache(), $testData['disabledCache']);
 
         return $user->getId();
     }
@@ -135,7 +135,7 @@ class UserTest extends TestCase
         $this->resource->setRole('read');
 
         $user = $this->resource->getOne($id);
-        $this->assertGreaterThan(0, $user['id']);
+        static::assertGreaterThan(0, $user['id']);
     }
 
     /**
@@ -148,8 +148,8 @@ class UserTest extends TestCase
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $user = $this->resource->getOne($id);
 
-        $this->assertInstanceOf('\Shopware\Models\User\User', $user);
-        $this->assertGreaterThan(0, $user->getId());
+        static::assertInstanceOf('\Shopware\Models\User\User', $user);
+        static::assertGreaterThan(0, $user->getId());
     }
 
     /**
@@ -161,11 +161,11 @@ class UserTest extends TestCase
 
         $result = $this->resource->getList();
 
-        $this->assertArrayHasKey('data', $result);
-        $this->assertArrayHasKey('total', $result);
+        static::assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('total', $result);
 
-        $this->assertGreaterThanOrEqual(1, $result['total']);
-        $this->assertGreaterThanOrEqual(1, $result['data']);
+        static::assertGreaterThanOrEqual(1, $result['total']);
+        static::assertGreaterThanOrEqual(1, $result['data']);
     }
 
     /**
@@ -178,13 +178,13 @@ class UserTest extends TestCase
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $result = $this->resource->getList();
 
-        $this->assertArrayHasKey('data', $result);
-        $this->assertArrayHasKey('total', $result);
+        static::assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('total', $result);
 
-        $this->assertGreaterThanOrEqual(1, $result['total']);
-        $this->assertGreaterThanOrEqual(1, $result['data']);
+        static::assertGreaterThanOrEqual(1, $result['total']);
+        static::assertGreaterThanOrEqual(1, $result['data']);
 
-        $this->assertInstanceOf('\Shopware\Models\User\User', $result['data'][0]);
+        static::assertInstanceOf('\Shopware\Models\User\User', $result['data'][0]);
     }
 
     /**
@@ -218,11 +218,11 @@ class UserTest extends TestCase
 
         $user = $this->resource->update($id, $testData);
 
-        $this->assertInstanceOf('\Shopware\Models\User\User', $user);
-        $this->assertEquals($id, $user->getId());
+        static::assertInstanceOf('\Shopware\Models\User\User', $user);
+        static::assertEquals($id, $user->getId());
 
-        $this->assertEquals($user->getUsername(), $testData['username']);
-        $this->assertEquals($user->getName(), $testData['name']);
+        static::assertEquals($user->getUsername(), $testData['username']);
+        static::assertEquals($user->getName(), $testData['name']);
 
         return $id;
     }
@@ -271,8 +271,8 @@ class UserTest extends TestCase
 
         $user = $this->resource->delete($id);
 
-        $this->assertInstanceOf('\Shopware\Models\User\User', $user);
-        $this->assertEquals(null, $user->getId());
+        static::assertInstanceOf('\Shopware\Models\User\User', $user);
+        static::assertEquals(null, $user->getId());
     }
 
     /**
@@ -311,7 +311,7 @@ class UserTest extends TestCase
         ];
 
         $user = $this->resource->create($data);
-        $this->assertEquals(1, $user->getRole()->getId());
+        static::assertEquals(1, $user->getRole()->getId());
     }
 
     public function testCreateWithUserRoleName()
@@ -327,7 +327,7 @@ class UserTest extends TestCase
         ];
 
         $user = $this->resource->create($data);
-        $this->assertEquals('local_admins', $user->getRole()->getName());
+        static::assertEquals('local_admins', $user->getRole()->getName());
     }
 
     public function testCreateWithLocaleId()
@@ -344,7 +344,7 @@ class UserTest extends TestCase
         ];
 
         $user = $this->resource->create($data);
-        $this->assertEquals(2, $user->getLocaleId());
+        static::assertEquals(2, $user->getLocaleId());
     }
 
     public function testCreateWithLocaleName()
@@ -361,7 +361,7 @@ class UserTest extends TestCase
         ];
 
         $user = $this->resource->create($data);
-        $this->assertEquals(2, $user->getLocaleId());
+        static::assertEquals(2, $user->getLocaleId());
     }
 
     /**
@@ -386,11 +386,11 @@ class UserTest extends TestCase
     {
         $aclMock = $this->createMock(\Shopware_Components_Acl::class);
 
-        $aclMock->expects($this->any())
+        $aclMock->expects(static::any())
             ->method('has')
             ->willReturn(true);
 
-        $aclMock->expects($this->any())
+        $aclMock->expects(static::any())
             ->method('isAllowed')
             ->willReturn(true);
 

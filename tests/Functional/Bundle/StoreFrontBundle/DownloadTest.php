@@ -41,14 +41,14 @@ class DownloadTest extends TestCase
 
         $downloads = Shopware()->Container()->get('shopware_storefront.product_download_service')->get($product, $context);
 
-        $this->assertCount(2, $downloads);
+        static::assertCount(2, $downloads);
 
         /** @var Download $download */
         foreach ($downloads as $download) {
-            $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Download', $download);
-            $this->assertContains($download->getFile(), ['/var/www/first.txt', '/var/www/second.txt']);
-            $this->assertCount(1, $download->getAttributes());
-            $this->assertTrue($download->hasAttribute('core'));
+            static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Download', $download);
+            static::assertContains($download->getFile(), ['/var/www/first.txt', '/var/www/second.txt']);
+            static::assertCount(1, $download->getAttributes());
+            static::assertTrue($download->hasAttribute('core'));
         }
     }
 
@@ -67,15 +67,15 @@ class DownloadTest extends TestCase
         $downloads = Shopware()->Container()->get('shopware_storefront.product_download_service')
             ->getList($products, $context);
 
-        $this->assertCount(2, $downloads);
+        static::assertCount(2, $downloads);
 
         foreach ($downloads as $number => $productDownloads) {
-            $this->assertContains($number, $numbers);
-            $this->assertCount(2, $productDownloads);
+            static::assertContains($number, $numbers);
+            static::assertCount(2, $productDownloads);
         }
 
         foreach ($numbers as $number) {
-            $this->assertArrayHasKey($number, $downloads);
+            static::assertArrayHasKey($number, $downloads);
         }
     }
 

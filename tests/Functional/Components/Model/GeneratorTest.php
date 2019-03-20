@@ -189,9 +189,9 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $this->' . self::TEST_ATTRIBUTE_PROPERTY_NAME . 'Two = 123456;
     }';
 
-        $this->assertTrue(strpos($modelSourceCode, $definitionInt) !== false);
-        $this->assertTrue(strpos($modelSourceCode, $definitionString) !== false);
-        $this->assertTrue(strpos($modelSourceCode, $initialization) !== false);
+        static::assertTrue(strpos($modelSourceCode, $definitionInt) !== false);
+        static::assertTrue(strpos($modelSourceCode, $definitionString) !== false);
+        static::assertTrue(strpos($modelSourceCode, $initialization) !== false);
 
         // Clean up second field
         $this->cs->delete(
@@ -229,7 +229,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
      */
      protected $' . self::TEST_ATTRIBUTE_PROPERTY_NAME . ';';
 
-        $this->assertTrue(strpos($modelSourceCode, $definition) !== false);
+        static::assertTrue(strpos($modelSourceCode, $definition) !== false);
         if ($default == !null) {
             switch ($type) {
                 case 'date':
@@ -238,7 +238,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
                     break;
             }
             $initialization = '$this->' . self::TEST_ATTRIBUTE_PROPERTY_NAME . ' = ' . $default . ';';
-            $this->assertTrue(strpos($modelSourceCode, $initialization) !== false);
+            static::assertTrue(strpos($modelSourceCode, $initialization) !== false);
         }
     }
 }

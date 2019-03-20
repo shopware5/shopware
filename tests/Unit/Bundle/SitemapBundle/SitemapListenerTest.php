@@ -76,7 +76,7 @@ class SitemapListenerTest extends TestCase
 
     public function testListEmptyFolder()
     {
-        $this->assertEmpty($this->listener->getSitemaps(1));
+        static::assertEmpty($this->listener->getSitemaps(1));
     }
 
     public function testListWithSitemap()
@@ -85,12 +85,12 @@ class SitemapListenerTest extends TestCase
         $this->fs->write($file, '');
 
         $sitemaps = $this->listener->getSitemaps(1);
-        $this->assertNotEmpty($sitemaps);
+        static::assertNotEmpty($sitemaps);
 
-        $this->assertInstanceOf(Sitemap::class, $sitemaps[0]);
+        static::assertInstanceOf(Sitemap::class, $sitemaps[0]);
 
         // Subshop specific sitemaps
-        $this->assertEmpty($this->listener->getSitemaps(2));
-        $this->assertNotEmpty($this->listener->getSitemaps(1));
+        static::assertEmpty($this->listener->getSitemaps(2));
+        static::assertNotEmpty($this->listener->getSitemaps(1));
     }
 }

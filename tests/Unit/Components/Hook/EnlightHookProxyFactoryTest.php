@@ -192,7 +192,7 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends \Sh
 }
 
 EOT;
-        $this->assertSame($expectedClass, $generatedClass);
+        static::assertSame($expectedClass, $generatedClass);
     }
 
     public function testGenerateProxyClassWithReferenceParameter()
@@ -296,7 +296,7 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyReferenceTestClassProxy extends
 }
 
 EOT;
-        $this->assertSame($expectedClass, $generatedClass);
+        static::assertSame($expectedClass, $generatedClass);
     }
 
     private function invokeMethod($object, $methodName, array $parameters = [])

@@ -49,7 +49,7 @@ class ManufacturerFacetTest extends TestCase
             [new ManufacturerFacet()]
         );
 
-        $this->assertCount(0, $result->getFacets());
+        static::assertCount(0, $result->getFacets());
     }
 
     public function testSingleManufacturer()
@@ -71,10 +71,10 @@ class ManufacturerFacetTest extends TestCase
         $facet = $result->getFacets()[0];
 
         /* @var $facet ValueListFacetResult */
-        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult', $facet);
+        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult', $facet);
 
-        $this->assertCount(1, $facet->getValues());
-        $this->assertEquals($supplier->getId(), $facet->getValues()[0]->getId());
+        static::assertCount(1, $facet->getValues());
+        static::assertEquals($supplier->getId(), $facet->getValues()[0]->getId());
     }
 
     public function testMultipleManufacturers()
@@ -99,7 +99,7 @@ class ManufacturerFacetTest extends TestCase
 
         /** @var ValueListFacetResult $facet */
         $facet = $result->getFacets()[0];
-        $this->assertCount(2, $facet->getValues());
+        static::assertCount(2, $facet->getValues());
     }
 
     /**

@@ -83,9 +83,9 @@ class PresetLoaderTest extends TestCase
 
         $presetData = $this->presetLoader->load($preset->getId());
 
-        $this->assertInternalType('string', $presetData);
-        $this->assertJson($presetData);
-        $this->assertEquals('[]', $presetData);
+        static::assertInternalType('string', $presetData);
+        static::assertJson($presetData);
+        static::assertEquals('[]', $presetData);
     }
 
     public function testPresetLoadingShouldBeSuccessfulWithEmptyElements()
@@ -95,9 +95,9 @@ class PresetLoaderTest extends TestCase
 
         $presetData = $this->presetLoader->load($preset->getId());
 
-        $this->assertInternalType('string', $presetData);
-        $this->assertJson($presetData);
-        $this->assertEquals($data, $presetData);
+        static::assertInternalType('string', $presetData);
+        static::assertJson($presetData);
+        static::assertEquals($data, $presetData);
     }
 
     public function testPresetLoadingShouldBeSuccessful()
@@ -107,20 +107,20 @@ class PresetLoaderTest extends TestCase
 
         $presetData = $this->presetLoader->load($preset->getId());
 
-        $this->assertInternalType('string', $presetData);
-        $this->assertJson($presetData);
+        static::assertInternalType('string', $presetData);
+        static::assertJson($presetData);
 
         $decodedData = json_decode($presetData, true);
 
         $componentId = $this->connection->fetchColumn('SELECT id FROM s_library_component WHERE name = "Banner"');
         $fieldId = $this->connection->fetchColumn('SELECT id FROM s_library_component_field WHERE name = "file" AND componentID = :componentId', ['componentId' => $componentId]);
 
-        $this->assertEquals($componentId, $decodedData['elements'][0]['componentId']);
-        $this->assertEquals($componentId, $decodedData['elements'][0]['component']['id']);
+        static::assertEquals($componentId, $decodedData['elements'][0]['componentId']);
+        static::assertEquals($componentId, $decodedData['elements'][0]['component']['id']);
 
-        $this->assertEquals($fieldId, $decodedData['elements'][0]['component']['fields'][0]['id']);
-        $this->assertEquals($fieldId, $decodedData['elements'][0]['data'][1]['fieldId']);
-        $this->assertRegExp('/http/', $decodedData['elements'][0]['data'][1]['value']);
+        static::assertEquals($fieldId, $decodedData['elements'][0]['component']['fields'][0]['id']);
+        static::assertEquals($fieldId, $decodedData['elements'][0]['data'][1]['fieldId']);
+        static::assertRegExp('/http/', $decodedData['elements'][0]['data'][1]['value']);
     }
 
     public function testShouldBeSuccessfulWithJsonEncodedDataValue()
@@ -131,17 +131,17 @@ class PresetLoaderTest extends TestCase
 
         $presetData = $this->presetLoader->load($preset->getId());
 
-        $this->assertInternalType('string', $presetData);
-        $this->assertJson($presetData);
+        static::assertInternalType('string', $presetData);
+        static::assertJson($presetData);
 
         $decodedData = json_decode($presetData, true);
 
         $componentId = $this->connection->fetchColumn('SELECT id FROM s_library_component WHERE name = "Banner-Slider"');
 
-        $this->assertEquals($componentId, $decodedData['elements'][0]['componentId']);
-        $this->assertEquals($componentId, $decodedData['elements'][0]['component']['id']);
+        static::assertEquals($componentId, $decodedData['elements'][0]['componentId']);
+        static::assertEquals($componentId, $decodedData['elements'][0]['component']['id']);
 
-        $this->assertInternalType('array', $decodedData['elements'][0]['data'][6]['value']);
-        $this->assertRegExp('/http/', $decodedData['elements'][0]['data'][6]['value'][0]['path']);
+        static::assertInternalType('array', $decodedData['elements'][0]['data'][6]['value']);
+        static::assertRegExp('/http/', $decodedData['elements'][0]['data'][6]['value'][0]['path']);
     }
 }

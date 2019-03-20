@@ -42,17 +42,17 @@ class CdnOptimizerServiceTest extends TestCase
             ->getMock();
 
         $filesystemMock
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('writeStream')
             ->withAnyParameters();
 
         $filesystemMock
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('readStream')
             ->withAnyParameters();
 
         $filesystemMock
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('delete');
 
         $mediaServiceAdapterMock = $this->getMockBuilder(Filesystem::class)
@@ -61,12 +61,12 @@ class CdnOptimizerServiceTest extends TestCase
             ->getMock();
 
         $mediaServiceAdapterMock
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('updateStream')
             ->willThrowException(new FileNotFoundException('test.file'));
 
         $mediaServiceAdapterMock
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('readStream')
             ->withAnyParameters();
 
@@ -81,12 +81,12 @@ class CdnOptimizerServiceTest extends TestCase
             ->getMock();
 
         $mediaServiceMock
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('getAdapterType')
             ->willReturn('s3');
 
         $mediaServiceMock
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('getFilesystem')
             ->willReturn($mediaServiceAdapterMock);
 
@@ -108,17 +108,17 @@ class CdnOptimizerServiceTest extends TestCase
             ->getMock();
 
         $filesystemMock
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('writeStream')
             ->withAnyParameters();
 
         $filesystemMock
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('readStream')
             ->withAnyParameters();
 
         $filesystemMock
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('delete');
 
         $mediaServiceAdapterMock = $this->getMockBuilder(Filesystem::class)
@@ -127,12 +127,12 @@ class CdnOptimizerServiceTest extends TestCase
             ->getMock();
 
         $mediaServiceAdapterMock
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('updateStream')
             ->withAnyParameters();
 
         $mediaServiceAdapterMock
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('readStream')
             ->withAnyParameters();
 
@@ -147,12 +147,12 @@ class CdnOptimizerServiceTest extends TestCase
             ->getMock();
 
         $mediaServiceMock
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('getAdapterType')
             ->willReturn('s3');
 
         $mediaServiceMock
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('getFilesystem')
             ->willReturn($mediaServiceAdapterMock);
 
@@ -178,7 +178,7 @@ class CdnOptimizerServiceTest extends TestCase
             ->getMock();
 
         $mediaServiceMock
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('getAdapterType')
             ->willReturn('local');
 
@@ -200,7 +200,7 @@ class CdnOptimizerServiceTest extends TestCase
             ->getMock();
 
         $optimizerServiceMock
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('getOptimizerByMimeType')
             ->with('jpeg')
             ->willReturn($optimizer);
@@ -214,7 +214,7 @@ class CdnOptimizerServiceTest extends TestCase
             $mediaServiceMock
         );
 
-        $this->assertEquals($optimizer, $cdnOptimizerService->getOptimizerByMimeType('jpeg'));
+        static::assertEquals($optimizer, $cdnOptimizerService->getOptimizerByMimeType('jpeg'));
     }
 
     public function testGetOptimizers()
@@ -225,7 +225,7 @@ class CdnOptimizerServiceTest extends TestCase
             ->getMock();
 
         $optimizerServiceMock
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('getOptimizers')
             ->willReturn(['foo', 'bar']);
 
@@ -238,6 +238,6 @@ class CdnOptimizerServiceTest extends TestCase
             $mediaServiceMock
         );
 
-        $this->assertEquals(['foo', 'bar'], $cdnOptimizerService->getOptimizers());
+        static::assertEquals(['foo', 'bar'], $cdnOptimizerService->getOptimizers());
     }
 }

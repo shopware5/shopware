@@ -62,20 +62,20 @@ class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Tes
         $response = $this->dispatch('/backend/mail/createMail');
         $jsonBody = Zend_Json::decode($response->getBody());
 
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
-        $this->assertTrue($jsonBody['success']);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
+        static::assertTrue($jsonBody['success']);
 
         $result = $jsonBody['data'];
 
-        $this->assertEquals($this->testData['name'], $result['name']);
-        $this->assertEquals($this->testData['fromMail'], $result['fromMail']);
-        $this->assertEquals($this->testData['fromName'], $result['fromName']);
-        $this->assertEquals($this->testData['subject'], $result['subject']);
-        $this->assertEquals($this->testData['contentHtml'], $result['contentHtml']);
-        $this->assertEquals($this->testData['isHtml'], $result['isHtml']);
+        static::assertEquals($this->testData['name'], $result['name']);
+        static::assertEquals($this->testData['fromMail'], $result['fromMail']);
+        static::assertEquals($this->testData['fromName'], $result['fromName']);
+        static::assertEquals($this->testData['subject'], $result['subject']);
+        static::assertEquals($this->testData['contentHtml'], $result['contentHtml']);
+        static::assertEquals($this->testData['isHtml'], $result['isHtml']);
 
-        $this->assertArrayHasKey('id', $result);
+        static::assertArrayHasKey('id', $result);
 
         return $result['id'];
     }
@@ -91,19 +91,19 @@ class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Tes
         $body = $response->getBody();
         $jsonBody = Zend_Json::decode($body);
 
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
-        $this->assertTrue($jsonBody['success']);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
+        static::assertTrue($jsonBody['success']);
 
         $result = $jsonBody['data'];
 
-        $this->assertEquals($this->testData['fromMail'], $result['fromMail']);
-        $this->assertEquals($this->testData['fromName'], $result['fromName']);
-        $this->assertEquals($this->testData['subject'], $result['subject']);
-        $this->assertEquals($this->testData['contentHtml'], $result['contentHtml']);
-        $this->assertEquals($this->testData['isHtml'], $result['isHtml']);
+        static::assertEquals($this->testData['fromMail'], $result['fromMail']);
+        static::assertEquals($this->testData['fromName'], $result['fromName']);
+        static::assertEquals($this->testData['subject'], $result['subject']);
+        static::assertEquals($this->testData['contentHtml'], $result['contentHtml']);
+        static::assertEquals($this->testData['isHtml'], $result['isHtml']);
 
-        $this->assertArrayHasKey('id', $result);
+        static::assertArrayHasKey('id', $result);
 
         return $result['id'];
     }
@@ -121,15 +121,15 @@ class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Tes
         $response = $this->dispatch('/backend/mail/updateMail?id=' . $id);
         $jsonBody = Zend_Json::decode($response->getBody());
 
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
-        $this->assertTrue($jsonBody['success']);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
+        static::assertTrue($jsonBody['success']);
 
         $result = $jsonBody['data'];
 
-        $this->assertEquals($updateTestData['subject'], $result['subject']);
+        static::assertEquals($updateTestData['subject'], $result['subject']);
 
-        $this->assertArrayHasKey('id', $result);
+        static::assertArrayHasKey('id', $result);
 
         return $result['id'];
     }
@@ -142,8 +142,8 @@ class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Tes
         $response = $this->dispatch('/backend/mail/removeMail?id=' . $id);
         $jsonBody = Zend_Json::decode($response->getBody());
 
-        $this->assertArrayHasKey('success', $jsonBody);
-        $this->assertTrue($jsonBody['success']);
+        static::assertArrayHasKey('success', $jsonBody);
+        static::assertTrue($jsonBody['success']);
     }
 
     public function testGetAttachmentsShouldBeSuccessful()
@@ -153,9 +153,9 @@ class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Tes
         $response = $this->dispatch('/backend/mail/getAttachments');
         $jsonBody = Zend_Json::decode($response->getBody());
 
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
-        $this->assertTrue($jsonBody['success']);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
+        static::assertTrue($jsonBody['success']);
     }
 
     public function testGetMailsShouldBeSuccessful()
@@ -165,8 +165,8 @@ class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Tes
         $response = $this->dispatch('/backend/mail/getMails?&node=NaN');
         $jsonBody = Zend_Json::decode($response->getBody());
 
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
-        $this->assertTrue($jsonBody['success']);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
+        static::assertTrue($jsonBody['success']);
     }
 }

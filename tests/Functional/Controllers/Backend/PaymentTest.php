@@ -68,12 +68,12 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
     {
         /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/payment/getPayments');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
     }
 
     /**
@@ -84,12 +84,12 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
     {
         /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/payment/getCountries');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
     }
 
     /**
@@ -102,11 +102,11 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
         $this->Request()->setMethod('POST')->setPost($this->testDataCreate);
         $this->dispatch('backend/payment/createPayments');
 
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
 
         return $jsonBody['data'];
     }
@@ -123,12 +123,12 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
 
         /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/payment/updatePayments');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
     }
 
     /**
@@ -143,10 +143,10 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
 
         /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/payment/deletePayment');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
     }
 }

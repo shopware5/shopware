@@ -43,7 +43,7 @@ class StreamProtocolValidatorTest extends Enlight_Components_Test_TestCase
         $validator = new StreamProtocolValidator();
 
         foreach ($urls as $url) {
-            $this->assertEquals(true, $validator->validate($url));
+            static::assertEquals(true, $validator->validate($url));
         }
     }
 
@@ -64,11 +64,11 @@ class StreamProtocolValidatorTest extends Enlight_Components_Test_TestCase
             try {
                 $validator->validate($url);
             } catch (\InvalidArgumentException $ex) {
-                $this->assertContains('Invalid stream protocol', $ex->getMessage());
+                static::assertContains('Invalid stream protocol', $ex->getMessage());
                 continue;
             }
 
-            $this->assertEquals('Missing exception for url ', $url);
+            static::assertEquals('Missing exception for url ', $url);
         }
     }
 }

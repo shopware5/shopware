@@ -70,10 +70,10 @@ class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
         $this->dispatch('/backend/EmotionPreset/list');
 
         $data = $this->View()->getAssign();
-        $this->assertArrayHasKey('success', $data);
-        $this->assertArrayHasKey('data', $data);
+        static::assertArrayHasKey('success', $data);
+        static::assertArrayHasKey('data', $data);
 
-        $this->assertCount(3, $data['data']);
+        static::assertCount(3, $data['data']);
     }
 
     public function testDeleteAction()
@@ -86,8 +86,8 @@ class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
         $this->dispatch('/backend/EmotionPreset/delete');
 
         $data = $this->View()->getAssign();
-        $this->assertArrayHasKey('success', $data);
-        $this->assertCount(2, $this->resource->getList());
+        static::assertArrayHasKey('success', $data);
+        static::assertCount(2, $this->resource->getList());
     }
 
     public function testLoadPresetActionShouldFail()
@@ -98,9 +98,9 @@ class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
         $this->dispatch('/backend/EmotionPreset/loadPreset');
 
         $data = $this->View()->getAssign();
-        $this->assertArrayHasKey('success', $data);
-        $this->assertArrayNotHasKey('data', $data);
-        $this->assertFalse($data['success']);
+        static::assertArrayHasKey('success', $data);
+        static::assertArrayNotHasKey('data', $data);
+        static::assertFalse($data['success']);
     }
 
     public function testLoadPresetAction()
@@ -113,9 +113,9 @@ class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
         $this->dispatch('/backend/EmotionPreset/loadPreset');
 
         $data = $this->View()->getAssign();
-        $this->assertArrayHasKey('success', $data);
-        $this->assertArrayHasKey('data', $data);
-        $this->assertJson($data['data']);
+        static::assertArrayHasKey('success', $data);
+        static::assertArrayHasKey('data', $data);
+        static::assertJson($data['data']);
     }
 
     public function testCreateShouldFail()
@@ -125,8 +125,8 @@ class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
         $this->dispatch('/backend/EmotionPreset/save');
 
         $data = $this->View()->getAssign();
-        $this->assertArrayHasKey('success', $data);
-        $this->assertFalse($data['success']);
+        static::assertArrayHasKey('success', $data);
+        static::assertFalse($data['success']);
     }
 
     public function testCreate()
@@ -136,8 +136,8 @@ class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
         $this->dispatch('/backend/EmotionPreset/save');
 
         $data = $this->View()->getAssign();
-        $this->assertArrayHasKey('success', $data);
-        $this->assertCount(1, $this->resource->getList());
+        static::assertArrayHasKey('success', $data);
+        static::assertCount(1, $this->resource->getList());
     }
 
     public function testUpdate()
@@ -152,11 +152,11 @@ class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
         $this->dispatch('/backend/EmotionPreset/save');
 
         $data = $this->View()->getAssign();
-        $this->assertArrayHasKey('success', $data);
+        static::assertArrayHasKey('success', $data);
 
         $list = $this->resource->getList();
-        $this->assertCount(1, $list);
-        $this->assertSame($list[0]['name'], 'updated');
+        static::assertCount(1, $list);
+        static::assertSame($list[0]['name'], 'updated');
     }
 
     public function testImportAssetsShouldFail()
@@ -167,9 +167,9 @@ class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
         $this->dispatch('/backend/EmotionPreset/importAsset');
 
         $data = $this->View()->getAssign();
-        $this->assertArrayHasKey('success', $data);
-        $this->assertArrayNotHasKey('data', $data);
-        $this->assertFalse($data['success']);
+        static::assertArrayHasKey('success', $data);
+        static::assertArrayNotHasKey('data', $data);
+        static::assertFalse($data['success']);
     }
 
     public function testImportAssets()
@@ -189,7 +189,7 @@ class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
         $this->dispatch('/backend/EmotionPreset/importAsset');
 
         $data = $this->View()->getAssign();
-        $this->assertArrayHasKey('success', $data);
+        static::assertArrayHasKey('success', $data);
 
         $preset = $this->resource->getManager()->find(Preset::class, $preset->getId());
         $presetData = json_decode($preset->getPresetData(), true);
