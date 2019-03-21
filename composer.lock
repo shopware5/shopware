@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e4d141d4cb598418c4e8f8687950dba8",
+    "content-hash": "4f3e43edf0ab143e1e76b130cf7f851c",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -5719,6 +5719,52 @@
             "time": "2017-06-30T04:02:48+00:00"
         },
         {
+            "name": "jakub-onderka/php-var-dump-check",
+            "version": "v0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JakubOnderka/PHP-Var-Dump-Check.git",
+                "reference": "c7b30cbe73b7815811d079cb5bc326c313dd084e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JakubOnderka/PHP-Var-Dump-Check/zipball/c7b30cbe73b7815811d079cb5bc326c313dd084e",
+                "reference": "c7b30cbe73b7815811d079cb5bc326c313dd084e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "jakub-onderka/php-parallel-lint": "~1.0",
+                "phpunit/phpunit": "~4.5"
+            },
+            "suggest": {
+                "jakub-onderka/php-console-highlighter": "For colored console output"
+            },
+            "bin": [
+                "var-dump-check"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "JakubOnderka\\PhpVarDumpCheck\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Jakub Onderka",
+                    "email": "jakub.onderka@gmail.com"
+                }
+            ],
+            "description": "Find forgotten variables dump in PHP source code.",
+            "time": "2018-09-29T19:22:45+00:00"
+        },
+        {
             "name": "myclabs/deep-copy",
             "version": "1.7.0",
             "source": {
@@ -6076,6 +6122,7 @@
                 "testing",
                 "xunit"
             ],
+            "abandoned": true,
             "time": "2016-12-02T14:39:14+00:00"
         },
         {
@@ -6466,6 +6513,7 @@
                 "mock",
                 "xunit"
             ],
+            "abandoned": true,
             "time": "2017-06-30T09:13:00+00:00"
         },
         {

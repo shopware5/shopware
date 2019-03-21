@@ -37,6 +37,7 @@ class PreCommitChecks
         $this->runPhpLint($this->getCommittedFileList('php'));
         $this->runPhpCsFixer($this->getCommittedFileList('php'));
         $this->runEsLint($this->getCommittedFileList('js'));
+        $this->runVarDumpCheck($this->getCommittedFileList('php'));
         $this->runMigrationCheck();
 
 
@@ -55,6 +56,14 @@ class PreCommitChecks
         $output = [];
         $return = 0;
         exec('command -v ./vendor/bin/php-cs-fixer >/dev/null 2>&1', $output, $return);
+        return !(bool)$return;
+    }
+
+    public function isVarDumpCheckerAvailable()
+    {
+        $output = [];
+        $return = 0;
+        exec('command -v ./vendor/bin/var-dump-check >/dev/null 2>&1', $output, $return);
         return !(bool)$return;
     }
 
@@ -209,6 +218,30 @@ class PreCommitChecks
         $this->checkESLint($fileList);
 
         $this->writeln();
+    }
+
+    private function runVarDumpCheck(array $fileList)
+    {
+        $this->writeln('# Searching for var-dumps');
+
+        if (!$this->isVarDumpCheckerAvailable()) {
+            $this->error = true;
+            $this->writeln('- var-dump-checker is NOT installed. Please install composer with dev dependencies.', 2);
+            $this->writeln();
+            return;
+        }
+
+        $fileList = array_map('escapeshellarg', $fileList);
+        $files = implode(' ', $fileList);
+
+        exec('./vendor/bin/var-dump-check --doctrine --symfony --laravel ' . $files . ' 2>&1', $output, $return);
+        if ($return !== 0) {
+            foreach ($output as $item) {
+                $this->writeln($item);
+            }
+
+            $this->error = true;
+        }
     }
 
     private function runMigrationCheck()
