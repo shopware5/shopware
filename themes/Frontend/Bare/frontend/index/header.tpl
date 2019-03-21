@@ -6,13 +6,14 @@
 
 {* Meta-Tags *}
 {block name='frontend_index_header_meta_tags'}
-    <meta name="author" content="{s name='IndexMetaAuthor'}{/s}" />
-    {* <meta name="copyright" content="{s name='IndexMetaCopyright'}{/s}" /> *}
-    <meta name="robots" content="{block name='frontend_index_header_meta_robots'}{s name='IndexMetaRobots'}{/s}{/block}" />
-    <meta name="revisit-after" content="{s name='IndexMetaRevisit'}{/s}" />
-    <meta name="keywords" content="{block name='frontend_index_header_meta_keywords'}{if $sCategoryContent.metaKeywords}{$sCategoryContent.metaKeywords|escapeHtml}{else}{s name='IndexMetaKeywordsStandard'}{/s}{/if}{/block}" />
-    {s name="IndexMetaDescriptionStandard" assign="snippetIndexMetaDescriptionStandard"}{/s}
-    <meta name="description" content="{block name='frontend_index_header_meta_description'}{$snippetIndexMetaDescriptionStandard|truncate:$SeoDescriptionMaxLength:'…'}{/block}" />
+    {block name='frontend_index_header_meta_tags_inner'}
+        <meta name="author" content="{s name='IndexMetaAuthor'}{/s}" />
+        <meta name="robots" content="{block name='frontend_index_header_meta_robots'}{s name='IndexMetaRobots'}{/s}{/block}" />
+        <meta name="revisit-after" content="{s name='IndexMetaRevisit'}{/s}" />
+        <meta name="keywords" content="{block name='frontend_index_header_meta_keywords'}{if $sCategoryContent.metaKeywords}{$sCategoryContent.metaKeywords|escapeHtml}{else}{s name='IndexMetaKeywordsStandard'}{/s}{/if}{/block}" />
+        {s name="IndexMetaDescriptionStandard" assign="snippetIndexMetaDescriptionStandard"}{/s}
+        <meta name="description" content="{block name='frontend_index_header_meta_description'}{$snippetIndexMetaDescriptionStandard|truncate:$SeoDescriptionMaxLength:'…'}{/block}" />
+    {/block}
 
     {* Meta opengraph tags *}
     {block name='frontend_index_header_meta_tags_opengraph'}
