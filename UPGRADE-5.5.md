@@ -15,6 +15,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added new block `frontend_account_order_item_detail_info_wrapper` to `account/order_item_details.tpl`
 * Added missing attribute accessor methods to `CustomerStream` model
 * Added rich-snippets for `priceValidUntil` , `url`, `image` and  `gtin13`
+* Added new block `frontend_index_header_meta_tags_inner` to `frontend/index/header.tpl`
 
 ### Changes
 
