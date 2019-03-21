@@ -74,6 +74,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed plugin initialization to alphabetical by default
 * Changed elasticsearch/elasticsearch to 5.4.0
 * Changed ongr/elasticsearch-dsl to 5.0.6
+* Changed the generation of the Robots.txt
 
 ### Removals
 
@@ -304,3 +305,17 @@ Following modes are available
     * text
     * xml
     * xquery
+    
+## Improved Robots.txt
+
+robots.txt shows now all links from all language shops.
+To remove or add entries overwrite the blocks `frontend_robots_txt_disallows_output`, `frontend_robots_txt_allows_output` and call methods `setAllow`, `setDisallow`, `removeAllow`, `removeDisallow`
+
+Example:
+
+```smarty
+{block name="frontend_robots_txt_disallows_output"}
+    {$robotsTxt->removeDisallow('/ticket')}
+    {$smarty.block.parent}
+{/block}
+```

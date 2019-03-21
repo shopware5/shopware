@@ -946,5 +946,9 @@
             <argument type="service" id="session" on-invalid="null"/>
             <tag name="shopware.event_subscriber"/>
         </service>
+
+        <service id="shopware.components.robots_txt_generator" class="Shopware\Components\RobotsTxtGenerator">
+            <argument type="service" id="router"/>
+        </service>
     </services>
 </container>

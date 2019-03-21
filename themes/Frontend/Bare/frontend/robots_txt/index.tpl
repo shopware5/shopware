@@ -1,38 +1,42 @@
 {block name="frontend_robots_txt_user_agent"}
-User-agent: *
+    User-agent: *
 {/block}
 
 {block name="frontend_robots_txt_disallows"}
-Disallow: {url controller=compare fullPath=false}
+    {$robotsTxt->setDisallow('/compare')}
+    {$robotsTxt->setDisallow('/checkout')}
+    {$robotsTxt->setDisallow('/register')}
+    {$robotsTxt->setDisallow('/account')}
+    {$robotsTxt->setDisallow('/address')}
+    {$robotsTxt->setDisallow('/note')}
+    {$robotsTxt->setDisallow('/widgets')}
+    {$robotsTxt->setDisallow('/listing')}
+    {$robotsTxt->setDisallow('/ticket')}
 
-Disallow: {url controller=checkout fullPath=false}
-
-Disallow: {url controller=register fullPath=false}
-
-Disallow: {url controller=account fullPath=false}
-
-Disallow: {url controller=address fullPath=false}
-
-Disallow: {url controller=note fullPath=false}
-
-Disallow: {url controller=widgets fullPath=false}
-
-Disallow: {url controller=listing fullPath=false}
-
-Disallow: {url controller=ticket fullPath=false}
+    {block name="frontend_robots_txt_disallows_output"}
+        {foreach $robotsTxt->getDisallows() as $disallow}
+            {$disallow}
+        {/foreach}
+    {/block}
 {/block}
 
 {block name="frontend_robots_txt_allows"}
-Allow: {url module=widgets controller=emotion fullPath=false}
+    {$robotsTxt->setAllow('/widgets')}
+    {block name="frontend_robots_txt_allows_output"}
+        {foreach $robotsTxt->getAllows() as $allow}
+            {$allow}
+        {/foreach}
+    {/block}
 {/block}
 
 {block name="frontend_robots_txt_sitemap"}
-Sitemap: {url controller=index}sitemap_index.xml
+    {foreach $robotsTxt->getSitemaps() as $sitemap}
+        {$sitemap}
+    {/foreach}
 {/block}
 
 {*
     @deprecated
-
     Will be removed in 5.6 without alternative
 *}
 {block name="frontend_robots_txt_sitemap_mobile"}{/block}
