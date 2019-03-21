@@ -81,9 +81,7 @@
                         <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}"/>
                     {/block}
 
-                    {block name="frontend_detail_index_data_price_valid_until"}
-                        <meta itemprop="priceValidUntil" content="{math equation="x + 1" x=$smarty.now|date_format:"%Y"}-{$smarty.now|date_format:"%m-%d"}" />
-                    {/block}
+                    {block name="frontend_detail_index_data_price_valid_until"}{/block}
 
                     {block name="frontend_detail_index_data_url"}
                         <meta itemprop="url" content="{url sArticle=$sArticle.articleID title=$sArticle.articleName}"/>
