@@ -26,11 +26,6 @@ namespace Shopware\Components;
 
 use Monolog\Logger as BaseLogger;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Logger extends BaseLogger
 {
     /**
@@ -52,5 +47,12 @@ class Logger extends BaseLogger
     public function trace($label)
     {
         $this->log(BaseLogger::DEBUG, $label, ['trace' => true]);
+    }
+
+    public function addRecord($level, $message, array $context = [])
+    {
+        $message = str_replace(['[', ']'], ['(', ')'], $message);
+
+        return parent::addRecord($level, $message, $context);
     }
 }
