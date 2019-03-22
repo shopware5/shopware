@@ -430,6 +430,17 @@ class Kernel implements HttpKernelInterface, TerminableInterface
             ksort($this->plugins);
         }
 
+        if (is_array($this->config['plugin_initialization']['sort'])) {
+            $pluginSortOrder = $this->config['plugin_initialization']['sort'];
+
+            uksort($this->plugins, function($pluginA, $pluginB) use ($pluginSortOrder){
+                $pluginA = intval($pluginSortOrder[$pluginA] ?? 0);
+                $pluginB = intval($pluginSortOrder[$pluginB] ?? 0);
+
+                return $pluginA > $pluginB;
+            });
+        }
+
         $this->activePlugins = $initializer->getActivePlugins();
 
         $this->pluginHash = $this->createPluginHash($this->plugins);
