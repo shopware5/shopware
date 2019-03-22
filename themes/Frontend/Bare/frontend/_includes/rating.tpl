@@ -82,12 +82,8 @@
     {/if}
 {/block}
 
-{* Label *}
-{block name='frontend_rating_label'}
-    {if isset($label)}
-        {$hasLabel=$label}
-    {/if}
-{/block}
+{* Label - moved to frontend_rating_label_parameter *}
+{block name='frontend_rating_label'}{/block}
 
 {* Label depending on type *}
 {block name='frontend_rating_label_type'}
@@ -95,6 +91,13 @@
         {$hasLabel=true}
     {else}
         {$hasLabel=false}
+    {/if}
+{/block}
+
+{* Override label by parameter *}
+{block name='frontend_rating_label_parameter'}
+    {if isset($label)}
+        {$hasLabel=$label}
     {/if}
 {/block}
 
