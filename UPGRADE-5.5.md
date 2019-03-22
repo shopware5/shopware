@@ -36,6 +36,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed `sAdmin::sLogout` to refresh ShopContext on logout
 * Changed ESD download to send headers only once, fixing issues in IE and Safari browsers
 * Changed role selection in rule management to work with roles from the second page
+* Changed backend log viewer to work properly
 
 ### Deprecations
 

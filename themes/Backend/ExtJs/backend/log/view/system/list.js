@@ -147,7 +147,8 @@ Ext.define('Shopware.apps.Log.view.system.List', {
             fieldLabel: '{s name=toolbar/file}File{/s}',
             store: me.logFilesStore,
             valueField: 'name',
-            displayField: 'name'
+            displayField: 'name',
+            disableLoadingSelectedName: true
         });
 
         combo.store.on('load', function (store) {
