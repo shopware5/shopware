@@ -167,6 +167,7 @@
 {include file='backend/base/store/corner_position.js'}
 {include file='backend/base/store/cookie_mode.js'}
 {include file='backend/base/store/shipping_calculations_display_modes.js'}
+{include file='backend/base/store/deactivate_no_customer_account_modes.js'}
 
 {* Include shopware related components *}
 {include file='backend/base/component/Shopware.button.HoverButton.js'}

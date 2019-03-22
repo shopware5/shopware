@@ -16,6 +16,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added missing attribute accessor methods to `CustomerStream` model
 * Added rich-snippets for `priceValidUntil` , `url`, `image` and  `gtin13`
 * Added new block `frontend_index_header_meta_tags_inner` to `frontend/index/header.tpl`
+* Added preselected checkbox option to 'Deactivate No Customer Account' in basic configuration
 
 ### Changes
 
