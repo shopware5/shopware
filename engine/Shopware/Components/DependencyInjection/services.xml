@@ -868,6 +868,8 @@
             <argument type="service" id="modules"/>
         </service>
 
+        <service id="shopware.components.cart.proportional_cart_normalizer" class="Shopware\Components\Cart\ProportionalCartNormalizer"/>
+
         <!-- Filesystem -->
         <service id="shopware.filesystem_factory" class="Shopware\Components\Filesystem\FilesystemFactory">
             <argument type="tagged" tag="shopware_media.adapter" />

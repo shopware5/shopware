@@ -335,6 +335,14 @@ class Helper
         $this->translationApi->create($data);
     }
 
+    /**
+     * @param string $orderNumber
+     */
+    public function updateArticle($orderNumber, array $data)
+    {
+        return $this->articleApi->updateByNumber($orderNumber, $data);
+    }
+
     public function createManufacturerTranslation($manufacturerId, $shopId)
     {
         $data = [
