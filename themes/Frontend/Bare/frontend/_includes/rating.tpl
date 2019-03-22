@@ -44,6 +44,11 @@
  *     Hide Label
  *     {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage type="aggregated" label=false}
  *  ```
+ *
+ *  ```
+ *     Hide Symbols
+ *     {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage type="aggregated" symbols=false}
+ *  ```
 
 
 {* Type *}
@@ -101,6 +106,14 @@
     {/if}
 {/block}
 
+{* Symbols *}
+{block name='frontend_rating_symbols'}
+    {$hasSymbols=true}
+    {if isset($symbols)}
+        {$hasSymbols=$symbols}
+    {/if}
+{/block}
+
 {* Star rating content *}
 {block name='frontend_rating_content'}
     <span class="product--rating"{if $hasMicroData} {$data}{/if}>
@@ -127,7 +140,7 @@
 
         {* Stars *}
         {block name='frontend_rating_content_stars'}
-            {if $points != 0}
+            {if $points != 0 && $hasSymbols}
                 {for $value=1 to 5}
                     {$cls = 'icon--star'}
 
