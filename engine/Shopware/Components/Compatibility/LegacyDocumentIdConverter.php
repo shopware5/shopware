@@ -143,6 +143,10 @@ class LegacyDocumentIdConverter
             return false;
         }
 
+        if (stripos($result, 'mariadb') !== false) {
+            return false;
+        }
+
         return version_compare($result, '8.0.0', '>=');
     }
 
