@@ -149,10 +149,8 @@
 
         <!-- DBAL gateway classes, which used as shopware default -->
         <service id="shopware_storefront.list_product_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ListProductGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
             <argument type="service" id="shopware_storefront.product_hydrator_dbal"/>
-            <argument type="service" id="config" />
+            <argument type="service" id="shopware_bundle_store_front.gateway_dbal.list_product_query_helper" />
         </service>
 
         <service id="shopware_storefront.media_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\MediaGateway">
@@ -325,6 +323,12 @@
         <service id="shopware_storefront.field_helper_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper">
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_storefront.storefront_cache" />
+        </service>
+
+        <service id="shopware_bundle_store_front.gateway_dbal.list_product_query_helper" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ListProductQueryHelper">
+            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
+            <argument type="service" id="config"/>
+            <argument type="service" id="dbal_connection"/>
         </service>
 
         <!-- Shopware hydrator definitions -->
