@@ -31,6 +31,7 @@ use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\Query\Parameter;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\QueryBuilder;
+use Shopware\Components\Model\QueryOperatorValidator;
 
 class QueryBuilderTest extends TestCase
 {
@@ -39,12 +40,12 @@ class QueryBuilderTest extends TestCase
      */
     public $querybuilder;
 
-    public function setUp()
+    protected function setUp()
     {
         // Create a stub for the SomeClass class.
         $emMock = $this->createMock(EntityManager::class);
 
-        $queryBuilder = new QueryBuilder($emMock);
+        $queryBuilder = new QueryBuilder($emMock, new QueryOperatorValidator(['foo', 'bar']));
 
         $this->querybuilder = $queryBuilder;
     }
@@ -168,6 +169,11 @@ class QueryBuilderTest extends TestCase
                 'expression' => '!=',
                 'value' => '100',
             ],
+            [
+                'property' => 'number',
+                'expression' => 'foo',
+                'value' => '100',
+            ],
         ];
 
         $this->querybuilder->addFilter($filter);
@@ -176,7 +182,7 @@ class QueryBuilderTest extends TestCase
         $expression = $this->querybuilder->getDQLPart('where');
         $parts = $expression->getParts();
 
-        static::assertCount(2, $parts);
+        static::assertCount(3, $parts);
         static::assertSame(strpos($parts[0]->getRightExpr(), ':number'), 0);
         static::assertSame(strpos($parts[1]->getRightExpr(), ':number'), 0);
         static::assertNotEquals($parts[0]->getRightExpr(), $parts[1]->getRightExpr());
@@ -184,6 +190,7 @@ class QueryBuilderTest extends TestCase
         $expectedResult = [
             new Comparison('number', '!=', $parts[0]->getRightExpr()),
             new Comparison('number', '!=', $parts[1]->getRightExpr()),
+            new Comparison('number', 'foo', $parts[2]->getRightExpr()),
         ];
 
         static::assertEquals($parts, $expectedResult);
@@ -192,6 +199,7 @@ class QueryBuilderTest extends TestCase
         $expectedResult = [
             new Parameter($parts[0]->getRightExpr(), '500'),
             new Parameter($parts[1]->getRightExpr(), '100'),
+            new Parameter($parts[2]->getRightExpr(), '100'),
         ];
         static::assertEquals($expectedResult, $params);
     }
@@ -342,5 +350,42 @@ class QueryBuilderTest extends TestCase
         }
 
         static::assertEquals($expectedResult, $params);
+    }
+
+    /**
+     * @dataProvider getInvalidFilterDataProvider
+     */
+    public function testInvalidOperatorsThrowException(array $filter)
+    {
+        $this->querybuilder->resetDQLParts();
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(sprintf('\'%s\' is no valid operator', $filter['expression']));
+        $this->querybuilder->addFilter([$filter]);
+    }
+
+    public function getInvalidFilterDataProvider()
+    {
+        return [
+            [[
+                'property' => 'id',
+                'expression' => '=article.id',
+                'value' => 10,
+            ]],
+            [[
+                'property' => 'name',
+                'expression' => 'select',
+                'value' => 10,
+            ]],
+            [[
+                'property' => 'id',
+                'expression' => 'FOOBAR',
+                'value' => 10,
+            ]],
+            [[
+                'property' => 'name',
+                'expression' => 'LOIKE',
+                'value' => 10,
+            ]],
+        ];
     }
 }

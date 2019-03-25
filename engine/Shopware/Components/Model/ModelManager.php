@@ -55,11 +55,18 @@ class ModelManager extends EntityManager
     protected $debugMode = false;
 
     /**
-     * @return DBALQueryBuilder
+     * @var QueryOperatorValidator
      */
-    public function getDBALQueryBuilder()
+    protected $operatorValidator;
+
+    public function __construct(
+        Connection $conn,
+        Configuration $config,
+        QueryOperatorValidator $operatorValidator,
+        EventManager $eventManager = null)
     {
-        return new DBALQueryBuilder($this->getConnection());
+        $this->operatorValidator = $operatorValidator;
+        parent::__construct($conn, $config, $eventManager);
     }
 
     /**
@@ -67,11 +74,15 @@ class ModelManager extends EntityManager
      *
      * @param EventManager $eventManager
      *
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ORMException
      *
      * @return ModelManager
      */
-    public static function createInstance(Connection $conn, Configuration $config, EventManager $eventManager = null)
+    public static function createInstance(
+        Connection $conn,
+        Configuration $config,
+        QueryOperatorValidator $operatorValidator,
+        EventManager $eventManager = null)
     {
         if (!$config->getMetadataDriverImpl()) {
             throw ORMException::missingMappingDriverImpl();
@@ -81,7 +92,15 @@ class ModelManager extends EntityManager
             throw ORMException::mismatchedEventManager();
         }
 
-        return new self($conn, $config, $conn->getEventManager());
+        return new self($conn, $config, $operatorValidator, $conn->getEventManager());
+    }
+
+    /**
+     * @return DBALQueryBuilder
+     */
+    public function getDBALQueryBuilder()
+    {
+        return new DBALQueryBuilder($this->getConnection());
     }
 
     /**
@@ -140,7 +159,7 @@ class ModelManager extends EntityManager
      */
     public function createQueryBuilder()
     {
-        return new QueryBuilder($this);
+        return new QueryBuilder($this, $this->operatorValidator);
     }
 
     /**

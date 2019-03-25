@@ -29,6 +29,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query\Expr\From;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
+use Shopware\Components\Model\QueryOperatorValidator;
 
 class ModelRepositoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -37,7 +38,7 @@ class ModelRepositoryTest extends \PHPUnit\Framework\TestCase
         $em = $this->getMockBuilder(EntityManagerInterface::class)->disableOriginalConstructor()->getMock();
         $em->expects(static::once())
             ->method('createQueryBuilder')
-            ->willReturn(new QueryBuilder($em));
+            ->willReturn(new QueryBuilder($em, new QueryOperatorValidator()));
 
         $class = $this->getMockBuilder(ClassMetadata::class)->disableOriginalConstructor()->getMock();
 
