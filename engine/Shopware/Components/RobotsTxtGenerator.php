@@ -173,10 +173,7 @@ class RobotsTxtGenerator implements RobotsTxtGeneratorInterface
         return $this->baseUrls;
     }
 
-    /**
-     * @param string $allow
-     */
-    public function removeAllow($allow): void
+    public function removeAllow(string $allow): void
     {
         $index = array_search($allow, $this->allows);
         if ($index !== false) {
