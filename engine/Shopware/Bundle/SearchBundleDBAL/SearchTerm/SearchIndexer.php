@@ -284,7 +284,7 @@ class SearchIndexer implements SearchIndexerInterface
             $sql_join
 
             GROUP BY keywordID, fieldID
-            HAVING COUNT(*) > (SELECT COUNT(*)*0.9 FROM `s_articles`)
+            HAVING COUNT(*) > (SELECT COUNT(*)*0.9 FROM `s_articles_details`)
         ";
 
         $collectToDelete = $this->connection->fetchAll($sql);
