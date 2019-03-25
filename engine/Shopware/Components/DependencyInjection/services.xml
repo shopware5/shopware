@@ -215,6 +215,10 @@
             <argument type="service" id="shopware.release" />
         </service>
 
+        <service id="shopware.query_operator_validator" class="Shopware\Components\Model\QueryOperatorValidator">
+            <argument>%shopware.model.validOperators%</argument>
+        </service>
+
         <service id="model_factory" class="Shopware\Components\DependencyInjection\Bridge\Models" />
         <service id="shopware.model_manager" alias="models" />
 
@@ -224,6 +228,7 @@
             <argument type="service" id="shopware.model_config" />
             <argument type="service" id="shopware.loader" />
             <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware.query_operator_validator" />
             <argument type="service" id="shopware.model_annotations" />
          </service>
 
