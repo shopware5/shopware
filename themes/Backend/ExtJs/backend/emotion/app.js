@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.Emotion', {
      * Required views for module (subapplication)
      * @array
      */
-    stores: [ 'CategoryPath', 'List', 'LandingPage', 'Detail', 'Library', 'Templates', 'Presets' ],
+    stores: [ 'CategoryPath', 'List', 'LandingPage', 'Detail', 'Library', 'Templates', 'Presets', 'Visibility' ],
 
     /**
      * Required models for the module (subapplication)

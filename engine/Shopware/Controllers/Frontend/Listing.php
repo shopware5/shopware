@@ -35,9 +35,6 @@ use Shopware\Models\Emotion\Emotion;
 
 class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 {
-    /**
-     * Index action method
-     */
     public function indexAction()
     {
         $requestCategoryId = $this->Request()->getParam('sCategory');
@@ -208,18 +205,13 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     protected function getEmotionConfiguration($categoryId, $withStreams = false, $streamId = null)
     {
-        if ($this->Request()->getParam('sPage')) {
-            return [
-                'hasEmotion' => false,
-                'showListing' => true,
-                'showListingDevices' => [],
-            ];
-        }
         $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
 
         $service = $this->container->get('shopware_emotion.store_front_emotion_device_configuration');
 
         $emotions = $service->getCategoryConfiguration($categoryId, $context, $withStreams);
+
+        $emotions = $this->filterListingEmotions($emotions);
 
         $isHomePage = $context->getShop()->getCategory()->getId() === $categoryId;
 
@@ -231,7 +223,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         return [
             'emotions' => $emotions,
             'hasEmotion' => !empty($emotions),
-            'showListing' => $this->hasListing($emotions) && !$isHomePage,
+            'showListing' => $this->hasListing($emotions, $devicesWithListing),
             'showListingDevices' => $devicesWithListing,
             'isHomePage' => $isHomePage,
             'showListingButton' => $this->hasProducts($categoryId, $context, $streamId),
@@ -246,6 +238,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     private function hasProducts($categoryId, ShopContextInterface $context, $streamId)
     {
+        if ($this->Request()->getParam('sPage')) {
+            return false;
+        }
+
         if ($streamId) {
             $criteria = $this->createCategoryStreamCriteria($categoryId, $streamId);
         } else {
@@ -391,22 +387,16 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $queryParamsNames = array_keys($this->Request()->getParams());
         $paramsDiff = array_diff($queryParamsNames, $queryParamsWhiteList);
 
-        return $defaultShopCategoryId == $categoryId && !$paramsDiff;
+        return $defaultShopCategoryId === (int) $categoryId && !$paramsDiff;
     }
 
-    /**
-     * Determines if the product listing has to be loaded/shown at all
-     *
-     *
-     * @return bool
-     */
-    private function hasListing(array $emotions)
+    private function hasListing(array $emotions, array $devicesWithEmotion): bool
     {
-        if (empty($emotions)) {
+        if ($this->Request()->getParam('sPage')) {
             return true;
         }
 
-        if ($this->Request()->getParam('sPage')) {
+        if (empty($emotions)) {
             return true;
         }
 
@@ -415,20 +405,20 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             return true;
         }
 
-        $devices = $this->getDevicesWithListing($emotions);
-
-        if (!empty($devices)) {
+        // Enable the listing if there's a viewport with no emotion assigned
+        if (!$this->haveAllViewportsEmotions($emotions)) {
             return true;
         }
 
+        if (empty($devicesWithEmotion)) {
+            return false;
+        }
+
         $entryPageEmotions = array_filter($emotions, function ($emotion) {
-            return in_array(
-                $emotion['listing_visibility'],
-                [
-                    Emotion::LISTING_VISIBILITY_ONLY_START,
-                    Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING,
-                ]
-            );
+            return in_array($emotion['listing_visibility'], [
+                Emotion::LISTING_VISIBILITY_ONLY_START,
+                Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING,
+            ], true);
         });
 
         return empty($entryPageEmotions);
@@ -437,11 +427,14 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     /**
      * Filters the device types down to which have to show the product listing
      *
-     *
      * @return int[]
      */
-    private function getDevicesWithListing(array $emotions)
+    private function getDevicesWithListing(array $emotions): array
     {
+        if ($this->Request()->getParam('sPage')) {
+            return [];
+        }
+
         $visibleDevices = [0, 1, 2, 3, 4];
         $permanentVisibleDevices = [];
 
@@ -616,47 +609,40 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         return $categoryContent;
     }
 
-    /**
-     * @param array $emotionConfiguration
-     *
-     * @return bool
-     */
-    private function loadListing($emotionConfiguration)
+    private function loadListing(array $emotionConfiguration): bool
     {
         return $emotionConfiguration['showListing'] || $this->Request()->getParam('sPage');
     }
 
-    /**
-     * @param array $emotions
-     *
-     * @return array
-     */
-    private function filterListingEmotions($emotions)
+    private function filterListingEmotions(array $emotions): array
     {
-        if (max(array_column($emotions, 'showListing')) > 0) {
-            return $emotions;
-        }
-
         if ((int) $this->Request()->getParam('sPage') > 0) {
             return array_filter($emotions, function ($emotion) {
-                return in_array(
-                    $emotion['listing_visibility'],
-                    [
-                        Emotion::LISTING_VISIBILITY_ONLY_LISTING,
-                        Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING,
-                    ]
-                );
+                return in_array($emotion['listing_visibility'], [
+                    Emotion::LISTING_VISIBILITY_ONLY_LISTING,
+                    Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING,
+                ], true);
             });
         }
 
         return array_filter($emotions, function ($emotion) {
-            return in_array(
-                $emotion['listing_visibility'],
-                [
-                    Emotion::LISTING_VISIBILITY_ONLY_START,
-                    Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING,
-                ]
-            );
+            return in_array($emotion['listing_visibility'], [
+                Emotion::LISTING_VISIBILITY_ONLY_START,
+                Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING,
+            ], true);
         });
+    }
+
+    private function haveAllViewportsEmotions(array $emotions): bool
+    {
+        $devices = [];
+
+        foreach ($emotions as $emotion) {
+            $devices = array_merge($devices, $emotion['devicesArray']);
+        }
+
+        $devices = array_unique($devices);
+
+        return count($devices) === 5;
     }
 }

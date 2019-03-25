@@ -81,6 +81,7 @@ class Repository extends ModelRepository
             'emotions.is_landingpage as isLandingPage',
             'emotions.parent_id as parentId',
             'emotions.modified',
+            'emotions.listing_visibility as listingVisibility',
             'GROUP_CONCAT(categories.description ORDER BY categories.description ASC) AS categoriesNames',
         ]);
 

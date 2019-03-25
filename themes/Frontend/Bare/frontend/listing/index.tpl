@@ -11,9 +11,7 @@
         {$countCtrlUrl = "{url module="widgets" controller="listing" action="listingCount" params=$ajaxCountUrlParams fullPath}"}
     {/block}
 
-    {if !$hasFullScreenEmotion}
-        {include file='frontend/listing/sidebar.tpl'}
-    {/if}
+    {include file='frontend/listing/sidebar.tpl'}
 {/block}
 
 {block name="frontend_index_content_main_classes"}

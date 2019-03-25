@@ -64,18 +64,16 @@
             loadingOverlaySelector: '.emotion--overlay',
 
             /**
-             * Defines if a product listing will be displayed
-             *
-             * @type {boolean}
-             */
-            hasListing: false,
-
-            /**
              * Should the emotion loaded with ajax
              * @property ajax
              * @type {boolean}
              */
-            ajax: true
+            ajax: true,
+
+            /**
+             * The DOM selector for visible fullscreen emotions
+             */
+            visibleFullscreenSelector: '.emotion--wrapper:visible[data-fullscreen="true"]'
         },
 
         /**
@@ -484,9 +482,7 @@
         initFullscreen: function() {
             var me = this;
 
-            if (!me.opts.hasListing) {
-                $body.addClass('is--no-sidebar');
-            }
+            $body.addClass('is--no-sidebar');
             me.$contentMain.addClass('is--fullscreen');
             me.$wrapper.addClass('is--fullscreen');
 
@@ -656,7 +652,7 @@
         onShow: function(event, emotion) {
             var me = this;
 
-            if (emotion.$el.is(me.$el)) {
+            if (emotion.$emotion && emotion.$emotion.is(me.$el)) {
                 me.initFullscreen();
             }
 
@@ -666,7 +662,7 @@
         onHide: function(event, emotion) {
             var me = this;
 
-            if (emotion.$el.is(me.$el)) {
+            if (emotion.$emotion && emotion.$emotion.is(me.$el)) {
                 me.removeFullscreen();
             }
 

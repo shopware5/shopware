@@ -1,4 +1,3 @@
-<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -20,21 +19,35 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Emotion
+ * @subpackage Grid
+ * @version    $Id$
+ * @author shopware AG
  */
 
-use Shopware\Components\Migrations\AbstractMigration;
-
-class Migrations_Migration1613 extends AbstractMigration
-{
-    /**
-     * {@inheritdoc}
-     */
-    public function up($modus)
-    {
-        $sql = <<<SQL
-ALTER TABLE `s_emotion` ADD `listing_visibility` varchar(50) DEFAULT 'only_start' NOT NULL
-SQL;
-
-        $this->addSql($sql);
-    }
-}
+/**
+ * Shopware Store - Emotion Module
+ */
+//{namespace name=backend/emotion/view/detail}
+//{block name="backend/emotion/store/visibility"}
+Ext.define('Shopware.apps.Emotion.store.Visibility', {
+    extend: 'Ext.data.Store',
+    fields: ['key', 'label'],
+    data: [
+        {
+            key: 'only_start',
+            label: '{s name="settings/displayInListing_only_start"}{/s}'
+        },
+        {
+            key: 'start_and_listing',
+            label: '{s name="settings/displayInListing_start_and_listing"}{/s}'
+        },
+        {
+            key: 'only_listing',
+            label: '{s name="settings/displayInListing_only_listing"}{/s}'
+        }
+    ]
+});
+//{/block}

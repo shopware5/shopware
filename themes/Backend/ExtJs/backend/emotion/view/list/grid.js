@@ -69,6 +69,8 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
         me.features = [me.createGroupingFeature()];
         me.plugins = me.createPlugins();
 
+        me.visibilityStore = Ext.create('Shopware.apps.Emotion.store.Visibility');
+
         me.callParent(arguments);
     },
 
@@ -198,6 +200,11 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             draggable: false,
             sortable: false,
             groupable: false
+        },{
+            header: '{s name=list/visibility_in_categories}{/s}',
+            dataIndex: 'listingVisibility',
+            width: 115,
+            renderer: me.listingVisibilityRenderer
         }, {
             xtype: 'datecolumn',
             header: '{s name=grid/column/date}Last edited{/s}',
@@ -502,6 +509,20 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
         metaData.tdAttr = 'data-qtip="{s name=grid/renderer/editable_tooltip}Doubleclick to edit{/s}"';
 
         return value;
+    },
+
+    /**
+     * @param [string] value    - The field value
+     * @param [string] metaData - The model meta data
+     * @param [string] record   - The whole data model
+     */
+    listingVisibilityRenderer: function (value, metaData, record) {
+        if (record.get('isLandingPage')) {
+            return '';
+        }
+
+        var record = this.visibilityStore.findRecord('key', value);
+        return record ? record.get('label') : value;
     }
 });
 //{/block}

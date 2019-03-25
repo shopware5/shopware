@@ -42,18 +42,18 @@ class DeviceConfigurationTest extends TestCase
     public function testEmotionsWithDifferentPositions()
     {
         $service = new DeviceConfiguration($this->createQueryMock([
-            ['id' => 1, 'position' => 4, 'devices' => ''],
-            ['id' => 2, 'position' => 3, 'devices' => ''],
-            ['id' => 3, 'position' => 1, 'devices' => ''],
-            ['id' => 4, 'position' => 2, 'devices' => ''],
+            ['id' => 1, 'position' => 4, 'devices' => '', 'shopIds' => ''],
+            ['id' => 2, 'position' => 3, 'devices' => '', 'shopIds' => ''],
+            ['id' => 3, 'position' => 1, 'devices' => '', 'shopIds' => ''],
+            ['id' => 4, 'position' => 2, 'devices' => '', 'shopIds' => ''],
         ]));
         $emotions = $service->get(1);
         $this->assertEquals(
             [
-                ['id' => 3, 'position' => 1, 'devices' => '', 'devicesArray' => ['']],
-                ['id' => 4, 'position' => 2, 'devices' => '', 'devicesArray' => ['']],
-                ['id' => 2, 'position' => 3, 'devices' => '', 'devicesArray' => ['']],
-                ['id' => 1, 'position' => 4, 'devices' => '', 'devicesArray' => ['']],
+                ['id' => 3, 'position' => 1, 'devices' => '', 'devicesArray' => [''], 'shopIds' => []],
+                ['id' => 4, 'position' => 2, 'devices' => '', 'devicesArray' => [''], 'shopIds' => []],
+                ['id' => 2, 'position' => 3, 'devices' => '', 'devicesArray' => [''], 'shopIds' => []],
+                ['id' => 1, 'position' => 4, 'devices' => '', 'devicesArray' => [''], 'shopIds' => []],
             ],
             $emotions
         );
@@ -62,18 +62,18 @@ class DeviceConfigurationTest extends TestCase
     public function testEmotionsWithNullPositions()
     {
         $service = new DeviceConfiguration($this->createQueryMock([
-            ['id' => 1, 'position' => null, 'devices' => ''],
-            ['id' => 2, 'position' => null, 'devices' => ''],
-            ['id' => 3, 'position' => null, 'devices' => ''],
-            ['id' => 4, 'position' => null, 'devices' => ''],
+            ['id' => 1, 'position' => null, 'devices' => '', 'shopIds' => ''],
+            ['id' => 2, 'position' => null, 'devices' => '', 'shopIds' => ''],
+            ['id' => 3, 'position' => null, 'devices' => '', 'shopIds' => ''],
+            ['id' => 4, 'position' => null, 'devices' => '', 'shopIds' => ''],
         ]));
         $emotions = $service->get(1);
         $this->assertEquals(
             [
-                ['id' => 1, 'position' => null, 'devices' => '', 'devicesArray' => ['']],
-                ['id' => 2, 'position' => null, 'devices' => '', 'devicesArray' => ['']],
-                ['id' => 3, 'position' => null, 'devices' => '', 'devicesArray' => ['']],
-                ['id' => 4, 'position' => null, 'devices' => '', 'devicesArray' => ['']],
+                ['id' => 1, 'position' => null, 'devices' => '', 'devicesArray' => [''], 'shopIds' => []],
+                ['id' => 2, 'position' => null, 'devices' => '', 'devicesArray' => [''], 'shopIds' => []],
+                ['id' => 3, 'position' => null, 'devices' => '', 'devicesArray' => [''], 'shopIds' => []],
+                ['id' => 4, 'position' => null, 'devices' => '', 'devicesArray' => [''], 'shopIds' => []],
             ],
             $emotions
         );
@@ -82,18 +82,18 @@ class DeviceConfigurationTest extends TestCase
     public function testEmotionsWithSamePosition()
     {
         $service = new DeviceConfiguration($this->createQueryMock([
-            ['id' => 1, 'position' => 3, 'devices' => ''],
-            ['id' => 2, 'position' => 3, 'devices' => ''],
-            ['id' => 3, 'position' => 1, 'devices' => ''],
-            ['id' => 4, 'position' => 1, 'devices' => ''],
+            ['id' => 1, 'position' => 3, 'devices' => '', 'shopIds' => ''],
+            ['id' => 2, 'position' => 3, 'devices' => '', 'shopIds' => ''],
+            ['id' => 3, 'position' => 1, 'devices' => '', 'shopIds' => ''],
+            ['id' => 4, 'position' => 1, 'devices' => '', 'shopIds' => ''],
         ]));
         $emotions = $service->get(1);
         $this->assertEquals(
             [
-                ['id' => 3, 'position' => 1, 'devices' => '', 'devicesArray' => ['']],
-                ['id' => 4, 'position' => 1, 'devices' => '', 'devicesArray' => ['']],
-                ['id' => 1, 'position' => 3, 'devices' => '', 'devicesArray' => ['']],
-                ['id' => 2, 'position' => 3, 'devices' => '', 'devicesArray' => ['']],
+                ['id' => 3, 'position' => 1, 'devices' => '', 'devicesArray' => [''], 'shopIds' => []],
+                ['id' => 4, 'position' => 1, 'devices' => '', 'devicesArray' => [''], 'shopIds' => []],
+                ['id' => 1, 'position' => 3, 'devices' => '', 'devicesArray' => [''], 'shopIds' => []],
+                ['id' => 2, 'position' => 3, 'devices' => '', 'devicesArray' => [''], 'shopIds' => []],
             ],
             $emotions
         );
@@ -109,17 +109,45 @@ class DeviceConfigurationTest extends TestCase
         $statement = $this->createMock(Statement::class);
         $statement->expects(static::any())
             ->method('fetchAll')
-            ->will(static::returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $query = $this->createMock(QueryBuilder::class);
         $query->expects(static::any())
             ->method('execute')
-            ->will(static::returnValue($statement));
+            ->willReturn($statement);
+
+        $query->expects(static::any())
+            ->method('andWhere')
+            ->willReturn($query);
+
+        $query->expects(static::any())
+            ->method('innerJoin')
+            ->willReturn($query);
+
+        $query->expects(static::any())
+            ->method('leftJoin')
+            ->willReturn($query);
+
+        $query->expects(static::any())
+            ->method('from')
+            ->willReturn($query);
+
+        $query->expects(static::any())
+            ->method('addOrderBy')
+            ->willReturn($query);
+
+        $query->expects(static::any())
+            ->method('groupBy')
+            ->willReturn($query);
+
+        $query->expects(static::any())
+            ->method('setParameter')
+            ->willReturn($query);
 
         $connection = $this->createMock(Connection::class);
         $connection->expects(static::any())
             ->method('createQueryBuilder')
-            ->will(static::returnValue($query));
+            ->willReturn($query);
 
         return $connection;
     }

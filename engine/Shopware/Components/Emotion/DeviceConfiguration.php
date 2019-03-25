@@ -280,8 +280,6 @@ class DeviceConfiguration implements DeviceConfigurationInterface
     }
 
     /**
-     * @param array $emotions
-     *
      * @return array
      */
     private function sortEmotionsByPositionAndId(array $emotions)
@@ -298,9 +296,6 @@ class DeviceConfiguration implements DeviceConfigurationInterface
     }
 
     /**
-     * @param array $emotions
-     * @param array $visibility
-     *
      * @return array
      */
     private function getEmotionsByVisibility(array $emotions, array $visibility)
