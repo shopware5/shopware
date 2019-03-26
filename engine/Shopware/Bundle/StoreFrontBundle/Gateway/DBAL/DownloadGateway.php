@@ -97,6 +97,7 @@ class DownloadGateway implements Gateway\DownloadGatewayInterface
 
         $query->from('s_articles_downloads', 'download')
             ->leftJoin('download', 's_articles_downloads_attributes', 'downloadAttribute', 'downloadAttribute.downloadID = download.id')
+            ->innerJoin('download', 's_media', 'media', 'media.path = download.filename')
             ->where('download.articleID IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
