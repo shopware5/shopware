@@ -394,7 +394,9 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 header: me.snippets.columns.standard,
                 dataIndex: 'standard',
                 sortable: false,
-                flex: 1,
+                width: 70,
+                xtype: 'booleancolumn',
+                renderer: me.booleanColumnRenderer,
                 editor: {
                     xtype: 'checkbox',
                     inputValue: true,
@@ -403,8 +405,9 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
             } , {
                 header: me.snippets.columns.active,
                 dataIndex: 'active',
-                sortable: false,
-                flex: 1,
+                width: 70,
+                xtype: 'booleancolumn',
+                renderer: me.booleanColumnRenderer,
                 editor: {
                     xtype: 'checkbox',
                     inputValue: true,
@@ -755,6 +758,14 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
 
         me.store.pageSize = record.get('value');
         me.store.loadPage(1);
+    },
+
+    booleanColumnRenderer: function (value) {
+        var checked = 'sprite-ui-check-box-uncheck';
+        if (value === true || value === 1) {
+            checked = 'sprite-ui-check-box';
+        }
+        return '<span style="display:block; margin: 0 auto; height:16px; width:16px;" class="' + checked + '"></span>';
     },
 });
 //{/block}
