@@ -102,6 +102,9 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
         graduatedPrices: {
             title: '{s name=graduatedPrices/title}{/s}',
             confirm: '{s name=graduatedPrices/confirm}{/s}'
+        },
+        paging: {
+            pageSize: '{s name=variant/variantPageSize}variants{/s}'
         }
     },
 
@@ -662,13 +665,43 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
      * @return [Ext.toolbar.Paging] The paging toolbar for the customer grid
      */
     getPagingBar:function () {
-        var me = this;
+        var me = this,
+            productSnippet = me.snippets.paging.pageSize;
 
-        return Ext.create('Ext.toolbar.Paging', {
+        var pageSize = Ext.create('Ext.form.field.ComboBox', {
+            labelWidth: 120,
+            cls: Ext.baseCSSPrefix + 'page-size',
+            queryMode: 'local',
+            width: 180,
+            editable: false,
+            listeners: {
+                scope: me,
+                select: me.onPageSizeChange
+            },
+            store: Ext.create('Ext.data.Store', {
+                fields: [ 'value', 'name' ],
+                data: [
+                    { value: '20', name: '20 ' + productSnippet },
+                    { value: '40', name: '40 ' + productSnippet },
+                    { value: '60', name: '60 ' + productSnippet },
+                    { value: '80', name: '80 ' + productSnippet },
+                    { value: '100', name: '100 ' + productSnippet }
+                ]
+            }),
+            displayField: 'name',
+            valueField: 'value'
+        });
+        pageSize.setValue(me.store.pageSize);
+
+        var pagingBar = Ext.create('Ext.toolbar.Paging', {
             store: me.store,
             dock:'bottom',
             displayInfo:true
         });
+
+        pagingBar.insert(pagingBar.items.length - 2, [ { xtype: 'tbspacer', width: 6 }, pageSize ]);
+
+        return pagingBar;
     },
 
     /**
@@ -681,7 +714,15 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
         me.customerGroupStore = stores['customerGroups'];
         me.configuratorGroupStore = stores['configuratorGroups'];
         me.reconfigure(me.getStore(), me.getColumns(true));
-    }
+    },
+
+    onPageSizeChange: function(combo, records) {
+        var record = records[0],
+            me = this;
+
+        me.store.pageSize = record.get('value');
+        me.store.loadPage(1);
+    },
 });
 //{/block}
 
