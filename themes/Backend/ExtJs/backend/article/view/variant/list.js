@@ -125,6 +125,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
 
         me.registerEvents();
         me.columns = me.getColumns(true);
+        me.selModel = me.getGridSelModel();
 
         me.toolbar = me.getToolbar();
         me.pagingbar = me.getPagingBar();
@@ -482,6 +483,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
         return columns;
     },
 
+
     /**
      * Renderer function of the price column. If a scale price defined, the function returns the first price value
      * with an additional flag "from*" to display the user that this variant has scale prices.
@@ -585,7 +587,19 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
      * @return [Ext.selection.CheckboxModel] grid selection model
      */
     getGridSelModel:function () {
-        return Ext.create('Ext.selection.CellModel');
+        var me = this;
+
+        return Ext.create('Ext.selection.CheckboxModel', {
+            checkOnly: true,
+            listeners:{
+                // Unlocks the save button if the user has checked at least one checkbox
+                selectionchange:function (sm, selections) {
+                    if (me.deleteButton !== null) {
+                        me.deleteButton.setDisabled(selections.length === 0);
+                    }
+                }
+            }
+        });
     },
 
     /**
@@ -595,6 +609,21 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
      */
     getToolbar:function () {
         var me = this;
+
+        // Creates the delete button for mass deletion of variants
+        me.deleteButton = Ext.create('Ext.button.Button', {
+            iconCls: 'sprite-minus-circle-frame',
+            text: me.snippets.toolbar.remove,
+            disabled: true,
+            handler: function () {
+                var selectionModel = me.getSelectionModel(),
+                    records = selectionModel.getSelection();
+
+                if (records.length > 0) {
+                    me.fireEvent('deleteMultipleVariants', records);
+                }
+            }
+        });
 
         // Creates the price button to apply the standard prices of the main article on all variants.
         me.applyDataButton = Ext.create('Ext.button.Button', {
@@ -645,6 +674,10 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
             ui: 'shopware-ui',
             cls: 'shopware-toolbar',
             items:[
+                me.deleteButton,
+                { xtype:'tbspacer', width: 6 },
+                { xtype: 'tbseparator' },
+                { xtype:'tbspacer', width: 6 },
                 me.applyDataButton,
                 { xtype:'tbspacer', width: 6 },
                 { xtype: 'tbseparator' },
