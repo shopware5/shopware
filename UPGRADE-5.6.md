@@ -30,6 +30,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added information text to detail page of category filter 
 * Added string type cast in return statement of method `sOrder::sGetOrdernumber`
 * Added configuration to decide whether user basket should be cleared after logout or not
+* Added option symbols for `{include file="frontend/_includes/rating.tpl"}` to hide rating symbols
 
 ### Changes
 
