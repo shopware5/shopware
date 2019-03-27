@@ -454,14 +454,16 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $upstream = $filesystem->readStream($filePath);
         $downstream = fopen('php://output', 'wb');
 
-        ob_end_clean();
+        if ($this->isNotInUnitTestMode()) {
+            ob_end_clean();
+        }
 
         while (!feof($upstream)) {
             fwrite($downstream, fread($upstream, 4096));
             flush();
         }
 
-        if (!$this->container->hasParameter('session.unitTestEnabled') || !$this->container->getParameter('session.unitTestEnabled')) {
+        if ($this->isNotInUnitTestMode()) {
             exit;
         }
     }
@@ -865,5 +867,13 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     {
         return $this->container->get('session')->offsetGet('sOneTimeAccount')
             || $this->View()->getAssign('sUserData')['additional']['user']['accountmode'] == 1;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isNotInUnitTestMode()
+    {
+        return !$this->container->hasParameter('shopware.session.unitTestEnabled') || !$this->container->getParameter('shopware.session.unitTestEnabled');
     }
 }
