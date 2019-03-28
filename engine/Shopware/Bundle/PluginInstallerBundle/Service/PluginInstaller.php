@@ -247,9 +247,10 @@ class PluginInstaller
      */
     public function activatePlugin(Plugin $plugin)
     {
-        $context = new ActivateContext($plugin, $this->release->getVersion(), $plugin->getVersion());
-
         $bootstrap = $this->getPluginByName($plugin->getName());
+        $this->requirementValidator->validate($bootstrap->getPath() . '/plugin.xml', $this->release->getVersion());
+
+        $context = new ActivateContext($plugin, $this->release->getVersion(), $plugin->getVersion());
 
         $this->events->notify(PluginEvent::PRE_ACTIVATE, new PrePluginActivateEvent($context, $bootstrap));
 
