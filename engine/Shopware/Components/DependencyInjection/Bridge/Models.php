@@ -54,9 +54,9 @@ class Models
         Configuration $config,
         \Enlight_Loader $loader,
         Connection $connection,
-        QueryOperatorValidator $operatorValidator,
         // Annotation driver is not really used here but has to be loaded first
-        AnnotationDriver $modelAnnotation
+        AnnotationDriver $modelAnnotation,
+        QueryOperatorValidator $operatorValidator = null
     ) {
         $loader->registerNamespace(
             'Shopware\Models\Attribute',
@@ -69,8 +69,8 @@ class Models
         $entityManager = ModelManager::createInstance(
             $connection,
             $config,
-            $operatorValidator,
-            $eventManager
+            $eventManager,
+            $operatorValidator
         );
 
         LazyFetchModelEntity::setEntityManager($entityManager);

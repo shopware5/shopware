@@ -81,8 +81,8 @@ class ModelManager extends EntityManager
     public static function createInstance(
         Connection $conn,
         Configuration $config,
-        QueryOperatorValidator $operatorValidator,
-        EventManager $eventManager = null)
+        EventManager $eventManager = null,
+        QueryOperatorValidator $operatorValidator = null)
     {
         if (!$config->getMetadataDriverImpl()) {
             throw ORMException::missingMappingDriverImpl();
@@ -90,6 +90,10 @@ class ModelManager extends EntityManager
 
         if ($eventManager !== null && $conn->getEventManager() !== $eventManager) {
             throw ORMException::mismatchedEventManager();
+        }
+
+        if ($operatorValidator === null) {
+            $operatorValidator = new QueryOperatorValidator();
         }
 
         return new self($conn, $config, $operatorValidator, $conn->getEventManager());

@@ -57,6 +57,7 @@ class QueryOperatorValidator
         'BETWEEN',
         'BINARY',
         'CASE',
+        'CONTAINS',
         'DIV',
         'IN',
         'ISNULL',
@@ -68,6 +69,8 @@ class QueryOperatorValidator
         'REGEXP',
         'RLIKE',
         'SOUNDS LIKE',
+        'STARTS_WITH',
+        'ENDS_WITH',
         'XOR',
         Comparison::EQ,  // =
         Comparison::NEQ, // <>
@@ -82,9 +85,9 @@ class QueryOperatorValidator
      */
     public function __construct(array $validOperators = [])
     {
-        $this->validOperators = array_merge(
+        $this->validOperators = \array_merge(
             $this->validOperators,
-            array_map('strtoupper', $validOperators)
+            \array_map('strtoupper', $validOperators)
         );
     }
 
@@ -102,6 +105,6 @@ class QueryOperatorValidator
             return true;
         }
 
-        throw new InvalidArgumentException(sprintf("'%s' is no valid operator", $operator));
+        throw new InvalidArgumentException(\sprintf("'%s' is no valid operator", $operator));
     }
 }
