@@ -228,8 +228,8 @@
             <argument type="service" id="shopware.model_config" />
             <argument type="service" id="shopware.loader" />
             <argument type="service" id="dbal_connection" />
-            <argument type="service" id="shopware.query_operator_validator" />
             <argument type="service" id="shopware.model_annotations" />
+            <argument type="service" id="shopware.query_operator_validator" />
          </service>
 
         <service id="models_metadata_cache" class="Doctrine\Common\Cache\Cache">
