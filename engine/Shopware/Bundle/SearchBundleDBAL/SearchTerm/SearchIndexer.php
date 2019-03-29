@@ -259,23 +259,29 @@ class SearchIndexer implements SearchIndexerInterface
         $tables = $this->getSearchTables();
 
         $sql_join = '';
+        $sql_select_counts = [];
+        $sql_having = [];
         foreach ($tables as $table) {
-            if (empty($table['foreign_key'])) {
-                continue;
-            }
             if (empty($table['referenz_table'])) {
                 $table['referenz_table'] = 's_articles';
             }
-            $sql_join .= "
-                LEFT JOIN {$table['referenz_table']} t{$table['tableID']}
-                ON si.elementID=t{$table['tableID']}.{$table['foreign_key']}
-                AND si.fieldID IN ({$table['fieldIDs']})
-            ";
+            if (!empty($table['foreign_key'])) {
+                $sql_join .= "
+                    LEFT JOIN {$table['referenz_table']} t{$table['tableID']}
+                    ON si.elementID=t{$table['tableID']}.{$table['foreign_key']}
+                    AND si.fieldID IN ({$table['fieldIDs']})
+                ";
+            }
+            $sql_select_counts[$table['referenz_table'] ?: $table['table']] = '(SELECT COUNT(*) * 0.9 FROM ' . ($table['referenz_table'] ?: $table['table']) . ') AS cnt_' . ($table['referenz_table'] ?: $table['table']);
+            $sql_having[] = '(tableId = ' . $table['tableID'] . ' AND count_self > cnt_' . ($table['referenz_table'] ?: $table['table']) . ')';
         }
 
         $sql = "
             SELECT STRAIGHT_JOIN
-                   keywordID, fieldID, sk.keyword
+                   keywordID, fieldID, sk.keyword,
+                   " . implode(',' . PHP_EOL, $sql_select_counts) . ",
+                   (SELECT tableId FROM s_search_fields WHERE s_search_fields.id = si.fieldID) AS tableId,
+                   COUNT(*) AS count_self
             FROM `s_search_index` si
 
             INNER JOIN s_search_keywords sk
@@ -284,9 +290,9 @@ class SearchIndexer implements SearchIndexerInterface
             $sql_join
 
             GROUP BY keywordID, fieldID
-            HAVING COUNT(*) > (SELECT COUNT(*)*0.9 FROM `s_articles_details`)
+            HAVING " . implode(' OR ', $sql_having) . "
         ";
-
+        
         $collectToDelete = $this->connection->fetchAll($sql);
         foreach ($collectToDelete as $delete) {
             $sql = '
