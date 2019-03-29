@@ -3326,7 +3326,6 @@ class sAdmin
     /**
      * Overwrite sUserData['billingaddress'] with chosen address
      *
-     *
      * @return array
      */
     private function overwriteBillingAddress(array $userData)
@@ -3359,7 +3358,6 @@ class sAdmin
     /**
      * Overwrite sUserData['shippingaddress'] with chosen address
      *
-     *
      * @return array
      */
     private function overwriteShippingAddress(array $userData)
@@ -3390,7 +3388,6 @@ class sAdmin
 
     /**
      * Converts an address to the array key structure of a legacy billing or shipping address
-     *
      *
      * @return array
      */

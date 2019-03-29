@@ -434,7 +434,6 @@ class User extends ModelEntity
     /**
      * Set lockedUntil
      *
-     *
      * @return User
      */
     public function setLockedUntil($lockedUntil)

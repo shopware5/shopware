@@ -76,7 +76,6 @@ class ProductHydrator extends Hydrator
      * Hydrates the passed data and converts the ORM
      * array values into a Struct\ListProduct class.
      *
-     *
      * @return Struct\ListProduct
      */
     public function hydrateListProduct(array $data)

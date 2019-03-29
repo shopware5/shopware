@@ -452,7 +452,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      *
      * Populates $this->_postData
      *
-     *
      * @throws \Exception
      *
      * @return array

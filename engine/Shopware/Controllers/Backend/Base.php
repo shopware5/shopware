@@ -1035,7 +1035,6 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     /**
      * Add the table alias to the passed filter and sort parameters.
      *
-     *
      * @return array
      */
     private function prepareParam(array $properties, array $fields)
@@ -1056,7 +1055,6 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
     /**
      * Prepares the sort params for the variant search
-     *
      *
      * @return array
      */
@@ -1142,7 +1140,6 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
     /**
      * Helper function to generate the additional text dynamically
-     *
      *
      * @return array
      */

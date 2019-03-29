@@ -2487,7 +2487,6 @@ SQL;
      * Loads relevant associated data for the provided products
      * Used in sGetBasket
      *
-     *
      * @throws \Exception
      * @throws \Enlight_Event_Exception
      *

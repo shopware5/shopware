@@ -175,7 +175,6 @@ class Repository extends ModelRepository
     /**
      * Returns the \Doctrine\ORM\Query to select all categories for example for the backend tree
      *
-     *
      * @return Query
      */
     public function getListQuery(array $filterBy, array $orderBy, $limit = null, $offset = null)
@@ -188,7 +187,6 @@ class Repository extends ModelRepository
     /**
      * Helper method to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
-     *
      *
      * @return QueryBuilder
      */

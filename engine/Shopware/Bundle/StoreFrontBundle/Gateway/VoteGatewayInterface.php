@@ -52,7 +52,6 @@ interface VoteGatewayInterface
      * Required conditions for the selection:
      * - Sorted by the vote create date
      *
-     *
      * @return Struct\Product\Vote[]
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);

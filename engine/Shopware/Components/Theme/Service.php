@@ -188,7 +188,6 @@ class Service
      * configuration sets of the passed template.
      * The sets are translated automatically.
      *
-     *
      * @return array
      */
     public function getConfigSets(Shop\Template $template)
@@ -313,7 +312,6 @@ class Service
     /**
      * Translates the theme meta data.
      *
-     *
      * @return array
      */
     public function translateTheme(Shop\Template $template, array $data)
@@ -352,7 +350,6 @@ class Service
      * the template parent namespace and calls himself again.
      * This is required because the theme configuration are copied
      * from the extended theme but the snippets are not copied.
-     *
      *
      * @return array
      */
@@ -480,7 +477,6 @@ class Service
     /**
      * Internal helper function which translates the theme meta data.
      *
-     *
      * @return array
      */
     protected function translateThemeData(array $data, \Enlight_Components_Snippet_Namespace $namespace)
@@ -602,7 +598,6 @@ class Service
 
     /**
      * Returns the snippet namespace for the passed template.
-     *
      *
      * @return \Enlight_Components_Snippet_Namespace
      */

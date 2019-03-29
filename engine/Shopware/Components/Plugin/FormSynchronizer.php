@@ -165,7 +165,6 @@ class FormSynchronizer
     /**
      * Returns plugin form
      *
-     *
      * @return Form
      */
     private function getForm(Plugin $plugin)

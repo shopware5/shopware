@@ -26,7 +26,6 @@
      * Example:
      * <form id="filter" method="get" data-filter-form="true">
      *
-     *
      * ** Action Forms **
      * You can apply different category parameters over additional action forms.
      * In most cases these forms are auto submitting forms using the "autoSubmit" plugin,
@@ -40,7 +39,6 @@
      *      {...}
      *  </select>
      * </form>
-     *
      *
      * ** Action Links **
      * You can also apply different category parameter via direct links.

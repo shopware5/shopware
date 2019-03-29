@@ -38,7 +38,6 @@ interface PriceGroupDiscountGatewayInterface
      * - Price group base data
      * - Price group discounts for the provided customer group
      *
-     *
      * @return Struct\Product\PriceGroup[] Indexed by the price group id
      */
     public function getPriceGroups(

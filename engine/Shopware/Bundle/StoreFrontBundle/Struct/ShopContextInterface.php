@@ -63,7 +63,6 @@ interface ShopContextInterface
      * If the customer isn't logged in, the current customer group
      * is equal to the fallback customer group of the shop.
      *
-     *
      * @return Group
      */
     public function getCurrentCustomerGroup();

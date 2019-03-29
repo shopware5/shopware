@@ -195,7 +195,6 @@ class ListProductService implements ListProductServiceInterface
      * Checks if the provided product is allowed to display in the store front for
      * the provided context.
      *
-     *
      * @return bool
      */
     private function isProductValid(ListProduct $product, ShopContextInterface $context)

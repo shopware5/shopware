@@ -166,7 +166,6 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
     /**
      * Remove html-comments / whitespaces
      *
-     *
      * @return mixed|string
      */
     public function onFilterRender(Enlight_Event_EventArgs $args)

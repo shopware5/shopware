@@ -41,7 +41,6 @@ class DefaultCacheTimeService implements CacheTimeServiceInterface
     /**
      * getCacheTime returns the time span for which the cache of the given route remains valid.
      *
-     *
      * @return int|null
      */
     public function getCacheTime(Request $request)

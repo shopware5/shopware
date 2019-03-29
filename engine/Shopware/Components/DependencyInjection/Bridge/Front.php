@@ -39,7 +39,6 @@ class Front
      * front dispatcher. After the controller path is set to the dispatcher,
      * the plugin namespace of the front resource is set.
      *
-     *
      * @throws \Exception
      *
      * @return \Enlight_Controller_Front

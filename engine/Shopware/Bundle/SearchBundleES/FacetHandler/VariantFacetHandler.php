@@ -72,7 +72,6 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
     /**
      * Validates if the criteria part can be handled by this handler
      *
-     *
      * @return bool
      */
     public function supports(CriteriaPartInterface $criteriaPart)

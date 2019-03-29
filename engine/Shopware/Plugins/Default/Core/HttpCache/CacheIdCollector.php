@@ -36,7 +36,6 @@ class CacheIdCollector
     /**
      * Returns an array of affected cache ids for this $controller
      *
-     *
      * @return array
      */
     public function getCacheIdsFromController(Controller $controller, ShopContextInterface $context)

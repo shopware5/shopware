@@ -41,7 +41,6 @@ interface FacetHandlerInterface
     /**
      * Generates the facet data for the passed query, criteria and context object.
      *
-     *
      * @return FacetResultInterface|FacetResultInterface[]|null
      */
     public function generateFacet(
@@ -52,7 +51,6 @@ interface FacetHandlerInterface
 
     /**
      * Checks if the passed facet can be handled by this class.
-     *
      *
      * @return bool
      */

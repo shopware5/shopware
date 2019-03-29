@@ -21,7 +21,6 @@
      *
      * <div class="offcanvas--content">This content will be displayed inside the off canvas menu.</div>
      *
-     *
      * jQuery Initializing for all viewports
      *
      * StateManager.addPlugin('.category--teaser', 'swOffcanvasHtmlPanel');

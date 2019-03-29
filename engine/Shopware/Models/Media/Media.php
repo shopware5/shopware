@@ -544,7 +544,6 @@ class Media extends ModelEntity
     /**
      * Sets the assigned album.
      *
-     *
      * @return Media
      */
     public function setAlbum(Album $album)

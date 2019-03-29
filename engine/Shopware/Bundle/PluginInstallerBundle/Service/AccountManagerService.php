@@ -167,7 +167,6 @@ class AccountManagerService
     /**
      * Get the list of shops (and details) associated to the given user
      *
-     *
      * @throws \Exception
      *
      * @return array Array of shop details

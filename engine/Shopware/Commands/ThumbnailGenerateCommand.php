@@ -191,7 +191,6 @@ class ThumbnailGenerateCommand extends ShopwareCommand
     /**
      * Check each single thumbnail to skip already existing thumbnails
      *
-     *
      * @throws Exception
      */
     private function createMediaThumbnails(Media $media)

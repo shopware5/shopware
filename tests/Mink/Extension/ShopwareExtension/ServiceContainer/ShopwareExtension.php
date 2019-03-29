@@ -104,7 +104,6 @@ class ShopwareExtension implements ExtensionInterface
     /**
      * You can modify the container here before it is dumped to PHP code.
      *
-     *
      * @api
      */
     public function process(ContainerBuilder $container)

@@ -165,7 +165,6 @@ class QueryBuilder extends BaseQueryBuilder
      *      )));
      * </code>
      *
-     *
      * @return QueryBuilder
      */
     public function addFilter(array $filter)

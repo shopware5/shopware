@@ -81,7 +81,6 @@ class MediaSubscriber implements EventSubscriber
     /**
      * Live migration to fill width/height
      *
-     *
      * @throws \Exception
      */
     private function migrateMeta(LifecycleEventArgs $eventArgs)

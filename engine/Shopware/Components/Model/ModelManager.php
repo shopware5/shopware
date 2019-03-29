@@ -130,7 +130,6 @@ class ModelManager extends EntityManager
     /**
      * Returns the total count of the passed query builder.
      *
-     *
      * @return int|null
      */
     public function getQueryCount(Query $query)

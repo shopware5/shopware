@@ -122,7 +122,6 @@ class Listing extends Page implements HelperSelectorInterface
     /**
      * Sets the article filter
      *
-     *
      * @throws \Exception
      */
     public function filter(FilterGroup $filterGroups, array $properties)
@@ -189,7 +188,6 @@ class Listing extends Page implements HelperSelectorInterface
 
     /**
      * Checks the properties of a product box
-     *
      *
      * @throws \Exception
      */
@@ -272,7 +270,6 @@ class Listing extends Page implements HelperSelectorInterface
 
     /**
      * Sets the filters
-     *
      *
      * @throws \Exception
      */

@@ -333,7 +333,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      * Result can be merged with "sCategoryContent" to override relevant seo category data with
      * manufacturer data.
      *
-     *
      * @return array
      */
     private function getSeoDataOfManufacturer(Manufacturer $manufacturer)
@@ -404,7 +403,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     /**
      * Determines if the product listing has to be loaded/shown at all
      *
-     *
      * @return bool
      */
     private function hasListing(array $emotions)
@@ -425,7 +423,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
     /**
      * Filters the device types down to which have to show the product listing
-     *
      *
      * @return int[]
      */

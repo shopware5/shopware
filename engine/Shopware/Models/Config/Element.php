@@ -185,7 +185,6 @@ class Element extends ModelEntity
     /**
      * Set value
      *
-     *
      * @return Element
      */
     public function setValue($value)

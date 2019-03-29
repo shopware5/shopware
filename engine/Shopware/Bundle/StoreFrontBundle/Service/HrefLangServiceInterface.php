@@ -32,7 +32,6 @@ interface HrefLangServiceInterface
     /**
      * Returns the href links for all language shops
      *
-     *
      * @return HrefLang[]
      */
     public function getUrls(array $parameters, ShopContextInterface $contextService);

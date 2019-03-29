@@ -32,7 +32,6 @@ class CacheRouteGenerationService
      * getActionRoute takes a request and returns the concatenated module-, controller- and action-name,
      * e.g. frontend/listing/index.
      *
-     *
      * @return string
      */
     public function getActionRoute(Request $request)
@@ -46,7 +45,6 @@ class CacheRouteGenerationService
     /**
      * getActionRoute takes a request and returns the concatenated module- and controller-name,
      * e.g. frontend/listing.
-     *
      *
      * @return string
      */

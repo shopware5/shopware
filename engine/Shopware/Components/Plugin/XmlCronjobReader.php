@@ -105,7 +105,6 @@ class XmlCronjobReader
     /**
      * Get child elements by name.
      *
-     *
      * @return \DOMElement[]
      */
     private function getChildren(\DOMNode $node, $name)

@@ -92,7 +92,6 @@ class Configurator
      *
      * If one of the theme container elements isn't valid the function throws an exception
      *
-     *
      * @throws \Exception
      */
     public function synchronize(Theme $theme)
@@ -149,7 +148,6 @@ class Configurator
     /**
      * Helper function which validates the passed Shopware\Components\Form\Container.
      *
-     *
      * @throws \Exception
      */
     private function validateConfig(Form\Interfaces\Container $container)
@@ -174,7 +172,6 @@ class Configurator
     /**
      * Synchronize the theme configuration sets of the file system and
      * the database.
-     *
      *
      * @throws \Exception
      */

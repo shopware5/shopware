@@ -79,7 +79,6 @@ class BenchmarkCollector implements BenchmarkCollectorInterface
     /**
      * Moves the array element 'shop' to the parent array and deletes the 'shop' element.
      *
-     *
      * @throws \Exception
      *
      * @return array
@@ -99,7 +98,6 @@ class BenchmarkCollector implements BenchmarkCollectorInterface
 
     /**
      * Moves the "updated_orders" array into the "orders" key and leaves a hint about that moving
-     *
      *
      * @return array
      */

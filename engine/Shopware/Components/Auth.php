@@ -60,7 +60,6 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
     /**
      * Add adapter to list
      *
-     *
      * @return Shopware_Components_Auth
      */
     public function addAdapter(Zend_Auth_Adapter_Interface $adapter)
@@ -124,7 +123,6 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
 
     /**
      * Do a authentication approve with a defined adapter
-     *
      *
      * @return Zend_Auth_Result
      */

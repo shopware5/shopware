@@ -113,7 +113,6 @@ class Helper
     /**
      * Converts values with key in $keys to floats
      *
-     *
      * @return array
      */
     public static function floatArray(array $values, array $keys = [])
@@ -528,7 +527,6 @@ EOD
     /**
      * Helper method that returns the content block of a page
      *
-     *
      * @throws \Exception
      *
      * @return \Behat\Mink\Element\NodeElement
@@ -628,7 +626,6 @@ EOD
      * Helper function to get some information about the current page
      * Possible modes are 'controller', 'action' and 'template' or a combination of them
      * Please note, that 'template' only works in combination with 'controller' and/or 'action'.
-     *
      *
      * @return array|bool
      */

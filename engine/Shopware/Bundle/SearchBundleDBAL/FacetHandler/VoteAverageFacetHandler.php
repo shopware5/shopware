@@ -140,7 +140,6 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
     /**
      * Checks if the passed facet can be handled by this class.
      *
-     *
      * @return bool
      */
     public function supportsFacet(FacetInterface $facet)

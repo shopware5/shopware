@@ -988,7 +988,6 @@ class Category extends ModelEntity
     /**
      * Helper function which checks, if this category is child of a given parent category
      *
-     *
      * @return bool
      */
     public function isChildOf(\Shopware\Models\Category\Category $parent)
@@ -1126,7 +1125,6 @@ class Category extends ModelEntity
 
     /**
      * Helper function for the isChildOf function. This function is used for a recursive call.
-     *
      *
      * @return bool
      */

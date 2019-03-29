@@ -111,7 +111,6 @@ class PresetLoader implements PresetLoaderInterface
     /**
      * Prepares preset data to be shown as preview in ui.
      *
-     *
      * @return string $presetData
      */
     private function preparePresetData(array $presetData)

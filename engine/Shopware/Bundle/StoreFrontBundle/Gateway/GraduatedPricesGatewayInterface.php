@@ -53,7 +53,6 @@ interface GraduatedPricesGatewayInterface
      * Required conditions for the selection:
      * - Sorted ascending with the \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule::from property.
      *
-     *
      * @return Struct\Product\PriceRule[]
      */
     public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context, Struct\Customer\Group $customerGroup);

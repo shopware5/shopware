@@ -155,7 +155,6 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
     /**
      * Checks if "lastReceived" is younger than 24 hours.
      *
-     *
      * @return bool
      */
     private function hasFreshStatistics(\DateTimeInterface $lastReceived)
@@ -172,7 +171,6 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
 
     /**
      * Checks if "lastReceived" is older than 7 days.
-     *
      *
      * @return bool
      */

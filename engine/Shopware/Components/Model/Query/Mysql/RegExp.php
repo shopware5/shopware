@@ -55,7 +55,6 @@ class RegExp extends FunctionNode
     /**
      * Return SQL expression
      *
-     *
      * @return string
      */
     public function getSql(SqlWalker $sqlWalker)

@@ -63,7 +63,6 @@ class UploadMaxSizeValidator implements SubscriberInterface
     /**
      * Returns true if the POST max size has been exceeded in the request.
      *
-     *
      * @return bool
      */
     public function hasPostMaxSizeBeenExceeded(Enlight_Controller_Request_Request $request)

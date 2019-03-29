@@ -434,7 +434,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *  3. array('success' => true)
      *   => Delete was successfully.
      *
-     *
      * @param int $id
      *
      * @return array
@@ -465,7 +464,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * The passed id is the primary key value of the configured main model in the {@link #model}
      * property.
      * The passed associationKey contains the property name of the association.
-     *
      *
      * Important: This function works only for associations of the configured {@link #model} property.
      * If you want to reload association listings of other models, you have to override this function.

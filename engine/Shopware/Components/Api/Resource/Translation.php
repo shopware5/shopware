@@ -170,7 +170,6 @@ class Translation extends Resource implements BatchInterface
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
-     *
      * @throws ApiException\ParameterMissingException
      *
      * @return TranslationModel
@@ -201,7 +200,6 @@ class Translation extends Resource implements BatchInterface
      *  - shopId  => Identifier of the shop entity.
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
-     *
      *
      * @throws ApiException\ParameterMissingException
      *
@@ -427,7 +425,6 @@ class Translation extends Resource implements BatchInterface
 
     /**
      * Helper function which handles the update and create process of translations.
-     *
      *
      * @return array|TranslationModel|null
      */
@@ -807,7 +804,6 @@ class Translation extends Resource implements BatchInterface
      * Example:
      *     SET-A|GROUP-A
      *
-     *
      * @param string $number
      *
      * @throws \Exception
@@ -860,7 +856,6 @@ class Translation extends Resource implements BatchInterface
      * a piped separated name with the set, group and value name.
      * Example:
      *     SET-A|GROUP-A
-     *
      *
      * @param string $number
      *

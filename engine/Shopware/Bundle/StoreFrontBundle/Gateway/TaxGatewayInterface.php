@@ -45,7 +45,6 @@ interface TaxGatewayInterface
      *  - State
      * - The above rules are prioritized, from first to last.
      *
-     *
      * @return Struct\Tax[] Indexed by 'tax_' + id
      */
     public function getRules(

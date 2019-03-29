@@ -325,7 +325,6 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     /**
      * Override to get all snippet definitions for the loaded theme configuration.
      *
-     *
      * @return array
      */
     protected function getAdditionalDetailData(array $data)
@@ -446,7 +445,6 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     /**
      * Helper function which checks if the passed template
      * or the inheritance templates has configuration sets.
-     *
      *
      * @return bool
      */

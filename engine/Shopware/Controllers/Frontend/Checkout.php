@@ -1337,7 +1337,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     /**
      * Get all dispatches available in selected country from sAdmin object
      *
-     *
      * @return array|false list of dispatches
      */
     public function getDispatches($paymentId = null)
@@ -1866,7 +1865,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     /**
      * Selects the default payment method defined in the backend. If no payment method is defined,
      * the first payment method of the provided list will be returned.
-     *
      *
      * @return array
      */
