@@ -188,13 +188,21 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             }
 
             $store = $values['options']['store'];
+
             // Replace the store, which may contain multiple translations, with
             // a store with translated messages:
-            $values['options']['store'] = $this->translateStore($language, $store, $storeFallbackLocales);
+            if ($values['options']['translateUsingSnippets']) {
+                $values['options']['store'] = $this->translateStoreUsingSnippets($store, $values['options']['namespace']);
+            } else {
+                $values['options']['store'] = $this->translateStore($language, $store, $storeFallbackLocales);
+            }
+
             if (!isset($values['options']['queryMode'])) {
                 $values['options']['queryMode'] = 'remote';
             }
         }
+
+        unset($values);
 
         $this->View()->assign([
             'success' => true,
@@ -983,6 +991,28 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 $row[] = array_shift($value);
             }
         }
+
+        return $store;
+    }
+
+    /**
+     * @param string $namespace
+     *
+     * @return array
+     */
+    private function translateStoreUsingSnippets(array $store, $namespace)
+    {
+        $namespace = $this->container->get('snippets')->getNamespace($namespace);
+        foreach ($store as &$row) {
+            $text = $row[1];
+            if (is_array($text)) {
+                $text = current($text);
+            }
+
+            $row[1] = $namespace->get($text, $text);
+        }
+
+        unset($row);
 
         return $store;
     }
