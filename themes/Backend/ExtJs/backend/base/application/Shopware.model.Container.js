@@ -255,7 +255,6 @@ Ext.define('Shopware.model.Container', {
              *  and surrounded with square brackets:
              *      -   field.name = attribute['name']
              *
-             *
              * @type { String }
              */
             fieldAlias: undefined,

@@ -81,7 +81,6 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
     /**
      * Event listener method
      *
-     *
      * @return \sSystem
      */
     public function onInitResourceSystem(Enlight_Event_EventArgs $args)
@@ -152,7 +151,6 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
 
     /**
      * Event listener method
-     *
      *
      * @return \Shopware_Components_Modules
      */

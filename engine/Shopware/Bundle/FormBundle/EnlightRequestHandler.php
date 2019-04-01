@@ -68,7 +68,6 @@ class EnlightRequestHandler implements RequestHandlerInterface
     /**
      * remove shopware GET parameters from the request
      *
-     *
      * @return array
      */
     private function filterDefaultParameters(array $data)
@@ -102,7 +101,6 @@ class EnlightRequestHandler implements RequestHandlerInterface
 
     /**
      * Checks if the form has at least one field present
-     *
      *
      * @return bool
      */

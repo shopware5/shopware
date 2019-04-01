@@ -795,7 +795,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      * Function which calculates, validates and updates the new in stock when a cancelled order will be transformed into
      * a regular order
      *
-     *
      * @return bool
      */
     private function convertCancelledOrderInStock(Shopware\Models\Order\Order $orderModel)
@@ -840,7 +839,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
     /**
      * Checks if the order position is a regular product
-     *
      *
      * @return bool
      */

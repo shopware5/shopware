@@ -58,7 +58,7 @@ abstract class Resource
     const HYDRATE_ARRAY = 2;
 
     /**
-     * Contains the shopware model manager
+     * Contains the Shopware model manager
      *
      * @var ModelManager
      */
@@ -354,8 +354,7 @@ abstract class Resource
     }
 
     /**
-     * Returns a new api resource which contains the
-     * same configuration for the model manager and acl
+     * Returns a new api resource which contains the same configuration for the model manager and ACL
      * as the current resource.
      *
      * @param string $name
@@ -390,8 +389,9 @@ abstract class Resource
 
     /**
      * Helper function which checks the option configuration for the passed collection.
+     *
      * If the data property contains the "__options_$optionName" value and this value contains
-     * the "replace" parameter the collection will be cleared.
+     * the "replace" parameter, the collection will be cleared.
      *
      * @param array  $data
      * @param string $optionName
@@ -460,7 +460,7 @@ abstract class Resource
     }
 
     /**
-     * Helper function to execute different findOneBy statements which different conditions
+     * Helper function to execute different `findOneBy` statements with different conditions
      * until a passed entity instance found.
      *
      * @param string $entity
@@ -531,17 +531,19 @@ abstract class Resource
     }
 
     /**
-     * Helper function to resolve many to many associations for an entity.
-     * The function do the following thinks:
-     * It iterates all conditions which passed. The conditions contains the property names
-     * which can be used as identifier like array("id", "name", "number", ...).
-     * If the property isn't set in the passed data array the function continue with the next condition.
-     * If the property is set, the function looks into the passed collection element if
-     * the item is already exist in the entity collection.
-     * In case that the collection don't contains the entity, the function creates a findOneBy
-     * statement for the passed entity type.
-     * In case that the findOneBy statement finds no entity, the function throws an exception.
-     * Otherwise the item will be
+     * Helper function to resolve many to many associations for an entity. The function does the following:
+     *
+     * It iterates over all conditions which are passed to it. The conditions contain the property names
+     * which can be used as an identifier like array("id", "name", "number", ...).
+     *
+     * If the property isn't set in the passed data array, the function continues with the next condition.
+     * If the property IS defined, the function looks into the passed collection element if an
+     * item does already exist in the entity collection.
+     *
+     * In case the collection doesn't contain the entity, the function creates a `findOneBy`-statement
+     * for the passed entity type.
+     * In case that the `findOneBy`-statement finds no entity, the function throws an exception.
+     * Otherwise the item will be added to the collection and returned.
      *
      * @param array  $data
      * @param string $entityType
@@ -582,8 +584,8 @@ abstract class Resource
 
     /**
      * This helper method will reload the EntityManager.
-     * This is useful if the EntityManager was closed due to an error on the
-     * PDO connection.
+     *
+     * This is useful if the EntityManager was closed due to an error on the PDO connection.
      */
     protected function resetEntityManager()
     {

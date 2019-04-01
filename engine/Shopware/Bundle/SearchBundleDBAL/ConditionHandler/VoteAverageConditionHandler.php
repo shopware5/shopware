@@ -50,7 +50,6 @@ class VoteAverageConditionHandler implements ConditionHandlerInterface
     /**
      * Checks if the passed condition can be handled by this class.
      *
-     *
      * @return bool
      */
     public function supportsCondition(ConditionInterface $condition)

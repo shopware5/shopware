@@ -650,7 +650,6 @@ class sArticles
     /**
      * Get product topsellers for a specific category
      *
-     *
      * @return array
      */
     public function sGetArticleCharts($category = null)
@@ -2598,7 +2597,6 @@ class sArticles
      * Additionally the function removes empty array elements.
      * Array elements of the configuration selection can be empty, if the user resets the
      * different group selections.
-     *
      *
      * @return array
      */

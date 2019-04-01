@@ -54,7 +54,6 @@ interface ProductConfigurationGatewayInterface
      * - Configurator groups
      * - Configurator options
      *
-     *
      * @return Struct\Configurator\Group[]
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);

@@ -136,7 +136,6 @@ class Compiler
      * Helper function which compiles a shop with new theme.
      * The function is called when the template cache is cleared.
      *
-     *
      * @throws \Exception
      */
     public function compile(Shop\Shop $shop)
@@ -307,7 +306,6 @@ class Compiler
     /**
      * Helper function which reads and creates the theme timestamp for the css and js files.
      *
-     *
      * @return int
      */
     public function getThemeTimestamp(Shop\Shop $shop)
@@ -346,7 +344,6 @@ class Compiler
     /**
      * Helper function which compiles the passed less definition.
      * The shop parameter is required to build the shop url for the files.
-     *
      *
      * @throws \Enlight_Event_Exception
      */
@@ -395,7 +392,6 @@ class Compiler
      * the function throws the event `Theme_Compiler_Collect_Plugin_Less_Config`
      * to allow plugins to override the theme configuration.
      *
-     *
      * @throws \Exception
      *
      * @return array
@@ -425,7 +421,6 @@ class Compiler
 
     /**
      * Builds the configuration for the less compiler class.
-     *
      *
      * @throws \Enlight_Event_Exception
      *

@@ -54,7 +54,6 @@ class LegacyPluginExtractor
      * path and validates the plugin namespace, directory traversal
      * and multiple plugin directories.
      *
-     *
      * @throws \Exception
      */
     private function validatePluginZip(\ZipArchive $archive)

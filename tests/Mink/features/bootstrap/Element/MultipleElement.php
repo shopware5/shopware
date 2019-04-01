@@ -89,7 +89,6 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     /**
      * Have to be called after get the MultipleElement to find all its siblings
      *
-     *
      * @return $this
      */
     public function setParent(\Behat\Mink\Element\Element $parent)

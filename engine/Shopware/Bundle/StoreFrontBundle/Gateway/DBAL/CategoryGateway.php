@@ -235,7 +235,6 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     /**
      * Resolves translated data for media and streamId
      *
-     *
      * @return array
      */
     private function translateCategoryData(array $category, Struct\ShopContextInterface $context)

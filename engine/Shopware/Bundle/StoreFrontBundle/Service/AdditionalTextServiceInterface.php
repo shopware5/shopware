@@ -42,7 +42,6 @@ interface AdditionalTextServiceInterface
      *
      * This behaviour can be optionally disabled using the backend settings
      *
-     *
      * @return Struct\ListProduct $product
      */
     public function buildAdditionalText(Struct\ListProduct $product, Struct\ShopContextInterface $context);

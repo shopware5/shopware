@@ -173,7 +173,6 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
     /**
      * Use the ID of the authenticated user as a fallback 'userId'
      *
-     *
      * @return array
      */
     private function prepareFallbackUser(array $params)

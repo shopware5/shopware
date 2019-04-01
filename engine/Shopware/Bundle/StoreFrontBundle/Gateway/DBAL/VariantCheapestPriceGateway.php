@@ -224,7 +224,6 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
     /**
      * Pre selection of the cheapest prices.
      *
-     *
      * @return QueryBuilder
      */
     private function getCheapestPriceQuery(QueryBuilder $mainQuery, Criteria $criteria)

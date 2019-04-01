@@ -45,7 +45,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     private $eventManager;
 
     /**
-     * @var array
+     * @var ComponentHandlerInterface[]
      */
     private $componentHandlers;
 

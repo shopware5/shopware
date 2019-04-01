@@ -54,7 +54,6 @@ class LocationService implements LocationServiceInterface
     /**
      * Returns all available countries for the provided shop context
      *
-     *
      * @return Country[] indexed by id
      */
     public function getCountries(ShopContextInterface $context)

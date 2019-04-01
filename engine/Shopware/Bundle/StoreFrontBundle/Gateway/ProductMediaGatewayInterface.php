@@ -80,7 +80,6 @@ interface ProductMediaGatewayInterface
      * - Selects only product media which has no configurator configuration and the main flag equals 1
      * - Sorted ascending by the image position
      *
-     *
      * @return Struct\Media
      */
     public function getCover(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
@@ -98,7 +97,6 @@ interface ProductMediaGatewayInterface
      * Required conditions for the selection:
      * - Selects only product media which has no configurator configuration
      * - Sorted ascending by the image main flag and image position
-     *
      *
      *
      * @return Struct\Media[]

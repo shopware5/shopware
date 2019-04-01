@@ -131,7 +131,6 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
     /**
      * Returns the base query to select the custom facet data.
      *
-     *
      * @return QueryBuilder
      */
     private function createQuery(ShopContextInterface $context)

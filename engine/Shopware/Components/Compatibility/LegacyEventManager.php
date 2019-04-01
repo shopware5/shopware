@@ -87,7 +87,6 @@ class LegacyEventManager
      * Following events are deprecated and only implemented for backward compatibility to shopware 4
      * Removed with shopware 5.1
      *
-     *
      * @return array|mixed
      */
     public function fireArticleByIdEvents(array $product, \sArticles $module)

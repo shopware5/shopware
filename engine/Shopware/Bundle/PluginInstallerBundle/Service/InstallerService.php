@@ -139,7 +139,6 @@ class InstallerService
     /**
      * Returns a certain plugin by plugin id.
      *
-     *
      * @return \Shopware_Components_Plugin_Bootstrap|null
      */
     public function getPluginBootstrap(Plugin $plugin)

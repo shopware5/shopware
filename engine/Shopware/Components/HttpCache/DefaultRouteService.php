@@ -74,7 +74,6 @@ class DefaultRouteService
      * findRouteValue takes the current Request and tries to find a default max-age value for either the full route,
      * including the action, or at least the controller. If that fails, null is returned.
      *
-     *
      * @return int|null
      */
     public function findRouteValue(Enlight_Controller_Request_Request $request, array $values = null)

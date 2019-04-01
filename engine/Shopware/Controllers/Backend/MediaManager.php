@@ -828,7 +828,6 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     /**
      * Returns all thumbnails paths according to the given media object
      *
-     *
      * @return array
      */
     private function getMediaThumbnailPaths(array $media)
@@ -904,7 +903,6 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     /**
      * Internal helper function to handle batch processing to remove the albums.
      *
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
@@ -957,7 +955,6 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     /**
      * Internal helper function to set the passed params to the media model and save the media.
      * Created to handle the batch processing.
-     *
      *
      * @throws Exception
      * @throws \Doctrine\ORM\ORMException

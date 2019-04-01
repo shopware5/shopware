@@ -98,7 +98,6 @@ class PriceCalculationService implements PriceCalculationServiceInterface
     /**
      * Calculates the cheapest price considering the variant min purchase
      *
-     *
      * @return Price
      */
     private function calculateCheapestAvailablePrice(
@@ -125,7 +124,6 @@ class PriceCalculationService implements PriceCalculationServiceInterface
      * The product can contains multiple price struct elements like the graduated prices
      * and the cheapest price struct.
      * All price structs will be calculated through this function.
-     *
      *
      * @return Price
      */
@@ -159,7 +157,6 @@ class PriceCalculationService implements PriceCalculationServiceInterface
     /**
      * Calculates the product unit reference price for the passed
      * product price.
-     *
      *
      * @return float
      */

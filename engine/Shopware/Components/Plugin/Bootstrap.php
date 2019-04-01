@@ -300,7 +300,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Create a new menu item instance
      *
-     *
      * @return Menu|null
      */
     public function createMenuItem(array $options)
@@ -510,7 +509,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *  1. The 'Views' plugin directory is added as a template directory.
      *  2. The 'Snippets' plugin directory is added as a config directory.
      *  3. The 'Components' plugin directory is added as a component namespace.
-     *
      *
      * @throws Exception
      *
@@ -891,7 +889,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Check if a list of given plugins is currently available
      * and active
-     *
      *
      * @return bool
      */

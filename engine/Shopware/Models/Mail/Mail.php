@@ -219,7 +219,6 @@ class Mail extends ModelEntity
     /**
      * Set fromMail
      *
-     *
      * @param string $fromMail
      *
      * @return \Shopware\Models\Mail\Mail

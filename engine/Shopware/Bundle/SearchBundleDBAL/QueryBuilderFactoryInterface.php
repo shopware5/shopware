@@ -40,14 +40,12 @@ interface QueryBuilderFactoryInterface
      *
      * Adds the sorting and conditions of the provided criteria.
      *
-     *
      * @return QueryBuilder
      */
     public function createQueryWithSorting(Criteria $criteria, ShopContextInterface $context);
 
     /**
      * Generates the product selection query of the product number search
-     *
      *
      * @return QueryBuilder
      */
@@ -58,7 +56,6 @@ interface QueryBuilderFactoryInterface
      * criteria and context.
      *
      * Adds only the conditions of the provided criteria.
-     *
      *
      * @return QueryBuilder
      */

@@ -108,7 +108,6 @@ class Enlight_Components_Cron_Job
      * action - Name of the action which is called during the execution phase. Expected data type: String
      * data - Data storage. Can be used to store answers from cron job call. Expected data type: String
      *
-     *
      * @param array $options
      */
     public function __construct(array $options)

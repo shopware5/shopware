@@ -217,7 +217,6 @@ class AppCache extends HttpCache
      * Checks whether or not the response header contains
      * a no-cache header that matches one in the request cookie
      *
-     *
      * @return bool
      */
     protected function containsNoCacheTag(Request $request, Response $response)
@@ -290,7 +289,6 @@ class AppCache extends HttpCache
 
     /**
      * Checks if current purge request is allowed.
-     *
      *
      * @return bool
      */

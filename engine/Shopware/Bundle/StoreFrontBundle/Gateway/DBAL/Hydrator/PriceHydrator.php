@@ -95,7 +95,6 @@ class PriceHydrator extends Hydrator
      * This function uses the normally hydrate function of this class
      * and adds additionally the product unit information to the price.
      *
-     *
      * @return Struct\Product\PriceRule
      */
     public function hydrateCheapestPrice(array $data)

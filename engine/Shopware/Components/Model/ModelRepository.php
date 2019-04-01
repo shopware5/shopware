@@ -112,7 +112,6 @@ class ModelRepository extends EntityRepository
      *      )));
      * </code>
      *
-     *
      * @return QueryBuilder
      */
     public function addFilter(QueryBuilder $builder, array $filter)
@@ -129,7 +128,6 @@ class ModelRepository extends EntityRepository
      *          'direction' => 'DESC'
      *      )));
      * </code>
-     *
      *
      * @return QueryBuilder
      */

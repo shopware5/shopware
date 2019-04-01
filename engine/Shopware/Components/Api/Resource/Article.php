@@ -507,7 +507,6 @@ class Article extends Resource implements BatchInterface
     /**
      * Helper function which converts the passed data for the main variant of the product.
      *
-     *
      * @return array
      */
     public function prepareMainDetail(array $data, ProductModel $article)
@@ -613,7 +612,6 @@ class Article extends Resource implements BatchInterface
     /**
      * Helper function which creates a new product image with the passed media object.
      *
-     *
      * @return Image
      */
     public function createNewArticleImage(ProductModel $article, MediaModel $media)
@@ -633,7 +631,6 @@ class Article extends Resource implements BatchInterface
     /**
      * Helper function to map the media data into an product image
      *
-     *
      * @return Image
      */
     public function updateArticleImageWithMedia(ProductModel $article, Image $image, MediaModel $media)
@@ -652,8 +649,6 @@ class Article extends Resource implements BatchInterface
      * @param int   $articleId
      * @param array $translations
      *
-     * @throws ORMException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws ApiException\CustomValidationException
      */
     public function writeTranslations($articleId, $translations)
@@ -977,7 +972,7 @@ class Article extends Resource implements BatchInterface
         $data = $this->prepareDownloadsAssociatedData($data, $article);
         $data = $this->prepareConfiguratorSet($data, $article);
 
-        //need to set the tax data directly for following price calculations which use the tax object of the article
+        // Need to set the tax data directly for following price calculations which use the tax object of the article
         if (isset($data['tax'])) {
             $article->setTax($data['tax']);
         }
@@ -1018,7 +1013,7 @@ class Article extends Resource implements BatchInterface
         }
 
         $setFirstVariantMain = false;
-        // delete old main, if it has no configurator options
+        // Delete old main, if it has no configurator options
         // and if non of the following variants has the mainDetail's number
         $oldMainDetail = $article->getMainDetail();
 
@@ -1040,9 +1035,8 @@ class Article extends Resource implements BatchInterface
             }
         }
 
-        // if the mainDetail was deleted, set the first variant as mainDetail
-        // if another variant has set isMain to true, this variant will become
-        // a usual variant again
+        // If the mainDetail was deleted, set the first variant as mainDetail.
+        // If another variant has set isMain to true, this variant will become a usual variant again
         if ($setFirstVariantMain) {
             $data['variants'][0]['isMain'] = true;
         }
@@ -1073,9 +1067,9 @@ class Article extends Resource implements BatchInterface
             } else {
                 $variant = null;
 
-                //the number property can be set for two reasons.
-                //1. Use the number as identifier to update an existing variant
-                //2. Use this number for the new variant
+                // The number property can be set for two reasons.
+                // 1. Use the number as identifier to update an existing variant
+                // 2. Use this number for the new variant
                 if (isset($variantData['number'])) {
                     $variant = $this->getManager()->getRepository(Detail::class)->findOneBy([
                         'number' => $variantData['number'],
@@ -1083,7 +1077,7 @@ class Article extends Resource implements BatchInterface
                     ]);
                 }
 
-                //if the variant was found over the number, update the existing
+                // If the variant was found over the number, update the existing
                 if ($variant) {
                     $variant = $this->getVariantResource()->internalUpdate(
                         $variant->getId(),
@@ -1091,7 +1085,7 @@ class Article extends Resource implements BatchInterface
                         $article
                     );
                 } else {
-                    //otherwise the number passed to use as order number for the new variant
+                    // Otherwise the number passed to use as order number for the new variant
                     $variant = $this->getVariantResource()->internalCreate($variantData, $article);
                 }
             }
@@ -1283,7 +1277,7 @@ class Article extends Resource implements BatchInterface
      */
     protected function prepareArticleAssociatedData($data, ProductModel $article)
     {
-        //check if a tax id is passed and load the tax model or set the tax parameter to null.
+        // Check if a tax id is passed and load the tax model or set the tax parameter to null.
         if (!empty($data['taxId'])) {
             $data['tax'] = $this->getManager()->find(Tax::class, $data['taxId']);
 
@@ -1300,7 +1294,7 @@ class Article extends Resource implements BatchInterface
             unset($data['tax']);
         }
 
-        //check if a supplier id is passed and load the supplier model or set the supplier parameter to null.
+        // Check if a supplier id is passed and load the supplier model or set the supplier parameter to null.
         if (!empty($data['supplierId'])) {
             $data['supplier'] = $this->getManager()->find(Supplier::class, $data['supplierId']);
             if (empty($data['supplier'])) {
@@ -1317,7 +1311,7 @@ class Article extends Resource implements BatchInterface
             unset($data['supplier']);
         }
 
-        //check if a priceGroup id is passed and load the priceGroup model or set the priceGroup parameter to null.
+        // Check if a priceGroup id is passed and load the priceGroup model or set the priceGroup parameter to null.
         if (isset($data['priceGroupId'])) {
             if (empty($data['priceGroupId'])) {
                 $data['priceGroupId'] = null;
@@ -1331,7 +1325,7 @@ class Article extends Resource implements BatchInterface
             unset($data['priceGroup']);
         }
 
-        //check if a propertyGroup is passed and load the propertyGroup model or set the propertyGroup parameter to null.
+        // Check if a propertyGroup is passed and load the propertyGroup model or set the propertyGroup parameter to null.
         if (isset($data['filterGroupId'])) {
             if (empty($data['filterGroupId'])) {
                 $data['propertyGroup'] = null;
@@ -1662,7 +1656,7 @@ class Article extends Resource implements BatchInterface
                 );
             }
 
-            //no valid entity found, throw exception!
+            // No valid entity found, throw exception!
             if (!$similarProduct) {
                 $property = $similarData['number'] ?: $similarData['id'];
                 throw new ApiException\CustomValidationException(
@@ -1694,7 +1688,7 @@ class Article extends Resource implements BatchInterface
             return $data;
         }
 
-        // remove assigned values
+        // Remove assigned values
         if (empty($data['propertyValues'])) {
             return $data;
         }
@@ -1747,7 +1741,7 @@ class Article extends Resource implements BatchInterface
                         if (!$relation) {
                             $propertyGroup->addOption($option);
                         }
-                        // get/create option depending on associated filter groups
+                        // Get/create option depending on associated filter groups
                     } elseif (isset($valueData['option']['name'])) {
                         // If a name is passed and there is a matching option/group relation, get this option
                         // If only a name is passed, create a new option
@@ -1835,7 +1829,6 @@ class Article extends Resource implements BatchInterface
      * Checks if the passed product image is already created
      * as variant image.
      *
-     *
      * @return bool
      */
     protected function isVariantImageExist(Detail $variant, Image $image)
@@ -1884,7 +1877,6 @@ class Article extends Resource implements BatchInterface
      *    //OR
      *    array('name' => 'blue')
      * )
-     *
      *
      * @throws ApiException\CustomValidationException
      */
@@ -1935,7 +1927,6 @@ class Article extends Resource implements BatchInterface
 
     /**
      * Translate the whole product array.
-     *
      *
      * @return array
      */
@@ -2250,7 +2241,6 @@ class Article extends Resource implements BatchInterface
      * to get a single row of the query builder result for the current resource result mode
      * using the query paginator.
      *
-     *
      * @return array
      */
     private function getSingleResult(QueryBuilder $builder)
@@ -2266,7 +2256,6 @@ class Article extends Resource implements BatchInterface
      * Helper function to prevent duplicate source code
      * to get the full query builder result for the current resource result mode
      * using the query paginator.
-     *
      *
      * @return array
      */
@@ -2294,7 +2283,7 @@ class Article extends Resource implements BatchInterface
 
         $key = '__options_categories';
 
-        //replacement deactivated?
+        // Replacement deactivated?
         if (isset($data[$key]) && $data[$key]['replace'] == false) {
             return;
         }

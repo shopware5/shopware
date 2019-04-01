@@ -81,7 +81,6 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * Enlight_Controller_Request_Request and an instance of the Enlight_Controller_Response_Response.
      * The response and request instance will be passed to the init events of the class and the controller.
      *
-     *
      * @param Enlight_Controller_Request_Request   $request
      * @param Enlight_Controller_Response_Response $response
      *

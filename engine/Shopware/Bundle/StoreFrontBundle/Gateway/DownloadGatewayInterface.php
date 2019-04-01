@@ -50,7 +50,6 @@ interface DownloadGatewayInterface
      * - Download base data
      * - Core attribute of the download
      *
-     *
      * @return Struct\Product\Download[]
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);

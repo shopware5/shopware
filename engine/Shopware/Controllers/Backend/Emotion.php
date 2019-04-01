@@ -953,7 +953,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      * Failure case:
      *  array('success' => false, 'error' => An error message)
      *
-     *
      * @param int|null $id
      *
      * @return array
@@ -989,7 +988,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      *
      * Failure case:
      *  array('success' => false, 'error' => An error message)
-     *
      *
      * @param int|null $id
      *
@@ -1133,7 +1131,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      * Method for saving a single emotion model.
      * Processes the provided data and creates necessary associations.
      *
-     *
      * @return Emotion|null
      */
     private function saveEmotion(array $data)
@@ -1255,7 +1252,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     /**
      * Helper method for creating associated emotion elements.
      *
-     *
      * @return array
      */
     private function createElements(Emotion $emotion, array $emotionElements)
@@ -1285,7 +1281,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     /**
      * Helper method for creating associated element viewports.
      *
-     *
      * @return array
      */
     private function createElementViewports(Emotion $emotion, array $elementViewports)
@@ -1299,7 +1294,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
     /**
      * Helper method for creating associated element data.
-     *
      *
      * @return array
      */
@@ -1516,7 +1510,6 @@ EOD;
 
     /**
      * creates a unique identifier string based on the grid position
-     *
      *
      * @return string
      */

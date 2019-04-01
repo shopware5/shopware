@@ -58,7 +58,6 @@ interface RelatedProductStreamsGatewayInterface
      *
      * Example result: array({Struct\ProductStream}, {Struct\ProductStream})
      *
-     *
      * @return array Array of order numbers
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);

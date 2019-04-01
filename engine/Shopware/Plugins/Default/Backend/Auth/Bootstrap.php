@@ -380,7 +380,6 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      * Initiate shopware auth resource
      * database adapter by default
      *
-     *
      * @throws \Exception
      * @throws \SmartyException
      * @throws \Enlight_Exception

@@ -293,7 +293,6 @@ class CategorySubscriber implements BaseEventSubscriber
     /**
      * Sets the internal path field for given category based on it's parents
      *
-     *
      * @return Category
      */
     public function setPathForCategory(Category $category)

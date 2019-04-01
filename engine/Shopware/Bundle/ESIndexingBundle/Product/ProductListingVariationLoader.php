@@ -181,7 +181,6 @@ class ProductListingVariationLoader
     /**
      * Builds the visibility for the variant listings
      *
-     *
      * @return array
      */
     public function getVisibility(Product $product, VariantFacet $facet)
@@ -197,7 +196,6 @@ class ProductListingVariationLoader
 
     /**
      * Combines all array elements with all array elements
-     *
      *
      * @return array
      */

@@ -37,7 +37,6 @@ interface PriceHelperInterface
     /**
      * Returns the full selection for the cheapest price
      *
-     *
      * @return string
      */
     public function getSelection(ProductContextInterface $context);

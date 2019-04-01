@@ -81,7 +81,6 @@ class Discount extends ModelEntity
     /**
      * Set group
      *
-     *
      * @return Discount
      */
     public function setGroup(Group $group)

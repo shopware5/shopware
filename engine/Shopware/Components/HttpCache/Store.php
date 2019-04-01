@@ -171,7 +171,6 @@ class Store extends BaseStore
      * When saving a page, also save the page's cacheKey in an optimized version
      * so we can look it up more quickly
      *
-     *
      * @return string
      */
     public function write(Request $request, Response $response)
@@ -229,7 +228,6 @@ class Store extends BaseStore
     /**
      * Verify the URL parameters for a better cache hit rate
      * Removes ignored URL parameters set in the Shopware configuration.
-     *
      *
      * @return string
      */

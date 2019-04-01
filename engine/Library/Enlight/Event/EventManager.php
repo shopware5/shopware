@@ -197,7 +197,6 @@ class Enlight_Event_EventManager extends Enlight_Class
      * Before the listener will be executed the the flag "processed" will be set to false in the event arguments.
      * After all event listeners has been executed the "processed" flag will be set to true.
      *
-     *
      * @param string                             $event
      * @param Enlight_Event_EventArgs|array|null $eventArgs
      *
@@ -234,7 +233,6 @@ class Enlight_Event_EventManager extends Enlight_Class
      * After all event listeners has been executed the "processed" flag will be set to true.
      *
      * The event listeners will be executed until one of the listeners return not null.
-     *
      *
      * @param string                             $event
      * @param Enlight_Event_EventArgs|array|null $eventArgs
@@ -279,7 +277,6 @@ class Enlight_Event_EventManager extends Enlight_Class
      * After all event listeners has been executed the "processed" flag will be set to true.
      *
      * The return value of the execute method will be set in the event arguments return value.
-     *
      *
      * @param string                             $event
      * @param mixed                              $value

@@ -306,7 +306,6 @@ class Installer
      * Used to update the Shopware\Models\Shop\Template entity with
      * the theme data.
      *
-     *
      * @return array
      */
     private function getThemeDefinition(Theme $theme)
@@ -352,7 +351,6 @@ class Installer
     /**
      * Helper function which resolves the theme parent for each
      * passed theme
-     *
      *
      * @throws \Exception
      */
