@@ -816,17 +816,13 @@ SQL;
         }
 
         // Including currency factor
+        $factor = 1;
         if ($this->sSYSTEM->sCurrency['factor'] && empty($voucherDetails['percental'])) {
             $factor = $this->sSYSTEM->sCurrency['factor'];
             $voucherDetails['value'] *= $factor;
-        } else {
-            $factor = 1;
         }
 
-        $basketValue = 0;
-        if ($factor !== 0) {
-            $basketValue = $amount['totalAmount'] / $factor;
-        }
+        $basketValue = $amount['totalAmount'] / $factor;
         // Check if the basket's value is above the voucher's
         if ($basketValue < $voucherDetails['minimumcharge']) {
             $snippet = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
