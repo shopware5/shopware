@@ -835,7 +835,11 @@ SQL;
             );
             $smarty = Shopware()->Container()->get('template');
             $template = $smarty->createTemplate(sprintf('string:%s', $snippet));
-            $template->assign('sMinimumCharge', $voucherDetails['minimumcharge']);
+            if ($factor !== 0) {	    
+            	$template->assign('sMinimumCharge', $voucherDetails['minimumcharge'] * $factor);
+            } else {
+            	$template->assign('sMinimumCharge', $voucherDetails['minimumcharge']);
+            }
 
             $sErrorMessages[] = $template->fetch();
 
