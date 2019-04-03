@@ -142,6 +142,11 @@ class ShopPage extends Extendable
     protected $parent;
 
     /**
+     * @var int
+     */
+    protected $childrenCount;
+
+    /**
      * @return int
      */
     public function getId()
@@ -488,6 +493,22 @@ class ShopPage extends Extendable
     public function setParentId($parentId)
     {
         $this->parentId = $parentId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getChildrenCount()
+    {
+        return $this->childrenCount;
+    }
+
+    /**
+     * @param int $childrenCount
+     */
+    public function setChildrenCount($childrenCount)
+    {
+        $this->childrenCount = $childrenCount;
     }
 
     /**

@@ -1012,6 +1012,36 @@ class LegacyStructConverter
     }
 
     /**
+     * @return array
+     */
+    public function convertShopPageStruct(StoreFrontBundle\Struct\ShopPage $shopPage)
+    {
+        $data = $shopPage->jsonSerialize();
+
+        $data = $data + [
+            'attributes' => $shopPage->getAttributes(),
+        ];
+
+        if ($shopPage->hasAttribute('core')) {
+            $data['attribute'] = $shopPage->getAttribute('core')->jsonSerialize();
+        }
+
+        $data['children'] = $this->convertShopPageStructList($shopPage->getChildren());
+
+        return $data;
+    }
+
+    /**
+     * @param StoreFrontBundle\Struct\ShopPage[] $shopPages
+     *
+     * @return array
+     */
+    public function convertShopPageStructList(array $shopPages)
+    {
+        return array_map([$this, 'convertShopPageStruct'], $shopPages);
+    }
+
+    /**
      * Returns the count of children categories of the provided category
      *
      * @param int $id

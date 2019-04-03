@@ -809,6 +809,7 @@ class FieldHelper
             'page.meta_description as __page_meta_description',
             'page.changed as __page_changed',
             'page.shop_ids as __page_shop_ids',
+            '(SELECT COUNT(*) FROM s_cms_static WHERE parentID = page.id) as __page_children_count',
         ];
 
         $fields = array_merge(

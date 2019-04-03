@@ -76,6 +76,7 @@ class ShopPageHydrator extends Hydrator
         $shopPage->setPageTitle($data['__page_page_title']);
         $shopPage->setMetaKeywords($data['__page_meta_keywords']);
         $shopPage->setMetaDescription($data['__page_meta_description']);
+        $shopPage->setChildrenCount((int) $data['__page_children_count']);
 
         if (isset($data['__page_parent_id']) && $data['__page_parent_id'] > 0) {
             $shopPage->setParentId((int) $data['__page_parent_id']);
