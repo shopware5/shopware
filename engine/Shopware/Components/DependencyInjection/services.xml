@@ -144,6 +144,7 @@
             <argument type="service" id="shopware.model_manager"/>
             <argument>%shopware.plugin_directories%</argument>
             <argument>%shopware.snippet%</argument>
+            <argument>%shopware.template.templateDir%/Frontend</argument>
         </service>
 
         <service id="acl" class="Shopware_Components_Acl">

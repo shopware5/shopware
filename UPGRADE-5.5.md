@@ -14,6 +14,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 * Changed the usage of translation for shop pages in the side menu in mobile view
 * Changed the worstRating for Googles struct data
+* Changed `SnippetManager` to consider plugin directories and theme directories in readFromIni mode
 
 ## 5.5.8
 
