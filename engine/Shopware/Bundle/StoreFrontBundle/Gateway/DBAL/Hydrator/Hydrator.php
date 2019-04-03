@@ -46,6 +46,8 @@ class Hydrator
     }
 
     /**
+     * @deprecated in 5.6, will be removed in 5.7 without an replacement.
+     *
      * @param string $prefix
      * @param array  $data
      *
@@ -53,6 +55,8 @@ class Hydrator
      */
     protected function getFields($prefix, $data)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $result = [];
         foreach ($data as $field => $value) {
             if (strpos($field, $prefix) === 0) {

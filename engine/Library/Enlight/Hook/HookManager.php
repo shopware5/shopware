@@ -170,7 +170,6 @@ class Enlight_Hook_HookManager extends Enlight_Class
      */
     public function executeHooks(Enlight_Hook_Proxy $subject, $method, array $args)
     {
-        $className = get_parent_class($subject);
         $context = new Enlight_Hook_HookExecutionContext(
             $this,
             $subject,

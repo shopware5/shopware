@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class OrderedAtWeekdayCondition implements ConditionInterface
 {
+    private const NAME = 'OrderedAtWeekdayCondition';
+
     /**
      * @var string[]
      */
@@ -51,6 +53,6 @@ class OrderedAtWeekdayCondition implements ConditionInterface
 
     public function getName()
     {
-        return 'OrderedAtWeekdayCondition';
+        return self::NAME;
     }
 }

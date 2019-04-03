@@ -33,11 +33,6 @@
 class Shopware_Components_Check_File
 {
     /**
-     * @var array
-     */
-    protected $list = [];
-
-    /**
      * @var string
      */
     protected $testDir = '';

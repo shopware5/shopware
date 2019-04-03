@@ -25,22 +25,30 @@
 class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJs
 {
     /**
+     * @deprecated in 5.6, will be private in the future
+     *
      * Helper function to get the new seo index component with auto completion
      *
      * @return Shopware_Components_SeoIndex
      */
     public function SeoIndex()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.7.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return Shopware()->Container()->get('SeoIndex');
     }
 
     /**
+     * @deprecated in 5.6, will be private in the future
+     *
      * Helper function to get the sRewriteTable class with auto completion.
      *
      * @return sRewriteTable
      */
     public function RewriteTable()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.7.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return Shopware()->Modules()->RewriteTable();
     }
 

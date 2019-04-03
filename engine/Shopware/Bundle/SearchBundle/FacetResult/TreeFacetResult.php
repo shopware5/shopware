@@ -31,6 +31,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 class TreeFacetResult extends Extendable implements FacetResultInterface, TemplateSwitchable
 {
+    private const TEMPLATE = 'frontend/listing/filter/facet-value-tree.tpl';
+
     /**
      * @var string
      */
@@ -77,7 +79,7 @@ class TreeFacetResult extends Extendable implements FacetResultInterface, Templa
         $label,
         $values,
         $attributes = [],
-        $template = 'frontend/listing/filter/facet-value-tree.tpl'
+        $template = self::TEMPLATE
     ) {
         $this->facetName = $facetName;
         $this->fieldName = $fieldName;

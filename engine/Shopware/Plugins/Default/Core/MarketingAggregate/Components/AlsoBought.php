@@ -131,6 +131,8 @@ class Shopware_Components_AlsoBought extends Enlight_Class
     }
 
     /**
+     * @deprecated in 5.6, will be removed in 5.7 without replacement
+     *
      * Helper function to get the date of one year ago.
      *
      * @param int $interval
@@ -139,6 +141,8 @@ class Shopware_Components_AlsoBought extends Enlight_Class
      */
     public function getOrderTime($interval = 365)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $orderTime = new DateTime();
         $orderTime->sub(new DateInterval('P' . (int) $interval . 'D'));
 

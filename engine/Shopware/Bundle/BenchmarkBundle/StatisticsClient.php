@@ -29,7 +29,7 @@ use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 use Shopware\Bundle\BenchmarkBundle\Exception\StatisticsHydratingException;
 use Shopware\Bundle\BenchmarkBundle\Exception\StatisticsSendingException;
-use Shopware\Bundle\BenchmarkBundle\Hydrator\StatisticsResponseHydrator;
+use Shopware\Bundle\BenchmarkBundle\Hydrator\HydratorInterface;
 use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsRequest;
 use Shopware\Components\HttpClient\HttpClientInterface;
 use Shopware\Components\HttpClient\RequestException;
@@ -52,7 +52,7 @@ class StatisticsClient implements StatisticsClientInterface
     private $client;
 
     /**
-     * @var StatisticsResponseHydrator
+     * @var HydratorInterface
      */
     private $statisticsResponseHydrator;
 
@@ -72,7 +72,7 @@ class StatisticsClient implements StatisticsClientInterface
     public function __construct(
         $statisticsApiEndpoint,
         HttpClientInterface $client,
-        StatisticsResponseHydrator $statisticsResponseHydrator,
+        HydratorInterface $statisticsResponseHydrator,
         LoggerInterface $logger,
         Connection $connection
     ) {

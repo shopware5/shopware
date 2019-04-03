@@ -28,9 +28,11 @@ use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 
 class ProductSearcher extends GenericSearcher
 {
+    private const COLUMN = 'number';
+
     protected function getIdentifierColumn()
     {
-        return 'number';
+        return self::COLUMN;
     }
 
     protected function buildSearchObject(SearchCriteria $criteria)

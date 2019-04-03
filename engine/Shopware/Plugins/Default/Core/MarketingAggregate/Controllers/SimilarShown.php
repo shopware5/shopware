@@ -25,12 +25,16 @@
 class Shopware_Controllers_Backend_SimilarShown extends Shopware_Controllers_Backend_ExtJs
 {
     /**
+     * @deprecated in 5.6 will be private in 5.7
+     *
      * Helper function to get access on the SimilarShown component.
      *
      * @return Shopware_Components_SimilarShown
      */
     public function SimilarShown()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.7.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return Shopware()->Container()->get('SimilarShown');
     }
 

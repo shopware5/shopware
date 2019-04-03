@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class LastProductIdCondition implements ConditionInterface, \JsonSerializable
 {
+    private const NAME = 'last_product_id';
+
     /**
      * @var int
      */
@@ -62,6 +64,6 @@ class LastProductIdCondition implements ConditionInterface, \JsonSerializable
      */
     public function getName()
     {
-        return 'last_product_id';
+        return self::NAME;
     }
 }

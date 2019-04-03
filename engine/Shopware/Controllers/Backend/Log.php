@@ -146,6 +146,8 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
      */
     public function createLogAction()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed in 5.7. Use \Shopware\Controllers\Backend\Logger::createLogAction instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $this->forward('createLog', 'logger', 'backend');
     }
 

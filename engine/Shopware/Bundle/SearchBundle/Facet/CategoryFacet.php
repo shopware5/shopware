@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 
 class CategoryFacet implements FacetInterface
 {
+    private const NAME = 'category';
+
     /**
      * @var string|null
      */
@@ -61,7 +63,7 @@ class CategoryFacet implements FacetInterface
      */
     public function getName()
     {
-        return 'category';
+        return self::NAME;
     }
 
     /**

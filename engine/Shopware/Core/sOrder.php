@@ -60,6 +60,7 @@ class sOrder implements \Enlight_Hook
     public $sComment;
 
     /**
+     * @deprecated in 5.6, will be removed in 5.7 without replacement
      * Payment-mean object
      *
      * @var object
@@ -455,10 +456,7 @@ class sOrder implements \Enlight_Hook
         // Create order attributes
         $this->attributePersister->persist($this->orderAttributes, 's_order_attributes', $orderID);
 
-        $position = 0;
         foreach ($this->sBasketData['content'] as $basketRow) {
-            ++$position;
-
             if (!$basketRow['price']) {
                 $basketRow['price'] = '0,00';
             }
@@ -667,11 +665,8 @@ class sOrder implements \Enlight_Hook
         $attributes = $this->attributeLoader->load('s_order_attributes', $orderID);
         unset($attributes['id'], $attributes['orderID']);
 
-        $position = 0;
         $esdOrder = null;
         foreach ($this->sBasketData['content'] as $key => $basketRow) {
-            ++$position;
-
             $basketRow = $this->formatBasketRow($basketRow);
 
             $preparedQuery = '

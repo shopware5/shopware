@@ -34,6 +34,8 @@ interface SearchIndexerInterface
     public function populate(array $ids);
 
     /**
+     * @deprecated in 5.6, will be removed in 5.7 without replacement.
+     *
      * Clears the whole search index at once
      */
     public function clearIndex();

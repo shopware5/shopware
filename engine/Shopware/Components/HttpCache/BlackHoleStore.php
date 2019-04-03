@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpCache\StoreInterface;
 
 /**
- * Dummy Storage
+ * Black Hole Storage for the Config
  */
 class BlackHoleStore implements StoreInterface
 {

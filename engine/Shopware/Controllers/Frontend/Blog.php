@@ -485,6 +485,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     }
 
     /**
+     * @deprecated in 5.6, will be private in 5.8
+     *
      * Returns all data needed to display the date filter
      *
      * @param int[] $blogCategoryIds
@@ -494,6 +496,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      */
     public function getDateFilterData($blogCategoryIds, $selectedFilters)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         // Date filter query
         $dateFilterData = $this->repository
             ->getDisplayDateFilterQuery($blogCategoryIds, $selectedFilters)
@@ -503,6 +507,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     }
 
     /**
+     * @deprecated in 5.6, will be private in 5.8
+     *
      * Returns all data needed to display the author filter
      *
      * @param int[] $blogCategoryIds
@@ -512,6 +518,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      */
     public function getAuthorFilterData($blogCategoryIds, $filter)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         // Date filter query
         $filterData = $this->repository
             ->getAuthorFilterQuery($blogCategoryIds, $filter)
@@ -521,6 +529,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     }
 
     /**
+     * @deprecated in 5.6, will be private in 5.8
+     *
      * Returns all data needed to display the tags filter
      *
      * @param int[] $blogCategoryIds
@@ -530,6 +540,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      */
     public function getTagsFilterData($blogCategoryIds, $filter)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         // Date filter query
         $filterData = $this->repository
             ->getTagsFilterQuery($blogCategoryIds, $filter)
@@ -539,6 +551,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     }
 
     /**
+     * @deprecated in 5.6, will be private in 5.8
+     *
      * Returns listing breadcrumb
      *
      * @param int $categoryId
@@ -547,6 +561,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      */
     public function getCategoryBreadcrumb($categoryId)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return array_reverse(Shopware()->Modules()->Categories()->sGetCategoriesByParent($categoryId));
     }
 

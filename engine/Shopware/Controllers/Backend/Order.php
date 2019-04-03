@@ -1315,12 +1315,16 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     }
 
     /**
+     * @deprecated in 5.6, will be removed in 5.7 without a replacement
+     *
      * Helper function to get access on the static declared repository
      *
      * @return \Shopware\Components\Model\ModelRepository
      */
     protected function getDocumentRepository()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         if (self::$documentRepository === null) {
             self::$documentRepository = Shopware()->Models()->getRepository(Document::class);
         }

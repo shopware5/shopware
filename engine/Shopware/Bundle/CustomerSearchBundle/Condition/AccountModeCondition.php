@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class AccountModeCondition implements ConditionInterface
 {
+    private const NAME = 'AccountModeCondition';
+
     /**
      * @var int
      */
@@ -51,6 +53,6 @@ class AccountModeCondition implements ConditionInterface
 
     public function getName()
     {
-        return 'AccountModeCondition';
+        return self::NAME;
     }
 }

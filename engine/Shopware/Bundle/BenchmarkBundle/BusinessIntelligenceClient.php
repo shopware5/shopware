@@ -28,7 +28,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Shopware\Bundle\BenchmarkBundle\Exception\BenchmarkHydratingException;
 use Shopware\Bundle\BenchmarkBundle\Exception\BenchmarkSendingException;
-use Shopware\Bundle\BenchmarkBundle\Hydrator\BusinessIntelligenceResponseHydrator;
+use Shopware\Bundle\BenchmarkBundle\Hydrator\HydratorInterface;
 use Shopware\Bundle\BenchmarkBundle\Struct\BusinessIntelligenceRequest;
 use Shopware\Components\HttpClient\HttpClientInterface;
 use Shopware\Components\HttpClient\Response;
@@ -46,7 +46,7 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
     private $client;
 
     /**
-     * @var BusinessIntelligenceResponseHydrator
+     * @var HydratorInterface
      */
     private $biResponseHydrator;
 
@@ -66,7 +66,7 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
     public function __construct(
         $biEndpoint,
         HttpClientInterface $client,
-        BusinessIntelligenceResponseHydrator $biResponseHydrator,
+        HydratorInterface $biResponseHydrator,
         BenchmarkEncryption $benchmarkEncryption,
         LoggerInterface $logger = null
     ) {

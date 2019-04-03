@@ -512,7 +512,7 @@ class Repository extends ModelRepository
      */
     public function getBlogCategoriesByParentQuery($parentId, $offset = null, $limit = null)
     {
-        $builder = $this->getBlogCategoriesByParentBuilder($parentId, $offset = null, $limit = null);
+        $builder = $this->getBlogCategoriesByParentBuilder($parentId, $offset, $limit);
 
         return $builder->getQuery();
     }

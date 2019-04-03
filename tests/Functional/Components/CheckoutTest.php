@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Test;
+namespace Shopware\Tests\Functional\Components;
 
 use Enlight_Controller_Request_RequestHttp;
 use Shopware\Components\Random;

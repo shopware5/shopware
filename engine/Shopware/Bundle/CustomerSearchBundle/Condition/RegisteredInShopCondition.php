@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class RegisteredInShopCondition implements ConditionInterface
 {
+    private const NAME = 'RegisteredInShopCondition';
+
     /**
      * @var int[]
      */
@@ -51,6 +53,6 @@ class RegisteredInShopCondition implements ConditionInterface
 
     public function getName()
     {
-        return 'RegisteredInShopCondition';
+        return self::NAME;
     }
 }

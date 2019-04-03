@@ -110,16 +110,6 @@ class MediaReplaceService implements MediaReplaceServiceInterface
     }
 
     /**
-     * @return bool
-     */
-    private function validateMediaType(Media $media, UploadedFile $file)
-    {
-        $uploadedFileExtension = $this->getExtension($file);
-
-        return $media->getType() === $this->mappingService->getType($uploadedFileExtension);
-    }
-
-    /**
      * @return string
      */
     private function getExtension(UploadedFile $file)

@@ -57,10 +57,6 @@ class YoutubeComponentHandler implements ComponentHandlerInterface
 
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
-        $elementData = json_decode(json_encode($element), true);
-        $elementData['component']['xType'] = $element->getComponent()->getType();
-        $elementData['component']['cls'] = $element->getComponent()->getCssClass();
-
         $data = array_merge($element->getConfig()->getAll(), $element->getData()->getAll());
         $data['objectId'] = md5((string) $element->getId());
 

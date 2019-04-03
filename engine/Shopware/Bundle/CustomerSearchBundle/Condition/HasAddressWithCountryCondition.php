@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class HasAddressWithCountryCondition implements ConditionInterface
 {
+    private const NAME = 'HasAddressWithCountryCondition';
+
     /**
      * @var int[]
      */
@@ -51,6 +53,6 @@ class HasAddressWithCountryCondition implements ConditionInterface
 
     public function getName()
     {
-        return 'HasAddressWithCountryCondition';
+        return self::NAME;
     }
 }

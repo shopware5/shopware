@@ -230,6 +230,71 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Deprecated `Enlight_Controller_Response_ResponseHttp::outputBody`
 * Deprecated `Shopware_Controllers_Backend_Log::createLogAction`. It will be removed in 5.7, use `\Shopware\Controllers\Backend\Logger::createLogAction` instead
 * Deprecated `Enlight_Event_EventHandler`. It will be removed in 5.8, use `Enlight_Event_Handler_Default` or `SubscriberInterface::getSubscribedEvents` instead
+* Deprecated `Shopware\Bundle\SearchBundle\ConditionInterface\RegisteredInShopCondition`. It will be removed in 5.7 without replacement
+* Deprecated `Shopware\Bundle\BenchmarkBundle\Commands\ReceiveStatisticsCommand::MAX_BATCH_SIZE`. It will be removed in 5.7 without replacement
+* Deprecated `Shopware\Bundle\SearchBundle\ConditionInterface\RegisteredInShopCondition`. It will be removed in 5.7 without replacement
+* Deprecated `Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\RegisteredInShopConditionHandler`. It will be removed in 5.7 without replacement
+* Deprecated `Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\CronJobSubscriber\CronJobProgressHelper`. It will be removed in 5.7. Use the `CronJobProgressHelper` instead.
+* Deprecated `Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\SearchIndexerInterface::clearIndex`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\SearchIndexerInterface::cleanupIndex`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Bundle\EmotionBundle\Exception\ComponentHandlerNotFoundException`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Bundle\EsBackendBundle\EsAwareSearcher`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Bundle\ESIndexingBundle\Product\ProductQueryFactoryInterface::createPriceIdQuery`, `::createVoteIdQuery`, `::createVariantIdQuery`, `::createProductCategoryQuery`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Bundle\ESIndexingBundle\Product\ProductQueryFactory` Deprecated `Shopware\Bundle\ESIndexingBundle\Product\ProductQueryFactoryInterface::createPriceIdQuery`, `::createVoteIdQuery`, `::createVariantIdQuery`, `::createProductCategoryQuery`. It will be removed in 5.7 without replacement.::createPriceIdQuery`, `::createVoteIdQuery`, `::createVariantIdQuery`, `::createProductCategoryQuery`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Bundle\ESIndexingBundle\LastIdQuery::getQuery`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Bundle\PluginInstallerBundle\Context\PluginLicenceRequest`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService::getPluginLicence`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Bundle\PluginInstallerBundle\Struct\SubscriptionStateStruct`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Bundle\SearchBundle\Condition\SimpleCondition`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Bundle\SearchBundle\Facet\SimpleFacet`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Bundle\SearchBundle\Sorting\SimpleSorting`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Bundle\StoreFrontBundle\Common\StructHelper`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Bundle\StoreFrontBundle\Struct\LocationContext`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Components\Auth\Adapter\Default::rehash`. It will be private in 5.7 without replacement.
+* Deprecated `Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait`. It will be removed in 5.8 without replacement.
+* Deprecated `Shopware\Components\DependencyInjection\ProxyFactory`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Components\Emotion\Preset\PresetInstallerInterface`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Components\Log\Handler\DoctrineDBALHandler`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Components\CsvIterator::setFieldmark`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware_Controllers_Backend_Article` `::getArticleCategories`, `::getArticleSimilars`, `::getArticleRelatedProductStreams`, `::getArticleRelated`, `::getArticleImages`, `::getArticleLinks`, `::getArticleDownloads`, `::getArticleCustomerGroups`, `::getArticleConfiguratorSet`, `::getArticleDependencies`, `::getFreeSerialCount`, `:getChartData:`. It will be private in 5.8.
+* Deprecated `Shopware_Controllers_Backend_Blog` `::getCategoryRepository`, `::getArticleRepository`, `::getRepository`, `::getBlogCommentRepository`. It will be private in 5.8.
+* Deprecated `Shopware_Controllers_Backend_Category` `::getRepository`, `::getCategoryComponent`, `::getPathByQuery`, `::saveDetail`. It will be private in 5.8.
+* Deprecated `Shopware_Controllers_Backend_Login` `::getPlugin`. It will be private in 5.8.
+* Deprecated `Shopware_Controllers_Backend_Newsletter` `::initMailing`, `::initTemplate`, `::getMailing`, `::getMailingDetails`, `::getMailingVoucher`, `::getMailingEmails`, `::getVoucherCode`, `::getMailingUserByEmail`, `::preFilter`, `::outputFilter`, `::altFilter`, `::trackFilter`, `::createHash`. It will be private in 5.8.
+* Deprecated `Shopware_Controllers_Backend_NewsletterManager`, `::getCampaignsRepository`, `::getPreviewNewslettersQuery`. It will be private in 5.8.
+* Deprecated `Shopware_Controllers_Backend_NewsletterManager`, `::getCampaignsRepository`, `::getPreviewNewslettersQuery`. It will be private in 5.8.
+* Deprecated `Shopware_Controllers_Backend_Performance`, `::saveConfigData`, `::prepareDataForSaving`. It will be private in 5.8.
+* Deprecated `Shopware_Controllers_Backend_Shipping`, `::deleteCostMatrix`, `::saveCostMatrix`. It will be private in 5.8.
+* Deprecated `Shopware_Controllers_Backend_Supplier::getAllSupplier`. It will removed in 5.7, without any replacement.
+* Deprecated `Shopware_Controllers_Frontend_Blog`, `::getDateFilterData`, `::getAuthorFilterData`, `::getTagsFilterData`, `::getCategoryBreadcrumb`. It will be private in 5.8.
+* Deprecated `Shopware_Controllers_Frontend_Blog::acceptBlogCommentAction`.  It will be removed in 5.7 without replacement.
+* Deprecated `Shopware_Controllers_Frontend_Checkout`, `::flagPaymentBlocked`, `::getUserData`, `::saveTemporaryOrder`, `::saveOrder`, `::getInstockInfo`, `::getAvailableStock`, `::getShippingCosts`, `::getBasket`, `::getTaxRates`, `::getSimilarShown`, `::getBoughtToo`, `::getMinimumCharge`, `::getDispatchNoOrder`, `::getPremiums`, `::getEsdNote`, `::getInquiry`, `::getInquiryLink`, `::getCountryList`, `::getDispatches`, `::getPayments`, `::getSelectedCountry`, `getSelectedState`, `::getSelectedPayment`, `::getSelectedDispatch` . It will protected in 5.8.
+* Deprecated `Shopware_Controllers_Frontend_Forms::commitForm`. It will be private in 5.8.
+* Deprecated `Shopware_Controllers_Frontend_Listing::getBreadcrumb`. It will be private in 5.8.
+* Deprecated `Shopware_Controllers_Frontend_Tracking::$testRepository`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware_Controllers_Widgets_Campaign::getEmotions`. It will be removed in 5.7 without replacement.
+* Deprecated `sArticles` `::sGetArticleTaxById`, `::sGetCheapestPrice`, `::sGetSupplierById`, `::sGetArticlesBySupplier`, `::sFillUpComparisonArticles`, `::sGetComparisonProperties`. It will be removed in 5.7 without replacement.
+* Deprecated `sArticles::sFillUpComparisonArticles`. It will be removed in 5.7. Use the `sArticlesComparisons::sFillUpComparisonArticles` instead.
+* Deprecated `sArticles::sGetComparisonProperties`. It will be removed in 5.7. Use the `sArticlesComparisons::sGetComparisonProperties` instead.
+* Deprecated `sArticles::getArticleListingCover`. It will be removed in 5.7. Use the `sArticles::sGetArticlePictures` instead.
+* Deprecated `sArticles::sGetTranslations`. It will be removed in 5.7. Use `sArticle::sGetTranslation` instead.
+* Deprecated `sCategories::$sSYSTEM` It will be removed in 5.7 without replacement.
+* Deprecated `sExport` `::$sDB`, `::$sApi`, `::$sPath`, `::$sTemplates`, `::sGetDispatch` It will be removed in 5.7 without replacement.
+* Deprecated `sOrder::$paymentObject`. It will be removed in 5.7 without replacement.
+* Deprecated `sRewriteTable::getData`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware_Components_AlsoBought::getOrderTime`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware_Controllers_Backend_SimilarShown::SimilarShown`. It will be private in 5.8.
+* Deprecated `Shopware_Controllers_Backend_TopSeller::TopSeller`. It will be private in 5.8.
+* Deprecated `Shopware_Controllers_Backend_Seo` `::SeoIndex`, `::RewriteTable`. It will be private in 5.8.
+* Deprecated `Shopware_Controllers_Backend_Analytics::getShopRepository`. It will be private in 5.8.
+* Deprecated `Shopware_Controllers_Backend_Snippet::prefixProperties`. It will be removed in 5.8 without replacement.
+* Deprecated `Shopware_Controllers_Backend_Order::getDocumentRepository`. It will be removed in 5.8 without replacement.
+* Deprecated `Shopware_Controllers_Backend_Article` `::$configuratorPriceVariationRepository`, `::$configuratorGroupRepository`, `::getConfiguratorGroupRepository`, `::getDependencyByOptionId`, `::getViolationFields`. It will be removed in 5.8 without an replacement
+* Deprecated `Shopware_Components_Translation::filterText`. It will be removed in 5.7 without an replacement
+* Deprecated `Shopware\Components\Api\Resource\ApiProgressHelper`. It will be removed in 5.7 without an replacement.
+* Deprecated `Shopware\Components\Api\Resource\Cache::getRequest`. It will be removed in 5.7 without an replacement.
+* Deprecated `Shopware\Components\Api\Resource\Article::isVariantImageExist`. It will be removed in 5.7 without an replacement. 
+* Deprecated `Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\Hydrator::getFields`. It will be removed in 5.7 without an replacement.
 * Deprecated `Shopware\Components\Model\Query\Mysql\IfElse` in 5.6, will be removed with 5.7. Please use `DoctrineExtensions\Query\Mysql\IfElse` instead.
 * Deprecated `Shopware\Components\Model\Query\Mysql\DateFormat` in 5.6, will be removed with 5.7. Please use `DoctrineExtensions\Query\Mysql\DateFormat` instead.
 * Deprecated `Shopware\Components\Model\Query\Mysql\IfNull` in 5.6, will be removed with 5.7. Please use `DoctrineExtensions\Query\Mysql\IfNull` instead.

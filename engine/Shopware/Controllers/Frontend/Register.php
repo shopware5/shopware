@@ -36,11 +36,6 @@ use Symfony\Component\Form\FormInterface;
 class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 {
     /**
-     * @var sAdmin
-     */
-    protected $admin;
-
-    /**
      * Will be called from the dispatcher before an action is processed
      */
     public function preDispatch()

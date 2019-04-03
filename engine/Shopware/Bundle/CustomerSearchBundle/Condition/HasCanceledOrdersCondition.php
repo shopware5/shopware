@@ -28,8 +28,10 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class HasCanceledOrdersCondition implements ConditionInterface
 {
+    private const NAME = 'HasCanceledOrdersCondition';
+
     public function getName()
     {
-        return 'HasCanceledOrdersCondition';
+        return self::NAME;
     }
 }

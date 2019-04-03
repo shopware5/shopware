@@ -38,13 +38,6 @@ use Shopware\Models\Shop\Shop;
 class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * Entity Manager
-     *
-     * @var null
-     */
-    protected $manager;
-
-    /**
      * @var \Shopware\Models\Article\Repository
      */
     protected $articleRepository;
@@ -53,11 +46,6 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
      * @var \Shopware\Models\Shop\Repository
      */
     protected $shopRepository;
-
-    /**
-     * @var \Shopware\Models\ProductFeed\Repository
-     */
-    protected $productFeedRepository;
 
     /**
      * Returns a JSON string to the view containing all Product Feeds

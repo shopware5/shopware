@@ -33,6 +33,8 @@ class Shopware_Controllers_Widgets_Campaign extends Shopware_Controllers_Widgets
     }
 
     /**
+     * @deprecated in 5.6, will be removed in 5.7 without replacement
+     *
      * The getEmotion method for the emotion landing page
      *
      * @param \Shopware\Models\Emotion\Repository $repository
@@ -41,6 +43,8 @@ class Shopware_Controllers_Widgets_Campaign extends Shopware_Controllers_Widgets
      */
     public function getEmotion($repository)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         /** @var \Shopware\Models\Emotion\Repository $repository */
         $emotionId = (int) $this->Request()->getParam('emotionId');
         $query = $repository->getEmotionById($emotionId);

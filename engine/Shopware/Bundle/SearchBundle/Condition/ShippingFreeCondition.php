@@ -28,12 +28,14 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class ShippingFreeCondition implements ConditionInterface, \JsonSerializable
 {
+    private const NAME = 'shipping_free';
+
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'shipping_free';
+        return self::NAME;
     }
 
     /**

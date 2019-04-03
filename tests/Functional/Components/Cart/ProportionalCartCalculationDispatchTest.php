@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Functional\Components\Cart;
 
-use Shopware\Components\Test\CheckoutTest;
+use Shopware\Tests\Functional\Components\CheckoutTest;
 
 /**
  * @group Basket

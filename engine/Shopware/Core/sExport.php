@@ -40,10 +40,26 @@ class sExport implements \Enlight_Hook
     public $sFeedID;
     public $sHash;
     public $sSettings;
+
+    /**
+     * @deprecated in 5.6, will be removed in 5.7 without replacement
+     */
     public $sDB;
+
+    /**
+     * @deprecated in 5.6, will be removed in 5.7 without replacement
+     */
     public $sApi;
     public $sSYSTEM;
+
+    /**
+     * @deprecated in 5.6, will be removed in 5.7 without replacement
+     */
     public $sPath;
+
+    /**
+     * @deprecated in 5.6, will be removed in 5.7 without replacement
+     */
     public $sTemplates;
 
     public $sCurrency;
@@ -58,11 +74,6 @@ class sExport implements \Enlight_Hook
      * @var Enlight_Template_Manager
      */
     public $sSmarty;
-
-    /**
-     * @var \Shopware\Models\Article\Repository
-     */
-    protected $articleRepository;
 
     /**
      * @var \Shopware\Models\Media\Repository
@@ -1271,11 +1282,15 @@ class sExport implements \Enlight_Hook
     }
 
     /**
+     * @deprecated in 5.6, will be removed in 5.7 without replacement
+     *
      * @param int|string|null $dispatch
      * @param int|string|null $country
      */
     public function sGetDispatch($dispatch = null, $country = null)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         if (empty($dispatch)) {
             $sql_order = '';
         } elseif (is_numeric($dispatch)) {

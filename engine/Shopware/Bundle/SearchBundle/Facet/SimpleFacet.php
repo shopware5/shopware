@@ -26,6 +26,9 @@ namespace Shopware\Bundle\SearchBundle\Facet;
 
 use Shopware\Bundle\SearchBundle\FacetInterface;
 
+/**
+ * @deprecated in 5.6, will be removed in 5.7 without replacement
+ */
 class SimpleFacet implements FacetInterface
 {
     /**

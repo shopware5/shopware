@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 
 class HeightFacet implements FacetInterface
 {
+    private const NAME = 'height';
+
     /**
      * @var string
      */
@@ -81,6 +83,6 @@ class HeightFacet implements FacetInterface
 
     public function getName()
     {
-        return 'height';
+        return self::NAME;
     }
 }

@@ -26,6 +26,9 @@ namespace Shopware\Bundle\PluginInstallerBundle\Context;
 
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 
+/**
+ * @deprecated in 5.6, will be removed in 5.7 without replacement
+ */
 class PluginLicenceRequest
 {
     /**
@@ -56,6 +59,8 @@ class PluginLicenceRequest
      */
     public function __construct($token, $domain, $shopwareVersion, $technicalName)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $this->token = $token;
         $this->domain = $domain;
         $this->shopwareVersion = $shopwareVersion;
@@ -67,6 +72,8 @@ class PluginLicenceRequest
      */
     public function getTechnicalName()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->technicalName;
     }
 
@@ -75,6 +82,8 @@ class PluginLicenceRequest
      */
     public function getShopwareVersion()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->shopwareVersion;
     }
 
@@ -83,6 +92,8 @@ class PluginLicenceRequest
      */
     public function getDomain()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->domain;
     }
 
@@ -91,6 +102,8 @@ class PluginLicenceRequest
      */
     public function getToken()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->token;
     }
 }

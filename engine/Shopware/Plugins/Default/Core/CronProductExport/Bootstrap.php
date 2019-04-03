@@ -30,11 +30,6 @@ use Shopware\Models\ProductFeed\ProductFeed;
 class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     /**
-     * @var \Shopware\Models\ProductFeed\Repository
-     */
-    protected $productFeedRepository = null;
-
-    /**
      * Bootstrap Installation method
      *
      * @return bool

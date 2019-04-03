@@ -32,6 +32,7 @@ use ONGR\ElasticsearchDSL\Query\TermLevel\IdsQuery;
 use ONGR\ElasticsearchDSL\Query\TermLevel\TermQuery;
 use ONGR\ElasticsearchDSL\Search;
 use ONGR\ElasticsearchDSL\Sort\FieldSort;
+use Shopware\Bundle\ESIndexingBundle\EsSearch;
 use Shopware\Bundle\ESIndexingBundle\IndexFactoryInterface;
 use Shopware\Bundle\ESIndexingBundle\Property\PropertyMapping;
 use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
@@ -149,7 +150,7 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
 
         $groupIds = $this->getGroupIds($ids);
 
-        $search = new Search();
+        $search = new EsSearch();
         $search->addQuery(new IdsQuery($groupIds), BoolQuery::FILTER);
         $search->addQuery(new TermQuery('filterable', true), BoolQuery::FILTER);
         $search->addSort(new FieldSort('name', 'asc'));

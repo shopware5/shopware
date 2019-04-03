@@ -33,6 +33,8 @@ use Shopware\Components\ShopwareReleaseStruct;
 
 class ShopwareProvider implements BenchmarkProviderInterface
 {
+    private const NAME = 'shopware';
+
     /**
      * @var Connection
      */
@@ -60,7 +62,7 @@ class ShopwareProvider implements BenchmarkProviderInterface
 
     public function getName()
     {
-        return 'shopware';
+        return self::NAME;
     }
 
     /**

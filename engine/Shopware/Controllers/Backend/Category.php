@@ -38,15 +38,6 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      * @var \Shopware\Models\Category\Repository
      */
     protected $repository;
-    /**
-     * @var \Shopware\Models\Article\Repository
-     */
-    protected $articleRepository = null;
-
-    /**
-     * @var \Shopware\Models\Media\Repository
-     */
-    protected $mediaRepository = null;
 
     /**
      * @var \Shopware\Models\Customer\Repository
@@ -54,12 +45,16 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     protected $customerRepository = null;
 
     /**
+     * @deprecated in 5.6, will be private in 5.8
+     *
      * Helper Method to get access to the category repository.
      *
      * @return Shopware\Models\Category\Repository
      */
     public function getRepository()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         if ($this->repository === null) {
             $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
         }
@@ -68,10 +63,14 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     }
 
     /**
+     * @deprecated in 5.6, will be private in 5.8
+     *
      * @return \Shopware\Components\Model\CategoryDenormalization
      */
     public function getCategoryComponent()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return Shopware()->Container()->get('CategoryDenormalization');
     }
 
@@ -222,6 +221,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     }
 
     /**
+     * @deprecated in 5.6, will be private in 5.8
+     *
      * helper method used in the getPathByQueryAction to return the path information
      *
      * @param int|string|null $query
@@ -232,6 +233,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     public function getPathByQuery($query = null, $separator = '>', $parents = false)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         if (empty($query)) {
             $where = 'parent=1';
         } elseif (is_numeric($query)) {
@@ -496,6 +499,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     }
 
     /**
+     * @deprecated in 5.6, will be private in 5.8
+     *
      * Saves a single category. If no category id is passed,
      * the save function will create a new category model and persist
      * it.
@@ -504,6 +509,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     public function saveDetail()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $params = $this->Request()->getParams();
         $categoryId = (int) $params['id'];
 

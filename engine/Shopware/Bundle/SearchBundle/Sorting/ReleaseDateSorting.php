@@ -26,11 +26,5 @@ namespace Shopware\Bundle\SearchBundle\Sorting;
 
 class ReleaseDateSorting extends Sorting
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'release_date';
-    }
+    protected const NAME = 'release_date';
 }

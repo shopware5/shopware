@@ -998,7 +998,6 @@ class Helper
      */
     public function insertConfiguratorData($groups)
     {
-        $pos = 1;
         $data = [];
 
         foreach ($groups as $groupName => $options) {
@@ -1019,7 +1018,6 @@ class Helper
                 ++$optionPos;
             }
             $group->setOptions($collection);
-            ++$pos;
 
             $data[] = $group;
 

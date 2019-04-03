@@ -30,6 +30,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class CustomersProvider implements BatchableProviderInterface
 {
+    private const NAME = 'customers';
+
     /**
      * @var Connection
      */
@@ -47,7 +49,7 @@ class CustomersProvider implements BatchableProviderInterface
 
     public function getName()
     {
-        return 'customers';
+        return self::NAME;
     }
 
     /**

@@ -45,9 +45,7 @@ class ProductLinkService implements Service\ProductLinkServiceInterface
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
-        $downloads = $this->getList([$product], $context);
-
-        return array_shift($downloads);
+        return $this->gateway->get($product, $context);
     }
 
     /**

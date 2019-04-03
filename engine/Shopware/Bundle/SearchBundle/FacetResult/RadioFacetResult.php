@@ -31,6 +31,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 class RadioFacetResult extends Extendable implements FacetResultInterface, TemplateSwitchable
 {
+    private const TEMPLATE = 'frontend/listing/filter/facet-radio.tpl';
+
     /**
      * @var string
      */
@@ -77,7 +79,7 @@ class RadioFacetResult extends Extendable implements FacetResultInterface, Templ
         $values,
         $fieldName,
         $attributes = [],
-        $template = 'frontend/listing/filter/facet-radio.tpl'
+        $template = self::TEMPLATE
     ) {
         $this->facetName = $facetName;
         $this->active = $active;

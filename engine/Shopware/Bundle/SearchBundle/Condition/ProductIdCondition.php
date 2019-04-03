@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class ProductIdCondition implements ConditionInterface, \JsonSerializable
 {
+    private const NAME = 'productids';
+
     /**
      * @var int[]
      */
@@ -46,7 +48,7 @@ class ProductIdCondition implements ConditionInterface, \JsonSerializable
      */
     public function getName()
     {
-        return 'productids';
+        return self::NAME;
     }
 
     /**

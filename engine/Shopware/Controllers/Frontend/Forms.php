@@ -88,6 +88,8 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     }
 
     /**
+     * @deprecated in 5.6, will be private in 5.8
+     *
      * Commit form via email (default) or database (ticket system)
      *
      * @throws \Enlight_Exception
@@ -96,6 +98,8 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      */
     public function commitForm()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         /** @var Enlight_Components_Mail $mail */
         $mail = $this->get('mail');
 

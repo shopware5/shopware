@@ -26,10 +26,15 @@ namespace Shopware\Bundle\StoreFrontBundle\Common;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 
+/**
+ * @deprecated in 5.6, will be removed in 5.7 without replacement
+ */
 class StructHelper
 {
     public function assignProductData(ListProduct $listProduct, ListProduct $product)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $product->setShippingFree($listProduct->isShippingFree());
         $product->setMainVariantId($listProduct->getMainVariantId());
         $product->setAllowsNotification($listProduct->allowsNotification());

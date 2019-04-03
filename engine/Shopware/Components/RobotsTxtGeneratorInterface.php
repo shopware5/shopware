@@ -32,7 +32,7 @@ interface RobotsTxtGeneratorInterface
 
     public function setBaseUrls(array $baseUrls): void;
 
-    public function setHost(string $host);
+    public function setHost(string $host): void;
 
     public function setSecure(bool $secure): void;
 

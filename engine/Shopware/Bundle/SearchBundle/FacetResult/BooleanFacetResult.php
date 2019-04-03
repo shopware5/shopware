@@ -31,6 +31,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 class BooleanFacetResult extends Extendable implements FacetResultInterface, TemplateSwitchable
 {
+    private const TEMPLATE = 'frontend/listing/filter/facet-boolean.tpl';
+
     /**
      * @var string
      */
@@ -70,7 +72,7 @@ class BooleanFacetResult extends Extendable implements FacetResultInterface, Tem
         $active,
         $label,
         $attributes = [],
-        $template = 'frontend/listing/filter/facet-boolean.tpl'
+        $template = self::TEMPLATE
     ) {
         $this->facetName = $facetName;
         $this->fieldName = $fieldName;

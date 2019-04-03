@@ -31,6 +31,7 @@ class ReleaseDateCondition implements ConditionInterface, \JsonSerializable
 {
     const DIRECTION_PAST = 'past';
     const DIRECTION_FUTURE = 'future';
+    private const NAME = 'release_date_condition';
 
     /**
      * @var string
@@ -61,7 +62,7 @@ class ReleaseDateCondition implements ConditionInterface, \JsonSerializable
      */
     public function getName()
     {
-        return 'release_date_condition';
+        return self::NAME;
     }
 
     /**

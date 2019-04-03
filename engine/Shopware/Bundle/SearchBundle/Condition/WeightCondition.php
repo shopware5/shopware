@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class WeightCondition implements ConditionInterface, \JsonSerializable
 {
+    private const NAME = 'weight';
+
     /**
      * @var float|null
      */
@@ -50,7 +52,7 @@ class WeightCondition implements ConditionInterface, \JsonSerializable
 
     public function getName()
     {
-        return 'weight';
+        return self::NAME;
     }
 
     /**

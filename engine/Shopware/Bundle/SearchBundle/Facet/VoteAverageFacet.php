@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 
 class VoteAverageFacet implements FacetInterface
 {
+    private const NAME = 'vote_average';
+
     /**
      * @var string|null
      */
@@ -54,6 +56,6 @@ class VoteAverageFacet implements FacetInterface
      */
     public function getName()
     {
-        return 'vote_average';
+        return self::NAME;
     }
 }

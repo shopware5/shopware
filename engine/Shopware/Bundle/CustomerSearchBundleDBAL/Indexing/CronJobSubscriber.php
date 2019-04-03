@@ -26,7 +26,6 @@ namespace Shopware\Bundle\CustomerSearchBundleDBAL\Indexing;
 
 use Doctrine\DBAL\Connection;
 use Enlight\Event\SubscriberInterface;
-use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 use Shopware\Components\Api\Resource\CustomerStream;
 use Shopware\Components\CustomerStream\StreamIndexerInterface;
@@ -129,20 +128,5 @@ class CronJobSubscriber implements SubscriberInterface
         $query->setMaxResults(100);
 
         return new LastIdQuery($query);
-    }
-}
-
-class CronJobProgressHelper implements ProgressHelperInterface
-{
-    public function start($count, $label = '')
-    {
-    }
-
-    public function advance($step = 1)
-    {
-    }
-
-    public function finish()
-    {
     }
 }

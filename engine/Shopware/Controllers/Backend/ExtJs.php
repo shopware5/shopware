@@ -25,23 +25,11 @@
 abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
 {
     /**
-     * @var Shopware_Plugins_Backend_Auth_Bootstrap
-     */
-    protected $auth;
-
-    /**
      * Array with all permissions to check in this controller
      *
      * @var array
      */
     protected $aclPermissions = [];
-
-    /**
-     * Holds optionally acl error message
-     *
-     * @var string
-     */
-    protected $errorMessage;
 
     /**
      * Enable script renderer and json request plugin

@@ -29,6 +29,8 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 
 class VariantFacet implements FacetInterface
 {
+    private const NAME = 'option';
+
     /**
      * @var array
      */
@@ -89,6 +91,6 @@ class VariantFacet implements FacetInterface
      */
     public function getName()
     {
-        return 'option';
+        return self::NAME;
     }
 }

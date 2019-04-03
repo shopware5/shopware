@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 
 class WeightFacet implements FacetInterface
 {
+    private const NAME = 'weight';
+
     /**
      * @var string
      */
@@ -81,6 +83,6 @@ class WeightFacet implements FacetInterface
 
     public function getName()
     {
-        return 'weight';
+        return self::NAME;
     }
 }

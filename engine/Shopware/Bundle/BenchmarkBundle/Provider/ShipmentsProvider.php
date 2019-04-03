@@ -29,11 +29,10 @@ use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
 use Shopware\Bundle\BenchmarkBundle\Service\MatcherService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * Not yet in use.
- */
 class ShipmentsProvider implements BenchmarkProviderInterface
 {
+    private const NAME = 'shipments';
+
     /**
      * @var Connection
      */
@@ -62,7 +61,7 @@ class ShipmentsProvider implements BenchmarkProviderInterface
 
     public function getName()
     {
-        return 'shipments';
+        return self::NAME;
     }
 
     /**

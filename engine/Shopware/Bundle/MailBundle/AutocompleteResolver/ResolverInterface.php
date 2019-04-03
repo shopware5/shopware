@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\MailBundle\AutocompleteResolver;
 
-interface Resolver
+interface ResolverInterface
 {
     public function completer(array $context, string $smartyCode): array;
 }

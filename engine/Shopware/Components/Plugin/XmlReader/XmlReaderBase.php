@@ -41,16 +41,6 @@ abstract class XmlReaderBase implements XmlReaderInterface
     const DEFAULT_LANG = 'en';
 
     /**
-     * Map of language shortcuts to locale.
-     *
-     * @var array
-     */
-    protected static $languageMapping = [
-        'de' => 'de_DE',
-        'en' => 'en_GB',
-    ];
-
-    /**
      * @var string should be set in instance that extends this class
      */
     protected $xsdFile;

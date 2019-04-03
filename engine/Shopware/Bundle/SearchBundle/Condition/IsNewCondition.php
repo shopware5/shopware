@@ -28,12 +28,14 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class IsNewCondition implements ConditionInterface, \JsonSerializable
 {
+    private const NAME = 'is_new_condition';
+
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'is_new_condition';
+        return self::NAME;
     }
 
     /**

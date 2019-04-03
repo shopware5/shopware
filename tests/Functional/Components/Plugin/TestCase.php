@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Test\Plugin;
+namespace Shopware\Tests\Functional\Components\Plugin;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 

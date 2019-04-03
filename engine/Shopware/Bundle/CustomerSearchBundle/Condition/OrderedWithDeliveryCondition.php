@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class OrderedWithDeliveryCondition implements ConditionInterface
 {
+    private const NAME = 'OrderedWithDeliveryCondition';
+
     /**
      * @var int[]
      */
@@ -51,6 +53,6 @@ class OrderedWithDeliveryCondition implements ConditionInterface
 
     public function getName()
     {
-        return 'OrderedWithDeliveryCondition';
+        return self::NAME;
     }
 }

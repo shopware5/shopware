@@ -28,12 +28,14 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class ImmediateDeliveryCondition implements ConditionInterface, \JsonSerializable
 {
+    private const NAME = 'immediate_delivery';
+
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'immediate_delivery';
+        return self::NAME;
     }
 
     /**

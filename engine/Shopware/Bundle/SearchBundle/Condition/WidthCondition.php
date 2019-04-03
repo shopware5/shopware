@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class WidthCondition implements ConditionInterface, \JsonSerializable
 {
+    private const NAME = 'width';
+
     /**
      * @var float|null
      */
@@ -50,7 +52,7 @@ class WidthCondition implements ConditionInterface, \JsonSerializable
 
     public function getName()
     {
-        return 'width';
+        return self::NAME;
     }
 
     /**

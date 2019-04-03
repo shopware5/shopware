@@ -31,6 +31,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class EmotionsProvider implements BenchmarkProviderInterface
 {
+    private const NAME = 'emotions';
+
     /**
      * @var Connection
      */
@@ -53,7 +55,7 @@ class EmotionsProvider implements BenchmarkProviderInterface
 
     public function getName()
     {
-        return 'emotions';
+        return self::NAME;
     }
 
     /**

@@ -49,11 +49,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     protected $shopRepository;
 
     /**
-     * @var \Shopware\Models\Tracking\Repository
-     */
-    protected $articleImpressionRepository;
-
-    /**
      * @var Repository|null
      */
     protected $repository;
@@ -119,12 +114,15 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     }
 
     /**
+     * @deprecated since 5.6 will be private in 5.8
      * Helper Method to get access to the shop repository.
      *
      * @return Shopware\Models\Shop\Repository
      */
     public function getShopRepository()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         if ($this->shopRepository === null) {
             $this->shopRepository = $this->getManager()->getRepository(Shop::class);
         }
@@ -133,10 +131,14 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     }
 
     /**
+     * @deprecated since 5.6, will be private in 5.8
+     *
      * @return Repository
      */
     public function getRepository()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         if (!$this->repository) {
             $this->repository = new Repository(
                 $this->get('models')->getConnection(),

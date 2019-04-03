@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class LengthCondition implements ConditionInterface, \JsonSerializable
 {
+    private const NAME = 'length';
+
     /**
      * @var float|null
      */
@@ -50,7 +52,7 @@ class LengthCondition implements ConditionInterface, \JsonSerializable
 
     public function getName()
     {
-        return 'length';
+        return self::NAME;
     }
 
     /**

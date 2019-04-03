@@ -73,10 +73,6 @@
             <tag name="shopware.controller" module="frontend" controller="note"/>
         </service>
 
-        <service id="shopware_controllers_frontend_payment" class="Shopware_Controllers_Frontend_Payment">
-            <tag name="shopware.controller" module="frontend" controller="payment"/>
-        </service>
-
         <service id="shopware_controllers_frontend_register" class="Shopware_Controllers_Frontend_Register">
             <tag name="shopware.controller" module="frontend" controller="register"/>
         </service>
