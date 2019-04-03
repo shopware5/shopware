@@ -68,7 +68,12 @@
              * @property ajax
              * @type {boolean}
              */
-            ajax: true
+            ajax: true,
+
+            /**
+             * The DOM selector for visible fullscreen emotions
+             */
+            visibleFullscreenSelector: '.emotion--wrapper:visible[data-fullscreen="true"]'
         },
 
         /**
@@ -220,6 +225,8 @@
                 return;
             }
 
+            me.$emotion.attr('data-hasListing', me.opts.hasListing);
+
             me.$emotion.swEmotion();
 
             $.publish('plugin/swEmotionLoader/onInitEmotion', [ me, html ]);
@@ -355,7 +362,13 @@
              * @property wrapperSelector
              * @type {string}
              */
-            wrapperSelector: '.emotion--wrapper'
+            wrapperSelector: '.emotion--wrapper',
+
+            /**
+             * flag to prevent `is--no-sidebar` for fullscreen emotions with listing below
+             * @type {boolean}
+             */
+            hasListing: false
         },
 
         /**
@@ -639,7 +652,7 @@
         onShow: function(event, emotion) {
             var me = this;
 
-            if (emotion.$el.is(me.$el)) {
+            if (emotion.$emotion && emotion.$emotion.is(me.$el)) {
                 me.initFullscreen();
             }
 
@@ -649,7 +662,7 @@
         onHide: function(event, emotion) {
             var me = this;
 
-            if (emotion.$el.is(me.$el)) {
+            if (emotion.$emotion && emotion.$emotion.is(me.$el)) {
                 me.removeFullscreen();
             }
 

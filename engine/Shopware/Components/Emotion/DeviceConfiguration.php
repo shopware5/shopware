@@ -26,6 +26,7 @@ namespace Shopware\Components\Emotion;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Shopware\Models\Emotion\Emotion;
 
 class DeviceConfiguration implements DeviceConfigurationInterface
 {
@@ -37,6 +38,42 @@ class DeviceConfiguration implements DeviceConfigurationInterface
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
+    }
+
+    /**
+     * @param int $categoryId
+     * @param int $pageIndex
+     *
+     * @return array[]
+     */
+    public function getListingEmotions($categoryId, $pageIndex)
+    {
+        $emotions = $this->get($categoryId);
+
+        if (max(array_column($emotions, 'showListing')) > 0) {
+            return $emotions;
+        }
+
+        if ((int) $pageIndex > 0) {
+            return $this->getEmotionsByVisibility($emotions, [
+                Emotion::LISTING_VISIBILITY_ONLY_LISTING,
+                Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING,
+            ]);
+        }
+
+        $entryPageEmotions = $this->getEmotionsByVisibility($emotions, [
+            Emotion::LISTING_VISIBILITY_ONLY_START,
+            Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING,
+        ]);
+
+        if (!empty($entryPageEmotions)) {
+            return $entryPageEmotions;
+        }
+
+        return $this->getEmotionsByVisibility($emotions, [
+            Emotion::LISTING_VISIBILITY_ONLY_LISTING,
+            Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING,
+        ]);
     }
 
     /**
@@ -53,6 +90,8 @@ class DeviceConfiguration implements DeviceConfigurationInterface
             'emotion.fullscreen',
             'emotion.customer_stream_ids',
             'emotion.replacement',
+            'emotion.position',
+            'emotion.listing_visibility',
             'GROUP_CONCAT(shops.shop_id SEPARATOR \',\') as shopIds',
         ]);
 
@@ -88,7 +127,7 @@ class DeviceConfiguration implements DeviceConfigurationInterface
             return $emotion;
         }, $emotions);
 
-        return $emotions;
+        return $this->sortEmotionsByPositionAndId($emotions);
     }
 
     /**
@@ -185,7 +224,9 @@ class DeviceConfiguration implements DeviceConfigurationInterface
         /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $emotions = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $this->sortEmotionsByPositionAndId($emotions);
     }
 
     /**
@@ -197,6 +238,7 @@ class DeviceConfiguration implements DeviceConfigurationInterface
 
         $query->select([
             'emotion.id',
+            'emotion.position',
             'emotion.device as devices',
             'emotion.name',
             'emotion.seo_title',
@@ -226,7 +268,7 @@ class DeviceConfiguration implements DeviceConfigurationInterface
      *
      * @return QueryBuilder
      */
-    private function getLandingpageShopsQuery()
+    private function getLandingPageShopsQuery()
     {
         $query = $this->connection->createQueryBuilder();
 
@@ -235,5 +277,31 @@ class DeviceConfiguration implements DeviceConfigurationInterface
             ->where('shops.emotion_id = :id');
 
         return $query;
+    }
+
+    /**
+     * @return array
+     */
+    private function sortEmotionsByPositionAndId(array $emotions)
+    {
+        usort($emotions, function ($a, $b) {
+            if ($a['position'] === $b['position']) {
+                return ($a['id'] < $b['id']) ? -1 : 1;
+            }
+
+            return ($a['position'] < $b['position']) ? -1 : 1;
+        });
+
+        return $emotions;
+    }
+
+    /**
+     * @return array
+     */
+    private function getEmotionsByVisibility(array $emotions, array $visibility)
+    {
+        return array_filter($emotions, function ($emotion) use ($visibility) {
+            return in_array($emotion['listing_visibility'], $visibility);
+        });
     }
 }
