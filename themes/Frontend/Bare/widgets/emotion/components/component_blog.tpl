@@ -14,9 +14,12 @@
                                  style="width:{{"100" / $Data.entries|count}|round:2}%">
 
                                 {block name="widget_emotion_component_blog_entry_image"}
-                                    {if $entry.media.thumbnails}
-
+                                    {if $entry.media}
                                         {$images = $entry.media.thumbnails}
+                                        {if !isset($images[0])}
+                                            {$images[0] = ['source' => $entry.media.source]}
+                                            {$images[1] = ['source' => $entry.media.source]}
+                                        {/if}
 
                                         {strip}
                                             <style type="text/css">

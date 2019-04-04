@@ -16,6 +16,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed the worstRating for Googles struct data
 * Changed `SnippetManager` to consider plugin directories and theme directories in readFromIni mode
 * Changed `Checkout` controller, to resolve race condition problems on confirm page
+* Changed the album selection in the media manager for the blog images to show all images
 
 ## 5.5.8
 
