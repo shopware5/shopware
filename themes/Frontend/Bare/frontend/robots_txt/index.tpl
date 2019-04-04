@@ -1,3 +1,4 @@
+{stripLines}
 {block name="frontend_robots_txt_user_agent"}
     User-agent: *
 {/block}
@@ -40,3 +41,4 @@
     Will be removed in 5.6 without alternative
 *}
 {block name="frontend_robots_txt_sitemap_mobile"}{/block}
+{/stripLines}

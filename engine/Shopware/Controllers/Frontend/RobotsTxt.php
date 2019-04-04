@@ -29,21 +29,17 @@ class Shopware_Controllers_Frontend_RobotsTxt extends Enlight_Controller_Action
 {
     public function indexAction()
     {
-        $shop = $this->get('Shop');
-        if ($shop->getMain()) {
-            $shop = $shop->getMain();
-        }
-        $shops = $shop->getChildren();
+        $shop = $this->get('shop');
+        $routerContexts = $this->getRouterContext($shop->getMain() ?: $shop);
+
+        $baseUrls = array_map(static function (Context $context) {
+            return $context->getBaseUrl();
+        }, $routerContexts);
+
         $robotsTxtGenerator = $this->get('shopware.components.robots_txt_generator');
-        $baseUrls[] = $shop->getBaseUrl();
-
-        foreach ($shops as $languageShop) {
-            $baseUrls[] = $languageShop->getBaseUrl();
-        }
-
         $baseUrls = array_unique($baseUrls);
 
-        $robotsTxtGenerator->setRouterContext($this->getRouterContext($shop));
+        $robotsTxtGenerator->setRouterContext($routerContexts);
         $robotsTxtGenerator->setBaseUrls($baseUrls);
         $robotsTxtGenerator->setHost($shop->getHost());
         $robotsTxtGenerator->setSecure($shop->getSecure());
