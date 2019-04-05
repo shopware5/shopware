@@ -114,7 +114,7 @@
         {block name='frontend_rating_content_microdata'}
             {if $hasMicroData}
                 <meta itemprop="ratingValue" content="{$points}">
-                <meta itemprop="worstRating" content="1">
+                <meta itemprop="worstRating" content="0.5">
                 <meta itemprop="bestRating" content="{$isBase}">
                 {if $isType === 'aggregated'}
                     <meta itemprop="ratingCount" content="{$count}">
