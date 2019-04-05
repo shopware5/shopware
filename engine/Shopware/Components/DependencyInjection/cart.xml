@@ -30,5 +30,17 @@
             <factory class="Shopware\Components\DependencyInjection\SimpleFactory" method="factory"/>
             <argument type="expression">container.get('config').offsetGet('roundNetAfterTax') ? service('shopware.cart.net_rounding.after_tax') : service('shopware.cart.net_rounding.after_quantity')</argument>
         </service>
+
+        <service id="shopware.components.cart.cart_migration" class="Shopware\Components\Cart\CartMigration">
+            <argument type="service" id="session"/>
+            <argument type="expression">container.get('modules').Basket()</argument>
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware.components.cart.cart_migration_cleaner"/>
+        </service>
+
+        <service id="shopware.components.cart.cart_migration_cleaner" class="Shopware\Components\Cart\CartMigrationCleaner">
+            <argument type="service" id="session"/>
+            <argument type="service" id="dbal_connection"/>
+        </service>
     </services>
 </container>
