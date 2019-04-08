@@ -26,6 +26,14 @@ use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
 
 class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
 {
+    /**
+     * Pre dispatch method
+     */
+    public function preDispatch()
+    {
+        $this->Response()->setHeader('x-robots', 'noindex');
+    }
+
     public function refreshCaptchaAction()
     {
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();

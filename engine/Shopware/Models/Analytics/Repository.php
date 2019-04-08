@@ -220,7 +220,6 @@ class Repository
     /**
      * Returns a result which displays the revenue of each referrer.
      *
-     *
      * @return Result
      */
     public function getReferrerRevenue(Shop $shop, \DateTimeInterface $from = null, \DateTimeInterface $to = null)
@@ -289,7 +288,6 @@ class Repository
 
     /**
      * Returns a result which displays which kind of user created at which time orders.
-     *
      *
      * @return Result
      *                array (
@@ -1062,7 +1060,6 @@ class Repository
      *      $turnover = $repository->getDailyTurnover(... , ...);
      *      $turnover = array_map('reset', $turnover->getData());
      *
-     *
      * @return DBALQueryBuilder
      */
     protected function createDailyTurnoverBuilder(\DateTimeInterface $from = null, \DateTimeInterface $to = null)
@@ -1093,7 +1090,6 @@ class Repository
      *      $visitors = $repository->getDailyVisitors(... , ...);
      *      $visitors = array_map('reset', $visitors->getData());
      *
-     *
      * @return DBALQueryBuilder
      */
     protected function createDailyVisitorsBuilder(\DateTimeInterface $from = null, \DateTimeInterface $to = null)
@@ -1123,7 +1119,6 @@ class Repository
      * execute the following code:
      *      $registrations = $repository->getDailyRegistrations(... , ...);
      *      $registrations = array_map('reset', $registrations->getData());
-     *
      *
      * @return DBALQueryBuilder
      */
@@ -1182,7 +1177,6 @@ class Repository
     /**
      * This function creates a DBAL query builder, which used to determine the product sale value per order.
      * This is used to display, for example, how much revenue bring the products to a category or a manufacturer.
-     *
      *
      * @return DBALQueryBuilder
      */
@@ -1328,7 +1322,6 @@ class Repository
     /**
      * Returns a query which displays how many orders are each customer done.
      *
-     *
      * @return DBALQueryBuilder
      */
     protected function createOrdersOfCustomersBuilder(\DateTimeInterface $from = null, \DateTimeInterface $to = null)
@@ -1355,7 +1348,6 @@ class Repository
     /**
      * Returns a query which selects the sell count of each product.
      *
-     *
      * @return DBALQueryBuilder
      */
     protected function createProductSalesBuilder(\DateTimeInterface $from = null, \DateTimeInterface $to = null)
@@ -1380,7 +1372,6 @@ class Repository
 
     /**
      * Returns a query which selects the revenue of each partner.
-     *
      *
      * @return DBALQueryBuilder
      */
@@ -1407,7 +1398,6 @@ class Repository
 
     /**
      * Returns a query which selects the revenue of each referrer.
-     *
      *
      * @return DBALQueryBuilder
      */
@@ -1439,7 +1429,6 @@ class Repository
 
     /**
      * Returns a query which displays how many visits comes from each referrer.
-     *
      *
      * @return DBALQueryBuilder
      */

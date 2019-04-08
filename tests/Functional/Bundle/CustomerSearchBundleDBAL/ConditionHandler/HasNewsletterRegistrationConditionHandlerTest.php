@@ -123,6 +123,6 @@ class HasNewsletterRegistrationConditionHandlerTest extends TestCase
             ]
         );
 
-        $this->assertEquals(0, $result->getTotal());
+        static::assertEquals(0, $result->getTotal());
     }
 }

@@ -44,7 +44,6 @@ interface PartialFacetHandlerInterface
     /**
      * Checks if the provided facet can be handled by this class.
      *
-     *
      * @return bool
      */
     public function supportsFacet(FacetInterface $facet);

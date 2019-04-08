@@ -46,7 +46,7 @@ class Shopware_Tests_Controllers_Frontend_ListingTest extends Enlight_Components
 
         $this->dispatch('/cat/index/sCategory/' . $mainCategory);
 
-        $this->assertEquals(301, $this->Response()->getHttpResponseCode());
+        static::assertEquals(301, $this->Response()->getHttpResponseCode());
     }
 
     public function testManufacturerPage()
@@ -55,7 +55,7 @@ class Shopware_Tests_Controllers_Frontend_ListingTest extends Enlight_Components
 
         $source = $this->Response()->getBody();
 
-        $this->assertContains('blaueshaus_200x200.png', $source);
+        static::assertContains('blaueshaus_200x200.png', $source);
     }
 
     public function testWithoutImageManufacturerPage()
@@ -72,6 +72,6 @@ SQL;
 
         $source = $this->Response()->getBody();
 
-        $this->assertNotContains('blaueshaus_200x200.png', $source);
+        static::assertNotContains('blaueshaus_200x200.png', $source);
     }
 }

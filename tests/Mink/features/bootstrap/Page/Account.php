@@ -540,7 +540,6 @@ class Account extends Page implements HelperSelectorInterface
     /**
      * Helper method checks the order positions
      *
-     *
      * @throws \Exception
      */
     private function checkOrderPositions(AccountOrder $order, array $articles)

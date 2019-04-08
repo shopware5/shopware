@@ -43,8 +43,8 @@ class Shopware_Tests_Controllers_Frontend_RegisterTest extends Enlight_Component
 
         $viewVariables = $this->View()->getAssign();
 
-        $this->assertTrue($this->Response()->isRedirect());
-        $this->assertArrayNotHasKey('errors', $viewVariables);
+        static::assertTrue($this->Response()->isRedirect());
+        static::assertArrayNotHasKey('errors', $viewVariables);
     }
 
     public function testNoCaptcha()
@@ -60,8 +60,8 @@ class Shopware_Tests_Controllers_Frontend_RegisterTest extends Enlight_Component
 
         $viewVariables = $this->View()->getAssign();
 
-        $this->assertTrue($this->Response()->isRedirect());
-        $this->assertArrayNotHasKey('errors', $viewVariables);
+        static::assertTrue($this->Response()->isRedirect());
+        static::assertArrayNotHasKey('errors', $viewVariables);
     }
 
     public function testHoneypot()
@@ -77,8 +77,8 @@ class Shopware_Tests_Controllers_Frontend_RegisterTest extends Enlight_Component
 
         $viewVariables = $this->View()->getAssign();
 
-        $this->assertTrue($this->Response()->isRedirect());
-        $this->assertArrayNotHasKey('errors', $viewVariables);
+        static::assertTrue($this->Response()->isRedirect());
+        static::assertArrayNotHasKey('errors', $viewVariables);
     }
 
     public function testDefault()
@@ -100,8 +100,8 @@ class Shopware_Tests_Controllers_Frontend_RegisterTest extends Enlight_Component
 
         $viewVariables = $this->View()->getAssign();
 
-        $this->assertTrue($this->Response()->isRedirect());
-        $this->assertArrayNotHasKey('errors', $viewVariables);
+        static::assertTrue($this->Response()->isRedirect());
+        static::assertArrayNotHasKey('errors', $viewVariables);
     }
 
     public function testInvalidHoneypot()
@@ -118,7 +118,7 @@ class Shopware_Tests_Controllers_Frontend_RegisterTest extends Enlight_Component
 
         $viewVariables = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('errors', $viewVariables);
+        static::assertArrayHasKey('errors', $viewVariables);
     }
 
     public function testInvalidDefault()
@@ -140,7 +140,7 @@ class Shopware_Tests_Controllers_Frontend_RegisterTest extends Enlight_Component
 
         $viewVariables = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('errors', $viewVariables);
+        static::assertArrayHasKey('errors', $viewVariables);
     }
 
     private static function saveConfig($name, $value)

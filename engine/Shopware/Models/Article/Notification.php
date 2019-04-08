@@ -26,6 +26,7 @@ namespace Shopware\Models\Article;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\LazyFetchModelEntity;
+use Shopware\Models\Attribute\ArticleNotification as ProductNotificationAttribute;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -63,7 +64,7 @@ class Notification extends LazyFetchModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\ArticleNotification
+     * @var ProductNotificationAttribute
      *
      * @Assert\Valid()
      *
@@ -225,7 +226,7 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\ArticleNotification
+     * @return ProductNotificationAttribute
      */
     public function getAttribute()
     {
@@ -233,13 +234,13 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * @param array|\Shopware\Models\Attribute\ArticleNotification|array|null $attribute
+     * @param array|ProductNotificationAttribute|array|null $attribute
      *
      * @return Notification
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\ArticleNotification::class, 'attribute', 'articleNotification');
+        return $this->setOneToOne($attribute, ProductNotificationAttribute::class, 'attribute', 'articleNotification');
     }
 
     /**

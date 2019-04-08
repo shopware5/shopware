@@ -42,7 +42,7 @@ class GarbageCollectorFactoryTest extends TestCase
 
         $collector = $factory->factory();
 
-        $this->assertNotEquals($currentCount, count($this->getMediaPositionsFromGarbageCollector($collector)));
+        static::assertNotEquals($currentCount, count($this->getMediaPositionsFromGarbageCollector($collector)));
 
         Shopware()->Container()->get('shopware_attribute.crud_service')->delete('s_articles_attributes', 'foo');
     }

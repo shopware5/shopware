@@ -33,13 +33,13 @@ class RemoveAndCreateResourceTest extends Enlight_Components_Test_TestCase
         $name = 'test' . mt_rand(0, 5000000);
 
         $acl->createResource($name, ['read', 'write']);
-        $this->assertTrue($acl->hasResourceInDatabase($name));
-        $this->assertTrue($acl->deleteResource($name));
+        static::assertTrue($acl->hasResourceInDatabase($name));
+        static::assertTrue($acl->deleteResource($name));
         $this->assertfalse($acl->hasResourceInDatabase($name));
 
         $acl->createResource($name, ['read', 'write']);
-        $this->assertTrue($acl->hasResourceInDatabase($name));
-        $this->assertTrue($acl->deleteResource($name));
+        static::assertTrue($acl->hasResourceInDatabase($name));
+        static::assertTrue($acl->deleteResource($name));
         $this->assertfalse($acl->hasResourceInDatabase($name));
     }
 }

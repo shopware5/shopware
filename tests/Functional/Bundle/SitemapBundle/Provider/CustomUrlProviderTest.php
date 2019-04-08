@@ -42,7 +42,7 @@ class CustomUrlProviderTest extends TestCase
 
         $shopContext = $this->getContextService()->createShopContext(1);
 
-        $this->assertSame([], $customUrlProvider->getUrls(new Context(), $shopContext));
+        static::assertSame([], $customUrlProvider->getUrls(new Context(), $shopContext));
     }
 
     public function testGetUrlsReturnsAllUrlsForShop()
@@ -72,7 +72,7 @@ class CustomUrlProviderTest extends TestCase
 
         $shopContext = $this->getContextService()->createShopContext($shopId);
 
-        $this->assertCount(1, $customUrlProvider->getUrls(new Context(), $shopContext));
+        static::assertCount(1, $customUrlProvider->getUrls(new Context(), $shopContext));
     }
 
     public function testGetUrlsReturnsAllUrlsForShopIdZero()
@@ -109,9 +109,9 @@ class CustomUrlProviderTest extends TestCase
         $shopContext = $this->getContextService()->createShopContext($shopId);
 
         $urls = $customUrlProvider->getUrls(new Context(), $shopContext);
-        $this->assertCount(2, $urls);
-        $this->assertSame('bar', $urls[0]->getLoc());
-        $this->assertSame('fooBar', $urls[1]->getLoc());
+        static::assertCount(2, $urls);
+        static::assertSame('bar', $urls[0]->getLoc());
+        static::assertSame('fooBar', $urls[1]->getLoc());
     }
 
     public function testGetUrlsReturnsNoUrlsWrongShopId()
@@ -135,7 +135,7 @@ class CustomUrlProviderTest extends TestCase
 
         $shopContext = $this->getContextService()->createShopContext($shopId);
 
-        $this->assertEmpty($customUrlProvider->getUrls(new Context(), $shopContext));
+        static::assertEmpty($customUrlProvider->getUrls(new Context(), $shopContext));
     }
 
     private function getCustomUrlProvider(ConfigHandler $configHandlerStub)

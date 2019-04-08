@@ -146,7 +146,6 @@ SQL;
     /**
      * Builds a feed-url for a given row from the s_export table.
      *
-     *
      * @return string
      */
     protected function pathTo(array $feed)

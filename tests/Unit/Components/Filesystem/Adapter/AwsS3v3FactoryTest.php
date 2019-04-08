@@ -43,7 +43,7 @@ class AwsS3v3FactoryTest extends TestCase
 
     public function testTypeLocal()
     {
-        $this->assertSame('s3', $this->factory->getType());
+        static::assertSame('s3', $this->factory->getType());
     }
 
     public function testCreationWithEmptyConfig()
@@ -64,6 +64,6 @@ class AwsS3v3FactoryTest extends TestCase
             ],
         ]);
 
-        $this->assertInstanceOf(AwsS3Adapter::class, $filesystem);
+        static::assertInstanceOf(AwsS3Adapter::class, $filesystem);
     }
 }

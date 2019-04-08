@@ -39,7 +39,7 @@ class Shopware_Tests_Api_PaymentMethodsTest extends PHPUnit\Framework\TestCase
 
         $hostname = $helper->Shop()->getHost();
         if (empty($hostname)) {
-            $this->markTestSkipped(
+            static::markTestSkipped(
                 'Hostname is not available.'
             );
         }
@@ -76,18 +76,18 @@ class Shopware_Tests_Api_PaymentMethodsTest extends PHPUnit\Framework\TestCase
         $client = new Zend_Http_Client($this->apiBaseUrl . self::API_PATH);
         $response = $client->request('GET');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(401, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(401, $response->getStatus());
 
         $result = $response->getBody();
 
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     public function testGetPaymentWithInvalidIdShouldReturnMessage()
@@ -97,18 +97,18 @@ class Shopware_Tests_Api_PaymentMethodsTest extends PHPUnit\Framework\TestCase
             ->setUri($this->apiBaseUrl . self::API_PATH . $id)
             ->request('GET');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(404, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
 
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     public function testGetPaymentShouldBeSuccessful()
@@ -116,23 +116,23 @@ class Shopware_Tests_Api_PaymentMethodsTest extends PHPUnit\Framework\TestCase
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . self::API_PATH);
         $result = $client->request('GET');
 
-        $this->assertEquals('application/json', $result->getHeader('Content-Type'));
-        $this->assertEquals(null, $result->getHeader('Set-Cookie'));
-        $this->assertEquals(200, $result->getStatus());
+        static::assertEquals('application/json', $result->getHeader('Content-Type'));
+        static::assertEquals(null, $result->getHeader('Set-Cookie'));
+        static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
-        $this->assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('data', $result);
 
-        $this->assertArrayHasKey('total', $result);
-        $this->assertInternalType('int', $result['total']);
+        static::assertArrayHasKey('total', $result);
+        static::assertInternalType('int', $result['total']);
 
         $data = $result['data'];
-        $this->assertInternalType('array', $data);
+        static::assertInternalType('array', $data);
     }
 
     public function testPostPaymentShouldBeSuccessful()
@@ -149,9 +149,9 @@ class Shopware_Tests_Api_PaymentMethodsTest extends PHPUnit\Framework\TestCase
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('POST');
 
-        $this->assertEquals(201, $response->getStatus());
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertNull(
+        static::assertEquals(201, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertNull(
             $response->getHeader('Set-Cookie'),
             'There should be no set-cookie header set.'
         );
@@ -159,17 +159,17 @@ class Shopware_Tests_Api_PaymentMethodsTest extends PHPUnit\Framework\TestCase
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
         $location = $response->getHeader('Location');
         $identifier = (int) array_pop(explode('/', $location));
 
-        $this->assertGreaterThan(0, $identifier);
+        static::assertGreaterThan(0, $identifier);
 
         // Check ID
         $Payment = Shopware()->Models()->find('Shopware\Models\Payment\Payment', $identifier);
-        $this->assertGreaterThan(0, $Payment->getId());
+        static::assertGreaterThan(0, $Payment->getId());
 
         return $identifier;
     }
@@ -184,20 +184,20 @@ class Shopware_Tests_Api_PaymentMethodsTest extends PHPUnit\Framework\TestCase
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . self::API_PATH . $identifier);
         $result = $client->request('GET');
 
-        $this->assertEquals('application/json', $result->getHeader('Content-Type'));
-        $this->assertEquals(null, $result->getHeader('Set-Cookie'));
-        $this->assertEquals(200, $result->getStatus());
+        static::assertEquals('application/json', $result->getHeader('Content-Type'));
+        static::assertEquals(null, $result->getHeader('Set-Cookie'));
+        static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
-        $this->assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('data', $result);
 
         $data = $result['data'];
-        $this->assertInternalType('array', $data);
+        static::assertInternalType('array', $data);
     }
 
     /**
@@ -211,15 +211,15 @@ class Shopware_Tests_Api_PaymentMethodsTest extends PHPUnit\Framework\TestCase
 
         $response = $client->request('DELETE');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(200, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
     }
 
     public function testDeletePaymentWithInvalidIdShouldFailWithMessage()
@@ -229,16 +229,16 @@ class Shopware_Tests_Api_PaymentMethodsTest extends PHPUnit\Framework\TestCase
 
         $response = $client->request('DELETE');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(404, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 }

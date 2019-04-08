@@ -71,7 +71,7 @@ class CdnOptimizerService implements OptimizerServiceInterface
         }
 
         // Generate unique temporary file name
-        $tempFileName = tempnam(sys_get_temp_dir(), 'CdnOptimizerTemp-');
+        $tempFileName = uniqid('CdnOptimizerTemp-', true);
 
         $mediaServiceAdapter = $this->mediaService->getFilesystem();
 
@@ -79,9 +79,9 @@ class CdnOptimizerService implements OptimizerServiceInterface
             // Load file from remote filesystem, optimize it and upload it back again.
             $this->filesystem->writeStream($tempFileName, $mediaServiceAdapter->readStream($filepath));
 
-            $this->optimizerService->optimize($tempFileName);
+            $this->optimizerService->optimize(sys_get_temp_dir() . '/' . $tempFileName);
 
-            $mediaServiceAdapter->writeStream($filepath, $this->filesystem->readStream($tempFileName));
+            $mediaServiceAdapter->updateStream($filepath, $this->filesystem->readStream($tempFileName));
         } catch (\League\Flysystem\Exception $exception) {
             throw $exception;
         } finally {

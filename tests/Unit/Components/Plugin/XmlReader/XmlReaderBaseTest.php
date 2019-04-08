@@ -55,9 +55,9 @@ class XmlReaderBaseTest extends TestCase
 
     public function testConstantsHaveCorrectValue(): void
     {
-        self::assertEquals(0, XmlReaderBase::SCOPE_LOCALE);
-        self::assertEquals(1, XmlReaderBase::SCOPE_SHOP);
-        self::assertEquals('en', XmlReaderBase::DEFAULT_LANG);
+        static::assertEquals(0, XmlReaderBase::SCOPE_LOCALE);
+        static::assertEquals(1, XmlReaderBase::SCOPE_SHOP);
+        static::assertEquals('en', XmlReaderBase::DEFAULT_LANG);
     }
 
     public function testReadValidFile(): void
@@ -65,8 +65,8 @@ class XmlReaderBaseTest extends TestCase
         $xmlReader = new XmlConfigReader();
         $data = $xmlReader->read(__DIR__ . '/examples/base/config.xml');
 
-        self::assertInternalType('array', $data);
-        self::assertCount(3, $data);
+        static::assertInternalType('array', $data);
+        static::assertCount(3, $data);
     }
 
     public function testReadInvalidFile(): void
@@ -83,28 +83,28 @@ class XmlReaderBaseTest extends TestCase
         $formDescriptions = $this->xpath->query('//config/description');
 
         $formDescriptionResult = XmlReaderBase::parseTranslatableNodeList($formDescriptions);
-        self::assertCount(3, $formDescriptionResult);
-        self::assertArrayHasKey('de', $formDescriptionResult);
-        self::assertArrayHasKey('en', $formDescriptionResult);
-        self::assertArrayHasKey('fr', $formDescriptionResult);
+        static::assertCount(3, $formDescriptionResult);
+        static::assertArrayHasKey('de', $formDescriptionResult);
+        static::assertArrayHasKey('en', $formDescriptionResult);
+        static::assertArrayHasKey('fr', $formDescriptionResult);
 
-        self::assertEquals('My description', $formDescriptionResult['en']);
-        self::assertEquals('Meine Beschreibung', $formDescriptionResult['de']);
-        self::assertEquals('Ma description', $formDescriptionResult['fr']);
+        static::assertEquals('My description', $formDescriptionResult['en']);
+        static::assertEquals('Meine Beschreibung', $formDescriptionResult['de']);
+        static::assertEquals('Ma description', $formDescriptionResult['fr']);
 
         $formLabels = $this->xpath->query('//config/label');
         $formLabelResult = XmlReaderBase::parseTranslatableNodeList($formLabels);
 
-        self::assertCount(2, $formLabelResult);
-        self::assertArrayHasKey('de', $formLabelResult);
-        self::assertArrayHasKey('en', $formLabelResult);
+        static::assertCount(2, $formLabelResult);
+        static::assertArrayHasKey('de', $formLabelResult);
+        static::assertArrayHasKey('en', $formLabelResult);
 
-        self::assertEquals('My Form Label', $formLabelResult['en']);
-        self::assertEquals('Mein Form', $formLabelResult['de']);
+        static::assertEquals('My Form Label', $formLabelResult['en']);
+        static::assertEquals('Mein Form', $formLabelResult['de']);
 
         $firstElementDescriptions = $this->xpath->query('//config/elements/element[0]/description');
         $firstElementDescriptionResult = XmlReaderBase::parseTranslatableNodeList($firstElementDescriptions);
-        self::assertNull($firstElementDescriptionResult);
+        static::assertNull($firstElementDescriptionResult);
     }
 
     public function testGetFirstItemOfNodeList(): void
@@ -112,11 +112,11 @@ class XmlReaderBaseTest extends TestCase
         $config = $this->xpath->query('//config')->item(0);
         $element = XmlReaderBase::getFirstChildren($config, 'label');
 
-        self::assertEquals($config->getElementsByTagName('label')->item(0), $element);
+        static::assertEquals($config->getElementsByTagName('label')->item(0), $element);
 
         $emptyNodeList = $this->xpath->query('//config/elements/element')->item(0);
 
-        self::assertNull(XmlReaderBase::getFirstChildren($emptyNodeList, 'description'));
+        static::assertNull(XmlReaderBase::getFirstChildren($emptyNodeList, 'description'));
     }
 
     public function testValidateBooleanAttribute(): void
@@ -127,8 +127,8 @@ class XmlReaderBaseTest extends TestCase
             $element1->getAttribute('required')
         );
 
-        self::assertInternalType('bool', $element1Result);
-        self::assertEquals(true, $element1Result);
+        static::assertInternalType('bool', $element1Result);
+        static::assertEquals(true, $element1Result);
 
         //required not given - passed default value
         $element2 = $this->xpath->query('//config/elements/element')->item(1);
@@ -137,8 +137,8 @@ class XmlReaderBaseTest extends TestCase
             false
         );
 
-        self::assertInternalType('bool', $element2Result);
-        self::assertEquals(false, $element2Result);
+        static::assertInternalType('bool', $element2Result);
+        static::assertEquals(false, $element2Result);
     }
 
     public function testParseStoreNodeList(): void
@@ -147,23 +147,23 @@ class XmlReaderBaseTest extends TestCase
         $store1 = $this->xpath->query('//config/elements/element[3]/store');
         $store1Result = XmlReaderBase::parseStoreNodeList($store1);
 
-        self::assertInternalType('string', $store1Result);
-        self::assertEquals('EXTJS-STORE', $store1Result);
+        static::assertInternalType('string', $store1Result);
+        static::assertEquals('EXTJS-STORE', $store1Result);
 
         //Xml Store
         $store2 = $this->xpath->query('//config/elements/element[4]/store');
         $store2Result = XmlReaderBase::parseStoreNodeList($store2);
 
-        self::assertInternalType('array', $store2Result);
-        self::assertCount(3, $store2Result);
-        self::assertEquals('value2', $store2Result[1][0]);
-        self::assertEquals('label2', $store2Result[1][1]['en']);
+        static::assertInternalType('array', $store2Result);
+        static::assertCount(3, $store2Result);
+        static::assertEquals('value2', $store2Result[1][0]);
+        static::assertEquals('label2', $store2Result[1][1]['en']);
 
         //No store found
         $store3 = $this->xpath->query('//config/elements/element[5]/store');
         $store3Result = XmlReaderBase::parseStoreNodeList($store3);
 
-        self::assertNull(null, $store3Result);
+        static::assertNull(null, $store3Result);
     }
 
     public function testParseOptionsNodeList(): void
@@ -171,12 +171,12 @@ class XmlReaderBaseTest extends TestCase
         $options = $this->xpath->query('//config/elements/element[6]/options');
         $optionsResult = XmlReaderBase::parseOptionsNodeList($options);
 
-        self::assertInternalType('array', $optionsResult);
-        self::assertCount(2, $optionsResult);
-        self::assertArrayHasKey('minValue', $optionsResult);
-        self::assertArrayHasKey('maxValue', $optionsResult);
-        self::assertEquals('1', $optionsResult['minValue']);
-        self::assertEquals('2', $optionsResult['maxValue']);
+        static::assertInternalType('array', $optionsResult);
+        static::assertCount(2, $optionsResult);
+        static::assertArrayHasKey('minValue', $optionsResult);
+        static::assertArrayHasKey('maxValue', $optionsResult);
+        static::assertEquals('1', $optionsResult['minValue']);
+        static::assertEquals('2', $optionsResult['maxValue']);
     }
 
     public function testParseOptionsNodeListNoOptions(): void
@@ -188,7 +188,7 @@ class XmlReaderBaseTest extends TestCase
         $xpath = new DOMXPath($dom);
         $options = $xpath->query('//element/options');
 
-        self::assertNull(XmlConfigReader::parseOptionsNodeList(
+        static::assertNull(XmlConfigReader::parseOptionsNodeList(
             $options
         ));
     }
@@ -202,7 +202,7 @@ class XmlReaderBaseTest extends TestCase
         $xpath = new DOMXPath($dom);
         $options = $xpath->query('//element/options');
 
-        self::assertNull(XmlConfigReader::parseOptionsNodeList(
+        static::assertNull(XmlConfigReader::parseOptionsNodeList(
             $options
         ));
     }
@@ -212,7 +212,7 @@ class XmlReaderBaseTest extends TestCase
         $options = $this->xpath->query('//config/elements/element[6]/options');
         $value = XmlReaderBase::getElementChildValueByName($options->item(0), 'minValue', false);
 
-        self::assertEquals('1', $value);
+        static::assertEquals('1', $value);
     }
 
     public function testGetElementChildValueByNameReturnsNull(): void
@@ -220,7 +220,7 @@ class XmlReaderBaseTest extends TestCase
         $options = $this->xpath->query('//config/elements/element[6]/options');
         $value = XmlReaderBase::getElementChildValueByName($options->item(0), 'invalid', false);
 
-        self::assertNull($value);
+        static::assertNull($value);
     }
 
     public function testGetElementChildValueByNameThrowsException(): void
@@ -234,7 +234,7 @@ class XmlReaderBaseTest extends TestCase
 
     public function testValidateTextAttribute(): void
     {
-        self::assertEquals('combo', XmlConfigReader::validateTextAttribute('', 'combo'));
-        self::assertEquals('select', XmlConfigReader::validateTextAttribute('select'));
+        static::assertEquals('combo', XmlConfigReader::validateTextAttribute('', 'combo'));
+        static::assertEquals('select', XmlConfigReader::validateTextAttribute('select'));
     }
 }

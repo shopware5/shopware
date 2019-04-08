@@ -220,6 +220,10 @@
             <argument type="service" id="shopware.release" />
         </service>
 
+        <service id="shopware.query_operator_validator" class="Shopware\Components\Model\QueryOperatorValidator">
+            <argument>%shopware.model.validOperators%</argument>
+        </service>
+
         <service id="model_factory" class="Shopware\Components\DependencyInjection\Bridge\Models" />
         <service id="shopware.model_manager" alias="models" />
 
@@ -230,6 +234,7 @@
             <argument type="service" id="shopware.loader" />
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware.model_annotations" />
+            <argument type="service" id="shopware.query_operator_validator" />
          </service>
 
         <service id="models_metadata_cache" class="Doctrine\Common\Cache\Cache">
@@ -556,6 +561,7 @@
         <service id="shopware.requirements" class="Shopware\Components\Check\Requirements">
             <argument>%kernel.root_dir%/engine/Shopware/Components/Check/Data/System.xml</argument>
             <argument type="service" id="db_connection"/>
+            <argument type="service" id="snippets"/>
         </service>
 
         <service id="shopware.emotion_component_installer" class="Shopware\Components\Emotion\ComponentInstaller">

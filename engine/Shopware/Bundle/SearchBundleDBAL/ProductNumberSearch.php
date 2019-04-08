@@ -71,7 +71,6 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      * The search gateway has to implement an event which plugin can be listened to,
      * to add their own handler classes.
      *
-     *
      * @return SearchBundle\ProductNumberSearchResult
      */
     public function search(SearchBundle\Criteria $criteria, ShopContextInterface $context)

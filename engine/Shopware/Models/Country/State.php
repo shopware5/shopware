@@ -26,6 +26,7 @@ namespace Shopware\Models\Country;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\CountryState as CountryStateAttribute;
 
 /**
  * @ORM\Entity()
@@ -38,7 +39,7 @@ class State extends ModelEntity
      * The countries property is the owning side of the association between area and countries.
      * The association is joined over the countryID field and the id field of the country.
      *
-     * @var \Shopware\Models\Country\Country
+     * @var Country
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Country\Country", inversedBy="states", cascade={"persist"})
      * @ORM\JoinColumn(name="countryID", referencedColumnName="id")
@@ -48,7 +49,7 @@ class State extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\CountryState
+     * @var CountryStateAttribute
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CountryState", mappedBy="countryState", orphanRemoval=true, cascade={"persist"})
      */
@@ -186,7 +187,7 @@ class State extends ModelEntity
      * OWNING SIDE
      * of the association between states and country
      *
-     * @return \Shopware\Models\Country\Country
+     * @return Country
      */
     public function getCountry()
     {
@@ -194,9 +195,9 @@ class State extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Country\Country|array|null $country
+     * @param Country|array|null $country
      *
-     * @return \Shopware\Models\Country\State
+     * @return State
      */
     public function setCountry($country)
     {
@@ -206,7 +207,7 @@ class State extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\CountryState
+     * @return CountryStateAttribute
      */
     public function getAttribute()
     {
@@ -214,12 +215,12 @@ class State extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\CountryState|array|null $attribute
+     * @param CountryStateAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\CountryState
+     * @return State
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\CountryState::class, 'attribute', 'countryState');
+        return $this->setOneToOne($attribute, CountryStateAttribute::class, 'attribute', 'countryState');
     }
 }

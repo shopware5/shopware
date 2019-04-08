@@ -193,7 +193,7 @@ class RewriteMatcherTest extends \Enlight_Components_Test_TestCase
         foreach ($this->provideSeoUrls() as $testCase) {
             $context = $this->createRoutingContext($testCase['shopId']);
 
-            $this->assertEquals($this->matcher->match($testCase['path'], $context), $testCase['expected']);
+            static::assertEquals($this->matcher->match($testCase['path'], $context), $testCase['expected']);
         }
     }
 

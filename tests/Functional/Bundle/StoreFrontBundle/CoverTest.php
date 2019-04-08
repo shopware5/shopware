@@ -85,7 +85,7 @@ class CoverTest extends TestCase
             $context
         );
 
-        $this->assertCount(2, $products);
+        static::assertCount(2, $products);
 
         foreach ($products as $product) {
             $expected = 'test-spachtelmasse';
@@ -218,12 +218,12 @@ class CoverTest extends TestCase
 
     private function assertMediaFile($expected, Struct\Media $media)
     {
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Media', $media);
-        $this->assertNotEmpty($media->getThumbnails());
-        $this->assertContains($expected, $media->getFile());
+        static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Media', $media);
+        static::assertNotEmpty($media->getThumbnails());
+        static::assertContains($expected, $media->getFile());
 
         foreach ($media->getThumbnails() as $thumbnail) {
-            $this->assertContains($expected, $thumbnail->getSource());
+            static::assertContains($expected, $thumbnail->getSource());
         }
     }
 

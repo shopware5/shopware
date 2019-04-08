@@ -39,9 +39,9 @@ class CheapestPriceTest extends TestCase
         $listProduct = $this->helper->getListProduct($number, $context);
 
         $cheapestPrice = $listProduct->getCheapestPrice();
-        $this->assertEquals(50, $cheapestPrice->getCalculatedPrice());
-        $this->assertEquals(60, $cheapestPrice->getCalculatedPseudoPrice());
-        $this->assertEquals(100, $cheapestPrice->getCalculatedReferencePrice());
+        static::assertEquals(50, $cheapestPrice->getCalculatedPrice());
+        static::assertEquals(60, $cheapestPrice->getCalculatedPseudoPrice());
+        static::assertEquals(100, $cheapestPrice->getCalculatedReferencePrice());
     }
 
     public function testCheapestWithInactiveVariants()
@@ -59,9 +59,9 @@ class CheapestPriceTest extends TestCase
         $listProduct = $this->helper->getListProduct($number, $context);
         $cheapestPrice = $listProduct->getCheapestPrice();
 
-        $this->assertEquals(70, $cheapestPrice->getCalculatedPrice());
-        $this->assertEquals(80, $cheapestPrice->getCalculatedPseudoPrice());
-        $this->assertEquals(140, $cheapestPrice->getCalculatedReferencePrice());
+        static::assertEquals(70, $cheapestPrice->getCalculatedPrice());
+        static::assertEquals(80, $cheapestPrice->getCalculatedPseudoPrice());
+        static::assertEquals(140, $cheapestPrice->getCalculatedReferencePrice());
     }
 
     public function testCheapestWithCloseout()
@@ -80,9 +80,9 @@ class CheapestPriceTest extends TestCase
         $this->helper->createArticle($data);
         $listProduct = $this->helper->getListProduct($number, $context);
         $cheapestPrice = $listProduct->getCheapestPrice();
-        $this->assertEquals(80, $cheapestPrice->getCalculatedPrice());
-        $this->assertEquals(90, $cheapestPrice->getCalculatedPseudoPrice());
-        $this->assertEquals(160, $cheapestPrice->getCalculatedReferencePrice());
+        static::assertEquals(80, $cheapestPrice->getCalculatedPrice());
+        static::assertEquals(90, $cheapestPrice->getCalculatedPseudoPrice());
+        static::assertEquals(160, $cheapestPrice->getCalculatedReferencePrice());
     }
 
     public function testCheapestWithMinPurchase()
@@ -109,9 +109,9 @@ class CheapestPriceTest extends TestCase
         /*
          * Expect price * minPurchase calculation
          */
-        $this->assertEquals(15, $cheapestPrice->getCalculatedPrice());
-        $this->assertEquals(18, $cheapestPrice->getCalculatedPseudoPrice());
-        $this->assertEquals(10, $cheapestPrice->getCalculatedReferencePrice());
+        static::assertEquals(15, $cheapestPrice->getCalculatedPrice());
+        static::assertEquals(18, $cheapestPrice->getCalculatedPseudoPrice());
+        static::assertEquals(10, $cheapestPrice->getCalculatedReferencePrice());
     }
 
     public function testCheapestWithMinPurchaseAndCloseout()
@@ -140,9 +140,9 @@ class CheapestPriceTest extends TestCase
         $listProduct = $this->helper->getListProduct($number, $context);
 
         $cheapestPrice = $listProduct->getCheapestPrice();
-        $this->assertEquals(60, $cheapestPrice->getCalculatedPrice());
-        $this->assertEquals(70, $cheapestPrice->getCalculatedPseudoPrice());
-        $this->assertEquals(120, $cheapestPrice->getCalculatedReferencePrice());
+        static::assertEquals(60, $cheapestPrice->getCalculatedPrice());
+        static::assertEquals(70, $cheapestPrice->getCalculatedPseudoPrice());
+        static::assertEquals(120, $cheapestPrice->getCalculatedReferencePrice());
     }
 
     public function testCheapestForCustomerGroup()
@@ -178,10 +178,10 @@ class CheapestPriceTest extends TestCase
          * FORCE price = 1,-€
          *
          */
-        $this->assertEquals('PHP', $cheapestPrice->getCustomerGroup()->getKey());
-        $this->assertEquals(50, $cheapestPrice->getCalculatedPrice());
-        $this->assertEquals(60, $cheapestPrice->getCalculatedPseudoPrice());
-        $this->assertEquals(100, $cheapestPrice->getCalculatedReferencePrice());
+        static::assertEquals('PHP', $cheapestPrice->getCustomerGroup()->getKey());
+        static::assertEquals(50, $cheapestPrice->getCalculatedPrice());
+        static::assertEquals(60, $cheapestPrice->getCalculatedPseudoPrice());
+        static::assertEquals(100, $cheapestPrice->getCalculatedReferencePrice());
     }
 
     public function testCheapestWithFallback()
@@ -205,10 +205,10 @@ class CheapestPriceTest extends TestCase
         /*
          * Expect that no FORCE-FALLBACK customer group prices found.
          */
-        $this->assertEquals('PHP', $cheapestPrice->getCustomerGroup()->getKey());
-        $this->assertEquals(50, $cheapestPrice->getCalculatedPrice());
-        $this->assertEquals(60, $cheapestPrice->getCalculatedPseudoPrice());
-        $this->assertEquals(100, $cheapestPrice->getCalculatedReferencePrice());
+        static::assertEquals('PHP', $cheapestPrice->getCustomerGroup()->getKey());
+        static::assertEquals(50, $cheapestPrice->getCalculatedPrice());
+        static::assertEquals(60, $cheapestPrice->getCalculatedPseudoPrice());
+        static::assertEquals(100, $cheapestPrice->getCalculatedReferencePrice());
     }
 
     public function testCheapestWithPriceGroup()
@@ -235,7 +235,7 @@ class CheapestPriceTest extends TestCase
          * Expect cheapest variant 50€
          * And price group discount 10%
          */
-        $this->assertEquals(45, $cheapestPrice->getCalculatedPrice());
+        static::assertEquals(45, $cheapestPrice->getCalculatedPrice());
     }
 
     public function testCheapestWithPriceGroupAndCloseout()
@@ -271,8 +271,8 @@ class CheapestPriceTest extends TestCase
          * Expect cheapest variant 80,- €
          * And price group discount 10%
          */
-        $this->assertEquals(72, $cheapestPrice->getCalculatedPrice());
-        $this->assertEquals(144, $cheapestPrice->getCalculatedReferencePrice());
+        static::assertEquals(72, $cheapestPrice->getCalculatedPrice());
+        static::assertEquals(144, $cheapestPrice->getCalculatedReferencePrice());
     }
 
     /**
@@ -298,7 +298,7 @@ class CheapestPriceTest extends TestCase
             'useLastGraduationForCheapestPrice' => true,
         ]);
 
-        $this->assertEquals(80, $listProduct->getCheapestPrice()->getCalculatedPrice());
+        static::assertEquals(80, $listProduct->getCheapestPrice()->getCalculatedPrice());
     }
 
     /**
@@ -321,7 +321,7 @@ class CheapestPriceTest extends TestCase
             'useLastGraduationForCheapestPrice' => false,
         ]);
 
-        $this->assertEquals(90, $listProduct->getCheapestPrice()->getCalculatedPrice());
+        static::assertEquals(90, $listProduct->getCheapestPrice()->getCalculatedPrice());
     }
 
     /**
@@ -345,7 +345,7 @@ class CheapestPriceTest extends TestCase
         ]);
 
         /* @var ListProduct $listProduct */
-        $this->assertEquals(7, $listProduct->getCheapestPrice()->getCalculatedPrice());
+        static::assertEquals(7, $listProduct->getCheapestPrice()->getCalculatedPrice());
     }
 
     /**
@@ -369,7 +369,7 @@ class CheapestPriceTest extends TestCase
             'useLastGraduationForCheapestPrice' => false,
         ]);
 
-        $this->assertEquals(9, $listProduct->getCheapestPrice()->getCalculatedPrice());
+        static::assertEquals(9, $listProduct->getCheapestPrice()->getCalculatedPrice());
     }
 
     private function getConfiguratorProduct($number, ShopContextInterface $context) // ShopContext

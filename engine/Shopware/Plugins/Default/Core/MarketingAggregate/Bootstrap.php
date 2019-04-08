@@ -138,7 +138,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_SimilarShown
      * event. This event is fired when shopware trying to access the plugin SimilarShown controller.
      *
-     *
      * @return string
      */
     public function getSimilarShownBackendController(Enlight_Event_EventArgs $arguments)
@@ -247,7 +246,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      * This event is a configured cron job which is used to update the
      * elapsed similar shown article data.
      *
-     *
      * @return bool
      */
     public function refreshSimilarShown(Enlight_Event_EventArgs $arguments)
@@ -270,7 +268,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
     /**
      * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_SimilarShown
      * event. This event is fired when shopware trying to access the plugin AlsoBought controller.
-     *
      *
      * @return string
      */
@@ -337,7 +334,6 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
     /**
      * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_TopSeller
      * event. This event is fired when shopware trying to access the plugin TopSeller controller.
-     *
      *
      * @return string
      */

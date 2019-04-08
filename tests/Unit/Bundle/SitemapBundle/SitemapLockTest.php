@@ -69,7 +69,7 @@ class SitemapLockTest extends TestCase
         $shop->id = 1;
         $lock = new SitemapLock($this->cacheMock, 'sitemap-exporter-running-%s');
 
-        $this->assertFalse($lock->isLocked($shop));
+        static::assertFalse($lock->isLocked($shop));
     }
 
     public function testAcquireLockWorks()
@@ -79,8 +79,8 @@ class SitemapLockTest extends TestCase
 
         $lock = new SitemapLock($this->cacheMock, 'sitemap-exporter-running-%s');
 
-        $this->assertFalse($lock->isLocked($shop));
-        $this->assertTrue($lock->doLock($shop, $this->lifeTime));
+        static::assertFalse($lock->isLocked($shop));
+        static::assertTrue($lock->doLock($shop, $this->lifeTime));
     }
 }
 

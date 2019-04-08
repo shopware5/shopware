@@ -76,7 +76,6 @@ class CSRFTokenValidator implements SubscriberInterface
     /**
      * CSRF protection for backend actions
      *
-     *
      * @throws CSRFTokenValidationException
      */
     public function checkBackendTokenValidation(ActionEventArgs $args)
@@ -105,7 +104,6 @@ class CSRFTokenValidator implements SubscriberInterface
 
     /**
      * CSRF protection for frontend actions
-     *
      *
      * @throws CSRFTokenValidationException
      */
@@ -148,7 +146,6 @@ class CSRFTokenValidator implements SubscriberInterface
     /**
      * Check if the submitted CSRF token matches with the token stored in the cookie or header
      *
-     *
      * @return bool
      */
     private function checkRequest(\Enlight_Controller_Request_Request $request)
@@ -163,7 +160,6 @@ class CSRFTokenValidator implements SubscriberInterface
     /**
      * Check if the controller has opted in for CSRF whitelisting and if the
      * called action is on the whitelist
-     *
      *
      * @return bool
      */
@@ -184,7 +180,6 @@ class CSRFTokenValidator implements SubscriberInterface
     /**
      * Check if a controller has opted in for CSRF protection and if the called action
      * should be protected
-     *
      *
      * @return bool
      */

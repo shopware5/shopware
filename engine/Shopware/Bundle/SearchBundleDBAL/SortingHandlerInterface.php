@@ -32,7 +32,6 @@ interface SortingHandlerInterface
     /**
      * Checks if the passed sorting can be handled by this class
      *
-     *
      * @return bool
      */
     public function supportsSorting(SortingInterface $sorting);

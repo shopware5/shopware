@@ -80,18 +80,18 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
         $params['node'] = 1;
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/getList');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
         $returnData = $this->View()->data;
 
-        $this->assertNotEmpty($returnData);
-        $this->assertGreaterThan(0, $this->View()->total);
+        static::assertNotEmpty($returnData);
+        static::assertGreaterThan(0, $this->View()->total);
         $foundDummy = [];
         foreach ($returnData as $dummyData) {
             if ($dummyData['name'] == $dummy->getName()) {
                 $foundDummy = $dummyData;
             }
         }
-        $this->assertTrue(!empty($foundDummy));
+        static::assertTrue(!empty($foundDummy));
         $this->manager->remove($dummy);
         $this->manager->flush();
     }
@@ -111,16 +111,16 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
         //test new category
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/createDetail');
-        $this->assertTrue($this->View()->success);
-        $this->assertEquals($this->dummyData['name'], $this->View()->data['name']);
+        static::assertTrue($this->View()->success);
+        static::assertEquals($this->dummyData['name'], $this->View()->data['name']);
 
         //test update category
         $params['id'] = $this->View()->data['id'];
         $params['metaDescription'] = $this->updateMetaDescription;
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/updateDetail');
-        $this->assertTrue($this->View()->success);
-        $this->assertEquals($this->updateMetaDescription, $this->View()->data['metaDescription']);
+        static::assertTrue($this->View()->success);
+        static::assertEquals($this->updateMetaDescription, $this->View()->data['metaDescription']);
 
         return $this->View()->data['id'];
     }
@@ -139,14 +139,14 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
         $params['node'] = $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/getDetail');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
         $returningData = $this->View()->data;
         $dummyData = $this->dummyData;
 
-        $this->assertEquals($dummyData['parentId'], $returningData['parentId']);
-        $this->assertEquals($dummyData['name'], $returningData['name']);
-        $this->assertTrue($returningData['changed'] instanceof \DateTime);
-        $this->assertTrue($returningData['added'] instanceof \DateTime);
+        static::assertEquals($dummyData['parentId'], $returningData['parentId']);
+        static::assertEquals($dummyData['name'], $returningData['name']);
+        static::assertTrue($returningData['changed'] instanceof \DateTime);
+        static::assertTrue($returningData['added'] instanceof \DateTime);
 
         return $id;
     }
@@ -161,10 +161,10 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
         $params['categoryIds'] = $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/getIdPath');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
         $categoryPath = $this->View()->data;
-        $this->assertTrue(!empty($categoryPath));
-        $this->assertEquals(2, count(explode('/', $categoryPath[0])));
+        static::assertTrue(!empty($categoryPath));
+        static::assertEquals(2, count(explode('/', $categoryPath[0])));
     }
 
     /**
@@ -179,20 +179,20 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
         $params['position'] = 2;
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/moveTreeItem');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $params['id'] = $id;
         $params['position'] = 2;
         $params['parentId'] = 3;
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/moveTreeItem');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $movedCategoryModel = $this->repository->find($id);
         $parentModel = $movedCategoryModel->getParent();
 
         //parentCategory should be Deutsch Id = 3
-        $this->assertEquals(3, $parentModel->getId());
+        static::assertEquals(3, $parentModel->getId());
     }
 
     /**
@@ -207,13 +207,13 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
         $params['id'] = $id;
         $categoryModel = $this->repository->find($id);
         $categoryName = $categoryModel->getName();
-        $this->assertTrue(!empty($categoryName));
+        static::assertTrue(!empty($categoryName));
 
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/delete');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
         $categoryModel = $this->repository->find($id);
-        $this->assertEquals(null, $categoryModel);
+        static::assertEquals(null, $categoryModel);
     }
 
     /**

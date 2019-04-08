@@ -69,7 +69,7 @@ EOD;
 
         $result = $this->compiler->compileCompatibilityMode($template, $context);
 
-        $this->assertEquals($result, $expectedResult);
+        static::assertEquals($result, $expectedResult);
     }
 
     /**
@@ -117,7 +117,7 @@ EOD;
 
         $result = $this->compiler->compileSmartyString($template, $context);
 
-        $this->assertEquals($result, $expectedResult);
+        static::assertEquals($result, $expectedResult);
     }
 
     /**
@@ -152,7 +152,7 @@ EOD;
 
         $result = $this->compiler->compileString($template, $context);
 
-        $this->assertEquals($result, $expectedResult);
+        static::assertEquals($result, $expectedResult);
     }
 
     /**

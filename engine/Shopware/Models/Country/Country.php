@@ -27,6 +27,7 @@ namespace Shopware\Models\Country;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\Country as CountryAttribute;
 
 /**
  * Shopware country model represents a single country.
@@ -52,7 +53,7 @@ class Country extends ModelEntity
      * The area property is the owning side of the association between area and countries.
      * The association is joined over the area id field and the areaID field of the country.
      *
-     * @var \Shopware\Models\Country\Area
+     * @var Area
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Country\Area", inversedBy="countries")
      * @ORM\JoinColumn(name="areaID", referencedColumnName="id")
@@ -64,7 +65,7 @@ class Country extends ModelEntity
      * The countries property is the inverse side of the association between area and countries.
      * The association is joined over the area id field and the areaID field of the country.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Country\State>
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Country\State", mappedBy="country", orphanRemoval=true, cascade={"persist"})
      */
@@ -73,7 +74,7 @@ class Country extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\Country
+     * @var CountryAttribute
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Country", mappedBy="country", orphanRemoval=true, cascade={"persist"})
      */
@@ -180,7 +181,7 @@ class Country extends ModelEntity
     private $allowShipping = true;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment>
+     * @var ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Payment\Payment", mappedBy="countries")
      * @ORM\JoinTable(name="s_core_paymentmeans_countries",
@@ -412,7 +413,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Country
+     * @return CountryAttribute
      */
     public function getAttribute()
     {
@@ -420,17 +421,17 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\Country|array|null $attribute
+     * @param CountryAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Country
+     * @return Country
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Country::class, 'attribute', 'country');
+        return $this->setOneToOne($attribute, CountryAttribute::class, 'attribute', 'country');
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getStates()
     {
@@ -438,20 +439,20 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Country\State[]|null $states
+     * @param State[]|null $states
      *
      * @return Country
      */
     public function setStates($states)
     {
-        return $this->setOneToMany($states, \Shopware\Models\Country\State::class, 'states', 'country');
+        return $this->setOneToMany($states, State::class, 'states', 'country');
     }
 
     /**
      * OWNING SIDE
      * of the association between countries and area
      *
-     * @return \Shopware\Models\Country\Area|null
+     * @return Area|null
      */
     public function getArea()
     {
@@ -459,9 +460,9 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Country\Area|array|null $area
+     * @param Area|array|null $area
      *
-     * @return \Shopware\Models\Country\Country
+     * @return Country
      */
     public function setArea($area)
     {
@@ -471,7 +472,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment>
+     * @return ArrayCollection
      */
     public function getPayments()
     {
@@ -479,7 +480,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment> $payments
+     * @param ArrayCollection $payments
      *
      * @return Country
      */

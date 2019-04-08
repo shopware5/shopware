@@ -37,7 +37,7 @@ class ConfigureApiResourcesPassTest extends Enlight_Components_Test_Controller_T
     {
         /** @var resource $service */
         $resource = Shopware()->Container()->get($serviceId);
-        $this->assertNotNull($resource->getManager());
+        static::assertNotNull($resource->getManager());
     }
 
     /**

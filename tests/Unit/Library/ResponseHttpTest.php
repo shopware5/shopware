@@ -43,7 +43,7 @@ class ResponseHttpTest extends TestCase
         $this->response->setCookie('foo', 1);
         $this->response->removeCookie('foo');
 
-        $this->assertEmpty($this->response->getCookies());
+        static::assertEmpty($this->response->getCookies());
     }
 
     public function testCookieRemoveWithoutPath()
@@ -51,7 +51,7 @@ class ResponseHttpTest extends TestCase
         $this->response->setCookie('foo', 1, 0, '/foo');
         $this->response->removeCookie('foo');
 
-        $this->assertCount(1, $this->response->getCookies());
+        static::assertCount(1, $this->response->getCookies());
     }
 
     public function testCookieRemoveWithPath()
@@ -59,6 +59,6 @@ class ResponseHttpTest extends TestCase
         $this->response->setCookie('foo', 1, 0, '/foo');
         $this->response->removeCookie('foo', '/foo');
 
-        $this->assertEmpty($this->response->getCookies());
+        static::assertEmpty($this->response->getCookies());
     }
 }

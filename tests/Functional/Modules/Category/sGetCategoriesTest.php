@@ -69,12 +69,12 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
 
         $result = $this->module->sGetCategories(3);
 
-        $this->assertCount(8, $result);
-        $this->assertArrayHasKey($first1->getId(), $result);
-        $this->assertArrayHasKey($first2->getId(), $result);
+        static::assertCount(8, $result);
+        static::assertArrayHasKey($first1->getId(), $result);
+        static::assertArrayHasKey($first2->getId(), $result);
 
         foreach ($result as $category) {
-            $this->assertCount(0, $category['subcategories']);
+            static::assertCount(0, $category['subcategories']);
         }
     }
 
@@ -89,13 +89,13 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
 
         $result = $this->module->sGetCategories($first1->getId());
 
-        $this->assertCount(8, $result);
-        $this->assertArrayHasKey($first1->getId(), $result);
-        $this->assertArrayHasKey($first2->getId(), $result);
+        static::assertCount(8, $result);
+        static::assertArrayHasKey($first1->getId(), $result);
+        static::assertArrayHasKey($first2->getId(), $result);
 
         foreach ($result as $category) {
             if ($category['id'] != $first1->getId()) {
-                $this->assertCount(0, $category['subcategories']);
+                static::assertCount(0, $category['subcategories']);
             }
         }
 
@@ -126,13 +126,13 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
 
         $result = $this->module->sGetCategories($second1->getId());
 
-        $this->assertCount(8, $result);
-        $this->assertArrayHasKey($first1->getId(), $result);
-        $this->assertArrayHasKey($first2->getId(), $result);
+        static::assertCount(8, $result);
+        static::assertArrayHasKey($first1->getId(), $result);
+        static::assertArrayHasKey($first2->getId(), $result);
 
         foreach ($result as $category) {
             if ($category['id'] != $first1->getId()) {
-                $this->assertCount(0, $category['subcategories']);
+                static::assertCount(0, $category['subcategories']);
             }
         }
 
@@ -165,13 +165,13 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
 
         Shopware()->Db()->delete('s_categories', 'description = "ListingTest"');
 
-        $this->assertCount(8, $result);
-        $this->assertArrayHasKey($first1->getId(), $result);
-        $this->assertArrayHasKey($first2->getId(), $result);
+        static::assertCount(8, $result);
+        static::assertArrayHasKey($first1->getId(), $result);
+        static::assertArrayHasKey($first2->getId(), $result);
 
         foreach ($result as $category) {
             if ($category['id'] != $first1->getId()) {
-                $this->assertCount(0, $category['subcategories']);
+                static::assertCount(0, $category['subcategories']);
             }
         }
 
@@ -194,9 +194,9 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
             []
         );
 
-        $this->assertTrue($result[$first1->getId()]['flag']);
-        $this->assertTrue($level1[$second1->getId()]['flag']);
-        $this->assertTrue($level2[$third1->getId()]['flag']);
+        static::assertTrue($result[$first1->getId()]['flag']);
+        static::assertTrue($level1[$second1->getId()]['flag']);
+        static::assertTrue($level2[$third1->getId()]['flag']);
     }
 
     public function testCategoryData()
@@ -219,7 +219,7 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
         ];
 
         foreach ($keys as $key) {
-            $this->assertArrayHasKey($key, $category);
+            static::assertArrayHasKey($key, $category);
         }
 
         $expected = [
@@ -279,14 +279,14 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
                     $array = $category[$property];
 
                     foreach ($value as $arrayProperty => $arrayValue) {
-                        $this->assertEquals(
+                        static::assertEquals(
                             $arrayValue,
                             $array[$arrayProperty],
                             'Property ' . $property . ' - ' . $arrayProperty . ' not match '
                         );
                     }
                 } else {
-                    $this->assertEquals($value, $category[$property], 'Property ' . $property . ' not match ');
+                    static::assertEquals($value, $category[$property], 'Property ' . $property . ' not match ');
                 }
             }
         }
@@ -304,7 +304,7 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
 
         $result = $this->module->sGetCategories($second->getId());
 
-        $this->assertArrayHasKey($first->getId(), $result);
+        static::assertArrayHasKey($first->getId(), $result);
 
         $level1 = $this->assertAndGetSubCategories(
             $result[$first->getId()],
@@ -312,7 +312,7 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
         );
 
         $second = $level1[$second->getId()];
-        $this->assertEmpty($second['subcategories']);
+        static::assertEmpty($second['subcategories']);
     }
 
     public function testOnlyActiveCategories()
@@ -323,7 +323,7 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
 
         $result = $this->module->sGetCategories($second->getId());
 
-        $this->assertArrayHasKey($first->getId(), $result);
+        static::assertArrayHasKey($first->getId(), $result);
 
         $level1 = $this->assertAndGetSubCategories(
             $result[$first->getId()],
@@ -331,7 +331,7 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
         );
 
         $second = $level1[$second->getId()];
-        $this->assertEmpty($second['subcategories']);
+        static::assertEmpty($second['subcategories']);
     }
 
     public function testPositionSorting()
@@ -343,7 +343,7 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
 
         $result = $this->module->sGetCategories($second->getId());
 
-        $this->assertArrayHasKey($first->getId(), $result);
+        static::assertArrayHasKey($first->getId(), $result);
 
         $level1 = $this->assertAndGetSubCategories(
             $result[$first->getId()],
@@ -352,18 +352,18 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
 
         $level1 = array_values($level1);
 
-        $this->assertEquals($level1[0]['id'], $second->getId());
-        $this->assertEquals($level1[1]['id'], $third->getId());
-        $this->assertEquals($level1[2]['id'], $fourth->getId());
+        static::assertEquals($level1[0]['id'], $second->getId());
+        static::assertEquals($level1[1]['id'], $third->getId());
+        static::assertEquals($level1[2]['id'], $fourth->getId());
     }
 
     private function assertAndGetSubCategories($category, $expectedIds)
     {
         $sub = $category['subcategories'];
-        $this->assertCount(count($expectedIds), $sub);
+        static::assertCount(count($expectedIds), $sub);
 
         foreach ($expectedIds as $id) {
-            $this->assertArrayHasKey($id, $sub);
+            static::assertArrayHasKey($id, $sub);
         }
 
         return $sub;

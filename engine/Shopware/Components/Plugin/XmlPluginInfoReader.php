@@ -108,7 +108,6 @@ class XmlPluginInfoReader
     /**
      * Get child elements by name.
      *
-     *
      * @return \DOMElement[]
      */
     private function getChildren(\DOMNode $node, $name)
@@ -139,7 +138,6 @@ class XmlPluginInfoReader
 
     /**
      * Get child element values by name.
-     *
      *
      * @return string[]
      */

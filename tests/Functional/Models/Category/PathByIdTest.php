@@ -96,7 +96,7 @@ class Shopware_Tests_Models_Category_PathByIdTest extends Enlight_Components_Tes
     public function testGetPathByIdWithDefaultParameters($categoryId, $expectedResult)
     {
         $result = $this->getRepo()->getPathById($categoryId);
-        $this->assertEquals($expectedResult, $result);
+        static::assertEquals($expectedResult, $result);
     }
 
     /**
@@ -105,7 +105,7 @@ class Shopware_Tests_Models_Category_PathByIdTest extends Enlight_Components_Tes
     public function testGetPathByIdWithDefaultNameParameter($categoryId, $expectedResult)
     {
         $result = $this->getRepo()->getPathById($categoryId, 'name');
-        $this->assertEquals($expectedResult, $result);
+        static::assertEquals($expectedResult, $result);
     }
 
     /**
@@ -114,7 +114,7 @@ class Shopware_Tests_Models_Category_PathByIdTest extends Enlight_Components_Tes
     public function testGetPathByIdWithIdParameter($categoryId, $expectedResult)
     {
         $result = $this->getRepo()->getPathById($categoryId, 'id');
-        $this->assertEquals($expectedResult, $result);
+        static::assertEquals($expectedResult, $result);
     }
 
     /**
@@ -123,7 +123,7 @@ class Shopware_Tests_Models_Category_PathByIdTest extends Enlight_Components_Tes
     public function testGetPathByIdShouldReturnArray($categoryId, $expectedResult)
     {
         $result = $this->getRepo()->getPathById($categoryId, ['id', 'name', 'blog']);
-        $this->assertEquals($expectedResult, $result);
+        static::assertEquals($expectedResult, $result);
     }
 
     /**
@@ -132,7 +132,7 @@ class Shopware_Tests_Models_Category_PathByIdTest extends Enlight_Components_Tes
     public function testGetPathByIdShouldReturnPathAsString($categoryId, $expectedResult)
     {
         $result = $this->getRepo()->getPathById($categoryId, 'name', ' > ');
-        $this->assertEquals($expectedResult, $result);
+        static::assertEquals($expectedResult, $result);
     }
 
     /**
@@ -143,7 +143,7 @@ class Shopware_Tests_Models_Category_PathByIdTest extends Enlight_Components_Tes
         $expectedResult = str_replace(' > ', '|', $expectedResult);
 
         $result = $this->getRepo()->getPathById($categoryId, 'name', '|');
-        $this->assertEquals($expectedResult, $result);
+        static::assertEquals($expectedResult, $result);
     }
 
     /**

@@ -40,8 +40,8 @@ class Shopware_Tests_Models_Order_BillingTest extends Enlight_Components_Test_Te
         Shopware()->Models()->clear();
 
         $billing = Shopware()->Models()->getRepository(\Shopware\Models\Order\Billing::class)->find($billingId);
-        $this->assertEquals('This is a really really really long city name', $billing->getStreet());
-        $this->assertEquals('This is a really really really long zip code', $billing->getZipCode());
+        static::assertEquals('This is a really really really long city name', $billing->getStreet());
+        static::assertEquals('This is a really really really long zip code', $billing->getZipCode());
 
         $billing->setStreet($originalStreet);
         $billing->setZipCode($originalZipCode);

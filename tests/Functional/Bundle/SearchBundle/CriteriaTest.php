@@ -41,7 +41,7 @@ class CriteriaTest extends TestCase
 
         $criteria->addCondition(new CategoryCondition([1]));
         $criteria->addCondition(new CategoryCondition([3]));
-        $this->assertCount(1, $criteria->getConditions());
+        static::assertCount(1, $criteria->getConditions());
     }
 
     public function testUniqueFacet()
@@ -49,7 +49,7 @@ class CriteriaTest extends TestCase
         $criteria = new Criteria();
         $criteria->addFacet(new PriceFacet());
         $criteria->addFacet(new PriceFacet());
-        $this->assertCount(1, $criteria->getFacets());
+        static::assertCount(1, $criteria->getFacets());
     }
 
     public function testUniqueSorting()
@@ -57,7 +57,7 @@ class CriteriaTest extends TestCase
         $criteria = new Criteria();
         $criteria->addSorting(new PriceSorting());
         $criteria->addSorting(new PriceSorting());
-        $this->assertCount(1, $criteria->getSortings());
+        static::assertCount(1, $criteria->getSortings());
     }
 
     public function testIndexedSorting()
@@ -76,7 +76,7 @@ class CriteriaTest extends TestCase
 
         foreach ($sortings as $expected) {
             $sorting = $criteria->getSorting($expected->getName());
-            $this->assertEquals($expected, $sorting);
+            static::assertEquals($expected, $sorting);
         }
     }
 
@@ -89,12 +89,12 @@ class CriteriaTest extends TestCase
         $condition = new CategoryCondition([3]);
         $criteria->addCondition($condition);
 
-        $this->assertCount(1, $criteria->getConditions());
+        static::assertCount(1, $criteria->getConditions());
         $condition = $criteria->getCondition($condition->getName());
 
-        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\Condition\CategoryCondition', $condition);
+        static::assertInstanceOf('Shopware\Bundle\SearchBundle\Condition\CategoryCondition', $condition);
 
         /* @var CategoryCondition $condition */
-        $this->assertEquals([3], $condition->getCategoryIds());
+        static::assertEquals([3], $condition->getCategoryIds());
     }
 }

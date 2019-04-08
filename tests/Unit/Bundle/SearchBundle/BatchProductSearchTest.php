@@ -90,6 +90,6 @@ class BatchProductSearchTest extends \PHPUnit\Framework\TestCase
             ],
         ]);
 
-        $this->assertEquals($expectedResult, $result);
+        static::assertEquals($expectedResult, $result);
     }
 }

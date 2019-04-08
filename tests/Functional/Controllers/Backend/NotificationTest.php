@@ -57,16 +57,16 @@ class Shopware_Tests_Controllers_Backend_NotificationTest extends Enlight_Compon
     public function testGetArticleList()
     {
         $this->dispatch('backend/Notification/getArticleList');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
         $returnData = $this->View()->data;
-        $this->assertNotEmpty($returnData);
-        $this->assertEquals(2, count($returnData));
+        static::assertNotEmpty($returnData);
+        static::assertEquals(2, count($returnData));
         $listingFirstEntry = $returnData[0];
 
         // cause of the DataSet you can assert fix values
-        $this->assertEquals(2, $listingFirstEntry['registered']);
-        $this->assertEquals('SW2001', $listingFirstEntry['number']);
-        $this->assertEquals(1, $listingFirstEntry['notNotified']);
+        static::assertEquals(2, $listingFirstEntry['registered']);
+        static::assertEquals('SW2001', $listingFirstEntry['number']);
+        static::assertEquals(1, $listingFirstEntry['notNotified']);
     }
 
     /**
@@ -77,30 +77,30 @@ class Shopware_Tests_Controllers_Backend_NotificationTest extends Enlight_Compon
         $params['orderNumber'] = 'SW2001';
         $this->Request()->setParams($params);
         $this->dispatch('backend/Notification/getCustomerList');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $returnData = $this->View()->data;
-        $this->assertEquals(2, count($returnData));
+        static::assertEquals(2, count($returnData));
         $listingFirstEntry = $returnData[0];
         $listingSecondEntry = $returnData[1];
 
         // cause of the DataSet you can assert fix values
-        $this->assertEquals('test@example.de', $listingFirstEntry['mail']);
-        $this->assertEquals(0, $listingFirstEntry['notified']);
+        static::assertEquals('test@example.de', $listingFirstEntry['mail']);
+        static::assertEquals(0, $listingFirstEntry['notified']);
 
-        $this->assertEquals('test@example.org', $listingSecondEntry['mail']);
-        $this->assertEquals(1, $listingSecondEntry['notified']);
+        static::assertEquals('test@example.org', $listingSecondEntry['mail']);
+        static::assertEquals(1, $listingSecondEntry['notified']);
 
         $params['orderNumber'] = 'SW2003';
         $this->Request()->setParams($params);
         $this->dispatch('backend/Notification/getCustomerList');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $returnData = $this->View()->data;
 
-        $this->assertCount(1, $returnData);
-        $this->assertEquals('test@example.com', $returnData[0]['mail']);
-        $this->assertNotEmpty($returnData[0]['name']);
-        $this->assertNotEmpty($returnData[0]['customerId']);
+        static::assertCount(1, $returnData);
+        static::assertEquals('test@example.com', $returnData[0]['mail']);
+        static::assertNotEmpty($returnData[0]['name']);
+        static::assertNotEmpty($returnData[0]['customerId']);
     }
 }

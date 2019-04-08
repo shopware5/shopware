@@ -53,7 +53,7 @@ class OrderTest extends TestCase
             ['property' => 'orderTime', 'direction' => 'ASC'],
         ];
 
-        $this->assertSame(
+        static::assertSame(
             [
                 ['property' => 'orders.orderTime', 'direction' => 'ASC'],
             ],
@@ -68,7 +68,7 @@ class OrderTest extends TestCase
             ['property' => 'active', 'direction' => 'ASC'],
         ];
 
-        $this->assertSame(
+        static::assertSame(
             [
                 ['property' => 'orders.orderTime', 'direction' => 'ASC'],
                 ['property' => 'orders.active', 'direction' => 'ASC'],
@@ -85,7 +85,7 @@ class OrderTest extends TestCase
             ['property' => 'customerId', 'direction' => 'ASC'],
         ];
 
-        $this->assertSame(
+        static::assertSame(
             [
                 ['property' => 'orders.orderTime', 'direction' => 'DESC'],
                 ['property' => 'orders.active', 'direction' => 'DESC'],
@@ -103,7 +103,7 @@ class OrderTest extends TestCase
             ['property' => 'billing.countryId', 'direction' => 'ASC'],
         ];
 
-        $this->assertSame(
+        static::assertSame(
             [
                 ['property' => 'customer.name', 'direction' => 'DESC'],
                 ['property' => 'customer.email', 'direction' => 'DESC'],
@@ -119,7 +119,7 @@ class OrderTest extends TestCase
             ['property' => 'customerName', 'direction' => 'DESC'],
         ];
 
-        $this->assertSame(
+        static::assertSame(
             [
                 ['property' => 'billing.lastName', 'direction' => 'DESC'],
                 ['property' => 'billing.firstName', 'direction' => 'DESC'],
@@ -135,7 +135,7 @@ class OrderTest extends TestCase
             ['property' => 'customerEmail', 'direction' => 'DESC'],
         ];
 
-        $this->assertSame(
+        static::assertSame(
             [
                 ['property' => 'customer.email', 'direction' => 'DESC'],
             ],

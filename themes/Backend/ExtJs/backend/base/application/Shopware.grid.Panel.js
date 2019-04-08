@@ -315,7 +315,6 @@ Ext.define('Shopware.grid.Panel', {
              *     return items;
              *  },
              *
-             *
              * @type { boolean }
              */
             toolbar: true,

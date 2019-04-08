@@ -52,7 +52,7 @@ class CategoryDenormalizationTest extends TestCase
     protected function setUp(): void
     {
         if (!extension_loaded('sqlite3')) {
-            $this->markTestSkipped(
+            static::markTestSkipped(
                 'The Sqlite3 extension is not available.'
             );
 
@@ -66,7 +66,7 @@ class CategoryDenormalizationTest extends TestCase
             $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             $conn->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            $this->markTestSkipped(
+            static::markTestSkipped(
                 'Could not create sqlite connection, got error:  ' . $e->getMessage()
             );
         }
@@ -117,7 +117,7 @@ class CategoryDenormalizationTest extends TestCase
 
         $this->component->setConnection($pdo);
 
-        $this->assertSame($pdo, $this->component->getConnection());
+        static::assertSame($pdo, $this->component->getConnection());
     }
 
     /**
@@ -129,12 +129,12 @@ class CategoryDenormalizationTest extends TestCase
 
         $result = $this->component->getParentCategoryIds(5);
 
-        $this->assertEquals($expectedResult, $result);
+        static::assertEquals($expectedResult, $result);
     }
 
     public function testRebuildAssignment(): void
     {
-        $this->assertEquals(0, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(0, $this->getConnection()->getRowCount('s_articles_categories_ro'));
 
         // Assign to Getränke
         $this->conn->exec('INSERT INTO s_articles_categories (articleID, categoryID) VALUES (1, 5)');
@@ -144,17 +144,17 @@ class CategoryDenormalizationTest extends TestCase
 
         $result = $this->component->rebuildAllAssignmentsCount();
         // We have 2 rows in s_articles_categories
-        $this->assertEquals(2, $result);
+        static::assertEquals(2, $result);
 
         // Six rows in s_articles_categories_ro have to be created
         $affectedRows = $this->component->rebuildAllAssignments();
-        $this->assertEquals(6, $affectedRows);
-        $this->assertEquals(6, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(6, $affectedRows);
+        static::assertEquals(6, $this->getConnection()->getRowCount('s_articles_categories_ro'));
     }
 
     public function testAddAssignment(): void
     {
-        $this->assertEquals(0, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(0, $this->getConnection()->getRowCount('s_articles_categories_ro'));
 
         // Assign to Getränke
         $this->conn->exec('INSERT INTO s_articles_categories (articleID, categoryID) VALUES (1, 5)');
@@ -164,12 +164,12 @@ class CategoryDenormalizationTest extends TestCase
         $this->conn->exec('INSERT INTO s_articles_categories (articleID, categoryID) VALUES (1, 7)');
         $this->component->addAssignment(1, 7);
 
-        $this->assertEquals(6, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(6, $this->getConnection()->getRowCount('s_articles_categories_ro'));
     }
 
     public function testRemoveAssignment(): void
     {
-        $this->assertEquals(0, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(0, $this->getConnection()->getRowCount('s_articles_categories_ro'));
 
         // Assign to Getränke
         $this->conn->exec('INSERT INTO s_articles_categories (articleID, categoryID) VALUES (1, 5)');
@@ -179,12 +179,12 @@ class CategoryDenormalizationTest extends TestCase
         $this->conn->exec('INSERT INTO s_articles_categories (articleID, categoryID) VALUES (1, 7)');
         $this->component->addAssignment(1, 7);
 
-        $this->assertEquals(6, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(6, $this->getConnection()->getRowCount('s_articles_categories_ro'));
 
         $this->conn->exec('DELETE FROM s_articles_categories WHERE articleID = 1 AND categoryID = 5');
         $this->component->removeAssignment(1, 5);
 
-        $this->assertEquals(3, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(3, $this->getConnection()->getRowCount('s_articles_categories_ro'));
     }
 
     public function testRebuildCategoryPath(): void
@@ -192,11 +192,11 @@ class CategoryDenormalizationTest extends TestCase
         $result = $this->component->rebuildCategoryPathCount();
 
         // We have 6 row in our testdataset
-        $this->assertEquals(6, $result);
+        static::assertEquals(6, $result);
 
         // 4 Rows are relevant
         $affectedRows = $this->component->rebuildCategoryPath();
-        $this->assertEquals(4, $affectedRows);
+        static::assertEquals(4, $affectedRows);
 
         $expectedResult = [
             ['id' => '4', 'path' => '|2|'],
@@ -207,7 +207,7 @@ class CategoryDenormalizationTest extends TestCase
 
         $result = $this->conn->query('SELECT id, path FROM s_categories WHERE path IS NOT NULL')->fetchAll(\PDO::FETCH_ASSOC);
 
-        $this->assertEquals($expectedResult, $result);
+        static::assertEquals($expectedResult, $result);
     }
 
     /**
@@ -228,24 +228,24 @@ class CategoryDenormalizationTest extends TestCase
         $this->conn->exec('UPDATE s_categories SET parent = 6, path = "|6|3|" WHERE id = 4');
 
         $result = $this->component->rebuildCategoryPathCount(4);
-        $this->assertEquals(1, $result);
+        static::assertEquals(1, $result);
 
         $affectedRows = $this->component->rebuildCategoryPath(4);
-        $this->assertEquals(1, $affectedRows, 'Genusswelten child-category Getränke has to be updated');
+        static::assertEquals(1, $affectedRows, 'Genusswelten child-category Getränke has to be updated');
 
         $result = $this->component->removeOldAssignmentsCount(4);
-        $this->assertEquals(1, $result, 'One Parent-Category has to be cleanen up');
+        static::assertEquals(1, $result, 'One Parent-Category has to be cleanen up');
 
         $affectedRows = $this->component->removeOldAssignments(4);
-        $this->assertEquals(2, $affectedRows, 'Two old assignment should be removed');
+        static::assertEquals(2, $affectedRows, 'Two old assignment should be removed');
 
         $result = $this->component->rebuildAssignmentsCount(4);
-        $this->assertEquals(1, $result, 'Affected Categories');
+        static::assertEquals(1, $result, 'Affected Categories');
 
         $affectedRows = $this->component->rebuildAssignments(4);
-        $this->assertEquals(3, $affectedRows, '3 new assignments should be created');
+        static::assertEquals(3, $affectedRows, '3 new assignments should be created');
 
-        $this->assertEquals(7, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(7, $this->getConnection()->getRowCount('s_articles_categories_ro'));
     }
 
     /**
@@ -266,21 +266,21 @@ class CategoryDenormalizationTest extends TestCase
         $this->conn->exec('UPDATE s_categories SET parent = 6, path = "|6|3|" WHERE id = 5');
 
         $affectedRows = $this->component->rebuildCategoryPath(5);
-        $this->assertEquals(0, $affectedRows, 'Leaf category has no childs that have to be updated');
+        static::assertEquals(0, $affectedRows, 'Leaf category has no childs that have to be updated');
 
         $result = $this->component->removeOldAssignmentsCount(5);
-        $this->assertEquals(1, $result, 'One category tree is affected');
+        static::assertEquals(1, $result, 'One category tree is affected');
 
         $affectedRows = $this->component->removeOldAssignments(5);
-        $this->assertEquals(2, $affectedRows, 'Two old assignment should be removed');
+        static::assertEquals(2, $affectedRows, 'Two old assignment should be removed');
 
         $affectedRows = $this->component->rebuildAssignments(5);
-        $this->assertEquals(2, $affectedRows, 'Two new assignments should be created');
+        static::assertEquals(2, $affectedRows, 'Two new assignments should be created');
 
         $rows = $this->conn->query('SELECT count(id) FROM s_articles_categories_ro WHERE parentCategoryID = 5')->fetchColumn();
-        $this->assertEquals(3, $rows, '3 Rows should be in database');
+        static::assertEquals(3, $rows, '3 Rows should be in database');
 
-        $this->assertEquals(6, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(6, $this->getConnection()->getRowCount('s_articles_categories_ro'));
     }
 
     public function testRemoveAllAssignments(): void
@@ -293,12 +293,12 @@ class CategoryDenormalizationTest extends TestCase
         $this->conn->exec('INSERT INTO s_articles_categories (articleID, categoryID) VALUES (1, 7)');
         $this->component->addAssignment(1, 7);
 
-        $this->assertEquals(6, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(6, $this->getConnection()->getRowCount('s_articles_categories_ro'));
 
         $affectedRows = $this->component->removeAllAssignments();
 
-        $this->assertEquals(6, $affectedRows);
-        $this->assertEquals(0, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(6, $affectedRows);
+        static::assertEquals(0, $this->getConnection()->getRowCount('s_articles_categories_ro'));
     }
 
     public function testRemoveArticleAssignmentments(): void
@@ -316,9 +316,9 @@ class CategoryDenormalizationTest extends TestCase
         $this->component->addAssignment(2, 7);
 
         $affectedRows = $this->component->removeArticleAssignmentments(1);
-        $this->assertEquals(6, $affectedRows);
+        static::assertEquals(6, $affectedRows);
 
-        $this->assertEquals(3, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(3, $this->getConnection()->getRowCount('s_articles_categories_ro'));
     }
 
     public function testGetParentCategoryIdsForRootLevelReturnsEmptyArray(): void
@@ -327,14 +327,14 @@ class CategoryDenormalizationTest extends TestCase
 
         $result = $this->component->getParentCategoryIds(1);
 
-        $this->assertEquals($expectedResult, $result);
+        static::assertEquals($expectedResult, $result);
     }
 
     public function testRebuildAllAssignmentsCountReturnsZeroIfTableIsEmpty(): void
     {
         $result = $this->component->rebuildAllAssignmentsCount();
 
-        $this->assertEquals(0, $result);
+        static::assertEquals(0, $result);
     }
 
     public function testLimitWithLimitArgument(): void
@@ -344,7 +344,7 @@ class CategoryDenormalizationTest extends TestCase
         $expected = 'SELECT * FROM example LIMIT 10';
         $result = $this->component->limit($statement, 10);
 
-        $this->assertEquals($expected, $result);
+        static::assertEquals($expected, $result);
     }
 
     public function testLimitWithLimitArgumentAndOffsetNull(): void
@@ -354,7 +354,7 @@ class CategoryDenormalizationTest extends TestCase
         $expected = 'SELECT * FROM example LIMIT 10';
         $result = $this->component->limit($statement, 10, null);
 
-        $this->assertEquals($expected, $result);
+        static::assertEquals($expected, $result);
     }
 
     public function testLimitWithLimitArgumentAndOffset(): void
@@ -364,7 +364,7 @@ class CategoryDenormalizationTest extends TestCase
         $expected = 'SELECT * FROM example LIMIT 10 OFFSET 20';
         $result = $this->component->limit($statement, 10, 20);
 
-        $this->assertEquals($expected, $result);
+        static::assertEquals($expected, $result);
     }
 
     public function testLimitShouldThrowExceptionIfLimitIsLessThanOne(): void
@@ -388,12 +388,12 @@ class CategoryDenormalizationTest extends TestCase
     public function testEnableTransactions(): void
     {
         $this->component->enableTransactions();
-        $this->assertTrue($this->component->transactionsEnabled());
+        static::assertTrue($this->component->transactionsEnabled());
     }
 
     public function testDisableTransactions(): void
     {
         $this->component->disableTransactions();
-        $this->assertFalse($this->component->transactionsEnabled());
+        static::assertFalse($this->component->transactionsEnabled());
     }
 }

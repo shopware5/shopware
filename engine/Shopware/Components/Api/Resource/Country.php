@@ -112,7 +112,6 @@ class Country extends Resource
     /**
      * Creates a new Country entity using the passed params.
      *
-     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      *
      * @return \Shopware\Models\Country\Country

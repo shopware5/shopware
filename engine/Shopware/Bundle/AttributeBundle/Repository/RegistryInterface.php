@@ -29,7 +29,6 @@ interface RegistryInterface
     /**
      * Returns a search repository for the provided criteria class.
      *
-     *
      * @return GenericRepository|RepositoryInterface
      */
     public function getRepository(SearchCriteria $criteria);

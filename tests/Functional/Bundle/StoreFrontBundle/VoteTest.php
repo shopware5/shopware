@@ -42,11 +42,11 @@ class VoteTest extends TestCase
         $listProduct = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($number, $context);
         $votes = Shopware()->Container()->get('shopware_storefront.vote_service')->get($listProduct, $context);
 
-        $this->assertCount(5, $votes);
+        static::assertCount(5, $votes);
 
         /** @var Vote $vote */
         foreach ($votes as $vote) {
-            $this->assertEquals('Bert Bewerter', $vote->getName());
+            static::assertEquals('Bert Bewerter', $vote->getName());
         }
     }
 
@@ -63,18 +63,18 @@ class VoteTest extends TestCase
         $listProduct = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($number, $context);
         $voteAverage = $listProduct->getVoteAverage();
 
-        $this->assertEquals(5, $voteAverage->getAverage());
+        static::assertEquals(5, $voteAverage->getAverage());
 
         foreach ($voteAverage->getPointCount() as $pointCount) {
             switch ($pointCount['points']) {
                 case 1:
-                    $this->assertEquals(1, $pointCount['total']);
+                    static::assertEquals(1, $pointCount['total']);
                     break;
                 case 2:
-                    $this->assertEquals(2, $pointCount['total']);
+                    static::assertEquals(2, $pointCount['total']);
                     break;
                 case 3:
-                    $this->assertEquals(5, $pointCount['total']);
+                    static::assertEquals(5, $pointCount['total']);
                     break;
             }
         }
@@ -217,13 +217,13 @@ class VoteTest extends TestCase
             //validate vote count of provided shop
             if (array_key_exists('count', $data)) {
                 $votes = $service->get($product, $context);
-                $this->assertEquals($data['count'], count($votes), sprintf('Vote count %s for shop %s of product %s not match', $data['count'], $shopId, $product->getNumber()));
+                static::assertEquals($data['count'], count($votes), sprintf('Vote count %s for shop %s of product %s not match', $data['count'], $shopId, $product->getNumber()));
             }
 
             //validates provided average value of provided shop
             if (array_key_exists('average', $data)) {
                 $average = $service->getAverage($product, $context);
-                $this->assertEquals($data['average'], $average->getAverage(), sprintf('Vote average %s for shop %s of product %s not match', $data['average'], $shopId, $product->getNumber()));
+                static::assertEquals($data['average'], $average->getAverage(), sprintf('Vote average %s for shop %s of product %s not match', $data['average'], $shopId, $product->getNumber()));
             }
 
             if (array_key_exists('points', $data)) {
@@ -235,8 +235,8 @@ class VoteTest extends TestCase
                 }
 
                 foreach ($data['points'] as $point => $count) {
-                    $this->assertArrayHasKey($point, $actual, sprintf('Point count for points %s not exist', $point));
-                    $this->assertEquals($count, $actual[$point], sprintf('Expected %s times votes with points %s', $count, $point));
+                    static::assertArrayHasKey($point, $actual, sprintf('Point count for points %s not exist', $point));
+                    static::assertEquals($count, $actual[$point], sprintf('Expected %s times votes with points %s', $count, $point));
                 }
             }
         }

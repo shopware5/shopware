@@ -52,7 +52,6 @@ class BatchProductSearch
      * Creates a search request on the internal search gateway to
      * get the product result for the passed criteria object.
      *
-     *
      * @return BatchProductSearchResult
      */
     public function search(BatchProductNumberSearchRequest $request, Struct\ShopContextInterface $context)

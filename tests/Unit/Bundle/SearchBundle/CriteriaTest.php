@@ -50,7 +50,7 @@ class CriteriaTest extends TestCase
     {
         $criteria = new Criteria();
         $criteria->limit($limit);
-        $this->assertEquals($criteria->getLimit(), $limit);
+        static::assertEquals($criteria->getLimit(), $limit);
     }
 
     /**
@@ -74,7 +74,7 @@ class CriteriaTest extends TestCase
     {
         $criteria = new Criteria();
         $criteria->offset($offset);
-        $this->assertEquals($offset, $criteria->getOffset());
+        static::assertEquals($offset, $criteria->getOffset());
     }
 
     public function validCriteriaLimit()

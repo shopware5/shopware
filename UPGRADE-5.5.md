@@ -10,14 +10,19 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 * Added new config `alwaysShowMainFeatures` to show the template from `mainfeatures` in the whole checkout process
 * Added configuration for displaying shipping costs pre calculation in off canvas shopping cart
-* Added wrapping smarty blocks to Themes/Frontend/Bare/documents/index.tpl
+* Added wrapping smarty blocks to `documents/index.tpl`
 * Added condition for not displaying basic price if it is a product with graduated prices
 * Added new block `frontend_account_order_item_detail_info_wrapper` to `account/order_item_details.tpl`
 * Added missing attribute accessor methods to `CustomerStream` model
+* Added rich-snippets for `priceValidUntil` , `url`, `image` and  `gtin13`
+* Added new block `frontend_index_header_meta_tags_inner` to `frontend/index/header.tpl`
+* Added preselected checkbox option to 'Deactivate No Customer Account' in basic configuration
+* Added an upload compatibility check for plugins
+* Added smarty function `http_build_query` to the list of allowed functions
 
 ### Changes
 
-* Changed deprecation on `Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface`. It was deprecated since 5.3.0, that deprecation got removed
+* Changed HTTPCache to fix issues with the first request of a URL when debugging is active
 * Changed url plugin to resolve base-url on CLI
 * Changed variant switch to consider url parameters without value
 * Changed `CategoryProvider` to skip excluded categories from sitemap 
@@ -25,16 +30,44 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed article REST api to properly deal with configuration option positions
 * Changed shipping costs pre calculation display configuration
 * Changed `HreflangService` to only consider active subshops
-* Changed HTTPCache to fix issues with the first request of a URL when debugging is active
 * Changed availability filter for ES condition
 * Changed `ProductListingVariationLoader::fetchAvailability` to consider only given variants
 * Changed cachebuster parameter for images in backend to contain the datetime of the last change
 * Changed `font-display` value to `swap` for improved font rendering performance
+* Changed `CdnOptimizerService` to work with external filesystems
+* Changed `sAdmin::sLogout` to refresh ShopContext on logout
+* Changed ESD download to send headers only once, fixing issues in IE and Safari browsers
+* Changed role selection in rule management to work with roles from the second page
+* Changed backend log viewer to work properly
+* Changed conversion of resource to service id with CamelCase-Name
+* Changed duplicated variable assignment in `frontend/checkout/header.tpl`
+* Changed blog meta description length from 150 to global used meta description length
+* Changed deprecation on `Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface`. It was deprecated since 5.3.0, that deprecation got removed
 
 ### Deprecations
 
 * Deprecated the class `Shopware_Components_Benchmark_Point`. It will be removed in 5.6 without replacement.
 * Deprecated the class `Shopware_Components_Benchmark_Container`. It will be removed in 5.6 without replacement.
+* Deprecated the function `sArticles::sCheckIfEsd` as it is unused. It will be removed in 5.7 without replacement.
+
+### Custom file extension whitelist
+
+Shopware by default only allows a fixed list of known file extensions to be uploaded to the server using the MediaManger. If you need to upload files with an extension not in this internal list, you can now add necessary file extensions in your `config.php`:
+
+```php
+<?php
+return [
+    ...
+    'media' => [
+        'whitelist' => [
+            'docx',
+            'xslx'
+        ],
+    ]
+];
+```
+
+For security reasons, some extensions like php, cgi, com, exe are not allowed in the whitelist.
 
 ## 5.5.7
 

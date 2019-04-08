@@ -47,7 +47,7 @@ abstract class ProviderTestCase extends BenchmarkTestCase
         $resultData = $this->getBenchmarkData();
         $arrayKeys = array_keys($resultData);
 
-        $this->assertCount($this::EXPECTED_KEYS_COUNT, $arrayKeys);
+        static::assertCount($this::EXPECTED_KEYS_COUNT, $arrayKeys);
     }
 
     /**
@@ -58,7 +58,7 @@ abstract class ProviderTestCase extends BenchmarkTestCase
         $resultData = $this->getBenchmarkData();
 
         if (!is_array($this::EXPECTED_TYPES)) {
-            $this->assertInternalType($this::EXPECTED_TYPES, $resultData);
+            static::assertInternalType($this::EXPECTED_TYPES, $resultData);
 
             return;
         }
@@ -111,13 +111,13 @@ abstract class ProviderTestCase extends BenchmarkTestCase
             }
 
             try {
-                $this->assertInternalType(
+                static::assertInternalType(
                     $expectedTypes[$resultKey],
                     $resultItem
                 );
             } catch (\PHPUnit_Framework_ExpectationFailedException $e) {
                 // Print custom error message
-                $this->fail(sprintf(
+                static::fail(sprintf(
                     'Failed asserting that the value for the key %s is of type %s',
                     $resultKey,
                     $expectedTypes[$resultKey]

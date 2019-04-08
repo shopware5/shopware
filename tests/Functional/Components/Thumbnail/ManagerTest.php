@@ -27,7 +27,7 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework
     public function testManagerInstance()
     {
         $manager = Shopware()->Container()->get('thumbnail_manager');
-        $this->assertInstanceOf('\Shopware\Components\Thumbnail\Manager', $manager);
+        static::assertInstanceOf('\Shopware\Components\Thumbnail\Manager', $manager);
     }
 
     public function testThumbnailGeneration()
@@ -52,10 +52,10 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework
         $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media->getType()) . '_thumbnail');
 
         $path = $thumbnailDir . $media->getName();
-        $this->assertTrue($mediaService->has($path . '_100x110.jpg'));
-        $this->assertTrue($mediaService->has($path . '_120x130.jpg'));
-        $this->assertTrue($mediaService->has($path . '_140x140.jpg'));
-        $this->assertTrue($mediaService->has($path . '_150x160.jpg'));
+        static::assertTrue($mediaService->has($path . '_100x110.jpg'));
+        static::assertTrue($mediaService->has($path . '_120x130.jpg'));
+        static::assertTrue($mediaService->has($path . '_140x140.jpg'));
+        static::assertTrue($mediaService->has($path . '_150x160.jpg'));
 
         $mediaService->delete($media->getPath());
     }
@@ -82,8 +82,8 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework
         $path = $thumbnailDir . $media->getName();
 
         foreach ($sizes as $size) {
-            $this->assertTrue($mediaService->has($path . '_' . $size . '.jpg'));
-            $this->assertTrue($mediaService->has($path . '_' . $size . '.png'));
+            static::assertTrue($mediaService->has($path . '_' . $size . '.jpg'));
+            static::assertTrue($mediaService->has($path . '_' . $size . '.png'));
         }
     }
 
@@ -115,14 +115,14 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework
         $path = $thumbnailDir . $media->getName();
 
         foreach ($sizes as $key => $size) {
-            $this->assertTrue($mediaService->has($path . '_' . $size . '.jpg'));
-            $this->assertTrue($mediaService->has($path . '_' . $size . '.png'));
+            static::assertTrue($mediaService->has($path . '_' . $size . '.jpg'));
+            static::assertTrue($mediaService->has($path . '_' . $size . '.png'));
 
             $image = imagecreatefromstring($mediaService->read($path . '_' . $size . '.jpg'));
             $width = imagesx($image);
             $height = imagesy($image);
 
-            $this->assertSame($proportionalSizes[$key], $width . 'x' . $height);
+            static::assertSame($proportionalSizes[$key], $width . 'x' . $height);
         }
     }
 
@@ -177,15 +177,15 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
         $path = $thumbnailDir . $media->getName();
 
-        $this->assertTrue($mediaService->has($path . '_' . $defaultSize . '.' . $media->getExtension()));
+        static::assertTrue($mediaService->has($path . '_' . $defaultSize . '.' . $media->getExtension()));
 
         $manager->removeMediaThumbnails($media);
 
-        $this->assertFalse($mediaService->has($path . '_' . $defaultSize . '.' . $media->getExtension()));
+        static::assertFalse($mediaService->has($path . '_' . $defaultSize . '.' . $media->getExtension()));
 
         $mediaService->delete($media->getPath());
 
-        $this->assertFalse($mediaService->has($media->getPath()));
+        static::assertFalse($mediaService->has($media->getPath()));
     }
 
     private function getMediaModel()

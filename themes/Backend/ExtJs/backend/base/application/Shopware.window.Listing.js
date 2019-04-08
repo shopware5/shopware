@@ -153,7 +153,6 @@ Ext.define('Shopware.window.Listing', {
              *      }
              *  });
              *
-             *
              *  Now you can add the extension to the extensions array:
              *  Ext.define('...', {
              *      extend: 'Shopware.window.Listing',

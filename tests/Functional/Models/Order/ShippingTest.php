@@ -40,8 +40,8 @@ class Shopware_Tests_Models_Order_ShippingTest extends Enlight_Components_Test_T
         Shopware()->Models()->clear();
 
         $shipping = Shopware()->Models()->getRepository('Shopware\Models\Order\Shipping')->find($shippingId);
-        $this->assertEquals('This is a really really really long city name', $shipping->getStreet());
-        $this->assertEquals('This is a really really really long zip code', $shipping->getZipCode());
+        static::assertEquals('This is a really really really long city name', $shipping->getStreet());
+        static::assertEquals('This is a really really really long zip code', $shipping->getZipCode());
 
         $shipping->setStreet($originalStreet);
         $shipping->setZipCode($originalZipCode);

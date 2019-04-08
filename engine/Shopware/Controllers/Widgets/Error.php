@@ -24,6 +24,14 @@
 
 class Shopware_Controllers_Widgets_Error extends Shopware_Controllers_Frontend_Error
 {
+    /**
+     * Pre dispatch method
+     */
+    public function preDispatch()
+    {
+        $this->Response()->setHeader('x-robots', 'noindex');
+    }
+
     public function serviceAction()
     {
         $this->Response()->setStatusCode(503);

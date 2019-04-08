@@ -26,6 +26,7 @@ namespace Shopware\Models\Article;
 
 use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * Repository class for Supplier entity
@@ -53,14 +54,15 @@ class SupplierRepository extends ModelRepository
      * @param int|null $offset
      * @param int|null $limit
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getFriendlyUrlSuppliersBuilder($offset = null, $limit = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->createQueryBuilder('supplier')
             ->select(['supplier.id']);
 
-        if ($limit != null) {
+        if ($limit !== null) {
             $builder->setFirstResult($offset)
                 ->setMaxResults($limit);
         }
@@ -72,12 +74,15 @@ class SupplierRepository extends ModelRepository
      * Query to fetch the number of suppliers that can be used
      * to generate friendly routes
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getFriendlyUrlSuppliersCountQueryBuilder()
     {
-        return $this->createQueryBuilder('supplier')
-                ->select('COUNT(DISTINCT supplier.id)');
+        /** @var QueryBuilder $builder */
+        $builder = $this->createQueryBuilder('supplier')
+            ->select('COUNT(DISTINCT supplier.id)');
+
+        return $builder;
     }
 
     /**
@@ -86,13 +91,11 @@ class SupplierRepository extends ModelRepository
      *
      * @param int $manufacturerId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getDetailQuery($manufacturerId)
     {
-        $builder = $this->getDetailQueryBuilder($manufacturerId);
-
-        return $builder->getQuery();
+        return $this->getDetailQueryBuilder($manufacturerId)->getQuery();
     }
 
     /**
@@ -101,16 +104,17 @@ class SupplierRepository extends ModelRepository
      *
      * @param int $manufacturerId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getDetailQueryBuilder($manufacturerId)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select([
             'supplier',
             'attribute',
         ])
-            ->from('Shopware\Models\Article\Supplier', 'supplier')
+            ->from(Supplier::class, 'supplier')
             ->leftJoin('supplier.attribute', 'attribute')
             ->where('supplier.id = ?1')
             ->setParameter(1, $manufacturerId);
@@ -121,29 +125,25 @@ class SupplierRepository extends ModelRepository
     /**
      * Returns the \Doctrine\ORM\Query to select all manufacturers for example for the backend tree
      *
-     *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getListQuery(array $filterBy, array $orderBy, $limit = null, $offset = null)
     {
-        $builder = $this->getListQueryBuilder($filterBy, $orderBy, $limit, $offset);
-
-        return $builder->getQuery();
+        return $this->getListQueryBuilder($filterBy, $orderBy, $limit, $offset)->getQuery();
     }
 
     /**
      * Helper method to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     *
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function getListQueryBuilder(array $filterBy, array $orderBy, $limit = null, $offset = null)
     {
-        /** @var \Shopware\Components\Model\QueryBuilder $builder */
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['supplier'])
-            ->from('Shopware\Models\Article\Supplier', 'supplier');
+            ->from(Supplier::class, 'supplier');
 
         if (!empty($filterBy)) {
             $builder->addFilter($filterBy);

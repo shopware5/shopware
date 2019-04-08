@@ -947,7 +947,6 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
      * Validates the value of the snippet. Returns false if the snippet value is empty and the shopId/localeId is
      * not 1.
      *
-     *
      * @return bool
      */
     private function isSnippetValid(Snippet $snippet)

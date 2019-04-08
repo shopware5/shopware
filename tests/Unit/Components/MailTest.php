@@ -33,7 +33,7 @@ class MailTest extends TestCase
         $mail = new \Enlight_Components_Mail();
         $mail->setFrom('foo@example.com', 'Sender\'s name');
 
-        $this->assertSame('foo@example.com', $mail->getFrom());
+        static::assertSame('foo@example.com', $mail->getFrom());
     }
 
     public function testCodeInjectionInFromHeader()

@@ -27,6 +27,7 @@ namespace Shopware\Models\Article;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\ArticleSupplier as ProductSupplierAttribute;
 
 /**
  * Supplier Model
@@ -91,7 +92,7 @@ class Supplier extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\ArticleSupplier
+     * @var ProductSupplierAttribute
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleSupplier", mappedBy="articleSupplier", cascade={"persist"})
      */
@@ -276,7 +277,7 @@ class Supplier extends ModelEntity
     /**
      * Returns all articles assigned to this supplier
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Article>
+     * @return ArrayCollection<\Shopware\Models\Article\Article>
      */
     public function getArticles()
     {
@@ -286,7 +287,7 @@ class Supplier extends ModelEntity
     /**
      * Takes an array of articles, in most cases doctrine will take care of this.
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Article> $articles
+     * @param ArrayCollection<\Shopware\Models\Article\Article> $articles
      *
      * @return Supplier
      */
@@ -298,7 +299,7 @@ class Supplier extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\ArticleSupplier
+     * @return ProductSupplierAttribute
      */
     public function getAttribute()
     {
@@ -306,13 +307,13 @@ class Supplier extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\ArticleSupplier|array|null $attribute
+     * @param ProductSupplierAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\ArticleSupplier
+     * @return Supplier
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\ArticleSupplier::class, 'attribute', 'articleSupplier');
+        return $this->setOneToOne($attribute, ProductSupplierAttribute::class, 'attribute', 'articleSupplier');
     }
 
     /**

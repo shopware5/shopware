@@ -52,13 +52,13 @@ class Shopware_Tests_Controllers_Backend_PremiumTest extends Enlight_Components_
     {
         /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/premium/getPremiumArticles');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('total', $jsonBody);
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('total', $jsonBody);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
 
         //Testing the search-function
         $filter = [
@@ -69,9 +69,9 @@ class Shopware_Tests_Controllers_Backend_PremiumTest extends Enlight_Components_
         $this->Request()->setMethod('POST')->setPost($filter);
         $this->dispatch('backend/premium/getPremiumArticles');
         $jsonBody = $this->View()->getAssign();
-        $this->assertArrayHasKey('total', $jsonBody);
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('total', $jsonBody);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
     }
 
     /**
@@ -86,13 +86,13 @@ class Shopware_Tests_Controllers_Backend_PremiumTest extends Enlight_Components_
         $this->Request()->setMethod('POST')->setPost($this->premiumData);
 
         $this->dispatch('backend/premium/createPremiumArticle');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
-        $this->assertArrayHasKey('id', $jsonBody['data']);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('id', $jsonBody['data']);
 
         return $jsonBody['data']['id'];
     }
@@ -120,8 +120,8 @@ class Shopware_Tests_Controllers_Backend_PremiumTest extends Enlight_Components_
 
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
     }
 
     /**
@@ -139,6 +139,6 @@ class Shopware_Tests_Controllers_Backend_PremiumTest extends Enlight_Components_
 
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
     }
 }

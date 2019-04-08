@@ -39,9 +39,9 @@ class ArrayCollectionTest extends TestCase
             'key_two' => 'wert2',
         ]);
 
-        $this->assertEquals('wert1', $collection->key_one);
-        $this->assertEquals('wert1', $collection->getKeyOne());
-        $this->assertEquals('wert1', $collection->get('key_one'));
+        static::assertEquals('wert1', $collection->key_one);
+        static::assertEquals('wert1', $collection->getKeyOne());
+        static::assertEquals('wert1', $collection->get('key_one'));
     }
 
     /**
@@ -52,9 +52,9 @@ class ArrayCollectionTest extends TestCase
         $collection = new ArrayCollection();
 
         $collection->setKeyOne('wert123');
-        $this->assertEquals('wert123', $collection->getKeyOne());
+        static::assertEquals('wert123', $collection->getKeyOne());
 
         $collection->key_one = 'wert145';
-        $this->assertEquals('wert145', $collection->key_one);
+        static::assertEquals('wert145', $collection->key_one);
     }
 }

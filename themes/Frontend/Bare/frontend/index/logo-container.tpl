@@ -9,8 +9,6 @@
                     <source srcset="{link file=$theme.desktopLogo}" media="(min-width: 78.75em)">
                     <source srcset="{link file=$theme.tabletLandscapeLogo}" media="(min-width: 64em)">
                     <source srcset="{link file=$theme.tabletLogo}" media="(min-width: 48em)">
-
-                    {s name="IndexLinkDefault" namespace="frontend/index/index" assign="snippetIndexLinkDefault"}{/s}
                     <img srcset="{link file=$theme.mobileLogo}" alt="{"{config name=shopName}"|escapeHtml} - {$snippetIndexLinkDefault|escape}" />
                 </picture>
             </a>

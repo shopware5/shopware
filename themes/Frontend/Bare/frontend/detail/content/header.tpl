@@ -11,6 +11,18 @@
                         </h1>
                     {/block}
 
+                    {block name="frontend_detail_index_data_image"}
+                        {foreach $sArticle.images as $image}
+                            <meta itemprop="image" content="{$image.source}"/>
+                        {/foreach}
+                    {/block}
+
+                    {block name="frontend_detail_index_data_ean"}
+                        {if $sArticle.ean}
+                            <meta itemprop="gtin13" content="{$sArticle.ean}"/>
+                        {/if}
+                    {/block}
+
                     {* Product - Supplier information *}
                     {block name='frontend_detail_supplier_info'}
                         {$imgSrc = $sArticle.supplierImg}

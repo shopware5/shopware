@@ -122,7 +122,6 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
     /**
      * Event listener function of the search index rebuild cron job.
      *
-     *
      * @return bool
      */
     public function onRefreshSeoIndex(Enlight_Event_EventArgs $arguments)
@@ -190,7 +189,6 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
     /**
      * Event listener function of the search index rebuild cron job.
      *
-     *
      * @return bool
      */
     public function refreshSearchIndex(Enlight_Event_EventArgs $arguments)
@@ -241,7 +239,6 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
      * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_Seo
      * event. This event is fired when shopware trying to access the plugin SEO controller.
      *
-     *
      * @return string
      */
     public function getSeoBackendController(Enlight_Event_EventArgs $arguments)
@@ -253,7 +250,6 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
      * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_SearchIndex
      * event. This event is fired when shopware trying to access the plugin SearchIndex controller.
      *
-     *
      * @return string
      */
     public function getSearchIndexBackendController(Enlight_Event_EventArgs $arguments)
@@ -264,7 +260,6 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
     /**
      * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_SimilarShown
      * event. This event is fired when shopware trying to access the plugin AlsoBought controller.
-     *
      *
      * @return string
      */

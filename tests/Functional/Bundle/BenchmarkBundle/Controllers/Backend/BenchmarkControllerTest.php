@@ -43,7 +43,7 @@ class BenchmarkControllerTest extends BenchmarkControllerTestCase
 
         $controller->saveIndustryAction();
 
-        $this->assertEquals(15, $this->loadSettingColumn('config.industry'));
+        static::assertEquals(15, $this->loadSettingColumn('config.industry'));
     }
 
     /**
@@ -61,7 +61,7 @@ class BenchmarkControllerTest extends BenchmarkControllerTestCase
 
         $controller->setActiveAction();
 
-        $this->assertEquals(1, $this->loadSettingColumn('config.active'));
+        static::assertEquals(1, $this->loadSettingColumn('config.active'));
     }
 
     /**
@@ -79,6 +79,6 @@ class BenchmarkControllerTest extends BenchmarkControllerTestCase
 
         $controller->saveTypeAction();
 
-        $this->assertEquals('b2c', $this->loadSettingColumn('config.type'));
+        static::assertEquals('b2c', $this->loadSettingColumn('config.type'));
     }
 }

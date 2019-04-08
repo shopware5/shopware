@@ -77,19 +77,19 @@ class Shopware_Tests_Controllers_Backend_CanceledOrderTest extends Enlight_Compo
         $data = $this->View()->getAssign('data');
 
         $firstRow = $data[0];
-        $this->assertEquals('2101-09-10', $firstRow['date']);
-        $this->assertEquals('2499', $firstRow['price']);
-        $this->assertEquals('2499', $firstRow['average']);
-        $this->assertEquals('1', $firstRow['number']);
-        $this->assertEquals('2101', $firstRow['year']);
-        $this->assertEquals('9', $firstRow['month']);
+        static::assertEquals('2101-09-10', $firstRow['date']);
+        static::assertEquals('2499', $firstRow['price']);
+        static::assertEquals('2499', $firstRow['average']);
+        static::assertEquals('1', $firstRow['number']);
+        static::assertEquals('2101', $firstRow['year']);
+        static::assertEquals('9', $firstRow['month']);
 
         $secondRow = $data[1];
-        $this->assertEquals('2101-09-11', $secondRow['date']);
-        $this->assertEquals('125.72', $secondRow['price']);
-        $this->assertEquals('25.144', $secondRow['average']);
-        $this->assertEquals('2', $secondRow['number']);
-        $this->assertEquals('2101', $secondRow['year']);
-        $this->assertEquals('9', $secondRow['month']);
+        static::assertEquals('2101-09-11', $secondRow['date']);
+        static::assertEquals('125.72', $secondRow['price']);
+        static::assertEquals('25.144', $secondRow['average']);
+        static::assertEquals('2', $secondRow['number']);
+        static::assertEquals('2101', $secondRow['year']);
+        static::assertEquals('9', $secondRow['month']);
     }
 }

@@ -60,47 +60,47 @@ class XmlMenuReaderTest extends TestCase
     {
         $result = $this->readFile('menu.xml');
 
-        self::assertInternalType('array', $result);
-        self::assertCount(2, $result);
+        static::assertInternalType('array', $result);
+        static::assertCount(2, $result);
 
         $firstMenu = $result[0];
 
-        self::assertArrayHasKey('isRootMenu', $firstMenu);
-        self::assertArrayHasKey('label', $firstMenu);
+        static::assertArrayHasKey('isRootMenu', $firstMenu);
+        static::assertArrayHasKey('label', $firstMenu);
 
-        self::assertArrayHasKey('name', $firstMenu);
-        self::assertArrayHasKey('controller', $firstMenu);
-        self::assertArrayHasKey('action', $firstMenu);
-        self::assertArrayHasKey('class', $firstMenu);
-        self::assertArrayHasKey('parent', $firstMenu);
-        self::assertArrayHasKey('active', $firstMenu);
-        self::assertArrayHasKey('position', $firstMenu);
+        static::assertArrayHasKey('name', $firstMenu);
+        static::assertArrayHasKey('controller', $firstMenu);
+        static::assertArrayHasKey('action', $firstMenu);
+        static::assertArrayHasKey('class', $firstMenu);
+        static::assertArrayHasKey('parent', $firstMenu);
+        static::assertArrayHasKey('active', $firstMenu);
+        static::assertArrayHasKey('position', $firstMenu);
 
-        self::assertEquals(false, $firstMenu['isRootMenu']);
-        self::assertEquals('SwagDefaultSort', $firstMenu['name']);
-        self::assertEquals('SwagDefaultSort', $firstMenu['controller']);
-        self::assertEquals('index', $firstMenu['action']);
-        self::assertEquals('sprite-sort', $firstMenu['class']);
-        self::assertEquals(false, $firstMenu['active']);
-        self::assertEquals(-1, $firstMenu['position']);
+        static::assertEquals(false, $firstMenu['isRootMenu']);
+        static::assertEquals('SwagDefaultSort', $firstMenu['name']);
+        static::assertEquals('SwagDefaultSort', $firstMenu['controller']);
+        static::assertEquals('index', $firstMenu['action']);
+        static::assertEquals('sprite-sort', $firstMenu['class']);
+        static::assertEquals(false, $firstMenu['active']);
+        static::assertEquals(-1, $firstMenu['position']);
 
-        self::assertArrayHasKey('label', $firstMenu['parent']);
-        self::assertEquals('Einstellungen', $firstMenu['parent']['label']);
+        static::assertArrayHasKey('label', $firstMenu['parent']);
+        static::assertEquals('Einstellungen', $firstMenu['parent']['label']);
 
-        self::assertArrayHasKey('children', $firstMenu);
-        self::assertCount(1, $firstMenu['children']);
+        static::assertArrayHasKey('children', $firstMenu);
+        static::assertCount(1, $firstMenu['children']);
     }
 
     public function testMultipleChildren(): void
     {
         $result = $this->readFile('paypal.xml');
 
-        self::assertEquals('PayPal', $result[0]['label']['de']);
-        self::assertNotNull($result[0]);
-        self::assertArrayHasKey('children', $result[0]);
-        self::assertCount(2, $result[0]['children']);
-        self::assertEquals('PaypalUnified', $result[0]['children'][0]['controller']);
-        self::assertEquals('PaypalUnifiedSettings', $result[0]['children'][1]['controller']);
+        static::assertEquals('PayPal', $result[0]['label']['de']);
+        static::assertNotNull($result[0]);
+        static::assertArrayHasKey('children', $result[0]);
+        static::assertCount(2, $result[0]['children']);
+        static::assertEquals('PaypalUnified', $result[0]['children'][0]['controller']);
+        static::assertEquals('PaypalUnifiedSettings', $result[0]['children'][1]['controller']);
     }
 
     private function readFile(string $file): array

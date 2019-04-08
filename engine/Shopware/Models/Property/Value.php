@@ -24,8 +24,10 @@
 
 namespace Shopware\Models\Property;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\PropertyValue as PropertyValueAttribute;
 use Shopware\Models\Media\Media;
 
 /**
@@ -39,7 +41,7 @@ class Value extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\PropertyValue
+     * @var PropertyValueAttribute
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyValue", mappedBy="propertyValue", orphanRemoval=true, cascade={"persist"})
      */
@@ -88,7 +90,7 @@ class Value extends ModelEntity
     private $option;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Article>
+     * @var ArrayCollection<\Shopware\Models\Article\Article>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article", mappedBy="propertyValues")
      * @ORM\JoinTable(name="s_filter_articles",
@@ -103,7 +105,7 @@ class Value extends ModelEntity
      *
      * @ORM\Column(name="media_id", type="integer", nullable=true)
      */
-    private $mediaId = null;
+    private $mediaId;
 
     /**
      * @var Media
@@ -114,14 +116,13 @@ class Value extends ModelEntity
     private $media;
 
     /**
-     * @param \Shopware\Models\Property\Option $option
-     * @param string                           $value
+     * @param string $value
      */
     public function __construct(Option $option, $value)
     {
         $this->option = $option;
         $this->setValue($value);
-        $this->articles = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->articles = new ArrayCollection();
     }
 
     /**
@@ -155,7 +156,7 @@ class Value extends ModelEntity
     /**
      * @param int $position
      *
-     * @return \Shopware\Models\Property\Value
+     * @return Value
      */
     public function setPosition($position)
     {
@@ -189,7 +190,7 @@ class Value extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function getMedia()
     {
@@ -197,7 +198,7 @@ class Value extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Media\Media $media
+     * @param Media $media
      */
     public function setMedia($media)
     {
@@ -205,7 +206,7 @@ class Value extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\PropertyValue
+     * @return PropertyValueAttribute
      */
     public function getAttribute()
     {
@@ -213,12 +214,12 @@ class Value extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\PropertyValue|array|null $attribute
+     * @param PropertyValueAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\PropertyValue
+     * @return Value
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\PropertyValue', 'attribute', 'propertyValue');
+        return $this->setOneToOne($attribute, PropertyValueAttribute::class, 'attribute', 'propertyValue');
     }
 }

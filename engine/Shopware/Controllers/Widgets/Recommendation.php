@@ -33,6 +33,14 @@ class Shopware_Controllers_Widgets_Recommendation extends Enlight_Controller_Act
     /** @var sMarketing */
     protected $marketingModule;
 
+    /**
+     * Pre dispatch method
+     */
+    public function preDispatch()
+    {
+        $this->Response()->setHeader('x-robots', 'noindex');
+    }
+
     public function init()
     {
         $this->config = Shopware()->Config();

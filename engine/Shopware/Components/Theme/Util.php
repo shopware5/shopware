@@ -60,7 +60,6 @@ class Util
      * Returns the preview image of the passed shopware template.
      * The image will be encoded as base 64 image.
      *
-     *
      * @return string|null
      */
     public function getPreviewImage(Shop\Template $template)
@@ -73,7 +72,6 @@ class Util
      * of the passed shopware template.
      * The function resolves the theme directory over the
      * getDirectory function of the PathResolver
-     *
      *
      * @throws \Exception
      *
@@ -103,7 +101,6 @@ class Util
     /**
      * Resolves the passed directory to a theme class.
      * Returns a new instance of the \Shopware\Theme
-     *
      *
      * @throws \Exception
      *
@@ -138,7 +135,6 @@ class Util
 
     /**
      * Returns the snippet namespace for the passed theme.
-     *
      *
      * @return string
      */

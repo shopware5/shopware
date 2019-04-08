@@ -406,7 +406,8 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      */
     onMetaDescriptionChange: function(textField) {
         var me = this;
-        textField.supportTextEl.update(textField.value.length + "/ 150 " + me.snippets.chars);
+        var metaDescriptionLength = parseInt('{config name=metaDescriptionLength}');
+        textField.supportTextEl.update(textField.value.length + "/" + metaDescriptionLength + " " + me.snippets.chars);
     },
 
     /**

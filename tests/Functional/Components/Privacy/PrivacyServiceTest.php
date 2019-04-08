@@ -61,7 +61,7 @@ class PrivacyServiceTest extends TestCase
 
         $this->privacyService->cleanupGuestUsers(3);
 
-        $this->assertEmpty($this->getUserFromDb($userId));
+        static::assertEmpty($this->getUserFromDb($userId));
     }
 
     /**
@@ -73,7 +73,7 @@ class PrivacyServiceTest extends TestCase
 
         $this->privacyService->cleanupGuestUsers(4);
 
-        $this->assertNotEmpty($this->getUserFromDb($userId));
+        static::assertNotEmpty($this->getUserFromDb($userId));
     }
 
     /**
@@ -87,7 +87,7 @@ class PrivacyServiceTest extends TestCase
 
         $this->privacyService->cleanupGuestUsers(3);
 
-        $this->assertEmpty($this->getUserFromDb($userId));
+        static::assertEmpty($this->getUserFromDb($userId));
     }
 
     /**
@@ -102,7 +102,7 @@ class PrivacyServiceTest extends TestCase
 
         $this->privacyService->cleanupGuestUsers(3);
 
-        $this->assertNotEmpty($this->getUserFromDb($userId));
+        static::assertNotEmpty($this->getUserFromDb($userId));
     }
 
     /**
@@ -117,7 +117,7 @@ class PrivacyServiceTest extends TestCase
 
         $this->privacyService->cleanupCanceledOrders(3);
 
-        $this->assertEmpty($this->getOrdersByUserIdFromDb($userId));
+        static::assertEmpty($this->getOrdersByUserIdFromDb($userId));
     }
 
     /**
@@ -132,7 +132,7 @@ class PrivacyServiceTest extends TestCase
 
         $this->privacyService->cleanupCanceledOrders(3);
 
-        $this->assertEmpty($this->getBasketsByUserIdFromDb($userId));
+        static::assertEmpty($this->getBasketsByUserIdFromDb($userId));
     }
 
     /**

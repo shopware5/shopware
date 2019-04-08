@@ -72,8 +72,8 @@ class Shopware_Tests_Modules_Articles_SeoCategoryTest extends Enlight_Components
             2
         );
 
-        $this->assertEquals($first['id'], $german);
-        $this->assertEquals($second['id'], $english);
+        static::assertEquals($first['id'], $german);
+        static::assertEquals($second['id'], $english);
     }
 
     private function getSimpleTestData()

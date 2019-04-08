@@ -76,7 +76,17 @@
                         <meta itemprop="highPrice" content="{$highestPrice}"/>
                         <meta itemprop="offerCount" content="{$sArticle.sBlockPrices|count}"/>
                     {/if}
-                    <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}"/>
+
+                    {block name="frontend_detail_index_data_price_currency"}
+                        <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}"/>
+                    {/block}
+
+                    {block name="frontend_detail_index_data_price_valid_until"}{/block}
+
+                    {block name="frontend_detail_index_data_url"}
+                        <meta itemprop="url" content="{url sArticle=$sArticle.articleID title=$sArticle.articleName}"/>
+                    {/block}
+
                     {include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
                 {/block}
 

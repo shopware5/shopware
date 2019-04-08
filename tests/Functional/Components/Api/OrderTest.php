@@ -66,7 +66,7 @@ class OrderTest extends TestCase
     public function testGetOneShouldBeSuccessful()
     {
         $order = $this->resource->getOne($this->order['id']);
-        $this->assertEquals($this->order['id'], $order['id']);
+        static::assertEquals($this->order['id'], $order['id']);
     }
 
     /**
@@ -88,7 +88,7 @@ class OrderTest extends TestCase
     public function testGetOneByNumberShouldBeSuccessful()
     {
         $order = $this->resource->getOneByNumber($this->order['ordernumber']);
-        $this->assertEquals($this->order['ordernumber'], $order['number']);
+        static::assertEquals($this->order['ordernumber'], $order['number']);
     }
 
     public function testGetOneShouldBeAbleToReturnObject()
@@ -96,23 +96,23 @@ class OrderTest extends TestCase
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $order = $this->resource->getOne($this->order['id']);
 
-        $this->assertInstanceOf('\Shopware\Models\Order\Order', $order);
-        $this->assertEquals($this->order['id'], $order->getId());
+        static::assertInstanceOf('\Shopware\Models\Order\Order', $order);
+        static::assertEquals($this->order['id'], $order->getId());
     }
 
     public function testGetListShouldBeSuccessful()
     {
         $result = $this->resource->getList();
 
-        $this->assertInternalType('array', $result);
+        static::assertInternalType('array', $result);
 
-        $this->assertArrayHasKey('total', $result);
-        $this->assertGreaterThanOrEqual(1, $result['total']);
+        static::assertArrayHasKey('total', $result);
+        static::assertGreaterThanOrEqual(1, $result['total']);
 
-        $this->assertArrayHasKey('data', $result);
-        $this->assertInternalType('array', $result['data']);
+        static::assertArrayHasKey('data', $result);
+        static::assertInternalType('array', $result['data']);
 
-        $this->assertGreaterThanOrEqual(1, count($result['data']));
+        static::assertGreaterThanOrEqual(1, count($result['data']));
 
         $firstOrder = $result['data'][0];
 
@@ -150,12 +150,12 @@ class OrderTest extends TestCase
         ];
 
         foreach ($expectedKeys as $expectedKey) {
-            $this->assertArrayHasKey($expectedKey, $firstOrder);
+            static::assertArrayHasKey($expectedKey, $firstOrder);
         }
 
-        $this->assertInternalType('array', $firstOrder['customer']);
-        $this->assertArrayHasKey('id', $firstOrder['customer']);
-        $this->assertArrayHasKey('email', $firstOrder['customer']);
+        static::assertInternalType('array', $firstOrder['customer']);
+        static::assertArrayHasKey('id', $firstOrder['customer']);
+        static::assertArrayHasKey('email', $firstOrder['customer']);
     }
 
     public function testGetListShouldBeAbleToReturnObjects()
@@ -163,13 +163,13 @@ class OrderTest extends TestCase
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $result = $this->resource->getList();
 
-        $this->assertArrayHasKey('data', $result);
-        $this->assertArrayHasKey('total', $result);
+        static::assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('total', $result);
 
-        $this->assertGreaterThanOrEqual(1, $result['total']);
-        $this->assertGreaterThanOrEqual(1, $result['data']);
+        static::assertGreaterThanOrEqual(1, $result['total']);
+        static::assertGreaterThanOrEqual(1, $result['data']);
 
-        $this->assertInstanceOf('\Shopware\Models\Order\Order', $result['data'][0]);
+        static::assertInstanceOf('\Shopware\Models\Order\Order', $result['data'][0]);
     }
 
     /**
@@ -343,7 +343,7 @@ class OrderTest extends TestCase
 
         $newOrder = $this->resource->create($order);
 
-        $this->assertEquals($newOrder->getBilling()->getState(), null);
+        static::assertEquals($newOrder->getBilling()->getState(), null);
     }
 
     public function testCreateOrderOnEmptyStateIdInShippingAddress()
@@ -357,7 +357,7 @@ class OrderTest extends TestCase
 
         $newOrder = $this->resource->create($order);
 
-        $this->assertEquals($newOrder->getShipping()->getState(), null);
+        static::assertEquals($newOrder->getShipping()->getState(), null);
     }
 
     /**
@@ -564,16 +564,16 @@ class OrderTest extends TestCase
         $newOrder = $this->resource->create($order);
 
         // Checking some fields in all models
-        $this->assertGreaterThan($this->order['id'], $newOrder->getId());
-        $this->assertNotNull($newOrder->getNumber());
-        $this->assertNotSame((int) $newOrder->getNumber(), $oldOrderNumber);
-        $this->assertEquals($newOrder->getCustomer()->getId(), $order['customer']['id']);
-        $this->assertEquals($newOrder->getInvoiceAmount(), $order['invoiceAmount']);
-        $this->assertEquals($newOrder->getBilling()->getCity(), $order['billing']['city']);
-        $this->assertEquals($newOrder->getShipping()->getCity(), $order['shipping']['city']);
-        $this->assertEquals(count($newOrder->getDetails()), count($order['details']));
-        $this->assertEquals($newOrder->getDetails()[0]->getArticleName(), $order['details'][0]['articleName']);
-        $this->assertEquals((int) $newOrder->getDetails()[0]->getNumber(), ($oldOrderNumber + 1));
+        static::assertGreaterThan($this->order['id'], $newOrder->getId());
+        static::assertNotNull($newOrder->getNumber());
+        static::assertNotSame((int) $newOrder->getNumber(), $oldOrderNumber);
+        static::assertEquals($newOrder->getCustomer()->getId(), $order['customer']['id']);
+        static::assertEquals($newOrder->getInvoiceAmount(), $order['invoiceAmount']);
+        static::assertEquals($newOrder->getBilling()->getCity(), $order['billing']['city']);
+        static::assertEquals($newOrder->getShipping()->getCity(), $order['shipping']['city']);
+        static::assertEquals(count($newOrder->getDetails()), count($order['details']));
+        static::assertEquals($newOrder->getDetails()[0]->getArticleName(), $order['details'][0]['articleName']);
+        static::assertEquals((int) $newOrder->getDetails()[0]->getNumber(), ($oldOrderNumber + 1));
     }
 
     public function testUpdateOrderPositionStatusShouldBeSuccessful()
@@ -595,8 +595,8 @@ class OrderTest extends TestCase
         foreach ($order['details'] as $detail) {
             $currentId = $detail['id'];
 
-            $this->assertEquals($updateArray['details'][$currentId]['status'], $detail['statusId']);
-            $this->assertEquals($updateArray['details'][$currentId]['shipped'], $detail['shipped']);
+            static::assertEquals($updateArray['details'][$currentId]['status'], $detail['statusId']);
+            static::assertEquals($updateArray['details'][$currentId]['shipped'], $detail['shipped']);
         }
     }
 
@@ -628,7 +628,7 @@ class OrderTest extends TestCase
 
         $order = $this->resource->create($order);
 
-        $this->assertCount(2, $order->getDocuments());
+        static::assertCount(2, $order->getDocuments());
     }
 
     /**

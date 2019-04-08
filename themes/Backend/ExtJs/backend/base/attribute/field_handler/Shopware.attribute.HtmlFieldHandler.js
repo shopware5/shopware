@@ -36,7 +36,11 @@ Ext.define('Shopware.attribute.HtmlFieldHandler', {
 
     create: function(field, attribute) {
         field.xtype = 'tinymce';
-        field.height = 150;
+        /** {if $user->extended_editor eq 1} */
+        field.height = 300;
+        /** {else} */
+        field.height = 200;
+        /** {/if} */
         return field;
     }
 });

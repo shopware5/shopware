@@ -143,7 +143,6 @@ EOF
     /**
      * Helper function to ask for optional data
      *
-     *
      * @return array
      */
     private function dialog(InputInterface $input, OutputInterface $output)

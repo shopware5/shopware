@@ -56,7 +56,7 @@ class CacheOptimizerServiceTest extends TestCase
         // second call should hit cached optimizer mappings
         $optimizer = $this->optimizerService->getOptimizerByMimeType('image/png');
 
-        $this->assertEquals(1, $optimizer->callCount);
+        static::assertEquals(1, $optimizer->callCount);
     }
 
     public function testOptimizeDecoration()

@@ -44,7 +44,7 @@ class PluginsProviderTest extends ProviderTestCase
 
         $resultData = $this->getBenchmarkData();
 
-        $this->assertSame(6, $resultData['total']);
+        static::assertSame(6, $resultData['total']);
     }
 
     /**
@@ -56,7 +56,7 @@ class PluginsProviderTest extends ProviderTestCase
 
         $resultData = $this->getBenchmarkData();
 
-        $this->assertArraySubset([
+        static::assertArraySubset([
             [
                 'name' => 'SwagExample2',
                 'active' => 0,

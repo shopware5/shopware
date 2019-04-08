@@ -60,13 +60,13 @@ class PresetInstallerTest extends TestCase
     {
         $presetMetaData = $this->buildMetaDataMock('foo');
 
-        $this->assertInstanceOf(PresetMetaDataInterface::class, $presetMetaData);
+        static::assertInstanceOf(PresetMetaDataInterface::class, $presetMetaData);
         $this->presetInstaller->installOrUpdate([$presetMetaData]);
         $presets = $this->connection->fetchAll('SELECT * FROM s_emotion_presets');
 
-        $this->assertCount(1, $presets);
+        static::assertCount(1, $presets);
         // check slugified name
-        $this->assertEquals('foo', $presets[0]['name']);
+        static::assertEquals('foo', $presets[0]['name']);
     }
 
     public function testPresetUpdateShouldSucceedWithEmptyPresetData()
@@ -74,20 +74,20 @@ class PresetInstallerTest extends TestCase
         $presetMetaData = $this->buildMetaDataMock('foo');
         $presetMetaDataUpdate = $this->buildMetaDataMock('foo', true);
 
-        $this->assertInstanceOf(PresetMetaDataInterface::class, $presetMetaData);
+        static::assertInstanceOf(PresetMetaDataInterface::class, $presetMetaData);
         $this->presetInstaller->installOrUpdate([$presetMetaData]);
         $presets = $this->connection->fetchAll('SELECT * FROM s_emotion_presets');
 
-        $this->assertCount(1, $presets);
+        static::assertCount(1, $presets);
         // check slugified name
-        $this->assertEquals('foo', $presets[0]['name']);
+        static::assertEquals('foo', $presets[0]['name']);
 
         $this->presetInstaller->installOrUpdate([$presetMetaDataUpdate]);
         $presets = $this->connection->fetchAll('SELECT * FROM s_emotion_presets');
 
-        $this->assertCount(1, $presets);
-        $this->assertEquals('foo', $presets[0]['name']);
-        $this->assertEquals(1, $presets[0]['custom']);
+        static::assertCount(1, $presets);
+        static::assertEquals('foo', $presets[0]['name']);
+        static::assertEquals(1, $presets[0]['custom']);
     }
 
     public function testPresetUninstallationShouldSucceed()
@@ -96,12 +96,12 @@ class PresetInstallerTest extends TestCase
         $secondPreset = $this->buildMetaDataMock('bar');
 
         $this->presetInstaller->installOrUpdate([$firstPreset, $secondPreset]);
-        $this->assertCount(2, $this->connection->fetchAll('SELECT * FROM s_emotion_presets'));
+        static::assertCount(2, $this->connection->fetchAll('SELECT * FROM s_emotion_presets'));
 
         $this->presetInstaller->uninstall(['foo']);
         $presets = $this->connection->fetchAll('SELECT * FROM s_emotion_presets');
-        $this->assertCount(1, $presets);
-        $this->assertEquals('bar', $presets[0]['name']);
+        static::assertCount(1, $presets);
+        static::assertEquals('bar', $presets[0]['name']);
     }
 
     /**

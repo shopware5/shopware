@@ -60,15 +60,15 @@ class OrderNumberValidatorTest extends TestCase
                 $catch = null;
             }
 
-            self::assertNull($catch, sprintf('Type of variable "%s" did not throw an exception', print_r($value, true)));
+            static::assertNull($catch, sprintf('Type of variable "%s" did not throw an exception', print_r($value, true)));
         }
     }
 
     public function testEmptyValue(): void
     {
-        self::assertNull($this->validator->validate(null, new Constraints\OrderNumber()));
-        self::assertNull($this->validator->validate(0, new Constraints\OrderNumber()));
-        self::assertNull($this->validator->validate('', new Constraints\OrderNumber()));
+        static::assertNull($this->validator->validate(null, new Constraints\OrderNumber()));
+        static::assertNull($this->validator->validate(0, new Constraints\OrderNumber()));
+        static::assertNull($this->validator->validate('', new Constraints\OrderNumber()));
     }
 
     public function testWrongConstraint(): void

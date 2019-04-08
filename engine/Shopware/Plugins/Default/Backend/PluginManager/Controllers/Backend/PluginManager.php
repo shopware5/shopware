@@ -928,7 +928,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     /**
      * Gets an array of plugins that are in Safe Mode
      *
-     *
      * @return Plugin[]
      */
     private function getPluginsInSafeMode(array $plugins)

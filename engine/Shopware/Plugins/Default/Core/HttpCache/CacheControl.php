@@ -91,7 +91,6 @@ class CacheControl
     /**
      * Validates if the provided route should be cached
      *
-     *
      * @return bool
      */
     public function isCacheableRoute(Request $request)
@@ -119,7 +118,6 @@ class CacheControl
 
     /**
      * Returns the cache time for the provided request route
-     *
      *
      * @return int|null
      */
@@ -204,7 +202,6 @@ class CacheControl
     /**
      * Returns a list of tags which has to be added to the no cache cookie
      *
-     *
      * @return \string[]
      */
     public function getTagsForNoCacheCookie(Request $request, ShopContextInterface $context)
@@ -239,7 +236,6 @@ class CacheControl
 
     /**
      * Returns a list of tags which has to be deleted from the no cache cookie
-     *
      *
      * @return \string[]
      */
@@ -320,7 +316,6 @@ class CacheControl
      * )
      * </code>
      *
-     *
      * @return array
      */
     private function getNoCacheTagsFromCookie(Request $request)
@@ -340,7 +335,6 @@ class CacheControl
     /**
      * Validates if the provided request is a cacheable route which should not be cached if a specify tag is set
      * and the request contains the nocache parameter as get parameter
-     *
      *
      * @return bool
      */

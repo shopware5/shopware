@@ -43,14 +43,14 @@ class ConfiguratorTest extends TestCase
             $product = Shopware()->Container()->get('shopware_storefront.product_service')
                 ->get($testVariant['number'], $context);
 
-            $this->assertCount(3, $product->getConfiguration());
+            static::assertCount(3, $product->getConfiguration());
 
             $optionNames = array_column($testVariant['configuratorOptions'], 'option');
 
             foreach ($product->getConfiguration() as $configuratorGroup) {
-                $this->assertCount(1, $configuratorGroup->getOptions());
+                static::assertCount(1, $configuratorGroup->getOptions());
                 $option = array_shift($configuratorGroup->getOptions());
-                $this->assertContains($option->getName(), $optionNames);
+                static::assertContains($option->getName(), $optionNames);
             }
         }
     }
@@ -69,23 +69,23 @@ class ConfiguratorTest extends TestCase
         $configurator = Shopware()->Container()->get('shopware_storefront.configurator_service')
             ->getProductConfigurator($product, $context, []);
 
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Set', $configurator);
+        static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Set', $configurator);
 
-        $this->assertCount(3, $configurator->getGroups());
+        static::assertCount(3, $configurator->getGroups());
         foreach ($configurator->getGroups() as $group) {
-            $this->assertCount(3, $group->getOptions());
-            $this->assertContains($group->getName(), ['Farbe', 'Größe', 'Form']);
+            static::assertCount(3, $group->getOptions());
+            static::assertContains($group->getName(), ['Farbe', 'Größe', 'Form']);
 
             foreach ($group->getOptions() as $option) {
                 switch ($group->getName()) {
                     case 'Farbe':
-                        $this->assertContains($option->getName(), ['rot', 'blau', 'grün']);
+                        static::assertContains($option->getName(), ['rot', 'blau', 'grün']);
                         break;
                     case 'Größe':
-                        $this->assertContains($option->getName(), ['L', 'M', 'S']);
+                        static::assertContains($option->getName(), ['L', 'M', 'S']);
                         break;
                     case 'Form':
-                        $this->assertContains($option->getName(), ['rund', 'eckig', 'oval']);
+                        static::assertContains($option->getName(), ['rund', 'eckig', 'oval']);
                         break;
                 }
             }
@@ -113,26 +113,26 @@ class ConfiguratorTest extends TestCase
         foreach ($configurator->getGroups() as $group) {
             switch ($group->getName()) {
                 case 'Farbe':
-                    $this->assertTrue($group->isSelected());
+                    static::assertTrue($group->isSelected());
                     break;
                 case 'Größe':
-                    $this->assertTrue($group->isSelected());
+                    static::assertTrue($group->isSelected());
                     break;
                 case 'Form':
-                    $this->assertFalse($group->isSelected());
+                    static::assertFalse($group->isSelected());
                     break;
             }
 
             foreach ($group->getOptions() as $option) {
-                $this->assertTrue($option->getActive());
+                static::assertTrue($option->getActive());
 
                 switch ($option->getName()) {
                     case 'rot':
                     case 'L':
-                        $this->assertTrue($option->isSelected());
+                        static::assertTrue($option->isSelected());
                         break;
                     default:
-                        $this->assertFalse($option->isSelected());
+                        static::assertFalse($option->isSelected());
                         break;
                 }
             }
@@ -229,9 +229,9 @@ class ConfiguratorTest extends TestCase
         foreach ($configurator->getGroups() as $group) {
             foreach ($group->getOptions() as $option) {
                 if (in_array($option->getName(), $expectedOptions)) {
-                    $this->assertFalse($option->getActive());
+                    static::assertFalse($option->getActive());
                 } else {
-                    $this->assertTrue($option->getActive());
+                    static::assertTrue($option->getActive());
                 }
             }
         }

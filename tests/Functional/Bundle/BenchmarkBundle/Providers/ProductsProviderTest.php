@@ -44,25 +44,25 @@ class ProductsProviderTest extends ProviderTestCase
         $benchmarkData = $this->getBenchmarkData();
         $productsList = $benchmarkData['list'];
 
-        $this->assertNotEmpty($productsList);
+        static::assertNotEmpty($productsList);
 
-        $this->assertEquals(0, $productsList[1]['active']);
-        $this->assertEquals(1, $productsList[2]['active']);
-        $this->assertEquals(8, $productsList[3]['instock']);
-        $this->assertEquals(20, $productsList[4]['instockMinimum']);
-        $this->assertEquals(0, $productsList[1]['sale']);
-        $this->assertEquals(1, $productsList[2]['sale']);
-        $this->assertEquals(2, $productsList[2]['minPurchase']);
-        $this->assertEquals(10, $productsList[3]['maxPurchase']);
-        $this->assertEquals(5, $productsList[4]['purchaseSteps']);
-        $this->assertEquals(0, $productsList[0]['shippingFree']);
-        $this->assertEquals(1, $productsList[1]['shippingFree']);
-        $this->assertEquals(10, $productsList[2]['pseudoSales']);
-        $this->assertEquals(0, $productsList[2]['topSeller']);
-        $this->assertEquals(1, $productsList[3]['topSeller']);
-        $this->assertEquals(0, $productsList[0]['notificationEnabled']);
-        $this->assertEquals(1, $productsList[1]['notificationEnabled']);
-        $this->assertEquals(7, $productsList[1]['shippingTime']);
+        static::assertEquals(0, $productsList[1]['active']);
+        static::assertEquals(1, $productsList[2]['active']);
+        static::assertEquals(8, $productsList[3]['instock']);
+        static::assertEquals(20, $productsList[4]['instockMinimum']);
+        static::assertEquals(0, $productsList[1]['sale']);
+        static::assertEquals(1, $productsList[2]['sale']);
+        static::assertEquals(2, $productsList[2]['minPurchase']);
+        static::assertEquals(10, $productsList[3]['maxPurchase']);
+        static::assertEquals(5, $productsList[4]['purchaseSteps']);
+        static::assertEquals(0, $productsList[0]['shippingFree']);
+        static::assertEquals(1, $productsList[1]['shippingFree']);
+        static::assertEquals(10, $productsList[2]['pseudoSales']);
+        static::assertEquals(0, $productsList[2]['topSeller']);
+        static::assertEquals(1, $productsList[3]['topSeller']);
+        static::assertEquals(0, $productsList[0]['notificationEnabled']);
+        static::assertEquals(1, $productsList[1]['notificationEnabled']);
+        static::assertEquals(7, $productsList[1]['shippingTime']);
     }
 
     /**
@@ -75,8 +75,8 @@ class ProductsProviderTest extends ProviderTestCase
         $benchmarkData = $this->getBenchmarkData();
         $productsList = $benchmarkData['list'];
 
-        $this->assertEquals(25, $productsList[4]['variants'][0]['instock']);
-        $this->assertEquals(30, $productsList[4]['variants'][1]['instock']);
+        static::assertEquals(25, $productsList[4]['variants'][0]['instock']);
+        static::assertEquals(30, $productsList[4]['variants'][1]['instock']);
     }
 
     /**
@@ -89,8 +89,8 @@ class ProductsProviderTest extends ProviderTestCase
         $benchmarkData = $this->getBenchmarkData();
         $productsList = $benchmarkData['list'];
 
-        $this->assertEquals(12345, $productsList[0]['images'][0]['fileSize']);
-        $this->assertEquals(54321, $productsList[0]['images'][1]['fileSize']);
+        static::assertEquals(12345, $productsList[0]['images'][0]['fileSize']);
+        static::assertEquals(54321, $productsList[0]['images'][1]['fileSize']);
     }
 
     /**
@@ -105,12 +105,12 @@ class ProductsProviderTest extends ProviderTestCase
         $benchmarkData = $provider->getBenchmarkData(Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1));
         $productsList = $benchmarkData['list'];
 
-        $this->assertCount(5, $productsList);
+        static::assertCount(5, $productsList);
 
         $benchmarkData = $provider->getBenchmarkData(Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(2));
         $productsList = $benchmarkData['list'];
 
-        $this->assertCount(1, $productsList);
+        static::assertCount(1, $productsList);
     }
 
     /**
@@ -126,7 +126,7 @@ class ProductsProviderTest extends ProviderTestCase
         $benchmarkData = $this->getBenchmarkData();
         $productsList = $benchmarkData['list'];
 
-        $this->assertCount(1, $productsList);
+        static::assertCount(1, $productsList);
     }
 
     /**
@@ -142,7 +142,7 @@ class ProductsProviderTest extends ProviderTestCase
         $benchmarkData = $this->getBenchmarkData();
         $productsList = $benchmarkData['list'];
 
-        $this->assertEquals(15, $productsList[0]['instock']);
+        static::assertEquals(15, $productsList[0]['instock']);
     }
 
     /**
@@ -157,6 +157,6 @@ class ProductsProviderTest extends ProviderTestCase
 
         $this->sendStatistics();
 
-        $this->assertEquals(5, Shopware()->Db()->fetchOne('SELECT last_product_id FROM s_benchmark_config WHERE shop_id=1'));
+        static::assertEquals(5, Shopware()->Db()->fetchOne('SELECT last_product_id FROM s_benchmark_config WHERE shop_id=1'));
     }
 }

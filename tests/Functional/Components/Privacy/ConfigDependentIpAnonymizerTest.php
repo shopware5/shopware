@@ -52,28 +52,28 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
     {
         $configStub = $this->createMock(\Shopware_Components_Config::class);
         $configStub
-            ->expects($this->exactly(1))
+            ->expects(static::exactly(1))
             ->method('get')
             ->with('anonymizeIp')
-            ->will($this->returnValue(true));
+            ->will(static::returnValue(true));
 
         $service = new ConfigDependentIpAnonymizer(new IpAnonymizer(), $configStub);
 
-        $this->assertEquals('127.0.0.0', $service->anonymize('127.0.0.1'));
+        static::assertEquals('127.0.0.0', $service->anonymize('127.0.0.1'));
     }
 
     public function testConfigInactiveWorking()
     {
         $configStub = $this->createMock(\Shopware_Components_Config::class);
         $configStub
-            ->expects($this->exactly(1))
+            ->expects(static::exactly(1))
             ->method('get')
             ->with('anonymizeIp')
-            ->will($this->returnValue(false));
+            ->will(static::returnValue(false));
 
         $service = new ConfigDependentIpAnonymizer(new IpAnonymizer(), $configStub);
 
-        $this->assertEquals('127.0.0.1', $service->anonymize('127.0.0.1'));
+        static::assertEquals('127.0.0.1', $service->anonymize('127.0.0.1'));
     }
 
     public function testDispatchLogLocalhostIpv4()
@@ -95,7 +95,7 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
         $this->dispatch('/backend/Log/createLog');
         $data = $this->View()->getAssign('data');
 
-        $this->assertEquals('127.0.0.0', $data['ipAddress']);
+        static::assertEquals('127.0.0.0', $data['ipAddress']);
     }
 
     public function testDispatchLogIpv6()
@@ -117,7 +117,7 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
         $this->dispatch('/backend/Log/createLog');
         $data = $this->View()->getAssign('data');
 
-        $this->assertEquals('2a00:1450:4001:::', $data['ipAddress']);
+        static::assertEquals('2a00:1450:4001:::', $data['ipAddress']);
     }
 
     public function testDispatchLogLocalhostConfigDisabled()
@@ -139,6 +139,6 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
         $this->dispatch('/backend/Log/createLog');
         $data = $this->View()->getAssign('data');
 
-        $this->assertEquals('127.0.0.1', $data['ipAddress']);
+        static::assertEquals('127.0.0.1', $data['ipAddress']);
     }
 }

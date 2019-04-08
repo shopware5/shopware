@@ -33,7 +33,6 @@ class ShopwareEnvironmentProcessor
     /**
      * Adds request, shop and session info
      *
-     *
      * @return array
      */
     public function __invoke(array $record)

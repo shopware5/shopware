@@ -29,6 +29,8 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
      */
     public function preDispatch()
     {
+        $this->Response()->setHeader('x-robots', 'noindex');
+
         if ($this->Request()->getActionName() === 'refreshStatistic') {
             $this->Front()->Plugins()->ViewRenderer()->setNoRender();
         }

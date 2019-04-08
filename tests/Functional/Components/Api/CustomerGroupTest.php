@@ -72,14 +72,14 @@ class CustomerGroupTest extends TestCase
 
         $customerGroup = $this->resource->create($testData);
 
-        $this->assertInstanceOf('\Shopware\Models\Customer\Group', $customerGroup);
-        $this->assertGreaterThan(0, $customerGroup->getId());
+        static::assertInstanceOf('\Shopware\Models\Customer\Group', $customerGroup);
+        static::assertGreaterThan(0, $customerGroup->getId());
 
-        $this->assertEquals($customerGroup->getKey(), $testData['key']);
-        $this->assertEquals($customerGroup->getName(), $testData['name']);
-        $this->assertEquals($customerGroup->getTax(), $testData['tax']);
-        $this->assertEquals($customerGroup->getTaxInput(), $testData['taxInput']);
-        $this->assertEquals($customerGroup->getMode(), $testData['mode']);
+        static::assertEquals($customerGroup->getKey(), $testData['key']);
+        static::assertEquals($customerGroup->getName(), $testData['name']);
+        static::assertEquals($customerGroup->getTax(), $testData['tax']);
+        static::assertEquals($customerGroup->getTaxInput(), $testData['taxInput']);
+        static::assertEquals($customerGroup->getMode(), $testData['mode']);
 
         return $customerGroup->getId();
     }
@@ -90,7 +90,7 @@ class CustomerGroupTest extends TestCase
     public function testGetOneShouldBeSuccessful($id)
     {
         $CustomerGroup = $this->resource->getOne($id);
-        $this->assertGreaterThan(0, $CustomerGroup['id']);
+        static::assertGreaterThan(0, $CustomerGroup['id']);
     }
 
     /**
@@ -100,11 +100,11 @@ class CustomerGroupTest extends TestCase
     {
         $result = $this->resource->getList();
 
-        $this->assertArrayHasKey('data', $result);
-        $this->assertArrayHasKey('total', $result);
+        static::assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('total', $result);
 
-        $this->assertGreaterThanOrEqual(1, $result['total']);
-        $this->assertGreaterThanOrEqual(1, $result['data']);
+        static::assertGreaterThanOrEqual(1, $result['total']);
+        static::assertGreaterThanOrEqual(1, $result['data']);
     }
 
     /**
@@ -122,14 +122,14 @@ class CustomerGroupTest extends TestCase
 
         $customerGroup = $this->resource->update($id, $testData);
 
-        $this->assertInstanceOf('\Shopware\Models\Customer\Group', $customerGroup);
-        $this->assertGreaterThan(0, $customerGroup->getId());
+        static::assertInstanceOf('\Shopware\Models\Customer\Group', $customerGroup);
+        static::assertGreaterThan(0, $customerGroup->getId());
 
-        $this->assertEquals($customerGroup->getKey(), $testData['key']);
-        $this->assertEquals($customerGroup->getName(), $testData['name']);
-        $this->assertEquals($customerGroup->getTax(), $testData['tax']);
-        $this->assertEquals($customerGroup->getTaxInput(), $testData['taxInput']);
-        $this->assertEquals($customerGroup->getMode(), $testData['mode']);
+        static::assertEquals($customerGroup->getKey(), $testData['key']);
+        static::assertEquals($customerGroup->getName(), $testData['name']);
+        static::assertEquals($customerGroup->getTax(), $testData['tax']);
+        static::assertEquals($customerGroup->getTaxInput(), $testData['taxInput']);
+        static::assertEquals($customerGroup->getMode(), $testData['mode']);
 
         return $id;
     }
@@ -157,8 +157,8 @@ class CustomerGroupTest extends TestCase
     {
         $customerGroup = $this->resource->delete($id);
 
-        $this->assertInstanceOf('\Shopware\Models\Customer\Group', $customerGroup);
-        $this->assertEquals(null, $customerGroup->getId());
+        static::assertInstanceOf('\Shopware\Models\Customer\Group', $customerGroup);
+        static::assertEquals(null, $customerGroup->getId());
     }
 
     /**
@@ -195,14 +195,14 @@ class CustomerGroupTest extends TestCase
 
         $customerGroup = $this->resource->create($testData);
 
-        $this->assertInstanceOf('\Shopware\Models\Customer\Group', $customerGroup);
-        $this->assertGreaterThan(0, $customerGroup->getId());
+        static::assertInstanceOf('\Shopware\Models\Customer\Group', $customerGroup);
+        static::assertGreaterThan(0, $customerGroup->getId());
 
-        $this->assertEquals($customerGroup->getKey(), $testData['key']);
-        $this->assertEquals($customerGroup->getName(), $testData['name']);
-        $this->assertEquals($customerGroup->getTax(), $defaults['tax']);
-        $this->assertEquals($customerGroup->getTaxInput(), $defaults['taxInput']);
-        $this->assertEquals($customerGroup->getMode(), $defaults['mode']);
+        static::assertEquals($customerGroup->getKey(), $testData['key']);
+        static::assertEquals($customerGroup->getName(), $testData['name']);
+        static::assertEquals($customerGroup->getTax(), $defaults['tax']);
+        static::assertEquals($customerGroup->getTaxInput(), $defaults['taxInput']);
+        static::assertEquals($customerGroup->getMode(), $defaults['mode']);
 
         $this->resource->delete($customerGroup->getId());
     }

@@ -30,6 +30,7 @@ use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Shopware\Components\Model\Configuration;
 use Shopware\Components\Model\LazyFetchModelEntity;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\QueryOperatorValidator;
 
 /**
  * Wrapper service class for the doctrine entity manager.
@@ -42,7 +43,6 @@ class Models
     /**
      * Creates the entity manager for the application.
      *
-     *
      * @return ModelManager
      */
     public function factory(
@@ -50,8 +50,9 @@ class Models
         Configuration $config,
         \Enlight_Loader $loader,
         Connection $connection,
-        // annotation driver is not really used here but has to be loaded first
-        AnnotationDriver $modelAnnotation
+        // Annotation driver is not really used here but has to be loaded first
+        AnnotationDriver $modelAnnotation,
+        QueryOperatorValidator $operatorValidator = null
     ) {
         $loader->registerNamespace(
             'Shopware\Models\Attribute',
@@ -64,7 +65,8 @@ class Models
         $entityManager = ModelManager::createInstance(
             $connection,
             $config,
-            $eventManager
+            $eventManager,
+            $operatorValidator
         );
 
         LazyFetchModelEntity::setEntityManager($entityManager);

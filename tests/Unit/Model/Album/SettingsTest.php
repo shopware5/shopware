@@ -33,6 +33,6 @@ class Shopware_Tests_Models_Album_SettingsTest extends TestCase
 
         $size = $settings->getThumbnailSize();
 
-        $this->assertEquals([], $size);
+        static::assertEquals([], $size);
     }
 }

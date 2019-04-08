@@ -127,7 +127,6 @@ class SubscriptionService
     /**
      * Returns information about shop upgrade state and installed plugins.
      *
-     *
      * @return PluginInformationResultStruct|bool
      */
     public function getPluginInformation(Response $response, Request $request)
@@ -255,7 +254,6 @@ class SubscriptionService
 
     /**
      * Check the date of the last subscription-check var
-     *
      *
      * @return bool
      */

@@ -100,7 +100,6 @@ class ManufacturerUrlProvider implements UrlProviderInterface
     /**
      * Gets all suppliers that have products for the current shop
      *
-     *
      * @return array
      */
     private function getManufacturersForSitemap(ShopContextInterface $shopContext)

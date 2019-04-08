@@ -646,7 +646,6 @@ class sArticles
     /**
      * Get product topsellers for a specific category
      *
-     *
      * @return array
      */
     public function sGetArticleCharts($category = null)
@@ -685,19 +684,22 @@ class sArticles
     }
 
     /**
-     * Check if an product has instant download
+     * Check if a product has an instant download
+     *
+     * @deprecated in 5.5, this function will be removed in 5.7 without replacement
      *
      * @param int  $id        s_articles.id
      * @param int  $detailsID s_articles_details.id
-     * @param bool $realtime  @deprecated 5.6
+     * @param bool $realtime
      *
      * @return bool
      */
     public function sCheckIfEsd($id, $detailsID, $realtime = false)
     {
         // Check if this product is esd-only (check in variants, too -> later)
-
+        $id = (int) $id;
         if ($detailsID) {
+            $detailsID = (int) $detailsID;
             $sqlGetEsd = "
             SELECT id, serials FROM s_articles_esd WHERE articleID=$id
             AND articledetailsID=$detailsID
@@ -2591,7 +2593,6 @@ class sArticles
      * Additionally the function removes empty array elements.
      * Array elements of the configuration selection can be empty, if the user resets the
      * different group selections.
-     *
      *
      * @return array
      */

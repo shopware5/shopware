@@ -27,6 +27,7 @@ namespace Shopware\Models\Order;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Security\AttributeCleanerTrait;
+use Shopware\Models\Attribute\OrderBilling as OrderBillingAttribute;
 use Shopware\Models\Customer\Address;
 
 /**
@@ -72,7 +73,7 @@ class Billing extends ModelEntity
      *
      * @ORM\Column(name="additional_address_line1", type="string", length=255, nullable=true)
      */
-    protected $additionalAddressLine1 = null;
+    protected $additionalAddressLine1;
 
     /**
      * Contains the additional address line data 2
@@ -81,12 +82,12 @@ class Billing extends ModelEntity
      *
      * @ORM\Column(name="additional_address_line2", type="string", length=255, nullable=true)
      */
-    protected $additionalAddressLine2 = null;
+    protected $additionalAddressLine2;
 
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\OrderBilling
+     * @var OrderBillingAttribute
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderBilling", mappedBy="orderBilling", orphanRemoval=true, cascade={"persist"})
      */
@@ -638,7 +639,7 @@ class Billing extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\OrderBilling
+     * @return OrderBillingAttribute
      */
     public function getAttribute()
     {
@@ -646,13 +647,13 @@ class Billing extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\OrderBilling|array|null $attribute
+     * @param OrderBillingAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\OrderBilling
+     * @return Billing
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\OrderBilling::class, 'attribute', 'orderBilling');
+        return $this->setOneToOne($attribute, OrderBillingAttribute::class, 'attribute', 'orderBilling');
     }
 
     /**

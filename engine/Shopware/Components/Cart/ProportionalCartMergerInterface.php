@@ -29,7 +29,6 @@ interface ProportionalCartMergerInterface
     /**
      * Merges proportional cart items into one
      *
-     *
      * @return array
      */
     public function mergeProportionalItems(array $content);

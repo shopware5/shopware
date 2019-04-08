@@ -61,27 +61,27 @@ class HandlerRegistryTest extends TestCase
             $classes[] = get_class($handler);
         }
 
-        $this->assertContains(AgeConditionHandler::class, $classes);
-        $this->assertContains(CustomerAttributeConditionHandler::class, $classes);
-        $this->assertContains(HasAddressWithCountryConditionHandler::class, $classes);
-        $this->assertContains(HasCanceledOrdersConditionHandler::class, $classes);
-        $this->assertContains(HasNewsletterRegistrationConditionHandler::class, $classes);
-        $this->assertContains(HasOrderCountConditionHandler::class, $classes);
-        $this->assertContains(HasTotalOrderAmountConditionHandler::class, $classes);
-        $this->assertContains(IsCustomerSinceConditionHandler::class, $classes);
-        $this->assertContains(IsInCustomerGroupConditionHandler::class, $classes);
-        $this->assertContains(OrderedAtWeekdayConditionHandler::class, $classes);
-        $this->assertContains(OrderedInLastDaysConditionHandler::class, $classes);
-        $this->assertContains(OrderedInShopConditionHandler::class, $classes);
-        $this->assertContains(OrderedOnDeviceConditionHandler::class, $classes);
-        $this->assertContains(OrderedProductConditionHandler::class, $classes);
-        $this->assertContains(OrderedProductOfCategoryConditionHandler::class, $classes);
-        $this->assertContains(OrderedProductOfManufacturerConditionHandler::class, $classes);
-        $this->assertContains(OrderedWithDeliveryConditionHandler::class, $classes);
-        $this->assertContains(OrderedWithPaymentConditionHandler::class, $classes);
-        $this->assertContains(RegisteredInShopConditionHandler::class, $classes);
-        $this->assertContains(SearchTermConditionHandler::class, $classes);
-        $this->assertContains(SalutationConditionHandler::class, $classes);
+        static::assertContains(AgeConditionHandler::class, $classes);
+        static::assertContains(CustomerAttributeConditionHandler::class, $classes);
+        static::assertContains(HasAddressWithCountryConditionHandler::class, $classes);
+        static::assertContains(HasCanceledOrdersConditionHandler::class, $classes);
+        static::assertContains(HasNewsletterRegistrationConditionHandler::class, $classes);
+        static::assertContains(HasOrderCountConditionHandler::class, $classes);
+        static::assertContains(HasTotalOrderAmountConditionHandler::class, $classes);
+        static::assertContains(IsCustomerSinceConditionHandler::class, $classes);
+        static::assertContains(IsInCustomerGroupConditionHandler::class, $classes);
+        static::assertContains(OrderedAtWeekdayConditionHandler::class, $classes);
+        static::assertContains(OrderedInLastDaysConditionHandler::class, $classes);
+        static::assertContains(OrderedInShopConditionHandler::class, $classes);
+        static::assertContains(OrderedOnDeviceConditionHandler::class, $classes);
+        static::assertContains(OrderedProductConditionHandler::class, $classes);
+        static::assertContains(OrderedProductOfCategoryConditionHandler::class, $classes);
+        static::assertContains(OrderedProductOfManufacturerConditionHandler::class, $classes);
+        static::assertContains(OrderedWithDeliveryConditionHandler::class, $classes);
+        static::assertContains(OrderedWithPaymentConditionHandler::class, $classes);
+        static::assertContains(RegisteredInShopConditionHandler::class, $classes);
+        static::assertContains(SearchTermConditionHandler::class, $classes);
+        static::assertContains(SalutationConditionHandler::class, $classes);
     }
 
     /**

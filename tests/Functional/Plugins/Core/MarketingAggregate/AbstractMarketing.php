@@ -92,7 +92,7 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
     protected function assertArrayEquals(array $expected, array $result, array $properties)
     {
         foreach ($properties as $property) {
-            $this->assertEquals($expected[$property], $result[$property]);
+            static::assertEquals($expected[$property], $result[$property]);
         }
     }
 

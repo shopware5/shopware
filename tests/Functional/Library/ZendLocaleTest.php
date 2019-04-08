@@ -69,7 +69,7 @@ class ZendLocaleTest extends TestCase
      */
     public function testLocalCreation($localName)
     {
-        $this->assertFileExists(sprintf('%s/engine/Library/Zend/Locale/Data/%s.xml', Shopware()->DocPath(), $localName));
+        static::assertFileExists(sprintf('%s/engine/Library/Zend/Locale/Data/%s.xml', Shopware()->DocPath(), $localName));
     }
 
     /**

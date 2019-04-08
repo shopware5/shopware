@@ -46,14 +46,14 @@ class TranslationTest extends TestCase
             $context
         );
 
-        $this->assertEquals('Dummy Translation', $listProduct->getName());
-        $this->assertEquals('Dummy Translation', $listProduct->getShortDescription());
-        $this->assertEquals('Dummy Translation', $listProduct->getLongDescription());
-        $this->assertEquals('Dummy Translation', $listProduct->getShippingTime());
-        $this->assertEquals('Dummy Translation', $listProduct->getAdditional());
-        $this->assertEquals('Dummy Translation', $listProduct->getKeywords());
-        $this->assertEquals('Dummy Translation', $listProduct->getMetaTitle());
-        $this->assertEquals('Dummy Translation', $listProduct->getUnit()->getPackUnit());
+        static::assertEquals('Dummy Translation', $listProduct->getName());
+        static::assertEquals('Dummy Translation', $listProduct->getShortDescription());
+        static::assertEquals('Dummy Translation', $listProduct->getLongDescription());
+        static::assertEquals('Dummy Translation', $listProduct->getShippingTime());
+        static::assertEquals('Dummy Translation', $listProduct->getAdditional());
+        static::assertEquals('Dummy Translation', $listProduct->getKeywords());
+        static::assertEquals('Dummy Translation', $listProduct->getMetaTitle());
+        static::assertEquals('Dummy Translation', $listProduct->getUnit()->getPackUnit());
     }
 
     public function testManufacturerTranslation()
@@ -73,10 +73,10 @@ class TranslationTest extends TestCase
 
         $manufacturer = $product->getManufacturer();
 
-        $this->assertEquals('Dummy Translation', $manufacturer->getDescription());
-        $this->assertEquals('Dummy Translation', $manufacturer->getMetaTitle());
-        $this->assertEquals('Dummy Translation', $manufacturer->getMetaKeywords());
-        $this->assertEquals('Dummy Translation', $manufacturer->getMetaDescription());
+        static::assertEquals('Dummy Translation', $manufacturer->getDescription());
+        static::assertEquals('Dummy Translation', $manufacturer->getMetaTitle());
+        static::assertEquals('Dummy Translation', $manufacturer->getMetaKeywords());
+        static::assertEquals('Dummy Translation', $manufacturer->getMetaDescription());
     }
 
     public function testUnitTranslation()
@@ -135,16 +135,16 @@ class TranslationTest extends TestCase
             $context
         );
 
-        $this->assertEquals('Dummy Translation', $listProduct->getUnit()->getUnit());
-        $this->assertEquals('Dummy Translation', $listProduct->getUnit()->getName());
+        static::assertEquals('Dummy Translation', $listProduct->getUnit()->getUnit());
+        static::assertEquals('Dummy Translation', $listProduct->getUnit()->getName());
 
         foreach ($listProduct->getPrices() as $price) {
-            $this->assertEquals('Dummy Translation', $price->getUnit()->getUnit());
-            $this->assertEquals('Dummy Translation', $price->getUnit()->getName());
+            static::assertEquals('Dummy Translation', $price->getUnit()->getUnit());
+            static::assertEquals('Dummy Translation', $price->getUnit()->getName());
         }
 
-        $this->assertEquals('Dummy Translation 2', $listProduct->getCheapestPrice()->getUnit()->getUnit());
-        $this->assertEquals('Dummy Translation 2', $listProduct->getCheapestPrice()->getUnit()->getName());
+        static::assertEquals('Dummy Translation 2', $listProduct->getCheapestPrice()->getUnit()->getUnit());
+        static::assertEquals('Dummy Translation 2', $listProduct->getCheapestPrice()->getUnit()->getName());
     }
 
     public function testPropertyTranslation()
@@ -162,15 +162,15 @@ class TranslationTest extends TestCase
         $listProduct = $this->helper->getListProduct($number, $context);
         $property = $this->helper->getProductProperties($listProduct, $context);
 
-        $this->assertEquals('Dummy Translation', $property->getName());
+        static::assertEquals('Dummy Translation', $property->getName());
 
         foreach ($property->getGroups() as $group) {
             $expected = 'Dummy Translation group - ' . $group->getId();
-            $this->assertEquals($expected, $group->getName());
+            static::assertEquals($expected, $group->getName());
 
             foreach ($group->getOptions() as $option) {
                 $expected = 'Dummy Translation option - ' . $group->getId() . ' - ' . $option->getId();
-                $this->assertEquals($expected, $option->getName());
+                static::assertEquals($expected, $option->getName());
             }
         }
     }
@@ -209,14 +209,14 @@ class TranslationTest extends TestCase
 
         foreach ($configurator->getGroups() as $group) {
             $expected = 'Dummy Translation group - ' . $group->getId();
-            $this->assertEquals($expected, $group->getName());
+            static::assertEquals($expected, $group->getName());
 
             $expected = 'Dummy Translation description - ' . $group->getId();
-            $this->assertEquals($expected, $group->getDescription());
+            static::assertEquals($expected, $group->getDescription());
 
             foreach ($group->getOptions() as $option) {
                 $expected = 'Dummy Translation option - ' . $group->getId() . ' - ' . $option->getId();
-                $this->assertEquals($expected, $option->getName());
+                static::assertEquals($expected, $option->getName());
             }
         }
     }

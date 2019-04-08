@@ -62,14 +62,14 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
     public function testCreate()
     {
         $this->resource->create(['name' => 'test', 'presetData' => '[]']);
-        $this->assertCount(1, $this->connection->fetchAll('SELECT * FROM s_emotion_presets'));
+        static::assertCount(1, $this->connection->fetchAll('SELECT * FROM s_emotion_presets'));
     }
 
     public function testCreateReturnsPersistedEntity()
     {
         $preset = $this->resource->create(['name' => 'test', 'presetData' => '[]']);
-        $this->assertInstanceOf(Preset::class, $preset);
-        $this->assertNotNull($preset->getId());
+        static::assertInstanceOf(Preset::class, $preset);
+        static::assertNotNull($preset->getId());
     }
 
     /**
@@ -119,7 +119,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         $preset = array_shift($this->resource->getList());
         $preset = $this->removeIds($preset);
 
-        $this->assertEquals([
+        static::assertEquals([
             'name' => 'First preset',
             'label' => 'First preset',
             'description' => 'First preset',
@@ -164,7 +164,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         $preset = array_shift($this->resource->getList());
         $preset = $this->removeIds($preset);
 
-        $this->assertEquals([
+        static::assertEquals([
             'name' => 'First preset',
             'label' => 'First preset',
             'description' => 'First preset',
@@ -209,7 +209,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         $preset = array_shift($this->resource->getList());
         $preset = $this->removeIds($preset);
 
-        $this->assertEquals([
+        static::assertEquals([
             'name' => 'First preset',
             'label' => 'First preset',
             'description' => 'First preset',
@@ -247,7 +247,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         $preset = array_shift($this->resource->getList('en_GB'));
         $preset = $this->removeIds($preset);
 
-        $this->assertSame([
+        static::assertSame([
             'name' => 'First preset',
             'label' => 'English label',
             'description' => 'English description',
@@ -279,7 +279,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
             return $this->removeIds($preset);
         }, $presets);
 
-        $this->assertSame(
+        static::assertSame(
             [
                 [
                     'name' => 'First preset',
@@ -322,11 +322,11 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
             ],
         ]);
 
-        $this->assertNotNull($preset->getId());
+        static::assertNotNull($preset->getId());
         $english = array_shift($this->resource->getList('en_GB'));
 
         $english = $this->removeIds($english);
-        $this->assertSame([
+        static::assertSame([
             'name' => 'Test-preset',
             'label' => 'English',
             'description' => 'English',
@@ -342,7 +342,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
 
         $german = array_shift($this->resource->getList('de_DE'));
         $german = $this->removeIds($german);
-        $this->assertSame([
+        static::assertSame([
             'name' => 'Test-preset',
             'label' => 'German',
             'description' => 'German',
@@ -361,8 +361,8 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
     {
         $preset = $this->resource->create(['name' => 'test', 'presetData' => json_encode(['data'])]);
         $updated = $this->resource->update($preset->getId(), ['name' => 'updated']);
-        $this->assertSame('updated', $updated->getName());
-        $this->assertCount(1, $this->connection->fetchAll("SELECT * FROM s_emotion_presets WHERE name = 'updated'"));
+        static::assertSame('updated', $updated->getName());
+        static::assertCount(1, $this->connection->fetchAll("SELECT * FROM s_emotion_presets WHERE name = 'updated'"));
     }
 
     /**
@@ -377,7 +377,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
     {
         $preset = $this->resource->create(['name' => 'test', 'presetData' => 'data']);
         $this->resource->delete($preset->getId());
-        $this->assertEmpty($this->resource->getList());
+        static::assertEmpty($this->resource->getList());
     }
 
     /**
@@ -403,7 +403,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
     public function testDeleteWithNoneExistingId()
     {
         $this->resource->delete(1000);
-        $this->assertEmpty($this->resource->getList());
+        static::assertEmpty($this->resource->getList());
     }
 
     /**

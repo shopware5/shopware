@@ -24,12 +24,13 @@
 
 namespace Shopware\Models\Customer;
 
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\LazyFetchModelEntity;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Security\AttributeCleanerTrait;
+use Shopware\Models\Attribute\Customer as CustomerAttribute;
+use Shopware\Models\Shop\Shop;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -86,7 +87,7 @@ class Customer extends LazyFetchModelEntity
      * The group property is the owning side of the association between customer and customer group.
      * The association is joined over the group id field and the groupkey field of the customer.
      *
-     * @var \Shopware\Models\Customer\Group
+     * @var Group
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Customer\Group", inversedBy="customers", cascade={"persist"})
      * @ORM\JoinColumn(name="customergroup", referencedColumnName="groupkey")
@@ -107,7 +108,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Shop\Shop
+     * @var Shop
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="subshopID", referencedColumnName="id")
@@ -117,7 +118,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\Customer
+     * @var CustomerAttribute
      *
      * @Assert\Valid()
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Customer", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
@@ -129,7 +130,7 @@ class Customer extends LazyFetchModelEntity
      * The price group property represents the owning side for the association between customer and customer price group.
      * The association is joined over the pricegroup id field and the pricegroupID field of the customer.
      *
-     * @var \Shopware\Models\Customer\PriceGroup
+     * @var PriceGroup
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\PriceGroup", inversedBy="customers")
      * @ORM\JoinColumn(name="pricegroupID", referencedColumnName="id")
@@ -264,7 +265,7 @@ class Customer extends LazyFetchModelEntity
      *
      * @var string
      */
-    private $rawPassword = null;
+    private $rawPassword;
 
     /**
      * Contains the md5 encoded password
@@ -387,7 +388,7 @@ class Customer extends LazyFetchModelEntity
      *
      * Used for the language subshop association
      *
-     * @var \Shopware\Models\Shop\Shop
+     * @var Shop
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="language", referencedColumnName="id")
@@ -426,7 +427,7 @@ class Customer extends LazyFetchModelEntity
      *
      * @ORM\Column(name="lockedUntil", type="datetime", nullable=true)
      */
-    private $lockedUntil = null;
+    private $lockedUntil;
 
     /**
      * @var string
@@ -993,7 +994,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Customer
+     * @return CustomerAttribute
      */
     public function getAttribute()
     {
@@ -1001,13 +1002,13 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\Customer|array|null $attribute
+     * @param CustomerAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Customer
+     * @return Customer
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Customer::class, 'attribute', 'customer');
+        return $this->setOneToOne($attribute, CustomerAttribute::class, 'attribute', 'customer');
     }
 
     /**
@@ -1018,7 +1019,7 @@ class Customer extends LazyFetchModelEntity
      *
      * of the association between customers and shop
      *
-     * @return \Shopware\Models\Shop\Shop
+     * @return Shop
      */
     public function getShop()
     {
@@ -1030,9 +1031,9 @@ class Customer extends LazyFetchModelEntity
      * The shop models contains all data about the shop, on which the customer has registered.
      * The shop association is only used on the customer side.
      *
-     * @param \Shopware\Models\Shop\Shop|array|null $shop
+     * @param Shop|array|null $shop
      *
-     * @return \Shopware\Models\Customer\Customer
+     * @return Customer
      */
     public function setShop($shop)
     {
@@ -1062,7 +1063,7 @@ class Customer extends LazyFetchModelEntity
      *
      * @param ArrayCollection<\Shopware\Models\Order\Order>|null $orders
      *
-     * @return \Shopware\Models\Customer\Customer
+     * @return Customer
      */
     public function setOrders($orders)
     {
@@ -1080,11 +1081,11 @@ class Customer extends LazyFetchModelEntity
      *
      * of the association between customers and group
      *
-     * @return \Shopware\Models\Customer\Group|null
+     * @return Group|null
      */
     public function getGroup()
     {
-        /** @var \Shopware\Models\Customer\Group|null $return */
+        /** @var Group|null $return */
         $return = $this->fetchLazy($this->group, ['key' => $this->groupKey]);
 
         return $return;
@@ -1096,13 +1097,13 @@ class Customer extends LazyFetchModelEntity
      * the Customer.group property (OWNING SIDE) and the Group.customers (INVERSE SIDE) property.
      * The group data is joined over the s_core_customergroup.id field.
      *
-     * @param \Shopware\Models\Customer\Group|array|null $group
+     * @param Group|array|null $group
      *
-     * @return \Shopware\Models\Customer\Customer
+     * @return Customer
      */
     public function setGroup($group)
     {
-        return $this->setManyToOne($group, \Shopware\Models\Customer\Group::class, 'group');
+        return $this->setManyToOne($group, Group::class, 'group');
     }
 
     /**
@@ -1122,7 +1123,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Customer\PriceGroup
+     * @return PriceGroup
      */
     public function getPriceGroup()
     {
@@ -1130,23 +1131,23 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Customer\PriceGroup $priceGroup
+     * @param PriceGroup $priceGroup
      */
     public function setPriceGroup($priceGroup)
     {
         $this->priceGroup = $priceGroup;
     }
 
-    public function setLanguageSubShop(\Shopware\Models\Shop\Shop $languageSubShop)
+    public function setLanguageSubShop(Shop $languageSubShop)
     {
         $this->languageSubShop = $languageSubShop;
 
-        $subShop = ($languageSubShop->getMain()) ? $languageSubShop->getMain() : $languageSubShop;
+        $subShop = $languageSubShop->getMain() ?: $languageSubShop;
         $this->setShop($subShop);
     }
 
     /**
-     * @return \Shopware\Models\Shop\Shop
+     * @return Shop
      */
     public function getLanguageSubShop()
     {

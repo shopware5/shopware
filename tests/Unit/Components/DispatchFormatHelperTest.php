@@ -51,7 +51,7 @@ class DispatchFormatHelperTest extends TestCase
         $nameFormatter = $this->getDispatchFormatHelper();
 
         foreach ($testResults as $testValue => $expectedResult) {
-            $this->assertSame($expectedResult, $nameFormatter->formatNameForRequest($testValue));
+            static::assertSame($expectedResult, $nameFormatter->formatNameForRequest($testValue));
         }
     }
 
@@ -62,8 +62,8 @@ class DispatchFormatHelperTest extends TestCase
         $testString = 'foo.bar';
         $testStringForController = $nameFormatter->formatNameForRequest($testString, true);
         $testStringForModule = $nameFormatter->formatNameForRequest($testString);
-        $this->assertSame('foo.bar', $testStringForController);
-        $this->assertSame('foobar', $testStringForModule);
+        static::assertSame('foo.bar', $testStringForController);
+        static::assertSame('foobar', $testStringForModule);
     }
 
     public function testFormatNameForRequestCompatibleWithEmptyStrings()
@@ -73,8 +73,8 @@ class DispatchFormatHelperTest extends TestCase
         $testString = '';
         $testStringForController = $nameFormatter->formatNameForRequest($testString, true);
         $testStringForModule = $nameFormatter->formatNameForRequest($testString);
-        $this->assertSame('', $testStringForController);
-        $this->assertSame('', $testStringForModule);
+        static::assertSame('', $testStringForController);
+        static::assertSame('', $testStringForModule);
     }
 
     public function testFormatNameForDispatchReplacesSpecialCharactersIntoUpperCamelcase()
@@ -90,14 +90,14 @@ class DispatchFormatHelperTest extends TestCase
         $nameFormatter = $this->getDispatchFormatHelper();
 
         foreach ($testResults as $testValue => $expectedResult) {
-            $this->assertSame($expectedResult, $nameFormatter->formatNameForDispatch($testValue));
+            static::assertSame($expectedResult, $nameFormatter->formatNameForDispatch($testValue));
         }
     }
 
     public function testFormatNameForDispatchKeepsUnderscore()
     {
         $testResult = $this->getDispatchFormatHelper()->formatNameForDispatch('foo_bar');
-        $this->assertSame('Foo_Bar', $testResult);
+        static::assertSame('Foo_Bar', $testResult);
     }
 
     private function getDispatchFormatHelper()

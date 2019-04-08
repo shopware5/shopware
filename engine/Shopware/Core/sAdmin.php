@@ -680,6 +680,7 @@ class sAdmin
 
         Shopware()->Session()->unsetAll();
         $this->regenerateSessionId();
+        $this->contextService->initializeContext();
 
         $this->eventManager->notify('Shopware_Modules_Admin_Logout_Successful');
     }
@@ -1201,6 +1202,7 @@ class sAdmin
     public function sGetDownloads($destinationPage = 1, $perPage = 10)
     {
         $userId = $this->session->offsetGet('sUserId');
+        /** @var array $getOrders */
         $getOrders = $this->db->fetchAll(
             "SELECT
                 id, ordernumber, invoice_amount, invoice_amount_net,
@@ -1227,6 +1229,7 @@ class sAdmin
                     ->sFormatPrice($orderValue['invoice_shipping']);
             }
 
+            /** @var array $getOrderDetails */
             $getOrderDetails = $this->db->fetchAll(
                 'SELECT * FROM s_order_details WHERE orderID = ?',
                 [$orderValue['id']]
@@ -1327,6 +1330,7 @@ class sAdmin
             ORDER BY ordertime DESC
             LIMIT $limitStart, $limitEnd
         ";
+        /** @var array $getOrders */
         $getOrders = $this->db->fetchAll(
             $sql,
             [
@@ -3322,7 +3326,6 @@ class sAdmin
     /**
      * Overwrite sUserData['billingaddress'] with chosen address
      *
-     *
      * @return array
      */
     private function overwriteBillingAddress(array $userData)
@@ -3355,7 +3358,6 @@ class sAdmin
     /**
      * Overwrite sUserData['shippingaddress'] with chosen address
      *
-     *
      * @return array
      */
     private function overwriteShippingAddress(array $userData)
@@ -3386,7 +3388,6 @@ class sAdmin
 
     /**
      * Converts an address to the array key structure of a legacy billing or shipping address
-     *
      *
      * @return array
      */
@@ -3658,6 +3659,7 @@ SQL;
      */
     private function processOpenOrderDetails($orderValue, $getOrders, $orderKey)
     {
+        /** @var array $getOrderDetails */
         $getOrderDetails = $this->db->fetchAll(
             'SELECT * FROM s_order_details WHERE orderID = ? ORDER BY id ASC',
             [$orderValue['id']]

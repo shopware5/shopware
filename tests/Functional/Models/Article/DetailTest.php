@@ -67,7 +67,7 @@ class Shopware_Tests_Models_Order_DetailTest extends Enlight_Components_Test_Tes
 
         $detail = $this->repo->find(6);
 
-        self::assertEquals('SW100066', $detail->getNumber());
+        static::assertEquals('SW100066', $detail->getNumber());
     }
 
     public function testInvalidOrderNumber(): void
@@ -78,8 +78,8 @@ class Shopware_Tests_Models_Order_DetailTest extends Enlight_Components_Test_Tes
 
         $violations = $this->em->validate($detail);
 
-        self::assertEquals(1, $violations->count());
-        self::assertEquals('Order number "€SW100066@1" does not match pattern "/^[a-zA-Z0-9-_.]+$/"', $violations->get(0)->getMessage());
+        static::assertEquals(1, $violations->count());
+        static::assertEquals('Order number "€SW100066@1" does not match pattern "/^[a-zA-Z0-9-_.]+$/"', $violations->get(0)->getMessage());
     }
 
     public function testEmptyOrderNumberIsInvalid(): void
@@ -90,8 +90,8 @@ class Shopware_Tests_Models_Order_DetailTest extends Enlight_Components_Test_Tes
 
         $violations = $this->em->validate($detail);
 
-        self::assertEquals(1, $violations->count());
-        self::assertEquals('This value should not be blank.', $violations->get(0)->getMessage());
+        static::assertEquals(1, $violations->count());
+        static::assertEquals('This value should not be blank.', $violations->get(0)->getMessage());
     }
 
     /**
@@ -146,6 +146,6 @@ class Shopware_Tests_Models_Order_DetailTest extends Enlight_Components_Test_Tes
 
         $violations = $this->em->validate($detail);
 
-        self::assertEquals(0, $violations->count(), sprintf('Number "%s" does not match regex "%s"', $number, $regex));
+        static::assertEquals(0, $violations->count(), sprintf('Number "%s" does not match regex "%s"', $number, $regex));
     }
 }

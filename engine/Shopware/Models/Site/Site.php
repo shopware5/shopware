@@ -26,6 +26,7 @@ namespace Shopware\Models\Site;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\Site as SiteAttribute;
 
 /**
  * Shopware Model Site
@@ -40,7 +41,7 @@ class Site extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\Site
+     * @var SiteAttribute
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Site", mappedBy="site", orphanRemoval=true, cascade={"persist"})
      */
@@ -478,7 +479,7 @@ class Site extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Site\Site
+     * @return Site
      */
     public function getParent()
     {
@@ -486,7 +487,7 @@ class Site extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Site\Site $parent
+     * @param Site $parent
      *
      * @return Site
      */
@@ -538,7 +539,7 @@ class Site extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Site
+     * @return SiteAttribute
      */
     public function getAttribute()
     {
@@ -546,13 +547,13 @@ class Site extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\Site|array|null $attribute
+     * @param SiteAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Site
+     * @return Site
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Site', 'attribute', 'site');
+        return $this->setOneToOne($attribute, SiteAttribute::class, 'attribute', 'site');
     }
 
     /**

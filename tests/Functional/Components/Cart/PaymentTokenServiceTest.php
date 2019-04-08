@@ -49,15 +49,15 @@ class PaymentTokenServiceTest extends \Enlight_Components_Test_Controller_TestCa
     {
         $hash = $this->service->generate();
 
-        $this->assertInstanceOf(PaymentTokenResult::class, $this->service->restore($hash));
-        $this->assertNull($this->service->restore($hash));
+        static::assertInstanceOf(PaymentTokenResult::class, $this->service->restore($hash));
+        static::assertNull($this->service->restore($hash));
     }
 
     public function testTokenNotExist(): void
     {
         $hash = 'i dont exist';
 
-        $this->assertNull($this->service->restore($hash));
+        static::assertNull($this->service->restore($hash));
     }
 
     public function testPaymentTokenValidRequest(): void
@@ -67,8 +67,8 @@ class PaymentTokenServiceTest extends \Enlight_Components_Test_Controller_TestCa
         $this->dispatch('/?swPaymentToken=' . $hash);
         $cookies = $this->Response()->getCookies();
 
-        $this->assertArrayHasKey(session_name() . '-', $cookies);
-        $this->assertNotNull($this->Response()->getHeader('Location'));
+        static::assertArrayHasKey(session_name() . '-', $cookies);
+        static::assertNotNull($this->Response()->getHeader('Location'));
     }
 
     public function testPaymentTokenInvalidRequest(): void
@@ -76,7 +76,7 @@ class PaymentTokenServiceTest extends \Enlight_Components_Test_Controller_TestCa
         $this->dispatch('/?swPaymentToken=fooooooo');
         $cookies = $this->Response()->getCookies();
 
-        $this->assertArrayNotHasKey(session_name() . '-', $cookies);
-        $this->assertNotNull($this->Response()->getHeader('Location'));
+        static::assertArrayNotHasKey(session_name() . '-', $cookies);
+        static::assertNotNull($this->Response()->getHeader('Location'));
     }
 }

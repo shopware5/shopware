@@ -189,7 +189,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     /**
      * Generic helper method which prepares a given array for saving
      *
-     *
      * @return array
      */
     public function prepareForSavingDefault(array $data)
@@ -201,7 +200,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     /**
      * Prepare seo array for saving
-     *
      *
      * @return array
      */
@@ -225,7 +223,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     /**
      * Prepare the http config array so that it can easily be saved
-     *
      *
      * @return array
      */
@@ -603,7 +600,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     /**
      * Generic helper method to build an array of config which needs to be loaded
-     *
      *
      * @return array
      */

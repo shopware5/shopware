@@ -26,6 +26,7 @@ namespace Shopware\Models\ProductFeed;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\ProductFeed as ProductFeedAttribute;
 
 /**
  * Shopware product feed model represents a single feed.
@@ -49,7 +50,7 @@ class ProductFeed extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\ProductFeed
+     * @var ProductFeedAttribute
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ProductFeed", mappedBy="productFeed", orphanRemoval=true, cascade={"persist"})
      */
@@ -957,7 +958,7 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\ProductFeed
+     * @return ProductFeedAttribute
      */
     public function getAttribute()
     {
@@ -965,13 +966,13 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\ProductFeed|array|null $attribute
+     * @param ProductFeedAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\ProductFeed
+     * @return ProductFeed
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ProductFeed', 'attribute', 'productFeed');
+        return $this->setOneToOne($attribute, ProductFeedAttribute::class, 'attribute', 'productFeed');
     }
 
     /**

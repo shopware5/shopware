@@ -51,7 +51,9 @@
             <argument>%shopware.cdn.strategy%</argument>
         </service>
 
-        <service id="shopware_media.extension_mapping" class="Shopware\Bundle\MediaBundle\MediaExtensionMappingService"/>
+        <service id="shopware_media.extension_mapping" class="Shopware\Bundle\MediaBundle\MediaExtensionMappingService">
+            <argument>%shopware.media.whitelist%</argument>
+        </service>
 
         <!-- Optimizer -->
         <service id="shopware_media.cdn_optimizer_service" class="Shopware\Bundle\MediaBundle\CdnOptimizerService">

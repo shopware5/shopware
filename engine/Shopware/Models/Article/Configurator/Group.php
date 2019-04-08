@@ -27,6 +27,7 @@ namespace Shopware\Models\Article\Configurator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\ConfiguratorGroup as ConfiguratorGroupAttribute;
 
 /**
  * @ORM\Entity()
@@ -35,14 +36,14 @@ use Shopware\Components\Model\ModelEntity;
 class Group extends ModelEntity
 {
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Set>
+     * @var ArrayCollection<\Shopware\Models\Article\Configurator\Set>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Set", mappedBy="groups")
      */
     protected $sets;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Option>
+     * @var ArrayCollection<\Shopware\Models\Article\Configurator\Option>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\Option", mappedBy="group", orphanRemoval=true, cascade={"persist"})
      */
@@ -51,7 +52,7 @@ class Group extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\ConfiguratorGroup
+     * @var ConfiguratorGroupAttribute
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ConfiguratorGroup", mappedBy="configuratorGroup", orphanRemoval=true, cascade={"persist"})
      */
@@ -78,7 +79,7 @@ class Group extends ModelEntity
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $description = null;
+    private $description;
 
     /**
      * @var int
@@ -150,7 +151,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Set>
+     * @return ArrayCollection<\Shopware\Models\Article\Configurator\Set>
      */
     public function getSets()
     {
@@ -158,7 +159,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Set> $sets
+     * @param ArrayCollection<\Shopware\Models\Article\Configurator\Set> $sets
      */
     public function setSets($sets)
     {
@@ -174,7 +175,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Configurator\Option> $options
+     * @param ArrayCollection<\Shopware\Models\Article\Configurator\Option> $options
      */
     public function setOptions($options)
     {
@@ -182,7 +183,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\ConfiguratorGroup
+     * @return ConfiguratorGroupAttribute
      */
     public function getAttribute()
     {
@@ -190,12 +191,12 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\ConfiguratorGroup|array|null $attribute
+     * @param ConfiguratorGroupAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\ConfiguratorGroup
+     * @return Group
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\ConfiguratorGroup::class, 'attribute', 'configuratorGroup');
+        return $this->setOneToOne($attribute, ConfiguratorGroupAttribute::class, 'attribute', 'configuratorGroup');
     }
 }

@@ -990,7 +990,6 @@ class DqlHelper
      *  * a category
      *  * images?
      *
-     *
      * @param array[] $articles
      *
      * @return array[]
