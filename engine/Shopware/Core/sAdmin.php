@@ -681,6 +681,10 @@ class sAdmin
         Shopware()->Session()->unsetAll();
         $this->regenerateSessionId();
 
+        if (!$this->config->get('clearBasketAfterLogout')) {
+            $this->moduleManager->Basket()->sRefreshBasket();
+        }
+
         $this->eventManager->notify('Shopware_Modules_Admin_Logout_Successful');
     }
 

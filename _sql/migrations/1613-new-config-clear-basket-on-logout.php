@@ -27,7 +27,7 @@ class Migrations_Migration1613 extends Shopware\Components\Migrations\AbstractMi
     public function up($modus)
     {
         $sql = <<<SQL
-        SET @parent = (SELECT id FROM s_core_config_forms WHERE name = 'Checkout' LIMIT 1);
+        SET @parent = (SELECT id FROM s_core_config_forms WHERE name = 'Frontend79' LIMIT 1);
         
         INSERT IGNORE INTO s_core_config_elements (form_id, name, value, label, description, type, required, position, scope, options) VALUES (@parent, 'clearBasketAfterLogout', 'b:1;', 'Warenkorb beim Logout leeren', 'Falls aktiv, wird der Warenkorb nach einem Logout geleert.<br>Falls inaktiv, wird der Warenkorb beim Logout nicht geleert und bleibt für einen späteren Login erhalten.', 'boolean', 0, 0, 0, null);
         
