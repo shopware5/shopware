@@ -65,7 +65,11 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
             ],
             'tax' => $taxRate,
             'supplierId' => 2,
-            'categories' => [10],
+            'categories' => [
+                [
+                    'id' => 10,
+                ],
+            ],
         ]);
 
         return $orderNumber;

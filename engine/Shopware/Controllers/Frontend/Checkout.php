@@ -115,6 +115,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $this->session->sBasketQuantity = $this->basket->sCountBasket();
         $amount = $this->basket->sGetAmount();
         $this->session->sBasketAmount = empty($amount) ? 0 : array_shift($amount);
+
+        if ($this->session->offsetExists('removedProductWithInvalidCategory') && !$this->Response()->isRedirect()) {
+            $this->View()->assign('removedProductWithInvalidCategory', true);
+            $this->session->offsetUnset('removedProductWithInvalidCategory');
+        }
     }
 
     /**
@@ -558,7 +563,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         if ($this->Request()->getParam('sAddAccessories')) {
             $this->forward('addAccessories');
         } else {
-            $this->redirect(['action' => $this->Request()->getParam('sTargetAction', 'cart')]);
+            if ($this->Request()->isXmlHttpRequest()) {
+                $this->forward($this->Request()->getParam('sTargetAction', 'cart'));
+            } else {
+                $this->redirect(['action' => $this->Request()->getParam('sTargetAction', 'cart')]);
+            }
         }
     }
 

@@ -77,10 +77,16 @@ class Session
 
         /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $container->get('Shop');
-
-        $sessionOptions['name'] = 'session-' . $shop->getId();
-
         $mainShop = $shop->getMain() ?: $shop;
+
+        $name = 'session-' . $shop->getId();
+
+        if ($container->get('config')->get('shareSessionBetweenLanguageShops')) {
+            $name = 'session-' . $mainShop->getId();
+        }
+
+        $sessionOptions['name'] = $name;
+
         if ($mainShop->getSecure()) {
             $sessionOptions['cookie_secure'] = true;
         }
