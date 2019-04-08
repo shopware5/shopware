@@ -167,6 +167,97 @@ class Shopware_Tests_Controllers_Frontend_RobotsTxtTest extends Enlight_Componen
         $this->sitemapTest($this->Response()->getBody());
     }
 
+    public function testLanguageShopWithoutVirtualUrl(): void
+    {
+        Shopware()->Db()->query('
+        SET FOREIGN_KEY_CHECKS = 0;
+        DELETE FROM s_core_shops;
+        INSERT INTO s_core_shops (id, name, position, host, base_path, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
+        VALUES (1, "Deutsch", 0, ?, "/foo", "/foo/de", "", 0, 23, 23, 3, 1, 1, 1, 0, 1, 1);
+        INSERT INTO s_core_shops (id, main_id, name, title, position, base_url, hosts, secure, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
+        VALUES (2, 1, "English", "English", 0, "", "", 0, 39, 2, 1, 1, 0, 0, 1);
+        SET FOREIGN_KEY_CHECKS = 1;
+        ', [
+            Shopware()->Shop()->getHost(),
+        ]);
+
+        $this->dispatch('/foo/robots.txt');
+
+        $robotsTxt = $this->formatRobotsTxt();
+
+        $this->assertArrayHasKey('Disallow: /foo/compare', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/checkout', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/register', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/account', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/address', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/note', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/widgets', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/listing', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/ticket', $robotsTxt);
+
+        $this->sitemapTest($this->Response()->getBody());
+    }
+
+    public function testMainShopWithPath(): void
+    {
+        Shopware()->Db()->query('
+        SET FOREIGN_KEY_CHECKS = 0;
+        DELETE FROM s_core_shops;
+        INSERT INTO s_core_shops (id, name, position, host, base_path, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
+        VALUES (1, "Deutsch", 0, ?, "/foo", "", "", 0, 23, 23, 3, 1, 1, 1, 0, 1, 1);
+        SET FOREIGN_KEY_CHECKS = 1;
+        ', [
+            Shopware()->Shop()->getHost(),
+        ]);
+
+        $this->dispatch('/foo/robots.txt');
+
+        $robotsTxt = $this->formatRobotsTxt();
+
+        $this->assertArrayHasKey('Disallow: /foo/compare', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/checkout', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/register', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/account', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/address', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/note', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/widgets', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/listing', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/ticket', $robotsTxt);
+
+        $this->sitemapTest($this->Response()->getBody());
+    }
+
+    public function testLanguageShopWithVirtualUrlsAndRequestNormalRobotsTxt(): void
+    {
+        Shopware()->Db()->query('
+        SET FOREIGN_KEY_CHECKS = 0;
+        DELETE FROM s_core_shops;
+        INSERT INTO s_core_shops (id, name, position, host, base_path, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
+        VALUES (1, "Deutsch", 0, ?, "/foo", "/foo/de", "", 0, 23, 23, 3, 1, 1, 1, 0, 1, 1);
+        INSERT INTO s_core_shops (id, main_id, name, title, position, base_url, hosts, secure, category_id, locale_id, currency_id, customer_group_id, customer_scope, `default`, active)
+        VALUES (2, 1, "English", "English", 0, "", "/foo/en", 0, 39, 2, 1, 1, 0, 0, 1);
+        SET FOREIGN_KEY_CHECKS = 1;
+        ', [
+            Shopware()->Shop()->getHost(),
+        ]);
+
+        $this->dispatch('/robots.txt');
+
+        $robotsTxt = $this->formatRobotsTxt();
+
+        $this->assertArrayHasKey('Disallow: /foo/de/compare', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/de/checkout', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/de/register', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/de/account', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/de/address', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/de/note', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/de/widgets', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/de/listing', $robotsTxt);
+        $this->assertArrayHasKey('Disallow: /foo/de/ticket', $robotsTxt);
+
+        $this->sitemapTest($this->Response()->getBody());
+    }
+
     public function sitemapTest($response): void
     {
         $re = '/^\s*Sitemap:\s*(?<url>http.*)$/m';
