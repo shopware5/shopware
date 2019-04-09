@@ -31,6 +31,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added string type cast in return statement of method `sOrder::sGetOrdernumber`
 * Added configuration to decide whether user basket should be cleared after logout or not
 * Added option symbols for `{include file="frontend/_includes/rating.tpl"}` to hide rating symbols
+* Added specific logger service for each plugin. See [Plugin specific logger](###Plugin specific logger) for more details  
 
 ### Changes
 
@@ -319,4 +320,20 @@ Example:
     {$robotsTxt->removeDisallow('/ticket')}
     {$smarty.block.parent}
 {/block}
+```
+
+### Plugin specific logger
+
+There is a new logger service for each plugin.
+The service id is a combination of the plugin's service prefix (lower camel case plugin name) and `.logger`.
+For example: when a plugin's name is `SwagPlugin` the specific logger can be accessed via `swag_plugin.logger`.
+This logger will now write into the logs directory using a rotating file pattern like the other logger services.
+The settings for the logger can be configured using the DI parameters `swag_plugin.logger.level`(defaults to shopware default logging level) and `swag_plugin.logger.max_files` (defaults to 14 like other shopware loggers).
+In this case the logger would write into a file like `var/log/swag_plugin_production-2019-03-06.log`.
+
+Support for easier log message writing is enabled:
+```php
+<?php
+
+$logger->fatal("An error is occured while requesting {module}/{controller}/{action}", $controller->Request()->getParams());
 ```
