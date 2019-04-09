@@ -855,7 +855,9 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                     $data[$mapping['fieldName']] = $associationModel;
 
                     //remove the foreign key data.
-                    unset($data[$field]);
+                    if ($field !== $mapping['fieldName']) {
+                        unset($data[$field]);
+                    }
                 }
             } elseif ($mapping['type'] === ClassMetadataInfo::MANY_TO_MANY) {
                 /**
