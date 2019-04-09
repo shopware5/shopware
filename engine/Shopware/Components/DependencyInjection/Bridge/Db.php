@@ -49,7 +49,8 @@ class Db
             $conn = new \PDO(
                 'mysql:' . $connectionString,
                 $dbConfig['username'],
-                $password
+                $password,
+                $dbConfig['pdoOptions']
             );
 
             $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
