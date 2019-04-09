@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundle\CriteriaRequestHandler;
 
 use Doctrine\DBAL\Connection;
-use Enlight_Controller_Request_RequestHttp as Request;
+use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\SearchBundle\Condition\CombinedCondition;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -73,6 +73,7 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     ) {
         if ($this->isSearchPage($request)) {
             $ids = $this->config->get('searchFacets', '');
+            /** @var int[] $ids */
             $ids = array_filter(explode('|', $ids));
             $customFacets = $this->facetService->getList($ids, $context);
         } elseif ($this->isCategoryListing($request)) {

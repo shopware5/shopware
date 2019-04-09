@@ -3,7 +3,7 @@ includes:
     #- ../vendor/phpstan/phpstan-phpunit/extension.neon
     #- ../vendor/phpstan/phpstan-doctrine/extension.neon
 parameters:
-    level: 4
+    level: 5
 
     autoload_directories:
         - %currentWorkingDirectory%/var/cache
@@ -71,6 +71,26 @@ parameters:
         # Models that are detached by cloning and nulling the id
         - '#\([a-z]+\) does not accept null\.#'
         - '#supplied for foreach, only iterables are supported#'
-        #
+        # Wrong typehint in `\Doctrine\ORM\QueryBuilder::setParameter`
+        - '#Parameter \#3 \$type of method Doctrine\\ORM\\QueryBuilder::setParameter\(\) expects string\|null, int given#'
+        # Wrong typehint in `\Doctrine\DBAL\Query\QueryBuilder::setParameter`
+        - '#Parameter \#3 \$type of method Doctrine\\DBAL\\Query\\QueryBuilder::setParameter\(\) expects string\|null, int given#'
+        # Interface / Implementation Switch
+        - '#expects Shopware\\Bundle\\SearchBundle\\Facet\\[a-zA-Z]+Facet, Shopware\\Bundle\\SearchBundle\\[a-zA-Z]+Interface given#'
+        - '#expects Shopware\\Bundle\\SearchBundle\\Condition\\[a-zA-Z]+Condition, Shopware\\Bundle\\SearchBundle\\[a-zA-Z]+Interface given#'
+        # Product/Shopcontext mixup
+        - '#expects Shopware\\Bundle\\StoreFrontBundle\\Struct\\ProductContextInterface, Shopware\\Bundle\\StoreFrontBundle\\Struct\\ShopContextInterface given#'
+        # Interfaces not being recognized
+        - '#expects Shopware\\Components\\Form\\Container\\[a-zA-Z]+, Shopware\\Components\\Form\\Interfaces\\Container given#'
+        - '#expects Doctrine\\ORM\\PersistentCollection, Doctrine\\Common\\Collections\\ArrayCollection&iterable<Shopware\\Models\\Shop\\TemplateConfig\\[a-zA-Z]+> given#'
+        - '#Parameter \#1 \$sort of method Doctrine\\ORM\\QueryBuilder::addOrderBy\(\) expects Doctrine\\ORM\\Query\\Expr\\OrderBy|string, array given#'
+        - '#Parameter \#1 \$reader of class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver constructor expects Doctrine\\Common\\Annotations\\AnnotationReader, Doctrine\\Common\\Annotations\\Reader given#'
+        # Container Issues
+        - '#Parameter \#2 \$service of method Symfony\\Component\\DependencyInjection\\ContainerInterface::set\(\) expects object, array<Shopware\\Bundle\\SearchBundleDBAL\\[a-zA-Z]+Interface> given#'
+        # Wrong type in ElasticsearchDSL, can be removed in 5.6
+        - '#Parameter \#2 \$value of class ONGR\\ElasticsearchDSL\\Query\\TermQuery constructor expects string#'
+        - '#Parameter \#2 \$value of class ONGR\\ElasticsearchDSL\\Query\\TermLevel\\TermQuery constructor expects string#'
+        - '#Parameter \#2 \$value of method ONGR\\ElasticsearchDSL\\Query\\Compound\\BoolQuery::addParameter\(\) expects array\|stdClass\|string#'
+        - '#Parameter \#2 \$value of method ONGR\\ElasticsearchDSL\\Aggregation\\AbstractAggregation::addParameter\(\) expects array\|stdClass\|string#'
 
     reportUnmatchedIgnoredErrors: false

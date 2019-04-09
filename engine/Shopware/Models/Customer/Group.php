@@ -26,6 +26,7 @@ namespace Shopware\Models\Customer;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\CustomerGroup;
 
 /**
  * Shopware customer group model represents a single customer group.
@@ -59,7 +60,7 @@ class Group extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\CustomerGroup
+     * @var CustomerGroup
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerGroup", mappedBy="customerGroup", orphanRemoval=true, cascade={"persist"})
      */
@@ -409,7 +410,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\CustomerGroup
+     * @return CustomerGroup
      */
     public function getAttribute()
     {
@@ -423,7 +424,7 @@ class Group extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\CustomerGroup::class, 'attribute', 'customerGroup');
+        return $this->setOneToOne($attribute, CustomerGroup::class, 'attribute', 'customerGroup');
     }
 
     /**

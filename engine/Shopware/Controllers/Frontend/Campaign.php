@@ -32,7 +32,7 @@ class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        $emotionId = $this->Request()->getParam('emotionId');
+        $emotionId = (int) $this->Request()->getParam('emotionId');
         $shopContext = $this->get('shopware_storefront.context_service')->getShopContext();
 
         $result = $this->get('shopware.emotion.emotion_landingpage_loader')->load(

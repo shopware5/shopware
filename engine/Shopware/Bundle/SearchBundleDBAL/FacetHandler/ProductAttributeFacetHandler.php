@@ -100,6 +100,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
 
         $type = $attribute ? $attribute->getColumnType() : null;
 
+        /** @var ProductAttributeFacet $facet */
         switch ($facet->getMode()) {
             case ProductAttributeFacet::MODE_VALUE_LIST_RESULT:
             case ProductAttributeFacet::MODE_RADIO_LIST_RESULT:

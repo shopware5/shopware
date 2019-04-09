@@ -154,9 +154,9 @@ class XmlPluginInfoReader
     }
 
     /**
-     * @param array $requiredPlugins
+     * @param \DOMNode $requiredPlugins
      *
-     * @return array<array>
+     * @return array<int, array<string, array<string>|string>>
      */
     private function parseRequiredPlugins($requiredPlugins)
     {

@@ -54,7 +54,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * Will be set in the class constructor. Passed to the class init and controller init function.
      * Required for the forward, dispatch and redirect functions.
      *
-     * @var Enlight_Controller_Request_Request
+     * @var Enlight_Controller_Request_RequestHttp
      */
     protected $request;
 
@@ -72,7 +72,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     protected $container;
 
     /**
-     * @var string contains the name of the controller
+     * @var string Contains the name of the controller
      */
     protected $controller_name;
 
@@ -382,7 +382,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     /**
      * Returns request instance
      *
-     * @return Enlight_Controller_Request_Request
+     * @return Enlight_Controller_Request_RequestHttp
      */
     public function Request()
     {

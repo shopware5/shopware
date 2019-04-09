@@ -52,6 +52,7 @@ class SimilarProductsService implements SimilarProductsServiceInterface
      * @var ListProductServiceInterface
      */
     private $listProductService;
+
     /**
      * @var Shopware_Components_Config
      */
@@ -96,15 +97,16 @@ class SimilarProductsService implements SimilarProductsServiceInterface
      */
     public function getList($products, ProductContextInterface $context)
     {
-        /**
-         * returns an array which is associated with the different product numbers.
+        /*
+         * Returns an array which is associated with the different product numbers.
          * Each array contains a list of product numbers which are related to the reference product.
          */
         $numbers = $this->gateway->getList($products, $context);
 
-        //loads the list product data for the selected numbers.
-        //all numbers are joined in the extractNumbers function to prevent that a product will be
-        //loaded multiple times
+        /*
+         * Loads the list product data for the selected numbers.
+         * All numbers are joined in the `extractNumbers` function to prevent that a product will be loaded multiple times
+         */
         $listProducts = $this->listProductService->getList(
             $this->extractNumbers($numbers),
             $context
@@ -174,7 +176,7 @@ class SimilarProductsService implements SimilarProductsServiceInterface
     }
 
     /**
-     * @param string[] $numbers
+     * @param array<string, string[]> $numbers
      *
      * @return array
      */

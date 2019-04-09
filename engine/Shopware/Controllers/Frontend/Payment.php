@@ -141,7 +141,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
             WHERE transactionID=? AND temporaryID=?
             AND status!=-1
         ';
-        $orderId = Shopware()->Db()->fetchOne($sql, [
+        $orderId = (int) Shopware()->Db()->fetchOne($sql, [
                 $transactionId,
                 $paymentUniqueId,
             ]);

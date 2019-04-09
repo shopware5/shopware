@@ -527,7 +527,7 @@ class sArticles
      *
      * @throws Enlight_Exception
      *
-     * @return float $price formatted price
+     * @return string $price formatted price
      */
     public function sCalculatingPrice($price, $tax, $taxId = 0, $article = [])
     {
@@ -789,7 +789,7 @@ class sArticles
      * Get discounts and discount table for a certain product
      *
      * @param string $customergroup id of customergroup key
-     * @param string $groupID       customer group id
+     * @param int    $groupID       customer group id
      * @param float  $listprice     default price
      * @param int    $quantity
      * @param bool   $doMatrix      Return array with all block prices
@@ -818,20 +818,20 @@ class sArticles
             return false;
         }
 
-        $sql = "
+        $sql = '
         SELECT s_core_pricegroups_discounts.discount AS discount,discountstart
         FROM
             s_core_pricegroups_discounts,
             s_core_customergroups AS scc
         WHERE
-            groupID=$groupID AND customergroupID = scc.id
+            groupID=? AND customergroupID = scc.id
         AND
             scc.groupkey = ?
         GROUP BY discount
         ORDER BY discountstart ASC
-        ";
+        ';
 
-        $getGroups = $this->db->fetchAll($sql, [$customergroup]);
+        $getGroups = $this->db->fetchAll($sql, [(int) $groupID, $customergroup]);
         $priceMatrix = [];
 
         if (count($getGroups)) {
@@ -1144,8 +1144,6 @@ class sArticles
     /**
      * calculates the reference price with the base price data
      *
-     * @since 4.1.4
-     *
      * @param string $price         | the final price which will be shown
      * @param float  $purchaseUnit
      * @param float  $referenceUnit
@@ -1171,16 +1169,16 @@ class sArticles
      *
      * @param float $price
      *
-     * @return float price
+     * @return string
      */
     public function sFormatPrice($price)
     {
-        $price = str_replace(',', '.', $price);
+        $price = str_replace(',', '.', (string) $price);
         $price = $this->sRound($price);
-        $price = str_replace('.', ',', $price); // Replaces points with commas
-        $commaPos = strpos($price, ',');
+        $price = str_replace('.', ',', (string) $price); // Replaces points with commas
+        $commaPos = strpos((string) $price, ',');
         if ($commaPos) {
-            $part = substr($price, $commaPos + 1, strlen($price) - $commaPos);
+            $part = substr((string) $price, $commaPos + 1, strlen((string) $price) - $commaPos);
             switch (strlen($part)) {
                 case 1:
                     $price .= '0';
@@ -1202,7 +1200,7 @@ class sArticles
     /**
      * Round product price
      *
-     * @param float $moneyfloat
+     * @param float|string $moneyfloat
      *
      * @return float price
      */
@@ -1217,9 +1215,7 @@ class sArticles
         }
         $money_str[1] = substr($money_str[1], 0, 3); // convert to rounded (to the nearest thousandth) string
 
-        $money_str = $money_str[0] . '.' . $money_str[1];
-
-        return round($money_str, 2);
+        return round((float) ($money_str[0] . '.' . $money_str[1]), 2);
     }
 
     /**
@@ -1379,7 +1375,7 @@ class sArticles
      */
     public function getArticleListingCover($articleId, $forceMainImage = false)
     {
-        return $this->sGetArticlePictures($articleId, true, 0, null, null, null, $forceMainImage);
+        return $this->sGetArticlePictures($articleId, true, 0, null, false, false, $forceMainImage);
     }
 
     /**
@@ -1406,14 +1402,14 @@ class sArticles
     ) {
         static $articleAlbum;
         if ($articleAlbum === null) {
-            //now we search for the default product album of the media manager, this album contains the thumbnail configuration.
+            // Now we search for the default product album of the media manager, this album contains the thumbnail configuration.
             /** @var Album $model */
             $articleAlbum = $this->getMediaRepository()
                 ->getAlbumWithSettingsQuery(-1)
                 ->getOneOrNullResult();
         }
 
-        //first we convert the passed product id into an integer to prevent sql injections
+        // First we convert the passed product id into an integer to prevent sql injections
         $productId = (int) $sArticleID;
 
         Shopware()->Events()->notify(
@@ -1421,7 +1417,7 @@ class sArticles
             ['subject' => $this, 'id' => $productId]
         );
 
-        //first we get the product cover
+        // First we get the product cover
         if ($forceMainImage) {
             $cover = $this->getArticleMainCover($productId, $articleAlbum);
         } else {
@@ -1438,45 +1434,45 @@ class sArticles
             return $cover;
         }
 
-        //now we select all product images of the passed product id.
+        // Now we select all product images of the passed product id.
         $productImages = $this->getProductRepository()
             ->getArticleImagesQuery($productId)
             ->getArrayResult();
 
-        //if an order number passed to the function, we have to select the configured variant images
+        // If an order number passed to the function, we have to select the configured variant images
         $variantImages = [];
         if (!empty($ordernumber)) {
             $variantImages = $this->getProductRepository()
                 ->getVariantImagesByArticleNumberQuery($ordernumber)
                 ->getArrayResult();
         }
-        //we have to collect the already added image ids, otherwise the images
-        //would be displayed multiple times.
+        // We have to collect the already added image ids, otherwise the images
+        // would be displayed multiple times.
         $addedImages = [$cover['id']];
         $images = [];
 
-        //first we add all variant images, this images has a higher priority as the normal product images
+        // First we add all variant images, this images has a higher priority as the normal product images
         foreach ($variantImages as $variantImage) {
-            //if the image wasn't added already, we can add the image
+            // If the image wasn't added already, we can add the image
             if (!in_array($variantImage['id'], $addedImages)) {
-                //first we have to convert the image data, to resolve the image path and get the thumbnail configuration
+                // First we have to convert the image data, to resolve the image path and get the thumbnail configuration
                 $image = $this->getDataOfProductImage($variantImage, $articleAlbum);
 
-                //after the data was converted we add the image to the result array and add the id to the addedImages array
+                // After the data was converted we add the image to the result array and add the id to the addedImages array
                 $images[] = $image;
                 $addedImages[] = $variantImage['id'];
             }
         }
 
-        //after the variant images added, we can add the normal images, this images has a lower priority as the variant images
+        // After the variant images added, we can add the normal images, this images has a lower priority as the variant images
         foreach ($productImages as $productImage) {
-            //add only normal images without any configuration
-            //if the image wasn't added already, we can add the image
+            // Add only normal images without any configuration
+            // If the image wasn't added already, we can add the image
             if (!in_array($productImage['id'], $addedImages)) {
-                //first we have to convert the image data, to resolve the image path and get the thumbnail configuration
+                // First we have to convert the image data, to resolve the image path and get the thumbnail configuration
                 $image = $this->getDataOfProductImage($productImage, $articleAlbum);
 
-                //after the data was converted we add the image to the result array and add the id to the addedImages array
+                // After the data was converted we add the image to the result array and add the id to the addedImages array
                 $images[] = $image;
                 $addedImages[] = $productImage['id'];
             }
@@ -2068,11 +2064,17 @@ class sArticles
     /**
      * @param int $categoryId
      *
-     * @return string|null
+     * @return int|null
      */
     private function getStreamIdOfCategory($categoryId)
     {
-        return $this->db->fetchOne('SELECT stream_id FROM s_categories WHERE id = ?', [$categoryId]);
+        $streamId = $this->db->fetchOne('SELECT `stream_id` FROM `s_categories` WHERE id = ?', [$categoryId]);
+
+        if ($streamId === null) {
+            return null;
+        }
+
+        return (int) $streamId;
     }
 
     /**
@@ -2087,8 +2089,7 @@ class sArticles
         $categoryId,
         ShopContextInterface $context
     ) {
-        $products = $searchResult->getProducts();
-        $products = array_values($products);
+        $products = array_values($searchResult->getProducts());
 
         if (empty($products)) {
             return [];
@@ -2169,7 +2170,7 @@ class sArticles
             ]
         );
 
-        $queryPrams = http_build_query($params, null, '&');
+        $queryPrams = http_build_query($params, '', '&');
 
         return $this->config->get('sBASEFILE') . '?' . $queryPrams;
     }
@@ -2309,8 +2310,8 @@ class sArticles
      * Returns a minified product which can be used for listings,
      * sliders or emotions.
      *
-     * @param int    $category
-     * @param string $number
+     * @param int|null $category
+     * @param string   $number
      *
      * @return array|bool
      */
@@ -2568,12 +2569,11 @@ class sArticles
     private function getDescriptionKeywords($longDescription)
     {
         //sDescriptionKeywords
-        $string = strip_tags(html_entity_decode($longDescription, null, 'UTF-8'));
+        $string = strip_tags(html_entity_decode($longDescription, ENT_COMPAT | ENT_HTML401, 'UTF-8'));
         $string = str_replace(',', '', $string);
         $words = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
         $badWords = explode(',', $this->config->get('badwords'));
-        $words = array_diff($words, $badWords);
-        $words = array_count_values($words);
+        $words = array_count_values(array_diff($words, $badWords));
         foreach (array_keys($words) as $word) {
             if (strlen($word) < 2) {
                 unset($words[$word]);

@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Newsletter;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Newsletter\ContainerType\Article;
@@ -66,7 +67,7 @@ class Container extends ModelEntity
      *
      * Inverse side of the association between the container and its link children
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Newsletter\ContainerType\Link>
+     * @var ArrayCollection<\Shopware\Models\Newsletter\ContainerType\Link>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\ContainerType\Link", mappedBy="container", cascade={"persist", "remove"})
      */
@@ -77,7 +78,7 @@ class Container extends ModelEntity
      *
      * Inverse side of the association between the container and its article children
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Newsletter\ContainerType\Article>
+     * @var ArrayCollection<\Shopware\Models\Newsletter\ContainerType\Article>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\ContainerType\Article", mappedBy="container", cascade={"persist",  "remove"})
      */
@@ -152,8 +153,8 @@ class Container extends ModelEntity
 
     public function __construct()
     {
-        $this->links = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->articles = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->links = new ArrayCollection();
+        $this->articles = new ArrayCollection();
     }
 
     /**
@@ -259,7 +260,7 @@ class Container extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Newsletter\ContainerType\Article $articles
+     * @param \Shopware\Models\Newsletter\ContainerType\Article[] $articles
      *
      * @return \Shopware\Models\Newsletter\ContainerType\Article
      */
@@ -273,7 +274,7 @@ class Container extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Newsletter\ContainerType\Article>
+     * @return ArrayCollection<\Shopware\Models\Newsletter\ContainerType\Article>
      */
     public function getArticles()
     {
@@ -317,7 +318,7 @@ class Container extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Newsletter\ContainerType\Link>
+     * @return ArrayCollection<\Shopware\Models\Newsletter\ContainerType\Link>
      */
     public function getLinks()
     {

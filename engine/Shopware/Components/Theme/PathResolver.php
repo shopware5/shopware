@@ -299,7 +299,7 @@ class PathResolver
      * already exists, if this isn't the case, the smarty
      * function starts the theme compiler operations.
      *
-     * @param int $timestamp
+     * @param string $timestamp
      *
      * @return string
      */
@@ -315,7 +315,7 @@ class PathResolver
      * already exists, if this isn't the case, the smarty
      * function starts the theme compiler operations.
      *
-     * @param int $timestamp
+     * @param string $timestamp
      *
      * @return string
      */
@@ -327,7 +327,7 @@ class PathResolver
     /**
      * Helper function to build a unique file name.
      *
-     * @param int    $timestamp
+     * @param string $timestamp
      * @param string $suffix
      *
      * @return string

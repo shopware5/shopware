@@ -30,6 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\CustomFacetServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomSorting;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
@@ -206,9 +207,9 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @param int    $categoryId
-     * @param bool   $withStreams
-     * @param string $streamId
+     * @param int  $categoryId
+     * @param bool $withStreams
+     * @param int  $streamId
      *
      * @return array
      */
@@ -221,6 +222,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
                 'showListingDevices' => [],
             ];
         }
+        /** @var ShopContext $context */
         $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
 
         $service = $this->container->get('shopware_emotion.store_front_emotion_device_configuration');
@@ -245,8 +247,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @param string $categoryId
-     * @param string $streamId
+     * @param int $categoryId
+     * @param int $streamId
      *
      * @return bool
      */
@@ -319,8 +321,9 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $result = $this->get('shopware_search.product_number_search')->search($criteria, $context);
 
             if (count($result->getProducts()) === 1) {
+                $products = $result->getProducts();
                 /** @var \Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct $first */
-                $first = array_shift($result->getProducts());
+                $first = array_shift($products);
                 $location = ['controller' => 'detail', 'sArticle' => $first->getId()];
             }
         }

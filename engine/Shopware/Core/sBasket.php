@@ -1381,7 +1381,7 @@ SQL;
         if (!empty($result['content'])) {
             foreach ($result['content'] as $key => $value) {
                 if (!empty($value['amountWithTax'])) {
-                    $t = round(str_replace(',', '.', $value['amountWithTax']), 2);
+                    $t = round((float) str_replace(',', '.', $value['amountWithTax']), 2);
                 } else {
                     $t = str_replace(',', '.', $value['price']);
                     $t = (float) round($t * $value['quantity'], 2);

@@ -61,6 +61,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
             $sorting = $this->Request()->getParam('sort');
 
             if ($sorting !== null) {
+                /** @var \Shopware\Bundle\SearchBundle\SortingInterface[] $sorting */
                 $sorting = $streamRepo->unserialize($sorting);
 
                 foreach ($sorting as $sort) {
@@ -77,9 +78,10 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
                     throw new \InvalidArgumentException('Could not decode JSON: ' . json_last_error_msg());
                 }
 
+                /** @var \Shopware\Bundle\SearchBundle\ConditionInterface[] $conditions */
                 $conditions = $streamRepo->unserialize($conditions);
 
-                foreach ($conditions as $condition) { /* @var \Shopware\Bundle\SearchBundle\ConditionInterface $condition */
+                foreach ($conditions as $condition) {
                     $criteria->addCondition($condition);
                 }
             }

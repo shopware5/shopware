@@ -27,6 +27,7 @@ namespace Shopware\Models\Article;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Attribute\Article as ProductAttribute;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -971,7 +972,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection|null
+     * @return ArrayCollection<\Shopware\Models\Article\Configurator\Option>|null
      */
     public function getConfiguratorOptions()
     {
@@ -979,7 +980,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection $configuratorOptions
+     * @param ArrayCollection<\Shopware\Models\Article\Configurator\Option> $configuratorOptions
      */
     public function setConfiguratorOptions($configuratorOptions)
     {
@@ -987,7 +988,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param Esd $esd
+     * @param Esd|null $esd
      */
     public function setEsd($esd)
     {
@@ -1003,7 +1004,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<Image>
      */
     public function getImages()
     {
@@ -1011,7 +1012,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param Image[]|null $images
+     * @param ArrayCollection<Image>|Image[]|null $images
      *
      * @return Detail
      */

@@ -54,7 +54,9 @@ class TranslationService
     {
         $translations = [];
 
+        /** @var Locale $germanLocale */
         $germanLocale = $this->modelManager->getRepository(Locale::class)->find(1);
+        /** @var Locale $englishLocale */
         $englishLocale = $this->modelManager->getRepository(Locale::class)->find(2);
 
         $this->snippetManager->setLocale($germanLocale);

@@ -134,9 +134,9 @@ class Shopware_Components_Check_Path implements IteratorAggregate, Countable
     /**
      * Compares the requirement with the version
      *
-     * @param string $name
-     * @param string $version
-     * @param string $required
+     * @param string           $name
+     * @param string|bool|null $version
+     * @param string|bool|null $required
      *
      * @return string
      */

@@ -40,7 +40,7 @@ class Element extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Config\ElementTranslation>
+     * @var ArrayCollection<ElementTranslation>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Config\ElementTranslation", mappedBy="element", cascade={"all"})
      */
@@ -127,7 +127,7 @@ class Element extends ModelEntity
     private $form;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<Value>
+     * @var ArrayCollection<Value>
      *
      * @ORM\OneToMany(targetEntity="Value", mappedBy="element", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="element_id")
@@ -369,7 +369,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<Value> $values
+     * @param ArrayCollection<Value> $values
      *
      * @return Element
      */
@@ -381,7 +381,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<Value>
+     * @return ArrayCollection<Value>
      */
     public function getValues()
     {
@@ -389,7 +389,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Config\ElementTranslation>
+     * @return ArrayCollection<ElementTranslation>
      */
     public function getTranslations()
     {
@@ -397,7 +397,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Config\ElementTranslation> $translations
+     * @param ArrayCollection<ElementTranslation> $translations
      */
     public function setTranslations($translations)
     {
@@ -405,9 +405,9 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Config\ElementTranslation $translation
+     * @param ElementTranslation $translation
      *
-     * @return \Shopware\Models\Config\Element
+     * @return Element
      */
     public function addTranslation($translation)
     {

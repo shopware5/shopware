@@ -99,7 +99,7 @@ class StoreDownloadCommand extends StoreCommand
             $token = $this->checkAuthentication();
 
             if ($token) {
-                $context = new LicenceRequest(null, $version, $domain, $token);
+                $context = new LicenceRequest('', $version, $domain, $token);
 
                 try {
                     /** @var PluginStoreService $pluginStoreService */
@@ -395,7 +395,7 @@ class StoreDownloadCommand extends StoreCommand
         $this->io->comment('Searching for plugin: ' . $technicalName);
 
         $service = $this->container->get('shopware_plugininstaller.plugin_service_view');
-        $context = new PluginsByTechnicalNameRequest(null, $version, [$technicalName]);
+        $context = new PluginsByTechnicalNameRequest('', $version, [$technicalName]);
 
         return $service->getPlugin($context);
     }

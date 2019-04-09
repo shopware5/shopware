@@ -64,7 +64,7 @@ class EventComponentHandler implements ComponentHandlerInterface
         $elementData['component']['cls'] = $element->getComponent()->getCssClass();
 
         $data = array_merge($element->getConfig()->getAll(), $element->getData()->getAll());
-        $data['objectId'] = md5($element->getId());
+        $data['objectId'] = md5((string) $element->getId());
 
         $data = $this->eventManager->filter('Shopware_Controllers_Widgets_Emotion_AddElement', $data, ['element' => $elementData]);
 

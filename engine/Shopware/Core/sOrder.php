@@ -2041,7 +2041,7 @@ EOT;
     private function getOrderPaymentStatus($orderId)
     {
         return $this->db->fetchOne(
-            'SELECT cleared FROM s_order WHERE id= :orderId;',
+            'SELECT `cleared` FROM `s_order` WHERE `id`=:orderId;',
             [':orderId' => $orderId]
         );
     }

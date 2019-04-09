@@ -112,11 +112,7 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
             return null;
         }
 
-        /** @var AccessTokenStruct $token */
-        $token = $this->get('BackendSession')->offsetGet('store_token');
-        $token = unserialize($token);
-
-        return $token;
+        return unserialize($this->get('BackendSession')->offsetGet('store_token'));
     }
 
     private function handleException(Exception $e)

@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\CriteriaRequestHandler;
 
-use Enlight_Controller_Request_RequestHttp as Request;
+use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Bundle\SearchBundle\Condition\HeightCondition;
@@ -91,12 +91,14 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     private function addCategoryCondition(Request $request, Criteria $criteria)
     {
         if ($request->has('sCategory')) {
+            /** @var int[] $ids */
             $ids = explode('|', $request->getParam('sCategory'));
 
             $criteria->addBaseCondition(
                 new CategoryCondition($ids)
             );
         } elseif ($request->has('categoryFilter')) {
+            /** @var int[] $ids */
             $ids = explode('|', $request->getParam('categoryFilter'));
 
             $criteria->addCondition(
@@ -111,13 +113,14 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
             return;
         }
 
-        $manufacturers = explode(
+        /** @var int[] $manufacturerIds */
+        $manufacturerIds = explode(
             '|',
             $request->getParam('sSupplier')
         );
 
-        if (!empty($manufacturers)) {
-            $criteria->addCondition(new ManufacturerCondition($manufacturers));
+        if (!empty($manufacturerIds)) {
+            $criteria->addCondition(new ManufacturerCondition($manufacturerIds));
         }
     }
 

@@ -63,7 +63,7 @@ class Repository extends EntityRepository
 
             $configModel->setIndustry(0);
             $configModel->setType('b2c');
-            $configModel->setActive(0);
+            $configModel->setActive(false);
 
             // Config for this shop was sent from on-boarding
             if (array_key_exists($shopId, $newConfigs)) {
@@ -73,7 +73,7 @@ class Repository extends EntityRepository
                 if ($config['industry'] && $config['type']) {
                     $configModel->setIndustry($config['industry']);
                     $configModel->setType($config['type']);
-                    $configModel->setActive(1);
+                    $configModel->setActive(true);
                 }
             }
 
@@ -175,7 +175,7 @@ class Repository extends EntityRepository
 
         foreach ($shopIds as $shopId) {
             if (!in_array($shopId, $benchmarkShopIds)) {
-                $config = new BenchmarkConfig(Uuid::uuid4());
+                $config = new BenchmarkConfig(Uuid::uuid4()->toString());
                 $config->setShopId($shopId);
                 $this->getEntityManager()->persist($config);
             }

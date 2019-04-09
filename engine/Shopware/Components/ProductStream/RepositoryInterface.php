@@ -36,7 +36,7 @@ interface RepositoryInterface
     /**
      * @param array $serializedConditions
      *
-     * @return object[]
+     * @return Criteria[]
      */
     public function unserialize($serializedConditions);
 }

@@ -206,12 +206,13 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         // Sets the correct limit
         $limit = 25;
-        if (strtolower($this->format) == 'csv') {
+        if (strtolower($this->format) === 'csv') {
             $limit = count($data);
         }
 
+        $values = array_values($data);
         $splice = array_splice(
-            array_values($data),
+            $values,
             $this->Request()->getParam('start', 0),
             $this->Request()->getParam('limit', $limit)
         );
@@ -279,10 +280,11 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             }
         }
 
+        $values = array_values($data);
         $splice = array_splice(
-            array_values($data),
-            $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', 25)
+            $values,
+            (int) $this->Request()->getParam('start', 0),
+            (int) $this->Request()->getParam('limit', 25)
         );
 
         $this->send($splice, count($data));

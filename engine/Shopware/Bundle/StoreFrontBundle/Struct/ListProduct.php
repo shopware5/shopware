@@ -314,7 +314,7 @@ class ListProduct extends BaseProduct
      * States defines which processed the product has already passed through,
      * like the price calculation, translation or other states.
      *
-     * @var array
+     * @var string[]
      */
     protected $states = [];
 
@@ -378,7 +378,7 @@ class ListProduct extends BaseProduct
     /**
      * Adds a new product state.
      *
-     * @param array $state
+     * @param string $state
      */
     public function addState($state)
     {
@@ -499,7 +499,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\Price[] $prices
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\Price[]|null $prices
      */
     public function setPrices($prices)
     {
@@ -547,7 +547,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\Price $cheapestPrice
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\Price|null $cheapestPrice
      */
     public function setCheapestPrice($cheapestPrice)
     {
@@ -717,7 +717,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \DateTimeInterface $releaseDate
+     * @param \DateTimeInterface|null $releaseDate
      */
     public function setReleaseDate($releaseDate)
     {
@@ -841,7 +841,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \DateTimeInterface $createdAt
+     * @param \DateTimeInterface|null $createdAt
      */
     public function setCreatedAt($createdAt)
     {
@@ -857,7 +857,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \DateTimeInterface $updatedAt
+     * @param \DateTimeInterface|null $updatedAt
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -889,7 +889,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule[] $priceRules
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule[]|null $priceRules
      */
     public function setPriceRules($priceRules)
     {
@@ -905,7 +905,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule $cheapestPriceRule
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule|null $cheapestPriceRule
      */
     public function setCheapestPriceRule($cheapestPriceRule)
     {
@@ -1105,7 +1105,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param Price $cheapestUnitPrice
+     * @param Price|null $cheapestUnitPrice
      */
     public function setCheapestUnitPrice($cheapestUnitPrice)
     {

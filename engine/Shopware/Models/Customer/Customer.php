@@ -1437,7 +1437,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $doubleOptinConfirmDate
+     * @param \DateTimeInterface|null $doubleOptinConfirmDate
      */
     public function setDoubleOptinConfirmDate($doubleOptinConfirmDate)
     {

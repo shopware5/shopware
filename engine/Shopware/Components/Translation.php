@@ -43,8 +43,8 @@ class Shopware_Components_Translation
     /**
      * Filter translation data for saving.
      *
-     * @param string      $type
-     * @param string|null $key
+     * @param string   $type
+     * @param int|null $key
      *
      * @return string
      */
@@ -82,8 +82,8 @@ class Shopware_Components_Translation
     /**
      * Un filter translation data for output.
      *
-     * @param string      $type
-     * @param string|null $key
+     * @param string   $type
+     * @param int|null $key
      *
      * @return array
      */
@@ -116,10 +116,10 @@ class Shopware_Components_Translation
     /**
      * Reads a single translation data from the storage.
      *
-     * @param int    $language
-     * @param string $type
-     * @param int    $key
-     * @param bool   $merge
+     * @param string|int $language
+     * @param string     $type
+     * @param int        $key
+     * @param bool       $merge
      *
      * @return array
      */
@@ -149,11 +149,11 @@ class Shopware_Components_Translation
      * Reads a single translation data from the storage.
      * Also loads fallback (has less priority)
      *
-     * @param int    $language
-     * @param string $fallback
-     * @param string $type
-     * @param int    $key
-     * @param bool   $merge
+     * @param string|int $language
+     * @param int        $fallback
+     * @param string     $type
+     * @param int        $key
+     * @param bool       $merge
      *
      * @return array
      */
@@ -172,10 +172,10 @@ class Shopware_Components_Translation
     /**
      * Reads multiple translation data from storage.
      *
-     * @param int       $language
-     * @param string    $type
-     * @param int|int[] $key
-     * @param bool      $merge
+     * @param string|int|null $language
+     * @param string          $type
+     * @param int|int[]       $key
+     * @param bool            $merge
      *
      * @return array
      */
@@ -231,11 +231,11 @@ class Shopware_Components_Translation
      * Reads multiple translations including their fallbacks
      * Merges the two (fallback has less priority) and returns the results
      *
-     * @param int       $language
-     * @param int       $fallback
-     * @param string    $type
-     * @param int|int[] $key
-     * @param bool      $merge
+     * @param string|int $language
+     * @param int        $fallback
+     * @param string     $type
+     * @param int|int[]  $key
+     * @param bool       $merge
      *
      * @return array|mixed
      */
@@ -266,9 +266,9 @@ class Shopware_Components_Translation
     /**
      * Deletes translations from storage.
      *
-     * @param int    $language
-     * @param string $type
-     * @param int    $key
+     * @param string|int|null $language
+     * @param string          $type
+     * @param int             $key
      */
     public function delete($language, $type, $key = 1)
     {
@@ -297,9 +297,10 @@ class Shopware_Components_Translation
     /**
      * Writes multiple translation data to storage.
      *
-     * @param bool $merge
+     * @param array $data
+     * @param bool  $merge
      *
-     * @throws \Zend_Db_Adapter_Exception
+     * @throws Zend_Db_Adapter_Exception
      */
     public function writeBatch($data, $merge = false)
     {
@@ -323,10 +324,10 @@ class Shopware_Components_Translation
     /**
      * Saves translation data to the storage.
      *
-     * @param int    $language
-     * @param string $type
-     * @param int    $key
-     * @param bool   $merge
+     * @param string|int $language
+     * @param string     $type
+     * @param int        $key
+     * @param bool       $merge
      *
      * @throws \Zend_Db_Adapter_Exception
      */

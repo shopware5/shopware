@@ -91,10 +91,10 @@ abstract class ModelEntity
      * <li>So the parameter expect <b>"customer"</b></li>
      * </ul>
      *
-     * @param ModelEntity|array|null $data      Model data, example: an instance of \Shopware\Models\Order\Order
-     * @param string                 $model     Full namespace of the association model, example: '\Shopware\Models\Order\Order'
-     * @param string                 $property  Name of the association property, example: 'orders'
-     * @param string|null            $reference Name of the reference property, example: 'customer'
+     * @param ModelEntity|ArrayCollection|array|null $data      Model data, example: an instance of \Shopware\Models\Order\Order
+     * @param string                                 $model     Full namespace of the association model, example: '\Shopware\Models\Order\Order'
+     * @param string                                 $property  Name of the association property, example: 'orders'
+     * @param string|null                            $reference Name of the reference property, example: 'customer'
      *
      * @return $this
      */
@@ -105,7 +105,7 @@ abstract class ModelEntity
 
         $this->$getterFunction();
 
-        //if an expected instance passed, set this in the internal property
+        // If an expected instance passed, set this in the internal property
         if ($data instanceof $model) {
             $this->$property = $data;
             if ($setterFunction) {
@@ -115,7 +115,7 @@ abstract class ModelEntity
             return $this;
         }
 
-        //check if expected model already exists but null passed, than clear the association.
+        // Check if expected model already exists but null passed, than clear the association.
         if ($data === null && $this->$getterFunction()) {
             if ($setterFunction) {
                 $this->$property->$setterFunction(null);
@@ -125,17 +125,17 @@ abstract class ModelEntity
             return $this;
         }
 
-        //if the parameter is no array, return
+        // If the parameter is no array, return
         if (!is_array($data) || empty($data)) {
             return $this;
         }
 
-        //check if the model association isn't created
+        // Check if the model association isn't created
         if ($this->$getterFunction() === null) {
             $this->$property = new $model();
         }
 
-        //load array data into the object and set association reference.
+        // Load array data into the object and set association reference.
         $this->$property->fromArray($data);
         if ($setterFunction) {
             $this->$property->$setterFunction($this);
@@ -173,10 +173,10 @@ abstract class ModelEntity
      * <li>So the parameter expect <b>"customer"</b></li>
      * </ul>
      *
-     * @param array|null $data      Model data, example: an array of \Shopware\Models\Order\Order
-     * @param string     $model     Full namespace of the association model, example: '\Shopware\Models\Order\Order'
-     * @param string     $property  Name of the association property, example: 'orders'
-     * @param string     $reference Name of the reference property, example: 'customer'
+     * @param array[]|ModelEntity[]|null $data      Model data, example: an array of \Shopware\Models\Order\Order
+     * @param string                     $model     Full namespace of the association model, example: '\Shopware\Models\Order\Order'
+     * @param string                     $property  Name of the association property, example: 'orders'
+     * @param string                     $reference Name of the reference property, example: 'customer'
      *
      * @return $this
      */
@@ -188,47 +188,48 @@ abstract class ModelEntity
             $setterFunction = 'set' . ucfirst($reference);
         }
 
-        //to remove the whole one to many association, u can pass null as parameter.
+        // To remove the whole one to many association, u can pass null as parameter.
         if ($data === null) {
             $this->$getterFunction()->clear();
 
             return $this;
         }
-        //if no array passed or if false passed, return
+        // If no array passed or if false passed, return
         if (!is_array($data)) {
             return $this;
         }
 
-        //create a new collection to collect all updated and created models.
+        // Create a new collection to collect all updated and created models.
         $updated = new ArrayCollection();
 
-        //iterate all passed items
+        // Iterate all passed items
+        /** @var array[]|ModelEntity[]|ArrayCollection<ModelEntity> $data */
         foreach ($data as $item) {
-            //to get the right collection item use the internal helper function
+            // To get the right collection item use the internal helper function
             if (is_array($item) && isset($item['id']) && $item['id'] !== null) {
                 $attribute = $this->getArrayCollectionElementById($this->$getterFunction(), $item['id']);
                 if (!$attribute instanceof $model) {
                     $attribute = new $model();
                 }
-                //if the item is an array without an id, create a new model.
+                // If the item is an array without an id, create a new model.
             } elseif (is_array($item)) {
                 $attribute = new $model();
-            //if the item is no array, it could be an instance of the expected object.
+            // If the item is no array, it could be an instance of the expected object.
             } else {
                 $attribute = $item;
             }
 
-            //check if the object correctly initialed. If this is not the case continue.
+            // Check if the object correctly initialed. If this is not the case continue.
             if (!$attribute instanceof $model) {
                 continue;
             }
 
-            //if the current item is an array, use the from array function to set the data.
+            // If the current item is an array, use the from array function to set the data.
             if (is_array($item)) {
                 $attribute->fromArray($item);
             }
 
-            //after the attribute filled with data, set the association reference and add the model to the internal collection.
+            // After the attribute filled with data, set the association reference and add the model to the internal collection.
             if ($setterFunction !== null) {
                 $attribute->$setterFunction($this);
             }
@@ -237,14 +238,14 @@ abstract class ModelEntity
                 $this->$getterFunction()->add($attribute);
             }
 
-            //add the model to the updated collection to have an flag which models updated.
+            // Add the model to the updated collection to have an flag which models updated.
             $updated->add($attribute);
         }
 
-        //after all passed data items added to the internal collection, we have to iterate the items
-        //to remove all old items which are not updated.
+        // After all passed data items added to the internal collection, we have to iterate the items
+        // to remove all old items which are not updated.
         foreach ($this->$getterFunction() as $attr) {
-            //the updated collection contains all updated and created models.
+            // The updated collection contains all updated and created models.
             if (!$updated->contains($attr)) {
                 $this->$getterFunction()->removeElement($attr);
             }
@@ -286,26 +287,26 @@ abstract class ModelEntity
         $getterFunction = 'get' . ucfirst($property);
         $this->$getterFunction();
 
-        //if an expected instance passed, set this in the internal property
+        // If an expected instance passed, set this in the internal property
         if ($data instanceof $model) {
             $this->$property = $data;
 
             return $this;
         }
 
-        //check if expected model already exists but null passed, than clear the association.
+        // Check if expected model already exists but null passed, than clear the association.
         if ($data === null && $this->$getterFunction()) {
             $this->$property = null;
 
             return $this;
         }
 
-        //if the parameter is no array, return
+        // If the parameter is no array, return
         if (!is_array($data) || empty($data)) {
             return $this;
         }
 
-        //check if the model association isn't created
+        // Check if the model association isn't created
         $instance = $this->$getterFunction();
         if ($instance === null) {
             $instance = new $model();
@@ -313,8 +314,8 @@ abstract class ModelEntity
 
         $id = $instance->getId();
 
-        //if an id passed, the already assigned model has an id and the ids are not equal, we can't update the model instance.
-        //otherwise we would update the instance with the id 1 with the data for the instance with id 2.
+        // If an id passed, the already assigned model has an id and the ids are not equal, we can't update the model instance.
+        // Otherwise we would update the instance with the id 1 with the data for the instance with id 2.
         if (!empty($data['id']) && !empty($id) && $data['id'] !== $id) {
             throw new \InvalidArgumentException('Passed id and id of the already assigned model are not equal');
         }
@@ -326,8 +327,8 @@ abstract class ModelEntity
     }
 
     /**
-     * @param ArrayCollection|array $collection
-     * @param int                   $id
+     * @param ModelEntity[]|ArrayCollection<ModelEntity> $collection
+     * @param int                                        $id
      *
      * @return ModelEntity|null
      */

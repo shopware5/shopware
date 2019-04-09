@@ -290,7 +290,7 @@ class Form extends ModelEntity
      * @param string         $name
      * @param array          $options
      *
-     * @return \Shopware\Models\Config\Form
+     * @return Form
      */
     public function addElement($element, $name = null, $options = null)
     {
@@ -370,7 +370,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<\Shopware\Models\Config\FormTranslation>
+     * @return ArrayCollection<FormTranslation>
      */
     public function getTranslations()
     {
@@ -378,9 +378,9 @@ class Form extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection<\Shopware\Models\Config\FormTranslation> $translation
+     * @param FormTranslation $translation
      *
-     * @return \Shopware\Models\Config\Form
+     * @return Form
      */
     public function addTranslation($translation)
     {

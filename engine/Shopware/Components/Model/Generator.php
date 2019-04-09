@@ -265,7 +265,7 @@ class %className% extends ModelEntity
      * Generates the models for the extension tables like s_user_extension.
      * This tables can be modified from plugins so we have to generate the models after each plugin installation.
      *
-     * @param array $tableNames
+     * @param string[] $tableNames
      *
      * @throws \Exception
      *

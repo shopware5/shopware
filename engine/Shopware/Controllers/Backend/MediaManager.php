@@ -102,7 +102,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $albumId = $this->Request()->getParam('albumId');
 
         $builder->select(['album'])
-            ->from(\Shopware\Models\Media\Album::class, 'album')
+            ->from(Album::class, 'album')
             ->where('album.parentId IS NULL')
             ->orderBy('album.position', 'ASC');
 
@@ -301,7 +301,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(['media'])
-            ->from(\Shopware\Models\Media\Media::class, 'media')
+            ->from(Media::class, 'media')
             ->setMaxResults(1);
 
         if (!empty($id)) {
@@ -342,7 +342,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $id = $params['id'];
 
         // Load the media model
-        $media = Shopware()->Models()->find(\Shopware\Models\Media\Media::class, $id);
+        $media = Shopware()->Models()->find(Media::class, $id);
 
         // Check if the media is loaded.
         if ($media === null || empty($media)) {
@@ -422,8 +422,8 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $media = new Media();
 
         $albumId = !empty($params['albumID']) ? $params['albumID'] : -10;
-        /* @var \Shopware\Models\Media\Album $album */
-        $album = Shopware()->Models()->find(\Shopware\Models\Media\Album::class, $albumId);
+        /** @var Album|null $album */
+        $album = Shopware()->Models()->find(Album::class, $albumId);
 
         if (!$album) {
             $this->View()->assign(['success' => false, 'message' => 'Invalid album id passed']);
@@ -492,7 +492,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $data = $this->Request()->getParams();
 
         if (!empty($data['id'])) {
-            $repo = $this->getManager()->getRepository(\Shopware\Models\Media\Media::class);
+            $repo = $this->getManager()->getRepository(Media::class);
             $builder = $repo->getAlbumWithSettingsQueryBuilder($data['id']);
 
             $album = $builder->getQuery()->getOneOrNullResult(
@@ -711,7 +711,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         $data['parent'] = null;
         if (!empty($data['parentId']) && $data['parentId'] !== 'root') {
-            $parent = $this->getManager()->find(\Shopware\Models\Media\Album::class, $data['parentId']);
+            $parent = $this->getManager()->find(Album::class, $data['parentId']);
             if (!$parent) {
                 throw new Exception('No valid parent album passed!');
             }
@@ -837,7 +837,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         }
         $sizes = ['140x140'];
 
-        $album = $this->getManager()->find(\Shopware\Models\Media\Album::class, $media['albumId']);
+        $album = $this->getManager()->find(Album::class, $media['albumId']);
 
         // Check if the album has loaded correctly.
         if ($album && $album->getSettings() && $album->getSettings()->getCreateThumbnails() === 1) {
@@ -895,7 +895,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $builder = Shopware()->Models()->createQueryBuilder();
 
         return $builder->select(['media'])
-            ->from(\Shopware\Models\Media\Media::class, 'media')
+            ->from(Media::class, 'media')
             ->where('media.id = ?1')
             ->setParameter(1, $id);
     }
@@ -927,8 +927,8 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             return false;
         }
 
-        /** @var \Shopware\Models\Media\Album|null $album */
-        $album = Shopware()->Models()->find(\Shopware\Models\Media\Album::class, $albumId);
+        /** @var Album|null $album */
+        $album = Shopware()->Models()->find(Album::class, $albumId);
         $repo = Shopware()->Models()->getRepository(\Shopware\Models\Media\Settings::class);
         $settings = $repo->findOneBy(['albumId' => $albumId]);
 
@@ -955,18 +955,12 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     /**
      * Internal helper function to set the passed params to the media model and save the media.
      * Created to handle the batch processing.
-     *
-     * @throws Exception
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     private function saveMedia(array $params)
     {
-        /* @var Shopware\Models\Media\Media $media */
         if (isset($params['id']) && !empty($params['id']) && $params['id'] > 0) {
-            $media = Shopware()->Models()->find(\Shopware\Models\Media\Media::class, $params['id']);
+            /** @var Media|null $media */
+            $media = Shopware()->Models()->find(Media::class, $params['id']);
         } else {
             $this->View()->assign(['success' => false, 'message' => 'No valid media Id']);
 
@@ -1054,15 +1048,13 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      * @param array|ArrayCollection $data
      * @param array|null            $parent
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     *
      * @return array
      */
     private function toTree($data, &$parent = null)
     {
         $result = [];
         $count = 0;
-        /** @var \Shopware\Models\Media\Album $element */
+        /** @var Album $element */
         foreach ($data as $element) {
             $node = $this->getAlbumNodeProperties($element);
             $result[] = $node;
@@ -1083,7 +1075,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      *
      * @return array
      */
-    private function getAlbumNodeProperties(\Shopware\Models\Media\Album $album)
+    private function getAlbumNodeProperties(Album $album)
     {
         /** @var \Shopware\Models\Media\Repository $repository */
         $repository = Shopware()->Models()->getRepository(Media::class);
@@ -1176,7 +1168,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         $builder
             ->select(['media'])
-            ->from(\Shopware\Models\Media\Media::class, 'media')
+            ->from(Media::class, 'media')
             ->where('media.albumId = :albumId')
             ->setFirstResult($offset)
             ->setMaxResults($limit)

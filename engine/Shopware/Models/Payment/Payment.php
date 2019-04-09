@@ -682,7 +682,7 @@ class Payment extends ModelEntity
     /**
      * Sets the pluginId of a payment
      *
-     * @param int $pluginId
+     * @param int|null $pluginId
      *
      * @return Payment
      */
@@ -696,7 +696,7 @@ class Payment extends ModelEntity
     /**
      * Gets the pluginId of a payment
      *
-     * @return int
+     * @return int|null
      */
     public function getPluginId()
     {
@@ -755,7 +755,7 @@ class Payment extends ModelEntity
      * Sets the source of a payment.
      * NULL = default payment, 1 = self-created
      *
-     * @param int $source
+     * @param int|null $source
      *
      * @return Payment
      */
@@ -770,7 +770,7 @@ class Payment extends ModelEntity
      * Gets the source of a payment
      * NULL = default payment, 1 = self-created
      *
-     * @return int
+     * @return int|null
      */
     public function getSource()
     {

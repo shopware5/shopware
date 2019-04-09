@@ -856,7 +856,7 @@ class Media extends ModelEntity
 
             if (!$mediaService->has($thumbnail)) {
                 try {
-                    $this->createThumbnail($size[0], $size[1]);
+                    $this->createThumbnail((int) $size[0], (int) $size[1]);
                 } catch (\Exception $e) {
                     // Ignore for now
                     // Exception might be thrown when thumbnails can not

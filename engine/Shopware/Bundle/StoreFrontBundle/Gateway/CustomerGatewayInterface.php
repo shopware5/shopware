@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
-use Shopware\Models\Customer\Customer;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 
 interface CustomerGatewayInterface
 {

@@ -168,7 +168,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<\Shopware\Models\Article\Configurator\Group>
+     * @return ArrayCollection<\Shopware\Models\Article\Configurator\Group>|null
      */
     public function getGroups()
     {
@@ -176,7 +176,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection<\Shopware\Models\Article\Configurator\Group>|Group[] $groups
+     * @param Group[] $groups
      *
      * @return \Shopware\Models\Article\Configurator\Set
      */
@@ -220,7 +220,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<\Shopware\Models\Article\Configurator\Option>
+     * @return ArrayCollection<\Shopware\Models\Article\Configurator\Option>|null
      */
     public function getOptions()
     {
@@ -228,7 +228,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection<\Shopware\Models\Article\Configurator\Option>|Option[] $options
+     * @param Option[] $options
      *
      * @return \Shopware\Models\Article\Configurator\Set
      */

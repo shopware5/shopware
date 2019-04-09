@@ -186,7 +186,7 @@ interface Enlight_Controller_Response_Response
      * If $name is a string, sets the named segment in the body array to
      * $content.
      *
-     * @param string $content
+     * @param mixed $content
      * @param null|string $name
      * @return \Enlight_Controller_Response_Response
      */

@@ -25,6 +25,7 @@
 namespace Shopware\Models\Form;
 
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 class Repository extends ModelRepository
 {
@@ -58,6 +59,7 @@ class Repository extends ModelRepository
      */
     public function getListQueryBuilder($filter = null, $orderBy = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['form', 'attribute'])
             ->from($this->getEntityName(), 'form')

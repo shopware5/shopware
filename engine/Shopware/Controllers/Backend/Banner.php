@@ -348,7 +348,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         $datePart = new \DateTime($date);
         $timePart = new \DateTime($time);
         // Fill the timePart with the datePart
-        return $timePart->setDate($datePart->format('Y'), $datePart->format('m'), $datePart->format('d'));
+        return $timePart->setDate((int) $datePart->format('Y'), (int) $datePart->format('m'), (int) $datePart->format('d'));
     }
 
     /**

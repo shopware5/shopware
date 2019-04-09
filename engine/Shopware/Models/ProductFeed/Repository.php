@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\ProductFeed;
 
-use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * Repository for the ProductFeed model (Shopware\Models\ProductFeed\ProductFeed).
@@ -63,6 +63,7 @@ class Repository extends ModelRepository
      */
     public function getListQueryBuilder(array $orderBy = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(
             [
@@ -75,7 +76,7 @@ class Repository extends ModelRepository
                 'productFeed.lastExport as lastExport',
             ]
         );
-        $builder->from('Shopware\Models\ProductFeed\ProductFeed', 'productFeed');
+        $builder->from(\Shopware\Models\ProductFeed\ProductFeed::class, 'productFeed');
         if (!empty($orderBy)) {
             $builder->addOrderBy($orderBy);
         }
@@ -142,7 +143,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['feeds', 'suppliers', 'categories', 'articles'])
-                ->from('Shopware\Models\ProductFeed\ProductFeed', 'feeds')
+                ->from(\Shopware\Models\ProductFeed\ProductFeed::class, 'feeds')
                 ->leftJoin('feeds.categories', 'categories')
                 ->leftJoin('feeds.suppliers', 'suppliers')
                 ->leftJoin('feeds.articles', 'articles')
@@ -179,7 +180,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
-                ->from('Shopware\Models\Attribute\ProductFeed', 'attribute')
+                ->from(\Shopware\Models\Attribute\ProductFeed::class, 'attribute')
                 ->where('attribute.productFeedId = ?1')
                 ->setParameter(1, $productFeedId);
 

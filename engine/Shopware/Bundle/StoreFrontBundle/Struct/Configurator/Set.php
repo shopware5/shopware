@@ -44,7 +44,7 @@ class Set extends Extendable
     protected $name;
 
     /**
-     * @var string
+     * @var int
      */
     protected $type;
 
@@ -86,7 +86,7 @@ class Set extends Extendable
     }
 
     /**
-     * @param string $type
+     * @param int $type
      */
     public function setType($type)
     {
@@ -94,7 +94,7 @@ class Set extends Extendable
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getType()
     {

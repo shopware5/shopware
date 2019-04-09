@@ -26,6 +26,7 @@ namespace Shopware\Models\Category;
 
 use Doctrine\ORM\Query\Expr;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * This class gathers all categories with there id, description, position, parent category id and the number
@@ -49,9 +50,9 @@ use Shopware\Components\Model\ModelRepository;
 class Repository extends ModelRepository
 {
     /**
-     * @param int         $id        identifier of category
-     * @param string      $field     string or array of selectable fields
-     * @param string|null $separator if separator is given string will be returned
+     * @param int          $id        identifier of category
+     * @param string|array $field     string or array of selectable fields
+     * @param string|null  $separator if separator is given string will be returned
      *
      * @return array|string
      */
@@ -91,8 +92,6 @@ class Repository extends ModelRepository
      * @param int|null $offset
      * @param bool     $selectOnlyActive
      *
-     * @internal param $categoryId
-     *
      * @return \Doctrine\ORM\Query
      */
     public function getListQuery(array $filterBy, array $orderBy = [], $limit = null, $offset = null, $selectOnlyActive = true)
@@ -108,11 +107,11 @@ class Repository extends ModelRepository
      * @param int|null $limit
      * @param int|null $offset
      *
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function getBackendListQuery(array $filterBy = [], array $orderBy = [], $limit = null, $offset = null)
     {
-        /** @var \Shopware\Components\Model\QueryBuilder $builder */
+        /** @var QueryBuilder $builder */
         $builder = $this->createQueryBuilder('c');
         $builder->select([
             'c.id as id',
@@ -180,11 +179,11 @@ class Repository extends ModelRepository
      * @param int|null $offset
      * @param bool     $selectOnlyActive
      *
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function getListQueryBuilder(array $filterBy, array $orderBy = [], $limit = null, $offset = null, $selectOnlyActive = true)
     {
-        /** @var \Shopware\Components\Model\QueryBuilder $builder */
+        /** @var QueryBuilder $builder */
         $builder = $this->createQueryBuilder('c');
         $builder->select([
             'c.id as id',
@@ -528,7 +527,7 @@ class Repository extends ModelRepository
      * @param int|null $offset
      * @param int|null $limit
      *
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function getBlogCategoriesByParentBuilder($parentId, $offset = null, $limit = null)
     {
@@ -583,7 +582,7 @@ class Repository extends ModelRepository
      * Helper method to create the query builder for the "getBlogCategoryTreeListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function getBlogCategoryTreeListBuilder()
     {
@@ -696,7 +695,7 @@ class Repository extends ModelRepository
      */
     protected function getActiveQueryBuilder($customerGroupId = null, $shopId = null)
     {
-        /** @var \Shopware\Components\Model\QueryBuilder $builder */
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->from($this->getEntityName(), 'c')
                 ->select([

@@ -164,7 +164,7 @@ class Cache extends Resource implements ContainerAwareInterface, BatchInterface
                 $results[$key] = [
                     'success' => true,
                     'operation' => 'delete',
-                    'data' => $this->delete($id),
+                    'data' => $this->delete((string) $id),
                 ];
             } catch (\Exception $e) {
                 $message = $e->getMessage();

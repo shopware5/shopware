@@ -74,8 +74,12 @@ class EmotionHydrator extends Hydrator
         $emotion->setParentId($data['__emotion_parent_id'] !== null ? (int) $data['__emotion_parent_id'] : null);
         $emotion->setIsPreview((bool) $data['__emotion_preview_id']);
         $emotion->setPreviewSecret($data['__emotion_preview_secret']);
-        $emotion->setCategoryIds(explode(',', $data['__emotion_category_ids']));
-        $emotion->setShopIds(explode(',', $data['__emotion_shop_ids']));
+        /** @var int[] $categoryIds */
+        $categoryIds = explode(',', $data['__emotion_category_ids']);
+        $emotion->setCategoryIds($categoryIds);
+        /** @var int[] $shopIds */
+        $shopIds = explode(',', $data['__emotion_shop_ids']);
+        $emotion->setShopIds($shopIds);
 
         // assign template
         $this->assignTemplate($emotion, $data);

@@ -410,7 +410,8 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
             && in_array($locale, ['en_GB', 'default'])
             && count(array_keys($fullNamespace->toArray()))
         ) {
-            $locale = array_shift(array_diff(['en_GB', 'default'], [$locale]));
+            $diff = array_diff(['en_GB', 'default'], [$locale]);
+            $locale = array_shift($diff);
         }
 
         $fullNamespace->setSection($locale);

@@ -63,7 +63,7 @@ class StoreListUpdatesCommand extends StoreCommand
         $plugins = $this->container->get('shopware_plugininstaller.plugin_service_local')->getPluginsForUpdateCheck();
         $domain = $this->container->get('shopware_plugininstaller.account_manager_service')->getDomain();
         $service = $this->container->get('shopware_plugininstaller.plugin_service_view');
-        $request = new UpdateListingRequest(null, $version, $domain, $plugins);
+        $request = new UpdateListingRequest('', $version, $domain, $plugins);
         /** @var UpdateResultStruct $updates */
         $updates = $service->getUpdates($request);
         $plugins = $updates->getPlugins();

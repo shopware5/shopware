@@ -1093,13 +1093,13 @@ class LegacyStructConverter
      *
      * @param float $price
      *
-     * @return float price
+     * @return string price
      */
     private function sFormatPrice($price)
     {
-        $price = str_replace(',', '.', $price);
+        $price = str_replace(',', '.', (string) $price);
         $price = $this->sRound($price);
-        $price = str_replace('.', ',', $price); // Replaces points with commas
+        $price = str_replace('.', ',', (string) $price); // Replaces points with commas
         $commaPos = strpos($price, ',');
         if ($commaPos) {
             $part = substr($price, $commaPos + 1, strlen($price) - $commaPos);
@@ -1134,7 +1134,7 @@ class LegacyStructConverter
 
         $money_str = $money_str[0] . '.' . $money_str[1];
 
-        return round($money_str, 2);
+        return round((float) $money_str, 2);
     }
 
     /**
