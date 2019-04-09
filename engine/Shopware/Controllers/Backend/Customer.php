@@ -26,6 +26,7 @@ use Shopware\Bundle\AccountBundle\Service\CustomerUnlockServiceInterface;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\OptinServiceInterface;
+use Shopware\Components\Random;
 use Shopware\Components\StateTranslatorService;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\PaymentData;
@@ -447,6 +448,17 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         $shop->registerResources();
 
+        session_regenerate_id(true);
+        $newSessionId = session_id();
+
+        session_write_close();
+        session_start();
+
+        Shopware()->Session()->offsetSet('sessionId', $newSessionId);
+        Shopware()->Container()->reset('SessionId');
+        Shopware()->Container()->set('SessionId', $newSessionId);
+        Shopware()->Session()->unsetAll();
+
         Shopware()->Session()->Admin = true;
         Shopware()->System()->_POST = [
             'email' => $user['email'],
@@ -501,6 +513,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         // Update right domain cookies
         $this->Response()->headers->setCookie(new Cookie('shop', $data['shopId'], 0, $path));
+        $this->Response()->headers->setCookie(new Cookie('sUniqueID', Random::getString(20), 0, $path));
         $this->Response()->headers->setCookie(new Cookie('session-' . $data['shopId'], $data['sessionId'], 0, '/'));
 
         $this->redirect($shop->getBaseUrl());
