@@ -276,6 +276,17 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
             $configDir[] = Shopware()->DocPath('snippets');
         }
 
+        // Default theme directories
+        return array_merge($configDir, $this->getPluginDirs(), $this->getThemeDirs($themeDir));
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function getPluginDirs()
+    {
+        $configDir = [];
+
         /** @var Plugin[] $plugins */
         $plugins = $this->modelManager->getRepository(Plugin::class)->findBy(['active' => true]);
         foreach ($plugins as $plugin) {
@@ -310,13 +321,22 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
             }
         }
 
-        // Default theme directories
-        $directories = new \DirectoryIterator(
-            $themeDir
-        );
+        return $configDir;
+    }
+
+    /**
+     * @param string $themeDir
+     *
+     * @return array<string, string>
+     */
+    private function getThemeDirs($themeDir)
+    {
+        $configDir = [];
 
         /** @var \DirectoryIterator $directory */
-        foreach ($directories as $directory) {
+        foreach (new \DirectoryIterator(
+            $themeDir
+        ) as $directory) {
             //check valid directory
             if ($directory->isDot() || !$directory->isDir() || $directory->getFilename() === '_cache') {
                 continue;
