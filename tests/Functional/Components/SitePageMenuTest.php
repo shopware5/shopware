@@ -61,11 +61,11 @@ class SitePageMenuTest extends TestCase
         $this->connection->insert('s_cms_static', ['id' => 1, 'description' => 'test', '`grouping`' => 'left']);
 
         $pages = $this->sitePageMenu->getTree(1, null);
-        $this->assertArrayHasKey('left', $pages);
-        $this->assertCount(1, $pages['left']);
+        static::assertArrayHasKey('left', $pages);
+        static::assertCount(1, $pages['left']);
 
         $page = array_shift($pages['left']);
-        $this->assertSame($this->getPath() . '/custom/index/sCustom/1', $page['link']);
+        static::assertSame($this->getPath() . '/custom/index/sCustom/1', $page['link']);
     }
 
     public function testSiteWithExternalLink()
@@ -76,11 +76,11 @@ class SitePageMenuTest extends TestCase
         );
 
         $pages = $this->sitePageMenu->getTree(1, null);
-        $this->assertArrayHasKey('left', $pages);
-        $this->assertCount(1, $pages['left']);
+        static::assertArrayHasKey('left', $pages);
+        static::assertCount(1, $pages['left']);
 
         $page = array_shift($pages['left']);
-        $this->assertSame('http://localhost/examples', $page['link']);
+        static::assertSame('http://localhost/examples', $page['link']);
     }
 
     public function testSiteWithInternalLink()
@@ -91,11 +91,11 @@ class SitePageMenuTest extends TestCase
         );
 
         $pages = $this->sitePageMenu->getTree(1, null);
-        $this->assertArrayHasKey('left', $pages);
-        $this->assertCount(1, $pages['left']);
+        static::assertArrayHasKey('left', $pages);
+        static::assertCount(1, $pages['left']);
 
         $page = array_shift($pages['left']);
-        $this->assertSame('https://www.google.de', $page['link']);
+        static::assertSame('https://www.google.de', $page['link']);
     }
 
     public function testSiteWithLinkWithoutHttp()
@@ -106,11 +106,11 @@ class SitePageMenuTest extends TestCase
         );
 
         $pages = $this->sitePageMenu->getTree(1, null);
-        $this->assertArrayHasKey('left', $pages);
-        $this->assertCount(1, $pages['left']);
+        static::assertArrayHasKey('left', $pages);
+        static::assertCount(1, $pages['left']);
 
         $page = array_shift($pages['left']);
-        $this->assertSame('www.google.de', $page['link']);
+        static::assertSame('www.google.de', $page['link']);
     }
 
     public function testRelativeUrl()
@@ -121,11 +121,11 @@ class SitePageMenuTest extends TestCase
         );
 
         $pages = $this->sitePageMenu->getTree(1, null);
-        $this->assertArrayHasKey('left', $pages);
-        $this->assertCount(1, $pages['left']);
+        static::assertArrayHasKey('left', $pages);
+        static::assertCount(1, $pages['left']);
 
         $page = array_shift($pages['left']);
-        $this->assertSame('/de/hoehenluft-abenteuer/', $page['link']);
+        static::assertSame('/de/hoehenluft-abenteuer/', $page['link']);
     }
 
     public function testSiteWithOldViewport()
@@ -136,11 +136,11 @@ class SitePageMenuTest extends TestCase
         );
 
         $pages = $this->sitePageMenu->getTree(1, null);
-        $this->assertArrayHasKey('left', $pages);
-        $this->assertCount(1, $pages['left']);
+        static::assertArrayHasKey('left', $pages);
+        static::assertCount(1, $pages['left']);
 
         $page = array_shift($pages['left']);
-        $this->assertSame($this->getPath() . '/cat/index/sCategory/300', $page['link']);
+        static::assertSame($this->getPath() . '/cat/index/sCategory/300', $page['link']);
     }
 
     private function getPath()

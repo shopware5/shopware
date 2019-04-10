@@ -75,6 +75,6 @@ class ArticleTest extends TestCase
             2,
         ]);
 
-        $this->assertSame('SW500.2', $result);
+        static::assertSame('SW500.2', $result);
     }
 }

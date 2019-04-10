@@ -147,7 +147,6 @@ class AddressRepository extends ModelRepository
      * Helper method to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     protected function getListQueryBuilder(array $filterBy = [], array $orderBy = [], $limit = null, $offset = null)

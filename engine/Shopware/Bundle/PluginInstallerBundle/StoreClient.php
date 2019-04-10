@@ -377,7 +377,6 @@ class StoreClient
      * Parses it to detect and extract details provided
      * by SBP about what happened
      *
-     *
      * @throws \Exception
      * @throws SbpServerException
      * @throws AuthenticationException

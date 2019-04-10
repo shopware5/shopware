@@ -53,8 +53,8 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        $this->assertEquals('foo', $article->getName());
-        $this->assertEquals('bar', $article->getDescription());
+        static::assertEquals('foo', $article->getName());
+        static::assertEquals('bar', $article->getDescription());
     }
 
     public function testCanReAssignProperties()
@@ -69,8 +69,8 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        $this->assertEquals('foo', $article->getName());
-        $this->assertEquals('bar', $article->getDescription());
+        static::assertEquals('foo', $article->getName());
+        static::assertEquals('bar', $article->getDescription());
     }
 
     public function testCanAssignOneToOne()
@@ -86,11 +86,11 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        $this->assertEquals(true, $article->getConfiguratorTemplate()->getActive());
-        $this->assertEquals('baz', $article->getConfiguratorTemplate()->getEan());
+        static::assertEquals(true, $article->getConfiguratorTemplate()->getActive());
+        static::assertEquals('baz', $article->getConfiguratorTemplate()->getEan());
 
         // configuratorTemplate is the owning side of relation, so article has to be set
-        $this->assertSame($article, $article->getConfiguratorTemplate()->getArticle());
+        static::assertSame($article, $article->getConfiguratorTemplate()->getArticle());
     }
 
     public function testLoopsArePreventedOneToOne()
@@ -109,7 +109,7 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        $this->assertSame($article, $article->getConfiguratorTemplate()->getArticle());
+        static::assertSame($article, $article->getConfiguratorTemplate()->getArticle());
     }
 
     public function testCanAssignOneToOneByInstance()
@@ -129,8 +129,8 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        $this->assertSame($tax, $article->getTax());
-        $this->assertSame($template, $article->getConfiguratorTemplate());
+        static::assertSame($tax, $article->getTax());
+        static::assertSame($template, $article->getConfiguratorTemplate());
     }
 
     public function testCanReAssignOneToOne()
@@ -150,8 +150,8 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        $this->assertEquals(true, $article->getConfiguratorTemplate()->getActive());
-        $this->assertEquals('foo', $article->getConfiguratorTemplate()->getEan());
+        static::assertEquals(true, $article->getConfiguratorTemplate()->getActive());
+        static::assertEquals('foo', $article->getConfiguratorTemplate()->getEan());
     }
 
     public function testCanEmptyArrayDoesNotOverrideOneToOne()
@@ -170,8 +170,8 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        $this->assertEquals(true, $article->getConfiguratorTemplate()->getActive());
-        $this->assertEquals('foo', $article->getConfiguratorTemplate()->getEan());
+        static::assertEquals(true, $article->getConfiguratorTemplate()->getActive());
+        static::assertEquals('foo', $article->getConfiguratorTemplate()->getEan());
     }
 
     public function testCanRemoveOneToOne()
@@ -191,8 +191,8 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        $this->assertNull($article->getConfiguratorTemplate());
-        $this->assertNull($template->getArticle());
+        static::assertNull($article->getConfiguratorTemplate());
+        static::assertNull($template->getArticle());
     }
 
     public function testCanAssignManyToOne()
@@ -207,7 +207,7 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        $this->assertEquals('foo', $article->getSupplier()->getName());
+        static::assertEquals('foo', $article->getSupplier()->getName());
     }
 
     public function testCanAssignManyToOneByInstance()
@@ -223,7 +223,7 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        $this->assertSame($supplier, $article->getSupplier());
+        static::assertSame($supplier, $article->getSupplier());
     }
 
     public function testCanReAssignManyToOne()
@@ -236,7 +236,7 @@ class ModelEntityTest extends TestCase
 
         $article->setSupplier($supplier);
 
-        $this->assertSame($supplier, $article->getSupplier());
+        static::assertSame($supplier, $article->getSupplier());
 
         $data = [
             'supplier' => [
@@ -246,10 +246,10 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        $this->assertEquals('foo', $article->getSupplier()->getName());
+        static::assertEquals('foo', $article->getSupplier()->getName());
 
         // 19 taxrate shoud be preserved
-        $this->assertEquals('description', $article->getSupplier()->getDescription());
+        static::assertEquals('description', $article->getSupplier()->getDescription());
     }
 
     public function testCanEmptyArrayDoesNotOverrideManyToOne()
@@ -262,7 +262,7 @@ class ModelEntityTest extends TestCase
 
         $article->setSupplier($supplier);
 
-        $this->assertSame($supplier, $article->getSupplier());
+        static::assertSame($supplier, $article->getSupplier());
 
         $data = [
             'supplier' => [],
@@ -270,8 +270,8 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        $this->assertEquals('test', $article->getSupplier()->getName());
-        $this->assertEquals('description', $article->getSupplier()->getDescription());
+        static::assertEquals('test', $article->getSupplier()->getName());
+        static::assertEquals('description', $article->getSupplier()->getDescription());
     }
 
     public function testCanRemoveManyToOne()
@@ -284,7 +284,7 @@ class ModelEntityTest extends TestCase
 
         $article->setSupplier($supplier);
 
-        $this->assertSame($supplier, $article->getSupplier());
+        static::assertSame($supplier, $article->getSupplier());
 
         $data = [
             'supplier' => null,
@@ -292,7 +292,7 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        $this->assertEquals(null, $article->getSupplier());
+        static::assertEquals(null, $article->getSupplier());
     }
 
     public function testCanReAssignWithAnotherIdThrowsExceptionManyToOne()
@@ -306,7 +306,7 @@ class ModelEntityTest extends TestCase
 
         $article->setSupplier($supplier);
 
-        $this->assertSame($supplier, $article->getSupplier());
+        static::assertSame($supplier, $article->getSupplier());
 
         $data = [
             'supplier' => [
@@ -337,7 +337,7 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        $this->assertCount(2, $article->getLinks());
+        static::assertCount(2, $article->getLinks());
     }
 
     public function testCanAssignOneToManyByInstance()
@@ -358,9 +358,9 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        $this->assertCount(2, $article->getLinks());
+        static::assertCount(2, $article->getLinks());
 
-        $this->assertContains($link0, $article->getLinks());
+        static::assertContains($link0, $article->getLinks());
     }
 
     public function testCanOverWriteAssignOneToMany()
@@ -373,7 +373,7 @@ class ModelEntityTest extends TestCase
 
         $article->getLinks()->add($link0);
 
-        $this->assertContains($link0, $article->getLinks());
+        static::assertContains($link0, $article->getLinks());
 
         $data = [
             'links' => [
@@ -385,10 +385,10 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        $this->assertCount(1, $article->getLinks());
-        $this->assertNotContains($link0, $article->getLinks());
+        static::assertCount(1, $article->getLinks());
+        static::assertNotContains($link0, $article->getLinks());
 
-        $this->assertEquals('batz', $article->getLinks()->current()->getName());
+        static::assertEquals('batz', $article->getLinks()->current()->getName());
     }
 
     public function testCanRemoveOneToMany()
@@ -401,7 +401,7 @@ class ModelEntityTest extends TestCase
 
         $article->getLinks()->add($link0);
 
-        $this->assertContains($link0, $article->getLinks());
+        static::assertContains($link0, $article->getLinks());
 
         $data = [
             'links' => null,
@@ -409,7 +409,7 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        $this->assertCount(0, $article->getLinks());
+        static::assertCount(0, $article->getLinks());
     }
 
     public function testCanUpdateOneToManyById()
@@ -423,7 +423,7 @@ class ModelEntityTest extends TestCase
 
         $article->getLinks()->add($link0);
 
-        $this->assertContains($link0, $article->getLinks());
+        static::assertContains($link0, $article->getLinks());
 
         $data = [
             'links' => [
@@ -439,11 +439,11 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        $this->assertCount(2, $article->getLinks());
-        $this->assertContains($link0, $article->getLinks());
+        static::assertCount(2, $article->getLinks());
+        static::assertContains($link0, $article->getLinks());
 
-        $this->assertEquals('batz', $article->getLinks()->first()->getName());
-        $this->assertEquals('foo', $article->getLinks()->next()->getName());
+        static::assertEquals('batz', $article->getLinks()->first()->getName());
+        static::assertEquals('foo', $article->getLinks()->next()->getName());
     }
 
     public function testCanUpdateOneToMany()
@@ -457,7 +457,7 @@ class ModelEntityTest extends TestCase
 
         $article->getLinks()->add($link0);
 
-        $this->assertContains($link0, $article->getLinks());
+        static::assertContains($link0, $article->getLinks());
 
         $data = [
             'links' => [
@@ -470,10 +470,10 @@ class ModelEntityTest extends TestCase
 
         $article->fromArray($data);
 
-        $this->assertCount(1, $article->getLinks());
-        $this->assertNotContains($link0, $article->getLinks());
+        static::assertCount(1, $article->getLinks());
+        static::assertNotContains($link0, $article->getLinks());
 
-        $this->assertEquals('batz', $article->getLinks()->first()->getName());
+        static::assertEquals('batz', $article->getLinks()->first()->getName());
     }
 
     /**

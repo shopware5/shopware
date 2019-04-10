@@ -66,8 +66,8 @@ class StoreExtjsValueParserTest extends TestCase
         $store = $this->getStoreElement(1);
         $options = $this->parser->parse($store);
 
-        self::assertInternalType('string', $options);
-        self::assertEquals('Shopware.apps.Base.store.Category', $options);
+        static::assertInternalType('string', $options);
+        static::assertEquals('Shopware.apps.Base.store.Category', $options);
     }
 
     public function testThatEmptyOptionsReturnsEmptyArray(): void
@@ -75,8 +75,8 @@ class StoreExtjsValueParserTest extends TestCase
         $store = $this->getStoreElement(2);
         $options = $this->parser->parse($store);
 
-        self::assertInternalType('string', $options);
-        self::assertEquals('', $options);
+        static::assertInternalType('string', $options);
+        static::assertEquals('', $options);
     }
 
     private function getStoreElement(int $elementIndex): DOMElement

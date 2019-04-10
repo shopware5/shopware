@@ -135,7 +135,6 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
     /**
      * Returns the base query to select the custom sorting data.
      *
-     *
      * @return QueryBuilder
      */
     private function createQuery(ShopContextInterface $context)

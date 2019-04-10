@@ -49,6 +49,6 @@ class BacklogTest extends \Enlight_Components_Test_TestCase
         Shopware()->Models()->persist($customers[0]);
         Shopware()->Models()->flush($customers[0]);
 
-        $this->assertGreaterThanOrEqual(1, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_es_backend_backlog'));
+        static::assertGreaterThanOrEqual(1, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_es_backend_backlog'));
     }
 }

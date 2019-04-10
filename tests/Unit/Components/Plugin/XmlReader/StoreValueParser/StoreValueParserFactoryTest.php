@@ -33,8 +33,8 @@ class StoreValueParserFactoryTest extends TestCase
 {
     public function testThatFactoryReturnsCorrectInstance(): void
     {
-        self::assertInstanceOf(StoreXmlValueParser::class, StoreValueParserFactory::create(''));
-        self::assertInstanceOf(StoreXmlValueParser::class, StoreValueParserFactory::create('xml'));
-        self::assertInstanceOf(StoreExtjsValueParser::class, StoreValueParserFactory::create('extjs'));
+        static::assertInstanceOf(StoreXmlValueParser::class, StoreValueParserFactory::create(''));
+        static::assertInstanceOf(StoreXmlValueParser::class, StoreValueParserFactory::create('xml'));
+        static::assertInstanceOf(StoreExtjsValueParser::class, StoreValueParserFactory::create('extjs'));
     }
 }

@@ -50,26 +50,26 @@ class ResourceTest extends \Enlight_Components_Test_TestCase
 
     public function testResultModeShouldDefaultToArray()
     {
-        $this->assertEquals($this->resource->getResultMode(), Resource::HYDRATE_ARRAY);
+        static::assertEquals($this->resource->getResultMode(), Resource::HYDRATE_ARRAY);
     }
 
     public function testSetResultModeShouldShouldWork()
     {
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
 
-        $this->assertEquals($this->resource->getResultMode(), Resource::HYDRATE_OBJECT);
+        static::assertEquals($this->resource->getResultMode(), Resource::HYDRATE_OBJECT);
     }
 
     public function testAutoFlushShouldDefaultToTrue()
     {
-        $this->assertEquals($this->resource->getAutoFlush(), true);
+        static::assertEquals($this->resource->getAutoFlush(), true);
     }
 
     public function testSetAutoFlushShouldWork()
     {
         $this->resource->setAutoFlush(false);
 
-        $this->assertEquals($this->resource->getAutoFlush(), false);
+        static::assertEquals($this->resource->getAutoFlush(), false);
     }
 
     /**
@@ -79,11 +79,11 @@ class ResourceTest extends \Enlight_Components_Test_TestCase
     {
         $aclMock = $this->createMock(\Shopware_Components_Acl::class);
 
-        $aclMock->expects($this->any())
+        $aclMock->expects(static::any())
                 ->method('has')
                 ->willReturn(true);
 
-        $aclMock->expects($this->any())
+        $aclMock->expects(static::any())
                 ->method('isAllowed')
                 ->willReturn(false);
 
@@ -97,12 +97,12 @@ class ResourceTest extends \Enlight_Components_Test_TestCase
     {
         $aclMock = $this->createMock(\Shopware_Components_Acl::class);
 
-        $aclMock->expects($this->any())
+        $aclMock->expects(static::any())
                 ->method('isAllowed')
                 ->willReturn(true);
 
         $this->resource->setRole('dummy');
         $this->resource->setAcl($aclMock);
-        $this->assertNull($this->resource->checkPrivilege('test'));
+        static::assertNull($this->resource->checkPrivilege('test'));
     }
 }

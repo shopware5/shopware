@@ -111,11 +111,11 @@ class PresetDataSynchronizerTest extends TestCase
         $this->synchronizerService->importElementAssets($preset, 'key');
         $presets = $this->connection->fetchAll('SELECT * FROM s_emotion_presets');
 
-        $this->assertEquals(1, count($presets));
+        static::assertEquals(1, count($presets));
         $createdPreset = $presets[0];
 
-        $this->assertJson($createdPreset['preset_data']);
-        $this->assertEquals($data, $createdPreset['preset_data']);
+        static::assertJson($createdPreset['preset_data']);
+        static::assertEquals($data, $createdPreset['preset_data']);
     }
 
     public function testAssetImportForElementWithBannerComponent()
@@ -125,18 +125,18 @@ class PresetDataSynchronizerTest extends TestCase
         $this->synchronizerService->importElementAssets($preset, 'key');
         $presets = $this->connection->fetchAll('SELECT * FROM s_emotion_presets');
 
-        $this->assertEquals(1, count($presets));
+        static::assertEquals(1, count($presets));
 
         $createdPreset = $presets[0];
 
-        $this->assertJson($createdPreset['preset_data']);
+        static::assertJson($createdPreset['preset_data']);
 
         $presetData = json_decode($createdPreset['preset_data'], true);
 
-        $this->assertArrayHasKey('elements', $presetData);
-        $this->assertArrayHasKey('data', $presetData['elements'][0]);
-        $this->assertRegExp('/media/', $presetData['elements'][0]['data'][1]['value']);
-        $this->assertNotEquals($this->imageData, $presetData['elements'][0]['data'][1]['value']);
+        static::assertArrayHasKey('elements', $presetData);
+        static::assertArrayHasKey('data', $presetData['elements'][0]);
+        static::assertRegExp('/media/', $presetData['elements'][0]['data'][1]['value']);
+        static::assertNotEquals($this->imageData, $presetData['elements'][0]['data'][1]['value']);
     }
 
     public function testAssetImportForElemementWithBannerSliderComponentShouldNotChangeElements()
@@ -147,12 +147,12 @@ class PresetDataSynchronizerTest extends TestCase
         $this->synchronizerService->importElementAssets($preset, 'key');
         $presets = $this->connection->fetchAll('SELECT * FROM s_emotion_presets');
 
-        $this->assertEquals(1, count($presets));
+        static::assertEquals(1, count($presets));
 
         $createdPreset = $presets[0];
 
-        $this->assertJson($createdPreset['preset_data']);
-        $this->assertEquals($data, $createdPreset['preset_data']);
+        static::assertJson($createdPreset['preset_data']);
+        static::assertEquals($data, $createdPreset['preset_data']);
     }
 
     public function testAssetImportForElemementWithBannerSliderComponent()
@@ -162,21 +162,21 @@ class PresetDataSynchronizerTest extends TestCase
         $this->synchronizerService->importElementAssets($preset, 'key');
         $presets = $this->connection->fetchAll('SELECT * FROM s_emotion_presets');
 
-        $this->assertEquals(1, count($presets));
+        static::assertEquals(1, count($presets));
 
         $createdPreset = $presets[0];
 
-        $this->assertJson($createdPreset['preset_data']);
+        static::assertJson($createdPreset['preset_data']);
 
         $presetData = json_decode($createdPreset['preset_data'], true);
-        $this->assertArrayHasKey('elements', $presetData);
+        static::assertArrayHasKey('elements', $presetData);
 
-        $this->assertArrayHasKey('data', $presetData['elements'][0]);
+        static::assertArrayHasKey('data', $presetData['elements'][0]);
 
         // double encoded value here
         $value = json_decode($presetData['elements'][0]['data'][6]['value'], true);
 
-        $this->assertRegExp('/media/', $value[0]['path']);
-        $this->assertNotEmpty($presetData['elements'][0]['data'][6]['value'][0]['mediaId']);
+        static::assertRegExp('/media/', $value[0]['path']);
+        static::assertNotEmpty($presetData['elements'][0]['data'][6]['value'][0]['mediaId']);
     }
 }

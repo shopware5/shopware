@@ -48,7 +48,7 @@ class PaymentsProviderTest extends ProviderTestCase
 
         $resultData = $this->getBenchmarkData();
 
-        $this->assertSame(4, $resultData['activePayments']);
+        static::assertSame(4, $resultData['activePayments']);
     }
 
     /**
@@ -60,7 +60,7 @@ class PaymentsProviderTest extends ProviderTestCase
 
         $resultData = $this->getBenchmarkData();
 
-        $this->assertSame(4, $resultData['paymentsWithSurcharge']);
+        static::assertSame(4, $resultData['paymentsWithSurcharge']);
     }
 
     /**
@@ -72,7 +72,7 @@ class PaymentsProviderTest extends ProviderTestCase
 
         $resultData = $this->getBenchmarkData();
 
-        $this->assertSame(5, $resultData['paymentsWithReduction']);
+        static::assertSame(5, $resultData['paymentsWithReduction']);
     }
 
     /**
@@ -84,7 +84,7 @@ class PaymentsProviderTest extends ProviderTestCase
 
         $resultData = $this->getBenchmarkData();
 
-        $this->assertSame(4, $resultData['paymentsWithPercentagePrice']);
+        static::assertSame(4, $resultData['paymentsWithPercentagePrice']);
     }
 
     /**
@@ -96,7 +96,7 @@ class PaymentsProviderTest extends ProviderTestCase
 
         $resultData = $this->getBenchmarkData();
 
-        $this->assertSame(6, $resultData['paymentsWithAbsolutePrice']);
+        static::assertSame(6, $resultData['paymentsWithAbsolutePrice']);
     }
 
     /**
@@ -109,9 +109,9 @@ class PaymentsProviderTest extends ProviderTestCase
         $provider = $this->getProvider();
 
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
-        $this->assertSame(4, $resultData['activePayments']);
+        static::assertSame(4, $resultData['activePayments']);
 
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
-        $this->assertSame(5, $resultData['activePayments']);
+        static::assertSame(5, $resultData['activePayments']);
     }
 }

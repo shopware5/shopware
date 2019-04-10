@@ -398,6 +398,10 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         } catch (\League\Flysystem\FileNotFoundException $exception) {
             $this->forwardDownloadError(2);
         }
+
+        if ($this->isNotInUnitTestMode()) {
+            exit;
+        }
     }
 
     /**
@@ -806,5 +810,13 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     {
         return $this->container->get('session')->offsetGet('sOneTimeAccount')
             || $this->View()->getAssign('sUserData')['additional']['user']['accountmode'] == 1;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isNotInUnitTestMode()
+    {
+        return !$this->container->hasParameter('shopware.session.unitTestEnabled') || !$this->container->getParameter('shopware.session.unitTestEnabled');
     }
 }

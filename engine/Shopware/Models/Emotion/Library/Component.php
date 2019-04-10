@@ -331,7 +331,6 @@ class Component extends ModelEntity
     /**
      * Generally function to create a new custom emotion component field.
      *
-     *
      * @return Field
      */
     public function createField(array $data)

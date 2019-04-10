@@ -59,7 +59,6 @@ interface ProductPropertyGatewayInterface
      * - Sort mode equals to 3, the values are sorted by the position
      * - In all other cases the values are sorted by their alphanumeric value
      *
-     *
      * @return Struct\Property\Set
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);

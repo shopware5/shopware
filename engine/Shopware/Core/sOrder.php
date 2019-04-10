@@ -1245,7 +1245,6 @@ class sOrder
     /**
      * Send status mail
      *
-     *
      * @return Enlight_Components_Mail
      */
     public function sendStatusMail(Enlight_Components_Mail $mail)
@@ -1885,7 +1884,6 @@ EOT;
      * and formats the product name and order number.
      * This function is used for the order status mail.
      *
-     *
      * @return array
      */
     private function getOrderDetailsForMail(array $basketRows)
@@ -1955,7 +1953,6 @@ EOT;
     /**
      * Helper function which converts all HTML entities, in the passed user data array,
      * to their applicable characters.
-     *
      *
      * @return array
      */

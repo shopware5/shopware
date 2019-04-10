@@ -461,12 +461,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function paymentAction()
     {
-        $accountMode = (int) $this->View()->sUserData['additional']['user']['accountmode'];
-
         if (empty($this->session['sOrderVariables'])
                 || $this->getMinimumCharge()
                 || $this->getEsdNote()
-                || ($accountMode === 0 && $this->getDispatchNoOrder())) {
+                || $this->getDispatchNoOrder()) {
             return $this->forward('confirm');
         }
 
@@ -1334,7 +1332,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     /**
      * Get all dispatches available in selected country from sAdmin object
      *
-     *
      * @return array|false list of dispatches
      */
     public function getDispatches($paymentId = null)
@@ -1617,6 +1614,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $view->assign('sDispatches', $this->getDispatches());
         $accountMode = (int) $this->View()->sUserData['additional']['user']['accountmode'];
         $view->assign('sDispatchNoOrder', ($accountMode === 0 && $this->getDispatchNoOrder()));
+        $view->assign('showShippingCalculation', (bool) $this->Request()->getParam('openShippingCalculations'));
     }
 
     /**
@@ -1862,7 +1860,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     /**
      * Selects the default payment method defined in the backend. If no payment method is defined,
      * the first payment method of the provided list will be returned.
-     *
      *
      * @return array
      */

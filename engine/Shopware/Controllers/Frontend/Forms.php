@@ -456,7 +456,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      *
      * Populates $this->_postData
      *
-     *
      * @throws \Exception
      *
      * @return array
@@ -511,6 +510,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                         if (!$emailValidator->isValid($value)) {
                             unset($value);
                             $valid = false;
+                            break;
                         }
                         $host = trim(substr($value, strpos($value, '@') + 1));
                         if (empty($host) || !gethostbyname($host)) {

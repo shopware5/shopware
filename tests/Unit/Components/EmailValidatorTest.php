@@ -75,7 +75,7 @@ class EmailValidatorTest extends TestCase
      */
     public function testValidEmails($email)
     {
-        $this->assertTrue($this->SUT->isValid($email));
+        static::assertTrue($this->SUT->isValid($email));
     }
 
     public function getinvalidEmails()
@@ -100,6 +100,6 @@ class EmailValidatorTest extends TestCase
      */
     public function testInvalidEmails($email)
     {
-        $this->assertFalse($this->SUT->isValid($email));
+        static::assertFalse($this->SUT->isValid($email));
     }
 }

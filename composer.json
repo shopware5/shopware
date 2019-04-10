@@ -97,7 +97,8 @@
         "symfony/dom-crawler": "~2.8.9",
         "friendsofphp/php-cs-fixer": "~2.10",
         "symfony/yaml": "3.4.22",
-        "kubawerlos/php-cs-fixer-custom-fixers": "^1.13"
+        "kubawerlos/php-cs-fixer-custom-fixers": "^1.13",
+        "jakub-onderka/php-var-dump-check": "^0.3.0"
     },
     "include-path": [
         "engine/Library/"

@@ -36,7 +36,6 @@ interface ProductNumberSearchInterface
      * The search gateway has to implement an event which plugin can be listened to,
      * to add their own handler classes.
      *
-     *
      * @return ProductNumberSearchResult
      */
     public function search(Criteria $criteria, Struct\ShopContextInterface $context);

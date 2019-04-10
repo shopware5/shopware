@@ -82,7 +82,7 @@ class Shopware_RegressionTests_Ticket4788 extends Enlight_Components_Test_Plugin
         // Count occurrences in category listing
         $this->dispatch('/cat/index/sCategory/23');
         $count = substr_count($this->Response()->getBody(), $this->longDescriptionStripped);
-        $this->assertEquals(2, $count);
+        static::assertEquals(2, $count);
 
         $oldValue = 'b:' . $oldValue . ';';
         Shopware()->Db()->query(
@@ -101,8 +101,8 @@ class Shopware_RegressionTests_Ticket4788 extends Enlight_Components_Test_Plugin
         // Check
         foreach ($this->articlesToTest as $articleId => $categoryId) {
             $this->dispatch("/detail/index/sArticle/{$articleId}");
-            $this->assertContains($this->longDescription, $this->Response()->getBody());
-            $this->assertContains($this->longDescriptionStripped, $this->Response()->getBody());
+            static::assertContains($this->longDescription, $this->Response()->getBody());
+            static::assertContains($this->longDescriptionStripped, $this->Response()->getBody());
             $this->reset();
         }
     }

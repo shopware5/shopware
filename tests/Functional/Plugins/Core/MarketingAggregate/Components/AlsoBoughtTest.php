@@ -79,7 +79,7 @@ class AlsoBoughtTest extends AbstractMarketing
 
     public function testInitAlsoBought()
     {
-        $this->assertCount(30, $this->getAllAlsoBought());
+        static::assertCount(30, $this->getAllAlsoBought());
     }
 
     public function testRefreshBoughtArticles()
@@ -96,8 +96,8 @@ class AlsoBoughtTest extends AbstractMarketing
             );
             $updated = $updated[0];
 
-            $this->assertNotEmpty($updated);
-            $this->assertEquals($combination['sales'] + 1, $updated['sales']);
+            static::assertNotEmpty($updated);
+            static::assertEquals($combination['sales'] + 1, $updated['sales']);
         }
     }
 

@@ -364,7 +364,6 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
         var selectionFactory = Ext.create('Shopware.attribute.SelectionFactory', {});
         var store = selectionFactory.createEntitySearchStore("Shopware\\Models\\Country\\Country");
         store.pageSize = 999;
-        store.remoteSort = true;
 
         store.sort([{
             property: 'active',
@@ -373,6 +372,7 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
             property: 'name',
             direction: 'ASC'
         }]);
+        store.remoteSort = true;
 
         return store;
     },

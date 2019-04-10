@@ -36,7 +36,7 @@ class DeviceConfigurationTest extends TestCase
     {
         $service = new DeviceConfiguration($this->createQueryMock([]));
         $emotions = $service->get(1);
-        $this->assertEmpty($emotions);
+        static::assertEmpty($emotions);
     }
 
     public function testEmotionsWithDifferentPositions()
@@ -48,7 +48,7 @@ class DeviceConfigurationTest extends TestCase
             ['id' => 4, 'position' => 2, 'devices' => '', 'shopIds' => ''],
         ]));
         $emotions = $service->get(1);
-        $this->assertEquals(
+        static::assertEquals(
             [
                 ['id' => 3, 'position' => 1, 'devices' => '', 'devicesArray' => [''], 'shopIds' => []],
                 ['id' => 4, 'position' => 2, 'devices' => '', 'devicesArray' => [''], 'shopIds' => []],
@@ -68,7 +68,7 @@ class DeviceConfigurationTest extends TestCase
             ['id' => 4, 'position' => null, 'devices' => '', 'shopIds' => ''],
         ]));
         $emotions = $service->get(1);
-        $this->assertEquals(
+        static::assertEquals(
             [
                 ['id' => 1, 'position' => null, 'devices' => '', 'devicesArray' => [''], 'shopIds' => []],
                 ['id' => 2, 'position' => null, 'devices' => '', 'devicesArray' => [''], 'shopIds' => []],
@@ -88,7 +88,7 @@ class DeviceConfigurationTest extends TestCase
             ['id' => 4, 'position' => 1, 'devices' => '', 'shopIds' => ''],
         ]));
         $emotions = $service->get(1);
-        $this->assertEquals(
+        static::assertEquals(
             [
                 ['id' => 3, 'position' => 1, 'devices' => '', 'devicesArray' => [''], 'shopIds' => []],
                 ['id' => 4, 'position' => 1, 'devices' => '', 'devicesArray' => [''], 'shopIds' => []],

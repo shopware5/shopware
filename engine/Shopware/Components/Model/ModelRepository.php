@@ -45,7 +45,7 @@ class ModelRepository extends EntityRepository
      * @param string $alias
      * @param string $indexBy the index for the from
      *
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function createQueryBuilder($alias, $indexBy = null)
     {
@@ -112,7 +112,6 @@ class ModelRepository extends EntityRepository
      *      )));
      * </code>
      *
-     *
      * @return QueryBuilder
      */
     public function addFilter(QueryBuilder $builder, array $filter)
@@ -129,7 +128,6 @@ class ModelRepository extends EntityRepository
      *          'direction' => 'DESC'
      *      )));
      * </code>
-     *
      *
      * @return QueryBuilder
      */

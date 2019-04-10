@@ -122,6 +122,8 @@ class Value extends ModelEntity
     }
 
     /**
+     * @param string $value
+     *
      * @return Value
      */
     public function setValue($value)
@@ -131,6 +133,9 @@ class Value extends ModelEntity
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getValue()
     {
         return $this->value;

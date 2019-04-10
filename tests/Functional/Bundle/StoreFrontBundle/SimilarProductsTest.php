@@ -72,12 +72,12 @@ class SimilarProductsTest extends TestCase
         $similarProducts = Shopware()->Container()->get('shopware_storefront.similar_products_service')
             ->get($product, $context);
 
-        $this->assertCount(4, $similarProducts);
+        static::assertCount(4, $similarProducts);
 
         /** @var ListProduct $similarProduct */
         foreach ($similarProducts as $similarProduct) {
-            $this->assertInstanceOf('\Shopware\Bundle\StoreFrontBundle\Struct\ListProduct', $similarProduct);
-            $this->assertContains($similarProduct->getNumber(), $similarNumbers);
+            static::assertInstanceOf('\Shopware\Bundle\StoreFrontBundle\Struct\ListProduct', $similarProduct);
+            static::assertContains($similarProduct->getNumber(), $similarNumbers);
         }
     }
 
@@ -109,18 +109,18 @@ class SimilarProductsTest extends TestCase
         $similarProductList = Shopware()->Container()->get('shopware_storefront.similar_products_service')
             ->getList($products, $context);
 
-        $this->assertCount(2, $similarProductList);
+        static::assertCount(2, $similarProductList);
 
         /** @var ListProduct $product */
         foreach ($products as $product) {
             $similarProducts = $similarProductList[$product->getNumber()];
 
-            $this->assertCount(4, $similarProducts);
+            static::assertCount(4, $similarProducts);
 
             /** @var ListProduct $similarProduct */
             foreach ($similarProducts as $similarProduct) {
-                $this->assertInstanceOf('\Shopware\Bundle\StoreFrontBundle\Struct\ListProduct', $similarProduct);
-                $this->assertContains($similarProduct->getNumber(), $similarNumbers);
+                static::assertInstanceOf('\Shopware\Bundle\StoreFrontBundle\Struct\ListProduct', $similarProduct);
+                static::assertContains($similarProduct->getNumber(), $similarNumbers);
             }
         }
     }
@@ -154,10 +154,10 @@ class SimilarProductsTest extends TestCase
         $similar = Shopware()->Container()->get('shopware_storefront.similar_products_service')
             ->get($product, $context);
 
-        $this->assertCount(3, $similar);
+        static::assertCount(3, $similar);
 
         foreach ($similar as $similarProduct) {
-            $this->assertInstanceOf(
+            static::assertInstanceOf(
                 'Shopware\Bundle\StoreFrontBundle\Struct\ListProduct',
                 $similarProduct
             );

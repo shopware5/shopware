@@ -34,16 +34,16 @@ class ResourceSubscriberTest extends TestCase
     {
         $subscriber = new ResourceSubscriber(__DIR__ . '/examples/EmptyPlugin');
 
-        $this->assertNull($subscriber->onCollectCss());
-        $this->assertNull($subscriber->onCollectJavascript());
-        $this->assertNull($subscriber->onCollectLess());
+        static::assertNull($subscriber->onCollectCss());
+        static::assertNull($subscriber->onCollectJavascript());
+        static::assertNull($subscriber->onCollectLess());
     }
 
     public function testFoo()
     {
         $subscriber = new ResourceSubscriber(__DIR__ . '/examples/TestPlugin');
 
-        $this->assertSame(
+        static::assertSame(
             [
                 __DIR__ . '/examples/TestPlugin/Resources/frontend/css/foo/bar.css',
                 __DIR__ . '/examples/TestPlugin/Resources/frontend/css/test.css',
@@ -51,7 +51,7 @@ class ResourceSubscriberTest extends TestCase
             $subscriber->onCollectCss()->toArray()
         );
 
-        $this->assertSame(
+        static::assertSame(
             [
                 __DIR__ . '/examples/TestPlugin/Resources/frontend/js/foo.js',
                 __DIR__ . '/examples/TestPlugin/Resources/frontend/js/foo/bar.js',
@@ -59,7 +59,7 @@ class ResourceSubscriberTest extends TestCase
             $subscriber->onCollectJavascript()->toArray()
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             new LessDefinition([], [
                 __DIR__ . '/examples/TestPlugin/Resources/frontend/less/all.less',
             ]),

@@ -40,12 +40,12 @@ class Shopware_Tests_Components_RandomTest extends Enlight_Components_Test_TestC
         $chars = implode($sets);
 
         $password = Random::generatePassword();
-        $this->assertEquals(15, strlen($password));
+        static::assertEquals(15, strlen($password));
 
         for ($i = 0; $i < strlen($password); ++$i) {
             $char = $password[$i];
 
-            $this->assertContains($char, $chars);
+            static::assertContains($char, $chars);
 
             foreach ($sets as $key => $set) {
                 if (strpos($set, $char) !== false) {
@@ -54,7 +54,7 @@ class Shopware_Tests_Components_RandomTest extends Enlight_Components_Test_TestC
             }
         }
 
-        $this->assertEmpty($sets);
+        static::assertEmpty($sets);
     }
 
     /**
@@ -63,7 +63,7 @@ class Shopware_Tests_Components_RandomTest extends Enlight_Components_Test_TestC
     public function testGetBoolean()
     {
         $result = Random::getBoolean();
-        $this->assertInternalType('boolean', $result);
+        static::assertInternalType('boolean', $result);
     }
 
     /**
@@ -73,8 +73,8 @@ class Shopware_Tests_Components_RandomTest extends Enlight_Components_Test_TestC
     {
         for ($i = 0; $i < 100; ++$i) {
             $result = Random::getInteger(-100000, 100000);
-            $this->assertLessThanOrEqual(100000, $result);
-            $this->assertGreaterThanOrEqual(-100000, $result);
+            static::assertLessThanOrEqual(100000, $result);
+            static::assertGreaterThanOrEqual(-100000, $result);
         }
     }
 
@@ -86,10 +86,10 @@ class Shopware_Tests_Components_RandomTest extends Enlight_Components_Test_TestC
         $results = [];
         for ($i = 0; $i < 1000; ++$i) {
             $result = Random::getFloat();
-            $this->assertInternalType('float', $result);
-            $this->assertLessThanOrEqual(1, $result);
-            $this->assertGreaterThanOrEqual(0, $result);
-            $this->assertNotContains($result, $results);
+            static::assertInternalType('float', $result);
+            static::assertLessThanOrEqual(1, $result);
+            static::assertGreaterThanOrEqual(0, $result);
+            static::assertNotContains($result, $results);
 
             $results[] = $result;
         }

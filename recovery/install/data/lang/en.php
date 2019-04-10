@@ -75,6 +75,7 @@ EOT
     'requirements_error' => '<h3 class="alert-heading">Warning!</h3>Not all of the requirements for successful installation have been met',
     'requirements_success' => '<h3 class="alert-heading">Congratulations!</h3>All of the requirements for successful installation have been met',
     'requirements_php_info' => 'Your server must meet the following system requirements in order to run Shopware',
+    'requirements_php_max_compatible_version' => 'This Shopware version supports PHP up to version %s. The complete functionality with newer PHP versions cannot be guaranteed.',
     'requirements_system_colcheck' => 'Requirement',
     'requirements_system_colrequired' => 'Required',
     'requirements_system_colfound' => 'Your system',

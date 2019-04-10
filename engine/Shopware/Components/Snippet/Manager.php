@@ -141,7 +141,6 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     /**
      * Set locale instance
      *
-     *
      * @return Shopware_Components_Snippet_Manager
      */
     public function setLocale(Locale $locale)
@@ -154,7 +153,6 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
 
     /**
      * Set shop instance
-     *
      *
      * @return Shopware_Components_Snippet_Manager
      */

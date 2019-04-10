@@ -43,36 +43,36 @@ class XmlCronjobReaderTest extends TestCase
     {
         $result = $this->readFile('cronjob.xml');
 
-        self::assertInternalType('array', $result);
-        self::assertCount(2, $result);
+        static::assertInternalType('array', $result);
+        static::assertCount(2, $result);
 
         $firstCron = $result[0];
 
-        self::assertArrayHasKey('name', $firstCron);
-        self::assertArrayHasKey('action', $firstCron);
-        self::assertArrayHasKey('active', $firstCron);
-        self::assertArrayHasKey('interval', $firstCron);
-        self::assertArrayHasKey('disable_on_error', $firstCron);
+        static::assertArrayHasKey('name', $firstCron);
+        static::assertArrayHasKey('action', $firstCron);
+        static::assertArrayHasKey('active', $firstCron);
+        static::assertArrayHasKey('interval', $firstCron);
+        static::assertArrayHasKey('disable_on_error', $firstCron);
 
-        self::assertEquals('Article Importer', $firstCron['name']);
-        self::assertEquals('ImportArticle', $firstCron['action']);
-        self::assertEquals(true, $firstCron['active']);
-        self::assertEquals(3600, $firstCron['interval']);
-        self::assertEquals(true, $firstCron['disable_on_error']);
+        static::assertEquals('Article Importer', $firstCron['name']);
+        static::assertEquals('ImportArticle', $firstCron['action']);
+        static::assertEquals(true, $firstCron['active']);
+        static::assertEquals(3600, $firstCron['interval']);
+        static::assertEquals(true, $firstCron['disable_on_error']);
 
         $secondCron = $result[1];
 
-        self::assertArrayHasKey('name', $secondCron);
-        self::assertArrayHasKey('action', $secondCron);
-        self::assertArrayHasKey('active', $secondCron);
-        self::assertArrayHasKey('interval', $secondCron);
-        self::assertArrayHasKey('disable_on_error', $secondCron);
+        static::assertArrayHasKey('name', $secondCron);
+        static::assertArrayHasKey('action', $secondCron);
+        static::assertArrayHasKey('active', $secondCron);
+        static::assertArrayHasKey('interval', $secondCron);
+        static::assertArrayHasKey('disable_on_error', $secondCron);
 
-        self::assertEquals('Order Export', $secondCron['name']);
-        self::assertEquals('ExportOrder', $secondCron['action']);
-        self::assertEquals(true, $secondCron['active']);
-        self::assertEquals(3600, $secondCron['interval']);
-        self::assertEquals(false, $secondCron['disable_on_error']);
+        static::assertEquals('Order Export', $secondCron['name']);
+        static::assertEquals('ExportOrder', $secondCron['action']);
+        static::assertEquals(true, $secondCron['active']);
+        static::assertEquals(3600, $secondCron['interval']);
+        static::assertEquals(false, $secondCron['disable_on_error']);
     }
 
     public function testReadEmptyFile(): void
@@ -83,8 +83,8 @@ class XmlCronjobReaderTest extends TestCase
 
         $result = $method->invokeArgs($this->cronjobReader, [new \DOMNodeList()]);
 
-        self::assertInternalType('array', $result);
-        self::assertCount(0, $result);
+        static::assertInternalType('array', $result);
+        static::assertCount(0, $result);
     }
 
     private function readFile(string $file): array

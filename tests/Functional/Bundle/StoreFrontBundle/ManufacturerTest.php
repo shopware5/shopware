@@ -68,16 +68,16 @@ class ManufacturerTest extends TestCase
 
         /** @var Manufacturer $manufacturer */
         foreach ($manufacturers as $key => $manufacturer) {
-            $this->assertEquals($key, $manufacturer->getId());
+            static::assertEquals($key, $manufacturer->getId());
 
-            $this->assertNotEmpty($manufacturer->getName());
-            $this->assertNotEmpty($manufacturer->getLink());
-            $this->assertNotEmpty($manufacturer->getDescription());
-            $this->assertNotEmpty($manufacturer->getMetaTitle());
-            $this->assertNotEmpty($manufacturer->getCoverFile());
+            static::assertNotEmpty($manufacturer->getName());
+            static::assertNotEmpty($manufacturer->getLink());
+            static::assertNotEmpty($manufacturer->getDescription());
+            static::assertNotEmpty($manufacturer->getMetaTitle());
+            static::assertNotEmpty($manufacturer->getCoverFile());
 
-            $this->assertGreaterThanOrEqual(1, $manufacturer->getAttributes());
-            $this->assertTrue($manufacturer->hasAttribute('core'));
+            static::assertGreaterThanOrEqual(1, $manufacturer->getAttributes());
+            static::assertTrue($manufacturer->hasAttribute('core'));
         }
     }
 }

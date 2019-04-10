@@ -117,31 +117,31 @@ class PluginMigrationTest extends \Shopware\Components\Test\Plugin\TestCase
 
     private function assertMigrationExecuted(string $pluginName, int $version): void
     {
-        $this->assertTrue((bool) Shopware()->Db()->fetchOne('SELECT 1 FROM s_plugin_schema_version WHERE plugin_name = ? AND version = ? AND complete_date IS NOT NULL', [$pluginName, $version]));
+        static::assertTrue((bool) Shopware()->Db()->fetchOne('SELECT 1 FROM s_plugin_schema_version WHERE plugin_name = ? AND version = ? AND complete_date IS NOT NULL', [$pluginName, $version]));
     }
 
     private function assertMigrationNotExecuted(string $pluginName, int $version): void
     {
-        $this->assertFalse((bool) Shopware()->Db()->fetchOne('SELECT 1 FROM s_plugin_schema_version WHERE plugin_name = ? AND version = ? AND complete_date IS NOT NULL', [$pluginName, $version]));
+        static::assertFalse((bool) Shopware()->Db()->fetchOne('SELECT 1 FROM s_plugin_schema_version WHERE plugin_name = ? AND version = ? AND complete_date IS NOT NULL', [$pluginName, $version]));
     }
 
     private function assertTableExists(string $table): void
     {
-        $this->assertTrue((bool) Shopware()->Db()->fetchOne('SHOW TABLES like ?', [$table]));
+        static::assertTrue((bool) Shopware()->Db()->fetchOne('SHOW TABLES like ?', [$table]));
     }
 
     private function assertTableNotExists(string $table): void
     {
-        $this->assertFalse((bool) Shopware()->Db()->fetchOne('SHOW TABLES like ?', [$table]));
+        static::assertFalse((bool) Shopware()->Db()->fetchOne('SHOW TABLES like ?', [$table]));
     }
 
     private function assertTableColumnExists(string $table, string $column)
     {
-        $this->assertTrue((bool) Shopware()->Db()->fetchOne(sprintf('show columns FROM %s WHERE `Field` = ?', $table), [$column]));
+        static::assertTrue((bool) Shopware()->Db()->fetchOne(sprintf('show columns FROM %s WHERE `Field` = ?', $table), [$column]));
     }
 
     private function assertTableColumnNotExists(string $table, string $column)
     {
-        $this->assertFalse((bool) Shopware()->Db()->fetchOne(sprintf('show columns FROM %s WHERE `Field` = ?', $table), [$column]));
+        static::assertFalse((bool) Shopware()->Db()->fetchOne(sprintf('show columns FROM %s WHERE `Field` = ?', $table), [$column]));
     }
 }

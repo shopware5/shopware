@@ -42,14 +42,14 @@ class BasketSignatureGeneratorTest extends TestCase
             null
         );
 
-        $this->assertNotEmpty($signature);
+        static::assertNotEmpty($signature);
     }
 
     public function testSignatureConsidersItemTaxRate()
     {
         $signatureCreator = new BasketSignatureGenerator();
 
-        $this->assertNotSame(
+        static::assertNotSame(
             $signatureCreator->generateSignature(
                 [
                     'sAmount' => 0,
@@ -79,7 +79,7 @@ class BasketSignatureGeneratorTest extends TestCase
     {
         $signatureCreator = new BasketSignatureGenerator();
 
-        $this->assertNotSame(
+        static::assertNotSame(
             $signatureCreator->generateSignature(
                 [
                     'sAmount' => 0,
@@ -109,7 +109,7 @@ class BasketSignatureGeneratorTest extends TestCase
     {
         $signatureCreator = new BasketSignatureGenerator();
 
-        $this->assertNotSame(
+        static::assertNotSame(
             $signatureCreator->generateSignature(
                 [
                     'sAmount' => 0,
@@ -139,7 +139,7 @@ class BasketSignatureGeneratorTest extends TestCase
     {
         $signatureCreator = new BasketSignatureGenerator();
 
-        $this->assertNotSame(
+        static::assertNotSame(
             $signatureCreator->generateSignature(
                 [
                     'sAmount' => 0,
@@ -169,7 +169,7 @@ class BasketSignatureGeneratorTest extends TestCase
     {
         $signatureCreator = new BasketSignatureGenerator();
 
-        $this->assertNotSame(
+        static::assertNotSame(
             $signatureCreator->generateSignature(
                 [
                     'sAmount' => 100,
@@ -195,7 +195,7 @@ class BasketSignatureGeneratorTest extends TestCase
     {
         $signatureCreator = new BasketSignatureGenerator();
 
-        $this->assertNotSame(
+        static::assertNotSame(
             $signatureCreator->generateSignature(
                 [
                     'sAmount' => 0,
@@ -221,7 +221,7 @@ class BasketSignatureGeneratorTest extends TestCase
     {
         $signatureCreator = new BasketSignatureGenerator();
 
-        $this->assertNotSame(
+        static::assertNotSame(
             $signatureCreator->generateSignature(
                 [
                     'sAmount' => 0,
@@ -260,7 +260,7 @@ class BasketSignatureGeneratorTest extends TestCase
         $method = $class->getMethod('sortItems');
         $method->setAccessible(true);
 
-        $this->assertSame(
+        static::assertSame(
             $signatureCreator->generateSignature(
                 [
                     'sAmount' => 0,
@@ -312,7 +312,7 @@ class BasketSignatureGeneratorTest extends TestCase
         // shuffle the items and compare output to reference
         foreach (range(0, 10) as $counter) {
             shuffle($items);
-            $this->assertEquals($expected, $method->invokeArgs($generator, [$items]));
+            static::assertEquals($expected, $method->invokeArgs($generator, [$items]));
         }
     }
 
@@ -320,7 +320,7 @@ class BasketSignatureGeneratorTest extends TestCase
     {
         $signatureCreator = new BasketSignatureGenerator();
 
-        $this->assertNotSame(
+        static::assertNotSame(
             $signatureCreator->generateSignature(
                 [
                     'sAmount' => 0,
@@ -346,7 +346,7 @@ class BasketSignatureGeneratorTest extends TestCase
     {
         $signatureCreator = new BasketSignatureGenerator();
 
-        $this->assertNotSame(
+        static::assertNotSame(
             $signatureCreator->generateSignature(
                 [
                     'sAmount' => 0,
@@ -367,7 +367,7 @@ class BasketSignatureGeneratorTest extends TestCase
             )
         );
 
-        $this->assertNotSame(
+        static::assertNotSame(
             $signatureCreator->generateSignature(
                 [
                     'sAmount' => 0,

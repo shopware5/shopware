@@ -72,7 +72,6 @@ class Repository extends ModelRepository
     /**
      * Helper function which sets the fromPath and the selectPath for the order list query.
      *
-     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     protected function selectListQuery(\Doctrine\ORM\QueryBuilder $builder)

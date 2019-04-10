@@ -121,7 +121,6 @@ class PathResolver
     /**
      * Helper function to build the path to the passed plugin.
      *
-     *
      * @return string
      */
     public function getPluginPath(Plugin $plugin)
@@ -170,7 +169,6 @@ class PathResolver
     /**
      * Returns the less directory for the passed theme.
      *
-     *
      * @return string
      */
     public function getPublicDirectory(Shop\Template $template)
@@ -184,7 +182,6 @@ class PathResolver
 
     /**
      * Returns the fix defined snippet directory of the passed theme.
-     *
      *
      * @return string
      */
@@ -201,7 +198,6 @@ class PathResolver
     /**
      * Returns the fix defined snippet directory of the passed theme.
      *
-     *
      * @return string
      */
     public function getSmartyDirectory(Shop\Template $template)
@@ -217,7 +213,6 @@ class PathResolver
     /**
      * Returns the less directory for the passed theme.
      *
-     *
      * @return string
      */
     public function getLessDirectory(Shop\Template $template)
@@ -231,7 +226,6 @@ class PathResolver
 
     /**
      * Returns the less directory for the passed theme.
-     *
      *
      * @return string
      */
@@ -285,7 +279,6 @@ class PathResolver
 
     /**
      * Returns the shop url to the generated compiler source map.
-     *
      *
      * @return string
      */
@@ -357,7 +350,6 @@ class PathResolver
     /**
      * Helper function which returns the theme directory for the passed
      * shop template.
-     *
      *
      * @return string
      */

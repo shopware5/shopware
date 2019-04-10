@@ -88,7 +88,7 @@ class ModelManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvertSqlTypeToAttributeType($sqlType, $expectedAttributeType): void
     {
-        $this->assertEquals($expectedAttributeType, $this->convertColumnType($sqlType));
+        static::assertEquals($expectedAttributeType, $this->convertColumnType($sqlType));
     }
 
     /**

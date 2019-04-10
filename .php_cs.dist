@@ -34,6 +34,7 @@ EOF;
 
 return PhpCsFixer\Config::create()
     ->registerCustomFixers(new PhpCsFixerCustomFixers\Fixers())
+    ->setRiskyAllowed(true)
     ->setUsingCache(false)
     ->setRules([
         '@PSR2' => true,
@@ -56,6 +57,7 @@ return PhpCsFixer\Config::create()
         'doctrine_annotation_indentation' => true,
         'doctrine_annotation_spaces' => true,
         'no_superfluous_phpdoc_tags' => true,
+        'php_unit_test_case_static_method_calls' => true,
         PhpCsFixerCustomFixers\Fixer\NoUselessCommentFixer::name() => true,
         PhpCsFixerCustomFixers\Fixer\NoUnneededConcatenationFixer::name() => true,
         PhpCsFixerCustomFixers\Fixer\SingleSpaceAfterStatementFixer::name() => true,

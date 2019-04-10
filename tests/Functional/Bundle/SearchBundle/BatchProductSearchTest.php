@@ -88,8 +88,8 @@ class BatchProductSearchTest extends TestCase
 
         $result = $this->batchProductSearch->search($request, $context);
 
-        $this->assertArrayHasKey(10002, $result->get('test-1'));
-        $this->assertArrayHasKey('SW10001', $result->get('test-1'));
+        static::assertArrayHasKey(10002, $result->get('test-1'));
+        static::assertArrayHasKey('SW10001', $result->get('test-1'));
     }
 
     public function testWithLessProductsThanRequested()
@@ -125,7 +125,7 @@ class BatchProductSearchTest extends TestCase
         $result = $this->batchProductSearch->search($request, $context);
 
         $products = $result->get('test-criteria-1');
-        $this->assertCount(10, $products);
+        static::assertCount(10, $products);
         $this->assertProductNumbersExists(
             $products,
             [
@@ -143,7 +143,7 @@ class BatchProductSearchTest extends TestCase
         );
 
         $products = $result->get('test-1');
-        $this->assertCount(3, $products);
+        static::assertCount(3, $products);
         $this->assertProductNumbersExists($products, ['BATCH-A', 'BATCH-H', 'BATCH-J']);
     }
 
@@ -153,8 +153,8 @@ class BatchProductSearchTest extends TestCase
     private function assertProductNumbersExists(array $result, array $numbers)
     {
         array_walk($numbers, function ($number) use ($result) {
-            $this->assertArrayHasKey($number, $result, sprintf('Expected "%s" to be in [%s]', $number, implode(', ', array_keys($result))));
-            $this->assertSame($number, $result[$number]->getNumber());
+            static::assertArrayHasKey($number, $result, sprintf('Expected "%s" to be in [%s]', $number, implode(', ', array_keys($result))));
+            static::assertSame($number, $result[$number]->getNumber());
         });
     }
 }

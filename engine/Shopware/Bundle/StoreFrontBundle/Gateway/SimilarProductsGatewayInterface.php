@@ -56,7 +56,6 @@ interface SimilarProductsGatewayInterface
      *
      * Example result: array('SW101', 'SW102')
      *
-     *
      * @return array Array of order numbers
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);

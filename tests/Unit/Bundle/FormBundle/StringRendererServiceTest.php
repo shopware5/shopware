@@ -50,7 +50,7 @@ class StringRendererServiceTest extends TestCase
 
     public function testStringWithoutPlaceholders()
     {
-        $this->assertSame('foobar', $this->stringRendererService->render('foobar', [], []));
+        static::assertSame('foobar', $this->stringRendererService->render('foobar', [], []));
     }
 
     public function testStringWithSimplePlaceholder()
@@ -59,7 +59,7 @@ class StringRendererServiceTest extends TestCase
         $input = 'foobar {$someKey}';
         $expectedOutput = 'foobar someValue';
 
-        $this->assertSame($expectedOutput, $this->stringRendererService->render($input, $view, []));
+        static::assertSame($expectedOutput, $this->stringRendererService->render($input, $view, []));
     }
 
     public function testStringWithMultiLevelPlaceholder()
@@ -70,7 +70,7 @@ class StringRendererServiceTest extends TestCase
         $input = 'foobar {$someKey.secondKey}';
         $expectedOutput = 'foobar secondVal';
 
-        $this->assertSame($expectedOutput, $this->stringRendererService->render($input, $view, []));
+        static::assertSame($expectedOutput, $this->stringRendererService->render($input, $view, []));
     }
 
     public function testStringWithNotExistingPlaceholder()
@@ -80,7 +80,7 @@ class StringRendererServiceTest extends TestCase
         $expectedString = 'foobar ';
 
         $renderedString = $this->stringRendererService->render($input, $view, []);
-        $this->assertSame($expectedString, $renderedString);
+        static::assertSame($expectedString, $renderedString);
     }
 
     public function testViewVariable()
@@ -108,8 +108,8 @@ Wir freuen uns auf Ihre Kontaktaufnahme.
             []
         );
 
-        $this->assertSame($expectedString1, $renderedString1);
-        $this->assertSame($expectedString2, $renderedString2);
+        static::assertSame($expectedString1, $renderedString1);
+        static::assertSame($expectedString2, $renderedString2);
     }
 
     public function testElementVariable()
@@ -128,7 +128,7 @@ Wir freuen uns auf Ihre Kontaktaufnahme.
 
         $expectedString = 'Feld Name: vorname';
         $renderedString = $this->stringRendererService->render($element['note'], $this->view->getAssign(), $element);
-        $this->assertSame($expectedString, $renderedString);
+        static::assertSame($expectedString, $renderedString);
     }
 
     public function testViewAndElementVariables()
@@ -147,7 +147,7 @@ Wir freuen uns auf Ihre Kontaktaufnahme.
 
         $expectedString = 'Formular Name: Kontaktformular und Element Typ: select';
         $renderedString = $this->stringRendererService->render($element['note'], $this->view->getAssign(), $element);
-        $this->assertSame($expectedString, $renderedString);
+        static::assertSame($expectedString, $renderedString);
     }
 
     public function testViewThrowsException()

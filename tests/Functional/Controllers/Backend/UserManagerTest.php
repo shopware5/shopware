@@ -94,7 +94,7 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
         ]);
 
         $this->dispatch('backend/Login/login');
-        $this->assertFalse($this->View()->success);
+        static::assertFalse($this->View()->success);
     }
 
     /**
@@ -110,7 +110,7 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
         $this->dispatch('/backend/UserManager/updateUser');
 
         //Verify that the admin user creation was successful
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
     }
 
     /**
@@ -129,13 +129,13 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
         ]);
 
         $this->dispatch('/backend/Login/login');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         /*
          * Fill in session data into s_core_sessions_backend
          */
         $this->dispatch('/backend');
-        $this->assertNotEmpty(Shopware()->Session()->Auth->sessionID);
+        static::assertNotEmpty(Shopware()->Session()->Auth->sessionID);
 
         $this->resetRequest()
         ->resetResponse();
@@ -143,8 +143,8 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
         $this->Request()->setParam('password', $this->temporaryAdminUserData['password']);
         $this->dispatch('backend/Login/validatePassword');
 
-        $this->assertTrue($this->View()->success);
-        $this->assertEquals(1, Shopware()->BackendSession()->offsetGet('passwordVerified'));
+        static::assertTrue($this->View()->success);
+        static::assertEquals(1, Shopware()->BackendSession()->offsetGet('passwordVerified'));
     }
 
     /**
@@ -160,8 +160,8 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
 
         $this->dispatch('backend/UserManager/updateUser');
 
-        $this->assertTrue($this->View()->success);
-        $this->assertEquals(
+        static::assertTrue($this->View()->success);
+        static::assertEquals(
             $this->temporaryUserData['username'],
             $this->View()->data['username']
         );
@@ -183,19 +183,19 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
 
         $randomName = sprintf('RandomName_%s', md5(rand(0, time())));
 
-        $this->assertGreaterThan(0, $user['id']);
+        static::assertGreaterThan(0, $user['id']);
 
         //Update the username
         $this->Request()->setParam('id', $user['id']);
         $this->Request()->setParam('name', $randomName);
 
         $this->dispatch('backend/UserManager/updateUser');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         //Verify that the username has effectively changed in the database
         $user = $this->getUserByUsername($username);
 
-        $this->assertEquals($randomName, $user['name']);
+        static::assertEquals($randomName, $user['name']);
 
         return $username;
     }
@@ -209,12 +209,12 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
     {
         $user = $this->getUserByUsername($username);
 
-        $this->assertGreaterThan(0, $user['id']);
+        static::assertGreaterThan(0, $user['id']);
 
         $this->Request()->setParam('id', $user['id']);
         $this->dispatch('backend/UserManager/deleteUser');
 
-        $this->assertTrue(
+        static::assertTrue(
             $this->View()->success,
             sprintf(
                 'User %s with id %s not found',
@@ -230,9 +230,9 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
     public function testUserList()
     {
         $this->dispatch('backend/UserManager/getUsers');
-        $this->assertTrue($this->View()->success);
-        $this->assertGreaterThan(0, count($this->View()->data));
-        $this->assertEquals($this->View()->total, count($this->View()->data));
+        static::assertTrue($this->View()->success);
+        static::assertGreaterThan(0, count($this->View()->data));
+        static::assertEquals($this->View()->total, count($this->View()->data));
     }
 
     /**
@@ -246,17 +246,17 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
         $this->dispatch('backend/UserManager/getUserDetails');
 
         // Check if request was successful
-        $this->assertTrue($this->View()->success);
-        $this->assertEquals($this->View()->total, 1);
+        static::assertTrue($this->View()->success);
+        static::assertEquals($this->View()->total, 1);
 
         // Check that returning data is an array
-        $this->assertTrue(is_array($this->View()->data));
+        static::assertTrue(is_array($this->View()->data));
 
         // Check that data matches the requested one
-        $this->assertEquals($user['id'], $this->View()->data['id']);
+        static::assertEquals($user['id'], $this->View()->data['id']);
 
         // Check that result does not contain passwords
-        $this->assertNull($this->View()->data['password']);
+        static::assertNull($this->View()->data['password']);
     }
 
     /**
@@ -266,9 +266,9 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
     {
         $this->dispatch('backend/UserManager/getRoles');
 
-        $this->assertTrue($this->View()->success);
-        $this->assertGreaterThan(0, count($this->View()->data));
-        $this->assertEquals($this->View()->total, count($this->View()->data));
+        static::assertTrue($this->View()->success);
+        static::assertGreaterThan(0, count($this->View()->data));
+        static::assertEquals($this->View()->total, count($this->View()->data));
     }
 
     /**
@@ -287,7 +287,7 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
         $this->Request()->setParam('enabled', 1);
         $this->Request()->setParam('admin', 1);
         $this->dispatch('backend/UserManager/updateRole');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         return $randomRoleName;
     }
@@ -310,12 +310,12 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
             ->execute()
             ->fetch(\PDO::FETCH_ASSOC);
 
-        $this->assertGreaterThan(0, $randomRole['id']);
+        static::assertGreaterThan(0, $randomRole['id']);
 
         $this->Request()->setParam('id', $randomRole['id']);
         $this->Request()->setParam('enabled', false);
         $this->dispatch('backend/UserManager/updateRole');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         return $randomRole['id'];
     }
@@ -330,7 +330,7 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
         $this->Request()->setParam('id', $randomRoleId);
         $this->dispatch('backend/UserManager/deleteRole');
 
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
     }
 
     /**

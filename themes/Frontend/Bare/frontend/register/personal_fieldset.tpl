@@ -123,22 +123,24 @@
                 {* Skip login *}
                 {if !$update}
                     {block name='frontend_register_personal_fieldset_skip_login'}
-                        {if ($showNoAccount || $form_data.accountmode) && !$sEsd && !$form_data.sValidation && !{config name=NoAccountDisable}}
+                        <input type="hidden"
+                               value="0"
+                               name="register[personal][accountmode]"
+                               class="register--checkbox chkbox"/>
+                        {if !$sEsd && !$form_data.sValidation && ({config name=NoAccountDisable} == 1 || {config name=NoAccountDisable} == 2)}
+                            {$accountModeChecked = {config name=NoAccountDisable} == 1}
+                            {if isset($form_data.accountmode)}
+                                {$accountModeChecked = $form_data.accountmode}
+                            {/if}
                             <div class="register--check">
                                 <input type="checkbox"
                                        value="1"
                                        id="register_personal_skipLogin"
                                        name="register[personal][accountmode]"
-                                       class="register--checkbox chkbox" {if $form_data.accountmode || $accountmode}checked="checked" {/if}/>
+                                       class="register--checkbox chkbox" {if $accountModeChecked}checked="checked" {/if}/>
 
                                 <label for="register_personal_skipLogin" class="chklabel is--bold">{s name='RegisterLabelNoAccount'}{/s}</label>
                             </div>
-                        {else}
-                            <input type="hidden"
-                                   value="0"
-                                   id="register_personal_skipLogin"
-                                   name="register[personal][accountmode]"
-                                   class="register--checkbox chkbox" {if $form_data.accountmode || $accountmode}checked="checked" {/if}/>
                         {/if}
                     {/block}
 

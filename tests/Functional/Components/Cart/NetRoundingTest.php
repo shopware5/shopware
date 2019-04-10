@@ -54,7 +54,7 @@ class NetRoundingTest extends Enlight_Components_Test_Controller_TestCase
         $this->setConfig('roundNetAfterTax', false);
         $this->dispatch('/checkout/cart');
 
-        $this->assertEquals(23.189999999999998, $this->View()->getAssign('sBasket')['AmountWithTaxNumeric']);
+        static::assertEquals(23.189999999999998, $this->View()->getAssign('sBasket')['AmountWithTaxNumeric']);
     }
 
     public function testNewRounding(): void
@@ -62,6 +62,6 @@ class NetRoundingTest extends Enlight_Components_Test_Controller_TestCase
         $this->setConfig('roundNetAfterTax', true);
         $this->dispatch('/checkout/cart');
 
-        $this->assertEquals(23.2, $this->View()->getAssign('sBasket')['AmountWithTaxNumeric']);
+        static::assertEquals(23.2, $this->View()->getAssign('sBasket')['AmountWithTaxNumeric']);
     }
 }

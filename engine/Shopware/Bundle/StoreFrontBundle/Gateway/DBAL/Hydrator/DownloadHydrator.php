@@ -41,7 +41,6 @@ class DownloadHydrator extends Hydrator
     /**
      * Creates a new Struct\Product\Download struct with the passed data.
      *
-     *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Download
      */
     public function hydrate(array $data)

@@ -56,7 +56,6 @@ class Replace extends FunctionNode
     /**
      * Return plain SQL string
      *
-     *
      * @return string
      */
     public function getSql(SqlWalker $sqlWalker)

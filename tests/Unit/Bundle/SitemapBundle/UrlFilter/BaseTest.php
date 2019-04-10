@@ -33,14 +33,14 @@ class ExampleTest extends TestCase
     {
         $example = new Example();
 
-        $this->assertTrue($example->isFiltered(5, [5]));
+        static::assertTrue($example->isFiltered(5, [5]));
     }
 
     public function testIsFilteredShouldReturnFalse()
     {
         $example = new Example();
 
-        $this->assertFalse($example->isFiltered(5, [4]));
+        static::assertFalse($example->isFiltered(5, [4]));
     }
 }
 

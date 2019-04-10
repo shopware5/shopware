@@ -48,7 +48,6 @@ interface VoteAverageGatewayInterface
      * Required conditions for the selection:
      * - Only activated votes
      *
-     *
      * @return Struct\Product\VoteAverage
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);

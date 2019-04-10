@@ -87,7 +87,7 @@ class Shopware_Tests_Models_FormTest extends Enlight_Components_Test_TestCase
 
             $form->$setMethod($value);
 
-            $this->assertEquals($form->$getMethod(), $value);
+            static::assertEquals($form->$getMethod(), $value);
         }
     }
 
@@ -101,7 +101,7 @@ class Shopware_Tests_Models_FormTest extends Enlight_Components_Test_TestCase
 
         foreach ($this->testData as $fieldname => $value) {
             $getMethod = 'get' . ucfirst($fieldname);
-            $this->assertEquals($form->$getMethod(), $value);
+            static::assertEquals($form->$getMethod(), $value);
         }
     }
 
@@ -126,7 +126,7 @@ class Shopware_Tests_Models_FormTest extends Enlight_Components_Test_TestCase
 
         foreach ($this->testData as $fieldname => $value) {
             $getMethod = 'get' . ucfirst($fieldname);
-            $this->assertEquals($form->$getMethod(), $value);
+            static::assertEquals($form->$getMethod(), $value);
         }
     }
 }

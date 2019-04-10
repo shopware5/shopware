@@ -47,7 +47,7 @@ class Shopware_Tests_Modules_Articles_getListingArrayKeyTest extends Enlight_Com
             $data = $this->module->sGetArticlesByCategory($id);
 
             foreach ($data['sArticles'] as $key => $article) {
-                $this->assertEquals($key, $article['ordernumber']);
+                static::assertEquals($key, $article['ordernumber']);
             }
         }
     }

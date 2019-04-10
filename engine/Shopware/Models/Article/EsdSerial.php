@@ -36,7 +36,7 @@ class EsdSerial extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Esd
+     * @var Esd
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Esd", inversedBy="serials")
      * @ORM\JoinColumn(name="esdID", referencedColumnName="id")
@@ -77,9 +77,9 @@ class EsdSerial extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\EsdSerial
+     * @return EsdSerial
      */
-    public function setEsd(\Shopware\Models\Article\Esd $esd)
+    public function setEsd(Esd $esd)
     {
         $this->esd = $esd;
 
@@ -87,7 +87,7 @@ class EsdSerial extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Esd
+     * @return Esd
      */
     public function getEsd()
     {

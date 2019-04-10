@@ -228,6 +228,7 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
             valueField: 'id',
             displayField: 'name',
             forceSelection: true,
+            disableLoadingSelectedName: true,
             allowBlank:false,
             labelWidth: 50,
             emptyText: me.snippets.role.empty,

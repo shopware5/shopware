@@ -55,7 +55,7 @@ class ExtJsTest extends TestCase
         $method = $class->getMethod('inflectPath');
         $method->setAccessible(true);
 
-        $this->assertSame(
+        static::assertSame(
             $expectedResult,
             $method->invokeArgs($SUT, $args)
         );

@@ -41,52 +41,52 @@ class sCmsTest extends Enlight_Components_Test_Controller_TestCase
     public function testsGetStaticPage()
     {
         // Without argument, returns false
-        $this->assertFalse($this->module->sGetStaticPage());
+        static::assertFalse($this->module->sGetStaticPage());
 
         // Non-existent id returns false
-        $this->assertFalse($this->module->sGetStaticPage(0));
+        static::assertFalse($this->module->sGetStaticPage(0));
 
         $pageIds = Shopware()->Db()->fetchCol('SELECT id FROM s_cms_static  LIMIT 10');
 
         foreach ($pageIds as $pageId) {
             $page = $this->module->sGetStaticPage($pageId);
 
-            $this->assertArrayHasKey('id', $page);
-            $this->assertArrayHasKey('description', $page);
-            $this->assertArrayHasKey('html', $page);
-            $this->assertArrayHasKey('grouping', $page);
-            $this->assertArrayHasKey('position', $page);
-            $this->assertArrayHasKey('link', $page);
-            $this->assertArrayHasKey('page_title', $page);
-            $this->assertArrayHasKey('meta_keywords', $page);
-            $this->assertArrayHasKey('meta_description', $page);
+            static::assertArrayHasKey('id', $page);
+            static::assertArrayHasKey('description', $page);
+            static::assertArrayHasKey('html', $page);
+            static::assertArrayHasKey('grouping', $page);
+            static::assertArrayHasKey('position', $page);
+            static::assertArrayHasKey('link', $page);
+            static::assertArrayHasKey('page_title', $page);
+            static::assertArrayHasKey('meta_keywords', $page);
+            static::assertArrayHasKey('meta_description', $page);
 
             if (!empty($page['parentID'])) {
-                $this->assertArrayHasKey('siblingPages', $page);
+                static::assertArrayHasKey('siblingPages', $page);
                 foreach ($page['siblingPages'] as $siblingPage) {
-                    $this->assertArrayHasKey('id', $siblingPage);
-                    $this->assertArrayHasKey('description', $siblingPage);
-                    $this->assertArrayHasKey('link', $siblingPage);
-                    $this->assertArrayHasKey('target', $siblingPage);
-                    $this->assertArrayHasKey('active', $siblingPage);
-                    $this->assertArrayHasKey('page_title', $siblingPage);
+                    static::assertArrayHasKey('id', $siblingPage);
+                    static::assertArrayHasKey('description', $siblingPage);
+                    static::assertArrayHasKey('link', $siblingPage);
+                    static::assertArrayHasKey('target', $siblingPage);
+                    static::assertArrayHasKey('active', $siblingPage);
+                    static::assertArrayHasKey('page_title', $siblingPage);
                 }
-                $this->assertArrayHasKey('parent', $page);
+                static::assertArrayHasKey('parent', $page);
                 if (count($page['parent']) > 0) {
-                    $this->assertArrayHasKey('id', $page['parent']);
-                    $this->assertArrayHasKey('description', $page['parent']);
-                    $this->assertArrayHasKey('link', $page['parent']);
-                    $this->assertArrayHasKey('target', $page['parent']);
-                    $this->assertArrayHasKey('page_title', $page['parent']);
+                    static::assertArrayHasKey('id', $page['parent']);
+                    static::assertArrayHasKey('description', $page['parent']);
+                    static::assertArrayHasKey('link', $page['parent']);
+                    static::assertArrayHasKey('target', $page['parent']);
+                    static::assertArrayHasKey('page_title', $page['parent']);
                 }
             } else {
-                $this->assertArrayHasKey('subPages', $page);
+                static::assertArrayHasKey('subPages', $page);
                 foreach ($page['subPages'] as $subPage) {
-                    $this->assertArrayHasKey('id', $subPage);
-                    $this->assertArrayHasKey('description', $subPage);
-                    $this->assertArrayHasKey('link', $subPage);
-                    $this->assertArrayHasKey('target', $subPage);
-                    $this->assertArrayHasKey('page_title', $subPage);
+                    static::assertArrayHasKey('id', $subPage);
+                    static::assertArrayHasKey('description', $subPage);
+                    static::assertArrayHasKey('link', $subPage);
+                    static::assertArrayHasKey('target', $subPage);
+                    static::assertArrayHasKey('page_title', $subPage);
                 }
             }
         }

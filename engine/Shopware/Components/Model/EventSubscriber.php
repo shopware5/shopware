@@ -84,7 +84,6 @@ class EventSubscriber implements BaseEventSubscriber
     /**
      * Event listener function of the preUpdate live cycle event. Fired before an existing model saved.
      *
-     *
      * @return \Enlight_Event_EventArgs|null
      */
     public function preUpdate(LifecycleEventArgs $eventArgs)
@@ -96,7 +95,6 @@ class EventSubscriber implements BaseEventSubscriber
 
     /**
      * Event listener function of the preRemove live cycle event. Fired before an model removed.
-     *
      *
      * @return \Enlight_Event_EventArgs|null
      */
@@ -110,7 +108,6 @@ class EventSubscriber implements BaseEventSubscriber
     /**
      * Event listener function of the prePersist live cycle event. Fired before a new model saved.
      *
-     *
      * @return \Enlight_Event_EventArgs|null
      */
     public function prePersist(LifecycleEventArgs $eventArgs)
@@ -122,7 +119,6 @@ class EventSubscriber implements BaseEventSubscriber
 
     /**
      * Event listener function of the postUpdateRemove live cycle event. Fired after an existing model saved.
-     *
      *
      * @return \Enlight_Event_EventArgs|null
      */
@@ -136,7 +132,6 @@ class EventSubscriber implements BaseEventSubscriber
     /**
      * Event listener function of the postRemove live cycle event. Fired after a model removed.
      *
-     *
      * @return \Enlight_Event_EventArgs|null
      */
     public function postRemove(LifecycleEventArgs $eventArgs)
@@ -148,7 +143,6 @@ class EventSubscriber implements BaseEventSubscriber
 
     /**
      * Event listener function of the postPersist live cycle event. Fired after a new model saved.
-     *
      *
      * @return \Enlight_Event_EventArgs|null
      */

@@ -38,26 +38,44 @@ class MediaExtensionMappingServiceTest extends TestCase
 
     protected function setUp()
     {
-        $this->mappingService = new MediaExtensionMappingService();
+        $this->mappingService = new MediaExtensionMappingService(['xlsx', 'DOCX', 'pdf']);
     }
 
     public function testAllowedExtensionShouldPass()
     {
-        $this->assertTrue($this->mappingService->isAllowed('jpg'));
+        static::assertTrue($this->mappingService->isAllowed('jpg'));
     }
 
     public function testNotAllowedExtensionShouldFail()
     {
-        $this->assertFalse($this->mappingService->isAllowed('does_not_exists'));
+        static::assertFalse($this->mappingService->isAllowed('does_not_exists'));
     }
 
     public function testGetCorrectTypeForKnownExtension()
     {
-        $this->assertSame(Media::TYPE_IMAGE, $this->mappingService->getType('jpg'));
+        static::assertSame(Media::TYPE_IMAGE, $this->mappingService->getType('jpg'));
     }
 
     public function testGetCorrectTypeForUnknownExtension()
     {
-        $this->assertSame(Media::TYPE_UNKNOWN, $this->mappingService->getType('unknown_extension'));
+        static::assertSame(Media::TYPE_UNKNOWN, $this->mappingService->getType('unknown_extension'));
+    }
+
+    public function testGetUnknownExtensionForCustomType()
+    {
+        static::assertSame(Media::TYPE_UNKNOWN, $this->mappingService->getType('xlsx'));
+        static::assertSame(Media::TYPE_UNKNOWN, $this->mappingService->getType('docx'));
+    }
+
+    public function testCustomFileExtensionsAreAllowed()
+    {
+        static::assertTrue($this->mappingService->isAllowed('XLSX'));
+        static::assertTrue($this->mappingService->isAllowed('docx'));
+    }
+
+    public function testExistingExtensionInCustomFileExtensionsIsStillDefined()
+    {
+        static::assertTrue($this->mappingService->isAllowed('pdf'));
+        static::assertSame(Media::TYPE_PDF, $this->mappingService->getType('pdf'));
     }
 }

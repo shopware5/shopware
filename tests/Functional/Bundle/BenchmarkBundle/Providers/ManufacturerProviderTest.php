@@ -44,9 +44,9 @@ class ManufacturerProviderTest extends ProviderTestCase
         $provider = $this->getProvider();
 
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
-        $this->assertSame(3, $resultData['total']);
+        static::assertSame(3, $resultData['total']);
 
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
-        $this->assertSame(2, $resultData['total']);
+        static::assertSame(2, $resultData['total']);
     }
 }

@@ -47,7 +47,7 @@ class ProductMappingTest extends TestCase
 
         $mapping = $productMapping->get($shop);
 
-        self::assertTrue($mapping['dynamic']);
+        static::assertTrue($mapping['dynamic']);
     }
 
     public function testDynamicIsFalseWhenFalseIsPassed()
@@ -69,7 +69,7 @@ class ProductMappingTest extends TestCase
 
         $mapping = $productMapping->get($shop);
 
-        self::assertFalse($mapping['dynamic']);
+        static::assertFalse($mapping['dynamic']);
     }
 
     public function testDynamicIsTrueWhenTrueIsPassed()
@@ -91,7 +91,7 @@ class ProductMappingTest extends TestCase
 
         $mapping = $productMapping->get($shop);
 
-        self::assertTrue($mapping['dynamic']);
+        static::assertTrue($mapping['dynamic']);
     }
 
     /**

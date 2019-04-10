@@ -84,9 +84,9 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
         $sql = 'SELECT * FROM `s_statistics_currentusers` ORDER BY `id` DESC LIMIT 1';
         $result = Shopware()->Container()->get('dbal_connection')->fetchAssoc($sql);
 
-        $this->assertSame('192.168.0.0', $result['remoteaddr']); // IP should have been anonymized
-        $this->assertSame('/foobar', $result['page']);
-        $this->assertSame('mobile', $result['deviceType']);
+        static::assertSame('192.168.0.0', $result['remoteaddr']); // IP should have been anonymized
+        static::assertSame('/foobar', $result['page']);
+        static::assertSame('mobile', $result['deviceType']);
     }
 
     /**
@@ -120,7 +120,7 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
             $result,
         ]);
 
-        $this->assertEquals($assert, !empty($insertId));
+        static::assertEquals($assert, !empty($insertId));
     }
 
     /**
@@ -135,9 +135,9 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
 
         $this->Plugin()->refreshPartner($request, $response);
 
-        $this->assertEquals('test123', Shopware()->Session()->sPartner);
+        static::assertEquals('test123', Shopware()->Session()->sPartner);
 
-        $this->assertEquals('test123', $this->getCookie($response, 'partner'));
+        static::assertEquals('test123', $this->getCookie($response, 'partner'));
     }
 
     /**
@@ -152,7 +152,7 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
 
         $this->Plugin()->refreshPartner($request, $response);
 
-        $this->assertEquals('sCampaign1', Shopware()->Session()->sPartner);
+        static::assertEquals('sCampaign1', Shopware()->Session()->sPartner);
     }
 
     private function getCookie(\Enlight_Controller_Response_Response $response, $name)

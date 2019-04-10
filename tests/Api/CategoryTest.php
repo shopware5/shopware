@@ -38,7 +38,7 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
 
         $hostname = $helper->Shop()->getHost();
         if (empty($hostname)) {
-            $this->markTestSkipped(
+            static::markTestSkipped(
                 'Hostname is not available.'
             );
         }
@@ -75,18 +75,18 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
         $client = new Zend_Http_Client($this->apiBaseUrl . '/categories');
         $response = $client->request('GET');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(401, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(401, $response->getStatus());
 
         $result = $response->getBody();
 
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     public function testGetCategoriesWithInvalidIdShouldReturnMessage()
@@ -96,18 +96,18 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
             ->setUri($this->apiBaseUrl . '/categories/' . $id)
             ->request('GET');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(404, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
 
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     public function testPostCategoriesShouldBeSuccessful()
@@ -124,21 +124,21 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
 
         $response = $client->request('POST');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(201, $response->getStatus());
-        $this->assertArrayHasKey('Location', $response->getHeaders());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(201, $response->getStatus());
+        static::assertArrayHasKey('Location', $response->getHeaders());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
         $location = $response->getHeader('Location');
         $identifier = (int) array_pop(explode('/', $location));
 
-        $this->assertGreaterThan(0, $identifier);
+        static::assertGreaterThan(0, $identifier);
 
         return $identifier;
     }
@@ -160,16 +160,16 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('POST');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(400, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(400, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
+        static::assertArrayHasKey('message', $result);
     }
 
     /**
@@ -181,22 +181,22 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
             ->setUri($this->apiBaseUrl . '/categories/' . $id)
             ->request('GET');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(200, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
-        $this->assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('data', $result);
 
         $data = $result['data'];
-        $this->assertInternalType('array', $data);
-        $this->assertArrayHasKey('id', $data);
-        $this->assertArrayHasKey('parentId', $data);
+        static::assertInternalType('array', $data);
+        static::assertArrayHasKey('id', $data);
+        static::assertArrayHasKey('parentId', $data);
     }
 
     /**
@@ -215,17 +215,17 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(400, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(400, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     /**
@@ -243,13 +243,13 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
 
-        $this->assertEquals(200, $response->getStatus());
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertNull(
+        static::assertEquals(200, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertNull(
             $response->getHeader('Set-Cookie'),
             'There should be no set-cookie header set.'
         );
-        $this->assertNull(
+        static::assertNull(
             $response->getHeader('location',
                 'There should be no location header set.'
             ));
@@ -257,31 +257,31 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
         // revalidate
         $response = $this->getHttpClient()
             ->setUri($this->apiBaseUrl . '/categories/' . $id)
             ->request('GET');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(200, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
-        $this->assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('data', $result);
 
         $data = $result['data'];
-        $this->assertInternalType('array', $data);
-        $this->assertArrayHasKey('id', $data);
-        $this->assertArrayHasKey('name', $data);
-        $this->assertEquals('Changed test category', $data['name']);
+        static::assertInternalType('array', $data);
+        static::assertArrayHasKey('id', $data);
+        static::assertArrayHasKey('name', $data);
+        static::assertEquals('Changed test category', $data['name']);
 
         return $id;
     }
@@ -295,15 +295,15 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
 
         $response = $client->request('DELETE');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(200, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
         return $id;
     }
@@ -315,17 +315,17 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
 
         $response = $client->request('DELETE');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(404, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     public function testPutCategoriesWithInvalidIdShouldReturnMessage()
@@ -342,17 +342,17 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
-        $this->assertEquals(404, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     public function testGetCategoriesShouldBeSuccessful()
@@ -360,22 +360,22 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/categories');
         $result = $client->request('GET');
 
-        $this->assertEquals('application/json', $result->getHeader('Content-Type'));
-        $this->assertEquals(null, $result->getHeader('Set-Cookie'));
-        $this->assertEquals(200, $result->getStatus());
+        static::assertEquals('application/json', $result->getHeader('Content-Type'));
+        static::assertEquals(null, $result->getHeader('Set-Cookie'));
+        static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
-        $this->assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('data', $result);
 
-        $this->assertArrayHasKey('total', $result);
-        $this->assertInternalType('int', $result['total']);
+        static::assertArrayHasKey('total', $result);
+        static::assertInternalType('int', $result['total']);
 
         $data = $result['data'];
-        $this->assertInternalType('array', $data);
+        static::assertInternalType('array', $data);
     }
 }

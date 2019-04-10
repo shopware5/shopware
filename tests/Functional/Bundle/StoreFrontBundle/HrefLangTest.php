@@ -58,20 +58,20 @@ class HrefLangTest extends TestCase
     public function testHrefLinksNotGenerated()
     {
         $urls = $this->service->getUrls(['controller' => 'cat', 'action' => 'index', 'sCategory' => 912345], $this->getContext());
-        $this->assertEmpty($urls);
+        static::assertEmpty($urls);
     }
 
     public function testHrefLinksHome()
     {
         $urls = $this->service->getUrls(['controller' => 'index', 'action' => 'index'], $this->getContext());
 
-        $this->assertNotEmpty($urls);
+        static::assertNotEmpty($urls);
 
         foreach ($urls as $href) {
             if ($href->getLocale() === 'de-DE') {
-                $this->assertEquals('/', parse_url($href->getLink(), PHP_URL_PATH));
+                static::assertEquals('/', parse_url($href->getLink(), PHP_URL_PATH));
             } else {
-                $this->assertEquals('/en/', parse_url($href->getLink(), PHP_URL_PATH));
+                static::assertEquals('/en/', parse_url($href->getLink(), PHP_URL_PATH));
             }
         }
     }
@@ -82,13 +82,13 @@ class HrefLangTest extends TestCase
 
         $urls = $this->service->getUrls(['controller' => 'cat', 'action' => 'index', 'sCategory' => $category], $this->getContext());
 
-        $this->assertNotEmpty($urls);
+        static::assertNotEmpty($urls);
 
         foreach ($urls as $href) {
             if ($href->getLocale() === 'de-DE') {
-                $this->assertEquals('/my-fancy-german-category/', parse_url($href->getLink(), PHP_URL_PATH));
+                static::assertEquals('/my-fancy-german-category/', parse_url($href->getLink(), PHP_URL_PATH));
             } else {
-                $this->assertEquals('/en/my-fancy-english-category/', parse_url($href->getLink(), PHP_URL_PATH));
+                static::assertEquals('/en/my-fancy-english-category/', parse_url($href->getLink(), PHP_URL_PATH));
             }
         }
     }
@@ -99,13 +99,13 @@ class HrefLangTest extends TestCase
 
         $urls = $this->service->getUrls(['controller' => 'cat', 'action' => 'index', 'sCategory' => $category, 'foo' => 'bar'], $this->getContext());
 
-        $this->assertNotEmpty($urls);
+        static::assertNotEmpty($urls);
 
         foreach ($urls as $href) {
             if ($href->getLocale() === 'de-DE') {
-                $this->assertEquals('/my-fancy-german-category/', parse_url($href->getLink(), PHP_URL_PATH));
+                static::assertEquals('/my-fancy-german-category/', parse_url($href->getLink(), PHP_URL_PATH));
             } else {
-                $this->assertEquals('/en/my-fancy-english-category/', parse_url($href->getLink(), PHP_URL_PATH));
+                static::assertEquals('/en/my-fancy-english-category/', parse_url($href->getLink(), PHP_URL_PATH));
             }
         }
     }
@@ -116,13 +116,13 @@ class HrefLangTest extends TestCase
 
         $urls = $this->service->getUrls(['controller' => 'cat', 'action' => 'index', 'sCategory' => $category, 'foo' => 'bar'], $this->getContext());
 
-        $this->assertNotEmpty($urls);
-        $this->assertContains('foo=bar', $urls[0]->getLink());
+        static::assertNotEmpty($urls);
+        static::assertContains('foo=bar', $urls[0]->getLink());
 
         $urls = $this->service->getUrls(['controller' => 'forms', 'action' => 'index', 'sFid' => 5, 'foo' => 'bar'], $this->getContext());
 
-        $this->assertNotEmpty($urls);
-        $this->assertNotContains('foo=bar', $urls[0]->getLink());
+        static::assertNotEmpty($urls);
+        static::assertNotContains('foo=bar', $urls[0]->getLink());
     }
 
     private function createCategory()

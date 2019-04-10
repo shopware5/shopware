@@ -45,7 +45,7 @@ class Shopware_Tests_Controllers_Frontend_SitemapTest extends Enlight_Components
 
         $sCategoryTree = $controller->View()->getAssign('sCategoryTree');
 
-        $this->assertEquals(200, $this->Response()->getHttpResponseCode());
+        static::assertEquals(200, $this->Response()->getHttpResponseCode());
 
         foreach ($sitemapData as $name => $elements) {
             $partialTree = array_filter($sCategoryTree, function (array $treeElement) use ($name) {
@@ -56,7 +56,7 @@ class Shopware_Tests_Controllers_Frontend_SitemapTest extends Enlight_Components
             $partialTreeNames = array_column($partialTree, 'name');
 
             foreach ($elements as $element) {
-                $this->assertContains($element, $partialTreeNames);
+                static::assertContains($element, $partialTreeNames);
             }
         }
     }

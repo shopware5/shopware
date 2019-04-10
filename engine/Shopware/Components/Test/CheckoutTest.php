@@ -111,17 +111,17 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
         $cartItemFound = false;
         foreach ($sBasket as $item) {
             if ($item['articlename'] === $itemName) {
-                $this->assertEquals($itemOrdernumber, $item['ordernumber']);
-                $this->assertEquals($itemNetPrice, $item['netprice']);
-                $this->assertEquals($itemPrice, (float) str_replace(',', '.', $item['price']));
-                $this->assertEquals($itemOrdernumber, $item['ordernumber']);
-                $this->assertEquals(Shopware()->Modules()->Articles()->sFormatPrice($itemPrice - $itemNetPrice), $item['tax']);
+                static::assertEquals($itemOrdernumber, $item['ordernumber']);
+                static::assertEquals($itemNetPrice, $item['netprice']);
+                static::assertEquals($itemPrice, (float) str_replace(',', '.', $item['price']));
+                static::assertEquals($itemOrdernumber, $item['ordernumber']);
+                static::assertEquals(Shopware()->Modules()->Articles()->sFormatPrice($itemPrice - $itemNetPrice), $item['tax']);
                 $cartItemFound = true;
             }
         }
 
         if (!$cartItemFound) {
-            $this->fail(sprintf('Cart item by name "%s" not found', $itemName));
+            static::fail(sprintf('Cart item by name "%s" not found', $itemName));
         }
     }
 

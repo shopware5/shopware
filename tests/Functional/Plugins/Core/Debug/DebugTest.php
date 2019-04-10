@@ -40,6 +40,6 @@ class Shopware_Tests_Plugins_Core_Debug_Debug extends Enlight_Components_Test_Pl
         $plugin->Config()->AllowIP = '127.0.0.1';
         $plugin->onStartDispatch($eventArgs);
 
-        $this->assertInstanceOf('Shopware_Plugins_Core_Debug_Bootstrap', $plugin);
+        static::assertInstanceOf('Shopware_Plugins_Core_Debug_Bootstrap', $plugin);
     }
 }

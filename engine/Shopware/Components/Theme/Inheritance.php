@@ -292,7 +292,6 @@ class Inheritance
      * Helper function which creates an array with all shop templates
      * inside which should be included in the frontend inheritance.
      *
-     *
      * @return array
      */
     private function buildInheritanceRecursive(Shop\Template $template)

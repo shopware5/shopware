@@ -46,7 +46,7 @@ class IpAnonymizerTest extends TestCase
         $anonymizer = new IpAnonymizer();
 
         foreach ($tests as $ip => $expected) {
-            $this->assertEquals($expected, $anonymizer->anonymize($ip));
+            static::assertEquals($expected, $anonymizer->anonymize($ip));
         }
     }
 }

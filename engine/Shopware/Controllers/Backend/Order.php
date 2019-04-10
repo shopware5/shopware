@@ -1396,7 +1396,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * Prepare address data - loads countryModel from a given countryId
      *
-     *
      * @return array
      */
     protected function prepareAddressData(array $data)
@@ -1499,7 +1498,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
     /**
      * Simple helper function which actually merges a given array of document-paths
-     *
      *
      * @return string The created document's url
      */
@@ -1937,7 +1935,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
     /**
      * Internal helper function which insert the order association data into the passed data array.
-     *
      *
      * @return array
      */

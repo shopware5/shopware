@@ -197,7 +197,6 @@ SQL;
     /**
      * Builds the tax cases for the price selection query
      *
-     *
      * @return string
      */
     private function buildTaxCase(ShopContextInterface $context)

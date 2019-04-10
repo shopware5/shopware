@@ -38,7 +38,7 @@ class QueryAliasMapperTest extends TestCase
 
         $mapper = new QueryAliasMapper($mapping);
 
-        $this->assertEquals($mapping, $mapper->getQueryAliases());
+        static::assertEquals($mapping, $mapper->getQueryAliases());
     }
 
     public function testCanBeInitializedByString()
@@ -50,7 +50,7 @@ class QueryAliasMapperTest extends TestCase
 
         $mapper = QueryAliasMapper::createFromString('foo=bar,omg=baz');
 
-        $this->assertEquals($expected, $mapper->getQueryAliases());
+        static::assertEquals($expected, $mapper->getQueryAliases());
     }
 
     public function testCanBeInitializedByConfig()
@@ -67,7 +67,7 @@ class QueryAliasMapperTest extends TestCase
 
         $mapper = QueryAliasMapper::createFromConfig($mock);
 
-        $this->assertEquals($expected, $mapper->getQueryAliases());
+        static::assertEquals($expected, $mapper->getQueryAliases());
     }
 
     public function testAliasesCanBeRetrieved()
@@ -79,9 +79,9 @@ class QueryAliasMapperTest extends TestCase
 
         $mapper = new QueryAliasMapper($mapping);
 
-        $this->assertEquals('q', $mapper->getShortAlias('sSearch'));
-        $this->assertEquals('p', $mapper->getShortAlias('sPage'));
-        $this->assertEquals(null, $mapper->getShortAlias('somefoo'));
+        static::assertEquals('q', $mapper->getShortAlias('sSearch'));
+        static::assertEquals('p', $mapper->getShortAlias('sPage'));
+        static::assertEquals(null, $mapper->getShortAlias('somefoo'));
     }
 
     public function testLongParamsGettingReplaced()
@@ -107,7 +107,7 @@ class QueryAliasMapperTest extends TestCase
             'someParam' => 'someValue',
         ];
 
-        $this->assertEquals($expected, $result);
+        static::assertEquals($expected, $result);
     }
 
     public function testShortParamsGettingReplaced()
@@ -133,7 +133,7 @@ class QueryAliasMapperTest extends TestCase
             'someParam' => 'someValue',
         ];
 
-        $this->assertEquals($expected, $result);
+        static::assertEquals($expected, $result);
     }
 
     public function testRequestQueriesGettingReplacd()
@@ -158,7 +158,7 @@ class QueryAliasMapperTest extends TestCase
             'sPage' => 'someOtherValue',
         ];
 
-        $this->assertEquals($expected, $request->getParams());
+        static::assertEquals($expected, $request->getParams());
         $request->clearAll();
     }
 }

@@ -43,7 +43,7 @@ class SearchBundleDBALSubscriberTest extends \PHPUnit\Framework\TestCase
             $criteriaRequestHandler,
         ]);
 
-        $this->assertInstanceOf('\Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber', $subscriber);
+        static::assertInstanceOf('\Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber', $subscriber);
     }
 
     /**

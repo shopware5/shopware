@@ -2,19 +2,29 @@
 
 <h2><?= $t->t('requirements_header'); ?></h2>
 
-<?php if ($error): ?>
+<?php if ($error) {
+    ?>
     <div class="alert alert-error">
         <span class="icon-cross huge"></span>
         <?= $t->t('requirements_error'); ?>
     </div>
-<?php endif; ?>
 
-<?php if (!$error): ?>
+<?php
+} elseif ($phpVersionNotSupported) {
+        ?>
+    <div class="alert alert-warning">
+        <i class="icon-info22 huge"></i> <?= $phpVersionNotSupported; ?>
+    </div>
+
+<?php
+    } else {
+        ?>
     <div class="alert alert-success">
         <span class="icon-checkmark huge"></span>
         <?= $t->t('requirements_success'); ?>
     </div>
-<?php endif; ?>
+<?php
+    } ?>
 
 <h4 class="<?php if (!$pathError): ?>success<?php endif; ?><?php if ($pathError): ?>error<?php endif; ?>"><?= $t->t('requirements_header_files'); ?> <small><a href="#permissions" data-shown="<?= $t->t('requirements_hide_all'); ?>" data-hidden="<?= $t->t('requirements_show_all'); ?>"><?= $t->t('requirements_show_all'); ?></a></small></h4>
 
@@ -71,7 +81,7 @@
             <?php if (!empty($systemCheckResult['notice'])): ?>
             <tr class="notice-text ">
                 <td colspan="4">
-                    <p><i class="icon-info-sign"></i> <?= $systemCheckResult['notice']; ?></p>
+                    <p><i class="icon-info22"></i> <?= $systemCheckResult['notice']; ?></p>
                 </td>
             </tr>
             <?php endif; ?>

@@ -41,6 +41,6 @@ class Shopware_Tests_Models_Order_StatusTest extends Enlight_Components_Test_Tes
         Shopware()->Models()->flush($order);
         Shopware()->Models()->clear();
 
-        $this->assertNull(Shopware()->Models()->find(\Shopware\Models\Order\Status::class, $order->getId()));
+        static::assertNull(Shopware()->Models()->find(\Shopware\Models\Order\Status::class, $order->getId()));
     }
 }

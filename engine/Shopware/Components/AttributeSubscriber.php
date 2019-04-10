@@ -93,7 +93,6 @@ class AttributeSubscriber implements SubscriberInterface
     /**
      * Helper function to validate if the thrown exception is an shopware attribute model exception.
      *
-     *
      * @return bool
      */
     private function isModelException(\Exception $exception)

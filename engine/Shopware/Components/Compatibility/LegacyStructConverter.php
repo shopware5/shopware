@@ -164,7 +164,6 @@ class LegacyStructConverter
     /**
      * Converts a configurator group struct which used for default or selection configurators.
      *
-     *
      * @return array
      */
     public function convertConfiguratorGroupStruct(StoreFrontBundle\Struct\Configurator\Group $group)
@@ -274,7 +273,6 @@ class LegacyStructConverter
     /**
      * Converts the passed ListProduct struct to a shopware 3-4 array structure.
      *
-     *
      * @return array
      */
     public function convertListProductStruct(ListProduct $product)
@@ -374,7 +372,6 @@ class LegacyStructConverter
 
     /**
      * Converts the passed ProductStream struct to an array structure.
-     *
      *
      * @return array
      */
@@ -705,7 +702,6 @@ class LegacyStructConverter
      *     ],
      * ];
      *
-     *
      * @return array
      */
     public function convertPropertySetStruct(StoreFrontBundle\Struct\Property\Set $set)
@@ -886,7 +882,6 @@ class LegacyStructConverter
     /**
      * Creates the settings array for the passed configurator set
      *
-     *
      * @return array
      */
     public function getConfiguratorSettings(
@@ -919,7 +914,6 @@ class LegacyStructConverter
 
     /**
      * Converts a configurator option struct which used for default or selection configurators.
-     *
      *
      * @return array
      */
@@ -979,7 +973,6 @@ class LegacyStructConverter
 
     /**
      * Converts a payment struct
-     *
      *
      * @return array
      */
@@ -1112,7 +1105,6 @@ class LegacyStructConverter
     /**
      * Internal function which converts only the data of a list product.
      * Associated data won't converted.
-     *
      *
      * @return array
      */

@@ -51,13 +51,13 @@ class BasePriceTest extends TestCase
 
         /** @var Price $first */
         $first = array_shift($product->getPrices());
-        $this->assertEquals(100, $first->getCalculatedPrice());
-        $this->assertEquals(200, $first->getCalculatedReferencePrice());
+        static::assertEquals(100, $first->getCalculatedPrice());
+        static::assertEquals(200, $first->getCalculatedReferencePrice());
 
         /** @var Price $last */
         $last = array_pop($product->getPrices());
-        $this->assertEquals(50, $last->getCalculatedPrice());
-        $this->assertEquals(100, $last->getCalculatedReferencePrice());
+        static::assertEquals(50, $last->getCalculatedPrice());
+        static::assertEquals(100, $last->getCalculatedReferencePrice());
     }
 
     public function testHigherPurchaseUnit()
@@ -82,11 +82,11 @@ class BasePriceTest extends TestCase
 
         /** @var Price $first */
         $first = array_shift($product->getPrices());
-        $this->assertEquals(100, $first->getCalculatedPrice());
-        $this->assertEquals(20, $first->getCalculatedReferencePrice());
+        static::assertEquals(100, $first->getCalculatedPrice());
+        static::assertEquals(20, $first->getCalculatedReferencePrice());
 
         $last = array_pop($product->getPrices());
-        $this->assertEquals(50, $last->getCalculatedPrice());
-        $this->assertEquals(10, $last->getCalculatedReferencePrice());
+        static::assertEquals(50, $last->getCalculatedPrice());
+        static::assertEquals(10, $last->getCalculatedReferencePrice());
     }
 }

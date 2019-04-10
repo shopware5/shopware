@@ -107,7 +107,6 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     /**
      * Set shop instance
      *
-     *
      * @return Shopware_Components_Plugin_Namespace
      */
     public function setShop(Shop $shop)
@@ -210,7 +209,6 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
 
     /**
      * Registers a plugin in the collection.
-     *
      *
      * @return bool|array
      */
@@ -415,7 +413,6 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
 
     /**
      * Registers a plugin in the collection.
-     *
      *
      * @throws \Exception
      * @throws \Enlight_Config_Exception

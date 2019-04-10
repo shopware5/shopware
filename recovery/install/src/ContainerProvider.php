@@ -141,7 +141,7 @@ class ContainerProvider implements ServiceProviderInterface
         };
 
         $container['install.requirements'] = function ($c) {
-            return new Requirements(SW_PATH . '/engine/Shopware/Components/Check/Data/System.xml');
+            return new Requirements(SW_PATH . '/engine/Shopware/Components/Check/Data/System.xml', $c['translation.service']);
         };
 
         $container['install.requirementsPath'] = function ($c) {

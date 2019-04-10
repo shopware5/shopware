@@ -58,7 +58,7 @@ class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Te
     public function testDispatchNoActiveBlogItem()
     {
         $this->dispatch('/blog/detail/?blogArticle=3');
-        $this->assertTrue($this->Response()->isRedirect());
+        static::assertTrue($this->Response()->isRedirect());
     }
 
     /**
@@ -70,7 +70,7 @@ class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Te
     public function testDispatchNotExistingBlogItem()
     {
         $this->dispatch('/blog/detail/?blogArticle=2222');
-        $this->assertTrue($this->Response()->isRedirect());
+        static::assertTrue($this->Response()->isRedirect());
     }
 
     /**
@@ -81,18 +81,18 @@ class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Te
         try {
             $this->dispatch('/blog/?sCategory=17');
         } catch (Exception $e) {
-            $this->fail('Exception thrown. This should not occur.');
+            static::fail('Exception thrown. This should not occur.');
         }
 
-        $this->assertTrue(!$this->Response()->isRedirect());
+        static::assertTrue(!$this->Response()->isRedirect());
 
         try {
             $this->dispatch('/blog/?sCategory=156165');
         } catch (Exception $e) {
-            $this->fail('Exception thrown. This should not occur.');
+            static::fail('Exception thrown. This should not occur.');
         }
 
-        $this->assertTrue($this->Response()->isRedirect());
+        static::assertTrue($this->Response()->isRedirect());
 
         //deactivate blog category
         $sql = "UPDATE `s_categories` SET `active` = '0' WHERE `id` =17";
@@ -102,18 +102,18 @@ class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Te
         try {
             $this->dispatch('/blog/?sCategory=17');
         } catch (Exception $e) {
-            $this->fail('Exception thrown. This should not occur.');
+            static::fail('Exception thrown. This should not occur.');
         }
-        $this->assertTrue($this->Response()->isRedirect());
+        static::assertTrue($this->Response()->isRedirect());
 
         //should be redirected because blog category is inactive
         try {
             $this->dispatch('/blog/detail/?blogArticle=3');
         } catch (Exception $e) {
-            $this->fail('Exception thrown. This should not occur.');
+            static::fail('Exception thrown. This should not occur.');
         }
 
-        $this->assertTrue($this->Response()->isRedirect());
+        static::assertTrue($this->Response()->isRedirect());
 
         //activate blog category
         $sql = "UPDATE `s_categories` SET `active` = '1' WHERE `id` =17";

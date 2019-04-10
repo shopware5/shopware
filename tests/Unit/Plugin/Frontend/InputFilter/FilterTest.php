@@ -117,7 +117,7 @@ class FilterTest extends TestCase
         $regex = '#' . $this->inputFilter->sqlRegex . '#msi';
         $statement = \Shopware_Plugins_Frontend_InputFilter_Bootstrap::filterValue($statement, $regex);
 
-        $this->assertNull($statement);
+        static::assertNull($statement);
     }
 
     /**
@@ -127,7 +127,7 @@ class FilterTest extends TestCase
      */
     public function testStripTagsEnabled($input, array $expected)
     {
-        $this->assertEquals(
+        static::assertEquals(
             $expected['enabled'],
             \Shopware_Plugins_Frontend_InputFilter_Bootstrap::filterValue($input, '#PreventRegexMatch#', true)
         );
@@ -140,7 +140,7 @@ class FilterTest extends TestCase
      */
     public function testStripTagsDisabled($input, array $expected)
     {
-        $this->assertEquals(
+        static::assertEquals(
             $expected['disabled'],
             \Shopware_Plugins_Frontend_InputFilter_Bootstrap::filterValue($input, '#PreventRegexMatch#', false)
         );
@@ -156,7 +156,7 @@ class FilterTest extends TestCase
     {
         $result = \Shopware_Plugins_Frontend_InputFilter_Bootstrap::filterValue($input, '#' . $this->inputFilter->xssRegex . '#msi');
 
-        $this->assertEquals(
+        static::assertEquals(
             $expected,
             $result
         );

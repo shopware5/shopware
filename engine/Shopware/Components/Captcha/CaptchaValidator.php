@@ -41,7 +41,6 @@ class CaptchaValidator
     /**
      * Validates a Request using the currently configured captcha
      *
-     *
      * @return bool
      */
     public function validate(Enlight_Controller_Request_Request $request)

@@ -77,13 +77,13 @@ class OptimizerServiceTest extends TestCase
     public function testFindOptimizerByMimeTypeWithMultipleMatchingOptimizer()
     {
         $optimizer = $this->optimizerService->getOptimizerByMimeType('application/unit-test');
-        $this->assertInstanceOf(RunnableUnitOptimizer::class, $optimizer);
+        static::assertInstanceOf(RunnableUnitOptimizer::class, $optimizer);
     }
 
     public function testFindOptimizerByMimeTypeWithSingleMatchingOptimizer()
     {
         $optimizer = $this->optimizerService->getOptimizerByMimeType('application/single-runnable');
-        $this->assertInstanceOf(SingleRunnableUnitOptimizer::class, $optimizer);
+        static::assertInstanceOf(SingleRunnableUnitOptimizer::class, $optimizer);
     }
 
     public function testFindOptimizerByMimeTypeWithSingleMatchingButNotRunnableOptimizer()
@@ -95,8 +95,8 @@ class OptimizerServiceTest extends TestCase
     public function testGetOptimizers()
     {
         $optimizers = $this->optimizerService->getOptimizers();
-        $this->assertInternalType('array', $optimizers);
-        $this->assertSame($this->optimizers->toArray(), $optimizers);
+        static::assertInternalType('array', $optimizers);
+        static::assertSame($this->optimizers->toArray(), $optimizers);
     }
 
     public function testOptimize()
@@ -106,7 +106,7 @@ class OptimizerServiceTest extends TestCase
         $this->optimizerService->optimize($file);
 
         $optimizer = $this->optimizerService->getOptimizerByMimeType('image/png');
-        $this->assertEquals(1, $optimizer->runCount);
+        static::assertEquals(1, $optimizer->runCount);
     }
 }
 

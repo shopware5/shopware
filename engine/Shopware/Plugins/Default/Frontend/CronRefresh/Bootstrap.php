@@ -49,7 +49,6 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
      * Delete all entries older then 30 days.
      * To change this time - modify sql-queries
      *
-     *
      * @return array
      */
     public function onCronJobClearing(Shopware_Components_Cron_CronJob $job)

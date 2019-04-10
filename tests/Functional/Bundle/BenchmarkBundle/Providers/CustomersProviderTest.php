@@ -44,16 +44,16 @@ class CustomersProviderTest extends ProviderTestCase
         $resultData = $this->getBenchmarkData();
         $customersList = $resultData['list'];
 
-        $this->assertEquals(1993, $customersList[0]['birthYear']);
-        $this->assertEquals(1, $customersList[0]['birthMonth']);
+        static::assertEquals(1993, $customersList[0]['birthYear']);
+        static::assertEquals(1, $customersList[0]['birthMonth']);
 
-        $this->assertEquals(1, $customersList[0]['registered']);
-        $this->assertEquals(0, $customersList[1]['registered']);
+        static::assertEquals(1, $customersList[0]['registered']);
+        static::assertEquals(0, $customersList[1]['registered']);
 
-        $this->assertEquals('2013-11-25', $customersList[5]['registerDate']);
+        static::assertEquals('2013-11-25', $customersList[5]['registerDate']);
 
-        $this->assertEquals(1, $customersList[4]['hasNewsletter']);
-        $this->assertEquals(0, $customersList[5]['hasNewsletter']);
+        static::assertEquals(1, $customersList[4]['hasNewsletter']);
+        static::assertEquals(0, $customersList[5]['hasNewsletter']);
     }
 
     /**
@@ -67,9 +67,9 @@ class CustomersProviderTest extends ProviderTestCase
         $resultData = $this->getBenchmarkData();
         $customersList = $resultData['list'];
 
-        $this->assertSame('male', $customersList[0]['gender']);
-        $this->assertSame('female', $customersList[1]['gender']);
-        $this->assertSame('unknown', $customersList[3]['gender']);
+        static::assertSame('male', $customersList[0]['gender']);
+        static::assertSame('female', $customersList[1]['gender']);
+        static::assertSame('unknown', $customersList[3]['gender']);
     }
 
     /**
@@ -83,8 +83,8 @@ class CustomersProviderTest extends ProviderTestCase
         $resultData = $this->getBenchmarkData();
         $customersList = $resultData['list'];
 
-        $this->assertEquals(750, $customersList[3]['turnOver']);
-        $this->assertEquals(850, $customersList[4]['turnOver']);
+        static::assertEquals(750, $customersList[3]['turnOver']);
+        static::assertEquals(850, $customersList[4]['turnOver']);
     }
 
     /**
@@ -98,11 +98,11 @@ class CustomersProviderTest extends ProviderTestCase
 
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
         $customersList = $resultData['list'];
-        $this->assertCount(7, $customersList);
+        static::assertCount(7, $customersList);
 
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
         $customersList = $resultData['list'];
-        $this->assertCount(1, $customersList);
+        static::assertCount(1, $customersList);
     }
 
     /**
@@ -118,7 +118,7 @@ class CustomersProviderTest extends ProviderTestCase
         $resultData = $this->getBenchmarkData();
         $customersList = $resultData['list'];
 
-        $this->assertCount(1, $customersList);
+        static::assertCount(1, $customersList);
     }
 
     /**
@@ -134,7 +134,7 @@ class CustomersProviderTest extends ProviderTestCase
         $resultData = $this->getBenchmarkData();
         $customersList = $resultData['list'];
 
-        $this->assertEquals(850, $customersList[0]['turnOver']);
+        static::assertEquals(850, $customersList[0]['turnOver']);
     }
 
     /**
@@ -149,6 +149,6 @@ class CustomersProviderTest extends ProviderTestCase
 
         $this->sendStatistics();
 
-        $this->assertEquals(5, Shopware()->Db()->fetchOne('SELECT last_customer_id FROM s_benchmark_config WHERE shop_id=1'));
+        static::assertEquals(5, Shopware()->Db()->fetchOne('SELECT last_customer_id FROM s_benchmark_config WHERE shop_id=1'));
     }
 }

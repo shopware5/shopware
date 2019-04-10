@@ -284,7 +284,6 @@ class Order extends Resource
     /**
      * Helper method to prepare the order data
      *
-     *
      * @throws ApiException\NotFoundException
      * @throws ApiException\ParameterMissingException
      *
@@ -420,7 +419,6 @@ class Order extends Resource
     /**
      * Helper method to prepare the order detail data
      *
-     *
      * @throws ApiException\NotFoundException
      * @throws ApiException\ValidationException
      *
@@ -517,7 +515,6 @@ class Order extends Resource
     /**
      * Helper method to prepare the order data
      *
-     *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      *
      * @return array
@@ -580,7 +577,6 @@ class Order extends Resource
 
     /**
      * Helper method to prepare the order detail data
-     *
      *
      * @throws \Shopware\Components\Api\Exception\NotFoundException|ApiException\CustomValidationException
      *

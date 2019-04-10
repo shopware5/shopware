@@ -56,12 +56,12 @@ class AddressTest extends TestCase
 
         $address = $this->resource->create($testData);
 
-        $this->assertInstanceOf('\Shopware\Models\Customer\Address', $address);
-        $this->assertGreaterThan(0, $address->getId());
+        static::assertInstanceOf('\Shopware\Models\Customer\Address', $address);
+        static::assertGreaterThan(0, $address->getId());
 
-        $this->assertEquals($testData['country'], $address->getCountry()->getId());
-        $this->assertEquals($testData['firstname'], $address->getFirstname());
-        $this->assertEquals($testData['lastname'], $address->getLastname());
+        static::assertEquals($testData['country'], $address->getCountry()->getId());
+        static::assertEquals($testData['firstname'], $address->getFirstname());
+        static::assertEquals($testData['lastname'], $address->getLastname());
 
         return $address->getId();
     }
@@ -72,7 +72,7 @@ class AddressTest extends TestCase
     public function testGetOneShouldBeSuccessful($id)
     {
         $address = $this->resource->getOne($id);
-        $this->assertGreaterThan(0, $address['id']);
+        static::assertGreaterThan(0, $address['id']);
     }
 
     /**
@@ -82,11 +82,11 @@ class AddressTest extends TestCase
     {
         $result = $this->resource->getList();
 
-        $this->assertArrayHasKey('data', $result);
-        $this->assertArrayHasKey('total', $result);
+        static::assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('total', $result);
 
-        $this->assertGreaterThanOrEqual(1, $result['total']);
-        $this->assertGreaterThanOrEqual(1, $result['data']);
+        static::assertGreaterThanOrEqual(1, $result['total']);
+        static::assertGreaterThanOrEqual(1, $result['data']);
     }
 
     /**
@@ -101,11 +101,11 @@ class AddressTest extends TestCase
 
         $address = $this->resource->update($id, $testData);
 
-        $this->assertInstanceOf('\Shopware\Models\Customer\Address', $address);
-        $this->assertEquals($id, $address->getId());
+        static::assertInstanceOf('\Shopware\Models\Customer\Address', $address);
+        static::assertEquals($id, $address->getId());
 
-        $this->assertEquals($address->getLastname(), $testData['lastname']);
-        $this->assertEquals($address->getZipcode(), $testData['zipcode']);
+        static::assertEquals($address->getLastname(), $testData['lastname']);
+        static::assertEquals($address->getZipcode(), $testData['zipcode']);
 
         return $id;
     }
@@ -119,7 +119,7 @@ class AddressTest extends TestCase
         $address = $this->resource->getOne($newAddressId);
         $customer = Shopware()->Models()->find('Shopware\Models\Customer\Customer', $address['customer']['id']);
 
-        $this->assertNotEquals($newAddressId, $customer->getDefaultBillingAddress()->getId());
+        static::assertNotEquals($newAddressId, $customer->getDefaultBillingAddress()->getId());
 
         return $newAddressId;
     }
@@ -136,8 +136,8 @@ class AddressTest extends TestCase
 
         $address = $this->resource->update($id, $testData);
 
-        $this->assertEquals($id, $address->getCustomer()->getDefaultBillingAddress()->getId());
-        $this->assertEquals($id, $address->getCustomer()->getDefaultShippingAddress()->getId());
+        static::assertEquals($id, $address->getCustomer()->getDefaultBillingAddress()->getId());
+        static::assertEquals($id, $address->getCustomer()->getDefaultShippingAddress()->getId());
 
         return $id;
     }
@@ -165,8 +165,8 @@ class AddressTest extends TestCase
     {
         $address = $this->resource->delete($id);
 
-        $this->assertInstanceOf('\Shopware\Models\Customer\Address', $address);
-        $this->assertEquals(null, $address->getId());
+        static::assertInstanceOf('\Shopware\Models\Customer\Address', $address);
+        static::assertEquals(null, $address->getId());
     }
 
     /**

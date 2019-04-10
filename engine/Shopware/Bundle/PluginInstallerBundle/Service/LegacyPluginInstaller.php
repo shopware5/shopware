@@ -58,7 +58,6 @@ class LegacyPluginInstaller
     /**
      * Returns a certain plugin by plugin id.
      *
-     *
      * @throws \RuntimeException
      *
      * @return \Shopware_Components_Plugin_Bootstrap|null

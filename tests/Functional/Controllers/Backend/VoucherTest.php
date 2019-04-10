@@ -87,12 +87,12 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
 
         /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/voucher/getVoucher?page=1&start=0&limit=2000');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
         $returnData = $this->View()->data;
-        $this->assertNotEmpty($returnData);
-        $this->assertGreaterThan(0, $this->View()->totalCount);
+        static::assertNotEmpty($returnData);
+        static::assertGreaterThan(0, $this->View()->totalCount);
         $lastInsert = $returnData[count($returnData) - 1];
-        $this->assertEquals($voucher->getId(), $lastInsert['id']);
+        static::assertEquals($voucher->getId(), $lastInsert['id']);
 
         $this->manager->remove($voucher);
         $this->manager->flush();
@@ -112,8 +112,8 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
         $params = $this->voucherData;
         $this->Request()->setParams($params);
         $this->dispatch('backend/voucher/saveVoucher');
-        $this->assertTrue($this->View()->success);
-        $this->assertEquals($params['description'], $this->View()->data['description']);
+        static::assertTrue($this->View()->success);
+        static::assertEquals($params['description'], $this->View()->data['description']);
 
         return $this->View()->data['id'];
     }
@@ -132,15 +132,15 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
         $params['voucherID'] = $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/voucher/getVoucherDetail');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
         $returningData = $this->View()->data;
         $voucherData = $this->voucherData;
-        $this->assertEquals($voucherData['description'], $returningData['description']);
-        $this->assertEquals($voucherData['numberOfUnits'], $returningData['numberOfUnits']);
-        $this->assertEquals($voucherData['minimumCharge'], $returningData['minimumCharge']);
-        $this->assertEquals($voucherData['orderCode'], $returningData['orderCode']);
-        $this->assertEquals($voucherData['modus'], $returningData['modus']);
-        $this->assertEquals($voucherData['taxConfig'], $returningData['taxConfig']);
+        static::assertEquals($voucherData['description'], $returningData['description']);
+        static::assertEquals($voucherData['numberOfUnits'], $returningData['numberOfUnits']);
+        static::assertEquals($voucherData['minimumCharge'], $returningData['minimumCharge']);
+        static::assertEquals($voucherData['orderCode'], $returningData['orderCode']);
+        static::assertEquals($voucherData['modus'], $returningData['modus']);
+        static::assertEquals($voucherData['taxConfig'], $returningData['taxConfig']);
 
         return $id;
     }
@@ -160,7 +160,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
         $this->Request()->setParams($params);
         $this->dispatch('backend/voucher/validateVoucherCode');
 
-        $this->assertEquals(1, $this->Response()->getBody());
+        static::assertEquals(1, $this->Response()->getBody());
 
         $this->Request()->clearParams();
         $this->Response()->clearBody();
@@ -172,7 +172,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
         $this->Request()->setParams($params);
         $this->dispatch('backend/voucher/validateVoucherCode');
 
-        $this->assertEmpty($this->Response()->getBody());
+        static::assertEmpty($this->Response()->getBody());
         $this->manager->remove($voucherModel);
         $this->manager->flush();
     }
@@ -194,7 +194,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
         $this->Request()->setParams($params);
         $this->dispatch('backend/voucher/validateOrderCode');
 
-        $this->assertEquals(1, $this->Response()->getBody());
+        static::assertEquals(1, $this->Response()->getBody());
 
         $this->Request()->clearParams();
         $this->Response()->clearBody();
@@ -205,7 +205,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
         $params['param'] = 416531;
         $this->Request()->setParams($params);
         $this->dispatch('backend/voucher/validateOrderCode');
-        $this->assertEmpty($this->Response()->getBody());
+        static::assertEmpty($this->Response()->getBody());
     }
 
     /**
@@ -223,8 +223,8 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
         $this->Request()->setParams($params);
 
         $this->dispatch('backend/voucher/saveVoucher');
-        $this->assertTrue($this->View()->success);
-        $this->assertEquals($params['description'], $this->View()->data['description']);
+        static::assertTrue($this->View()->success);
+        static::assertEquals($params['description'], $this->View()->data['description']);
 
         return $id;
     }
@@ -244,7 +244,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
         $params['voucherId'] = intval($id);
         $this->Request()->setParams($params);
         $this->dispatch('backend/voucher/createVoucherCodes');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         return $id;
     }
@@ -259,8 +259,8 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
     public function testGetVoucherCodes($id)
     {
         $this->dispatch('backend/voucher/getVoucherCodes?voucherID=' . $id);
-        $this->assertTrue($this->View()->success);
-        $this->assertCount(50, $this->View()->data);
+        static::assertTrue($this->View()->success);
+        static::assertCount(50, $this->View()->data);
 
         return $id;
     }
@@ -281,9 +281,9 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
         $header = $this->Response()->getHeaders();
 
         $lastHeader = array_pop($header);
-        $this->assertEquals('Content-Disposition', $lastHeader['name']);
-        $this->assertEquals('attachment;filename=voucherCodes.csv', $lastHeader['value']);
-        $this->assertGreaterThan(1000, strlen($this->Response()->getBody()));
+        static::assertEquals('Content-Disposition', $lastHeader['name']);
+        static::assertEquals('attachment;filename=voucherCodes.csv', $lastHeader['value']);
+        static::assertGreaterThan(1000, strlen($this->Response()->getBody()));
 
         return $id;
     }
@@ -301,8 +301,8 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
         $params['id'] = intval($id);
         $this->Request()->setParams($params);
         $this->dispatch('backend/voucher/deleteVoucher');
-        $this->assertTrue($this->View()->success);
-        $this->assertNull($this->repository->find($params['id']));
+        static::assertTrue($this->View()->success);
+        static::assertNull($this->repository->find($params['id']));
     }
 
     /**
@@ -311,8 +311,8 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
     public function testGetTaxConfiguration()
     {
         $this->dispatch('backend/voucher/getTaxConfiguration');
-        $this->assertTrue($this->View()->success);
-        $this->assertNotEmpty($this->View()->data);
+        static::assertTrue($this->View()->success);
+        static::assertNotEmpty($this->View()->data);
     }
 
     /**

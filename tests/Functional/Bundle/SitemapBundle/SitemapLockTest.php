@@ -39,28 +39,28 @@ class SitemapLockTest extends TestCase
         $lock = new SitemapLock(new \Shopware\Bundle\StoreFrontBundle\Service\Core\CoreCache(new ArrayCache()), 'sitemap-exporter-running-%s');
 
         // Check that the Shop is not locked
-        $this->assertFalse($lock->isLocked($shop), 'Shop already locked');
+        static::assertFalse($lock->isLocked($shop), 'Shop already locked');
 
         // Check we can lock the Shop
-        $this->assertTrue($lock->doLock($shop, 60), 'Failed to lock shop');
+        static::assertTrue($lock->doLock($shop, 60), 'Failed to lock shop');
 
         // Check that is indeed locked
-        $this->assertTrue($lock->isLocked($shop), 'Check for locked shop failed');
+        static::assertTrue($lock->isLocked($shop), 'Check for locked shop failed');
 
         // Check that we cannot lock the Shop again now
-        $this->assertFalse($lock->doLock($shop), 'Lock for shop was not persisted');
+        static::assertFalse($lock->doLock($shop), 'Lock for shop was not persisted');
 
         // Check we can unlock the shop
-        $this->assertTrue($lock->unLock($shop), 'Failed to unlock shop');
+        static::assertTrue($lock->unLock($shop), 'Failed to unlock shop');
 
         // Check that is indeed unlocked
-        $this->assertFalse($lock->isLocked($shop), 'Shop was not unlocked');
+        static::assertFalse($lock->isLocked($shop), 'Shop was not unlocked');
 
         // Check we can lock the shop again
-        $this->assertTrue($lock->doLock($shop, 60), 'Failed to lock shop again');
+        static::assertTrue($lock->doLock($shop, 60), 'Failed to lock shop again');
 
         // Finally unlock Shop again
-        $this->assertTrue($lock->unLock($shop), 'Failed to unlock shop twice');
+        static::assertTrue($lock->unLock($shop), 'Failed to unlock shop twice');
     }
 }
 

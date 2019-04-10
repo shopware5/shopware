@@ -59,11 +59,11 @@ class MediaTest extends TestCase
         }
 
         $this->resource->create($data);
-        $this->assertTrue($mediaService->has($path));
+        static::assertTrue($mediaService->has($path));
 
         //check if the thumbnails are generated
         $path = Shopware()->DocPath('media_image_thumbnail') . 'test-bild-used_140x140.jpg';
-        $this->assertTrue($mediaService->has($path));
+        static::assertTrue($mediaService->has($path));
 
         unlink($dest);
     }
@@ -83,11 +83,11 @@ class MediaTest extends TestCase
 
         $pathPicture = Shopware()->DocPath('media_image') . $media->getFileName();
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        $this->assertTrue($mediaService->has($pathPicture));
+        static::assertTrue($mediaService->has($pathPicture));
 
         //check if the thumbnails are generated
         $path = Shopware()->DocPath('media_image_thumbnail') . $media->getName() . '_140x140.jpg';
-        $this->assertTrue($mediaService->has($path));
+        static::assertTrue($mediaService->has($path));
 
         $mediaService->delete(Shopware()->DocPath('media_image') . $media->getFileName());
         $mediaService->delete($path);
@@ -105,12 +105,12 @@ class MediaTest extends TestCase
         // Assert that the given name is used
         $media = $this->resource->create($data);
         $ids[] = $media->getId();
-        $this->assertEquals($data['name'], $media->getName());
+        static::assertEquals($data['name'], $media->getName());
 
         // On the second pass the given name should still be used (extended with a random string)
         $media = $this->resource->create($data);
         $ids[] = $media->getId();
-        $this->assertContains($data['name'], $media->getName());
+        static::assertContains($data['name'], $media->getName());
 
         // Delete the created media
         foreach ($ids as $id) {
@@ -147,7 +147,7 @@ class MediaTest extends TestCase
 
         $content = base64_encode($mediaService->read($path));
 
-        $this->assertEquals($content, $base64Data, 'Replaced file was not persisted correctly.');
+        static::assertEquals($content, $base64Data, 'Replaced file was not persisted correctly.');
     }
 
     /**

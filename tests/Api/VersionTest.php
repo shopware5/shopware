@@ -40,7 +40,7 @@ class Shopware_Tests_Api_VersionTest extends PHPUnit\Framework\TestCase
 
         $hostname = $helper->Shop()->getHost();
         if (empty($hostname)) {
-            $this->markTestSkipped(
+            static::markTestSkipped(
                 'Hostname is not available.'
             );
         }
@@ -79,21 +79,21 @@ class Shopware_Tests_Api_VersionTest extends PHPUnit\Framework\TestCase
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/version');
         $result = $client->request('GET');
 
-        $this->assertEquals('application/json', $result->getHeader('Content-Type'));
-        $this->assertEquals(null, $result->getHeader('Set-Cookie'));
-        $this->assertEquals(200, $result->getStatus());
+        static::assertEquals('application/json', $result->getHeader('Content-Type'));
+        static::assertEquals(null, $result->getHeader('Set-Cookie'));
+        static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
-        $this->assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('data', $result);
         $data = $result['data'];
-        $this->assertInternalType('array', $data);
+        static::assertInternalType('array', $data);
 
-        $this->assertEquals($release['version'], $data['version']);
-        $this->assertEquals($release['revision'], $data['revision']);
+        static::assertEquals($release['version'], $data['version']);
+        static::assertEquals($release['revision'], $data['revision']);
     }
 }

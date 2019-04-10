@@ -53,9 +53,9 @@ class PaginationTest extends TestCase
             ]
         );
 
-        $this->assertContains('test1@example.com', $result->getEmails());
-        $this->assertEquals(3, $result->getTotal());
-        $this->assertCount(1, $result->getIds());
-        $this->assertCount(1, $result->getCustomers());
+        static::assertContains('test1@example.com', $result->getEmails());
+        static::assertEquals(3, $result->getTotal());
+        static::assertCount(1, $result->getIds());
+        static::assertCount(1, $result->getCustomers());
     }
 }

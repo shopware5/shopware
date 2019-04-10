@@ -41,10 +41,10 @@ class GraduatedPricesTest extends TestCase
         $listProduct = $this->helper->getListProduct($number, $context);
         $graduation = $listProduct->getPrices();
 
-        $this->assertCount(3, $graduation);
+        static::assertCount(3, $graduation);
         foreach ($graduation as $price) {
-            $this->assertEquals('PHP', $price->getCustomerGroup()->getKey());
-            $this->assertGreaterThan(0, $price->getCalculatedPrice());
+            static::assertEquals('PHP', $price->getCustomerGroup()->getKey());
+            static::assertGreaterThan(0, $price->getCalculatedPrice());
         }
     }
 
@@ -61,10 +61,10 @@ class GraduatedPricesTest extends TestCase
         $listProduct = $this->helper->getListProduct($number, $context);
         $graduation = $listProduct->getPrices();
 
-        $this->assertCount(3, $graduation);
+        static::assertCount(3, $graduation);
         foreach ($graduation as $price) {
-            $this->assertEquals('BACK', $price->getCustomerGroup()->getKey());
-            $this->assertGreaterThan(0, $price->getCalculatedPrice());
+            static::assertEquals('BACK', $price->getCustomerGroup()->getKey());
+            static::assertGreaterThan(0, $price->getCalculatedPrice());
         }
     }
 
@@ -93,16 +93,16 @@ class GraduatedPricesTest extends TestCase
 
         /** @var Price $first */
         $listProduct = $this->helper->getListProduct($number, $context);
-        $this->assertCount(3, $listProduct->getPrices());
+        static::assertCount(3, $listProduct->getPrices());
         $first = array_shift($listProduct->getPrices());
-        $this->assertEquals(100, $first->getCalculatedPrice());
+        static::assertEquals(100, $first->getCalculatedPrice());
 
         /** @var Price $first */
         $listProduct = $this->helper->getListProduct($variantNumber, $context);
 
-        $this->assertCount(3, $listProduct->getPrices());
+        static::assertCount(3, $listProduct->getPrices());
         $first = array_shift($listProduct->getPrices());
-        $this->assertEquals(200, $first->getCalculatedPrice());
+        static::assertEquals(200, $first->getCalculatedPrice());
     }
 
     public function testGraduationByPriceGroup()
@@ -133,19 +133,19 @@ class GraduatedPricesTest extends TestCase
         $listProduct = $this->helper->getListProduct($number, $context);
 
         $graduations = $listProduct->getPrices();
-        $this->assertCount(3, $graduations);
+        static::assertCount(3, $graduations);
 
-        $this->assertEquals(36, $graduations[0]->getCalculatedPrice());
-        $this->assertEquals(1, $graduations[0]->getFrom());
-        $this->assertEquals(4, $graduations[0]->getTo());
+        static::assertEquals(36, $graduations[0]->getCalculatedPrice());
+        static::assertEquals(1, $graduations[0]->getFrom());
+        static::assertEquals(4, $graduations[0]->getTo());
 
-        $this->assertEquals(32, $graduations[1]->getCalculatedPrice());
-        $this->assertEquals(5, $graduations[1]->getFrom());
-        $this->assertEquals(9, $graduations[1]->getTo());
+        static::assertEquals(32, $graduations[1]->getCalculatedPrice());
+        static::assertEquals(5, $graduations[1]->getFrom());
+        static::assertEquals(9, $graduations[1]->getTo());
 
-        $this->assertEquals(28, $graduations[2]->getCalculatedPrice());
-        $this->assertEquals(10, $graduations[2]->getFrom());
-        $this->assertEquals(null, $graduations[2]->getTo());
+        static::assertEquals(28, $graduations[2]->getCalculatedPrice());
+        static::assertEquals(10, $graduations[2]->getFrom());
+        static::assertEquals(null, $graduations[2]->getTo());
     }
 
     protected function getContext()

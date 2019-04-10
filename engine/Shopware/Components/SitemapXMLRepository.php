@@ -179,7 +179,6 @@ class SitemapXMLRepository
     /**
      * Reads all product urls recursive
      *
-     *
      * @return array
      */
     private function readProductUrlsRecursive(Criteria $criteria)

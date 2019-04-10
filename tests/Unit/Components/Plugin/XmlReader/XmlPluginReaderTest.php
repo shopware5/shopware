@@ -43,67 +43,67 @@ class XmlPluginReaderTest extends TestCase
     {
         $result = $this->readFile('plugin.xml');
 
-        self::assertInternalType('array', $result);
+        static::assertInternalType('array', $result);
 
-        self::assertArrayHasKey('label', $result);
-        self::assertArrayHasKey('en', $result['label']);
-        self::assertArrayHasKey('de', $result['label']);
-        self::assertEquals('My plugin', $result['label']['de']);
-        self::assertEquals('My plugin', $result['label']['en']);
+        static::assertArrayHasKey('label', $result);
+        static::assertArrayHasKey('en', $result['label']);
+        static::assertArrayHasKey('de', $result['label']);
+        static::assertEquals('My plugin', $result['label']['de']);
+        static::assertEquals('My plugin', $result['label']['en']);
 
-        self::assertArrayHasKey('description', $result);
-        self::assertArrayHasKey('en', $result['description']);
-        self::assertArrayHasKey('de', $result['description']);
-        self::assertEquals("<h2>Mein Plugin</h2>\n<p>Meine Plugin Beschreibung</p>", $result['description']['de']);
-        self::assertEquals("<h2>My Plugin</h2>\n<p>My long description</p>", $result['description']['en']);
+        static::assertArrayHasKey('description', $result);
+        static::assertArrayHasKey('en', $result['description']);
+        static::assertArrayHasKey('de', $result['description']);
+        static::assertEquals("<h2>Mein Plugin</h2>\n<p>Meine Plugin Beschreibung</p>", $result['description']['de']);
+        static::assertEquals("<h2>My Plugin</h2>\n<p>My long description</p>", $result['description']['en']);
 
-        self::assertArrayHasKey('version', $result);
-        self::assertArrayHasKey('license', $result);
-        self::assertArrayHasKey('author', $result);
-        self::assertArrayHasKey('copyright', $result);
-        self::assertArrayHasKey('link', $result);
+        static::assertArrayHasKey('version', $result);
+        static::assertArrayHasKey('license', $result);
+        static::assertArrayHasKey('author', $result);
+        static::assertArrayHasKey('copyright', $result);
+        static::assertArrayHasKey('link', $result);
 
-        self::assertEquals('1.5.3', $result['version']);
-        self::assertEquals('MIT', $result['license']);
-        self::assertEquals('Hasna Corp.', $result['author']);
-        self::assertEquals('(c) Hansa Corp.', $result['copyright']);
-        self::assertEquals('Some link', $result['link']);
+        static::assertEquals('1.5.3', $result['version']);
+        static::assertEquals('MIT', $result['license']);
+        static::assertEquals('Hasna Corp.', $result['author']);
+        static::assertEquals('(c) Hansa Corp.', $result['copyright']);
+        static::assertEquals('Some link', $result['link']);
 
-        self::assertArrayHasKey('changelog', $result);
-        self::assertArrayHasKey('1.0.6', $result['changelog']);
-        self::assertArrayHasKey('1.0.5', $result['changelog']);
-        self::assertArrayHasKey('de', $result['changelog']['1.0.6']);
-        self::assertArrayHasKey('en', $result['changelog']['1.0.6']);
-        self::assertCount(3, $result['changelog']['1.0.6']['de']);
-        self::assertCount(1, $result['changelog']['1.0.6']['en']);
+        static::assertArrayHasKey('changelog', $result);
+        static::assertArrayHasKey('1.0.6', $result['changelog']);
+        static::assertArrayHasKey('1.0.5', $result['changelog']);
+        static::assertArrayHasKey('de', $result['changelog']['1.0.6']);
+        static::assertArrayHasKey('en', $result['changelog']['1.0.6']);
+        static::assertCount(3, $result['changelog']['1.0.6']['de']);
+        static::assertCount(1, $result['changelog']['1.0.6']['en']);
 
-        self::assertArrayHasKey('compatibility', $result);
-        self::assertArrayHasKey('minVersion', $result['compatibility']);
-        self::assertArrayHasKey('maxVersion', $result['compatibility']);
-        self::assertArrayHasKey('blacklist', $result['compatibility']);
+        static::assertArrayHasKey('compatibility', $result);
+        static::assertArrayHasKey('minVersion', $result['compatibility']);
+        static::assertArrayHasKey('maxVersion', $result['compatibility']);
+        static::assertArrayHasKey('blacklist', $result['compatibility']);
 
-        self::assertCount(2, $result['compatibility']['blacklist']);
+        static::assertCount(2, $result['compatibility']['blacklist']);
 
-        self::assertArrayHasKey('requiredPlugins', $result);
+        static::assertArrayHasKey('requiredPlugins', $result);
 
-        self::assertCount(2, $result['requiredPlugins']);
+        static::assertCount(2, $result['requiredPlugins']);
 
         $firstRequiredPlugin = $result['requiredPlugins'][0];
 
-        self::assertArrayHasKey('minVersion', $firstRequiredPlugin);
-        self::assertArrayHasKey('maxVersion', $firstRequiredPlugin);
-        self::assertArrayHasKey('blacklist', $firstRequiredPlugin);
+        static::assertArrayHasKey('minVersion', $firstRequiredPlugin);
+        static::assertArrayHasKey('maxVersion', $firstRequiredPlugin);
+        static::assertArrayHasKey('blacklist', $firstRequiredPlugin);
 
-        self::assertCount(2, $firstRequiredPlugin['blacklist']);
+        static::assertCount(2, $firstRequiredPlugin['blacklist']);
 
-        self::assertEquals('1.0.2', $firstRequiredPlugin['blacklist'][0]);
-        self::assertEquals('1.0.3', $firstRequiredPlugin['blacklist'][1]);
+        static::assertEquals('1.0.2', $firstRequiredPlugin['blacklist'][0]);
+        static::assertEquals('1.0.3', $firstRequiredPlugin['blacklist'][1]);
 
         $secondRequiredPlugin = $result['requiredPlugins'][1];
 
-        self::assertArrayNotHasKey('minVersion', $secondRequiredPlugin);
-        self::assertArrayNotHasKey('maxVersion', $secondRequiredPlugin);
-        self::assertArrayNotHasKey('blacklist', $secondRequiredPlugin);
+        static::assertArrayNotHasKey('minVersion', $secondRequiredPlugin);
+        static::assertArrayNotHasKey('maxVersion', $secondRequiredPlugin);
+        static::assertArrayNotHasKey('blacklist', $secondRequiredPlugin);
     }
 
     private function readFile(string $file): array

@@ -40,61 +40,61 @@ class Shopware_Tests_Controllers_Backend_SysteminfoTest extends Enlight_Componen
     {
         $response = $this->dispatch('backend/systeminfo/getConfigList');
 
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $body = $response->getBody();
         $jsonBody = Zend_Json::decode($body);
 
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
-        $this->assertArrayHasKey('name', $jsonBody['data'][0]);
-        $this->assertArrayHasKey('group', $jsonBody['data'][0]);
-        $this->assertArrayHasKey('required', $jsonBody['data'][0]);
-        $this->assertArrayHasKey('version', $jsonBody['data'][0]);
-        $this->assertArrayHasKey('status', $jsonBody['data'][0]);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('name', $jsonBody['data'][0]);
+        static::assertArrayHasKey('group', $jsonBody['data'][0]);
+        static::assertArrayHasKey('required', $jsonBody['data'][0]);
+        static::assertArrayHasKey('version', $jsonBody['data'][0]);
+        static::assertArrayHasKey('status', $jsonBody['data'][0]);
     }
 
     public function testGetPathList()
     {
         $response = $this->dispatch('backend/systeminfo/getPathList');
 
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $body = $response->getBody();
         $jsonBody = Zend_Json::decode($body);
 
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
-        $this->assertArrayHasKey('name', $jsonBody['data'][0]);
-        $this->assertArrayHasKey('version', $jsonBody['data'][0]);
-        $this->assertArrayHasKey('result', $jsonBody['data'][0]);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('name', $jsonBody['data'][0]);
+        static::assertArrayHasKey('version', $jsonBody['data'][0]);
+        static::assertArrayHasKey('result', $jsonBody['data'][0]);
     }
 
     public function testGetFileList()
     {
         $response = $this->dispatch('backend/systeminfo/getFileList');
 
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $body = $response->getBody();
         $jsonBody = Zend_Json::decode($body);
 
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
     }
 
     public function testGetVersionList()
     {
         $response = $this->dispatch('backend/systeminfo/getVersionList');
 
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $body = $response->getBody();
         $jsonBody = Zend_Json::decode($body);
 
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
-        $this->assertArrayHasKey('name', $jsonBody['data'][0]);
-        $this->assertArrayHasKey('version', $jsonBody['data'][0]);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('name', $jsonBody['data'][0]);
+        static::assertArrayHasKey('version', $jsonBody['data'][0]);
     }
 }

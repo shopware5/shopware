@@ -27,6 +27,7 @@ namespace Shopware\Models\Article;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\ArticleEsd as ProductEsdAttribute;
 
 /**
  * @ORM\Entity()
@@ -38,7 +39,7 @@ class Esd extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\ArticleEsd
+     * @var ProductEsdAttribute
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleEsd", mappedBy="articleEsd", cascade={"persist"})
      */
@@ -47,7 +48,7 @@ class Esd extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\EsdSerial>
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\EsdSerial", mappedBy="esd")
      */
@@ -56,7 +57,7 @@ class Esd extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Article
+     * @var Article
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="esds")
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
@@ -66,7 +67,7 @@ class Esd extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Detail
+     * @var Detail
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Detail", inversedBy="esd")
      * @ORM\JoinColumn(name="articleDetailsID", referencedColumnName="id")
@@ -129,7 +130,7 @@ class Esd extends ModelEntity
      *
      * @ORM\Column(name="datum", type="datetime", nullable=true)
      */
-    private $date = null;
+    private $date;
 
     public function __construct()
     {
@@ -137,7 +138,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\ArticleEsd
+     * @return ProductEsdAttribute
      */
     public function getAttribute()
     {
@@ -145,13 +146,13 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\ArticleEsd|array|null $attribute
+     * @param ProductEsdAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\ArticleEsd
+     * @return Esd
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\ArticleEsd::class, 'attribute', 'articleEsd');
+        return $this->setOneToOne($attribute, ProductEsdAttribute::class, 'attribute', 'articleEsd');
     }
 
     /**
@@ -163,7 +164,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $serials
+     * @param ArrayCollection $serials
      */
     public function setSerials($serials)
     {
@@ -171,7 +172,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getSerials()
     {
@@ -179,31 +180,31 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Article $article
+     * @param Article $article
      *
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     public function setArticle($article)
     {
-        throw new \Exception('Article should be set implicit with setArticleDetail');
+        throw new \RuntimeException('Article should be set implicit with setArticleDetail');
     }
 
     /**
-     * @return \Shopware\Models\Article\Article
+     * @return Article
      */
     public function getArticle()
     {
         return $this->article;
     }
 
-    public function setArticleDetail(\Shopware\Models\Article\Detail $articleDetail)
+    public function setArticleDetail(Detail $articleDetail)
     {
         $this->articleDetail = $articleDetail;
         $this->article = $articleDetail->getArticle();
     }
 
     /**
-     * @return \Shopware\Models\Article\Detail
+     * @return Detail
      */
     public function getArticleDetail()
     {

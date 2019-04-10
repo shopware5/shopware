@@ -59,7 +59,6 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getListQueryBuilder(array $orderBy = null)

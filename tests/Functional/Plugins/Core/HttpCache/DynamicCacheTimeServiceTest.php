@@ -94,7 +94,7 @@ class DynamicCacheTimeServiceTest extends TestCase
 
     public function testServiceIsAvailable()
     {
-        $this->assertInstanceOf(DynamicCacheTimeService::class, $this->cacheTimeService);
+        static::assertInstanceOf(DynamicCacheTimeService::class, $this->cacheTimeService);
     }
 
     public function testProductDetailTimeCalculation()
@@ -109,7 +109,7 @@ class DynamicCacheTimeServiceTest extends TestCase
          * In this case, the calculated cache time should be less than the default time.
          */
         $productCacheTime = $this->cacheTimeService->getCacheTime($request);
-        $this->assertLessThanOrEqual($this->defaultTime, $productCacheTime);
+        static::assertLessThanOrEqual($this->defaultTime, $productCacheTime);
 
         Shopware()->Models()->remove($product);
     }
@@ -127,7 +127,7 @@ class DynamicCacheTimeServiceTest extends TestCase
          * to be used. Therefore we're testing for an expected deviation (< 5s) here and not exactly 300s.
          */
         $emotionCacheTime = $this->cacheTimeService->getCacheTime($request);
-        $this->assertLessThan(5, abs(300 - $emotionCacheTime));
+        static::assertLessThan(5, abs(300 - $emotionCacheTime));
 
         Shopware()->Models()->remove($category);
     }
@@ -145,7 +145,7 @@ class DynamicCacheTimeServiceTest extends TestCase
          * to be used. Therefore we're testing for an expected deviation (< 5s) here and not exactly 300s.
          */
         $blogCacheTime = $this->cacheTimeService->getCacheTime($request);
-        $this->assertLessThan(5, abs(300 - $blogCacheTime));
+        static::assertLessThan(5, abs(300 - $blogCacheTime));
 
         Shopware()->Models()->remove($blog);
     }
@@ -163,7 +163,7 @@ class DynamicCacheTimeServiceTest extends TestCase
          * to be used. Therefore we're testing for an expected deviation (< 5s) here and not exactly 300s.
          */
         $blogCacheTime = $this->cacheTimeService->getCacheTime($request);
-        $this->assertLessThan(5, abs(300 - $blogCacheTime));
+        static::assertLessThan(5, abs(300 - $blogCacheTime));
 
         Shopware()->Models()->remove($blog);
     }
@@ -214,7 +214,7 @@ class DynamicCacheTimeServiceTest extends TestCase
 
             return $blog;
         } catch (Exception $e) {
-            $this->fail($e->getMessage());
+            static::fail($e->getMessage());
 
             return null;
         }
@@ -236,7 +236,7 @@ class DynamicCacheTimeServiceTest extends TestCase
 
             return $blog;
         } catch (Exception $e) {
-            $this->fail($e->getMessage());
+            static::fail($e->getMessage());
 
             return null;
         }
@@ -272,7 +272,7 @@ class DynamicCacheTimeServiceTest extends TestCase
 
             return $emotion;
         } catch (Exception $e) {
-            $this->fail($e->getMessage());
+            static::fail($e->getMessage());
 
             return null;
         }
@@ -304,7 +304,7 @@ class DynamicCacheTimeServiceTest extends TestCase
 
             return $category;
         } catch (Exception $e) {
-            $this->fail($e->getMessage());
+            static::fail($e->getMessage());
 
             return null;
         }
@@ -350,7 +350,7 @@ class DynamicCacheTimeServiceTest extends TestCase
 
             return $product;
         } catch (Exception $e) {
-            $this->fail($e->getMessage());
+            static::fail($e->getMessage());
 
             return null;
         }

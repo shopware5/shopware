@@ -56,24 +56,24 @@ class Shopware_Tests_Controllers_Frontend_RobotsTxtTest extends Enlight_Componen
 
         $this->dispatch('/de/robots.txt');
         $robotsTxt = $this->formatRobotsTxt();
-        $this->assertArrayHasKey('Disallow: /de/compare', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /de/checkout', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /de/register', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /de/account', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /de/address', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /de/note', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /de/widgets', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /de/listing', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /de/ticket', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /en/compare', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /en/checkout', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /en/register', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /en/account', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /en/address', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /en/note', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /en/widgets', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /en/listing', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /en/ticket', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/compare', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/checkout', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/register', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/account', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/address', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/note', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/widgets', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/listing', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/ticket', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /en/compare', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /en/checkout', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /en/register', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /en/account', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /en/address', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /en/note', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /en/widgets', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /en/listing', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /en/ticket', $robotsTxt);
 
         $this->sitemapTest($this->Response()->getBody());
     }
@@ -94,15 +94,15 @@ class Shopware_Tests_Controllers_Frontend_RobotsTxtTest extends Enlight_Componen
 
         $robotsTxt = $this->formatRobotsTxt();
 
-        $this->assertArrayHasKey('Disallow: /de/compare', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /de/checkout', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /de/register', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /de/account', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /de/address', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /de/note', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /de/widgets', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /de/listing', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /de/ticket', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/compare', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/checkout', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/register', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/account', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/address', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/note', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/widgets', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/listing', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/ticket', $robotsTxt);
 
         $this->sitemapTest($this->Response()->getBody());
     }
@@ -123,15 +123,15 @@ class Shopware_Tests_Controllers_Frontend_RobotsTxtTest extends Enlight_Componen
 
         $robotsTxt = $this->formatRobotsTxt();
 
-        $this->assertArrayHasKey('Disallow: /foo/de/compare', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /foo/de/checkout', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /foo/de/register', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /foo/de/account', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /foo/de/address', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /foo/de/note', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /foo/de/widgets', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /foo/de/listing', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /foo/de/ticket', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/compare', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/checkout', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/register', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/account', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/address', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/note', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/widgets', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/listing', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/ticket', $robotsTxt);
 
         $this->sitemapTest($this->Response()->getBody());
     }
@@ -154,15 +154,15 @@ class Shopware_Tests_Controllers_Frontend_RobotsTxtTest extends Enlight_Componen
 
         $robotsTxt = $this->formatRobotsTxt();
 
-        $this->assertArrayHasKey('Disallow: /foo/de/compare', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /foo/de/checkout', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /foo/de/register', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /foo/de/account', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /foo/de/address', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /foo/de/note', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /foo/de/widgets', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /foo/de/listing', $robotsTxt);
-        $this->assertArrayHasKey('Disallow: /foo/de/ticket', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/compare', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/checkout', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/register', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/account', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/address', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/note', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/widgets', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/listing', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/ticket', $robotsTxt);
 
         $this->sitemapTest($this->Response()->getBody());
     }
@@ -272,7 +272,7 @@ class Shopware_Tests_Controllers_Frontend_RobotsTxtTest extends Enlight_Componen
 
             $this->dispatch($url);
 
-            $this->assertContains($expected, $this->Response()->getBody());
+            static::assertContains($expected, $this->Response()->getBody());
         }
     }
 

@@ -284,7 +284,6 @@ class Variant extends Resource implements BatchInterface
      * Creates a new variant for an product.
      * This function requires an articleId in the params parameter.
      *
-     *
      * @throws ApiException\ValidationException
      * @throws ApiException\NotFoundException
      * @throws ApiException\ParameterMissingException
@@ -362,7 +361,6 @@ class Variant extends Resource implements BatchInterface
      * Required for the 'Article' resource if the product data is already updated
      * in the entity but not in the database.
      *
-     *
      * @throws ApiException\ValidationException
      *
      * @return Detail
@@ -385,7 +383,6 @@ class Variant extends Resource implements BatchInterface
     /**
      * Interface which allows to use the data preparation in the 'Article' resource for the main variant.
      *
-     *
      * @return array|mixed
      */
     public function prepareMainVariantData(array $data, ProductModel $article, Detail $variant)
@@ -395,7 +392,6 @@ class Variant extends Resource implements BatchInterface
 
     /**
      * Helper function which creates a variant image for the passed product image.
-     *
      *
      * @return Image
      */
@@ -487,7 +483,6 @@ class Variant extends Resource implements BatchInterface
 
     /**
      * Resolves the association data for a single variant.
-     *
      *
      * @throws ApiException\CustomValidationException
      *
@@ -626,7 +621,6 @@ class Variant extends Resource implements BatchInterface
      * Helper function which returns a single image mapping
      * for the passed variant image and variant model.
      *
-     *
      * @return Image\Mapping|null
      */
     protected function getVariantMappingOfImage(Image $image, Detail $variant)
@@ -709,7 +703,6 @@ class Variant extends Resource implements BatchInterface
     /**
      * Resolves the passed configuratorOptions parameter for a single variant.
      * Each passed configurator option, has to be configured in the product configurator set.
-     *
      *
      * @throws ApiException\CustomValidationException
      *
@@ -898,7 +891,6 @@ class Variant extends Resource implements BatchInterface
     /**
      * Calculates and merges the numeric values of the Price entity
      *
-     *
      * @throws ApiException\CustomValidationException
      */
     private function mergePriceData(array $priceData, Tax $tax)
@@ -988,7 +980,6 @@ class Variant extends Resource implements BatchInterface
     /**
      * Helper function returns the findOneBy condition
      * for the passed unit data.
-     *
      *
      * @throws ApiException\CustomValidationException
      *

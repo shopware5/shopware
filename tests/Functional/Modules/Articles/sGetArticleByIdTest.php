@@ -3519,11 +3519,11 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
 
         Shopware()->Db()->query('UPDATE s_articles SET active = 0 WHERE id = ?', [$id]);
 
-        $this->assertCount(0, $this->Module()->sGetArticleById($id));
+        static::assertCount(0, $this->Module()->sGetArticleById($id));
 
         Shopware()->Db()->query('UPDATE s_articles SET active = 1 WHERE id = ?', [$id]);
 
-        $this->assertGreaterThan(0, count($this->Module()->sGetArticleById($id)));
+        static::assertGreaterThan(0, count($this->Module()->sGetArticleById($id)));
     }
 
     private function assertArticleData($expected, $data)
@@ -3534,7 +3534,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                 $expected[$property] = $mediaService->getUrl($expected[$property]);
             }
 
-            $this->assertEquals(
+            static::assertEquals(
                 $expected[$property],
                 $data[$property],
                 sprintf('Property %s dont match for article : %s - %s', $property, $expected['ordernumber'], $expected['articleName'])
@@ -3544,7 +3544,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
 
     private function assertLinks($expected, $data)
     {
-        $this->assertCount(
+        static::assertCount(
             count($expected['sLinks']),
             $data['sLinks'],
             sprintf("Link count doesn't match for article : %s - %s", $expected['ordernumber'], $expected['articleName'])
@@ -3553,7 +3553,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
 
     private function assertRelated($expected, $data)
     {
-        $this->assertCount(count($expected['sRelatedArticles']), $data['sRelatedArticles']);
+        static::assertCount(count($expected['sRelatedArticles']), $data['sRelatedArticles']);
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         for ($i = 0; $i < count($expected['sRelatedArticles']); ++$i) {
@@ -3570,7 +3570,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     continue;
                 }
 
-                $this->assertEquals(
+                static::assertEquals(
                     $expectedArticle[$property],
                     $gotArticle[$property],
                     sprintf("sRelatedArticles property %s doesn't match for article %s - %s", $property, $expected['ordernumber'], $expected['articleName'])

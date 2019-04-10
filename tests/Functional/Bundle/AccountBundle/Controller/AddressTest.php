@@ -118,9 +118,9 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         $this->ensureLogin();
         $crawler = $this->doRequest('GET', '/address/');
 
-        $this->assertEquals(3, $crawler->filter('.address--item-content')->count());
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Standard-Rechnungsadresse")')->count());
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Standard-Lieferadresse")')->count());
+        static::assertEquals(3, $crawler->filter('.address--item-content')->count());
+        static::assertGreaterThan(0, $crawler->filter('html:contains("Standard-Rechnungsadresse")')->count());
+        static::assertGreaterThan(0, $crawler->filter('html:contains("Standard-Lieferadresse")')->count());
     }
 
     /**
@@ -145,9 +145,9 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
             ]
         );
 
-        $this->assertEquals(1, $crawler->filter('html:contains("Die Adresse wurde erfolgreich erstellt")')->count());
-        $this->assertGreaterThan(0, $crawler->filter('.address--item-content:contains("Fasanenstrasse 99")')->count());
-        $this->assertEquals(4, $crawler->filter('.address--item-content')->count());
+        static::assertEquals(1, $crawler->filter('html:contains("Die Adresse wurde erfolgreich erstellt")')->count());
+        static::assertGreaterThan(0, $crawler->filter('.address--item-content:contains("Fasanenstrasse 99")')->count());
+        static::assertEquals(4, $crawler->filter('.address--item-content')->count());
 
         return (int) $crawler->filter('.address--item-content:contains("Fasanenstrasse 99")')->filter('input[name=addressId]')->attr('value');
     }
@@ -162,7 +162,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
 
         // Edit page
         $crawler = $this->doRequest('GET', '/address/edit/id/' . $addressId);
-        $this->assertEquals('Fasanenstrasse 99', $crawler->filter('input[name="address[street]"]')->attr('value'));
+        static::assertEquals('Fasanenstrasse 99', $crawler->filter('input[name="address[street]"]')->attr('value'));
     }
 
     /**
@@ -190,10 +190,10 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
             ]
         );
 
-        $this->assertEquals(1, $crawler->filter('html:contains("Die Adresse wurde erfolgreich gespeichert")')->count());
-        $this->assertGreaterThan(0, $crawler->filter('.address--item-content:contains("Joe Doe")')->count());
-        $this->assertGreaterThan(0, $crawler->filter('.address--item-content:contains("Fasanenstrasse 99")')->count());
-        $this->assertEquals(4, $crawler->filter('.address--item-content')->count());
+        static::assertEquals(1, $crawler->filter('html:contains("Die Adresse wurde erfolgreich gespeichert")')->count());
+        static::assertGreaterThan(0, $crawler->filter('.address--item-content:contains("Joe Doe")')->count());
+        static::assertGreaterThan(0, $crawler->filter('.address--item-content:contains("Fasanenstrasse 99")')->count());
+        static::assertEquals(4, $crawler->filter('.address--item-content')->count());
     }
 
     /**
@@ -207,12 +207,12 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
 
         // Delete confirm page
         $crawler = $this->doRequest('GET', '/address/delete/id/' . $addressId);
-        $this->assertEquals(1, $crawler->filter('html:contains("Fasanenstrasse 99")')->count());
+        static::assertEquals(1, $crawler->filter('html:contains("Fasanenstrasse 99")')->count());
 
         // Delete operation
         $crawler = $this->doRequest('POST', '/address/delete/id/' . $addressId, ['id' => $addressId]);
-        $this->assertEquals(1, $crawler->filter('html:contains("Die Adresse wurde erfolgreich gelöscht")')->count());
-        $this->assertEquals(3, $crawler->filter('.address--item-content')->count());
+        static::assertEquals(1, $crawler->filter('html:contains("Die Adresse wurde erfolgreich gelöscht")')->count());
+        static::assertEquals(3, $crawler->filter('.address--item-content')->count());
     }
 
     /**
@@ -237,7 +237,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
 
         $crawler = $this->doRequest('GET', '/address/');
 
-        $this->assertEquals(3, $crawler->filter('.address--item-content')->count());
+        static::assertEquals(3, $crawler->filter('.address--item-content')->count());
     }
 
     /**
@@ -251,7 +251,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         $crawler = $this->doRequest('GET', '/account');
         $addressId = (int) $crawler->filter('.account--billing .panel--actions a:contains("oder andere Adresse wählen")')->attr('data-id');
 
-        $this->assertGreaterThan(0, $addressId);
+        static::assertGreaterThan(0, $addressId);
 
         $this->doRequest(
             'POST',
@@ -275,13 +275,13 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         $crawler = $this->doRequest('GET', '/account');
         $panelBody = $crawler->filter('.account--billing .panel--body');
 
-        $this->assertEquals('Muster GmbH', trim($panelBody->filter('.address--company')->text()));
-        $this->assertEquals('Herr', trim($panelBody->filter('.address--salutation')->text()));
-        $this->assertEquals('Shop', trim($panelBody->filter('.address--firstname')->text()));
-        $this->assertEquals('Man', trim($panelBody->filter('.address--lastname')->text()));
-        $this->assertEquals('Musterstr. 55', trim($panelBody->filter('.address--street')->text()));
-        $this->assertEquals('Nordrhein-Westfalen', trim($panelBody->filter('.address--statename')->text()));
-        $this->assertEquals('Deutschland', trim($panelBody->filter('.address--countryname')->text()));
+        static::assertEquals('Muster GmbH', trim($panelBody->filter('.address--company')->text()));
+        static::assertEquals('Herr', trim($panelBody->filter('.address--salutation')->text()));
+        static::assertEquals('Shop', trim($panelBody->filter('.address--firstname')->text()));
+        static::assertEquals('Man', trim($panelBody->filter('.address--lastname')->text()));
+        static::assertEquals('Musterstr. 55', trim($panelBody->filter('.address--street')->text()));
+        static::assertEquals('Nordrhein-Westfalen', trim($panelBody->filter('.address--statename')->text()));
+        static::assertEquals('Deutschland', trim($panelBody->filter('.address--countryname')->text()));
     }
 
     /**

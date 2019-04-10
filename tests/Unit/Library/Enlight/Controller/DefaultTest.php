@@ -51,7 +51,7 @@ class DefaultTest extends TestCase
         ];
 
         foreach ($testedStrings as $invalid => $expected) {
-            $this->assertSame($expected, $dispatcher->formatControllerName($invalid));
+            static::assertSame($expected, $dispatcher->formatControllerName($invalid));
         }
     }
 
@@ -77,7 +77,7 @@ class DefaultTest extends TestCase
         ];
 
         foreach ($testedStrings as $invalid => $expected) {
-            $this->assertSame($expected, $dispatcher->formatActionName($invalid));
+            static::assertSame($expected, $dispatcher->formatActionName($invalid));
         }
     }
 
@@ -95,7 +95,7 @@ class DefaultTest extends TestCase
         ];
 
         foreach ($testedStrings as $invalid => $expected) {
-            $this->assertSame($expected, $dispatcher->formatModuleName($invalid));
+            static::assertSame($expected, $dispatcher->formatModuleName($invalid));
         }
     }
 

@@ -44,7 +44,7 @@ class NumberRangeIncrementerTest extends \PHPUnit\Framework\TestCase
     public function testItShouldImplementInterface()
     {
         $manager = new NumberRangeIncrementer($this->connection);
-        $this->assertInstanceOf(NumberRangeIncrementerInterface::class, $manager);
+        static::assertInstanceOf(NumberRangeIncrementerInterface::class, $manager);
     }
 
     public function testIncrement()
@@ -63,7 +63,7 @@ class NumberRangeIncrementerTest extends \PHPUnit\Framework\TestCase
 
         $manager = new NumberRangeIncrementer($this->connection);
 
-        $this->assertEquals($expectedNumber, $manager->increment($rangeName));
+        static::assertEquals($expectedNumber, $manager->increment($rangeName));
     }
 
     public function testIncrementWithInvalidName()

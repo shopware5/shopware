@@ -74,37 +74,37 @@ class StoreXmlValueParserTest extends TestCase
         $store = $this->getStoreElement(1);
         $options = $this->parser->parse($store);
 
-        self::assertInternalType('array', $options);
-        self::assertCount(2, $options);
+        static::assertInternalType('array', $options);
+        static::assertCount(2, $options);
 
         $firstOption = $options[0];
 
-        self::assertArrayHasKey(0, $firstOption);
-        self::assertEquals('1', $firstOption[0]);
-        self::assertArrayHasKey(1, $firstOption);
+        static::assertArrayHasKey(0, $firstOption);
+        static::assertEquals('1', $firstOption[0]);
+        static::assertArrayHasKey(1, $firstOption);
 
         $firstOptionLabels = $firstOption[1];
 
-        self::assertCount(2, $firstOptionLabels);
-        self::assertArrayHasKey('de', $firstOptionLabels);
-        self::assertArrayHasKey('en', $firstOptionLabels);
-        self::assertEquals('DE 1', $firstOptionLabels['de']);
-        self::assertEquals('EN 1', $firstOptionLabels['en']);
+        static::assertCount(2, $firstOptionLabels);
+        static::assertArrayHasKey('de', $firstOptionLabels);
+        static::assertArrayHasKey('en', $firstOptionLabels);
+        static::assertEquals('DE 1', $firstOptionLabels['de']);
+        static::assertEquals('EN 1', $firstOptionLabels['en']);
 
         $secondOption = $options[1];
 
-        self::assertArrayHasKey(0, $secondOption);
-        self::assertEquals('TWO', $secondOption[0]);
+        static::assertArrayHasKey(0, $secondOption);
+        static::assertEquals('TWO', $secondOption[0]);
 
-        self::assertArrayHasKey(1, $secondOption);
+        static::assertArrayHasKey(1, $secondOption);
 
         $secondOptionLabels = $secondOption[1];
 
-        self::assertCount(2, $secondOptionLabels);
-        self::assertArrayHasKey('de', $secondOptionLabels);
-        self::assertArrayHasKey('en', $secondOptionLabels);
-        self::assertEquals('DE 2', $secondOptionLabels['de']);
-        self::assertEquals('EN 2', $secondOptionLabels['en']);
+        static::assertCount(2, $secondOptionLabels);
+        static::assertArrayHasKey('de', $secondOptionLabels);
+        static::assertArrayHasKey('en', $secondOptionLabels);
+        static::assertEquals('DE 2', $secondOptionLabels['de']);
+        static::assertEquals('EN 2', $secondOptionLabels['en']);
     }
 
     public function testThatEmptyOptionsReturnsEmptyArray(): void
@@ -112,8 +112,8 @@ class StoreXmlValueParserTest extends TestCase
         $store = $this->getStoreElement(2);
         $options = $this->parser->parse($store);
 
-        self::assertInternalType('array', $options);
-        self::assertCount(0, $options);
+        static::assertInternalType('array', $options);
+        static::assertCount(0, $options);
     }
 
     private function getStoreElement(int $elementIndex): DOMElement

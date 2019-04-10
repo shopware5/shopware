@@ -77,20 +77,20 @@ class EmotionToPresetDataTransformerTest extends TestCase
 
         $data = $this->transformer->transform($emotionId);
 
-        $this->assertArrayHasKey('presetData', $data);
-        $this->assertJson($data['presetData']);
+        static::assertArrayHasKey('presetData', $data);
+        static::assertJson($data['presetData']);
 
         $presetData = json_decode($data['presetData'], true);
 
-        $this->assertArrayNotHasKey('id', $presetData);
+        static::assertArrayNotHasKey('id', $presetData);
 
-        $this->assertArrayNotHasKey('id', $presetData['elements'][0]);
-        $this->assertInternalType('string', $presetData['elements'][0]['componentId']);
-        $this->assertArrayHasKey('syncKey', $presetData['elements'][0]);
+        static::assertArrayNotHasKey('id', $presetData['elements'][0]);
+        static::assertInternalType('string', $presetData['elements'][0]['componentId']);
+        static::assertArrayHasKey('syncKey', $presetData['elements'][0]);
 
-        $this->assertArrayHasKey('data', $presetData['elements'][0]);
+        static::assertArrayHasKey('data', $presetData['elements'][0]);
 
-        $this->assertInternalType('array', $data['requiredPlugins']);
+        static::assertInternalType('array', $data['requiredPlugins']);
     }
 
     public function testTransformWithTranslationsShouldSucceed()
@@ -102,18 +102,18 @@ class EmotionToPresetDataTransformerTest extends TestCase
 
         $data = $this->transformer->transform($emotionId);
 
-        $this->assertArrayHasKey('emotionTranslations', $data);
-        $this->assertJson($data['emotionTranslations']);
+        static::assertArrayHasKey('emotionTranslations', $data);
+        static::assertJson($data['emotionTranslations']);
 
         $translationData = json_decode($data['emotionTranslations'], true);
 
-        $this->assertSame('en_GB', $translationData[0]['locale']);
-        $this->assertSame('emotion', $translationData[0]['objecttype']);
+        static::assertSame('en_GB', $translationData[0]['locale']);
+        static::assertSame('emotion', $translationData[0]['objecttype']);
 
-        $this->assertArrayHasKey('presetData', $data);
-        $this->assertJson($data['presetData']);
-        $this->assertArrayHasKey('requiredPlugins', $data);
-        $this->assertEmpty($data['requiredPlugins']);
+        static::assertArrayHasKey('presetData', $data);
+        static::assertJson($data['presetData']);
+        static::assertArrayHasKey('requiredPlugins', $data);
+        static::assertEmpty($data['requiredPlugins']);
     }
 
     public function testGettingRequiredPluginsByIdShouldSucceed()
@@ -128,7 +128,7 @@ class EmotionToPresetDataTransformerTest extends TestCase
 
         $result = $method->invoke($this->transformer, $ids);
 
-        $this->assertInternalType('array', $result);
-        $this->assertEquals('SwagLiveShopping', $result[0]['name']);
+        static::assertInternalType('array', $result);
+        static::assertEquals('SwagLiveShopping', $result[0]['name']);
     }
 }

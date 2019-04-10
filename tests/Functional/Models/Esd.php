@@ -84,7 +84,7 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
 
             $esd->$setMethod($value);
 
-            $this->assertEquals($esd->$getMethod(), $value);
+            static::assertEquals($esd->$getMethod(), $value);
         }
     }
 
@@ -98,7 +98,7 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
 
         foreach ($this->testData as $fieldname => $value) {
             $getMethod = 'get' . ucfirst($fieldname);
-            $this->assertEquals($esd->$getMethod(), $value);
+            static::assertEquals($esd->$getMethod(), $value);
         }
     }
 
@@ -127,9 +127,9 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
 
         foreach ($this->testData as $fieldname => $value) {
             $getMethod = 'get' . ucfirst($fieldname);
-            $this->assertEquals($esd->$getMethod(), $value);
+            static::assertEquals($esd->$getMethod(), $value);
         }
 
-        $this->assertInstanceOf('\DateTime', $esd->getDate());
+        static::assertInstanceOf('\DateTime', $esd->getDate());
     }
 }

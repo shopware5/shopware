@@ -9,6 +9,12 @@
  */
 class PreCommitChecks
 {
+    const ALLOWED_DIRECTORIES = [
+        'engine/Shopware',
+        'tests',
+        'recovery',
+    ];
+
     /**
      * @var bool
      */
@@ -31,6 +37,7 @@ class PreCommitChecks
         $this->runPhpLint($this->getCommittedFileList('php'));
         $this->runPhpCsFixer($this->getCommittedFileList('php'));
         $this->runEsLint($this->getCommittedFileList('js'));
+        $this->runVarDumpCheck($this->getCommittedFileList('php'));
         $this->runMigrationCheck();
 
 
@@ -52,6 +59,14 @@ class PreCommitChecks
         return !(bool)$return;
     }
 
+    public function isVarDumpCheckerAvailable()
+    {
+        $output = [];
+        $return = 0;
+        exec('command -v ./vendor/bin/var-dump-check >/dev/null 2>&1', $output, $return);
+        return !(bool)$return;
+    }
+
     /**
      * @return bool
      */
@@ -69,6 +84,16 @@ class PreCommitChecks
     private function getCommittedFileList($extension = 'php')
     {
         exec("git diff --name-only --diff-filter=ACMRTUXB \"HEAD\" | grep -e '\.".$extension."$'", $fileList);
+
+        $fileList = array_filter($fileList, function($filePath) {
+            foreach (self::ALLOWED_DIRECTORIES as $dir) {
+                if (strpos($filePath, $dir) === 0) {
+                    return true;
+                }
+            }
+
+            return false;
+        });
 
         return $fileList;
     }
@@ -193,6 +218,30 @@ class PreCommitChecks
         $this->checkESLint($fileList);
 
         $this->writeln();
+    }
+
+    private function runVarDumpCheck(array $fileList)
+    {
+        $this->writeln('# Searching for var-dumps');
+
+        if (!$this->isVarDumpCheckerAvailable()) {
+            $this->error = true;
+            $this->writeln('- var-dump-checker is NOT installed. Please install composer with dev dependencies.', 2);
+            $this->writeln();
+            return;
+        }
+
+        $fileList = array_map('escapeshellarg', $fileList);
+        $files = implode(' ', $fileList);
+
+        exec('./vendor/bin/var-dump-check --doctrine --symfony --laravel ' . $files . ' 2>&1', $output, $return);
+        if ($return !== 0) {
+            foreach ($output as $item) {
+                $this->writeln($item);
+            }
+
+            $this->error = true;
+        }
     }
 
     private function runMigrationCheck()

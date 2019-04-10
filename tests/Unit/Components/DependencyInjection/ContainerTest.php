@@ -51,18 +51,18 @@ class ContainerTest extends TestCase
         $object = new \stdClass();
 
         $this->container->set('someKey', $object);
-        $this->assertSame($object, $this->container->get('someKey'));
-        $this->assertSame($object, $this->container->get('somekey'));
+        static::assertSame($object, $this->container->get('someKey'));
+        static::assertSame($object, $this->container->get('somekey'));
     }
 
     public function testHas()
     {
-        $this->assertTrue($this->container->has('bar'));
-        $this->assertTrue($this->container->has('BAR'));
-        $this->assertTrue($this->container->has('alias'));
-        $this->assertTrue($this->container->has('ALIAS'));
+        static::assertTrue($this->container->has('bar'));
+        static::assertTrue($this->container->has('BAR'));
+        static::assertTrue($this->container->has('alias'));
+        static::assertTrue($this->container->has('ALIAS'));
 
-        $this->assertFalse($this->container->has('some'));
+        static::assertFalse($this->container->has('some'));
     }
 
     public function testGetOnNonExistentWithDefaultBehaviour()
@@ -80,14 +80,14 @@ class ContainerTest extends TestCase
 
     public function testGetOnNonExistentWithNullBehaviour()
     {
-        $this->assertNull(
+        static::assertNull(
             $this->container->get('foo', ContainerInterface::NULL_ON_INVALID_REFERENCE)
         );
     }
 
     public function testGetOnNonExistentWithIgnoreBehaviour()
     {
-        $this->assertNull(
+        static::assertNull(
             $this->container->get('foo', ContainerInterface::IGNORE_ON_INVALID_REFERENCE)
         );
     }
@@ -103,7 +103,7 @@ class ContainerTest extends TestCase
         $service = $service->reveal();
         $this->container->set('events', $service);
 
-        $this->assertInstanceOf('stdClass', $this->container->get('Bar'));
+        static::assertInstanceOf('stdClass', $this->container->get('Bar'));
     }
 
     public function testEventsAreEmitedDuringServiceInitialisationWhenUsingAlias()
@@ -119,7 +119,7 @@ class ContainerTest extends TestCase
         $service = $service->reveal();
         $this->container->set('events', $service);
 
-        $this->assertInstanceOf('stdClass', $this->container->get('alias'));
+        static::assertInstanceOf('stdClass', $this->container->get('alias'));
     }
 
     public function testEventsAreEmitedDuringServiceInitialisationWhenUsingUnknownServices()
@@ -156,7 +156,7 @@ class ContainerTest extends TestCase
             }
         );
 
-        $this->assertSame($class, $this->container->get('bar'));
+        static::assertSame($class, $this->container->get('bar'));
     }
 
     public function testAfterInitEventDecoratorService()
@@ -175,7 +175,7 @@ class ContainerTest extends TestCase
             ['service.listener', 'onEvent']
         );
 
-        $this->assertSame($class, $this->container->get('bar'));
+        static::assertSame($class, $this->container->get('bar'));
     }
 
     public function testServiceCircularReferenceExceptionException()

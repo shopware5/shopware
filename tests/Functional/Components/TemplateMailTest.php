@@ -40,12 +40,12 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
         $stringCompiler = new Shopware_Components_StringCompiler(Shopware()->Template());
 
         $repository = $this->createMock(\Doctrine\ORM\EntityRepository::class);
-        $repository->expects($this->any())
+        $repository->expects(static::any())
             ->method('findOneBy')
             ->willReturn(null);
 
         $manager = $this->createMock(\Shopware\Components\Model\ModelManager::class);
-        $manager->expects($this->any())
+        $manager->expects(static::any())
                 ->method('getRepository')
                 ->willReturn($repository);
 
@@ -60,10 +60,10 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
      */
     public function testShouldBeInstanceOfShopwareComponentsTemplateMail()
     {
-        $this->assertInstanceOf('\Shopware_Components_TemplateMail', $this->mail);
+        static::assertInstanceOf('\Shopware_Components_TemplateMail', $this->mail);
 
-        $this->assertInstanceOf('\Shopware_Components_StringCompiler', $this->mail->getStringCompiler());
-        $this->assertInstanceOf('\Shopware\Components\Model\ModelManager', $this->mail->getModelManager());
+        static::assertInstanceOf('\Shopware_Components_StringCompiler', $this->mail->getStringCompiler());
+        static::assertInstanceOf('\Shopware\Components\Model\ModelManager', $this->mail->getModelManager());
     }
 
     /**
@@ -76,8 +76,8 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
 
         $result = $this->mail->loadValues($mail, $templateMock);
 
-        $this->assertInstanceOf('\Enlight_Components_Mail', $result);
-        $this->assertEquals('UTF-8', $result->getCharset());
+        static::assertInstanceOf('\Enlight_Components_Mail', $result);
+        static::assertEquals('UTF-8', $result->getCharset());
     }
 
     /**
@@ -90,11 +90,11 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
 
         $result = $this->mail->loadValues($mail, $templateMock);
 
-        $this->assertEquals($templateMock->getSubject(), $result->getSubject());
-        $this->assertEquals($templateMock->getFromName(), $result->getFromName());
-        $this->assertEquals($templateMock->getFromMail(), $result->getFrom());
-        $this->assertEquals($templateMock->getContent(), $result->getBodyText(true));
-        $this->assertEquals($templateMock->getContentHtml(), $result->getBodyHtml(true));
+        static::assertEquals($templateMock->getSubject(), $result->getSubject());
+        static::assertEquals($templateMock->getFromName(), $result->getFromName());
+        static::assertEquals($templateMock->getFromMail(), $result->getFrom());
+        static::assertEquals($templateMock->getContent(), $result->getBodyText(true));
+        static::assertEquals($templateMock->getContentHtml(), $result->getBodyHtml(true));
     }
 
     /**
@@ -116,11 +116,11 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
 
         $result = $this->mail->loadValues($mail, $templateMock);
 
-        $this->assertEquals('Ihr Bestellung bei Shopware 3.5 Demo', $result->getSubject());
-        $this->assertEquals('Shopware 3.5 Demo', $result->getFromName());
-        $this->assertEquals('info@example.com', $result->getFrom());
-        $this->assertEquals('Testbestellung bei Shopware 3.5 Demo', $result->getBodyText(true));
-        $this->assertEquals('Testbestellung HTML bei Shopware 3.5 Demo', $result->getBodyHtml(true));
+        static::assertEquals('Ihr Bestellung bei Shopware 3.5 Demo', $result->getSubject());
+        static::assertEquals('Shopware 3.5 Demo', $result->getFromName());
+        static::assertEquals('info@example.com', $result->getFrom());
+        static::assertEquals('Testbestellung bei Shopware 3.5 Demo', $result->getBodyText(true));
+        static::assertEquals('Testbestellung HTML bei Shopware 3.5 Demo', $result->getBodyHtml(true));
     }
 
     /**
@@ -138,11 +138,11 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
 
         $result = $this->mail->createMail($templateMock, $context);
 
-        $this->assertEquals('Ihr Bestellung bei Shopware 3.5 Demo', $result->getSubject());
-        $this->assertEquals('Shopware 3.5 Demo', $result->getFromName());
-        $this->assertEquals('info@example.com', $result->getFrom());
-        $this->assertEquals('Testbestellung bei Shopware 3.5 Demo', $result->getBodyText(true));
-        $this->assertEquals('Testbestellung HTML bei Shopware 3.5 Demo', $result->getBodyHtml(true));
+        static::assertEquals('Ihr Bestellung bei Shopware 3.5 Demo', $result->getSubject());
+        static::assertEquals('Shopware 3.5 Demo', $result->getFromName());
+        static::assertEquals('info@example.com', $result->getFrom());
+        static::assertEquals('Testbestellung bei Shopware 3.5 Demo', $result->getBodyText(true));
+        static::assertEquals('Testbestellung HTML bei Shopware 3.5 Demo', $result->getBodyHtml(true));
     }
 
     /**
@@ -166,7 +166,7 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
 
         $mail = $templateMail->createMail('sOrder');
 
-        $this->assertInstanceOf(Enlight_Components_Mail::class, $mail);
+        static::assertInstanceOf(Enlight_Components_Mail::class, $mail);
     }
 
     /**
@@ -186,7 +186,7 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
         // Test mail creation
         $registerConfirmationMail = $entityManager->find(\Shopware\Models\Mail\Mail::class, 1);
         $mail = $this->mail->createMail($registerConfirmationMail, [], $newShop);
-        $this->assertInstanceOf(Enlight_Components_Mail::class, $mail);
+        static::assertInstanceOf(Enlight_Components_Mail::class, $mail);
 
         // Revert changes in the database
         $entityManager->remove($newShop);
@@ -212,7 +212,7 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
         // Test mail creation
         $registerConfirmationMail = $entityManager->find(\Shopware\Models\Mail\Mail::class, 1);
         $mail = $this->mail->createMail($registerConfirmationMail, [], $newShop);
-        $this->assertInstanceOf(Enlight_Components_Mail::class, $mail);
+        static::assertInstanceOf(Enlight_Components_Mail::class, $mail);
 
         // Revert changes in the database
         $entityManager->remove($newMainShop);
@@ -227,15 +227,15 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
     {
         $attachmentMock = $this->createMock(\Shopware\Models\Mail\Attachment::class);
 
-        $attachmentMock->expects($this->any())
+        $attachmentMock->expects(static::any())
                        ->method('getPath')
                        ->willReturn(__FILE__);
 
-        $attachmentMock->expects($this->any())
+        $attachmentMock->expects(static::any())
                        ->method('getName')
                        ->willReturn('foobar.pdf');
 
-        $attachmentMock->expects($this->any())
+        $attachmentMock->expects(static::any())
                        ->method('getFileName')
                        ->willReturn('foobar.pdf')
                        ->willReturn('foobar.pdf');
@@ -250,31 +250,31 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
     {
         $templateMock = $this->createMock(\Shopware\Models\Mail\Mail::class);
 
-        $templateMock->expects($this->any())
+        $templateMock->expects(static::any())
                      ->method('getFromMail')
                      ->willReturn('info@demo.shopware.de');
 
-        $templateMock->expects($this->any())
+        $templateMock->expects(static::any())
                      ->method('getFromName')
                      ->willReturn('Shopware 5 Demo');
 
-        $templateMock->expects($this->any())
+        $templateMock->expects(static::any())
                      ->method('getSubject')
                      ->willReturn('Shopware 5 Testmail');
 
-        $templateMock->expects($this->any())
+        $templateMock->expects(static::any())
                      ->method('getContent')
                      ->willReturn('Testcontent');
 
-        $templateMock->expects($this->any())
+        $templateMock->expects(static::any())
                      ->method('getContentHtml')
                      ->willReturn('Testcontent HTML');
 
-        $templateMock->expects($this->any())
+        $templateMock->expects(static::any())
                      ->method('isHtml')
                      ->willReturn(true);
 
-        $templateMock->expects($this->any())
+        $templateMock->expects(static::any())
                      ->method('getAttachments')
                      ->willReturn([$this->getAttachmentMockObject()]);
 
@@ -288,27 +288,27 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
     {
         $templateMock = $this->createMock(\Shopware\Models\Mail\Mail::class);
 
-        $templateMock->expects($this->any())
+        $templateMock->expects(static::any())
                      ->method('getFromMail')
                      ->willReturn('{$sConfig.sMAIL}');
 
-        $templateMock->expects($this->any())
+        $templateMock->expects(static::any())
                      ->method('getFromName')
                      ->willReturn('{$sConfig.sSHOPNAME}');
 
-        $templateMock->expects($this->any())
+        $templateMock->expects(static::any())
                      ->method('getSubject')
                      ->willReturn('Ihr Bestellung bei {$sConfig.sSHOPNAME}');
 
-        $templateMock->expects($this->any())
+        $templateMock->expects(static::any())
                      ->method('getContent')
                      ->willReturn('Testbestellung bei {$sConfig.sSHOPNAME}');
 
-        $templateMock->expects($this->any())
+        $templateMock->expects(static::any())
                      ->method('getContentHtml')
                      ->willReturn('Testbestellung HTML bei {$sConfig.sSHOPNAME}');
 
-        $templateMock->expects($this->any())
+        $templateMock->expects(static::any())
                      ->method('isHtml')
                      ->willReturn(true);
 

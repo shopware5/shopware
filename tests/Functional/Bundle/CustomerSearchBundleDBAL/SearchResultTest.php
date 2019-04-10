@@ -50,11 +50,11 @@ class SearchResultTest extends TestCase
             ]
         );
 
-        $this->assertContains('test1@example.com', $result->getEmails());
-        $this->assertContains('test2@example.com', $result->getEmails());
-        $this->assertContains('test3@example.com', $result->getEmails());
-        $this->assertEquals(3, $result->getTotal());
-        $this->assertCount(3, $result->getIds());
-        $this->assertCount(3, $result->getCustomers());
+        static::assertContains('test1@example.com', $result->getEmails());
+        static::assertContains('test2@example.com', $result->getEmails());
+        static::assertContains('test3@example.com', $result->getEmails());
+        static::assertEquals(3, $result->getTotal());
+        static::assertCount(3, $result->getIds());
+        static::assertCount(3, $result->getCustomers());
     }
 }

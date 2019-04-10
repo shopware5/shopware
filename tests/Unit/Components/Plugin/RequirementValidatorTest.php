@@ -63,7 +63,7 @@ class RequirementValidatorTest extends TestCase
         } catch (\Exception $e) {
         }
 
-        $this->assertNull($e);
+        static::assertNull($e);
     }
 
     /**
@@ -84,7 +84,7 @@ class RequirementValidatorTest extends TestCase
             $validator->validate(__DIR__ . '/examples/shopware_version_requirement.xml', '5.1.0');
         } catch (\Exception $e) {
         }
-        $this->assertNull($e);
+        static::assertNull($e);
     }
 
     /**
@@ -105,7 +105,7 @@ class RequirementValidatorTest extends TestCase
             $validator->validate(__DIR__ . '/examples/shopware_version_requirement.xml', '5.1.3');
         } catch (\Exception $e) {
         }
-        $this->assertNull($e);
+        static::assertNull($e);
     }
 
     /**
@@ -202,7 +202,7 @@ class RequirementValidatorTest extends TestCase
             $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
         } catch (\Exception $e) {
         }
-        $this->assertNull($e);
+        static::assertNull($e);
     }
 
     /**
@@ -240,7 +240,7 @@ class RequirementValidatorTest extends TestCase
 
         if ($plugins) {
             $repo->method('findOneBy')
-                ->will($this->returnCallback([$this, 'findPluginByName']));
+                ->will(static::returnCallback([$this, 'findPluginByName']));
         }
 
         $em = $this->createConfiguredMock(ModelManager::class, ['getRepository' => $repo]);
@@ -256,7 +256,7 @@ class RequirementValidatorTest extends TestCase
         $snippetNamespace = $this->createMock(\Enlight_Components_Snippet_Namespace::class);
 
         $snippetNamespace
-            ->expects($this->any())
+            ->expects(static::any())
             ->method('get')
             ->willReturnCallback(function ($arg) {
                 switch ($arg) {
@@ -283,7 +283,7 @@ class RequirementValidatorTest extends TestCase
 
         $snippetManager = $this->createMock(\Enlight_Components_Snippet_Manager::class);
 
-        $snippetManager->expects($this->any())
+        $snippetManager->expects(static::any())
             ->method('getNamespace')
             ->willReturn($snippetNamespace);
 

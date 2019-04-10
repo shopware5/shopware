@@ -106,7 +106,6 @@ Ext.define('Shopware.form.field.ComboTree', {
      *
      * sets the value and the name of an element into the form element
      *
-     *
      * @param view
      * @param record
      * @param item

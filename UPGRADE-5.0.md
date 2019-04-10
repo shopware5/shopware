@@ -342,9 +342,9 @@ This changelog references changes done in Shopware 5.0 patch versions.
         * `sCalculatingPrice`
         * `calculateCheapestBasePriceData`
         * `getArticleListingCover`
-    * `sGetAritcleById` events
+    * `sGetArticleById` events
         * `Shopware_Modules_Articles_GetArticleById_FilterSQL`
-    * `sGetAritcleById` functions
+    * `sGetArticleById` functions
         * `sGetTranslation`
         * `sGetPricegroupDiscount`
         * `sGetPromotionById` (for similar and related products)

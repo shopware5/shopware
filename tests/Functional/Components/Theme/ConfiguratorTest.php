@@ -59,19 +59,19 @@ class ConfiguratorTest extends Base
             [$container]
         );
 
-        $this->assertArrayHasKey('fields', $names);
-        $this->assertArrayHasKey('containers', $names);
+        static::assertArrayHasKey('fields', $names);
+        static::assertArrayHasKey('containers', $names);
 
-        $this->assertCount(3, $names['fields']);
-        $this->assertCount(3, $names['containers']);
+        static::assertCount(3, $names['fields']);
+        static::assertCount(3, $names['containers']);
 
-        $this->assertContains('color', $names['fields']);
-        $this->assertContains('percent', $names['fields']);
-        $this->assertContains('text', $names['fields']);
+        static::assertContains('color', $names['fields']);
+        static::assertContains('percent', $names['fields']);
+        static::assertContains('text', $names['fields']);
 
-        $this->assertContains('test1', $names['containers']);
-        $this->assertContains('test2', $names['containers']);
-        $this->assertContains('fieldset', $names['containers']);
+        static::assertContains('test1', $names['containers']);
+        static::assertContains('test2', $names['containers']);
+        static::assertContains('fieldset', $names['containers']);
     }
 
     public function testRemoveUnused()
@@ -92,18 +92,18 @@ class ConfiguratorTest extends Base
             $elements->add($layout);
         }
 
-        $entityManager->expects($this->once())
+        $entityManager->expects(static::once())
             ->method('flush');
 
-        $entityManager->expects($this->exactly(3))
+        $entityManager->expects(static::exactly(3))
             ->method('remove')
-            ->with($this->logicalOr(
-                $this->isInstanceOf('Shopware\Models\Shop\TemplateConfig\Layout'),
-                $this->isInstanceOf('Shopware\Models\Shop\TemplateConfig\Element')
+            ->with(static::logicalOr(
+                static::isInstanceOf('Shopware\Models\Shop\TemplateConfig\Layout'),
+                static::isInstanceOf('Shopware\Models\Shop\TemplateConfig\Element')
             ));
 
         $eventManager = $this->getEventManager();
-        $eventManager->expects($this->once())
+        $eventManager->expects(static::once())
             ->method('filter')
             ->willReturn([
                 'containers' => ['container1', 'container4'],
@@ -152,7 +152,7 @@ class ConfiguratorTest extends Base
             [$container]
         );
 
-        $this->assertTrue(true, 'validateConfig doesn\'t throw an exception');
+        static::assertTrue(true, 'validateConfig doesn\'t throw an exception');
     }
 
     /**
@@ -183,7 +183,7 @@ class ConfiguratorTest extends Base
         $theme = $this->getResponsiveTheme();
 
         $entityManager = $this->getEntityManager();
-        $entityManager->expects($this->once())
+        $entityManager->expects(static::once())
             ->method('flush');
 
         $configurator = $this->getMockBuilder('Shopware\Components\Theme\Configurator')
@@ -199,13 +199,13 @@ class ConfiguratorTest extends Base
             ]
         );
 
-        $this->assertCount(2, $template->getConfigSets());
+        static::assertCount(2, $template->getConfigSets());
 
         $set = $template->getConfigSets()->get(0);
-        $this->assertEquals('set1', $set->getName());
+        static::assertEquals('set1', $set->getName());
 
         $set = $template->getConfigSets()->get(1);
-        $this->assertEquals('set2', $set->getName());
+        static::assertEquals('set2', $set->getName());
     }
 
     public function testSynchronizeSetsRemove()
@@ -220,17 +220,17 @@ class ConfiguratorTest extends Base
 
         $template = $this->createMock(Template::class);
 
-        $template->expects($this->any())
+        $template->expects(static::any())
             ->method('getConfigSets')
             ->willReturn($existing);
 
         $entityManager = $this->getEntityManager();
-        $entityManager->expects($this->once())
+        $entityManager->expects(static::once())
             ->method('flush');
 
-        $entityManager->expects($this->exactly(2))
+        $entityManager->expects(static::exactly(2))
             ->method('remove')
-            ->with($this->isInstanceOf('Shopware\Models\Shop\TemplateConfig\Set'));
+            ->with(static::isInstanceOf('Shopware\Models\Shop\TemplateConfig\Set'));
 
         $configurator = $this->getMockBuilder('Shopware\Components\Theme\Configurator')
             ->setConstructorArgs([$entityManager, $this->getUtilClass(), $this->getFormPersister(), $this->getEventManager()])

@@ -92,7 +92,7 @@ class PlainStrategyTest extends TestCase
      */
     public function testNormalizer($path, $expected)
     {
-        $this->assertEquals(
+        static::assertEquals(
             $expected,
             $this->strategy->normalize($path)
         );
@@ -100,17 +100,17 @@ class PlainStrategyTest extends TestCase
 
     public function testEncodedPath()
     {
-        $this->assertTrue($this->strategy->isEncoded('media/image/my-image.png'));
-        $this->assertTrue($this->strategy->isEncoded('http://www.shopware.com/media/image/my-image.png'));
+        static::assertTrue($this->strategy->isEncoded('media/image/my-image.png'));
+        static::assertTrue($this->strategy->isEncoded('http://www.shopware.com/media/image/my-image.png'));
     }
 
     public function testNotEncodedPath()
     {
-        $this->assertFalse($this->strategy->isEncoded('media/image/53/'));
-        $this->assertFalse($this->strategy->isEncoded('media/image/53/foo'));
-        $this->assertFalse($this->strategy->isEncoded('media/image/53/a4/d3/'));
-        $this->assertFalse($this->strategy->isEncoded('media/image/53/a4/d3/foo'));
-        $this->assertFalse($this->strategy->isEncoded('http://www.shopware.com/media/image/53/'));
+        static::assertFalse($this->strategy->isEncoded('media/image/53/'));
+        static::assertFalse($this->strategy->isEncoded('media/image/53/foo'));
+        static::assertFalse($this->strategy->isEncoded('media/image/53/a4/d3/'));
+        static::assertFalse($this->strategy->isEncoded('media/image/53/a4/d3/foo'));
+        static::assertFalse($this->strategy->isEncoded('http://www.shopware.com/media/image/53/'));
     }
 
     /**
@@ -120,7 +120,7 @@ class PlainStrategyTest extends TestCase
      */
     public function testEncodingWithInvalidPaths($path)
     {
-        $this->assertEquals('', $this->strategy->encode($path));
+        static::assertEquals('', $this->strategy->encode($path));
     }
 
     /**
@@ -131,6 +131,6 @@ class PlainStrategyTest extends TestCase
      */
     public function testEncodeForThumbnails($path, $expectedPath)
     {
-        $this->assertEquals($expectedPath, $this->strategy->encode($path));
+        static::assertEquals($expectedPath, $this->strategy->encode($path));
     }
 }

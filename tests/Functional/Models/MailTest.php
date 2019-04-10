@@ -114,7 +114,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
 
             $mail->$setMethod($value);
 
-            $this->assertEquals($mail->$getMethod(), $value);
+            static::assertEquals($mail->$getMethod(), $value);
         }
     }
 
@@ -133,7 +133,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
                 $getMethod = 'get' . ucfirst($fieldname);
             }
 
-            $this->assertEquals($mail->$getMethod(), $value);
+            static::assertEquals($mail->$getMethod(), $value);
         }
     }
 
@@ -157,7 +157,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
                 $getMethod = 'get' . ucfirst($fieldname);
             }
 
-            $this->assertEquals($value, $mail->$getMethod());
+            static::assertEquals($value, $mail->$getMethod());
         }
     }
 
@@ -187,7 +187,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
                 $getMethod = 'get' . ucfirst($fieldname);
             }
 
-            $this->assertEquals($mail->$getMethod(), $value);
+            static::assertEquals($mail->$getMethod(), $value);
         }
     }
 
@@ -197,7 +197,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
     public function testGetAttachmentShouldReturnEmptyArrayInitial()
     {
         $mail = new Mail();
-        $this->assertEquals($mail->getAttachments(), []);
+        static::assertEquals($mail->getAttachments(), []);
     }
 
     /**
@@ -206,7 +206,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
     public function testGetStateShouldReturnNullInitial()
     {
         $mail = new Mail();
-        $this->assertEquals($mail->getStatus(), null);
+        static::assertEquals($mail->getStatus(), null);
     }
 
     /**
@@ -216,7 +216,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
     {
         $mail = new Mail();
 
-        $this->assertEquals(Mail::MAILTYPE_USER, $mail->getMailtype());
+        static::assertEquals(Mail::MAILTYPE_USER, $mail->getMailtype());
     }
 
     /**
@@ -226,14 +226,14 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
     {
         $statusMock = $this->createMock(Status::class);
 
-        $statusMock->expects($this->any())
+        $statusMock->expects(static::any())
                 ->method('getGroup')
                 ->willReturn(Status::GROUP_STATE);
 
         $mail = new Mail();
         $mail->setStatus($statusMock);
 
-        $this->assertEquals(Mail::MAILTYPE_STATE, $mail->getMailtype());
+        static::assertEquals(Mail::MAILTYPE_STATE, $mail->getMailtype());
     }
 
     /**
@@ -244,10 +244,10 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
         $mail = new Mail();
         $mail->setMailtype(Mail::MAILTYPE_USER);
 
-        $this->assertTrue($mail->isUserMail());
-        $this->assertFalse($mail->isSystemMail());
-        $this->assertFalse($mail->isOrderStateMail());
-        $this->assertFalse($mail->isPaymentStateMail());
+        static::assertTrue($mail->isUserMail());
+        static::assertFalse($mail->isSystemMail());
+        static::assertFalse($mail->isOrderStateMail());
+        static::assertFalse($mail->isPaymentStateMail());
     }
 
     /**
@@ -258,10 +258,10 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
         $mail = new Mail();
         $mail->setMailtype(Mail::MAILTYPE_SYSTEM);
 
-        $this->assertFalse($mail->isUserMail());
-        $this->assertTrue($mail->isSystemMail());
-        $this->assertFalse($mail->isOrderStateMail());
-        $this->assertFalse($mail->isPaymentStateMail());
+        static::assertFalse($mail->isUserMail());
+        static::assertTrue($mail->isSystemMail());
+        static::assertFalse($mail->isOrderStateMail());
+        static::assertFalse($mail->isPaymentStateMail());
     }
 
     /**
@@ -271,7 +271,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
     {
         $statusMock = $this->createMock(Status::class);
 
-        $statusMock->expects($this->any())
+        $statusMock->expects(static::any())
                    ->method('getGroup')
                    ->willReturn(Status::GROUP_STATE);
 
@@ -279,10 +279,10 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
         $mail->setMailtype(Mail::MAILTYPE_STATE);
         $mail->setStatus($statusMock);
 
-        $this->assertFalse($mail->isUserMail());
-        $this->assertFalse($mail->isSystemMail());
-        $this->assertTrue($mail->isOrderStateMail());
-        $this->assertFalse($mail->isPaymentStateMail());
+        static::assertFalse($mail->isUserMail());
+        static::assertFalse($mail->isSystemMail());
+        static::assertTrue($mail->isOrderStateMail());
+        static::assertFalse($mail->isPaymentStateMail());
     }
 
     /**
@@ -292,7 +292,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
     {
         $statusMock = $this->createMock(Status::class);
 
-        $statusMock->expects($this->any())
+        $statusMock->expects(static::any())
                 ->method('getGroup')
                 ->willReturn(Status::GROUP_PAYMENT);
 
@@ -300,10 +300,10 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
         $mail->setMailtype(Mail::MAILTYPE_STATE);
         $mail->setStatus($statusMock);
 
-        $this->assertFalse($mail->isUserMail());
-        $this->assertFalse($mail->isSystemMail());
-        $this->assertFalse($mail->isOrderStateMail());
-        $this->assertTrue($mail->isPaymentStateMail());
+        static::assertFalse($mail->isUserMail());
+        static::assertFalse($mail->isSystemMail());
+        static::assertFalse($mail->isOrderStateMail());
+        static::assertTrue($mail->isPaymentStateMail());
     }
 
     /**
@@ -331,6 +331,6 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
 
         $mail = new Mail();
 
-        $this->assertEquals($mail->arrayGetPath($input), $exceptedOutput);
+        static::assertEquals($mail->arrayGetPath($input), $exceptedOutput);
     }
 }

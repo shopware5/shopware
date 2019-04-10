@@ -40,7 +40,6 @@ interface RelatedProductStreamsServiceInterface
     /**
      * Selects all related product stream ids for the provided product.
      *
-     *
      * @return int[] array of product stream structs, indexed by the product order number
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);

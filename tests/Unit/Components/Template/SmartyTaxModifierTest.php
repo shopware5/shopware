@@ -37,7 +37,7 @@ class SmartyTaxModifierTest extends TestCase
      */
     public function testTaxModifierWithValid($tax, $expected, $locale)
     {
-        $this->assertSame(
+        static::assertSame(
             $expected,
             smarty_modifier_tax($tax, $locale)
         );

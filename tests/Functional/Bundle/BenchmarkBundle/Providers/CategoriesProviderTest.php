@@ -47,10 +47,10 @@ class CategoriesProviderTest extends ProviderTestCase
 
         $provider = $this->getProvider();
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
-        $this->assertSame(2.0, $resultData['products']['average']);
+        static::assertSame(2.0, $resultData['products']['average']);
 
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
-        $this->assertSame(1.0, $resultData['products']['average']);
+        static::assertSame(1.0, $resultData['products']['average']);
     }
 
     /**
@@ -62,10 +62,10 @@ class CategoriesProviderTest extends ProviderTestCase
 
         $provider = $this->getProvider();
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
-        $this->assertSame(6, $resultData['products']['max']);
+        static::assertSame(6, $resultData['products']['max']);
 
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
-        $this->assertSame(2, $resultData['products']['max']);
+        static::assertSame(2, $resultData['products']['max']);
     }
 
     /**
@@ -79,25 +79,25 @@ class CategoriesProviderTest extends ProviderTestCase
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
 
         // First child category, "Example Parent 1"
-        $this->assertCount(2, $resultData['tree'][0]['children']);
+        static::assertCount(2, $resultData['tree'][0]['children']);
         // First child of "Example parent 1", name "Example 3"
-        $this->assertCount(1, $resultData['tree'][0]['children'][1]['children']);
+        static::assertCount(1, $resultData['tree'][0]['children'][1]['children']);
         // Child of "Example 3", name "Example 5"
-        $this->assertCount(1, $resultData['tree'][0]['children'][1]['children'][0]['children']);
+        static::assertCount(1, $resultData['tree'][0]['children'][1]['children'][0]['children']);
 
-        $this->assertEquals(0, $resultData['tree'][0]['children'][1]['active']);
-        $this->assertEquals(1, $resultData['tree'][0]['children'][1]['children'][0]['active']);
-        $this->assertEquals(1, $resultData['tree'][0]['children'][0]['hasProductStream']);
+        static::assertEquals(0, $resultData['tree'][0]['children'][1]['active']);
+        static::assertEquals(1, $resultData['tree'][0]['children'][1]['children'][0]['active']);
+        static::assertEquals(1, $resultData['tree'][0]['children'][0]['hasProductStream']);
 
         $provider = $this->getProvider();
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
 
         // First child category, "Example Parent 2"
-        $this->assertCount(1, $resultData['tree'][0]['children']);
+        static::assertCount(1, $resultData['tree'][0]['children']);
         // First child of "Example Parent 2", name "Example 4"
-        $this->assertCount(0, $resultData['tree'][0]['children'][0]['children']);
+        static::assertCount(0, $resultData['tree'][0]['children'][0]['children']);
 
-        $this->assertEquals(1, $resultData['tree'][0]['active']);
-        $this->assertEquals(0, $resultData['tree'][0]['children'][0]['active']);
+        static::assertEquals(1, $resultData['tree'][0]['active']);
+        static::assertEquals(0, $resultData['tree'][0]['children'][0]['active']);
     }
 }

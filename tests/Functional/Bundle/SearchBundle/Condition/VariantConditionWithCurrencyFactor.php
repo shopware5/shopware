@@ -510,11 +510,11 @@ class VariantConditionWithCurrencyFactor extends TestCase
         foreach ($products as $product) {
             $number = $product->getNumber();
             if (isset($prices['cheapestPrice'][$number])) {
-                $this->assertEquals($prices['cheapestPrice'][$number], $product->getCheapestPrice()->getCalculatedPrice());
+                static::assertEquals($prices['cheapestPrice'][$number], $product->getCheapestPrice()->getCalculatedPrice());
             }
 
             if (isset($prices['pseudoPrice'][$number])) {
-                $this->assertEquals($prices['pseudoPrice'][$number], $product->getCheapestPrice()->getCalculatedPseudoPrice());
+                static::assertEquals($prices['pseudoPrice'][$number], $product->getCheapestPrice()->getCalculatedPseudoPrice());
             }
         }
     }
@@ -535,24 +535,24 @@ class VariantConditionWithCurrencyFactor extends TestCase
         $expectedCheapestPriceNumbers = array_keys($prices['cheapestPrice']);
 
         foreach ($numbers as $number) {
-            $this->assertContains($number, $expectedCheapestPriceNumbers, sprintf('Cheapest price of product with number: `%s` found but not expected', $number));
+            static::assertContains($number, $expectedCheapestPriceNumbers, sprintf('Cheapest price of product with number: `%s` found but not expected', $number));
         }
         foreach ($expectedCheapestPriceNumbers as $number) {
-            $this->assertContains($number, $numbers, sprintf('Expected cheapest price of product with number: `%s` not found', $number));
+            static::assertContains($number, $numbers, sprintf('Expected cheapest price of product with number: `%s` not found', $number));
         }
 
-        $this->assertCount(count($expectedCheapestPriceNumbers), $products);
+        static::assertCount(count($expectedCheapestPriceNumbers), $products);
 
         // Pseudo prices
         $expectedPseudoPriceNumbers = array_keys($prices['pseudoPrice']);
 
         foreach ($numbers as $number) {
-            $this->assertContains($number, $expectedPseudoPriceNumbers, sprintf('Pseudo price of product with number: `%s` found but not expected', $number));
+            static::assertContains($number, $expectedPseudoPriceNumbers, sprintf('Pseudo price of product with number: `%s` found but not expected', $number));
         }
         foreach ($expectedPseudoPriceNumbers as $number) {
-            $this->assertContains($number, $numbers, sprintf('Expected pseudo price of product with number: `%s` not found', $number));
+            static::assertContains($number, $numbers, sprintf('Expected pseudo price of product with number: `%s` not found', $number));
         }
 
-        $this->assertCount(count($expectedPseudoPriceNumbers), $products);
+        static::assertCount(count($expectedPseudoPriceNumbers), $products);
     }
 }

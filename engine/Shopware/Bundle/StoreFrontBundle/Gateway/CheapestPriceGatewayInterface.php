@@ -60,7 +60,6 @@ interface CheapestPriceGatewayInterface
      *  - The variants has to be active
      *  - Closeout variants can only be selected if the stock > min purchase
      *
-     *
      * @return Struct\Product\PriceRule
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context, Struct\Customer\Group $customerGroup);

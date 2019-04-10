@@ -112,7 +112,6 @@ class DatabaseInteractor
     /**
      * Facade for asking questions
      *
-     *
      * @return string
      */
     public function askQuestion(Question $question)

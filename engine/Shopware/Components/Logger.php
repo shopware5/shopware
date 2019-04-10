@@ -48,4 +48,11 @@ class Logger extends BaseLogger
     {
         $this->log(BaseLogger::DEBUG, $label, ['trace' => true]);
     }
+
+    public function addRecord($level, $message, array $context = [])
+    {
+        $message = str_replace(['[', ']'], ['(', ')'], $message);
+
+        return parent::addRecord($level, $message, $context);
+    }
 }

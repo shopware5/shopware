@@ -54,19 +54,19 @@ class Shopware_Tests_Controllers_Backend_VoteTest extends Enlight_Components_Tes
 
         /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/vote/list');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
-        $this->assertNotNull($this->View()->data);
-        $this->assertNotNull($this->View()->total);
+        static::assertNotNull($this->View()->data);
+        static::assertNotNull($this->View()->total);
 
         //Testing the search-function
         $filter = ['filter' => Zend_Json::encode([['value' => 'test']])];
         $this->Request()->setMethod('POST')->setPost($filter);
         $this->dispatch('backend/premium/getPremiumArticles');
 
-        $this->assertTrue($this->View()->success);
-        $this->assertNotNull($this->View()->data);
-        $this->assertNotNull($this->View()->total);
+        static::assertTrue($this->View()->success);
+        static::assertNotNull($this->View()->data);
+        static::assertNotNull($this->View()->total);
 
         return $data;
     }
@@ -85,9 +85,9 @@ class Shopware_Tests_Controllers_Backend_VoteTest extends Enlight_Components_Tes
 
         $this->dispatch('backend/vote/update');
 
-        $this->assertTrue($this->View()->success);
-        $this->assertNotNull($this->View()->data);
-        $this->assertNotNull($this->View()->data['answer_date']);
+        static::assertTrue($this->View()->success);
+        static::assertNotNull($this->View()->data);
+        static::assertNotNull($this->View()->data['answer_date']);
     }
 
     /**
@@ -109,8 +109,8 @@ class Shopware_Tests_Controllers_Backend_VoteTest extends Enlight_Components_Tes
 
         $this->dispatch('backend/vote/update');
 
-        $this->assertTrue($this->View()->success);
-        $this->assertNotNull($this->View()->data);
+        static::assertTrue($this->View()->success);
+        static::assertNotNull($this->View()->data);
     }
 
     /**
@@ -124,6 +124,6 @@ class Shopware_Tests_Controllers_Backend_VoteTest extends Enlight_Components_Tes
     {
         $this->Request()->setMethod('POST')->setPost($data);
         $this->dispatch('backend/vote/delete');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
     }
 }

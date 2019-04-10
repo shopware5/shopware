@@ -45,7 +45,7 @@ class BenchmarkLocalOverviewControllerTest extends BenchmarkControllerTestCase
 
         $loadedTemplate = $controller->View()->getTemplate();
 
-        $this->assertSame('backend/benchmark/template/local/start.tpl', $loadedTemplate);
+        static::assertSame('backend/benchmark/template/local/start.tpl', $loadedTemplate);
     }
 
     /**
@@ -64,6 +64,6 @@ class BenchmarkLocalOverviewControllerTest extends BenchmarkControllerTestCase
 
         $loadedTemplate = $controller->View()->getTemplate();
 
-        $this->assertSame('backend/benchmark/template/local/custom.tpl', $loadedTemplate);
+        static::assertSame('backend/benchmark/template/local/custom.tpl', $loadedTemplate);
     }
 }

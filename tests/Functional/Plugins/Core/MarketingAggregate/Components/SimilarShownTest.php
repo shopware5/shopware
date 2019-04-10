@@ -31,7 +31,7 @@ class SimilarShownTest extends AbstractMarketing
     public function testResetSimilarShown()
     {
         $this->SimilarShown()->resetSimilarShown();
-        $this->assertCount(0, $this->getAllSimilarShown());
+        static::assertCount(0, $this->getAllSimilarShown());
     }
 
     public function testInitSimilarShown()
@@ -42,7 +42,7 @@ class SimilarShownTest extends AbstractMarketing
 
         $data = $this->getAllSimilarShown();
 
-        $this->assertCount(144, $data);
+        static::assertCount(144, $data);
     }
 
     public function testUpdateElapsedSimilarShownArticles()
@@ -55,13 +55,13 @@ class SimilarShownTest extends AbstractMarketing
 
         $articles = $this->getAllSimilarShown(" WHERE init_date > '2010-01-01' ");
 
-        $this->assertCount(10, $articles);
+        static::assertCount(10, $articles);
 
         $this->SimilarShown()->updateElapsedSimilarShownArticles();
 
         $articles = $this->getAllSimilarShown(" WHERE init_date > '2010-01-01' ");
 
-        $this->assertCount(
+        static::assertCount(
             count($this->getAllSimilarShown()),
             $articles
         );
@@ -81,7 +81,7 @@ class SimilarShownTest extends AbstractMarketing
                 ' AND related_article_id = ' . $combination['related_article_id']
             );
             $updated = $updated[0];
-            $this->assertEquals($combination['viewed'] + 1, $updated['viewed']);
+            static::assertEquals($combination['viewed'] + 1, $updated['viewed']);
         }
     }
 
@@ -103,7 +103,7 @@ class SimilarShownTest extends AbstractMarketing
 
         $articles = $this->getAllSimilarShown();
 
-        $this->assertCount($countBefore - 20, $articles);
+        static::assertCount($countBefore - 20, $articles);
     }
 
     public function testSimilarCronJobRefresh()
@@ -117,19 +117,19 @@ class SimilarShownTest extends AbstractMarketing
         $this->setSimilarShownInvalid();
 
         $result = $this->dispatch('/sommerwelten/accessoires/170/sonnenbrille-red');
-        $this->assertEquals(200, $result->getHttpResponseCode());
+        static::assertEquals(200, $result->getHttpResponseCode());
 
         $articles = $this->getAllSimilarShown(" WHERE init_date > '2010-01-01' ");
-        $this->assertCount(0, $articles);
+        static::assertCount(0, $articles);
 
         $cron = $this->Db()->fetchRow("SELECT * FROM s_crontab WHERE action = 'RefreshSimilarShown'");
-        $this->assertNotEmpty($cron);
+        static::assertNotEmpty($cron);
 
         //the cron plugin isn't installed, so we can't use a dispatch on /backend/cron
         $this->Plugin()->refreshSimilarShown(new \Enlight_Event_EventArgs(['subject' => $this]));
 
         $articles = $this->getAllSimilarShown(" WHERE init_date > '2010-01-01' ");
-        $this->assertCount(
+        static::assertCount(
             count($this->getAllSimilarShown()),
             $articles
         );
