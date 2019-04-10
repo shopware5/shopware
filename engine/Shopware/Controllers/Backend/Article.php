@@ -633,6 +633,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $builder = Shopware()->Models()->createQueryBuilder()
             ->from(\Shopware\Models\Property\Value::class, 'pv')
+            ->orderBy('pv.position', 'ASC')
             ->join('pv.articles', 'pa', 'with', 'pa.id = :articleId')
             ->setParameter('articleId', $productId)
             ->join('pv.option', 'po')

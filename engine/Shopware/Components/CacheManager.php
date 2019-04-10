@@ -276,17 +276,26 @@ class CacheManager
      */
     public function getConfigCacheInfo()
     {
-        $cacheConfig = $this->container->getParameter('shopware.cache');
-        $dir = null;
+        $backendCache = $this->cache->getBackend();
 
-        if ($this->cache->getBackend() instanceof \Zend_Cache_Backend_Apcu) {
+        if ($backendCache instanceof \Zend_Cache_Backend_Apcu) {
             $info = [];
             $apcInfo = apcu_cache_info('user');
             $info['files'] = $apcInfo['num_entries'];
             $info['size'] = $this->encodeSize($apcInfo['mem_size']);
             $apcInfo = apcu_sma_info();
             $info['freeSpace'] = $this->encodeSize($apcInfo['avail_mem']);
+        } elseif ($backendCache instanceof \Zend_Cache_Backend_Redis) {
+            $info = [];
+
+            /** @var \Redis $redis */
+            $redis = $backendCache->getRedis();
+            $info['files'] = $redis->dbSize();
+            $info['size'] = $this->encodeSize($redis->info()['used_memory']);
         } else {
+            $cacheConfig = $this->container->getParameter('shopware.cache');
+            $dir = null;
+
             if (!empty($cacheConfig['backendOptions']['cache_dir'])) {
                 $dir = $cacheConfig['backendOptions']['cache_dir'];
             } elseif (!empty($cacheConfig['backendOptions']['slow_backend_options']['cache_dir'])) {
@@ -297,7 +306,7 @@ class CacheManager
 
         $info['name'] = 'Shopware configuration';
 
-        $backend = get_class($this->cache->getBackend());
+        $backend = get_class($backendCache);
         $backend = str_replace('Zend_Cache_Backend_', '', $backend);
 
         $info['backend'] = $backend;

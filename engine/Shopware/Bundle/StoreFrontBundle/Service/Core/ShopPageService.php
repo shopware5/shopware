@@ -45,10 +45,19 @@ class ShopPageService implements Service\ShopPageServiceInterface
      */
     private $shopGateway;
 
-    public function __construct(Gateway\ShopPageGatewayInterface $shopPageGateway, Gateway\ShopGatewayInterface $shopGateway)
-    {
+    /**
+     * @var Gateway\ShopPageChildrenGatewayInterface
+     */
+    private $shopPageChildrenGateway;
+
+    public function __construct(
+        Gateway\ShopPageGatewayInterface $shopPageGateway,
+        Gateway\ShopGatewayInterface $shopGateway,
+        Gateway\ShopPageChildrenGatewayInterface $shopPageChildrenGateway
+    ) {
         $this->shopPageGateway = $shopPageGateway;
         $this->shopGateway = $shopGateway;
+        $this->shopPageChildrenGateway = $shopPageChildrenGateway;
     }
 
     /**
@@ -91,12 +100,12 @@ class ShopPageService implements Service\ShopPageServiceInterface
      */
     private function resolveChildren(array $shopPages, Struct\ShopContextInterface $context)
     {
-        $parentIds = array_map(function ($page) {
-            return $page->getParentId() > 0 ? (int) $page->getId() : null;
+        $ids = array_map(function (Struct\ShopPage $page) {
+            return $page->getId();
         }, $shopPages);
 
-        $parentIds = array_unique(array_filter($parentIds));
-        $parentPages = $this->shopPageGateway->getList($parentIds, $context);
+        $ids = array_unique(array_filter($ids));
+        $parentPages = $this->shopPageChildrenGateway->getList($ids, $context);
 
         foreach ($parentPages as $page) {
             $parentId = $page->getParentId();

@@ -151,15 +151,16 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
             $products = array_column($products, 'articleID');
 
             if (empty($products)) {
-                $sql = "
+                $like_search = $search . '%';
+                $sql = '
                     SELECT DISTINCT articleID
                     FROM s_articles_details
                     WHERE ordernumber = ?
-                    OR ? LIKE CONCAT(ordernumber, '%')
+                    OR ordernumber LIKE ?
                     GROUP BY articleID
                     LIMIT 2
-                ";
-                $products = $this->get('db')->fetchCol($sql, [$search, $search]);
+                ';
+                $products = $this->get('db')->fetchCol($sql, [$search, $like_search]);
             }
         }
         if (!empty($products) && count($products) == 1) {

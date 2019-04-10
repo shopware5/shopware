@@ -589,7 +589,7 @@ createShopwareVersionMessage = function() {
                     '<p>If you want to develop proprietary extensions that makes use of ExtJS (ie extensions that are not licensed under the GNU Affero General Public License, version 3, or a compatible license), you´ll need to license shopware SDK to get the necessary rights for the distribution of your extensions / plugins.</p>' +
                     '<p><strong>Doctrine 2</strong><span>MIT License</span><span>&nbsp;Origin: http://www.doctrine-project.org/</span></p>' +
                     '<p><strong>TinyMCE 3</strong><span>LGPL 2.1 License</span><span>&nbsp;Origin: Moxiecode Systems AB.</span></p>' +
-                    '<p><strong>Symfony 2</strong><span>MIT License</span><span>&nbsp;Origin: SensioLabs</span></p>' +
+                    '<p><strong>Symfony 3</strong><span>MIT License</span><span>&nbsp;Origin: SensioLabs</span></p>' +
                     '<p><strong>Smarty 3</strong><span>LGPL 2.1 License</span><span>&nbsp;Origin: New Digital Group, Inc.</span></p>' +
                     '<p><strong>CodeMirror</strong><span>BSD License</span><span>&nbsp;Origin: http://codemirror.net/</span></p>' +
                     '<p><strong>MPDF</strong><span>GPL License</span><span>&nbsp;Origin: https://mpdf.github.io</span></p>' +
