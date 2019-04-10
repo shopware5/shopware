@@ -681,6 +681,11 @@ class sAdmin
         Shopware()->Session()->unsetAll();
         $this->regenerateSessionId();
         $this->contextService->initializeContext();
+        $shop = Shopware()->Shop();
+
+        $this->sSYSTEM->sUSERGROUP = $shop->getCustomerGroup()->getKey();
+        $this->sSYSTEM->sUSERGROUPDATA = $shop->getCustomerGroup()->toArray();
+        $this->sSYSTEM->sCurrency = $shop->getCurrency()->toArray();
 
         if (!$this->config->get('clearBasketAfterLogout')) {
             $this->moduleManager->Basket()->sRefreshBasket();
