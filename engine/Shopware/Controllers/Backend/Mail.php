@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\MailBundle\Service\Filter\AdministrativeMailFilter;
 use Shopware\Models\Document\Document;
 use Shopware\Models\Mail\Attachment;
 use Shopware\Models\Mail\Mail;
@@ -326,6 +327,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         try {
             $templateMail = Shopware()->TemplateMail()->createMail($mail, array_merge($this->getDefaultMailContext($shop), $mail->getContext()), $shop);
             $templateMail->addTo($recipient);
+            $templateMail->setAssociation(AdministrativeMailFilter::ADMINISTRATIVE_MAIL, true);
             $templateMail->send();
         } catch (\Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);

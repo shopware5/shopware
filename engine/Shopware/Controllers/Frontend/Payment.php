@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
 use Shopware\Components\BasketSignature\BasketPersister;
 use Shopware\Components\BasketSignature\BasketSignatureGeneratorInterface;
 use Shopware\Components\Random;
@@ -310,6 +311,7 @@ EOD;
             $mail->addTo($this->get('config')->get('mail'));
             $mail->setSubject('An invalid basket signature occured');
             $mail->setBodyHtml($content);
+            $mail->setAssociation(LogEntryBuilder::ORDER_NUMBER_ASSOCIATION, $orderNumber);
             $mail->send();
         } catch (Exception $e) {
         }

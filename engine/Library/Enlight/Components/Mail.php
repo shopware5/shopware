@@ -28,9 +28,7 @@
  * The Enlight_Components_Mail is a component for sending an email. It extends the zend form
  * with php mailer functions.
  *
- * @category   Enlight
  *
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 class Enlight_Components_Mail extends Zend_Mail
@@ -78,10 +76,14 @@ class Enlight_Components_Mail extends Zend_Mail
     protected $templateName = null;
 
     /**
+     * @var array
+     */
+    protected $asscociations = [];
+
+    /**
      * Magic setter method
      *
      * @param string $name
-     * @param mixed  $value
      */
     public function __set($name, $value)
     {
@@ -333,6 +335,41 @@ class Enlight_Components_Mail extends Zend_Mail
     public function getTemplateName()
     {
         return $this->templateName;
+    }
+
+    public function getAsscociations(): array
+    {
+        return $this->asscociations;
+    }
+
+    public function setAssociations(array $associations): void
+    {
+        $this->asscociations = $associations;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getAssociation(string $key)
+    {
+        if (isset($this->asscociations[$key])) {
+            return $this->asscociations[$key];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param mixed|null $value
+     */
+    public function setAssociation(string $key, $value = null): void
+    {
+        $this->asscociations[$key] = $value;
+    }
+
+    public function removeAssociation(string $key): void
+    {
+        unset($this->asscociations[$key]);
     }
 
     /**

@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
 use Shopware\Models\Order\Order;
 
 /**
@@ -363,6 +364,13 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         try {
             $mail = Shopware()->TemplateMail()->createMail($template, $context, $shop);
             $mail->addTo($mailTo);
+
+            if ($orderModel !== null) {
+                $mail->setAssociation(LogEntryBuilder::ORDER_ASSOCIATION, $orderModel);
+            } else {
+                $mail->setAssociation(LogEntryBuilder::ORDER_ID_ASSOCIATION, $orderId);
+            }
+
             $mail->send();
         } catch (\Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
