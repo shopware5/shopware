@@ -48,6 +48,9 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 * Deprecated the class `Shopware_Components_Benchmark_Point`. It will be removed in 5.6 without replacement.
 * Deprecated the class `Shopware_Components_Benchmark_Container`. It will be removed in 5.6 without replacement.
+* Deprecated the class `Shopware_Controllers_Backend_Search::getArticles`. It will be removed in 5.7, use the ProductRepository instead.
+* Deprecated the class `Shopware_Controllers_Backend_Search::getOrders`. It will be removed in 5.7, use the OrderRepository instead.
+* Deprecated the class `Shopware_Controllers_Backend_Search::getCustomers`. It will be removed in 5.7, use the CustomerRepository instead.
 * Deprecated the function `sArticles::sCheckIfEsd` as it is unused. It will be removed in 5.7 without replacement.
 
 ### Custom file extension whitelist

@@ -22,19 +22,35 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\EsBackendBundle\Searcher;
-
-use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
-
-class ProductSearcher extends GenericSearcher
+/**
+ * @category Shopware
+ *
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
+class Shopware_Tests_Controllers_Backend_SearchTest extends Enlight_Components_Test_Controller_TestCase
 {
-    protected function getIdentifierColumn()
+    /**
+     * Standard set up for every test - just disable auth
+     */
+    public function setUp()
     {
-        return 'number';
+        parent::setUp();
+
+        // disable auth and acl
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
-    protected function buildSearchObject(SearchCriteria $criteria)
+    /**
+     * @group elasticSearch
+     */
+    public function testSearchForVariants()
     {
-        return parent::buildSearchObject($criteria);
+        $this->Request()->setMethod('POST')->setPost(['search' => 'SW10002.1']);
+        $this->dispatch('backend/search');
+
+        $jsonBody = $this->View()->getAssign();
+
+        static::assertEquals(2, $jsonBody['searchResult']['articles']['SW10002.1']['kind']);
     }
 }

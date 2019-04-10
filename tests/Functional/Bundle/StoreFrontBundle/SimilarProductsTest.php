@@ -144,6 +144,7 @@ class SimilarProductsTest extends TestCase
         if (!$convertedShop->getCurrency()) {
             $convertedShop->setCurrency($context->getCurrency());
         }
+
         $helper->refreshSearchIndexes(
             $convertedShop
         );

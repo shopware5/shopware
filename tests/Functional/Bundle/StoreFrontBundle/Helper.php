@@ -887,13 +887,8 @@ class Helper
             return;
         }
 
-        try {
-            $client = Shopware()->Container()->get('shopware_elastic_search.client');
-            $client->indices()->delete(['index' => '_all']);
-        } catch (\Exception $e) {
-        }
-
         $indexer = Shopware()->Container()->get('shopware_elastic_search.shop_indexer');
+        $indexer->cleanupIndices();
         $indexer->index($shop, new ProgressHelper());
     }
 
