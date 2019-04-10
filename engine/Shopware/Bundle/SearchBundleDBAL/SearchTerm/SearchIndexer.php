@@ -28,12 +28,19 @@ use Doctrine\DBAL\Connection;
 use Shopware\Components\MemoryLimit;
 
 /**
- * @category Shopware
+ * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SearchIndexer implements SearchIndexerInterface
 {
+    /**
+     * Percent of matches to delete search index keywords
+     *
+     * @type float
+     */
+    const INDEX_DELETE_THRESHOLD = 0.9;
+
     /**
      * @var Connection
      */
@@ -81,7 +88,7 @@ class SearchIndexer implements SearchIndexerInterface
             return;
         }
 
-        $interval = (int) $this->config->get('cacheSearch');
+        $interval = (int)$this->config->get('cacheSearch');
 
         if (empty($interval) || $interval < 360) {
             $interval = 86400;
@@ -184,7 +191,7 @@ class SearchIndexer implements SearchIndexerInterface
                     foreach ($fields as $fieldID => $field) {
                         $field_keywords = [$row[$field['fieldName']]];
 
-                        if (!(bool) $field['doNotSplit']) {
+                        if (!(bool)$field['doNotSplit']) {
                             // Split string from column into keywords
                             $field_keywords = $this->termHelper->splitTerm($row[$field['fieldName']]);
                         }
@@ -257,43 +264,69 @@ class SearchIndexer implements SearchIndexerInterface
     private function cleanupIndex()
     {
         $tables = $this->getSearchTables();
+        $qb = $this->connection->createQueryBuilder();
+        $qb
+            ->select(['si.keywordID', 'si.fieldID', 'sk.keyword'])
+            ->addSelect('(SELECT tableId FROM s_search_fields WHERE s_search_fields.id = si.fieldID) AS tableId')
+            ->addSelect('COUNT(*) AS count_self')
+            ->from('s_search_index', 'si')
+            ->innerJoin('si', 's_search_keywords', 'sk', 'si.keywordID=sk.id')
+            ->groupBy('si.keywordID')
+            ->addGroupBy('si.fieldID')
+            ->setParameter('threshold', static::INDEX_DELETE_THRESHOLD);
 
-        $sql_join = '';
-        $sql_select_counts = [];
-        $sql_having = [];
+        $selected = []; // To avoid identical selects
         foreach ($tables as $table) {
-            if (empty($table['referenz_table'])) {
-                $table['referenz_table'] = 's_articles';
-            }
             if (!empty($table['foreign_key'])) {
-                $sql_join .= "
-                    LEFT JOIN {$table['referenz_table']} t{$table['tableID']}
-                    ON si.elementID=t{$table['tableID']}.{$table['foreign_key']}
-                    AND si.fieldID IN ({$table['fieldIDs']})
-                ";
+                $qb->leftJoin(
+                    'si',
+                    $table['referenz_table'] ?: 's_articles',
+                    't' . $table['tableID'],
+                    sprintf(
+                        'si.elementID = t%d.%s AND si.fieldID IN (:fieldIDs%1$d)',
+                        $table['tableID'],
+                        $table['foreign_key']
+                    )
+                );
+                $qb->setParameter('fieldIDs' . $table['tableID'], $table['fieldIDs']);
             }
-            $sql_select_counts[$table['referenz_table'] ?: $table['table']] = '(SELECT COUNT(*) * 0.9 FROM ' . ($table['referenz_table'] ?: $table['table']) . ') AS cnt_' . ($table['referenz_table'] ?: $table['table']);
-            $sql_having[] = '(tableId = ' . $table['tableID'] . ' AND count_self > cnt_' . ($table['referenz_table'] ?: $table['table']) . ')';
+
+            if (!in_array($table['referenz_table'] ?: $table['table'], $selected)) {
+                $qb->addSelect(
+                    sprintf(
+                        '(SELECT COUNT(*) * :threshold FROM %s) AS cnt_%1$s',
+                        $selected[] = ($table['referenz_table'] ?: $table['table'])
+                    )
+                );
+            }
+
+            $qb->orHaving(
+                sprintf(
+                    'tableId = %d AND count_self > cnt_%s',
+                    $table['tableID'],
+                    $table['referenz_table'] ?: $table['table']
+                )
+            );
         }
 
-        $sql = "
-            SELECT STRAIGHT_JOIN
-                   keywordID, fieldID, sk.keyword,
-                   " . implode(',' . PHP_EOL, $sql_select_counts) . ",
-                   (SELECT tableId FROM s_search_fields WHERE s_search_fields.id = si.fieldID) AS tableId,
-                   COUNT(*) AS count_self
-            FROM `s_search_index` si
+        // @todo Fix retrieval of results:
+        // For any reason, $qb->execute()->fetchAll() misses some results (compare result with $collectToDelete).
+        // As a workaround, sql is fetched and enriched with parameters for now.
+        // Second issue is that Doctrine doesn't support STRAIGHT_JOIN until now.
 
-            INNER JOIN s_search_keywords sk
-            ON si.keywordID=sk.id
+        // Get mapped sql:
+        $mappedSql = str_replace(
+            array_map(
+                function ($param) {
+                    return ':' . $param;
+                }, array_keys($qb->getParameters())
+            ),
+            array_values($qb->getParameters()),
+            // Replace SELECT by SELECT STRAIGHT JOIN
+            substr_replace($qb->getSQL(), 'SELECT STRAIGHT_JOIN', 0, 6)
+        );
 
-            $sql_join
-
-            GROUP BY keywordID, fieldID
-            HAVING " . implode(' OR ', $sql_having) . "
-        ";
-        
-        $collectToDelete = $this->connection->fetchAll($sql);
+        $collectToDelete = $this->connection->fetchAll($mappedSql);
         foreach ($collectToDelete as $delete) {
             $sql = '
                 DELETE FROM s_search_index
