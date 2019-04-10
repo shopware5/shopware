@@ -2,6 +2,14 @@
 
 This changelog references changes done in Shopware 5.5 patch versions.
 
+## 5.5.9
+
+[View all changes from v5.5.8...v5.5.9](https://github.com/shopware/shopware/compare/v5.5.8...v5.5.9)
+
+### Additions
+
+* Added option to "I am" select field in basic configuration
+
 ## 5.5.8
 
 [View all changes from v5.5.7...v5.5.8](https://github.com/shopware/shopware/compare/v5.5.7...v5.5.8)
