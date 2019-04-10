@@ -138,6 +138,7 @@ return array_replace_recursive([
         'host' => 'localhost',
         'charset' => 'utf8mb4',
         'adapter' => 'pdo_mysql',
+        'pdoOptions' => null,
         'serverVersion' => null,
         'defaultTableOptions' => [
             'charset' => 'utf8',
