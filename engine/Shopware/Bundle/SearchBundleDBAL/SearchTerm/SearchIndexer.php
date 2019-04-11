@@ -128,8 +128,8 @@ class SearchIndexer implements SearchIndexerInterface
 
         $this->setNextUpdateTimestamp();
 
-        // Truncate search index table
-        $this->connection->executeUpdate('TRUNCATE TABLE `s_search_index`');
+        // Truncate search index table (using DELETE to avoid committing database transactions in tests)
+        $this->connection->executeUpdate('DELETE FROM `s_search_index`');
 
         // Get a list of all tables and columns in this tables that should be processed by search
         /**
