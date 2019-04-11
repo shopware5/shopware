@@ -3247,7 +3247,13 @@ class sAdmin
         $this->session->offsetSet('sUserPassword', $hash);
         $this->session->offsetSet('sUserId', $getUser['id']);
 
-        $this->sCheckUser();
+        if (!$this->sCheckUser()) {
+            return;
+        }
+
+        if ($this->config->get('migrateCartAfterLogin')) {
+            Shopware()->Container()->get('shopware.components.cart.cart_migration')->migrate();
+        }
     }
 
     /**

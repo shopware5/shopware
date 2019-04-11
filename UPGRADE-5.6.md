@@ -47,6 +47,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added the `associations` property to `Enlight_Components_Mail`
 * Added option symbols for `{include file="frontend/_includes/rating.tpl"}` to hide rating symbols
 * Added specific logger service for each plugin. See [Plugin specific logger](###Plugin specific logger) for more details  
+* Added new config option to allow restoring of old cart items
 
 ### Changes
 
