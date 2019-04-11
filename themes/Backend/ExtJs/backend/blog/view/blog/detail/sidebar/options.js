@@ -216,7 +216,6 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
             buttonText: '{s name=detail/sidebar/options/button/select_image}Select images{/s}',
             name: 'media-manager-selection',
             multiSelect: true,
-            albumId:-11,
             flex:1,
             buttonConfig : {
                 width:100
