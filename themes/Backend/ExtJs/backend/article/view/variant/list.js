@@ -717,11 +717,11 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
             store: Ext.create('Ext.data.Store', {
                 fields: [ 'value', 'name' ],
                 data: [
-                    { value: '20', name: '20 ' + productSnippet },
-                    { value: '40', name: '40 ' + productSnippet },
-                    { value: '60', name: '60 ' + productSnippet },
-                    { value: '80', name: '80 ' + productSnippet },
-                    { value: '100', name: '100 ' + productSnippet }
+                    { value: 20, name: '20 ' + productSnippet },
+                    { value: 40, name: '40 ' + productSnippet },
+                    { value: 60, name: '60 ' + productSnippet },
+                    { value: 80, name: '80 ' + productSnippet },
+                    { value: 100, name: '100 ' + productSnippet }
                 ]
             }),
             displayField: 'name',
