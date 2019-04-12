@@ -37,7 +37,7 @@ class SearchIndexer implements SearchIndexerInterface
     /**
      * Percent of matches to delete search index keywords
      *
-     * @type float
+     * @var float
      */
     const INDEX_DELETE_THRESHOLD = 0.9;
 
@@ -88,7 +88,7 @@ class SearchIndexer implements SearchIndexerInterface
             return;
         }
 
-        $interval = (int)$this->config->get('cacheSearch');
+        $interval = (int) $this->config->get('cacheSearch');
 
         if (empty($interval) || $interval < 360) {
             $interval = 86400;
@@ -191,7 +191,7 @@ class SearchIndexer implements SearchIndexerInterface
                     foreach ($fields as $fieldID => $field) {
                         $field_keywords = [$row[$field['fieldName']]];
 
-                        if (!(bool)$field['doNotSplit']) {
+                        if (!(bool) $field['doNotSplit']) {
                             // Split string from column into keywords
                             $field_keywords = $this->termHelper->splitTerm($row[$field['fieldName']]);
                         }
