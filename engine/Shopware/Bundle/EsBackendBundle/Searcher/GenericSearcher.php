@@ -67,21 +67,24 @@ class GenericSearcher implements SearcherInterface
     protected $enabled;
 
     /**
-     * @param string $domainName
-     * @param bool   $enabled
+     * @var string
      */
+    private $esVersion;
+
     public function __construct(
         Client $client,
         SearcherInterface $decorated,
         SearchQueryBuilder $searchQueryBuilder,
-        $domainName,
-        $enabled
+        string $domainName,
+        bool $enabled,
+        string $esVersion
     ) {
         $this->decorated = $decorated;
         $this->client = $client;
         $this->searchQueryBuilder = $searchQueryBuilder;
         $this->domainName = $domainName;
         $this->enabled = $enabled;
+        $this->esVersion = $esVersion;
     }
 
     /**
@@ -130,11 +133,23 @@ class GenericSearcher implements SearcherInterface
 
     protected function fetch(Search $search)
     {
-        return $this->client->search([
+        $arguments = [
             'index' => EsBackendIndexer::buildAlias($this->domainName),
             'type' => $this->domainName,
             'body' => $search->toArray(),
-        ]);
+        ];
+
+        if (version_compare($this->esVersion, '7', '>=')) {
+            $arguments = array_merge(
+                $arguments,
+                [
+                    'rest_total_hits_as_int' => true,
+                    'track_total_hits' => true,
+                ]
+            );
+        }
+
+        return $this->client->search($arguments);
     }
 
     /**

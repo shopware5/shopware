@@ -39,9 +39,17 @@ class ProductNumberSearchFactory
      */
     private $handlers;
 
-    public function __construct(IteratorAggregate $handlers)
-    {
+    /**
+     * @var string
+     */
+    private $esVersion;
+
+    public function __construct(
+        IteratorAggregate $handlers,
+        string $esVersion
+    ) {
         $this->handlers = iterator_to_array($handlers, false);
+        $this->esVersion = $esVersion;
     }
 
     /**
@@ -57,7 +65,8 @@ class ProductNumberSearchFactory
         return new ProductNumberSearch(
             $searchClient,
             $indexFactory,
-            $container->get('shopware_search_es.handler_collection')->toArray()
+            $container->get('shopware_search_es.handler_collection')->toArray(),
+            $this->esVersion
         );
     }
 

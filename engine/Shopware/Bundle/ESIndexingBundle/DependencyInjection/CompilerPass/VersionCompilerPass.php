@@ -22,41 +22,29 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\ESIndexingBundle\TextMapping;
+namespace Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass;
 
-use Shopware\Bundle\ESIndexingBundle\TextMappingInterface;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 
-class TextMappingES5 implements TextMappingInterface
+class VersionCompilerPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getTextField()
+    public function process(ContainerBuilder $container): void
     {
-        return ['type' => 'text', 'fielddata' => true];
-    }
+        $client = $container->get('shopware_elastic_search.client');
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getNotAnalyzedField()
-    {
-        return $this->getKeywordField();
-    }
+        $version = null;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getKeywordField()
-    {
-        return ['type' => 'keyword'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAttributeRawField(): array
-    {
-        return $this->getKeywordField();
+        try {
+            $container->getParameter('shopware.es.version');
+        } catch (InvalidArgumentException $exception) {
+            try {
+                $info = $client->info();
+                $container->setParameter('shopware.es.version', $info['version']['number']);
+            } catch (\Exception $e) {
+                $container->setParameter('shopware.es.version', '6');
+            }
+        }
     }
 }

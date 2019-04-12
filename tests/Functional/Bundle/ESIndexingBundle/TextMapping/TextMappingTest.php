@@ -72,17 +72,31 @@ class TextMappingTest extends TestCase
 
         $this->helper->refreshSearchIndexes($context->getShop());
 
-        $response = $client->search(
-            [
-                'index' => $indexFactory->createShopIndex($context->getShop(), ProductMapping::TYPE)->getName(),
-                'body' => [
-                    'query' => [
-                        'term' => [
-                            'ean' => '444',
-                        ],
+        $version = Shopware()->Container()->getParameter('shopware.es.version');
+
+        $arguments = [
+            'index' => $indexFactory->createShopIndex($context->getShop(), ProductMapping::TYPE)->getName(),
+            'body' => [
+                'query' => [
+                    'term' => [
+                        'ean' => '444',
                     ],
                 ],
-            ]
+            ],
+        ];
+
+        if (version_compare($version, '7', '>=')) {
+            $arguments = array_merge(
+                $arguments,
+                [
+                    'rest_total_hits_as_int' => true,
+                    'track_total_hits' => true,
+                ]
+            );
+        }
+
+        $response = $client->search(
+                $arguments
         );
 
         static::assertEquals('test9999', $response['hits']['hits'][0]['_id']);

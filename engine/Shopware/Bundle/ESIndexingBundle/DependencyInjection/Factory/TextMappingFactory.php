@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory;
 
 use Elasticsearch\Client;
-use Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES5;
 use Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES6;
 use Shopware\Bundle\ESIndexingBundle\TextMappingInterface;
 
@@ -56,24 +55,6 @@ class TextMappingFactory
      */
     public function factory(Client $client)
     {
-        if (!$this->esEnabled) {
-            return new TextMappingES5();
-        }
-
-        if (!$this->version) {
-            try {
-                $info = $client->info();
-                $this->version = $info['version']['number'];
-            } catch (\Exception $e) {
-                return new TextMappingES5();
-            }
-        }
-
-        switch (true) {
-            case version_compare($this->version, '6', '>='):
-                return new TextMappingES6();
-            default:
-                return new TextMappingES5();
-        }
+        return new TextMappingES6();
     }
 }

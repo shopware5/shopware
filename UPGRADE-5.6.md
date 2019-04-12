@@ -73,7 +73,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added `--index` option to `sw:es:index:populate`. It can be used to reindex single or multiple index. If it is not defined, every index will be reindexed.
     `bin/console sw:es:index:populate --index property`
     `bin/console sw:es:index:populate --index property --index product`
-* Added the Product Number as a new method to sort your results.
+* Added the Product Number as a new method to sort your results
+* Added support for Elasticsearch 7
 * Added a last password change date to customers
 * Added new foreign key to `s_order_details`, `orderID` now references `s_order`.`id`
 * Added new config option to set batch size of backlog indexing for elasticsearch backend implementation
@@ -135,6 +136,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `Ext.ClassManager` to show better error messages on missing alias or class
 * Changed `Shopware_Controllers_Backend_Application` to abstract
 * Changed `Shopware_Controllers_Backend_ExtJs` to abstract
+* Changed minimum Elasticsearch version to 6.0.0
 * Changed internal validation of `Shopware\Bundle\StoreFrontBundle\Struct\Attribute`
 * Changed the blog seo meta details to be saveable after being over the max length of the global max length
 * Changed shipping calculation in off canvas to work correctly with country states

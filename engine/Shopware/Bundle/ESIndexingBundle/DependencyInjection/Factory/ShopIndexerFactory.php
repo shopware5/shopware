@@ -54,11 +54,21 @@ class ShopIndexerFactory
      */
     private $settings;
 
-    public function __construct(\Traversable $indexer, \Traversable $mappings, \Traversable $settings)
-    {
+    /**
+     * @var string
+     */
+    private $esVersion;
+
+    public function __construct(
+        \Traversable $indexer,
+        \Traversable $mappings,
+        \Traversable $settings,
+        string $esVersion
+    ) {
         $this->indexer = iterator_to_array($indexer, false);
         $this->mappings = iterator_to_array($mappings, false);
         $this->settings = iterator_to_array($settings, false);
+        $this->esVersion = $esVersion;
     }
 
     /**
@@ -92,7 +102,8 @@ class ShopIndexerFactory
             $consoleHelper,
             $indexer,
             $mappings,
-            $settings
+            $settings,
+            $this->esVersion
         );
     }
 
