@@ -37,6 +37,11 @@ class ProductMapping implements MappingInterface
     const TYPE = 'product';
 
     /**
+     * @var bool
+     */
+    protected $isDebug;
+
+    /**
      * @var IdentifierSelector
      */
     private $identifierSelector;
@@ -75,7 +80,8 @@ class ProductMapping implements MappingInterface
         TextMappingInterface $textMapping,
         CrudService $crudService,
         Client $client,
-        $isDynamic = true
+        $isDynamic = true,
+        $isDebug = false
     ) {
         $this->identifierSelector = $identifierSelector;
         $this->fieldMapping = $fieldMapping;
@@ -83,6 +89,7 @@ class ProductMapping implements MappingInterface
         $this->crudService = $crudService;
         $this->client = $client;
         $this->isDynamic = $isDynamic;
+        $this->isDebug = $isDebug;
     }
 
     /**
@@ -98,7 +105,7 @@ class ProductMapping implements MappingInterface
      */
     public function get(Shop $shop)
     {
-        return [
+        $mapping = [
             'dynamic' => $this->isDynamic,
             '_source' => [
                 'includes' => ['id', 'mainVariantId', 'variantId', 'number'],
@@ -172,6 +179,12 @@ class ProductMapping implements MappingInterface
                 'voteAverage' => $this->getVoteAverageMapping(),
             ],
         ];
+
+        if ($this->isDebug) {
+            unset($mapping['_source']);
+        }
+
+        return $mapping;
     }
 
     /**

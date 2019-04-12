@@ -122,6 +122,7 @@
                  class="Shopware\Bundle\ESIndexingBundle\Property\PropertyMapping">
             <argument type="service" id="shopware_elastic_search.field_mapping"/>
             <argument>%shopware.es.dynamic_mapping_enabled%</argument>
+            <argument>%shopware.es.debug%</argument>
 
             <tag name="shopware_elastic_search.mapping"/>
         </service>
@@ -170,6 +171,7 @@
             <argument type="service" id="shopware_attribute.crud_service"/>
             <argument type="service" id="shopware_elastic_search.client"/>
             <argument>%shopware.es.dynamic_mapping_enabled%</argument>
+            <argument>%shopware.es.debug%</argument>
 
             <tag name="shopware_elastic_search.mapping"/>
         </service>

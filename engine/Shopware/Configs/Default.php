@@ -166,6 +166,7 @@ return array_replace_recursive([
             'name' => 2,
             'number' => 2,
         ],
+        'debug' => false,
     ],
     'front' => [
         'noErrorHandler' => false,
