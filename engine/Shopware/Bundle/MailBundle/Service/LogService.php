@@ -26,6 +26,7 @@ namespace Shopware\Bundle\MailBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Enlight_Components_Mail;
+use Shopware\Bundle\MailBundle\Service\Filter\AdministrativeMailFilter;
 use Shopware\Bundle\MailBundle\Service\Filter\MailFilterInterface;
 use Shopware\Models\Mail\Log;
 
@@ -51,6 +52,11 @@ class LogService implements LogServiceInterface
      */
     private $filters;
 
+    /**
+     * @var bool
+     */
+    private $flushError = false;
+
     public function __construct(EntityManagerInterface $entityManager, LogEntryBuilderInterface $entryBuilder, iterable $filters)
     {
         $this->entityManager = $entityManager;
@@ -71,6 +77,7 @@ class LogService implements LogServiceInterface
         }
 
         $this->entries[] = $this->entryBuilder->build($mail);
+        $this->handleErrorMail($mail);
     }
 
     /**
@@ -78,22 +85,45 @@ class LogService implements LogServiceInterface
      */
     public function flush(): void
     {
-        if (empty($this->entries)) {
+        if (empty($this->entries) || $this->flushError) {
             return;
         }
 
         $this->entityManager->beginTransaction();
 
         try {
-            foreach ($this->entries as $entry) {
-                $this->entityManager->persist($entry);
+            while (count($this->entries) > 0) {
+                $this->entityManager->persist(array_pop($this->entries));
+
+                if (count($this->entries) % 20 === 0) {
+                    $this->entityManager->flush();
+                }
             }
 
-            $this->entityManager->flush();
             $this->entityManager->commit();
         } catch (\Exception $exception) {
             $this->entityManager->rollback();
             throw $exception;
+        }
+    }
+
+    /**
+     * The error logger will in some cases try to send an e-mail when an uncaught exception occurs.
+     * E-Mails are sent via register_shutdown_function in this case and therefore after the
+     * KernelEvents::TERMINATE Event, so we have to make sure flush() is called anyway.
+     */
+    protected function handleErrorMail(Enlight_Components_Mail $mail): void
+    {
+        if ($mail->getAssociation(AdministrativeMailFilter::ADMINISTRATIVE_MAIL)) {
+            try {
+                $this->flush();
+            } catch (\Exception $exception) {
+                /*
+                 * flush() could throw exceptions, which would otherwise be caught by Monolog again.
+                 * This is a precaution to prevent an infinite loop.
+                 */
+                $this->flushError = true;
+            }
         }
     }
 }

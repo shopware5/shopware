@@ -26,11 +26,10 @@ namespace Shopware\Bundle\MailBundle\Service;
 
 use Enlight_Components_Mail;
 use League\Flysystem\FilesystemInterface;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Models\Mail\Contact;
 use Shopware\Models\Mail\Log;
 use Shopware\Models\Order\Document\Document;
-use Zend_Mime;
-use Zend_Mime_Part;
 
 class LogEntryMailBuilder implements LogEntryMailBuilderInterface
 {
@@ -41,9 +40,15 @@ class LogEntryMailBuilder implements LogEntryMailBuilderInterface
      */
     private $filesystem;
 
-    public function __construct(FilesystemInterface $filesystem)
+    /**
+     * @var MediaServiceInterface
+     */
+    private $mediaService;
+
+    public function __construct(FilesystemInterface $filesystem, MediaServiceInterface $mediaService)
     {
         $this->filesystem = $filesystem;
+        $this->mediaService = $mediaService;
     }
 
     /**
@@ -56,7 +61,7 @@ class LogEntryMailBuilder implements LogEntryMailBuilderInterface
         try {
             $mail->setFrom($entry->getSender());
         } catch (\RuntimeException $exception) {
-            $mail->setFrom($this::INVALID_SENDER_REPLACEMENT_ADDRESS);
+            $mail->setFrom(self::INVALID_SENDER_REPLACEMENT_ADDRESS);
         }
 
         $entry->getRecipients()->map(function ($recipient) use ($mail) {
@@ -84,12 +89,24 @@ class LogEntryMailBuilder implements LogEntryMailBuilderInterface
             $mail->setAssociation(LogEntryBuilder::ORDER_ASSOCIATION, $entry->getOrder());
         }
 
-        if (count($entry->getDocuments()) < 1) {
-            return $mail;
+        if ($entry->getShop() !== null) {
+            $mail->setAssociation(LogEntryBuilder::SHOP_ASSOCIATION, $entry->getShop());
+        }
+
+        $this->assignOrderDocuments($entry, $mail);
+        $this->assignTemplateDocuments($entry, $mail);
+
+        return $mail;
+    }
+
+    protected function assignOrderDocuments(Log $logEntry, Enlight_Components_Mail $mail): void
+    {
+        if ($logEntry->getDocuments()->isEmpty()) {
+            return;
         }
 
         /** @var Document $document */
-        foreach ($entry->getDocuments() as $document) {
+        foreach ($logEntry->getDocuments() as $document) {
             $filePath = sprintf('documents/%s.pdf', $document->getHash());
             $fileName = sprintf('%s.pdf', $document->getType()->getName());
 
@@ -97,21 +114,37 @@ class LogEntryMailBuilder implements LogEntryMailBuilderInterface
                 continue;
             }
 
-            $mail->addAttachment($this->createAttachment($filePath, $fileName));
+            $fileAttachment = $mail->createAttachment(
+                $this->filesystem->read($filePath)
+            );
+            $fileAttachment->filename = $fileName;
         }
-
-        return $mail;
     }
 
-    protected function createAttachment(string $filePath, string $fileName): Zend_Mime_Part
+    protected function assignTemplateDocuments(Log $logEntry, Enlight_Components_Mail $mail): void
     {
-        $content = $this->filesystem->read($filePath);
-        $zendAttachment = new Zend_Mime_Part($content);
-        $zendAttachment->type = 'application/pdf';
-        $zendAttachment->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
-        $zendAttachment->encoding = Zend_Mime::ENCODING_BASE64;
-        $zendAttachment->filename = $fileName;
+        if ($logEntry->getType() === null || empty($logEntry->getType()->getAttachments())) {
+            return;
+        }
 
-        return $zendAttachment;
+        $entryShopId = $logEntry->getShop() ? $logEntry->getShop()->getId() : null;
+        $attachments = $logEntry->getType()->getAttachments();
+
+        foreach ($attachments as $attachment) {
+            $attachmentShopId = $attachment->getShopId();
+
+            if ($attachmentShopId !== null && $attachmentShopId !== $entryShopId) {
+                continue;
+            }
+
+            if (!$this->mediaService->has($attachment->getPath())) {
+                continue;
+            }
+
+            $fileAttachment = $mail->createAttachment(
+                $this->mediaService->read($attachment->getPath())
+            );
+            $fileAttachment->filename = $attachment->getFileName();
+        }
     }
 }

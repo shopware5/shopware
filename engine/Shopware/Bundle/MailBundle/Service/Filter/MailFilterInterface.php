@@ -28,5 +28,13 @@ use Enlight_Components_Mail;
 
 interface MailFilterInterface
 {
+    /**
+     * The filter method takes an E-Mail and returns null, when the filters condition matches
+     */
     public function filter(?Enlight_Components_Mail $mail): ?Enlight_Components_Mail;
+
+    /**
+     * The getName method returns the technical name of the filter
+     */
+    public function getName(): string;
 }

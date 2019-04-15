@@ -26,10 +26,16 @@ namespace Shopware\Bundle\MailBundle\Service\Filter;
 
 class AdministrativeMailFilter extends AssociationExistsFilter
 {
+    public const NAME = 'AdministrativeMailFilter';
     public const ADMINISTRATIVE_MAIL = 'administrative-mail';
 
     public function __construct(bool $active)
     {
         parent::__construct($active, [self::ADMINISTRATIVE_MAIL]);
+    }
+
+    public function getName(): string
+    {
+        return self::NAME;
     }
 }

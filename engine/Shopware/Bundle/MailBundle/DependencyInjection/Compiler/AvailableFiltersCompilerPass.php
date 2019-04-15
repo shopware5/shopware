@@ -22,45 +22,17 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\MailBundle\Service\Filter;
+namespace Shopware\Bundle\MailBundle\DependencyInjection\Compiler;
 
-use Enlight_Components_Mail;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-abstract class AssociationExistsFilter implements MailFilterInterface
+class AvailableFiltersCompilerPass implements CompilerPassInterface
 {
-    /**
-     * @var bool
-     */
-    private $active;
-
-    /**
-     * @var array
-     */
-    private $associations;
-
-    public function __construct(bool $active, array $associations)
+    public function process(ContainerBuilder $container): void
     {
-        $this->active = $active;
-        $this->associations = $associations;
-    }
+        $serviceIds = $container->findTaggedServiceIds('shopware.mail_bundle.filter');
 
-    public function filter(?Enlight_Components_Mail $mail): ?Enlight_Components_Mail
-    {
-        if (!$this->active || $mail === null) {
-            return $mail;
-        }
-
-        foreach ($this->associations as $association) {
-            if ($mail->getAssociation($association) !== null) {
-                return null;
-            }
-        }
-
-        return $mail;
-    }
-
-    public function getName(): string
-    {
-        return self::class;
+        $container->setParameter('shopware.mail_bundle.available_filters', array_keys($serviceIds));
     }
 }

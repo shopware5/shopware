@@ -42,6 +42,7 @@ class Shop extends ModelEntity
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Mail\Log", mappedBy="shop")
      */
     protected $id;
 

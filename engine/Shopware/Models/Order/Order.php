@@ -226,7 +226,6 @@ class Order extends ModelEntity
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Mail\Log", mappedBy="order")
      */
     private $id;
 

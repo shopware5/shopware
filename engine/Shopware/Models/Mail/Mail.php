@@ -90,7 +90,6 @@ class Mail extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Mail\Log", mappedBy="type")
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
