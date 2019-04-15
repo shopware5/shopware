@@ -61,7 +61,16 @@ class LogEntryMailBuilderTest extends \PHPUnit\Framework\TestCase
         static::assertNotNull($built);
         static::assertEquals($mail->getFrom(), $built->getFrom());
         static::assertCount(count($mail->getTo()), $built->getTo());
-        static::assertArraySubset($mail->getTo(), $built->getTo());
+
+        /*
+         * Check if the log-derived mail object contains all original recipient addresses.
+         * When using assertEquals or assertArraySubset, the order of the elements is taken into account as well
+         * which is unnecessary in this case.
+         */
+        foreach ($mail->getTo() as $recipient) {
+            static::assertContains($recipient, $built->getTo());
+        }
+
         static::assertEquals($mail->getSubject(), $built->getSubject());
         static::assertEquals($mail->getBodyText(), $built->getBodyText());
         static::assertEquals($mail->getBodyHtml(), $built->getBodyHtml());
