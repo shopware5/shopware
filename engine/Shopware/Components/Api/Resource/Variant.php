@@ -883,7 +883,7 @@ class Variant extends Resource implements BatchInterface
 
         $variant['prices'] = $this->getArticleResource()->getTaxPrices(
             $variant['prices'],
-            $tax
+            (float) $tax
         );
 
         return $variant;

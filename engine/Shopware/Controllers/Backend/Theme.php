@@ -25,6 +25,7 @@
 use Shopware\Bundle\PluginInstallerBundle\Service\ZipUtils;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\OptinServiceInterface;
+use Shopware\Components\Theme;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
 use Symfony\Component\Filesystem\Filesystem;
@@ -44,7 +45,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      *
      * @var string
      */
-    protected $model = 'Shopware\Models\Shop\Template';
+    protected $model = Template::class;
 
     /**
      * SQL alias for the internal query builder
@@ -86,14 +87,13 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     public function previewAction()
     {
         $themeId = $this->Request()->getParam('themeId');
-
         $shopId = $this->Request()->getParam('shopId');
 
         /** @var Template $theme */
         $theme = $this->getRepository()->find($themeId);
 
-        /** @var \Shopware\Models\Shop\Shop $shop */
-        $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveById($shopId);
+        /** @var Shop $shop */
+        $shop = $this->getManager()->getRepository(Shop::class)->getActiveById($shopId);
         $shop->registerResources();
 
         $session = $this->get('session');
@@ -135,8 +135,8 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             return;
         }
 
-        /** @var \Shopware\Models\Shop\Shop $shop */
-        $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveById(
+        /** @var Shop $shop */
+        $shop = $this->getManager()->getRepository(Shop::class)->getActiveById(
             $shopId
         );
 
@@ -146,7 +146,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         $shop->registerResources();
 
-        Shopware()->Session()->template = null;
+        Shopware()->Session()->offsetSet('template', null);
     }
 
     /**
@@ -334,7 +334,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         /** @var Shop $shop */
         $shop = $this->getManager()->find(
-            'Shopware\Models\Shop\Shop',
+            Shop::class,
             $this->Request()->getParam('shopId')
         );
 
@@ -375,7 +375,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         $data = parent::getList(null, null, $sort, $filter, $wholeParams);
 
         /** @var Shop $shop */
-        $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $wholeParams['shopId']);
+        $shop = $this->getManager()->find(Shop::class, $wholeParams['shopId']);
 
         foreach ($data['data'] as &$theme) {
             /** @var Template $instance */
@@ -450,7 +450,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      */
     private function hasTemplateConfigSet(Template $template)
     {
-        /** @var \Shopware\Components\Theme $theme */
+        /** @var Theme $theme */
         $theme = $this->get('theme_util')->getThemeByTemplate($template);
 
         if ($template->getConfigSets()->count() > 0) {

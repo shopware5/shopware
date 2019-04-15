@@ -158,6 +158,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         $feedId = $params['id'];
         if (!empty($feedId)) {
             // Edit Product Feed
+            /** @var ProductFeed $productFeed */
             $productFeed = Shopware()->Models()->getRepository(ProductFeed::class)->find($feedId);
             // Clear all previous associations
             $productFeed->getCategories()->clear();

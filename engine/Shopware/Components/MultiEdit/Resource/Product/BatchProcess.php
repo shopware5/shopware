@@ -207,7 +207,7 @@ class BatchProcess
 
             switch (strtolower($operation['operator'])) {
                 case 'removestring':
-                    $builder->set("{$prefix}.$column", new Literal("REPLACE({$prefix}.{$column}, '{$operation['value']}', '')"));
+                    $builder->set("{$prefix}.$column", new Literal(["REPLACE({$prefix}.{$column}, '{$operation['value']}', '')"]));
                     break;
                 case 'divide':
                 case 'devide':

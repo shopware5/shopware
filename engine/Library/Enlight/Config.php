@@ -358,7 +358,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
     /**
      * Sets the current section of the config list.
      *
-     * @param string $section
+     * @param string|array $section
      *
      * @return Enlight_Config
      */

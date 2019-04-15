@@ -29,7 +29,7 @@ interface TimestampPersistor
     /**
      * @param int $shopId
      *
-     * @return int
+     * @return string
      */
     public function getCurrentTimestamp($shopId);
 

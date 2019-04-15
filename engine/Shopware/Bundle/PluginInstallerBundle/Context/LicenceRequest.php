@@ -39,9 +39,9 @@ class LicenceRequest extends BaseRequest
     private $token;
 
     /**
-     * @param string $domain
      * @param string $locale
      * @param string $shopwareVersion
+     * @param string $domain
      */
     public function __construct(
         $locale,

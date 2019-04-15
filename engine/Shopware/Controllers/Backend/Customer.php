@@ -29,6 +29,7 @@ use Shopware\Components\OptinServiceInterface;
 use Shopware\Components\StateTranslatorService;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\PaymentData;
+use Shopware\Models\Payment\Payment;
 
 /**
  * Backend Controller for the customer backend module.
@@ -292,6 +293,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
             /** @var Customer $customer */
             $customer = $this->getRepository()->find((int) $id);
+            /** @var PaymentData $paymentData */
             $paymentData = $this->getManager()->getRepository(PaymentData::class)->findOneBy(
                 ['customer' => $customer, 'paymentMean' => (int) $paymentId]
             );
@@ -342,9 +344,12 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         if (!$paymentData instanceof PaymentData && !empty($params['paymentData']) && array_filter($params['paymentData'][0])) {
             $paymentData = new PaymentData();
             $customer->addPaymentData($paymentData);
-            $paymentData->setPaymentMean(
-                $this->getManager()->getRepository(\Shopware\Models\Payment\Payment::class)->find($paymentId)
-            );
+
+            /** @var Payment $payment */
+            $payment = $this->getManager()
+                ->getRepository(\Shopware\Models\Payment\Payment::class)
+                ->find($paymentId);
+            $paymentData->setPaymentMean($payment);
         }
 
         $params = $this->prepareCustomerData($params, $customer, $paymentData);
@@ -367,7 +372,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         if (!$customer->getNumber() && Shopware()->Config()->get('shopwareManagedCustomerNumbers')) {
             /** @var NumberRangeIncrementerInterface $incrementer */
             $incrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
-            $customer->setNumber($incrementer->increment('user'));
+            $customer->setNumber((string) $incrementer->increment('user'));
         }
 
         $this->getManager()->persist($customer);
@@ -668,7 +673,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $fromDate = $this->Request()->getParam('fromDate');
         if (empty($fromDate)) {
             $fromDate = new \DateTime();
-            $fromDate->setDate((int) $fromDate->format('Y') - 1, $fromDate->format('m'), $fromDate->format('d'));
+            $fromDate->setDate((int) $fromDate->format('Y') - 1, (int) $fromDate->format('m'), (int) $fromDate->format('d'));
         } else {
             $fromDate = new \DateTime($fromDate);
         }
@@ -705,14 +710,14 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             // To display the whole time range the user inserted, check if the date of the first order equals the fromDate parameter
             if ($fromDate->format('Y-m') !== $first->format('Y-m')) {
                 // Create a new dummy order with amount 0 and the date the user inserted.
-                $fromDate->setDate($fromDate->format('Y'), $fromDate->format('m'), 1);
+                $fromDate->setDate((int) $fromDate->format('Y'), (int) $fromDate->format('m'), 1);
                 $emptyOrder = ['amount' => '0.00', 'date' => $fromDate->format('Y-m-d')];
                 array_unshift($orders, $emptyOrder);
             }
 
             // To display the whole time range the user inserted, check if the date of the last order equals the toDate parameter
             if ($toDate->format('Y-m') !== $last->format('Y-m')) {
-                $toDate->setDate($toDate->format('Y'), $toDate->format('m'), 1);
+                $toDate->setDate((int) $toDate->format('Y'), (int) $toDate->format('m'), 1);
                 $orders[] = ['amount' => '0.00', 'date' => $toDate->format('Y-m-d')];
             }
         }

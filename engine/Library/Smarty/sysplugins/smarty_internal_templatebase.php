@@ -414,7 +414,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
      *
      * @param string   $type       plugin type
      * @param string   $tag        name of template tag
-     * @param callback $callback   PHP callback to register
+     * @param callback|array<int, object|string> $callback   PHP callback to register
      * @param boolean  $cacheable  if true (default) this fuction is cachable
      * @param array    $cache_attr caching attributes if any
      * @return Smarty_Internal_Templatebase current Smarty_Internal_Templatebase (or Smarty or Smarty_Internal_Template) instance for chaining

@@ -261,7 +261,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        /* @var Form $form */
+        /** @var Form|null $form */
         $form = $this->getRepository()->find($id);
         if (!$form) {
             $this->View()->assign(['success' => false, 'message' => 'Form not found']);

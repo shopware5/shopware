@@ -155,8 +155,8 @@ class Repository implements RepositoryInterface
     private function assignConditions(array $productStream, Criteria $criteria)
     {
         $serializedConditions = json_decode($productStream['conditions'], true);
+        /** @var ConditionInterface[] $conditions */
         $conditions = $this->unserialize($serializedConditions);
-        /** @var ConditionInterface $conditions */
         foreach ($conditions as $condition) {
             $criteria->addBaseCondition($condition);
         }

@@ -24,6 +24,7 @@
 
 use Shopware\Components\Random;
 use Shopware\Models\Blog\Blog;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Shopware Frontend Controller for the Blog
@@ -568,6 +569,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $blogCommentModel = new \Shopware\Models\Blog\Comment();
         /** @var \Shopware\Models\Blog\Blog $blog */
         $blog = $this->getRepository()->find($blogArticleId);
+        /** @var Shop $shop */
+        $shop = $this->getModelManager()->getReference(\Shopware\Models\Shop\Shop::class, $this->get('shop')->getId());
 
         $blogCommentModel->setBlog($blog);
         $blogCommentModel->setCreationDate(new \DateTime());
@@ -578,7 +581,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $blogCommentModel->setHeadline($commentData['headline']);
         $blogCommentModel->setComment($commentData['comment']);
         $blogCommentModel->setPoints($commentData['points']);
-        $blogCommentModel->setShop($this->getModelManager()->getReference(\Shopware\Models\Shop\Shop::class, $this->get('shop')->getId()));
+        $blogCommentModel->setShop($shop);
 
         Shopware()->Models()->persist($blogCommentModel);
         Shopware()->Models()->flush();

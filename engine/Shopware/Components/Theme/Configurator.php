@@ -30,6 +30,7 @@ use Shopware\Components\Form;
 use Shopware\Components\Model;
 use Shopware\Components\Theme;
 use Shopware\Models\Shop;
+use Shopware\Models\Shop\TemplateConfig\Set;
 
 /**
  * The Theme\Configurator class is used
@@ -438,8 +439,8 @@ class Configurator
      * Helper function which checks if the configuration set is
      * already exists in the passed collection.
      *
-     * @param Shop\TemplateConfig\Set[] $collection
-     * @param string                    $name
+     * @param Set[]|ArrayCollection<Set> $collection
+     * @param string                     $name
      *
      * @return Shop\TemplateConfig\Set|null
      */

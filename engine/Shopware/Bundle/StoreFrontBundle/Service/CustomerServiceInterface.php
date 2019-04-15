@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Models\Customer\Customer;
+use  Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 
 interface CustomerServiceInterface
 {

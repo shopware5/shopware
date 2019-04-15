@@ -97,7 +97,6 @@ class UserValidator implements UserValidatorInterface
 
     /**
      * @param string       $property
-     * @param string       $value
      * @param Constraint[] $constraints
      */
     private function validateField($property, $value, $constraints)

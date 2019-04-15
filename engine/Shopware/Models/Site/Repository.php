@@ -25,6 +25,7 @@
 namespace Shopware\Models\Site;
 
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * Repository for the site model (Shopware\Models\Site\Site).
@@ -59,6 +60,7 @@ class Repository extends ModelRepository
      */
     public function getGroupListQueryBuilder(array $filterBy = null, array $orderBy = null, $limit = null, $offset = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->from(\Shopware\Models\Site\Group::class, 'g');
         $builder->leftJoin('g.mapping', 'm');

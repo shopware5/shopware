@@ -158,7 +158,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
         $_REQUEST = [];
         $_SERVER['HTTP_COOKIE'] = null;
         if (function_exists('apache_setenv')) {
-            apache_setenv('HTTP_COOKIE', null);
+            apache_setenv('HTTP_COOKIE', '');
         }
         phpinfo();
     }

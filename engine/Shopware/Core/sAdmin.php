@@ -1546,9 +1546,9 @@ class sAdmin
     /**
      * Shopware Risk Management
      *
-     * @param int   $paymentID Payment mean id (s_core_paymentmeans.id)
-     * @param array $basket    Current shopping cart
-     * @param array $user      User data
+     * @param int        $paymentID Payment mean id (s_core_paymentmeans.id)
+     * @param array|null $basket    Current shopping cart
+     * @param array      $user      User data
      *
      * @return bool If customer is a risk customer
      */
@@ -3044,7 +3044,7 @@ class sAdmin
             return false;
         }
 
-        $amount = $this->db->fetchOne('
+        $amount = (float) $this->db->fetchOne('
                 SELECT SUM((CAST(price AS DECIMAL(10,2))*quantity)/currencyFactor) AS amount
                 FROM s_order_basket
                 WHERE sessionID = ?

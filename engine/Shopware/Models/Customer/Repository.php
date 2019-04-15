@@ -26,6 +26,8 @@ namespace Shopware\Models\Customer;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
+use Shopware\Models\Order\Order;
 
 /**
  * Repository for the customer model (Shopware\Models\Customer\Customer).
@@ -60,10 +62,10 @@ class Repository extends ModelRepository
      */
     public function getCustomerDetailQueryBuilder($customerId)
     {
-        // sub query to select the canceledOrderAmount. This can't be done with another join condition
+        // Sub query to select the canceledOrderAmount. This can't be done with another join condition
         $subQueryBuilder = $this->getEntityManager()->createQueryBuilder();
         $subQueryBuilder->select('SUM(canceledOrders.invoiceAmount)')
-            ->from('Shopware\Models\Customer\Customer', 'customer2')
+            ->from(Customer::class, 'customer2')
             ->leftJoin('customer2.orders', 'canceledOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'canceledOrders.cleared = 16')
             ->where('customer2.id = :customerId');
 
@@ -81,7 +83,7 @@ class Repository extends ModelRepository
             'SUM(doneOrders.invoiceAmount) as amount',
             '(' . $subQueryBuilder->getDQL() . ') as canceledOrderAmount',
         ]);
-        //join s_orders second time to display the count of canceled orders and the count and total amount of done orders
+        // Join s_orders second time to display the count of canceled orders and the count and total amount of done orders
         $builder->from($this->getEntityName(), 'customer')
                 ->leftJoin('customer.defaultBillingAddress', 'billing')
                 ->leftJoin('customer.defaultShippingAddress', 'shipping')
@@ -122,7 +124,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         return $builder->select(['groups'])
-                       ->from('Shopware\Models\Customer\Group', 'groups')
+                       ->from(Group::class, 'groups')
                        ->orderBy('groups.id');
     }
 
@@ -158,6 +160,7 @@ class Repository extends ModelRepository
      */
     public function getOrdersQueryBuilder($customerId, $filter = null, $orderBy = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         // Select the different entities
         $builder->select([
@@ -172,7 +175,7 @@ class Repository extends ModelRepository
         ]);
 
         // Join the required tables for the order list
-        $builder->from('Shopware\Models\Order\Order', 'orders')
+        $builder->from(Order::class, 'orders')
                 ->leftJoin('orders.payment', 'payment')
                 ->leftJoin('orders.dispatch', 'dispatch')
                 ->leftJoin('orders.orderStatus', 'orderStatus')
@@ -286,7 +289,7 @@ class Repository extends ModelRepository
     public function getCustomerGroupsWithoutIdsQueryBuilder($usedIds, $offset, $limit)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(['groups'])->from('Shopware\Models\Customer\Group', 'groups');
+        $builder->select(['groups'])->from(Group::class, 'groups');
         if (!empty($usedIds)) {
             $builder->where('groups.id NOT IN (:usedIds)')
                 ->setParameter('usedIds', $usedIds, Connection::PARAM_INT_ARRAY);

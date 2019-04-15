@@ -87,7 +87,7 @@ class AttributeSubscriber implements SubscriberInterface
                     $request->getRequestUri()
                 );
 
-                setcookie(self::redirectCookieString, true, time() + 5);
+                setcookie(self::redirectCookieString, '1', time() + 5);
                 $response->sendResponse();
                 exit();
             }

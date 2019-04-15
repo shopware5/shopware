@@ -309,7 +309,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        /* @var Mail $mail */
+        /** @var Mail|null $mail */
         $mail = $this->getRepository()->find($id);
         if (!$mail) {
             $this->View()->assign(['success' => false, 'message' => 'Mail not found']);
@@ -399,7 +399,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        /* @var \Shopware\Models\Mail\Mail $mail */
+        /** @var \Shopware\Models\Mail\Mail|null $mail */
         $mail = $this->getRepository()->find($mailId);
         if (!$mail) {
             $this->View()->assign(['success' => false, 'message' => 'Mail not found']);
@@ -407,7 +407,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        /* @var \Shopware\Models\Media\Media $media */
+        /** @var \Shopware\Models\Media\Media|null $media */
         $media = Shopware()->Models()->getRepository(\Shopware\Models\Media\Media::class)->find($mediaId);
         if (!$media) {
             $this->View()->assign(['success' => false, 'message' => 'Media not found']);

@@ -438,7 +438,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @param Detail $articleDetail
+     * @param Detail|null $articleDetail
      */
     public function setArticleDetail($articleDetail)
     {

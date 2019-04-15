@@ -27,6 +27,7 @@ namespace Shopware\Models\Blog;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * Repository for the Blog model (Shopware\Models\Blog\Blog).
@@ -184,7 +185,7 @@ class Repository extends ModelRepository
         $builder->select([
             'tags',
         ])
-        ->from('Shopware\Models\Blog\Tag', 'tags')
+        ->from(Tag::class, 'tags')
         ->andWhere('tags.blogId = :blogId')
         ->setParameter('blogId', $blogId);
 
@@ -335,10 +336,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog author filter
      *
-     * @param int[]       $blogCategoryIds
-     * @param string|null $order
-     * @param int|null    $offset
-     * @param int|null    $limit
+     * @param int[]      $blogCategoryIds
+     * @param array|null $order
+     * @param int|null   $offset
+     * @param int|null   $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -359,13 +360,14 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getBackendListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param int[]  $blogCategoryIds
-     * @param string $order
+     * @param int[] $blogCategoryIds
+     * @param array $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getBackendListQueryBuilder($blogCategoryIds, array $filter, $order)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(
             [
@@ -385,7 +387,7 @@ class Repository extends ModelRepository
                 ->setParameter('blogCategoryIds', $blogCategoryIds, Connection::PARAM_INT_ARRAY);
         }
 
-        if (!empty($filter) && $filter[0]['property'] == 'filter' && !empty($filter[0]['value'])) {
+        if (!empty($filter) && $filter[0]['property'] === 'filter' && !empty($filter[0]['value'])) {
             $builder->andWhere('blog.title LIKE ?1')
                     ->orWhere('blog.views LIKE ?1')
                     ->setParameter(1, '%' . $filter[0]['value'] . '%');
@@ -487,11 +489,11 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog article comments
      *
-     * @param int    $blogId
-     * @param array  $filter
-     * @param string $order
-     * @param int    $offset
-     * @param int    $limit
+     * @param int   $blogId
+     * @param array $filter
+     * @param array $order
+     * @param int   $offset
+     * @param int   $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -512,14 +514,15 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getBlogCommentsById" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param int    $blogId
-     * @param array  $filter
-     * @param string $order
+     * @param int   $blogId
+     * @param array $filter
+     * @param array $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getBlogCommentsByIdBuilder($blogId, $filter, $order)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(
             [
@@ -533,7 +536,7 @@ class Repository extends ModelRepository
                 'comment.comment as content',
                 'comment.shopId',
             ])
-                ->from('Shopware\Models\Blog\Comment', 'comment')
+                ->from(Comment::class, 'comment')
                 ->where('comment.blogId = ?1')
                 ->setParameter(1, $blogId);
 
@@ -577,7 +580,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         $builder->select(['tags'])
-                ->from('Shopware\Models\Blog\Tag', 'tags')
+                ->from(Tag::class, 'tags')
                 ->where('tags.blogId = ?1')
             ->setParameter(1, $blogId);
 

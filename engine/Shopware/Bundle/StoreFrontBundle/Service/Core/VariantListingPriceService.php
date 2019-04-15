@@ -96,11 +96,13 @@ class VariantListingPriceService implements VariantListingPriceServiceInterface
         }
 
         //executed if no price condition included in search request
+        /* @var ShopContext $context */
         $this->loadPrices($criteria, $result, $context);
     }
 
     private function loadPrices(Criteria $criteria, ProductSearchResult $result, ShopContextInterface $context)
     {
+        /** @var ShopContext $context */
         $cheapestPriceData = $this->variantCheapestPriceGateway->getList($result->getProducts(), $context, $context->getCurrentCustomerGroup(), $criteria);
 
         foreach ($result->getProducts() as $product) {
@@ -132,9 +134,9 @@ class VariantListingPriceService implements VariantListingPriceServiceInterface
     }
 
     /**
-     * @param ListProduct $product
-     * @param PriceRule   $price
-     * @param ShopContext $context
+     * @param ListProduct          $product
+     * @param PriceRule            $price
+     * @param ShopContextInterface $context
      *
      * @return PriceRule
      */
@@ -165,7 +167,7 @@ class VariantListingPriceService implements VariantListingPriceServiceInterface
      *
      * @return PriceDiscount|null
      */
-    private function getHighestQuantityDiscount(ListProduct $product, ShopContext $context, $quantity)
+    private function getHighestQuantityDiscount(ListProduct $product, ShopContextInterface $context, $quantity)
     {
         $priceGroups = $context->getPriceGroups();
         if (empty($priceGroups)) {

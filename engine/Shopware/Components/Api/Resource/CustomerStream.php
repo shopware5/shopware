@@ -107,7 +107,7 @@ class CustomerStream extends Resource
     /**
      * @param int|null $id
      * @param int      $offset
-     * @param array    $conditions
+     * @param string   $conditions
      * @param string   $sortings
      *
      * @return \Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult
@@ -395,12 +395,12 @@ class CustomerStream extends Resource
     }
 
     /**
-     * @param int        $streamId
-     * @param array|null $conditions
+     * @param int         $streamId
+     * @param string|null $conditions
      *
      * @return array
      */
-    private function getConditions($streamId, $conditions = [])
+    private function getConditions($streamId, $conditions = null)
     {
         if (!empty($conditions)) {
             return $this->reflectionHelper->unserialize(

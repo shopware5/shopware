@@ -130,7 +130,7 @@ class LegacyCaptcha implements CaptchaInterface
             $colors = explode(',', '255,0,0');
         }
 
-        $black = imagecolorallocate($im, $colors[0], $colors[1], $colors[2]);
+        $black = imagecolorallocate($im, (int) $colors[0], (int) $colors[1], (int) $colors[2]);
 
         $string = implode(' ', str_split($string));
 

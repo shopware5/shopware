@@ -171,7 +171,7 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param array $data
-     * @param int   $activeAverage
+     * @param float $activeAverage
      *
      * @return array
      */
@@ -192,7 +192,7 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
                 continue;
             }
 
-            $values[] = new ValueListItem($i, $count, $activeAverage == $i);
+            $values[] = new ValueListItem($i, (string) $count, $activeAverage == $i);
         }
 
         usort($values, function (ValueListItem $a, ValueListItem $b) {

@@ -71,7 +71,7 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
      */
     protected function createArticle($price = 10, $taxRate = 19.0)
     {
-        $orderNumber = 'swTEST' . uniqid(rand());
+        $orderNumber = 'swTEST' . uniqid((string) rand());
 
         $this->apiHelper->createArticle([
             'name' => 'Testartikel',

@@ -68,15 +68,15 @@ class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Contro
             $data = $this->implodePriceVariation($data);
 
             $priceVariation->fromArray($data);
-
-            $priceVariation->setConfiguratorSet(
-                Shopware()->Models()
+            $modelManager = $this->get('models');
+            /** @var Set|null $configuratorSet */
+            $configuratorSet = $modelManager
                     ->getRepository(Set::class)
-                    ->find($data['configuratorSetId'])
-            );
+                    ->find($data['configuratorSetId']);
+            $priceVariation->setConfiguratorSet($configuratorSet);
 
-            Shopware()->Models()->persist($priceVariation);
-            Shopware()->Models()->flush();
+            $modelManager->persist($priceVariation);
+            $modelManager->flush();
 
             $data['id'] = $priceVariation->getId();
             $data = $this->explodePriceVariation($data);
@@ -103,16 +103,15 @@ class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Contro
                 ->getRepository(PriceVariation::class)
                 ->find($data['id']);
 
-            unset($data['options']);
-            unset($data['option_names']);
+            unset($data['options'], $data['option_names']);
 
             $priceVariation->fromArray($data);
 
-            $priceVariation->setConfiguratorSet(
-                Shopware()->Models()
-                    ->getRepository(Set::class)
-                    ->find($data['configuratorSetId'])
-            );
+            /** @var Set $configuratorSet */
+            $configuratorSet = Shopware()->Models()
+                ->getRepository(Set::class)
+                ->find($data['configuratorSetId']);
+            $priceVariation->setConfiguratorSet($configuratorSet);
 
             Shopware()->Models()->persist($priceVariation);
             Shopware()->Models()->flush();

@@ -158,7 +158,7 @@ class ModelManager extends EntityManager
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
+     * @return QueryBuilder
      */
     public function createQueryBuilder()
     {
@@ -184,7 +184,7 @@ class ModelManager extends EntityManager
     }
 
     /**
-     * @param array $tableNames
+     * @param string[] $tableNames
      */
     public function generateAttributeModels($tableNames = [])
     {

@@ -71,7 +71,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
      */
     public function save($data)
     {
-        /* @var \Shopware\Models\Customer\Address $model */
+        /* @var AddressModel $model */
         if (!empty($data['id'])) {
             $model = $this->getRepository()->find($data['id']);
         } else {
@@ -134,6 +134,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
             return ['success' => false, 'error' => 'The id parameter contains no value.'];
         }
 
+        /** @var AddressModel $model */
         $model = $this->getManager()->find($this->model, $id);
 
         if (!($model instanceof $this->model)) {

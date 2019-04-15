@@ -52,7 +52,7 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
             $data = $dataQuery->getArrayResult();
 
             // manually calc the totalAmount cause the paginate(Shopware()->Models()->getQueryCount) doesn't work with this query
-            $dataQuery->setFirstResult(null)->setMaxResults(null);
+            $dataQuery->setFirstResult(0);
             $totalCount = count($dataQuery->getArrayResult());
 
             $summaryQuery = $repository->getArticlesWithRegisteredNotificationsQuery($filter, $offset, $limit, $order, true);

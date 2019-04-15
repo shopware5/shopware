@@ -27,6 +27,7 @@ namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 use Shopware\Bundle\SearchBundle\Condition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet;
+use Shopware\Bundle\SearchBundle\Facet\ManufacturerFacet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
@@ -110,6 +111,7 @@ class ManufacturerFacetHandler implements PartialFacetHandlerInterface
 
         $activeManufacturers = $this->getActiveIds($criteria);
 
+        /* @var ManufacturerFacet $facet */
         return $this->createFacetResult($facet, $manufacturers, $activeManufacturers);
     }
 

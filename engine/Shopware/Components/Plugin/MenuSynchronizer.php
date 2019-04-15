@@ -71,6 +71,7 @@ class MenuSynchronizer
                 if (!isset($menuItem['parent'])) {
                     throw new \InvalidArgumentException('Root Menu Item must provide parent element');
                 }
+                /** @var Menu|null $parent */
                 $parent = $this->menuRepository->findOneBy($menuItem['parent']);
                 if (!$parent) {
                     throw new \InvalidArgumentException(sprintf('Unable to find parent for query %s', print_r($menuItem['parent'], true)));

@@ -176,7 +176,7 @@ class Shopware_Components_TemplateMail
 
         if (!($mailModel instanceof Mail)) {
             $modelName = $mailModel;
-            /* @var Mail $mailModel */
+            /** @var Mail|null $mailModel */
             $mailModel = $this->getModelManager()->getRepository(Mail::class)->findOneBy(
                 ['name' => $modelName]
             );

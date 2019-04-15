@@ -32,6 +32,7 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
 use Shopware\Components\HttpClient\GuzzleFactory;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Shop\Shop;
 
 class AccountManagerService
 {
@@ -91,7 +92,7 @@ class AccountManagerService
      */
     public function getDomain()
     {
-        $repo = $this->entityManager->getRepository('Shopware\Models\Shop\Shop');
+        $repo = $this->entityManager->getRepository(Shop::class);
 
         $default = $repo->getActiveDefault();
 

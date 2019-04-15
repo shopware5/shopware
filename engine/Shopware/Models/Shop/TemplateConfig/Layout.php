@@ -89,7 +89,8 @@ class Layout extends ModelEntity
     protected $title;
 
     /**
-     * @var string
+     * @var string[]
+     *
      * @ORM\Column(name="attributes", type="array", nullable=false)
      */
     protected $attributes;
@@ -97,7 +98,7 @@ class Layout extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection
+     * @var ArrayCollection<Layout>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Shop\TemplateConfig\Layout", mappedBy="parent"))
      */
@@ -261,7 +262,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string[]
      */
     public function getAttributes()
     {
@@ -269,7 +270,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @param string $attributes
+     * @param string[] $attributes
      */
     public function setAttributes($attributes)
     {

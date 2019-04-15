@@ -88,7 +88,9 @@ class EventSubscriber implements BaseEventSubscriber
      */
     public function preUpdate(LifecycleEventArgs $eventArgs)
     {
-        $entityName = $this->getEntityName($eventArgs->getEntity());
+        /** @var ModelEntity $entity */
+        $entity = $eventArgs->getEntity();
+        $entityName = $this->getEntityName($entity);
 
         return $this->notifyEvent($entityName . '::preUpdate', $eventArgs);
     }
@@ -100,7 +102,9 @@ class EventSubscriber implements BaseEventSubscriber
      */
     public function preRemove(LifecycleEventArgs $eventArgs)
     {
-        $entityName = $this->getEntityName($eventArgs->getEntity());
+        /** @var ModelEntity $entity */
+        $entity = $eventArgs->getEntity();
+        $entityName = $this->getEntityName($entity);
 
         return $this->notifyEvent($entityName . '::preRemove', $eventArgs);
     }
@@ -112,7 +116,9 @@ class EventSubscriber implements BaseEventSubscriber
      */
     public function prePersist(LifecycleEventArgs $eventArgs)
     {
-        $entityName = $this->getEntityName($eventArgs->getEntity());
+        /** @var ModelEntity $entity */
+        $entity = $eventArgs->getEntity();
+        $entityName = $this->getEntityName($entity);
 
         return $this->notifyEvent($entityName . '::prePersist', $eventArgs);
     }
@@ -124,7 +130,9 @@ class EventSubscriber implements BaseEventSubscriber
      */
     public function postUpdate(LifecycleEventArgs $eventArgs)
     {
-        $entityName = $this->getEntityName($eventArgs->getEntity());
+        /** @var ModelEntity $entity */
+        $entity = $eventArgs->getEntity();
+        $entityName = $this->getEntityName($entity);
 
         return $this->notifyEvent($entityName . '::postUpdate', $eventArgs);
     }
@@ -136,7 +144,9 @@ class EventSubscriber implements BaseEventSubscriber
      */
     public function postRemove(LifecycleEventArgs $eventArgs)
     {
-        $entityName = $this->getEntityName($eventArgs->getEntity());
+        /** @var ModelEntity $entity */
+        $entity = $eventArgs->getEntity();
+        $entityName = $this->getEntityName($entity);
 
         return $this->notifyEvent($entityName . '::postRemove', $eventArgs);
     }
@@ -148,7 +158,9 @@ class EventSubscriber implements BaseEventSubscriber
      */
     public function postPersist(LifecycleEventArgs $eventArgs)
     {
-        $entityName = $this->getEntityName($eventArgs->getEntity());
+        /** @var ModelEntity $entity */
+        $entity = $eventArgs->getEntity();
+        $entityName = $this->getEntityName($entity);
 
         return $this->notifyEvent($entityName . '::postPersist', $eventArgs);
     }

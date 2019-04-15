@@ -71,7 +71,7 @@ class Sha256 implements PasswordEncoderInterface
     {
         list($iterations, $salt) = explode(':', $hash);
 
-        $verifyHash = $this->generateInternal($password, $salt, $iterations);
+        $verifyHash = $this->generateInternal($password, $salt, (int) $iterations);
 
         return hash_equals($hash, $verifyHash);
     }
@@ -83,6 +83,7 @@ class Sha256 implements PasswordEncoderInterface
      */
     public function encodePassword($password)
     {
+        /** @var int $interations */
         $iterations = $this->options['iterations'];
         $salt = $this->getSalt();
 
@@ -96,6 +97,7 @@ class Sha256 implements PasswordEncoderInterface
      */
     public function isReencodeNeeded($hash)
     {
+        /* @var int $interations */
         list($iterations, $salt) = explode(':', $hash);
 
         if ($iterations != $this->options['iterations']) {

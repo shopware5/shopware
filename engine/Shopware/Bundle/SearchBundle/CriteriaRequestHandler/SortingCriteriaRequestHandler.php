@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\CriteriaRequestHandler;
 
-use Enlight_Controller_Request_RequestHttp as Request;
+use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface;

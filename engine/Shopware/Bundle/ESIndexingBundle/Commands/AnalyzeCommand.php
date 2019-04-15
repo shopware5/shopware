@@ -45,7 +45,7 @@ class AnalyzeCommand extends ShopwareCommand
         $this
             ->setName('sw:es:analyze')
             ->setDescription('Helper tool to test own analyzers.')
-            ->addArgument('shopId', InputOption::VALUE_REQUIRED, null, 1)
+            ->addArgument('shopId', InputOption::VALUE_REQUIRED, '', '1')
             ->addArgument('type', InputOption::VALUE_REQUIRED, 'Mapping type of the elasticsearch index (e.g. product, property)')
             ->addArgument('analyzer', InputOption::VALUE_REQUIRED)
             ->addArgument('query', InputOption::VALUE_REQUIRED)

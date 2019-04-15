@@ -60,7 +60,7 @@ sql;
         $timestamp = time();
         $this->updateTimestamp($shopId, $timestamp);
 
-        return $timestamp;
+        return (string) $timestamp;
     }
 
     /**

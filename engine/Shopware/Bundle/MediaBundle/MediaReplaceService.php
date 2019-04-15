@@ -68,6 +68,7 @@ class MediaReplaceService implements MediaReplaceServiceInterface
      */
     public function replace($mediaId, UploadedFile $file)
     {
+        /** @var Media|null $media */
         $media = $this->modelManager->find(Media::class, $mediaId);
 
         if ($media === null) {

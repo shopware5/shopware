@@ -79,14 +79,14 @@ class DiscountContext extends Extendable
     private $basketId;
 
     /**
-     * @param string $sessionId
-     * @param int    $discountType
-     * @param float  $discountValue
-     * @param string $discountName
-     * @param string $orderNumber
-     * @param int    $basketMode
-     * @param float  $currencyFactor
-     * @param bool   $isNetPrice
+     * @param string      $sessionId
+     * @param int|null    $discountType
+     * @param float|null  $discountValue
+     * @param string|null $discountName
+     * @param string|null $orderNumber
+     * @param int|null    $basketMode
+     * @param float|null  $currencyFactor
+     * @param bool|null   $isNetPrice
      */
     public function __construct(
         $sessionId,

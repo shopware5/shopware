@@ -216,7 +216,7 @@ class Compiler
      * compresses the theme and plugin javascript and css files
      * into one file.
      *
-     * @param int $timestamp
+     * @param string $timestamp
      *
      * @throws \Exception
      */
@@ -306,7 +306,7 @@ class Compiler
     /**
      * Helper function which reads and creates the theme timestamp for the css and js files.
      *
-     * @return int
+     * @return string
      */
     public function getThemeTimestamp(Shop\Shop $shop)
     {

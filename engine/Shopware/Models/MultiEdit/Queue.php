@@ -82,9 +82,9 @@ class Queue extends ModelEntity
     private $operations;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="items", type="string", nullable=false)
+     * @ORM\Column(name="items", type="integer", nullable=false)
      */
     private $initialSize;
 
@@ -189,7 +189,7 @@ class Queue extends ModelEntity
     }
 
     /**
-     * @param string $initialSize
+     * @param int $initialSize
      */
     public function setInitialSize($initialSize)
     {
@@ -197,7 +197,7 @@ class Queue extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getInitialSize()
     {

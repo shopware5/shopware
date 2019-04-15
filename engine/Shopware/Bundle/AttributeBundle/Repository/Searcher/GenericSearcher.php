@@ -71,6 +71,7 @@ class GenericSearcher implements SearcherInterface
      */
     public function search(SearchCriteria $criteria)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->createQuery($criteria);
 
         $builder->setFirstResult($criteria->offset)

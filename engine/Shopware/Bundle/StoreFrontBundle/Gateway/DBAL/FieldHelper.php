@@ -98,7 +98,7 @@ class FieldHelper
     /**
      * Defines which s_articles fields should be selected.
      *
-     * @return array
+     * @return string[]
      */
     public function getArticleFields()
     {
@@ -139,7 +139,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getTopSellerFields()
     {
@@ -151,7 +151,7 @@ class FieldHelper
     /**
      * Defines which s_articles_details fields should be selected.
      *
-     * @return array
+     * @return string[]
      */
     public function getVariantFields()
     {
@@ -180,7 +180,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getEsdFields()
     {
@@ -206,7 +206,7 @@ class FieldHelper
     /**
      * Defines which s_core_tax fields should be selected
      *
-     * @return array
+     * @return string[]
      */
     public function getTaxFields()
     {
@@ -220,7 +220,7 @@ class FieldHelper
     /**
      * Defines which s_core_pricegroups fields should be selected
      *
-     * @return array
+     * @return string[]
      */
     public function getPriceGroupFields()
     {
@@ -233,7 +233,7 @@ class FieldHelper
     /**
      * Defines which s_articles_suppliers fields should be selected
      *
-     * @return array
+     * @return string[]
      */
     public function getManufacturerFields()
     {
@@ -257,7 +257,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getCategoryFields()
     {
@@ -292,7 +292,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getPriceFields()
     {
@@ -317,7 +317,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getUnitFields()
     {
@@ -335,7 +335,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getConfiguratorSetFields()
     {
@@ -347,7 +347,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getConfiguratorGroupFields()
     {
@@ -367,7 +367,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getConfiguratorOptionFields()
     {
@@ -386,7 +386,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getAreaFields()
     {
@@ -398,7 +398,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getCountryFields()
     {
@@ -429,7 +429,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getStateFields()
     {
@@ -548,7 +548,7 @@ class FieldHelper
      * Returns an array with all required media fields for a full media selection.
      * Requires that the s_media table is included with table alias 'media'
      *
-     * @return array
+     * @return string[]
      */
     public function getMediaFields()
     {
@@ -683,6 +683,9 @@ class FieldHelper
         ];
     }
 
+    /**
+     * @return string[]
+     */
     public function getShopFields()
     {
         $fields = [
@@ -716,6 +719,9 @@ class FieldHelper
         return $fields;
     }
 
+    /**
+     * @return string[]
+     */
     public function getCurrencyFields()
     {
         return [
@@ -730,6 +736,9 @@ class FieldHelper
         ];
     }
 
+    /**
+     * @return string[]
+     */
     public function getTemplateFields()
     {
         return [
@@ -748,6 +757,9 @@ class FieldHelper
         ];
     }
 
+    /**
+     * @return string[]
+     */
     public function getLocaleFields()
     {
         return [
@@ -762,7 +774,7 @@ class FieldHelper
      * Returns an array with all required related product stream fields.
      * Requires that the s_product_streams table is included with table alias 'stream'
      *
-     * @return array
+     * @return string[]
      */
     public function getRelatedProductStreamFields()
     {
@@ -785,7 +797,7 @@ class FieldHelper
      * Returns an array with all required shop page fields.
      * Requires that the s_cms_static table is included with table alias 'page'
      *
-     * @return array
+     * @return string[]
      */
     public function getShopPageFields()
     {
@@ -824,7 +836,7 @@ class FieldHelper
      * Returns an array with all required emotion fields.
      * Requires that the s_emotion table is included with table alias 'emotion'
      *
-     * @return array
+     * @return string[]
      */
     public function getEmotionFields()
     {
@@ -869,7 +881,7 @@ class FieldHelper
      * Returns an array with all required emotion fields.
      * Requires that the s_emotion_templates table is included with table alias 'emotionTemplate'
      *
-     * @return array
+     * @return string[]
      */
     public function getEmotionTemplateFields()
     {
@@ -886,7 +898,7 @@ class FieldHelper
      * Returns an array with all required emotion element fields.
      * Requires that the s_emotion_element table is included with table alias 'emotionElement'
      *
-     * @return array
+     * @return string[]
      */
     public function getEmotionElementFields()
     {
@@ -908,7 +920,7 @@ class FieldHelper
      * Returns an array with all required emotion element value fields.
      * Requires that the s_emotion_element_value table is included with table alias 'emotionElementValue'
      *
-     * @return array
+     * @return string[]
      */
     public function getEmotionElementValueFields()
     {
@@ -928,7 +940,7 @@ class FieldHelper
      * Returns an array with all required emotion component fields.
      * Requires that the s_library_component table is included with table alias 'emotionLibraryComponent'
      *
-     * @return array
+     * @return string[]
      */
     public function getEmotionElementLibraryFields()
     {
@@ -950,7 +962,7 @@ class FieldHelper
      * Returns an array with all required emotion component settings fields.
      * Requires that the s_library_component_fields table is included with table alias 'emotionLibraryComponentField'
      *
-     * @return array
+     * @return string[]
      */
     public function getEmotionElementLibraryFieldFields()
     {
@@ -980,7 +992,7 @@ class FieldHelper
      * Returns an array with all required emotion element viewport fields.
      * Requires that the s_emotion_element_viewport table is included with table alias 'emotionElementViewport'
      *
-     * @return array
+     * @return string[]
      */
     public function getEmotionElementViewportFields()
     {
@@ -1064,10 +1076,10 @@ class FieldHelper
     /**
      * Joins the translation table and selects the objectdata for the provided join conditions
      *
-     * @param string $fromPart        Table which uses as from part
-     * @param string $joinCondition   Join condition for the objectkey column
-     * @param string $translationType Type of the translation
-     * @param string $selectName      Name of the additional selection
+     * @param string      $fromPart        Table which uses as from part
+     * @param string      $translationType Type of the translation
+     * @param string|null $joinCondition   Join condition for the objectkey column
+     * @param string|null $selectName      Name of the additional selection
      */
     public function addTranslation(
         $fromPart,
@@ -1112,13 +1124,13 @@ class FieldHelper
 
     public function addCountryTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
-        $this->addTranslation('country', 'config_countries', $query, $context, 1);
+        $this->addTranslation('country', 'config_countries', $query, $context, '1');
         $this->addTranslation('countryAttribute', 's_core_countries_attributes', $query, $context, 'country.id');
     }
 
     public function addCountryStateTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
-        $this->addTranslation('countryState', 'config_country_states', $query, $context, 1);
+        $this->addTranslation('countryState', 'config_country_states', $query, $context, '1');
         $this->addTranslation('countryStateAttribute', 's_core_countries_states_attributes', $query, $context, 'countryStateAttribute.stateID');
     }
 
@@ -1129,7 +1141,7 @@ class FieldHelper
 
     public function addUnitTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
-        $this->addTranslation('unit', 'config_units', $query, $context, 1);
+        $this->addTranslation('unit', 'config_units', $query, $context, '1');
     }
 
     public function addEsdTranslation(QueryBuilder $queryBuilder, ShopContextInterface $context)
@@ -1214,7 +1226,7 @@ class FieldHelper
 
     public function addCustomSortingTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
-        $this->addTranslation('customSorting', 'custom_sorting', $query, $context, 1);
+        $this->addTranslation('customSorting', 'custom_sorting', $query, $context, '1');
     }
 
     /**
@@ -1223,7 +1235,7 @@ class FieldHelper
      */
     public function addCustomFacetTranslation($query, $context)
     {
-        $this->addTranslation('customFacet', 'custom_facet', $query, $context, 1);
+        $this->addTranslation('customFacet', 'custom_facet', $query, $context, '1');
     }
 
     public function addCategoryTranslation(QueryBuilder $query, ShopContextInterface $context)
@@ -1242,6 +1254,9 @@ class FieldHelper
         $this->addTranslation('paymentAttribute', 's_core_paymentmeans_attributes', $query, $context, 'paymentAttribute.paymentmeanID');
     }
 
+    /**
+     * @return string[]
+     */
     public function getCustomerFields()
     {
         $fields = [
@@ -1288,7 +1303,7 @@ class FieldHelper
      * Returns an array with all required payment fields.
      * Requires that the s_core_paymentmeans table is included with table alias 'payment'
      *
-     * @return array
+     * @return string[]
      */
     public function getPaymentFields()
     {

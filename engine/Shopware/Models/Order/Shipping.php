@@ -534,7 +534,7 @@ class Shipping extends ModelEntity
     /**
      * Setter for the state association
      *
-     * @param State $state
+     * @param State|null $state
      */
     public function setState($state)
     {
@@ -544,7 +544,7 @@ class Shipping extends ModelEntity
     /**
      * Getter for the state association
      *
-     * @return State
+     * @return State|null
      */
     public function getState()
     {

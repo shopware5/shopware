@@ -48,7 +48,7 @@ class LandingPageViewLoader
     }
 
     /**
-     * @param string $emotionId
+     * @param int $emotionId
      *
      * @throws \Exception
      * @throws \Enlight_Controller_Exception
