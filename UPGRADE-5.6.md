@@ -2,7 +2,7 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
-[View all changes from v5.5.7...v5.6.0](https://github.com/shopware/shopware/compare/v5.5.7...v5.6.0)
+[View all changes from v5.5.8...v5.6.0](https://github.com/shopware/shopware/compare/v5.5.8...v5.6.0)
 
 ### Additions
 
@@ -48,6 +48,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added option symbols for `{include file="frontend/_includes/rating.tpl"}` to hide rating symbols
 * Added specific logger service for each plugin. See [Plugin specific logger](###Plugin specific logger) for more details  
 * Added new config option to allow restoring of old cart items
+* Added new config option to enable sharing of session between language shops
 
 ### Changes
 

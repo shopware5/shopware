@@ -58,6 +58,14 @@ class AccountContext extends SubContext
     }
 
     /**
+     * @When /^I click on login again$/
+     */
+    public function iClickOnLoginAgain()
+    {
+        $this->getPage('Account')->clickLoginAgain();
+    }
+
+    /**
      * @Then /^I change my email with password "(?P<password>[^"]*)" to "(?P<new>[^"]*)"$/
      * @Then /^I change my email with password "(?P<password>[^"]*)" to "(?P<new>[^"]*)" with confirmation "(?P<confirmation>[^"]*)"$/
      */

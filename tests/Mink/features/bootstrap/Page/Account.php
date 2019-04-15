@@ -87,6 +87,7 @@ class Account extends Page implements HelperSelectorInterface
             'changeBillingButton' => ['de' => 'Adresse speichern',        'en' => 'Change address'],
             'changeShippingButton' => ['de' => 'Adresse speichern',        'en' => 'Change address'],
             'saveAddressButton' => ['de' => 'Adresse speichern',        'en' => 'Save address'],
+            'loginAgain' => ['de' => 'Erneut Anmelden', 'en' => 'Login again'],
         ];
     }
 
@@ -141,6 +142,11 @@ class Account extends Page implements HelperSelectorInterface
         Helper::pressNamedButton($this, 'loginButton');
     }
 
+    public function clickLoginAgain()
+    {
+        Helper::clickNamedLink($this, 'loginAgain');
+    }
+
     /**
      * Check if the user was successfully logged in
      *
@@ -164,13 +170,7 @@ class Account extends Page implements HelperSelectorInterface
      */
     public function logout()
     {
-        if ($this->verifyPage('Dashboard') === true) {
-            Helper::clickNamedLink($this, 'logoutLink');
-
-            return true;
-        }
-
-        return false;
+        Helper::clickNamedLink($this, 'logoutLink');
     }
 
     /**

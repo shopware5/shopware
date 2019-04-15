@@ -1822,7 +1822,11 @@ class sBasketTest extends PHPUnit\Framework\TestCase
                 ],
                 'taxId' => 4,
                 'supplierId' => 2,
-                'categories' => [10],
+                'categories' => [
+                    [
+                        'id' => 10,
+                    ],
+                ],
             ]);
             $customerGroup = $resourceHelper->createCustomerGroup();
             $customer = $this->createDummyCustomer();
@@ -1889,7 +1893,11 @@ class sBasketTest extends PHPUnit\Framework\TestCase
                 ],
                 'taxId' => 4,
                 'supplierId' => 2,
-                'categories' => [10],
+                'categories' => [
+                    [
+                        'id' => 10,
+                    ],
+                ],
             ]);
             // Setup discount for the second basket position - a shipping discount of EUR -2.8
             $dispatchDiscountId = $this->db->fetchCol(
@@ -1976,7 +1984,11 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             ],
             'taxId' => 4,
             'supplierId' => 2,
-            'categories' => [10],
+            'categories' => [
+                [
+                    'id' => 10,
+                ],
+            ],
         ]);
 
         $this->db->insert(

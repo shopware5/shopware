@@ -151,7 +151,14 @@ class CSRFTokenValidator implements SubscriberInterface
     private function checkRequest(\Enlight_Controller_Request_Request $request)
     {
         $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
-        $token = $request->getCookie('__csrf_token-' . $context->getShop()->getId());
+        $name = '__csrf_token-' . $context->getShop()->getId();
+
+        if ($context->getShop()->getParentId() && $this->container->get('config')->get('shareSessionBetweenLanguageShops')) {
+            $name = '__csrf_token-' . $context->getShop()->getParentId();
+        }
+
+        $token = $request->getCookie($name);
+
         $requestToken = $request->getParam('__csrf_token') ?: $request->getHeader('X-CSRF-Token');
 
         return hash_equals($token, $requestToken);

@@ -215,6 +215,10 @@
             'shopId' => $Shop->getId()
         ]}
 
+        {if {config name="shareSessionBetweenLanguageShops"} && $Shop->getMain()}
+            {$csrfConfig['shopId'] = $Shop->getMain()->getId()}
+        {/if}
+
         {* let the user modify the data here *}
         {block name="frontend_index_header_javascript_data"}{/block}
 

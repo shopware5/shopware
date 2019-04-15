@@ -32,7 +32,7 @@
         {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetConfirmInfoNoDispatch}
     {/if}
 {/block}
-    
+
 {* Minimum sum not reached *}
 {block name='frontend_checkout_error_messages_minimum_not_reached'}
     {if $sMinimumSurcharge}
@@ -54,5 +54,13 @@
     {if $agreementErrors && $agreementErrors.esdError && {config name="showEsdWarning"}}
         {s name="EsdErrorMessage" assign="snippetEsdErrorMessage"}{/s}
         {include file="frontend/_includes/messages.tpl" type="error" content=$snippetEsdErrorMessage}
+    {/if}
+{/block}
+
+{* Product with invalid category got removed *}
+{block name="frontend_checkout_error_messages_product_with_invalid_category"}
+    {if $removedProductWithInvalidCategory}
+        {s name="InvalidCategoryMessage" assign="snippetInvalidCategory"}{/s}
+        {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetInvalidCategory}
     {/if}
 {/block}

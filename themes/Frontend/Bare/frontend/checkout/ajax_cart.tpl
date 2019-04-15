@@ -31,6 +31,17 @@
             {/if}
         {/block}
 
+        {block name='frontend_checkout_ajax_cart_product_removed_with_invalid_category'}
+            {if $removedProductWithInvalidCategory}
+                <div class="alert is--warning is--rounded">
+                    <div class="alert--icon">
+                        <div class="icon--element icon--info"></div>
+                    </div>
+                    <div class="alert--content">{s name="InvalidCategoryMessage" namespace="frontend/checkout/error_messages"}{/s}</div>
+                </div>
+            {/if}
+        {/block}
+
         {block name='frontend_checkout_ajax_cart_item_container'}
             <div class="item--container">
                 {block name='frontend_checkout_ajax_cart_item_container_inner'}
