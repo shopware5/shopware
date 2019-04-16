@@ -17,6 +17,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed `SnippetManager` to consider plugin directories and theme directories in readFromIni mode
 * Changed `Checkout` controller, to resolve race condition problems on confirm page
 * Changed the album selection in the media manager for the blog images to show all images
+* Changed `Blog` and `Listing` controllers to throw an exception if a blog category-id is passed to the `Listing` controller or vice versa
 
 ## 5.5.8
 
