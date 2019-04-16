@@ -2033,7 +2033,7 @@ INSERT INTO `s_core_config_element_translations` (`id`, `element_id`, `locale_id
 (59, 302, 2, 'Number of articles shown under novelties', NULL),
 (60, 303, 2, 'Request form ID', NULL),
 (61, 304, 2, 'Min. shopping cart value from which option of individual request is offered', NULL),
-(62, 305, 2, 'Zoom viewer instead of light box on detail page ', NULL),
+(62, 305, 2, 'Zoom viewer instead of light box on detail page', NULL),
 (63, 306, 2, 'Check stock level on detail page in real time', NULL),
 (64, 307, 2, 'Max. number of configurator variants per article', NULL),
 (65, 308, 2, 'Deactivate sales articles without stock level', NULL),

@@ -22,7 +22,7 @@ SQL;
 
         $sql = <<<SQL
         INSERT IGNORE INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`)
-        VALUES (@elementId, '2', 'Do not show on sale products that are out of stock ');
+        VALUES (@elementId, '2', 'Do not show on sale products that are out of stock');
 SQL;
         $this->addSql($sql);
     }
