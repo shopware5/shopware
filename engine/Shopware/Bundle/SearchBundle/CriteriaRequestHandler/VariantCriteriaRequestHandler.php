@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundle\CriteriaRequestHandler;
 
 use Doctrine\DBAL\Connection;
-use Enlight_Controller_Request_Request as Request;
+use Enlight_Controller_Request_RequestHttp as Request;
 use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
