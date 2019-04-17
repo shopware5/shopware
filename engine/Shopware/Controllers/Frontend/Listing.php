@@ -127,10 +127,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         /** @var ShopContextInterface $context */
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
-        /** @var \Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface $service */
-        $sortingService = $this->get('shopware_storefront.custom_sorting_service');
-
         if (!$this->Request()->getParam('sCategory')) {
+            /** @var \Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface $service */
+            $sortingService = $this->get('shopware_storefront.custom_sorting_service');
+
             $categoryId = $context->getShop()->getCategory()->getId();
 
             $this->Request()->setParam('sCategory', $categoryId);
@@ -141,6 +141,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $sortings = array_shift($sortings);
 
             $this->setDefaultSorting($sortings);
+
+            $this->view->assign('sortings', $sortings);
         }
 
         /** @var Criteria $criteria */
