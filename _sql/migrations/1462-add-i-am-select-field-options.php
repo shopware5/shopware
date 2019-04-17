@@ -52,7 +52,7 @@ class Migrations_Migration1462 extends Shopware\Components\Migrations\AbstractMi
                     2,
                     [
                         'snippet' => 'i_am_select_field_not_show_b2b',
-                        'en_GB' => 'No. Customers register B2B customers.',
+                        'en_GB' => 'No. Customers register as B2B customers.',
                         'de_DE' => 'Nein. Kunden melden sich als B2B Kunden an.'
                     ]
                 ]
@@ -62,15 +62,12 @@ class Migrations_Migration1462 extends Shopware\Components\Migrations\AbstractMi
         $sql = <<<'SQL'
         SET @parent = (SELECT id FROM s_core_config_forms WHERE name = 'Frontend33' LIMIT 1);
         SET @elementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'showCompanySelectField' and form_id=@parent LIMIT 1);
-        UPDATE s_core_config_elements set type='select', options='%s', value='i:0;' where id=@elementId;
 
-		UPDATE s_core_config_values SET value = 'i:1;'
-        WHERE
-          element_id = @elementId AND value = 'b:0;';
-          
-      UPDATE s_core_config_values SET value = 'i:0;'
-        WHERE
-          element_id = @elementId AND value = 'b:1;';
+        UPDATE s_core_config_elements set type='select', options='%s', value='i:0;' where id=@elementId;
+		UPDATE s_core_config_values SET value = 'i:1;' WHERE element_id = @elementId AND value = 'b:0;';
+        UPDATE s_core_config_values SET value = 'i:0;' WHERE element_id = @elementId AND value = 'b:1;';
+        UPDATE `s_core_config_elements` SET `description` = 'Das Auswahlfeld wird nur bei der Registrierung ausgeblendet, danach ist es beim Ändern der Benutzerdaten trotzdem verfügbar.' WHERE `id` = @element;
+        UPDATE `s_core_config_element_translations` SET `description` = 'This option only affects the registration, it is still available when editing user data.' WHERE `element_id` = @element;
 SQL;
         $this->addSql(sprintf($sql, serialize($options)));
     }
