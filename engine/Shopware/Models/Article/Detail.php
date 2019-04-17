@@ -878,7 +878,7 @@ class Detail extends ModelEntity
      * OWNING SIDE
      * of the association between articles and unit
      *
-     * @return Unit
+     * @return Unit|null
      */
     public function getUnit()
     {

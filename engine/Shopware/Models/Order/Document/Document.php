@@ -313,7 +313,7 @@ class Document extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\Document|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Document
+     * @return \Shopware\Models\Order\Document\Document
      */
     public function setAttribute($attribute)
     {

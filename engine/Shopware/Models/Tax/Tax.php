@@ -90,7 +90,7 @@ class Tax extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getId()
     {
@@ -110,7 +110,7 @@ class Tax extends ModelEntity
     }
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getTax()
     {

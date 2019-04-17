@@ -506,7 +506,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return Order
+     * @return Order|null
      */
     public function getOrder()
     {
@@ -538,7 +538,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Tax\Tax
+     * @return \Shopware\Models\Tax\Tax|null
      */
     public function getTax()
     {
@@ -693,7 +693,7 @@ class Detail extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\OrderDetail|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\OrderDetail
+     * @return \Shopware\Models\Order\Detail
      */
     public function setAttribute($attribute)
     {

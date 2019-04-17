@@ -154,10 +154,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param array[]|null $filters
-     * @param string|null  $orderBy
-     * @param int|null     $offset
-     * @param int|null     $limit
+     * @param array[]|null      $filters
+     * @param string|array|null $orderBy
+     * @param int|null          $offset
+     * @param int|null          $limit
      *
      * @internal param $ids
      *
@@ -178,13 +178,14 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getOrdersQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array[]|null $filters
-     * @param string|null  $orderBy
+     * @param array[]|null      $filters
+     * @param string|array|null $orderBy
      *
      * @return QueryBuilder
      */
     public function getOrdersQueryBuilder($filters = null, $orderBy = null)
     {
+        /** @var \Shopware\Components\Model\QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select([
             'orders',
@@ -516,6 +517,7 @@ class Repository extends ModelRepository
     {
         /** @var ModelManager $em */
         $em = $this->getEntityManager();
+        /** @var \Shopware\Components\Model\QueryBuilder $builder */
         $builder = $em->createQueryBuilder();
 
         $builder->select(['orders.id']);
@@ -568,10 +570,10 @@ class Repository extends ModelRepository
     /**
      * Filters the displayed fields by the passed filter value.
      *
-     * @param QueryBuilder|\Shopware\Components\Model\QueryBuilder $builder
-     * @param array[]|null                                         $filters
+     * @param \Shopware\Components\Model\QueryBuilder $builder
+     * @param array[]|null                            $filters
      *
-     * @return QueryBuilder
+     * @return \Shopware\Components\Model\QueryBuilder
      */
     protected function filterListQuery(QueryBuilder $builder, $filters = null)
     {

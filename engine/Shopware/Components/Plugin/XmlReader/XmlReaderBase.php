@@ -156,6 +156,7 @@ abstract class XmlReaderBase implements XmlReaderInterface
             return null;
         }
 
+        /** @var DOMElement $storeItem */
         $storeItem = $list->item(0);
 
         $type = $storeItem->getAttribute('type') ?: 'xml';

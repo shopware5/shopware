@@ -831,7 +831,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 continue;
             }
 
-            /** @var \Shopware\Models\Order\Order $order */
+            /** @var Order|null $order */
             $order = $modelManager->find(Order::class, $data['id']);
             if (!$order) {
                 continue;
@@ -1572,7 +1572,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      * @param int|null                      $documentTypeId
      * @param bool                          $addAttachments
      *
-     * @return array
+     * @return array|null
      */
     private function checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend, $documentTypeId, $addAttachments)
     {
@@ -1601,7 +1601,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             if ($addAttachments) {
                 // Attach documents
                 $document = $this->getDocument($documentTypeId, $order);
-                $mail['mail'] = $this->addAttachments($mail['mail'], $order->getId(), [$document]);
+                /** @var Enlight_Components_Mail $mailObject */
+                $mailObject = $mail['mail'];
+                $mail['mail'] = $this->addAttachments($mailObject, $order->getId(), [$document]);
             }
             if ($autoSend) {
                 // Send mail
@@ -1845,7 +1847,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      *
      * @param array $data
      *
-     * @return array
+     * @return array|null
      */
     private function getPositionAssociatedData($data)
     {
@@ -1867,7 +1869,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             unset($data['tax']);
         }
 
-        /** @var ArticleDetail $variant */
+        /** @var ArticleDetail|null $variant */
         $variant = Shopware()->Models()->getRepository(ArticleDetail::class)
             ->findOneBy(['number' => $data['articleNumber']]);
 
@@ -1898,10 +1900,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                         $languageData['languageId'],
                         'config_units'
                     );
+
+                    $data['unit'] = $unit->getName();
                     if (!empty($unitTranslation[$unit->getId()]['description'])) {
                         $data['unit'] = $unitTranslation[$unit->getId()]['description'];
-                    } elseif ($unit) {
-                        $data['unit'] = $unit->getName();
                     }
                 }
 
@@ -2169,7 +2171,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     }
 
     /**
-     * @return \Shopware\Models\Shop\Locale
+     * @return \Shopware\Models\Shop\Locale|null
      */
     private function getCurrentLocale()
     {

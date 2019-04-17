@@ -25,12 +25,13 @@
 namespace Shopware\Bundle\ESIndexingBundle;
 
 use Elasticsearch\ClientBuilder;
+use Elasticsearch\Namespaces\AbstractNamespace;
 use Elasticsearch\Transport;
 
 class EsClientBuilder extends ClientBuilder
 {
     /**
-     * @param object[] $registeredNamespaces
+     * @param AbstractNamespace[] $registeredNamespaces
      *
      * @return EsClientLogger
      */

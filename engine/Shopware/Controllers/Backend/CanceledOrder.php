@@ -23,7 +23,13 @@
  */
 
 use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
+use Shopware\Models\Country\Country;
+use Shopware\Models\Customer\Customer;
+use Shopware\Models\Order\Detail;
 use Shopware\Models\Order\Order;
+use Shopware\Models\Order\Status;
+use Shopware\Models\Shop\Shop;
+use Shopware\Models\Voucher\Code;
 
 /**
  * Backend for various ajax queries
@@ -78,13 +84,14 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $newOrderNumber = $numberModel->getNumber() + 1;
 
         // Set new ordernumber
-        $numberModel->setNumber($newOrderNumber);
+        $numberModel->setNumber((string) $newOrderNumber);
 
         // Set new ordernumber to the order and its details
+        /** @var Order $orderModel */
         $orderModel = Shopware()->Models()->find(\Shopware\Models\Order\Order::class, $orderId);
-        $orderModel->setNumber($newOrderNumber);
+        $orderModel->setNumber((string) $newOrderNumber);
         foreach ($orderModel->getDetails() as $detailModel) {
-            $detailModel->setNumber($newOrderNumber);
+            $detailModel->setNumber((string) $newOrderNumber);
         }
 
         // Refreshes the in stock correctly for this order if the user confirmed it
@@ -112,7 +119,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             $result[0]['customer']['defaultShippingAddress'] = $result[0]['customer']['defaultBillingAddress'];
         }
 
-        $customer = Shopware()->Models()->find(\Shopware\Models\Customer\Customer::class, $result[0]['customer']['id']);
+        /** @var Customer $customer */
+        $customer = Shopware()->Models()->find(Customer::class, $result[0]['customer']['id']);
 
         // Copy customer number into billing address from customer
         $result[0]['customer']['defaultBillingAddress']['number'] = $customer->getNumber();
@@ -122,10 +130,13 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             return (string) $value;
         }, $result[0]['customer']['defaultBillingAddress']);
 
+        /** @var Country $billingCountry */
+        $billingCountry = Shopware()->Models()->find(Country::class, $result[0]['customer']['defaultBillingAddress']['countryId']);
+
         // Create new entry in s_order_billingaddress
         $billingModel = new Shopware\Models\Order\Billing();
         $billingModel->fromArray($billingAddress);
-        $billingModel->setCountry(Shopware()->Models()->find(\Shopware\Models\Country\Country::class, $result[0]['customer']['defaultBillingAddress']['countryId']));
+        $billingModel->setCountry($billingCountry);
         $billingModel->setCustomer($customer);
         $billingModel->setOrder($orderModel);
         Shopware()->Models()->persist($billingModel);
@@ -135,16 +146,20 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             return (string) $value;
         }, $result[0]['customer']['defaultShippingAddress']);
 
+        /** @var Country $shippingCountry */
+        $shippingCountry = Shopware()->Models()->find(Country::class, $result[0]['customer']['defaultShippingAddress']['countryId']);
+
         // Create new entry in s_order_shippingaddress
         $shippingModel = new Shopware\Models\Order\Shipping();
         $shippingModel->fromArray($shippingAddress);
-        $shippingModel->setCountry(Shopware()->Models()->find(\Shopware\Models\Country\Country::class, $result[0]['customer']['defaultShippingAddress']['countryId']));
+        $shippingModel->setCountry($shippingCountry);
         $shippingModel->setCustomer($customer);
         $shippingModel->setOrder($orderModel);
         Shopware()->Models()->persist($shippingModel);
 
         // Finally set the order to be a regular order
-        $statusModel = Shopware()->Models()->find(\Shopware\Models\Order\Status::class, 1);
+        /** @var Status $statusModel */
+        $statusModel = Shopware()->Models()->find(Status::class, 1);
         $orderModel->setOrderStatus($statusModel);
 
         Shopware()->Models()->flush();
@@ -158,7 +173,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     public function getViewportsAction()
     {
-        $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, 1, 1, date('Y'))));
+        $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, 1, 1, (int) date('Y'))));
         $endDate = $this->Request()->getParam('toDate', date('Y-m-d'));
         $filter = $this->Request()->getParam('filter');
         $sort = $this->Request()->getParam('sort');
@@ -227,7 +242,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $data = Shopware()->Db()->fetchAll($sql, $params);
 
         // Insert the percentage into each field manually
-        if ($data !== null && $total === null) {
+        if ($data !== null) {
             for ($i = 0, $iMax = count($data); $i < $iMax; ++$i) {
                 if ($total !== 0) {
                     $data[$i]['percent'] = round($data[$i]['number'] / $total * 100, 1);
@@ -276,6 +291,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     public function sendCanceledQuestionMailAction()
     {
+        $voucherId = null;
         if (!($mailTo = $this->Request()->getParam('mail'))) {
             $this->View()->assign([
                 'success' => false,
@@ -354,7 +370,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         // Find the shop matching the order
         $orderModel = Shopware()->Models()->find('Shopware\Models\Order\Order', $orderId);
         if (!$orderModel instanceof Shopware\Models\Order\Order) {
-            $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
+            $shop = Shopware()->Models()->getRepository(Shop::class)->getActiveDefault();
         } else {
             $shop = $orderModel->getLanguageSubShop();
         }
@@ -380,7 +396,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
         // Mark the used voucher-code as reserved for our user
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->update('Shopware\Models\Voucher\Code', 'code')
+        $builder->update(Code::class, 'code')
                 ->set('code.customerId', $customerId)
                 ->where('code.id = ?1')
                 ->andWhere('code.customerId is NULL')
@@ -394,12 +410,12 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             // 'Frage gesendet' marks a order, when its customer got a "Ask Reason" mail
             // Compatible with Shopware 3
 
-            $orderRepository = Shopware()->Models()->getRepository('Shopware\Models\Order\Order');
+            $orderRepository = Shopware()->Models()->getRepository(Order::class);
             $model = $orderRepository->find($orderId);
             $model->setComment('Frage gesendet');
             Shopware()->Models()->flush();
         } else {
-            $orderRepository = Shopware()->Models()->getRepository('Shopware\Models\Order\Order');
+            $orderRepository = Shopware()->Models()->getRepository(Order::class);
             $model = $orderRepository->find($orderId);
             $model->setComment($model->getComment() . ' Gutschein gesendet');
             Shopware()->Models()->flush();
@@ -413,7 +429,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     public function getStatisticsAction()
     {
-        $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, 1, 1, date('Y'))));
+        $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, 1, 1, (int) date('Y'))));
         $endDate = $this->Request()->getParam('toDate', date('Y-m-d'));
         $filter = $this->Request()->getParam('filter');
 
@@ -452,7 +468,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     public function getArticleAction()
     {
-        $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, 1, 1, date('Y'))));
+        $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, 1, 1, (int) date('Y'))));
         $endDate = $this->Request()->getParam('toDate', date('Y-m-d'));
         $filter = $this->Request()->getParam('filter');
         $sort = $this->Request()->getParam('sort');
@@ -522,7 +538,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     public function getBasketAction()
     {
-        $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, 1, 1, date('Y'))));
+        $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, 1, 1, (int) date('Y'))));
         $endDate = $this->Request()->getParam('toDate', date('Y-m-d'));
         $sort = $this->Request()->getParam('sort');
         $filter = $this->Request()->getParam('filter');
@@ -603,7 +619,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $filter = $filter[0]['value'];
         $sort = $this->Request()->getParam('sort', [['property' => 'orders.orderTime', 'direction' => 'DESC']]);
 
-        $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, 1, 1, date('Y'))));
+        $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, 1, 1, (int) date('Y'))));
         $endDate = $this->Request()->getParam('toDate', date('Y-m-d'));
 
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -760,11 +776,11 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     }
 
     /**
-     * @return \Shopware\Models\Order\Detail|null
+     * @return Detail|null
      */
     private function getOrderPositionByProduct(\Shopware\Models\Article\Detail $variant, Order $order)
     {
-        /** @var \Shopware\Models\Order\Detail $detail */
+        /** @var Detail $detail */
         foreach ($order->getDetails() as $detail) {
             if (!$this->isProductPosition($detail)) {
                 continue;
@@ -787,10 +803,11 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
         $products = [];
         foreach ($order->getDetails() as $detail) {
-            /** @var \Shopware\Models\Order\Detail $detail */
+            /** @var Detail $detail */
             if (!$this->isProductPosition($detail)) {
                 continue;
             }
+            /** @var \Shopware\Models\Article\Detail $variant */
             $variant = $repository->findOneBy(['number' => $detail->getArticleNumber()]);
             $products[] = $variant;
         }

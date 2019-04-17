@@ -231,11 +231,11 @@ class Shopware_Components_Translation
      * Reads multiple translations including their fallbacks
      * Merges the two (fallback has less priority) and returns the results
      *
-     * @param string|int $language
-     * @param int        $fallback
-     * @param string     $type
-     * @param int|int[]  $key
-     * @param bool       $merge
+     * @param string|int      $language
+     * @param string|int|null $fallback
+     * @param string          $type
+     * @param int|int[]       $key
+     * @param bool            $merge
      *
      * @return array|mixed
      */

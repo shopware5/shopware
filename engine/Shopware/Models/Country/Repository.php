@@ -31,10 +31,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all defined countries.
      *
-     * @param array|null                                   $filter
-     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
-     * @param int|null                                     $offset
-     * @param int|null                                     $limit
+     * @param array|null                                         $filter
+     * @param string|array|\Doctrine\ORM\Query\Expr\OrderBy|null $order
+     * @param int|null                                           $offset
+     * @param int|null                                           $limit
      *
      * @return \Doctrine\ORM\Query
      * @return \Doctrine\ORM\Query
@@ -54,8 +54,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getCountriesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array|null                                   $filter
-     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
+     * @param array|null                                         $filter
+     * @param string|array|\Doctrine\ORM\Query\Expr\OrderBy|null $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -91,8 +91,8 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param array|null                                   $filter
-     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
+     * @param array|null                                         $filter
+     * @param string|array|\Doctrine\ORM\Query\Expr\OrderBy|null $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

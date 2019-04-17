@@ -258,10 +258,12 @@ class LogEntryBuilder implements LogEntryBuilderInterface
         /** @var Zend_Mime_Part $part */
         foreach ($mail->getParts() as $part) {
             if (isset($filenameIdMap[$part->filename])) {
-                $logEntry->addDocument($this->entityManager->getPartialReference(
+                /** @var Document $document */
+                $document = $this->entityManager->getPartialReference(
                     Document::class,
                     $filenameIdMap[$part->filename]
-                ));
+                );
+                $logEntry->addDocument($document);
             }
         }
     }
