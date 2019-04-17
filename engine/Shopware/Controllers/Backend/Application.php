@@ -56,7 +56,7 @@ use Shopware\Components\Model\QueryBuilder;
  *  - For example you can limit the sortable fields by using the $sortFields property
  *  - Or you can limit the filterable fields by using the $filterFields property.
  */
-class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Backend_ExtJs
+abstract class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Backend_ExtJs
 {
     /**
      * Contains the repository class of the configured

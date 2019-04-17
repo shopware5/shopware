@@ -94,6 +94,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed ongr/elasticsearch-dsl to 5.0.6
 * Changed the generation of the Robots.txt
 * Changed backend customer login to start with a fresh session
+* Changed `Shopware_Controllers_Backend_Application` to abstract
 
 ### Removals
 
