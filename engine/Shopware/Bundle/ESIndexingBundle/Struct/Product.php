@@ -79,7 +79,7 @@ class Product extends ListProduct
     /**
      * @var Group[]
      */
-    protected $fullConfiguration;
+    protected $fullConfiguration = [];
 
     /**
      * @var string[]

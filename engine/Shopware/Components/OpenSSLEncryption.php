@@ -50,7 +50,7 @@ class OpenSSLEncryption
             return false;
         }
 
-        if (!in_array($encryptionMethod, openssl_get_cipher_methods('true'))) {
+        if (!in_array($encryptionMethod, openssl_get_cipher_methods(true))) {
             return false;
         }
 
@@ -74,7 +74,7 @@ class OpenSSLEncryption
         $ivLength = openssl_cipher_iv_length($encryptionMethod);
         $iv = Random::getBytes($ivLength);
 
-        $encryptedMessage = openssl_encrypt($data, $encryptionMethod, $key, false, $iv);
+        $encryptedMessage = openssl_encrypt($data, $encryptionMethod, $key, 0, $iv);
 
         $encryptedKey = '';
         if (!openssl_public_encrypt($key, $encryptedKey, $publicKey)) {

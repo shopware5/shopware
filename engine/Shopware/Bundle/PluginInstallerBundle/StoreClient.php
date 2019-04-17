@@ -309,9 +309,8 @@ class StoreClient
     {
         $url = $this->apiEndPoint . $resource;
         if (!empty($params)) {
-            $url .= '?' . http_build_query($params, null, '&');
+            $url .= '?' . http_build_query($params, '', '&');
         }
-
         $header = [];
         if ($token) {
             $header['X-Shopware-Token'] = $token->getToken();

@@ -157,9 +157,9 @@ class CategoryHydrator extends Hydrator
         }
 
         if (isset($data['__category_customer_groups'])) {
-            $category->setBlockedCustomerGroupIds(
-                explode(',', $data['__category_customer_groups'])
-            );
+            /** @var int[] $categoryCustomerGroups */
+            $categoryCustomerGroups = explode(',', $data['__category_customer_groups']);
+            $category->setBlockedCustomerGroupIds($categoryCustomerGroups);
         }
 
         $category->setHideSortings((bool) $data['__category_hide_sortings']);

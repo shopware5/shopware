@@ -281,8 +281,8 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         // Batch mode
         if (!empty($snippets)) {
             foreach ($snippets as $snippet) {
-                /* @var Snippet $snippetModel */
-                $snippetModel = Shopware()->Models()->getRepository('Shopware\Models\Snippet\Snippet')->find($snippet['id']);
+                /** @var Snippet $snippetModel */
+                $snippetModel = Shopware()->Models()->getRepository(Snippet::class)->find($snippet['id']);
                 $dirty = ($snippetModel->getDirty() || strcmp($snippetModel->getValue(), $snippet['value']) != 0);
                 $snippetModel->setDirty($dirty);
                 $snippetModel->setValue($snippet['value']);
@@ -305,8 +305,8 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             return;
         }
 
-        /* @var Snippet $result */
-        $result = Shopware()->Models()->getRepository('Shopware\Models\Snippet\Snippet')->find($id);
+        /** @var Snippet|null $result */
+        $result = Shopware()->Models()->getRepository(Snippet::class)->find($id);
         if (!$result) {
             $this->View()->assign(['success' => false, 'message' => 'Snippet not found']);
 
@@ -339,8 +339,8 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             $this->View()->assign(['success' => false, 'message' => 'Id not found']);
         }
 
-        /* @var Snippet $snippet */
-        $snippet = Shopware()->Models()->getRepository('\Shopware\Models\Snippet\Snippet')->find($id);
+        /** @var Snippet|null $snippet */
+        $snippet = Shopware()->Models()->getRepository(Snippet::class)->find($id);
         if (!$snippet) {
             $this->View()->assign(['success' => false, 'message' => 'Snippet not found']);
 

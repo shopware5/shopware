@@ -62,7 +62,7 @@ class GuzzleHttpClient implements HttpClientInterface
         }
 
         return new Response(
-            $response->getStatusCode(),
+            (string) $response->getStatusCode(),
             $response->getHeaders(),
             (string) $response->getBody()
         );
@@ -80,7 +80,7 @@ class GuzzleHttpClient implements HttpClientInterface
         }
 
         return new Response(
-            $response->getStatusCode(),
+            (string) $response->getStatusCode(),
             $response->getHeaders(),
             (string) $response->getBody()
         );
@@ -98,7 +98,7 @@ class GuzzleHttpClient implements HttpClientInterface
         }
 
         return new Response(
-            $response->getStatusCode(),
+            (string) $response->getStatusCode(),
             $response->getHeaders(),
             (string) $response->getBody()
         );
@@ -122,7 +122,7 @@ class GuzzleHttpClient implements HttpClientInterface
         }
 
         return new Response(
-            $response->getStatusCode(),
+            (string) $response->getStatusCode(),
             $response->getHeaders(),
             (string) $response->getBody()
         );
@@ -146,7 +146,7 @@ class GuzzleHttpClient implements HttpClientInterface
         }
 
         return new Response(
-            $response->getStatusCode(),
+            (string) $response->getStatusCode(),
             $response->getHeaders(),
             (string) $response->getBody()
         );
@@ -181,7 +181,7 @@ class GuzzleHttpClient implements HttpClientInterface
         }
 
         return new Response(
-            $response->getStatusCode(),
+            (string) $response->getStatusCode(),
             $response->getHeaders(),
             (string) $response->getBody()
         );

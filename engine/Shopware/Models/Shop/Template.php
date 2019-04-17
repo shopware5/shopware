@@ -27,6 +27,8 @@ namespace Shopware\Models\Shop;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Shop\TemplateConfig\Layout;
+use Shopware\Models\Shop\TemplateConfig\Set;
 
 /**
  * Template Model Entity
@@ -433,7 +435,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\TemplateConfig\Element|null $elements
+     * @param \Shopware\Models\Shop\TemplateConfig\Element[]|null $elements
      */
     public function setElements($elements)
     {
@@ -470,7 +472,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\TemplateConfig\Layout[]|null $layouts
+     * @param Layout[]|null $layouts
      */
     public function setLayouts($layouts)
     {
@@ -483,7 +485,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Layout>
+     * @return ArrayCollection<Layout>
      */
     public function getLayouts()
     {
@@ -491,7 +493,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Set>
+     * @return ArrayCollection<Set>
      */
     public function getConfigSets()
     {
@@ -499,7 +501,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Set> $configSets
+     * @param ArrayCollection<Set> $configSets
      */
     public function setConfigSets($configSets)
     {

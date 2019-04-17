@@ -429,7 +429,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $installed
+     * @param \DateTimeInterface|null $installed
      */
     public function setInstalled($installed)
     {
@@ -653,7 +653,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param string $updateVersion
+     * @param string|null $updateVersion
      */
     public function setUpdateVersion($updateVersion)
     {
@@ -669,7 +669,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param string $updateSource
+     * @param string|null $updateSource
      */
     public function setUpdateSource($updateSource)
     {

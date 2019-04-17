@@ -247,6 +247,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         if (!empty($id) && $id > 0) {
+            /** @var Set|null $configuratorSet */
             $configuratorSet = Shopware()->Models()->find(Set::class, $id);
         } else {
             $configuratorSet = new Set();
@@ -343,7 +344,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function duplicateArticleAction()
     {
-        $productId = $this->Request()->getParam('articleId');
+        $productId = (int) $this->Request()->getParam('articleId');
 
         if (empty($productId)) {
             $this->View()->assign([
@@ -434,6 +435,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             if (empty($mappingData['id'])) {
                 $mapping = new Mapping();
             } else {
+                /** @var Mapping $mapping */
                 $mapping = Shopware()->Models()->find(Mapping::class, $mappingData['id']);
             }
 
@@ -441,6 +443,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $options = [];
             foreach ($mappingData['rules'] as $ruleData) {
                 $rule = new Rule();
+                /** @var Option|null $option */
                 $option = Shopware()->Models()->getReference(Option::class, $ruleData['optionId']);
                 $rule->setMapping($mapping);
                 $rule->setOption($option);
@@ -472,6 +475,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $id = (int) $this->Request()->getParam('id');
 
         if ($id > 0) {
+            /** @var Detail $detail */
             $detail = $this->getArticleDetailRepository()->find($id);
         } else {
             $detail = new Detail();
@@ -629,6 +633,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $builder = Shopware()->Models()->createQueryBuilder()
             ->from(\Shopware\Models\Property\Value::class, 'pv')
+            ->orderBy('pv.position', 'ASC')
             ->join('pv.articles', 'pa', 'with', 'pa.id = :articleId')
             ->setParameter('articleId', $productId)
             ->join('pv.option', 'po')
@@ -1233,6 +1238,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         Shopware()->Models()->clear();
+        /** @var Article $product */
         $product = $this->getRepository()->find($productId);
         $detailData = $this->setDetailDataReferences($detailData, $product);
 
@@ -2043,7 +2049,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             return $this->getChartData();
         }
 
-        $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, date('m'), 1, date('Y'))));
+        $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, (int) date('m'), 1, (int) date('Y'))));
         $endDate = $this->Request()->getParam('toDate', date('Y-m-d'));
 
         $sql = "
@@ -2128,7 +2134,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         );
 
         /* @var Shop $shop */
-        $this->Response()->headers->setCookie(new Cookie('shop', $shopId, 0, $shop->getBasePath()));
+        $this->Response()->headers->setCookie(new Cookie('shop', (string) $shopId, 0, $shop->getBasePath()));
         $this->redirect($url);
     }
 
@@ -2561,6 +2567,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function duplicateArticleLinks($articleId, $newArticleId)
     {
+        /** @var Article $product */
         $product = Shopware()->Models()->find(Article::class, $newArticleId);
 
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -2638,6 +2645,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function duplicateArticleImages($articleId, $newArticleId)
     {
+        /** @var Article $product */
         $product = Shopware()->Models()->find(Article::class, $newArticleId);
 
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -2779,7 +2787,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * @param int $articleId
      *
-     * @return string|null
+     * @return int|null
      */
     protected function duplicateArticleConfigurator($articleId)
     {
@@ -2918,6 +2926,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $details = Shopware()->Db()->fetchCol($sql);
 
         foreach ($details as $detailId) {
+            /** @var Detail $detail */
             $detail = Shopware()->Models()->getReference(Detail::class, $detailId);
             $image = new Image();
             $image->fromArray($imageData);
@@ -3390,6 +3399,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * the generated product variants.
      *
      * @param Article $article
+     *
+     * @return array
      */
     protected function getDetailDataForVariantGeneration($article)
     {
@@ -4188,9 +4199,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * First the function executes the current command on the passed cursor object.
      * If the result is traversable
      *
-     * @param Article|Detail $cursor
-     * @param int            $index
-     * @param array          $commands
+     * @param Article|Detail|string $cursor
+     * @param int                   $index
+     * @param array                 $commands
      *
      * @return string
      */
@@ -4205,6 +4216,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         // First we execute the current command on the cursor object
+        /** @var Article|Traversable $result */
         $result = $cursor->{$commands[$index]['command']}();
 
         // Now we increment the command index
@@ -4228,6 +4240,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             // Otherwise we can return directly.
         }
 
+        /* @var string $result */
         return $result;
     }
 
@@ -4384,8 +4397,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
-     * @param array $detailData
-     * @param array $article
+     * @param array        $detailData
+     * @param Article|null $article
      */
     private function setDetailDataReferences($detailData, $article)
     {

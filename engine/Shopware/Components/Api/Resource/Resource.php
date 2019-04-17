@@ -394,7 +394,7 @@ abstract class Resource implements ContainerAwareInterface
      * @param string $optionName
      * @param bool   $defaultReplace
      *
-     * @return Collection
+     * @return Collection<\Shopware\Models\Article\Image>
      */
     protected function checkDataReplacement(Collection $collection, $data, $optionName, $defaultReplace)
     {

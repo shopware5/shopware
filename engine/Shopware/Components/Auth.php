@@ -44,7 +44,7 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
     /**
      * Get all adapters or certain one
      *
-     * @param string|null $index
+     * @param int|null $index
      *
      * @return array|Zend_Auth_Adapter_Interface
      */
@@ -100,7 +100,7 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
     /**
      * Set current active adapter
      *
-     * @param \Zend_Auth_Adapter_Interface $adapter
+     * @param \Zend_Auth_Adapter_Interface|null $adapter
      *
      * @return \Shopware_Components_Auth
      */

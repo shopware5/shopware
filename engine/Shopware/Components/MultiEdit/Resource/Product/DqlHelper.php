@@ -524,7 +524,7 @@ class DqlHelper
      *
      * @param string $alias
      *
-     * @return bool
+     * @return array|false
      */
     public function getColumnInfoByAlias($alias)
     {

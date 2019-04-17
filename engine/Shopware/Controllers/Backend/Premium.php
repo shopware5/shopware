@@ -144,6 +144,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
             $premiumModel->fromArray($params);
 
             //find the shop-model by using the subShopId
+            /** @var Shop $shop */
             $shop = Shopware()->Models()->find(Shop::class, $params['shopId']);
             $premiumModel->setShop($shop);
 
@@ -228,6 +229,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
                 $data = [];
                 foreach ($params as $values) {
                     $id = $values['id'];
+                    /** @var Premium $model */
                     $model = $repository->find($id);
                     Shopware()->Models()->remove($model);
                     Shopware()->Models()->flush();
@@ -235,6 +237,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
                 }
             } else {
                 $id = $this->Request()->get('id');
+                /** @var Premium $model */
                 $model = $repository->find($id);
 
                 Shopware()->Models()->remove($model);
@@ -260,7 +263,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
             return;
         }
 
-        //If the product exists
+        // If the product exists
         $repository = Shopware()->Models()->getRepository(Detail::class);
         $result = $repository->findByNumber($value);
 
@@ -268,7 +271,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
             return;
         }
 
-        //If the product is already set as a premium-product
+        // If the product is already set as a premium-product
         $repository = Shopware()->Models()->getRepository(Premium::class);
         $result = $repository->findByOrderNumber($value);
 

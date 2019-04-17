@@ -64,7 +64,7 @@ class Enlight_Event_EventManager extends Enlight_Class
      * $eventManager->addListener('foo.action', array($listener, 'onFooAction'));
      *
      * @param string   $eventName
-     * @param callback $listener
+     * @param callback|array<int, object|string> $listener
      * @param int      $priority
      *
      * @return Enlight_Event_EventManager
@@ -310,9 +310,9 @@ class Enlight_Event_EventManager extends Enlight_Class
      * Event which is fired to collect plugin parameters
      * to register additionally application components or configurations.
      *
-     * @param                 $event
+     * @param string          $event
      * @param ArrayCollection $collection
-     * @param null            $eventArgs
+     * @param array|null      $eventArgs
      *
      * @throws Enlight_Event_Exception
      *

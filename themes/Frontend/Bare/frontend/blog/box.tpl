@@ -84,7 +84,7 @@
                                          alt="{$sArticle.title|escape}"
                                          title="{$sArticle.title|escape|truncate:160}" />
                                 {else}
-                                    <img src="{link file='frontend/_public/src/img/no-picture.jpg'}"
+                                    <img src="{media path=$sArticle.media[0].media.path}"
                                          alt="{$sArticle.title|escape}"
                                          title="{$sArticle.title|escape|truncate:160}" />
                                 {/if}

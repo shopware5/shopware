@@ -282,7 +282,9 @@ class sExport
             ->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
 
         $repository = Shopware()->Models()->getRepository(Currency::class);
-        $shop->setCurrency($repository->find($this->sCurrency['id']));
+        /** @var Currency $currency */
+        $currency = $repository->find($this->sCurrency['id']);
+        $shop->setCurrency($currency);
         $shop->registerResources();
 
         $this->shop = $shop;
@@ -298,15 +300,15 @@ class sExport
         $this->sSYSTEM->sSMARTY->debugging = 0;
         $this->sSYSTEM->sSMARTY->caching = 0;
 
-        $this->sSmarty->registerPlugin('modifier', 'htmlentities', [&$this, 'sHtmlEntities']);
-        $this->sSmarty->registerPlugin('modifier', 'format', [&$this, 'sFormatString']);
-        $this->sSmarty->registerPlugin('modifier', 'escape', [&$this, 'sEscapeString']);
-        $this->sSmarty->registerPlugin('modifier', 'category', [&$this, 'sGetArticleCategoryPath']);
-        $this->sSmarty->registerPlugin('modifier', 'link', [&$this, 'sGetArticleLink']);
-        $this->sSmarty->registerPlugin('modifier', 'image', [&$this, 'sGetImageLink']);
-        $this->sSmarty->registerPlugin('modifier', 'articleImages', [&$this, 'sGetArticleImageLinks']);
-        $this->sSmarty->registerPlugin('modifier', 'shippingcost', [&$this, 'sGetArticleShippingcost']);
-        $this->sSmarty->registerPlugin('modifier', 'property', [&$this, 'sGetArticleProperties']);
+        $this->sSmarty->registerPlugin('modifier', 'htmlentities', [$this, 'sHtmlEntities']);
+        $this->sSmarty->registerPlugin('modifier', 'format', [$this, 'sFormatString']);
+        $this->sSmarty->registerPlugin('modifier', 'escape', [$this, 'sEscapeString']);
+        $this->sSmarty->registerPlugin('modifier', 'category', [$this, 'sGetArticleCategoryPath']);
+        $this->sSmarty->registerPlugin('modifier', 'link', [$this, 'sGetArticleLink']);
+        $this->sSmarty->registerPlugin('modifier', 'image', [$this, 'sGetImageLink']);
+        $this->sSmarty->registerPlugin('modifier', 'articleImages', [$this, 'sGetArticleImageLinks']);
+        $this->sSmarty->registerPlugin('modifier', 'shippingcost', [$this, 'sGetArticleShippingcost']);
+        $this->sSmarty->registerPlugin('modifier', 'property', [$this, 'sGetArticleProperties']);
 
         $this->sSmarty->assign('sConfig', $this->sSYSTEM->sCONFIG);
         $this->sSmarty->assign('shopData', $this->shopData);
@@ -378,7 +380,7 @@ class sExport
 
         switch ($esc_type) {
             case 'number':
-                return number_format($string, 2, $this->sSettings['dec_separator'], '');
+                return number_format((float) $string, 2, $this->sSettings['dec_separator'], '');
 
             case 'csv':
                 if (empty($this->sSettings['escaped_line_separator'])) {
@@ -1696,10 +1698,10 @@ class sExport
     }
 
     /**
-     * @param array      $article
-     * @param array      $payment
-     * @param array      $country
-     * @param array|null $dispatch
+     * @param array    $article
+     * @param array    $payment
+     * @param array    $country
+     * @param int|null $dispatch
      *
      * @return bool|float
      */
@@ -1709,6 +1711,7 @@ class sExport
         if (empty($basket)) {
             return false;
         }
+        /** @var array|null $dispatch */
         $dispatch = $this->sGetPremiumDispatch($basket, $dispatch);
         if (empty($dispatch)) {
             return false;

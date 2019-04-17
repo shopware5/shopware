@@ -94,6 +94,7 @@
         <service id="shopware_storefront.shop_page_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ShopPageService">
             <argument type="service" id="shopware_storefront.shop_page_gateway"/>
             <argument type="service" id="shopware_storefront.shop_gateway_dbal"/>
+            <argument type="service" id="shopware_storefront.shop_page_children_gateway"/>
         </service>
 
         <service id="shopware_storefront.price_calculation_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\PriceCalculationService">
@@ -188,6 +189,11 @@
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_storefront.field_helper_dbal"/>
             <argument type="service" id="shopware_storefront.shop_page_hydrator_dbal"/>
+        </service>
+
+        <service id="shopware_storefront.shop_page_children_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ShopPageChildrenGateway">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_storefront.shop_page_gateway"/>
         </service>
 
         <service id="shopware_storefront.tax_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\TaxGateway">

@@ -102,6 +102,7 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
         if (empty($facet->getGroupIds())) {
             return null;
         }
+        /** @var VariantFacet $facet */
         $options = $this->getOptions($context, $reverted, $facet);
 
         if ($options === null) {

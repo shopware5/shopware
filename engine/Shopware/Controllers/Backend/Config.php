@@ -1326,7 +1326,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
         $values = [];
         foreach ($elementData['values'] as $valueData) {
-            /* @var Shop $shop */
+            /** @var Shop $shop */
             $shop = $shopRepository->find($valueData['shopId']);
 
             //  Scope not match
@@ -1335,7 +1335,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             }
 
             // Do not save empty checkbox / boolean select values the fallback should be used
-            if (($elementData['type'] == 'checkbox' || $elementData['type'] == 'boolean') && $valueData['value'] === '') {
+            if (($elementData['type'] === 'checkbox' || $elementData['type'] === 'boolean') && $valueData['value'] === '') {
                 continue;
             }
 

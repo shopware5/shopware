@@ -42,10 +42,10 @@ class QueryWriter
     }
 
     /**
-     * @param array  $data
-     * @param string $namespace
-     * @param int    $localeId
-     * @param int    $shopId
+     * @param array      $data
+     * @param string     $namespace
+     * @param int|string $localeId
+     * @param int        $shopId
      *
      * @throws \Exception
      *
@@ -120,10 +120,10 @@ class QueryWriter
     }
 
     /**
-     * @param array  $data
-     * @param string $namespace
-     * @param int    $localeId
-     * @param int    $shopId
+     * @param array      $data
+     * @param string     $namespace
+     * @param int|string $localeId
+     * @param int        $shopId
      *
      * @return $this
      */

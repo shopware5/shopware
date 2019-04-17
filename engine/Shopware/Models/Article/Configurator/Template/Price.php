@@ -129,7 +129,7 @@ class Price extends LazyFetchModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Customer\Group $customerGroup
+     * @param CustomerGroup $customerGroup
      *
      * @return Price
      */
@@ -141,7 +141,7 @@ class Price extends LazyFetchModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Customer\Group
+     * @return CustomerGroup
      */
     public function getCustomerGroup()
     {

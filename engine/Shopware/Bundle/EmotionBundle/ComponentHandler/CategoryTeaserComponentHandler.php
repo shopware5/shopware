@@ -140,7 +140,8 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
                     if (!$blog) {
                         break;
                     }
-                    $media = array_shift($blog->getMedias());
+                    $medias = $blog->getMedias();
+                    $media = array_shift($medias);
 
                     $element->getData()->set('blog', $blog);
                     $element->getData()->set('image', $media);

@@ -70,14 +70,16 @@ class MailTransport
         }
         unset($options['type'], $options['charset']);
 
-        if ($transportName == 'Zend_Mail_Transport_Smtp') {
+        if ($transportName === 'Zend_Mail_Transport_Smtp') {
+            /** @var \Zend_Mail_Transport_Smtp $transport */
             $transport = \Enlight_Class::Instance($transportName, [$options['host'], $options]);
         } elseif (!empty($options)) {
+            /** @var \Zend_Mail_Transport_Abstract $transport */
             $transport = \Enlight_Class::Instance($transportName, [$options]);
         } else {
+            /** @var \Zend_Mail_Transport_Abstract $transport */
             $transport = \Enlight_Class::Instance($transportName);
         }
-        /* @var \Zend_Mail_Transport_Abstract $transport */
         \Enlight_Components_Mail::setDefaultTransport($transport);
 
         if (!isset($options['from']) && !empty($config->Mail)) {

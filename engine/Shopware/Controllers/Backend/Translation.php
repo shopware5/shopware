@@ -63,7 +63,7 @@ class Shopware_Controllers_Backend_Translation extends Shopware_Controllers_Back
     {
         $type = (string) $this->Request()->getParam('type');
         $merge = (bool) $this->Request()->getParam('merge');
-        $key = (string) $this->Request()->getParam('key', 1);
+        $key = (int) $this->Request()->getParam('key', 1);
         $language = (string) $this->Request()->getParam('language');
 
         $data = $this->getTranslation()->read($language, $type, $key, $merge);
@@ -80,7 +80,7 @@ class Shopware_Controllers_Backend_Translation extends Shopware_Controllers_Back
     {
         $type = (string) $this->Request()->getParam('type');
         $merge = (bool) $this->Request()->getParam('merge');
-        $key = (string) $this->Request()->getParam('key', 1);
+        $key = (int) $this->Request()->getParam('key', 1);
         $language = (string) $this->Request()->getParam('language');
         $data = (array) $this->Request()->getParam('data', []);
 

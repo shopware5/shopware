@@ -44,7 +44,7 @@ class MediaCleanupCommand extends ShopwareCommand
             ->setName('sw:media:cleanup')
             ->setHelp('The <info>%command.name%</info> collects unused media and moves them to the recycle bin album.')
             ->setDescription('Collect unused media move them to trash.')
-            ->addOption('delete', false, InputOption::VALUE_NONE, 'Delete unused media.');
+            ->addOption('delete', null, InputOption::VALUE_NONE, 'Delete unused media.');
     }
 
     /**

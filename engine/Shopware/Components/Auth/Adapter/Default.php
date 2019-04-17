@@ -224,7 +224,7 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
     /**
      * Set the property failed logins to a new value
      *
-     * @param string $number
+     * @param int $number
      *
      * @return Shopware_Components_Auth_Adapter_Default
      */

@@ -27,7 +27,6 @@ namespace Shopware\Bundle\EsBackendBundle\Searcher;
 use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
 use ONGR\ElasticsearchDSL\Query\TermLevel\TermQuery;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
-use Shopware\Models\Article\Article;
 
 class ProductSearcher extends GenericSearcher
 {

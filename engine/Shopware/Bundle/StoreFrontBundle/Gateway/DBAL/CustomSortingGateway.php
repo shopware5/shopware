@@ -95,6 +95,9 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
         );
 
         $categorySortings = [];
+
+        /** @var int $categoryId */
+        /** @var int[] $sortingIds */
         foreach ($mapping as $categoryId => $sortingIds) {
             $categorySortings[$categoryId] = $this->getAndSortElementsByIds(
                 $sortingIds,

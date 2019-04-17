@@ -498,6 +498,12 @@ class sMarketing
         return $products;
     }
 
+    /**
+     * @param int|null $articleId
+     * @param int|null $limit
+     *
+     * @return array
+     */
     public function sGetSimilarArticles($articleId = null, $limit = null)
     {
         $limit = empty($limit) ? 6 : (int) $limit;

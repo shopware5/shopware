@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\User\Privilege;
 use Shopware\Models\User\Resource;
@@ -171,7 +172,7 @@ class Shopware_Components_Acl extends Zend_Acl
                 $privilegeObjects[] = $privilege;
             }
 
-            $resource->setPrivileges($privilegeObjects);
+            $resource->setPrivileges(new ArrayCollection($privilegeObjects));
         }
 
         $this->em->persist($resource);

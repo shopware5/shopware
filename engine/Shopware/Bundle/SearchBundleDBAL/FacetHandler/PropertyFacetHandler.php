@@ -97,6 +97,7 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
         }
         $actives = $this->getFilteredValues($criteria);
 
+        /* @var Facet\PropertyFacet $facet */
         return $this->createCollectionResult($facet, $properties, $actives);
     }
 

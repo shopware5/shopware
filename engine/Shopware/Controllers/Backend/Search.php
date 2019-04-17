@@ -106,6 +106,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     /**
      * Queries the articles from the database based on the passed search term
      *
+     * @deprecated since version 5.5.8, to be removed in 5.7, use the ProductRepository instead
+     *
      * @param string $search
      *
      * @return array
@@ -148,6 +150,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     /**
      * Queries the customers from the database based on the passed search term
      *
+     * @deprecated since version 5.5.8, to be removed in 5.7, use the CustomerRepository instead
+     *
      * @param string $search
      *
      * @return array
@@ -182,6 +186,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
 
     /**
      * Queries the orders from the database based on the passed search term
+     *
+     * @deprecated since version 5.5.8, to be removed in 5.7, use the OrderRepository instead
      *
      * @param string $search
      *

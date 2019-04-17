@@ -185,7 +185,7 @@ class PropertyGroup extends Resource
     }
 
     /**
-     * @param array|null $propertyGroup
+     * @param \Shopware\Models\Property\Group|null $propertyGroup
      *
      * @throws ApiException\CustomValidationException
      *

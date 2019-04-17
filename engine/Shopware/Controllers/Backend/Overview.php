@@ -26,7 +26,7 @@ class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend
 {
     public function getOrderSummaryAction()
     {
-        $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, date('m'), 1, date('Y'))));
+        $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, (int) date('m'), 1, (int) date('Y'))));
         $endDate = $this->Request()->getParam('toDate', date('Y-m-d'));
 
         $sql = '

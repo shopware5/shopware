@@ -710,7 +710,7 @@ class VariantConditionOnSaleTest extends TestCase
     {
         $groups = [];
         foreach ($expected as $group => $optionNames) {
-            /* @var $allGroups Group[] */
+            /* @var Group[] $allGroups */
             foreach ($this->groups as $globalGroup) {
                 if ($globalGroup->getName() !== $group) {
                     continue;

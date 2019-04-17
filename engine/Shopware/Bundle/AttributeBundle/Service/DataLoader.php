@@ -46,7 +46,7 @@ class DataLoader
 
     /**
      * @param string $table
-     * @param string $foreignKey
+     * @param int    $foreignKey
      *
      * @throws \Exception
      *

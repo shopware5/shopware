@@ -39,10 +39,6 @@ class ProductSearcher extends GenericSearcher
         $builder->from(Detail::class, 'entity');
         $builder->innerJoin('entity.article', 'article');
 
-        if ($criteria->entity === 'Shopware\Models\Article\Article') {
-            $builder->andWhere('entity.kind = 1');
-        }
-
         $builder->setAlias('entity');
 
         return $builder;

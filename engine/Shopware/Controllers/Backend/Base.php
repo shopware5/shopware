@@ -24,6 +24,7 @@
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\StateTranslatorService;
 use Shopware\Models\Document\Document;
 use Shopware\Models\Shop\Locale;
@@ -742,6 +743,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     {
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Currency::class);
 
+        /** @var QueryBuilder $builder */
         $builder = $repository->createQueryBuilder('c');
         $builder->select([
             'c.id as id',
@@ -805,6 +807,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     {
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Country\Area::class);
 
+        /** @var QueryBuilder $builder */
         $builder = $repository->createQueryBuilder('area');
         $builder->select([
             'area.id as id',
@@ -830,6 +833,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Country\State::class);
 
+        /** @var QueryBuilder $builder */
         $builder = $repository->createQueryBuilder('state');
         $builder->select([
             'state.id as id',
@@ -1066,7 +1070,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             foreach ($fields as $field) {
                 $asStr = ' as ';
                 $dotPos = strpos($field, '.');
-                $asPos = strpos($field, $asStr, true);
+                $asPos = strpos($field, $asStr, 1);
 
                 if ($asPos) {
                     $fieldName = substr($field, $asPos + strlen($asStr));

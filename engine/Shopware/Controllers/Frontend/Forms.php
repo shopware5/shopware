@@ -493,9 +493,9 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                             break;
                         }
                         if (strlen($values[0]) === 4) {
-                            $value = mktime(0, 0, 0, $values[1], $values[2], $values[0]);
+                            $value = mktime(0, 0, 0, (int) $values[1], (int) $values[2], (int) $values[0]);
                         } else {
-                            $value = mktime(0, 0, 0, $values[0], $values[2], $values[1]);
+                            $value = mktime(0, 0, 0, (int) $values[0], (int) $values[2], (int) $values[1]);
                         }
                         if (empty($value) || ((int) $value === -1)) {
                             unset($value);

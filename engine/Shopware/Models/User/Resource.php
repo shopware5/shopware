@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\User;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -73,7 +74,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
      * The privileges property is the inverse side of the association between resource and privileges.
      * The association is joined over the s_core_acl_privileges.resourceID field and the s_core_acl_resources.id
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\User\Privilege>
+     * @var ArrayCollection<\Shopware\Models\User\Privilege>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\User\Privilege", mappedBy="resource")
      */
@@ -128,7 +129,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
     /**
      * Setter function for the pluginId property
      *
-     * @param int $pluginId
+     * @param int|null $pluginId
      */
     public function setPluginId($pluginId)
     {
@@ -141,7 +142,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
      * the Resource.privileges property (INVERSE SIDE) and the Privilege.resource (OWNING SIDE) property.
      * The privilege data is joined over the s_core_acl_privileges.resourceID field.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\User\Privilege>
+     * @return ArrayCollection<Privilege>
      */
     public function getPrivileges()
     {
@@ -154,7 +155,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
      * the Resource.privileges property (INVERSE SIDE) and the Privilege.resource (OWNING SIDE) property.
      * The privilege data is joined over the s_core_acl_privileges.resourceID field.
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\User\Privilege> $privileges
+     * @param ArrayCollection<Privilege> $privileges
      */
     public function setPrivileges($privileges)
     {

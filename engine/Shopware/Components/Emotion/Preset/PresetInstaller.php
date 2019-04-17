@@ -47,6 +47,9 @@ class PresetInstaller
         $this->slugService = $slugService;
     }
 
+    /**
+     * @param PresetMetaDataInterface[] $presetMetaData
+     */
     public function installOrUpdate(array $presetMetaData)
     {
         $modelManager = $this->presetResource->getManager();
@@ -77,6 +80,9 @@ class PresetInstaller
         }
     }
 
+    /**
+     * @param string[] $presetNames
+     */
     public function uninstall(array $presetNames)
     {
         $modelManager = $this->presetResource->getManager();
@@ -85,10 +91,10 @@ class PresetInstaller
             $slugifiedNames[] = $this->slugService->slugify($presetName);
         }
 
-        // make default presets deletable when plugin is removed
+        // Make default presets deletable when plugin is removed
         $modelManager->getConnection()->createQueryBuilder()
             ->update('s_emotion_presets', 'preset')
-            ->set('preset.custom', 1)
+            ->set('preset.custom', '1')
             ->where('preset.name IN (:names) AND preset.custom = 0')
             ->setParameter('names', $slugifiedNames, Connection::PARAM_STR_ARRAY)
             ->execute();

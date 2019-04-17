@@ -613,11 +613,11 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
      * The listing query created in the getListQuery function.
      * The pagination of the listing is handled inside this function.
      *
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $sort        Contains an array of Ext JS sort conditions
-     * @param array $filter      Contains an array of Ext JS filters
-     * @param array $wholeParams Contains all passed request parameters
+     * @param int|null $offset
+     * @param int|null $limit
+     * @param array    $sort        Contains an array of Ext JS sort conditions
+     * @param array    $filter      Contains an array of Ext JS filters
+     * @param array    $wholeParams Contains all passed request parameters
      *
      * @return array
      */
@@ -694,7 +694,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
      *
      * @param int $id
      *
-     * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
+     * @return QueryBuilder
      */
     protected function getDetailQuery($id)
     {

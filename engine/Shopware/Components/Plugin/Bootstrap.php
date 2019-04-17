@@ -424,22 +424,18 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     }
 
     /**
-     * Subscribes a plugin event.
-     *
      * {@inheritdoc}
-     *
-     * @param string|Enlight_Event_Handler $event
-     * @param string                       $listener
-     * @param int                          $position
-     *
-     * @return Enlight_Plugin_Bootstrap_Config
      */
     public function subscribeEvent($event, $listener = null, $position = null)
     {
         if ($listener === null) {
-            $this->Collection()->Subscriber()->registerListener($event);
+            /** @var Enlight_Event_Handler $handler */
+            $handler = $event;
+            $this->Collection()->Subscriber()->registerListener($handler);
         } else {
-            parent::subscribeEvent($event, $listener, $position);
+            /** @var string $eventName */
+            $eventName = $event;
+            parent::subscribeEvent($eventName, $listener, $position);
         }
 
         return $this;
@@ -701,7 +697,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
 
         $component = $installer->createOrUpdate($this->getName(), $options['name'], $options);
 
-        //register post dispatch of backend and widgets emotion controller to load the template extensions of the plugin
+        // Register post dispatch of backend and widgets emotion controller to load the template extensions of the plugin
         $this->subscribeEvent('Enlight_Controller_Action_PostDispatchSecure_Widgets_Emotion', 'extendsEmotionTemplates');
         $this->subscribeEvent('Enlight_Controller_Action_PostDispatchSecure_Backend_Emotion', 'extendsEmotionTemplates');
 
@@ -786,6 +782,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         $form = $this->Form();
 
         foreach ($translations as $localeCode => $translationSet) {
+            /** @var Locale|null $locale */
             $locale = Shopware()->Models()->getRepository(Locale::class)->findOneBy(['locale' => $localeCode]);
             if (empty($locale)) {
                 continue;

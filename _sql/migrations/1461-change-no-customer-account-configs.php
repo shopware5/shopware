@@ -62,15 +62,10 @@ class Migrations_Migration1461 extends Shopware\Components\Migrations\AbstractMi
         $sql = <<<'SQL'
         SET @parent = (SELECT id FROM s_core_config_forms WHERE name = 'Frontend33' LIMIT 1);
         SET @elementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'noaccountdisable' and form_id=@parent LIMIT 1);
-        UPDATE s_core_config_elements set type='select', options='%s', value='i:2;' where id=@elementId;
 
-		UPDATE s_core_config_values SET value = 'i:2;'
-        WHERE
-          element_id = @elementId AND value = 'b:0;';
-          
-      UPDATE s_core_config_values SET value = 'i:0;'
-        WHERE
-          element_id = @elementId AND value = 'b:1;';
+        UPDATE s_core_config_elements set type='select', options='%s', value='i:2;' where id=@elementId;
+		UPDATE s_core_config_values SET value = 'i:2;' WHERE element_id = @elementId AND value = 'b:0;';
+        UPDATE s_core_config_values SET value = 'i:0;' WHERE element_id = @elementId AND value = 'b:1;';
 SQL;
         $this->addSql(sprintf($sql, serialize($options)));
     }
