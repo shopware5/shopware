@@ -236,7 +236,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
 
-        if (empty($categoryContent)) {
+        // Make sure the category exists and is a blog category
+        if (empty($categoryContent) || !$categoryContent['blog']) {
             throw new Enlight_Controller_Exception(sprintf('Blog category by id "%d" is invalid', $categoryId), Enlight_Controller_Exception::PROPERTY_NOT_FOUND);
         }
 

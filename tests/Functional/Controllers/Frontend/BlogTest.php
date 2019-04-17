@@ -28,14 +28,19 @@
 class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Test_Plugin_TestCase
 {
     /**
+     * @var \Doctrine\DBAL\Connection
+     */
+    private $connection;
+
+    /**
      * Set up test case, fix demo data where needed
      */
     public function setUp()
     {
         parent::setUp();
 
-        $sql = "UPDATE `s_blog` SET `active` = '0' WHERE `id` =3;";
-        Shopware()->Db()->exec($sql);
+        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection->beginTransaction();
     }
 
     /**
@@ -44,9 +49,7 @@ class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Te
     public function tearDown()
     {
         parent::tearDown();
-
-        $sql = "UPDATE `s_blog` SET `active` = '1' WHERE `id` =3;";
-        Shopware()->Db()->exec($sql);
+        $this->connection->rollBack();
     }
 
     /**
@@ -57,6 +60,8 @@ class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Te
      */
     public function testDispatchNoActiveBlogItem()
     {
+        $this->connection->exec('UPDATE `s_blog` SET `active` = 0 WHERE `id` = 3;');
+
         $this->dispatch('/blog/detail/?blogArticle=3');
         static::assertTrue($this->Response()->isRedirect());
     }
@@ -83,7 +88,6 @@ class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Te
         } catch (Exception $e) {
             static::fail('Exception thrown. This should not occur.');
         }
-
         static::assertTrue(!$this->Response()->isRedirect());
 
         try {
@@ -91,14 +95,12 @@ class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Te
         } catch (Exception $e) {
             static::fail('Exception thrown. This should not occur.');
         }
-
         static::assertTrue($this->Response()->isRedirect());
 
-        //deactivate blog category
-        $sql = "UPDATE `s_categories` SET `active` = '0' WHERE `id` =17";
-        Shopware()->Db()->exec($sql);
+        // Deactivate blog category
+        $this->connection->exec('UPDATE `s_categories` SET `active` = 0 WHERE `id` = 17');
 
-        //should be redirected because blog category is inactive
+        // Should be redirected because blog category is inactive
         try {
             $this->dispatch('/blog/?sCategory=17');
         } catch (Exception $e) {
@@ -106,17 +108,24 @@ class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Te
         }
         static::assertTrue($this->Response()->isRedirect());
 
-        //should be redirected because blog category is inactive
+        // Should be redirected because blog category is inactive
         try {
             $this->dispatch('/blog/detail/?blogArticle=3');
         } catch (Exception $e) {
             static::fail('Exception thrown. This should not occur.');
         }
-
         static::assertTrue($this->Response()->isRedirect());
+    }
 
-        //activate blog category
-        $sql = "UPDATE `s_categories` SET `active` = '1' WHERE `id` =17";
-        Shopware()->Db()->exec($sql);
+    /**
+     * Test that requesting a non-blog category-id creates a redirect
+     *
+     * @expectedException \Enlight_Exception
+     * @expectedExceptionCode \Enlight_Exception::PROPERTY_NOT_FOUND
+     */
+    public function testDispatchNonBlogCategory()
+    {
+        $this->dispatch('/blog/?sCategory=14');
+        static::assertTrue($this->Response()->isRedirect());
     }
 }

@@ -564,7 +564,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     private function loadCategoryContent($requestCategoryId)
     {
-        if ($requestCategoryId && !$this->isValidCategoryPath($requestCategoryId)) {
+        if (empty($requestCategoryId) && !$this->isValidCategoryPath($requestCategoryId)) {
             throw new Enlight_Controller_Exception(
                 'Listing category missing, non-existent or invalid for the current shop',
                 404
@@ -572,6 +572,14 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         }
 
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($requestCategoryId);
+        // Check if the requested category-id belongs to a blog category
+        if ($categoryContent['blog']) {
+            throw new Enlight_Controller_Exception(
+                'Listing category missing, non-existent or invalid for the current shop',
+                404
+            );
+        }
+
         Shopware()->System()->_GET['sCategory'] = $requestCategoryId;
 
         $this->View()->assign([
