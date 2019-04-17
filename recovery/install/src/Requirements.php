@@ -24,6 +24,8 @@
 
 namespace Shopware\Recovery\Install;
 
+use Shopware\Recovery\Install\Service\TranslationService;
+
 class Requirements
 {
     /**

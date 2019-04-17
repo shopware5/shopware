@@ -59,7 +59,6 @@ class Migrations_Migration1460 extends Shopware\Components\Migrations\AbstractMi
             ]
         ];
 
-
         $sql = <<<'SQL'
         SET @parent = (SELECT id FROM s_core_config_forms WHERE name = 'Frontend79' LIMIT 1);
         
