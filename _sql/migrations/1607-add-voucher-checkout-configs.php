@@ -26,11 +26,44 @@ class Migrations_Migration1607 extends Shopware\Components\Migrations\AbstractMi
 {
     public function up($modus)
     {
+        $options = [
+            'editable' => false,
+            'forceSelection' => true,
+            'translateUsingSnippets' => true,
+            'namespace' => 'backend/application/main',
+            'store' => [
+                [
+                    0,
+                    [
+                        'snippet' => 'voucher_mode_not_show',
+                        'en_GB' => 'No',
+                        'de_DE' => 'Nein'
+                    ],
+                ],
+                [
+                    1,
+                    [
+                        'snippet' => 'voucher_mode_show_folded',
+                        'en_GB' => 'Collapsed',
+                        'de_DE' => 'Eingeklappt'
+                    ]
+                ],
+                [
+                    2,
+                    [
+                        'snippet' => 'voucher_mode_show_expanded',
+                        'en_GB' => 'Expanded',
+                        'de_DE' => 'Ausgeklappt'
+                    ]
+                ]
+            ]
+        ];
+
         $sql = <<<'SQL'
         SET @parent = (SELECT id FROM s_core_config_forms WHERE name = 'Checkout' LIMIT 1);
 
         INSERT IGNORE INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `options`) VALUES
-        (NULL, @parent, 'showVoucherModeForCheckout', 'i:2;', 'Gutscheinfeld im Bestellabschluss anzeigen', NULL, 'select', 0, 0, 0, 'a:2:{s:5:"store";s:37:"Shopware.apps.Base.store.VoucherModes";s:9:"queryMode";s:5:"local";}');
+        (NULL, @parent, 'showVoucherModeForCheckout', 'i:2;', 'Gutscheinfeld im Bestellabschluss anzeigen', NULL, 'select', 0, 0, 0, '%s');
 
         SET @voucherModeElementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'showVoucherModeForCheckout' LIMIT 1);
         INSERT IGNORE INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`)
@@ -40,7 +73,7 @@ class Migrations_Migration1607 extends Shopware\Components\Migrations\AbstractMi
 		UPDATE `s_core_config_elements` SET `description` = 'Artikel hinzuf&uuml;gen, Kommentarfunktion', name = 'commentArticle' WHERE id = @commentArticleElementId;
 		UPDATE `s_core_config_element_translations` SET description = 'Add product, comment function' WHERE element_id = @commentArticleElementId;
 SQL;
-        $this->addSql($sql);
+        $this->addSql(sprintf($sql, serialize($options)));
 
         if ($modus === self::MODUS_UPDATE) {
             $sql = <<<'SQL'
