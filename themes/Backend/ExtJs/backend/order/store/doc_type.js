@@ -76,4 +76,3 @@ Ext.define('Shopware.apps.Order.store.DocType', {
 
 });
 //{/block}
-

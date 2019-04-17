@@ -82,4 +82,3 @@ Ext.define('Shopware.apps.Blog.store.CategoryPath', {
     }
 });
 //{/block}
-

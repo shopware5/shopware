@@ -57,4 +57,3 @@ Ext.define('Shopware.apps.Base.model.Media', {
     ]
 });
 //{/block}
-

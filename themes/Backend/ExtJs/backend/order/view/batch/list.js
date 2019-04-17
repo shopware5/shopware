@@ -232,4 +232,3 @@ Ext.define('Shopware.apps.Order.view.batch.List', {
 
 });
 //{/block}
-

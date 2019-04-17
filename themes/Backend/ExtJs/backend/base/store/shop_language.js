@@ -38,4 +38,3 @@ Ext.define('Shopware.apps.Base.store.ShopLanguage', {
     storeId: 'base.ShopLanguage',
     filters: [ ]
 }).create();
-

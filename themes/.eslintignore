@@ -11,3 +11,8 @@ engine/Library/ExtJs/
 
 # Backend files
 Backend/ExtJs/backend/_resources/
+
+Backend/ExtJs/backend/article/view/detail/base.js
+Backend/ExtJs/backend/base/bootstrap.js
+Backend/ExtJs/backend/base/component/Shopware.form.field.TinyMCE.js
+Backend/ExtJs/backend/benchmark/template/local/js/components.js

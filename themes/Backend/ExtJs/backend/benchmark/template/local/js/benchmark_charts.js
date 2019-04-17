@@ -195,4 +195,3 @@
         $('*[data-benchmark-graph="true"]').benchmarkGraph();
     });
 })(jQuery);
-

@@ -97,4 +97,3 @@ Ext.define('Shopware.apps.Base.store.Supplier', {
         }
     }
 }).create();
-

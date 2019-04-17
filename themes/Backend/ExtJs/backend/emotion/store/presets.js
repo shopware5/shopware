@@ -75,4 +75,3 @@ Ext.define('Shopware.apps.Emotion.store.Presets', {
     }
 });
 //{/block}
-

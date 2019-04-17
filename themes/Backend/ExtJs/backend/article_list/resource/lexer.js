@@ -551,4 +551,3 @@ Ext.define('Lexer', {
         }
     }
 });
-

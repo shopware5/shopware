@@ -73,4 +73,3 @@ Ext.define('Shopware.apps.Article.store.ConfiguratorSet', {
 
 });
 //{/block}
-

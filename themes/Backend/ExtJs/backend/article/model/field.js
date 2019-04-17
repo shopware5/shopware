@@ -60,4 +60,3 @@ Ext.define('Shopware.apps.Article.model.Field', {
 
 });
 //{/block}
-

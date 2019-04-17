@@ -85,4 +85,3 @@ Ext.define('Shopware.apps.Emotion.store.Templates', {
     }
 });
 //{/block}
-

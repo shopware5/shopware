@@ -9,7 +9,7 @@
     "configBackend": "eslint --print-config Backend/ExtJs/backend"
   },
   "devDependencies": {
-    "eslint": "^3.19.0",
+    "eslint": "^5.16.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",

@@ -366,4 +366,3 @@ Ext.define('Shopware.apps.Article.view.esd.Detail', {
     }
 });
 //{/block}
-

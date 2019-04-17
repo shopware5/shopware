@@ -69,4 +69,3 @@ Ext.define('Shopware.apps.MediaManager.model.Media', {
     }
 });
 //{/block}
-

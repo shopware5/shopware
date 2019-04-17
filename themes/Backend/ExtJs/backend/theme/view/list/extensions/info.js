@@ -149,4 +149,3 @@ Ext.define('Shopware.apps.Theme.view.list.extensions.Info', {
 });
 
 //{/block}
-

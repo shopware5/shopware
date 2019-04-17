@@ -88,4 +88,3 @@ Ext.define('Shopware.apps.Order.store.Order', {
     ]
 });
 //{/block}
-

@@ -90,4 +90,3 @@ Ext.define('Shopware.apps.Base.model.Payment', {
     ]
 });
 //{/block}
-

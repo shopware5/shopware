@@ -58,5 +58,3 @@ Ext.define('Shopware.apps.Base.model.Captcha', {
 
 });
 //{/block}
-
-
