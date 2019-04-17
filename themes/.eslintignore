@@ -1,12 +1,13 @@
 Frontend/Responsive/frontend/_public/src/js/vendors/modernizr/
 Frontend/Responsive/frontend/_public/src/js/vendors/raphael/
 Frontend/Responsive/frontend/_public/vendors/js/**/*.js
-Backend/ExtJs/
 
 # The pre commit hook will be called in the root directory instead of the theme folder, therefore we have to define
 # them twice with the "themes" directory as prefix
 themes/Frontend/Responsive/frontend/_public/js/src/vendors/modernizr/
 themes/Frontend/Responsive/frontend/_public/js/src/vendors/raphael/
 themes/Frontend/Responsive/frontend/_public/vendors/js/**/*.js
-themes/Backend/ExtJs/
 engine/Library/ExtJs/
+
+# Backend files
+Backend/ExtJs/backend/_resources/
