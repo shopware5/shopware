@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
+abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
 {
     /**
      * @var Shopware_Plugins_Backend_Auth_Bootstrap

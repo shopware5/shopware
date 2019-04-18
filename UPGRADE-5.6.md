@@ -114,6 +114,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `sExport::sGetArticleCategoryPath` to allow various attributes in category path
 * Changed `Shopware_Controllers_Backend_Application` to be abstract
 * Changed `Ext.ClassManager` to show better error messages on missing alias or class
+* Changed `Shopware_Controllers_Backend_Application` to abstract
+* Changed `Shopware_Controllers_Backend_ExtJs` to abstract
 
 ### Removals
 

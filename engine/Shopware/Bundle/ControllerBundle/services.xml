@@ -7,6 +7,7 @@
     <parameters>
         <parameter type="collection" key="shopware.controller.blacklisted_controllers">
             <parameter type="string">Shopware_Controllers_Backend_Application</parameter>
+            <parameter type="string">Shopware_Controllers_Backend_ExtJs</parameter>
         </parameter>
     </parameters>
 
