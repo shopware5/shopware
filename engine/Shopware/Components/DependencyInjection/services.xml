@@ -212,6 +212,9 @@
         <service id="shopware.event_manager" alias="events" public="true"/>
         <service id="events" class="Shopware\Components\ContainerAwareEventManager" public="true">
             <argument type="service" id="service_container"/>
+            <call method="setLogger">
+                <argument type="service" id="corelogger"/>
+            </call>
         </service>
 
         <service id="shopware.hook_manager" alias="hooks" />
