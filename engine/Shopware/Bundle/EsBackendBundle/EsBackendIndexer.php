@@ -108,7 +108,7 @@ class EsBackendIndexer
                 }
 
                 if (is_string($value)) {
-                    $value = strtolower($value);
+                    $value = mb_strtolower($value);
                 }
             }
 
