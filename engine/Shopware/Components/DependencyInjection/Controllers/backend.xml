@@ -255,5 +255,9 @@
         <service id="shopware_controllers_backend_widgets" class="Shopware_Controllers_Backend_Widgets">
             <tag name="shopware.controller" module="backend" controller="widgets"/>
         </service>
+
+        <service id="shopware_controllers_backend_manual_sorting" class="Shopware\Controllers\Backend\ManualSorting">
+            <tag name="shopware.controller" module="backend" controller="manualsorting"/>
+        </service>
     </services>
 </container>

@@ -457,6 +457,11 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
 
         $this->Request()->setAttribute('_controller', $this->Request()->getAttribute('controllerId') . ':' . $actionMethodName);
 
-        return $this->container->get('argument_resolver')->getArguments($this->Request(), $controllerArray);
+        try {
+            return $this->container->get('argument_resolver')->getArguments($this->Request(), $controllerArray);
+        } catch (\ReflectionException $e) {
+            // Invalid action called
+            return [];
+        }
     }
 }

@@ -143,9 +143,9 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
         $query = $this->queryBuilderFactory->createQuery($reverted, $context);
         $query->resetQueryPart('orderBy');
         $query->resetQueryPart('groupBy');
-        $query->select(['productCategory.categoryID']);
-        $query->innerJoin('product', 's_articles_categories_ro', 'productCategory', 'productCategory.articleID = product.id');
-        $query->groupBy('productCategory.categoryID');
+        $query->select(['productCategoryFacet.categoryID']);
+        $query->innerJoin('product', 's_articles_categories_ro', 'productCategoryFacet', 'productCategoryFacet.articleID = product.id');
+        $query->groupBy('productCategoryFacet.categoryID');
 
         return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
     }

@@ -60,15 +60,12 @@ class ProductMapping implements MappingInterface
      */
     private $isDynamic;
 
-    /**
-     * @param bool $isDynamic
-     */
     public function __construct(
         IdentifierSelector $identifierSelector,
         FieldMappingInterface $fieldMapping,
         TextMappingInterface $textMapping,
         CrudService $crudService,
-        $isDynamic = true
+        bool $isDynamic = true
     ) {
         $this->identifierSelector = $identifierSelector;
         $this->fieldMapping = $fieldMapping;
@@ -162,6 +159,7 @@ class ProductMapping implements MappingInterface
                 'configuration' => $this->getVariantOptionsMapping($shop),
 
                 'voteAverage' => $this->getVoteAverageMapping(),
+                'manualSorting' => $this->getManualMapping(),
             ],
         ];
     }
@@ -362,6 +360,17 @@ class ProductMapping implements MappingInterface
                         'description' => $this->fieldMapping->getLanguageField($shop),
                     ],
                 ],
+            ],
+        ];
+    }
+
+    private function getManualMapping(): array
+    {
+        return [
+            'type' => 'nested',
+            'properties' => [
+                'category_id' => ['type' => 'long'],
+                'position' => ['type' => 'long'],
             ],
         ];
     }

@@ -31,6 +31,21 @@ Ext.define('Shopware.apps.Config.view.element.CustomSortingGrid', {
 
         me.store = factory.createEntitySearchStore("Shopware\\Models\\Search\\CustomSorting");
         me.searchStore = factory.createEntitySearchStore("Shopware\\Models\\Search\\CustomSorting");
+
+        me.store.remoteFilter = true;
+        me.store.filter({
+            property: 'sortings',
+            expression: 'NOT LIKE',
+            value: '%ManualSorting%'
+        });
+
+        me.searchStore.remoteFilter = true;
+        me.searchStore.filter({
+            property: 'sortings',
+            expression: 'NOT LIKE',
+            value: '%ManualSorting%'
+        });
+
         me.callParent(arguments);
 
         if (me.value) {

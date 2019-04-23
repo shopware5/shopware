@@ -56,7 +56,18 @@ Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
     },
 
     createSortingCombo: function() {
-        var me = this;
+        var me = this,
+            store = me.createEntitySearchStore(
+                "Shopware\\Models\\Search\\CustomSorting",
+                'Shopware.apps.Base.model.CustomSorting'
+            );
+
+        store.remoteFilter = true;
+        store.filter({
+            property: 'sortings',
+            expression: 'NOT LIKE',
+            value: '%ManualSorting%'
+        });
 
         me.sortingCombo = Ext.create('Shopware.form.field.SingleSelection', {
             fieldLabel: '{s name=sorting}Sorting{/s}',
@@ -64,10 +75,7 @@ Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
             allowBlank: false,
             forceSelection: true,
             anchor: '100%',
-            store: me.createEntitySearchStore(
-                "Shopware\\Models\\Search\\CustomSorting",
-                'Shopware.apps.Base.model.CustomSorting'
-            )
+            store: store
         });
 
         return me.sortingCombo;

@@ -26,6 +26,7 @@ namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\CategoryConditionHandler;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
@@ -56,6 +57,22 @@ class CategoryConditionTest extends TestCase
             null,
             [$condition]
         );
+    }
+
+    public function testConditionCounter(): void
+    {
+        $queryFactory = Shopware()->Container()->get('shopware_searchdbal.dbal_query_builder_factory');
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+
+        $criteria = new Criteria();
+        $criteria->addBaseCondition(new CategoryCondition([1]));
+        $criteria->addCondition(new CategoryCondition([2]));
+
+        /** @var \Shopware\Bundle\SearchBundleDBAL\QueryBuilder $query */
+        $query = $queryFactory->createQuery($criteria, $context);
+
+        static::assertTrue($query->hasState(CategoryConditionHandler::STATE_NAME));
+        static::assertTrue($query->hasState(CategoryConditionHandler::STATE_NAME . '2'));
     }
 
     protected function getProduct(

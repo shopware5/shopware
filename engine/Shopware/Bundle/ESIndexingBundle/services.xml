@@ -147,6 +147,7 @@
             <argument type="service" id="shopware_elastic_search.product_configuration_loader"/>
             <argument type="service" id="shopware_elastic_search.product_listing_variation_loader"/>
             <argument type="service" id="shopware_attribute.crud_service"/>
+            <argument type="service" id="shopware_bundle_esindexing.product.product_manual_position_loader"/>
         </service>
 
         <service id="shopware_elastic_search.product_mapping"
@@ -156,6 +157,7 @@
             <argument type="service" id="shopware_elastic_search.text_mapping"/>
             <argument type="service" id="shopware_attribute.crud_service"/>
             <argument>%shopware.es.dynamic_mapping_enabled%</argument>
+            <argument type="service" id="dbal_connection"/>
 
             <tag name="shopware_elastic_search.mapping"/>
         </service>
@@ -194,6 +196,10 @@
             <argument id="shopware_storefront.configurator_hydrator_dbal" type="service"/>
             <argument id="shopware_storefront.field_helper_dbal" type="service"/>
             <argument type="service" id="config"/>
+        </service>
+
+        <service class="Shopware\Bundle\ESIndexingBundle\Product\ProductManualPositionLoader" id="shopware_bundle_esindexing.product.product_manual_position_loader">
+            <argument type="service" id="dbal_connection"/>
         </service>
 
         <!-- Commands -->

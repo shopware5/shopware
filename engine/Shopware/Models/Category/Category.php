@@ -25,6 +25,7 @@
 namespace Shopware\Models\Category;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\ProductStream\ProductStream;
@@ -365,12 +366,23 @@ class Category extends ModelEntity
      */
     private $mediaId;
 
+    /**
+     * INVERSE SIDE
+     *
+     * @var Collection<ManualSorting>
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Category\ManualSorting", mappedBy="category", cascade={"all"}, orphanRemoval=true))
+     * @ORM\OrderBy({"position" = "ASC"})
+     */
+    private $manualSorting;
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
         $this->articles = new ArrayCollection();
         $this->allArticles = new ArrayCollection();
         $this->emotions = new ArrayCollection();
+        $this->manualSorting = new ArrayCollection();
         $this->changed = new \DateTime();
         $this->added = new \DateTime();
     }
@@ -386,7 +398,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getId()
     {
@@ -1103,6 +1115,24 @@ class Category extends ModelEntity
         $this->shops = $shops;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<ManualSorting>
+     */
+    public function getManualSorting(): Collection
+    {
+        return $this->manualSorting;
+    }
+
+    /**
+     * @param ManualSorting[]|null $manualSorting
+     *
+     * @return $this
+     */
+    public function setManualSorting(?array $manualSorting): Category
+    {
+        return $this->setOneToMany($manualSorting, ManualSorting::class, 'manualSorting', 'category');
     }
 
     /**

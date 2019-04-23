@@ -57,7 +57,8 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.SortingSelection', {
             Ext.create('Shopware.apps.Config.view.custom_search.sorting.classes.ReleaseDateSorting'),
             Ext.create('Shopware.apps.Config.view.custom_search.sorting.classes.SearchRankingSorting'),
             Ext.create('Shopware.apps.Config.view.custom_search.sorting.classes.ProductAttributeSorting'),
-            Ext.create('Shopware.apps.Config.view.custom_search.sorting.classes.ProductStockSorting')
+            Ext.create('Shopware.apps.Config.view.custom_search.sorting.classes.ProductStockSorting'),
+            Ext.create('Shopware.apps.Config.view.custom_search.sorting.classes.ManualSorting')
         ];
     },
 
