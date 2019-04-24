@@ -1,8 +1,20 @@
 Important:
-Shopware is licensed under a dual license. To check which license / edition of Shopware you have installed, please open the "About shopware" dialog in the backend.
-The following terms are important regarding the Shopware Community Edition, licensed under AGPL V3:
 
-For shopware community edition which stands under agpl license the following terms are significantly:
+  Shopware is licensed under a dual license. To check which
+license / edition of Shopware you have installed, please open
+the "About shopware" dialog in the backend.
+
+Additional permission under AGPLv3, Sec. 7:
+
+  If you modify this Program, or any covered work, by combining it
+with Plugins entirely written by you, the licensors of this Program
+grant you additional permission to convey those Plugins under terms
+of your choice, provided that those terms do not place additional
+restrictions on the Program.
+
+The following terms are important regarding the Shopware Community Edition, licensed under AGPLv3:
+
+For shopware community edition which stands under AGPL license the following terms are significant:
 
                     GNU AFFERO GENERAL PUBLIC LICENSE
                        Version 3, 19 November 2007
