@@ -21,6 +21,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed the album selection in the media manager for the blog images to show all images
 * Changed `Blog` and `Listing` controllers to throw an exception if a blog category-id is passed to the `Listing` controller or vice versa
 * Changed `EsBackendIndexer` to improve support for unicode characters
+* Changed `mediaselectionfield` to work also with enabled translation in tabs
 
 ## 5.5.8
 
