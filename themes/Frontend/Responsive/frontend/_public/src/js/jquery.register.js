@@ -466,7 +466,7 @@
             me.$inputs.each(function () {
                 $input = $(this);
 
-                if (!$input.val()) {
+                if (!$input.val() && $input.attr('required')) {
                     me.setFieldAsError($input);
                 }
             });
