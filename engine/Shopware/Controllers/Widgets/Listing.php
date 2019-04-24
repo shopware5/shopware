@@ -233,12 +233,19 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     public function getCustomPageAction()
     {
-        $pageId = (int) $this->Request()->getParam('pageId', 0);
-        $groupKey = $this->Request()->getParam('groupKey', 'left');
+        $shopPageGateway = $this->container->get('shopware_storefront.shop_page_service');
+        $list = $shopPageGateway->getList(
+            [(int) $this->Request()->getParam('pageId', 0)],
+            $this->container->get('shopware_storefront.context_service')->getShopContext()
+        );
 
-        $customPage = Shopware()->Modules()->Cms()->sGetStaticPageChildrensById($pageId, $groupKey);
+        $list = $this->container->get('legacy_struct_converter')->convertShopPageStructList($list);
+        $page = current($list);
 
-        $this->View()->assign('customPage', $customPage);
+        $this->View()->assign('customPage', [
+            'parent' => $page,
+            'children' => $page['children'],
+        ]);
     }
 
     /**

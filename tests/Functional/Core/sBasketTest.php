@@ -1273,6 +1273,81 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     /**
      * @covers \sBasket::sAddVoucher
      */
+    public function testsAddVoucherWithCurrencyFactor()
+    {
+        // Prepare a voucher
+        $voucherData = [
+            'vouchercode' => 'testOne',
+            'description' => 'testOne description',
+            'numberofunits' => 1,
+            'value' => 10,
+            'minimumcharge' => 10,
+            'ordercode' => uniqid(rand()),
+            'modus' => 0,
+        ];
+        $this->db->insert(
+            's_emarketing_vouchers',
+            $voucherData
+        );
+
+        // Fetch a random article
+        $randomArticle = $this->db->fetchRow(
+            'SELECT * FROM s_articles_details detail
+            INNER JOIN s_articles article
+              ON article.id = detail.articleID
+            WHERE detail.active = 1
+            LIMIT 1'
+        );
+
+        // Generate session id
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
+        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+
+        // Define different currency factors to test
+        $currencyFactors = [0, .5, 1, 1.5, 2];
+
+        foreach ($currencyFactors as $currencyFactor) {
+            // If the currency factor is set to 0, a fallback of 1 should be used
+            $currencyFactorForCalculation = $currencyFactor ?: 1;
+
+            // Prepare values to test against later
+            $deltaBetweenVoucherAndArticlePrice = 1;
+            $this->module->sSYSTEM->sCurrency['factor'] = $currencyFactor;
+            $basketAmountWithoutVoucher = $voucherData['minimumcharge'] * $currencyFactorForCalculation + $deltaBetweenVoucherAndArticlePrice;
+
+            // Add one article to the basket with enough value to use discount
+            $this->db->insert(
+                's_order_basket',
+                [
+                    'price' => $basketAmountWithoutVoucher,
+                    'quantity' => 1,
+                    'sessionID' => $this->session->get('sessionId'),
+                    'ordernumber' => $randomArticle['ordernumber'],
+                    'articleID' => $randomArticle['articleID'],
+                ]
+            );
+
+            static::assertEquals($basketAmountWithoutVoucher, $this->module->sGetAmount()['totalAmount']);
+            static::assertTrue($this->module->sAddVoucher($voucherData['vouchercode']));
+            static::assertEquals($deltaBetweenVoucherAndArticlePrice, $this->module->sGetAmount()['totalAmount']);
+
+            // Housekeeping
+            $this->db->delete(
+                's_order_basket',
+                ['sessionID = ?' => $this->session->get('sessionId')]
+            );
+        }
+
+        // Housekeeping
+        $this->db->delete(
+            's_emarketing_vouchers',
+            ['vouchercode = ?' => $voucherData['vouchercode']]
+        );
+    }
+
+    /**
+     * @covers \sBasket::sAddVoucher
+     */
     public function testsAddVoucherWithSupplier()
     {
         $randomArticleOne = $this->db->fetchRow(

@@ -1008,6 +1008,37 @@ class LegacyStructConverter
     }
 
     /**
+     * @return array
+     */
+    public function convertShopPageStruct(StoreFrontBundle\Struct\ShopPage $shopPage)
+    {
+        $data = $shopPage->jsonSerialize();
+
+        $data = $data + [
+            'attributes' => $shopPage->getAttributes(),
+        ];
+
+        if ($shopPage->hasAttribute('core')) {
+            $data['attribute'] = $shopPage->getAttribute('core')->jsonSerialize();
+        }
+
+        $data['children'] = $this->convertShopPageStructList($shopPage->getChildren());
+        $data['parentID'] = $shopPage->getParentId();
+
+        return $data;
+    }
+
+    /**
+     * @param StoreFrontBundle\Struct\ShopPage[] $shopPages
+     *
+     * @return array
+     */
+    public function convertShopPageStructList(array $shopPages)
+    {
+        return array_map([$this, 'convertShopPageStruct'], $shopPages);
+    }
+
+    /**
      * Returns the count of children categories of the provided category
      *
      * @param int $id
@@ -1058,13 +1089,13 @@ class LegacyStructConverter
      *
      * @param float $price
      *
-     * @return float price
+     * @return string price
      */
     private function sFormatPrice($price)
     {
-        $price = str_replace(',', '.', $price);
+        $price = str_replace(',', '.', (string) $price);
         $price = $this->sRound($price);
-        $price = str_replace('.', ',', $price); // Replaces points with commas
+        $price = str_replace('.', ',', (string) $price); // Replaces points with commas
         $commaPos = strpos($price, ',');
         if ($commaPos) {
             $part = substr($price, $commaPos + 1, strlen($price) - $commaPos);
@@ -1099,7 +1130,7 @@ class LegacyStructConverter
 
         $money_str = $money_str[0] . '.' . $money_str[1];
 
-        return round($money_str, 2);
+        return round((float) $money_str, 2);
     }
 
     /**

@@ -182,9 +182,6 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
         return new QueryBuilder($this->connection);
     }
 
-    /**
-     * @throws \Exception
-     */
     private function addConditions(Criteria $criteria, QueryBuilder $query, ShopContextInterface $context)
     {
         foreach ($criteria->getConditions() as $condition) {
@@ -193,9 +190,6 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
         }
     }
 
-    /**
-     * @throws \Exception
-     */
     private function addSorting(Criteria $criteria, QueryBuilder $query, ShopContextInterface $context)
     {
         foreach ($criteria->getSortings() as $sorting) {
@@ -238,9 +232,6 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     }
 
     /**
-     * @throws \RuntimeException
-     * @throws \Enlight_Event_Exception
-     *
      * @return SortingHandlerInterface[]
      */
     private function registerSortingHandlers()
@@ -257,9 +248,6 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     }
 
     /**
-     * @throws \RuntimeException
-     * @throws \Enlight_Event_Exception
-     *
      * @return ConditionHandlerInterface[]
      */
     private function registerConditionHandlers()

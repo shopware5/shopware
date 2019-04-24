@@ -69,7 +69,7 @@ class Url
      * @param \DateTimeInterface $lastmod
      * @param string             $changefreq
      * @param string             $resource
-     * @param int                $identifier
+     * @param int|null           $identifier
      * @param float              $priority
      */
     public function __construct($loc, $lastmod, $changefreq, $resource, $identifier, $priority = 0.5)

@@ -36,6 +36,7 @@ class ComponentInstaller
         'cls' => '',
         'xtype' => 'emotion-components-base',
     ];
+
     /**
      * @var ModelManager
      */
@@ -57,6 +58,7 @@ class ComponentInstaller
     public function createOrUpdate($pluginName, $componentName, array $data)
     {
         $repo = $this->em->getRepository(Plugin::class);
+        /** @var Plugin|null $plugin */
         $plugin = $repo->findOneBy(['name' => $pluginName]);
 
         if (!$plugin) {

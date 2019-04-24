@@ -24,10 +24,7 @@
 
 namespace Shopware\Bundle\EsBackendBundle\Searcher;
 
-use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
-use ONGR\ElasticsearchDSL\Query\TermLevel\TermQuery;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
-use Shopware\Models\Article\Article;
 
 class ProductSearcher extends GenericSearcher
 {
@@ -38,15 +35,6 @@ class ProductSearcher extends GenericSearcher
 
     protected function buildSearchObject(SearchCriteria $criteria)
     {
-        $search = parent::buildSearchObject($criteria);
-
-        if ($criteria->entity === Article::class) {
-            $search->addQuery(
-                new TermQuery('kind', 1),
-                BoolQuery::FILTER
-            );
-        }
-
-        return $search;
+        return parent::buildSearchObject($criteria);
     }
 }

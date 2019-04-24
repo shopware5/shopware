@@ -3,7 +3,7 @@ includes:
     #- ../vendor/phpstan/phpstan-phpunit/extension.neon
     #- ../vendor/phpstan/phpstan-doctrine/extension.neon
 parameters:
-    level: 4
+    level: 5
 
     autoload_directories:
         - %currentWorkingDirectory%/var/cache
@@ -31,18 +31,6 @@ parameters:
         - %currentWorkingDirectory%/engine/Shopware/Components/DependencyInjection/LegacyPhpDumper.php
         - %currentWorkingDirectory%/engine/Shopware/Components/ContainerAwareEventManager.php
         - %currentWorkingDirectory%/engine/Shopware/Components/Install/Database.php
-        # The following are added because of the Hack in Document/Document
-        - %currentWorkingDirectory%/engine/Shopware/Models/Order/Document/Document.php
-        - %currentWorkingDirectory%/engine/Shopware/Components/Api/Resource/Order.php
-        - %currentWorkingDirectory%/engine/Shopware/Components/Document.php
-        - %currentWorkingDirectory%/engine/Shopware/Controllers/Api/Orders.php
-        - %currentWorkingDirectory%/engine/Shopware/Controllers/Backend/CanceledOrder.php
-        - %currentWorkingDirectory%/engine/Shopware/Controllers/Backend/Order.php
-        - %currentWorkingDirectory%/engine/Shopware/Models/Order/Detail.php
-        - %currentWorkingDirectory%/engine/Shopware/Models/Order/Order.php
-        - %currentWorkingDirectory%/engine/Shopware/Models/Order/OrderHistorySubscriber.php
-        - %currentWorkingDirectory%/engine/Shopware/Models/Order/Repository.php
-        - %currentWorkingDirectory%/engine/Shopware/Bundle/EsBackendBundle/Subscriber/OrmBacklogSubscriber.php
 
     ignoreErrors:
         - '#apcu_#'
@@ -86,5 +74,26 @@ parameters:
         - '#Return type \(bool\) of method Shopware\\Components\\DependencyInjection\\Container\:\:load\(\) should be compatible with return type \(object\) of method Symfony\\Component\\DependencyInjection\\Container\:\:load\(\)#'
         # Broken return value of Components/Log/Handler/FirePHPHandler.php
         - '#Return type \(array\) of method Shopware\\Components\\Log\\Handler\\FirePHPHandler\:\:createRecordHeader\(\) should be compatible with return type \(string\) of method Monolog\\Handler\\FirePHPHandler\:\:createRecordHeader\(\)#'
+        # Interface / Implementation Switch
+        - '#expects Shopware\\Bundle\\SearchBundle\\Facet\\[a-zA-Z]+Facet, Shopware\\Bundle\\SearchBundle\\[a-zA-Z]+Interface given#'
+        - '#expects Shopware\\Bundle\\SearchBundle\\Condition\\[a-zA-Z]+Condition, Shopware\\Bundle\\SearchBundle\\[a-zA-Z]+Interface given#'
+        # Product/Shopcontext mixup
+        - '#expects Shopware\\Bundle\\StoreFrontBundle\\Struct\\ProductContextInterface, Shopware\\Bundle\\StoreFrontBundle\\Struct\\ShopContextInterface given#'
+        # Interfaces not being recognized
+        - '#expects Shopware\\Components\\Form\\Container\\[a-zA-Z]+, Shopware\\Components\\Form\\Interfaces\\Container given#'
+        - '#expects Doctrine\\ORM\\PersistentCollection, Doctrine\\Common\\Collections\\ArrayCollection&iterable<Shopware\\Models\\Shop\\TemplateConfig\\[a-zA-Z]+> given#'
+        - '#Parameter \#1 \$em of method Doctrine\\ORM\\EntityRepository::__construct\(\) expects Doctrine\\ORM\\EntityManager, Doctrine\\ORM\\EntityManagerInterface given#'
+        - '#Parameter \#1 \$sort of method Doctrine\\ORM\\QueryBuilder::addOrderBy\(\) expects Doctrine\\ORM\\Query\\Expr\\OrderBy|string, array given#'
+        - '#Parameter \#3 \$type of method Doctrine\\ORM\\QueryBuilder::setParameter\(\) expects string\|null, int given#'
+        - '#Parameter \#3 \$type of method Doctrine\\DBAL\\Query\\QueryBuilder::setParameter\(\) expects string\|null, int given#'
+        - '#Parameter \#1 \$reader of class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver constructor expects Doctrine\\Common\\Annotations\\AnnotationReader, Doctrine\\Common\\Annotations\\Reader given#'
+        - '#Parameter \#1 \$request of method Shopware\\Bundle\\SearchBundle\\CriteriaRequestHandlerInterface::handleRequest\(\) expects Enlight_Controller_Request_RequestHttp, Enlight_Controller_Request_Request given#'
+        # Container Issues
+        - '#Parameter \#2 \$service of method Symfony\\Component\\DependencyInjection\\ContainerInterface::set\(\) expects object, array<Shopware\\Bundle\\SearchBundleDBAL\\[a-zA-Z]+Interface> given#'
+        # Wrong type in ElasticsearchDSL, can be removed in 5.6
+        - '#Parameter \#2 \$value of class ONGR\\ElasticsearchDSL\\Query\\TermQuery constructor expects string#'
+        - '#Parameter \#2 \$value of class ONGR\\ElasticsearchDSL\\Query\\TermLevel\\TermQuery constructor expects string#'
+        - '#Parameter \#2 \$value of method ONGR\\ElasticsearchDSL\\Query\\Compound\\BoolQuery::addParameter\(\) expects array\|stdClass\|string#'
+        - '#Parameter \#2 \$value of method ONGR\\ElasticsearchDSL\\Aggregation\\AbstractAggregation::addParameter\(\) expects array\|stdClass\|string#'
 
     reportUnmatchedIgnoredErrors: false

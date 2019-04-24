@@ -36,6 +36,7 @@ use Shopware\Components\Random;
 use Shopware\Components\Routing\Context;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
+use Shopware\Models\Customer\Group;
 use Shopware_Components_Config;
 
 class RegisterService implements RegisterServiceInterface
@@ -180,7 +181,7 @@ class RegisterService implements RegisterServiceInterface
 
         // Account mode validation
         if ($customer->getAccountMode() == Customer::ACCOUNT_MODE_FAST_LOGIN) {
-            $customer->setPassword(md5(uniqid(rand())));
+            $customer->setPassword(md5(uniqid((string) rand())));
             $customer->setEncoderName('md5');
         }
 
@@ -188,18 +189,18 @@ class RegisterService implements RegisterServiceInterface
             $customer->setPaymentId($this->config->get('defaultPayment'));
         }
 
-        $customer->setShop(
-            $this->modelManager->find(\Shopware\Models\Shop\Shop::class, $shop->getParentId())
-        );
+        /** @var \Shopware\Models\Shop\Shop $shop */
+        $shop = $this->modelManager->find(\Shopware\Models\Shop\Shop::class, $shop->getParentId());
+        $customer->setShop($shop);
 
-        $customer->setLanguageSubShop(
-            $this->modelManager->find(\Shopware\Models\Shop\Shop::class, $shop->getId())
-        );
+        /** @var \Shopware\Models\Shop\Shop $subShop */
+        $subShop = $this->modelManager->find(\Shopware\Models\Shop\Shop::class, $shop->getId());
+        $customer->setLanguageSubShop($subShop);
 
         if ($customer->getGroup() === null) {
-            $customer->setGroup(
-                $this->modelManager->find(\Shopware\Models\Customer\Group::class, $shop->getCustomerGroup()->getId())
-            );
+            /** @var Group $customerGroup */
+            $customerGroup = $this->modelManager->find(\Shopware\Models\Customer\Group::class, $shop->getCustomerGroup()->getId());
+            $customer->setGroup($customerGroup);
         }
 
         if ($customer->getAffiliate()) {
@@ -209,7 +210,7 @@ class RegisterService implements RegisterServiceInterface
         }
 
         if (!$customer->getNumber() && $this->config->get('shopwareManagedCustomerNumbers')) {
-            $customer->setNumber($this->numberIncrementer->increment('user'));
+            $customer->setNumber((string) $this->numberIncrementer->increment('user'));
         }
 
         $this->validator->validate($customer);

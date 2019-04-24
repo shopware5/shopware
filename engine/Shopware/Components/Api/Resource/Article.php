@@ -1161,11 +1161,13 @@ class Article extends Resource implements BatchInterface
         foreach ($data['configuratorSet']['groups'] as $groupData) {
             $group = null;
             if (isset($groupData['id'])) {
+                /** @var Configurator\Group|null $group */
                 $group = $this->getManager()->getRepository(Configurator\Group::class)->find($groupData['id']);
                 if (!$group) {
                     throw new ApiException\CustomValidationException(sprintf('ConfiguratorGroup by id "%s" not found', $groupData['id']));
                 }
             } elseif (isset($groupData['name'])) {
+                /** @var Configurator\Group|null $group */
                 $group = $this->getManager()->getRepository(Configurator\Group::class)->findOneBy(['name' => $groupData['name']]);
 
                 if (!$group) {
@@ -1182,11 +1184,13 @@ class Article extends Resource implements BatchInterface
                 $option = null;
                 if ($group->getId() > 0) {
                     if (isset($optionData['id'])) {
+                        /** @var Configurator\Option|null $option */
                         $option = $this->getManager()->find(Configurator\Option::class, $optionData['id']);
                         if (!$option) {
                             throw new ApiException\CustomValidationException(sprintf('ConfiguratorOption by id "%s" not found', $optionData['id']));
                         }
                     } else {
+                        /** @var Configurator\Option|null $option */
                         $option = $this->getManager()->getRepository(Configurator\Option::class)->findOneBy([
                             'name' => $optionData['name'],
                             'groupId' => $group->getId(),
@@ -1689,6 +1693,7 @@ class Article extends Resource implements BatchInterface
                 if (isset($valueData['option'])) {
                     // Get option by id
                     if (isset($valueData['option']['id'])) {
+                        /** @var Option|null $option */
                         $option = $this->getManager()->getRepository(Option::class)->find($valueData['option']['id']);
                         if (!$option) {
                             throw new ApiException\CustomValidationException(sprintf('Property option by id "%s" not found', $valueData['option']['id']));

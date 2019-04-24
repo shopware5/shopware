@@ -2009,10 +2009,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of article votes.
      *
-     * @param array|null $filter
-     * @param array|null $offset
-     * @param int|null   $limit
-     * @param int|null   $order
+     * @param string|null $filter
+     * @param int|null    $offset
+     * @param int|null    $limit
+     * @param array|null  $order
      *
      * @return Query
      */

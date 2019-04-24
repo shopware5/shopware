@@ -621,7 +621,7 @@ class Billing extends ModelEntity
     /**
      * Setter for the state association
      *
-     * @param \Shopware\Models\Country\State $state
+     * @param \Shopware\Models\Country\State|null $state
      */
     public function setState($state)
     {

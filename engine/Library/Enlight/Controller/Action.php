@@ -72,7 +72,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     protected $container;
 
     /**
-     * @var string contains the name of the controller
+     * @var string Contains the name of the controller
      */
     protected $controller_name;
 

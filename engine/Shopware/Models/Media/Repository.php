@@ -25,6 +25,7 @@
 namespace Shopware\Models\Media;
 
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * The media repository used for the media manager backend module.
@@ -36,10 +37,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to access a list of media
      *
-     * @param string|null $filter
-     * @param string|null $orderBy
-     * @param int|null    $offset
-     * @param int|null    $limit
+     * @param array|null $filter
+     * @param array|null $orderBy
+     * @param int|null   $offset
+     * @param int|null   $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -58,13 +59,14 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getMediaListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param string $filter
-     * @param string $orderBy
+     * @param array $filter
+     * @param array $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getMediaListQueryBuilder($filter, $orderBy)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select('media')
                 ->from(\Shopware\Models\Media\Media::class, 'media');
@@ -82,12 +84,12 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select the media of the passed album id.
      * Used for the backend media manager listing of the media.
      *
-     * @param int                                          $albumId
-     * @param string|null                                  $filter
-     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $orderBy
-     * @param int|null                                     $offset
-     * @param int|null                                     $limit
-     * @param array|null                                   $validTypes
+     * @param int                                                $albumId
+     * @param string|null                                        $filter
+     * @param array|string|\Doctrine\ORM\Query\Expr\OrderBy|null $orderBy
+     * @param int|null                                           $offset
+     * @param int|null                                           $limit
+     * @param array|null                                         $validTypes
      *
      * @return \Doctrine\ORM\Query
      */

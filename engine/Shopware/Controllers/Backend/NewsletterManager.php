@@ -180,8 +180,9 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             return;
         }
 
-        $model = Shopware()->Models()->find(\Shopware\Models\Newsletter\Address::class, $id);
-        if ($model === null) {
+        /** @var \Shopware\Models\Newsletter\Newsletter|null $newsletter */
+        $newsletter = Shopware()->Models()->find(\Shopware\Models\Newsletter\Address::class, $id);
+        if ($newsletter === null) {
             $this->View()->assign([
                 'success' => false,
                 'message' => $this->translateMessage('error_msg/no_recipient', 'Recipient not found'),
@@ -190,13 +191,13 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             return;
         }
 
-        $model->setEmail($email);
-        $model->setGroupId($groupId);
+        $newsletter->setEmail($email);
+        $newsletter->setGroupId($groupId);
 
-        Shopware()->Models()->persist($model);
+        Shopware()->Models()->persist($newsletter);
         Shopware()->Models()->flush();
 
-        $this->View()->assign(['success' => true, 'data' => Shopware()->Models()->toArray($model)]);
+        $this->View()->assign(['success' => true, 'data' => Shopware()->Models()->toArray($newsletter)]);
     }
 
     /**

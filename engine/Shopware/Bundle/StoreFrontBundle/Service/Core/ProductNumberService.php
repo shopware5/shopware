@@ -130,7 +130,7 @@ class ProductNumberService implements ProductNumberServiceInterface
      *
      * @param string $number
      *
-     * @return string|false
+     * @return int|null
      */
     private function getProductIdByNumber($number)
     {

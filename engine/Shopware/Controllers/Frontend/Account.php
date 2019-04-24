@@ -402,6 +402,10 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         if ($this->isNotInUnitTestMode()) {
             exit;
         }
+
+        if ($this->isNotInUnitTestMode()) {
+            exit;
+        }
     }
 
     /**

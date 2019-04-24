@@ -73,6 +73,7 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     ) {
         if ($this->isSearchPage($request)) {
             $ids = $this->config->get('searchFacets', '');
+            /** @var int[] $ids */
             $ids = array_filter(explode('|', $ids));
             $customFacets = $this->facetService->getList($ids, $context);
         } elseif ($this->isCategoryListing($request)) {

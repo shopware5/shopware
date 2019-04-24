@@ -117,10 +117,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         /** @var ShopContextInterface $context */
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
-        /** @var \Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface $service */
-        $sortingService = $this->get('shopware_storefront.custom_sorting_service');
-
         if (!$this->Request()->getParam('sCategory')) {
+            /** @var \Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface $service */
+            $sortingService = $this->get('shopware_storefront.custom_sorting_service');
+
             $categoryId = $context->getShop()->getCategory()->getId();
 
             $this->Request()->setParam('sCategory', $categoryId);
@@ -131,6 +131,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $sortings = array_shift($sortings);
 
             $this->setDefaultSorting($sortings);
+
+            $this->view->assign('sortings', $sortings);
         }
 
         /** @var Criteria $criteria */
@@ -197,9 +199,9 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @param int    $categoryId
-     * @param bool   $withStreams
-     * @param string $streamId
+     * @param int  $categoryId
+     * @param bool $withStreams
+     * @param int  $streamId
      *
      * @return array
      */
@@ -231,8 +233,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @param string $categoryId
-     * @param string $streamId
+     * @param int $categoryId
+     * @param int $streamId
      *
      * @return bool
      */
@@ -308,8 +310,9 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $result = $this->get('shopware_search.product_number_search')->search($criteria, $context);
 
             if (count($result->getProducts()) === 1) {
+                $products = $result->getProducts();
                 /** @var \Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct $first */
-                $first = array_shift($result->getProducts());
+                $first = array_shift($products);
                 $location = ['controller' => 'detail', 'sArticle' => $first->getId()];
             }
         }
@@ -572,7 +575,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     private function loadCategoryContent($requestCategoryId)
     {
-        if ($requestCategoryId && !$this->isValidCategoryPath($requestCategoryId)) {
+        if (empty($requestCategoryId) && !$this->isValidCategoryPath($requestCategoryId)) {
             throw new Enlight_Controller_Exception(
                 'Listing category missing, non-existent or invalid for the current shop',
                 404
@@ -580,6 +583,14 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         }
 
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($requestCategoryId);
+        // Check if the requested category-id belongs to a blog category
+        if ($categoryContent['blog']) {
+            throw new Enlight_Controller_Exception(
+                'Listing category missing, non-existent or invalid for the current shop',
+                404
+            );
+        }
+
         Shopware()->System()->_GET['sCategory'] = $requestCategoryId;
 
         $this->View()->assign([

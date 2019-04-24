@@ -260,7 +260,7 @@ class Configuration extends BaseConfiguration
 
         // RedisCache->setRedis might configure igbinary as serializer, which might cause problems
         // this enforces the PHP serializer
-        $redis->setOption(\Redis::OPT_SERIALIZER, \Redis::SERIALIZER_PHP);
+        $redis->setOption(\Redis::OPT_SERIALIZER, (string) \Redis::SERIALIZER_PHP);
 
         return $cache;
     }

@@ -385,7 +385,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         ");
 
         foreach ($fetchLoggedInUsers as &$user) {
-            $user['customer'] = htmlentities($user['customer'], null, 'UTF-8');
+            $user['customer'] = htmlentities($user['customer'], ENT_COMPAT | ENT_HTML401, 'UTF-8');
         }
 
         $this->View()->assign(
@@ -562,9 +562,9 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $fetchUsersToUnlock = Shopware()->Container()->get('db')->fetchAll($sql);
 
         foreach ($fetchUsersToUnlock as &$user) {
-            $user['customergroup_name'] = htmlentities($user['customergroup_name'], null, 'UTF-8');
-            $user['company_name'] = htmlentities($user['company_name'], null, 'UTF-8');
-            $user['customer'] = htmlentities($user['customer'], null, 'UTF-8');
+            $user['customergroup_name'] = htmlentities($user['customergroup_name'], ENT_COMPAT | ENT_HTML401, 'UTF-8');
+            $user['company_name'] = htmlentities($user['company_name'], ENT_COMPAT | ENT_HTML401, 'UTF-8');
+            $user['customer'] = htmlentities($user['customer'], ENT_COMPAT | ENT_HTML401, 'UTF-8');
         }
 
         $this->View()->assign(['success' => true, 'data' => $fetchUsersToUnlock]);

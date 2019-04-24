@@ -25,7 +25,9 @@
 namespace Shopware\Bundle\SearchBundleES\DependencyInjection\Factory;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Elasticsearch\Client;
 use IteratorAggregate;
+use Shopware\Bundle\ESIndexingBundle\IndexFactory;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ProductNumberSearch;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -47,9 +49,14 @@ class ProductNumberSearchFactory
      */
     public function factory(ContainerInterface $container)
     {
+        /** @var Client $searchClient */
+        $searchClient = $container->get('shopware_elastic_search.client');
+        /** @var IndexFactory $indexFactory */
+        $indexFactory = $container->get('shopware_elastic_search.index_factory');
+
         return new ProductNumberSearch(
-            $container->get('shopware_elastic_search.client'),
-            $container->get('shopware_elastic_search.index_factory'),
+            $searchClient,
+            $indexFactory,
             $container->get('shopware_search_es.handler_collection')->toArray()
         );
     }

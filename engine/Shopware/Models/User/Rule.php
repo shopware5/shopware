@@ -194,7 +194,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\User\Privilege $privilege
+     * @param \Shopware\Models\User\Privilege|null $privilege
      */
     public function setPrivilege($privilege)
     {

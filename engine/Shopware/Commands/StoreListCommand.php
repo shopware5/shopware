@@ -57,7 +57,7 @@ class StoreListCommand extends StoreCommand
         $domain = $this->setupDomain($input, $output);
 
         $context = new LicenceRequest(
-            null,
+            '',
             $version,
             $domain,
             $token

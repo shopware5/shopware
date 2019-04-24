@@ -64,11 +64,11 @@ interface ResourceInterface
     /**
      * Create a queue from a given filterArray
      *
-     * @param array  $filterArray
-     * @param string $operations
-     * @param int    $offset
-     * @param int    $limit
-     * @param int    $queueId
+     * @param array $filterArray
+     * @param array $operations
+     * @param int   $offset
+     * @param int   $limit
+     * @param int   $queueId
      */
     public function createQueue($filterArray, $operations, $offset, $limit, $queueId);
 

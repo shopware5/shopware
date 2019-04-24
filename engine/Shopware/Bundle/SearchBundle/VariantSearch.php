@@ -64,7 +64,6 @@ class VariantSearch implements ProductSearchInterface
     public function search(Criteria $criteria, ProductContextInterface $context)
     {
         $result = $this->decorated->search($criteria, $context);
-
         if (!$criteria->hasConditionOfClass(VariantCondition::class)) {
             return $result;
         }

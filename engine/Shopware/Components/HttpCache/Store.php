@@ -309,7 +309,7 @@ class Store extends BaseStore
     /**
      * Delete all pages with the given cache id
      *
-     * @param int $id
+     * @param string $id
      *
      * @return bool
      */

@@ -86,14 +86,14 @@ EOF
             return 1;
         }
 
+        $installationContext = null;
+
         if ($plugin->getInstalled()) {
             $output->writeln(sprintf('The plugin %s is already installed.', $pluginName));
-
-            return 1;
+        } else {
+            $installationContext = $pluginManager->installPlugin($plugin);
+            $output->writeln(sprintf('Plugin %s has been installed successfully.', $pluginName));
         }
-
-        $installationContext = $pluginManager->installPlugin($plugin);
-        $output->writeln(sprintf('Plugin %s has been installed successfully.', $pluginName));
 
         $activationContext = null;
 

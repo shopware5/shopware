@@ -196,6 +196,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         $rolesRepository = Shopware()->Models()->getRepository(Role::class);
 
         if (!empty($id)) {
+            /** @var Role $role */
             $role = $rolesRepository->find((int) $id);
         } else {
             $role = new Role();
@@ -293,6 +294,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         $isNewUser = false;
 
         if (!empty($id)) {
+            /** @var User $user */
             $user = $this->getUserRepository()->find((int) $id);
         } else {
             $user = new User();
@@ -612,10 +614,14 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
             $rule->setRole($role);
 
             if (isset($newRule['resourceId'])) {
-                $rule->setResource(Shopware()->Models()->find(Resource::class, $newRule['resourceId']));
+                /** @var \Shopware\Models\User\Resource $resource */
+                $resource = Shopware()->Models()->find(Resource::class, $newRule['resourceId']);
+                $rule->setResource($resource);
             }
             if (isset($newRule['privilegeId'])) {
-                $rule->setPrivilege(Shopware()->Models()->find(Privilege::class, $newRule['privilegeId']));
+                /** @var \Shopware\Models\User\Privilege $privilege */
+                $privilege = Shopware()->Models()->find(Privilege::class, $newRule['privilegeId']);
+                $rule->setPrivilege($privilege);
             } else {
                 $rule->setPrivilege(null);
             }

@@ -1221,10 +1221,10 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $emotion->setElements($elements);
         $emotion->setTemplate($template);
         $emotion->setParentId(!empty($data['parentId']) ? $data['parentId'] : null);
-        $emotion->setActive(!empty($data['active']));
+        $emotion->setActive((int) !empty($data['active']));
         $emotion->setPosition(!empty($data['position']) ? $data['position'] : 1);
         $emotion->setShowListing(!empty($data['showListing']));
-        $emotion->setFullscreen(!empty($data['fullscreen']));
+        $emotion->setFullscreen((int) !empty($data['fullscreen']));
         $emotion->setDevice((!empty($data['device']) || $data['device'] === '0') ? $data['device'] : null);
         $emotion->setMode($data['mode']);
         $emotion->setRows($data['rows']);
@@ -1232,7 +1232,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $emotion->setCellSpacing($data['cellSpacing']);
         $emotion->setCellHeight($data['cellHeight']);
         $emotion->setArticleHeight($data['articleHeight']);
-        $emotion->setIsLandingPage(!empty($data['isLandingPage']));
+        $emotion->setIsLandingPage((int) !empty($data['isLandingPage']));
         $emotion->setSeoTitle($data['seoTitle']);
         $emotion->setSeoKeywords($data['seoKeywords']);
         $emotion->setSeoDescription($data['seoDescription']);

@@ -358,7 +358,8 @@ class SearchIndexer implements SearchIndexerInterface
             }
 
             unset($keyword['id']);
-            $field = array_pop(array_keys($keyword));
+            $keywords = array_keys($keyword);
+            $field = array_pop($keywords);
 
             $categoryTranslations = $translations[$id];
             foreach ($categoryTranslations as $translation) {

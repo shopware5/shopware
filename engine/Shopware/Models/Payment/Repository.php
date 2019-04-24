@@ -25,6 +25,7 @@
 namespace Shopware\Models\Payment;
 
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * Shopware Payment Model
@@ -167,6 +168,7 @@ class Repository extends ModelRepository
      */
     public function getListQueryBuilder($filter = null, $order = null, $offset = null, $limit = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select('payment', 'countries', 'shops', 'attribute')
             ->from($this->getEntityName(), 'payment')

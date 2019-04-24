@@ -402,7 +402,7 @@ return array_replace_recursive([
         /*
          * @deprecated since Shopware 5.5
          *
-         * Sorting of plugins will be active by default in 5.6 and this parameter will be removed with Shopware 5.7
+         * Sorting of plugins is active by default in 5.6 and this parameter will be removed with Shopware 5.7
          */
         'predictable_plugin_order' => true,
     ],

@@ -78,7 +78,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
      */
     public function get($id, Struct\ShopContextInterface $context)
     {
-        $categories = $this->getList($id, $context);
+        $categories = $this->getList([$id], $context);
 
         return array_shift($categories);
     }
@@ -106,8 +106,12 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
                 continue;
             }
 
+            /** @var int[] $ids */
+            $ids = explode(',', $mapping[$id]);
+
+            /** @var int[] $productCategories */
             $productCategories = $this->getProductCategories(
-                explode(',', $mapping[$id]),
+                $ids,
                 $categories
             );
             $result[$product->getNumber()] = $productCategories;

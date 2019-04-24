@@ -59,6 +59,7 @@ class PaymentInstaller
         ]);
 
         $pluginRepository = $this->em->getRepository(Plugin::class);
+        /** @var Plugin $plugin */
         $plugin = $pluginRepository->findOneBy([
             'name' => $pluginName,
         ]);

@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\HttpCache\CacheWarmer;
@@ -321,7 +322,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             $values[$shop->getId()] = $valueModel;
         }
 
-        $element->setValues($values);
+        $element->setValues(new ArrayCollection($values));
         $modelManager->flush($element);
     }
 

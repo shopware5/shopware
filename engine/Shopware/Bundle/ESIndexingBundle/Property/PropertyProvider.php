@@ -74,6 +74,7 @@ class PropertyProvider implements PropertyProviderInterface
     {
         $context = $this->contextService->createShopContext(
             $shop->getId(),
+            null,
             ContextService::FALLBACK_CUSTOMER_GROUP
         );
 

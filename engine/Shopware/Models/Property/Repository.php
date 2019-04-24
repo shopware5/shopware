@@ -82,10 +82,10 @@ class Repository extends ModelRepository
     /**
      * Receives all known property groups
      *
-     * @param array|null                                   $filter
-     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
-     * @param int                                          $limit
-     * @param int                                          $offset
+     * @param array|null                                         $filter
+     * @param array|string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
+     * @param int                                                $limit
+     * @param int                                                $offset
      *
      * @return \Doctrine\ORM\Query
      */

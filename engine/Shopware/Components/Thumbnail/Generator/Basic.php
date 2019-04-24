@@ -196,7 +196,7 @@ class Basic implements GeneratorInterface
      * @param resource $image
      * @param array    $originalSize
      * @param array    $newSize
-     * @param bool     $extension
+     * @param string   $extension
      *
      * @return resource
      */

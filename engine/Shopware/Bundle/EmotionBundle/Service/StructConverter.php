@@ -113,7 +113,7 @@ class StructConverter
         $elementArray['component']['cls'] = $element->getComponent()->getCssClass();
 
         $elementArray['data'] = array_merge($element->getConfig()->getAll(), $element->getData()->getAll());
-        $elementArray['data']['objectId'] = md5($element->getId());
+        $elementArray['data']['objectId'] = md5((string) $element->getId());
 
         switch ($element->getComponent()->getType()) {
             case BannerSliderComponentHandler::COMPONENT_NAME:

@@ -52,7 +52,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             $config->get('PageNotFoundCode', 404)
         );
         $this->View()->assign('sRelatedArticles', Shopware()->Modules()->Marketing()->sGetSimilarArticles(
-            $this->Request()->sArticle,
+            (int) $this->Request()->sArticle,
             4
         ));
     }

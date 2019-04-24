@@ -324,16 +324,6 @@ class Helper
         return $this->articleApi->create($data);
     }
 
-    /**
-     * @param int $id
-     *
-     * @return Models\Article\Article
-     */
-    public function updateArticle($id, array $data)
-    {
-        return $this->articleApi->update($id, $data);
-    }
-
     public function createArticleTranslation($articleId, $shopId)
     {
         $data = [
@@ -343,6 +333,16 @@ class Helper
             'data' => $this->getArticleTranslation(),
         ];
         $this->translationApi->create($data);
+    }
+
+    /**
+     * @param string $orderNumber
+     *
+     * @return Models\Article\Article
+     */
+    public function updateArticle($orderNumber, array $data)
+    {
+        return $this->articleApi->updateByNumber($orderNumber, $data);
     }
 
     public function createManufacturerTranslation($manufacturerId, $shopId)
@@ -955,13 +955,8 @@ class Helper
             return;
         }
 
-        try {
-            $client = Shopware()->Container()->get('shopware_elastic_search.client');
-            $client->indices()->delete(['index' => '_all']);
-        } catch (\Exception $e) {
-        }
-
         $indexer = Shopware()->Container()->get('shopware_elastic_search.shop_indexer');
+        $indexer->cleanupIndices();
         $indexer->index($shop, new ProgressHelper());
     }
 

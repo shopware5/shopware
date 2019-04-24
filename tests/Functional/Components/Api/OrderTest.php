@@ -96,7 +96,7 @@ class OrderTest extends TestCase
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $order = $this->resource->getOne($this->order['id']);
 
-        static::assertInstanceOf('\Shopware\Models\Order\Order', $order);
+        static::assertInstanceOf(\Shopware\Models\Order\Order::class, $order);
         static::assertEquals($this->order['id'], $order->getId());
     }
 
@@ -169,7 +169,7 @@ class OrderTest extends TestCase
         static::assertGreaterThanOrEqual(1, $result['total']);
         static::assertGreaterThanOrEqual(1, $result['data']);
 
-        static::assertInstanceOf('\Shopware\Models\Order\Order', $result['data'][0]);
+        static::assertInstanceOf(\Shopware\Models\Order\Order::class, $result['data'][0]);
     }
 
     /**
@@ -639,12 +639,10 @@ class OrderTest extends TestCase
     private function filterOrderId($order)
     {
         // Remove order Ids and order numbers
-        unset($order['id']);
-        unset($order['number']);
+        unset($order['id'], $order['number']);
 
         foreach ($order['details'] as &$detail) {
-            unset($detail['id']);
-            unset($detail['number']);
+            unset($detail['id'], $detail['number']);
         }
 
         return $order;

@@ -42,6 +42,7 @@ class Repository extends ModelRepository
      */
     public function getListQueryBuilder($filter = null, $orderBy = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['emotions', 'categories'])
             ->from(\Shopware\Models\Emotion\Emotion::class, 'emotions')
@@ -179,7 +180,7 @@ class Repository extends ModelRepository
             );
         }
 
-        // skip preview entries
+        // Skip preview entries
         $builder->andWhere('emotions.preview_id IS NULL');
 
         return $builder;
@@ -217,6 +218,7 @@ class Repository extends ModelRepository
      */
     public function getNameListQueryBuilder($filter = null, $orderBy = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['emotions.id', 'emotions.name'])
             ->from(\Shopware\Models\Emotion\Emotion::class, 'emotions');
@@ -411,6 +413,7 @@ class Repository extends ModelRepository
      */
     public function getEmotionElementsQuery($emotionId)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['elements', 'component']);
         $builder->from(Element::class, 'elements');

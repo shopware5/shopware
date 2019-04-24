@@ -62,7 +62,7 @@ class ProportionalTaxCalculator implements ProportionalTaxCalculatorInterface
         $discounts = [];
         /** @var Price $price */
         foreach ($prices as $price) {
-            $key = md5($price->getTaxRate());
+            $key = md5((string) $price->getTaxRate());
 
             if (!array_key_exists($key, $discounts)) {
                 $discounts[$key] = [

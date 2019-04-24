@@ -27,6 +27,7 @@ namespace Shopware\Components\Form\Persister;
 use Doctrine\ORM\PersistentCollection;
 use Shopware\Components\Form;
 use Shopware\Components\Form\Container;
+use Shopware\Components\Form\Interfaces\Container as ContainerInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Template;
 use Shopware\Models\Shop\TemplateConfig;
@@ -64,22 +65,24 @@ class Theme implements Form\Interfaces\Persister
 
         $entity = $this->createContainer($container, $template, $parent);
 
-        //do class switch to route the container to the responsible save function.
+        // Do class switch to route the container to the responsible save function.
         switch ($class) {
             case 'Shopware\\Components\\Form\\Container\\TabContainer':
                 $entity = $this->saveTabContainer($entity);
                 break;
 
             case 'Shopware\\Components\\Form\\Container\\Tab':
+                /** @var Form\Container\Tab $container */
                 $entity = $this->saveTab($entity, $container);
                 break;
 
             case 'Shopware\\Components\\Form\\Container\\FieldSet':
+                /** @var Form\Container\FieldSet $container */
                 $entity = $this->saveFieldSet($entity, $container);
                 break;
         }
 
-        //check for recursion
+        // Check for recursion
         foreach ($container->getElements() as $element) {
             if ($element instanceof Form\Interfaces\Container) {
                 $this->saveContainer($element, $template, $entity);
@@ -97,7 +100,7 @@ class Theme implements Form\Interfaces\Persister
      * @return TemplateConfig\Layout
      */
     private function createContainer(
-        Container $container,
+        ContainerInterface $container,
         Template $template,
         TemplateConfig\Layout $parent = null)
     {

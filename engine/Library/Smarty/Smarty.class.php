@@ -343,7 +343,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
     /**
      * implementation of security class
      *
-     * @var Smarty_Security
+     * @var Smarty_Security|null
      */
     public $security_policy = null;
     /**

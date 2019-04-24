@@ -516,7 +516,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getNumber()
     {
@@ -1076,7 +1076,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Order\History>
+     * @return ArrayCollection<\Shopware\Models\Order\History>
      */
     public function getHistory()
     {
@@ -1084,7 +1084,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Order\History>
+     * @param ArrayCollection<\Shopware\Models\Order\History> $history
      */
     public function setHistory($history)
     {
@@ -1111,7 +1111,7 @@ class Order extends ModelEntity
 
             $taxValue = $detail->getTaxRate();
 
-            // additional tax checks required for sw-2238, sw-2903 and sw-3164
+            // Additional tax checks required for sw-2238, sw-2903 and sw-3164
             if ($tax && $tax->getId() !== 0 && $tax->getId() !== null && $tax->getTax() !== null) {
                 $taxValue = $tax->getTax();
             }

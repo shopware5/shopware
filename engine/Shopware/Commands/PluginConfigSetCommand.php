@@ -26,6 +26,7 @@ namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Shop\Shop;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -104,14 +105,17 @@ class PluginConfigSetCommand extends ShopwareCommand
         }
 
         if ($shopId) {
-            $shop = $em->getRepository('Shopware\Models\Shop\Shop')->find($shopId);
+            /** @var Shop|null $shop */
+            $shop = $em->getRepository(Shop::class)->find($input->getOption('shop'));
+
             if (!$shop) {
                 $output->writeln(sprintf('Could not find shop with id %s.', $shopId));
 
                 return 1;
             }
         } else {
-            $shop = $em->getRepository('Shopware\Models\Shop\Shop')->findOneBy(['default' => true]);
+            /** @var Shop $shop */
+            $shop = $em->getRepository(Shop::class)->findOneBy(['default' => true]);
         }
 
         $rawValue = $input->getArgument('value');

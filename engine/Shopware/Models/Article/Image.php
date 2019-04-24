@@ -58,6 +58,7 @@ class Image extends ModelEntity
 
     /**
      * INVERSE SIDE
+     *
      * The mapping property contains the configuration for the variant images. One mapping contains one or many
      * rule sets which contains the configured configurator options.
      * Based on the image mapping, the variant images will be extended from the main image of the article.
@@ -433,7 +434,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @param Detail $articleDetail
+     * @param Detail|null $articleDetail
      */
     public function setArticleDetail($articleDetail)
     {

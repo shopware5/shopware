@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\MultiEdit\Resource\Product;
 
+use Shopware\Models\Article\Detail;
 use Shopware\Models\MultiEdit\QueueArticle;
 
 /**
@@ -121,11 +122,11 @@ class Queue
     /**
      * Create queue for a given filter array. If an queueId is passed, the existing queue will be used
      *
-     * @param array  $filterArray
-     * @param string $operations
-     * @param int    $offset
-     * @param int    $limit
-     * @param int    $queueId
+     * @param array $filterArray
+     * @param array $operations
+     * @param int   $offset
+     * @param int   $limit
+     * @param int   $queueId
      *
      * @throws \RuntimeException
      *
@@ -138,10 +139,12 @@ class Queue
         $filterString = $this->getFilterResource()->filterArrayToString($filterArray);
 
         $query = $this->getFilterResource()->getFilterQuery($filterArray, $offset, $limit);
+        /** @var int[] $results */
         list($results, $totalCount) = $this->getFilterResource()->getPaginatedResult($query);
 
         if (!empty($queueId)) {
             $newBackup = false;
+            /** @var \Shopware\Models\MultiEdit\Queue|null $queue */
             $queue = $entityManager->find(\Shopware\Models\MultiEdit\Queue::class, $queueId);
             if (!$queue) {
                 throw new \RuntimeException(sprintf('Queue with ID %s not found', $queueId));
@@ -173,9 +176,11 @@ class Queue
                 $entityManager->flush($model);
                 $entityManager->clear();
 
+                /** @var \Shopware\Models\MultiEdit\Queue $queue */
                 $queue = $entityManager->getReference(\Shopware\Models\MultiEdit\Queue::class, $queueId);
             }
 
+            /** @var Detail $detail */
             $detail = $entityManager->getReference(\Shopware\Models\Article\Detail::class, $detailId);
 
             $model = new QueueArticle();

@@ -187,7 +187,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         $response->headers->set('content-description', 'File Transfer');
         $response->headers->set('content-disposition', 'attachment; filename=' . $logFile);
         $response->headers->set('content-transfer-encoding', 'binary');
-        $response->headers->set('content-length', filesize($logFilePath));
+        $response->headers->set('content-length', (string) filesize($logFilePath));
         $response->sendHeaders();
 
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();

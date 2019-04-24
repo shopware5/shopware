@@ -207,8 +207,8 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param int   $number
-     * @param array $additionally
+     * @param string $number
+     * @param array  $additionally
      *
      * @return Article
      */

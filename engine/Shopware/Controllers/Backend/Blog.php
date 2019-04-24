@@ -191,6 +191,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
 
         if (!empty($id)) {
             // Edit Data
+            /** @var Blog $blogModel */
             $blogModel = $this->getManager()->getRepository(Blog::class)->find($id);
             // Deletes all old blog tags
             $this->deleteOldTags($id);
@@ -263,9 +264,9 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
      */
     public function getBlogCommentsAction()
     {
-        $limit = (int) $this->Request()->limit;
-        $offset = (int) $this->Request()->start;
-        //order data
+        $limit = (int) $this->Request()->getParam('limit');
+        $offset = (int) $this->Request()->getParam('start');
+        // Order data
         $order = (array) $this->Request()->getParam('sort', []);
 
         if (empty($order)) {
@@ -273,7 +274,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         }
         /** @var array $filter */
         $filter = $this->Request()->getParam('filter', []);
-        $blogId = (int) $this->Request()->blogId;
+        $blogId = (int) $this->Request()->getParam('blogId');
 
         $dataQuery = $this->getRepository()->getBlogCommentsById($blogId, $filter, $order, $offset, $limit);
         $totalCount = $this->getManager()->getQueryCount($dataQuery);
@@ -326,7 +327,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     public function deleteBlogArticleAction()
     {
         $multipleBlogArticles = $this->Request()->getPost('blogArticles');
-        $blogArticleRequestData = empty($multipleBlogArticles) ? [['id' => $this->Request()->id]] : $multipleBlogArticles;
+        $blogArticleRequestData = empty($multipleBlogArticles) ? [['id' => $this->Request()->getParam('id')]] : $multipleBlogArticles;
         try {
             foreach ($blogArticleRequestData as $blogArticle) {
                 /** @var \Shopware\Models\Blog\Blog $model */
@@ -346,7 +347,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     public function deleteBlogCommentAction()
     {
         $multipleBlogComments = $this->Request()->getPost('blogComments');
-        $blogCommentRequestData = empty($multipleBlogComments) ? [['id' => $this->Request()->id]] : $multipleBlogComments;
+        $blogCommentRequestData = empty($multipleBlogComments) ? [['id' => $this->Request()->getParam('id')]] : $multipleBlogComments;
         try {
             foreach ($blogCommentRequestData as $blogComment) {
                 /** @var \Shopware\Models\Blog\Comment $model */
@@ -466,7 +467,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         $mediaModels = [];
         foreach ($mediaData as $media) {
             $mediaModel = new Media();
-            $media['media'] = $this->getManager()->find('Shopware\Models\Media\Media', $media['mediaId']);
+            $media['media'] = $this->getManager()->find(\Shopware\Models\Media\Media::class, $media['mediaId']);
             unset($media['mediaId']);
             $mediaModel->fromArray($media);
             $mediaModels[] = $mediaModel;

@@ -48,7 +48,7 @@ class StoreListIntegratedCommand extends StoreCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $shopwareVersion = $this->container->getParameter('shopware.release.version');
-        $context = new ListingRequest(null, $shopwareVersion, 0, 1000, [['property' => 'dummy', 'value' => 1]], []);
+        $context = new ListingRequest('', $shopwareVersion, 0, 1000, [['property' => 'dummy', 'value' => 1]], []);
         $listing = $this->container->get('shopware_plugininstaller.plugin_service_view')->getStoreListing($context);
 
         $result = [];

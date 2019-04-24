@@ -146,10 +146,10 @@ class Backup
      * Depending on $newBackup a existing file will be appended or overwritten. The name of the backup is chosen
      * depending on $id.
      *
-     * @param string $detailIds
-     * @param array  $operations
-     * @param string $newBackup
-     * @param int    $id
+     * @param int[] $detailIds
+     * @param array $operations
+     * @param bool  $newBackup
+     * @param int   $id
      */
     public function create($detailIds, $operations, $newBackup, $id)
     {
@@ -175,7 +175,7 @@ class Backup
      *
      * @param string $filterString
      * @param array  $operations
-     * @param array  $items
+     * @param int    $items
      * @param int    $id
      */
     public function finishBackup($filterString, $operations, $items, $id)
@@ -249,7 +249,8 @@ class Backup
             }
 
             // Get one table and one data sql file
-            $table = array_pop(array_keys($tables));
+            $keys = array_keys($tables);
+            $table = array_pop($keys);
             $dataPath = array_pop($tables[$table]);
             $headerPath = $dir . '/' . $table . '.headersql';
             $footerPath = $dir . '/' . $table . '.footersql';
@@ -497,7 +498,7 @@ class Backup
      * @param string $path
      * @param string $filterString
      * @param array  $operations
-     * @param array  $items
+     * @param int    $items
      */
     protected function saveBackup($path, $filterString, $operations, $items)
     {

@@ -905,12 +905,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     {
         $order = Shopware()->Modules()->Order();
 
-        $orgBasketData = $this->View()->sBasket;
-        $this->View()->assign('sBasket', $this->getBasket(false));
+        $orgBasketData = $this->View()->getAssign('sBasket');
+        $normalizer = $this->container->get('shopware.components.cart.proportional_cart_normalizer');
 
         $order->sUserData = $this->View()->sUserData;
         $order->sComment = isset($this->session['sComment']) ? $this->session['sComment'] : '';
-        $order->sBasketData = $this->View()->sBasket;
+        $order->sBasketData = $normalizer->normalize($orgBasketData);
         $order->sAmount = $this->View()->sBasket['sAmount'];
         $order->sAmountWithTax = !empty($this->View()->sBasket['AmountWithTaxNumeric']) ? $this->View()->sBasket['AmountWithTaxNumeric'] : $this->View()->sBasket['AmountNumeric'];
         $order->sAmountNet = $this->View()->sBasket['AmountNetNumeric'];

@@ -476,6 +476,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
             throw new RuntimeException(sprintf('Could not decode "%s"', $this->Request()->getParam('filterArray')));
         }
 
+        /** @var array|false $operations */
         $operations = json_decode($operations, true);
         if ($operations === false) {
             throw new RuntimeException(sprintf('Could not decode "%s"', $this->Request()->getParam('operations')));

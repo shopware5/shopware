@@ -28,11 +28,10 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
-use Shopware\Models\Customer;
 
 /**
  * Repository for the customer model (Shopware\Models\Dispatch\Dispatch).
- * <br>
+ *
  * The dispatch models accumulates all data needed for a specific dispatch service
  */
 class Repository extends ModelRepository
@@ -87,16 +86,17 @@ class Repository extends ModelRepository
     /**
      * Returns all info about known shipping and dispatch settings
      *
-     * @param int        $dispatchId - If this parameter is given, only one data set will be returned
-     * @param array|null $filter     - Used to search in the name and description of the dispatch data set
-     * @param array      $order      - Name of the field which should considered as sorting field
-     * @param int|null   $limit      - Reduce the number of returned data sets
-     * @param int|null   $offset     - Start the output based on that offset
+     * @param int         $dispatchId - If this parameter is given, only one data set will be returned
+     * @param string|null $filter     - Used to search in the name and description of the dispatch data set
+     * @param array       $order      - Name of the field which should considered as sorting field
+     * @param int|null    $limit      - Reduce the number of returned data sets
+     * @param int|null    $offset     - Start the output based on that offset
      *
      * @return \Doctrine\ORM\Query
      */
     public function getShippingCostsQuery($dispatchId = null, $filter = null, $order = [], $limit = null, $offset = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getShippingCostsQueryBuilder($dispatchId, $filter, $order);
         if (!empty($offset)) {
             $builder->setFirstResult($offset);
@@ -111,15 +111,16 @@ class Repository extends ModelRepository
     /**
      * Returns basic info about known shipping and dispatch settings
      *
-     * @param array|null $filter - Used to search in the name and description of the dispatch data set
-     * @param array      $order  - Name of the field which should considered as sorting field
-     * @param int|null   $limit  - Reduce the number of returned data sets
-     * @param int|null   $offset - Start the output based on that offset
+     * @param string|null $filter - Used to search in the name and description of the dispatch data set
+     * @param array       $order  - Name of the field which should considered as sorting field
+     * @param int|null    $limit  - Reduce the number of returned data sets
+     * @param int|null    $offset - Start the output based on that offset
      *
      * @return \Doctrine\ORM\Query
      */
     public function getListQuery($filter = null, $order = [], $limit = null, $offset = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getListQueryBuilder($filter, $order);
         if (!empty($offset)) {
             $builder->setFirstResult($offset);
@@ -143,6 +144,7 @@ class Repository extends ModelRepository
      */
     public function getShippingCostsQueryBuilder($dispatchId = null, $filter = null, $order = [])
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->createQueryBuilder('dispatch');
 
         // Build the query
@@ -179,6 +181,7 @@ class Repository extends ModelRepository
      */
     public function getListQueryBuilder($filter = null, $order = [])
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->createQueryBuilder('dispatch');
 
         // Build the query
@@ -208,6 +211,7 @@ class Repository extends ModelRepository
      */
     public function getShippingCostsMatrixQuery($dispatchId = null, $filter = null, $limit = null, $offset = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getShippingCostsMatrixQueryBuilder($dispatchId);
 
         return $builder->getQuery();
@@ -285,6 +289,7 @@ class Repository extends ModelRepository
      */
     public function getPaymentQueryBuilder($filter = null, $order = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         $filters = [];
@@ -347,6 +352,7 @@ class Repository extends ModelRepository
                 $filters[$singleFilter['property']] = $singleFilter['value'];
             }
         }
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         // Build the query
@@ -381,7 +387,7 @@ class Repository extends ModelRepository
      */
     public function getHolidayQuery($filter = null, $order = null, $limit = null, $offset = null)
     {
-        // get the query and prepare the limit statement
+        /** @var QueryBuilder $builder */
         $builder = $this->getHolidayQueryBuilder($filter, $order);
         if ($offset !== null && $limit !== null) {
             $builder->setFirstResult($offset)

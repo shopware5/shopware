@@ -78,9 +78,9 @@ class Enlight_Plugin_Bootstrap_Config extends Enlight_Plugin_Bootstrap
      * are used to instantiate a new Enlight_Event_Handler_Plugin.
      * This Enlight_Event_Handler_Plugin is subscribed over the namespace subscriber.
      *
-     * @param string   $event
-     * @param callable $listener
-     * @param int      $position
+     * @param string|Enlight_Event_Handler|Enlight_Hook_HookHandler $event
+     * @param string|callable|null         $listener
+     * @param int                          $position
      *
      * @return Enlight_Plugin_Bootstrap_Config
      */

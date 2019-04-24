@@ -112,7 +112,7 @@ class Unit extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getName()
     {

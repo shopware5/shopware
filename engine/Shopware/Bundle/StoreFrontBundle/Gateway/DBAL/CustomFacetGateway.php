@@ -91,6 +91,9 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
         $facets = $this->getList($ids, $context);
 
         $categoryFacets = [];
+
+        /** @var int $categoryId */
+        /** @var int[] $facetIds */
         foreach ($mapping as $categoryId => $facetIds) {
             $categoryFacets[$categoryId] = $this->getAndSortElementsByIds($facetIds, $facets);
         }

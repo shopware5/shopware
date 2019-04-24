@@ -30,8 +30,8 @@ use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactory;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Components\ProductStream\RepositoryInterface;
 
 class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 {
@@ -175,7 +175,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     private function getProductSliderData($category, $offset, $limit, $sort = null)
     {
-        /** @var ContextService $context */
+        /** @var ShopContext $context */
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
         /** @var StoreFrontCriteriaFactory $factory */
         $factory = Shopware()->Container()->get('shopware_search.store_front_criteria_factory');
@@ -234,7 +234,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $criteria->offset($offset)
                  ->limit($limit);
 
-        /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
+        /** @var RepositoryInterface $streamRepository */
         $streamRepository = $this->get('shopware_product_stream.repository');
         $streamRepository->prepareCriteria($criteria, $productStreamId);
 
