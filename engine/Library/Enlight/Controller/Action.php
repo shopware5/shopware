@@ -77,11 +77,6 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     protected $controller_name;
 
     /**
-     * The Enlight_Controller_Action class constructor expects an instance of the
-     * Enlight_Controller_Request_Request and an instance of the Enlight_Controller_Response_Response.
-     * The response and request instance will be passed to the init events of the class and the controller.
-     *
-     *
      * @param Enlight_Controller_Request_RequestHttp   $request
      * @param Enlight_Controller_Response_ResponseHttp $response
      *
@@ -89,7 +84,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * @throws \Enlight_Exception
      * @throws \Enlight_Event_Exception
      */
-    public function __construct(Enlight_Controller_Request_RequestHttp $request,
+    public function initController(Enlight_Controller_Request_RequestHttp $request,
                                 Enlight_Controller_Response_ResponseHttp $response
     ) {
         $this->setRequest($request)->setResponse($response);
@@ -105,7 +100,9 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
             ['subject' => $this, 'request' => $this->Request(), 'response' => $this->Response()]
         );
 
-        parent::__construct();
+        if (method_exists($this, 'init')) {
+            $this->init();
+        }
     }
 
     /**
@@ -442,6 +439,17 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
 
     protected function getActionArguments(string $actionMethodName): array
     {
-        return [];
+        if (!$this->Request()->attributes->has('controllerId')) {
+            return [];
+        }
+
+        $controllerArray = [
+            $this,
+            $actionMethodName,
+        ];
+
+        $this->Request()->setAttribute('_controller', $this->Request()->getAttribute('controllerId') . ':' . $actionMethodName);
+
+        return $this->container->get('argument_resolver')->getArguments($this->Request(), $controllerArray);
     }
 }

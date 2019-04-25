@@ -22,10 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\ControllerBundle\RestController;
 use Shopware\Components\Api\Resource\PaymentMethods;
 
-class Shopware_Controllers_Api_PaymentMethods extends RestController
+class Shopware_Controllers_Api_PaymentMethods extends Shopware_Controllers_Api_Rest
 {
     /**
      * @var PaymentMethods

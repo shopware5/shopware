@@ -22,10 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\ControllerBundle\RestController;
 use Shopware\Components\Api\Resource\Order;
 
-class Shopware_Controllers_Api_Orders extends RestController
+class Shopware_Controllers_Api_Orders extends Shopware_Controllers_Api_Rest
 {
     /**
      * @var Shopware\Components\Api\Resource\Order

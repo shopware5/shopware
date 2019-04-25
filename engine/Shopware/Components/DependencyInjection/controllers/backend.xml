@@ -1,0 +1,259 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="shopware_controllers_backend_address" class="Shopware_Controllers_Backend_Address">
+            <tag name="shopware.controller" module="backend" controller="address"/>
+        </service>
+
+        <service id="shopware_controllers_backend_analytics" class="Shopware_Controllers_Backend_Analytics">
+            <tag name="shopware.controller" module="backend" controller="analytics"/>
+        </service>
+
+        <service id="shopware_controllers_backend_application" class="Shopware_Controllers_Backend_Application">
+            <tag name="shopware.controller" module="backend" controller="application"/>
+        </service>
+
+        <service id="shopware_controllers_backend_article" class="Shopware_Controllers_Backend_Article">
+            <tag name="shopware.controller" module="backend" controller="article"/>
+        </service>
+
+        <service id="shopware_controllers_backend_articlelist" class="Shopware_Controllers_Backend_ArticleList">
+            <tag name="shopware.controller" module="backend" controller="articlelist"/>
+        </service>
+
+        <service id="shopware_controllers_backend_articlepricevariation"
+                 class="Shopware_Controllers_Backend_ArticlePriceVariation">
+            <tag name="shopware.controller" module="backend" controller="articlepricevariation"/>
+        </service>
+
+        <service id="shopware_controllers_backend_banner" class="Shopware_Controllers_Backend_Banner">
+            <tag name="shopware.controller" module="backend" controller="banner"/>
+        </service>
+
+        <service id="shopware_controllers_backend_base" class="Shopware_Controllers_Backend_Base">
+            <tag name="shopware.controller" module="backend" controller="base"/>
+        </service>
+
+        <service id="shopware_controllers_backend_blog" class="Shopware_Controllers_Backend_Blog">
+            <tag name="shopware.controller" module="backend" controller="blog"/>
+        </service>
+
+        <service id="shopware_controllers_backend_csrftoken" class="Shopware_Controllers_Backend_CSRFToken">
+            <tag name="shopware.controller" module="backend" controller="csrftoken"/>
+        </service>
+
+        <service id="shopware_controllers_backend_cache" class="Shopware_Controllers_Backend_Cache">
+            <tag name="shopware.controller" module="backend" controller="cache"/>
+        </service>
+
+        <service id="shopware_controllers_backend_canceledorder" class="Shopware_Controllers_Backend_CanceledOrder">
+            <tag name="shopware.controller" module="backend" controller="canceledorder"/>
+        </service>
+
+        <service id="shopware_controllers_backend_category" class="Shopware_Controllers_Backend_Category">
+            <tag name="shopware.controller" module="backend" controller="category"/>
+        </service>
+
+        <service id="shopware_controllers_backend_config" class="Shopware_Controllers_Backend_Config">
+            <tag name="shopware.controller" module="backend" controller="config"/>
+        </service>
+
+        <service id="shopware_controllers_backend_corelicense" class="Shopware_Controllers_Backend_CoreLicense">
+            <tag name="shopware.controller" module="backend" controller="corelicense"/>
+        </service>
+        <service id="shopware_controllers_backend_customfacet" class="Shopware_Controllers_Backend_CustomFacet">
+            <tag name="shopware.controller" module="backend" controller="customfacet"/>
+        </service>
+
+        <service id="shopware_controllers_backend_customsorting" class="Shopware_Controllers_Backend_CustomSorting">
+            <tag name="shopware.controller" module="backend" controller="customsorting"/>
+        </service>
+
+        <service id="shopware_controllers_backend_customer" class="Shopware_Controllers_Backend_Customer">
+            <tag name="shopware.controller" module="backend" controller="customer"/>
+        </service>
+
+        <service id="shopware_controllers_backend_customerquickview"
+                 class="Shopware_Controllers_Backend_CustomerQuickView">
+            <tag name="shopware.controller" module="backend" controller="customerquickview"/>
+        </service>
+
+        <service id="shopware_controllers_backend_customerstream" class="Shopware_Controllers_Backend_CustomerStream">
+            <tag name="shopware.controller" module="backend" controller="customerstream"/>
+        </service>
+
+        <service id="shopware_controllers_backend_document" class="Shopware_Controllers_Backend_Document">
+            <tag name="shopware.controller" module="backend" controller="document"/>
+        </service>
+
+        <service id="shopware_controllers_backend_emotion" class="Shopware_Controllers_Backend_Emotion">
+            <tag name="shopware.controller" module="backend" controller="emotion"/>
+        </service>
+
+        <service id="shopware_controllers_backend_emotionpreset" class="Shopware_Controllers_Backend_EmotionPreset">
+            <tag name="shopware.controller" module="backend" controller="emotionpreset"/>
+        </service>
+
+        <service id="shopware_controllers_backend_error" class="Shopware_Controllers_Backend_Error">
+            <tag name="shopware.controller" module="backend" controller="error"/>
+        </service>
+
+        <service id="shopware_controllers_backend_export" class="Shopware_Controllers_Backend_Export">
+            <tag name="shopware.controller" module="backend" controller="export"/>
+        </service>
+
+        <service id="shopware_controllers_backend_extjs" class="Shopware_Controllers_Backend_ExtJs">
+            <tag name="shopware.controller" module="backend" controller="extjs"/>
+        </service>
+
+        <service id="shopware_controllers_backend_feedback" class="Shopware_Controllers_Backend_Feedback">
+            <tag name="shopware.controller" module="backend" controller="feedback"/>
+        </service>
+
+        <service id="shopware_controllers_backend_firstrunwizard" class="Shopware_Controllers_Backend_FirstRunWizard">
+            <tag name="shopware.controller" module="backend" controller="firstrunwizard"/>
+        </service>
+
+        <service id="shopware_controllers_backend_firstrunwizardpluginmanager"
+                 class="Shopware_Controllers_Backend_FirstRunWizardPluginManager">
+            <tag name="shopware.controller" module="backend" controller="firstrunwizardpluginmanager"/>
+        </service>
+
+        <service id="shopware_controllers_backend_form" class="Shopware_Controllers_Backend_Form">
+            <tag name="shopware.controller" module="backend" controller="form"/>
+        </service>
+
+        <service id="shopware_controllers_backend_index" class="Shopware_Controllers_Backend_Index">
+            <tag name="shopware.controller" module="backend" controller="index"/>
+        </service>
+
+        <service id="shopware_controllers_backend_log" class="Shopware_Controllers_Backend_Log">
+            <tag name="shopware.controller" module="backend" controller="log"/>
+        </service>
+
+        <service id="shopware_controllers_backend_login" class="Shopware_Controllers_Backend_Login">
+            <tag name="shopware.controller" module="backend" controller="login"/>
+        </service>
+
+        <service id="shopware_controllers_backend_mail" class="Shopware_Controllers_Backend_Mail">
+            <tag name="shopware.controller" module="backend" controller="mail"/>
+        </service>
+
+        <service id="shopware_controllers_backend_mediamanager" class="Shopware_Controllers_Backend_MediaManager">
+            <tag name="shopware.controller" module="backend" controller="mediamanager"/>
+        </service>
+
+        <service id="shopware_controllers_backend_newsletter" class="Shopware_Controllers_Backend_Newsletter">
+            <tag name="shopware.controller" module="backend" controller="newsletter"/>
+        </service>
+
+        <service id="shopware_controllers_backend_newslettermanager"
+                 class="Shopware_Controllers_Backend_NewsletterManager">
+            <tag name="shopware.controller" module="backend" controller="newslettermanager"/>
+        </service>
+
+        <service id="shopware_controllers_backend_notification" class="Shopware_Controllers_Backend_Notification">
+            <tag name="shopware.controller" module="backend" controller="notification"/>
+        </service>
+
+        <service id="shopware_controllers_backend_order" class="Shopware_Controllers_Backend_Order">
+            <tag name="shopware.controller" module="backend" controller="order"/>
+        </service>
+
+        <service id="shopware_controllers_backend_overview" class="Shopware_Controllers_Backend_Overview">
+            <tag name="shopware.controller" module="backend" controller="overview"/>
+        </service>
+
+        <service id="shopware_controllers_backend_partner" class="Shopware_Controllers_Backend_Partner">
+            <tag name="shopware.controller" module="backend" controller="partner"/>
+        </service>
+
+        <service id="shopware_controllers_backend_payment" class="Shopware_Controllers_Backend_Payment">
+            <tag name="shopware.controller" module="backend" controller="payment"/>
+        </service>
+
+        <service id="shopware_controllers_backend_performance" class="Shopware_Controllers_Backend_Performance">
+            <tag name="shopware.controller" module="backend" controller="performance"/>
+        </service>
+
+        <service id="shopware_controllers_backend_premium" class="Shopware_Controllers_Backend_Premium">
+            <tag name="shopware.controller" module="backend" controller="premium"/>
+        </service>
+
+        <service id="shopware_controllers_backend_productfeed" class="Shopware_Controllers_Backend_ProductFeed">
+            <tag name="shopware.controller" module="backend" controller="productfeed"/>
+        </service>
+
+        <service id="shopware_controllers_backend_productstream" class="Shopware_Controllers_Backend_ProductStream">
+            <tag name="shopware.controller" module="backend" controller="productstream"/>
+        </service>
+
+        <service id="shopware_controllers_backend_property" class="Shopware_Controllers_Backend_Property">
+            <tag name="shopware.controller" module="backend" controller="property"/>
+        </service>
+
+        <service id="shopware_controllers_backend_riskmanagement" class="Shopware_Controllers_Backend_RiskManagement">
+            <tag name="shopware.controller" module="backend" controller="riskmanagement"/>
+        </service>
+
+        <service id="shopware_controllers_backend_search" class="Shopware_Controllers_Backend_Search">
+            <tag name="shopware.controller" module="backend" controller="search"/>
+        </service>
+
+        <service id="shopware_controllers_backend_shipping" class="Shopware_Controllers_Backend_Shipping">
+            <tag name="shopware.controller" module="backend" controller="shipping"/>
+        </service>
+
+        <service id="shopware_controllers_backend_site" class="Shopware_Controllers_Backend_Site">
+            <tag name="shopware.controller" module="backend" controller="site"/>
+        </service>
+
+        <service id="shopware_controllers_backend_snippet" class="Shopware_Controllers_Backend_Snippet">
+            <tag name="shopware.controller" module="backend" controller="snippet"/>
+        </service>
+
+        <service id="shopware_controllers_backend_supplier" class="Shopware_Controllers_Backend_Supplier">
+            <tag name="shopware.controller" module="backend" controller="supplier"/>
+        </service>
+
+        <service id="shopware_controllers_backend_systeminfo" class="Shopware_Controllers_Backend_Systeminfo">
+            <tag name="shopware.controller" module="backend" controller="systeminfo"/>
+        </service>
+
+        <service id="shopware_controllers_backend_theme" class="Shopware_Controllers_Backend_Theme">
+            <tag name="shopware.controller" module="backend" controller="theme"/>
+        </service>
+
+        <service id="shopware_controllers_backend_translation" class="Shopware_Controllers_Backend_Translation">
+            <tag name="shopware.controller" module="backend" controller="translation"/>
+        </service>
+
+        <service id="shopware_controllers_backend_updatewizard" class="Shopware_Controllers_Backend_UpdateWizard">
+            <tag name="shopware.controller" module="backend" controller="updatewizard"/>
+        </service>
+
+        <service id="shopware_controllers_backend_userconfig" class="Shopware_Controllers_Backend_UserConfig">
+            <tag name="shopware.controller" module="backend" controller="userconfig"/>
+        </service>
+
+        <service id="shopware_controllers_backend_usermanager" class="Shopware_Controllers_Backend_UserManager">
+            <tag name="shopware.controller" module="backend" controller="usermanager"/>
+        </service>
+
+        <service id="shopware_controllers_backend_vote" class="Shopware_Controllers_Backend_Vote">
+            <tag name="shopware.controller" module="backend" controller="vote"/>
+        </service>
+
+        <service id="shopware_controllers_backend_voucher" class="Shopware_Controllers_Backend_Voucher">
+            <tag name="shopware.controller" module="backend" controller="voucher"/>
+        </service>
+
+        <service id="shopware_controllers_backend_widgets" class="Shopware_Controllers_Backend_Widgets">
+            <tag name="shopware.controller" module="backend" controller="widgets"/>
+        </service>
+    </services>
+</container>

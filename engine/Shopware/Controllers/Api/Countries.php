@@ -22,10 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\ControllerBundle\RestController;
 use Shopware\Components\Api\Resource\Country;
 
-class Shopware_Controllers_Api_Countries extends RestController
+class Shopware_Controllers_Api_Countries extends Shopware_Controllers_Api_Rest
 {
     /**
      * @var Country

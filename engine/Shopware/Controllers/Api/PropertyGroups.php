@@ -22,10 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\ControllerBundle\RestController;
 use Shopware\Components\Api\Resource\PropertyGroup;
 
-class Shopware_Controllers_Api_PropertyGroups extends RestController
+class Shopware_Controllers_Api_PropertyGroups extends Shopware_Controllers_Api_Rest
 {
     /**
      * @var PropertyGroup

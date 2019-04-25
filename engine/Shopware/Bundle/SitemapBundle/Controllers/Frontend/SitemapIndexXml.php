@@ -24,12 +24,11 @@
 
 namespace Shopware\Bundle\SitemapBundle\Controller;
 
-use Shopware\Bundle\ControllerBundle\Controller;
 use Shopware\Bundle\SitemapBundle\Exception\AlreadyLockedException;
 use Shopware\Bundle\SitemapBundle\SitemapExporterInterface;
 use Shopware\Bundle\SitemapBundle\SitemapListerInterface;
 
-class SitemapIndexXml extends Controller
+class SitemapIndexXml extends \Enlight_Controller_Action
 {
     /**
      * @var SitemapListerInterface

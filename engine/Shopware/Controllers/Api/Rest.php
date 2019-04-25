@@ -22,12 +22,24 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Api\Resource;
+
 class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
 {
     protected $apiBaseUrl;
 
+    /**
+     * @var Resource\Resource
+     */
+    protected $resource;
+
     public function preDispatch()
     {
+        if (($this->resource instanceof Resource\Resource) && $this->container->initialized('Auth')) {
+            $this->resource->setAcl($this->container->get('acl'));
+            $this->resource->setRole($this->container->get('auth')->getIdentity()->role);
+        }
+
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
         $this->apiBaseUrl = $this->Request()->getScheme()

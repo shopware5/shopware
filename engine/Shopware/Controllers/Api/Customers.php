@@ -22,10 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\ControllerBundle\RestController;
 use Shopware\Components\Api\Resource\Customer;
 
-class Shopware_Controllers_Api_Customers extends RestController
+class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
 {
     /**
      * @var Customer

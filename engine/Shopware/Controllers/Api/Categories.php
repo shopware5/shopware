@@ -22,10 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\ControllerBundle\RestController;
 use Shopware\Components\Api\Resource\Category;
 
-class Shopware_Controllers_Api_Categories extends RestController
+class Shopware_Controllers_Api_Categories extends Shopware_Controllers_Api_Rest
 {
     /**
      * @var Category

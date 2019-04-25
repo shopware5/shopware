@@ -6,7 +6,9 @@
 
     <imports>
         <import resource="../HttpCache/services.xml"/>
-        <import resource="api_controller.xml"/>
+        <import resource="controllers/api.xml"/>
+        <import resource="controllers/frontend.xml"/>
+        <import resource="controllers/widgets.xml"/>
         <import resource="cart.xml"/>
     </imports>
 

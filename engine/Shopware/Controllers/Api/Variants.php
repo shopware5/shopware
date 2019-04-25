@@ -22,10 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\ControllerBundle\RestController;
 use Shopware\Components\Api\Resource\Variant;
 
-class Shopware_Controllers_Api_Variants extends RestController
+class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
 {
     /**
      * @var Variant

@@ -407,7 +407,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 
         if ($controllerId) {
             $request->setAttribute('controllerId', $controllerId);
-            return $this->container->get($controllerId);
+            return clone $this->container->get($controllerId);
         }
 
         if ($event = Shopware()->Events()->notifyUntil(
@@ -572,13 +572,13 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
             $proxy = Shopware()->Hooks()->getProxy($class);
 
             /** @var Enlight_Controller_Action $controller */
-            $controller = new $proxy($request, $response);
+            $controller = new $proxy();
         } else {
-            /** @var \Shopware\Bundle\ControllerBundle\Controller $controller */
+            /** @var Enlight_Controller_Action $controller */
             $controller = $class;
-            $controller->setRequest($request)->setResponse($response);
-            $controller->initController();
         }
+
+        $controller->initController($request, $response);
 
         $controller->setFront($this->Front());
 
