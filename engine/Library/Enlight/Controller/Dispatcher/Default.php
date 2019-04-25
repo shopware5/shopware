@@ -40,12 +40,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatcher
 {
     /**
-     * @var string current directory of the controller.
-     *             Will be set in the getControllerClass method or in the getControllerPath method
-     */
-    protected $curDirectory;
-
-    /**
      * @var string contains the current module.
      *             Will be set in the getControllerClass method or in the getControllerPath method.
      *             If the property is set by the getControllerPath method, the string is formatted
@@ -85,10 +79,10 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     protected $frontController;
 
     /**
-     * @var array Contains all added controller directories. Used to get the controller
-     *            directory of a module
+     * Holds all valid modules
+     * @var array
      */
-    protected $controllerDirectory = [];
+    protected $modules = ['frontend', 'api', 'widgets', 'backend'];
 
     /**
      * @var \Shopware\Components\DispatchFormatHelper
@@ -122,128 +116,6 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         }
 
         return $this->dispatchFormatHelper;
-    }
-
-    /**
-     * Adds a controller directory. If no module is given, the default module will be used.
-     *
-     * @param      $path
-     * @param null $module
-     *
-     * @return Enlight_Controller_Dispatcher_Default
-     */
-    public function addControllerDirectory($path, $module = null)
-    {
-        if (empty($module)) {
-            $module = $this->defaultModule;
-        }
-
-        $module = $this->formatModuleName($module);
-        $path = realpath($path) . '/';
-
-        $this->controllerDirectory[$module] = $path;
-
-        return $this;
-    }
-
-    /**
-     * Sets the controller directory. The directory can be given as an array or a string.
-     *
-     * @param string|array $directory
-     * @param string|null  $module
-     *
-     * @return Enlight_Controller_Dispatcher_Default
-     */
-    public function setControllerDirectory($directory, $module = null)
-    {
-        $this->controllerDirectory = [];
-
-        if (is_string($directory)) {
-            $this->addControllerDirectory($directory, $module);
-        } else {
-            foreach ((array) $directory as $module => $path) {
-                $this->addControllerDirectory($path, $module);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Returns the controller directory.
-     * If more than one directory exists the function returns the controller directory of the given module.
-     * If no module name is passed, the function returns the whole controller directory array.
-     *
-     * @param null $module
-     *
-     * @return array|null
-     */
-    public function getControllerDirectory($module = null)
-    {
-        if ($module === null) {
-            return $this->controllerDirectory;
-        }
-        $module = $this->formatModuleName($module);
-        if (isset($this->controllerDirectory[$module])) {
-            return $this->controllerDirectory[$module];
-        }
-
-        return null;
-    }
-
-    /**
-     * Removes the controller directory for the given module.
-     *
-     * @param string $module
-     *
-     * @return bool
-     */
-    public function removeControllerDirectory($module)
-    {
-        $module = (string) $module;
-        if (isset($this->controllerDirectory[$module])) {
-            unset($this->controllerDirectory[$module]);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Adds the given path to the module directory
-     *
-     * @param string $path
-     *
-     * @throws Enlight_Controller_Exception
-     *
-     * @return Enlight_Controller_Dispatcher_Default
-     */
-    public function addModuleDirectory($path)
-    {
-        try {
-            $dir = new DirectoryIterator($path);
-        } catch (Exception $e) {
-            throw new Enlight_Controller_Exception("Directory $path not readable", 0, $e);
-        }
-
-        foreach ($dir as $file) {
-            if ($file->isDot() || !$file->isDir()) {
-                continue;
-            }
-
-            $module = $file->getFilename();
-
-            // Don't use SCCS directories as modules
-            if (preg_match('/^[^a-z]/i', $module) || ($module === 'CVS')) {
-                continue;
-            }
-
-            $moduleDir = $file->getPathname();
-            $this->addControllerDirectory($moduleDir, $module);
-        }
-
-        return $this;
     }
 
     /**
@@ -379,7 +251,6 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 
         $module = $request->getModuleName();
         $this->curModule = $module;
-        $this->curDirectory = $this->getControllerDirectory($module);
 
         $moduleName = $this->formatModuleName($module);
         $controllerName = $this->formatControllerName($request->getControllerName());
@@ -415,12 +286,10 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
                 ['subject' => $this, 'request' => $request]
                 )
         ) {
-            $path = $event->getReturn();
-        } else {
-            $path = $this->curDirectory . $controllerName . '.php';
+            return $event->getReturn();
         }
 
-        return $path;
+        return null;
     }
 
     /**
@@ -506,7 +375,12 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         if (class_exists($className, false)) {
             return true;
         }
+
         $path = $this->getControllerPath($request);
+
+        if ($path === null) {
+            return false;
+        }
 
         return is_object($path) || class_exists($path) || Enlight_Loader::isReadable($path);
     }
@@ -524,9 +398,17 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
             return false;
         }
 
-        $controllerDir = $this->getControllerDirectory($module);
+        return in_array(strtolower($module), $this->modules);
+    }
 
-        return !empty($controllerDir);
+    public function setModules(array $modules): void
+    {
+        $this->modules = $modules;
+    }
+
+    public function getModules(): array
+    {
+        return $this->modules;
     }
 
     /**

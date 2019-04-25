@@ -48,10 +48,6 @@ class Front
 
         $front->setDispatcher($container->get('Dispatcher'));
 
-        $front->Dispatcher()->addModuleDirectory(
-            Shopware()->AppPath('Controllers')
-        );
-
         $front->setRouter($container->get('Router'));
 
         $front->setParams($options);
