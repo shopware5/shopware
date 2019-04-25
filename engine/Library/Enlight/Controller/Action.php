@@ -77,6 +77,13 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     protected $controller_name;
 
     /**
+     * Override default Enlight constructor
+     */
+    public function __construct()
+    {
+    }
+
+    /**
      * @param Enlight_Controller_Request_RequestHttp   $request
      * @param Enlight_Controller_Response_ResponseHttp $response
      *

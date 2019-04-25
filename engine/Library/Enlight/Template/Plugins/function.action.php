@@ -91,6 +91,8 @@ function smarty_function_action($params, Enlight_Template_Default $template)
     $request->setParams($params)
             ->setDispatched(true);
 
+    Shopware()->Container()->get('request_stack')->push($request);
+
     $dispatcher->dispatch($request, $response);
 
     if (!$request->isDispatched() || $response->isRedirect()) {

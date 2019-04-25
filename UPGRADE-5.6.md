@@ -49,6 +49,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added specific logger service for each plugin. See [Plugin specific logger](###Plugin specific logger) for more details  
 * Added new config option to allow restoring of old cart items
 * Added new config option to enable sharing of session between language shops
+* Added symfony `RequestStack` to enlight's request cycle
 
 ### Changes
 

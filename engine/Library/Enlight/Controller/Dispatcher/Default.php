@@ -276,17 +276,17 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         $controllerId = $this->getControllerServiceId($moduleName, $controllerName);
         $request->unsetAttribute('controllerId');
 
-        if ($controllerId) {
-            $request->setAttribute('controllerId', $controllerId);
-            return clone $this->container->get($controllerId);
-        }
-
         if ($event = Shopware()->Events()->notifyUntil(
                 'Enlight_Controller_Dispatcher_ControllerPath_' . $moduleName . '_' . $controllerName,
                 ['subject' => $this, 'request' => $request]
                 )
         ) {
             return $event->getReturn();
+        }
+
+        if ($controllerId) {
+            $request->setAttribute('controllerId', $controllerId);
+            return clone $this->container->get($controllerId);
         }
 
         return null;
