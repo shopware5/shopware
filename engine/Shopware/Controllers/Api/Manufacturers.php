@@ -22,10 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\ControllerBundle\RestController;
 use Shopware\Components\Api\Resource\Manufacturer;
 
-class Shopware_Controllers_Api_Manufacturers extends RestController
+class Shopware_Controllers_Api_Manufacturers extends Shopware_Controllers_Api_Rest
 {
     /**
      * @var Manufacturer

@@ -49,6 +49,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added specific logger service for each plugin. See [Plugin specific logger](###Plugin specific logger) for more details  
 * Added new config option to allow restoring of old cart items
 * Added new config option to enable sharing of session between language shops
+* Added symfony `RequestStack` to enlight's request cycle
 
 ### Changes
 
@@ -137,6 +138,12 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Removed unused `Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPassSearchHandlerCompilerPass` which was not used at all.
 * Removed method `Enlight_Controller_Response_ResponseHttp::insert` 
 * Removed method `Shopware\Kernel::transformEnlightResponseToSymfonyResponse` 
+* Removed following methods from class `Enlight_Controller_Dispatcher_Default`
+    * `addControllerDirectory`, use setModules instead
+    * `addModuleDirectory`, use addModule instead
+    * `setControllerDirectory`, use setModules instead
+    * `getControllerDirectory`, use getModules instead
+    * `removeControllerDirectory`, use setModules instead
 
 ### Deprecations
 
@@ -172,7 +179,7 @@ in your plugin configuration.
 
 ### Controller Registration using DI-Tag
 
-Controllers can be now registered using the DI tag `shopware.controller`. This DI tag needs attributes `module` and `controller`. These controllers are also lazy-loaded and should extend from `Shopware\Components\Controller`.
+Controllers can be now registered using the DI tag `shopware.controller`. This DI tag needs attributes `module` and `controller`. These controllers are also lazy-loaded.
 
 #### Example:
 
@@ -193,9 +200,8 @@ Controllers can be now registered using the DI tag `shopware.controller`. This D
 namespace SwagExample\Controller\Frontend;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\ControllerBundle\Controller;
 
-class Test extends Controller
+class Test extends \Enlight_Controller_Action
 {
     private $connection;
 

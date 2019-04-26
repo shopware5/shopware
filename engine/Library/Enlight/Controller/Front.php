@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Symfony\Component\HttpFoundation\RequestStack;
+
 /**
  * Enlight_Controller_Front managed everything between the request, response, dispatcher and router.
  *
@@ -89,6 +91,11 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     protected $eventManager;
 
     /**
+     * @var RequestStack
+     */
+    protected $requestStack;
+
+    /**
      * @param Enlight_Event_EventManager $eventManager
      */
     public function __construct(Enlight_Event_EventManager $eventManager)
@@ -147,6 +154,8 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
         if (!$this->response) {
             $this->setResponse('Enlight_Controller_Response_ResponseHttp');
         }
+
+        $this->requestStack->push($this->request);
 
         $eventArgs->set('request', $this->Request());
         $eventArgs->set('response', $this->Response());
@@ -494,5 +503,15 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     public function getParams()
     {
         return $this->invokeParams;
+    }
+
+    public function getRequestStack(): RequestStack
+    {
+        return $this->requestStack;
+    }
+
+    public function setRequestStack(RequestStack $requestStack): void
+    {
+        $this->requestStack = $requestStack;
     }
 }

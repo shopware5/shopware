@@ -22,10 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\ControllerBundle\RestController;
 use Shopware\Components\Api\Resource\Translation;
 
-class Shopware_Controllers_Api_Translations extends RestController
+class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Rest
 {
     /**
      * @var Translation

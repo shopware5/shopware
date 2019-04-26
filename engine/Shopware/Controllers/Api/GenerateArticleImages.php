@@ -22,12 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\ControllerBundle\RestController;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Api\Resource\Article as ArticleResource;
 use Shopware\Models\Article\Article;
 
-class Shopware_Controllers_Api_GenerateArticleImages extends RestController
+class Shopware_Controllers_Api_GenerateArticleImages extends Shopware_Controllers_Api_Rest
 {
     /**
      * @var ArticleResource

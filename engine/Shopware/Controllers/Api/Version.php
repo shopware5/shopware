@@ -22,9 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\ControllerBundle\RestController;
-
-class Shopware_Controllers_Api_Version extends RestController
+class Shopware_Controllers_Api_Version extends Shopware_Controllers_Api_Rest
 {
     /**
      * Returns the current version

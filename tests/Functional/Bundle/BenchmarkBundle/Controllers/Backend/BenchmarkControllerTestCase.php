@@ -39,10 +39,10 @@ class BenchmarkControllerTestCase extends BenchmarkTestCase
      */
     protected function getController()
     {
-        $controller = \Enlight_Class::Instance($this::CONTROLLER_NAME, [
-            new \Enlight_Controller_Request_RequestTestCase(),
-            new \Enlight_Controller_Response_ResponseTestCase(),
-        ]);
+        /** @var \Enlight_Controller_Action $controller */
+        $controller = \Enlight_Class::Instance($this::CONTROLLER_NAME);
+
+        $controller->initController(new \Enlight_Controller_Request_RequestTestCase(), new \Enlight_Controller_Response_ResponseTestCase());
 
         $controller->setContainer(Shopware()->Container());
         $controller->setView(new \Enlight_View_Default(new \Enlight_Template_Manager()));

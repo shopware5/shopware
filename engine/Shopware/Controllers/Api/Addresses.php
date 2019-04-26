@@ -22,10 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\ControllerBundle\RestController;
 use Shopware\Components\Api\Resource\Address;
 
-class Shopware_Controllers_Api_Addresses extends RestController
+class Shopware_Controllers_Api_Addresses extends Shopware_Controllers_Api_Rest
 {
     /**
      * @var Address

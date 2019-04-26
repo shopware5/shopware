@@ -98,5 +98,9 @@
         <service id="shopware_controllers_api_version" class="Shopware_Controllers_Api_Version">
             <tag name="shopware.controller" module="api" controller="Version"/>
         </service>
+
+        <service id="shopware_controllers_api_error" class="Shopware_Controllers_Api_Error">
+            <tag name="shopware.controller" module="api" controller="error"/>
+        </service>
     </services>
 </container>

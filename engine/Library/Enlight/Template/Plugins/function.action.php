@@ -42,13 +42,6 @@ function smarty_function_action($params, Enlight_Template_Default $template)
     $front = Shopware()->Front();
     $dispatcher = clone $front->Dispatcher();
 
-    $modules = $dispatcher->getControllerDirectory();
-    if (empty($modules)) {
-        $e = new Exception('Action helper depends on valid front controller instance');
-        //$e->setView($view);
-        throw $e;
-    }
-
     $request = $front->Request();
     $response = $front->Response();
 
@@ -97,6 +90,8 @@ function smarty_function_action($params, Enlight_Template_Default $template)
     $request->setActionName(isset($params['action']) ? $params['action'] : 'index');
     $request->setParams($params)
             ->setDispatched(true);
+
+    Shopware()->Container()->get('request_stack')->push($request);
 
     $dispatcher->dispatch($request, $response);
 
