@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -30,7 +31,7 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
     public function setUp()
     {
         parent::setUp();
-        // disable auth and acl
+        // Disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
@@ -58,6 +59,8 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
      */
     public function testCreateLog()
     {
+        Shopware()->Container()->get('dbal_connection')->beginTransaction();
+
         $this->Request()->setClientIp('10.0.0.3', false);
         $this->Request()->setMethod('POST')->setPost(
             [
@@ -70,7 +73,7 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
             ]
         );
 
-        $this->dispatch('backend/log/createLog');
+        $this->dispatch('backend/logger/createLog');
         static::assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
@@ -99,5 +102,39 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
 
         static::assertArrayHasKey('success', $jsonBody);
         static::assertArrayHasKey('data', $jsonBody);
+
+        Shopware()->Container()->get('dbal_connection')->rollBack();
+    }
+
+    /**
+     * This test tests the creating of a new log.
+     * This function is called before testDeleteLogs
+     */
+    public function testCreateDeprecatedLog()
+    {
+        Shopware()->Container()->get('dbal_connection')->beginTransaction();
+
+        $this->Request()->setClientIp('10.0.0.3', false);
+        $this->Request()->setMethod('POST')->setPost(
+            [
+                'type' => 'backend',
+                'key' => 'Log',
+                'text' => 'DummyText',
+                'date' => new \DateTime('now'),
+                'user' => 'Administrator',
+                'value4' => '',
+            ]
+        );
+
+        $this->dispatch('backend/log/createLog');
+        static::assertTrue($this->View()->success);
+
+        $jsonBody = $this->View()->getAssign();
+
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('id', $jsonBody['data']);
+
+        Shopware()->Container()->get('dbal_connection')->rollBack();
     }
 }

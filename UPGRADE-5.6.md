@@ -6,6 +6,16 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 ### Additions
 
+* Added support for Shopping Worlds without AJAX requests, configurable in theme settings
+* Added configuration to define the format of a valid order number. See [Custom validation of order numbers (SKU)](###Custom validation of order numbers (SKU)) for more details
+* Added controller registration by DI-tag. See Controller See [Controller Registration using DI-Tag](###Controller Registration using DI-Tag) for more details
+* Added autowiring of controller action parameters. See [Autowire of controller actions parameters](###Autowire of controller actions parameters) for more details* Added better ExtJS file auto-loading. See [Improved ExtJS auto-loading](###Improved ExtJS auto-loading) for more details
+* Added new `Shopware\Components\Cart\PaymentTokenService` to improve handling of payment callbacks. See [Payment Token](###Payment Token) for more details
+* Added specific logger service for each plugin. See [Plugin specific logger](###Plugin specific logger) for more details
+* Added support for HTTP2 server push. See [HTTP2 Server Push Support](###HTTP2 Server Push Support) for more details
+* Added Symfony `RequestStack` to Enlight's request cycle
+* Added new config option to allow restoring of old cart items
+* Added new config option to enable sharing of session between language shops
 * Added definition signature `getAttributeRawField` to `Shopware\Bundle\ESIndexingBundle\TextMappingInterface` to reduce info request of
     Elasticsearch and added method implementation to TextMappings
     `Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES2::getAttributeRawField`
@@ -21,14 +31,12 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * Added method implementation to 
     `Shopware\Bundle\ESIndexingBundle\Property\PropertySynchronizer::supports`
     `Shopware\Bundle\ESIndexingBundle\Product\ProductSynchronizer::supports`
-* Added configuration to define the format of a valid order number 
 * Added service `\Doctrine\Common\Annotations\Reader` as `models.annotations_reader`
 * Added `shopware.controller.blacklisted_controllers` parameter to the DI container to blacklist controllers for dispatching
-* Added default table options of Doctrine to config
-* Added better ExtJS file auto-loading. See [Improved ExtJS auto-loading](###Improved ExtJS auto-loading) for more details
+* Added Doctrine's default table options to config, can now be modified
 * Added configuration to show the voucher field on checkout confirm page
 * Added information text to detail page of category filter 
-* Added string type cast in return statement of method `sOrder::sGetOrdernumber`
+* Added `string` type cast in return statement of method `sOrder::sGetOrdernumber`
 * Added configuration to decide whether user basket should be cleared after logout or not
 * Added the following new models and repositories to enable e-mail logging
     * `\Shopware\Models\Mail\Log`
@@ -46,20 +54,24 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `mailLogCleanupMaximumAgeInDays`
 * Added the `associations` property to `Enlight_Components_Mail`
 * Added option symbols for `{include file="frontend/_includes/rating.tpl"}` to hide rating symbols
-* Added specific logger service for each plugin. See [Plugin specific logger](###Plugin specific logger) for more details  
-* Added new config option to allow restoring of old cart items
-* Added new config option to enable sharing of session between language shops
-* Added symfony `RequestStack` to enlight's request cycle
+* Added new controller `Shopware\Controllers\Backend\Logger`
+* Added [Ace](https://ace.c9.io/) editor in the backend where `Codemirror` was used before: in email and shopping world templates, shipping cost calculation and product exports.
 
 ### Changes
 
-* Increased minimum required PHP version to PHP >= 7.2.0.
+* Changed minimum required PHP version to 7.2.0
+* Changed doctrine/orm to 2.6.3
+* Changed mpdf/mpdf to 7.1.9
+* Changed elasticsearch/elasticsearch to 5.4.0
+* Changed ongr/elasticsearch-dsl to 5.0.6
 * Changed id of login password form in `frontend/account/login.tpl` from `passwort` to `password`
+* Changed the generation of the Robots.txt. See [Improved Robots.txt](###Improved Robots.txt) for more details
+* Changed plugin initialization to alphabetical by default
 * Changed cookie `x-ua-device` to be `secure` if the shop runs on SSL
 * Changed the following cart actions to redirect the request to allow customers to press reload:
-    `\Shopware_Controllers_Frontend_Checkout::addArticleAction`
-    `\Shopware_Controllers_Frontend_Checkout::addAccessoriesAction`
-    `\Shopware_Controllers_Frontend_Checkout::deleteArticleAction`
+    `Shopware_Controllers_Frontend_Checkout::addArticleAction`
+    `Shopware_Controllers_Frontend_Checkout::addAccessoriesAction`
+    `Shopware_Controllers_Frontend_Checkout::deleteArticleAction`
 * Changed browser cache handling in backend to cache javascript `index` and `load` actions. Caching will be disabled when...
     * the template cache is disabled
     * `$this->Response()->setHeader('Cache-Control', 'private', true);` is used in the controller
@@ -78,8 +90,6 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `Shopware\Components\DependencyInjection\Container` to trigger InitResource and AfterInitResource events for alias services, introduced by decorations
 * Changed the `Regex`-Constraint on `\Shopware\Models\Article\Detail::$number` to a new `OrderNumber`-Constraint to be more configurable
 * Changed interface `Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface` to contain new method `joinVariants(QueryBuilder $query)` which was already a necessary part of the default implementation
-* Changed Doctrine orm version to 2.6.3
-* Changed mpdf to 7.1.9
 * Changed `type` of `logMailAddress` config in `s_core_config_elements` to `textarea`
 * Changed mail error handler to consider multiple recipient addresses
 * Changed `Shopware_Controllers_Frontend_Note` forwards to redirects
@@ -91,13 +101,10 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `s_article_configurator_template_prices`
     * `s_articles_prices`
     * `s_campaigns_mailings` to varchar limit of 15 for customer group key.
-* Changed plugin initialization to alphabetical by default
-* Changed elasticsearch/elasticsearch to 5.4.0
-* Changed ongr/elasticsearch-dsl to 5.0.6
-* Changed the generation of the Robots.txt
 * Changed backend customer login to start with a fresh session
-* Changed `Shopware_Controllers_Backend_Application` to an abstract class
+* Changed `Shopware_Controllers_Backend_Application` to be an abstract class
 * Changed `sExport::sGetArticleCategoryPath` to allow various attributes in category path
+* Changed `Shopware_Controllers_Backend_Application` to be abstract
 
 ### Removals
 
@@ -145,6 +152,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `setControllerDirectory`, use setModules instead
     * `getControllerDirectory`, use getModules instead
     * `removeControllerDirectory`, use setModules instead
+* Removed the `CodeMirror` JavaScript editor, use `Ace` instead
 
 ### Deprecations
 
@@ -165,6 +173,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Deprecated `Enlight_Controller_Response_ResponseHttp::clearRawHeader`
 * Deprecated `Enlight_Controller_Response_ResponseHttp::clearRawHeaders`
 * Deprecated `Enlight_Controller_Response_ResponseHttp::outputBody`
+* Deprecated `Shopware_Controllers_Backend_Log::createLogAction`. It will be removed in 5.7, use `\Shopware\Controllers\Backend\Logger::createLogAction` instead
 
 ### Improved ExtJS auto-loading
 
@@ -242,9 +251,9 @@ The request and response instances in Shopware now extend from Symfony Request /
 
 ### Custom validation of order numbers (SKU)
 
-Up to now, the validation of order numbers (or SKUs) was done in form of a Regex-Assertion in the Doctrine model at `\Shopware\Models\Article\Detail::$number`. That solution was not flexible and didn't allow any modifications of said regex, let alone a complete custom implementation of a validation.
+Up to now, the validation of order numbers (or SKUs) was done in form of a Regex-Assertion in the Doctrine model at `Shopware\Models\Article\Detail::$number`. That solution was not flexible and didn't allow any modifications of said regex, let alone a complete custom implementation of a validation.
  
-Now, a new constraint `\Shopware\Components\Model\DBAL\Constraints\OrderNumber` is used instead, which is a wrapper around `\Shopware\Components\OrderNumberValidator\RegexOrderNumberValidator`.
+Now, a new constraint `Shopware\Components\Model\DBAL\Constraints\OrderNumber` is used instead, which is a wrapper around `\Shopware\Components\OrderNumberValidator\RegexOrderNumberValidator`.
 
 This way you can either change the regex which is being used for validation by defining one yourself in the `config.php`:
 ```php
@@ -256,7 +265,7 @@ return [
     'db' => [...],
 ]
 ``` 
-Or you can create your own implementation of the underlying interface `\Shopware\Components\OrderNumberValidator\OrderNumberValidatorInterface` and use it for the validation by simply decorating the current service with id `shopware.components.ordernumber_validator` and e.g. query some API. 
+Or you can create your own implementation of the underlying interface `Shopware\Components\OrderNumberValidator\OrderNumberValidatorInterface` and use it for the validation by simply decorating the current service with id `shopware.components.ordernumber_validator` and e.g. query some API. 
 
 ### Definition of MySQL version in config
 
@@ -278,12 +287,11 @@ Providing this value via config makes it unnecessary for Doctrine to figure the 
 
 If you are running a MariaDB database, you should prefix the `serverVersion` with `mariadb`- (e.g.: `mariadb-10.2.12`).
 
-
 ### Payment Token
 
 Some internet security software packages open a new clean browser without cookies for payments.
 After returning from the payment provider, the customer will be redirected to the home page, because the new browser instance does not contain the previous session.
-For this reason there is now a service to generate a token, which can be added to the returning url (e.g /payment_paypal/return?paymentId=test123&swPaymentToken=abc123def).
+For this reason there is now a service to generate a token, which can be added to the returning url (e.g `/payment_paypal/return?paymentId=test123&swPaymentToken=abc123def`).
 This parameter will be resolved in the PreDispatch.
 If the user is not logged in, but the URL contains a valid token, he will get back his former session and will be redirected to the original URL, but without the token
 
@@ -298,7 +306,7 @@ class MyPaymentController extends Controller {
 
     public function gatewayAction()
     {
-        // do some payment things
+        // Do some payment things
         $token = $this->get('shopware.components.cart.payment_token')->generate();
         
         $returnParamters = [
@@ -365,7 +373,28 @@ Support for easier log message writing is enabled:
 $logger->fatal("An error is occured while requesting {module}/{controller}/{action}", $controller->Request()->getParams());
 ```
 
-### Custom Sorting
+### Manual Sorting of products in categories
 
-Items in a category can be now custom sorted. Custom sortings can be also created using the categories api resource.
-They will be applied when the sorting has been selected in the storefront. Dynamic sorted products will use configured fallback sorting
+Products in a category can be now sorted "by hand". This specific sorting can also be created using the categories API resource.
+
+They will be applied when the associated sorting has been selected in the storefront. Not manually sorted products will use the configured normal fallback sorting.
+
+### HTTP2 Server Push Support
+
+HTTP2 Server Push allows Shopware to push certain resources to the browser without it even requesting them. To do so, Shopware creates `Link`-headers for specified resources, informing Apache or Nginx to push these files to the browser. Server Push is supported since [Apache 2.4.18](https://httpd.apache.org/docs/2.4/mod/mod_http2.html#h2push) and [nginx 1.13.9](https://www.nginx.com/blog/nginx-1-13-9-http2-server-push/#http2_push).
+
+These resources are only pushed on the very first request of a client. After that, the files should be cached in the browser and don't need to be transmitted anymore. The presence of a `session`-cookie is used to determine if a push is necessary.
+
+The Smarty function `{preload}` is used to define in the template which resource are to be pushed and as what.
+
+Example for CSS: 
+```html
+<link href="{preload file={$stylesheetPath} as="style"}" media="all" rel="stylesheet" type="text/css" />
+```
+
+Example for Javascript: 
+```html
+<script src="{preload file={link file='somefile.js'} as="script"}"></script>
+```
+
+Server Push can be enabled in the `Various` section of the `Cache/Performance` settings. Please do not enable Server Push support if you are using Google's Pagespeed module: It creates custom CSS and Javascript files for the browser, replacing the ones Shopware contains in the HTML. So pushing the original files to the browser leads to an unnecessary overhead.
