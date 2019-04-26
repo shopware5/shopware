@@ -56,7 +56,7 @@ class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Te
      * Tests the behavior if the blog article is not activated
      *
      * @expectedException \Enlight_Exception
-     * @expectedExceptionCode \Enlight_Exception::PROPERTY_NOT_FOUND
+     * @expectedExceptionCode 404
      */
     public function testDispatchNoActiveBlogItem()
     {
@@ -70,7 +70,7 @@ class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Te
      * Tests the behavior if the BlogItem does not exist anymore
      *
      * @expectedException \Enlight_Exception
-     * @expectedExceptionCode \Enlight_Exception::PROPERTY_NOT_FOUND
+     * @expectedExceptionCode 404
      */
     public function testDispatchNotExistingBlogItem()
     {
@@ -78,54 +78,60 @@ class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Te
         static::assertTrue($this->Response()->isRedirect());
     }
 
-    /**
-     * Test redirect when the blog category does not exist
-     */
-    public function testDispatchNotExistingBlogCategory()
+    public function testDispatchInactiveCategory()
     {
-        try {
-            $this->dispatch('/blog/?sCategory=17');
-        } catch (Exception $e) {
-            static::fail('Exception thrown. This should not occur.');
-        }
-        static::assertTrue(!$this->Response()->isRedirect());
-
-        try {
-            $this->dispatch('/blog/?sCategory=156165');
-        } catch (Exception $e) {
-            static::fail('Exception thrown. This should not occur.');
-        }
-        static::assertTrue($this->Response()->isRedirect());
-
         // Deactivate blog category
         $this->connection->exec('UPDATE `s_categories` SET `active` = 0 WHERE `id` = 17');
 
         // Should be redirected because blog category is inactive
+        $ex = null;
         try {
             $this->dispatch('/blog/?sCategory=17');
         } catch (Exception $e) {
-            static::fail('Exception thrown. This should not occur.');
+            $ex = $e;
         }
-        static::assertTrue($this->Response()->isRedirect());
+        static::assertEquals(404, $ex->getCode());
 
         // Should be redirected because blog category is inactive
         try {
             $this->dispatch('/blog/detail/?blogArticle=3');
         } catch (Exception $e) {
-            static::fail('Exception thrown. This should not occur.');
+            $ex = $e;
         }
-        static::assertTrue($this->Response()->isRedirect());
+        static::assertEquals(404, $ex->getCode());
     }
 
     /**
      * Test that requesting a non-blog category-id creates a redirect
      *
      * @expectedException \Enlight_Exception
-     * @expectedExceptionCode \Enlight_Exception::PROPERTY_NOT_FOUND
+     * @expectedExceptionCode 404
      */
     public function testDispatchNonBlogCategory()
     {
         $this->dispatch('/blog/?sCategory=14');
-        static::assertTrue($this->Response()->isRedirect());
+    }
+
+    /**
+     * Test redirect when the blog category does not exist
+     *
+     * @dataProvider invalidCategoryUrlDataProvider
+     *
+     * @expectedException \Enlight_Exception
+     * @expectedExceptionCode 404
+     *
+     * @param string $url
+     */
+    public function testDispatchNotExistingBlogCategory($url)
+    {
+        $this->dispatch($url);
+    }
+
+    public function invalidCategoryUrlDataProvider()
+    {
+        return [
+            ['/blog/?sCategory=14'], // Not a blog category
+            ['/blog/?sCategory=156165'], // Unknown blog category
+        ];
     }
 }
