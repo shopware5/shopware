@@ -678,12 +678,23 @@ class sAdmin
             $this->moduleManager->Basket()->clearBasket();
         }
 
-        Shopware()->Session()->unsetAll();
+        $this->session->unsetAll();
         $this->regenerateSessionId();
+
+        $shop = Shopware()->Shop();
+
+        $this->sSYSTEM->sUSERGROUP = $shop->getCustomerGroup()->getKey();
+        $this->sSYSTEM->sUSERGROUPDATA = $shop->getCustomerGroup()->toArray();
+        $this->sSYSTEM->sCurrency = $shop->getCurrency()->toArray();
+
         $this->contextService->initializeContext();
 
         if (!$this->config->get('clearBasketAfterLogout')) {
             $this->moduleManager->Basket()->sRefreshBasket();
+            $this->moduleManager->Admin()->sGetPremiumShippingcosts();
+
+            $amount = $this->moduleManager->Basket()->sGetAmount();
+            $this->session->offsetSet('sBasketAmount', empty($amount) ? 0 : array_shift($amount));
         }
 
         $this->eventManager->notify('Shopware_Modules_Admin_Logout_Successful');
