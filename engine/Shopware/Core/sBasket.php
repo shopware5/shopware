@@ -315,7 +315,9 @@ class sBasket
         $voucher = $this->sGetVoucher();
         if ($voucher) {
             $this->sDeleteArticle('voucher');
-            $this->sAddVoucher($voucher['code']);
+            if (is_array($this->sAddVoucher($voucher['code']))) {
+                $this->session->offsetSet('sBasketVoucherRemovedInCart', true);
+            }
         }
     }
 
@@ -1645,16 +1647,6 @@ SQL;
                     // If no price is set for default customer group, delete product from basket
                     $this->sDeleteArticle($id);
                     $errors = true;
-
-                    continue;
-                }
-
-                if (empty($additionalInfo['hasCategory'])) {
-                    // If no categories assigned in this current subshop
-                    $this->sDeleteArticle($id);
-                    $errors = true;
-
-                    $this->session->offsetSet('removedProductWithInvalidCategory', true);
 
                     continue;
                 }

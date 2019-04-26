@@ -449,6 +449,7 @@
                 success: function (result) {
                     $el.html(result);
                     picturefill();
+                    window.StateManager.updatePlugin('*[data-notification-message-close="true"]', 'swNotificationMessageClose');
                     me._on(me.$el.find(me.opts.shippingCalculatorOptions), 'change', $.proxy(me.onShippingCalculationChange, me));
                     if (typeof callback === 'function') {
                         callback();

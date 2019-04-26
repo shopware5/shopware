@@ -27,6 +27,7 @@ namespace Shopware\Components;
 use Enlight\Event\SubscriberInterface;
 use Enlight_Controller_ActionEventArgs as ActionEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class CSRFTokenValidator implements SubscriberInterface
 {
@@ -148,7 +149,7 @@ class CSRFTokenValidator implements SubscriberInterface
      *
      * @return bool
      */
-    private function checkRequest(\Enlight_Controller_Request_Request $request)
+    private function checkRequest(Request $request)
     {
         $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
         $name = '__csrf_token-' . $context->getShop()->getId();
@@ -157,9 +158,9 @@ class CSRFTokenValidator implements SubscriberInterface
             $name = '__csrf_token-' . $context->getShop()->getParentId();
         }
 
-        $token = $request->getCookie($name);
+        $token = $request->cookies->get($name);
 
-        $requestToken = $request->getParam('__csrf_token') ?: $request->getHeader('X-CSRF-Token');
+        $requestToken = $request->get('__csrf_token', $request->headers->get('X-CSRF-Token'));
 
         return hash_equals($token, $requestToken);
     }
