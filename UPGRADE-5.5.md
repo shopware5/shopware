@@ -9,15 +9,19 @@ This changelog references changes done in Shopware 5.5 patch versions.
 ### Additions
 
 * Added option to "I am" select field in basic configuration
+* Added paragraph to license.txt regarding the permission to relicense plugins
 
 ### Changes
 
+* Changed meta-tag `viewport` to allow zooming on mobile devices
 * Changed the usage of translation for shop pages in the side menu in mobile view
-* Changed the worstRating for Googles struct data
+* Changed the worstRating for Google's struct data
 * Changed `SnippetManager` to consider plugin directories and theme directories in readFromIni mode
 * Changed `Checkout` controller, to resolve race condition problems on confirm page
 * Changed the album selection in the media manager for the blog images to show all images
 * Changed `Blog` and `Listing` controllers to throw an exception if a blog category-id is passed to the `Listing` controller or vice versa
+* Changed `EsBackendIndexer` to improve support for unicode characters
+* Changed `mediaselectionfield` to work also with enabled translation in tabs
 
 ## 5.5.8
 

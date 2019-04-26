@@ -147,7 +147,10 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $category = $this->getCategoryRepository()->findOneBy(['id' => $categoryId, 'active' => true]);
         $isChild = ($shopCategory && $category) ? $category->isChildOf($shopCategory) : false;
         if (!$isChild) {
-            return $this->redirect(['controller' => 'index'], ['code' => 301]);
+            throw new Enlight_Controller_Exception(
+                'Blog category missing, non-existent or invalid for the current shop',
+                404
+            );
         }
 
         // PerPage
@@ -232,7 +235,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         // Make sure the category exists and is a blog category
         if (empty($categoryContent) || !$categoryContent['blog']) {
-            throw new Enlight_Controller_Exception(sprintf('Blog category by id "%d" is invalid', $categoryId), Enlight_Controller_Exception::PROPERTY_NOT_FOUND);
+            throw new Enlight_Controller_Exception(sprintf('Blog category by id "%d" is invalid', $categoryId), 404);
         }
 
         if (!empty($categoryContent['external'])) {
@@ -291,7 +294,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         if (empty($blogArticleData) || empty($blogArticleData['active'])) {
             throw new Enlight_Controller_Exception(
                 sprintf('Blog article with id %d not found or inactive', $blogArticleId),
-                Enlight_Controller_Exception::PROPERTY_NOT_FOUND
+                404
             );
         }
 
