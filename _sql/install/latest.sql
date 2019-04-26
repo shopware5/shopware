@@ -6976,7 +6976,7 @@ UPDATE
 SET
 	`body` = REPLACE(`body`, '$sArticle.attr6', '$sArticle.ean')
 WHERE
-	`last_export` LIKE '2000%';
+	CAST(`last_export` AS char) LIKE '2000%';
 
 
 -- 4-add-new-version-of-skrill-payment.sql
