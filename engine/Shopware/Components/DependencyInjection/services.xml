@@ -982,6 +982,10 @@
             <argument type="service" id="router"/>
         </service>
 
+        <service id="shopware.console.completion_command" class="Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand">
+            <tag name="console.command"/>
+        </service>
+
         <service id="shopware.components.manual_sorting.product_loader" class="Shopware\Components\ManualSorting\ProductLoader">
             <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory"/>
             <argument type="service" id="shopware_storefront.context_service"/>

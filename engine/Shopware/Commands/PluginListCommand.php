@@ -52,6 +52,8 @@ class PluginListCommand extends ShopwareCommand implements CompletionAwareInterf
                 'core',
                 'frontend',
                 'backend',
+                'ShopwarePlugins',
+                'ProjectPlugins',
             ];
 
             return array_diff($namespaces, array_intersect($namespaces, $context->getWords()));

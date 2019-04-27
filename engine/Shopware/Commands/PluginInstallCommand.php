@@ -53,7 +53,7 @@ class PluginInstallCommand extends ShopwareCommand implements CompletionAwareInt
             /** @var ModelRepository $repository */
             $repository = $this->getContainer()->get('models')->getRepository(Plugin::class);
             $queryBuilder = $repository->createQueryBuilder('plugin');
-            $result = $queryBuilder->andWhere($queryBuilder->expr()->eq('plugin.capabilityEnable', 'true'))
+            $result = $queryBuilder->andWhere($queryBuilder->expr()->eq('plugin.capabilityInstall', 'true'))
                 ->andWhere($queryBuilder->expr()->isNull('plugin.installed'))
                 ->select(['plugin.name'])
                 ->getQuery()
