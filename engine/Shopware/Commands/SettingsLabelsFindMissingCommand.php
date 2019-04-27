@@ -25,13 +25,39 @@
 namespace Shopware\Commands;
 
 use Shopware\Models\Shop\Locale;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SettingsLabelsFindMissingCommand extends ShopwareCommand
+class SettingsLabelsFindMissingCommand extends ShopwareCommand implements CompletionAwareInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        if ($optionName === 'target') {
+            return $this->completeDirectoriesInDirectory($this->container->get('application')->DocPath());
+        }
+
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if ($argumentName === 'locale') {
+            return $this->completeInstalledLocaleKeys($context->getCurrentWord());
+        }
+
+        return [];
+    }
+
     /**
      * {@inheritdoc}
      */

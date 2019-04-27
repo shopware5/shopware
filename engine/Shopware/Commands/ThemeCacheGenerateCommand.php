@@ -29,12 +29,37 @@ use Shopware\Components\CacheManager;
 use Shopware\Components\Theme\Compiler;
 use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ThemeCacheGenerateCommand extends ShopwareCommand
+class ThemeCacheGenerateCommand extends ShopwareCommand implements CompletionAwareInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        if ($optionName === 'shopId') {
+            $shopIdKeys = array_map(function ($key) { return $key + 1; }, array_keys($context->getWords(), '--shopId'));
+            $selectedShopIds = array_intersect_key($context->getWords(), array_combine($shopIdKeys, array_pad([], count($shopIdKeys), 0)));
+
+            return array_diff($this->completeShopIds($context->getCurrentWord()), array_map('intval', $selectedShopIds));
+        }
+
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        return [];
+    }
+
     /**
      * {@inheritdoc}
      */

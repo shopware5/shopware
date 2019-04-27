@@ -24,9 +24,12 @@
 
 namespace Shopware\Commands;
 
+use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\Theme\Generator;
 use Shopware\Components\Theme\Installer;
 use Shopware\Models\Shop\Template;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,9 +37,41 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
-class ThemeCreateCommand extends ShopwareCommand
+class ThemeCreateCommand extends ShopwareCommand implements CompletionAwareInterface
 {
     private $repository;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if ($argumentName === 'parent') {
+            /** @var QueryBuilder $queryBuilder */
+            $queryBuilder = $this->getRepository()->createQueryBuilder('tpl');
+
+            if (strlen($context->getCurrentWord())) {
+                $queryBuilder->andWhere($queryBuilder->expr()->like('tpl.template', ':search'))
+                    ->setParameter('search', addcslashes($context->getCurrentWord(), '_%') . '%');
+            }
+
+            $result = $queryBuilder->select(['tpl.template'])
+                ->getQuery()
+                ->getArrayResult();
+
+            return array_column($result, 'template');
+        }
+
+        return [];
+    }
 
     /**
      * {@inheritdoc}

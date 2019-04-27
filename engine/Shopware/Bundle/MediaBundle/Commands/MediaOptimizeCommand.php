@@ -31,6 +31,9 @@ use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\MediaBundle\Optimizer\OptimizerInterface;
 use Shopware\Bundle\MediaBundle\OptimizerServiceInterface;
 use Shopware\Commands\ShopwareCommand;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\ShellPathCompletion;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -42,8 +45,29 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 /**
  * This command allows to optimize all media files at once by executing the relevant optimization commands available.
  */
-class MediaOptimizeCommand extends ShopwareCommand
+class MediaOptimizeCommand extends ShopwareCommand implements CompletionAwareInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if ($argumentName === 'path') {
+            // TODO set path for shell completion. Hint: the exit code gets checked in the generated completion bash script
+            exit(ShellPathCompletion::PATH_COMPLETION_EXIT_CODE);
+        }
+
+        return [];
+    }
+
     /**
      * {@inheritdoc}
      */

@@ -981,5 +981,9 @@
         <service id="shopware.components.robots_txt_generator" class="Shopware\Components\RobotsTxtGenerator">
             <argument type="service" id="router"/>
         </service>
+
+        <service id="shopware.console.completion_command" class="Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand">
+            <tag name="console.command"/>
+        </service>
     </services>
 </container>

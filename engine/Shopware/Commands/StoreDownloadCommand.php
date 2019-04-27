@@ -35,18 +35,59 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LicenceStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginStruct;
 use Shopware\Models\Plugin\Plugin;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class StoreDownloadCommand extends StoreCommand
+class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterface
 {
     /**
      * @var SymfonyStyle
      */
     private $io;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        if ($optionName === 'domain') {
+            return $this->completeLicensedDomain($context->getCurrentWord());
+        }
+
+        if ($optionName === 'shopware-version') {
+            return $this->completeShopwareVersions($context->getCurrentWord());
+        }
+
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if ($argumentName === 'technical-name') {
+            if (!is_null($token = $this->getAuthenticationFromArguments($context->getWords()))) {
+                $context = new LicenceRequest(null, $this->getVersionFromArguments($context->getWords()), $this->getDomainFromArguments($context->getWords()), $token);
+
+                /** @var PluginStoreService $pluginStoreService */
+                $pluginStoreService = $this->container->get(
+                    'shopware_plugininstaller.plugin_service_store_production'
+                );
+
+                return array_map(function (LicenceStruct $licence) {
+                    return $licence->getTechnicalName();
+                }, $pluginStoreService->getLicences($context));
+            }
+        }
+
+        return [];
+    }
 
     /**
      * {@inheritdoc}
@@ -281,7 +322,7 @@ class StoreDownloadCommand extends StoreCommand
     {
         $version = $this->input->getOption('shopware-version');
         if (empty($version)) {
-            $version = $this->container->getParameter('shopware.release.version');
+            $version = $this->getInstalledShopwareVersion();
         }
 
         return $version;
@@ -393,5 +434,57 @@ class StoreDownloadCommand extends StoreCommand
         $context = new PluginsByTechnicalNameRequest('', $version, [$technicalName]);
 
         return $service->getPlugin($context);
+    }
+
+    /**
+     * @param string[] $arguments
+     *
+     * @return string
+     */
+    private function getDomainFromArguments(array $arguments)
+    {
+        $domain = ($domainKey = array_search('--domain', $arguments)) === false ? '' : $arguments[$domainKey + 1];
+
+        if (empty($domain)) {
+            $domain = $this->container->get('shopware_plugininstaller.account_manager_service')->getDomain();
+        }
+
+        return $domain;
+    }
+
+    /**
+     * @param string[] $arguments
+     *
+     * @return string
+     */
+    private function getVersionFromArguments(array $arguments)
+    {
+        $version = ($versionKey = array_search('--shopware-version', $arguments)) === false ? '' : $arguments[$versionKey + 1];
+        if (empty($version)) {
+            $version = $this->getInstalledShopwareVersion();
+        }
+
+        return $version;
+    }
+
+    /**
+     * @param string[] $arguments
+     *
+     * @return AccessTokenStruct|null
+     */
+    private function getAuthenticationFromArguments(array $arguments)
+    {
+        $username = ($usernameKey = array_search('--username', $arguments)) === false ? '' : $arguments[$usernameKey + 1];
+        $password = ($passwordKey = array_search('--password', $arguments)) === false ? '' : $arguments[$passwordKey + 1];
+
+        try {
+            /** @var StoreClient $storeClient */
+            $storeClient = $this->container->get('shopware_plugininstaller.store_client');
+
+            return $storeClient->getAccessToken($username, $password);
+        } catch (\Exception $e) {
+        }
+
+        return null;
     }
 }

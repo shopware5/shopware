@@ -24,13 +24,56 @@
 
 namespace Shopware\Commands;
 
+use Shopware\Components\Model\ModelRepository;
+use Shopware\Models\Shop\Locale;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SnippetsFindMissingCommand extends ShopwareCommand
+class SnippetsFindMissingCommand extends ShopwareCommand implements CompletionAwareInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        if ($optionName === 'target') {
+            return $this->completeDirectoriesInDirectory();
+        } elseif ($optionName === 'fallback') {
+            /** @var ModelRepository $localeRepository */
+            $localeRepository = $this->getContainer()->get('models')->getRepository(Locale::class);
+            $queryBuilder = $localeRepository->createQueryBuilder('locale');
+
+            if (strlen($context->getCurrentWord())) {
+                $queryBuilder->andWhere($queryBuilder->expr()->like('locale.locale', ':search'))
+                    ->setParameter('search', addcslashes($context->getCurrentWord(), '_%') . '%');
+            }
+
+            $result = $queryBuilder->select(['locale.locale'])
+                ->getQuery()
+                ->getArrayResult();
+
+            return array_diff(array_column($result, 'locale'), [$context->getWordAtIndex(2)]);
+        }
+
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if ($argumentName === 'locale') {
+            return $this->completeInstalledLocaleKeys($context->getCurrentWord());
+        }
+
+        return [];
+    }
+
     /**
      * {@inheritdoc}
      */
