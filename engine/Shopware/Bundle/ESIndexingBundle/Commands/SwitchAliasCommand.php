@@ -28,12 +28,57 @@ use Elasticsearch\Client;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Commands\ShopwareCommand;
+use Shopware\Models\Shop\Repository;
+use Shopware\Models\Shop\Shop as ShopModel;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SwitchAliasCommand extends ShopwareCommand
+class SwitchAliasCommand extends ShopwareCommand implements CompletionAwareInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if ($argumentName === 'shopId') {
+            /** @var Repository $shopRepository */
+            $shopRepository = $this->getContainer()->get('models')->getRepository(ShopModel::class);
+            $queryBuilder = $shopRepository->createQueryBuilder('shop');
+
+            if (is_numeric($context->getCurrentWord())) {
+                $queryBuilder->andWhere($queryBuilder->expr()->like('shop.id', ':id'))
+                    ->setParameter('id', addcslashes($context->getCurrentWord(), '%_') . '%');
+            }
+
+            $result = $queryBuilder->select(['shop.id'])
+                ->addOrderBy($queryBuilder->expr()->asc('shop.id'))
+                ->getQuery()
+                ->getArrayResult();
+
+            return array_column($result, 'id');
+        }
+
+        if ($argumentName === 'index') {
+            /** @var Client $client */
+            $client = $this->container->get('shopware_elastic_search.client');
+
+            return array_keys($client->indices()->getAliases());
+        }
+
+        return [];
+    }
+
     /**
      * {@inheritdoc}
      */

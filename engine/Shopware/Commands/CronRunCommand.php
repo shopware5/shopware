@@ -26,13 +26,40 @@ namespace Shopware\Commands;
 
 use Enlight_Components_Cron_Job;
 use Enlight_Components_Cron_Manager;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CronRunCommand extends ShopwareCommand
+class CronRunCommand extends ShopwareCommand implements CompletionAwareInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if ($argumentName === 'cronjob') {
+            /** @var Enlight_Components_Cron_Manager $manager */
+            $manager = $this->container->get('cron');
+
+            return array_map(function (Enlight_Components_Cron_Job $job) {
+                return $job->getAction();
+            }, $manager->getAllJobs());
+        }
+
+        return [];
+    }
+
     /**
      * {@inheritdoc}
      */

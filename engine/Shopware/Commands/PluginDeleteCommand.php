@@ -25,13 +25,17 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
+use Shopware\Components\Model\ModelRepository;
+use Shopware\Models\Plugin\Plugin;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
-class PluginDeleteCommand extends ShopwareCommand
+class PluginDeleteCommand extends ShopwareCommand implements CompletionAwareInterface
 {
     public function deletePath($path)
     {
@@ -44,6 +48,38 @@ class PluginDeleteCommand extends ShopwareCommand
         }
 
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if ($argumentName === 'plugin') {
+            /** @var ModelRepository $repository */
+            $repository = $this->getContainer()->get('models')->getRepository(Plugin::class);
+            $queryBuilder = $repository->createQueryBuilder('plugin');
+            $result = $queryBuilder->andWhere($queryBuilder->expr()->eq('plugin.capabilityEnable', 'true'))
+                ->andWhere($queryBuilder->expr()->neq('plugin.active', 'true'))
+                ->andWhere($queryBuilder->expr()->isNull('plugin.installed'))
+                ->andWhere($queryBuilder->expr()->neq('plugin.source', ':source'))
+                ->setParameter('source', 'Default')
+                ->select(['plugin.name'])
+                ->getQuery()
+                ->getArrayResult();
+
+            return array_column($result, 'name');
+        }
+
+        return [];
     }
 
     /**

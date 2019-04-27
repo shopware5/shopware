@@ -24,14 +24,119 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Commands;
 
+use Elasticsearch\Client;
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
 use Shopware\Commands\ShopwareCommand;
+use Shopware\Models\Shop\Repository;
+use Shopware\Models\Shop\Shop;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class AnalyzeCommand extends ShopwareCommand
+class AnalyzeCommand extends ShopwareCommand implements CompletionAwareInterface
 {
+    const DEFAULT_ANALYZERS = [
+        'standard',
+        'simple',
+        'whitespace',
+        'stop',
+        'keyword',
+        'pattern',
+        'fingerprint',
+
+        'arabic',
+        'armenian',
+        'basque',
+        'bengali',
+        'brazilian',
+        'bulgarian',
+        'catalan',
+        'cjk',
+        'czech',
+        'danish',
+        'dutch',
+        'english',
+        'finnish',
+        'french',
+        'galician',
+        'german',
+        'greek',
+        'hindi',
+        'hungarian',
+        'indonesian',
+        'irish',
+        'italian',
+        'latvian',
+        'lithuanian',
+        'norwegian',
+        'persian',
+        'portuguese',
+        'romanian',
+        'russian',
+        'sorani',
+        'spanish',
+        'swedish',
+        'turkish',
+        'thai',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if ($argumentName === 'shopId') {
+            /** @var Repository $shopRepository */
+            $shopRepository = $this->getContainer()->get('models')->getRepository(Shop::class);
+            $queryBuilder = $shopRepository->createQueryBuilder('shop');
+
+            if (is_numeric($context->getCurrentWord())) {
+                $queryBuilder->andWhere($queryBuilder->expr()->like('shop.id', ':id'))
+                    ->setParameter('id', addcslashes($context->getCurrentWord(), '%_') . '%');
+            }
+
+            $result = $queryBuilder->select(['shop.id'])
+                ->addOrderBy($queryBuilder->expr()->asc('shop.id'))
+                ->getQuery()
+                ->getArrayResult();
+
+            return array_column($result, 'id');
+        }
+
+        if ($argumentName === 'analyzer') {
+            /** @var Client $client */
+            $client = $this->container->get('shopware_elastic_search.client');
+
+            $recursive = new RecursiveIteratorIterator(
+                new RecursiveArrayIterator($client->indices()->getMapping()),
+                RecursiveIteratorIterator::SELF_FIRST
+            );
+
+            $analyzer = [];
+            foreach ($recursive as $key => $value) {
+                if ($key === 'analyzer') {
+                    $analyzer[] = $value;
+                }
+            }
+
+            return array_unique(array_merge($analyzer, self::DEFAULT_ANALYZERS));
+        }
+
+        return [];
+    }
+
     /**
      * {@inheritdoc}
      */
