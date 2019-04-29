@@ -138,7 +138,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
      * Creates the cell editor the grid panel.
      *
      * @public
-     * @return [object] Ext.grid.plugin.CellEditing
+     * @return { object } Ext.grid.plugin.CellEditing
      */
     createCellEditor: function() {
         var me = this;
@@ -216,7 +216,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                    oldValue = e.record.get('inStock');
                }
 
-                if(e.field === 'details.number' &&  (!newValue || !newValue.match(/^[a-zA-Z0-9-_. ]+$/))) {
+                if(e.field === 'details.number' &&  (!newValue || !newValue.match(new RegExp({$orderNumberRegex})))) {
                     Shopware.Notification.createGrowlMessage(me.snippets.saved.errorTitle, me.snippets.saved.ordernumberNotMatch, me.snippets.growlMessage);
                     e.record.set('number', oldValue);
                     e.record.set('details.number', oldValue);
@@ -349,7 +349,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
     /**
      * Creates the grid columns
      *
-     * @return [array] grid columns
+     * @return { array } grid columns
      */
     getColumns: function (dynamic) {
         var me = this, standardColumns, columns = [];
@@ -698,7 +698,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
     /**
      * Creates the paging toolbar for the grid to allow store paging. The paging toolbar uses the same store as the Grid
      *
-     * @return [Ext.toolbar.Paging] The paging toolbar for the customer grid
+     * @return { Ext.toolbar.Paging } The paging toolbar for the customer grid
      */
     getPagingBar:function () {
         var me = this,
@@ -742,7 +742,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
 
     /**
      * @param article
-     * @param [array] stores
+     * @param { array } stores
      */
     onStoresLoaded: function(article, stores) {
         var me = this;
