@@ -1156,10 +1156,11 @@ class sExport
      * @param int      $articleID
      * @param string   $separator
      * @param int|null $categoryID
+     * @param string   $field
      *
      * @return string
      */
-    public function sGetArticleCategoryPath($articleID, $separator = ' > ', $categoryID = null)
+    public function sGetArticleCategoryPath($articleID, $separator = ' > ', $categoryID = null, $field = 'name')
     {
         if (empty($categoryID)) {
             $categoryID = $this->sSettings['categoryID'];
@@ -1170,7 +1171,7 @@ class sExport
         $breadcrumbs = [];
 
         foreach ($breadcrumb as $breadcrumbObj) {
-            $breadcrumbs[] = $breadcrumbObj['name'];
+            $breadcrumbs[] = $field === 'link' ? Shopware()->Modules()->Core()->sRewriteLink($breadcrumbObj[$field]) : $breadcrumbObj[$field];
         }
 
         return htmlspecialchars_decode(implode($separator, $breadcrumbs));
