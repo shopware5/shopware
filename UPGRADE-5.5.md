@@ -10,6 +10,15 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 * Added option to "I am" select field in basic configuration
 * Added paragraph to license.txt regarding the permission to relicense plugins
+* Added cartItem to event `Shopware_Modules_Basket_UpdateArticle_Start`
+* Added following events to `sBasket`
+    * `Shopware_Modules_Basket_DeleteNote_Start`
+    * `Shopware_Modules_Basket_UpdateArticle_FilterSqlDefaultParameters`
+    * `Shopware_Modules_Basket_UpdateCartItems_Updated`
+    * `Shopware_Modules_Basket_BasketCleared`
+    * `Shopware_Modules_Basket_DeleteArticle_Start`
+    * `Shopware_Modules_Basket_DeletedArticle`
+    * `Shopware_Modules_Basket_getTaxesForUpdateProduct_FilterReturn`
 
 ### Changes
 
@@ -23,6 +32,10 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed `EsBackendIndexer` to improve support for unicode characters
 * Changed `mediaselectionfield` to work also with enabled translation in tabs
 * Changed RSS templates to contain correct language code
+
+### Deprecations
+
+* Deprecated `sBasket::clearBasket`, use `sBasket::sDeleteBasket` instead
 
 ## 5.5.8
 

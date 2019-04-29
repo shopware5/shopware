@@ -674,7 +674,7 @@ class sAdmin
 
     public function logout()
     {
-        $this->moduleManager->Basket()->clearBasket();
+        $this->moduleManager->Basket()->sDeleteBasket();
 
         Shopware()->Session()->unsetAll();
         $this->regenerateSessionId();

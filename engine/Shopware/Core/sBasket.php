@@ -1543,6 +1543,13 @@ SQL;
             return false;
         }
 
+        if ($this->eventManager->notifyUntil(
+            'Shopware_Modules_Basket_DeleteNote_Start',
+            ['subject' => $this, 'id' => $id]
+        )) {
+            return false;
+        }
+
         $delete = $this->db->query(
             'DELETE FROM s_order_notes
             WHERE (sUniqueID = ? OR (userID = ?  AND userID != 0))
@@ -1605,7 +1612,12 @@ SQL;
 
             if ($this->eventManager->notifyUntil(
                 'Shopware_Modules_Basket_UpdateArticle_Start',
-                ['subject' => $this, 'id' => $id, 'quantity' => $quantity]
+                [
+                    'subject' => $this,
+                    'id' => $id,
+                    'quantity' => $quantity,
+                    'cartItem' => $cartItem,
+                ]
             )
             ) {
                 $errors = true;
@@ -1676,8 +1688,8 @@ SQL;
                     $taxRate = ($grossPrice == $netPrice) ? 0.00 : $updatedPrice['tax'];
                 }
 
-                $update = $this->db->query(
-                    $sql,
+                $params = $this->eventManager->filter(
+                    'Shopware_Modules_Basket_UpdateArticle_FilterSqlDefaultParameters',
                     [
                         $quantity,
                         $grossPrice,
@@ -1686,7 +1698,21 @@ SQL;
                         $taxRate,
                         $id,
                         $this->session->get('sessionId'),
+                    ],
+                    [
+                        'subject' => $this,
+                        'id' => $id,
+                        'quantity' => $quantity,
+                        'price' => $grossPrice,
+                        'netprice' => $netPrice,
+                        'currencyFactor' => $this->sSYSTEM->sCurrency['factor'],
+                        'cartItem' => $cartItem,
                     ]
+                );
+
+                $update = $this->db->query(
+                    $sql,
+                    $params
                 );
 
                 if (!$update || !$updatedPrice) {
@@ -1694,6 +1720,12 @@ SQL;
                 }
             }
         }
+
+        $this->eventManager->notify('Shopware_Modules_Basket_UpdateCartItems_Updated', [
+            'subject' => $this,
+            'items' => $cartItems,
+            'updateableItems' => $updateableItems,
+        ]);
 
         if ($errors) {
             return false;
@@ -1738,6 +1770,11 @@ SQL;
             's_order_basket',
             ['sessionID = ?' => $sessionId]
         );
+
+        $this->eventManager->notify('Shopware_Modules_Basket_BasketCleared', [
+            'subject' => $this,
+            'sessionId' => $this->session->get('sessionId'),
+        ]);
     }
 
     /**
@@ -1750,6 +1787,13 @@ SQL;
      */
     public function sDeleteArticle($id)
     {
+        if ($this->eventManager->notifyUntil(
+            'Shopware_Modules_Basket_DeleteArticle_Start',
+            ['subject' => $this, 'id' => $id]
+        )) {
+            return false;
+        }
+
         if ($id === 'voucher') {
             $this->db->delete(
                 's_order_basket',
@@ -1767,6 +1811,11 @@ SQL;
                 ]
             );
         }
+
+        $this->eventManager->notify('Shopware_Modules_Basket_DeletedArticle', [
+            'subject' => $this,
+            'id' => $id,
+        ]);
     }
 
     /**
@@ -1915,14 +1964,12 @@ SQL;
     }
 
     /**
+     * @deprecated with 5.5, will be removed with 5.7. Use sDeleteBasket instead
      * Clear basket for current user
      */
     public function clearBasket()
     {
-        $this->db->executeUpdate(
-            'DELETE FROM s_order_basket WHERE sessionID= :sessionId',
-            ['sessionId' => $this->session->get('sessionId')]
-        );
+        $this->sDeleteBasket();
     }
 
     /**
