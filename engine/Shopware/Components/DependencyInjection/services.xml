@@ -6,10 +6,10 @@
 
     <imports>
         <import resource="../HttpCache/services.xml"/>
-        <import resource="controllers/api.xml"/>
-        <import resource="controllers/frontend.xml"/>
-        <import resource="controllers/widgets.xml"/>
-        <import resource="controllers/backend.xml"/>
+        <import resource="Controllers/api.xml"/>
+        <import resource="Controllers/frontend.xml"/>
+        <import resource="Controllers/widgets.xml"/>
+        <import resource="Controllers/backend.xml"/>
         <import resource="cart.xml"/>
     </imports>
 
@@ -980,6 +980,22 @@
 
         <service id="shopware.components.robots_txt_generator" class="Shopware\Components\RobotsTxtGenerator">
             <argument type="service" id="router"/>
+        </service>
+
+        <service id="shopware.components.manual_sorting.product_loader" class="Shopware\Components\ManualSorting\ProductLoader">
+            <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory"/>
+            <argument type="service" id="shopware_storefront.context_service"/>
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_media.media_service"/>
+        </service>
+
+        <service id="shopware.components.manual_sorting.position_service" class="Shopware\Components\ManualSorting\PositionService">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware.components.manual_sorting.product_loader"/>
+            <argument type="service" id="shopware_storefront.custom_sorting_service"/>
+            <argument type="service" id="shopware_storefront.context_service"/>
+            <argument type="service" id="shopware_elastic_search.backlog_processor"/>
+            <argument type="expression">parameter('shopware.es.enabled') and parameter('shopware.es.write_backlog')</argument>
         </service>
     </services>
 </container>

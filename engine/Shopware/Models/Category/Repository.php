@@ -290,12 +290,14 @@ class Repository extends ModelRepository
             'emotions',
             'customerGroups',
             'media',
+            'manualSorting',
         ])
             ->from($this->getEntityName(), 'c')
             ->leftJoin('c.attribute', 'attribute')
             ->leftJoin('c.emotions', 'emotions')
             ->leftJoin('c.media', 'media')
             ->leftJoin('c.customerGroups', 'customerGroups')
+            ->leftJoin('c.manualSorting', 'manualSorting')
             ->where('c.id = ?1')
             ->setParameter(1, $categoryId);
 
@@ -755,13 +757,20 @@ class Repository extends ModelRepository
      */
     private function addArticleCountSelect($builder, $onlyActive = false)
     {
-        $builder->addSelect('COUNT(articles) as articleCount');
+        $subQuery = $this->getEntityManager()->createQueryBuilder();
+        $subQuery->from(\Shopware\Models\Category\Category::class, 'c3')
+            ->select('COUNT(articles)')
+            ->where('c3.id = c.id');
+
         if ($onlyActive) {
-            $builder->leftJoin('c.allArticles', 'articles', 'WITH', 'articles.active = true');
+            $subQuery->leftJoin('c3.allArticles', 'articles', 'WITH', 'articles.active = true');
         } else {
-            $builder->leftJoin('c.allArticles', 'articles');
+            $subQuery->leftJoin('c3.allArticles', 'articles');
         }
-        $builder->addGroupBy('c.id');
+        $subQuery->addGroupBy('c3.id');
+
+        $dql = $subQuery->getDQL();
+        $builder->addSelect('(' . $dql . ') as articleCount');
 
         return $builder;
     }

@@ -117,7 +117,6 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($expectedAction, $request->getActionName());
         static::assertEquals($expectedVersion, $request->getParam('version'));
         static::assertEquals($expectedId, $request->getParam('id'));
-        static::assertEquals(201, $response->getHttpResponseCode());
     }
 
     public function routePutProvider()

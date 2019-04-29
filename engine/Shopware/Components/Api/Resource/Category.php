@@ -27,8 +27,10 @@ namespace Shopware\Components\Api\Resource;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use RuntimeException;
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Models\Article\Article as Product;
 use Shopware\Models\Attribute\Category as CategoryAttribute;
 use Shopware\Models\Category\Category as CategoryModel;
+use Shopware\Models\Category\ManualSorting;
 use Shopware\Models\Media\Media as MediaModel;
 use Shopware_Components_Translation as TranslationComponent;
 
@@ -149,6 +151,7 @@ class Category extends Resource
 
         $params = $this->prepareCategoryData($params);
         $params = $this->prepareMediaData($params, $category);
+        $params = $this->prepareManualSorting($params, $category);
 
         $category->fromArray($params);
 
@@ -201,6 +204,7 @@ class Category extends Resource
 
         $params = $this->prepareCategoryData($params);
         $params = $this->prepareMediaData($params, $category);
+        $params = $this->prepareManualSorting($params, $category);
         $category->fromArray($params);
 
         $violations = $this->getManager()->validate($category);
@@ -408,6 +412,56 @@ class Category extends Resource
 
         $categoryModel->setMedia($media);
         unset($data['media']);
+
+        return $data;
+    }
+
+    private function prepareManualSorting(array $data, CategoryModel $category): array
+    {
+        if (!array_key_exists('manualSorting', $data)) {
+            return $data;
+        }
+
+        if ($category->getId() === null) {
+            throw new ApiException\CustomValidationException(sprintf('Property manualSorting is only allowed on update'));
+        }
+
+        $collection = [];
+        $connection = $this->getManager()->getConnection();
+
+        foreach ($data['manualSorting'] as $sorting) {
+            if (!isset($sorting['product_id'])) {
+                throw new ApiException\CustomValidationException(sprintf('Field product_id is missing in manualSorting array'));
+            }
+
+            if (!isset($sorting['position'])) {
+                throw new ApiException\CustomValidationException(sprintf('Field position is missing in manualSorting array'));
+            }
+
+            if (!$connection->fetchColumn('SELECT 1 FROM s_articles_categories_ro WHERE categoryID = ? AND articleID = ?', [
+                $category->getId(),
+                $sorting['product_id'],
+            ])) {
+                throw new ApiException\CustomValidationException(sprintf('Product with id %d is not assigned to the category', $sorting['product_id']));
+            }
+
+            $sortingObj = new ManualSorting();
+            $sortingObj->setCategory($category);
+
+            /** @var Product $product */
+            $product = $this->getManager()->find(Product::class, $sorting['product_id']);
+
+            $sortingObj->setProduct($product);
+            $sortingObj->setPosition((int) $sorting['position']);
+
+            $collection[] = $sortingObj;
+        }
+
+        $category->setManualSorting(null);
+        $this->getManager()->flush($category);
+        $category->setManualSorting($collection);
+
+        unset($data['manualSorting']);
 
         return $data;
     }

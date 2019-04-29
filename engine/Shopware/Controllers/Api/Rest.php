@@ -23,6 +23,7 @@
  */
 
 use Shopware\Components\Api\Resource;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
 {
@@ -53,6 +54,10 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
     {
         $data = $this->View()->getAssign();
         $pretty = $this->Request()->getParam('pretty', false);
+
+        if ($this->Request()->getActionName() === 'post') {
+            $this->Response()->setStatusCode(SymfonyResponse::HTTP_CREATED);
+        }
 
         array_walk_recursive($data, function (&$value) {
             // Convert DateTime instances to ISO-8601 Strings

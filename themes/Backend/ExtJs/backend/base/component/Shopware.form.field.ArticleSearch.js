@@ -57,13 +57,13 @@ Ext.define('Shopware.form.field.ArticleSearch',
      * Defines alternate names for this class
      * @array
      */
-    alternateClassName: [ 'Shopware.form.ArticleSearch', 'Shopware.ArticleSearch' ],
+    alternateClassName: [ 'Shopware.form.ArticleSearch', 'Shopware.ArticleSearch', 'Shopware.form.field.ProductSearch' ],
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets
      * @array
      */
-    alias: [ 'widget.articlesearch', 'widget.articlesearchfield' ],
+    alias: [ 'widget.articlesearch', 'widget.articlesearchfield', 'widget.productsearchfield' ],
 
     /**
      * Basic CSS class for the component
@@ -834,6 +834,13 @@ Ext.define('Shopware.form.field.ArticleSearch',
      */
     getArticleStore: function() {
         return this.multiSelectStore
+    },
+
+    /**
+     * Resets the component
+     */
+    reset: function () {
+        this.searchField.reset();
     }
 });
 //{/block}

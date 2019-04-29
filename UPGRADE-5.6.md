@@ -363,3 +363,8 @@ Support for easier log message writing is enabled:
 
 $logger->fatal("An error is occured while requesting {module}/{controller}/{action}", $controller->Request()->getParams());
 ```
+
+### Custom Sorting
+
+Items in a category can be now custom sorted. Custom sortings can be also created using the categories api resource.
+They will be applied when the sorting has been selected in the storefront. Dynamic sorted products will use configured fallback sorting

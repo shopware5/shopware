@@ -123,6 +123,11 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
      */
     private $attributeConfigList;
 
+    /**
+     * @var ProductManualPositionLoaderInterface
+     */
+    private $manualPositionLoader;
+
     public function __construct(
         ListProductGatewayInterface $productGateway,
         CheapestPriceServiceInterface $cheapestPriceService,
@@ -137,7 +142,8 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
         VariantHelperInterface $variantHelper,
         ProductConfigurationLoader $configurationLoader,
         ProductListingVariationLoader $visibilityLoader,
-        CrudService $crudService
+        CrudService $crudService,
+        ProductManualPositionLoaderInterface $manualPositionLoader
     ) {
         $this->productGateway = $productGateway;
         $this->cheapestPriceService = $cheapestPriceService;
@@ -153,6 +159,7 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
         $this->configurationLoader = $configurationLoader;
         $this->listingVariationLoader = $visibilityLoader;
         $this->crudService = $crudService;
+        $this->manualPositionLoader = $manualPositionLoader;
     }
 
     /**
@@ -180,15 +187,15 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
 
         $variantFacet = $this->variantHelper->getVariantFacet();
 
+        $productIds = array_map(
+            static function (ListProduct $product) {
+                return $product->getId();
+            },
+            $products
+        );
+
         if ($variantFacet) {
             $variantConfiguration = $this->configuratorService->getProductsConfigurations($products, $context);
-
-            $productIds = array_map(
-                function (ListProduct $product) {
-                    return $product->getId();
-                },
-                $products
-            );
 
             $configurations = $this->configurationLoader->getConfigurations($productIds, $context);
 
@@ -198,6 +205,8 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
 
             $availability = $this->listingVariationLoader->getAvailability($products, $variantConfiguration, $variantFacet);
         }
+
+        $manualPositions = $this->manualPositionLoader->get($productIds);
 
         $result = [];
         foreach ($products as $listProduct) {
@@ -256,6 +265,10 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
             }
             if (isset($properties[$id])) {
                 $product->setProperties($properties[$id]);
+            }
+
+            if (isset($manualPositions[$id])) {
+                $product->setManualSorting($manualPositions[$id]);
             }
 
             $product->setFormattedCreatedAt(

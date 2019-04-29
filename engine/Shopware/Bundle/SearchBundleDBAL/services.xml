@@ -258,6 +258,10 @@
             <tag name="sorting_handler_dbal"/>
         </service>
 
+        <service id="shopware_searchdbal.manual_sorting_handler" class="Shopware\Bundle\SearchBundleDBAL\SortingHandler\ManualSortingHandler">
+            <tag name="sorting_handler_dbal"/>
+        </service>
+
         <service id="shopware_searchdbal.combined_condition_facet_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\CombinedConditionFacetHandler">
             <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory" />
             <tag name="facet_handler_dbal"/>
