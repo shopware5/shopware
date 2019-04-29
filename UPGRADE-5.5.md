@@ -22,6 +22,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed `Blog` and `Listing` controllers to throw an exception if a blog category-id is passed to the `Listing` controller or vice versa
 * Changed `EsBackendIndexer` to improve support for unicode characters
 * Changed `mediaselectionfield` to work also with enabled translation in tabs
+* Changed RSS templates to contain correct language code
 
 ## 5.5.8
 
