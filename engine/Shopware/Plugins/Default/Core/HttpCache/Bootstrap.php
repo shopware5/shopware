@@ -150,6 +150,14 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         $this->subscribeEvent('Shopware\Models\Site\Site::postUpdate', 'onPostPersist');
         $this->subscribeEvent('Shopware\Models\Site\Site::postRemove', 'onPostPersist');
 
+        $this->subscribeEvent('Shopware\Models\Form\Form::postPersist', 'onPostPersist');
+        $this->subscribeEvent('Shopware\Models\Form\Form::postUpdate', 'onPostPersist');
+        $this->subscribeEvent('Shopware\Models\Form\Form::postRemove', 'onPostPersist');
+
+        $this->subscribeEvent('Shopware\Models\Form\Field::postUpdate', 'onPostPersist');
+        $this->subscribeEvent('Shopware\Models\Form\Field::postPersist', 'onPostPersist');
+        $this->subscribeEvent('Shopware\Models\Form\Field::postRemove', 'onPostPersist');
+
         $this->installForm();
 
         return true;
@@ -239,6 +247,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             "frontend/campaign 14400\r\n" .
             "widgets/listing 14400\r\n" .
             "frontend/custom 14400\r\n" .
+            "frontend/forms 14400\r\n" .
             "frontend/sitemap 14400\r\n" .
             "frontend/blog 14400\r\n" .
             "widgets/index 3600\r\n" .
@@ -698,6 +707,12 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
             case Shopware\Models\Site\Site::class:
                 $cacheIds[] = 's' . $entity->getId();
+                break;
+            case Shopware\Models\Form\Form::class:
+                $cacheIds[] = 'f' . $entity->getId();
+                break;
+            case Shopware\Models\Form\Field::class:
+                $cacheIds[] = 'f' . $entity->getFormId();
                 break;
         }
 

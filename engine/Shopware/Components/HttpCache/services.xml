@@ -147,5 +147,12 @@
             <tag name="cache_warmer.url_provider"/>
         </service>
 
+        <service id="shopware_cache_warmer.url_provider_form"
+                 class="Shopware\Components\HttpCache\UrlProvider\FormProvider">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="router"/>
+            <tag name="cache_warmer.url_provider"/>
+        </service>
+
     </services>
 </container>
