@@ -69,6 +69,9 @@ class CacheIdCollector
             case 'frontend/custom':
                 return $this->getStaticSiteCacheIds($request);
 
+            case 'frontend/forms':
+                return $this->getFormsCacheIds($request);
+
             default:
                 return [];
         }
@@ -210,5 +213,16 @@ class CacheIdCollector
         $staticSiteId = $request->getParam('sCustom');
 
         return ['s' . (int) $staticSiteId];
+    }
+
+    /**
+     * @return array
+     */
+    private function getFormsCacheIds(Request $request)
+    {
+        $formsId = $request->getParam('sFid');
+        $formsId = $formsId ?: $request->getParam('id');
+
+        return ['f' . (int) $formsId];
     }
 }
