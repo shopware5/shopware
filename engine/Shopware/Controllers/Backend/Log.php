@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,6 +24,7 @@
  */
 
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Models\Log\Log;
 
 class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
@@ -31,11 +33,11 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
      */
     public function initAcl()
     {
-        $this->addAclPermission('getLogs', 'read', "You're not allowed to see the logs.");
-        $this->addAclPermission('deleteLogs', 'delete', "You're not allowed to delete the logs.");
-        $this->addAclPermission('downloadLogFile', 'system', "You're not allowed to see the system logs.");
-        $this->addAclPermission('getLogFileList', 'system', "You're not allowed to see the system logs.");
-        $this->addAclPermission('getLogList', 'system', "You're not allowed to see the system logs.");
+        $this->addAclPermission('getLogs', 'read', 'You\'re not allowed to see the logs.');
+        $this->addAclPermission('deleteLogs', 'delete', 'You\'re not allowed to delete the logs.');
+        $this->addAclPermission('downloadLogFile', 'system', 'You\'re not allowed to see the system logs.');
+        $this->addAclPermission('getLogFileList', 'system', 'You\'re not allowed to see the system logs.');
+        $this->addAclPermission('getLogList', 'system', 'You\'re not allowed to see the system logs.');
     }
 
     /**
@@ -53,7 +55,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
      */
     public function preDispatch()
     {
-        if ($this->Request()->getActionName() == 'downloadLogFile') {
+        if ($this->Request()->getActionName() === 'downloadLogFile') {
             $this->Front()->Plugins()->ViewRenderer()->setNoRender();
         } elseif (!in_array($this->Request()->getActionName(), ['index', 'load'])) {
             $this->Front()->Plugins()->Json()->setRenderer(true);
@@ -70,7 +72,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         $start = $this->Request()->get('start');
         $limit = $this->Request()->get('limit');
 
-        //order data
+        // Order data
         $order = (array) $this->Request()->getParam('sort', []);
 
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -84,7 +86,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
             'log.ipAddress as ip_address',
             'log.userAgent as user_agent',
             'log.value4 as value4'
-        )->from('Shopware\Models\Log\Log', 'log');
+        )->from(Log::class, 'log');
 
         if ($filter = $this->Request()->get('filter')) {
             $filter = $filter[0];
@@ -120,13 +122,13 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
 
             if ($params[0]) {
                 foreach ($params as $values) {
-                    $logModel = Shopware()->Models()->find(\Shopware\Models\Log\Log::class, $values['id']);
+                    $logModel = Shopware()->Models()->find(Log::class, $values['id']);
 
                     Shopware()->Models()->remove($logModel);
                     Shopware()->Models()->flush();
                 }
             } else {
-                $logModel = Shopware()->Models()->find(\Shopware\Models\Log\Log::class, $params['id']);
+                $logModel = Shopware()->Models()->find(Log::class, $params['id']);
 
                 Shopware()->Models()->remove($logModel);
                 Shopware()->Models()->flush();
@@ -138,33 +140,13 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
     }
 
     /**
-     * This method is called when a new log is made automatically.
-     * It sets the different values and saves the log into s_core_log
+     * This logging method has been moved to \Shopware\Controllers\Backend\Logger::createLogAction
+     *
+     * @deprecated in Shopware 5.6, to be removed in 5.7. Use \Shopware\Controllers\Backend\Logger::createLogAction instead
      */
     public function createLogAction()
     {
-        try {
-            $request = $this->Request();
-            $params = $request->getParams();
-            $params['key'] = html_entity_decode($params['key']);
-
-            $ip = $this->get('shopware.components.privacy.ip_anonymizer')->anonymize($request->getClientIp());
-
-            $logModel = new Shopware\Models\Log\Log();
-            $logModel->fromArray($params);
-            $logModel->setDate(new \DateTime('now'));
-            $logModel->setIpAddress($ip);
-            $logModel->setUserAgent($request->getServer('HTTP_USER_AGENT', 'Unknown'));
-
-            Shopware()->Models()->persist($logModel);
-            Shopware()->Models()->flush();
-
-            $data = Shopware()->Models()->toArray($logModel);
-
-            $this->View()->assign(['success' => true, 'data' => $data]);
-        } catch (Exception $e) {
-            $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
-        }
+        $this->forward('createLog', 'logger', 'backend');
     }
 
     public function downloadLogFileAction()
@@ -251,7 +233,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         $sort = $this->Request()->getParam('sort');
 
         $reverse = false;
-        if (!isset($sort[0]['direction']) || $sort[0]['direction'] == 'DESC') {
+        if (!isset($sort[0]['direction']) || $sort[0]['direction'] === 'DESC') {
             $reverse = true;
         }
 
