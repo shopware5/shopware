@@ -32,6 +32,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed `EsBackendIndexer` to improve support for unicode characters
 * Changed `mediaselectionfield` to work also with enabled translation in tabs
 * Changed RSS templates to contain correct language code
+* Changed BatchProcess to fix an issue with `removeString` operator
 
 ### Deprecations
 
