@@ -32,11 +32,13 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\TaxGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 
+/**
+ * Class ShopContextFactory
+ *
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
 class ShopContextFactory implements ShopContextFactoryInterface
 {
-    /**
-     * @const string
-     */
     const FALLBACK_CUSTOMER_GROUP = 'EK';
 
     /**
@@ -70,8 +72,6 @@ class ShopContextFactory implements ShopContextFactoryInterface
     protected $countryGateway;
 
     /**
-     * ShopContextFactory constructor.
-     *
      * @param CustomerGroupGatewayInterface      $customerGroupGateway
      * @param TaxGatewayInterface                $taxGateway
      * @param CountryGatewayInterface            $countryGateway
