@@ -56,6 +56,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added option symbols for `{include file="frontend/_includes/rating.tpl"}` to hide rating symbols
 * Added new controller `Shopware\Controllers\Backend\Logger`
 * Added [Ace](https://ace.c9.io/) editor in the backend where `Codemirror` was used before: in email and shopping world templates, shipping cost calculation and product exports.
+* Added server response tab to extjs error reporter to show errors in javascript code
 
 ### Changes
 
@@ -398,3 +399,7 @@ Example for Javascript:
 ```
 
 Server Push can be enabled in the `Various` section of the `Cache/Performance` settings. Please do not enable Server Push support if you are using Google's Pagespeed module: It creates custom CSS and Javascript files for the browser, replacing the ones Shopware contains in the HTML. So pushing the original files to the browser leads to an unnecessary overhead.
+
+### Improved Extjs Error Reporter
+
+Extjs error reporter shows now also the server response and lints the code to show errors.

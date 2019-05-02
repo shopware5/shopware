@@ -125,6 +125,11 @@ Ext.define('Shopware.form.field.AceEditor', {
     height: 200,
 
     /**
+     * @boolean
+     */
+    useWorker: true,
+
+    /**
      * Defines alternate names for this class
      * @array
      */
@@ -208,6 +213,10 @@ Ext.define('Shopware.form.field.AceEditor', {
         me.editor = ace.edit(me.inputId);
         me.editor.ownerCt = me;
         me.getSession().setMode('ace/mode/' + currentModeName);
+
+        me.fireEvent('setAceEditorMode', me, currentModeName);
+
+        me.editor.getSession().setUseWorker(me.useWorker);
         me.editor.setTheme('ace/theme/' + me.theme);
         me.editor.getSession().setUseWrapMode(me.useWrapMode);
         me.editor.setShowFoldWidgets(me.codeFolding);

@@ -457,6 +457,10 @@ Ext.onReady(function() {
                 plugins: 'Browser-plugins',
                 plugin_name: 'Plugin-Namen',
                 plugin_path: 'Plugin Pfad'
+            },
+            response: {
+                name: 'Server-Antwort',
+                errorOverview: 'Fehlerübersicht'
             }
         }
     });

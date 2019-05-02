@@ -429,6 +429,10 @@ Ext.onReady(function() {
                 plugins: 'Browser plugins',
                 plugin_name: 'Plugin name',
                 plugin_path: 'Plugin path'
+            },
+            response: {
+                name: 'Server-Response',
+                errorOverview: 'Error overview'
             }
         }
     });
