@@ -50,6 +50,7 @@ Ext.define('Shopware.apps.Attributes.model.Table', {
         s_core_customergroups_attributes: '{s name="table/s_core_customergroups_attributes"}{/s}',
         s_premium_dispatch_attributes: '{s name="table/s_premium_dispatch_attributes"}{/s}',
         s_order_documents_attributes: '{s name="table/s_order_documents_attributes"}{/s}',
+        s_core_documents_attributes: '{s name="table/s_core_documents_attributes"}{/s}',
         s_emotion_attributes: '{s name="table/s_emotion_attributes"}{/s}',
         s_cms_support_attributes: '{s name="table/s_cms_support_attributes"}{/s}',
         s_core_config_mails_attributes: '{s name="table/s_core_config_mails_attributes"}{/s}',

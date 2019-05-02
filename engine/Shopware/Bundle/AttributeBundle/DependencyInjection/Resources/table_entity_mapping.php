@@ -376,4 +376,12 @@ return [
         'coreAttributes' => [],
         'dependingTables' => [],
     ],
+    's_core_documents_attributes' => [
+        'readOnly' => false,
+        'model' => 'Shopware\Models\Attribute\DocumentDefinition',
+        'identifiers' => ['id', 'documentID'],
+        'foreignKey' => 'documentID',
+        'coreAttributes' => [],
+        'dependingTables' => [],
+    ],
 ];
