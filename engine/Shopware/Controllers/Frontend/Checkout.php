@@ -116,9 +116,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $amount = $this->basket->sGetAmount();
         $this->session->sBasketAmount = empty($amount) ? 0 : array_shift($amount);
 
-        if ($this->session->offsetExists('removedProductWithInvalidCategory') && !$this->Response()->isRedirect()) {
-            $this->View()->assign('removedProductWithInvalidCategory', true);
-            $this->session->offsetUnset('removedProductWithInvalidCategory');
+        if (($messageType = $this->Request()->query->get('removeMessage')) && $messageType === 'voucher') {
+            $this->session->offsetUnset('sBasketVoucherRemovedInCart');
+        }
+
+        if ($this->session->offsetExists('sBasketVoucherRemovedInCart')) {
+            $this->View()->assign('sBasketVoucherRemovedInCart', true);
         }
     }
 
@@ -151,6 +154,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $this->View()->assign('sUserData', $this->getUserData());
         $this->View()->assign('sBasket', $this->getBasket());
+        $this->View()->assign('sInvalidCartItems', $this->getInvalidProducts($this->View()->getAssign('sBasket')));
 
         $this->View()->assign('sShippingcosts', $this->View()->sBasket['sShippingcosts']);
         $this->View()->assign('sShippingcostsDifference', $this->View()->sBasket['sShippingcostsDifference']);
@@ -209,6 +213,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $this->View()->assign('sDispatches', $this->getDispatches());
 
         $this->View()->assign('sBasket', $this->getBasket());
+        $this->View()->assign('sInvalidCartItems', $this->getInvalidProducts($this->View()->getAssign('sBasket')));
 
         $this->View()->assign('sLaststock', $this->basket->sCheckBasketQuantities());
         $this->View()->assign('sShippingcosts', $this->View()->sBasket['sShippingcosts']);
@@ -229,7 +234,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $this->saveTemporaryOrder();
 
-        if ($this->getMinimumCharge() || count($this->View()->sBasket['content']) <= 0) {
+        if ($this->getMinimumCharge() || count($this->View()->sBasket['content']) <= 0 || $this->View()->getAssign('sInvalidCartItems')) {
             return $this->forward('cart');
         }
 
@@ -329,11 +334,13 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
                     $this->View()->clearAssign('sBasketView');
                 }
 
+                $this->View()->assign('sInvalidCartItems', $this->getInvalidProducts($this->View()->getAssign('sBasket')));
+
                 return;
             }
         }
 
-        if (empty($this->session['sOrderVariables']) || $this->getMinimumCharge() || $this->getEsdNote() || $this->getDispatchNoOrder()) {
+        if (empty($this->session['sOrderVariables']) || $this->getMinimumCharge() || $this->getEsdNote() || $this->getDispatchNoOrder() || $this->View()->getAssign('sInvalidCartItems')) {
             return $this->forward('confirm');
         }
 
@@ -355,6 +362,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             $this->View()->assign('sBasket', $this->View()->getAssign('sBasketView'));
             $this->View()->clearAssign('sBasketView');
         }
+
+        $this->View()->assign('sInvalidCartItems', $this->getInvalidProducts($this->View()->getAssign('sBasket')));
 
         if ($this->basket->sCountBasket() <= 0) {
             return;
@@ -653,7 +662,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
                 $this->basket->sInsertPremium();
             }
         }
-        $this->forward($this->Request()->getParam('sTargetAction', 'index'));
+        $this->redirect($this->Request()->getParam('sTargetAction', 'index'));
     }
 
     /**
@@ -1613,6 +1622,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $view->assign('sDispatch', $this->getSelectedDispatch());
 
         $view->assign('sBasket', $basket);
+        $this->View()->assign('sInvalidCartItems', $this->getInvalidProducts($basket));
 
         $view->assign('sShippingcosts', $basket['sShippingcosts']);
         $view->assign('sShippingcostsDifference', $basket['sShippingcostsDifference']);
@@ -2043,5 +2053,24 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $currency->setFormat($currencyModel->toArray());
 
         $this->get('shopware_storefront.context_service')->initializeShopContext();
+    }
+
+    private function getInvalidProducts(array $basket): array
+    {
+        $products = [];
+
+        foreach ($basket['content'] as $item) {
+            if ((int) $item['modus'] !== 0) {
+                continue;
+            }
+
+            if (!empty($item['additional_details'])) {
+                continue;
+            }
+
+            $products[] = $item['articlename'];
+        }
+
+        return $products;
     }
 }

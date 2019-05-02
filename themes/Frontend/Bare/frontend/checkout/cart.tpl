@@ -52,7 +52,7 @@
                                 {block name="frontend_checkout_actions_confirm"}
 
                                     {* Forward to the checkout *}
-                                    {if !$sMinimumSurcharge && !($sDispatchNoOrder && !$sDispatches)}
+                                    {if !$sMinimumSurcharge && !($sDispatchNoOrder && !$sDispatches) && !$sInvalidCartItems}
                                         {block name="frontend_checkout_actions_checkout"}
                                             {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions" assign="snippetCheckoutActionsLinkProceedShort"}{/s}
                                             <a href="{if {config name=always_select_payment}}{url controller='checkout' action='shippingPayment'}{else}{url controller='checkout' action='confirm'}{/if}"
@@ -123,7 +123,7 @@
                                     {block name="frontend_checkout_actions_link_last_bottom"}{/block}
 
                                     {* Forward to the checkout *}
-                                    {if !$sMinimumSurcharge && !($sDispatchNoOrder && !$sDispatches)}
+                                    {if !$sMinimumSurcharge && !($sDispatchNoOrder && !$sDispatches) && !$sInvalidCartItems}
                                         {block name="frontend_checkout_actions_confirm_bottom_checkout"}
                                             {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions" assign="snippetCheckoutActionsLinkProceedShort"}{/s}
                                             <a href="{if {config name=always_select_payment}}{url controller='checkout' action='shippingPayment'}{else}{url controller='checkout' action='confirm'}{/if}"

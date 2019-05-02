@@ -32,12 +32,24 @@
         {/block}
 
         {block name='frontend_checkout_ajax_cart_product_removed_with_invalid_category'}
-            {if $removedProductWithInvalidCategory}
+            {if $sInvalidCartItems}
                 <div class="alert is--warning is--rounded">
                     <div class="alert--icon">
                         <div class="icon--element icon--info"></div>
                     </div>
                     <div class="alert--content">{s name="InvalidCategoryMessage" namespace="frontend/checkout/error_messages"}{/s}</div>
+                </div>
+            {/if}
+        {/block}
+
+        {block name='frontend_checkout_ajax_cart_product_removed_with_invalid_voucher'}
+            {if $sBasketVoucherRemovedInCart}
+                <div class="alert is--warning is--rounded has--close">
+                    <a class="alert--close icon--cross" data-notification-message-close="true" data-link="{url removeMessage="voucher"}" title="{s name="Hide" namespace="frontend"}{/s}"></a>
+                    <div class="alert--icon">
+                        <div class="icon--element icon--info"></div>
+                    </div>
+                    <div class="alert--content">{s name="InvalidVoucherGotRemoved" namespace="frontend/checkout/error_messages"}{/s}</div>
                 </div>
             {/if}
         {/block}
@@ -66,7 +78,7 @@
 
         {block name='frontend_checkout_ajax_cart_prices_container'}
             {if $sBasket.content}
-				{if {config name=showShippingCostsOffCanvas} == 0}
+                {if {config name=showShippingCostsOffCanvas} == 0}
                     {block name='frontend_checkout_ajax_cart_prices_container_without_shipping_costs'}
                         <div class="prices--container">
                             {block name='frontend_checkout_ajax_cart_prices_container_inner'}
@@ -82,7 +94,7 @@
                             {/block}
                         </div>
                     {/block}
-				{else}
+                {else}
                     {block name='frontend_checkout_ajax_cart_prices_container_with_shipping_costs'}
                         <div class="prices--container">
                             {block name='frontend_checkout_ajax_cart_prices_container_inner'}
@@ -135,7 +147,7 @@
                             {/if}
                         </div>
                     {/block}
-				{/if}
+                {/if}
             {/if}
         {/block}
 
@@ -144,7 +156,7 @@
             <div class="button--container">
                 {block name='frontend_checkout_ajax_cart_button_container_inner'}
                     {block name='frontend_checkout_ajax_cart_open_checkout'}
-                        {if !($sDispatchNoOrder && !$sDispatches)}
+                        {if !($sDispatchNoOrder && !$sDispatches) && !$sInvalidCartItems}
                             {block name='frontend_checkout_ajax_cart_open_checkout_inner'}
                                 {s name="AjaxCartLinkConfirm" assign="snippetAjaxCartLinkConfirm"}{/s}
                                 <a href="{if {config name=always_select_payment}}{url controller='checkout' action='shippingPayment'}{else}{url controller='checkout' action='confirm'}{/if}" class="btn is--primary button--checkout is--icon-right" title="{$snippetAjaxCartLinkConfirm|escape}">

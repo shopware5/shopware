@@ -141,6 +141,7 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.cookie-permission.js',
         'src/js/jquery.shopware-responsive.js',
         'src/js/jquery.invalid-tos-jump.js',
+        'src/js/jquery.notification-message-close.js'
     ];
 
     /**

@@ -230,6 +230,8 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
                 $response->headers->setCookie(new Cookie($cookieKey, $cookieValue, $cookieTime, $cookiePath));
 
+                $this->refreshCart($newShop);
+
                 return;
             }
         }
@@ -508,5 +510,30 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         if (!$mainShop->getDocumentTemplate()) {
             throw new \RuntimeException(sprintf("Shop '%s (id: %s)' has no document template.", $shop->getName(), $shop->getId()));
         }
+    }
+
+    private function refreshCart(Shop $shop): void
+    {
+        $shop->registerResources();
+
+        /** @var Shopware_Components_Modules $modules */
+        $modules = $this->get('modules');
+
+        if (empty($this->get('session')->get('sUserId'))) {
+            $modules->System()->sUSERGROUP = $shop->getCustomerGroup()->getKey();
+            $modules->System()->sUSERGROUPDATA = $shop->getCustomerGroup()->toArray();
+            $modules->System()->sCurrency = $shop->getCurrency()->toArray();
+        }
+
+        $this->get('shopware_storefront.context_service')->initializeContext();
+
+        /** @var \Shopware\Bundle\StoreFrontBundle\Struct\ShopContext $shopContext */
+        $shopContext = $this->get('shopware_storefront.context_service')->getShopContext();
+
+        $modules->Basket()->sRefreshBasket();
+        $modules->Admin()->sGetPremiumShippingcosts($shopContext->getCountry() ? $shopContext->getCountry()->jsonSerialize() : null);
+
+        $amount = $modules->Basket()->sGetAmount();
+        $this->get('session')->offsetSet('sBasketAmount', empty($amount) ? 0 : array_shift($amount));
     }
 }
