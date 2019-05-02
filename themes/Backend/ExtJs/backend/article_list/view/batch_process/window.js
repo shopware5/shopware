@@ -26,71 +26,83 @@
 Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Window', {
     /**
      * Define that the plugin manager main window is an extension of the enlight application window
+     *
      * @string
      */
     extend: 'Enlight.app.Window',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
+     *
      * @string
      */
     alias: 'widget.multi-edit-batch-process-window',
 
     /**
      * Set no border for the window
+     *
      * @boolean
      */
     border: false,
 
     /**
-     * Set border layout for the window
-     * @string
-     */
-
-    /**
      * Define window width
+     *
      * @integer
      */
     width: 600,
 
     /**
      * Define window height
+     *
      * @integer
      */
     height: 400,
 
     /**
      * True to display the 'maximize' tool button and allow the user to maximize the window, false to hide the button and disallow maximizing the window.
+     *
      * @boolean
      */
     maximizable: true,
 
     /**
      * True to display the 'minimize' tool button and allow the user to minimize the window, false to hide the button and disallow minimizing the window.
+     *
      * @boolean
      */
     minimizable: true,
 
     /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
+     *
+     * @boolean
      */
     stateful: true,
 
     /**
      * The unique id for this object to use for state management purposes.
+     *
+     * @string
      */
     stateId: 'shopware-multiedit-batch-process-window',
 
     /**
      * Title of the window.
+     *
      * @string
      */
     titleTemplate: '{s name=batchProcess/windowTitle}Batch Process{/s}',
 
+    /**
+     * @boolean
+     */
     resizable: true,
 
     /**
      * Set the windows layout to "fit"
+     *
+     * @string
      */
     layout: 'fit',
 
@@ -103,7 +115,6 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Window', {
     initComponent: function () {
         var me = this;
 
-
         me.title = me.titleTemplate;
 
         me.dockedItems = [{
@@ -112,7 +123,7 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Window', {
             ui: 'shopware-ui',
             cls: 'shopware-toolbar',
             items: me.getFormButtons()
-        }]
+        }];
 
         me.items = [{
             xtype: 'multi-edit-batch-process-grid',
@@ -135,7 +146,6 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Window', {
         var me = this,
             buttons = [ '->' ];
 
-
         var cancelButton = Ext.create('Ext.button.Button', {
             text: '{s name=close}Close{/s}',
             scope: me,
@@ -151,7 +161,6 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Window', {
             cls: 'secondary',
             text: '{s name=batchProcess/addToQueue}Add to queue{/s}'
         });
-//        buttons.push(addToQueue);
 
         var addToQueueAndRun = Ext.create('Ext.button.Button', {
             action: 'addToQueueAndRun',
@@ -162,6 +171,5 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Window', {
 
         return buttons;
     }
-
 });
 //{/block}
