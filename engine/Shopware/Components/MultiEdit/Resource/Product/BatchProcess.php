@@ -34,6 +34,13 @@ use Shopware\Models\MultiEdit\Queue;
 class BatchProcess
 {
     /**
+     * Issue SW-23934
+     *
+     * Due to a problem in PHP (https://bugs.php.net/bug.php?id=70110) long values can lead to a problem parsing the DQL
+     */
+    const MAX_VALUE_LENGTH = 2700;
+
+    /**
      * Reference to an instance of the DqlHelper
      *
      * @var DqlHelper
@@ -200,7 +207,10 @@ class BatchProcess
             if ($operation['operator'] === 'set' && $columnInfo[ucfirst($prefix) . ucfirst($column)]['nullable'] && $operation['value'] == '') {
                 $operationValue = 'NULL';
             } else {
-                $operationValue = $builder->expr()->literal($operation['value']);
+                $operationValue = $builder->expr()->literal(
+                    // Limiting the value length to prevent possible parsing errors
+                    substr($operation['value'], 0, self::MAX_VALUE_LENGTH)
+                );
             }
 
             switch (strtolower($operation['operator'])) {
@@ -234,8 +244,8 @@ class BatchProcess
                     break;
 
                 case 'dql':
-                    // This is quite limited, as many sql features are note supported. Also the update-statements
-                    // are limited to the current entity, so you will not be able to set an product's name
+                    // This is quite limited, as many sql features are not supported. Also the update-statements
+                    // are limited to the current entity, so you will not be able to set a product's name
                     // to its details number because the detail cannot be joined here.
                     $builder->set("{$prefix}.$column", new Literal($operation['value']));
                     break;
@@ -251,7 +261,7 @@ class BatchProcess
     }
 
     /**
-     * Updates a sine product details within batch mode
+     * Updates product details within batch mode
      *
      * @param int[] $detailIds
      * @param array $nestedOperations
