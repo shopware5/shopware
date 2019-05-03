@@ -26,9 +26,12 @@ namespace Shopware\Tests\Functional\Components\Cart;
 
 use Enlight_Controller_Request_RequestHttp;
 use Shopware\Components\Test\CheckoutTest;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class CalculationOnLogoutTest extends CheckoutTest
 {
+    use DatabaseTransactionBehaviour;
+
     public $clearBasketOnReset = false;
 
     public function testLogout()
@@ -39,7 +42,7 @@ class CalculationOnLogoutTest extends CheckoutTest
 
         $productNumber = $this->createArticle(100, 19.00);
         Shopware()->Modules()->Basket()->sAddArticle($productNumber);
-        Shopware()->Modules()->Basket()->sRefreshBasket();
+        $this->visitCart();
 
         $currentAmount = Shopware()->Session()->get('sBasketAmount');
 

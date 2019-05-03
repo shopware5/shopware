@@ -691,7 +691,11 @@ class sAdmin
 
         if (!$this->config->get('clearBasketAfterLogout')) {
             $this->moduleManager->Basket()->sRefreshBasket();
-            $this->moduleManager->Admin()->sGetPremiumShippingcosts();
+
+            $countries = $this->sGetCountryList();
+            $country = reset($countries);
+
+            $this->moduleManager->Admin()->sGetPremiumShippingcosts($country);
 
             $amount = $this->moduleManager->Basket()->sGetAmount();
             $this->session->offsetSet('sBasketAmount', empty($amount) ? 0 : array_shift($amount));
