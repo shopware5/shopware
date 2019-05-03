@@ -53,6 +53,7 @@ use Shopware\Models\Article\Repository as ArticleRepository;
 use Shopware\Models\Article\Supplier;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Media\Album;
+use Shopware\Models\Media\Media;
 use Shopware\Models\Media\Repository as MediaRepository;
 
 /**
@@ -2004,7 +2005,7 @@ class sArticles
     private function getMediaRepository()
     {
         if ($this->mediaRepository === null) {
-            $this->mediaRepository = Shopware()->Models()->getRepository(\Shopware\Models\Media\Media::class);
+            $this->mediaRepository = Shopware()->Models()->getRepository(Media::class);
         }
 
         return $this->mediaRepository;
@@ -2249,7 +2250,7 @@ class sArticles
             $image['extension'] = 'jpg';
         }
 
-        $imageData['src']['original'] = $mediaService->getUrl('media/image/' . $image['path'] . '.' . $image['extension']);
+        $imageData['src']['original'] = $mediaService->getUrl($image['media']['path']);
         $imageData['res']['original']['width'] = $image['width'];
         $imageData['res']['original']['height'] = $image['height'];
         $imageData['res']['description'] = $image['description'];
@@ -2285,9 +2286,19 @@ class sArticles
             if (strpos($size, 'x') === 0) {
                 $size = $size . 'x' . $size;
             }
-            $imageData['src'][$key] = $mediaService->getUrl('media/image/thumbnail/' . $image['path'] . '_' . $size . '.' . $image['extension']);
-            if ($highDpiThumbnails) {
-                $imageData['srchd'][$key] = $mediaService->getUrl('media/image/thumbnail/' . $image['path'] . '_' . $size . '@2x.' . $image['extension']);
+
+            if ($image['media']['type'] === Media::TYPE_IMAGE) {
+                $imageData['src'][$key] = $mediaService->getUrl('media/image/thumbnail/' . $image['path'] . '_' . $size . '.' . $image['extension']);
+
+                if ($highDpiThumbnails) {
+                    $imageData['srchd'][$key] = $mediaService->getUrl('media/image/thumbnail/' . $image['path'] . '_' . $size . '@2x.' . $image['extension']);
+                }
+            } else {
+                $imageData['src'][$key] = $mediaService->getUrl($image['media']['path']);
+
+                if ($highDpiThumbnails) {
+                    $imageData['srchd'][$key] = $mediaService->getUrl($image['media']['path']);
+                }
             }
         }
 

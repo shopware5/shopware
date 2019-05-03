@@ -28,6 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Components\Thumbnail\Manager;
+use Shopware\Models\Media\Media;
 
 class MediaHydrator extends Hydrator
 {
@@ -109,8 +110,7 @@ class MediaHydrator extends Hydrator
             $media->setHeight((int) $data['__media_height']);
         }
 
-        if ($media->getType() == Struct\Media::TYPE_IMAGE
-            && $data['__mediaSettings_create_thumbnails']) {
+        if ($this->shouldAddThumbnails($media->getType(), $data)) {
             $media->setThumbnails(
                 $this->getMediaThumbnails($data)
             );
@@ -220,5 +220,23 @@ class MediaHydrator extends Hydrator
         $data['__media_height'] = $height;
 
         return $data;
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return bool
+     */
+    private function shouldAddThumbnails($type, array $data)
+    {
+        if (!$data['__mediaSettings_create_thumbnails']) {
+            return false;
+        }
+
+        if ($type !== Media::TYPE_VECTOR && $type !== Media::TYPE_IMAGE) {
+            return false;
+        }
+
+        return true;
     }
 }
