@@ -159,8 +159,6 @@ class Repository extends ModelRepository
      * @param int|null     $offset
      * @param int|null     $limit
      *
-     * @internal param $ids
-     *
      * @return \Doctrine\ORM\Query
      */
     public function getOrdersQuery($filters = null, $orderBy = null, $offset = null, $limit = null)
@@ -180,6 +178,8 @@ class Repository extends ModelRepository
      *
      * @param array[]|null $filters
      * @param string|null  $orderBy
+     *
+     * @throws \Exception
      *
      * @return QueryBuilder
      */
@@ -374,6 +374,8 @@ class Repository extends ModelRepository
      *  - voucher.value
      *  - voucher.minimumCharge
      *
+     * @throws \Exception
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getVoucherQuery()
@@ -457,9 +459,9 @@ class Repository extends ModelRepository
     /**
      * @param int[] $orderIds
      *
-     * @return array[]
+     * @return QueryBuilder
      */
-    public function getDocuments(array $orderIds)
+    public function getDocumentsQueryBuilder(array $orderIds)
     {
         $query = $this->getEntityManager()->createQueryBuilder();
         $query->select(['document', 'documentType']);
@@ -468,7 +470,34 @@ class Repository extends ModelRepository
         $query->where('IDENTITY(document.order) IN (:ids)');
         $query->setParameter(':ids', $orderIds, Connection::PARAM_INT_ARRAY);
 
-        return $query->getQuery()->getArrayResult();
+        return $query;
+    }
+
+    /**
+     * @param int[] $orderIds
+     *
+     * @return array[]
+     */
+    public function getDocuments(array $orderIds)
+    {
+        return $this->getDocumentsQueryBuilder($orderIds)->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @param int[] $orderIds
+     *
+     * @return QueryBuilder
+     */
+    public function getDetailsQueryBuilder(array $orderIds)
+    {
+        $query = $this->getEntityManager()->createQueryBuilder();
+        $query->select(['details', 'attribute']);
+        $query->from(\Shopware\Models\Order\Detail::class, 'details');
+        $query->leftJoin('details.attribute', 'attribute');
+        $query->where('IDENTITY(details.order) IN (:ids)');
+        $query->setParameter(':ids', $orderIds, Connection::PARAM_INT_ARRAY);
+
+        return $query;
     }
 
     /**
@@ -478,14 +507,23 @@ class Repository extends ModelRepository
      */
     public function getDetails(array $orderIds)
     {
+        return $this->getDetailsQueryBuilder($orderIds)->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @param int[] $orderIds
+     *
+     * @return QueryBuilder
+     */
+    public function getPaymentsQueryBuilder(array $orderIds)
+    {
         $query = $this->getEntityManager()->createQueryBuilder();
-        $query->select(['details', 'attribute']);
-        $query->from(\Shopware\Models\Order\Detail::class, 'details');
-        $query->leftJoin('details.attribute', 'attribute');
-        $query->where('IDENTITY(details.order) IN (:ids)');
+        $query->select(['payments']);
+        $query->from(\Shopware\Models\Payment\PaymentInstance::class, 'payments');
+        $query->where('IDENTITY(payments.order) IN (:ids)');
         $query->setParameter(':ids', $orderIds, Connection::PARAM_INT_ARRAY);
 
-        return $query->getQuery()->getArrayResult();
+        return $query;
     }
 
     /**
@@ -495,13 +533,7 @@ class Repository extends ModelRepository
      */
     public function getPayments(array $orderIds)
     {
-        $query = $this->getEntityManager()->createQueryBuilder();
-        $query->select(['payments']);
-        $query->from(\Shopware\Models\Payment\PaymentInstance::class, 'payments');
-        $query->where('IDENTITY(payments.order) IN (:ids)');
-        $query->setParameter(':ids', $orderIds, Connection::PARAM_INT_ARRAY);
-
-        return $query->getQuery()->getArrayResult();
+        return $this->getPaymentsQueryBuilder($orderIds)->getQuery()->getArrayResult();
     }
 
     /**
@@ -509,6 +541,8 @@ class Repository extends ModelRepository
      * @param int|null $limit
      * @param array[]  $filters
      * @param array[]  $sortings
+     *
+     * @throws \Exception
      *
      * @return array[]
      */
@@ -570,6 +604,8 @@ class Repository extends ModelRepository
      *
      * @param QueryBuilder|\Shopware\Components\Model\QueryBuilder $builder
      * @param array[]|null                                         $filters
+     *
+     * @throws \Exception
      *
      * @return QueryBuilder
      */
