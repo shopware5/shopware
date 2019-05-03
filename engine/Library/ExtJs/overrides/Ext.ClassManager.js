@@ -22,7 +22,7 @@
  */
 
 //{block name="extjs/overrides/classManager"}
-;(function(Manager, global) {
+;(function(Manager, global, arraySlice) {
     /**
      * Checks if a class has already been created.
      *
@@ -180,5 +180,88 @@
 
         return match;
     };
-})(Ext.ClassManager, Ext.global);
+
+    Manager.instantiateByAlias = function() {
+        var alias = arguments[0],
+            args = arraySlice.call(arguments),
+            className = this.getNameByAlias(alias);
+
+        if (!className) {
+            className = this.maps.aliasToName[alias];
+
+            if (!className) {
+                throw new Error("[Ext.createByAlias] Cannot create an instance of unrecognized alias: " + alias);
+            }
+
+            Ext.syncRequire(className);
+        }
+
+        args[0] = className;
+
+        return this.instantiate.apply(this, args);
+    };
+
+    Manager.instantiate = function (length) {
+        var name = arguments[0],
+            nameType = typeof name,
+            args = arraySlice.call(arguments, 1),
+            alias = name,
+            possibleName, cls;
+
+        if (nameType !== 'function') {
+            if (nameType !== 'string' && args.length === 0) {
+                args = [name];
+                name = name.xclass;
+            }
+
+            if (typeof name != 'string' || name.length < 1) {
+                throw new Error("[Ext.create] Invalid class name or alias '" + name + "' specified, must be a non-empty string");
+            }
+
+            cls = this.get(name);
+        }
+        else {
+            cls = name;
+        }
+
+        // No record of this class name, it's possibly an alias, so look it up
+        if (!cls) {
+            possibleName = this.getNameByAlias(name);
+
+            if (possibleName) {
+                name = possibleName;
+
+                cls = this.get(name);
+            }
+        }
+
+        // Still no record of this class name, it's possibly an alternate name, so look it up
+        if (!cls) {
+            possibleName = this.getNameByAlternate(name);
+
+            if (possibleName) {
+                name = possibleName;
+
+                cls = this.get(name);
+            }
+        }
+
+        // Still not existing at this point, try to load it via synchronous mode as the last resort
+        if (!cls) {
+            Ext.syncRequire(name);
+
+            cls = this.get(name);
+        }
+
+        if (!cls) {
+            throw new Error("[Ext.create] Cannot create an instance of unrecognized class name / alias: " + alias);
+        }
+
+        if (typeof cls != 'function') {
+            throw new Error("[Ext.create] '" + name + "' is a singleton and cannot be instantiated");
+        }
+
+        return this.getInstantiator(args.length)(cls, args);
+    }
+})(Ext.ClassManager, Ext.global, Array.prototype.slice);
 //{/block}
