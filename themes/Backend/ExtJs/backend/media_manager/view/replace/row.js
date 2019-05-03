@@ -33,8 +33,6 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Row', {
         borderBottom: '1px solid #c4c4c4'
     },
 
-    noPictureImageSrc: '{url module=frontend}' + '/themes/Backend/ExtJs/backend/_resources/images/index/no-picture.jpg',
-
     /**
      * Inits all required components
      */
@@ -81,11 +79,12 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Row', {
             var data,
                 type = me.getType(file);
 
-            if (!file.type.match(/^image/)) {
-                data = { thumbnail: me.noPictureImageSrc, name: file.name, isRaw: true, type: type };
-            } else {
-                data = { thumbnail: e.target.result, name: file.name, isRaw: true, type: type };
-            }
+            data = {
+                thumbnail: e.target.result,
+                name: file.name,
+                isRaw: true,
+                type: type
+            };
 
             previewContainer = me.getMediaTemplate(data);
             me.previewContainer.removeAll();

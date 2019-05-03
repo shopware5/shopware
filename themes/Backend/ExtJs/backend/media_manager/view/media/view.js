@@ -340,7 +340,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                             '</p>',
                         '</tpl>',
 
-                        '<tpl if="this.allowInBrowserRendering(extension)">',
+                        '<tpl>',
                             '<p>',
                                 '<strong>'+me.snippets.mediaInfo.adress+'</strong>',
                                 '<a class="link" target="_blank" href="{path}" title="{name}">'+ me.snippets.mediaInfo.mediaLink +'</a>',
@@ -387,16 +387,6 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                     });
 
                     return str;
-                },
-
-                /**
-                 * Checks if this file type is allowed to be rendered inside of the browser
-                 *
-                 * @param { string } extension
-                 * @returns { boolean }
-                 */
-                allowInBrowserRendering: function(extension) {
-                    return !Ext.Array.contains(['svg'], extension.toLowerCase());
                 },
 
                 /**
