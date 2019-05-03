@@ -19,6 +19,9 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `Shopware_Modules_Basket_DeleteArticle_Start`
     * `Shopware_Modules_Basket_DeletedArticle`
     * `Shopware_Modules_Basket_getTaxesForUpdateProduct_FilterReturn`
+* Added new blocks to `frontend/checkout/ajax_cart.tpl` for inactive links to checkout:
+    * `frontend_checkout_ajax_cart_open_checkout_inner_unavailable` 
+    * `frontend_checkout_ajax_cart_open_basket_unavailable`
 
 ### Changes
 
@@ -35,6 +38,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed BatchProcess to fix an issue with `removeString` operator
 * Changed custom-page attributes to be translated properly
 * Changed Symfony library to version 3.4.27
+* Changed buttons in empty off-canvas baskets to be disabled
 
 ### Deprecations
 
