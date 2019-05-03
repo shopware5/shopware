@@ -128,7 +128,10 @@ Ext.define('Shopware.apps.Category.view.sorting.Tab', {
                 '->',
                 {
                     xtype: 'productsearchfield',
-                    store: Ext.create('Shopware.apps.Base.store.Article')
+                    cls: 'searchfield',
+                    store: Ext.create('Shopware.apps.Base.store.Article'),
+                    searchScope: ['articles'],
+                    emptyText: '{s name="search/emptytext"}{/s}'
                 }
             ]
         });
@@ -138,11 +141,11 @@ Ext.define('Shopware.apps.Category.view.sorting.Tab', {
         var me = this;
         this.enable();
 
-        var store = Ext.create('Shopware.apps.Category.store.ManualSorting');
-        store.getProxy().extraParams.categoryId = this.currentCategoryId = record.get('id');
+        this.store = Ext.create('Shopware.apps.Category.store.ManualSorting');
+        this.store.getProxy().extraParams.categoryId = this.currentCategoryId = record.get('id');
 
-        this.table.reconfigure(store);
-        this.grid.reconfigure(store);
+        this.table.reconfigure(this.store);
+        this.grid.reconfigure(this.store);
 
         this.sortingBtn.store.getProxy().extraParams.categoryId = this.currentCategoryId;
         this.sortingBtn.store.load(function () {

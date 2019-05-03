@@ -95,8 +95,10 @@ ON DUPLICATE KEY UPDATE
         $productIds = array_map('intval', array_keys($positions));
         $positionValues = array_values($positions);
         $sorting = $this->getSorting($categoryId, $sortingId);
+        $maxPosition = max($positionValues);
+        $hasFoundMaxPosition = false;
 
-        $products = $this->productLoader->load($categoryId, 0, max(max($positionValues), $maxValue), $sorting)['data'];
+        $products = $this->productLoader->load($categoryId, 0, max($maxPosition, $maxValue), $sorting)['data'];
         $backlogs = [];
 
         $i = 1;
@@ -106,7 +108,15 @@ ON DUPLICATE KEY UPDATE
             }
 
             while (in_array($i, $positionValues, true)) {
+                if ($maxPosition === $i) {
+                    $hasFoundMaxPosition = true;
+                }
+
                 ++$i;
+            }
+
+            if ($hasFoundMaxPosition && $product['position'] === null) {
+                break;
             }
 
             $prepare->execute([
