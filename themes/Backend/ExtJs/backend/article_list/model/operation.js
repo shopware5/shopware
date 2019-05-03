@@ -45,7 +45,5 @@ Ext.define('Shopware.apps.ArticleList.model.Operation', {
         { name: 'operator', type: 'string' },
         { name: 'value', type: 'string' }
     ]
-
-
 });
 //{/block}
