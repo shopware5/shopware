@@ -182,7 +182,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         return [
             'previewDetail',
             'getEsdDownload',
-            'loadStores',
         ];
     }
 

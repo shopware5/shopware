@@ -516,7 +516,6 @@ class sExport
         // Get filename and extension in order to insert thumbnail size later
         $extension = pathinfo($hash, PATHINFO_EXTENSION);
         $fileName = pathinfo($hash, PATHINFO_FILENAME);
-        $type = $this->getTypeOfImage($hash);
 
         // Get thumbnail sizes
         $sizes = $this->articleMediaAlbum
@@ -533,6 +532,8 @@ class sExport
         }, $sizes);
 
         if (isset($sizes[$imageSize])) {
+            $type = $this->getTypeOfImage($hash);
+
             $thumbnails = $thumbnailManager->getMediaThumbnails($fileName, $type, $extension, [$sizes[$imageSize]]);
 
             if (empty($thumbnails)) {
@@ -1880,6 +1881,9 @@ class sExport
         return $url;
     }
 
+    /**
+     * @return string
+     */
     private function getTypeOfImage(string $hash)
     {
         $types = [

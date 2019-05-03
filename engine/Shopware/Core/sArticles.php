@@ -1365,8 +1365,6 @@ class sArticles
     /**
      * Wrapper method to specialize the sGetArticlePictures method for the listing images
      *
-     * @deprecated not used anymore
-     *
      * @param int  $articleId
      * @param bool $forceMainImage | if true this will return the main image no matter which variant restriction is set
      *
