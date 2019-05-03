@@ -25,7 +25,7 @@ Visit the forum at <http://forum.shopware.com/>
 - PHP 7.2.0 or above
 - [Apache 2.2 or 2.4](https://httpd.apache.org/)
 - Apache's `mod_rewrite` module
-- MySQL 5.6.0 or above
+- MySQL 5.7.0 or above
 
 #### Required PHP extensions:
 

@@ -61,6 +61,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 ### Changes
 
 * Changed minimum required PHP version to 7.2.0
+* Changed minimum required MySQL version to 5.7.0
 * Changed doctrine/orm to 2.6.3
 * Changed mpdf/mpdf to 7.1.9
 * Changed elasticsearch/elasticsearch to 5.4.0
