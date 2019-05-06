@@ -73,6 +73,7 @@ class Requirements
             'checks' => [],
         ];
 
+        $checks = [];
         foreach ($this->runChecks() as $requirement) {
             $check = [];
             $check['name'] = (string) $requirement->name;
@@ -89,6 +90,12 @@ class Requirements
                 $check = $this->handleMaxCompatibleVersion($check);
             }
 
+            $checks[] = $check;
+        }
+
+        $checks = array_merge($checks, $this->checkOpcache());
+
+        foreach ($checks as $check) {
             if (!$check['check'] && $check['error']) {
                 $check['status'] = 'error';
                 $result['hasErrors'] = true;
@@ -247,6 +254,44 @@ class Requirements
         }
 
         return $v;
+    }
+
+    /**
+     * Checks the opcache configuration if the opcache exists.
+     */
+    private function checkOpcache()
+    {
+        if (!extension_loaded('Zend OPcache')) {
+            return [];
+        }
+
+        $useCwdOption = $this->compare('opcache.use_cwd', ini_get('opcache.use_cwd'), '1');
+        $opcacheRequirements = [[
+            'name' => 'opcache.use_cwd',
+            'group' => 'core',
+            'required' => 1,
+            'version' => ini_get('opcache.use_cwd'),
+            'result' => ini_get('opcache.use_cwd'),
+            'notice' => '',
+            'check' => $this->compare('opcache.use_cwd', ini_get('opcache.use_cwd'), '1'),
+            'error' => '',
+        ]];
+
+        if (fileinode('/') > 2) {
+            $validateRootOption = $this->compare('opcache.validate_root', ini_get('opcache.validate_root'), '1');
+            $opcacheRequirements[] = [
+                'name' => 'opcache.validate_root',
+                'group' => 'core',
+                'required' => 1,
+                'version' => ini_get('opcache.validate_root'),
+                'result' => ini_get('opcache.validate_root'),
+                'notice' => '',
+                'check' => $this->compare('opcache.validate_root', ini_get('opcache.validate_root'), '1'),
+                'error' => '',
+            ];
+        }
+
+        return $opcacheRequirements;
     }
 
     /**
