@@ -27,7 +27,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * Migrations are loaded from folder `SwagTestPlugin/Resources/migrations`
     * The migration file can be generated using `./bin/console sw:generate:migration added-something-new -p SwagTestPlugin`
 * Added new theme configuration to disable ajax loading for emotions
-* Added signature `supports` to `Shopware\Bundle\ESIndexingBundle\SynchronizerInterface` to reduce wrong typed backlog sync request.
+* Added signature `supports` to `Shopware\Bundle\ESIndexingBundle\SynchronizerInterface` to reduce wrong typed backlog sync request
     * Added method implementation to 
     `Shopware\Bundle\ESIndexingBundle\Property\PropertySynchronizer::supports`
     `Shopware\Bundle\ESIndexingBundle\Product\ProductSynchronizer::supports`
@@ -102,7 +102,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `s_core_customergroups`
     * `s_article_configurator_template_prices`
     * `s_articles_prices`
-    * `s_campaigns_mailings` to varchar limit of 15 for customer group key.
+    * `s_campaigns_mailings` to varchar limit of 15 for customer group key
 * Changed backend customer login to start with a fresh session
 * Changed `Shopware_Controllers_Backend_Application` to be an abstract class
 * Changed `sExport::sGetArticleCategoryPath` to allow various attributes in category path
@@ -120,7 +120,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `Shopware\Components\Plugin\XmlCronjobReader`
     * `Shopware\Components\Plugin\XmlMenuReader`
 * Removed `storeType` `php` from Plugin config.xml
-* Removed the unspecific request params assignment to view in `\Shopware_Controllers_Widgets_Listing::productsAction` and `\Shopware_Controllers_Widgets_Listing::streamAction`. Use a *PostDispatchEvent to assign necessary variables in a plugin.
+* Removed the unspecific request params assignment to view in `\Shopware_Controllers_Widgets_Listing::productsAction` and `\Shopware_Controllers_Widgets_Listing::streamAction`. Use a *PostDispatchEvent to assign necessary variables in a plugin
 * Removed voucher field from additional feature
 * Removed following classes without replacement
     * `Shopware\Bundle\FormBundle\Extension\EnlightRequestExtension`
@@ -158,24 +158,25 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 ### Deprecations
 
-* Deprecated `Shopware\Bundle\ESIndexingBundle\TextMappingInterface::getNotAnalyzedField`. It will be removed in 5.7, use the getKeywordField instead.
-* Deprecated `Shopware\Bundle\ESIndexingBundle\TextMappingInterface::getAttributeRawField`. It will be removed in 5.7, use the getKeywordField instead.
-* Deprecated `Shopware\Bundle\ESIndexingBundle\Product\ProductProviderInterface`. It will be removed in 5.7, use the `Shopware\Bundle\ESIndexingBundle\ProviderInterface` instead.
-* Deprecated `Shopware\Bundle\ESIndexingBundle\Property\PropertyProviderInterface`. It will be removed in 5.7, use the `Shopware\Bundle\ESIndexingBundle\ProviderInterface` instead.
+* Deprecated `Shopware\Bundle\ESIndexingBundle\TextMappingInterface::getNotAnalyzedField`. It will be removed in 5.7, use the getKeywordField instead
+* Deprecated `Shopware\Bundle\ESIndexingBundle\TextMappingInterface::getAttributeRawField`. It will be removed in 5.7, use the getKeywordField instead
+* Deprecated `Shopware\Bundle\ESIndexingBundle\Product\ProductProviderInterface`. It will be removed in 5.7, use the `Shopware\Bundle\ESIndexingBundle\ProviderInterface` instead
+* Deprecated `Shopware\Bundle\ESIndexingBundle\Property\PropertyProviderInterface`. It will be removed in 5.7, use the `Shopware\Bundle\ESIndexingBundle\ProviderInterface` instead
 * Deprecated `Shopware\Components\Model\ModelRepository::queryAll`. It will be removed in 5.7, use findBy([], null, $limit, $offset) instead
 * Deprecated `Shopware\Components\Model\ModelRepository::queryBy`. It will be removed in 5.7, use findBy instead
-* Deprecated `Shopware\Bundle\ESIndexingBundle\EsClientLogger`. Use `Shopware\Bundle\ESIndexingBundle\EsClient` instead.
+* Deprecated `Shopware\Bundle\ESIndexingBundle\EsClientLogger`. Use `Shopware\Bundle\ESIndexingBundle\EsClient` instead
 * Deprecated `shopware_elastic_search.client.logger`. Use `shopware_elastic_search.client` instead.
-* Deprecated `Shopware\Models\Article\Article::getAttributeRawField`. It will be removed in 5.7, , use `Shopware\Models\Article\Detail::getAttributeRawField `.
-* Deprecated `Shopware\Models\Article\Article::setLastStock`. It will be removed in 5.7, , use `Shopware\Models\Article\Detail::setLastStock`.
-* Deprecated `Shopware\Models\Article\Article::lastStock`. It will be removed in 5.8, use `Shopware\Models\Article\Detail::lastStock`.
-* Deprecated `EsSearch::addFilter`. Use `EsSearch::addQuery(BuilderInterface, BoolQuery::FILTER)` instead.
-* Deprecated `EsSearch::getFilters`. Use `EsSearch::getQueries(BuilderInterface, BoolQuery::FILTER)` instead.
+* Deprecated `Shopware\Models\Article\Article::getAttributeRawField`. It will be removed in 5.7, , use `Shopware\Models\Article\Detail::getAttributeRawField `
+* Deprecated `Shopware\Models\Article\Article::setLastStock`. It will be removed in 5.7, , use `Shopware\Models\Article\Detail::setLastStock`
+* Deprecated `Shopware\Models\Article\Article::lastStock`. It will be removed in 5.8, use `Shopware\Models\Article\Detail::lastStock`
+* Deprecated `EsSearch::addFilter`. Use `EsSearch::addQuery(BuilderInterface, BoolQuery::FILTER)` instead
+* Deprecated `EsSearch::getFilters`. Use `EsSearch::getQueries(BuilderInterface, BoolQuery::FILTER)` instead
 * Deprecated `Enlight_Controller_Response_ResponseHttp::setRawHeader`
 * Deprecated `Enlight_Controller_Response_ResponseHttp::clearRawHeader`
 * Deprecated `Enlight_Controller_Response_ResponseHttp::clearRawHeaders`
 * Deprecated `Enlight_Controller_Response_ResponseHttp::outputBody`
 * Deprecated `Shopware_Controllers_Backend_Log::createLogAction`. It will be removed in 5.7, use `\Shopware\Controllers\Backend\Logger::createLogAction` instead
+* Deprecated email transmission method `mail`. It will be removed in 5.7, use `smtp` instead
 
 ### Improved ExtJS auto-loading
 
