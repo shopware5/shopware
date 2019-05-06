@@ -50,7 +50,8 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
     refs: [
         { ref: 'articleMappingView', selector: 'category-category-tabs-article_mapping' },
         { ref: 'addButton', selector: 'category-category-tabs-article_mapping button[action=add]' },
-        { ref: 'removeButton', selector: 'category-category-tabs-article_mapping button[action=remove]' }
+        { ref: 'removeButton', selector: 'category-category-tabs-article_mapping button[action=remove]' },
+        { ref: 'sortingTab', selector: 'manual-sort-tab' }
     ],
 
     /**
@@ -244,6 +245,7 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
      * @private
      */
     _sendRequest: function(action, ids, categoryId) {
+        var me = this;
         var mapping = this.getArticleMappingView();
         var url = '{url controller=Category action=addCategoryArticles}';
         var message = '{s name="category/action/add/success"}[0]x articles assigned{/s}';
@@ -274,6 +276,8 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
                 });
                 mapping.fromGrid.getStore().load();
                 mapping.fireEvent('sendRequestSuccess', result);
+
+                me.getSortingTab().store.load();
             },
             failure: function(response) {
                 mapping.setLoading(false);

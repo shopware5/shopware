@@ -24,9 +24,6 @@
 
 class Migrations_Migration1618 extends Shopware\Components\Migrations\AbstractMigration
 {
-    private const LANGUAGE_GERMAN = 'de';
-    private const LANGUAGE_ENGLISH = 'en';
-
     /**
      * @param string $modus
      */
@@ -39,7 +36,7 @@ class Migrations_Migration1618 extends Shopware\Components\Migrations\AbstractMi
         );
         $data = [
             'label' => 'Position',
-            'active' => 0,
+            'active' => $modus === self::MODUS_INSTALL ? 1 : 0,
             'category' => 1,
             'position' => 5,
             'sortings' => json_encode([Shopware\Bundle\SearchBundle\Sorting\ManualSorting::class => ['direction' => 'ASC']]),

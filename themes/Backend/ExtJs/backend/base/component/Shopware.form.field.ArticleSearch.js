@@ -229,8 +229,13 @@ Ext.define('Shopware.form.field.ArticleSearch',
      */
     formFieldConfig: {},
 
+    /**
+     * @cfg { string } emptyText
+     * Empty text for the search field
+     */
+    emptyText: '{s name=search_default_text}Search...{/s}',
+
     snippets: {
-        emptyText: '{s name=search_default_text}Search...{/s}',
         assignedArticles: '{s name=assigned_articles}Assigned articles{/s}',
         articleName: '{s name=article_name}Article name{/s}',
         orderNumber: '{s name=ordernumber}Order number{/s}',
@@ -401,7 +406,7 @@ Ext.define('Shopware.form.field.ArticleSearch',
         var fieldConfig = Ext.apply({
             componentLayout: 'textfield',
             triggerCls: 'reset',
-            emptyText: me.snippets.emptyText,
+            emptyText: me.emptyText,
             fieldLabel: (me.fieldLabel || undefined),
             cls:  Ext.baseCSSPrefix + 'search-article-live-field',
             name: me.searchFieldName,

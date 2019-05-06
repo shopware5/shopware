@@ -145,8 +145,8 @@ Ext.define('Shopware.apps.Category.view.sorting.Grid', {
             '<div class="product-name">',
             '<span>{[Ext.util.Format.ellipsis(values.name, 50)]}</span>',
             '</div>',
-            '<a class="paging prev-page{[this.prevPage()]}" title="{/literal}{s name="move_to_prev_page"}{/s}{literal}"></a>',
-            '<a class="paging next-page{[this.nextPage()]}" title="{/literal}{s name="move_to_next_page"}{/s}{literal}"></a>',
+            '<a class="paging prev-page sprite-arrow-turn-180-left{[this.prevPage()]}" title="{/literal}{s name="move_to_prev_page"}{/s}{literal}"></a>',
+            '<a class="paging next-page sprite-arrow-turn{[this.nextPage()]}" title="{/literal}{s name="move_to_next_page"}{/s}{literal}"></a>',
             '</div>',
             '</tpl>',
             '<div class="x-clear"></div>{/literal}',
@@ -154,7 +154,7 @@ Ext.define('Shopware.apps.Category.view.sorting.Grid', {
                 // Add class if current product is on first page in store list
                 prevPage: function () {
                     if (me.store.currentPage === 1) {
-                        return ' disabled';
+                        return ' x-hidden';
                     }
                 },
 
@@ -162,7 +162,7 @@ Ext.define('Shopware.apps.Category.view.sorting.Grid', {
                     var lastPage = Math.ceil(me.store.totalCount / me.store.pageSize);
 
                     if (lastPage <= me.store.currentPage || lastPage === 1) {
-                        return ' disabled';
+                        return ' x-hidden';
                     }
                 },
             }

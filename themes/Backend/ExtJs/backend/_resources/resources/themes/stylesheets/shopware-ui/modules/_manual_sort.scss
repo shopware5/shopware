@@ -23,7 +23,7 @@
         display: inline-block;
         vertical-align: middle;
         z-index: 500;
-        max-width: 100%;
+        max-width: 120px;
         max-height: 100%;
         height: auto;
         border: 0;
@@ -41,27 +41,12 @@
       width: 16px;
       height: 16px;
       cursor: pointer;
-      background-image: theme-image($theme, 'sprite-arrows.png');
-      background-repeat: no-repeat;
 
       &.prev-page {
-        background-position: 0 -66px;
-        left: 0;
-
-        &.disabled {
-          background-position: 0 0;
-        }
+        left: 5px;
       }
       &.next-page {
-        background-position: 0 -462px;
-        right: 0;
-
-        &.disabled {
-          background-position: 0 -396px;
-        }
-      }
-      &.disabled {
-        cursor: auto;
+        right: 5px;
       }
     }
 
