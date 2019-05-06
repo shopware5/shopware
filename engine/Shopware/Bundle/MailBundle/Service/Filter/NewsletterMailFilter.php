@@ -26,10 +26,16 @@ namespace Shopware\Bundle\MailBundle\Service\Filter;
 
 class NewsletterMailFilter extends AssociationExistsFilter
 {
+    public const NAME = 'NewsletterMailFilter';
     public const NEWSLETTER_MAIL = 'newsletter-mail';
 
     public function __construct(bool $active)
     {
         parent::__construct($active, [self::NEWSLETTER_MAIL]);
+    }
+
+    public function getName(): string
+    {
+        return self::NAME;
     }
 }

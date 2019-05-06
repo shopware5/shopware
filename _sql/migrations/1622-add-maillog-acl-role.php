@@ -21,46 +21,16 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-namespace Shopware\Bundle\MailBundle\Service\Filter;
-
-use Enlight_Components_Mail;
-
-abstract class AssociationExistsFilter implements MailFilterInterface
+class Migrations_Migration1622 extends Shopware\Components\Migrations\AbstractMigration
 {
-    /**
-     * @var bool
-     */
-    private $active;
-
-    /**
-     * @var array
-     */
-    private $associations;
-
-    public function __construct(bool $active, array $associations)
+    public function up($modus)
     {
-        $this->active = $active;
-        $this->associations = $associations;
-    }
+        $this->addSql("INSERT IGNORE INTO `s_core_acl_resources` (name) VALUES ('maillog');");
 
-    public function filter(?Enlight_Components_Mail $mail): ?Enlight_Components_Mail
-    {
-        if (!$this->active || $mail === null) {
-            return $mail;
-        }
+        $this->addSql('SET @resourceId = LAST_INSERT_ID();');
 
-        foreach ($this->associations as $association) {
-            if ($mail->getAssociation($association) !== null) {
-                return null;
-            }
-        }
-
-        return $mail;
-    }
-
-    public function getName(): string
-    {
-        return self::class;
+        $this->addSql("INSERT IGNORE INTO `s_core_acl_privileges` (resourceID,name) VALUES (@resourceId, 'read');");
+        $this->addSql("INSERT IGNORE INTO `s_core_acl_privileges` (resourceID,name) VALUES (@resourceId, 'resend');");
+        $this->addSql("INSERT IGNORE INTO `s_core_acl_privileges` (resourceID,name) VALUES (@resourceId, 'manage');");
     }
 }

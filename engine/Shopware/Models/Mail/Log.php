@@ -31,6 +31,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Order\Document\Document;
 use Shopware\Models\Order\Order;
+use Shopware\Models\Shop\Shop;
 
 /**
  * @ORM\Entity(repositoryClass="LogRepository")
@@ -111,6 +112,13 @@ class Log extends ModelEntity
     protected $order;
 
     /**
+     * @var Shop|null
+     *
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
+     */
+    protected $shop;
+
+    /**
      * @var Collection<Document>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Order\Document\Document", cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
@@ -143,9 +151,9 @@ class Log extends ModelEntity
         return $this->subject;
     }
 
-    public function setSubject(?string $subject = ''): void
+    public function setSubject(?string $subject): void
     {
-        $this->subject = $subject;
+        $this->subject = $subject ?: '';
     }
 
     public function getSender(): ?string
@@ -153,9 +161,9 @@ class Log extends ModelEntity
         return $this->sender;
     }
 
-    public function setSender(?string $sender = ''): void
+    public function setSender(?string $sender): void
     {
-        $this->sender = $sender;
+        $this->sender = $sender ?: '';
     }
 
     /**
@@ -207,9 +215,9 @@ class Log extends ModelEntity
         return $this->contentHtml;
     }
 
-    public function setContentHtml(?string $contentHtml = ''): void
+    public function setContentHtml(?string $contentHtml): void
     {
-        $this->contentHtml = $contentHtml;
+        $this->contentHtml = $contentHtml ?: '';
     }
 
     public function getContentText(): ?string
@@ -217,9 +225,9 @@ class Log extends ModelEntity
         return $this->contentText;
     }
 
-    public function setContentText(?string $contentText = ''): void
+    public function setContentText(?string $contentText): void
     {
-        $this->contentText = $contentText;
+        $this->contentText = $contentText ?: '';
     }
 
     public function getType(): ?Mail
@@ -227,7 +235,7 @@ class Log extends ModelEntity
         return $this->type;
     }
 
-    public function setType(?Mail $type = null): void
+    public function setType(?Mail $type): void
     {
         $this->type = $type;
     }
@@ -237,9 +245,19 @@ class Log extends ModelEntity
         return $this->order;
     }
 
-    public function setOrder(?Order $order = null): void
+    public function setOrder(?Order $order): void
     {
         $this->order = $order;
+    }
+
+    public function getShop(): ?Shop
+    {
+        return $this->shop;
+    }
+
+    public function setShop(?Shop $shop): void
+    {
+        $this->shop = $shop;
     }
 
     /**

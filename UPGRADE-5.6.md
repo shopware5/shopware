@@ -57,6 +57,11 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added new controller `Shopware\Controllers\Backend\Logger`
 * Added [Ace](https://ace.c9.io/) editor in the backend where `Codemirror` was used before: in email and shopping world templates, shipping cost calculation and product exports.
 * Added server response tab to extjs error reporter to show errors in javascript code
+* Added new backend module `mail_log`
+* Added new backend controllers:
+  * `MailLog`
+  * `MailLogContact`
+* Added `AvailableFiltersCompilerPass` so all available filters for the mail log can be listed by reading the `shopware.mail_bundle.available_filters` container parameter
 
 ### Changes
 
@@ -268,7 +273,7 @@ return [
     'db' => [...],
 ]
 ``` 
-Or you can create your own implementation of the underlying interface `Shopware\Components\OrderNumberValidator\OrderNumberValidatorInterface` and use it for the validation by simply decorating the current service with id `shopware.components.ordernumber_validator` and e.g. query some API. 
+Or you can create your own implementation of the underlying interface `Shopware\Components\OrderNumberValidator\OrderNumberValidatorInterface` and use it for the validation by simply decorating the current service with id `shopware.components.ordernumber_validator` and e.g. query some API.
 
 ### Definition of MySQL version in config
 
@@ -390,12 +395,12 @@ These resources are only pushed on the very first request of a client. After tha
 
 The Smarty function `{preload}` is used to define in the template which resource are to be pushed and as what.
 
-Example for CSS: 
+Example for CSS:
 ```html
 <link href="{preload file={$stylesheetPath} as="style"}" media="all" rel="stylesheet" type="text/css" />
 ```
 
-Example for Javascript: 
+Example for Javascript:
 ```html
 <script src="{preload file={link file='somefile.js'} as="script"}"></script>
 ```

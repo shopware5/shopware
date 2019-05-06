@@ -31,13 +31,15 @@ CREATE TABLE s_mail_log (
   id INT AUTO_INCREMENT NOT NULL,
   type_id INT DEFAULT NULL,
   order_id INT DEFAULT NULL,
-  subject mediumtext DEFAULT NULL,
+  shop_id INT UNSIGNED DEFAULT NULL,
+  subject LONGTEXT DEFAULT NULL,
   sender VARCHAR(255) NOT NULL,
   sent_at DATETIME NOT NULL,
-  content_html mediumtext DEFAULT NULL,
-  content_text mediumtext DEFAULT NULL,
+  content_html LONGTEXT DEFAULT NULL,
+  content_text LONGTEXT DEFAULT NULL,
   INDEX s_mail_log_idx_type_id (type_id),
   INDEX s_mail_log_idx_order_id (order_id),
+  INDEX s_mail_log_idx_shop_id (shop_id),
   PRIMARY KEY(id)
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 SQL;
@@ -86,6 +88,13 @@ SQL;
 ALTER TABLE s_mail_log ADD CONSTRAINT s_mail_log_fk_order_id
   FOREIGN KEY (order_id)
   REFERENCES s_order (id);
+SQL;
+        $this->addSql($sql);
+
+        $sql = <<<'SQL'
+ALTER TABLE s_mail_log ADD CONSTRAINT s_mail_log_fk_shop_id
+  FOREIGN KEY (shop_id)
+  REFERENCES s_core_shops (id);
 SQL;
         $this->addSql($sql);
 

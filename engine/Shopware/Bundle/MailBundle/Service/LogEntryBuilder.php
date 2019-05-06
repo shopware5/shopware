@@ -37,6 +37,7 @@ use Shopware\Models\Mail\Repository as MailRepository;
 use Shopware\Models\Order\Document\Document;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Order\Repository as OrderRepository;
+use Shopware\Models\Shop\Shop;
 use Zend_Mime_Part;
 
 class LogEntryBuilder implements LogEntryBuilderInterface
@@ -44,6 +45,8 @@ class LogEntryBuilder implements LogEntryBuilderInterface
     public const ORDER_ASSOCIATION = 'order';
     public const ORDER_ID_ASSOCIATION = 'orderId';
     public const ORDER_NUMBER_ASSOCIATION = 'orderNumber';
+    public const SHOP_ASSOCIATION = 'shop';
+    public const SHOP_ID_ASSOCIATION = 'shopId';
 
     /**
      * @var EntityManagerInterface
@@ -74,7 +77,7 @@ class LogEntryBuilder implements LogEntryBuilderInterface
     {
         $logEntry = new Log();
 
-        $logEntry->setSubject($mail->getSubject());
+        $logEntry->setSubject(iconv_mime_decode($mail->getSubject()));
         $logEntry->setSender($mail->getFrom());
         $logEntry->setSentAt(new DateTime($mail->getDate()));
         $logEntry->setContentText($mail->getPlainBodyText());
@@ -85,6 +88,8 @@ class LogEntryBuilder implements LogEntryBuilderInterface
 
         $this->assignType($logEntry, $mail->getTemplateName());
         $this->assignOrder($logEntry, $mail);
+        $this->assignShop($logEntry, $mail);
+
         $this->assignRecipients($logEntry, $mail->getRecipients());
         $this->assignDocuments($logEntry, $mail);
 
@@ -120,6 +125,31 @@ class LogEntryBuilder implements LogEntryBuilderInterface
 
         if ($order !== null) {
             $logEntry->setOrder($order);
+        }
+    }
+
+    protected function assignShop(Log $logEntry, Enlight_Components_Mail $mail): void
+    {
+        if ($mail->getAssociation(self::SHOP_ASSOCIATION) !== null) {
+            $logEntry->setShop($mail->getAssociation(self::SHOP_ASSOCIATION));
+
+            return;
+        }
+
+        if ($mail->getAssociation(self::SHOP_ID_ASSOCIATION) !== null) {
+            /** @var Shop $shop */
+            $shop = $this->entityManager->getPartialReference(
+                Shop::class,
+                $mail->getAssociation(self::SHOP_ID_ASSOCIATION)
+            );
+
+            $logEntry->setShop($shop);
+
+            return;
+        }
+
+        if ($logEntry->getOrder() !== null && $logEntry->getOrder()->getLanguageSubShop() !== null) {
+            $logEntry->setShop($logEntry->getOrder()->getLanguageSubShop());
         }
     }
 
