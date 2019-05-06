@@ -431,7 +431,7 @@ Ext.onReady(function() {
                 plugin_path: 'Plugin path'
             },
             response: {
-                name: 'Server-Response',
+                name: 'Server response',
                 errorOverview: 'Error overview'
             }
         }
