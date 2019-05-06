@@ -33,7 +33,8 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed `mediaselectionfield` to work also with enabled translation in tabs
 * Changed RSS templates to contain correct language code
 * Changed BatchProcess to fix an issue with `removeString` operator
-* Changed the handling of custom-page attributes translations
+* Changed custom-page attributes to be translated properly
+* Changed Symfony library to version 3.4.27
 
 ### Deprecations
 
