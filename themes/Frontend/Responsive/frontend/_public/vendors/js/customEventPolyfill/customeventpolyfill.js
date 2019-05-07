@@ -1,6 +1,6 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
 (function () {
-    if ( typeof window.CustomEvent === "function" ) return false;
+    if ( typeof window.CustomEvent === 'function' ) return false;
 
     function CustomEvent ( event, params ) {
         params = params || { bubbles: false, cancelable: false, detail: undefined };
