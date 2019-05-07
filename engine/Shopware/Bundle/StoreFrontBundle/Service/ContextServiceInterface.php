@@ -34,7 +34,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 interface ContextServiceInterface
 {
     /**
-     * @deprecated since version 5.2, to be removed in 6.0 - Use getShopContext instead
+     * @deprecated since version 5.2, to be removed in 5.7 - Use getShopContext instead
      * The \Shopware\Bundle\StoreFrontBundle\Struct\Context class contains
      * all information about the current state.
      *
@@ -51,7 +51,7 @@ interface ContextServiceInterface
      * - Use the `shop` service of the di container for the language and current category
      * - Use the `session` service of the di container for the current user data.
      *
-     * @return Struct\ProductContextInterface
+     * @return Struct\ShopContextInterface
      */
     public function getContext();
 
@@ -62,12 +62,12 @@ interface ContextServiceInterface
      * - Fallback customer group of the current shop
      * - The currency of the shop
      *
-     * @return Struct\ProductContextInterface
+     * @return Struct\ShopContextInterface
      */
     public function getShopContext();
 
     /**
-     * @deprecated since version 5.2, to be removed in 6.0 - Use getShopContext instead
+     * @deprecated since version 5.2, to be removed in 5.7 - Use getShopContext instead
      * Requires the following data:
      * - Current shop
      * - Current customer group
@@ -76,21 +76,21 @@ interface ContextServiceInterface
      * - Tax rules of the current customer group
      * - Price group discounts of the current customer group
      *
-     * @return Struct\ProductContextInterface
+     * @return Struct\ShopContextInterface
      */
     public function getProductContext();
 
     /**
-     * @deprecated since version 5.2, to be removed in 6.0 - Use getShopContext instead
+     * @deprecated since version 5.2, to be removed in 5.7 - Use getShopContext instead
      * Requires the following data:
      * - Location data of the current state. (area, country, state)
      *
-     * @return Struct\ProductContextInterface
+     * @return Struct\ShopContextInterface
      */
     public function getLocationContext();
 
     /**
-     * @deprecated since version 5.2, to be removed in 6.0 - Use initializeShopContext instead
+     * @deprecated since version 5.2, to be removed in 5.7 - Use initializeShopContext instead
      * Initials a global context class which contains
      * all information about the current request state.
      */
@@ -103,27 +103,27 @@ interface ContextServiceInterface
     public function initializeShopContext();
 
     /**
-     * @deprecated since version 5.2, to be removed in 6.0 - Use initializeShopContext instead
+     * @deprecated since version 5.2, to be removed in 5.7 - Use initializeShopContext instead
      * Initials a location context class which contains
      * the information about the country state
      */
     public function initializeLocationContext();
 
     /**
-     * @deprecated since version 5.2, to be removed in 6.0 - Use initializeShopContext instead
+     * @deprecated since version 5.2, to be removed in 5.7 - Use initializeShopContext instead
      * Initials a product context class which contains
      * all required information to calculate a product.
      */
     public function initializeProductContext();
 
     /**
-     * @deprecated since version 5.2, to be removed in 6.0 - Use createShopContext instead
+     * @deprecated since version 5.2, to be removed in 5.7 - Use createShopContext instead
      *
      * @param int         $shopId
      * @param int|null    $currencyId
      * @param string|null $customerGroupKey
      *
-     * @return Struct\ProductContextInterface
+     * @return Struct\ShopContextInterface
      */
     public function createProductContext($shopId, $currencyId = null, $customerGroupKey = null);
 
@@ -132,7 +132,7 @@ interface ContextServiceInterface
      * @param int|null    $currencyId
      * @param string|null $customerGroupKey
      *
-     * @return Struct\ProductContextInterface
+     * @return Struct\ShopContextInterface
      */
     public function createShopContext($shopId, $currencyId = null, $customerGroupKey = null);
 }
