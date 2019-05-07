@@ -24,46 +24,9 @@
 
 namespace Shopware\Components\Model\Query\Mysql;
 
-use Doctrine\ORM\Query\AST\Functions\FunctionNode;
-use Doctrine\ORM\Query\Lexer;
-use Doctrine\ORM\Query\Parser;
-use Doctrine\ORM\Query\SqlWalker;
-
 /**
- * Custom query extension to allow Replace() in DQL
+ * @deprecated in 5.6, will be removed with 5.7. Please use \DoctrineExtensions\Query\Mysql\Replace instead
  */
-class Replace extends FunctionNode
+class Replace extends \DoctrineExtensions\Query\Mysql\Replace
 {
-    public $subjectExpression = null;
-    public $findExpression = null;
-    public $replaceExpression = null;
-
-    /**
-     * Define the parser
-     */
-    public function parse(Parser $parser)
-    {
-        $parser->match(Lexer::T_IDENTIFIER);
-        $parser->match(Lexer::T_OPEN_PARENTHESIS);
-        $this->subjectExpression = $parser->StringExpression();
-        $parser->match(Lexer::T_COMMA);
-        $this->findExpression = $parser->StringPrimary();
-        $parser->match(Lexer::T_COMMA);
-        $this->replaceExpression = $parser->StringPrimary();
-        $parser->match(Lexer::T_CLOSE_PARENTHESIS);
-    }
-
-    /**
-     * Return plain SQL string
-     *
-     * @return string
-     */
-    public function getSql(SqlWalker $sqlWalker)
-    {
-        return 'REPLACE(' .
-            $this->subjectExpression->dispatch($sqlWalker) . ', ' .
-            $sqlWalker->walkStringPrimary($this->findExpression) . ', ' .
-            $sqlWalker->walkStringPrimary($this->replaceExpression) .
-        ')';
-    }
 }

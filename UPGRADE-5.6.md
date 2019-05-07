@@ -64,6 +64,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
   * `MailLog`
   * `MailLogContact`
 * Added function to rename or overwrite if esd file already exists
+* Added `beberlei/DoctrineExtensions` as requirement.
 * Added ExtJs developer mode, to provide better warnings and errors to developers
 * Added `Enlight_Hook_Exception`. It will be thrown when the HookManger gets a class name which not implements `Enlight_Hook` in 5.8
 * Added new events in `sBasket::getPricesForItemUpdates()`
@@ -221,6 +222,11 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Deprecated `Enlight_Controller_Response_ResponseHttp::outputBody`
 * Deprecated `Shopware_Controllers_Backend_Log::createLogAction`. It will be removed in 5.7, use `\Shopware\Controllers\Backend\Logger::createLogAction` instead
 * Deprecated `Enlight_Event_EventHandler`. It will be removed in 5.8, use `Enlight_Event_Handler_Default` or `SubscriberInterface::getSubscribedEvents` instead
+* Deprecated `Shopware\Components\Model\Query\Mysql\IfElse` in 5.6, will be removed with 5.7. Please use `DoctrineExtensions\Query\Mysql\IfElse` instead.
+* Deprecated `Shopware\Components\Model\Query\Mysql\DateFormat` in 5.6, will be removed with 5.7. Please use `DoctrineExtensions\Query\Mysql\DateFormat` instead.
+* Deprecated `Shopware\Components\Model\Query\Mysql\IfNull` in 5.6, will be removed with 5.7. Please use `DoctrineExtensions\Query\Mysql\IfNull` instead.
+* Deprecated `Shopware\Components\Model\Query\Mysql\RegExp` in 5.6, will be removed with 5.7. Please use `DoctrineExtensions\Query\Mysql\RegExp` instead.
+* Deprecated `Shopware\Components\Model\Query\Mysql\Replace` in 5.6, will be removed with 5.7. Please use `DoctrineExtensions\Query\Mysql\Replace` instead.
 * Deprecated `Shopware\Components\Api\Manager::getResource`. It will be removed in 5.8, inject resources instead
 * Deprecated usage of `shopware.api` DI prefix without tag `shopware.api_resource`
 * Deprecated `Shopware\Models\Shop\Shop::registerResources`. It will be removed in 5.8, use `Shopware\Components\ShopRegistrationService` instead

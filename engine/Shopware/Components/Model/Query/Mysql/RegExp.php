@@ -24,40 +24,9 @@
 
 namespace Shopware\Components\Model\Query\Mysql;
 
-use Doctrine\ORM\Query\AST\Functions\FunctionNode;
-use Doctrine\ORM\Query\Lexer;
-use Doctrine\ORM\Query\Parser;
-use Doctrine\ORM\Query\SqlWalker;
-
 /**
- * Custom query extension to allow regex comparison in DQL
+ * @deprecated in 5.6, will be removed with 5.7. Please use \DoctrineExtensions\Query\Mysql\RegExp instead
  */
-class RegExp extends FunctionNode
+class RegExp extends \DoctrineExtensions\Query\Mysql\Regexp
 {
-    public $regexpExpression = null;
-    public $valueExpression = null;
-
-    /**
-     * Parse
-     */
-    public function parse(Parser $parser)
-    {
-        $parser->match(Lexer::T_IDENTIFIER);
-        $parser->match(Lexer::T_OPEN_PARENTHESIS);
-        $this->regexpExpression = $parser->StringPrimary();
-        $parser->match(Lexer::T_COMMA);
-        $this->valueExpression = $parser->StringExpression();
-        $parser->match(Lexer::T_CLOSE_PARENTHESIS);
-    }
-
-    /**
-     * Return SQL expression
-     *
-     * @return string
-     */
-    public function getSql(SqlWalker $sqlWalker)
-    {
-        return '(' . $this->valueExpression->dispatch($sqlWalker) . ' REGEXP ' .
-            $sqlWalker->walkStringPrimary($this->regexpExpression) . ')';
-    }
 }

@@ -24,50 +24,9 @@
 
 namespace Shopware\Components\Model\Query\Mysql;
 
-use Doctrine\ORM\Query\AST\Functions\FunctionNode;
-use Doctrine\ORM\Query\Lexer;
-
 /**
- * Usage: IFNULL(expr1, expr2)
- *
- * If expr1 is not NULL, IFNULL() returns expr1; otherwise it returns expr2.
- * IFNULL() returns a numeric or string value, depending on the context in
- * which it is used.
- *
- *
- * @author    Andrew Mackrodt <andrew@ajmm.org>
- *
- * @version   2011.06.12
+ * @deprecated in 5.6, will be removed with 5.7. Please use \DoctrineExtensions\Query\Mysql\IfNull instead
  */
-class IfNull extends FunctionNode
+class IfNull extends \DoctrineExtensions\Query\Mysql\IfNull
 {
-    public $expr1;
-    public $expr2;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
-    {
-        return 'IFNULL(' .
-            $sqlWalker->walkArithmeticPrimary($this->expr1) .
-            ', ' .
-            $sqlWalker->walkArithmeticPrimary($this->expr2) .
-            ')';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function parse(\Doctrine\ORM\Query\Parser $parser)
-    {
-        $parser->match(Lexer::T_IDENTIFIER);
-        $parser->match(Lexer::T_OPEN_PARENTHESIS);
-
-        $this->expr1 = $parser->ArithmeticExpression();
-        $parser->match(Lexer::T_COMMA);
-        $this->expr2 = $parser->ArithmeticExpression();
-
-        $parser->match(Lexer::T_CLOSE_PARENTHESIS);
-    }
 }
