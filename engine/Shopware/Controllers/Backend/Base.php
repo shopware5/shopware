@@ -106,8 +106,8 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $query = $repository->getTaxQuery(
             $this->Request()->getParam('filter', []),
             $this->Request()->getParam('sort', []),
-            $this->Request()->getParam('limit'),
-            $this->Request()->getParam('start')
+            $this->Request()->getParam('start'),
+            $this->Request()->getParam('limit')
         );
 
         // Get total result of the query
