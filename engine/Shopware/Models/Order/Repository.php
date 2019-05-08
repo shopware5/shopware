@@ -179,8 +179,6 @@ class Repository extends ModelRepository
      * @param array[]|null $filters
      * @param string|null  $orderBy
      *
-     * @throws \Exception
-     *
      * @return QueryBuilder
      */
     public function getOrdersQueryBuilder($filters = null, $orderBy = null)
@@ -257,15 +255,13 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Returns an instance of the \Doctrine\ORM\Query object which .....
+     * Returns an instance of the \Doctrine\ORM\Query object which can be extended for customization
      *
      * @return \Doctrine\ORM\Query
      */
     public function getDetailStatusQuery()
     {
-        $builder = $this->getDetailStatusQueryBuilder();
-
-        return $builder->getQuery();
+        return $this->getDetailStatusQueryBuilder()->getQuery();
     }
 
     /**
@@ -338,15 +334,13 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Returns an instance of the \Doctrine\ORM\Query object which .....
+     * Returns an instance of the \Doctrine\ORM\Query object which can be extended for customization
      *
      * @return \Doctrine\ORM\Query
      */
     public function getDocumentTypesQuery()
     {
-        $builder = $this->getDocumentTypesQueryBuilder();
-
-        return $builder->getQuery();
+        return $this->getDocumentTypesQueryBuilder()->getQuery();
     }
 
     /**
@@ -373,8 +367,6 @@ class Repository extends ModelRepository
      *  - voucher.voucherCode
      *  - voucher.value
      *  - voucher.minimumCharge
-     *
-     * @throws \Exception
      *
      * @return \Doctrine\ORM\Query
      */
@@ -542,8 +534,6 @@ class Repository extends ModelRepository
      * @param array[]  $filters
      * @param array[]  $sortings
      *
-     * @throws \Exception
-     *
      * @return array[]
      */
     public function search($offset = null, $limit = null, $filters = [], $sortings = [])
@@ -605,8 +595,6 @@ class Repository extends ModelRepository
      * @param QueryBuilder|\Shopware\Components\Model\QueryBuilder $builder
      * @param array[]|null                                         $filters
      *
-     * @throws \Exception
-     *
      * @return QueryBuilder
      */
     protected function filterListQuery(QueryBuilder $builder, $filters = null)
@@ -629,21 +617,25 @@ class Repository extends ModelRepository
                     $builder->andWhere('orders.id IN (?4)');
                     $builder->setParameter(4, $orderIds, Connection::PARAM_INT_ARRAY);
                     break;
+
                 case 'from':
                     $tmp = new \DateTime($filter['value']);
                     $builder->andWhere('orders.orderTime >= :orderTimeFrom');
                     $builder->setParameter('orderTimeFrom', $tmp->format('Ymd'));
                     break;
+
                 case 'to':
                     $tmp = new \DateTime($filter['value']);
                     $tmp->add(new \DateInterval('P1D'));
                     $builder->andWhere('orders.orderTime <= :orderTimeTo');
                     $builder->setParameter('orderTimeTo', $tmp->format('Ymd'));
                     break;
+
                 case 'details.articleNumber':
                     $builder->andWhere('details.articleNumber LIKE :articleNumber');
                     $builder->setParameter('articleNumber', $filter['value']);
                     break;
+
                 default:
                     $builder->addFilter([$filter]);
             }
@@ -665,35 +657,45 @@ class Repository extends ModelRepository
             case 'shipping':
                 $builder->leftJoin('orders.shipping', 'shipping');
                 break;
+
             case 'billing':
                 $builder->leftJoin('orders.billing', 'billing');
                 break;
+
             case 'details':
                 $builder->leftJoin('orders.details', 'details');
                 break;
+
             case 'payment':
                 $builder->leftJoin('orders.payment', 'payment');
                 break;
+
             case 'paymentStatus':
                 $builder->leftJoin('orders.paymentStatus', 'paymentStatus');
                 break;
+
             case 'orderStatus':
                 $builder->leftJoin('orders.orderStatus', 'orderStatus');
                 break;
+
             case 'customer':
                 $builder->leftJoin('orders.customer', 'customer');
                 break;
+
             case 'billingCountry':
                 $this->addAliasJoin($builder, 'billing');
                 $builder->leftJoin('billing.country', 'billingCountry');
                 break;
+
             case 'billingState':
                 $this->addAliasJoin($builder, 'billing');
                 $builder->leftJoin('billing.state', 'billingState');
                 break;
+
             case 'shop':
                 $builder->leftJoin('orders.shop', 'shop');
                 break;
+
             case 'dispatch':
                 $builder->leftJoin('orders.dispatch', 'dispatch');
                 break;
