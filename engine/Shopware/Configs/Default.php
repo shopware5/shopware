@@ -282,8 +282,8 @@ return array_replace_recursive([
         ],
         'backend' => 'auto', // e.G auto, apcu, xcache, redis
         'backendOptions' => [
-            'hashed_directory_perm' => 0777 & ~umask(),
-            'cache_file_perm' => 0666 & ~umask(),
+            'hashed_directory_perm' => decoct(0777 & ~umask()),
+            'cache_file_perm' => decoct(0666 & ~umask()),
             'hashed_directory_level' => 3,
             'cache_dir' => $this->getCacheDir() . '/general',
             'file_name_prefix' => 'shopware',
