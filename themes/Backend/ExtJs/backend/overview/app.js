@@ -27,9 +27,6 @@
  * @author shopware AG
  */
 
-/**
- * todo@all: Documentation
- */
 //{block name="backend/overview/app"}
 Ext.define('Shopware.apps.Overview', {
 

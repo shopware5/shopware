@@ -22,7 +22,7 @@
  */
 
 //{namespace name="backend/benchmark/main"}
-
+//{block name="backend/benchmark/app"}
 Ext.define('Shopware.apps.Benchmark', {
     name: 'Shopware.apps.Benchmark',
     extend:'Enlight.app.SubApplication',
@@ -42,3 +42,4 @@ Ext.define('Shopware.apps.Benchmark', {
         return mainController.mainWindow;
     }
 });
+//{/block}

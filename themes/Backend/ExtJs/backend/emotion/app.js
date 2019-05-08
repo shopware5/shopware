@@ -32,6 +32,7 @@
  *
  * This file bootstrapps the Emotion module.
  */
+//{block name="backend/emotion/app"}
 //{block name="backend/Emotion/app"}
 Ext.define('Shopware.apps.Emotion', {
 
@@ -129,4 +130,5 @@ Ext.define('Shopware.apps.Emotion', {
         return mainController.mainWindow;
     }
 });
+//{/block}
 //{/block}

@@ -1,5 +1,5 @@
 // {namespace name="backend/mail_log/view/list/extensions"}
-// {block name="backend/mail_log/view/list/extension/filter"}
+// {block name="backend/mail_log/view/list/extensions/filter"}
 Ext.define('Shopware.apps.MailLog.view.list.extensions.Filter', {
 
     extend: 'Shopware.listing.FilterPanel',

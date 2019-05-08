@@ -21,9 +21,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * todo@all: Documentation
- */
 //{block name="backend/snippet/app"}
 Ext.define('Shopware.apps.Snippet', {
 

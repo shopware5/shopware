@@ -28,6 +28,7 @@
  * @package    Analytics
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  */
+//{block name="backend/analytics/app"}
 //{block name="backend/analytics/application"}
 Ext.define('Shopware.apps.Analytics', {
 
@@ -177,4 +178,5 @@ Ext.define('Shopware.apps.Analytics', {
         return mainController.mainWindow;
     }
 });
+//{/block}
 //{/block}

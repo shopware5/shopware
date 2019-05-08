@@ -1,4 +1,5 @@
-// {block name="backend/mail_log/application"}
+//{block name="backend/mail_log/app"}
+//{block name="backend/mail_log/application"}
 Ext.define('Shopware.apps.MailLog', {
 
     name: 'Shopware.apps.MailLog',
@@ -38,4 +39,5 @@ Ext.define('Shopware.apps.MailLog', {
     }
 
 });
-// {/block}
+//{/block}
+//{/block}

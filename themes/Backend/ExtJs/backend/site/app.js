@@ -27,11 +27,6 @@
  * @author shopware AG
  */
 
-/**
- * Shopware Controller - Site
- *
- * Backend - Management for all sites of the current shop
- */
 //{block name="backend/site/app"}
 Ext.define('Shopware.apps.Site', {
     /**
