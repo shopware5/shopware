@@ -22,16 +22,33 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Tests_Controllers_Frontend_DetailTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
-     * Test case method
+     * @var \Doctrine\DBAL\Connection
      */
+    private $connection;
+
+    /**
+     * Set up test case, fix demo data where needed
+     */
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection->beginTransaction();
+    }
+
+    /**
+     * Cleaning up testData
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+        $this->connection->rollBack();
+    }
+
     public function testDefaultVariant()
     {
         // Request a variant that is not the default one
@@ -46,9 +63,6 @@ class Shopware_Tests_Controllers_Frontend_DetailTest extends Enlight_Components_
         static::assertEquals(444, $article['articleDetailsID']);
     }
 
-    /**
-     * Test case method
-     */
     public function testNonDefaultVariant()
     {
         // Request a variant that is not the default one
@@ -64,5 +78,40 @@ class Shopware_Tests_Controllers_Frontend_DetailTest extends Enlight_Components_
         $article = $this->View()->getAssign('sArticle');
         static::assertEquals('SW10201.5', $article['ordernumber']);
         static::assertEquals('447', $article['articleDetailsID']);
+    }
+
+    /**
+     * @param string|null $gtin
+     * @param string      $value
+     *
+     * @dataProvider gtinDataprovider
+     */
+    public function testGtins($gtin, $value)
+    {
+        $this->connection->executeUpdate('UPDATE `s_articles_details` SET `ean`=? WHERE `ordernumber`="SW10006"', [$value]);
+
+        $response = $this->dispatch('/genusswelten/edelbraende/6/cigar-special-40');
+
+        if ($gtin) {
+            static::assertContains($gtin, $response->getBody());
+            static::assertContains('"' . trim($value) . '"', $response->getBody());
+        } else {
+            static::assertNotContains(trim($value), $response->getBody());
+        }
+    }
+
+    public function gtinDataprovider()
+    {
+        return [
+            ['gtin' => 'gtin8', 'value' => '12345678'],
+            ['gtin' => 'gtin8', 'value' => '12345678 '],
+            ['gtin' => 'gtin8', 'value' => ' 12345678'],
+            ['gtin' => 'gtin8', 'value' => '   12345678  '],
+            ['gtin' => 'gtin12', 'value' => '012345678912'],
+            ['gtin' => 'gtin13', 'value' => '0123456789123'],
+            ['gtin' => 'gtin14', 'value' => '01234567891234'],
+            ['gtin' => null, 'value' => '01234567891232343324'],
+            ['gtin' => null, 'value' => 'foobar'],
+        ];
     }
 }
