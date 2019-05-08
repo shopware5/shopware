@@ -73,11 +73,17 @@
             <tag name="shopware.event_subscriber"/>
         </service>
 
-        <service id="shopware_mail.backend_controllers_mail_log" class="Shopware_Controllers_Backend_MailLog">
+        <service id="shopware_mail.backend_controllers_mail_log" class="Shopware\Bundle\MailBundle\Controllers\Backend\MailLog">
+            <argument type="service" id="shopware_mail.log_entry_mail_builder"/>
+            <argument type="service" id="config"/>
+            <argument type="service" id="config_writer"/>
+            <argument type="service" id="shopware.cache_manager"/>
+            <argument type="tagged" tag="shopware.mail_bundle.filter"/>
+
             <tag name="shopware.controller" module="backend" controller="MailLog"/>
         </service>
 
-        <service id="shopware_mail.backend_controllers_mail_log_contact" class="Shopware_Controllers_Backend_MailLogContact">
+        <service id="shopware_mail.backend_controllers_mail_log_contact" class="Shopware\Bundle\MailBundle\Controllers\Backend\MailLogContact">
             <tag name="shopware.controller" module="backend" controller="MailLogContact"/>
         </service>
     </services>

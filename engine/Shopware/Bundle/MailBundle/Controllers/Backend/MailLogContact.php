@@ -22,12 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Controllers_Backend_MailLogContact extends Shopware_Controllers_Backend_Application
+namespace Shopware\Bundle\MailBundle\Controllers\Backend;
+
+use Shopware\Models\Mail\Contact;
+
+class MailLogContact extends \Shopware_Controllers_Backend_Application
 {
     /**
      * {@inheritdoc}
      */
-    protected $model = \Shopware\Models\Mail\Contact::class;
+    protected $model = Contact::class;
 
     /**
      * {@inheritdoc}

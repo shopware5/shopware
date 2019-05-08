@@ -22,11 +22,18 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Bundle\MailBundle\Controllers\Backend;
+
+use Enlight_Components_Mail;
 use Shopware\Bundle\MailBundle\Service\Filter\MailFilterInterface;
+use Shopware\Bundle\MailBundle\Service\LogEntryMailBuilder;
+use Shopware\Components\CacheManager;
+use Shopware\Components\ConfigWriter;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Mail\Log;
+use Shopware_Components_Config;
 
-class Shopware_Controllers_Backend_MailLog extends Shopware_Controllers_Backend_Application
+class MailLog extends \Shopware_Controllers_Backend_Application
 {
     public const CONFIG_KEY_MAILLOG_ACTIVE = 'mailLogActive';
     public const CONFIG_KEY_MAILLOG_ACTIVE_FILTERS = 'mailLogActiveFilters';
@@ -46,6 +53,45 @@ class Shopware_Controllers_Backend_MailLog extends Shopware_Controllers_Backend_
      * {@inheritdoc}
      */
     protected $alias = 'mailLog';
+
+    /**
+     * @var LogEntryMailBuilder
+     */
+    protected $mailBuilder;
+
+    /**
+     * @var Shopware_Components_Config
+     */
+    protected $config;
+
+    /**
+     * @var ConfigWriter
+     */
+    protected $writer;
+
+    /**
+     * @var CacheManager
+     */
+    protected $cacheManager;
+
+    /**
+     * @var array
+     */
+    protected $filters;
+
+    public function __construct(
+        LogEntryMailBuilder $mailBuilder,
+        Shopware_Components_Config $config,
+        ConfigWriter $writer,
+        CacheManager $cacheManager,
+        array $filters
+    ) {
+        $this->mailBuilder = $mailBuilder;
+        $this->config = $config;
+        $this->writer = $writer;
+        $this->cacheManager = $cacheManager;
+        $this->filters = $filters;
+    }
 
     /**
      * {@inheritdoc}
@@ -91,9 +137,8 @@ class Shopware_Controllers_Backend_MailLog extends Shopware_Controllers_Backend_
             return;
         }
 
-        $mailBuilder = $this->container->get('shopware.mail_bundle.log_entry_mail_builder');
-
-        $mail = $mailBuilder->build($baseEntry);
+        /** @var Enlight_Components_Mail $mail */
+        $mail = $this->mailBuilder->build($baseEntry);
         $mail = $this->overrideRecipients($mail, $recipients);
 
         $mail->send();
@@ -112,11 +157,10 @@ class Shopware_Controllers_Backend_MailLog extends Shopware_Controllers_Backend_
             self::CONFIG_KEY_MAILLOG_ACTIVE_FILTERS,
         ];
 
-        $config = $this->container->get('config');
         $values = [];
 
         foreach ($configKeys as $key) {
-            $values[$key] = $config->get($key);
+            $values[$key] = $this->config->get($key);
         }
 
         $this->View()->assign([
@@ -127,17 +171,13 @@ class Shopware_Controllers_Backend_MailLog extends Shopware_Controllers_Backend_
 
     public function saveConfigAction(bool $mailLogActive, array $mailLogActiveFilters, int $mailLogCleanupMaximumAgeInDays): void
     {
-        $allFilters = $this->container->getParameter('shopware.mail_bundle.available_filters');
-        $cacheManager = $this->container->get('shopware.cache_manager');
-        $writer = $this->container->get('config_writer');
+        $enabled = array_values(array_intersect($this->filters, $mailLogActiveFilters));
 
-        $enabled = array_values(array_intersect($allFilters, $mailLogActiveFilters));
+        $this->writer->save(self::CONFIG_KEY_MAILLOG_ACTIVE, $mailLogActive);
+        $this->writer->save(self::CONFIG_KEY_MAILLOG_ACTIVE_FILTERS, $enabled);
+        $this->writer->save(self::CONFIG_KEY_MAILLOG_MAX_AGE, $mailLogCleanupMaximumAgeInDays);
 
-        $writer->save(self::CONFIG_KEY_MAILLOG_ACTIVE, $mailLogActive);
-        $writer->save(self::CONFIG_KEY_MAILLOG_ACTIVE_FILTERS, $enabled);
-        $writer->save(self::CONFIG_KEY_MAILLOG_MAX_AGE, $mailLogCleanupMaximumAgeInDays);
-
-        $cacheManager->clearConfigCache();
+        $this->cacheManager->clearConfigCache();
 
         $this->View()->assign([
             'success' => true,
@@ -149,7 +189,7 @@ class Shopware_Controllers_Backend_MailLog extends Shopware_Controllers_Backend_
     {
         $filters = [];
 
-        foreach ($this->container->getParameter('shopware.mail_bundle.available_filters') as $serviceId) {
+        foreach ($this->filters as $serviceId) {
             $filters[] = [
                 'label' => $this->getFilterSnippet($serviceId),
                 'name' => $serviceId,
@@ -178,15 +218,6 @@ class Shopware_Controllers_Backend_MailLog extends Shopware_Controllers_Backend_
         $this->addAclPermission('getConfig', 'manage', 'Insufficient permissions');
         $this->addAclPermission('getFilters', 'manage', 'Insufficient permissions');
         $this->addAclPermission('saveConfig', 'manage', 'Insufficient permissions');
-    }
-
-    protected function getFilterSnippet(string $serviceId)
-    {
-        /** @var MailFilterInterface $filter */
-        $filter = $this->container->get($serviceId);
-        $snippetManager = $this->container->get('snippets');
-
-        return $snippetManager->getNamespace(self::SNIPPET_NAMESPACE)->get($filter->getName());
     }
 
     /**
@@ -231,16 +262,6 @@ class Shopware_Controllers_Backend_MailLog extends Shopware_Controllers_Backend_
         return $conditions;
     }
 
-    protected function overrideRecipients(Enlight_Components_Mail $mail, array $recipients): Enlight_Components_Mail
-    {
-        if (count($recipients) > 0) {
-            $mail->clearRecipients();
-            $mail->addTo(array_column($recipients, 'mailAddress'));
-        }
-
-        return $mail;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -267,5 +288,24 @@ class Shopware_Controllers_Backend_MailLog extends Shopware_Controllers_Backend_
             ->addSelect([self::JOIN_ALIAS_ORDER, self::JOIN_ALIAS_RECIPIENTS]);
 
         return $builder;
+    }
+
+    private function getFilterSnippet(string $serviceId)
+    {
+        /** @var MailFilterInterface $filter */
+        $filter = $this->container->get($serviceId);
+        $snippetManager = $this->container->get('snippets');
+
+        return $snippetManager->getNamespace(self::SNIPPET_NAMESPACE)->get($filter->getName());
+    }
+
+    private function overrideRecipients(Enlight_Components_Mail $mail, array $recipients): Enlight_Components_Mail
+    {
+        if (count($recipients) > 0) {
+            $mail->clearRecipients();
+            $mail->addTo(array_column($recipients, 'mailAddress'));
+        }
+
+        return $mail;
     }
 }

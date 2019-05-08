@@ -34,7 +34,6 @@ use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\ControllerComp
 use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\RegisterControllerCompilerPass;
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\AddConstraintValidatorsPass;
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
-use Shopware\Bundle\MailBundle\DependencyInjection\Compiler\AvailableFiltersCompilerPass;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginInitializer;
 use Shopware\Components\ConfigLoader;
 use Shopware\Components\DependencyInjection\Compiler\ConfigureApiResourcesPass;
@@ -627,7 +626,6 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         $container->addCompilerPass(new RegisterTypeRepositories());
         $container->addCompilerPass(new ControllerCompilerPass());
         $container->addCompilerPass(new RegisterControllerArgumentLocatorsPass('argument_resolver.service', 'shopware.controller'));
-        $container->addCompilerPass(new AvailableFiltersCompilerPass());
 
         $container->setParameter('active_plugins', $this->activePlugins);
 

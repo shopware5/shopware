@@ -31,6 +31,7 @@ use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\Random;
 use Shopware\Components\StateTranslatorService;
 use Shopware\Models\Article\Detail as ArticleDetail;
+use Shopware\Models\Article\Unit;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Customer;
@@ -1607,7 +1608,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             }
             if ($autoSend) {
                 // Send mail
-                $result = Shopware()->Modules()->Order()->sendStatusMail($mail['mail']);
+                /** @var Enlight_Components_Mail $mailObject */
+                $mailObject = $mail['mail'];
+                $result = Shopware()->Modules()->Order()->sendStatusMail($mailObject);
                 $mail['data']['sent'] = is_object($result);
             }
 
@@ -1876,6 +1879,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         // Load ean, unit and pack unit (translate if needed)
         if ($variant) {
             $data['ean'] = $variant->getEan() ?: $variant->getArticle()->getMainDetail()->getEan();
+            /** @var Unit|null $unit */
             $unit = $variant->getUnit() ?: $variant->getArticle()->getMainDetail()->getUnit();
             $data['unit'] = $unit ? $unit->getName() : null;
             $data['packunit'] = $variant->getPackUnit() ?: $variant->getArticle()->getMainDetail()->getPackUnit();
