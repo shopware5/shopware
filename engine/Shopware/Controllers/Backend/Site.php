@@ -171,7 +171,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
             $sites = Shopware()->Db()->fetchAssoc('SELECT id,grouping FROM s_cms_static');
 
             // Check is associated with the requested group
-            // If so, either just delete it or, if the site would become an orphan, move it to the group gDisabled
+            // If so, either just delete it or, if the site would become an orphan, move it to the group disabled
             foreach ($sites as $site) {
                 // Try to explode into an array
                 $groups = explode('|', $site['grouping']);
@@ -183,13 +183,13 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
                 if (in_array($key, $groups) && count($groups) == 1) {
                     //set group to gDisabled to prevent orphanage
                     Shopware()->Db()->query('UPDATE s_cms_static SET grouping = ? WHERE id = ?',
-                        ['gDisabled', $site['id']]);
+                        ['disabled', $site['id']]);
                 } // If the current site is associated with the requested group and does have other associations
                 else {
                     if (in_array($key, $groups) && count($groups) > 1) {
                         // Remove the requested group from the groupings field
-                        str_replace($key, '', $site['grouping']);
-                        str_replace('|', '', $site['grouping']);
+                        $site['grouping'] = str_replace($key, '', $site['grouping']);
+                        $site['grouping'] = str_replace('|', '', $site['grouping']);
 
                         // Update the table
                         $sql = 'UPDATE s_cms_static SET grouping = ? WHERE id = ?';
