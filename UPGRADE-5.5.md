@@ -12,6 +12,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added paragraph to license.txt regarding the permission to relicense plugins
 * Added cartItem to event `Shopware_Modules_Basket_UpdateArticle_Start`
 * Added OPCache options `opcache.use_cwd` and `opcache.validate_root` to the system info's requirements tab
+* Added more GTIN formats for itemprops in `frontent/detail/content/header.tpl`
 * Added following events to `sBasket`
     * `Shopware_Modules_Basket_DeleteNote_Start`
     * `Shopware_Modules_Basket_UpdateArticle_FilterSqlDefaultParameters`

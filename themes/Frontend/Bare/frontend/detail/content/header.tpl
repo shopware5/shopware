@@ -19,14 +19,14 @@
 
                     {block name="frontend_detail_index_data_ean"}
                         {if $sArticle.ean}
-                            {$sArticle.ean = $sArticle.ean|trim}
-                            {if $sArticle.ean|strlen == 13}
-                                <meta itemprop="gtin13" content="{$sArticle.ean}"/>
-                            {elseif $sArticle.ean|strlen == 8}
+                            {$eanLength = $sArticle.ean|strlen}
+                            {if $eanLength == 8}
                                 <meta itemprop="gtin8" content="{$sArticle.ean}"/>
-                            {elseif $sArticle.ean|strlen == 12}
+                            {elseif $eanLength == 12}
                                 <meta itemprop="gtin12" content="{$sArticle.ean}"/>
-                            {elseif $sArticle.ean|strlen == 14}
+                            {elseif $eanLength == 13}
+                                <meta itemprop="gtin13" content="{$sArticle.ean}"/>
+                            {elseif $eanLength == 14}
                                 <meta itemprop="gtin14" content="{$sArticle.ean}"/>
                             {/if}
                         {/if}
