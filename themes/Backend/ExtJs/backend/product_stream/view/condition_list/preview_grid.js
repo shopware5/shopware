@@ -108,11 +108,17 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
     },
 
     createColumns: function() {
+        var columns = this.createDisplayColumns();
+        columns.push(this.createActionColumn());
+        return columns;
+    },
+
+    createDisplayColumns: function() {
         return [{
             header: '{s name=number}Number{/s}',
             width: 110,
             dataIndex: 'number'
-        },{
+        }, {
             header: '{s name=name}Name{/s}',
             flex: 1,
             dataIndex: 'name'
@@ -124,6 +130,31 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
             header: '{s name=price}Price{/s}',
             dataIndex: 'cheapestPrice',
             renderer: this.priceRenderer
+        }];
+    },
+
+    createActionColumn: function() {
+        return {
+            xtype: 'actioncolumn',
+            width: 50,
+            sortable: false,
+            items: this.createActionItems()
+        };
+    },
+
+    createActionItems: function() {
+        return [{
+            iconCls: 'sprite-inbox',
+            tooltip: '{s name=openProduct}Open product{/s}',
+            handler: function(view, rowIndex, colIndex, item, opts, record) {
+                Shopware.app.Application.addSubApplication({
+                    name: 'Shopware.apps.Article',
+                    action: 'detail',
+                    params: {
+                        articleId: record.get('id')
+                    }
+                });
+            }
         }];
     },
 
