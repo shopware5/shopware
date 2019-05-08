@@ -23,7 +23,11 @@
 {/block}
 
 {block name="backend/base/header/javascript"}
-    <script type="text/javascript" src="{link file='ExtJs/ext-all.js'}?{$SHOPWARE_REVISION}"></script>
+    {if $extJsDeveloperModeActive}
+        <script type="text/javascript" src="{link file='ExtJs/ext-all-dev.js'}?{$SHOPWARE_REVISION}"></script>
+    {else}
+        <script type="text/javascript" src="{link file='ExtJs/ext-all.js'}?{$SHOPWARE_REVISION}"></script>
+    {/if}
     <script type="text/javascript" src="{link file="ExtJs/locale/ext-lang-{s name=script/ext/lang}en_GB{/s}.js"}?{$SHOPWARE_REVISION}"></script>
     <script type="text/javascript" src="{link file='TinyMce/tiny_mce.js'}?{$SHOPWARE_REVISION}"></script>
     <script type="text/javascript" src="{link file='backend/_resources/ace_editor/ace.js'}?{$SHOPWARE_REVISION}"></script>

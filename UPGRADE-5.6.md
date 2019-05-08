@@ -62,6 +62,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
   * `MailLog`
   * `MailLogContact`
 * Added `AvailableFiltersCompilerPass` so all available filters for the mail log can be listed by reading the `shopware.mail_bundle.available_filters` container parameter
+* Added ExtJs developer mode, to provide better warnings and errors to developers
 
 ### Changes
 
@@ -162,6 +163,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `getControllerDirectory`, use getModules instead
     * `removeControllerDirectory`, use setModules instead
 * Removed the `CodeMirror` JavaScript editor, use `Ace` instead
+* Removed `ext-all-debug.js`
 
 ### Deprecations
 
@@ -409,6 +411,16 @@ Example for Javascript:
 
 Server Push can be enabled in the `Various` section of the `Cache/Performance` settings. Please do not enable Server Push support if you are using Google's Pagespeed module: It creates custom CSS and Javascript files for the browser, replacing the ones Shopware contains in the HTML. So pushing the original files to the browser leads to an unnecessary overhead.
 
-### Improved Extjs Error Reporter
+### Improved ExtJs Error Reporter
 
 Extjs error reporter shows now also the server response and lints the code to show errors.
+
+### ExtJs Developer-Mode
+
+ExtJs developer mode loads a developer-version file of ExtJs to provide code documentation, warnings and better error messages. This mode can be enabled using this snippet in the `config.php`
+
+```php
+'extjs' => [
+    'developer_mode' => true
+]
+```

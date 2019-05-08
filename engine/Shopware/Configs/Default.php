@@ -409,4 +409,7 @@ return array_replace_recursive([
     'logger' => [
         'level' => $this->Environment() !== 'production' ? Logger::DEBUG : Logger::ERROR,
     ],
+    'extjs' => [
+        'developer_mode' => false,
+    ],
 ], $customConfig);
