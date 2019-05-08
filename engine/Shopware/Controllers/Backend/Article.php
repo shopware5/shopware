@@ -1849,6 +1849,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function uploadEsdFileAction()
     {
+        $overwriteMode = $this->Request()->query->get('uploadMode');
         $file = $this->Request()->files->get('fileId');
 
         if ($file === null) {
@@ -1884,6 +1885,27 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $filesystem = $this->container->get('shopware.filesystem.private');
         $destinationPath = $this->container->get('config')->offsetGet('esdKey') . '/' . ltrim($file->getClientOriginalName(), '.');
+
+        if ($overwriteMode === 'rename') {
+            $counter = 1;
+            do {
+                $newFilename = pathinfo(ltrim($file->getClientOriginalName()), PATHINFO_FILENAME) . '-' . $counter . '.' . pathinfo($destinationPath, PATHINFO_EXTENSION);
+                $destinationPath = $this->container->get('config')->offsetGet('esdKey') . '/' . ltrim($newFilename, '.');
+                ++$counter;
+            } while ($filesystem->has($destinationPath));
+
+            $this->View()->assign('newName', pathinfo($destinationPath, PATHINFO_BASENAME));
+        }
+
+        if ($filesystem->has($destinationPath)) {
+            if ($overwriteMode === 'overwrite') {
+                $filesystem->delete($destinationPath);
+            } else {
+                $this->View()->assign(['fileExists' => true]);
+
+                return;
+            }
+        }
 
         $upstream = fopen($file->getRealPath(), 'rb');
         $filesystem->writeStream($destinationPath, $upstream);
