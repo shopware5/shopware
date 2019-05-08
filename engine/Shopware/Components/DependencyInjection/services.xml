@@ -207,8 +207,8 @@
             <argument type="service" id="dbal_connection"/>
         </service>
 
-        <service id="shopware.event_manager" alias="events" />
-        <service id="events" class="Shopware\Components\ContainerAwareEventManager">
+        <service id="shopware.event_manager" alias="events" public="true"/>
+        <service id="events" class="Shopware\Components\ContainerAwareEventManager" public="true">
             <argument type="service" id="service_container"/>
         </service>
 
