@@ -467,7 +467,7 @@ class Media extends Resource
                         $originalName = $params['name'];
                     }
                 } catch (\Exception $e) {
-                    throw new \Exception(sprintf('Could not load image %s', $params['file']));
+                    throw new \Exception(sprintf('Could not load image %s', $params['file']), $e->getCode(), $e);
                 }
             } else {
                 $path = str_replace('file://', '', $params['file']);

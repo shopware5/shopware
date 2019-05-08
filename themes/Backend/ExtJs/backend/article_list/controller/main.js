@@ -154,10 +154,8 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
      * @returns Object
      */
     getColumnConfigObject: function (columnConfig) {
-        var me = this,
-                i, column, columnConfigLength = columnConfig.length,
-                columnConfigObject = { };
-
+        var i, column, columnConfigLength = columnConfig.length,
+            columnConfigObject = { };
 
         for (i = 0; i < columnConfigLength; i++) {
             column = columnConfig[i];
@@ -282,14 +280,12 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
      * @param message
      */
     showError: function (message) {
-        var me = this;
-
         Shopware.Notification.createStickyGrowlMessage({
-                    title: '{s name=error}Error{/s}',
-                    text: message,
-                    log: true
-                },
-                'ArticleList');
+            title: '{s name=error}Error{/s}',
+            text: message,
+            log: true
+        },
+        'ArticleList');
     },
 
     /**
@@ -298,7 +294,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
      * @param searchTerm
      */
     onSearch: function (searchTerm) {
-
         var me = this,
                 filter,
                 result,
@@ -343,6 +338,5 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
 
         return searchTerm;
     }
-
 });
 //{/block}

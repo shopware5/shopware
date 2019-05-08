@@ -123,16 +123,22 @@ class sCms
             return false;
         }
 
+        // load attributes
+        $staticPage['attribute'] = Shopware()->Container()->get('shopware_attribute.data_loader')->load('s_cms_static_attributes', $staticId);
+
         if ($translations) {
             foreach ($translations as $property => $translation) {
                 if (strlen($translation) > 0) {
+                    if (strpos($property, '__attribute_') === 0) {
+                        $property = str_replace('__attribute_', '', $property);
+                        $staticPage['attribute'][$property] = $translation;
+                        continue;
+                    }
                     $staticPage[$property] = $translation;
                 }
             }
         }
 
-        // load attributes
-        $staticPage['attribute'] = Shopware()->Container()->get('shopware_attribute.data_loader')->load('s_cms_static_attributes', $staticId);
         /*
          * Add support for sub pages
          */

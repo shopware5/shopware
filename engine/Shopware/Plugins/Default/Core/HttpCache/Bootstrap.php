@@ -120,27 +120,35 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
         $this->subscribeEvent('Shopware\Models\Article\Price::postUpdate', 'onPostPersist');
         $this->subscribeEvent('Shopware\Models\Article\Price::postPersist', 'onPostPersist');
+        $this->subscribeEvent('Shopware\Models\Article\Price::postRemove', 'onPostPersist');
 
         $this->subscribeEvent('Shopware\Models\Article\Article::postUpdate', 'onPostPersist');
         $this->subscribeEvent('Shopware\Models\Article\Article::postPersist', 'onPostPersist');
+        $this->subscribeEvent('Shopware\Models\Article\Article::postRemove', 'onPostPersist');
 
         $this->subscribeEvent('Shopware\Models\Article\Detail::postUpdate', 'onPostPersist');
         $this->subscribeEvent('Shopware\Models\Article\Detail::postPersist', 'onPostPersist');
+        $this->subscribeEvent('Shopware\Models\Article\Detail::postRemove', 'onPostPersist');
 
         $this->subscribeEvent('Shopware\Models\Category\Category::postPersist', 'onPostPersist');
         $this->subscribeEvent('Shopware\Models\Category\Category::postUpdate', 'onPostPersist');
+        $this->subscribeEvent('Shopware\Models\Category\Category::postRemove', 'onPostPersist');
 
         $this->subscribeEvent('Shopware\Models\Banner\Banner::postPersist', 'onPostPersist');
         $this->subscribeEvent('Shopware\Models\Banner\Banner::postUpdate', 'onPostPersist');
+        $this->subscribeEvent('Shopware\Models\Banner\Banner::postRemove', 'onPostPersist');
 
         $this->subscribeEvent('Shopware\Models\Blog\Blog::postPersist', 'onPostPersist');
         $this->subscribeEvent('Shopware\Models\Blog\Blog::postUpdate', 'onPostPersist');
+        $this->subscribeEvent('Shopware\Models\Blog\Blog::postRemove', 'onPostPersist');
 
         $this->subscribeEvent('Shopware\Models\Emotion\Emotion::postPersist', 'onPostPersist');
         $this->subscribeEvent('Shopware\Models\Emotion\Emotion::postUpdate', 'onPostPersist');
+        $this->subscribeEvent('Shopware\Models\Emotion\Emotion::postRemove', 'onPostPersist');
 
         $this->subscribeEvent('Shopware\Models\Site\Site::postPersist', 'onPostPersist');
         $this->subscribeEvent('Shopware\Models\Site\Site::postUpdate', 'onPostPersist');
+        $this->subscribeEvent('Shopware\Models\Site\Site::postRemove', 'onPostPersist');
 
         $this->installForm();
 

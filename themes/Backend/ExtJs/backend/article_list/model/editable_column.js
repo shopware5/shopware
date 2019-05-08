@@ -30,12 +30,14 @@
 Ext.define('Shopware.apps.ArticleList.model.EditableColumn', {
     /**
      * Extends the standard Ext Model
+     *
      * @string
      */
     extend: 'Ext.data.Model',
 
     /**
      * The fields used for this model
+     *
      * @array
      */
     fields: [
@@ -44,15 +46,13 @@ Ext.define('Shopware.apps.ArticleList.model.EditableColumn', {
         { name: 'name', type: 'string' }
     ],
 
-    associations:[
-           {
-               type:'hasMany',
-               model:'Shopware.apps.ArticleList.model.Operator',
-               name:'getOperators',
-               associationKey:'operators'
-           }
-       ]
-
-
+    associations: [
+        {
+           type:'hasMany',
+           model:'Shopware.apps.ArticleList.model.Operator',
+           name:'getOperators',
+           associationKey:'operators'
+       }
+   ]
 });
 //{/block}
