@@ -93,8 +93,13 @@ Ext.define('Shopware.apps.ProductStream.view.SearchGrid', {
 
     createDisplayColumns: function() {
         return [{
+            header: '{s name=number}Number{/s}',
+            sortable: true,
+            dataIndex: 'number',
+            width: 110
+        }, {
             header: '{s name=name}Name{/s}',
-            sortable: false,
+            sortable: true,
             dataIndex: 'name',
             flex: 1
         }];
@@ -112,7 +117,20 @@ Ext.define('Shopware.apps.ProductStream.view.SearchGrid', {
     createActionItems: function() {
         var me = this;
         return [{
+            iconCls: 'sprite-inbox',
+            tooltip: '{s name=openProduct}Open product{/s}',
+            handler: function(view, rowIndex, colIndex, item, opts, record) {
+                Shopware.app.Application.addSubApplication({
+                    name: 'Shopware.apps.Article',
+                    action: 'detail',
+                    params: {
+                        articleId: record.get('articleId')
+                    }
+                });
+            }
+        }, {
             iconCls: 'sprite-minus-circle-frame',
+            tooltip: '{s name=removeProduct}Remove product from stream{/s}',
             handler: function (view, rowIndex, colIndex, item, opts, record) {
                 me.removeRecord(record);
             }
