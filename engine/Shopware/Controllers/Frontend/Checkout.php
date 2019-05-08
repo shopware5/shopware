@@ -714,6 +714,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             );
         }
 
+        // Redirect if basket is empty
+        if (!array_key_exists('content', $this->getBasket())) {
+            return $this->redirect(['controller' => 'checkout', 'action' => 'cart']);
+        }
+
         // Load payment options, select option and details
         $this->View()->assign('sPayments', $this->getPayments());
         $this->View()->assign('sFormData', ['payment' => $this->View()->sUserData['additional']['user']['paymentID']]);
@@ -815,7 +820,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             return $this->forward('shippingPayment');
         }
 
-        // Save payment method details db
+        // Save payment method details to db
         if ($checkData['sPaymentObject'] instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
             $checkData['sPaymentObject']->savePaymentData(Shopware()->Session()->sUserId, $this->Request());
         }

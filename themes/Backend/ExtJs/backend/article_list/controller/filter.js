@@ -91,7 +91,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
         me.callParent(arguments);
     },
 
-
     /**
      * Callback function triggered, when the user deletes a row from the simple editor grid
      * @param rowIdx
@@ -155,7 +154,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
             suggestController = me.getController('Suggest'),
             filterString;
 
-        if (activeTab.xtype == 'query-field') {
+        if (activeTab.xtype === 'query-field') {
             filterString = me.getFilterCombo().getValue();
         } else {
             filterString = me.getFilterStringFromSimpleFilter().filterString;
@@ -163,7 +162,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
 
         suggestController.loadFilter(filterString, '{s name=unsavedFilter}Unsaved filter{/s}');
     },
-
 
     /**
      * Callback triggered after the user edited a row
@@ -221,18 +219,18 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
         var me = this,
             value, oldValue;
 
-        if (newTab.internalTitle == 'simple') {
+        if (newTab.internalTitle === 'simple') {
             oldValue = oldTab.down('combo').getValue();
 
             value = me.getController('Suggest').getSimpleResult(oldValue);
-            if (value || oldValue.trim().length == 0) {
+            if (value || oldValue.trim().length === 0) {
                 me.loadSimpleTokens(value);
             } else  {
                 Ext.MessageBox.confirm(
                     '{s name=proceed}Proceed?{/s}',
                     '{s name=convertFilterMessage}You cannot convert this query to a simple filter. Do you want to proceed anyway and loose the current filter?{/s}',
                     function (response) {
-                        if ( response == 'yes' ) {
+                        if ( response === 'yes' ) {
                             return;
                         }
 
@@ -264,7 +262,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
 
         Ext.each(tokens, function(currentRow) {
             record = Ext.create('Shopware.apps.ArticleList.model.Operation',  { });
-            if (currentRow.length == 1) {
+            if (currentRow.length === 1) {
                 record.set('column', currentRow[0]['token']);
             } else {
                 record.set('column', currentRow[0]['token']);
@@ -306,7 +304,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
         }
 
         // Get filter string depending on the tab panel currently active
-        if (activeTab.xtype == 'query-field') {
+        if (activeTab.xtype === 'query-field') {
             filterString = me.getFilterCombo().getValue();
         } else {
             filterString = me.getFilterStringFromSimpleFilter().filterString;
@@ -323,7 +321,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
             Shopware.Notification.createGrowlMessage('{s name=error}Error{/s}', message);
             return;
         }
-
 
         // update the record and save it
         form.getForm().updateRecord(record);
@@ -345,10 +342,8 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
                 },
                 'ArticleList');
             }
-
         });
     },
-
 
     /**
      * Callback function triggered when the user clicks a filter in the left grid
@@ -423,7 +418,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
             resultStorted[key] = result[key];
         });
 
-
         return resultStorted;
     },
 
@@ -493,7 +487,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
                 return;
             }
         }
-
     },
 
     /**
@@ -511,7 +504,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
             valueColumn = columns[2],
             grid = me.getSimpleGrid();
 
-        if (dataIndex == 'operator') {
+        if (dataIndex === 'operator') {
             var operatorName = record.get('name');
 
             // If the selected operator is not a binary operator: Disable the value field
@@ -521,7 +514,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
             } else {
                 valueColumn.setEditor(grid.getDefaultValueEditor());
             }
-        } else if (dataIndex == 'column') {
+        } else if (dataIndex === 'column') {
             var columnName = record.get('name'),
                 operators = me.filterableColumns[columnName];
 
@@ -544,7 +537,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
                 }
             }
         }
-
     },
 
     /**
@@ -595,7 +587,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
             store = me.subApplication.filterStore,
             record = store.getAt(rowIndex);
 
-
         Ext.MessageBox.confirm(
             '{s name=deleteFilterTitle}Delete filter?{/s}',
             Ext.String.format('{s name=deleteFilterMessage}Do you want to delete the filter \'[0]\'?{/s}', record.get('name')),
@@ -611,8 +602,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
                 });
             }
         );
-
     }
-
 });
 //{/block}

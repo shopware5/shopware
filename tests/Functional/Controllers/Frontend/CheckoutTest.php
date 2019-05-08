@@ -199,6 +199,25 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
         Shopware()->Modules()->Basket()->sDeleteBasket();
     }
 
+    public function testRedirectShippingPaymentPageOnEmptyBasket()
+    {
+        $this->loginFrontendUser();
+
+        $this->Request()->setMethod('GET');
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
+        $response = $this->dispatch('/checkout/shippingPayment');
+
+        $locationHeader = array_filter($response->getHeaders(), static function (array $header) {
+            return stripos($header['name'], 'location') === 0;
+        });
+
+        static::assertTrue($response->isRedirect());
+        static::assertEquals(302, $response->getHttpResponseCode());
+        static::assertCount(2, $locationHeader); // Known bug due to Symfony migration
+        $locationHeader = array_pop($locationHeader);
+        static::assertContains('/checkout/cart', $locationHeader['value']);
+    }
+
     /**
      * Login as a frontend user
      *

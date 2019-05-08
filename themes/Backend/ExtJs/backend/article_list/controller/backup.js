@@ -182,7 +182,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
             buttons      : Ext.MessageBox.CANCEL,
             fn           : function(buttonId, text, opt) {
 
-                if (buttonId != 'cancel') {
+                if (buttonId !== 'cancel') {
                     return;
                 }
 
@@ -262,7 +262,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
                         }
                     }
                 }
-
             },
             failure: function (response, request) {
                 if(response.responseText) {
@@ -293,9 +292,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Backup', {
         }
 
         return me.subApplication.backupWindow;
-
     }
-
-
 });
 //{/block}

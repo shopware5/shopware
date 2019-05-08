@@ -32,7 +32,8 @@ use Shopware\Tests\Functional\Traits\FixtureBehaviour;
 
 class CartMigrationTest extends TestCase
 {
-    use DatabaseTransactionBehaviour, FixtureBehaviour;
+    use DatabaseTransactionBehaviour;
+    use FixtureBehaviour;
 
     public function testMigrateOnLoginWithEmptyCart(): void
     {

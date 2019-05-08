@@ -10,6 +10,20 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 * Added option to "I am" select field in basic configuration
 * Added paragraph to license.txt regarding the permission to relicense plugins
+* Added cartItem to event `Shopware_Modules_Basket_UpdateArticle_Start`
+* Added OPCache options `opcache.use_cwd` and `opcache.validate_root` to the system info's requirements tab
+* Added more GTIN formats for itemprops in `frontent/detail/content/header.tpl`
+* Added following events to `sBasket`
+    * `Shopware_Modules_Basket_DeleteNote_Start`
+    * `Shopware_Modules_Basket_UpdateArticle_FilterSqlDefaultParameters`
+    * `Shopware_Modules_Basket_UpdateCartItems_Updated`
+    * `Shopware_Modules_Basket_BasketCleared`
+    * `Shopware_Modules_Basket_DeleteArticle_Start`
+    * `Shopware_Modules_Basket_DeletedArticle`
+    * `Shopware_Modules_Basket_getTaxesForUpdateProduct_FilterReturn`
+* Added new blocks to `frontend/checkout/ajax_cart.tpl` for inactive links to checkout:
+    * `frontend_checkout_ajax_cart_open_checkout_inner_unavailable` 
+    * `frontend_checkout_ajax_cart_open_basket_unavailable`
 
 ### Changes
 
@@ -22,6 +36,15 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed `Blog` and `Listing` controllers to throw an exception if a blog category-id is passed to the `Listing` controller or vice versa
 * Changed `EsBackendIndexer` to improve support for unicode characters
 * Changed `mediaselectionfield` to work also with enabled translation in tabs
+* Changed RSS templates to contain correct language code
+* Changed BatchProcess to fix an issue with `removeString` operator
+* Changed custom-page attributes to be translated properly
+* Changed Symfony library to version 3.4.27
+* Changed buttons in empty off-canvas baskets to be disabled
+
+### Deprecations
+
+* Deprecated `sBasket::clearBasket`, use `sBasket::sDeleteBasket` instead
 
 ## 5.5.8
 

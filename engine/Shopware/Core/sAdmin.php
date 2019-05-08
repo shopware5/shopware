@@ -675,7 +675,7 @@ class sAdmin
     public function logout()
     {
         if ($this->config->get('clearBasketAfterLogout')) {
-            $this->moduleManager->Basket()->clearBasket();
+            $this->moduleManager->Basket()->sDeleteBasket();
         }
 
         $this->session->unsetAll();
