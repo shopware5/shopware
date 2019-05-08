@@ -44,6 +44,12 @@ Ext.define('Shopware.form.field.SingleSelection', {
 
     initComponent: function() {
         var me = this;
+
+        if (!Ext.isDefined(this.store) && Ext.isDefined(this.model)) {
+            var factory = Ext.create('Shopware.attribute.SelectionFactory');
+            this.store = factory.createEntitySearchStore(this.model);
+        }
+
         var store = me.store;
         me.store = Ext.create('Ext.data.Store', {
             model: store.model,

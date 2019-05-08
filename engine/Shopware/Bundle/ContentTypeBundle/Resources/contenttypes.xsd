@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+    <xsd:element name="contentTypes" type="contentTypes"/>
+
+    <xsd:complexType name="contentTypes">
+        <xsd:sequence>
+            <xsd:element name="types" type="types" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="types">
+        <xsd:sequence>
+            <xsd:element name="type" type="singleType" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="singleType">
+        <xsd:sequence>
+            <xsd:element name="typeName" type="xsd:string"/>
+            <xsd:element name="name" type="xsd:string"/>
+            <xsd:element name="showInFrontend" type="xsd:boolean" minOccurs="0" default="false"/>
+            <xsd:element name="menuIcon" type="xsd:string" minOccurs="0" default="sprite-application-block"/>
+            <xsd:element name="menuPosition" type="xsd:integer" minOccurs="0" default="0"/>
+            <xsd:element name="menuParent" type="xsd:string"  minOccurs="0" default="Content"/>
+            <xsd:element name="viewTitleFieldName" type="xsd:string"  minOccurs="0"/>
+            <xsd:element name="viewDescriptionFieldName" type="xsd:string"  minOccurs="0"/>
+            <xsd:element name="viewImageFieldName" type="xsd:string"  minOccurs="0"/>
+            <xsd:element name="fieldSets" type="fieldSetType"/>
+            <xsd:element name="custom" type="custom" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="fieldSetType">
+        <xsd:sequence>
+            <xsd:element name="fieldSet" type="fieldTypeList" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="fieldType">
+        <xsd:sequence>
+            <xsd:element name="field" type="singleType" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="fieldTypeList">
+        <xsd:sequence>
+            <xsd:element name="field" type="singleFieldType" maxOccurs="unbounded"/>
+            <xsd:element name="options" type="custom" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="label" type="xsd:string"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="singleFieldType">
+        <xsd:all>
+            <xsd:element name="label" type="xsd:string"/>
+            <xsd:element name="helpText" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="description" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="showListing" type="xsd:boolean" minOccurs="0"/>
+            <xsd:element name="searchAble" type="xsd:boolean" minOccurs="0"/>
+            <xsd:element name="store" type="store" minOccurs="0">
+                <xsd:unique name="uniqueStoreOptionValue">
+                    <xsd:selector xpath="option/value"/>
+                    <xsd:field xpath="."/>
+                </xsd:unique>
+            </xsd:element>
+            <xsd:element name="custom" type="custom" minOccurs="0"/>
+            <xsd:element name="options" type="custom" minOccurs="0"/>
+        </xsd:all>
+        <xsd:attribute name="name" type="xsd:string" use="required" />
+        <xsd:attribute name="type" type="xsd:string" use="required" />
+        <xsd:attribute name="translatable" type="xsd:boolean" default="false"/>
+        <xsd:attribute name="required" type="xsd:boolean" default="false"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="custom">
+        <xsd:sequence>
+            <xsd:any processContents="skip" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:anyAttribute processContents="skip"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="store" mixed="true">
+        <xsd:sequence>
+            <xsd:element type="storeOption" name="option" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="storeOption">
+        <xsd:all>
+            <xsd:element name="label" type="xsd:string"/>
+            <xsd:element name="value" type="xsd:string"/>
+        </xsd:all>
+    </xsd:complexType>
+</xsd:schema>

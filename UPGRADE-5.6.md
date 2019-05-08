@@ -426,3 +426,61 @@ ExtJs developer mode loads a developer-version file of ExtJs to provide code doc
     'developer_mode' => true
 ]
 ```
+
+### Content Types
+
+Content Types are something similar to attributes, but you can create your own simple entity with defined fields using using xml or the backend.
+
+
+Example XML:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<contentTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../engine/Shopware/Bundle/ContentTypeBundle/Resources/contenttypes.xsd">
+    <types>
+        <type>
+            <typeName>store</typeName>
+            <name>Stores</name>
+            <fieldSets>
+                <fieldSet>
+                    <field name="name" type="text">
+                        <label>Name</label>
+                        <showListing>true</showListing>
+                    </field>
+                    <field name="address" type="text">
+                        <label>Address</label>
+                        <showListing>false</showListing>
+                    </field>
+                    <field name="country" type="text">
+                        <label>Country</label>
+                        <showListing>false</showListing>
+                    </field>
+                </fieldSet>
+            </fieldSets>
+        </type>
+    </types>
+</contentTypes>
+```
+
+Each type gets its own
+
+* backend controller
+* frontend controller, if enabled
+* API controller for all CRUD operations (Custom**type_name** e.g. CustomStore)
+* backend menu icon
+* table with s_custom prefix
+* repository serivce with shopware.bundle.content_type.**type_name**
+
+They are also accessible in template using new smarty function `fetchContent`
+
+Example
+```html
+{fetchContent type=store assign=stores filter=[['property' => 'country', 'value' => 'Germany']]}
+
+{foreach $stores as $store}
+    {$store.name}
+{/foreach}
+```
+
+The backend fields and titles can be translated using snippet namespace ``backend/customYOURTYPE/main``.

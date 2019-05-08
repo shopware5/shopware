@@ -139,6 +139,13 @@ class Menu extends ModelEntity
      */
     private $children;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="content_type", type="string", length=255, nullable=true)
+     */
+    private $contentType;
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
@@ -362,5 +369,17 @@ class Menu extends ModelEntity
     public function setPlugin($plugin)
     {
         $this->plugin = $plugin;
+    }
+
+    public function getContentType(): string
+    {
+        return $this->contentType;
+    }
+
+    public function setContentType(string $contentType)
+    {
+        $this->contentType = $contentType;
+
+        return $this;
     }
 }

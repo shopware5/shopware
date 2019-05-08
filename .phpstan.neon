@@ -95,5 +95,6 @@ parameters:
         - '#Parameter \#2 \$value of class ONGR\\ElasticsearchDSL\\Query\\TermLevel\\TermQuery constructor expects string#'
         - '#Parameter \#2 \$value of method ONGR\\ElasticsearchDSL\\Query\\Compound\\BoolQuery::addParameter\(\) expects array\|stdClass\|string#'
         - '#Parameter \#2 \$value of method ONGR\\ElasticsearchDSL\\Aggregation\\AbstractAggregation::addParameter\(\) expects array\|stdClass\|string#'
+        - '#should return Shopware\\Bundle\\ContentTypeBundle\\Services\\RepositoryInterface but returns object#'
 
     reportUnmatchedIgnoredErrors: false
