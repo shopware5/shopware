@@ -24,6 +24,10 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added new blocks to `frontend/checkout/ajax_cart.tpl` for inactive links to checkout:
     * `frontend_checkout_ajax_cart_open_checkout_inner_unavailable` 
     * `frontend_checkout_ajax_cart_open_basket_unavailable`
+* Added the following public methods to `Shopware\Models\Order\Repository`:
+    * `getDetailsQueryBuilder`
+    * `getPaymentsQueryBuilder`
+    * `getDocumentsQueryBuilder`
 
 ### Changes
 
