@@ -167,7 +167,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                 editVariantPrice: me.onEditVariantPrice,
                 editVariantPseudoPrice: me.onEditVariantPseudoPrice,
                 createVariants: me.onCreateVariants,
-                saveSettings: me.onSaveSettings
             },
             //global event of the configurator tab
             'article-detail-window article-variant-configurator': {

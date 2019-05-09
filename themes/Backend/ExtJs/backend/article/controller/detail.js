@@ -113,19 +113,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                 change: me.onEnableConfigurator
             },
             'article-detail-window combo[name=filterGroupId]': {
-                //select: me.onSelectPropertyGroup,
                 change: me.onChangePropertyGroup
-            },
-            'article-detail-window grid[name=property-grid]': {
-                //beforeedit: me.onBeforePropertyEdit
-            },
-            'article-detail-window article-sidebar-similar': {
-                addSimilarArticle: me.onAddSimilarArticle,
-                removeSimilarArticle: me.onRemoveSimilarArticle
-            },
-            'article-detail-window article-sidebar-accessory': {
-                addAccessoryArticle: me.onAddAccessoryArticle,
-                removeAccessoryArticle: me.onRemoveAccessoryArticle
             },
             'article-detail-window article-resources-links': {
                 addLink: me.onAddLink,

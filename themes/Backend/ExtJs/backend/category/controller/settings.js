@@ -65,10 +65,6 @@ Ext.define('Shopware.apps.Category.controller.Settings', {
             'category-category-tabs-settings':{
                 recordloaded : me.onRecordLoaded
             },
-            // Save button in settings tab
-            'category-category-tabs-settings button[action=categorySaveButton]':{
-                'click' : me.onSaveSettings
-            }
         });
     },
     /**
