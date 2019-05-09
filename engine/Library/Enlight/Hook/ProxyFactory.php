@@ -102,6 +102,10 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
      */
     public function getProxy($class)
     {
+		if (in_array('Enlight_Hook', class_implements($class))) {
+			throw new Enlight_Hook_Exception('The class does not implements Enlight_Hook interface');
+		}
+
         $proxyFile = $this->getProxyFileName($class);
         $proxy = $this->getProxyClassName($class);
 
