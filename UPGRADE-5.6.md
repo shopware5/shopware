@@ -63,6 +63,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
   * `MailLogContact`
 * Added `AvailableFiltersCompilerPass` so all available filters for the mail log can be listed by reading the `shopware.mail_bundle.available_filters` container parameter
 * Added ExtJs developer mode, to provide better warnings and errors to developers
+* Added `Enlight_Hook_Exception`. It will be thrown when the HookManger gets a class name which not implements `Enlight_Hook` in 5.8.
 
 ### Changes
 

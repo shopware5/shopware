@@ -16,22 +16,13 @@
  * @package    Enlight_Event
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
- * Class for an Enlight event exception.
+ * Class for an Enlight hook exception.
  *
- * An Enlight_Event_Exception is thrown if an error occurs within an event.
- *
- * @category   Enlight
- * @package    Enlight_Event
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
+ * An Enlight_Hook_Exception is thrown if a class is used for the HookManger without Enlight_Hook.
  */
-
 class Enlight_Hook_Exception extends Enlight_Exception {
 
 }

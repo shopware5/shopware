@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 /**
  * Shopware Class that handles categories
  */
-class sCategories
+class sCategories implements \Enlight_Hook
 {
     public $sSYSTEM;
 

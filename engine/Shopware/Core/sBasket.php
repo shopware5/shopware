@@ -34,7 +34,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 /**
  * Shopware Class that handles cart operations
  */
-class sBasket
+class sBasket implements \Enlight_Hook
 {
     /**
      * Pointer to sSystem object

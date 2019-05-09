@@ -29,7 +29,7 @@ use Shopware\Models\Customer\Customer;
 /**
  * Deprecated Shopware Class that handle frontend orders
  */
-class sOrder
+class sOrder implements \Enlight_Hook
 {
     /**
      * Array with user data

@@ -29,7 +29,7 @@ use Shopware\Components\LegacyRequestWrapper\PostWrapper;
 /**
  * Deprecated Shopware Class
  */
-class sSystem
+class sSystem implements \Enlight_Hook
 {
     /**
      * Shopware configuration

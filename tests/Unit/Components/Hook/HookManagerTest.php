@@ -942,6 +942,15 @@ class HookManagerTest extends TestCase
     }
 
     /**
+     * Uncomment with 5.8
+     */
+    //public function testFalseClassThrowsException()
+    //{
+    //   self::expectException(\Enlight_Hook_Exception::class);
+    //    $this->hookManager->getProxy(HookManagerTestNoTarget::class);
+    //}
+
+    /**
      * @param string $methodName
      * @param string $hookType
      */

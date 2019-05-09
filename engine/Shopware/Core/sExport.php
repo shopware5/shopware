@@ -32,7 +32,7 @@ use Shopware\Models\Shop\Currency;
 /**
  * Shopware Class to provide product export feeds
  */
-class sExport
+class sExport implements \Enlight_Hook
 {
     public $sFeedID;
     public $sHash;

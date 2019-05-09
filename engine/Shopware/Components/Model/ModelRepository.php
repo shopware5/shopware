@@ -37,7 +37,7 @@ use Doctrine\ORM\EntityRepository;
  * $modelRepository->createQueryBuilder();
  * </code>
  */
-class ModelRepository extends EntityRepository
+class ModelRepository extends EntityRepository implements \Enlight_Hook
 {
     /**
      * Creates a new QueryBuilder instance that is pre-populated for this entity name.
