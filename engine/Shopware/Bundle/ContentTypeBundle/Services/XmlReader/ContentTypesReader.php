@@ -110,6 +110,10 @@ class ContentTypesReader extends XmlReaderBase
             $item['viewImageFieldName'] = $viewImageFieldName;
         }
 
+        if ($seoUrlTemplate = self::getElementChildValueByName($element, 'seoUrlTemplate')) {
+            $item['seoUrlTemplate'] = $seoUrlTemplate;
+        }
+
         $item['menuParent'] = 'Content';
 
         if ($menuParent = self::getElementChildValueByName($element, 'menuParent')) {

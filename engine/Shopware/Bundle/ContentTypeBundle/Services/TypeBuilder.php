@@ -90,6 +90,10 @@ class TypeBuilder
             $class->setViewImageFieldName($type['viewImageFieldName']);
         }
 
+        if (isset($type['seoUrlTemplate'])) {
+            $class->setSeoUrlTemplate($type['seoUrlTemplate']);
+        }
+
         $fieldSets = [];
         $fields = [];
         foreach ($type['fieldSets'] as $fieldSet) {

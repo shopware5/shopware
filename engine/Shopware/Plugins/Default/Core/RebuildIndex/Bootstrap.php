@@ -173,6 +173,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
             $this->RewriteTable()->sCreateRewriteTableBlog(null, null, $context);
             $this->RewriteTable()->createManufacturerUrls($context);
             $this->RewriteTable()->sCreateRewriteTableStatic();
+            $this->RewriteTable()->createContentTypeUrls($context);
 
             Shopware()->Events()->notify(
                 'Shopware_CronJob_RefreshSeoIndex_CreateRewriteTable',

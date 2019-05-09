@@ -160,6 +160,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand
             $this->rewriteTable->sCreateRewriteTableBlog(null, null, $context);
             $this->rewriteTable->createManufacturerUrls($context);
             $this->rewriteTable->sCreateRewriteTableStatic();
+            $this->rewriteTable->createContentTypeUrls($context);
 
             $this->events->notify(
                 'Shopware_Command_RebuildSeoIndexCommand_CreateRewriteTable',

@@ -41,6 +41,7 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
     configure: function () {
         return {
             controller: 'ContentTypeManager',
+            splitFields: false,
             fieldSets: [
                 {
                     title: '{s name="type/title"}{/s}',
@@ -56,7 +57,7 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
                 {
                     title: '{s name="detail/view"}{/s}',
                     fields: {
-                        'showInFrontend': {
+                        showInFrontend: {
                             fieldLabel: '{s name="view/showInFrontend"}{/s}',
                             inputValue: true,
                             uncheckedValue: false,
@@ -67,29 +68,38 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
                                 scope: this
                             }
                         },
-                        'viewTitleFieldName': {
+                        viewTitleFieldName: {
                             fieldLabel: '{s name="view/titleField"}{/s}',
                             xtype: 'combobox',
                             valueField: 'name',
                             displayField: 'label',
                             queryMode: 'local',
                             labelWidth: 150,
+                            forceSelection: true
                         },
-                        'viewDescriptionFieldName': {
+                        viewDescriptionFieldName: {
                             fieldLabel: '{s name="view/descriptionField"}{/s}',
                             xtype: 'combobox',
                             valueField: 'name',
                             displayField: 'label',
                             queryMode: 'local',
                             labelWidth: 150,
+                            forceSelection: true
                         },
-                        'viewImageFieldName': {
+                        viewImageFieldName: {
                             fieldLabel: '{s name="view/imageField"}{/s}',
                             xtype: 'combobox',
                             valueField: 'name',
                             displayField: 'label',
                             queryMode: 'local',
                             labelWidth: 150,
+                            forceSelection: true
+                        },
+                        seoUrlTemplate: {
+                            fieldLabel: '{s name="type/seoUrlTemplate"}{/s}',
+                            xtype: 'ace-editor',
+                            labelWidth: 150,
+                            height: 20
                         }
                     }
                 }
@@ -134,7 +144,7 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
             return '';
         }
 
-        return '{s name="link_to_frontend"}{/s}' + record.get('internalName');
+        return '{s name="link_to_frontend"}{/s}custom' + record.get('internalName');
     }
 });
 // {/block}

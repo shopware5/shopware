@@ -23,6 +23,7 @@
  */
 
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
+use Shopware\Bundle\ContentTypeBundle\Structs\Criteria;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ShopPageServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -247,6 +248,7 @@ class sRewriteTable
         $lastUpdate = $this->sCreateRewriteTableArticles($lastUpdate);
         $this->sCreateRewriteTableContent(null, null, $context);
         $this->createManufacturerUrls($context);
+        $this->createContentTypeUrls($context);
 
         return $lastUpdate;
     }
@@ -688,6 +690,39 @@ class sRewriteTable
 
         //static pages urls
         $this->insertStaticPageUrls($offset, $limit, $context);
+    }
+
+    public function createContentTypeUrls(ShopContextInterface $context): void
+    {
+        /** @var \Shopware\Bundle\ContentTypeBundle\Structs\Type $type */
+        foreach (Shopware()->Container()->get('shopware.bundle.content_type.type_provider')->getTypes() as $type) {
+            if (!$type->isShowInFrontend()) {
+                continue;
+            }
+
+            // insert controller, itself
+            $path = $type->getName() . '/';
+            $path = $this->sCleanupPath($path);
+            $this->sInsertUrl('sViewport=' . $type->getControllerName(), $path);
+
+            $typeArray = json_decode(json_encode($type), true);
+
+            /** @var \Shopware\Bundle\ContentTypeBundle\Services\RepositoryInterface $repository */
+            $repository = Shopware()->Container()->get('shopware.bundle.content_type.' . $type->getInternalName());
+
+            $criteria = new Criteria();
+            $criteria->loadAssociations = true;
+            $criteria->loadTranslations = false;
+            $criteria->limit = null;
+
+            foreach ($repository->findAll($criteria)->items as $item) {
+                $path = $this->template->fetch('string:' . $type->getSeoUrlTemplate(), ['type' => $typeArray, 'item' => $item, 'context' => $context]);
+                $path = $this->sCleanupPath($path);
+
+                $org_path = sprintf('sViewport=%s&sAction=detail&id=%d', $type->getControllerName(), $item['id']);
+                $this->sInsertUrl($org_path, $path);
+            }
+        }
     }
 
     /**

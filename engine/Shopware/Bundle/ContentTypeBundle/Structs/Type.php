@@ -93,6 +93,11 @@ class Type implements JsonSerializable
      */
     protected $viewImageFieldName;
 
+    /**
+     * @var string
+     */
+    protected $seoUrlTemplate = '{$type.name}/{$item[$type.viewTitleFieldName]}/';
+
     public function getName(): string
     {
         return $this->name;
@@ -271,6 +276,18 @@ class Type implements JsonSerializable
     public function setViewImageFieldName(string $viewImageFieldName): self
     {
         $this->viewImageFieldName = $viewImageFieldName;
+
+        return $this;
+    }
+
+    public function getSeoUrlTemplate(): string
+    {
+        return $this->seoUrlTemplate;
+    }
+
+    public function setSeoUrlTemplate(string $seoUrlTemplate): Type
+    {
+        $this->seoUrlTemplate = $seoUrlTemplate;
 
         return $this;
     }

@@ -88,6 +88,11 @@ Ext.define('Shopware.apps.ContentTypeManager.model.Type', {
                 return 0;
             }
         },
+        {
+            name: 'seoUrlTemplate',
+            type: 'string',
+            defaultValue: '{literal}{$type.name}/{$item[$type.viewTitleFieldName]}/{/literal}'
+        }
     ],
 
     associations: [
