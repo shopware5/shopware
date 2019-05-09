@@ -181,12 +181,17 @@
          * @param {jQuery.Event} event
          */
         onClick: function (index, $el, event) {
-            var me = this;
+            var me = this,
+                menus = me.$el.find(me.opts.menuContainerSelector);
 
-            if (me._shouldPrevent || !$el.hasClass(me.opts.itemHoverClass)) {
+            var stop = $(menus[index]).has('ul').length && (me._shouldPrevent || !$el.hasClass(me.opts.itemHoverClass));
+
+            if (stop) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
             }
+
+            $.publish('plugin/swAdvancedMenu/onClick', [ me, stop, index, $el, event ]);
         },
 
         /**
