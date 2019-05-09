@@ -57,6 +57,11 @@ class DatabaseContentTypeSynchronizer implements DatabaseContentTypeSynchronizer
     private $connection;
 
     /**
+     * @var ContentTypeCleanupServiceInterface
+     */
+    private $cleanupService;
+
+    /**
      * @param FieldInterface[] $fieldAlias
      * @param string[]         $pluginFolders
      */
@@ -65,13 +70,15 @@ class DatabaseContentTypeSynchronizer implements DatabaseContentTypeSynchronizer
         array $pluginFolders,
         TypeBuilder $typeBuilder,
         Connection $connection,
-        SynchronizerServiceInterface $synchronizerService
+        SynchronizerServiceInterface $synchronizerService,
+        ContentTypeCleanupServiceInterface $cleanupService
     ) {
         $this->fieldAlias = $fieldAlias;
         $this->pluginFolders = $pluginFolders;
         $this->typeBuilder = $typeBuilder;
         $this->connection = $connection;
         $this->synchronizerService = $synchronizerService;
+        $this->cleanupService = $cleanupService;
     }
 
     public function sync(array $installedPlugins, bool $destructive = false): array
@@ -117,6 +124,16 @@ class DatabaseContentTypeSynchronizer implements DatabaseContentTypeSynchronizer
         }, $types);
 
         if (!empty($types)) {
+            $names = $this->connection->executeQuery('SELECT internalName FROM s_content_types WHERE source IS NOT NULL AND internalName NOT IN(:names)', [
+                'names' => $types,
+            ], [
+                'names' => Connection::PARAM_STR_ARRAY,
+            ])->fetchAll(\PDO::FETCH_COLUMN);
+
+            foreach ($names as $name) {
+                $this->cleanupService->deleteContentType($name);
+            }
+
             $this->connection->executeQuery('DELETE FROM s_content_types WHERE source IS NOT NULL AND internalName NOT IN(:names)', [
                 'names' => $types,
             ], [

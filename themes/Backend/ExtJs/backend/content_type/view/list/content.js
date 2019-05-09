@@ -33,6 +33,26 @@ Ext.define('Shopware.apps.{$controllerName}.view.list.Content', {
      */
     configure: function() {
         return {
+            /*{if {acl_is_allowed privilege=delete}}*/
+            deleteColumn: true,
+            deleteButton: true,
+            /* {else}*/
+            deleteColumn: false,
+            deleteButton: false,
+            /* {/if} */
+
+            /*{if {acl_is_allowed privilege=edit}}*/
+            editColumn: true,
+            /* {else}*/
+            editColumn: false,
+            /* {/if} */
+
+            /*{if {acl_is_allowed privilege=create}}*/
+            addButton: true,
+            /* {else}*/
+            addButton: false,
+            /* {/if} */
+
             detailWindow: 'Shopware.apps.{$controllerName}.view.detail.Window',
             columns: {$listColumns|json_encode}
         };

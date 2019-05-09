@@ -21,37 +21,15 @@
  * our trademarks remain entirely with us.
  */
 
-// {namespace name="backend/content_type_manager/main"}
-// {block name="backend/content_type_manager/view/detail/window"}
-Ext.define('Shopware.apps.ContentTypeManager.view.detail.Window', {
-    extend: 'Shopware.window.Detail',
-    alias: 'widget.content-type-manager-detail-window',
-    title : '{s name="detail/title"}{/s}',
-    height: 600,
-    width: 1000,
+// {block name="backend/content_type_manager/controller/detail"}
+Ext.define('Shopware.apps.ContentTypeManager.controller.Detail', {
+    extend: 'Shopware.detail.Controller',
 
-    /**
-     * configure the window
-     * @returns { Object }
-     */
     configure: function () {
         return {
-            hasOwnController: true,
-            eventAlias: 'content-type-manager',
+            detailWindow: 'Shopware.apps.ContentTypeManager.view.detail.Window',
+            eventAlias: 'content-type-manager'
         }
-    },
-
-    createTabItems: function () {
-        var parent = this.callParent(arguments);
-
-        parent.push({
-            xtype: 'content-type-manager-detail-fields',
-            store: this.record.getFields(),
-            fieldSelectionStore: this.subApp.getStore('Fields'),
-            title: '{s name="detail/fields"}{/s}'
-        });
-
-        return parent;
-    },
+    }
 });
 // {/block}

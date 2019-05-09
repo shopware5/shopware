@@ -78,6 +78,7 @@ class MenuSynchronizer implements MenuSynchronizerInterface
 
         $this->em->flush($items);
         $this->removeNotExistingEntries($contentTypes);
+        $this->cleanupContentTypeEntries();
     }
 
     protected function createMenuItem(array $menuItem, Menu $parent = null): Menu
@@ -155,6 +156,27 @@ class MenuSynchronizer implements MenuSynchronizerInterface
             $builder->setParameter(':contentTypes', $contentTypes, Connection::PARAM_STR_ARRAY);
         }
 
+        $builder->execute();
+    }
+
+    private function cleanupContentTypeEntries(): void
+    {
+        $ids = $this->em->getConnection()->createQueryBuilder()->from('s_core_menu', 'menu')
+            ->select('id')
+            ->andWhere('content_type IS NOT NULL')
+            ->groupBy('content_type')
+            ->having('COUNT(content_type) > 1')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN);
+
+        if (empty($ids)) {
+            return;
+        }
+
+        $builder = $this->em->getConnection()->createQueryBuilder();
+        $builder->delete('s_core_menu');
+        $builder->andWhere('id IN (:ids)');
+        $builder->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
         $builder->execute();
     }
 }

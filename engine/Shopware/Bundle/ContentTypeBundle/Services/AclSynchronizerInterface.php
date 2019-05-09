@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,37 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
-// {namespace name="backend/content_type_manager/main"}
-// {block name="backend/content_type_manager/view/detail/window"}
-Ext.define('Shopware.apps.ContentTypeManager.view.detail.Window', {
-    extend: 'Shopware.window.Detail',
-    alias: 'widget.content-type-manager-detail-window',
-    title : '{s name="detail/title"}{/s}',
-    height: 600,
-    width: 1000,
+namespace Shopware\Bundle\ContentTypeBundle\Services;
 
+interface AclSynchronizerInterface
+{
     /**
-     * configure the window
-     * @returns { Object }
+     * @param string[] $typeNames
      */
-    configure: function () {
-        return {
-            hasOwnController: true,
-            eventAlias: 'content-type-manager',
-        }
-    },
+    public function update(array $typeNames): void;
 
-    createTabItems: function () {
-        var parent = this.callParent(arguments);
-
-        parent.push({
-            xtype: 'content-type-manager-detail-fields',
-            store: this.record.getFields(),
-            fieldSelectionStore: this.subApp.getStore('Fields'),
-            title: '{s name="detail/fields"}{/s}'
-        });
-
-        return parent;
-    },
-});
-// {/block}
+    public function remove(string $name): void;
+}

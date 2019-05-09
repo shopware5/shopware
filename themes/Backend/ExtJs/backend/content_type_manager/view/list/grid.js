@@ -34,6 +34,23 @@ Ext.define('Shopware.apps.ContentTypeManager.view.list.Grid', {
      */
     configure: function () {
         return {
+            /*{if {acl_is_allowed privilege=delete}}*/
+            deleteColumn: true,
+            deleteButton: true,
+            /* {else}*/
+            deleteColumn: false,
+            deleteButton: false,
+            /* {/if} */
+
+            /*{if {acl_is_allowed privilege=edit}}*/
+            editColumn: true,
+            addButton: true,
+            /* {else}*/
+            editColumn: false,
+            addButton: false,
+            /* {/if} */
+
+
             pagingbar: false,
             columns: {
                 name: {},

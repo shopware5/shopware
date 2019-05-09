@@ -40,19 +40,37 @@ class SynchronizerService implements SynchronizerServiceInterface
      */
     private $provider;
 
-    public function __construct(ModelManager $modelManager, TypeProvider $provider)
-    {
+    /**
+     * @var MenuSynchronizerInterface
+     */
+    private $menuSynchronizer;
+
+    /**
+     * @var AclSynchronizerInterface
+     */
+    private $aclSynchronizer;
+
+    public function __construct(
+        ModelManager $modelManager,
+        TypeProvider $provider,
+        MenuSynchronizerInterface $menuSynchronizer,
+        AclSynchronizerInterface $aclSynchronizer
+    ) {
         $this->modelManager = $modelManager;
         $this->provider = $provider;
+        $this->menuSynchronizer = $menuSynchronizer;
+        $this->aclSynchronizer = $aclSynchronizer;
     }
 
     public function sync(bool $destructive = false): array
     {
-        $menu = new MenuSynchronizer($this->modelManager);
         $types = $this->provider->getTypes();
 
-        $menu->synchronize(self::getMenuEntries($types));
+        $this->menuSynchronizer->synchronize(self::getMenuEntries($types));
         $this->createTables($types, $destructive);
+        $this->aclSynchronizer->update(array_map(static function (Type $type) {
+            return strtolower($type->getControllerName());
+        }, $types));
 
         return $types;
     }

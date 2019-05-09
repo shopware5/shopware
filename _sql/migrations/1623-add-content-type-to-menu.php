@@ -40,5 +40,13 @@ VALUES (\'23\', \'Inhaltstypen\', NULL, \'sprite-application-form\', \'0\', \'1\
   `source` varchar(100) DEFAULT NULL,
   `config` text NOT NULL
 );');
+
+        $this->addSql("INSERT IGNORE INTO `s_core_acl_resources` (name) VALUES ('contenttypemanager');");
+
+        $this->addSql('SET @resourceId = LAST_INSERT_ID();');
+
+        $this->addSql("INSERT IGNORE INTO `s_core_acl_privileges` (resourceID,name) VALUES (@resourceId, 'read');");
+        $this->addSql("INSERT IGNORE INTO `s_core_acl_privileges` (resourceID,name) VALUES (@resourceId, 'edit');");
+        $this->addSql("INSERT IGNORE INTO `s_core_acl_privileges` (resourceID,name) VALUES (@resourceId, 'delete');");
     }
 }

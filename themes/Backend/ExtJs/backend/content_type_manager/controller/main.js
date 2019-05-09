@@ -40,6 +40,7 @@ Ext.define('Shopware.apps.ContentTypeManager.controller.Main', {
         });
 
         Shopware.app.Application.on('content-type-manager-start-save-record', this.onStartSaveRecord);
+        Shopware.app.Application.on('content-type-manager-save-successfully', this.onRecordSaved);
     },
 
     createNewField: function (grid, store) {
@@ -64,8 +65,8 @@ Ext.define('Shopware.apps.ContentTypeManager.controller.Main', {
 
     deleteField: function (store, record) {
         Ext.Msg.confirm(
-            'Feld löschen',
-            'Möchtest du das Feld wirklich löschen?',
+            '{s name="deleteField/title"}{/s}',
+            '{s name="deleteField/message"}{/s}',
             function(answer) {
                 if (answer === 'yes') {
                     store.remove(record);
@@ -76,9 +77,13 @@ Ext.define('Shopware.apps.ContentTypeManager.controller.Main', {
 
     onStartSaveRecord: function (controller, window, record, form) {
         if (record.getFieldsStore.count() === 0) {
-            Shopware.Notification.createGrowlMessage('Content Types', '{s name="error/emptyFields"}{/s}');
+            Shopware.Notification.createGrowlMessage('{s name="list/title"}{/s}', '{s name="error/emptyFields"}{/s}');
             return false;
         }
+    },
+
+    onRecordSaved: function () {
+        Shopware.app.Application.fireEvent('reload-main-menu');
     }
 });
 // {/block}

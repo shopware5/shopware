@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,35 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-// {block name="backend/content_type_manager/app"}
-Ext.define('Shopware.apps.ContentTypeManager', {
-    extend: 'Enlight.app.SubApplication',
+namespace Shopware\Bundle\ContentTypeBundle\Services;
 
-    name:'Shopware.apps.ContentTypeManager',
-
-    loadPath: '{url action=load}',
-    bulkLoad: true,
-
-    controllers: [ 'Main', 'Field', 'Detail' ],
-
-    views: [
-        'list.Window',
-        'list.Grid',
-        'detail.Type',
-        'detail.Window',
-        'detail.Fields',
-        'field.Form',
-        'field.Window',
-        'field.Fieldset',
-        'field_handler.IntegerHandler',
-        'field_handler.ComboboxHandler'
-    ],
-
-    models: [ 'Type', 'Field' ],
-    stores: [ 'Type', 'Fields' ],
-
-    launch: function() {
-        return this.getController('Main').mainWindow;
-    }
-});
-// {/block}
+interface ContentTypeCleanupServiceInterface
+{
+    public function deleteContentType(string $contentTypeName): void;
+}

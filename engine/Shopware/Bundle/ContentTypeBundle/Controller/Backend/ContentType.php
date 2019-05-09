@@ -159,4 +159,15 @@ class ContentType extends \Shopware_Controllers_Backend_ExtJs
 
         $this->View()->assign(['success' => true]);
     }
+
+    protected function initAcl(): void
+    {
+        $this->addAclPermission('index', 'read', 'Insufficient permissions');
+        $this->addAclPermission('load', 'read', 'Insufficient permissions');
+        $this->addAclPermission('list', 'read', 'Insufficient permissions');
+        $this->addAclPermission('detail', 'read', 'Insufficient permissions');
+        $this->addAclPermission('create', 'create', 'Insufficient permissions');
+        $this->addAclPermission('update', 'edit', 'Insufficient permissions');
+        $this->addAclPermission('delete', 'delete', 'Insufficient permissions');
+    }
 }

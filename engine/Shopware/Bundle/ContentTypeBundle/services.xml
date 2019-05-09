@@ -17,6 +17,7 @@
             <argument type="service" id="shopware_bundle_content_type.services.type_builder"/>
             <argument type="service" id="shopware.cache_manager"/>
             <argument type="service" id="shopware_bundle_content_type.services.synchronizer_service"/>
+            <argument type="service" id="shopware_bundle_content_type.services.content_type_cleanup_service"/>
             <tag name="shopware.controller" module="Backend" controller="ContentTypeManager"/>
         </service>
 
@@ -35,6 +36,8 @@
         <service id="shopware_bundle_content_type.services.synchronizer_service" class="Shopware\Bundle\ContentTypeBundle\Services\SynchronizerService">
             <argument type="service" id="models"/>
             <argument type="service" id="shopware.bundle.content_type.type_provider"/>
+            <argument type="service" id="shopware_bundle_content_type.services.menu_synchronizer"/>
+            <argument type="service" id="shopware_bundle_content_type.services.acl_synchronizer"/>
         </service>
 
         <service id="shopware_bundle_content_type.services.database_content_type_synchronizer" class="Shopware\Bundle\ContentTypeBundle\Services\DatabaseContentTypeSynchronizer">
@@ -46,6 +49,7 @@
             <argument type="service" id="shopware_bundle_content_type.services.type_builder"/>
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_bundle_content_type.services.synchronizer_service"/>
+            <argument type="service" id="shopware_bundle_content_type.services.content_type_cleanup_service"/>
         </service>
 
         <service id="shopware.bundle.content_type.type_provider" class="Shopware\Bundle\ContentTypeBundle\Services\TypeProvider">
@@ -64,6 +68,19 @@
 
         <service id="shopware_bundle_content_type.services.extjs_builder" class="Shopware\Bundle\ContentTypeBundle\Services\ExtjsBuilder">
             <argument type="service" id="snippets"/>
+        </service>
+
+        <service id="shopware_bundle_content_type.services.menu_synchronizer" class="Shopware\Bundle\ContentTypeBundle\Services\MenuSynchronizer">
+            <argument type="service" id="models"/>
+        </service>
+
+        <service id="shopware_bundle_content_type.services.acl_synchronizer" class="Shopware\Bundle\ContentTypeBundle\Services\AclSynchronizer">
+            <argument type="service" id="models"/>
+        </service>
+
+        <service id="shopware_bundle_content_type.services.content_type_cleanup_service" class="Shopware\Bundle\ContentTypeBundle\Services\ContentTypeCleanupService">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_bundle_content_type.services.acl_synchronizer"/>
         </service>
     </services>
 </container>

@@ -27,6 +27,7 @@ namespace Shopware\Bundle\ContentTypeBundle\Controller\Backend;
 use Shopware\Bundle\ContentTypeBundle\Field\ResolveableFieldInterface;
 use Shopware\Bundle\ContentTypeBundle\Field\TypeField;
 use Shopware\Bundle\ContentTypeBundle\Field\TypeGrid;
+use Shopware\Bundle\ContentTypeBundle\Services\ContentTypeCleanupServiceInterface;
 use Shopware\Bundle\ContentTypeBundle\Services\SynchronizerServiceInterface;
 use Shopware\Bundle\ContentTypeBundle\Services\TypeBuilder;
 use Shopware\Bundle\ContentTypeBundle\Services\TypeProvider;
@@ -73,6 +74,11 @@ class ContentTypeManager extends \Shopware_Controllers_Backend_ExtJs
      */
     private $synchronizerService;
 
+    /**
+     * @var ContentTypeCleanupServiceInterface
+     */
+    private $cleanupService;
+
     public function __construct(
         array $fieldAlias,
         TypeProvider $typeProvider,
@@ -80,7 +86,8 @@ class ContentTypeManager extends \Shopware_Controllers_Backend_ExtJs
         SlugInterface $slug,
         TypeBuilder $typeBuilder,
         CacheManager $cacheManager,
-        SynchronizerServiceInterface $synchronizerService
+        SynchronizerServiceInterface $synchronizerService,
+        ContentTypeCleanupServiceInterface $cleanupService
     ) {
         $this->fieldAlias = $fieldAlias;
         $this->typeProvider = $typeProvider;
@@ -89,6 +96,7 @@ class ContentTypeManager extends \Shopware_Controllers_Backend_ExtJs
         $this->typeBuilder = $typeBuilder;
         $this->cacheManager = $cacheManager;
         $this->synchronizerService = $synchronizerService;
+        $this->cleanupService = $cleanupService;
     }
 
     public function listAction(): void
@@ -168,6 +176,8 @@ class ContentTypeManager extends \Shopware_Controllers_Backend_ExtJs
             'internalName' => $id,
         ]);
 
+        $this->cleanupService->deleteContentType($id);
+
         $this->clearCacheAndSync();
 
         $this->View()->assign('success', true);
@@ -177,6 +187,17 @@ class ContentTypeManager extends \Shopware_Controllers_Backend_ExtJs
     {
         $this->View()->assign('success', true);
         $this->View()->assign('data', $this->getDetail($id));
+    }
+
+    protected function initAcl(): void
+    {
+        $this->addAclPermission('index', 'read', 'Insufficient permissions');
+        $this->addAclPermission('load', 'read', 'Insufficient permissions');
+        $this->addAclPermission('list', 'read', 'Insufficient permissions');
+        $this->addAclPermission('detail', 'read', 'Insufficient permissions');
+        $this->addAclPermission('create', 'edit', 'Insufficient permissions');
+        $this->addAclPermission('update', 'edit', 'Insufficient permissions');
+        $this->addAclPermission('delete', 'delete', 'Insufficient permissions');
     }
 
     private function getDetail(string $name): array
