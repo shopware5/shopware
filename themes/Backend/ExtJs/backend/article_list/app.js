@@ -21,6 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
+//{block name="backend/article_list/app"}
 //{block name="backend/article_list/application"}
 Ext.define('Shopware.apps.ArticleList', {
 
@@ -126,4 +127,4 @@ Ext.define('Shopware.apps.ArticleList', {
     }
 });
 //{/block}
-
+//{/block}

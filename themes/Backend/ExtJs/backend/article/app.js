@@ -32,6 +32,7 @@
  *
  * todo@all: Documentation
  */
+//{block name="backend/article/app"}
 //{block name="backend/article/application"}
 Ext.define('Shopware.apps.Article', {
 
@@ -177,4 +178,4 @@ Ext.define('Shopware.apps.Article', {
     controllers: [ 'Main', 'Detail', 'Category', 'Media', 'Variant', 'PriceVariation', 'Esd', 'Statistic', 'Crossselling' ]
 });
 //{/block}
-
+//{/block}

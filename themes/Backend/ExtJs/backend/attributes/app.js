@@ -27,7 +27,7 @@
  */
 
 //{namespace name="backend/attributes/main"}
-
+//{block name="backend/attributes/app"}
 Ext.define('Shopware.apps.Attributes', {
     name:'Shopware.apps.Attributes',
     extend:'Enlight.app.SubApplication',
@@ -47,3 +47,4 @@ Ext.define('Shopware.apps.Attributes', {
         return mainController.mainWindow;
     }
 });
+//{/block}
