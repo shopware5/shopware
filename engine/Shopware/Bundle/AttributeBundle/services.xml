@@ -7,10 +7,6 @@
     <services>
         <defaults public="true" />
 
-        <service id="shopware_attribute.controller_subscriber" class="Shopware\Bundle\AttributeBundle\DependencyInjection\EventListener\ControllerSubscriber">
-            <tag name="shopware.event_subscriber" />
-        </service>
-
         <service id="shopware_attribute.repository_registry" class="Shopware\Bundle\AttributeBundle\Repository\Registry">
             <argument type="tagged" tag="attribute_search_repository" />
             <argument type="service" id="models" />
@@ -288,6 +284,18 @@
             <argument type="service" id="shopware_attribute.custom_facet_reader" />
             <argument type="service" id="shopware_attribute.custom_facet_searcher" />
             <tag name="attribute_search_repository" />
+        </service>
+
+        <service id="shopware_attribute.backend_controllers_attributes" class="Shopware_Controllers_Backend_Attributes">
+            <tag name="shopware.controller" module="backend" controller="Attributes"/>
+        </service>
+
+        <service id="shopware_attribute.backend_controllers_attribute_data" class="Shopware_Controllers_Backend_AttributeData">
+            <tag name="shopware.controller" module="backend" controller="AttributeData"/>
+        </service>
+
+        <service id="shopware_attribute.backend_controllers_entity_search" class="Shopware_Controllers_Backend_EntitySearch">
+            <tag name="shopware.controller" module="backend" controller="EntitySearch"/>
         </service>
     </services>
 </container>
