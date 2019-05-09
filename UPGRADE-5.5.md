@@ -43,6 +43,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed custom-page attributes to be translated properly
 * Changed Symfony library to version 3.4.27
 * Changed buttons in empty off-canvas baskets to be disabled
+* Changed shop page attributes to be translatable
 
 ### Deprecations
 

@@ -52,16 +52,16 @@ Ext.define('Shopware.apps.Site.view.main.Window', {
     initComponent: function() {
         var me = this;
 
-        //set the title
+        // Set the title
         me.title = '{s name=mainWindowTitle}Sites{/s}';
 
-        //get all items for this window
+        // Get all items for this window
         me.items = me.getItems();
 
-        //get the upper toolbar
+        // Get the upper toolbar
         me.tbar = me.getUpperToolbar();
 
-        //call parent
+        // Call parent
         me.callParent(arguments);
     },
 
