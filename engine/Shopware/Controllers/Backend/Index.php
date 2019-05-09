@@ -149,6 +149,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $this->View()->assign('feedbackRequired', $this->checkIsFeedbackRequired());
         $this->View()->assign('biOverviewEnabled', $this->isBIOverviewEnabled());
         $this->View()->assign('biIsActive', $this->isBIActive());
+        $this->View()->assign('extJsDeveloperModeActive', $this->container->getParameter('shopware.extjs.developer_mode'));
     }
 
     public function authAction()
