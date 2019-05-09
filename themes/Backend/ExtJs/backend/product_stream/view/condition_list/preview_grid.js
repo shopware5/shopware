@@ -136,7 +136,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
     createActionColumn: function() {
         return {
             xtype: 'actioncolumn',
-            width: 50,
+            width: 25,
             sortable: false,
             items: this.createActionItems()
         };
@@ -159,8 +159,6 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
     },
 
     priceRenderer: function(value) {
-        var me = this;
-
         if (!Ext.isObject(value)) {
             return '';
         }

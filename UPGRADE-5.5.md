@@ -28,6 +28,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `getDetailsQueryBuilder`
     * `getPaymentsQueryBuilder`
     * `getDocumentsQueryBuilder`
+* Added product number and open action to product stream items
 
 ### Changes
 
