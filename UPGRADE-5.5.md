@@ -70,6 +70,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added preselected checkbox option to 'Deactivate No Customer Account' in basic configuration
 * Added an upload compatibility check for plugins
 * Added smarty function `http_build_query` to the list of allowed functions
+* Added Elasticsearch mapping debug option to show all mapping data 
 
 ### Changes
 
@@ -117,6 +118,20 @@ return [
             'docx',
             'xslx'
         ],
+    ]
+];
+```
+
+### Debug Elasticsearch Mapping
+
+Shopware adds a `_source` to reduce the size of the indices by default. By setting the `debug` option to true, you can get every field back by Elasticsearch.
+
+```php
+<?php
+return [
+    ...
+    'es' => [
+        'debug' => true,
     ]
 ];
 ```
