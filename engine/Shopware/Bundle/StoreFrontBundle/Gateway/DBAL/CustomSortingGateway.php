@@ -89,8 +89,11 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
     {
         $mapping = $this->getCategoryMapping($categoryIds);
 
+        /** @var int[] $ids */
+        $ids = array_merge(...array_values($mapping));
+
         $sortings = $this->getList(
-            array_merge(...array_values($mapping)),
+            $ids,
             $context
         );
 
