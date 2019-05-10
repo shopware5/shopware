@@ -75,7 +75,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
      */
     private $fallbackLocale;
 
-    public function __construct(ModelManager $modelManager, array $pluginDirectories, array $snippetConfig, $themeDir)
+    public function __construct(ModelManager $modelManager, array $pluginDirectories, array $snippetConfig, $themeDir = null)
     {
         $this->snippetConfig = $snippetConfig;
         $this->modelManager = $modelManager;
@@ -265,7 +265,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     }
 
     /**
-     * @param string $themeDir
+     * @param string|null $themeDir
      *
      * @return string[]
      */
@@ -325,13 +325,17 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     }
 
     /**
-     * @param string $themeDir
+     * @param string|null $themeDir
      *
      * @return array<string, string>
      */
     private function getThemeDirs($themeDir)
     {
         $configDir = [];
+
+        if ($themeDir === null) {
+            return $configDir;
+        }
 
         /** @var \DirectoryIterator $directory */
         foreach (new \DirectoryIterator(
