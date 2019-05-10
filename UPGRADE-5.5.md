@@ -51,6 +51,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed Symfony library to version 3.4.27
 * Changed buttons in empty off-canvas baskets to be disabled
 * Changed shop page attributes to be translatable
+* Changed button for mobile-view rating to work properly 
 * Changed cache file permission definition in `\Enlight_Template_Manager`
 * Changed Article and Category API endpoints to support translation of attributes with underscores
 * Changed the order of the columns in article module
