@@ -44,6 +44,6 @@ class MediaGrid extends AbstractGridField implements TemplateProvidingFieldInter
 
     public static function getTemplate(): string
     {
-        return 'frontend/content_type/field/media-slider.tpl';
+        return 'frontend/content_type/field/media-grid.tpl';
     }
 }
