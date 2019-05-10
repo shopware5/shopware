@@ -85,8 +85,12 @@ Ext.define('Shopware.apps.Article.view.esd.Detail', {
             title: '{s name=esd/detail/fileupload/title}File-Upload{/s}',
             selection: '{s name=esd/detail/fileupload/selection}Selection{/s}',
             selectFile: '{s name=esd/detail/fileupload/download_file}Select file{/s}',
-            dropZoneText: '{s name=esd/detail/fileupload/drop_zone_text}Upload file via Drag and Drop{/s}'
-        },
+            dropZoneText: '{s name=esd/detail/fileupload/drop_zone_text}Upload file via Drag and Drop{/s}',
+            buttonOverwrite: '{s name=esd/detail/fileupload/buttonOverwrite}Overwrite{/s}',
+            buttonRename: '{s name=esd/detail/fileupload/buttonRename}Rename{/s}',
+            buttonCancel: '{s name=esd/detail/fileupload/buttonCancel}Cancel{/s}',
+            renameMessage: '{s name=esd/detail/fileupload/reanameMessage}You file has been renamed to [0]{/s}'
+    },
 
         fileChoose:{
             title: '{s name=esd/detail/filechoose/title}Choose File{/s}',
@@ -281,8 +285,26 @@ Ext.define('Shopware.apps.Article.view.esd.Detail', {
      */
     getMediaDropZone: function() {
         var me = this;
+        var confirmationCallback = function (apply) {
+            if (apply === 'cancel') {
+                return;
+            }
 
-        return Ext.create('Shopware.app.FileUpload', {
+            me.fileUpload.on('fileUploaded', function () {
+                me.fileUpload.requestURL = '{url controller="article" action="uploadEsdFile"}';
+            }, { single: true });
+
+            if (apply === 'yes') {
+                me.fileUpload.requestURL = '{url controller="article" action="uploadEsdFile" uploadMode=overwrite}';
+                me.fileUpload.reuploadFiles();
+            }
+            if (apply === 'no') {
+                me.fileUpload.requestURL = '{url controller="article" action="uploadEsdFile"  uploadMode=rename}';
+                me.fileUpload.reuploadFiles();
+            }
+        };
+
+        return me.fileUpload = Ext.create('Shopware.app.FileUpload', {
             name: 'drop-zone',
             requestURL: '{url controller="article" action="uploadEsdFile"}',
             showInput: false,
@@ -291,8 +313,41 @@ Ext.define('Shopware.apps.Article.view.esd.Detail', {
             checkType: false,
             checkAmount: false,
             enablePreviewImage: false,
-            dropZoneText: me.snippets.fileUpload.dropZoneText
+            dropZoneText: me.snippets.fileUpload.dropZoneText,
+            listeners: {
+                uploadFailed: function (response) {
+                    if (!response.hasOwnProperty('fileExists')) {
+                        return;
+                    }
+
+                    Ext.MessageBox.confirm(me.getMessageBoxConfig('{s name=esd/detail/fileexists/title}File already exists{/s}', '{s name=esd/detail/fileexists/message}Do you want to overwrite the existing file?{/s}', confirmationCallback));
+                },
+                fileUploaded: function (target, response) {
+                    if (!response.hasOwnProperty('newName')) {
+                        return;
+                    }
+
+
+                    Ext.Msg.alert('', Ext.String.format(me.snippets.fileUpload.renameMessage, response.newName));
+                }
+            }
         });
+    },
+
+    getMessageBoxConfig: function(title, message, callback) {
+        var me = this;
+        return {
+            title: title,
+            icon: Ext.Msg.QUESTION,
+            msg: message,
+            buttons: Ext.Msg.YESNOCANCEL,
+            buttonText: {
+                yes: me.snippets.fileUpload.buttonOverwrite,
+                no: me.snippets.fileUpload.buttonRename,
+                cancel: me.snippets.fileUpload.buttonCancel
+            },
+            callback: callback
+        };
     },
 
     getFileUploadPanel: function() {

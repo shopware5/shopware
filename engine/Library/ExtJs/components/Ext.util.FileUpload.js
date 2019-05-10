@@ -347,7 +347,7 @@ Ext.define('Ext.util.FileUpload', {
         }
 
         // event will be fired when one file uploaded.
-        me.addEvents('fileUploaded', 'uploadReady');
+        me.addEvents('fileUploaded', 'uploadReady', 'uploadFailed');
         me.callParent(arguments);
     },
 
@@ -545,6 +545,8 @@ Ext.define('Ext.util.FileUpload', {
             return false;
         }
 
+        this.currentFiles = files;
+
         // Check file amount
         if (me.checkAmount) {
             if (files.length > me.maxAmount) {
@@ -562,6 +564,14 @@ Ext.define('Ext.util.FileUpload', {
         } else {
             me.createPreview(files);
         }
+    },
+
+    reuploadFiles: function() {
+        if (!Ext.isDefined(this.currentFiles)) {
+            return;
+        }
+
+        this.iterateFiles(this.currentFiles);
     },
 
     /**
@@ -795,7 +805,7 @@ Ext.define('Ext.util.FileUpload', {
 
             if (target.readyState === 4 && target.status === 200) {
                 try {
-                    me.fireEvent('fileUploaded', target);
+                    me.fireEvent('fileUploaded', target, response);
                 } catch (e) {
                     // todo@dr: throw exception
                 }
@@ -843,9 +853,9 @@ Ext.define('Ext.util.FileUpload', {
                             default:
                                 Ext.Msg.alert(me.snippets.maxUploadSizeTitle, me.snippets.maxUploadSizeText);
                         }
-                    } else {
-                        Ext.Msg.alert(me.snippets.maxUploadSizeTitle, me.snippets.maxUploadSizeText);
                     }
+
+                    me.fireEvent('uploadFailed', response);
                 }
             } else {
                 me.fireEvent('uploadReady', target);
