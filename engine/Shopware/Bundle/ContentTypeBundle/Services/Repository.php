@@ -142,6 +142,11 @@ class Repository implements RepositoryInterface
 
         if (!empty($sort)) {
             foreach ($sort as $item) {
+                if ($item['property'] === 'RANDOM') {
+                    $query->addOrderBy('RAND()');
+                    continue;
+                }
+
                 $query->addOrderBy($item['property'], $item['direction']);
             }
         }

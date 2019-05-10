@@ -142,11 +142,6 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 }
             }
 
-            store = null;
-            if (item.get('store')) {
-                store = Ext.create(item.get('store'));
-            }
-
             if (xtype === 'checkbox' || xtype === 'checkboxfield' || xtype === 'radio' || xtype === 'radiofield') {
                 boxLabel = supportText;
                 supportText = '';
@@ -160,7 +155,6 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 valueType       : item.get('valueType'),
                 queryMode       : 'remote',
                 name            : item.get('name') || '',
-                store           : store,
                 displayField    : item.get('displayField'),
                 valueField      : item.get('valueField'),
                 checkedValue    : true,
@@ -172,11 +166,15 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 translatable    : item.get('translatable')
             };
 
+            if (item.get('store')) {
+                constructedItem.store = Ext.create(item.get('store'));
+            }
+
             if (xtype === 'timefield' &&  Ext.isDefined(item.get('displayField')) ) {
                 // If displayField is not set, use ExtJS default.
                 constructedItem.displayField = 'disp';
                 constructedItem.format = 'H:i';
-            } else if (xtype == 'combobox') {
+            } else if (xtype === 'combobox') {
                 constructedItem.queryMode = 'local';
                 constructedItem.listeners = {
                     afterrender: Ext.bind(me.setComboValue, me)
@@ -204,6 +202,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 radios[constructedItem.name].items.push(constructedItem);
                 return;
             }
+
             items = me.pushItemToElements(constructedItem, items);
         });
 

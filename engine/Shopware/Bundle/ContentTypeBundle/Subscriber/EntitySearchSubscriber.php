@@ -59,6 +59,12 @@ class EntitySearchSubscriber implements SubscriberInterface
         $controller = $args->get('subject');
         $model = $controller->Request()->getParam('model');
 
+        if ($model === 'content_types') {
+            $this->loadTypes($controller);
+
+            return true;
+        }
+
         try {
             $type = $this->provider->getType($model);
         } catch (\RuntimeException $e) {
@@ -94,6 +100,17 @@ class EntitySearchSubscriber implements SubscriberInterface
         $controller->View()->assign('success', true);
 
         return true;
+    }
+
+    private function loadTypes(\Enlight_Controller_Action $controller): void
+    {
+        $data = array_values(array_map(static function (Type $type) {
+            return $type->jsonSerialize() + ['id' => $type->getInternalName()];
+        }, $this->provider->getTypes()));
+
+        $controller->View()->assign('total', count($data));
+        $controller->View()->assign('data', $data);
+        $controller->View()->assign('success', true);
     }
 
     private function getLabelField(Type $type): Field

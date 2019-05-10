@@ -132,5 +132,10 @@
             <tag name="shopware_emotion.component_handler"/>
         </service>
 
+        <service id="shopware_bundle_emotion.component_handler.content_type_component_handler" class="Shopware\Bundle\EmotionBundle\ComponentHandler\ContentTypeComponentHandler">
+            <argument type="service" id="service_container" />
+            <tag name="shopware_emotion.component_handler"/>
+        </service>
+
     </services>
 </container>

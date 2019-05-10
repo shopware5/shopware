@@ -289,6 +289,7 @@
 {include file='backend/base/attribute/field/Shopware.form.field.CustomFacetGrid.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.AttributeSingleSelection.js'}
 {include file='backend/base/component/Shopware.form.field.ProductStreamSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.ContentTypeSelection.js'}
 
 {include file='backend/base/attribute/field_handler/Shopware.attribute.AbstractEntityFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.CategoryFieldHandler.js'}
