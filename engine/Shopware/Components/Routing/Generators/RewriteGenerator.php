@@ -211,6 +211,10 @@ class RewriteGenerator implements GeneratorListInterface
                 if (isset($query['action'])) {
                     $orgQuery['sAction'] = $query['action'];
                 }
+
+                if (isset($query['id'])) {
+                    $orgQuery['id'] = $query['id'];
+                }
                 break;
         }
 

@@ -144,6 +144,8 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
         $moduleName = $dispatcher->formatModuleName($request->getModuleName());
         $controllerName = $dispatcher->formatControllerName($request->getControllerName());
 
+        $controllerName = $this->get('events')->filter('Enlight_Controller_Plugin_ScriptRenderer_formatControllerName', $controllerName, ['subject' => $this]);
+
         $fileNames = (array) $request->getParam('file', $this->defaultFile);
         if (empty($fileNames)) {
             $fileNames = $request->getParam('f');

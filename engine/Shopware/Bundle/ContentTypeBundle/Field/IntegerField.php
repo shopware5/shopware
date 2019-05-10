@@ -21,11 +21,36 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-class Migrations_Migration1603 extends Shopware\Components\Migrations\AbstractMigration
+
+namespace Shopware\Bundle\ContentTypeBundle\Field;
+
+use Doctrine\DBAL\Types\Type;
+use Shopware\Bundle\ContentTypeBundle\Structs\Field;
+
+class IntegerField implements FieldInterface
 {
-    public function up($modus)
+    public static function getDbalType(): string
     {
-        $this->addSql('INSERT INTO `s_core_widgets` (`name`, `label`, `plugin_id`)
-VALUES (\'swag-rating-widget\', NULL, NULL);');
+        return Type::INTEGER;
+    }
+
+    public static function getExtjsType(): string
+    {
+        return 'int';
+    }
+
+    public static function getExtjsOptions(Field $field): array
+    {
+        return [];
+    }
+
+    public static function getExtjsField(): string
+    {
+        return 'numberfield';
+    }
+
+    public static function isMultiple(): bool
+    {
+        return false;
     }
 }

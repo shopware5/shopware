@@ -88,6 +88,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
             'static' => $static,
             'content' => $content,
             'supplier' => $supplier,
+            'contentType' => $this->SeoIndex()->countContentTypes(),
         ];
 
         $counts = $this->get('events')->filter(
@@ -263,6 +264,24 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         // Make sure a template is available
         $this->RewriteTable()->baseSetup();
         $this->RewriteTable()->createManufacturerUrls($context, $offset, $limit);
+
+        $this->View()->assign([
+            'success' => true,
+        ]);
+    }
+
+    public function seoContentTypeAction(): void
+    {
+        @set_time_limit(1200);
+        $shopId = (int) $this->Request()->getParam('shopId', 1);
+
+        // Create shop
+        $this->SeoIndex()->registerShop($shopId);
+        $context = $this->get('shopware_storefront.context_service')->createShopContext($shopId);
+
+        // Make sure a template is available
+        $this->RewriteTable()->baseSetup();
+        $this->RewriteTable()->createContentTypeUrls($context);
 
         $this->View()->assign([
             'success' => true,

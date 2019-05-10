@@ -109,6 +109,11 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
             initialText: '{s name=listing/supplier}Supplier URLs{/s}',
             progressText: '{s name=progress/supplier}[0] of [1] supplier urls{/s}',
             requestUrl: '{url controller="Seo" action="seoSupplier"}'
+        },
+        contentType: {
+            initialText: '{s name=listing/contentTypes}{/s}',
+            progressText: '{s name=progress/contentTypes}{/s}',
+            requestUrl: '{url controller="Seo" action="seoContentType"}'
         }
     },
 

@@ -720,7 +720,7 @@ Ext.define('Shopware.window.Detail', {
             }
         });
 
-        //add lazy loading event listener. 
+        //add lazy loading event listener.
         component.on('viewready', function() {
             if (me.isLazyLoadingComponent(component)) {
                 if (!(me.fireEvent(me.getEventName('before-load-lazy-loading-component'), me, component))) {
