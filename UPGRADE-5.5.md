@@ -48,6 +48,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed Symfony library to version 3.4.27
 * Changed buttons in empty off-canvas baskets to be disabled
 * Changed shop page attributes to be translatable
+* Changed cache file permission definition
 
 ### Deprecations
 

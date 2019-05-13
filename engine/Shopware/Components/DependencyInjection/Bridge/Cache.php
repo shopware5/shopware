@@ -51,14 +51,6 @@ class Cache
     {
         $backendOptions['release'] = $release;
 
-        if (isset($backendOptions['hashed_directory_perm'])) {
-            $backendOptions['hashed_directory_perm'] = decoct($backendOptions['hashed_directory_perm']);
-        }
-
-        if (isset($backendOptions['cache_file_perm'])) {
-            $backendOptions['cache_file_perm'] = decoct($backendOptions['cache_file_perm']);
-        }
-
         $backend = $this->createBackend($backend, $backendOptions);
         $cacheCore = $this->createCacheCore($frontendOptions);
 

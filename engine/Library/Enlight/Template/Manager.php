@@ -73,11 +73,15 @@ class Enlight_Template_Manager extends Smarty
 
         $this->start_time = microtime(true);
 
-        if (!isset($backendOptions['cache_file_perm'])) {
+        if (isset($backendOptions['cache_file_perm']) && is_string($options['cache_file_perm'])) {
+            $backendOptions['cache_file_perm'] = octdec($backendOptions['cache_file_perm']);
+        } else {
             $backendOptions['cache_file_perm'] = 0666 & ~umask();
         }
 
-        if (!isset($backendOptions['hashed_directory_perm'])) {
+        if (isset($backendOptions['hashed_directory_perm']) && is_string($options['hashed_directory_perm'])) {
+            $backendOptions['hashed_directory_perm'] = octdec($backendOptions['hashed_directory_perm']);
+        } else {
             $backendOptions['hashed_directory_perm'] = 0777 & ~umask();
         }
 
