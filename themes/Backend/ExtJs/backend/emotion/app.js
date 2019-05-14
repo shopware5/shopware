@@ -77,19 +77,19 @@ Ext.define('Shopware.apps.Emotion', {
     views: [ 'main.Window', 'list.Toolbar', 'list.Grid', 'presets.Window', 'presets.List', 'presets.Info', 'presets.Form', 'detail.Window', 'detail.Preview', 'detail.Designer', 'detail.Grid',
         'detail.Settings', 'detail.Layout', 'detail.Widgets', 'detail.elements.Base', 'detail.elements.Banner', 'detail.elements.BannerSlider',
         'detail.elements.Html', 'detail.elements.Article', 'detail.elements.ArticleSlider', 'detail.elements.HtmlCode', 'detail.elements.Blog',
-        'detail.elements.CategoryTeaser', 'detail.elements.HtmlVideo', 'detail.elements.Iframe', 'detail.elements.ManufacturerSlider', 'detail.elements.Youtube',
+        'detail.elements.CategoryTeaser', 'detail.elements.HtmlVideo', 'detail.elements.Iframe', 'detail.elements.ManufacturerSlider', 'detail.elements.Youtube', 'detail.elements.ContentType',
         'components.SettingsWindow', 'components.Base', 'components.Banner', 'components.BannerMapping', 'components.Iframe',
         'components.Article', 'components.CategoryTeaser', 'components.fields.Article', 'components.fields.ArticleType',
         'components.fields.CategoryImageType', 'components.fields.CategorySelection', 'components.Blog', 'components.BannerSlider',
         'components.fields.SliderSelect', 'components.fields.Variant', 'components.fields.ManufacturerType', 'components.ManufacturerSlider', 'components.fields.LinkTarget',
-        'components.fields.ArticleSliderType', 'components.ArticleSlider', 'components.HtmlElement', 'components.HtmlVideo', 'components.HtmlCode', 'components.Youtube',
+        'components.fields.ArticleSliderType', 'components.ArticleSlider', 'components.HtmlElement', 'components.HtmlVideo', 'components.HtmlCode', 'components.Youtube', 'components.ContentType',
         'templates.List', 'templates.Toolbar', 'templates.Settings', 'components.fields.VideoMode', 'translation.Window' ],
 
     /**
      * Required views for module (subapplication)
      * @array
      */
-    stores: [ 'CategoryPath', 'List', 'LandingPage', 'Detail', 'Library', 'Templates', 'Presets', 'Visibility' ],
+    stores: [ 'CategoryPath', 'List', 'LandingPage', 'Detail', 'Library', 'Templates', 'Presets', 'Visibility', 'ContentTypeMode' ],
 
     /**
      * Required models for the module (subapplication)

@@ -67,6 +67,7 @@ Ext.define('Shopware.apps.ContentTypeManager.controller.Field', {
     slugify: function (text) {
         return text.toString().toLowerCase()
             .replace(/\s+/g, '_')           // Replace spaces with _
+            .replace(/\-/g, '_')            // Replace - with _
             .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
             .replace(/\_\_+/g, '_')         // Replace multiple _ with single _
             .replace(/^_+/, '')             // Trim _ from start of text
