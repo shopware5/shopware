@@ -62,29 +62,29 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
             bodyPadding: 10,
             region:'north',
             closable: false,
-            scrollable:true,
-            split:true,
-            autoScroll:true,
+            scrollable: true,
+            split: true,
+            autoScroll: true,
             collapsible: false,
             defaults:{
-                labelWidth:100,
+                labelWidth: 100,
                 anchor: '100%',
-                labelStyle:'font-weight: 700;',
-                xtype:'textfield'
+                labelStyle: 'font-weight: 700;',
+                xtype: 'textfield'
             },
             items: me.createOptionsForm()
         });
 
         me.imagePanel = Ext.create('Ext.panel.Panel', {
-            title:'{s name=detail/sidebar/options/panel/image}Image configuration{/s}',
+            title: '{s name=detail/sidebar/options/panel/image}Image configuration{/s}',
             layout: {
                 align: 'stretch',
                 type: 'vbox'
             },
-            region:'center',
-            split:true,
-            height:200,
-            minHeight:200,
+            region: 'center',
+            split: true,
+            height: 200,
+            minHeight: 200,
             tbar: me.createToolbar(),
             bodyPadding: 10,
             items: me.createImageElements()
@@ -99,7 +99,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
      * Defines additional events which will be
      * fired from the component
      *
-     * @return void
+     * @return bool
      */
     registerEvents:function () {
         this.addEvents(
@@ -223,9 +223,10 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
             validTypes: me.getAllowedExtensions()
         });
 
-        return [ me.mediaSelection,
-                me.createMediaView()
-            ];
+        return [
+            me.mediaSelection,
+            me.createMediaView()
+        ];
     },
 
     /**
@@ -233,8 +234,9 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
      * @return []
      */
     getAllowedExtensions : function() {
-        return [ 'gif', 'png', 'jpeg', 'jpg' ]
+        return [ 'gif', 'png', 'jpeg', 'jpg', 'svg' ]
     },
+
     /**
      * Creates the template for the media view panel
      *
@@ -288,7 +290,6 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
         return me.dataView;
     },
 
-
     /**
      * Creates the toolbar for the media listing.
      *
@@ -297,8 +298,8 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
     createToolbar: function() {
         var me = this;
 
-        //the preview button, marks the selected image in the listing as preview.
-        //the event will be handled in the media controller
+        // The preview button, marks the selected image in the listing as preview.
+        // The event will be handled in the media controller
         me.previewButton = Ext.create('Ext.button.Button', {
             text: '{s name=detail/sidebar/options/button/preview_image}Mark as preview{/s}',
             action: 'previewImage',
@@ -309,7 +310,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
             }
         });
 
-        //the remove button, removes the selected item from the image listing.
+        // The remove button, removes the selected item from the image listing.
         me.removeButton = Ext.create('Ext.button.Button', {
             text:'{s name=detail/sidebar/options/button/delete_image}Remove selected images{/s}',
             action: 'removeImage',
@@ -328,6 +329,5 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
             ]
         });
     }
-
 });
 //{/block}

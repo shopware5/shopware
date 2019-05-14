@@ -172,7 +172,7 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
      * @return []
      */
     getAllowedExtensions : function() {
-        return [ 'gif', 'png', 'jpeg', 'jpg' ]
+        return [ 'gif', 'png', 'jpeg', 'jpg', 'svg' ]
     },
 
     /**

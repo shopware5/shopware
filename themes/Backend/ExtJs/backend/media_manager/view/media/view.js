@@ -799,7 +799,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     },
 
     /**
-     * Locks the replace medie button
+     * Locks the replace media button
      *
      * @param rowModel
      */
@@ -857,7 +857,6 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * @return void
      */
     initializeMediaDragZone: function(view) {
-        var me = this;
         var selModel = view.getSelectionModel();
 
         view.dragZone = Ext.create('Ext.dd.DragZone', view.getEl(), {
@@ -884,7 +883,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                         selected = selModel.getSelection();
                     }
                     /**
-                     * Re initial the plugin to fix the drag selector zone
+                     * Re-initiate the plugin to fix the drag selector zone
                      */
                     var dragSelector = view.plugins[0];
                     dragSelector.reInit();
@@ -892,7 +891,6 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                     d = sourceEl.cloneNode(true);
                     d.id = Ext.id();
 
-                    // todo@stp - show list of the selected files in the drag object
                     return view.dragData = {
                         sourceEl: sourceEl,
                         repairXY: Ext.fly(sourceEl).getXY(),
@@ -934,7 +932,8 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * @private
      */
     _isImage: function (type, extension) {
-        return type === 'IMAGE' && !Ext.Array.contains(['tif', 'tiff'], extension);
+        return ((type === 'IMAGE' && !Ext.Array.contains(['tif', 'tiff'], extension)) ||
+            (type === 'VECTOR' && Ext.Array.contains(['svg'], extension)));
     }
 });
 //{/block}

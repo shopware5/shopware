@@ -41,6 +41,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
 
     /**
      * Extend from the standard ExtJS 4 controller
+     *
      * @string
      */
     extend: 'Ext.app.Controller',
@@ -143,8 +144,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
     },
 
     /**
-     * Helper method which sets the valid types
-     * for the media selection.
+     * Helper method which sets the valid types for the media selection.
      *
      * Please note that this code will be used multiple times.
      *
@@ -230,9 +230,9 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
             searchString = Ext.String.trim(value),
             childNodes = me.getAlbumTree().getStore().tree.root.childNodes;
 
-        //don't use store.clearFilter(), clearFilter() send an ajax request to reload the store.
+        // Don't use store.clearFilter(), clearFilter() send an ajax request to reload the store.
         store.filters.clear();
-        //Only one album available, so the search will only work in this album
+        // Only one album available, so the search will only work in this album
         if(childNodes.length === 1 && !store.getProxy().extraParams.albumID){
             store.getProxy().extraParams.albumID = childNodes[0].getId();
         }
@@ -259,7 +259,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
             store = mediaView.dataView.store,
             proxy = store.getProxy();
 
-        //add the album id as parameter to the request url of the upload field.
+        //  Add the album id as parameter to the request url of the upload field.
         /* {if {acl_is_allowed privilege=upload}} */
         var url = mediaView.mediaDropZone.requestURL;
         if (url.indexOf('?albumID=') !== -1) {
@@ -283,9 +283,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         store.currentPage = 1;
         store.load();
 
-        /**
-         * Re initial the plugin to fix the drag selector zone
-         */
+         // Re initial the plugin to fix the drag selector zone
         var dragSelector = mediaView.dataView.plugins[0];
         dragSelector.reInit();
     },
@@ -305,8 +303,8 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         Ext.MessageBox.confirm(
             me.snippets.confirmMsgBox.deleteTitle,
             me.snippets.confirmMsgBox.deleteText,
-            function(button){
-                if(button === 'yes'){
+            function (button) {
+                if (button === 'yes'){
                     me.deleteMedia();
                 }
             },
@@ -331,7 +329,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
 
         mediaView.setLoading(true);
 
-        if(mediaView.selectedLayout === 'grid') {
+        if (mediaView.selectedLayout === 'grid') {
             view = mediaView.dataView;
         } else {
             view = cardContainer.getLayout().getActiveItem();

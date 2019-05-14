@@ -70,7 +70,7 @@ class Manager
      */
     public function __construct(
         GeneratorInterface $generator,
-        $rootDir,
+        string $rootDir,
         Enlight_Event_EventManager $eventManager,
         MediaServiceInterface $mediaService
     ) {
@@ -191,12 +191,12 @@ class Manager
 
             $path = $this->getPathOfType($type);
 
+            $data['source'] = $path . '/' . $name . '.' . $extension;
+            $data['retinaSource'] = $path . '/' . $name . '.' . $extension;
+
             if ($type === Media::TYPE_IMAGE) {
                 $data['source'] = $path . '/thumbnail/' . $name . '_' . $suffix . '.' . $extension;
                 $data['retinaSource'] = $path . '/thumbnail/' . $name . '_' . $suffix . '@2x.' . $extension;
-            } else {
-                $data['source'] = $path . '/' . $name . '.' . $extension;
-                $data['retinaSource'] = $path . '/' . $name . '.' . $extension;
             }
 
             $thumbnails[] = $data;
@@ -263,11 +263,10 @@ class Manager
      * Returns the full path of a thumbnail dir according to the media type
      * The default path for images after the root dir would be media/image/thumbnail/
      *
-     * @param Media $media
      *
      * @return string
      */
-    protected function getThumbnailDir($media)
+    protected function getThumbnailDir(Media $media)
     {
         return '/media/' . strtolower($media->getType()) . '/thumbnail/';
     }
@@ -291,7 +290,7 @@ class Manager
      *
      * @return array
      */
-    protected function uniformThumbnailSizes($thumbnailSizes)
+    protected function uniformThumbnailSizes(array $thumbnailSizes)
     {
         foreach ($thumbnailSizes as &$size) {
             if (is_string($size)) {
@@ -327,12 +326,8 @@ class Manager
     /**
      * Returns an array with width and height gained
      * from a string in a format like 100x200
-     *
-     * @param string $size
-     *
-     * @return array
      */
-    private function stringSizeToArray($size)
+    private function stringSizeToArray(string $size): array
     {
         $sizes = explode('x', $size);
 
@@ -340,9 +335,9 @@ class Manager
     }
 
     /**
-     * @return array
+     * @throws Exception
      */
-    private function getThumbnailSizesFromMedia(Media $media)
+    private function getThumbnailSizesFromMedia(Media $media): array
     {
         $album = $media->getAlbum();
 
@@ -366,10 +361,7 @@ class Manager
         return $thumbnailSizes;
     }
 
-    /**
-     * @return Settings|null
-     */
-    private function getAlbumSettingsFromMedia(Media $media)
+    private function getAlbumSettingsFromMedia(Media $media): ?Settings
     {
         $album = $media->getAlbum();
 

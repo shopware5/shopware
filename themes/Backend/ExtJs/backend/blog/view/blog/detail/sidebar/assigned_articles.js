@@ -222,7 +222,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.AssignedArticles', {
             cls: Ext.baseCSSPrefix + 'free-standing-grid',
             store: me.gridStore,
             name: 'listing',
-            border:false,
+            border: false,
             minHeight: 50,
             columns: [
                 {

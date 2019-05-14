@@ -29,8 +29,14 @@
                                   {/if}
                                    data-alt="{$alt}">
 
+                                {$imageMediaClasses = 'image--media'}
+
+                                {if $sArticle.image.extension == 'svg'}
+                                    {$imageMediaClasses = $imageMediaClasses|cat:' image--svg'}
+                                {/if}
+
                                 {block name='frontend_detail_image_default_image_media'}
-                                    <span class="image--media">
+                                    <span class="{$imageMediaClasses}">
                                         {if isset($sArticle.image.thumbnails)}
                                             {block name='frontend_detail_image_default_picture_element'}
                                                 <img srcset="{$sArticle.image.thumbnails[1].sourceSet}"
@@ -62,6 +68,12 @@
                                     {$alt = $image.description|escape}
                                 {/if}
 
+                                {$imageMediaClasses = 'image--media'}
+
+                                {if $image.extension == 'svg'}
+                                    {$imageMediaClasses = $imageMediaClasses|cat:' image--svg'}
+                                {/if}
+
                                 <span class="image--element"
                                       data-img-large="{$image.thumbnails[2].source}"
                                       data-img-small="{$image.thumbnails[0].source}"
@@ -69,7 +81,7 @@
                                       data-alt="{$alt}">
 
                                     {block name='frontend_detail_images_image_media'}
-                                        <span class="image--media">
+                                        <span class="{$imageMediaClasses}">
                                             {if isset($image.thumbnails)}
                                                 {block name='frontend_detail_images_picture_element'}
                                                     <img srcset="{$image.thumbnails[1].sourceSet}" alt="{$alt}" itemprop="image" />

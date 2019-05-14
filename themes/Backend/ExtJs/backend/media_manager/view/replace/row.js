@@ -91,7 +91,7 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Row', {
             me.previewContainer.add(previewContainer);
 
             /**
-             * scroll to top of this container because after add the new preview container the view
+             * Scroll to top of this container because after add the new preview container the view
              * scrolls to top of the more closely container.
              */
             me.grid.scrollBy([0, me.getEl().dom.offsetTop], false);
@@ -292,12 +292,12 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Row', {
             '{literal}',
             '<tpl for=".">',
             '   <div class="thumb-wrap" id="{name}">',
-            '      <tpl if="type == &quot;IMAGE&quot;">',
+            '      <tpl if="type == &quot;IMAGE&quot; || type == &quot;VECTOR&quot;">',
             '         <div class="thumb">',
             '             <div class="inner-thumb" style="overflow: hidden"><img src="{thumbnail}" title="{name}" /></div>',
             '         </div>',
             '      </tpl>',
-            '      <tpl if="type != &quot;IMAGE&quot;">',
+            '      <tpl if="type != &quot;IMAGE&quot; && type != &quot;VECTOR&quot;">',
             '         <div class="thumb icon">',
             '             <div class="icon-{[values.type.toLowerCase()]}">&nbsp;</div>',
             '         </div>',

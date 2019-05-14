@@ -189,22 +189,26 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $media['path'] = $mediaService->getUrl($media['path']);
             $media['virtualPath'] = $mediaService->normalize($media['path']);
 
-            if ($media['type'] !== Media::TYPE_IMAGE) {
+            if (!in_array($media['type'], [Media::TYPE_VECTOR, Media::TYPE_IMAGE], true)) {
                 continue;
             }
 
-            $thumbnails = $this->getMediaThumbnailPaths($media);
-            $availableThumbs = [];
+            $media['thumbnail'] = $media['path'];
 
-            foreach ($thumbnails as $index => $thumbnail) {
-                if ($mediaService->has($thumbnail)) {
-                    $availableThumbs[$index] = $mediaService->getUrl($thumbnail);
+            if ($media['type'] === Media::TYPE_IMAGE) {
+                $thumbnails = $this->getMediaThumbnailPaths($media);
+                $availableThumbs = [];
+
+                foreach ($thumbnails as $index => $thumbnail) {
+                    if ($mediaService->has($thumbnail)) {
+                        $availableThumbs[$index] = $mediaService->getUrl($thumbnail);
+                    }
                 }
-            }
-            $media['thumbnails'] = $availableThumbs;
+                $media['thumbnails'] = $availableThumbs;
 
-            if (!empty($availableThumbs['140x140'])) {
-                $media['thumbnail'] = $availableThumbs['140x140'];
+                if (!empty($availableThumbs['140x140'])) {
+                    $media['thumbnail'] = $availableThumbs['140x140'];
+                }
             }
 
             $media['timestamp'] = time();
