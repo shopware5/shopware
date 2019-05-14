@@ -24,25 +24,55 @@
 
 namespace Shopware\Bundle\SitemapBundle\Provider;
 
+use Shopware\Bundle\SitemapBundle\Repository\CategoryRepositoryInterface;
 use Shopware\Bundle\SitemapBundle\Struct\Url;
+use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\Routing;
+use Shopware\Components\Routing\Context as RoutingContext;
+use Shopware\Components\Routing\RouterInterface;
 use Shopware\Models\Category\Category;
 
-class CategoryUrlProvider extends BaseUrlProvider
+class CategoryUrlProvider implements UrlProviderInterface
 {
+    /**
+     * @var CategoryRepositoryInterface
+     */
+    private $repository;
+
+    /**
+     * @var RouterInterface
+     */
+    private $router;
+
+    /**
+     * @var bool
+     */
+    private $allExported = false;
+
+    public function __construct(CategoryRepositoryInterface $repository, RouterInterface $router)
+    {
+        $this->repository = $repository;
+        $this->router = $router;
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext)
+    public function reset()
+    {
+        $this->allExported = false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUrls(RoutingContext $routingContext, ShopContextInterface $shopContext)
     {
         if ($this->allExported) {
             return [];
         }
 
-        $parentId = $shopContext->getShop()->getCategory()->getId();
-        $categoryRepository = $this->modelManager->getRepository(Category::class);
-        $categories = $categoryRepository->getActiveChildrenList($parentId, $shopContext->getFallbackCustomerGroup()->getId(), null, $shopContext->getShop()->getId());
+        $categories = $this->repository->getCategories($shopContext);
 
         /** @var array<string, array> $category */
         foreach ($categories as $key => &$category) {
@@ -54,7 +84,6 @@ class CategoryUrlProvider extends BaseUrlProvider
             $category['urlParams'] = [
                 'sViewport' => 'cat',
                 'sCategory' => $category['id'],
-                'title' => $category['name'],
             ];
 
             if ($category['blog']) {

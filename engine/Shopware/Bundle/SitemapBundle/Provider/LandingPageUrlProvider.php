@@ -24,13 +24,44 @@
 
 namespace Shopware\Bundle\SitemapBundle\Provider;
 
+use Shopware\Bundle\SitemapBundle\Repository\LandingPageRepositoryInterface;
 use Shopware\Bundle\SitemapBundle\Struct\Url;
+use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Routing;
 use Shopware\Models\Emotion\Emotion;
 
-class LandingPageUrlProvider extends BaseUrlProvider
+class LandingPageUrlProvider implements UrlProviderInterface
 {
+    /**
+     * @var LandingPageRepositoryInterface
+     */
+    protected $repository;
+
+    /**
+     * @var Routing\RouterInterface
+     */
+    protected $router;
+
+    /**
+     * @var bool
+     */
+    protected $allExported = false;
+
+    public function __construct(LandingPageRepositoryInterface $repository, Routing\RouterInterface $router)
+    {
+        $this->repository = $repository;
+        $this->router = $router;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function reset()
+    {
+        $this->allExported = false;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -40,23 +71,13 @@ class LandingPageUrlProvider extends BaseUrlProvider
             return [];
         }
 
-        $emotionRepository = $this->modelManager->getRepository(Emotion::class);
-
-        $shopId = $shopContext->getShop()->getId();
-
-        $builder = $emotionRepository->getCampaignsByShopId($shopId);
-        $campaigns = $builder->getQuery()->getArrayResult();
+        $campaigns = $this->repository->getLandingPages($shopContext);
 
         if (count($campaigns) === 0) {
             return [];
         }
 
         foreach ($campaigns as $key => &$campaign) {
-            if (!$this->filterCampaign($campaign['validFrom'], $campaign['validTo'])) {
-                unset($campaigns[$key]);
-                continue;
-            }
-
             $campaign['changed'] = $campaign['modified'];
             $campaign['urlParams'] = [
                 'sViewport' => 'campaign',
@@ -74,34 +95,8 @@ class LandingPageUrlProvider extends BaseUrlProvider
             $urls[] = new Url($routes[$i], $campaigns[$i]['changed'], 'weekly', Emotion::class, $campaigns[$i]['id']);
         }
 
-        unset($campaign);
-
         $this->allExported = true;
 
         return $urls;
-    }
-
-    /**
-     * Helper function to filter emotion campaigns
-     * Returns false, if the campaign starts later or is outdated
-     *
-     * @param \DateTimeInterface|null $from
-     * @param \DateTimeInterface|null $to
-     *
-     * @return bool
-     */
-    private function filterCampaign($from = null, $to = null)
-    {
-        $now = new \DateTime();
-
-        if ($from !== null && $now < $from) {
-            return false;
-        }
-
-        if ($to !== null && $now > $to) {
-            return false;
-        }
-
-        return true;
     }
 }

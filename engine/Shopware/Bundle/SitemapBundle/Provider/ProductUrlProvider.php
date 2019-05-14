@@ -25,21 +25,18 @@
 namespace Shopware\Bundle\SitemapBundle\Provider;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
-use Shopware\Bundle\SearchBundle\Condition\LastProductIdCondition;
-use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
-use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
+use Shopware\Bundle\SitemapBundle\ProductRepositoryInterface;
 use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\Routing;
+use Shopware\Components\Routing\Context as RoutingContext;
+use Shopware\Components\Routing\RouterInterface;
 use Shopware\Models\Article\Article as Product;
 
 class ProductUrlProvider implements UrlProviderInterface
 {
     /**
-     * @var Routing\RouterInterface
+     * @var RouterInterface
      */
     private $router;
 
@@ -49,68 +46,70 @@ class ProductUrlProvider implements UrlProviderInterface
     private $lastId;
 
     /**
-     * @var ProductNumberSearchInterface
+     * @var ProductRepositoryInterface
      */
-    private $productNumberSearch;
+    private $repository;
 
     /**
-     * @var StoreFrontCriteriaFactoryInterface
-     */
-    private $storeFrontCriteriaFactory;
-
-    /**
-     * @var ConnectionInterface
+     * @var Connection
      */
     private $connection;
 
-    /**
-     * @var int
-     */
-    private $batchSize;
-
-    /**
-     * @param int $batchSize
-     */
     public function __construct(
-        Routing\RouterInterface $router,
-        ProductNumberSearchInterface $productNumberSearch,
-        StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory,
-        ConnectionInterface $connection,
-        $batchSize
+        RouterInterface $router,
+        ProductRepositoryInterface $repository,
+        Connection $connection
     ) {
         $this->router = $router;
-        $this->productNumberSearch = $productNumberSearch;
-        $this->storeFrontCriteriaFactory = $storeFrontCriteriaFactory;
+        $this->repository = $repository;
         $this->connection = $connection;
-        $this->batchSize = $batchSize;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext)
+    public function getUrls(RoutingContext $routingContext, ShopContextInterface $shopContext)
     {
-        $criteria = $this->storeFrontCriteriaFactory
-            ->createBaseCriteria([$shopContext->getShop()->getCategory()->getId()], $shopContext);
-        $criteria->setFetchCount(false);
-        $criteria->limit($this->batchSize);
-
-        if ($this->lastId) {
-            $criteria->addBaseCondition(new LastProductIdCondition($this->lastId));
-        }
-
-        $productNumberSearchResult = $this->productNumberSearch->search($criteria, $shopContext);
-
-        if (count($productNumberSearchResult->getProducts()) === 0) {
-            return [];
-        }
-
         // Load all available product ids
-        $productIds = array_map(function (BaseProduct $baseProduct) {
-            return $baseProduct->getId();
-        }, array_values($productNumberSearchResult->getProducts()));
-        unset($productNumberSearchResult);
+        $productIds = $this->repository->getProductIds($shopContext, $this->lastId);
 
+        $products = $this->getProducts($productIds);
+
+        $this->lastId = array_pop($productIds);
+
+        return $this->generateUrls($products, $routingContext);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function reset()
+    {
+        $this->lastId = null;
+    }
+
+    /**
+     * @return array
+     */
+    protected function generateUrls(array $products, RoutingContext $routingContext)
+    {
+        // Batch generate routes
+        $routes = $this->router->generateList(array_column($products, 'urlParams'), $routingContext);
+        $urls = [];
+        for ($i = 0, $productCount = count($products); $i < $productCount; ++$i) {
+            $urls[] = new Url($routes[$i], new \DateTime($products[$i]['changetime']), 'weekly', Product::class, $products[$i]['id']);
+        }
+
+        return $urls;
+    }
+
+    /**
+     * @param int[] $productIds
+     *
+     * @return array
+     */
+    protected function getProducts(array $productIds)
+    {
         $qb = $this->connection->createQueryBuilder();
         $statement = $qb->from('s_articles', 'product')
             ->select('id, changetime')
@@ -130,24 +129,6 @@ class ProductUrlProvider implements UrlProviderInterface
         }
 
         // Batch generate routes
-        $routes = $this->router->generateList(array_column($products, 'urlParams'), $routingContext);
-
-        $urls = [];
-        for ($i = 0, $productCount = count($products); $i < $productCount; ++$i) {
-            $urls[] = new Url($routes[$i], new \DateTime($products[$i]['changetime']), 'weekly', Product::class, $products[$i]['id']);
-        }
-
-        reset($products);
-        $this->lastId = array_pop($productIds);
-
-        return $urls;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function reset()
-    {
-        $this->lastId = null;
+        return $products;
     }
 }

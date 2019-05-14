@@ -46,10 +46,8 @@
                  class="Shopware\Bundle\SitemapBundle\Provider\ProductUrlProvider"
                  public="false">
             <argument id="router" type="service"/>
-            <argument type="service" id="shopware_search.product_number_search"/>
-            <argument type="service" id="shopware_search.store_front_criteria_factory"/>
+            <argument type="service" id="shopware_bundle_sitemap.repository.product"/>
             <argument type="service" id="dbal_connection"/>
-            <argument>%shopware.sitemap.batchsize%</argument>
 
             <tag name="sitemap_url_provider" />
         </service>
@@ -58,14 +56,14 @@
                  class="Shopware\Bundle\SitemapBundle\Provider\StaticUrlProvider"
                  public="false">
             <argument type="service" id="router"/>
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_bundle_sitemap.repository.static_url"/>
             <tag name="sitemap_url_provider" />
         </service>
 
         <service id="shopware_bundle_sitemap.provider.url.category"
                  class="Shopware\Bundle\SitemapBundle\Provider\CategoryUrlProvider"
                  public="false">
-            <argument type="service" id="models"/>
+            <argument type="service" id="shopware_bundle_sitemap.repository.category"/>
             <argument type="service" id="router"/>
             <tag name="sitemap_url_provider" />
         </service>
@@ -82,7 +80,7 @@
         <service id="shopware_bundle_sitemap.provider.url.manufacturer"
                  class="Shopware\Bundle\SitemapBundle\Provider\ManufacturerUrlProvider"
                  public="false">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_bundle_sitemap.repository.manufacturer"/>
             <argument type="service" id="router"/>
             <tag name="sitemap_url_provider" />
         </service>
@@ -90,7 +88,7 @@
         <service id="shopware_bundle_sitemap.provider.url.landingpage"
                  class="Shopware\Bundle\SitemapBundle\Provider\LandingPageUrlProvider"
                  public="false">
-            <argument type="service" id="models"/>
+            <argument type="service" id="shopware_bundle_sitemap.repository.landing_page"/>
             <argument type="service" id="router"/>
             <tag name="sitemap_url_provider" />
         </service>
@@ -163,6 +161,28 @@
         <service id="shopware_bundle_sitemap.config_handler.file" class="Shopware\Bundle\SitemapBundle\ConfigHandler\File">
             <argument>%shopware.sitemap%</argument>
             <tag name="shopware.sitemap.config_handler" />
+        </service>
+
+        <service id="shopware_bundle_sitemap.repository.category" class="Shopware\Bundle\SitemapBundle\Repository\CategoryRepository">
+            <argument type="service" id="models"/>
+        </service>
+
+        <service id="shopware_bundle_sitemap.repository.landing_page" class="Shopware\Bundle\SitemapBundle\Repository\LandingPageRepository">
+            <argument type="service" id="models"/>
+        </service>
+
+        <service id="shopware_bundle_sitemap.repository.manufacturer" class="Shopware\Bundle\SitemapBundle\Repository\ManufacturerRepository">
+            <argument type="service" id="dbal_connection"/>
+        </service>
+
+        <service id="shopware_bundle_sitemap.repository.static_url" class="Shopware\Bundle\SitemapBundle\Repository\StaticUrlRepository">
+            <argument type="service" id="dbal_connection"/>
+        </service>
+
+        <service id="shopware_bundle_sitemap.repository.product" class="\Shopware\Bundle\SitemapBundle\Repository\ProductRepository">
+            <argument type="service" id="shopware_search.store_front_criteria_factory"/>
+            <argument type="service" id="shopware_search.product_number_search"/>
+            <argument>%shopware.sitemap.batchsize%</argument>
         </service>
     </services>
 </container>

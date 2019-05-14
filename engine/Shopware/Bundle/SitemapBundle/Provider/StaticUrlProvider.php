@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SitemapBundle\Provider;
 
 use DateTime;
-use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
+use Shopware\Bundle\SitemapBundle\Repository\StaticUrlRepositoryInterface;
 use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -39,19 +39,19 @@ class StaticUrlProvider implements UrlProviderInterface
     private $router;
 
     /**
-     * @var ConnectionInterface
+     * @var StaticUrlRepositoryInterface
      */
-    private $connection;
+    private $repository;
 
     /**
      * @var bool
      */
     private $allExported;
 
-    public function __construct(Routing\RouterInterface $router, ConnectionInterface $connection)
+    public function __construct(Routing\RouterInterface $router, StaticUrlRepositoryInterface $repository)
     {
         $this->router = $router;
-        $this->connection = $connection;
+        $this->repository = $repository;
     }
 
     /**
@@ -65,7 +65,7 @@ class StaticUrlProvider implements UrlProviderInterface
 
         $shopId = $shopContext->getShop()->getId();
 
-        $sites = $this->getSitesByShopId($shopId);
+        $sites = $this->repository->getSitesByShopId($shopId);
         foreach ($sites as $key => &$site) {
             $site['urlParams'] = [
                 'sViewport' => 'custom',
@@ -106,60 +106,6 @@ class StaticUrlProvider implements UrlProviderInterface
     public function reset()
     {
         $this->allExported = false;
-    }
-
-    /**
-     * Helper function to read all static pages of a shop from the database
-     *
-     * @param int $shopId
-     *
-     * @return array
-     */
-    private function getSitesByShopId($shopId)
-    {
-        $keys = $this->connection->createQueryBuilder()
-            ->select('shopGroups.key')
-            ->from('s_core_shop_pages', 'shopPages')
-            ->innerJoin('shopPages', 's_cms_static_groups', 'shopGroups', 'shopGroups.id = shopPages.group_id')
-            ->where('shopPages.shop_id = :shopId')
-            ->setParameter('shopId', $shopId)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
-
-        $sites = [];
-        foreach ($keys as $key) {
-            $builder = $this->connection->createQueryBuilder();
-            $current = $builder->from('s_cms_static', 'sites')
-                ->select('*')
-                ->where('sites.active = 1')
-                ->andWhere(
-                    $builder->expr()->orX(
-                        $builder->expr()->eq('sites.grouping', ':g1'),   //  = bottom
-                        $builder->expr()->like('sites.grouping', ':g2'), // like 'bottom|%
-                        $builder->expr()->like('sites.grouping', ':g3'), // like '|bottom
-                        $builder->expr()->like('sites.grouping', ':g4')  // like '|bottom|
-                    )
-                )
-                ->andWhere(
-                    $builder->expr()->orX(
-                        $builder->expr()->like('sites.shop_ids', ':shopId'),
-                        $builder->expr()->isNull('sites.shop_ids')
-                    )
-                )
-                ->setParameter('g1', $key)
-                ->setParameter('g2', $key . '|%')
-                ->setParameter('g3', '%|' . $key)
-                ->setParameter('g4', '%|' . $key . '|%')
-                ->setParameter('shopId', '%|' . $shopId . '|%')
-                ->execute()
-                ->fetchAll(\PDO::FETCH_ASSOC);
-
-            foreach ($current as $item) {
-                $sites[$item['id']] = $item;
-            }
-        }
-
-        return array_values($sites);
     }
 
     /**

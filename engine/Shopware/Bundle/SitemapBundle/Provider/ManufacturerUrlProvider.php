@@ -24,8 +24,7 @@
 
 namespace Shopware\Bundle\SitemapBundle\Provider;
 
-use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
-use Doctrine\DBAL\Query\QueryBuilder;
+use Shopware\Bundle\SitemapBundle\Repository\ManufacturerRepositoryInterface;
 use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -40,19 +39,19 @@ class ManufacturerUrlProvider implements UrlProviderInterface
     private $router;
 
     /**
-     * @var ConnectionInterface
+     * @var ManufacturerRepositoryInterface
      */
-    private $connection;
+    private $repository;
 
     /**
      * @var bool
      */
     private $allExported;
 
-    public function __construct(ConnectionInterface $connection, Routing\RouterInterface $router)
+    public function __construct(ManufacturerRepositoryInterface $repository, Routing\RouterInterface $router)
     {
         $this->router = $router;
-        $this->connection = $connection;
+        $this->repository = $repository;
     }
 
     /**
@@ -64,7 +63,7 @@ class ManufacturerUrlProvider implements UrlProviderInterface
             return [];
         }
 
-        $manufacturers = $this->getManufacturersForSitemap($shopContext);
+        $manufacturers = $this->repository->getManufacturers($shopContext);
 
         foreach ($manufacturers as &$manufacturer) {
             $manufacturer['changed'] = new \DateTime($manufacturer['changed']);
@@ -95,31 +94,5 @@ class ManufacturerUrlProvider implements UrlProviderInterface
     public function reset()
     {
         $this->allExported = false;
-    }
-
-    /**
-     * Gets all suppliers that have products for the current shop
-     *
-     * @return array
-     */
-    private function getManufacturersForSitemap(ShopContextInterface $shopContext)
-    {
-        $categoryId = $shopContext->getShop()->getCategory()->getId();
-
-        /** @var QueryBuilder $query */
-        $query = $this->connection->createQueryBuilder();
-        $query->select(['manufacturer.id', 'manufacturer.name', 'manufacturer.changed']);
-
-        $query->from('s_articles_supplier', 'manufacturer');
-        $query->innerJoin('manufacturer', 's_articles', 'product', 'product.supplierID = manufacturer.id')
-            ->innerJoin('product', 's_articles_categories_ro', 'categories', 'categories.articleID = product.id AND categories.categoryID = :categoryId')
-            ->setParameter(':categoryId', $categoryId);
-
-        $query->groupBy('manufacturer.id');
-
-        /** @var \PDOStatement $statement */
-        $statement = $query->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 }
