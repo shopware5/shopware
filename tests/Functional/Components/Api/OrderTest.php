@@ -26,6 +26,7 @@ namespace Shopware\Tests\Functional\Components\Api;
 
 use Shopware\Components\Api\Resource\Order;
 use Shopware\Components\Api\Resource\Resource;
+use Shopware\Models\Order\Detail;
 
 class OrderTest extends TestCase
 {
@@ -579,6 +580,71 @@ class OrderTest extends TestCase
         $order = $this->resource->create($order);
 
         static::assertCount(2, $order->getDocuments());
+    }
+
+    public function testSingleOrderDetailUpdate()
+    {
+        // Get existing order with at least two order items
+        $orderId = intval(Shopware()->Db()
+            ->query('SELECT `orderID`, COUNT(1) `counter` FROM `s_order_details` GROUP BY `orderId` HAVING `counter` > 1 ORDER BY id DESC LIMIT 1')
+            ->fetchColumn()
+        );
+        $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
+        $order = $this->resource->getOne($orderId);
+
+        /** @var Detail $firstDetail */
+        $firstDetail = $order->getDetails()->first();
+        $newShipped = $firstDetail->getShipped() + 1;
+        $orderCount = $order->getDetails()->count();
+
+        $order = $this->resource->update($order->getId(), [
+            'details' => [
+                [
+                    'id' => $firstDetail->getId(),
+                    'shipped' => $newShipped,
+                ],
+            ],
+            '__options_details' => [
+                'replace' => false,
+            ],
+        ]);
+
+        /** @var Detail|null $firstDetail */
+        $firstDetail = $order->getDetails()->filter(function (Detail $detail) use ($firstDetail): bool {
+            return $detail->getId() === $firstDetail->getId();
+        })->first();
+
+        static::assertEquals($orderCount, $order->getDetails()->count());
+        static::assertNotNull($firstDetail);
+        static::assertEquals($newShipped, $firstDetail->getShipped());
+    }
+
+    public function testSingleOrderDetailUpdateToDeleteOtherItems()
+    {
+        // Get existing order with at least two order items
+        $orderId = intval(Shopware()->Db()
+            ->query('SELECT `orderID`, COUNT(1) `counter` FROM `s_order_details` GROUP BY `orderId` HAVING `counter` > 1 ORDER BY id DESC LIMIT 1')
+            ->fetchColumn()
+        );
+        $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
+        $order = $this->resource->getOne($orderId);
+
+        /** @var Detail $firstDetail */
+        $firstDetail = $order->getDetails()->first();
+
+        $order = $this->resource->update($order->getId(), [
+            'details' => [
+                ['id' => $firstDetail->getId()],
+            ],
+        ]);
+
+        /** @var Detail|null $firstDetail */
+        $firstDetail = $order->getDetails()->filter(function (Detail $detail) use ($firstDetail): bool {
+            return $detail->getId() === $firstDetail->getId();
+        })->first();
+
+        static::assertEquals(1, $order->getDetails()->count());
+        static::assertNotNull($firstDetail);
     }
 
     /**
