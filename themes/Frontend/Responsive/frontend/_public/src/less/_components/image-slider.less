@@ -109,6 +109,12 @@ It contains the viewport specific styles inside media queries.
     .image--media {
         margin: 0 auto;
         text-align: center;
+
+        &.image--svg {
+            img {
+                height: 100%;
+            }
+        }
     }
 }
 

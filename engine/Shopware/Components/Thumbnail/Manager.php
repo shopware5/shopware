@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Thumbnail;
 
+use Enlight_Event_EventManager;
+use Exception;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Thumbnail\Generator\GeneratorInterface;
 use Shopware\Models\Media\Media;
@@ -51,7 +53,7 @@ class Manager
     protected $rootDir;
 
     /**
-     * @var \Enlight_Event_EventManager|null
+     * @var Enlight_Event_EventManager|null
      */
     protected $eventManager;
 
@@ -66,8 +68,12 @@ class Manager
      *
      * @param string $rootDir - the full path to the shopware directory e.g. /var/www/shopware/
      */
-    public function __construct(GeneratorInterface $generator, $rootDir, \Enlight_Event_EventManager $eventManager, MediaServiceInterface $mediaService)
-    {
+    public function __construct(
+        GeneratorInterface $generator,
+        string $rootDir,
+        Enlight_Event_EventManager $eventManager,
+        MediaServiceInterface $mediaService
+    ) {
         $this->generator = $generator;
         $this->rootDir = $rootDir;
         $this->eventManager = $eventManager;
@@ -82,15 +88,13 @@ class Manager
      *
      * @param array $thumbnailSizes  - array of all sizes which needs to be generated
      * @param bool  $keepProportions - Whether or not keeping the proportions of the original image, the size can be affected when true
-     *
-     * @throws \Exception
      */
     public function createMediaThumbnail(Media $media, $thumbnailSizes = [], $keepProportions = false)
     {
         $imagePath = $media->getPath();
 
         if ($media->getType() !== $media::TYPE_IMAGE) {
-            throw new \Exception(sprintf('File %s is not an image.', $imagePath));
+            throw new Exception(sprintf('File %s is not an image.', $imagePath));
         }
 
         if (empty($thumbnailSizes)) {
@@ -163,8 +167,7 @@ class Manager
     }
 
     /**
-     * Helper function which returns the thumbnail paths of a single
-     * media object.
+     * Helper function which returns the thumbnail paths of a single media object.
      *
      * @param string $name
      * @param string $type
@@ -181,14 +184,22 @@ class Manager
         foreach ($sizes as $size) {
             $suffix = $size['width'] . 'x' . $size['height'];
 
-            $path = $this->getPathOfType($type) . '/thumbnail/';
-
-            $thumbnails[] = [
+            $data = [
                 'maxWidth' => $size['width'],
                 'maxHeight' => $size['height'],
-                'source' => $path . $name . '_' . $suffix . '.' . $extension,
-                'retinaSource' => $path . $name . '_' . $suffix . '@2x.' . $extension,
             ];
+
+            $path = $this->getPathOfType($type);
+
+            $data['source'] = $path . '/' . $name . '.' . $extension;
+            $data['retinaSource'] = $path . '/' . $name . '.' . $extension;
+
+            if ($type === Media::TYPE_IMAGE) {
+                $data['source'] = $path . '/thumbnail/' . $name . '_' . $suffix . '.' . $extension;
+                $data['retinaSource'] = $path . '/thumbnail/' . $name . '_' . $suffix . '@2x.' . $extension;
+            }
+
+            $thumbnails[] = $data;
         }
 
         return $thumbnails;
@@ -217,8 +228,6 @@ class Manager
      * Returns an array with a jpg and original extension path if its not a jpg
      *
      * @param string $suffix
-     *
-     * @throws \Exception
      *
      * @return array
      */
@@ -254,11 +263,10 @@ class Manager
      * Returns the full path of a thumbnail dir according to the media type
      * The default path for images after the root dir would be media/image/thumbnail/
      *
-     * @param Media $media
      *
      * @return string
      */
-    protected function getThumbnailDir($media)
+    protected function getThumbnailDir(Media $media)
     {
         return '/media/' . strtolower($media->getType()) . '/thumbnail/';
     }
@@ -282,7 +290,7 @@ class Manager
      *
      * @return array
      */
-    protected function uniformThumbnailSizes($thumbnailSizes)
+    protected function uniformThumbnailSizes(array $thumbnailSizes)
     {
         foreach ($thumbnailSizes as &$size) {
             if (is_string($size)) {
@@ -293,7 +301,7 @@ class Manager
                 }
             } else {
                 if (is_array($size) && !array_key_exists('width', $size)) {
-                    $size = ['width' => $size[0], 'height' => isset($size[1]) ? $size[1] : $size[0]];
+                    $size = ['width' => $size[0], 'height' => $size[1] ?? $size[0]];
                 }
 
                 if (is_int($size)) {
@@ -318,35 +326,29 @@ class Manager
     /**
      * Returns an array with width and height gained
      * from a string in a format like 100x200
-     *
-     * @param string $size
-     *
-     * @return array
      */
-    private function stringSizeToArray($size)
+    private function stringSizeToArray(string $size): array
     {
-        $size = explode('x', $size);
+        $sizes = explode('x', $size);
 
-        return ['width' => $size[0], 'height' => $size[1]];
+        return ['width' => $sizes[0], 'height' => $sizes[1]];
     }
 
     /**
-     * @throws \Exception
-     *
-     * @return array
+     * @throws Exception
      */
-    private function getThumbnailSizesFromMedia(Media $media)
+    private function getThumbnailSizesFromMedia(Media $media): array
     {
         $album = $media->getAlbum();
 
         if (!$album) {
-            throw new \Exception('No album configured for the passed media object and no size passed!');
+            throw new Exception('No album configured for the passed media object and no size passed!');
         }
 
         $settings = $album->getSettings();
 
         if (!$settings) {
-            throw new \Exception('No settings configured in the album of the given media object!');
+            throw new Exception('No settings configured in the album of the given media object!');
         }
 
         $thumbnailSizes = $settings->getThumbnailSize();
@@ -359,10 +361,7 @@ class Manager
         return $thumbnailSizes;
     }
 
-    /**
-     * @return Settings|null
-     */
-    private function getAlbumSettingsFromMedia(Media $media)
+    private function getAlbumSettingsFromMedia(Media $media): ?Settings
     {
         $album = $media->getAlbum();
 

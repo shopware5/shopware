@@ -49,6 +49,7 @@ Ext.define('Shopware.apps.MediaManager.view.main.Selection', {
 
     /**
      * Forces the window to be on front
+     *
      * @boolean
      * @default false
      */
@@ -56,6 +57,7 @@ Ext.define('Shopware.apps.MediaManager.view.main.Selection', {
 
     /**
      * Collection of used snippets.
+     *
      * @object
      */
     snippets:{
@@ -133,7 +135,7 @@ Ext.define('Shopware.apps.MediaManager.view.main.Selection', {
             action: 'mediamanager-selection-window-apply-selection',
             handler: function(btn) {
                 if (Ext.isFunction(me.selectionHandler)) {
-                    // set selectionModel based on current view layout
+                    // Set selectionModel based on current view layout
                     var selectionModel = me.mediaView.dataView.getSelectionModel();
                     if (me.mediaView.selectedLayout === 'table') {
                         selectionModel = me.mediaView.down('mediamanager-media-grid').getSelectionModel();

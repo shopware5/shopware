@@ -16,6 +16,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added Symfony `RequestStack` to Enlight's request cycle
 * Added new config option to allow restoring of old cart items
 * Added new config option to enable sharing of session between language shops
+* Added support for SVG files in the frontend
 * Added definition signature `getAttributeRawField` to `Shopware\Bundle\ESIndexingBundle\TextMappingInterface` to reduce info request of
     Elasticsearch and added method implementation to TextMappings
     `Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES2::getAttributeRawField`

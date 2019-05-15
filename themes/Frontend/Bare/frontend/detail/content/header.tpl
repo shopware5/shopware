@@ -34,6 +34,7 @@
 
                     {* Product - Supplier information *}
                     {block name='frontend_detail_supplier_info'}
+                        {$productSupplierClasses = 'product--supplier'}
                         {$imgSrc = $sArticle.supplierImg}
                         {$imgSrcSet = ''}
                         {if $sArticle.supplierMedia.thumbnails[0].source}
@@ -43,10 +44,14 @@
                                 {$retinaSource = $sArticle.supplierMedia.thumbnails[0].retinaSource}
                                 {$imgSrcSet = "$imgSrc, $retinaSource 2x"}
                             {/if}
+
+                            {if $sArticle.supplierMedia.extension == 'svg'}
+                                {$productSupplierClasses = $productSupplierClasses|cat:' image--svg'}
+                            {/if}
                         {/if}
 
                         {if $imgSrc}
-                            <div class="product--supplier">
+                            <div class="{$productSupplierClasses}">
                                 {s name="DetailDescriptionLinkInformation" namespace="frontend/detail/description" assign="snippetDetailDescriptionLinkInformation"}{/s}
                                 <a href="{url controller='listing' action='manufacturer' sSupplier=$sArticle.supplierID}"
                                    title="{$snippetDetailDescriptionLinkInformation|escape}"

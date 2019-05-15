@@ -23,11 +23,13 @@
  */
 
 use Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionIsBlacklistedException;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Configurator\Dependency;
 use Shopware\Models\Article\Configurator\Group;
@@ -914,14 +916,17 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getArticleImages($articleId)
     {
+        /** @var MediaServiceInterface $mediaService */
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+
+        /** @var Manager $thumbnailManager */
+        $thumbnailManager = Shopware()->Container()->get('thumbnail_manager');
+
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(['images', 'imageMapping', 'mappingRule', 'ruleOption'])
+        $builder->select(['images', 'media'])
                 ->from(Image::class, 'images')
                 ->leftJoin('images.article', 'article')
-                ->leftJoin('images.mappings', 'imageMapping')
-                ->leftJoin('imageMapping.rules', 'mappingRule')
-                ->leftJoin('mappingRule.option', 'ruleOption')
+                ->leftJoin('images.media', 'media')
                 ->where('article.id = :articleId')
                 ->andWhere('images.parentId IS NULL')
                 ->orderBy('images.position')
@@ -930,8 +935,25 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $result = $builder->getQuery()->getArrayResult();
 
         foreach ($result as &$item) {
-            $item['original'] = $mediaService->getUrl('media/image/' . $item['path'] . '.' . $item['extension']);
-            $item['thumbnail'] = $mediaService->getUrl('media/image/thumbnail/' . $item['path'] . '_140x140.' . $item['extension']);
+            $thumbnails = $thumbnailManager->getMediaThumbnails(
+                $item['media']['name'],
+                $item['media']['type'],
+                $item['media']['extension'],
+                [
+                    [
+                        'width' => 140,
+                        'height' => 140,
+                    ],
+                ]
+            );
+
+            $item['original'] = $mediaService->getUrl($item['media']['path']);
+
+            if (!empty($thumbnails)) {
+                $item['thumbnail'] = $mediaService->getUrl($thumbnails[0]['source']);
+            } else {
+                $item['thumbnail'] = $mediaService->getUrl($item['media']['path']);
+            }
         }
 
         return $result;

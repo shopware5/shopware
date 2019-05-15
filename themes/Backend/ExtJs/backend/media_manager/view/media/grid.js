@@ -43,6 +43,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
     alias: 'widget.mediamanager-media-grid',
     /**
      * Selected preview size in px
+     *
      * @Number
      * @default 16
      */
@@ -50,6 +51,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
 
     /**
      * Used snippets in this component
+     *
      * @object
      */
     snippets: {
@@ -74,8 +76,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
     },
 
     /**
-     * Initializes the component and sets the neccessary
-     * toolbars and items.
+     * Initializes the component and sets the necessary toolbars and items.
      *
      * @return void
      */
@@ -180,8 +181,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
      * @returns { String } Formatted output
      */
     previewRenderer: function(value, tdStyle, record) {
-        var me = this,
-            type = record.get('type').toLowerCase(),
+        var type = record.get('type').toLowerCase(),
             result;
 
         if (!record.data.created) {
@@ -209,13 +209,21 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
 
            case 'vector':
                result = '<div class="sprite-blue-document-illustrator" style="height:16px; width:16px;display:inline-block"></div>';
+               if (Ext.Array.contains(['svg'], record.data.extension)) {
+                   // Fix styling for SVG images
+                   var style = Ext.String.format('width:[0]px;max-height:[0]px', this.selectedPreviewSize);
+                   if (record.get('height') > record.get('width')) {
+                       style = Ext.String.format('max-width:[0]px;height:[0]px', this.selectedPreviewSize);
+                   }
+                   result = Ext.String.format('<div class="small-preview-image"><img src="[0]" style="[1]" alt="[2]" /></div>', value, style, record.get('name'));
+               }
             break;
 
            case 'image':
                if (Ext.Array.contains(['tif', 'tiff'], record.data.extension)) {
                    result = '<div class="sprite-blue-document-image" style="height:16px; width:16px;display:inline-block"></div>';
                } else {
-                   result = Ext.String.format('<div class="small-preview-image"><img src="[0]" style="max-width:[1]px;max-height:[1]px" alt="[2]" /></div>', value, me.selectedPreviewSize, record.get('name'));
+                   result = Ext.String.format('<div class="small-preview-image"><img src="[0]" style="max-width:[1]px;max-height:[1]px" alt="[2]" /></div>', value, this.selectedPreviewSize, record.get('name'));
                }
                break;
 
@@ -266,8 +274,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
     },
 
     /**
-     * Renders the type column of the list view. The value will
-     * be replaced with a snippet.
+     * Renders the type column of the list view. The value will be replaced with a snippet.
      *
      * @param { String } value - The value of the column
      * @returns { String } Formatted output
@@ -296,6 +303,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
 
     /**
      * Returns the rendered fileSize
+     *
      * @param { integer } bytes
      */
     fileSizeRenderer: function(bytes) {

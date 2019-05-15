@@ -40,8 +40,9 @@ Ext.define('Shopware.apps.Blog.controller.Media', {
      * @string
      */
     extend:'Ext.app.Controller',
+
     /**
-     * all references to get the elements by the applicable selector
+     * All references to get the elements by the applicable selector
      */
     refs:[
         { ref:'mediaList', selector:'blog-blog-detail-sidebar-options dataview[name=image-listing]' }
@@ -74,9 +75,9 @@ Ext.define('Shopware.apps.Blog.controller.Media', {
      * and presses the "apply selection"-button in the media manager.
      *
      * @event selectMedia
-     * @param [object] me - Shopware.MediaManager.DropZone
-     * @param [array] selected - Array of the selected Ext.data.Model's
-     * @param [object] selModel - Associated Ext.selection.Model
+     * @param { object } dropZone - Shopware.MediaManager.DropZone
+     * @param { array } images - Array of the selected Ext.data.Model's
+     * @param { object } selModel - Associated Ext.selection.Model
      */
     onMediaAdded: function(dropZone, images, selModel) {
         var me = this,
@@ -102,8 +103,8 @@ Ext.define('Shopware.apps.Blog.controller.Media', {
     /**
      * Event will be fired when the user select an image in the listing.
      *
-     * @param [Ext.selection.DataViewModel] The selection data view model of the Ext.view.View
-     * @param [Shopware.apps.Article.model.Media] The selected media
+     * @param { Ext.selection.DataViewModel } dataViewModel The selection data view model of the Ext.view.View
+     * @param { Shopware.apps.Article.model.Media } media The selected media
      */
     onSelectMedia: function(dataViewModel, media, previewButton, removeButton) {
         this.disableImageButtons(dataViewModel, previewButton, removeButton);
@@ -120,9 +121,9 @@ Ext.define('Shopware.apps.Blog.controller.Media', {
     },
 
     /**
-     * marks an image as an blog preview image
+     * MNarks an image as an blog preview image
      *
-     * @return void
+     * @return bool
      */
     onMarkPreviewImage: function() {
         var me = this,
@@ -137,13 +138,14 @@ Ext.define('Shopware.apps.Blog.controller.Media', {
         store.each(function(item) {
             item.set('preview', false);
         });
+
         selected.set('preview', true);
     },
 
     /**
      * Removes the selected image.
      *
-     * @return void
+     * @return bool
      */
     onRemoveImage: function() {
         var me = this,
