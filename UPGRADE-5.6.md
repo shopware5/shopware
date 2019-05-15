@@ -190,6 +190,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Deprecated `Enlight_Controller_Response_ResponseHttp::outputBody`
 * Deprecated `Shopware_Controllers_Backend_Log::createLogAction`. It will be removed in 5.7, use `\Shopware\Controllers\Backend\Logger::createLogAction` instead
 * Deprecated email transmission method `mail`. It will be removed in 5.7, use `smtp` instead
+* Deprecated `Enlight_Event_EventHandler`. It will be removed in 5.8, use `Enlight_Event_Handler_Default` or `SubscriberInterface::getSubscribedEvents` instead.
 
 ### Improved ExtJS auto-loading
 

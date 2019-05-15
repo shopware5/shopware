@@ -59,7 +59,7 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
      */
     public function onStartDispatch(Enlight_Event_EventArgs $args)
     {
-        $event = new Enlight_Event_EventHandler(
+        $event = new Enlight_Event_Handler_Default(
             'Enlight_Controller_Front_PreDispatch',
             [$this, 'onPreDispatch']
         );
