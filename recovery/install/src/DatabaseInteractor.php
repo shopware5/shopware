@@ -22,10 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Shopware SwagAboCommerce Plugin - Bootstrap
- */
-
 namespace Shopware\Recovery\Install;
 
 use Shopware\Recovery\Common\IOHelper;
