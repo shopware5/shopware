@@ -11,6 +11,10 @@
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@shopware.de so we can send you a copy immediately.
+ *
+ * @category   Enlight
+ * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
+ * @license    http://enlight.de/license     New BSD License
  */
 
 /**

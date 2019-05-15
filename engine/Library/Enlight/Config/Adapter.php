@@ -13,12 +13,8 @@
  * to license@shopware.de so we can send you a copy immediately.
  *
  * @category   Enlight
- * @package    Enlight_Config
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $$Id$$
- * @author     Heiner Lohaus
- * @author     $$Author$$
+ * @license    http://enlight.de/license     New BSD License
  */
 
 /**
