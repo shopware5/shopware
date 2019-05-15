@@ -68,27 +68,31 @@ class Enlight_Template_Manager extends Smarty
      */
     public function __construct($options = null, $backendOptions = [])
     {
-        // self pointer needed by some other class methods
+        // Self pointer needed by some other class methods
         $this->smarty = $this;
 
         $this->start_time = microtime(true);
 
-        if (isset($backendOptions['cache_file_perm']) && is_string($options['cache_file_perm'])) {
-            $backendOptions['cache_file_perm'] = octdec($backendOptions['cache_file_perm']);
-        } else {
+        if (!isset($backendOptions['cache_file_perm'])) {
             $backendOptions['cache_file_perm'] = 0666 & ~umask();
         }
 
-        if (isset($backendOptions['hashed_directory_perm']) && is_string($options['hashed_directory_perm'])) {
-            $backendOptions['hashed_directory_perm'] = octdec($backendOptions['hashed_directory_perm']);
-        } else {
+        if (is_string($backendOptions['cache_file_perm'])) {
+            $backendOptions['cache_file_perm'] = octdec($backendOptions['cache_file_perm']);
+        }
+
+        if (!isset($backendOptions['hashed_directory_perm'])) {
             $backendOptions['hashed_directory_perm'] = 0777 & ~umask();
+        }
+
+        if (is_string($backendOptions['hashed_directory_perm'])) {
+            $backendOptions['hashed_directory_perm'] = octdec($backendOptions['hashed_directory_perm']);
         }
 
         $this->_file_perms = $backendOptions['cache_file_perm'];
         $this->_dir_perms = $backendOptions['hashed_directory_perm'];
 
-        // set default dirs
+        // Set default dirs
         $this->setTemplateDir('.' . DS . 'templates' . DS)
             ->setCompileDir('.' . DS . 'templates_c' . DS)
             ->setPluginsDir([dirname(__FILE__) . '/Plugins/', SMARTY_PLUGINS_DIR])
@@ -124,7 +128,7 @@ class Enlight_Template_Manager extends Smarty
     }
 
     /**
-     * @param $charset
+     * @param string $charset
      *
      * @return Enlight_Template_Manager
      */
@@ -179,16 +183,12 @@ class Enlight_Template_Manager extends Smarty
             }
         }
 
-        /**
-         * Filter all directories which includes the new shopware themes.
-         */
-        $themeDirectories = array_filter($template_dir, function ($themeDir) {
+        // Filter all directories which includes the new shopware themes
+        $themeDirectories = array_filter($template_dir, static function ($themeDir) {
             return stripos($themeDir, '/Themes/Frontend/');
         });
 
-        /*
-         * If no shopware theme assigned, we have to use the passed inheritance
-         */
+        // If no shopware theme assigned, we have to use the passed inheritance
         if (empty($themeDirectories)) {
             return parent::setTemplateDir($template_dir);
         }
@@ -209,9 +209,9 @@ class Enlight_Template_Manager extends Smarty
     /**
      * Add template directory(s)
      *
-     * @param string|array $template_dir directory(s) of template sources
-     * @param string       $key          of the array element to assign the template dir to
-     * @param null         $position
+     * @param string|string[] $template_dir directory(s) of template sources
+     * @param string          $key          of the array element to assign the template dir to
+     * @param null|string     $position
      *
      * @return Smarty current Smarty instance for chaining
      */
@@ -263,13 +263,12 @@ class Enlight_Template_Manager extends Smarty
     }
 
     /**
-     * @param $eventManager
+     * @param \Enlight_Event_EventManager $eventManager
      *
      * @return Enlight_Template_Manager
      */
     public function setEventManager($eventManager)
     {
-        //Enlight_Template_Manager_AddTemplateDir
         $this->eventManager = $eventManager;
 
         return $this;
