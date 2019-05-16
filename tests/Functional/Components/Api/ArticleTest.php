@@ -1923,6 +1923,11 @@ class ArticleTest extends TestCase
      */
     public function testCreateTranslation()
     {
+        /** @var \Shopware\Bundle\AttributeBundle\Service\CrudService $crud */
+        $crud = Shopware()->Container()->get('shopware_attribute.crud_service');
+
+        $crud->update('s_articles_attributes', 'underscore_test', 'string');
+
         $data = $this->getSimpleTestData();
 
         $definedTranslation = [
@@ -1940,6 +1945,7 @@ class ArticleTest extends TestCase
         for ($i = 1; $i <= 20; ++$i) {
             $definedTranslation[0]['__attribute_attr' . $i] = 'English-Attr' . $i;
         }
+        $definedTranslation[0]['__attribute_underscore_test'] = 'Attribute with underscore';
 
         $data['translations'] = $definedTranslation;
 
@@ -1955,11 +1961,14 @@ class ArticleTest extends TestCase
         static::assertEquals($definedTranslation['shippingTime'], $savedTranslation['shippingTime']);
         static::assertEquals($definedTranslation['keywords'], $savedTranslation['keywords']);
         static::assertEquals($definedTranslation['packUnit'], $savedTranslation['packUnit']);
+        static::assertEquals($definedTranslation['__attribute_underscore_test'], $savedTranslation['__attribute_underscore_test']);
 
         for ($i = 1; $i <= 20; ++$i) {
             $attr = '__attribute_attr' . $i;
             static::assertEquals($definedTranslation[$attr], $savedTranslation[$attr]);
         }
+
+        $crud->delete('s_articles_attributes', 'underscore_test');
     }
 
     public function testBase64ImageUpload()

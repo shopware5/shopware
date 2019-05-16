@@ -43,13 +43,14 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed `mediaselectionfield` to work also with enabled translation in tabs
 * Changed RSS templates to contain correct language code
 * Changed BatchProcess to fix an issue with `removeString` operator
-* Changed the handling of custom-page attributes translations
+* Changed the handling of custom-page attribute translations
 * Changed the handling of the grouping for shop pages
 * Changed custom-page attributes to be translated properly
 * Changed Symfony library to version 3.4.27
 * Changed buttons in empty off-canvas baskets to be disabled
 * Changed shop page attributes to be translatable
-* Changed cache file permission definition
+* Changed cache file permission definition in `\Enlight_Template_Manager`
+* Changed Article and Category API endpoints to support translation of attributes with underscores
 
 ### Deprecations
 
