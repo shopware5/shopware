@@ -119,6 +119,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `Ext.ClassManager` to show better error messages on missing alias or class
 * Changed `Shopware_Controllers_Backend_Application` to abstract
 * Changed `Shopware_Controllers_Backend_ExtJs` to abstract
+* Changed internal validation of `Shopware\Bundle\StoreFrontBundle\Struct\Attribute`
 
 ### Removals
 
@@ -132,7 +133,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `Shopware\Components\Plugin\XmlCronjobReader`
     * `Shopware\Components\Plugin\XmlMenuReader`
 * Removed `storeType` `php` from Plugin config.xml
-* Removed the unspecific request params assignment to view in `\Shopware_Controllers_Widgets_Listing::productsAction` and `\Shopware_Controllers_Widgets_Listing::streamAction`. Use a *PostDispatchEvent to assign necessary variables in a plugin
+* Removed the unspecific request params assignment to view in `Shopware_Controllers_Widgets_Listing::productsAction` and `Shopware_Controllers_Widgets_Listing::streamAction`. Use a *PostDispatchEvent to assign necessary variables in a plugin
 * Removed voucher field from additional feature
 * Removed following classes without replacement
     * `Shopware\Bundle\FormBundle\Extension\EnlightRequestExtension`

@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\StoreFrontBundle\Struct;
+namespace Shopware\Tests\Unit\Bundle\StoreFrontBundle\Struct;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\StoreFrontBundle\Struct\Struct as BaseStruct;

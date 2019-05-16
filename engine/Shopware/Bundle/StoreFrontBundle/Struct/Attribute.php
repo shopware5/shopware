@@ -34,15 +34,10 @@ class Attribute extends Struct implements \JsonSerializable
     protected $storage = [];
 
     /**
-     * @param array $data
-     *
      * @throws \InvalidArgumentException
      */
-    public function __construct($data = [])
+    public function __construct(array $data = [])
     {
-        if (!is_array($data)) {
-            throw new \InvalidArgumentException('Injected data should be an array');
-        }
         if (!$this->isValid($data)) {
             throw new \InvalidArgumentException('Class values should be serializable');
         }
@@ -112,11 +107,7 @@ class Attribute extends Struct implements \JsonSerializable
      */
     private function isValid($value)
     {
-        if ($value instanceof \JsonSerializable) {
-            return true;
-        }
-
-        if (is_scalar($value) || $value === null) {
+        if ($value instanceof \JsonSerializable || is_scalar($value) || $value === null) {
             return true;
         }
 

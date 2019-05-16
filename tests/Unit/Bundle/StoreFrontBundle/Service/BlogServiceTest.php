@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\StoreFrontBundle\Service;
+namespace Shopware\Tests\Unit\Bundle\StoreFrontBundle\Service;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\StoreFrontBundle\Gateway\BlogGatewayInterface;
@@ -36,6 +36,7 @@ class BlogServiceTest extends TestCase
     public function testSortingShouldBeAsRequest()
     {
         $idPool = [1, 2, 3, 4];
+        $blogs = [];
         shuffle($idPool);
 
         foreach ($idPool as $id) {
@@ -47,14 +48,12 @@ class BlogServiceTest extends TestCase
         $gatewayMock = $this->getMockBuilder(BlogGatewayInterface::class)->disableOriginalConstructor()->getMock();
         $gatewayMock->expects(static::once())
             ->method('getList')
-            ->will(static::returnValue($blogs));
+            ->willReturn($blogs);
 
         $mediaMock = $this->getMockBuilder(MediaService::class)->disableOriginalConstructor()->getMock();
         $contextMock = $this->getMockBuilder(ShopContextInterface::class)->getMock();
 
-        $service = new BlogService($gatewayMock, $mediaMock);
-
-        $data = $service->getList([1, 2, 3, 4], $contextMock);
+        $data = (new BlogService($gatewayMock, $mediaMock))->getList([1, 2, 3, 4], $contextMock);
 
         static::assertEquals([1, 2, 3, 4], array_keys($data));
     }

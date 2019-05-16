@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\StoreFrontBundle\Struct;
+namespace Shopware\Tests\Unit\Bundle\StoreFrontBundle\Struct;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
@@ -31,67 +31,68 @@ class AttributeStructTest extends TestCase
 {
     /**
      * @dataProvider getDataProvider
-     *
-     * @param $value
-     *
-     * @throws \Exception
      */
     public function testWithValidValues($value)
     {
         $attr = new Attribute(['attr' => $value]);
-        $this->assertTrue($attr->exists('attr'));
-        $this->assertSame($value, $attr->get('attr'));
+        static::assertTrue($attr->exists('attr'));
+        static::assertSame($value, $attr->get('attr'));
+
         $attr->set('attr', $value);
-        $this->assertSame($value, $attr->get('attr'));
-        $this->assertSame($attr->toArray(), $attr->jsonSerialize());
+        static::assertSame($value, $attr->get('attr'));
+        static::assertSame($attr->toArray(), $attr->jsonSerialize());
+
         $json = json_encode(['attr' => $value]);
-        $this->assertNotFalse($json);
-        $this->assertSame(json_encode($attr), $json);
+        static::assertNotFalse($json);
+        static::assertSame(json_encode($attr), $json);
     }
 
     /**
      * @dataProvider getInvalidDataProvider
-     *
-     * @param $value
-     *
-     * @throws \InvalidArgumentException
      */
     public function testWithInvalidValues($value)
     {
         $this->expectException(\InvalidArgumentException::class);
+
         new Attribute(['attr' => $value]);
     }
 
     /**
      * @dataProvider getInvalidDataProvider
-     *
-     * @param $value
-     *
-     * @throws \InvalidArgumentException
      */
     public function testWithInvalidValuesSet($value)
     {
         $this->expectException(\InvalidArgumentException::class);
+
         $attr = new Attribute(['attr' => null]);
         $attr->set('attr', $value);
     }
 
-    /***
-     * @throws \InvalidArgumentException
-     */
-    public function testWithInvalidData()
+    public function testWithNullData()
+    {
+        $this->expectException(\TypeError::class);
+        new Attribute(null);
+    }
+
+    public function testWithObjectData()
     {
         $this->expectException(\InvalidArgumentException::class);
-        new Attribute(null);
+        new Attribute([new \ArrayIterator([])]);
     }
 
     public function getDataProvider()
     {
         return [
             [0],
+            [[]],
             [null],
             ['test'],
             [0.99],
+            [['test' => 'foo']],
+            [[2 => 'foo']],
+            [[2 => ['foo' => 'bar']]],
+            [['bar' => ['foo' => 'bar']]],
+            [['test' => new Attribute(['bar' => 'foo'])]],
         ];
     }
 
