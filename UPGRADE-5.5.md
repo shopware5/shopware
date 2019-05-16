@@ -54,6 +54,8 @@ This changelog references changes done in Shopware 5.5 patch versions.
 ### Deprecations
 
 * Deprecated `sBasket::clearBasket`, use `sBasket::sDeleteBasket` instead
+* Deprecated `Shopware\Models\Article\Download::getSize` and `Shopware\Models\Article\Download::setSize`. Use `Shopware\Models\Media\Media::getFileSize` and `Shopware\Models\Media\Media::setFileSize` instead
+* Deprecated column `s_articles_downloads.size`. Use `s_media.file_size` instead
 
 ## 5.5.8
 
