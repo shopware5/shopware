@@ -27,9 +27,12 @@ namespace Shopware\Tests\Functional\Components\DepencencyInjection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\DependencyInjection\Bridge\Cache;
 use Shopware\Components\ShopwareReleaseStruct;
+use Shopware\Tests\Functional\Traits\DirectoryDeletionTrait;
 
 class CacheTest extends TestCase
 {
+    use DirectoryDeletionTrait;
+
     private $release;
 
     public function setUp()
@@ -159,33 +162,5 @@ class CacheTest extends TestCase
         static::assertEquals(octdec($options['cache_file_perm']), $filePermissions);
 
         $this->deleteDirectory($testDir);
-    }
-
-    /**
-     * @param string $dir
-     *
-     * @return bool
-     */
-    private function deleteDirectory($dir)
-    {
-        if (!file_exists($dir)) {
-            return true;
-        }
-
-        if (!is_dir($dir)) {
-            return unlink($dir);
-        }
-
-        foreach (scandir($dir, 0) as $item) {
-            if ($item === '.' || $item === '..') {
-                continue;
-            }
-
-            if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
-                return false;
-            }
-        }
-
-        return rmdir($dir);
     }
 }
