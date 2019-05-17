@@ -447,7 +447,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         }
 
         // Get payment for all orders with order status -1
-        $sql = "SELECT s_core_paymentmeans.description AS paymentName,  COUNT(invoice_amount) as number
+        $sql = "SELECT s_core_paymentmeans.description AS paymentName, COUNT(invoice_amount) as number, s_core_paymentmeans.id as id
         FROM s_order
         LEFT JOIN s_core_paymentmeans ON s_order.paymentID = s_core_paymentmeans.id
         WHERE s_order.status = -1
@@ -455,12 +455,18 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             $filter
         GROUP BY s_order.paymentID";
 
-        $data = Shopware()->Db()->fetchAll($sql, $params);
+        $paymentMethods = Shopware()->Db()->fetchAll($sql, $params);
+
+        // Translate payment method names.
+        $translator = $this->get('translation')->getObjectTranslator('config_payment');
+        foreach ($paymentMethods as &$paymentMethod) {
+            $paymentMethod = $translator->translateObjectProperty($paymentMethod, 'description', 'paymentName');
+        }
 
         $this->View()->assign([
             'success' => true,
-            'data' => $data,
-            'total' => count($data),
+            'data' => $paymentMethods,
+            'total' => count($paymentMethods),
         ]);
     }
 
@@ -625,7 +631,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(['orders', 'customer', 'billing', 'payment', 'details'])
-                ->from('Shopware\Models\Order\Order', 'orders')
+                ->from(Order::class, 'orders')
                 ->leftJoin('orders.details', 'details')
                 ->leftJoin('orders.customer', 'customer')
                 ->leftJoin('orders.payment', 'payment')
@@ -653,6 +659,10 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $total = $paginator->count();
         $orders = $paginator->getIterator()->getArrayCopy();
 
+        // Translate payment and dispatch method names.
+        $translationComponent = $this->get('translation');
+        $orders = $translationComponent->translateOrders($orders);
+
         $this->View()->assign([
             'success' => true,
             'data' => $orders,
@@ -661,8 +671,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     }
 
     /**
-     * Delete a order
-     * todo@dn: fix naming e.g. deleteOrderAction
+     * Delete an order
      */
     public function deleteOrderAction()
     {

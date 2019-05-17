@@ -199,10 +199,10 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
         $response = $this->dispatch('backend/Config/getList?' . $getString);
 
         $responseJSON = json_decode($response->getBody(), true);
-        $this->assertEquals(true, $responseJSON['success']);
+        static::assertEquals(true, $responseJSON['success']);
 
         foreach ($responseJSON['data'] as $documentType) {
-            $this->assertEquals($documentType['name'], $documentType['description']);
+            static::assertEquals($documentType['name'], $documentType['description']);
         }
 
         $this->reset();
@@ -219,21 +219,21 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
         $response = $this->dispatch('backend/Config/getList?' . $getString);
 
         $responseJSON = json_decode($response->getBody(), true);
-        $this->assertEquals(true, $responseJSON['success']);
+        static::assertEquals(true, $responseJSON['success']);
 
         foreach ($responseJSON['data'] as $documentType) {
             switch ($documentType['id']) {
                 case 1:
-                    $this->assertEquals('Invoice', $documentType['description']);
+                    static::assertEquals('Invoice', $documentType['description']);
                     break;
                 case 2:
-                    $this->assertEquals('Notice of delivery', $documentType['description']);
+                    static::assertEquals('Notice of delivery', $documentType['description']);
                     break;
                 case 3:
-                    $this->assertEquals('Credit', $documentType['description']);
+                    static::assertEquals('Credit', $documentType['description']);
                     break;
                 case 4:
-                    $this->assertEquals('Cancellation', $documentType['description']);
+                    static::assertEquals('Cancellation', $documentType['description']);
                     break;
             }
         }

@@ -47,33 +47,24 @@ class Shopware_Components_Translation
      */
     private $fallbackLocaleId;
 
-    /**
-     * @param Connection|null $connection
-     * @param Container|null  $container
-     */
-    public function __construct(Connection $connection = null, Container $container = null)
+    public function __construct(Connection $connection, Container $container)
     {
-        $container = $container ?: Shopware()->Container();
-        $this->connection = $connection ?: $container->get('dbal_connection');
+        $this->connection = $connection;
+
+        // Default language in case no locale exists
+        $this->localeId = 1;
+
+        $locale = null;
 
         // Determine how to query the current language
-        if ($container->has('Auth')) {
-            $locale = $container->get('Auth')->getIdentity()->locale;
-
-            if ($locale) {
-                $this->localeId = $locale->getId();
-            }
-        } elseif ($container->has('Shop')) {
-            $locale = $container->get('Shop')->getLocale();
-
-            if ($locale) {
-                $this->localeId = $locale->getId();
-            }
+        if ($container->initialized('auth')) {
+            $locale = $container->get('auth')->getIdentity()->locale;
+        } elseif ($container->has('shop')) {
+            $locale = $container->get('shop')->getLocale();
         }
 
-        if (!$this->localeId) {
-            // Fallback to default language in case no locale exists
-            $this->localeId = 1;
+        if ($locale) {
+            $this->localeId = $locale->getId();
         }
 
         // Determine fallback language
@@ -120,9 +111,10 @@ class Shopware_Components_Translation
     }
 
     /**
-     * Un filter translation data for output.
+     * Unfilter translation data for output.
      *
      * @param string   $type
+     * @param string   $data
      * @param int|null $key
      *
      * @return array
@@ -277,7 +269,7 @@ class Shopware_Components_Translation
      * @param int|int[]       $key
      * @param bool            $merge
      *
-     * @return array|mixed
+     * @return array
      */
     public function readBatchWithFallback($language, $fallback, $type, $key = 1, $merge = true)
     {
@@ -339,8 +331,6 @@ class Shopware_Components_Translation
      *
      * @param array $data
      * @param bool  $merge
-     *
-     * @throws Zend_Db_Adapter_Exception
      */
     public function writeBatch($data, $merge = false)
     {
@@ -362,14 +352,13 @@ class Shopware_Components_Translation
     }
 
     /**
-     * Saves translation data to the storage.
+     * Saves translation data to the storage
      *
      * @param string|int $language
      * @param string     $type
+     * @param array|null $data
      * @param int        $key
      * @param bool       $merge
-     *
-     * @throws \Zend_Db_Adapter_Exception
      */
     public function write($language, $type, $key = 1, $data = null, $merge = false)
     {
@@ -387,7 +376,7 @@ class Shopware_Components_Translation
             $data = $tmp;
         }
 
-        $data = $this->filterData($type, $data, $merge ? $key : null);
+        $serializedData = $this->filterData($type, $data, $merge ? $key : null);
 
         if (!empty($data)) {
             $sql = '
@@ -401,7 +390,7 @@ class Shopware_Components_Translation
                 $sql,
                 [
                     ':type' => $type,
-                    ':data' => $data,
+                    ':data' => $serializedData,
                     ':key' => $merge ? 1 : $key,
                     ':language' => $language,
                 ]
@@ -423,16 +412,14 @@ class Shopware_Components_Translation
             );
         }
         if ($type === 'article') {
-            $this->fixArticleTranslation($language, $key, $data);
+            $this->fixArticleTranslation($language, $key, $serializedData);
         }
     }
 
     /**
-     * Translates an order by translating its document types, payment and dispatch methods.
-     *
-     * @return array
+     * Translates an order by translating it's document types, payment and dispatch methods.
      */
-    public function translateOrders(array $orders, ?int $language, ?int $fallback): array
+    public function translateOrders(array $orders, ?int $language = null, ?int $fallback = null): array
     {
         $documentTypes = [];
         $paymentMethods = [];
@@ -440,11 +427,16 @@ class Shopware_Components_Translation
 
         // Extract documents, payment and dispatch methods
         foreach ($orders as $order) {
-            $orderDocuments = $order['documents'];
-            $dispatchMethods[$order['dispatch']['id']] = $order['dispatch'];
-            $paymentMethods[$order['payment']['id']] = $order['payment'];
-            foreach ($orderDocuments as $documentIndex => $document) {
-                $documentTypes[$document['type']['id']] = $document['type'];
+            if (array_key_exists('dispatch', $order)) {
+                $dispatchMethods[$order['dispatch']['id']] = $order['dispatch'];
+            }
+            if (array_key_exists('payment', $order)) {
+                $paymentMethods[$order['payment']['id']] = $order['payment'];
+            }
+            if (array_key_exists('documents', $order)) {
+                foreach ($order['documents'] as $documentIndex => $document) {
+                    $documentTypes[$document['type']['id']] = $document['type'];
+                }
             }
         }
 
@@ -456,7 +448,7 @@ class Shopware_Components_Translation
         // Save the translated objects
         foreach ($orders as &$order) {
             $orderDocuments = $order['documents'];
-            for ($documentCounter = 0; $documentCounter < count($orderDocuments); $documentCounter += 1) {
+            for ($documentCounter = 0, $orderDocumentsCount = count($orderDocuments); $documentCounter < $orderDocumentsCount; ++$documentCounter) {
                 $type = $orderDocuments[$documentCounter]['type'];
                 $order['documents'][$documentCounter]['type'] = $translatedDocumentTypes[$type['id']];
             }
@@ -478,13 +470,14 @@ class Shopware_Components_Translation
      *
      * @return array Translated dispatch methods
      */
-    public function translateDispatchMethods(array $dispatchMethods, ?int $language, ?int $fallback): array
+    public function translateDispatchMethods(array $dispatchMethods, ?int $language = null, ?int $fallback = null): array
     {
         $translator = $this->getObjectTranslator('config_dispatch', $language, $fallback);
 
-        $translatedDispatchMethods = array_map(function ($dispatchMethod) use ($translator) {
-            return $translator->translateObjectProperty($dispatchMethod, 'dispatch_name', 'name');
-        }, $dispatchMethods);
+        $translatedDispatchMethods = array_map(
+            static function ($dispatchMethod) use ($translator) {
+                return $translator->translateObjectProperty($dispatchMethod, 'dispatch_name', 'name');
+            }, $dispatchMethods);
 
         return $translatedDispatchMethods;
     }
@@ -494,13 +487,14 @@ class Shopware_Components_Translation
      *
      * @return array Translated documents
      */
-    public function translateDocuments(array $documents, ?int $language, ?int $fallback): array
+    public function translateDocuments(array $documents, ?int $language = null, ?int $fallback = null): array
     {
         $translator = $this->getObjectTranslator('documents', $language, $fallback);
 
-        $translatedDocuments = array_map(function ($document) use ($translator) {
-            return $translator->translateObjectProperty($document, 'name');
-        }, $documents);
+        $translatedDocuments = array_map(
+            static function ($document) use ($translator) {
+                return $translator->translateObjectProperty($document, 'name');
+            }, $documents);
 
         return $translatedDocuments;
     }
@@ -510,20 +504,21 @@ class Shopware_Components_Translation
      *
      * @return array Translated payments
      */
-    public function translatePaymentMethods(array $payments, ?int $language, ?int $fallback): array
+    public function translatePaymentMethods(array $payments, ?int $language = null, ?int $fallback = null): array
     {
         $translator = $this->getObjectTranslator('config_payment', $language, $fallback);
 
-        $translatedPayments = array_map(function ($payment) use ($translator) {
-            $translatedPayment = $translator->translateObjectProperty($payment, 'description');
-            $translatedPayment = $translator->translateObjectProperty(
+        $translatedPayments = array_map(
+            static function ($payment) use ($translator) {
+                $translatedPayment = $translator->translateObjectProperty($payment, 'description');
+                $translatedPayment = $translator->translateObjectProperty(
                 $translatedPayment,
                 'additionalDescription',
                 'additionaldescription'
             );
 
-            return $translatedPayment;
-        }, $payments);
+                return $translatedPayment;
+            }, $payments);
 
         return $translatedPayments;
     }
@@ -531,7 +526,7 @@ class Shopware_Components_Translation
     /**
      * Creates an object translator for a specific type of translatable object.
      */
-    public function getObjectTranslator(string $type, ?int $language, ?int $fallback): ObjectTranslator
+    public function getObjectTranslator(string $type, ?int $language = null, ?int $fallback = null): ObjectTranslator
     {
         // Check if the languages are specified and query them if not
         if ($language === null) {
@@ -551,23 +546,19 @@ class Shopware_Components_Translation
 
     /**
      * Loads the id of the fallback language.
-     *
-     * @param int $currentLocaleId
-     *
-     * @return int
      */
-    public function getFallbackLocaleId($currentLocaleId)
+    public function getFallbackLocaleId(int $currentLocaleId): int
     {
         if ($currentLocaleId === 1) {
             return 1;
         }
 
         $fallback = $this->connection->fetchColumn(
-            "SELECT id FROM s_core_locales WHERE locale = 'en_GB'"
+            'SELECT id FROM s_core_locales WHERE locale = "en_GB"'
         );
 
         // Fallback onto German if en_GB does not exist
-        return intval($fallback[0]) ?: 1;
+        return ((int) $fallback[0]) ?: 1;
     }
 
     /**
@@ -685,12 +676,7 @@ class Shopware_Components_Translation
         }
     }
 
-    /**
-     * @param string $data
-     *
-     * @return array
-     */
-    private function prepareArticleData($data)
+    private function prepareArticleData(string $data): array
     {
         $data = unserialize($data);
         if (!empty($data['txtlangbeschreibung']) && strlen($data['txtlangbeschreibung']) > 1000) {
@@ -722,14 +708,7 @@ class Shopware_Components_Translation
         return $data;
     }
 
-    /**
-     * @param int $productId
-     * @param int $languageId
-     *
-     * @throws \Doctrine\DBAL\DBALException
-     * @throws \Exception
-     */
-    private function addProductTranslation($productId, $languageId, array $data)
+    private function addProductTranslation(int $productId, int $languageId, array $data): void
     {
         $query = $this->connection->executeQuery(
             'SELECT id FROM s_articles_translations WHERE articleID = :articleId AND languageID = :languageId LIMIT 1',
@@ -744,13 +723,7 @@ class Shopware_Components_Translation
         }
     }
 
-    /**
-     * @param int $productId
-     * @param int $languageId
-     *
-     * @throws \Exception
-     */
-    private function insertProductTranslation($productId, $languageId, array $data)
+    private function insertProductTranslation(int $productId, int $languageId, array $data): void
     {
         $data = array_merge($data, ['languageID' => $languageId, 'articleID' => $productId]);
 
@@ -763,12 +736,7 @@ class Shopware_Components_Translation
         $query->execute();
     }
 
-    /**
-     * @param int $id
-     *
-     * @throws \Exception
-     */
-    private function updateProductTranslation($id, array $data)
+    private function updateProductTranslation(int $id, array $data): void
     {
         $query = $this->connection->createQueryBuilder();
 

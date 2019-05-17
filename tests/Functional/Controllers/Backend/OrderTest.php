@@ -235,36 +235,36 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
         $responseStr = preg_replace('/(new Date\([-0-9]+\))/', '"$1"', $response->getBody());
 
         $responseJSON = json_decode($responseStr, true);
-        $this->assertEquals(true, $responseJSON['success']);
+        static::assertEquals(true, $responseJSON['success']);
 
         foreach ($responseJSON['data'] as $dataElement) {
             switch ($dataElement['payment']['id']) {
                 case 2:
-                    $this->assertEquals(
+                    static::assertEquals(
                         'Debit',
                         $dataElement['payment']['description']
                     );
                     break;
                 case 3:
-                    $this->assertEquals(
+                    static::assertEquals(
                         'Cash on delivery',
                         $dataElement['payment']['description']
                     );
                     break;
                 case 4:
-                    $this->assertEquals(
+                    static::assertEquals(
                         'Invoice',
                         $dataElement['payment']['description']
                     );
                     break;
                 case 5:
-                    $this->assertEquals(
+                    static::assertEquals(
                         'Paid in advance',
                         $dataElement['payment']['description']
                     );
                     break;
                 case 6:
-                    $this->assertEquals(
+                    static::assertEquals(
                         'SEPA',
                         $dataElement['payment']['description']
                     );
@@ -310,7 +310,7 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
         $response = $this->dispatch('backend/Order/loadStores?' . $getString);
 
         $responseJSON = json_decode($response->getBody(), true);
-        $this->assertEquals(true, $responseJSON['success']);
+        static::assertEquals(true, $responseJSON['success']);
         $data = $responseJSON['data'];
 
         // Test for fallback value
@@ -330,7 +330,6 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
     /**
      * Tests a data array for an entry with a specified key value pair
      *
-     * @param mixed  $expected
      * @param string $dataKey
      * @param int    $id
      * @param array  $data
@@ -341,7 +340,7 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
     {
         foreach ($data as $entry) {
             if ($entry['id'] === $id) {
-                $this->assertEquals($expected, $entry[$dataKey]);
+                static::assertEquals($expected, $entry[$dataKey]);
 
                 return;
             }

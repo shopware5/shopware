@@ -45,7 +45,7 @@ class ObjectTranslator
     private $loaded;
 
     /**
-     * @var
+     * @var array
      */
     private $translations;
 
@@ -59,13 +59,7 @@ class ObjectTranslator
      */
     private $type;
 
-    /**
-     * @param \Shopware_Components_Translation $translationService
-     * @param string                           $type
-     * @param int                              $language
-     * @param int                              $fallback
-     */
-    public function __construct(\Shopware_Components_Translation $translationService, $type, $language, $fallback)
+    public function __construct(\Shopware_Components_Translation $translationService, string $type, int $language, int $fallback)
     {
         $this->language = $language;
         $this->loaded = false;
@@ -76,15 +70,8 @@ class ObjectTranslator
 
     /**
      * Translates an array property.
-     *
-     * @param array  $object
-     * @param string $translationIndex
-     * @param string $objectIndex
-     * @param string $fallback
-     *
-     * @return array
      */
-    public function translateObjectProperty(array $object, $translationIndex, $objectIndex = null, $fallback = null)
+    public function translateObjectProperty(array $object, string $translationIndex, ?string $objectIndex = null, ?string $fallback = null): array
     {
         if (!$this->areTranslationsLoaded()) {
             $this->loadTranslations();
@@ -105,7 +92,7 @@ class ObjectTranslator
     /**
      * Loads all translations.
      */
-    private function loadTranslations()
+    private function loadTranslations(): void
     {
         $this->translations = $this->translationService->readBatchWithFallback($this->language, $this->fallback, $this->type);
         $this->loaded = true;
@@ -113,10 +100,8 @@ class ObjectTranslator
 
     /**
      * Determines if the translations have been loaded.
-     *
-     * @return bool
      */
-    private function areTranslationsLoaded()
+    private function areTranslationsLoaded(): bool
     {
         return $this->loaded;
     }
