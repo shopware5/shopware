@@ -28,7 +28,7 @@ use Shopware\Models\Banner\Banner;
 /**
  * Deprecated Shopware Class that handles marketing related functions
  */
-class sMarketing
+class sMarketing implements \Enlight_Hook
 {
     /**
      * Pointer to Shopware-Core-public functions

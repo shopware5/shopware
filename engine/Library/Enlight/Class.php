@@ -150,11 +150,13 @@ abstract class Enlight_Class
         if (empty($class)) {
             $class = get_called_class();
         }
+
         if (is_object($class)) {
             $class = get_class($class);
         } elseif (!class_exists($class)) {
             throw new Enlight_Exception('Class ' . $class . ' does not exist and could not be loaded');
         }
+
         if (in_array('Enlight_Hook', class_implements($class))) {
             $class = Shopware()->Hooks()->getProxy($class);
         }

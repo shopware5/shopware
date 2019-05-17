@@ -39,7 +39,7 @@ use Shopware\Models\Customer\Customer;
  * Shopware Class that handles several
  * functions around customer / order related things
  */
-class sAdmin
+class sAdmin implements \Enlight_Hook
 {
     /**
      * Check if current active shop has own registration

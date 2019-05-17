@@ -93,8 +93,6 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
     /**
      * Returns the proxy of the given class. If the proxy is not already created
      * it is generated and written.
-     * If the proxy is already created it is drawn by the
-     * Shopware()->Hooks()->getHooks($class) method.
      *
      * @param  string    $class
      * @throws Exception
@@ -102,6 +100,11 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
      */
     public function getProxy($class)
     {
+        if (!in_array('Enlight_Hook', class_implements($class))) {
+            trigger_error(sprintf('The class "%s" does not implement the Enlight_Hook Interface. It will be thrown in 5.8.', $class), E_USER_WARNING);
+            //throw new Enlight_Hook_Exception('The class' . $class . ' does not implement Enlight_Hook interface.');
+        }
+
         $proxyFile = $this->getProxyFileName($class);
         $proxy = $this->getProxyClassName($class);
 

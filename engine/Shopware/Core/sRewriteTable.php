@@ -36,7 +36,7 @@ use Shopware\Models\Shop\Shop;
 /**
  * Deprecated Shopware Class that handles url rewrites
  */
-class sRewriteTable
+class sRewriteTable implements \Enlight_Hook
 {
     /**
      * @var \sSystem

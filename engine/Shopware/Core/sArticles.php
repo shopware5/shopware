@@ -59,7 +59,7 @@ use Shopware\Models\Media\Repository as MediaRepository;
 /**
  * Shopware Class that handle products
  */
-class sArticles
+class sArticles implements \Enlight_Hook
 {
     /**
      * Pointer to sSystem object
