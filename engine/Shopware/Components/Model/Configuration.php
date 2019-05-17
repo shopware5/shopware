@@ -32,9 +32,13 @@ use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\Common\Cache\RedisCache;
 use Doctrine\Common\Cache\XcacheCache;
 use Doctrine\Common\Proxy\AbstractProxyFactory;
-use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration as BaseConfiguration;
 use Doctrine\ORM\Repository\RepositoryFactory;
+use DoctrineExtensions\Query\Mysql\DateFormat;
+use DoctrineExtensions\Query\Mysql\IfElse;
+use DoctrineExtensions\Query\Mysql\IfNull;
+use DoctrineExtensions\Query\Mysql\Regexp;
+use DoctrineExtensions\Query\Mysql\Replace;
 use Shopware\Components\ShopwareReleaseStruct;
 
 class Configuration extends BaseConfiguration
@@ -78,15 +82,11 @@ class Configuration extends BaseConfiguration
 
         $this->setAttributeDir($options['attributeDir']);
 
-        Type::overrideType('datetime', \Shopware\Components\Model\DBAL\Types\DateTimeStringType::class);
-        Type::overrideType('date', \Shopware\Components\Model\DBAL\Types\DateStringType::class);
-        Type::overrideType('array', \Shopware\Components\Model\DBAL\Types\AllowInvalidArrayType::class);
-
-        $this->addCustomStringFunction('DATE_FORMAT', \Shopware\Components\Model\Query\Mysql\DateFormat::class);
-        $this->addCustomStringFunction('IFNULL', \Shopware\Components\Model\Query\Mysql\IfNull::class);
-        $this->addCustomStringFunction('IF', \Shopware\Components\Model\Query\Mysql\IfElse::class);
-        $this->addCustomStringFunction('RegExp', \Shopware\Components\Model\Query\Mysql\RegExp::class);
-        $this->addCustomStringFunction('Replace', \Shopware\Components\Model\Query\Mysql\Replace::class);
+        $this->addCustomStringFunction('DATE_FORMAT', DateFormat::class);
+        $this->addCustomStringFunction('IFNULL', IfNull::class);
+        $this->addCustomStringFunction('IF', IfElse::class);
+        $this->addCustomStringFunction('RegExp', Regexp::class);
+        $this->addCustomStringFunction('Replace', Replace::class);
 
         $this->release = $release;
 

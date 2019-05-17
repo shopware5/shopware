@@ -462,7 +462,7 @@ class Customer extends LazyFetchModelEntity
     private $lastname;
 
     /**
-     * @var string
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="birthday", type="date", nullable=true)
      */
@@ -1331,7 +1331,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return string
+     * @return \DateTimeInterface
      */
     public function getBirthday()
     {
@@ -1343,8 +1343,8 @@ class Customer extends LazyFetchModelEntity
      */
     public function setBirthday($birthday = null)
     {
-        if ($birthday instanceof \DateTimeInterface) {
-            $birthday = $birthday->format('Y-m-d');
+        if (!$birthday instanceof \DateTimeInterface && $birthday !== null) {
+            $birthday = new \DateTime($birthday);
         }
 
         $this->birthday = $birthday;

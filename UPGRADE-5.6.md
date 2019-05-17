@@ -227,6 +227,9 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Deprecated `Shopware\Components\Model\Query\Mysql\IfNull` in 5.6, will be removed with 5.7. Please use `DoctrineExtensions\Query\Mysql\IfNull` instead.
 * Deprecated `Shopware\Components\Model\Query\Mysql\RegExp` in 5.6, will be removed with 5.7. Please use `DoctrineExtensions\Query\Mysql\RegExp` instead.
 * Deprecated `Shopware\Components\Model\Query\Mysql\Replace` in 5.6, will be removed with 5.7. Please use `DoctrineExtensions\Query\Mysql\Replace` instead.
+* Deprecated `Shopware\Components\Model\DBAL\Types\DateTimeStringType` in 5.6, will be removed with 5.7. Please use `Doctrine\DBAL\Types\DateTimeType` instead.
+* Deprecated `Shopware\Components\Model\DBAL\Types\AllowInvalidArrayType` in 5.6, will be removed with 5.7. Please use `Doctrine\DBAL\Types\ArrayType` instead.
+* Deprecated `Shopware\Components\Model\DBAL\Types\DateTimeStringType` in 5.6, will be removed with 5.7. Please use `Doctrine\DBAL\Types\DateTimeType` instead.
 * Deprecated `Shopware\Components\Api\Manager::getResource`. It will be removed in 5.8, inject resources instead
 * Deprecated usage of `shopware.api` DI prefix without tag `shopware.api_resource`
 * Deprecated `Shopware\Models\Shop\Shop::registerResources`. It will be removed in 5.8, use `Shopware\Components\ShopRegistrationService` instead

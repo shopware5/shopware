@@ -29,9 +29,7 @@ use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 
 /**
- * Type that maps an SQL DATETIME/TIMESTAMP to a PHP DateTime object.
- *
- * @licence   This code was originally released under the MIT license
+ * @deprecated in 5.6, will be removed with 5.7. Please use `Doctrine\DBAL\Types\DateTimeType` instead.
  */
 class DateTimeStringType extends Type
 {

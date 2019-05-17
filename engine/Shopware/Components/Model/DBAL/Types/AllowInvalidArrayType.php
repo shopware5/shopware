@@ -28,9 +28,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
 /**
- * Type that maps a PHP array to a clob SQL type.
- *
- * @licence   This code was originally released under the MIT license
+ * @deprecated in 5.6, will be removed with 5.7. Please use `Doctrine\DBAL\Types\ArrayType` instead.
  */
 class AllowInvalidArrayType extends Type
 {
