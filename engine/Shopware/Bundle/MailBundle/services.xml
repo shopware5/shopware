@@ -24,13 +24,13 @@
 
         <service id="shopware_mail.filter.administrative_mail_filter"
                  class="Shopware\Bundle\MailBundle\Service\Filter\AdministrativeMailFilter">
-            <argument type="expression">'shopware_mail.filter.administrative_mail_filter' in service('config').offsetGet('mailLogActiveFilters')</argument>
+            <argument type="expression">'AdministrativeMailFilter' in service('config').offsetGet('mailLogActiveFilters')</argument>
             <tag name="shopware_mail.filter"/>
         </service>
 
         <service id="shopware_mail.filter.newsletter_mail_filter"
                  class="Shopware\Bundle\MailBundle\Service\Filter\NewsletterMailFilter">
-            <argument type="expression">'shopware_mail.filter.newsletter_mail_filter' in service('config').offsetGet('mailLogActiveFilters')</argument>
+            <argument type="expression">'NewsletterMailFilter' in service('config').offsetGet('mailLogActiveFilters')</argument>
             <tag name="shopware_mail.filter"/>
         </service>
 
@@ -78,7 +78,8 @@
             <argument type="service" id="config"/>
             <argument type="service" id="config_writer"/>
             <argument type="service" id="shopware.cache_manager"/>
-            <argument type="tagged" tag="shopware.mail_bundle.filter"/>
+            <argument type="service" id="snippets" />
+            <argument type="tagged" tag="shopware_mail.filter"/>
 
             <tag name="shopware.controller" module="backend" controller="MailLog"/>
         </service>

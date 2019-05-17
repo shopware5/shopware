@@ -44,11 +44,11 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `\Shopware\Models\Mail\Contact`
     * `\Shopware\Models\Mail\LogRepository`
 * Added the following new services to enable e-mail logging
-    * `shopware.mail_bundle.log_entry_builder`
-    * `shopware.mail_bundle.log_entry_mail_builder`
-    * `shopware.mail_bundle.log_service`
-    * `shopware.mail_bundle.filter.administrative_mail_filter`
-    * `shopware.mail_bundle.filter.newsletter_mail_filter`
+    * `shopware_mail.log_entry_builder`
+    * `shopware_mail.log_entry_mail_builder`
+    * `shopware_mail.log_service`
+    * `shopware_mail.filter.administrative_mail_filter`
+    * `shopware_mail.filter.newsletter_mail_filter`
 * Added the `MailLogCleanup` cron job which clears old entries from the e-mail log
 * Added new basic settings in the mailer section
     * `mailLogActive`
@@ -62,7 +62,6 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added new backend controllers:
   * `MailLog`
   * `MailLogContact`
-* Added `AvailableFiltersCompilerPass` so all available filters for the mail log can be listed by reading the `shopware.mail_bundle.available_filters` container parameter
 * Added function to rename or overwrite if esd file already exists
 * Added ExtJs developer mode, to provide better warnings and errors to developers
 * Added `Enlight_Hook_Exception`. It will be thrown when the HookManger gets a class name which not implements `Enlight_Hook` in 5.8.
