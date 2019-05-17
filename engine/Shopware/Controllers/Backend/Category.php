@@ -191,7 +191,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             }
         } else {
             $query = $this->Request()->getParam('query');
-            $parents = (bool) $this->Request()->getParam('parents', false);
+            $parents = (bool) $this->Request()->getParam('parents', true);
             $result = $this->getPathByQuery($query, $separator, $parents);
         }
 
