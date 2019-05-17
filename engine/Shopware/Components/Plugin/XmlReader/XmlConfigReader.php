@@ -121,6 +121,8 @@ class XmlConfigReader extends XmlReaderBase
                 $item->getElementsByTagName('store')
             )) {
                 $element['store'] = $store;
+            } elseif ($item->getElementsByTagName('store')->length) {
+                $element['store'] = $item->getElementsByTagName('store')->item(0)->nodeValue;
             }
 
             $elements[] = $element;

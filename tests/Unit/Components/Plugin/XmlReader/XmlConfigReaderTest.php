@@ -94,6 +94,16 @@ class XmlConfigReaderTest extends TestCase
         static::assertArrayHasKey('store', $element2);
     }
 
+    public function testConfigReadingWithExtJsStore(): void
+    {
+        $result = $this->readFile('config_store_extjs.xml');
+
+        $element1 = $result['elements'][0];
+
+        static::assertArrayHasKey('store', $element1);
+        static::assertEquals('Shopware.apps.Base.store.Category', $element1['store']);
+    }
+
     public function testParseElementNodeListEmpty(): void
     {
         $reflection = new \ReflectionClass(get_class($this->configReader));
