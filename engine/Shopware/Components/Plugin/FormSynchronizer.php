@@ -67,7 +67,7 @@ class FormSynchronizer
             $options = [
                 'scope' => $element['scope'],
                 'label' => $element['label']['en'],
-                'value' => $element['value'],
+                'value' => $element['value'] ?? null,
                 'required' => $element['isRequired'],
                 'position' => $key,
             ] + $element['options'];
