@@ -45,7 +45,7 @@ class TemplateVarCollector implements CollectorInterface
 
     public function start()
     {
-        $event = new \Enlight_Event_EventHandler(
+        $event = new \Enlight_Event_Handler_Default(
             'Enlight_Plugins_ViewRenderer_PreRender',
             [$this, 'onAfterRenderView']
         );
