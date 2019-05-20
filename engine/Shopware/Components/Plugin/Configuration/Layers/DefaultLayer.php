@@ -38,10 +38,7 @@ class DefaultLayer implements ConfigurationLayerInterface
         $this->connection = $connection;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function readValues($shopId, $pluginName)
+    public function readValues(?int $shopId, string $pluginName): array
     {
         $pluginNameKey = 'pluginName' . crc32($pluginName);
         $builder = $this->connection->createQueryBuilder();
@@ -73,10 +70,7 @@ class DefaultLayer implements ConfigurationLayerInterface
         return AbstractShopConfigurationLayer::unserializeArray($values);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function writeValues($shopId, $pluginName, array $data)
+    public function writeValues(?int $shopId, string $pluginName, array $data): void
     {
         $baseException = new LogicException('Cannot change values on default layer');
         throw new WriterException($baseException);

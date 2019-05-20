@@ -24,13 +24,12 @@
 
 namespace Shopware\Components\Plugin;
 
-use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\Configuration\WriterInterface;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Shop;
 
 /**
- * @deprecated Use `shopware.plugin.configuration.writer` instead
+ * @deprecated since 5.6 and removed in 5.8. Use `shopware.plugin.configuration.writer` instead
  */
 class ConfigWriter
 {
@@ -45,11 +44,9 @@ class ConfigWriter
     }
 
     /**
-     * @param Plugin $plugin
-     * @param array  $elements
-     * @param Shop   $shop
+     * @param array $elements
      *
-     * @deprecated Use `shopware.plugin.configuration.writer`::setByPluginName instead
+     * @deprecated Use since 5.6 and removed in 5.8. `shopware.plugin.configuration.writer`::setByPluginName instead
      */
     public function savePluginConfig(Plugin $plugin, $elements, Shop $shop)
     {
@@ -61,7 +58,7 @@ class ConfigWriter
      *
      * @throws \Exception
      *
-     * @deprecated Use `shopware.plugin.configuration.writer`::setByPluginName instead
+     * @deprecated Use since 5.6 and removed in 5.8. `shopware.plugin.configuration.writer`::setByPluginName instead
      */
     public function saveConfigElement(Plugin $plugin, $name, $value, Shop $shop)
     {

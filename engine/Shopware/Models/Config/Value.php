@@ -122,8 +122,6 @@ class Value extends ModelEntity
     }
 
     /**
-     * Get shop
-     *
      * @return int
      */
     public function getShopId()
@@ -146,8 +144,6 @@ class Value extends ModelEntity
     }
 
     /**
-     * Set value
-     *
      * @return Value
      */
     public function setValue($value)

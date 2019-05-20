@@ -105,6 +105,8 @@ class LegacyConfigWriterTest extends TestCase
             'capability_install' => 0,
             'capability_enable' => 1,
             'capability_secure_uninstall' => 1,
+        ], [
+            'added' => 'datetime',
         ]);
         $this->plugin = $this->modelManager->find(Plugin::class, $this->connection->lastInsertId());
 
@@ -175,12 +177,12 @@ class LegacyConfigWriterTest extends TestCase
     {
         $this->configWriter->saveConfigElement($this->plugin, self::NUMBER_CONFIGURATION_NAME, 2, $this->installationShop);
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
@@ -190,17 +192,17 @@ class LegacyConfigWriterTest extends TestCase
     {
         $this->configWriter->saveConfigElement($this->plugin, self::NUMBER_CONFIGURATION_NAME, 2, $this->subShop);
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShop),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
@@ -210,22 +212,22 @@ class LegacyConfigWriterTest extends TestCase
     {
         $this->configWriter->saveConfigElement($this->plugin, self::NUMBER_CONFIGURATION_NAME, 2, $this->languageShop);
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShop),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShop),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
@@ -236,22 +238,22 @@ class LegacyConfigWriterTest extends TestCase
         $this->configWriter->saveConfigElement($this->plugin, self::NUMBER_CONFIGURATION_NAME, 2, $this->installationShop);
         $this->configWriter->saveConfigElement($this->plugin, self::NUMBER_CONFIGURATION_NAME, self::ELEMENT_DEFAULT_VALUE, $this->subShop);
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
-            [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
+            [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShop),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShop),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
@@ -262,22 +264,22 @@ class LegacyConfigWriterTest extends TestCase
         $this->configWriter->saveConfigElement($this->plugin, self::NUMBER_CONFIGURATION_NAME, 2, $this->subShop);
         $this->configWriter->saveConfigElement($this->plugin, self::NUMBER_CONFIGURATION_NAME, self::ELEMENT_DEFAULT_VALUE, $this->languageShop);
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShop),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShop),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShop),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );

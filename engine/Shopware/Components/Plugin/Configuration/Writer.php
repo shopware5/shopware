@@ -41,6 +41,6 @@ class Writer implements WriterInterface
      */
     public function setByPluginName($pluginName, array $elements, $shopId = 1)
     {
-        return $this->lastLayer->writeValues($shopId, $pluginName, $elements);
+        $this->lastLayer->writeValues($shopId, $pluginName, $elements);
     }
 }

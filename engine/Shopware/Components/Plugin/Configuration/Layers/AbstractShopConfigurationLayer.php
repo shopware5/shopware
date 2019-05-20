@@ -53,26 +53,17 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
         $this->parent = $parent;
     }
 
-    /**
-     * @return Connection
-     */
-    public function getConnection()
+    public function getConnection(): Connection
     {
         return $this->connection;
     }
 
-    /**
-     * @return ConfigurationLayerInterface
-     */
-    public function getParent()
+    public function getParent(): ConfigurationLayerInterface
     {
         return $this->parent;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function readValues($shopId, $pluginName)
+    public function readValues(?int $shopId, string $pluginName): array
     {
         $builder = $this->getConnection()->createQueryBuilder();
 
@@ -111,28 +102,27 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
         return $this->mergeValues($this->getParent()->readValues($shopId, $pluginName), $this->unserializeArray($values));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function writeValues($shopId, $pluginName, array $data)
+    public function writeValues(?int $shopId, string $pluginName, array $data): void
     {
         if (!$this->isLayerResponsibleForShopId($shopId)) {
-            return $this->getParent()->writeValues($shopId, $pluginName, $data);
+            $this->getParent()->writeValues($shopId, $pluginName, $data);
+
+            return;
         }
 
         $pluginRepository = $this->modelManager->getRepository(Plugin::class);
         $formRepository = $this->modelManager->getRepository(Form::class);
 
-        /** @var Plugin $plugin */
+        /** @var Plugin|null $plugin */
         $plugin = $pluginRepository->findOneBy(['name' => $pluginName]);
         if (is_null($plugin)) {
             throw new WriterException(sprintf('Plugin by name "%s" not found.', $pluginName));
         }
 
-        /** @var $form Form */
+        /** @var Form|null $form */
         $form = $formRepository->findOneBy(['pluginId' => $plugin->getId()]);
         if (is_null($form)) {
-            throw new WriterException(sprintf('Plugin formular by plugin id "%i" not found.', $plugin->getId()));
+            throw new WriterException(sprintf('Plugin formular by plugin id "%u" not found.', $plugin->getId()));
         }
 
         $parentValues = $this->getParent()->readValues($shopId, $pluginName);
@@ -149,35 +139,29 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
     }
 
     /**
-     * @param int|null $shopId
-     * @param Form     $form
-     * @param string   $name
-     * @param mixed    $value
-     * @param mixed    $parentValue
-     *
      * @throws WriterException
      */
-    public function writeValue($shopId, $form, $name, $value, $parentValue)
+    public function writeValue(?int $shopId, Form $form, string $name, $value, $parentValue)
     {
         $elementRepository = $this->modelManager->getRepository(Element::class);
         $valueRepository = $this->modelManager->getRepository(Value::class);
 
-        /** @var $element Element */
+        /** @var Element|null $element */
         $element = $elementRepository->findOneBy(['form' => $form, 'name' => $name]);
-        if (!$element) {
+        if (is_null($element)) {
             throw new WriterException(sprintf('Config element "%s" not found.', $name));
         }
 
         if ($element->getScope() == 0 && $shopId !== 1) {
-            $message = sprintf("Element '%s' is not writeable for shop %i", $element->getName(), $shopId);
+            $message = sprintf("Element '%s' is not writeable for shop %u", $element->getName(), $shopId);
             $baseException = new InvalidArgumentException($message);
             throw new WriterException('Element is not valid', 0, $baseException);
         }
 
-        /** @var Value $valueModel */
+        /** @var Value|null $valueModel */
         $valueModel = $valueRepository->findOneBy(['shopId' => $shopId, 'element' => $element]);
 
-        if (!$valueModel) {
+        if (is_null($valueModel)) {
             if ($value === $parentValue || $value === null) {
                 return;
             }
@@ -212,12 +196,7 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
         }
     }
 
-    /**
-     * @param array $values
-     *
-     * @return array
-     */
-    public static function unserializeArray(array $values)
+    public static function unserializeArray(array $values): array
     {
         $result = [];
 
@@ -228,13 +207,7 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
         return $result;
     }
 
-    /**
-     * @param array $old
-     * @param array $new
-     *
-     * @return array
-     */
-    protected function mergeValues(array $old, array $new)
+    protected function mergeValues(array $old, array $new): array
     {
         foreach ($new as $key => $value) {
             if (!array_key_exists($key, $old) || !is_null($value)) {
@@ -245,19 +218,7 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
         return $old;
     }
 
-    /**
-     * @param QueryBuilder $builder
-     * @param int|null     $shopId
-     * @param string       $pluginName
-     *
-     * @return QueryBuilder
-     */
-    abstract protected function configureQuery(QueryBuilder $builder, $shopId, $pluginName);
+    abstract protected function configureQuery(QueryBuilder $builder, ?int $shopId, string $pluginName): QueryBuilder;
 
-    /**
-     * @param int|null $shopId
-     *
-     * @return bool
-     */
-    abstract protected function isLayerResponsibleForShopId($shopId);
+    abstract protected function isLayerResponsibleForShopId(?int $shopId): bool;
 }

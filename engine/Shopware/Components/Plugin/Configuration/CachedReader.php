@@ -24,20 +24,49 @@
 
 namespace Shopware\Components\Plugin\Configuration;
 
+use Psr\SimpleCache\CacheInterface;
+use Psr\SimpleCache\InvalidArgumentException;
 use Shopware\Components\Plugin\Configuration\Layers\ConfigurationLayerInterface;
 
-class Reader implements ReaderInterface
+class CachedReader implements ReaderInterface
 {
     /** @var ConfigurationLayerInterface */
     private $layer;
 
-    public function __construct(ConfigurationLayerInterface $lastLayer)
+    /** @var CacheInterface */
+    private $cache;
+
+    public function __construct(ConfigurationLayerInterface $lastLayer, CacheInterface $cache)
     {
         $this->layer = $lastLayer;
+        $this->cache = $cache;
     }
 
     public function getByPluginName(string $pluginName, ?int $shopId = null): array
     {
-        return $this->layer->readValues($shopId, $pluginName);
+        $cacheKey = $this->buildCacheKey($pluginName, $shopId);
+
+        try {
+            if ($this->cache->has($cacheKey)) {
+                return (array) $this->cache->get($cacheKey);
+            }
+        } catch (InvalidArgumentException $e) {
+            // progress normally
+        }
+
+        $readValues = $this->layer->readValues($shopId, $pluginName);
+
+        try {
+            $this->cache->set($cacheKey, $readValues);
+        } catch (InvalidArgumentException $e) {
+            // progress normally
+        }
+
+        return $readValues;
+    }
+
+    public function buildCacheKey(string $pluginName, ?int $shopId = null): string
+    {
+        return $shopId ? $shopId . $pluginName : $pluginName;
     }
 }

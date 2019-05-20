@@ -30,22 +30,13 @@ interface ConfigurationLayerInterface
 {
     /**
      * Read the values attached to this layer by shop and plugin name
-     *
-     * @param int|null $shopId
-     * @param string   $pluginName
-     *
-     * @return array
      */
-    public function readValues($shopId, $pluginName);
+    public function readValues(?int $shopId, string $pluginName): array;
 
     /**
      * Write the values attached to this layer by shop and plugin name
      *
-     * @param int|null $shopId
-     * @param string   $pluginName
-     * @param array    $data
-     *
      * @throws WriterException
      */
-    public function writeValues($shopId, $pluginName, array $data);
+    public function writeValues(?int $shopId, string $pluginName, array $data): void;
 }

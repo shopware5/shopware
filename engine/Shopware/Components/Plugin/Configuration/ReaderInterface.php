@@ -26,11 +26,5 @@ namespace Shopware\Components\Plugin\Configuration;
 
 interface ReaderInterface
 {
-    /**
-     * @param string   $pluginName
-     * @param int|null $shop
-     *
-     * @return array
-     */
-    public function getByPluginName($pluginName, $shopId = null);
+    public function getByPluginName(string $pluginName, ?int $shopId = null): array;
 }

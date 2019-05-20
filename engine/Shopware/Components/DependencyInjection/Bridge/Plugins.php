@@ -40,7 +40,7 @@ class Plugins
     ) {
         $pluginManager = new \Enlight_Plugin_PluginManager($application);
 
-        $configReader = $container->get(\Shopware\Components\Plugin\CachedConfigReader::class);
+        $configReader = $container->get('shopware.plugin.configuration.cached_reader');
 
         foreach (['Core', 'Frontend', 'Backend'] as $namespace) {
             $namespace = new \Shopware_Components_Plugin_Namespace(

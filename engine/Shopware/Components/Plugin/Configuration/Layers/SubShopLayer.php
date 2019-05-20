@@ -28,20 +28,18 @@ use Doctrine\DBAL\Query\QueryBuilder;
 
 class SubShopLayer extends AbstractShopConfigurationLayer
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function readValues($shopId, $pluginName)
+    public function readValues(?int $shopId, string $pluginName): array
     {
-        return is_null($shopId) ? [] : parent::readValues($shopId, $pluginName);
+        if (is_null($shopId)) {
+            return $this->getParent()->readValues($shopId, $pluginName);
+        }
+
+        return parent::readValues($shopId, $pluginName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function configureQuery(QueryBuilder $builder, $shopId, $pluginName)
+    protected function configureQuery(QueryBuilder $builder, ?int $shopId, string $pluginName): QueryBuilder
     {
-        $shopIdKey = 'shopId' . crc32($shopId);
+        $shopIdKey = 'shopId' . crc32(strval($shopId ?? ''));
         $pluginNameKey = 'pluginName' . crc32($pluginName);
 
         return $builder
@@ -58,10 +56,7 @@ class SubShopLayer extends AbstractShopConfigurationLayer
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function isLayerResponsibleForShopId($shopId)
+    protected function isLayerResponsibleForShopId(?int $shopId): bool
     {
         $queryBuilder = $this->getConnection()->createQueryBuilder();
 

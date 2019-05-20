@@ -24,12 +24,11 @@
 
 namespace Shopware\Components\Plugin;
 
-use Doctrine\DBAL\Connection;
 use Shopware\Components\Plugin\Configuration\ReaderInterface;
 use Shopware\Models\Shop\Shop;
 
 /**
- * @deprecated Use `shopware.plugin.configuration.reader` instead
+ * @deprecated since 5.6 and removed in 5.8. Use `shopware.plugin.configuration.reader` instead
  */
 class DBALConfigReader implements ConfigReader
 {
@@ -48,7 +47,7 @@ class DBALConfigReader implements ConfigReader
      *
      * @return array
      *
-     * @deprecated Use `shopware.plugin.configuration.reader`::getByPluginName instead
+     * @deprecated since 5.6 and removed in 5.8. Use `shopware.plugin.configuration.reader`::getByPluginName instead
      */
     public function getByPluginName($pluginName, Shop $shop = null)
     {

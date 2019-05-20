@@ -90,6 +90,8 @@ class ConfigReaderTest extends TestCase
             'capability_install' => 0,
             'capability_enable' => 1,
             'capability_secure_uninstall' => 1,
+        ], [
+            'added' => 'datetime',
         ]);
         $pluginId = $this->connection->lastInsertId();
 
@@ -157,12 +159,12 @@ class ConfigReaderTest extends TestCase
 
     public function testReadElementDefault()
     {
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
             [self::NUMBER_CONFIGURATION_NAME => 1]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
             [self::NUMBER_CONFIGURATION_NAME => 1]
         );
@@ -176,22 +178,22 @@ class ConfigReaderTest extends TestCase
             'shop_id' => $this->installationShopId,
         ]);
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
@@ -211,22 +213,22 @@ class ConfigReaderTest extends TestCase
             'shop_id' => $this->subShopId,
         ]);
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId),
             [self::NUMBER_CONFIGURATION_NAME => 3]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId),
             [self::NUMBER_CONFIGURATION_NAME => 3]
         );
@@ -252,22 +254,22 @@ class ConfigReaderTest extends TestCase
             'shop_id' => $this->languageShopId,
         ]);
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId),
             [self::NUMBER_CONFIGURATION_NAME => 3]
         );
 
-        $this->assertArraySubset(
+        static::assertArraySubset(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId),
             [self::NUMBER_CONFIGURATION_NAME => 4]
         );

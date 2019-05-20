@@ -28,7 +28,6 @@ interface WriterInterface
 {
     /**
      * @param string $pluginName
-     * @param array  $elements
      * @param int    $shopId
      *
      * @throws WriterException
