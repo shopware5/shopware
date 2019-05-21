@@ -88,4 +88,3 @@ Ext.define('Shopware.apps.Base.store.CategoryTree', {
         }
     }
 }).create();
-

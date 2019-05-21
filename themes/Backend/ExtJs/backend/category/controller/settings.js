@@ -167,4 +167,3 @@ Ext.define('Shopware.apps.Category.controller.Settings', {
     }
 });
 //{/block}
-

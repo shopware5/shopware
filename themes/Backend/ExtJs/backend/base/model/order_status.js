@@ -75,4 +75,3 @@ Ext.define('Shopware.apps.Base.model.OrderStatus', {
     ]
 });
 //{/block}
-

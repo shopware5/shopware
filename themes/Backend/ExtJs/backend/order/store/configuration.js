@@ -50,4 +50,3 @@ Ext.define('Shopware.apps.Order.store.Configuration', {
     model:'Shopware.apps.Order.model.Configuration'
 });
 //{/block}
-

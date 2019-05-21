@@ -361,4 +361,3 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
 });
 
 //{/block}
-

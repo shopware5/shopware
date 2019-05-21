@@ -272,7 +272,3 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
     }
 });
 //{/block}
-
-
-
-

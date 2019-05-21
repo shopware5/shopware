@@ -1,10 +1,15 @@
 {
   "private": true,
   "scripts": {
-    "lint": "eslint Frontend/Responsive/frontend/_public/src/js"
+    "lint": "eslint Frontend/Responsive/frontend/_public/src/js",
+    "lintBackend": "eslint Backend/ExtJs/backend",
+    "fix": "eslint --fix Frontend/Responsive/frontend/_public/src/js",
+    "fixBackend": "eslint --fix Backend/ExtJs/backend",
+    "configFrontend": "eslint --print-config .",
+    "configBackend": "eslint --print-config Backend/ExtJs/backend"
   },
   "devDependencies": {
-    "eslint": "^3.19.0",
+    "eslint": "^5.16.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",

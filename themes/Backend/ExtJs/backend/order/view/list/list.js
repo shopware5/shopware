@@ -701,4 +701,3 @@ Ext.define('Shopware.apps.Order.view.list.List', {
 
 });
 //{/block}
-

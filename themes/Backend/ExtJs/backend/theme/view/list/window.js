@@ -192,4 +192,3 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
 });
 
 //{/block}
-

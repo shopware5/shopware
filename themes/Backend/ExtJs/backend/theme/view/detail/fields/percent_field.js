@@ -42,4 +42,3 @@ Ext.define('Shopware.apps.Theme.view.detail.fields.PercentField', {
 });
 
 //{/block}
-

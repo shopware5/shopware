@@ -102,4 +102,3 @@ Ext.define('Shopware.apps.Emotion.store.List', {
     }
 });
 //{/block}
-

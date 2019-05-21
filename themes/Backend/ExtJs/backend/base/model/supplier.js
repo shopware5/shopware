@@ -67,4 +67,3 @@ Ext.define('Shopware.apps.Base.model.Supplier', {
     ]
 });
 //{/block}
-

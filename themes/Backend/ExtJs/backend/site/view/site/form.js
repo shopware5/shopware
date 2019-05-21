@@ -327,6 +327,3 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
     }
 });
 //{/block}
-
-
-

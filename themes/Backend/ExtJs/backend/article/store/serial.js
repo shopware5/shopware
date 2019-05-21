@@ -81,4 +81,3 @@ Ext.define('Shopware.apps.Article.store.Serial', {
     }
 });
 //{/block}
-

@@ -52,4 +52,3 @@ Ext.define('Shopware.apps.Order.store.Tax', {
     model:'Shopware.apps.Order.model.Tax'
 });
 //{/block}
-

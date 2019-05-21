@@ -58,4 +58,3 @@ Ext.define('Shopware.apps.Base.store.Translation', {
         value: false
     }]
 }).create();
-

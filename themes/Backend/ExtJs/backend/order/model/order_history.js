@@ -57,4 +57,3 @@ Ext.define('Shopware.apps.Order.model.OrderHistory', {
     ]
 });
 //{/block}
-

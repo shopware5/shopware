@@ -300,4 +300,3 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
 
 });
 //{/block}
-

@@ -288,4 +288,3 @@ Ext.define('Shopware.data.Model', {
     }
 });
 //{/block}
-

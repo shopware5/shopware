@@ -53,4 +53,3 @@ Ext.define('Shopware.apps.Article.model.Unit', {
 
 });
 //{/block}
-

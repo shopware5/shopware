@@ -49,4 +49,3 @@ Ext.define('Shopware.apps.Theme.store.ConfigSets', {
 });
 
 //{/block}
-

@@ -291,4 +291,3 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
     }
 });
 //{/block}
-

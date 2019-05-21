@@ -200,4 +200,3 @@ Ext.define('Shopware.apps.Article.view.statistics.List', {
     }
 });
 //{/block}
-

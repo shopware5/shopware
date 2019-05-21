@@ -46,4 +46,3 @@ Ext.define('Shopware.apps.Order.store.Voucher', {
     model:'Shopware.apps.Order.model.Voucher'
 });
 //{/block}
-

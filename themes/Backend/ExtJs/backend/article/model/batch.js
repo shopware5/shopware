@@ -94,4 +94,3 @@ Ext.define('Shopware.apps.Article.model.Batch', {
     ]
 });
 //{/block}
-

@@ -262,4 +262,3 @@ Ext.define('Shopware.apps.Order.view.list.Document', {
 
 });
 //{/block}
-

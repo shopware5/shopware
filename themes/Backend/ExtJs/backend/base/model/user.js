@@ -74,4 +74,3 @@ Ext.define('Shopware.apps.Base.model.User', {
     ]
 });
 //{/block}
-

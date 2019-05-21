@@ -92,5 +92,3 @@ Ext.define('Shopware.apps.ArticleList.store.Operator', {
         }
     }
 });
-
-

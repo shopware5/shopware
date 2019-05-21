@@ -53,4 +53,3 @@ Ext.define('Shopware.apps.Article.store.EsdFile', {
     pageSize: 15
 });
 //{/block}
-

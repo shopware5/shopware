@@ -769,4 +769,3 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
     },
 });
 //{/block}
-

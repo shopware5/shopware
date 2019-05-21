@@ -90,4 +90,3 @@ Ext.define('Shopware.apps.Article.store.Variant', {
     }
 });
 //{/block}
-

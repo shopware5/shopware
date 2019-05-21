@@ -62,4 +62,3 @@ Ext.define('Shopware.apps.Base.model.Currency', {
     ]
 });
 //{/block}
-

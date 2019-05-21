@@ -63,5 +63,3 @@ Ext.define('Shopware.apps.Base.model.BillingAddress', {
 
 });
 //{/block}
-
-

@@ -54,4 +54,3 @@ Ext.define('Shopware.apps.Blog.model.AssignedArticles', {
 
 });
 //{/block}
-

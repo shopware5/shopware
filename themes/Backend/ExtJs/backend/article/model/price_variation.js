@@ -86,4 +86,3 @@ Ext.define('Shopware.apps.Article.model.PriceVariation', {
     ]
 });
 //{/block}
-

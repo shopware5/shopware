@@ -256,4 +256,3 @@ Ext.define('Shopware.form.field.ColorField', {
 });
 
 //{/block}
-

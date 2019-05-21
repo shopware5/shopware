@@ -181,7 +181,3 @@ Ext.define('Shopware.apps.Article.view.category.DropZone', {
     }
 });
 //{/block}
-
-
-
-

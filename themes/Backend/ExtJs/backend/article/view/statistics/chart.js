@@ -117,4 +117,3 @@ Ext.define('Shopware.apps.Article.view.statistics.Chart', {
     }
 });
 //{/block}
-

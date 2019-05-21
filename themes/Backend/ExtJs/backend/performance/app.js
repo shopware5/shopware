@@ -140,4 +140,3 @@ Ext.define('Shopware.apps.Performance', {
     }
 });
 //{/block}
-

@@ -48,4 +48,3 @@ Ext.define('Shopware.apps.Order.model.ReceiptAttribute', {
     ]
 });
 //{/block}
-
