@@ -27,7 +27,7 @@ namespace Shopware\Bundle\ContentTypeBundle\Field;
 use Doctrine\DBAL\Types\Type;
 use Shopware\Bundle\ContentTypeBundle\Structs\Field;
 
-class IntegerField implements FieldInterface
+class IntegerField implements FieldInterface, TemplateProvidingFieldInterface
 {
     public static function getDbalType(): string
     {
@@ -52,5 +52,10 @@ class IntegerField implements FieldInterface
     public static function isMultiple(): bool
     {
         return false;
+    }
+
+    public static function getTemplate(): string
+    {
+        return 'frontend/content_type/field/integer.tpl';
     }
 }

@@ -27,7 +27,7 @@ namespace Shopware\Bundle\ContentTypeBundle\Field;
 use Doctrine\DBAL\Types\Type;
 use Shopware\Bundle\ContentTypeBundle\Structs\Field;
 
-class CheckboxField implements FieldInterface
+class CheckboxField implements FieldInterface, TemplateProvidingFieldInterface
 {
     public static function getDbalType(): string
     {
@@ -55,5 +55,10 @@ class CheckboxField implements FieldInterface
     public static function isMultiple(): bool
     {
         return false;
+    }
+
+    public static function getTemplate(): string
+    {
+        return 'frontend/content_type/field/checkbox.tpl';
     }
 }

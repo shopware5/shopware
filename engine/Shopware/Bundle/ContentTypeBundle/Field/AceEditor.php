@@ -27,7 +27,7 @@ namespace Shopware\Bundle\ContentTypeBundle\Field;
 use Doctrine\DBAL\Types\Type;
 use Shopware\Bundle\ContentTypeBundle\Structs\Field;
 
-class AceEditor implements FieldInterface
+class AceEditor implements FieldInterface, TemplateProvidingFieldInterface
 {
     public static function getDbalType(): string
     {
@@ -54,5 +54,10 @@ class AceEditor implements FieldInterface
     public static function isMultiple(): bool
     {
         return false;
+    }
+
+    public static function getTemplate(): string
+    {
+        return 'frontend/content_type/field/aceeditor.tpl';
     }
 }

@@ -64,7 +64,7 @@
 
                         {block name='frontend_content_type_col_description_short'}
                             <div class="blog--box-description-short">
-                                {$sItem[$sDescriptionKey]}
+                                {$sItem[$sDescriptionKey]|strip_tags|truncate:160:'...'}
                             </div>
                         {/block}
 

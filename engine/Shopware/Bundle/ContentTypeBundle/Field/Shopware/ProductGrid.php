@@ -24,10 +24,11 @@
 
 namespace Shopware\Bundle\ContentTypeBundle\Field\Shopware;
 
+use Shopware\Bundle\ContentTypeBundle\Field\TemplateProvidingFieldInterface;
 use Shopware\Bundle\ContentTypeBundle\FieldResolver\ProductResolver;
 use Shopware\Models\Article\Article;
 
-class ProductGrid extends AbstractGridField
+class ProductGrid extends AbstractGridField implements TemplateProvidingFieldInterface
 {
     protected static $model = Article::class;
 
@@ -39,5 +40,10 @@ class ProductGrid extends AbstractGridField
     public static function getResolver(): string
     {
         return ProductResolver::class;
+    }
+
+    public static function getTemplate(): string
+    {
+        return 'frontend/content_type/field/product-grid.tpl';
     }
 }
