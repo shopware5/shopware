@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
                 percent: '{s name=detail/price/percent}Percent discount{/s}',
                 price: '{s name=detail/price/price}Price{/s}',
                 pseudoPrice: '{s name=detail/price/pseudo_price}Pseudo price{/s}',
-                percentPseudo: '{s name=detail/price/percent_pseudo_price}Saving against Pseudo price{/s}'
+                percentPseudo: '{s name=detail/price/percent_pseudo_price}Savings vs. pseudo price{/s}'
             },
             any:'{s name=detail/price/any}Arbitrary{/s}'
         }

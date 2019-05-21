@@ -29,6 +29,8 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `getPaymentsQueryBuilder`
     * `getDocumentsQueryBuilder`
 * Added product number and open action to product stream items
+* Added new column pseudo percent` in article module
+
 
 ### Changes
 
@@ -51,6 +53,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Changed shop page attributes to be translatable
 * Changed cache file permission definition in `\Enlight_Template_Manager`
 * Changed Article and Category API endpoints to support translation of attributes with underscores
+* Changed the order of the columns in article module
 * Changed the listing for the category-teaser to also list main categories
 
 ### Deprecations
