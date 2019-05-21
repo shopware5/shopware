@@ -77,7 +77,7 @@ class MailLog extends \Shopware_Controllers_Backend_Application
     protected $cacheManager;
 
     /**
-     * @var MailFilterInterface[]
+     * @var Traversable
      */
     protected $filters;
 
@@ -197,6 +197,7 @@ class MailLog extends \Shopware_Controllers_Backend_Application
         $filters = [];
         $snippets = $this->snippetManager->getNamespace(self::SNIPPET_NAMESPACE);
 
+        /** @var MailFilterInterface $filter */
         foreach ($this->filters as $filter) {
             $filters[] = [
                 'label' => $snippets->get($filter->getName()),
