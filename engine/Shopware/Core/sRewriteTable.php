@@ -694,11 +694,15 @@ class sRewriteTable implements \Enlight_Hook
 
     public function createContentTypeUrls(ShopContextInterface $context): void
     {
+        $translator = Shopware()->Container()->get('shopware_bundle_content_type.services.frontend_type_translator');
+
         /** @var \Shopware\Bundle\ContentTypeBundle\Structs\Type $type */
         foreach (Shopware()->Container()->get('shopware.bundle.content_type.type_provider')->getTypes() as $type) {
             if (!$type->isShowInFrontend()) {
                 continue;
             }
+
+            $type = $translator->translate($type);
 
             // insert controller, itself
             $path = $type->getName() . '/';
@@ -712,7 +716,7 @@ class sRewriteTable implements \Enlight_Hook
 
             $criteria = new Criteria();
             $criteria->loadAssociations = true;
-            $criteria->loadTranslations = false;
+            $criteria->loadTranslations = true;
             $criteria->limit = null;
 
             foreach ($repository->findAll($criteria)->items as $item) {

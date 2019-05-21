@@ -4,7 +4,7 @@
     <div class="panel">
 
         {block name='frontend_content_type_field_textarea_panel_head'}
-            <h3 class="panel--title is--underline">{$detail->getLabel()}</h3>
+            <h3 class="panel--title is--underline">{$detail.label}</h3>
         {/block}
 
         {block name='frontend_content_type_field_textarea_panel_body'}

@@ -64,17 +64,20 @@ class SyncSubscriber implements SubscriberInterface
 
     public function onChange(\Enlight_Event_EventArgs $eventArgs): void
     {
+        // Plugin does not have a content type. Skip sync
+        if (!file_exists($eventArgs->getPlugin()->getPath() . '/Resources/contenttypes.xml')) {
+            return;
+        }
+
         $installedPlugins = array_keys($this->container->getParameter('active_plugins'));
 
-        if ($eventArgs instanceof PluginEvent) {
-            if ($eventArgs->getName() === PluginEvent::POST_INSTALL) {
-                $installedPlugins[] = $eventArgs->getPlugin()->getName();
-            } else {
-                $index = array_search($eventArgs->getPlugin()->getName(), $installedPlugins, true);
+        if ($eventArgs->getName() === PluginEvent::POST_INSTALL) {
+            $installedPlugins[] = $eventArgs->getPlugin()->getName();
+        } else {
+            $index = array_search($eventArgs->getPlugin()->getName(), $installedPlugins, true);
 
-                if ($index) {
-                    unset($installedPlugins[$index]);
-                }
+            if ($index) {
+                unset($installedPlugins[$index]);
             }
         }
 

@@ -36,8 +36,9 @@ class ContentTypeComponentHandler implements ComponentHandlerInterface
 {
     private const COMPONENT_NAME = 'emotion-components-content-type';
 
-    private const SORTING_NEWEST = 0;
-    private const SORTING_RANDOM = 1;
+    private const MODE_NEWEST = 0;
+    private const MODE_RANDOM = 1;
+    private const MODE_SELECTED = 2;
 
     /**
      * @var ContainerInterface
@@ -70,17 +71,24 @@ class ContentTypeComponentHandler implements ComponentHandlerInterface
         $criteria->loadTranslations = true;
         $criteria->loadAssociations = true;
 
-        if ($mode === self::SORTING_NEWEST) {
+        if ($mode === self::MODE_NEWEST) {
             $criteria->sort = [
                 [
                     'property' => 'id',
                     'direction' => 'DESC',
                 ],
             ];
-        } elseif ($mode === self::SORTING_RANDOM) {
+        } elseif ($mode === self::MODE_RANDOM) {
             $criteria->sort = [
                 [
                     'property' => 'RANDOM',
+                ],
+            ];
+        } elseif ($mode === self::MODE_SELECTED) {
+            $criteria->filter = [
+                [
+                    'property' => 'id',
+                    'value' => array_filter(explode('|', $element->getConfig()->get('ids'))),
                 ],
             ];
         }

@@ -33,7 +33,8 @@ VALUES (\'Content Type\', \'emotion-components-content-type\', NULL, \'\', \'com
         $this->addSql('SET @elementId = LAST_INSERT_ID();');
 
         $this->addSql('INSERT INTO `s_library_component_field` (`id`, `componentID`, `name`, `x_type`, `value_type`, `field_label`, `support_text`, `help_title`, `help_text`, `store`, `display_field`, `value_field`, `default_value`, `allow_blank`, `translatable`, `position`) VALUES
-(NULL,	@elementId,	\'content_type\',	\'shopware-form-field-content-type-selection\',	\'\',	\'Content Type Selection\',	\'\',	\'\',	\'\',	\'\',	\'name\',	\'internalName\',	\'\',	0,	0,	NULL),
-(NULL,	@elementId,	\'mode\',	\'combobox\',	\'\',	\'Modus\',	\'\',	\'\',	\'\',	\'Shopware.apps.Emotion.store.ContentTypeMode\',	\'name\',	\'id\',	\'\',	0,	0,	NULL);');
+(NULL, @elementId,	\'content_type\',	\'shopware-form-field-content-type-selection\',	\'\',	\'Content Type Selection\',	\'\',	\'\',	\'\',	\'\',	\'name\',	\'internalName\',	\'\',	0,	0,	NULL),
+(NULL, @elementId, \'ids\', \'hidden\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'1\', \'0\', NULL),
+(NULL, @elementId,	\'mode\',	\'combobox\',	\'\',	\'Modus\',	\'\',	\'\',	\'\',	\'Shopware.apps.Emotion.store.ContentTypeMode\',	\'name\',	\'id\',	\'\',	0,	0,	NULL);');
     }
 }

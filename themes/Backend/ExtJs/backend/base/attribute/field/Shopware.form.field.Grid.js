@@ -235,6 +235,7 @@ Ext.define('Shopware.form.field.Grid', {
     removeItem: function(record) {
         var me = this;
         me.store.remove(record);
+        this.fireEvent('change', this, this.getValue());
         me.fixLayout();
     },
 
@@ -259,6 +260,9 @@ Ext.define('Shopware.form.field.Grid', {
             this.store.add(record);
         }
         me.fixLayout();
+
+        this.fireEvent('change', this, this.getValue());
+
         return !exist;
     },
 
