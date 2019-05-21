@@ -109,8 +109,8 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
                 return ['null'];
             }
 
-            if (strpos($context->getCurrentWord(), '[') === 0 &&
-                stripos($context->getCurrentWord(), ']') === false) {
+            if (strpos($context->getCurrentWord(), '[') === 0
+                && stripos($context->getCurrentWord(), ']') === false) {
                 return ["{$context->getCurrentWord()}]"];
             }
         }

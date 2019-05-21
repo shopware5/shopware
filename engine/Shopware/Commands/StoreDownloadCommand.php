@@ -73,7 +73,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
     {
         if ($argumentName === 'technical-name') {
             if (!is_null($token = $this->getAuthenticationFromArguments($context->getWords()))) {
-                $context = new LicenceRequest(null, $this->getVersionFromArguments($context->getWords()), $this->getDomainFromArguments($context->getWords()), $token);
+                $context = new LicenceRequest('en_GB', $this->getVersionFromArguments($context->getWords()), $this->getDomainFromArguments($context->getWords()), $token);
 
                 /** @var PluginStoreService $pluginStoreService */
                 $pluginStoreService = $this->container->get(

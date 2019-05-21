@@ -32,7 +32,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PluginReinstallCommand extends ShopwareCommand implements CompletionAwareInterface
+class PluginReinstallCommand extends PluginCommand implements CompletionAwareInterface
 {
     /**
      * {@inheritdoc}

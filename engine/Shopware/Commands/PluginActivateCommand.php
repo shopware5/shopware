@@ -33,7 +33,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PluginActivateCommand extends ShopwareCommand implements CompletionAwareInterface
+class PluginActivateCommand extends PluginCommand implements CompletionAwareInterface
 {
     /**
      * {@inheritdoc}

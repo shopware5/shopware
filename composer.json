@@ -80,7 +80,7 @@
         "league/flysystem": "1.0.46",
         "league/flysystem-aws-s3-v3": "1.0.19",
         "superbalist/flysystem-google-storage": "6.0.0",
-        "stecman/symfony-console-completion": "^0.10.0"
+        "stecman/symfony-console-completion": "0.10.1"
     },
     "suggest": {
         "ext-apcu": "*",
