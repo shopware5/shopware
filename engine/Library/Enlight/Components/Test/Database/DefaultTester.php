@@ -13,13 +13,10 @@
  * to license@shopware.de so we can send you a copy immediately.
  *
  * @category   Enlight
- * @package    Enlight_Test
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
+
 use PHPUnit\DbUnit\AbstractTester;
 use PHPUnit\DbUnit\Database\DefaultConnection;
 

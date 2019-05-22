@@ -11,6 +11,7 @@ class PreCommitChecks
 {
     const ALLOWED_DIRECTORIES = [
         'engine/Shopware',
+        'engine/Library/Enlight',
         'tests',
         'recovery',
     ];
