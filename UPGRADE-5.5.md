@@ -47,6 +47,9 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Added product number and open action to backend product stream module
 * Added new column `pseudo percent` in article detail module
 * Added new interface `ReflectionAwareInterface`
+* Added product number and open action to product stream items
+* Added event `Shopware_Models_Order_Document_Filter_Config` to modify config settings for document creation
+* Added `_config` property to class `Shopware_Models_Document_Order` to make it usable while model creation
 
 ### Changes
 
