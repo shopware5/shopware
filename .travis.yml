@@ -26,7 +26,7 @@ jobs:
     - stage: lint
       php: 7.2
       install:
-      - composer install && ant -f build/build.xml -Dapp.host=localhost -Ddb.user=travis -Ddb.host=127.0.0.1 -Ddb.name=shopware build-unit && curl -s -L "https://github.com/phpstan/phpstan/releases/download/0.11.5/phpstan.phar" > phpstan.phar && chmod +x phpstan.phar
+      - composer install && ant -f build/build.xml -Dapp.host=localhost -Ddb.user=travis -Ddb.host=127.0.0.1 -Ddb.name=shopware build-unit && curl -s -L "https://github.com/phpstan/phpstan/releases/download/0.11.7/phpstan.phar" > phpstan.phar && chmod +x phpstan.phar
       script:
       # Static analyzer check
       - ./phpstan.phar analyze --no-progress -c .phpstan.neon
