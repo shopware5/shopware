@@ -101,12 +101,12 @@ class ReflectionHelper
      * and (optionally) that said class belongs to certain directories.
      *
      * @param string $docPath     Path to the project's document root
-     * @param array  $directories Optional set of directories in which the class file should be in
+     * @param array  $directories Set of directories in which the class file should be in
      *
      * @throws \InvalidArgumentException If the class is out of scope (docpath mismatch)   (code: 1)
      * @throws \InvalidArgumentException If the class is out of scope (directory mismatch) (code: 2)
      */
-    private function verifyClass(\ReflectionClass $class, $docPath, array $directories = [])
+    private function verifyClass(\ReflectionClass $class, $docPath, array $directories)
     {
         $fileName = $class->getFileName();
         $fileDir = substr($fileName, 0, strlen($docPath));
@@ -114,9 +114,6 @@ class ReflectionHelper
         // Trying to execute a class outside of the Shopware DocumentRoot
         if ($fileDir !== $docPath) {
             throw new \InvalidArgumentException(sprintf('Class "%s" out of scope', $class->getFileName()), 1);
-        }
-        if (empty($directories)) {
-            return;
         }
 
         $fileName = substr($fileName, strlen($docPath));
@@ -138,6 +135,11 @@ class ReflectionHelper
 
         if ($error) {
             throw new \InvalidArgumentException(sprintf('Class "%s" out of scope', $class->getFileName()), 2);
+        }
+
+        $className = $class->getName();
+        if (!array_key_exists(ReflectionAwareInterface::class, class_implements($className))) {
+            throw new \InvalidArgumentException(sprintf('Class %s has to implement the interface %s', $className, ReflectionAwareInterface::class));
         }
     }
 }

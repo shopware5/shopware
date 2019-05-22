@@ -26,6 +26,7 @@ namespace Shopware\Bundle\SearchBundle;
 
 use Assert\Assertion;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
+use Shopware\Components\ReflectionAwareInterface;
 
 /**
  * The criteria object is used for the search gateway.
@@ -40,7 +41,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Criteria extends Extendable
+class Criteria extends Extendable implements ReflectionAwareInterface
 {
     /**
      * Offset for the limitation
