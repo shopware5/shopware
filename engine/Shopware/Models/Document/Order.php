@@ -161,6 +161,13 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     protected $_discount;
 
     /**
+     * Document configuration
+     *
+     * @var array
+     */
+    protected $_config;
+
+    /**
      * @var \Shopware\Models\Tax\Repository
      */
     protected $_taxRepository;
@@ -185,6 +192,8 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         }
 
         $this->_id = $id;
+
+        $this->_config = $config;
 
         $this->_summaryNet = isset($config['summaryNet']) ? $config['summaryNet'] : false;
 
