@@ -25,14 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Enlight_Components_Session_Namespace as Session;
-use Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface;
-use Shopware\Bundle\StoreFrontBundle\Gateway\CurrencyGatewayInterface;
-use Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGroupGatewayInterface;
-use Shopware\Bundle\StoreFrontBundle\Gateway\PriceGroupDiscountGatewayInterface;
-use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface;
-use Shopware\Bundle\StoreFrontBundle\Gateway\TaxGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Models;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -52,51 +45,16 @@ class ContextService implements ContextServiceInterface
     private $context = null;
 
     /**
-     * @var CustomerGroupGatewayInterface
+     * @var ShopContextFactoryInterface
      */
-    private $customerGroupGateway;
-
-    /**
-     * @var TaxGatewayInterface
-     */
-    private $taxGateway;
-
-    /**
-     * @var PriceGroupDiscountGatewayInterface
-     */
-    private $priceGroupDiscountGateway;
-
-    /**
-     * @var ShopGatewayInterface
-     */
-    private $shopGateway;
-
-    /**
-     * @var CurrencyGatewayInterface
-     */
-    private $currencyGateway;
-
-    /**
-     * @var CountryGatewayInterface
-     */
-    private $countryGateway;
+    private $shopContextFactory;
 
     public function __construct(
         ContainerInterface $container,
-        CustomerGroupGatewayInterface $customerGroupGateway,
-        TaxGatewayInterface $taxGateway,
-        CountryGatewayInterface $countryGateway,
-        PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway,
-        ShopGatewayInterface $shopGateway,
-        CurrencyGatewayInterface $currencyGateway
+        ShopContextFactoryInterface $shopContextFactory
     ) {
         $this->container = $container;
-        $this->taxGateway = $taxGateway;
-        $this->countryGateway = $countryGateway;
-        $this->customerGroupGateway = $customerGroupGateway;
-        $this->priceGroupDiscountGateway = $priceGroupDiscountGateway;
-        $this->shopGateway = $shopGateway;
-        $this->currencyGateway = $currencyGateway;
+        $this->shopContextFactory = $shopContextFactory;
     }
 
     /**
@@ -116,7 +74,7 @@ class ContextService implements ContextServiceInterface
      */
     public function initializeShopContext()
     {
-        $this->context = $this->create(
+        $this->context = $this->shopContextFactory->create(
             $this->getStoreFrontBaseUrl(),
             $this->getStoreFrontShopId(),
             $this->getStoreFrontCurrencyId(),
@@ -181,7 +139,7 @@ class ContextService implements ContextServiceInterface
      */
     public function createProductContext($shopId, $currencyId = null, $customerGroupKey = null)
     {
-        return $this->create(
+        return $this->shopContextFactory->create(
             $this->getStoreFrontBaseUrl(),
             $shopId,
             $currencyId,
@@ -194,7 +152,7 @@ class ContextService implements ContextServiceInterface
      */
     public function createShopContext($shopId, $currencyId = null, $customerGroupKey = null)
     {
-        return $this->create(
+        return $this->shopContextFactory->create(
             $this->getStoreFrontBaseUrl(),
             $shopId,
             $currencyId,
@@ -303,84 +261,6 @@ class ContextService implements ContextServiceInterface
         }
 
         return null;
-    }
-
-    /**
-     * @param string      $baseUrl
-     * @param int         $shopId
-     * @param int|null    $currencyId
-     * @param string|null $currentCustomerGroupKey
-     * @param int|null    $areaId
-     * @param int|null    $countryId
-     * @param int|null    $stateId
-     * @param int[]       $streamIds
-     *
-     * @return ShopContextInterface
-     */
-    private function create(
-        $baseUrl,
-        $shopId,
-        $currencyId = null,
-        $currentCustomerGroupKey = null,
-        $areaId = null,
-        $countryId = null,
-        $stateId = null,
-        $streamIds = []
-    ) {
-        $shop = $this->shopGateway->get($shopId);
-        $fallbackCustomerGroupKey = self::FALLBACK_CUSTOMER_GROUP;
-
-        if ($currentCustomerGroupKey == null) {
-            $currentCustomerGroupKey = $fallbackCustomerGroupKey;
-        }
-
-        $groups = $this->customerGroupGateway->getList([$currentCustomerGroupKey, $fallbackCustomerGroupKey]);
-
-        $currentCustomerGroup = $groups[$currentCustomerGroupKey];
-        $fallbackCustomerGroup = $groups[$fallbackCustomerGroupKey];
-
-        $currency = null;
-        if ($currencyId != null) {
-            $currency = $this->currencyGateway->getList([$currencyId]);
-            $currency = array_shift($currency);
-        }
-        if (!$currency) {
-            $currency = $shop->getCurrency();
-        }
-
-        $context = new ShopContext($baseUrl, $shop, $currency, $currentCustomerGroup, $fallbackCustomerGroup, [], []);
-
-        $area = null;
-        if ($areaId !== null) {
-            $area = $this->countryGateway->getArea($areaId, $context);
-        }
-
-        $country = null;
-        if ($countryId !== null) {
-            $country = $this->countryGateway->getCountry($countryId, $context);
-        }
-
-        $state = null;
-        if ($stateId !== null) {
-            $state = $this->countryGateway->getState($stateId, $context);
-        }
-
-        $taxRules = $this->taxGateway->getRules($currentCustomerGroup, $area, $country, $state);
-        $priceGroups = $this->priceGroupDiscountGateway->getPriceGroups($currentCustomerGroup, $context);
-
-        return new ShopContext(
-            $baseUrl,
-            $shop,
-            $currency,
-            $currentCustomerGroup,
-            $fallbackCustomerGroup,
-            $taxRules,
-            $priceGroups,
-            $area,
-            $country,
-            $state,
-            $streamIds
-        );
     }
 
     /**
