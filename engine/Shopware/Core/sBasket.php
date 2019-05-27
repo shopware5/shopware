@@ -2919,6 +2919,14 @@ SQL;
             ->setParameter('pricegroup', $this->sSYSTEM->sUSERGROUP)
             ->setParameter('defaultPriceGroup', $defaultPriceGroup);
 
+        $this->eventManager->notify(
+            'Shopware_Modules_Basket_getPricesForItemUpdates_QueryBuilder',
+            [
+                'subject' => $this,
+                'queryBuilder' => $queryBuilder,
+            ]
+        );
+
         $itemPrices = $queryBuilder->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_ASSOC);
         $customerPriceGroup = $this->sSYSTEM->sUSERGROUP;
 
@@ -2928,6 +2936,16 @@ SQL;
             $prices = $itemPrices[$cartItem->getId()];
             $additionalInfo = $cartItem->getAdditionalInfo();
             $priceResult = [];
+
+            $prices = $this->eventManager->filter(
+                'Shopware_Modules_Basket_getPricesForItemUpdates_FilterCartItemPrices',
+                $prices,
+                [
+                    'subject' => $this,
+                    'quantity' => $quantity,
+                    'additionalInfo' => $additionalInfo,
+                ]
+            );
 
             if ($prices === null) {
                 continue;
