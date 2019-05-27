@@ -120,6 +120,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `Shopware_Controllers_Backend_Application` to abstract
 * Changed `Shopware_Controllers_Backend_ExtJs` to abstract
 * Changed internal validation of `Shopware\Bundle\StoreFrontBundle\Struct\Attribute`
+* Changed the blog seo meta details to be saveable after being over the max length of the global max length
 
 ### Removals
 
