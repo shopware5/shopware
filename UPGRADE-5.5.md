@@ -30,6 +30,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `getDocumentsQueryBuilder`
 * Added product number and open action to backend product stream module
 * Added new column `pseudo percent` in article detail module
+* Added new interface `ReflectionAwareInterface`
 
 ### Changes
 
