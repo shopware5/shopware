@@ -134,7 +134,7 @@
                                value="0"
                                name="register[personal][accountmode]"
                                class="register--checkbox chkbox"/>
-                        {if !$sEsd && !$form_data.sValidation && ({config name=NoAccountDisable} == 1 || {config name=NoAccountDisable} == 2)}
+                        {if ($showNoAccount || $form_data.accountmode) && !$sEsd && !$form_data.sValidation && ({config name=NoAccountDisable} == 1 || {config name=NoAccountDisable} == 2)}
                             {$accountModeChecked = {config name=NoAccountDisable} == 1}
                             {if isset($form_data.accountmode)}
                                 {$accountModeChecked = $form_data.accountmode}

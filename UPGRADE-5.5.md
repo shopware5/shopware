@@ -28,34 +28,34 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `getDetailsQueryBuilder`
     * `getPaymentsQueryBuilder`
     * `getDocumentsQueryBuilder`
-* Added product number and open action to product stream items
-* Added new column pseudo percent` in article module
-
+* Added product number and open action to backend product stream module
+* Added new column `pseudo percent` in article detail module
 
 ### Changes
 
 * Changed meta-tag `viewport` to allow zooming on mobile devices
 * Changed the usage of translation for shop pages in the side menu in mobile view
-* Changed the worstRating for Google's struct data
-* Changed `SnippetManager` to consider plugin directories and theme directories in readFromIni mode
+* Changed the `worstRating` for Google's struct data
+* Changed `SnippetManager` to consider plugin directories and theme directories in `readFromIni` mode
 * Changed `Checkout` controller, to resolve race condition problems on confirm page
 * Changed the album selection in the media manager for the blog images to show all images
 * Changed `Blog` and `Listing` controllers to throw an exception if a blog category-id is passed to the `Listing` controller or vice versa
 * Changed `EsBackendIndexer` to improve support for unicode characters
-* Changed `mediaselectionfield` to work also with enabled translation in tabs
+* Changed `mediaselectionfield` to also work with enabled translation in tabs
 * Changed RSS templates to contain correct language code
-* Changed BatchProcess to fix an issue with `removeString` operator
+* Changed `BatchProcess` to fix an issue with `removeString` operator
 * Changed the handling of custom-page attribute translations
 * Changed the handling of the grouping for shop pages
 * Changed custom-page attributes to be translated properly
+* Changed shop page attributes to be translatable
 * Changed Symfony library to version 3.4.27
 * Changed buttons in empty off-canvas baskets to be disabled
-* Changed shop page attributes to be translatable
 * Changed button for mobile-view rating to work properly 
 * Changed cache file permission definition in `\Enlight_Template_Manager`
 * Changed Article and Category API endpoints to support translation of attributes with underscores
 * Changed the order of the columns in article module
 * Changed the listing for the category-teaser to also list main categories
+* Changed template `register/personal_fieldset.tpl` to not show the 'No account' checkbox on signup form
 
 ### Deprecations
 
