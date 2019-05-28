@@ -92,7 +92,7 @@ class Download extends ModelEntity
      *
      * @ORM\Column(name="size", type="float", nullable=false)
      */
-    private $size;
+    private $size = 0;
 
     /**
      * Get id
