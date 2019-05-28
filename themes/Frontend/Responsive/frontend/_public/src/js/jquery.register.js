@@ -495,6 +495,8 @@
             me.$targetElement = $(relatedTarget);
 
             switch (id) {
+                case undefined:
+                    break;
                 case me.$personalEmail.prop('id'):
                 case me.$personalEmailConfirmation.prop('id'):
                     if (hasEmailConfirmation && (me.$personalEmail.val().length <= 0 || me.$personalEmailConfirmation.val().length <= 0)) {

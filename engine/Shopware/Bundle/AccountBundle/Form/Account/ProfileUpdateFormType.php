@@ -92,6 +92,7 @@ class ProfileUpdateFormType extends AbstractType
         ]);
 
         $builder->add('birthday', BirthdayType::class, [
+            'widget' => $this->config->get('birthdaySingleField') ? 'single_text' : 'choice',
             'constraints' => $this->getBirthdayConstraints(),
         ]);
 

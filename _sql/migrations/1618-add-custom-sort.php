@@ -29,7 +29,7 @@ class Migrations_Migration1618 extends Shopware\Components\Migrations\AbstractMi
      */
     public function up($modus)
     {
-        // make sorting available
+        // Make sorting available
         $statement = $this->getConnection()->prepare(
             'INSERT INTO `s_search_custom_sorting` (`label`, `active`, `display_in_categories`, `position`, `sortings`)
                 VALUES (:label, :active, :category, :position, :sortings)'

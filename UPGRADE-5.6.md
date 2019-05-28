@@ -2,7 +2,7 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
-[View all changes from v5.5.8...v5.6.0](https://github.com/shopware/shopware/compare/v5.5.8...v5.6.0)
+[View all changes from v5.5.10...v5.6.0](https://github.com/shopware/shopware/compare/v5.5.10...v5.6.0)
 
 ### Additions
 
@@ -66,6 +66,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added ExtJs developer mode, to provide better warnings and errors to developers
 * Added `Enlight_Hook_Exception`. It will be thrown when the HookManger gets a class name which not implements `Enlight_Hook` in 5.8
 * Added new events in `sBasket::getPricesForItemUpdates()`
+* Added an option to use a datepicker for birthday instead of the single select-fields
 * Added additional information to the address verification. You can now give more feedback during the form validation.
 * Added `--index` option to `sw:es:index:populate`. It can be used to reindex single or multiple index. If it is not defined, every index will be reindexed.
     `bin/console sw:es:index:populate --index property`
@@ -140,6 +141,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `Shopware\Models\Shop\Shop::registerResources` to extract the code in a new service `shopware.components.shop_registration_service`
 * Changed the offcanvas basket to now display shipping costs also when the user is logged in
 * Changed `\Shopware\Components\Privacy\PrivacyService` to run more efficiently
+* Changed the error message if a customer enters an invalid birthday in the registration
 
 ### Removals
 
