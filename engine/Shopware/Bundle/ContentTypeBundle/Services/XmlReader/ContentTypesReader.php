@@ -114,6 +114,10 @@ class ContentTypesReader extends XmlReaderBase
             $item['seoUrlTemplate'] = $seoUrlTemplate;
         }
 
+        if ($showInFrontend && (empty($viewDescriptionFieldName) || empty($viewImageFieldName) || empty($viewTitleFieldName))) {
+            throw new \InvalidArgumentException('Content-Type with enabled showInFrontend requires a viewTitleFieldName, viewDescriptionFieldName, viewImageFieldName');
+        }
+
         $item['menuParent'] = 'Content';
 
         if ($menuParent = self::getElementChildValueByName($element, 'menuParent')) {
@@ -156,9 +160,9 @@ class ContentTypesReader extends XmlReaderBase
         $store = $element->getElementsByTagName('store');
 
         if ($store->length) {
-            /** @var DOMNodeList $storeElement */
+            /** @var DOMElement $storeElement */
             $storeElement = $store->item(0);
-            $item['store'] = self::parseStoreNodeList($storeElement);
+            $item['store'] = self::parseComboboStoreList($storeElement);
         }
 
         return $item;
@@ -194,8 +198,6 @@ class ContentTypesReader extends XmlReaderBase
     }
 
     /**
-     * @return array
-     *
      * @see https://stackoverflow.com/questions/14553547/what-is-the-best-php-dom-2-array-function
      */
     private static function xmlToArray(DOMNode $root)
@@ -203,8 +205,7 @@ class ContentTypesReader extends XmlReaderBase
         $result = [];
 
         if ($root->hasAttributes()) {
-            $attrs = $root->attributes;
-            foreach ($attrs as $attr) {
+            foreach ($root->attributes as $attr) {
                 $result['@attributes'][$attr->name] = $attr->value;
             }
         }
@@ -251,5 +252,31 @@ class ContentTypesReader extends XmlReaderBase
         }
 
         return $haystack;
+    }
+
+    private static function parseComboboStoreList(DOMElement $element): array
+    {
+        $storeOptions = $element->getElementsByTagName('option');
+        if ($storeOptions->length === 0) {
+            return [];
+        }
+        $options = [];
+        /** @var DOMElement $storeOption */
+        foreach ($storeOptions as $storeOption) {
+            $value = '';
+            $label = '';
+            if ($optionValue = $storeOption->getElementsByTagName('value')->item(0)) {
+                $value = $optionValue->nodeValue;
+            }
+            if ($labelNode = $storeOption->getElementsByTagName('label')->item(0)) {
+                $label = $labelNode->nodeValue;
+            }
+            $options[] = [
+                'id' => $value,
+                'name' => $label,
+            ];
+        }
+
+        return $options;
     }
 }

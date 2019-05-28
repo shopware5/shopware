@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,22 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-// {block name="backend/content_type/view/detail/window"}
-Ext.define('Shopware.apps.{$controllerName}.view.detail.Window', {
-    extend: 'Shopware.window.Detail',
-    alias: 'widget.{$controllerName}-detail-window',
-    title : '{$type->getName()|snippet:"name":$type->getSnippetNamespace()}',
-    height: 600,
-    width: 1000,
+namespace Shopware\Bundle\ContentTypeBundle\Services;
 
-    /**
-     * configure the window
-     * @returns { Object }
-     */
-    configure: function () {
-        return {
-            translationKey: '{$type->getTableName()}'
-        }
-    }
-});
-// {/block}
+use Shopware\Bundle\ContentTypeBundle\Structs\Type;
+
+interface FrontendTypeTranslatorInterface
+{
+    public function translate(Type $type): Type;
+}

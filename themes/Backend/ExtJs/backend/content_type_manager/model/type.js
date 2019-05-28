@@ -66,6 +66,11 @@ Ext.define('Shopware.apps.ContentTypeManager.model.Type', {
             defaultValue: false
         },
         {
+            name: 'menuIcon',
+            type: 'string',
+            defaultValue: 'sprite-application-block'
+        },
+        {
             name: 'viewTitleFieldName',
             type: 'string',
         },

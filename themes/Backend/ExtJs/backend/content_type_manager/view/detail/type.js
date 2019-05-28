@@ -52,6 +52,12 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
                             supportText: this.labelSupportText(this.record),
                             labelWidth: 150,
                         },
+                        menuIcon: {
+                            allowBlank: false,
+                            fieldLabel: '{s name="type/menuIcon"}{/s}',
+                            supportText: '{s name="type/menuIconSupportText"}{/s}',
+                            labelWidth: 150
+                        }
                     }
                 },
                 {

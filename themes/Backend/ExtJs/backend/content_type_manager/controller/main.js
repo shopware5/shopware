@@ -22,6 +22,7 @@
  */
 
 // {block name="backend/content_type_manager/controller/main"}
+// {namespace name="backend/content_type_manager/main"}
 Ext.define('Shopware.apps.ContentTypeManager.controller.Main', {
     extend: 'Enlight.app.Controller',
 

@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,22 +22,33 @@
  * our trademarks remain entirely with us.
  */
 
-// {block name="backend/content_type/view/detail/window"}
-Ext.define('Shopware.apps.{$controllerName}.view.detail.Window', {
-    extend: 'Shopware.window.Detail',
-    alias: 'widget.{$controllerName}-detail-window',
-    title : '{$type->getName()|snippet:"name":$type->getSnippetNamespace()}',
-    height: 600,
-    width: 1000,
+namespace Shopware\Bundle\ContentTypeBundle\Services;
 
+use Shopware\Bundle\ContentTypeBundle\Structs\Type;
+use Shopware_Components_Snippet_Manager as SnippetManager;
+
+class FrontendTypeTranslator implements FrontendTypeTranslatorInterface
+{
     /**
-     * configure the window
-     * @returns { Object }
+     * @var SnippetManager
      */
-    configure: function () {
-        return {
-            translationKey: '{$type->getTableName()}'
-        }
+    private $snippetManager;
+
+    public function __construct(SnippetManager $snippetManager)
+    {
+        $this->snippetManager = $snippetManager;
     }
-});
-// {/block}
+
+    public function translate(Type $type): Type
+    {
+        $namespace = $this->snippetManager->getNamespace($type->getSnippetNamespace());
+
+        $type->setName($namespace->get('name', $type->getName()));
+
+        foreach ($type->getFields() as $field) {
+            $field->setLabel($namespace->get(strtolower($field->getName()) . '_label', $field->getLabel()));
+        }
+
+        return $type;
+    }
+}

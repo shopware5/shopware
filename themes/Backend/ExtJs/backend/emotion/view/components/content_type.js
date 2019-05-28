@@ -31,5 +31,55 @@ Ext.define('Shopware.apps.Emotion.view.components.ContentType', {
         content_type: '{s name="content_type"}{/s}',
         mode: '{s name="sorting"}{/s}'
     },
+
+
+    initComponent: function() {
+        var me = this;
+        me.callParent(arguments);
+
+        me.contentTypeSelection = me.down('[name="content_type"]');
+        me.contentTypeModeSelection = me.down('[name="mode"]');
+        me.hiddenIdsField = me.down('[name="ids"]');
+
+        me.selectionGrid = Ext.create('Shopware.form.field.Grid', {
+            labelWidth: 170,
+            model: 'recipients',
+            hidden: parseInt(me.contentTypeModeSelection.getValue()) !== 2,
+            fieldLabel: '{s name="selection"}{/s}'
+        });
+
+        if (me.hiddenIdsField.getValue()) {
+            me.selectionGrid.setValue(me.hiddenIdsField.getValue());
+        }
+
+        me.selectionGrid.on('change', function (grid, value) {
+            me.hiddenIdsField.setValue(value);
+        });
+
+        me.contentTypeSelection.on('select', this.changeListener, this);
+        me.contentTypeModeSelection.on('select', this.changeListener, this);
+
+        me.elementFieldset.add(me.selectionGrid);
+    },
+
+    changeListener: function () {
+        if (this.contentTypeModeSelection.getValue() === 2 && this.contentTypeSelection.getValue()) {
+            this.selectionGrid.show();
+            this.reconfigureSelection(this.contentTypeSelection.getValue());
+        } else {
+            this.selectionGrid.hide();
+            this.selectionGrid.setValue('');
+        }
+    },
+
+    reconfigureSelection: function (model) {
+        var factory = Ext.create('Shopware.attribute.SelectionFactory');
+        this.selectionGrid.store = factory.createEntitySearchStore(model);
+        this.selectionGrid.searchStore = factory.createEntitySearchStore(model);
+        this.selectionGrid.searchStore.load();
+
+        this.selectionGrid.grid.reconfigure(this.selectionGrid.store);
+        this.selectionGrid.searchField.combo.bindStore(this.selectionGrid.searchStore);
+    }
 });
 //{/block}

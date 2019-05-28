@@ -86,6 +86,16 @@ class EntitySearchSubscriber implements SubscriberInterface
         $criteria->loadTranslations = false;
         $criteria->loadAssociations = false;
 
+        if ($ids = $request->getParam('ids')) {
+            $ids = json_decode($ids, true);
+            $ids = array_map('intval', $ids);
+
+            $criteria->filter[] = [
+                'property' => 'id',
+                'value' => $ids,
+            ];
+        }
+
         $result = $repository->findAll($criteria);
         $data = $result->items;
 
@@ -108,9 +118,25 @@ class EntitySearchSubscriber implements SubscriberInterface
             return $type->jsonSerialize() + ['id' => $type->getInternalName()];
         }, $this->provider->getTypes()));
 
+        if ($ids = $controller->Request()->getParam('ids')) {
+            $data = $this->filterTypes($ids, $data);
+        }
+
         $controller->View()->assign('total', count($data));
         $controller->View()->assign('data', $data);
         $controller->View()->assign('success', true);
+    }
+
+    private function filterTypes(string $ids, array $data): array
+    {
+        $ids = json_decode($ids, true);
+        $ids = array_map('intval', $ids);
+
+        $data = array_filter($data, function ($item) use ($ids) {
+            return \in_array($item['id'], $ids);
+        });
+
+        return $data;
     }
 
     private function getLabelField(Type $type): Field

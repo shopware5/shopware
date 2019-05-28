@@ -26,6 +26,7 @@ namespace Shopware\Bundle\ContentTypeBundle\Services;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Shopware\Bundle\ContentTypeBundle\Field\CheckboxField;
 use Shopware\Bundle\ContentTypeBundle\Structs\Criteria;
 use Shopware\Bundle\ContentTypeBundle\Structs\Field;
 use Shopware\Bundle\ContentTypeBundle\Structs\SearchResult;
@@ -103,13 +104,15 @@ class Repository implements RepositoryInterface
     public function save(array $data, ?int $id = null): int
     {
         $this->validateFields($data);
+        $data = $this->filterFields($data);
+        $data = $this->quoteFields($data);
 
         $data['updated_at'] = date('Y-m-d H:i:s');
         if ($id) {
-            $this->connection->update($this->type->getTableName(), $this->filterFields($data), ['id' => $id]);
+            $this->connection->update($this->type->getTableName(), $data, ['id' => $id]);
         } else {
             $data['created_at'] = date('Y-m-d H:i:s');
-            $this->connection->insert($this->type->getTableName(), $this->filterFields($data));
+            $this->connection->insert($this->type->getTableName(), $data);
             $id = (int) $this->connection->lastInsertId();
         }
 
@@ -161,7 +164,7 @@ class Repository implements RepositoryInterface
                             continue;
                         }
 
-                        $query->orWhere(sprintf('%s LIKE :search', $field->getName()));
+                        $query->orWhere(sprintf('`%s` LIKE :search', $field->getName()));
                     }
                 } else {
                     $where = $item['value'];
@@ -193,11 +196,11 @@ class Repository implements RepositoryInterface
                         $expression = 'IS NULL';
                     }
 
-                    $cond = $item['property'] . ' ' . $expression;
+                    $cond = '`' . $item['property'] . '` ' . $expression;
 
                     if ($where) {
                         if ($expression === 'IN') {
-                            $cond = $query->expr()->in($item['property'], $where);
+                            $cond = $query->expr()->in('`' . $item['property'] . '`', $where);
                         } else {
                             $cond .= ' ' . $query->createNamedParameter($where);
                         }
@@ -263,7 +266,7 @@ class Repository implements RepositoryInterface
     private function validateFields(array $data): void
     {
         foreach ($this->type->getFields() as $field) {
-            if (!$field->isRequired()) {
+            if (!$field->isRequired() || $field->getType() instanceof CheckboxField) {
                 continue;
             }
 
@@ -271,5 +274,15 @@ class Repository implements RepositoryInterface
                 throw new CustomValidationException(sprintf('Field %s is required', $field->getName()));
             }
         }
+    }
+
+    private function quoteFields(array $data): array
+    {
+        foreach ($data as $key => $value) {
+            unset($data[$key]);
+            $data['`' . $key . '`'] = $value;
+        }
+
+        return $data;
     }
 }

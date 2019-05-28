@@ -94,7 +94,15 @@ class XmlReaderTest extends TestCase
         $this->reader->read(__DIR__ . '/fixtures/invalid.xml');
     }
 
-    private function getTypeBuilder()
+    public function testReadingInvalidFrontendConfiguration(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Content-Type with enabled showInFrontend requires a viewTitleFieldName, viewDescriptionFieldName, viewImageFieldName');
+
+        $this->reader->read(__DIR__ . '/fixtures/invalid_frontend.xml');
+    }
+
+    private function getTypeBuilder(): TypeBuilder
     {
         return new TypeBuilder([
             'text' => TextField::class,

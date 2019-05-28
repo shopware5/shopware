@@ -31,23 +31,15 @@
                     <div class="content-type--body panel--table has--border is--rounded">
 
                         {foreach $sFields as $field}
-                            {$fieldDetail = null}
-
                             {if $field.name === $titleFieldName || $field.name === $descriptionFieldName || $field.name === $imageFieldName}
                                 {continue}
                             {/if}
 
-                            {foreach $sType->getFields() as $tmpField}
-                                {if $field.name === $tmpField->getName()}
-                                    {$fieldDetail = $tmpField}
-                                {/if}
-                            {/foreach}
-
                             {block name='frontend_content_type_detail_body_field_wrapper'}
-                                <div class="content-type--field content-type--field-{$fieldDetail->getTypeName()} {$sType->getInternalName()}-{$fieldDetail->getName()} panel--tr">
+                                <div class="content-type--field content-type--field-{$field.type} {$sType->getInternalName()}-{$field.name} panel--tr">
                                     {block name='frontend_content_type_detail_body_field_include'}
 
-                                        {include file=$field.template content=$sItem[$field.name] detail=$fieldDetail}
+                                        {include file=$field.template content=$sItem[$field.name] detail=$field}
 
                                     {/block}
                                 </div>

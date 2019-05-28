@@ -137,10 +137,10 @@ class ContentType extends \Enlight_Controller_Action
                 continue;
             }
 
-            $fields[] = [
-                'name' => $field->getName(),
-                'template' => $field->getType()::getTemplate(),
-            ];
+            $tmpField = $field->jsonSerialize();
+            $tmpField['template'] = $field->getType()::getTemplate();
+
+            $fields[] = $tmpField;
         }
 
         return $fields;

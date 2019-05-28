@@ -56,7 +56,7 @@ class Type implements JsonSerializable
     /**
      * @var int
      */
-    protected $menuPosition = 0;
+    protected $menuPosition = 200;
 
     /**
      * @var string

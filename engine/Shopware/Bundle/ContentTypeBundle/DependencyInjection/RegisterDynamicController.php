@@ -71,11 +71,11 @@ class RegisterDynamicController implements CompilerPassInterface
 
             $container->setDefinition('shopware_bundle.content_type.controllers.api.' . $name, $apiController);
 
-            if (isset($type['showInFrontend'])) {
+            if ($this->allFrontendRequirementsMet($type)) {
                 $apiController = new Definition(\Shopware\Bundle\ContentTypeBundle\Controller\Frontend\ContentType::class);
                 $apiController->setArguments([
                     new Reference('shopware.bundle.content_type.' . $name),
-                    new Expression('service("shopware.bundle.content_type.type_provider").getType("' . $name . '")'),
+                    new Expression('service("shopware_bundle_content_type.services.frontend_type_translator").translate(service("shopware.bundle.content_type.type_provider").getType("' . $name . '"))'),
                 ]);
 
                 $apiController->addTag(
@@ -89,5 +89,10 @@ class RegisterDynamicController implements CompilerPassInterface
                 $container->setDefinition('shopware_bundle.content_type.controllers.api.' . $name, $apiController);
             }
         }
+    }
+
+    private function allFrontendRequirementsMet(array $type): bool
+    {
+        return !empty($type['showInFrontend']) && !empty($type['viewTitleFieldName']) && !empty($type['viewDescriptionFieldName']) && !empty($type['viewImageFieldName']);
     }
 }
