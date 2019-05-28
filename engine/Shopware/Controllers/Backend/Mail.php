@@ -599,7 +599,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         $context = array_merge($this->getDefaultMailContext($shop), $mail->getContext());
 
-        $completer = $this->container->get('shopware_bundle_mail.auto_complete_resolver');
+        $completer = $this->container->get('shopware_mail.auto_complete_resolver');
 
         $context = $completer->completer($context, $this->Request()->getParam('smartyCode'));
         $context = $mail->arrayGetPath($context);

@@ -80,7 +80,7 @@ class XmlConfigReaderTest extends TestCase
         static::assertCount(2, $element2['label']);
         static::assertArrayHasKey('en', $element2['label']);
         static::assertArrayHasKey('de', $element2['label']);
-        static::assertEquals('label', $element2['label']['en']);
+        static::assertEquals('My Textfield', $element2['label']['en']);
         static::assertEquals('Mein textfeld', $element2['label']['de']);
 
         //element description
@@ -92,6 +92,18 @@ class XmlConfigReaderTest extends TestCase
         static::assertEquals('Meine Feld Beschreibung', $element2['description']['de']);
 
         static::assertArrayHasKey('store', $element2);
+    }
+
+    public function testConfigReadingFromXml(): void
+    {
+        $result = $this->readFile('config_store_xml.xml');
+
+        $element1 = $result['elements'][0];
+
+        static::assertArrayHasKey('store', $element1);
+        static::assertEquals('XML Store', $element1['label']['en']);
+        static::assertInternalType('array', $element1['store']);
+        static::assertCount(2, $element1['store']);
     }
 
     public function testConfigReadingWithExtJsStore(): void
