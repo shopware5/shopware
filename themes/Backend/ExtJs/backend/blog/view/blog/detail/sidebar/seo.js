@@ -151,7 +151,6 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Seo', {
             fieldLabel: '{s name=detail/sidebar/seo/field/description}Description{/s}',
             translationLabel: 'SEO-{s name=detail/sidebar/seo/field/description}Description{/s}',
             enableKeyEvents: true,
-            maxLength: parseInt('{config name=metaDescriptionLength}'),
             supportText: ' ',
             name: 'metaDescription',
             listeners: {
