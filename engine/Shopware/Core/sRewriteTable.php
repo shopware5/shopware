@@ -707,7 +707,7 @@ class sRewriteTable implements \Enlight_Hook
             // insert controller, itself
             $path = $type->getName() . '/';
             $path = $this->sCleanupPath($path);
-            $this->sInsertUrl('sViewport=' . $type->getControllerName(), $path);
+            $this->sInsertUrl('sViewport=' . $type->getControllerName() . '&sAction=index', $path);
 
             $typeArray = json_decode(json_encode($type), true);
 

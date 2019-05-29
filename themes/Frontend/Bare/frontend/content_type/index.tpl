@@ -1,5 +1,9 @@
 {extends file='frontend/index/index.tpl'}
 
+{block name='frontend_index_header'}
+    {include file='frontend/content_type/listing_header.tpl'}
+{/block}
+
 {block name='frontend_index_content_left'}{/block}
 
 {* Main content *}
