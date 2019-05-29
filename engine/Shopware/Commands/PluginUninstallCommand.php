@@ -25,13 +25,46 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
+use Shopware\Components\Model\ModelRepository;
+use Shopware\Models\Plugin\Plugin;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PluginUninstallCommand extends PluginCommand
+class PluginUninstallCommand extends PluginCommand implements CompletionAwareInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if ($argumentName === 'plugin') {
+            /** @var ModelRepository $repository */
+            $repository = $this->getContainer()->get('models')->getRepository(Plugin::class);
+            $queryBuilder = $repository->createQueryBuilder('plugin');
+            $result = $queryBuilder->andWhere($queryBuilder->expr()->eq('plugin.capabilityEnable', 'true'))
+                ->andWhere($queryBuilder->expr()->isNotNull('plugin.installed'))
+                ->select(['plugin.name'])
+                ->getQuery()
+                ->getArrayResult();
+
+            return array_column($result, 'name');
+        }
+
+        return [];
+    }
+
     /**
      * {@inheritdoc}
      */

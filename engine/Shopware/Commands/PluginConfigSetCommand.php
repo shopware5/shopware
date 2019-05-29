@@ -26,15 +26,98 @@ namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\ModelRepository;
+use Shopware\Models\Plugin\Plugin;
+use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class PluginConfigSetCommand extends ShopwareCommand
+class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        if ($optionName === 'shop') {
+            return $this->completeShopIds($context->getCurrentWord());
+        }
+
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if ($argumentName === 'plugin') {
+            /** @var ModelRepository $repository */
+            $repository = $this->getContainer()->get('models')->getRepository(Plugin::class);
+            $queryBuilder = $repository->createQueryBuilder('plugin');
+            $result = $queryBuilder->andWhere($queryBuilder->expr()->eq('plugin.capabilityEnable', 'true'))
+                ->select(['plugin.name'])
+                ->getQuery()
+                ->getArrayResult();
+
+            return array_column($result, 'name');
+        } elseif ($argumentName === 'key') {
+            $pluginName = $context->getWordAtIndex($context->getWordIndex() - 1);
+            /** @var InstallerService $pluginManager */
+            $pluginManager = $this->container->get('shopware_plugininstaller.plugin_manager');
+            try {
+                $plugin = $pluginManager->getPluginByName($pluginName);
+            } catch (\Exception $e) {
+                return [];
+            }
+
+            /** @var Repository $shopRepository */
+            $shopRepository = $this->getContainer()->get('models')->getRepository(Shop::class);
+
+            $shops = $shopRepository->findAll();
+
+            /** @var string[] $result */
+            $result = [];
+
+            foreach ($shops as $shop) {
+                $configKeys = array_keys($pluginManager->getPluginConfig($plugin, $shop));
+
+                if (empty($result)) {
+                    $result = $configKeys;
+                } else {
+                    $result = array_intersect($result, $configKeys);
+                }
+            }
+
+            return $result;
+        } elseif ($argumentName === 'value') {
+            if (stripos('true', $context->getCurrentWord()) === 0) {
+                return ['true'];
+            }
+
+            if (stripos('false', $context->getCurrentWord()) === 0) {
+                return ['false'];
+            }
+
+            if (stripos('null', $context->getCurrentWord()) === 0) {
+                return ['null'];
+            }
+
+            if (strpos($context->getCurrentWord(), '[') === 0
+                && stripos($context->getCurrentWord(), ']') === false) {
+                return ["{$context->getCurrentWord()}]"];
+            }
+        }
+
+        return [];
+    }
+
     /**
      * {@inheritdoc}
      */

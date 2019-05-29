@@ -24,7 +24,9 @@
 
 namespace Shopware\Commands;
 
+use Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerService;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
+use Shopware\Components\HttpClient\HttpClientInterface;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -101,7 +103,7 @@ abstract class StoreCommand extends ShopwareCommand
     {
         $version = $input->getOption('shopware-version');
         if (empty($version)) {
-            $version = $this->container->getParameter('shopware.release.version');
+            $version = $this->getInstalledShopwareVersion();
         }
 
         return $version;
@@ -176,5 +178,55 @@ abstract class StoreCommand extends ShopwareCommand
         }
 
         return $hostname;
+    }
+
+    /**
+     * @param string $input
+     *
+     * @return string[]
+     */
+    protected function completeLicensedDomain($input)
+    {
+        /* @var AccountManagerService $accountManagerService */
+        try {
+            $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
+        } catch (\Exception $e) {
+            return [];
+        }
+
+        // TODO is it useful to query for other shop hosts?
+        return [
+            $accountManagerService->getDomain(),
+        ];
+    }
+
+    /**
+     * @param string $input
+     *
+     * @return string[]
+     */
+    protected function completeShopwareVersions($input)
+    {
+        try {
+            /** @var HttpClientInterface $guzzle */
+            $guzzle = $this->container->get('http_client');
+            $response = $guzzle->get('https://api.shopware.com/pluginstatics/softwareVersions');
+        } catch (\Exception $e) {
+            return [];
+        }
+
+        $data = json_decode($response->getBody(), true);
+
+        return array_column(array_filter($data, function (array $softwareVersion) {
+            return $softwareVersion['selectable'];
+        }), 'name');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getInstalledShopwareVersion()
+    {
+        return $this->container->getParameter('shopware.release.version');
     }
 }

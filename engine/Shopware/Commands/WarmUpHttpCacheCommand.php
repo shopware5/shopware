@@ -29,13 +29,16 @@ use Shopware\Components\HttpCache\UrlProvider\UrlProviderInterface;
 use Shopware\Components\HttpCache\UrlProviderFactoryInterface;
 use Shopware\Components\Routing\Context;
 use Shopware\Models\Shop\Shop;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class WarmUpHttpCacheCommand extends ShopwareCommand
+class WarmUpHttpCacheCommand extends ShopwareCommand implements CompletionAwareInterface
 {
     private $errorMessage = false;
 
@@ -45,6 +48,26 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
      * @var string[]
      */
     private $defaultProviderNames = ['blog', 'category', 'emotion', 'manufacturer', 'product', 'productwithcategory', 'productwithnumber', 'static', 'variantswitch'];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if ($argumentName === 'shopId') {
+            return $this->completeShopIds($context->getCurrentWord());
+        }
+
+        return [];
+    }
 
     /**
      * {@inheritdoc}

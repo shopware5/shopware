@@ -26,12 +26,38 @@ namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Context\LicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LicenceStruct;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class StoreListCommand extends StoreCommand
+class StoreListCommand extends StoreCommand implements CompletionAwareInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        if ($optionName === 'domain') {
+            return $this->completeLicensedDomain($context->getCurrentWord());
+        }
+
+        if ($optionName === 'shopware-version') {
+            return $this->completeShopwareVersions($context->getCurrentWord());
+        }
+
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        return [];
+    }
+
     /**
      * {@inheritdoc}
      */
