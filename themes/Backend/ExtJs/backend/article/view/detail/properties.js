@@ -134,15 +134,14 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
             listeners: {
                 scope: me,
                 change: function(element, value) {
-                    var article = me.subApp.articleWindow.article;
-
                     me.propertyGroupStore.getProxy().extraParams.setId = value;
+                    me.propertyGroupStore.load();
                     me.groupComboBox.setDisabled(false);
 
                     me.groupComboBox.setValue('');
                     me.groupComboBox.setDisabled(value === null || value === '');
 
-                    article.set('filterGroupId', value);
+                    me.article.set('filterGroupId', value);
                 }
             }
         });
@@ -444,6 +443,7 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
                 return { entity: 'Shopware\\Models\\Property\\Group' };
             }
         });
+
         me.propertyGroupStore = Ext.create('Shopware.store.Search', {
             fields: ['id', 'name'],
             pageSize: 10,
