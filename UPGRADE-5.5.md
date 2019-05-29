@@ -2,6 +2,12 @@
 
 This changelog references changes done in Shopware 5.5 patch versions.
 
+## [Unreleased]
+
+### Changes
+
+* Added improved accessibility in the Core Bare Template [@Patrik-Mueller](https://github.com/Patrik-Mueller)
+
 ## 5.5.9
 
 [View all changes from v5.5.8...v5.5.9](https://github.com/shopware/shopware/compare/v5.5.8...v5.5.9)
