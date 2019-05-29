@@ -64,7 +64,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
   * `MailLogContact`
 * Added function to rename or overwrite if esd file already exists
 * Added ExtJs developer mode, to provide better warnings and errors to developers
-* Added `Enlight_Hook_Exception`. It will be thrown when the HookManger gets a class name which not implements `Enlight_Hook` in 5.8.
+* Added `Enlight_Hook_Exception`. It will be thrown when the HookManger gets a class name which not implements `Enlight_Hook` in 5.8
 
 ### Changes
 
@@ -159,7 +159,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Removed deprecations of `Shopware\Components\Api\Resource\Variant`
 * Removed deprecated `Shopware_Components_Benchmark_Point`
 * Removed deprecated `Shopware_Components_Benchmark_Container`
-* Removed unused `Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPassSearchHandlerCompilerPass` which was not used at all.
+* Removed unused `Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPassSearchHandlerCompilerPass` which was not used at all
 * Removed method `Enlight_Controller_Response_ResponseHttp::insert` 
 * Removed method `Shopware\Kernel::transformEnlightResponseToSymfonyResponse` 
 * Removed following methods from class `Enlight_Controller_Dispatcher_Default`
@@ -179,7 +179,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Deprecated `Shopware\Bundle\ESIndexingBundle\Property\PropertyProviderInterface`. It will be removed in 5.7, use the `Shopware\Bundle\ESIndexingBundle\ProviderInterface` instead
 * Deprecated `Shopware\Components\Model\ModelRepository::queryAll`. It will be removed in 5.7, use findBy([], null, $limit, $offset) instead
 * Deprecated `Shopware\Components\Model\ModelRepository::queryBy`. It will be removed in 5.7, use findBy instead
-* Deprecated `Shopware\Bundle\ESIndexingBundle\EsClientLogger`. Use `Shopware\Bundle\ESIndexingBundle\EsClient` instead
+* Deprecated `Shopware\Bundle\ESIndexingBundle\EsClientLogger`. Use `Shopware\Bundle\ESIndexingBundle\EsClient` instead.
 * Deprecated `shopware_elastic_search.client.logger`. Use `shopware_elastic_search.client` instead.
 * Deprecated `Shopware\Models\Article\Article::getAttributeRawField`. It will be removed in 5.7, , use `Shopware\Models\Article\Detail::getAttributeRawField `
 * Deprecated `Shopware\Models\Article\Article::setLastStock`. It will be removed in 5.7, , use `Shopware\Models\Article\Detail::setLastStock`
@@ -191,8 +191,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Deprecated `Enlight_Controller_Response_ResponseHttp::clearRawHeaders`
 * Deprecated `Enlight_Controller_Response_ResponseHttp::outputBody`
 * Deprecated `Shopware_Controllers_Backend_Log::createLogAction`. It will be removed in 5.7, use `\Shopware\Controllers\Backend\Logger::createLogAction` instead
-* Deprecated email transmission method `mail`. It will be removed in 5.7, use `smtp` instead
-* Deprecated `Enlight_Event_EventHandler`. It will be removed in 5.8, use `Enlight_Event_Handler_Default` or `SubscriberInterface::getSubscribedEvents` instead.
+* Deprecated `Enlight_Event_EventHandler`. It will be removed in 5.8, use `Enlight_Event_Handler_Default` or `SubscriberInterface::getSubscribedEvents` instead
 
 ### Improved ExtJS auto-loading
 
