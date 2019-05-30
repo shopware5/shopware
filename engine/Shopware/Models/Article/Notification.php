@@ -26,6 +26,8 @@ namespace Shopware\Models\Article;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\LazyFetchModelEntity;
+use Shopware\Models\Attribute\ArticleNotification as ProductNotificationAttribute;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Shopware Notification Model
@@ -33,9 +35,9 @@ use Shopware\Components\Model\LazyFetchModelEntity;
  * This is the model for s_articles_notification table.
  * The model contains a single row of s_articles_notification.
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_articles_notification")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Notification extends LazyFetchModelEntity
 {
@@ -58,11 +60,23 @@ class Notification extends LazyFetchModelEntity
      * @ORM\JoinColumn(name="mail", referencedColumnName="email")
      */
     protected $customer;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @var ProductNotificationAttribute
+     *
+     * @Assert\Valid()
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleNotification", mappedBy="articleNotification", cascade={"persist"})
+     */
+    protected $attribute;
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -75,7 +89,7 @@ class Notification extends LazyFetchModelEntity
     private $articleNumber;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="date", type="datetime", nullable=false)
      */
@@ -110,8 +124,6 @@ class Notification extends LazyFetchModelEntity
     private $shopLink;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -120,13 +132,9 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * Set date
-     *
-     * @param \DateTime $date
-     *
      * @return Notification
      */
-    public function setDate($date)
+    public function setDate(\DateTimeInterface $date)
     {
         $this->date = $date;
 
@@ -134,9 +142,7 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * Get date
-     *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDate()
     {
@@ -144,8 +150,6 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * Set send
-     *
      * @param int $send
      *
      * @return Notification
@@ -158,8 +162,6 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * Get send
-     *
      * @return int
      */
     public function getSend()
@@ -168,8 +170,6 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * Set language
-     *
      * @param string $language
      *
      * @return Notification
@@ -182,8 +182,6 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * Get language
-     *
      * @return string
      */
     public function getLanguage()
@@ -192,8 +190,6 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * Set shopLink
-     *
      * @param string $shopLink
      *
      * @return Notification
@@ -206,8 +202,6 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
-     * Get shopLink
-     *
      * @return string
      */
     public function getShopLink()
@@ -216,11 +210,48 @@ class Notification extends LazyFetchModelEntity
     }
 
     /**
+     * @param string $articleNumber
+     */
+    public function setArticleNumber($articleNumber)
+    {
+        $this->articleNumber = $articleNumber;
+    }
+
+    /**
+     * @param string $mail
+     */
+    public function setMail($mail)
+    {
+        $this->mail = $mail;
+    }
+
+    /**
+     * @return ProductNotificationAttribute
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * @param array|ProductNotificationAttribute|array|null $attribute
+     *
+     * @return Notification
+     */
+    public function setAttribute($attribute)
+    {
+        return $this->setOneToOne($attribute, ProductNotificationAttribute::class, 'attribute', 'articleNotification');
+    }
+
+    /**
      * @return \Shopware\Models\Article\Detail
      */
     public function getArticleDetail()
     {
-        return $this->fetchLazy($this->articleDetail, ['number' => $this->articleNumber]);
+        /** @var \Shopware\Models\Article\Detail $return */
+        $return = $this->fetchLazy($this->articleDetail, ['number' => $this->articleNumber]);
+
+        return $return;
     }
 
     /**
@@ -228,6 +259,9 @@ class Notification extends LazyFetchModelEntity
      */
     public function getCustomer()
     {
-        return $this->fetchLazy($this->customer, ['email' => $this->mail]);
+        /** @var \Shopware\Models\Customer\Customer $return */
+        $return = $this->fetchLazy($this->customer, ['email' => $this->mail]);
+
+        return $return;
     }
 }

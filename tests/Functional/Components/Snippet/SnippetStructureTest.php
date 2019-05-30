@@ -23,7 +23,7 @@
  */
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -51,6 +51,6 @@ class Shopware_Tests_Components_Snippet_SnippetStructureTest extends Enlight_Com
             }
         }
 
-        $this->assertEmpty($validationResult, "Snippet validation errors detected: \n" . implode("\n", $validationResult));
+        static::assertEmpty($validationResult, "Snippet validation errors detected: \n" . implode("\n", $validationResult));
     }
 }

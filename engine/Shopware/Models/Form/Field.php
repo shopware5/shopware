@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Form;
+namespace Shopware\Models\Form;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -41,9 +41,9 @@ use Shopware\Components\Model\ModelEntity;
  *   - UNIQUE KEY `name` (`name`, `supportID`)
  * </code>
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_cms_support_fields")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Field extends ModelEntity
 {
@@ -63,7 +63,7 @@ class Field extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -123,7 +123,7 @@ class Field extends ModelEntity
     private $label;
 
     /**
-     * Class of display type. e.G. normal / strasse;nr
+     * Class of display type. e.G. normal / street;nr
      *
      * @var string
      *
@@ -143,7 +143,8 @@ class Field extends ModelEntity
     /**
      * Defines the date and time when the field was created
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
+     *
      * @ORM\Column(name="added", type="datetime", nullable=false)
      */
     private $added;
@@ -304,7 +305,7 @@ class Field extends ModelEntity
     }
 
     /**
-     * Set wether or not this field is required
+     * Set whether or not this field is required
      *
      * @param int $required
      *
@@ -318,7 +319,7 @@ class Field extends ModelEntity
     }
 
     /**
-     * Get wether or not this field is required
+     * Get whether or not this field is required
      *
      * @return int
      */
@@ -426,7 +427,7 @@ class Field extends ModelEntity
     /**
      * Sets added on pre persist
      *
-     * @ORM\PrePersist
+     * @ORM\PrePersist()
      */
     public function onPrePersist()
     {

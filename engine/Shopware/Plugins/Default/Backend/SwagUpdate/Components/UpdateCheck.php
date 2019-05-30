@@ -29,7 +29,7 @@ use Shopware\Components\ShopwareReleaseStruct;
 use ShopwarePlugins\SwagUpdate\Components\Struct\Version;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -61,11 +61,9 @@ class UpdateCheck
     private $release;
 
     /**
-     * @param string                $apiEndpoint
-     * @param string                $channel
-     * @param bool                  $verifySignature
-     * @param OpenSSLVerifier       $verificator
-     * @param ShopwareReleaseStruct $release
+     * @param string $apiEndpoint
+     * @param string $channel
+     * @param bool   $verifySignature
      */
     public function __construct($apiEndpoint, $channel, $verifySignature, OpenSSLVerifier $verificator, ShopwareReleaseStruct $release)
     {
@@ -86,7 +84,6 @@ class UpdateCheck
 
     /**
      * @param string $shopwareVersion
-     * @param array  $params
      *
      * @return Version|null
      */
@@ -142,11 +139,11 @@ class UpdateCheck
     private function verifyBody($signature, $body)
     {
         if (!$this->verificator->isSystemSupported()) {
-            return;
+            throw new ExtensionMissingException('openssl');
         }
 
         if (!$this->verificator->isValid($body, $signature)) {
-            throw new \Exception('Signature is not valid');
+            throw new \Exception('Signature is not valid. Try downloading again');
         }
     }
 }

@@ -35,8 +35,6 @@ class PrivacyService implements PrivacyServiceInterface
 
     /**
      * MaintenanceService constructor
-     *
-     * @param Connection $connection
      */
     public function __construct(Connection $connection)
     {

@@ -32,8 +32,8 @@ use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 interface ProductQueryFactoryInterface
 {
     /**
-     * @param $categoryId
-     * @param null|int $limit
+     * @param int      $categoryId
+     * @param int|null $limit
      *
      * @return LastIdQuery
      */

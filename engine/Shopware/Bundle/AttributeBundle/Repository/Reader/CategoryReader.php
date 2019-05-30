@@ -27,7 +27,7 @@ namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 use Doctrine\DBAL\Connection;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -53,7 +53,7 @@ class CategoryReader extends GenericReader
 
     /**
      * @param string[] $parents
-     * @param int[]    $path
+     * @param string[] $path
      *
      * @return array
      */

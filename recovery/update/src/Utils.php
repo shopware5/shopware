@@ -84,9 +84,6 @@ class Utils
         return $results;
     }
 
-    /**
-     * @return mixed
-     */
     public static function getRealIpAddr()
     {
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
@@ -117,9 +114,9 @@ class Utils
                 \RecursiveIteratorIterator::CHILD_FIRST
             );
 
-            /** @var $path \SplFileInfo */
+            /** @var \SplFileInfo $path */
             foreach ($iterator as $path) {
-                if ($path->getFilename() == '.gitkeep') {
+                if ($path->getFilename() === '.gitkeep') {
                     continue;
                 }
 
@@ -150,8 +147,7 @@ class Utils
     }
 
     /**
-     * @param \Slim\Http\Request $request
-     * @param string             $lang
+     * @param string $lang
      *
      * @return string
      */
@@ -280,17 +276,12 @@ class Utils
         return array_keys($errorFiles);
     }
 
-    /**
-     * @param $conn
-     */
     protected static function setNonStrictSQLMode(\PDO $conn)
     {
         $conn->exec("SET @@session.sql_mode = ''");
     }
 
     /**
-     * @param \PDO $conn
-     *
      * @throws \RuntimeException
      */
     private static function checkSQLMode(\PDO $conn)

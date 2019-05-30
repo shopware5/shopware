@@ -42,8 +42,6 @@ class UploadMaxSizeValidator implements SubscriberInterface
     }
 
     /**
-     * @param Enlight_Controller_EventArgs $args
-     *
      * @throws UploadMaxSizeException
      */
     public function validateContentLength(Enlight_Controller_EventArgs $args)
@@ -65,8 +63,6 @@ class UploadMaxSizeValidator implements SubscriberInterface
     /**
      * Returns true if the POST max size has been exceeded in the request.
      *
-     * @param Enlight_Controller_Request_Request $request
-     *
      * @return bool
      */
     public function hasPostMaxSizeBeenExceeded(Enlight_Controller_Request_Request $request)
@@ -80,20 +76,20 @@ class UploadMaxSizeValidator implements SubscriberInterface
     /**
      * Returns maximum post size in bytes.
      *
-     * @return null|int The maximum post size in bytes
+     * @return int|null The maximum post size in bytes
      */
     public function getPostMaxSize()
     {
         $iniMax = strtolower($this->getNormalizedIniPostMaxSize());
 
-        if ('' === $iniMax) {
-            return;
+        if ($iniMax === '') {
+            return null;
         }
 
         $max = ltrim($iniMax, '+');
-        if (0 === strpos($max, '0x')) {
+        if (strpos($max, '0x') === 0) {
             $max = intval($max, 16);
-        } elseif (0 === strpos($max, '0')) {
+        } elseif (strpos($max, '0') === 0) {
             $max = intval($max, 8);
         } else {
             $max = (int) $max;
@@ -101,8 +97,11 @@ class UploadMaxSizeValidator implements SubscriberInterface
 
         switch (substr($iniMax, -1)) {
             case 't': $max *= 1024;
+            // no break
             case 'g': $max *= 1024;
+            // no break
             case 'm': $max *= 1024;
+            // no break
             case 'k': $max *= 1024;
         }
 
@@ -120,8 +119,6 @@ class UploadMaxSizeValidator implements SubscriberInterface
     }
 
     /**
-     * @param Enlight_Controller_Response_Response $response
-     *
      * @return bool
      */
     private function hasUploadMaxSizeExceptions(Enlight_Controller_Response_Response $response)

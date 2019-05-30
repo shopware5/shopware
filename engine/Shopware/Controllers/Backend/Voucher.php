@@ -24,6 +24,7 @@
 
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\Random;
 use Shopware\Models\Tax\Tax;
 use Shopware\Models\Voucher\Code;
 use Shopware\Models\Voucher\Voucher;
@@ -36,14 +37,14 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     /**
      * Entity Manager
      *
-     * @var null
+     * @var \Shopware\Components\Model\ModelManager
      */
-    protected $manager = null;
+    protected $manager;
 
     /**
      * @var \Shopware\Models\Voucher\Repository
      */
-    protected $voucherRepository = null;
+    protected $voucherRepository;
 
     /**
      * Disable template engine for all actions
@@ -68,10 +69,10 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $multipleVouchers = $this->Request()->getPost('vouchers');
         $voucherRequestData = empty($multipleVouchers) ? [['id' => $this->Request()->id]] : $multipleVouchers;
         foreach ($voucherRequestData as $voucher) {
-            //first delete the voucher codes because this could be to huge for doctrine
+            // First delete the voucher codes because this could be to huge for doctrine
             $this->deleteAllVoucherCodesById($voucher['id']);
 
-            /** @var $model \Shopware\Models\Voucher\Voucher */
+            /** @var \Shopware\Models\Voucher\Voucher $model */
             $model = $this->getVoucherRepository()->find($voucher['id']);
             $this->getManager()->remove($model);
         }
@@ -89,7 +90,9 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $filter = $this->Request()->filter;
         $filter = $filter[0]['value'];
         $sqlBindings = [];
-        //search for values
+        $searchSQL = '';
+
+        // Search for values
         if (!empty($filter)) {
             $searchSQL = 'AND v.description LIKE :filter
                             OR v.vouchercode LIKE :filter
@@ -97,13 +100,13 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
                             OR (SELECT 1 FROM s_emarketing_voucher_codes WHERE voucherID = v.id AND code LIKE :filter LIMIT 1)';
             $sqlBindings['filter'] = '%' . $filter . '%';
         }
-        //sorting data
+        // Sorting data
         $sortData = $this->Request()->sort;
         $sortField = $sortData[0]['property'];
         $dir = $sortData[0]['direction'];
         $sort = '';
         if ((!empty($sortField) && $dir === 'ASC') || $dir === 'DESC') {
-            //to prevent sql-injections
+            // To prevent sql-injections
             $sortField = Shopware()->Db()->quoteIdentifier($sortField);
             $sort = 'ORDER BY ' . $sortField . ' ' . $dir;
         }
@@ -132,6 +135,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $vouchers = Shopware()->Db()->fetchAll($sql, $sqlBindings);
         $sql = 'SELECT FOUND_ROWS()';
         $totalCount = Shopware()->Db()->fetchOne($sql, []);
+
         $this->View()->assign(['success' => true, 'data' => $vouchers, 'totalCount' => $totalCount]);
     }
 
@@ -207,7 +211,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     public function updateVoucherCodesAction()
     {
         $codeId = (int) $this->Request()->getParam('id');
-        /** @var Code $code */
+        /** @var Code|null $code */
         $code = $this->get('models')->getRepository(Code::class)->find($codeId);
 
         if (!$code) {
@@ -425,9 +429,9 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     /**
      * helper Method to generate all needed voucher codes
      *
-     * @param $voucherId
-     * @param $numberOfUnits
-     * @param $codePattern
+     * @param int    $voucherId
+     * @param int    $numberOfUnits
+     * @param string $codePattern
      */
     protected function generateVoucherCodes($voucherId, $numberOfUnits, $codePattern)
     {
@@ -476,7 +480,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     /**
      * generates the voucherCode based on the code pattern
      *
-     * @param $codePattern
+     * @param string $codePattern
      *
      * @return mixed|string
      */
@@ -494,8 +498,8 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     /**
      * validates the code pattern
      *
-     * @param $codePattern
-     * @param $numberOfUnits
+     * @param string $codePattern
+     * @param int    $numberOfUnits
      *
      * @return bool
      */
@@ -504,9 +508,9 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $numberOfStringValues = substr_count($codePattern, '%s');
         $numberOfDigitValues = substr_count($codePattern, '%d');
 
-        $numberOfDigitValues = pow(10, $numberOfDigitValues);
+        $numberOfDigitValues = 10 ** $numberOfDigitValues;
         $numberOfDigitValues = $numberOfDigitValues == 1 ? 0 : $numberOfDigitValues;
-        $numberOfStringValues = pow(26, $numberOfStringValues);
+        $numberOfStringValues = 26 ** $numberOfStringValues;
         $numberOfStringValues = $numberOfStringValues == 1 ? 0 : $numberOfStringValues;
         if (empty($numberOfDigitValues)) {
             $numberOfPossibleCodes = $numberOfStringValues;
@@ -521,12 +525,18 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
 
     /**
      * replaced all matching patterns
+     *
+     * @param string $generatedCode
+     * @param array  $range
+     * @param string $pattern
+     *
+     * @return string|string[]|null
      */
     private function replaceAllMatchingPatterns($generatedCode, $range, $pattern)
     {
         $allPatternsReplaced = false;
         while (!$allPatternsReplaced) {
-            $generatedCode = preg_replace('/\\' . $pattern . '/', $range[mt_rand(1, count($range) - 1)], $generatedCode, 1);
+            $generatedCode = preg_replace('/\\' . $pattern . '/', $range[Random::getInteger(1, count($range) - 1)], $generatedCode, 1);
             $allPatternsReplaced = substr_count($generatedCode, $pattern) == 0;
         }
 
@@ -536,7 +546,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     /**
      * helper method to fast delete all voucher codes
      *
-     * @param $voucherId
+     * @param int $voucherId
      */
     private function deleteAllVoucherCodesById($voucherId)
     {

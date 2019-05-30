@@ -55,8 +55,6 @@ class ListingPriceTable implements ListingPriceTableInterface
     }
 
     /**
-     * @param ShopContextInterface $context
-     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     public function get(ShopContextInterface $context)
@@ -96,8 +94,6 @@ class ListingPriceTable implements ListingPriceTableInterface
     }
 
     /**
-     * @param ShopContextInterface $context
-     *
      * @return bool
      */
     private function hasDifferentCustomerGroups(ShopContextInterface $context)
@@ -105,9 +101,6 @@ class ListingPriceTable implements ListingPriceTableInterface
         return $context->getCurrentCustomerGroup()->getId() !== $context->getFallbackCustomerGroup()->getId();
     }
 
-    /**
-     * @param \Doctrine\DBAL\Query\QueryBuilder $query
-     */
     private function joinAvailableVariant(\Doctrine\DBAL\Query\QueryBuilder $query)
     {
         $stockCondition = '';

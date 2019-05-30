@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\CSRFWhitelistAware;
 
 class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action implements CSRFWhitelistAware
@@ -196,6 +197,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
     public function serviceAction()
     {
         $this->Response()->setHttpResponseCode(503);
+        $this->Response()->setHeader('Retry-After', '1800');
     }
 
     /**

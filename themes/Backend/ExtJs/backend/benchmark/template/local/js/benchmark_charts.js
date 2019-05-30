@@ -28,7 +28,7 @@
 
     BenchmarkChart.prototype.initDefaultConfig = function () {
         Chart.defaults.global.defaultFontColor = '#798EA3';
-        Chart.defaults.global.defaultFontFamily = 'Asap';
+        Chart.defaults.global.defaultFontFamily = 'Source Sans Pro';
     };
 
     BenchmarkChart.prototype.initTimeRangeLabel = function () {

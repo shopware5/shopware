@@ -1,3 +1,5 @@
+<a href="https://github.com/shopware/platform"><img src="https://s3.eu-central-1.amazonaws.com/shopware-platform-assets/github-platform/readme/discover_sw6.png" align="right" height="39" /></a>
+
 # Shopware 5
 
 [![Build Status](https://travis-ci.org/shopware/shopware.svg?branch=5.5)](https://travis-ci.org/shopware/shopware)
@@ -13,12 +15,12 @@
 
 ## Overview
 
-![Shopware 5 collage](http://cdn.shopware.de/github/readme_screenshot.png)
+![Shopware 5 collage](https://cdn.shopware.de/github/readme_screenshot.png)
 
-Shopware 5 is the next generation of open source e-commerce software made in Germany. Based on bleeding edge technologies like `Symfony 2`, `Doctrine 2` & `Zend Framework` Shopware comes as the perfect platform for your next e-commerce project.
+Shopware 5 is the next generation of open source e-commerce software made in Germany. Based on bleeding edge technologies like `Symfony 3`, `Doctrine 2` & `Zend Framework` Shopware comes as the perfect platform for your next e-commerce project.
 Furthermore Shopware 5 provides an event-driven plugin system and an advanced hook system, giving you the ability to customize every part of the platform.
 
-Visit the forum at <http://forum.shopware.com/>
+Visit the forum at <https://forum.shopware.com/>
 
 ### Shopware Server Requirements
 
@@ -29,21 +31,22 @@ Visit the forum at <http://forum.shopware.com/>
 
 #### Required PHP extensions:
 
--   <a href="http://php.net/manual/en/book.ctype.php" target="_blank">ctype</a>
--   <a href="http://php.net/manual/en/book.curl.php" target="_blank">curl</a>
--   <a href="http://php.net/manual/en/book.dom.php" target="_blank">dom</a>
--   <a href="http://php.net/manual/en/book.hash.php" target="_blank">hash</a>
--   <a href="http://php.net/manual/en/book.iconv.php" target="_blank">iconv</a>
--   <a href="http://php.net/manual/en/book.image.php" target="_blank">gd</a> (with freetype and libjpeg)
--   <a href="http://php.net/manual/en/book.json.php" target="_blank">json</a>
--   <a href="http://php.net/manual/en/book.mbstring.php" target="_blank">mbstring</a>
--   <a href="http://php.net/manual/en/book.openssl.php" target="_blank">OpenSSL</a>
--   <a href="http://php.net/manual/en/book.session.php" target="_blank">session</a>
--   <a href="http://php.net/manual/en/book.simplexml.php" target="_blank">SimpleXML</a>
--   <a href="http://php.net/manual/en/book.xml.php" target="_blank">xml</a>
--   <a href="http://php.net/manual/en/book.zip.php" target="_blank">zip</a>
--   <a href="http://php.net/manual/en/book.zlib.php" target="_blank">zlib</a>
--   <a href="http://php.net/manual/en/ref.pdo-mysql.php" target="_blank">PDO/MySQL</a>
+-   <a href="https://php.net/manual/en/book.ctype.php" target="_blank">ctype</a>
+-   <a href="https://php.net/manual/en/book.curl.php" target="_blank">curl</a>
+-   <a href="https://php.net/manual/en/book.dom.php" target="_blank">dom</a>
+-   <a href="https://php.net/manual/en/book.hash.php" target="_blank">hash</a>
+-   <a href="https://php.net/manual/en/book.iconv.php" target="_blank">iconv</a>
+-   <a href="https://php.net/manual/en/book.image.php" target="_blank">gd</a> (with freetype and libjpeg)
+-   <a href="https://php.net/manual/en/book.json.php" target="_blank">json</a>
+-   <a href="https://php.net/manual/en/book.mbstring.php" target="_blank">mbstring</a>
+-   <a href="https://php.net/manual/en/book.openssl.php" target="_blank">OpenSSL</a>
+-   <a href="https://php.net/manual/en/book.session.php" target="_blank">session</a>
+-   <a href="https://php.net/manual/en/book.simplexml.php" target="_blank">SimpleXML</a>
+-   <a href="https://php.net/manual/en/book.xml.php" target="_blank">xml</a>
+-   <a href="https://php.net/manual/en/book.zip.php" target="_blank">zip</a>
+-   <a href="https://php.net/manual/en/book.zlib.php" target="_blank">zlib</a>
+-   <a href="https://php.net/manual/en/ref.pdo-mysql.php" target="_blank">PDO/MySQL</a>
+-   <a href="https://php.net/manual/de/book.fileinfo.php" target="_blank">fileinfo</a>
 
 ### Installation via Git
 
@@ -57,16 +60,17 @@ In case you wish to contribute to Shopware, fork the `5.5` branch rather than cl
 
 2.) Set the correct directory permissions:
 
-    chmod -R 755 var
-    chmod -R 755 web
+    chmod -R 755 custom/plugins
+    chmod -R 755 engine/Shopware/Plugins/Community
     chmod -R 755 files
     chmod -R 755 media
-    chmod -R 755 engine/Shopware/Plugins/Community
+    chmod -R 755 var
+    chmod -R 755 web
 
 Depending on your server configuration, it might be necessary to set whole write permissions (777) to the files and folders above.
 You can also start testing with lower permissions due to security reasons (644 for example) as long as your php process can write to those files.
 
-3.) An [Ant](http://ant.apache.org/) Buildfile is used to set up the configuration and database connection:
+3.) An [Ant](https://ant.apache.org/) Buildfile is used to set up the configuration and database connection:
 
     cd build/
     ant configure
@@ -97,6 +101,11 @@ The test_images.zip file includes thumbnails for the new responsive theme and th
 
 If you want to have full featured demo data, you should download the respective demo data plugin in the First Run Wizard or in the Plugin Manager.
 
+# Frontend users in demo data
+
+* Customer: test@example.com / shopware
+* B2B: mustermann@b2b.de / mustermann
+
 # Get involved
 
 Shopware is available under dual license (AGPL v3 and proprietary license). If you want to contribute code (features or bugfixes), you have to create a pull request and include valid license information. You can either contribute your code under New BSD or MIT license.
@@ -112,7 +121,7 @@ For more information about contributing to Shopware, please see [CONTRIBUTING.md
 
 We've always had a sympathetic ear for our community, so please feel free to submit tickets with bug reports or feature requests. In order to have a single issue tracking tool, we've decided to close the GitHub issue panel in favor of our Jira issue tracker, which is directly connected to our development division.
 
-* [Shopware Jira ticket submit form](https://issues.shopware.com)
+* [Shopware ticket submit form](https://issues.shopware.com/createissue)
 
 # Copying / License
 
@@ -124,9 +133,9 @@ The changelog and all available commits are located under <https://github.com/sh
 
 ## Further reading
 
-* [Shopware AG](http://www.shopware.com) - Homepage of shopware AG
+* [Shopware AG](https://www.shopware.com) - Homepage of shopware AG
 * [Shopware Developer Documentation](https://devdocs.shopware.com/)
-* [Shopware Community](http://community.shopware.com/) - Shopware Community
-* [Shopware Forum](http://forum.shopware.com) - Community forum
-* [Shopware Marketplace](http://store.shopware.com) - Shopware Store
+* [Shopware Docs](https://docs.shopware.com/) - Shopware documentation
+* [Shopware Forum](https://forum.shopware.com) - Community forum
+* [Shopware Marketplace](https://store.shopware.com) - Shopware Store
 * [Shopware on Crowdin](https://crowdin.com/project/shopware) - Crowdin (Translations)

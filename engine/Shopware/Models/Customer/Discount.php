@@ -31,7 +31,7 @@ use Shopware\Components\Model\ModelEntity;
  * Shopware Discount Model
  *
  * @ORM\Table(name="s_core_customergroups_discounts")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Discount extends ModelEntity
 {
@@ -39,14 +39,17 @@ class Discount extends ModelEntity
      * OWNING SIDE
      *
      * @var Group
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Customer\Group", inversedBy="discounts")
      * @ORM\JoinColumn(name="groupID", referencedColumnName="id")
      */
     protected $group;
+
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -77,8 +80,6 @@ class Discount extends ModelEntity
 
     /**
      * Set group
-     *
-     * @param Group $group
      *
      * @return Discount
      */

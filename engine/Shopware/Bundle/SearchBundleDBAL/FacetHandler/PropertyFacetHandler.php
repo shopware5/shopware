@@ -42,7 +42,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -63,11 +63,6 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
      */
     private $fieldName;
 
-    /**
-     * @param PropertyGatewayInterface     $propertyGateway
-     * @param QueryBuilderFactoryInterface $queryBuilderFactory
-     * @param QueryAliasMapper             $queryAliasMapper
-     */
     public function __construct(
         PropertyGatewayInterface $propertyGateway,
         QueryBuilderFactoryInterface $queryBuilderFactory,
@@ -91,9 +86,6 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param FacetInterface|Facet\PropertyFacet $facet
-     * @param Criteria                           $reverted
-     * @param Criteria                           $criteria
-     * @param ShopContextInterface               $context
      *
      * @return FacetResultInterface|null
      */
@@ -105,26 +97,24 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
     ) {
         $properties = $this->getProperties($context, $reverted);
 
-        if (null === $properties) {
+        if ($properties === null) {
             return null;
         }
         $actives = $this->getFilteredValues($criteria);
 
+        /* @var Facet\PropertyFacet $facet */
         return $this->createCollectionResult($facet, $properties, $actives);
     }
 
     /**
-     * @param Struct\ShopContextInterface $context
-     * @param Criteria                    $queryCriteria
-     *
-     * @return Struct\Property\Set[]
+     * @return Struct\Property\Set[]|null
      */
     protected function getProperties(Struct\ShopContextInterface $context, Criteria $queryCriteria)
     {
         $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
         $this->rebuildQuery($query);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $propertyData = $statement->fetchAll();
@@ -145,9 +135,6 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
         return $properties;
     }
 
-    /**
-     * @param QueryBuilder $query
-     */
     private function rebuildQuery(QueryBuilder $query)
     {
         $query->resetQueryPart('orderBy');
@@ -162,8 +149,6 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param Criteria $criteria
-     *
      * @return array
      */
     private function getFilteredValues(Criteria $criteria)
@@ -179,7 +164,6 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param Facet\PropertyFacet   $facet
      * @param Struct\Property\Set[] $sets
      * @param int[]                 $actives
      *

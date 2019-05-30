@@ -42,7 +42,7 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
         // Empty data will return empty string
         $request = $this->Request()->setParams([]);
         $this->Front()->setRequest($request);
-        $this->assertEquals('', $this->module->sBuildLink([]));
+        static::assertEquals('', $this->module->sBuildLink([]));
 
         // Provided sVariables are passed into the url, except 'coreID' and 'sPartner'
         $sVariablesTestResult = $this->module->sBuildLink([
@@ -52,19 +52,19 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
             'other' => 'test',
             'variables' => 'values',
         ]);
-        $this->assertInternalType('string', $sVariablesTestResult);
-        $this->assertGreaterThan(0, strlen($sVariablesTestResult));
+        static::assertInternalType('string', $sVariablesTestResult);
+        static::assertGreaterThan(0, strlen($sVariablesTestResult));
 
         $resultArray = [];
         parse_str(trim($sVariablesTestResult, '?'), $resultArray);
-        $this->assertArrayHasKey('some', $resultArray);
-        $this->assertArrayHasKey('other', $resultArray);
-        $this->assertArrayHasKey('variables', $resultArray);
-        $this->assertArrayNotHasKey('coreID', $resultArray);
-        $this->assertArrayNotHasKey('sPartner', $resultArray);
-        $this->assertEquals('with', $resultArray['some']);
-        $this->assertEquals('test', $resultArray['other']);
-        $this->assertEquals('values', $resultArray['variables']);
+        static::assertArrayHasKey('some', $resultArray);
+        static::assertArrayHasKey('other', $resultArray);
+        static::assertArrayHasKey('variables', $resultArray);
+        static::assertArrayNotHasKey('coreID', $resultArray);
+        static::assertArrayNotHasKey('sPartner', $resultArray);
+        static::assertEquals('with', $resultArray['some']);
+        static::assertEquals('test', $resultArray['other']);
+        static::assertEquals('values', $resultArray['variables']);
 
         // Provided sVariables override _GET, not overlapping get included from both
         // Also test that null values don't get passed on
@@ -80,21 +80,21 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
             'variables' => 'values',
             'nullVariables' => null,
         ]);
-        $this->assertInternalType('string', $sVariablesTestResult);
-        $this->assertGreaterThan(0, strlen($sVariablesTestResult));
+        static::assertInternalType('string', $sVariablesTestResult);
+        static::assertGreaterThan(0, strlen($sVariablesTestResult));
 
         $resultArray = [];
         parse_str(trim($sVariablesTestResult, '?'), $resultArray);
-        $this->assertArrayHasKey('just', $resultArray);
-        $this->assertArrayHasKey('some', $resultArray);
-        $this->assertArrayHasKey('other', $resultArray);
-        $this->assertArrayHasKey('variables', $resultArray);
-        $this->assertArrayNotHasKey('nullVariables', $resultArray);
-        $this->assertArrayNotHasKey('nullGet', $resultArray);
-        $this->assertEquals('used', $resultArray['just']);
-        $this->assertEquals('for', $resultArray['some']);
-        $this->assertEquals('with', $resultArray['other']);
-        $this->assertEquals('values', $resultArray['variables']);
+        static::assertArrayHasKey('just', $resultArray);
+        static::assertArrayHasKey('some', $resultArray);
+        static::assertArrayHasKey('other', $resultArray);
+        static::assertArrayHasKey('variables', $resultArray);
+        static::assertArrayNotHasKey('nullVariables', $resultArray);
+        static::assertArrayNotHasKey('nullGet', $resultArray);
+        static::assertEquals('used', $resultArray['just']);
+        static::assertEquals('for', $resultArray['some']);
+        static::assertEquals('with', $resultArray['other']);
+        static::assertEquals('values', $resultArray['variables']);
 
         // Test that sViewport=cat only keeps sCategory and sPage from GET
         // Test that they can still be overwriten by sVariables
@@ -110,22 +110,22 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
             'other' => 'with',
             'variables' => 'values',
         ]);
-        $this->assertInternalType('string', $sVariablesTestResult);
-        $this->assertGreaterThan(0, strlen($sVariablesTestResult));
+        static::assertInternalType('string', $sVariablesTestResult);
+        static::assertGreaterThan(0, strlen($sVariablesTestResult));
 
         $resultArray = [];
         parse_str(trim($sVariablesTestResult, '?'), $resultArray);
-        $this->assertArrayHasKey('sViewport', $resultArray);
-        $this->assertArrayHasKey('sCategory', $resultArray);
-        $this->assertArrayHasKey('sPage', $resultArray);
-        $this->assertArrayHasKey('other', $resultArray);
-        $this->assertArrayHasKey('variables', $resultArray);
-        $this->assertArrayNotHasKey('foo', $resultArray);
-        $this->assertEquals('cat', $resultArray['sViewport']);
-        $this->assertEquals('sVariablesCategory', $resultArray['sCategory']);
-        $this->assertEquals('getPage', $resultArray['sPage']);
-        $this->assertEquals('with', $resultArray['other']);
-        $this->assertEquals('values', $resultArray['variables']);
+        static::assertArrayHasKey('sViewport', $resultArray);
+        static::assertArrayHasKey('sCategory', $resultArray);
+        static::assertArrayHasKey('sPage', $resultArray);
+        static::assertArrayHasKey('other', $resultArray);
+        static::assertArrayHasKey('variables', $resultArray);
+        static::assertArrayNotHasKey('foo', $resultArray);
+        static::assertEquals('cat', $resultArray['sViewport']);
+        static::assertEquals('sVariablesCategory', $resultArray['sCategory']);
+        static::assertEquals('getPage', $resultArray['sPage']);
+        static::assertEquals('with', $resultArray['other']);
+        static::assertEquals('values', $resultArray['variables']);
 
         // Test that overriding sViewport doesn't override the special behavior
         $request = $this->Request()->setParams([
@@ -141,22 +141,22 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
             'other' => 'with',
             'variables' => 'values',
         ]);
-        $this->assertInternalType('string', $sVariablesTestResult);
-        $this->assertGreaterThan(0, strlen($sVariablesTestResult));
+        static::assertInternalType('string', $sVariablesTestResult);
+        static::assertGreaterThan(0, strlen($sVariablesTestResult));
 
         $resultArray = [];
         parse_str(trim($sVariablesTestResult, '?'), $resultArray);
-        $this->assertArrayHasKey('sViewport', $resultArray);
-        $this->assertArrayHasKey('sCategory', $resultArray);
-        $this->assertArrayHasKey('sPage', $resultArray);
-        $this->assertArrayHasKey('other', $resultArray);
-        $this->assertArrayHasKey('variables', $resultArray);
-        $this->assertArrayNotHasKey('foo', $resultArray);
-        $this->assertEquals('test', $resultArray['sViewport']);
-        $this->assertEquals('sVariablesCategory', $resultArray['sCategory']);
-        $this->assertEquals('getPage', $resultArray['sPage']);
-        $this->assertEquals('with', $resultArray['other']);
-        $this->assertEquals('values', $resultArray['variables']);
+        static::assertArrayHasKey('sViewport', $resultArray);
+        static::assertArrayHasKey('sCategory', $resultArray);
+        static::assertArrayHasKey('sPage', $resultArray);
+        static::assertArrayHasKey('other', $resultArray);
+        static::assertArrayHasKey('variables', $resultArray);
+        static::assertArrayNotHasKey('foo', $resultArray);
+        static::assertEquals('test', $resultArray['sViewport']);
+        static::assertEquals('sVariablesCategory', $resultArray['sCategory']);
+        static::assertEquals('getPage', $resultArray['sPage']);
+        static::assertEquals('with', $resultArray['other']);
+        static::assertEquals('values', $resultArray['variables']);
     }
 
     /**
@@ -170,8 +170,8 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
         $baseUrl = $this->module->sRewriteLink();
 
         // Without arguments, we expect the base url
-        $this->assertInternalType('string', $baseUrl);
-        $this->assertGreaterThan(0, strlen($baseUrl));
+        static::assertInternalType('string', $baseUrl);
+        static::assertGreaterThan(0, strlen($baseUrl));
 
         // Fetch all rows and test them
         $paths = Shopware()->Db()->fetchCol(
@@ -184,8 +184,8 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
                 [Shopware()->Shop()->getId(), $path]
             );
 
-            $this->assertEquals(strtolower($baseUrl . $expectedPath), $this->module->sRewriteLink('?' . $path));
-            $this->assertEquals(strtolower($baseUrl . $expectedPath), $this->module->sRewriteLink('?' . $path, 'testTitle'));
+            static::assertEquals(strtolower($baseUrl . $expectedPath), $this->module->sRewriteLink('?' . $path));
+            static::assertEquals(strtolower($baseUrl . $expectedPath), $this->module->sRewriteLink('?' . $path, 'testTitle'));
         }
     }
 }

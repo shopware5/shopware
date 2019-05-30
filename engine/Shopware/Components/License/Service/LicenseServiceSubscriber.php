@@ -33,7 +33,7 @@ use Shopware\Components\License\Struct\ShopwareEdition;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -46,8 +46,6 @@ class LicenseServiceSubscriber implements SubscriberInterface
 
     /**
      * LicenseServiceSubscriber constructor.
-     *
-     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -64,12 +62,9 @@ class LicenseServiceSubscriber implements SubscriberInterface
         ];
     }
 
-    /**
-     * @param Enlight_Event_EventArgs $args
-     */
     public function onPostDispatchBackendIndex(Enlight_Event_EventArgs $args)
     {
-        /** @var $view Enlight_View_Default */
+        /** @var Enlight_View_Default $view */
         $view = $args->getSubject()->View();
         $view->assign('product', ShopwareEdition::CE);
 

@@ -29,20 +29,22 @@ use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Table(name="s_customer_streams_mapping")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Mapping extends ModelEntity
 {
     /**
      * @var int
-     * @ORM\Id
+     *
+     * @ORM\Id()
      * @ORM\Column(name="stream_id", type="integer", nullable=false)
      */
     private $streamId;
 
     /**
      * @var int
-     * @ORM\Id
+     *
+     * @ORM\Id()
      * @ORM\Column(name="customer_id", type="integer", nullable=false)
      */
     private $customerId;

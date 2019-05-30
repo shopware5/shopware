@@ -30,8 +30,8 @@ Ext.define('Shopware.apps.Benchmark', {
     loadPath: '{url action=load}',
 
     views: ['overview.Window', 'settings.Window', 'settings.IndustryField', 'settings.IndustryWindow'],
-    models: [],
-    stores: [ 'Industry' ],
+    models: [ 'ShopConfig' ],
+    stores: [ 'Industry', 'ShopConfigs' ],
 
     controllers: [ 'Main', 'Settings' ],
 

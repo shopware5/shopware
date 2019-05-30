@@ -34,7 +34,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -49,7 +49,7 @@ class MediaCleanupCommand extends ShopwareCommand
             ->setName('sw:media:cleanup')
             ->setHelp('The <info>%command.name%</info> collects unused media and moves them to the recycle bin album.')
             ->setDescription('Collect unused media move them to trash.')
-            ->addOption('delete', false, InputOption::VALUE_NONE, 'Delete unused media.');
+            ->addOption('delete', null, InputOption::VALUE_NONE, 'Delete unused media.');
     }
 
     /**
@@ -64,18 +64,18 @@ class MediaCleanupCommand extends ShopwareCommand
         $io->text(sprintf('%s unused item(s) found.', $total));
 
         if ($total === 0) {
-            return;
+            return null;
         }
 
         if ($input->getOption('delete')) {
             if ($input->isInteractive() && !$io->confirm('Are you sure you want to delete every item in the recycle bin?')) {
-                return;
+                return null;
             }
 
             $deleted = $this->handleCleanup($io);
             $io->success(sprintf('%d item(s) deleted.', $deleted));
 
-            return;
+            return null;
         }
 
         $io->success(sprintf('%d item(s) in recycle bin.', $total));
@@ -83,8 +83,6 @@ class MediaCleanupCommand extends ShopwareCommand
 
     /**
      * Handles cleaning process and returns the number of deleted media objects
-     *
-     * @param SymfonyStyle $io
      *
      * @throws \Exception
      *

@@ -50,8 +50,6 @@ class UserValidator implements UserValidatorInterface
 
     /**
      * CustomerValidator constructor.
-     *
-     * @param ValidatorInterface $validator
      */
     public function __construct(ValidatorInterface $validator)
     {
@@ -59,8 +57,6 @@ class UserValidator implements UserValidatorInterface
     }
 
     /**
-     * @param User $user
-     *
      * @throws ValidationException
      */
     public function validate(User $user)
@@ -101,7 +97,6 @@ class UserValidator implements UserValidatorInterface
 
     /**
      * @param string       $property
-     * @param string       $value
      * @param Constraint[] $constraints
      */
     private function validateField($property, $value, $constraints)

@@ -24,12 +24,12 @@
 
 namespace Shopware\Models\Partner;
 
-use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * Repository for the Partner model (Shopware\Models\Partner\Partner).
- * <br>
+ *
  * The Partner model repository is responsible to load all Partner data.
  * It supports the standard functions like findAll or findBy and extends the standard repository for
  * some specific functions to return the model data as array.
@@ -39,9 +39,9 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the partners for the backend list
      *
-     * @param null $order
-     * @param null $offset
-     * @param null $limit
+     * @param array|null $order
+     * @param int|null   $offset
+     * @param int|null   $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -62,12 +62,13 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $order
+     * @param array $order
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getListQueryBuilder($order)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(
             [
@@ -79,7 +80,7 @@ class Repository extends ModelRepository
                 '(' . $this->getDatePartListDQL('o') . ') as yearlyAmount',
                 '(' . $this->getDatePartListDQL('om', true) . ') as monthlyAmount',
             ])
-            ->from('Shopware\Models\Partner\Partner', 'partner');
+            ->from(\Shopware\Models\Partner\Partner::class, 'partner');
 
         if (!empty($order)) {
             $builder->addOrderBy($order);
@@ -91,7 +92,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the partner for the detail page
      *
-     * @param $filter
+     * @param array $filter
      *
      * @return \Doctrine\ORM\Query
      */
@@ -106,7 +107,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $filter
+     * @param array $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -122,14 +123,14 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object to select the partner for the statistic list
      *
-     * @param null $order
-     * @param null $offset
-     * @param null $limit
-     * @param      $partnerId
-     * @param bool $summary
-     * @param      $fromDate
-     * @param      $toDate
-     * @param      $userCurrencyFactor
+     * @param array|null         $order
+     * @param int|null           $offset
+     * @param int|null           $limit
+     * @param int                $partnerId
+     * @param bool               $summary
+     * @param \DateTimeInterface $fromDate
+     * @param \DateTimeInterface $toDate
+     * @param float|int          $userCurrencyFactor
      *
      * @return \Doctrine\ORM\Query
      */
@@ -148,17 +149,18 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getStatisticListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $order
-     * @param      $partnerId
-     * @param bool $summary
-     * @param      $fromDate
-     * @param      $toDate
-     * @param      $userCurrencyFactor
+     * @param array|null         $order
+     * @param int                $partnerId
+     * @param bool               $summary
+     * @param \DateTimeInterface $fromDate
+     * @param \DateTimeInterface $toDate
+     * @param float|int          $userCurrencyFactor
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getStatisticListQueryBuilder($order, $partnerId, $summary, $fromDate, $toDate, $userCurrencyFactor = 1)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $expr = $this->getEntityManager()->getExpressionBuilder();
 
@@ -174,10 +176,10 @@ class Repository extends ModelRepository
                 'customer.firstname as customerFirstName',
                 'customer.lastname as customerLastName',
                 'customer.number as customerNumber',
-                'orderState.description as orderStatus',
+                'orderState.name as orderStatus',
                 'orderState.id as orderStatusId',
             ])
-            ->from('Shopware\Models\Order\Order', 'o')
+            ->from(\Shopware\Models\Order\Order::class, 'o')
             ->leftJoin('o.partner', 'partner')
             ->leftJoin('o.orderStatus', 'orderState')
             ->leftJoin('o.customer', 'customer')
@@ -206,10 +208,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param $partnerId
-     * @param $fromDate
-     * @param $toDate
-     * @param $userCurrencyFactor
+     * @param int                $partnerId
+     * @param \DateTimeInterface $fromDate
+     * @param \DateTimeInterface $toDate
+     * @param float|int          $userCurrencyFactor
      *
      * @return \Doctrine\ORM\Query
      */
@@ -224,10 +226,10 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getStatisticChartQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $partnerId
-     * @param $fromDate
-     * @param $toDate
-     * @param $userCurrencyFactor
+     * @param int                $partnerId
+     * @param \DateTimeInterface $fromDate
+     * @param \DateTimeInterface $toDate
+     * @param float|int          $userCurrencyFactor
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -241,7 +243,7 @@ class Repository extends ModelRepository
                 'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor)) as netTurnOver',
                 'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor) / 100 * partner.percent) as provision',
             ])
-            ->from('Shopware\Models\Order\Order', 'o')
+            ->from(\Shopware\Models\Order\Order::class, 'o')
             ->leftJoin('o.partner', 'partner')
             ->where('partner.id = ?0')
             ->andWhere('o.status != 4')
@@ -261,7 +263,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object to map the customer to the partner account
      *
-     * @param $mappingValue
+     * @param string $mappingValue
      *
      * @return \Doctrine\ORM\Query
      */
@@ -276,7 +278,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getCustomerForMappingQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $mappingValue
+     * @param string $mappingValue
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -290,7 +292,7 @@ class Repository extends ModelRepository
             'billing.company as company',
             'customer.email as email',
         ]);
-        $builder->from('Shopware\Models\Customer\Customer', 'customer')
+        $builder->from(\Shopware\Models\Customer\Customer::class, 'customer')
                 ->leftJoin('customer.defaultBillingAddress', 'billing')
                 ->where('customer.accountMode = 0')
                 ->andWhere('customer.email = ?0')
@@ -306,8 +308,8 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object to validate the Tracking-Code because the Tracking-Code has to be unique
      *
-     * @param $trackingCode
-     * @param $partnerId
+     * @param string $trackingCode
+     * @param int    $partnerId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -322,8 +324,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getValidateTrackingCodeQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $trackingCode
-     * @param $partnerId
+     * @param string $trackingCode
+     * @param int    $partnerId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -334,7 +336,7 @@ class Repository extends ModelRepository
             [
                 'partner.id',
             ])
-            ->from('Shopware\\Models\\Partner\\Partner', 'partner')
+            ->from(\Shopware\Models\Partner\Partner::class, 'partner')
             ->where('partner.idCode = ?1')
             ->andWhere('partner.id != ?2')
             ->setParameter(1, $trackingCode)
@@ -346,15 +348,15 @@ class Repository extends ModelRepository
     /**
      * Helper method to get the date part of the dql query
      *
-     * @param $alias
-     * @param bool $monthlyAmount | whether to add the selection of a month or not
+     * @param string $alias
+     * @param bool   $monthlyAmount | whether to add the selection of a month or not
      *
      * @return string
      */
     private function getDatePartListDQL($alias, $monthlyAmount = false)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->from('Shopware\Models\Order\Order', $alias)
+        $builder->from(\Shopware\Models\Order\Order::class, $alias)
                 ->select(['SUM(' . $alias . '.invoiceAmountNet - ' . $alias . '.invoiceShippingNet)'])
                 ->where('DATE_FORMAT(CURRENT_DATE(),\'%Y\') = DATE_FORMAT(' . $alias . '.orderTime,\'%Y\')')
                 ->andWhere($alias . '.status NOT IN(\'4\', \'-1\')')

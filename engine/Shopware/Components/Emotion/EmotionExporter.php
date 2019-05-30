@@ -70,13 +70,7 @@ class EmotionExporter implements EmotionExporterInterface
     private $slug;
 
     /**
-     * @param EmotionToPresetDataTransformerInterface $transformer
-     * @param PresetDataSynchronizerInterface         $synchronizer
-     * @param EmotionPreset                           $emotionPresetResource
-     * @param MediaServiceInterface                   $mediaService
-     * @param string                                  $rootDirectory
-     * @param Connection                              $connection
-     * @param SlugInterface                           $slug
+     * @param string $rootDirectory
      */
     public function __construct(
         EmotionToPresetDataTransformerInterface $transformer,
@@ -113,7 +107,7 @@ class EmotionExporter implements EmotionExporterInterface
         $filename = $this->rootDirectory . '/files/downloads/' . $name . time() . '.zip';
 
         if ($zip->open($filename, \ZipArchive::CREATE) !== true) {
-            throw new \Exception('Could not create zip file!');
+            throw new \Exception(sprintf('Could not create zip file "%s"!', $filename));
         }
 
         $emotionData = $this->transformer->transform($emotionId, true);
@@ -148,7 +142,7 @@ class EmotionExporter implements EmotionExporterInterface
         $zip->addFromString('emotion.json', json_encode($exportData));
 
         if (!$zip->close()) {
-            throw new \Exception('Could not close zip file!');
+            throw new \Exception(sprintf('Could not close zip file "%s"!', $filename));
         }
 
         $this->presetResource->delete($preset->getId());
@@ -157,8 +151,6 @@ class EmotionExporter implements EmotionExporterInterface
     }
 
     /**
-     * @param array $emotionData
-     *
      * @return \Shopware\Models\Emotion\Preset
      */
     private function createHiddenPreset(array $emotionData)

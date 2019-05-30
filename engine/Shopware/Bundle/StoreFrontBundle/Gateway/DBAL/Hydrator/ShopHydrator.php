@@ -29,6 +29,11 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 class ShopHydrator extends Hydrator
 {
     /**
+     * @var AttributeHydrator
+     */
+    private $attributeHydrator;
+
+    /**
      * @var TemplateHydrator
      */
     private $templateHydrator;
@@ -53,20 +58,15 @@ class ShopHydrator extends Hydrator
      */
     private $customerGroupHydrator;
 
-    /**
-     * @param TemplateHydrator      $templateHydrator
-     * @param CategoryHydrator      $categoryHydrator
-     * @param LocaleHydrator        $localeHydrator
-     * @param CurrencyHydrator      $currencyHydrator
-     * @param CustomerGroupHydrator $customerGroupHydrator
-     */
     public function __construct(
+        AttributeHydrator $attributeHydrator,
         TemplateHydrator $templateHydrator,
         CategoryHydrator $categoryHydrator,
         LocaleHydrator $localeHydrator,
         CurrencyHydrator $currencyHydrator,
         CustomerGroupHydrator $customerGroupHydrator
     ) {
+        $this->attributeHydrator = $attributeHydrator;
         $this->templateHydrator = $templateHydrator;
         $this->categoryHydrator = $categoryHydrator;
         $this->localeHydrator = $localeHydrator;
@@ -111,6 +111,10 @@ class ShopHydrator extends Hydrator
             $hosts = array_unique(array_values(array_filter($hosts)));
         }
         $shop->setHosts($hosts);
+
+        if ($data['__shopAttribute_id']) {
+            $this->attributeHydrator->addAttribute($shop, $data, 'shopAttribute');
+        }
 
         return $shop;
     }

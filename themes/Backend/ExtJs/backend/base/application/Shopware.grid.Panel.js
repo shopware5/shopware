@@ -315,7 +315,6 @@ Ext.define('Shopware.grid.Panel', {
              *     return items;
              *  },
              *
-             *
              * @type { boolean }
              */
             toolbar: true,
@@ -509,7 +508,15 @@ Ext.define('Shopware.grid.Panel', {
              *          description: { header: 'MyOwnDescription' }
              *      }
              */
-            columns: { }
+            columns: { },
+
+            /**
+             * Shows the id property as a column
+             *
+             * @default { false }
+             * @type { Boolean }
+             */
+            showIdColumn: false
         },
 
         /**
@@ -1174,7 +1181,7 @@ Ext.define('Shopware.grid.Panel', {
     createColumn: function (model, field) {
         var me = this, column = {}, config, customConfig;
 
-        if (model.idProperty === field.name) {
+        if (model.idProperty === field.name && !me.getConfig('showIdColumn')) {
             return null;
         }
 

@@ -52,50 +52,50 @@ class PostWrapperTest extends TestCase
     public function testSet()
     {
         $this->system->_POST->offsetSet('foo', 'bar');
-        $this->assertEquals('bar', $this->request->getPost('foo'));
+        static::assertEquals('bar', $this->request->getPost('foo'));
 
         $this->system->_POST->offsetSet('foo', null);
-        $this->assertNull($this->request->getPost('bar'));
+        static::assertNull($this->request->getPost('bar'));
 
         $this->system->_POST->offsetSet('foo', []);
-        $this->assertEmpty($this->request->getPost('bar'));
-        $this->assertInternalType('array', $this->request->getPost('foo'));
+        static::assertEmpty($this->request->getPost('bar'));
+        static::assertInternalType('array', $this->request->getPost('foo'));
     }
 
     public function testGet()
     {
         $this->request->setPost('foo', 'bar');
-        $this->assertEquals('bar', $this->system->_POST->offsetGet('foo'));
+        static::assertEquals('bar', $this->system->_POST->offsetGet('foo'));
 
         $this->request->setPost('foo', null);
-        $this->assertNull($this->system->_POST->offsetGet('bar'));
+        static::assertNull($this->system->_POST->offsetGet('bar'));
 
         $this->request->setPost('foo', []);
-        $this->assertEmpty($this->system->_POST->offsetGet('bar'));
-        $this->assertInternalType('array', $this->system->_POST->offsetGet('foo'));
+        static::assertEmpty($this->system->_POST->offsetGet('bar'));
+        static::assertInternalType('array', $this->system->_POST->offsetGet('foo'));
     }
 
     public function testUnset()
     {
         $this->system->_POST->offsetSet('foo', 'bar');
-        $this->assertEquals('bar', $this->request->getPost('foo'));
+        static::assertEquals('bar', $this->request->getPost('foo'));
         unset($this->system->_POST['foo']);
-        $this->assertNull($this->request->getPost('foo'));
+        static::assertNull($this->request->getPost('foo'));
     }
 
     public function testSetAll()
     {
         $this->system->_POST->offsetSet('foo', 'bar');
-        $this->assertEquals('bar', $this->request->getPost('foo'));
+        static::assertEquals('bar', $this->request->getPost('foo'));
 
         $this->system->_POST = ['foo' => 'too'];
-        $this->assertNull($this->request->getPost('bar'));
-        $this->assertEquals('too', $this->request->getPost('foo'));
+        static::assertNull($this->request->getPost('bar'));
+        static::assertEquals('too', $this->request->getPost('foo'));
     }
 
     public function testToArray()
     {
         $this->request->setPost('foo', 'bar');
-        $this->assertEquals(['foo' => 'bar'], $this->system->_POST->toArray());
+        static::assertEquals(['foo' => 'bar'], $this->system->_POST->toArray());
     }
 }

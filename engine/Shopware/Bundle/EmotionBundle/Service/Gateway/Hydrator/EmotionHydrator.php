@@ -36,17 +36,12 @@ class EmotionHydrator extends Hydrator
      */
     private $attributeHydrator;
 
-    /**
-     * @param AttributeHydrator $attributeHydrator
-     */
     public function __construct(AttributeHydrator $attributeHydrator)
     {
         $this->attributeHydrator = $attributeHydrator;
     }
 
     /**
-     * @param array $data
-     *
      * @return Emotion
      */
     public function hydrate(array $data)
@@ -79,8 +74,12 @@ class EmotionHydrator extends Hydrator
         $emotion->setParentId($data['__emotion_parent_id'] !== null ? (int) $data['__emotion_parent_id'] : null);
         $emotion->setIsPreview((bool) $data['__emotion_preview_id']);
         $emotion->setPreviewSecret($data['__emotion_preview_secret']);
-        $emotion->setCategoryIds(explode(',', $data['__emotion_category_ids']));
-        $emotion->setShopIds(explode(',', $data['__emotion_shop_ids']));
+        /** @var int[] $categoryIds */
+        $categoryIds = explode(',', $data['__emotion_category_ids']);
+        $emotion->setCategoryIds($categoryIds);
+        /** @var int[] $shopIds */
+        $shopIds = explode(',', $data['__emotion_shop_ids']);
+        $emotion->setShopIds($shopIds);
 
         // assign template
         $this->assignTemplate($emotion, $data);
@@ -93,10 +92,6 @@ class EmotionHydrator extends Hydrator
         return $emotion;
     }
 
-    /**
-     * @param Emotion $emotion
-     * @param array   $data
-     */
     private function assignTemplate(Emotion $emotion, array $data)
     {
         $template = new EmotionTemplate();

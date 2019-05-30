@@ -28,7 +28,7 @@ use Assert\Assertion;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -87,7 +87,7 @@ class ProductAttributeCondition implements ConditionInterface, \JsonSerializable
     }
 
     /**
-     * @return string|array $value
+     * @return string|array|null $value
      */
     public function getValue()
     {

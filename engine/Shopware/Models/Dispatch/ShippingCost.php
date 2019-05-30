@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Dispatch;
+namespace Shopware\Models\Dispatch;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -43,7 +43,7 @@ use Shopware\Components\Model\ModelEntity;
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_premium_shippingcosts")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class ShippingCost extends ModelEntity
 {
@@ -56,13 +56,14 @@ class ShippingCost extends ModelEntity
      * @ORM\JoinColumn(name="dispatchID", referencedColumnName="id")
      */
     protected $dispatch;
+
     /**
      * Autoincrement ID
      *
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -86,7 +87,7 @@ class ShippingCost extends ModelEntity
     private $value;
 
     /**
-     * Multiplicator for this entry
+     * Multiplicand for this entry
      *
      * @var float
      *
@@ -198,8 +199,6 @@ class ShippingCost extends ModelEntity
 
     /**
      * @param \Shopware\Models\Dispatch\Dispatch|array|null $dispatch
-     *
-     * @return \Shopware\Components\Model\ModelEntity
      */
     public function setDispatch($dispatch)
     {

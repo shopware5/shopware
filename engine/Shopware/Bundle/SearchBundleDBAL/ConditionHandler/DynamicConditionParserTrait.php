@@ -34,7 +34,6 @@ trait DynamicConditionParserTrait
      * Adds base conditions to a query builder object
      * NOTE: The method will also verify that the column to be compared actually exists in the table.
      *
-     * @param QueryBuilder      $query
      * @param string            $table      table name
      * @param string            $tableAlias table alias in query
      * @param string            $field      Field to be used in the comparisons
@@ -51,8 +50,7 @@ trait DynamicConditionParserTrait
         $field = trim($field);
 
         if (empty($field)) {
-            $msg = 'Condition class requires a defined attribute field!';
-            throw new \InvalidArgumentException($msg, 1);
+            throw new \InvalidArgumentException('Condition class requires a defined attribute field!', 1);
         }
 
         /**
@@ -63,7 +61,7 @@ trait DynamicConditionParserTrait
             ->listTableColumns($table);
 
         if (empty($columns)) {
-            throw new \RuntimeException("Could not retrieve columns from '$table'");
+            throw new \RuntimeException(sprintf('Could not retrieve columns from "%s".', $table));
         }
 
         $names = array_map(function (\Doctrine\DBAL\Schema\Column $column) {
@@ -71,7 +69,7 @@ trait DynamicConditionParserTrait
         }, $columns);
 
         if (!array_key_exists(strtolower($field), $names)) {
-            throw new \InvalidArgumentException("Invalid column name specified '$field'", 1);
+            throw new \InvalidArgumentException(sprintf('Invalid column name "%s" specified.', $field), 1);
         }
 
         $validOperators = [
@@ -108,7 +106,7 @@ trait DynamicConditionParserTrait
 
         switch (true) {
             case $operator === Condition::OPERATOR_EQ:
-                if (null === $value) {
+                if ($value === null) {
                     $query->andWhere($query->expr()->isNull($field));
                     break;
                 }
@@ -117,7 +115,7 @@ trait DynamicConditionParserTrait
                 break;
 
             case $operator === Condition::OPERATOR_NEQ:
-                if (null === $value) {
+                if ($value === null) {
                     $query->andWhere($query->expr()->isNotNull($field));
                     break;
                 }

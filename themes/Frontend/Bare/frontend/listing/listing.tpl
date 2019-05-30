@@ -64,7 +64,8 @@
 
                     {block name="frontend_listing_no_filter_result"}
                         <div class="listing-no-filter-result">
-                            {include file="frontend/_includes/messages.tpl" type="info" content="{s name=noFilterResult}Für die Filterung wurden keine Ergebnisse gefunden!{/s}" visible=false}
+                            {s name="noFilterResult" assign="snippetNoFilterResult"}Für die Filterung wurden keine Ergebnisse gefunden!{/s}
+                            {include file="frontend/_includes/messages.tpl" type="info" content=$snippetNoFilterResult visible=false}
                         </div>
                     {/block}
 
@@ -79,6 +80,7 @@
                                     data-categoryId="{$sCategoryContent.id}"
                                     data-pages="{$pages}"
                                     data-threshold="{$theme.infiniteThreshold}"
+                                    data-pageShortParameter="{$shortParameters.sPage}"
                                 {/if}>
 
                             {* Actual listing *}

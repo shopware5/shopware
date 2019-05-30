@@ -44,26 +44,26 @@ class PreHashedTest extends TestCase
      */
     public function testGetNameShouldReturnName()
     {
-        $this->assertEquals('PreHashed', $this->hasher->getName());
+        static::assertEquals('PreHashed', $this->hasher->getName());
     }
 
     public function testEncodePasswordShouldNotModifyInput()
     {
-        $this->assertEquals('example', $this->hasher->encodePassword('example'));
+        static::assertEquals('example', $this->hasher->encodePassword('example'));
     }
 
     public function testRehash()
     {
-        $this->assertFalse($this->hasher->isReencodeNeeded('example'));
+        static::assertFalse($this->hasher->isReencodeNeeded('example'));
     }
 
     public function testValidatePasswordForSameHashes()
     {
-        $this->assertTrue($this->hasher->isPasswordValid('example', 'example'));
+        static::assertTrue($this->hasher->isPasswordValid('example', 'example'));
     }
 
     public function testValidatePasswordForDifferentHashes()
     {
-        $this->assertFalse($this->hasher->isPasswordValid('example', 'alice'));
+        static::assertFalse($this->hasher->isPasswordValid('example', 'alice'));
     }
 }

@@ -39,13 +39,13 @@ Ext.define('Shopware.apps.Base.model.Shop', {
     /**
      * Defines an alternate name for this class.
      */
-    alternateClassName:'Shopware.model.Shop',
+    alternateClassName: 'Shopware.model.Shop',
 
     /**
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.data.Model',
+    extend: 'Shopware.data.Model',
 
     /**
      * The fields used for this model
@@ -53,11 +53,11 @@ Ext.define('Shopware.apps.Base.model.Shop', {
      */
     fields:[
         //{block name="backend/base/model/shop/fields"}{/block}
-        { name:'id', type:'int' },
-        { name:'default', type:'boolean' },
-        { name:'localeId', type:'int' },
-        { name:'categoryId', type:'int' },
-        { name:'name', type:'string' }
+        { name: 'id', type: 'int' },
+        { name: 'default', type: 'boolean' },
+        { name: 'localeId', type: 'int' },
+        { name: 'categoryId', type: 'int' },
+        { name: 'name', type: 'string' }
     ]
 });
 //{/block}

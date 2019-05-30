@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\MediaBundle;
 
 use League\Flysystem\FilesystemInterface;
+use League\Flysystem\Util;
 use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
 use Shopware\Models\Shop\Shop;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -60,11 +61,6 @@ class MediaService implements MediaServiceInterface
     private $config;
 
     /**
-     * @param FilesystemInterface $filesystem
-     * @param StrategyInterface   $strategy
-     * @param ContainerInterface  $container
-     * @param array               $config
-     *
      * @throws \Exception
      */
     public function __construct(FilesystemInterface $filesystem, StrategyInterface $strategy, ContainerInterface $container, array $config)
@@ -75,7 +71,7 @@ class MediaService implements MediaServiceInterface
         $this->config = $config;
 
         if (!isset($config['mediaUrl'])) {
-            throw new \Exception(sprintf("Please provide a 'mediaUrl' in your %s adapter.", $config['type']));
+            throw new \Exception(sprintf('Please provide a "mediaUrl" in your %s adapter.', $config['type']));
         }
 
         $mediaUrl = $config['mediaUrl'] ?: $this->createFallbackMediaUrl();
@@ -218,7 +214,7 @@ class MediaService implements MediaServiceInterface
     {
         $files = [];
         foreach ($this->filesystem->listContents($directory, true) as $file) {
-            if ($file['type'] == 'dir' || strstr($file['path'], '/.') !== false) {
+            if ($file['type'] === 'dir' || strstr($file['path'], '/.') !== false) {
                 continue;
             }
 
@@ -246,6 +242,12 @@ class MediaService implements MediaServiceInterface
     public function migrateFile($path)
     {
         if ($this->getAdapterType() !== 'local' || $this->isEncoded($path)) {
+            return;
+        }
+
+        $normalizedPath = Util::normalizePath($path);
+
+        if (strpos($normalizedPath, 'media/') !== 0) {
             return;
         }
 

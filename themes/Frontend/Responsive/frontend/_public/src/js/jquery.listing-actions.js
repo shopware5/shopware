@@ -26,7 +26,6 @@
      * Example:
      * <form id="filter" method="get" data-filter-form="true">
      *
-     *
      * ** Action Forms **
      * You can apply different category parameters over additional action forms.
      * In most cases these forms are auto submitting forms using the "autoSubmit" plugin,
@@ -40,7 +39,6 @@
      *      {...}
      *  </select>
      * </form>
-     *
      *
      * ** Action Links **
      * You can also apply different category parameter via direct links.
@@ -405,14 +403,18 @@
          * @param {boolean} disabled
          */
         disableActiveFilterContainer: function (disabled) {
-            if (this.showInstantFilterResult || this.isFilterpanelInSidebar) {
+            var me = this;
+            
+            $.publish('plugin/swListingActions/disableActiveFilter', [this, disabled]);
+            
+            if (me.showInstantFilterResult || me.isFilterpanelInSidebar) {
                 return;
             }
 
             if (disabled) {
-                this.$activeFilterCont.addClass(this.opts.disabledCls);
-            } else if (this.$activeFilterCont.hasClass(this.opts.disabledCls)) {
-                this.$activeFilterCont.removeClass(this.opts.disabledCls);
+                me.$activeFilterCont.addClass(me.opts.disabledCls);
+            } else if (me.$activeFilterCont.hasClass(me.opts.disabledCls)) {
+                me.$activeFilterCont.removeClass(me.opts.disabledCls);
             }
         },
 
@@ -701,7 +703,7 @@
                 if (!isMobile && !me.$filterCont.hasClass(me.opts.collapsedCls)) {
                     me.applyCategoryParams();
                 }
-            } else if (!me.$activeFilterCont.hasClass(me.opts.disabledCls)) {
+            } else if (!me.$activeFilterCont.hasClass(me.opts.disabledCls) || me.$filterCont.is('.off-canvas.is--open')) {
                 me.removeActiveFilter(param);
                 me.resetFilterProperty(param);
             }

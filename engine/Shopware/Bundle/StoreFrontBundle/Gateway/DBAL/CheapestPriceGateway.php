@@ -29,9 +29,12 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ *
+ * NOTICE:  When doing changes on this file, please remember to do those changes in the CheapestPriceESGateway as well!
+ *          Otherwise there could be problems with the ES Indexing
  */
 class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
 {
@@ -65,12 +68,6 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
      */
     private $connection;
 
-    /**
-     * @param Connection                  $connection
-     * @param FieldHelper                 $fieldHelper
-     * @param Hydrator\PriceHydrator      $priceHydrator
-     * @param \Shopware_Components_Config $config
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
@@ -127,7 +124,7 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
         $this->fieldHelper->addVariantTranslation($query, $context);
         $this->fieldHelper->addPriceTranslation($query, $context);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -144,12 +141,11 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
     /**
      * Pre selection of the cheapest prices ids.
      *
-     * @param Struct\BaseProduct[]  $products
-     * @param Struct\Customer\Group $customerGroup
+     * @param Struct\BaseProduct[] $products
      *
      * @return array
      */
-    private function getCheapestPriceIds($products, Struct\Customer\Group $customerGroup)
+    protected function getCheapestPriceIds($products, Struct\Customer\Group $customerGroup)
     {
         $ids = [];
         foreach ($products as $product) {

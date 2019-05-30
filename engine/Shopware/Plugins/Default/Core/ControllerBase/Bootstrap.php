@@ -47,13 +47,13 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
      * Event listener method
      *
      * Read base controller data
-     *
-     * @param Enlight_Event_EventArgs $args
      */
     public function onPostDispatch(Enlight_Event_EventArgs $args)
     {
         $request = $args->getSubject()->Request();
         $response = $args->getSubject()->Response();
+
+        /** @var Enlight_View_Default $view */
         $view = $args->getSubject()->View();
 
         if (!$request->isDispatched() || $response->isException()
@@ -63,30 +63,36 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
             return;
         }
 
-        $view->baseUrl = $request->getBaseUrl() . $request->getPathInfo();
+        $view->assign('baseUrl', $request->getBaseUrl() . $request->getPathInfo());
 
         $shop = Shopware()->Shop();
-        $view->Controller = $args->getSubject()->Request()->getControllerName();
-        $view->Shopware = Shopware();
+        $view->assign('Controller', $args->getSubject()->Request()->getControllerName());
 
-        $view->sBasketQuantity = $view->sBasketQuantity ?: 0;
-        $view->sBasketAmount = $view->sBasketAmount ?: 0;
-        $view->sNotesQuantity = $view->sNotesQuantity ?: 0;
-        $view->sUserLoggedIn = $view->sUserLoggedIn ?: false;
+        /*
+         * @deprecated
+         *
+         * This assignment is deprecated and will be removed in Shopware 5.6 without replacement
+         */
+        $view->assign('Shopware', Shopware());
 
-        $view->Shop = $shop;
-        $view->Locale = $shop->getLocale()->getLocale();
+        $view->assign('sBasketQuantity', $view->sBasketQuantity ?: 0);
+        $view->assign('sBasketAmount', $view->sBasketAmount ?: 0);
+        $view->assign('sNotesQuantity', $view->sNotesQuantity ?: 0);
+        $view->assign('sUserLoggedIn', $view->sUserLoggedIn ?: false);
 
-        $view->sCategoryStart = $shop->getCategory()->getId();
-        $view->sCategoryCurrent = $this->getCategoryCurrent($view->sCategoryStart);
-        $view->sCategories = $this->getCategories($view->sCategoryCurrent);
-        $view->sMainCategories = $view->sCategories;
-        $view->sOutputNet = Shopware()->Session()->sOutputNet;
+        $view->assign('Shop', $shop);
+        $view->assign('Locale', $shop->getLocale()->getLocale());
+
+        $view->assign('sCategoryStart', $shop->getCategory()->getId());
+        $view->assign('sCategoryCurrent', $this->getCategoryCurrent($view->sCategoryStart));
+        $view->assign('sCategories', $this->getCategories($view->sCategoryCurrent));
+        $view->assign('sMainCategories', $view->sCategories);
+        $view->assign('sOutputNet', Shopware()->Session()->sOutputNet);
 
         $activePage = isset($view->sCustomPage['id']) ? $view->sCustomPage['id'] : null;
-        $view->sMenu = $this->getMenu($shop->getId(), $activePage);
+        $view->assign('sMenu', $this->getMenu($shop->getId(), $activePage));
 
-        $view->sShopname = Shopware()->Config()->shopName;
+        $view->assign('sShopname', Shopware()->Config()->shopName);
     }
 
     /**
@@ -104,7 +110,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     /**
      * Returns current category id
      *
-     * @param $default
+     * @param int $default
      *
      * @return int
      */
@@ -122,7 +128,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     /**
      * Return current categories
      *
-     * @param $parentId
+     * @param int $parentId
      *
      * @return array
      */
@@ -134,8 +140,8 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     /**
      * Return cms menu items
      *
-     * @param null|int $shopId
-     * @param null|int $activePageId
+     * @param int|null $shopId
+     * @param int|null $activePageId
      *
      * @return array
      */
@@ -155,7 +161,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     /**
      * Return box campaigns items
      *
-     * @param $parentId
+     * @param int $parentId
      *
      * @return array
      */

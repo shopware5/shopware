@@ -35,9 +35,6 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
     /** @var ModelManager $modelManager */
     private $modelManager;
 
-    /**
-     * @param ModelManager $modelManager
-     */
     public function __construct(ModelManager $modelManager)
     {
         $this->modelManager = $modelManager;
@@ -54,7 +51,7 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
     }
 
     /**
-     * @param $emotionId
+     * @param int $emotionId
      *
      * @throws NoResultException
      *
@@ -86,7 +83,7 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
     }
 
     /**
-     * @param array $emotionData
+     * @param bool $keepName
      *
      * @return array
      */
@@ -123,8 +120,6 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
     }
 
     /**
-     * @param array $elements
-     *
      * @return array
      */
     private function cleanupElements(array $elements)
@@ -153,9 +148,6 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
     }
 
     /**
-     * @param array $element
-     * @param array $fieldMapping
-     *
      * @return array
      */
     private function cleanupElementData(array $element, array $fieldMapping)
@@ -185,8 +177,6 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
     }
 
     /**
-     * @param array $viewports
-     *
      * @return array
      */
     private function cleanupElementViewports(array $viewports)
@@ -203,8 +193,6 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
     }
 
     /**
-     * @param array $elements
-     *
      * @return array
      */
     private function getRequiredPlugins(array $elements)
@@ -231,8 +219,6 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
     }
 
     /**
-     * @param array $pluginIds
-     *
      * @return array
      */
     private function getRequiredPluginsById(array $pluginIds)
@@ -247,8 +233,7 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
     }
 
     /**
-     * @param array $elements
-     * @param int   $emotionId
+     * @param int $emotionId
      *
      * @return array
      */

@@ -43,9 +43,6 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
 
     /**
      * Constructor
-     *
-     * @param Session $session
-     * @param Factory $factory
      */
     public function __construct(Session $session, Factory $factory)
     {
@@ -91,8 +88,6 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
 
     /**
      * Have to be called after get the MultipleElement to find all its siblings
-     *
-     * @param \Behat\Mink\Element\Element $parent
      *
      * @return $this
      */
@@ -141,10 +136,10 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
      *
      * @see http://php.net/manual/en/countable.count.php
      *
-     * @return int The custom count as an integer.
+     * @return int the custom count as an integer.
      *             </p>
      *             <p>
-     *             The return value is cast to an integer.
+     *             The return value is cast to an integer
      */
     public function count()
     {
@@ -197,8 +192,8 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
      *
      * @see http://php.net/manual/en/iterator.valid.php
      *
-     * @return bool The return value will be casted to boolean and then evaluated.
-     *              Returns true on success or false on failure.
+     * @return bool the return value will be casted to boolean and then evaluated.
+     *              Returns true on success or false on failure
      */
     public function valid()
     {
@@ -230,7 +225,7 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
      *
      * @param string $property
      *
-     * @return null|string
+     * @return string|null
      */
     public function getProperty($property)
     {

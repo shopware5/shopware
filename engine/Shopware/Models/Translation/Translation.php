@@ -32,26 +32,28 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Class Translation
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_core_translations")
  */
 class Translation extends ModelEntity
 {
     /**
      * @var Shop
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="objectlanguage", referencedColumnName="id")
      */
     protected $shop;
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -147,9 +149,6 @@ class Translation extends ModelEntity
         return $this->type;
     }
 
-    /**
-     * @param \Shopware\Models\Shop\Shop $shop
-     */
     public function setShop(Shop $shop)
     {
         $this->shop = $shop;

@@ -28,7 +28,7 @@ use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Models\Property\Value;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -48,8 +48,6 @@ class PropertyOptionSearcher extends GenericSearcher
     }
 
     /**
-     * @param SearchCriteria $criteria
-     *
      * @return array
      */
     protected function getSearchFields(SearchCriteria $criteria)

@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -51,10 +51,6 @@ interface PropertyGatewayInterface
      *  - Sort mode equals to 1, the values are sorted by the numeric value
      *  - Sort mode equals to 3, the values are sorted by the position
      *  - In all other cases the values are sorted by their alphanumeric value
-     *
-     * @param array                       $valueIds
-     * @param Struct\ShopContextInterface $context
-     * @param array                       $filterGroupIds
      *
      * @return Struct\Property\Set[] Each array element (set, group, option) is indexed by his id
      */

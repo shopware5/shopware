@@ -31,7 +31,7 @@ use Shopware\Models\Shop\Shop;
 /**
  * Shopware Plugin Namespace
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -57,8 +57,6 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      *
      * @param string              $name
      * @param Enlight_Config|null $storage
-     * @param array               $pluginDirectories
-     * @param ConfigReader        $configReader
      */
     public function __construct($name, $storage, array $pluginDirectories, ConfigReader $configReader)
     {
@@ -114,8 +112,6 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
 
     /**
      * Set shop instance
-     *
-     * @param Shop $shop
      *
      * @return Shopware_Components_Plugin_Namespace
      */
@@ -220,9 +216,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     /**
      * Registers a plugin in the collection.
      *
-     * @param Shopware_Components_Plugin_Bootstrap $bootstrap
-     *
-     * @return bool
+     * @return bool|array
      */
     public function installPlugin(Shopware_Components_Plugin_Bootstrap $bootstrap)
     {
@@ -286,8 +280,8 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             return $result;
         }
 
-        /** @var $plugin Shopware\Models\Plugin\Plugin */
-        /** @var $widget Shopware\Models\Widget\Widget */
+        /** @var Shopware\Models\Plugin\Plugin $plugin */
+        /** @var Shopware\Models\Widget\Widget $widget */
         foreach ($plugin->getWidgets() as $widget) {
             $name = $widget->getName();
             $db->insert('s_core_acl_privileges', [
@@ -303,12 +297,11 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      * Registers a plugin in the collection.
      * If $removeData is set to false the plugin data will not be removed.
      *
-     * @param Shopware_Components_Plugin_Bootstrap $bootstrap
-     * @param bool                                 $removeData
+     * @param bool $removeData
      *
      * @throws Exception
      *
-     * @return bool
+     * @return bool|array
      */
     public function uninstallPlugin(Shopware_Components_Plugin_Bootstrap $bootstrap, $removeData = true)
     {
@@ -427,15 +420,13 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     /**
      * Registers a plugin in the collection.
      *
-     * @param Shopware_Components_Plugin_Bootstrap $plugin
-     *
      * @throws \Exception
      * @throws \Enlight_Config_Exception
      * @throws \Enlight_Event_Exception
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      *
-     * @return bool
+     * @return bool|array
      */
     public function updatePlugin(Shopware_Components_Plugin_Bootstrap $plugin)
     {
@@ -641,8 +632,6 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      *
      * @param string $plugin
      * @param string $name
-     *
-     * @return mixed
      */
     protected function getInfo($plugin, $name = null)
     {
@@ -688,8 +677,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     /**
      * Helper function to remove a plugins form or only its translations (if removeData == false)
      *
-     * @param Shopware_Components_Plugin_Bootstrap $bootstrap
-     * @param bool                                 $removeData
+     * @param bool $removeData
      *
      * @throws Exception
      */

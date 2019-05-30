@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\Api\Exception as ApiException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\FileBag;
@@ -129,8 +130,6 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
     }
 
     /**
-     * @param array $params
-     *
      * @throws ApiException\CustomValidationException
      * @throws Exception
      *
@@ -173,8 +172,6 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
 
     /**
      * Use the ID of the authenticated user as a fallback 'userId'
-     *
-     * @param array $params
      *
      * @return array
      */

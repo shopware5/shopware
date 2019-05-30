@@ -42,8 +42,6 @@ class Replace extends FunctionNode
 
     /**
      * Define the parser
-     *
-     * @param Parser $parser
      */
     public function parse(Parser $parser)
     {
@@ -59,8 +57,6 @@ class Replace extends FunctionNode
 
     /**
      * Return plain SQL string
-     *
-     * @param SqlWalker $sqlWalker
      *
      * @return string
      */

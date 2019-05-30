@@ -126,6 +126,6 @@ class Zend_Mail_Transport_File extends Zend_Mail_Transport_Abstract
      */
     public function defaultCallback($transport)
     {
-        return 'ZendMail_' . $_SERVER['REQUEST_TIME'] . '_' . mt_rand() . '.tmp';
+        return 'ZendMail_' . $_SERVER['REQUEST_TIME'] . '_' . Shopware\Components\Random::getInteger(0, PHP_INT_MAX) . '.tmp';
     }
 }

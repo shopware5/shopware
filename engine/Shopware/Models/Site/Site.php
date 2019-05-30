@@ -22,10 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Site;
+namespace Shopware\Models\Site;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\Site as SiteAttribute;
 
 /**
  * Shopware Model Site
@@ -40,9 +41,9 @@ class Site extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Site", mappedBy="site", orphanRemoval=true, cascade={"persist"})
+     * @var SiteAttribute
      *
-     * @var \Shopware\Models\Attribute\Site
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Site", mappedBy="site", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
 
@@ -50,7 +51,7 @@ class Site extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -142,7 +143,7 @@ class Site extends ModelEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="grouping", type="string", nullable=false)
+     * @ORM\Column(name="`grouping`", type="string", nullable=false)
      */
     private $grouping;
 
@@ -175,14 +176,15 @@ class Site extends ModelEntity
     private $shopIds;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="changed", type="datetime", nullable=false)
      */
     private $changed;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection<Site>
+     *
      * @ORM\OneToMany(targetEntity="Site", mappedBy="parent")
      * @ORM\OrderBy({"position" = "ASC"})
      */
@@ -192,6 +194,7 @@ class Site extends ModelEntity
      * The parent category
      *
      * @var Site
+     *
      * @ORM\ManyToOne(targetEntity="Site", inversedBy="children")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
      */
@@ -199,6 +202,7 @@ class Site extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="parentID", type="integer", nullable=true)
      */
     private $parentId;
@@ -475,7 +479,7 @@ class Site extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Site\Site
+     * @return Site
      */
     public function getParent()
     {
@@ -483,7 +487,7 @@ class Site extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Site\Site $parent
+     * @param Site $parent
      *
      * @return Site
      */
@@ -535,7 +539,7 @@ class Site extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Site
+     * @return SiteAttribute
      */
     public function getAttribute()
     {
@@ -543,13 +547,13 @@ class Site extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\Site|array|null $attribute
+     * @param SiteAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Site
+     * @return Site
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Site', 'attribute', 'site');
+        return $this->setOneToOne($attribute, SiteAttribute::class, 'attribute', 'site');
     }
 
     /**
@@ -613,13 +617,13 @@ class Site extends ModelEntity
     }
 
     /**
-     * @param \DateTime|string $changed
+     * @param \DateTimeInterface|string $changed
      *
      * @return Site
      */
     public function setChanged($changed = 'now')
     {
-        if (!$changed instanceof \DateTime) {
+        if (!$changed instanceof \DateTimeInterface) {
             $this->changed = new \DateTime($changed);
         } else {
             $this->changed = $changed;
@@ -629,7 +633,7 @@ class Site extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getChanged()
     {

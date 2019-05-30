@@ -29,8 +29,7 @@ use Shopware\Models\Shop\Shop;
 interface ConfigReader
 {
     /**
-     * @param string    $pluginName
-     * @param Shop|null $shop
+     * @param string $pluginName
      *
      * @return array
      */

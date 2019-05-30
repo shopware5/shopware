@@ -47,7 +47,7 @@ class EmotionsProviderTest extends ProviderTestCase
 
         $resultData = $this->getBenchmarkData();
 
-        $this->assertSame(4, $resultData['total']);
+        static::assertSame(4, $resultData['total']);
     }
 
     /**
@@ -59,7 +59,7 @@ class EmotionsProviderTest extends ProviderTestCase
 
         $resultData = $this->getBenchmarkData();
 
-        $this->assertSame(1, $resultData['timed']);
+        static::assertSame(1, $resultData['timed']);
     }
 
     /**
@@ -71,7 +71,7 @@ class EmotionsProviderTest extends ProviderTestCase
 
         $resultData = $this->getBenchmarkData();
 
-        $this->assertSame(2, $resultData['landingPages']);
+        static::assertSame(2, $resultData['landingPages']);
     }
 
     /**
@@ -83,7 +83,7 @@ class EmotionsProviderTest extends ProviderTestCase
 
         $resultData = $this->getBenchmarkData();
 
-        $this->assertArraySubset([
+        static::assertArraySubset([
             ['elementCount' => 3, 'elementName' => 'example-element-1'],
             ['elementCount' => 2, 'elementName' => 'example-element-2'],
         ], $resultData['elementUsages']);
@@ -98,7 +98,7 @@ class EmotionsProviderTest extends ProviderTestCase
 
         $resultData = $this->getBenchmarkData();
 
-        $this->assertArraySubset(['4', '2', '4', '3', '4'], $resultData['viewportUsages']);
+        static::assertArraySubset(['4', '2', '4', '3', '4'], $resultData['viewportUsages']);
     }
 
     /**
@@ -111,10 +111,10 @@ class EmotionsProviderTest extends ProviderTestCase
         $provider = $this->getProvider();
 
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
-        $this->assertSame(4, $resultData['total']);
+        static::assertSame(4, $resultData['total']);
 
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
-        $this->assertSame(2, $resultData['total']);
+        static::assertSame(2, $resultData['total']);
     }
 
     /**
@@ -127,13 +127,13 @@ class EmotionsProviderTest extends ProviderTestCase
         $provider = $this->getProvider();
 
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
-        $this->assertArraySubset([
+        static::assertArraySubset([
             ['elementCount' => 3, 'elementName' => 'example-element-1'],
             ['elementCount' => 2, 'elementName' => 'example-element-2'],
         ], $resultData['elementUsages']);
 
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
-        $this->assertArraySubset([
+        static::assertArraySubset([
             ['elementCount' => 2, 'elementName' => 'example-element-1'],
             ['elementCount' => 1, 'elementName' => 'example-element-2'],
         ], $resultData['elementUsages']);

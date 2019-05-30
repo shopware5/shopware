@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -50,9 +50,6 @@ interface LinkGatewayInterface
      * The \Shopware\Bundle\StoreFrontBundle\Struct\Product\Link requires the following data:
      * - Link base data
      * - Core attribute of the link
-     *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Product\Link[]
      */

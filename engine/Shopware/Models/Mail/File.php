@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Mail;
+namespace Shopware\Models\Mail;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Abstract class to provide proxy methods to the media-model
  *
- * @ORM\MappedSuperclass
+ * @ORM\MappedSuperclass()
  */
 abstract class File extends ModelEntity
 {
@@ -38,7 +38,7 @@ abstract class File extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
@@ -47,6 +47,7 @@ abstract class File extends ModelEntity
      * The role property is the owning side of the association between attachment and media.
      *
      * @var \Shopware\Models\Media\Media
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Media\Media", fetch="EAGER")
      * @ORM\JoinColumn(name="mediaID", referencedColumnName="id")
      */
@@ -71,7 +72,7 @@ abstract class File extends ModelEntity
     /**
      * Returns the creation date of the media.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface|null
      */
     public function getCreated()
     {
@@ -85,7 +86,7 @@ abstract class File extends ModelEntity
     /**
      * Returns the id of the user, who uploaded the file.
      *
-     * @return int
+     * @return int|null
      */
     public function getUserId()
     {
@@ -141,7 +142,7 @@ abstract class File extends ModelEntity
     /**
      * Returns the converted file name.
      *
-     * @return bool|string
+     * @return string
      */
     public function getFileName()
     {
@@ -169,7 +170,7 @@ abstract class File extends ModelEntity
     /**
      * Returns the id of the assigned album.
      *
-     * @return int
+     * @return int|null
      */
     public function getAlbumId()
     {
@@ -197,7 +198,7 @@ abstract class File extends ModelEntity
     /**
      * Returns the memory size of the file.
      *
-     * @return float
+     * @return float|string
      */
     public function getFileSize()
     {
@@ -211,7 +212,7 @@ abstract class File extends ModelEntity
     /**
      * Returns the memory size of the file.
      *
-     * @return float
+     * @return int|string
      */
     public function getFormattedFileSize()
     {

@@ -3,7 +3,8 @@
 {* Breadcrumb *}
 {block name='frontend_index_start'}
     {$smarty.block.parent}
-    {$sBreadcrumb[] = ['name' => "{s name='MyOrdersTitle'}{/s}", 'link' => {url}]}
+    {s name="MyOrdersTitle" assign="snippetMyOrdersTitle"}{/s}
+    {$sBreadcrumb[] = ['name' => $snippetMyOrdersTitle, 'link' => {url}]}
 {/block}
 
 {* Main content *}
@@ -28,7 +29,8 @@
         {if !$sOpenOrders}
             {block name="frontend_account_orders_info_empty"}
                 <div class="account--no-orders-info">
-                    {include file="frontend/_includes/messages.tpl" type="warning" content="{s name='OrdersInfoEmpty'}{/s}"}
+                    {s name="OrdersInfoEmpty" assign="snippetOrdersInfoEmpty"}{/s}
+                    {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetOrdersInfoEmpty}
                 </div>
             {/block}
         {else}
@@ -89,7 +91,7 @@
                             {/foreach}
 
                             {if $sPages.next}
-                                <a href="{$sPages.next}" class="paging--link paging--next">
+                                <a href="{$sPages.next}" class="btn paging--link paging--next">
                                     <i class="icon--arrow-right"></i>
                                 </a>
                             {/if}

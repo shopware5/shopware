@@ -46,7 +46,7 @@ class StrategyFactory
             case 'plain':
                 return new PlainStrategy();
             default:
-                throw new \Exception(sprintf("Unsupported strategy '%s'.", $strategy));
+                throw new \Exception(sprintf('Unsupported strategy "%s".', $strategy));
         }
     }
 }

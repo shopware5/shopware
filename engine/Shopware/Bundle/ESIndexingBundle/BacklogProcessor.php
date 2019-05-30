@@ -40,10 +40,6 @@ class BacklogProcessor implements BacklogProcessorInterface
      */
     private $synchronizer;
 
-    /**
-     * @param Connection            $connection
-     * @param SynchronizerInterface $synchronizer
-     */
     public function __construct(
         Connection $connection,
         SynchronizerInterface $synchronizer

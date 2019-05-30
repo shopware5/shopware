@@ -42,7 +42,6 @@ class JavascriptDefinition
     private $theme;
 
     /**
-     * @param array $files
      * @param Theme $theme
      */
     public function __construct(array $files = [], Theme $theme = null)
@@ -68,7 +67,7 @@ class JavascriptDefinition
     }
 
     /**
-     * @return Theme
+     * @return Theme|null
      */
     public function getTheme()
     {

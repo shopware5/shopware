@@ -1,4 +1,4 @@
-<?php $app->render('_header.php', ['tab' => 'start']) ?>
+<?php $app->render('_header.php', ['tab' => 'start']); ?>
 
 <h2><?= $language['noaccess_title']; ?></h2>
 
@@ -6,4 +6,4 @@
     <?php printf($language['noaccess_info'], $clientIp, $filePath); ?>
 </div>
 
-<?php $app->render('_footer.php') ?>
+<?php $app->render('_footer.php'); ?>

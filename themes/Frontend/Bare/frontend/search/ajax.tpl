@@ -24,7 +24,8 @@
                                     {if $search_result.image.thumbnails[0]}
                                         <img srcset="{$search_result.image.thumbnails[0].sourceSet}" alt="{$search_result.name|escape}" class="media--image">
                                     {else}
-                                        <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{"{s name='ListingBoxNoPicture'}{/s}"|escape}" class="media--image">
+                                        {s name="ListingBoxNoPicture" assign="snippetListingBoxNoPicture"}{/s}
+                                        <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$snippetListingBoxNoPicture|escape}" class="media--image">
                                     {/if}
                                 </span>
                             {/block}
@@ -42,7 +43,14 @@
                                     {$sArticle = $search_result}
                                     {*reset pseudo price value to prevent discount boxes*}
                                     {$sArticle.has_pseudoprice = 0}
-                                    {include file="frontend/listing/product-box/product-price.tpl" sArticle=$sArticle}
+
+                                    {block name="search_ajax_list_entry_price_main"}
+                                        {include file="frontend/listing/product-box/product-price.tpl"}
+                                    {/block}
+
+                                    {block name="search_ajax_list_entry_price_unit"}
+                                        {include file="frontend/search/product-price-unit.tpl"}
+                                    {/block}
                                 </span>
                             {/block}
                         </a>

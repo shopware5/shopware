@@ -27,6 +27,7 @@ namespace Shopware\Models\Blog;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * Repository for the Blog model (Shopware\Models\Blog\Blog).
@@ -40,18 +41,18 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog articles for the frontend list
      *
-     * @param $blogCategoryIds
-     * @param null  $offset
-     * @param null  $limit
-     * @param array $filter
+     * @param int[]    $blogCategoryIds
+     * @param int|null $offset
+     * @param int|null $limit
+     * @param int|null $shopId
      *
      * @internal param $blogCategory
      *
      * @return \Doctrine\ORM\Query
      */
-    public function getListQuery($blogCategoryIds, $offset = null, $limit = null, array $filter = null)
+    public function getListQuery($blogCategoryIds, $offset = null, $limit = null, array $filter = null, $shopId = null)
     {
-        $builder = $this->getListQueryBuilder($blogCategoryIds, $filter);
+        $builder = $this->getListQueryBuilder($blogCategoryIds, $filter, $shopId);
         if (!empty($offset)) {
             $builder->setFirstResult($offset);
         }
@@ -66,14 +67,13 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $blogCategoryIds
-     * @param array $filter
-     *
-     * @internal param $blogCategoryIds
+     * @param int[]    $blogCategoryIds
+     * @param array    $filter
+     * @param int|null $shopId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getListQueryBuilder($blogCategoryIds, $filter)
+    public function getListQueryBuilder($blogCategoryIds, $filter, $shopId = null)
     {
         $builder = $this->createQueryBuilder('blog');
         $builder->select([
@@ -90,7 +90,6 @@ class Repository extends ModelRepository
         ->leftJoin('blog.media', 'mappingMedia', \Doctrine\ORM\Query\Expr\Join::WITH, 'mappingMedia.preview = 1')
         ->leftJoin('mappingMedia.media', 'media')
         ->leftJoin('blog.attribute', 'attribute')
-        ->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active = 1')
         ->where('blog.active = 1')
         ->andWhere('blog.displayDate < :now')
         ->setParameter('now', new \DateTime())
@@ -99,6 +98,14 @@ class Repository extends ModelRepository
         if (!empty($blogCategoryIds)) {
             $builder->andWhere('blog.categoryId IN (:categoryIds)')
                 ->setParameter('categoryIds', $blogCategoryIds, Connection::PARAM_INT_ARRAY);
+        }
+
+        if ($shopId && Shopware()->Config()->get('displayOnlySubShopBlogComments')) {
+            $builder
+                ->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active = 1 AND (comments.shopId IS NULL OR comments.shopId = :shopId)')
+                ->setParameter('shopId', $shopId);
+        } else {
+            $builder->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active = 1');
         }
 
         if (!empty($filter)) {
@@ -111,35 +118,41 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog articles for the backend list
      *
-     * @param $blogId
+     * @param int      $blogId
+     * @param int|null $shopId
      *
      * @return \Doctrine\ORM\Query
      */
-    public function getAverageVoteQuery($blogId)
+    public function getAverageVoteQuery($blogId, $shopId = null)
     {
-        $builder = $this->getAverageVoteQueryBuilder($blogId);
-
-        return $builder->getQuery();
+        return $this->getAverageVoteQueryBuilder($blogId, $shopId)->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getAverageVoteQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $blogId
+     * @param int      $blogId
+     * @param int|null $shopId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getAverageVoteQueryBuilder($blogId)
+    public function getAverageVoteQueryBuilder($blogId, $shopId = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select([
             'AVG(comment.points) as avgVote',
         ])
-        ->from('Shopware\Models\Blog\Comment', 'comment')
+        ->from(Comment::class, 'comment')
         ->where('comment.active = 1')
         ->andWhere('comment.blogId = :blogId')
         ->setParameter('blogId', $blogId);
+
+        if ($shopId && Shopware()->Config()->get('displayOnlySubShopBlogComments')) {
+            $builder
+                ->andWhere('comment.shopId IS NULL OR comment.shopId = :shopId')
+                ->setParameter('shopId', $shopId);
+        }
 
         return $builder;
     }
@@ -147,7 +160,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog articles for the backend list
      *
-     * @param $blogId
+     * @param int $blogId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -162,7 +175,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getTagsByBlogId" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $blogId
+     * @param int $blogId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -172,7 +185,7 @@ class Repository extends ModelRepository
         $builder->select([
             'tags',
         ])
-        ->from('Shopware\Models\Blog\Tag', 'tags')
+        ->from(Tag::class, 'tags')
         ->andWhere('tags.blogId = :blogId')
         ->setParameter('blogId', $blogId);
 
@@ -182,8 +195,8 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog date filter
      *
-     * @param $categoryIds
-     * @param $filter
+     * @param int[] $categoryIds
+     * @param array $filter
      *
      * @return \Doctrine\ORM\Query
      */
@@ -198,8 +211,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDisplayDateFilterQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $categoryIds
-     * @param $filter
+     * @param int[] $categoryIds
+     * @param array $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -218,8 +231,8 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog author filter
      *
-     * @param $categoryIds
-     * @param $filter
+     * @param int[] $categoryIds
+     * @param array $filter
      *
      * @return \Doctrine\ORM\Query
      */
@@ -234,8 +247,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getAuthorFilterQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $categoryIds
-     * @param $filter
+     * @param int[] $categoryIds
+     * @param array $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -255,8 +268,8 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog tags filter
      *
-     * @param $categoryIds
-     * @param $filter
+     * @param int[] $categoryIds
+     * @param array $filter
      *
      * @return \Doctrine\ORM\Query
      */
@@ -271,8 +284,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getTagsFilterQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $categoryIds
-     * @param $filter
+     * @param int[] $categoryIds
+     * @param array $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -293,8 +306,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDisplayDateFilterQueryBuilder, getAuthorFilterQueryBuilder, getTagsFilterQueryBuilder" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $categoryIds
-     * @param $filter
+     * @param int[] $categoryIds
+     * @param array $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -323,21 +336,20 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog author filter
      *
-     * @param $blogCategoryIds
-     * @param array|null $filter
-     * @param null       $order
-     * @param null       $offset
-     * @param null       $limit
+     * @param int[]      $blogCategoryIds
+     * @param array|null $order
+     * @param int|null   $offset
+     * @param int|null   $limit
      *
      * @return \Doctrine\ORM\Query
      */
     public function getBackendListQuery($blogCategoryIds, array $filter = null, $order = null, $offset = null, $limit = null)
     {
         $builder = $this->getBackendListQueryBuilder($blogCategoryIds, $filter, $order);
-        if (!empty($offset)) {
+        if ($offset !== null) {
             $builder->setFirstResult($offset);
         }
-        if (!empty($limit)) {
+        if ($limit !== null) {
             $builder->setMaxResults($limit);
         }
 
@@ -348,14 +360,14 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getBackendListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $blogCategoryIds
-     * @param $filter
-     * @param $order
+     * @param int[] $blogCategoryIds
+     * @param array $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getBackendListQueryBuilder($blogCategoryIds, array $filter, $order)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(
             [
@@ -375,7 +387,7 @@ class Repository extends ModelRepository
                 ->setParameter('blogCategoryIds', $blogCategoryIds, Connection::PARAM_INT_ARRAY);
         }
 
-        if (!empty($filter) && $filter[0]['property'] == 'filter' && !empty($filter[0]['value'])) {
+        if (!empty($filter) && $filter[0]['property'] === 'filter' && !empty($filter[0]['value'])) {
             $builder->andWhere('blog.title LIKE ?1')
                     ->orWhere('blog.views LIKE ?1')
                     ->setParameter(1, '%' . $filter[0]['value'] . '%');
@@ -391,13 +403,14 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog article for the detail page
      *
-     * @param $blogArticleId
+     * @param int      $blogArticleId
+     * @param int|null $shopId
      *
      * @return \Doctrine\ORM\Query
      */
-    public function getDetailQuery($blogArticleId)
+    public function getDetailQuery($blogArticleId, $shopId = null)
     {
-        $builder = $this->getDetailQueryBuilder($blogArticleId);
+        $builder = $this->getDetailQueryBuilder($blogArticleId, $shopId);
 
         return $builder->getQuery();
     }
@@ -406,11 +419,12 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $blogArticleId
+     * @param int      $blogArticleId
+     * @param int|null $shopId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getDetailQueryBuilder($blogArticleId)
+    public function getDetailQueryBuilder($blogArticleId, $shopId = null)
     {
         $builder = $this->createQueryBuilder('blog');
         $builder->select(['blog', 'tags', 'author', 'media', 'mappingMedia', 'assignedArticles', 'assignedArticlesDetail', 'attribute', 'comments'])
@@ -420,11 +434,18 @@ class Repository extends ModelRepository
                 ->leftJoin('assignedArticles.mainDetail', 'assignedArticlesDetail')
                 ->leftJoin('blog.media', 'mappingMedia')
                 ->leftJoin('blog.attribute', 'attribute')
-                ->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active = 1')
                 ->leftJoin('mappingMedia.media', 'media')
                 ->where('blog.id = :blogArticleId')
                 ->addOrderBy('comments.creationDate', 'ASC')
                 ->setParameter('blogArticleId', $blogArticleId);
+
+        if ($shopId && Shopware()->Config()->get('displayOnlySubShopBlogComments')) {
+            $builder
+                ->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active = 1 AND (comments.shopId IS NULL OR comments.shopId = :shopId)')
+                ->setParameter('shopId', $shopId);
+        } else {
+            $builder->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active = 1');
+        }
 
         return $builder;
     }
@@ -432,7 +453,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog article for the detail page
      *
-     * @param $filter
+     * @param array $filter
      *
      * @return \Doctrine\ORM\Query
      */
@@ -447,7 +468,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getBackendDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $filter
+     * @param array $filter
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -468,11 +489,11 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog article comments
      *
-     * @param $blogId
-     * @param $filter
-     * @param $order
-     * @param $offset
-     * @param $limit
+     * @param int   $blogId
+     * @param array $filter
+     * @param array $order
+     * @param int   $offset
+     * @param int   $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -493,17 +514,15 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getBlogCommentsById" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $blogId
-     * @param $filter
-     * @param $order
-     *
-     * @internal param $offset
-     * @internal param $limit
+     * @param int   $blogId
+     * @param array $filter
+     * @param array $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getBlogCommentsByIdBuilder($blogId, $filter, $order)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(
             [
@@ -515,8 +534,9 @@ class Repository extends ModelRepository
                 'comment.points as points',
                 'comment.headline as headline',
                 'comment.comment as content',
+                'comment.shopId',
             ])
-                ->from('Shopware\Models\Blog\Comment', 'comment')
+                ->from(Comment::class, 'comment')
                 ->where('comment.blogId = ?1')
                 ->setParameter(1, $blogId);
 
@@ -536,7 +556,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the all blog tags
      *
-     * @param $blogId
+     * @param int $blogId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -551,7 +571,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getBlogTagsById" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $blogId
+     * @param int $blogId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -560,7 +580,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         $builder->select(['tags'])
-                ->from('Shopware\Models\Blog\Tag', 'tags')
+                ->from(Tag::class, 'tags')
                 ->where('tags.blogId = ?1')
             ->setParameter(1, $blogId);
 

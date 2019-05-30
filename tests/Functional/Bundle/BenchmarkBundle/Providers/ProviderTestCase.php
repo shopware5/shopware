@@ -26,6 +26,9 @@ namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Providers;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\BenchmarkBundle\Service\StatisticsService;
+use Shopware\Bundle\BenchmarkBundle\StatisticsClient;
+use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Tests\Functional\Bundle\BenchmarkBundle\BenchmarkTestCase;
 
@@ -44,7 +47,7 @@ abstract class ProviderTestCase extends BenchmarkTestCase
         $resultData = $this->getBenchmarkData();
         $arrayKeys = array_keys($resultData);
 
-        $this->assertCount($this::EXPECTED_KEYS_COUNT, $arrayKeys);
+        static::assertCount($this::EXPECTED_KEYS_COUNT, $arrayKeys);
     }
 
     /**
@@ -55,7 +58,7 @@ abstract class ProviderTestCase extends BenchmarkTestCase
         $resultData = $this->getBenchmarkData();
 
         if (!is_array($this::EXPECTED_TYPES)) {
-            $this->assertInternalType($this::EXPECTED_TYPES, $resultData);
+            static::assertInternalType($this::EXPECTED_TYPES, $resultData);
 
             return;
         }
@@ -95,10 +98,6 @@ abstract class ProviderTestCase extends BenchmarkTestCase
         return $this->provider;
     }
 
-    /**
-     * @param array $data
-     * @param array $expectedTypes
-     */
     protected function checkForTypes(array $data, array $expectedTypes)
     {
         foreach ($data as $resultKey => $resultItem) {
@@ -112,13 +111,13 @@ abstract class ProviderTestCase extends BenchmarkTestCase
             }
 
             try {
-                $this->assertInternalType(
+                static::assertInternalType(
                     $expectedTypes[$resultKey],
                     $resultItem
                 );
             } catch (\PHPUnit_Framework_ExpectationFailedException $e) {
                 // Print custom error message
-                $this->fail(sprintf(
+                static::fail(sprintf(
                     'Failed asserting that the value for the key %s is of type %s',
                     $resultKey,
                     $expectedTypes[$resultKey]
@@ -152,5 +151,28 @@ abstract class ProviderTestCase extends BenchmarkTestCase
             'last_customer_id' => '0',
             'last_product_id' => '0',
         ], ['1' => '1']);
+    }
+
+    protected function sendStatistics($batchSize = null)
+    {
+        Shopware()->Models()->clear();
+        $response = new StatisticsResponse(new \DateTime('now', new \DateTimeZone('UTC')), 'foo', false);
+
+        $client = $this->createMock(StatisticsClient::class);
+
+        $client
+            ->method('sendStatistics')->willReturn($response);
+
+        $service = new StatisticsService(
+            Shopware()->Container()->get('shopware.benchmark_bundle.collector'),
+            $client,
+            Shopware()->Container()->get('shopware.benchmark_bundle.repository.config'),
+            Shopware()->Container()->get('shopware_storefront.context_service'),
+            Shopware()->Container()->get('dbal_connection')
+        );
+
+        $config = Shopware()->Container()->get('shopware.benchmark_bundle.repository.config')->findOneBy(['shopId' => 1]);
+
+        $service->transmit($config, $config->getBatchSize());
     }
 }

@@ -27,6 +27,7 @@ namespace Shopware\Models\Article;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\ArticleSupplier as ProductSupplierAttribute;
 
 /**
  * Supplier Model
@@ -81,6 +82,8 @@ class Supplier extends ModelEntity
      * INVERSE SIDE
      * Articles can be bound to a specific supplier
      *
+     * @var ArrayCollection<\Shopware\Models\Article\Article>
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Article", mappedBy="supplier", fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(name="id", referencedColumnName="supplierID")
      */
@@ -89,18 +92,19 @@ class Supplier extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleSupplier", mappedBy="articleSupplier", cascade={"persist"})
+     * @var ProductSupplierAttribute
      *
-     * @var \Shopware\Models\Attribute\ArticleSupplier
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleSupplier", mappedBy="articleSupplier", cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * Autoincrement ID
      *
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -119,7 +123,7 @@ class Supplier extends ModelEntity
      *
      * @var string
      *
-     * @ORM\Column(name="img", type="string", nullable=true)
+     * @ORM\Column(name="img", type="string", nullable=false)
      */
     private $image = '';
 
@@ -128,7 +132,7 @@ class Supplier extends ModelEntity
      *
      * @var string
      *
-     * @ORM\Column(name="link", type="string", nullable=true)
+     * @ORM\Column(name="link", type="string", nullable=false)
      */
     private $link = '';
 
@@ -142,7 +146,7 @@ class Supplier extends ModelEntity
     private $description;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="changed", type="datetime", nullable=false)
      */
@@ -157,7 +161,7 @@ class Supplier extends ModelEntity
     /**
      * Sets the primary key
      *
-     * @param $id
+     * @param int $id
      */
     public function setPrimaryIdentifier($id)
     {
@@ -275,7 +279,7 @@ class Supplier extends ModelEntity
     /**
      * Returns all articles assigned to this supplier
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection $articles
+     * @return ArrayCollection<\Shopware\Models\Article\Article>
      */
     public function getArticles()
     {
@@ -285,7 +289,7 @@ class Supplier extends ModelEntity
     /**
      * Takes an array of articles, in most cases doctrine will take care of this.
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $articles $articles
+     * @param ArrayCollection<\Shopware\Models\Article\Article> $articles
      *
      * @return Supplier
      */
@@ -297,7 +301,7 @@ class Supplier extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\ArticleSupplier
+     * @return ProductSupplierAttribute
      */
     public function getAttribute()
     {
@@ -305,13 +309,13 @@ class Supplier extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\ArticleSupplier|array|null $attribute
+     * @param ProductSupplierAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\ArticleSupplier
+     * @return Supplier
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ArticleSupplier', 'attribute', 'articleSupplier');
+        return $this->setOneToOne($attribute, ProductSupplierAttribute::class, 'attribute', 'articleSupplier');
     }
 
     /**
@@ -365,13 +369,13 @@ class Supplier extends ModelEntity
     /**
      * Set changed
      *
-     * @param \DateTime|string $changed
+     * @param \DateTimeInterface|string $changed
      *
      * @return Supplier
      */
     public function setChanged($changed = 'now')
     {
-        if (!$changed instanceof \DateTime) {
+        if (!$changed instanceof \DateTimeInterface) {
             $this->changed = new \DateTime($changed);
         } else {
             $this->changed = $changed;
@@ -383,7 +387,7 @@ class Supplier extends ModelEntity
     /**
      * Get changed
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getChanged()
     {

@@ -30,17 +30,18 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware Article SeoCategory Model
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_articles_categories_seo")
  */
 class SeoCategory extends ModelEntity
 {
     /**
      * @var \Shopware\Models\Shop\Shop
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
      */
@@ -48,6 +49,7 @@ class SeoCategory extends ModelEntity
 
     /**
      * @var \Shopware\Models\Article\Article
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="seoCategories")
      * @ORM\JoinColumn(name="article_id", referencedColumnName="id")
      */
@@ -55,39 +57,44 @@ class SeoCategory extends ModelEntity
 
     /**
      * @var \Shopware\Models\Category\Category
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Category\Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     protected $category;
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="article_id", type="integer", nullable=false)
      */
     private $articleId;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="category_id", type="integer", nullable=false)
      */
     private $categoryId;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="shop_id", type="integer", nullable=false)
      */
     private $shopId;
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -135,7 +142,7 @@ class SeoCategory extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Shop
+     * @return \Shopware\Models\Shop\Shop|null
      */
     public function getShop()
     {

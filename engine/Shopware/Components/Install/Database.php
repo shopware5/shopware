@@ -34,9 +34,6 @@ class Database
      */
     protected $connection;
 
-    /**
-     * @param \PDO $connection
-     */
     public function __construct(\PDO $connection)
     {
         $this->connection = $connection;
@@ -52,7 +49,7 @@ class Database
     {
         $this->connection->query(sprintf('use `%s`', $dbName));
 
-        if (false === ($contents = file_get_contents($file))) {
+        if (($contents = file_get_contents($file)) === false) {
             throw new \Exception(sprintf('Could not open file: %s', $file));
         }
 
@@ -130,7 +127,7 @@ SQL;
     /**
      * create database if not exists
      *
-     * @param $dbName
+     * @param string $dbName
      */
     public function dropDatabase($dbName)
     {

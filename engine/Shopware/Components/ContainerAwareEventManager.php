@@ -29,10 +29,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ContainerAwareEventManager extends \Enlight_Event_EventManager
 {
     /**
-     * @var array Contains all registered event listeners. A listener can be registered by the
-     *            registerListener(Enlight_Event_Handler $handler) function.
+     * Contains all registered event listeners. A listener can be registered by the
+     * registerListener(Enlight_Event_Handler $handler) function.
+     *
+     * @var array<string, array<string, callable>>
      */
     protected $containerListeners = [];
+
     /**
      * @var ContainerInterface;
      */
@@ -43,9 +46,6 @@ class ContainerAwareEventManager extends \Enlight_Event_EventManager
      */
     private $listenerIds = [];
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -57,15 +57,15 @@ class ContainerAwareEventManager extends \Enlight_Event_EventManager
      * @param string $eventName Event for which the listener is added
      * @param array  $callback  The service ID of the listener service & the method
      *                          name that has to be called
-     * @param int    $priority  The higher this value, the earlier an event listener
+     * @param int    $priority  the higher this value, the earlier an event listener
      *                          will be triggered in the chain.
-     *                          Defaults to 0.
+     *                          Defaults to 0
      *
      * @throws \InvalidArgumentException
      */
     public function addListenerService($eventName, $callback, $priority = 0)
     {
-        if (!is_array($callback) || 2 !== count($callback)) {
+        if (!is_array($callback) || count($callback) !== 2) {
             throw new \InvalidArgumentException('Expected an array("service", "method") argument');
         }
 
@@ -161,6 +161,16 @@ class ContainerAwareEventManager extends \Enlight_Event_EventManager
                 }
             }
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function reset()
+    {
+        $this->containerListeners = [];
+
+        return parent::reset();
     }
 
     /**

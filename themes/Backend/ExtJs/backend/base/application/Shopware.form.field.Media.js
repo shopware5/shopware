@@ -624,7 +624,9 @@ Ext.define('Shopware.form.field.Media', {
             right: 'auto'
         });
 
-        me.previewContainer.getEl().appendChild(globe);
+        if (Ext.isDefined(me.previewContainer.getEl())) {
+            me.previewContainer.getEl().appendChild(globe);
+        }
     }
 });
 //{/block}

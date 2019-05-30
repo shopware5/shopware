@@ -29,7 +29,7 @@ use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Table(name="s_core_theme_settings")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Settings extends ModelEntity
 {
@@ -37,37 +37,42 @@ class Settings extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="compiler_force", type="boolean", nullable=false)
      */
     private $forceCompile = false;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="compiler_create_source_map", type="boolean", nullable=false)
      */
     private $createSourceMap = false;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="compiler_compress_css", type="boolean", nullable=false)
      */
     private $compressCss = false;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="compiler_compress_js", type="boolean", nullable=false)
      */
     private $compressJs = false;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="force_reload_snippets", type="boolean", nullable=false)
      */
     private $reloadSnippets = false;

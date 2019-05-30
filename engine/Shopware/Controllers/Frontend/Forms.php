@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\Random;
 use Shopware\Models\Form\Field;
 use Shopware\Models\Form\Form;
@@ -28,7 +29,7 @@ use Shopware\Models\Form\Form;
 /**
  * Shopware Frontend Controller for the form module
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -70,14 +71,14 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $id = $this->Request()->getParam('sFid');
         $id = $id ?: $this->Request()->getParam('id');
 
-        $this->View()->forceMail = (int) $this->Request()->getParam('forceMail');
-        $this->View()->id = $id;
-        $this->View()->sSupport = $this->getContent($id);
-        $this->View()->rand = Random::getAlphanumericString(32);
+        $this->View()->assign('forceMail', (int) $this->Request()->getParam('forceMail'));
+        $this->View()->assign('id', $id);
+        $this->View()->assign('sSupport', $this->getContent($id));
+        $this->View()->assign('rand', Random::getAlphanumericString(32));
 
         $success = $this->Request()->getParam('success');
         if ($success) {
-            $this->View()->sSupport = array_merge($this->View()->sSupport, ['sElements' => []]);
+            $this->View()->assign('sSupport', array_merge($this->View()->sSupport, ['sElements' => []]));
         }
 
         $this->renderElementNote($this->View());
@@ -101,7 +102,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         /** @var Enlight_Components_Mail $mail */
         $mail = $this->get('mail');
 
-        //Email field available check
+        // Email field available check
         foreach ($this->_elements as $element) {
             if ($element['typ'] === 'email') {
                 $postEmail = $this->_postData[$element['id']];
@@ -118,9 +119,12 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $mailBody = $this->replaceVariables($content['email_template']);
         $mailSubject = $this->replaceVariables($content['email_subject']);
 
+        $receivers = explode(',', $content['email']);
+        $receivers = array_map('trim', $receivers);
+
         $mail->setFrom(Shopware()->Config()->Mail);
         $mail->clearRecipients();
-        $mail->addTo($content['email']);
+        $mail->addTo($receivers);
         $mail->setBodyText($mailBody);
         $mail->setSubject($mailSubject);
 
@@ -147,11 +151,11 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         $shopId = $this->container->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
 
-        /* @var $query \Doctrine\ORM\Query */
+        /* @var \Doctrine\ORM\Query $query */
         $query = Shopware()->Models()->getRepository(\Shopware\Models\Form\Form::class)
             ->getActiveFormQuery($formId, $shopId);
 
-        /* @var $form Form */
+        /* @var Form $form */
         $form = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
 
         if (!$form) {
@@ -161,10 +165,11 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             );
         }
 
-        /* @var $field Field */
+        /* @var Field $field */
         foreach ($form->getFields() as $field) {
-            $this->_elements[$field->getId()] = [
-                'id' => (string) $field->getId(), // intended string cast to keep compatibility
+            $fieldId = $field->getId();
+            $this->_elements[$fieldId] = [
+                'id' => (string) $fieldId, // intended string cast to keep compatibility
                 'name' => $field->getName(),
                 'note' => $field->getNote(),
                 'typ' => $field->getTyp(),
@@ -185,9 +190,15 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         if (empty($this->Request()->Submit) || count($this->_errors)) {
             foreach ($this->_elements as $id => $element) {
                 if ($element['name'] === 'sordernumber') {
-                    if ($sOrdernumber = $this->Request()->getParam('sOrdernumber')) {
-                        $product = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($sOrdernumber, false, true);
-                        $element['value'] = sprintf('%s (%s)', $product, $sOrdernumber);
+                    $sOrdernumber = $this->Request()->getParam('sOrdernumber');
+
+                    if ($this->isValidOrderNumber($sOrdernumber)) {
+                        $product = Shopware()->Modules()
+                            ->Articles()
+                            ->sGetArticleNameByOrderNumber($sOrdernumber, false, true);
+
+                        $element['value'] = sprintf('%s (%s)', $product, $this->get('shopware.escaper')
+                            ->escapeHtml($sOrdernumber));
                         $this->_elements[$id]['value'] = $element['value'];
                     }
                 }
@@ -276,7 +287,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     /**
      * Create input element method
      *
-     * @param array  $element
      * @param string $post
      *
      * @return string
@@ -426,7 +436,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      */
     protected function _filterInput($input)
     {
-        // remove all control characters, unassigned, private use, formatting and surrogate code points
+        // Remove all control characters, unassigned, private use, formatting and surrogate code points
         $input = preg_replace('#[^\PC\s]#u', '', $input);
 
         $temp = str_replace('"', '', $input);
@@ -434,16 +444,13 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             return '';
         }
 
-        return $input;
+        return $this->get('shopware.escaper')->escapeHtml($input);
     }
 
     /**
      * Validate input method
      *
      * Populates $this->_postData
-     *
-     * @param array $inputs
-     * @param array $elements
      *
      * @throws \Exception
      *
@@ -482,11 +489,11 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                             break;
                         }
                         if (strlen($values[0]) === 4) {
-                            $value = mktime(0, 0, 0, $values[1], $values[2], $values[0]);
+                            $value = mktime(0, 0, 0, (int) $values[1], (int) $values[2], (int) $values[0]);
                         } else {
-                            $value = mktime(0, 0, 0, $values[0], $values[2], $values[1]);
+                            $value = mktime(0, 0, 0, (int) $values[0], (int) $values[2], (int) $values[1]);
                         }
-                        if (empty($value) || $value = -1) {
+                        if (empty($value) || ((int) $value === -1)) {
                             unset($value);
                             $valid = false;
                             break;
@@ -499,6 +506,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                         if (!$emailValidator->isValid($value)) {
                             unset($value);
                             $valid = false;
+                            break;
                         }
                         $host = trim(substr($value, strpos($value, '@') + 1));
                         if (empty($host) || !gethostbyname($host)) {
@@ -543,9 +551,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     }
 
     /**
-     * @param Form  $form
-     * @param array $fields
-     *
      * @return Form
      */
     protected function translateForm(Form $form, array &$fields)
@@ -594,15 +599,31 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         foreach ($fieldTranslations as $fieldTranslation) {
             $key = $fieldTranslation['objectkey'];
-            $fields[$key] = $fieldTranslation['objectdata'] + $fields[$key];
+            $translation = $fieldTranslation['objectdata'];
+
+            // If we have another field type selected in the translation and no value is translated, don't use the translation
+            if (isset($translation['typ']) && !isset($translation['value']) && $translation['typ'] !== $fields[$key]['typ']) {
+                $translation['value'] = '';
+            }
+
+            $fields[$key] = $translation + $fields[$key];
         }
 
         return $form;
     }
 
     /**
-     * @param Enlight_View_Default $view
+     * @param string $orderNumber
      *
+     * @return bool
+     */
+    protected function isValidOrderNumber($orderNumber)
+    {
+        // This regex needs to match with the one in the assert in \Shopware\Models\Article\Detail::$number
+        return preg_match('/^[a-zA-Z0-9-_.]+$/', $orderNumber) === 1;
+    }
+
+    /**
      * @throws \Exception
      */
     private function renderElementNote(Enlight_View_Default $view)
@@ -620,7 +641,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             $elements[$key] = $element;
         }
 
-        $view->sSupport = array_merge($view->sSupport, ['sElements' => $elements]);
+        $view->assign('sSupport', array_merge($view->sSupport, ['sElements' => $elements]));
     }
 
     /**

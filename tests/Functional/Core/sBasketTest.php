@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\Random;
 
 class sBasketTest extends PHPUnit\Framework\TestCase
@@ -78,7 +79,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     public function testsGetAmount()
     {
         // Test with empty session, expect empty array
-        $this->assertEquals([], $this->module->sGetAmount());
+        static::assertEquals([], $this->module->sGetAmount());
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
@@ -91,7 +92,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             ['totalAmount' => 246],
             $this->module->sGetAmount()
         );
@@ -110,8 +111,8 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         $this->generateBasketSession();
 
         // Test with empty session, expect empty array
-        $this->assertEquals(
-            ['hideBasket' => false, 'articles' => null],
+        static::assertEquals(
+            ['hideBasket' => false, 'articles' => []],
             $this->module->sCheckBasketQuantities()
         );
     }
@@ -145,12 +146,12 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         $result = $this->module->sCheckBasketQuantities();
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('hideBasket', $result);
-        $this->assertArrayHasKey('articles', $result);
-        $this->assertFalse($result['hideBasket']);
-        $this->assertArrayHasKey($inStockArticle['ordernumber'], $result['articles']);
-        $this->assertFalse($result['articles'][$inStockArticle['ordernumber']]['OutOfStock']);
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('hideBasket', $result);
+        static::assertArrayHasKey('articles', $result);
+        static::assertFalse($result['hideBasket']);
+        static::assertArrayHasKey($inStockArticle['ordernumber'], $result['articles']);
+        static::assertFalse($result['articles'][$inStockArticle['ordernumber']]['OutOfStock']);
     }
 
     public function testsCheckBasketQuantitiesWithHigherQuantityThanAvailable()
@@ -206,14 +207,14 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         $result = $this->module->sCheckBasketQuantities();
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('hideBasket', $result);
-        $this->assertArrayHasKey('articles', $result);
-        $this->assertTrue($result['hideBasket']);
-        $this->assertArrayHasKey($inStockArticle['ordernumber'], $result['articles']);
-        $this->assertFalse($result['articles'][$inStockArticle['ordernumber']]['OutOfStock']);
-        $this->assertArrayHasKey($outStockArticle['ordernumber'], $result['articles']);
-        $this->assertTrue($result['articles'][$outStockArticle['ordernumber']]['OutOfStock']);
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('hideBasket', $result);
+        static::assertArrayHasKey('articles', $result);
+        static::assertTrue($result['hideBasket']);
+        static::assertArrayHasKey($inStockArticle['ordernumber'], $result['articles']);
+        static::assertFalse($result['articles'][$inStockArticle['ordernumber']]['OutOfStock']);
+        static::assertArrayHasKey($outStockArticle['ordernumber'], $result['articles']);
+        static::assertTrue($result['articles'][$outStockArticle['ordernumber']]['OutOfStock']);
 
         // Clear the current cart
         $this->db->delete(
@@ -250,12 +251,12 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         $result = $this->module->sCheckBasketQuantities();
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('hideBasket', $result);
-        $this->assertArrayHasKey('articles', $result);
-        $this->assertFalse($result['hideBasket']);
-        $this->assertArrayHasKey($ignoreStockArticle['ordernumber'], $result['articles']);
-        $this->assertFalse($result['articles'][$ignoreStockArticle['ordernumber']]['OutOfStock']);
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('hideBasket', $result);
+        static::assertArrayHasKey('articles', $result);
+        static::assertFalse($result['hideBasket']);
+        static::assertArrayHasKey($ignoreStockArticle['ordernumber'], $result['articles']);
+        static::assertFalse($result['articles'][$ignoreStockArticle['ordernumber']]['OutOfStock']);
 
         // Housekeeping
         $this->db->delete(
@@ -270,7 +271,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     public function testsGetAmountRestrictedArticles()
     {
         // Null arguments, empty basket, expect empty array
-        $this->assertEquals(
+        static::assertEquals(
             [],
             $this->invokeMethod(
                 $this->module,
@@ -328,7 +329,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         // No filters, expect total basket value
-        $this->assertEquals(
+        static::assertEquals(
             ['totalAmount' => 5],
             $this->invokeMethod(
                 $this->module,
@@ -338,7 +339,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         // Filter by article one supplier, expect article one value
-        $this->assertEquals(
+        static::assertEquals(
             ['totalAmount' => 2],
             $this->invokeMethod(
                 $this->module,
@@ -347,7 +348,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             )
         );
         // Filter by article two supplier, expect article two value
-        $this->assertEquals(
+        static::assertEquals(
             ['totalAmount' => 3],
             $this->invokeMethod(
                 $this->module,
@@ -356,7 +357,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             )
         );
         // Filter by other supplier, expect empty array
-        $this->assertEquals(
+        static::assertEquals(
             [],
             $this->invokeMethod(
                 $this->module,
@@ -366,7 +367,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         // Filter by article one, expect article one value
-        $this->assertEquals(
+        static::assertEquals(
             ['totalAmount' => 2],
             $this->invokeMethod(
                 $this->module,
@@ -375,7 +376,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             )
         );
         // Filter by article two, expect article two value
-        $this->assertEquals(
+        static::assertEquals(
             ['totalAmount' => 3],
             $this->invokeMethod(
                 $this->module,
@@ -384,7 +385,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             )
         );
         // Filter by both articles, expect total basket value
-        $this->assertEquals(
+        static::assertEquals(
             ['totalAmount' => 5],
             $this->invokeMethod(
                 $this->module,
@@ -396,7 +397,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             )
         );
         // Filter by another article, expect empty value
-        $this->assertEquals(
+        static::assertEquals(
             [],
             $this->invokeMethod(
                 $this->module,
@@ -421,14 +422,14 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     public function testsInsertPremium()
     {
         // Test with empty session, expect true
-        $this->assertTrue($this->module->sInsertPremium());
+        static::assertTrue($this->module->sInsertPremium());
 
         // Create session id
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Test with session, expect true
-        $this->assertTrue($this->module->sInsertPremium());
+        static::assertTrue($this->module->sInsertPremium());
 
         $normalArticle = $this->db->fetchRow(
             'SELECT * FROM s_articles_details detail
@@ -477,8 +478,8 @@ class sBasketTest extends PHPUnit\Framework\TestCase
                 'modus' => 0,
             ]
         );
-        $this->assertTrue($this->module->sInsertPremium());
-        $this->assertEquals(
+        static::assertTrue($this->module->sInsertPremium());
+        static::assertEquals(
             1,
             $this->db->fetchOne(
                 'SELECT count(*) FROM s_order_basket WHERE sessionID = ?',
@@ -510,8 +511,8 @@ class sBasketTest extends PHPUnit\Framework\TestCase
                 'modus' => 1,
             ]
         );
-        $this->assertTrue($this->module->sInsertPremium());
-        $this->assertEquals(
+        static::assertTrue($this->module->sInsertPremium());
+        static::assertEquals(
             1,
             $this->db->fetchOne(
                 'SELECT count(*) FROM s_order_basket WHERE sessionID = ?',
@@ -522,7 +523,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         // Add sAddPremium to _GET.
         // Basket price is 1, so expect premium articles to be denied
         $this->module->sSYSTEM->_GET['sAddPremium'] = $premiumArticleTwo['ordernumber'];
-        $this->assertFalse($this->module->sInsertPremium());
+        static::assertFalse($this->module->sInsertPremium());
 
         // Increase basket price and retry
         $this->db->insert(
@@ -537,12 +538,12 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             ]
         );
         // Will still get false due to cache
-        $this->assertFalse($this->module->sInsertPremium());
+        static::assertFalse($this->module->sInsertPremium());
 
         // Change the premium article to a non-premium, fail
         $this->module->sSYSTEM->_GET['sAddPremium'] = $premiumArticleOne['ordernumber'];
-        $this->assertFalse($this->module->sInsertPremium());
-        $this->assertEquals(
+        static::assertFalse($this->module->sInsertPremium());
+        static::assertEquals(
             2,
             $this->db->fetchOne(
                 'SELECT count(*) FROM s_order_basket WHERE sessionID = ?',
@@ -552,8 +553,8 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         // Change the premium article to a premium, succeed
         $this->module->sSYSTEM->_GET['sAddPremium'] = $premiumArticleTwo['ordernumber'];
-        $this->assertGreaterThan(0, $this->module->sInsertPremium());
-        $this->assertEquals(
+        static::assertGreaterThan(0, $this->module->sInsertPremium());
+        static::assertEquals(
             3,
             $this->db->fetchOne(
                 'SELECT count(*) FROM s_order_basket WHERE sessionID = ?',
@@ -574,14 +575,14 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     public function testGetMaxTax()
     {
         // Test with empty session, expect false
-        $this->assertFalse($this->module->getMaxTax());
+        static::assertFalse($this->module->getMaxTax());
 
         // Create session id
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Test with session and empty basket, expect false
-        $this->assertFalse($this->module->getMaxTax());
+        static::assertFalse($this->module->getMaxTax());
 
         $products = $this->db->fetchAll(
             'SELECT * FROM s_articles_details detail
@@ -609,7 +610,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
                 'tax_rate' => $products[0]['tax'],
             ]
         );
-        $this->assertEquals($products[0]['tax'], $this->module->getMaxTax());
+        static::assertEquals($products[0]['tax'], $this->module->getMaxTax());
 
         // Add another article, check that we get the max of the two
         $this->db->insert(
@@ -623,7 +624,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
                 'tax_rate' => $products[1]['tax'],
             ]
         );
-        $this->assertEquals($products[1]['tax'], $this->module->getMaxTax());
+        static::assertEquals($products[1]['tax'], $this->module->getMaxTax());
 
         $this->db->update('s_articles', ['taxID' => $originalTaxId], ['id = ?' => $products[0]['id']]);
 
@@ -641,11 +642,11 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     {
         // Test with empty args and session, expect failure
         $result = $this->module->sAddVoucher('');
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertTrue($result['sErrorFlag']);
-        $this->assertContains(
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertTrue($result['sErrorFlag']);
+        static::assertContains(
             $this->snippetManager->getNamespace('frontend/basket/internalMessages')
                 ->get('VoucherFailureNotFound', 'Voucher could not be found or is not valid anymore'),
             $result['sErrorMessages']
@@ -655,11 +656,11 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $result = $this->module->sAddVoucher('');
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertTrue($result['sErrorFlag']);
-        $this->assertContains(
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertTrue($result['sErrorFlag']);
+        static::assertContains(
             $this->snippetManager->getNamespace('frontend/basket/internalMessages')
                 ->get('VoucherFailureNotFound', 'Voucher could not be found or is not valid anymore'),
             $result['sErrorMessages']
@@ -683,11 +684,11 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $result = $this->module->sAddVoucher('testOne');
 
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertTrue($result['sErrorFlag']);
-        $this->assertContains('Der Mindestumsatz für diesen Gutschein beträgt 10,00&nbsp;&euro;', $result['sErrorMessages']);
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertTrue($result['sErrorFlag']);
+        static::assertContains('Der Mindestumsatz für diesen Gutschein beträgt 10,00&nbsp;&euro;', $result['sErrorMessages']);
 
         // Check if a currency switch is reflected in the snippet correctly
         $currencyDe = Shopware()->Container()->get('Currency');
@@ -696,12 +697,12 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $result = $this->module->sAddVoucher('testOne');
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertTrue($result['sErrorFlag']);
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertTrue($result['sErrorFlag']);
 
-        $this->assertContains('Der Mindestumsatz für diesen Gutschein beträgt &pound;10.00', $result['sErrorMessages']);
+        static::assertContains('Der Mindestumsatz für diesen Gutschein beträgt &pound;10.00', $result['sErrorMessages']);
 
         Shopware()->Container()->set('Currency', $currencyDe);
 
@@ -731,11 +732,11 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             ]
         );
         $result = $this->module->sAddVoucher('testOne');
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertTrue($result['sErrorFlag']);
-        $this->assertContains(
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertTrue($result['sErrorFlag']);
+        static::assertContains(
             $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
                 'VoucherFailureNotFound', 'Voucher could not be found or is not valid anymore'
             ),
@@ -749,25 +750,25 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         $previousAmount = $this->module->sGetAmount();
         // Voucher should work ok now
-        $this->assertTrue($this->module->sAddVoucher('testOne'));
-        $this->assertLessThan($previousAmount, $this->module->sGetAmount());
+        static::assertTrue($this->module->sAddVoucher('testOne'));
+        static::assertLessThan($previousAmount, $this->module->sGetAmount());
 
         // Test the voucher values with tax from user group
         $discount = $this->db->fetchRow(
             'SELECT * FROM s_order_basket WHERE modus = 2 and sessionID = ?',
             [$this->module->sSYSTEM->sSESSION_ID]
         );
-        $this->assertEquals($voucherData['value'] * -1, $discount['price']);
-        $this->assertEquals($this->config->offsetGet('sVOUCHERTAX'), $discount['tax_rate']);
-        $this->assertEquals($voucherData['value'] * -1, round($discount['netprice'] * (100 + $discount['tax_rate']) / 100));
+        static::assertEquals($voucherData['value'] * -1, $discount['price']);
+        static::assertEquals($this->config->offsetGet('sVOUCHERTAX'), $discount['tax_rate']);
+        static::assertEquals($voucherData['value'] * -1, round($discount['netprice'] * (100 + $discount['tax_rate']) / 100));
 
         // Second voucher should fail
         $result = $this->module->sAddVoucher('testOne');
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertTrue($result['sErrorFlag']);
-        $this->assertContains(
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertTrue($result['sErrorFlag']);
+        static::assertContains(
             $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
                 'VoucherFailureOnlyOnes', 'Only one voucher can be processed in order'
             ),
@@ -824,11 +825,11 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         // Test with one-time code, fail due to minimum amount (cart is empty)
         $result = $this->module->sAddVoucher($voucherCodeData['code']);
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertTrue($result['sErrorFlag']);
-        $this->assertContains('Der Mindestumsatz für diesen Gutschein beträgt 10,00&nbsp;&euro;', $result['sErrorMessages']);
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertTrue($result['sErrorFlag']);
+        static::assertContains('Der Mindestumsatz für diesen Gutschein beträgt 10,00&nbsp;&euro;', $result['sErrorMessages']);
 
         // Add one article to the basket with enough value to use discount
         $randomArticle = $this->db->fetchRow(
@@ -851,25 +852,25 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         $previousAmount = $this->module->sGetAmount();
         // Test with one-time code, success
-        $this->assertTrue($this->module->sAddVoucher($voucherCodeData['code']));
-        $this->assertLessThan($previousAmount, $this->module->sGetAmount());
+        static::assertTrue($this->module->sAddVoucher($voucherCodeData['code']));
+        static::assertLessThan($previousAmount, $this->module->sGetAmount());
 
         // Test the voucher values. This voucher has no taxes
         $discount = $this->db->fetchRow(
             'SELECT * FROM s_order_basket WHERE modus = 2 and sessionID = ?',
             [$this->module->sSYSTEM->sSESSION_ID]
         );
-        $this->assertEquals($voucherData['value'] * -1, $discount['price']);
-        $this->assertEquals($voucherData['value'] * -1, $discount['netprice']);
-        $this->assertEquals(0, $discount['tax_rate']);
+        static::assertEquals($voucherData['value'] * -1, $discount['price']);
+        static::assertEquals($voucherData['value'] * -1, $discount['netprice']);
+        static::assertEquals(0, $discount['tax_rate']);
 
         // Test again with the same one-time code, fail
         $result = $this->module->sAddVoucher($voucherCodeData['code']);
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertTrue($result['sErrorFlag']);
-        $this->assertContains(
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertTrue($result['sErrorFlag']);
+        static::assertContains(
             $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
                 'VoucherFailureOnlyOnes',
                 'Only one voucher can be processed in order'
@@ -949,24 +950,24 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         $previousAmount = $this->module->sGetAmount();
         // Test with one-time code, success
-        $this->assertTrue($this->module->sAddVoucher($voucherData['vouchercode']));
-        $this->assertLessThan($previousAmount, $this->module->sGetAmount());
+        static::assertTrue($this->module->sAddVoucher($voucherData['vouchercode']));
+        static::assertLessThan($previousAmount, $this->module->sGetAmount());
 
         // Test the voucher values with custom tax from voucher
         $discount = $this->db->fetchRow(
             'SELECT * FROM s_order_basket WHERE modus = 2 and sessionID = ?',
             [$this->module->sSYSTEM->sSESSION_ID]
         );
-        $this->assertEquals($voucherData['value'] * -1, $discount['price']);
-        $this->assertEquals($tax['tax'], $discount['tax_rate']);
+        static::assertEquals($voucherData['value'] * -1, $discount['price']);
+        static::assertEquals($tax['tax'], $discount['tax_rate']);
 
         // Test again with the same one-time code, fail
         $result = $this->module->sAddVoucher($voucherData['vouchercode']);
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertTrue($result['sErrorFlag']);
-        $this->assertContains(
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertTrue($result['sErrorFlag']);
+        static::assertContains(
             $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
                 'VoucherFailureOnlyOnes',
                 'Only one voucher can be processed in order'
@@ -1053,16 +1054,16 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         $previousAmount = $this->module->sGetAmount();
         // Test with one-time code, success
-        $this->assertTrue($this->module->sAddVoucher($voucherOneData['vouchercode']));
-        $this->assertLessThan($previousAmount, $this->module->sGetAmount());
+        static::assertTrue($this->module->sAddVoucher($voucherOneData['vouchercode']));
+        static::assertLessThan($previousAmount, $this->module->sGetAmount());
 
         // Test again with the same one-time code, fail
         $result = $this->module->sAddVoucher($voucherTwoData['vouchercode']);
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertTrue($result['sErrorFlag']);
-        $this->assertContains(
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertTrue($result['sErrorFlag']);
+        static::assertContains(
             $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
                 'VoucherFailureOnlyOnes',
                 'Only one voucher can be processed in order'
@@ -1144,11 +1145,11 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         // Test again with the same one-time code, fail
         $result = $this->module->sAddVoucher($voucherData['vouchercode']);
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertTrue($result['sErrorFlag']);
-        $this->assertContains(
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertTrue($result['sErrorFlag']);
+        static::assertContains(
             $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
                 'VoucherFailureCustomerGroup',
                 'This voucher is not available for your customer group'
@@ -1166,8 +1167,8 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         $previousAmount = $this->module->sGetAmount();
         // Test with one-time code, success
-        $this->assertTrue($this->module->sAddVoucher($voucherData['vouchercode']));
-        $this->assertLessThan($previousAmount, $this->module->sGetAmount());
+        static::assertTrue($this->module->sAddVoucher($voucherData['vouchercode']));
+        static::assertLessThan($previousAmount, $this->module->sGetAmount());
 
         // Housekeeping
         $this->db->delete(
@@ -1229,11 +1230,11 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         // Test again  code, fail
         $result = $this->module->sAddVoucher($voucherData['vouchercode']);
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertTrue($result['sErrorFlag']);
-        $this->assertContains(
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertTrue($result['sErrorFlag']);
+        static::assertContains(
             $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
                 'VoucherFailureProducts',
                 'This voucher is only available in combination with certain products'
@@ -1254,8 +1255,8 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         $previousAmount = $this->module->sGetAmount();
         // Test with one-time code, success
-        $this->assertTrue($this->module->sAddVoucher($voucherData['vouchercode']));
-        $this->assertLessThan($previousAmount, $this->module->sGetAmount());
+        static::assertTrue($this->module->sAddVoucher($voucherData['vouchercode']));
+        static::assertLessThan($previousAmount, $this->module->sGetAmount());
 
         // Housekeeping
         $this->db->delete(
@@ -1267,6 +1268,81 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             ['vouchercode = ?' => $voucherData['vouchercode']]
         );
         $this->deleteDummyCustomer($customer);
+    }
+
+    /**
+     * @covers \sBasket::sAddVoucher
+     */
+    public function testsAddVoucherWithCurrencyFactor()
+    {
+        // Prepare a voucher
+        $voucherData = [
+            'vouchercode' => 'testOne',
+            'description' => 'testOne description',
+            'numberofunits' => 1,
+            'value' => 10,
+            'minimumcharge' => 10,
+            'ordercode' => uniqid(rand()),
+            'modus' => 0,
+        ];
+        $this->db->insert(
+            's_emarketing_vouchers',
+            $voucherData
+        );
+
+        // Fetch a random article
+        $randomArticle = $this->db->fetchRow(
+            'SELECT * FROM s_articles_details detail
+            INNER JOIN s_articles article
+              ON article.id = detail.articleID
+            WHERE detail.active = 1
+            LIMIT 1'
+        );
+
+        // Generate session id
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
+        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+
+        // Define different currency factors to test
+        $currencyFactors = [0, .5, 1, 1.5, 2];
+
+        foreach ($currencyFactors as $currencyFactor) {
+            // If the currency factor is set to 0, a fallback of 1 should be used
+            $currencyFactorForCalculation = $currencyFactor ?: 1;
+
+            // Prepare values to test against later
+            $deltaBetweenVoucherAndArticlePrice = 1;
+            $this->module->sSYSTEM->sCurrency['factor'] = $currencyFactor;
+            $basketAmountWithoutVoucher = $voucherData['minimumcharge'] * $currencyFactorForCalculation + $deltaBetweenVoucherAndArticlePrice;
+
+            // Add one article to the basket with enough value to use discount
+            $this->db->insert(
+                's_order_basket',
+                [
+                    'price' => $basketAmountWithoutVoucher,
+                    'quantity' => 1,
+                    'sessionID' => $this->session->get('sessionId'),
+                    'ordernumber' => $randomArticle['ordernumber'],
+                    'articleID' => $randomArticle['articleID'],
+                ]
+            );
+
+            static::assertEquals($basketAmountWithoutVoucher, $this->module->sGetAmount()['totalAmount']);
+            static::assertTrue($this->module->sAddVoucher($voucherData['vouchercode']));
+            static::assertEquals($deltaBetweenVoucherAndArticlePrice, $this->module->sGetAmount()['totalAmount']);
+
+            // Housekeeping
+            $this->db->delete(
+                's_order_basket',
+                ['sessionID = ?' => $this->session->get('sessionId')]
+            );
+        }
+
+        // Housekeeping
+        $this->db->delete(
+            's_emarketing_vouchers',
+            ['vouchercode = ?' => $voucherData['vouchercode']]
+        );
     }
 
     /**
@@ -1329,11 +1405,11 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             [$randomArticleOne['supplierID']]
         );
         $result = $this->module->sAddVoucher($voucherData['vouchercode']);
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertTrue($result['sErrorFlag']);
-        $this->assertContains(
+        static::assertInternalType('array', $result);
+        static::assertArrayHasKey('sErrorFlag', $result);
+        static::assertArrayHasKey('sErrorMessages', $result);
+        static::assertTrue($result['sErrorFlag']);
+        static::assertContains(
             str_replace(
                 '{sSupplier}',
                 $supplierOne,
@@ -1358,8 +1434,8 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         $previousAmount = $this->module->sGetAmount();
         // Test with one-time code, success
-        $this->assertTrue($this->module->sAddVoucher($voucherData['vouchercode']));
-        $this->assertLessThan($previousAmount, $this->module->sGetAmount());
+        static::assertTrue($this->module->sAddVoucher($voucherData['vouchercode']));
+        static::assertLessThan($previousAmount, $this->module->sGetAmount());
 
         // Housekeeping
         $this->db->delete(
@@ -1390,7 +1466,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Test with empty basket, empty
-        $this->assertNull($this->module->sGetBasketIds());
+        static::assertNull($this->module->sGetBasketIds());
 
         // Add the first article to the basket, test we get the article id
         $this->db->insert(
@@ -1403,7 +1479,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
                 'articleID' => $randomArticles[0]['articleID'],
             ]
         );
-        $this->assertEquals(
+        static::assertEquals(
             [$randomArticles[0]['articleID']],
             $this->module->sGetBasketIds()
         );
@@ -1419,7 +1495,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
                 'articleID' => $randomArticles[0]['articleID'],
             ]
         );
-        $this->assertEquals(
+        static::assertEquals(
             [$randomArticles[0]['articleID']],
             $this->module->sGetBasketIds()
         );
@@ -1437,11 +1513,11 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         $basketIds = $this->module->sGetBasketIds();
-        $this->assertContains(
+        static::assertContains(
             $randomArticles[0]['articleID'],
             $basketIds
         );
-        $this->assertContains(
+        static::assertContains(
             $randomArticles[1]['articleID'],
             $basketIds
         );
@@ -1463,13 +1539,13 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         // Test with minimum order surcharge, always returns false
         $this->module->sSYSTEM->sUSERGROUPDATA['minimumordersurcharge'] = 10;
-        $this->assertFalse($this->module->sCheckMinimumCharge());
+        static::assertFalse($this->module->sCheckMinimumCharge());
 
         $this->module->sSYSTEM->sUSERGROUPDATA['minimumordersurcharge'] = 0;
         $this->module->sSYSTEM->sUSERGROUPDATA['minimumorder'] = 10;
 
         // Test with empty cart, expect 10
-        $this->assertEquals(10, $this->module->sCheckMinimumCharge());
+        static::assertEquals(10, $this->module->sCheckMinimumCharge());
 
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
@@ -1494,7 +1570,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         // Test with non-empty cart, expect 10
-        $this->assertEquals(10, $this->module->sCheckMinimumCharge());
+        static::assertEquals(10, $this->module->sCheckMinimumCharge());
 
         // Pass the minimum value, expect false
         $this->db->insert(
@@ -1508,7 +1584,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertFalse($this->module->sCheckMinimumCharge());
+        static::assertFalse($this->module->sCheckMinimumCharge());
 
         // Housekeeping
         $this->module->sSYSTEM->sUSERGROUPDATA['minimumorder'] = $oldMinimumOrder;
@@ -1528,7 +1604,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         $oldMinimumOrderSurcharge = $this->module->sSYSTEM->sUSERGROUPDATA['minimumordersurcharge'];
 
         // Empty basket, expect false
-        $this->assertFalse(
+        static::assertFalse(
             $this->invokeMethod(
                 $this->module,
                 'sInsertSurcharge',
@@ -1562,7 +1638,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         $this->module->sSYSTEM->sUSERGROUPDATA['minimumorder'] = 10;
 
         // Check that we have no surcharge
-        $this->assertEmpty(
+        static::assertEmpty(
             $this->db->fetchRow(
                 'SELECT * FROM s_order_basket WHERE sessionID = ? AND modus=4',
                 [$this->module->sSYSTEM->sSESSION_ID]
@@ -1570,7 +1646,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         // Add surcharge, expect success (null)
-        $this->assertNull(
+        static::assertNull(
             $this->invokeMethod(
                 $this->module,
                 'sInsertSurcharge',
@@ -1583,7 +1659,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             'SELECT * FROM s_order_basket WHERE sessionID = ? AND modus=4',
             [$this->module->sSYSTEM->sSESSION_ID]
         );
-        $this->assertEquals(5, $surchargeRow['price']);
+        static::assertEquals(5, $surchargeRow['price']);
 
         // Housekeeping
         $this->module->sSYSTEM->sUSERGROUPDATA['minimumorder'] = $oldMinimumOrder;
@@ -1600,7 +1676,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     public function testsInsertSurchargePercent()
     {
         // No user and no payment id, expect false
-        $this->assertFalse(
+        static::assertFalse(
             $this->invokeMethod(
                 $this->module,
                 'sInsertSurchargePercent',
@@ -1626,7 +1702,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Empty basket, expect false
-        $this->assertFalse(
+        static::assertFalse(
             $this->invokeMethod(
                 $this->module,
                 'sInsertSurchargePercent',
@@ -1654,7 +1730,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         // Check that we have no surcharge
-        $this->assertEmpty(
+        static::assertEmpty(
             $this->db->fetchRow(
                 'SELECT * FROM s_order_basket WHERE sessionID = ? AND modus=4',
                 [$this->module->sSYSTEM->sSESSION_ID]
@@ -1662,7 +1738,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         // Add surcharge, expect success (null)
-        $this->assertNull(
+        static::assertNull(
             $this->invokeMethod(
                 $this->module,
                 'sInsertSurchargePercent',
@@ -1675,7 +1751,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             'SELECT * FROM s_order_basket WHERE sessionID = ? AND modus = 4',
             [$this->module->sSYSTEM->sSESSION_ID]
         );
-        $this->assertEquals(2 / 100 * 5, $surchargeRow['price']);
+        static::assertEquals(2 / 100 * 5, $surchargeRow['price']);
 
         // Housekeeping
         $this->deleteDummyCustomer($customer);
@@ -1695,7 +1771,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     public function testsGetBasket()
     {
         // Test with empty basket
-        $this->assertEquals([], $this->module->sGetBasket());
+        static::assertEquals([], $this->module->sGetBasket());
 
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
@@ -1783,18 +1859,69 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         ];
 
         $result = $this->module->sGetBasket();
-        $this->assertEquals($keys, array_keys($result));
-        $this->assertGreaterThanOrEqual(1, count($result['content']));
+        static::assertEquals($keys, array_keys($result));
+        static::assertGreaterThanOrEqual(1, count($result['content']));
         foreach ($contentKeys as $key) {
-            $this->assertArrayHasKey($key, $result['content'][0]);
+            static::assertArrayHasKey($key, $result['content'][0]);
         }
 
-        $this->assertGreaterThanOrEqual(1, count($result['content']));
-        $this->assertGreaterThanOrEqual(2, $result['Amount']);
-        $this->assertGreaterThanOrEqual(2, $result['AmountNet']);
-        $this->assertGreaterThanOrEqual(2, $result['AmountNumeric']);
-        $this->assertGreaterThanOrEqual(2, $result['AmountNetNumeric']);
-        $this->assertEquals(1, $result['Quantity']);
+        static::assertGreaterThanOrEqual(1, count($result['content']));
+        static::assertGreaterThanOrEqual(2, $result['Amount']);
+        static::assertGreaterThanOrEqual(2, $result['AmountNet']);
+        static::assertGreaterThanOrEqual(2, $result['AmountNumeric']);
+        static::assertGreaterThanOrEqual(2, $result['AmountNetNumeric']);
+        static::assertEquals(1, $result['Quantity']);
+    }
+
+    public function testsGetBasketDataHasNumericCartItemAmounts()
+    {
+        $resourceHelper = new \Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper();
+        try {
+            $article = $resourceHelper->createArticle([
+                'name' => 'Testartikel',
+                'description' => 'Test description',
+                'active' => true,
+                'mainDetail' => [
+                    'number' => 'swTEST' . uniqid(rand()),
+                    'inStock' => 15,
+                    'lastStock' => true,
+                    'unitId' => 1,
+                    'prices' => [
+                        [
+                            'customerGroupKey' => 'EK',
+                            'from' => 1,
+                            'to' => '-',
+                            'price' => 29.97,
+                        ],
+                    ],
+                ],
+                'taxId' => 4,
+                'supplierId' => 2,
+                'categories' => [10],
+            ]);
+            $customerGroup = $resourceHelper->createCustomerGroup();
+            $customer = $this->createDummyCustomer();
+            $this->session['sUserId'] = $customer->getId();
+            $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
+            $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+            $this->module->sSYSTEM->sUSERGROUPDATA['id'] = $customerGroup->getId();
+
+            // Add the article to the basket
+            $this->module->sAddArticle($article->getMainDetail()->getNumber(), 2);
+            $this->module->sRefreshBasket();
+            $basketData = $this->module->sGetBasketData();
+
+            // Assert that a valid basket was returned
+            static::assertNotEmpty($basketData);
+            // Assert that there is a numeric basket amount
+            static::assertArrayHasKey('amountNumeric', $basketData['content'][0], 'amountNumeric for cart item should exist');
+            static::assertArrayHasKey('amountnetNumeric', $basketData['content'][0], 'amountnetNumeric for cart item should exist');
+            static::assertGreaterThan(0, $basketData['content'][0]['amountNumeric']);
+            static::assertGreaterThan(0, $basketData['content'][0]['amountnetNumeric']);
+            static::assertEquals(29.97 * 2, $basketData['content'][0]['amountNumeric'], 'amountNumeric for cart item should respect cart item quantity', 0.001);
+        } finally {
+            $resourceHelper->cleanUp();
+        }
     }
 
     /**
@@ -1882,9 +2009,9 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             $amount = $this->module->sGetAmount();
 
             // Assert that a valid basket was returned
-            $this->assertNotEmpty($basketData);
+            static::assertNotEmpty($basketData);
             // Assert that the total is approximately 0.00
-            $this->assertEquals(0, $basketData['AmountNumeric'], 'total is approxmately 0.00', 0.0001);
+            static::assertEquals(0, $basketData['AmountNumeric'], 'total is approxmately 0.00', 0.0001);
         } finally {
             // Delete test resources
             if ($customerGroupDiscountId) {
@@ -1892,6 +2019,58 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             }
             $resourceHelper->cleanUp();
         }
+    }
+
+    public function testsGetBasketWithInvalidProduct()
+    {
+        static::assertEquals([], $this->module->sGetBasket());
+
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
+        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+
+        $resourceHelper = new \Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper();
+
+        // Setup article for the first basket position - an article that costs EUR 29.97
+        $product = $resourceHelper->createArticle([
+            'name' => 'Testartikel',
+            'description' => 'Test description',
+            'active' => true,
+            'mainDetail' => [
+                'number' => 'swTEST' . Random::getAlphanumericString(12),
+                'inStock' => 15,
+                'lastStock' => true,
+                'unitId' => 1,
+                'prices' => [
+                    [
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => '-',
+                        'price' => 29.97,
+                    ],
+                ],
+            ],
+            'taxId' => 4,
+            'supplierId' => 2,
+            'categories' => [10],
+        ]);
+
+        $this->db->insert(
+            's_order_basket',
+            [
+                'price' => 2,
+                'quantity' => 1,
+                'sessionID' => $this->session->get('sessionId'),
+                'ordernumber' => $product->getMainDetail()->getNumber(),
+                'articleID' => $product->getId(),
+            ]
+        );
+
+        static::assertEquals(1, count($this->module->sGetBasket()['content']));
+
+        $this->db->delete('s_articles_details', ['articleID = ?' => $product->getId()]);
+        $this->db->delete('s_articles', ['id = ?' => $product->getId()]);
+
+        static::assertEquals([], $this->module->sGetBasket());
     }
 
     /**
@@ -1914,23 +2093,23 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             LIMIT 1'
         );
 
-        $this->assertEquals(0, $this->db->fetchOne(
+        static::assertEquals(0, $this->db->fetchOne(
             'SELECT COUNT(DISTINCT id) FROM s_order_notes WHERE sUniqueID = ? AND ordernumber = ?',
             [$this->module->sSYSTEM->_COOKIE['sUniqueID'], $randomArticle['ordernumber']]
         ));
 
-        $this->assertTrue($this->module->sAddNote(
+        static::assertTrue($this->module->sAddNote(
             $randomArticle['articleID'],
             $randomArticle['name'],
             $randomArticle['ordernumber']
         ));
 
-        $this->assertEquals(1, $this->db->fetchOne(
+        static::assertEquals(1, $this->db->fetchOne(
             'SELECT COUNT(DISTINCT id) FROM s_order_notes WHERE sUniqueID = ? AND ordernumber = ?',
             [$this->module->sSYSTEM->_COOKIE['sUniqueID'], $randomArticle['ordernumber']]
         ));
 
-        $this->assertTrue($this->module->sAddNote(
+        static::assertTrue($this->module->sAddNote(
             $randomArticle['articleID'],
             $randomArticle['name'],
             $randomArticle['ordernumber']
@@ -1948,11 +2127,11 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         list($randomArticle, $cookieId) = $input;
 
         // Test with no id in cookie
-        $this->assertEquals([], $this->module->sGetNotes());
+        static::assertEquals([], $this->module->sGetNotes());
         $_COOKIE['sUniqueID'] = $cookieId;
 
         $result = $this->module->sGetNotes();
-        $this->assertEquals($randomArticle['articleID'], $result[0]['articleID']);
+        static::assertEquals($randomArticle['articleID'], $result[0]['articleID']);
 
         return [$randomArticle, $cookieId];
     }
@@ -1967,7 +2146,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         // Test with no id in cookie
         $_COOKIE['sUniqueID'] = $cookieId;
-        $this->assertEquals(1, $this->module->sCountNotes());
+        static::assertEquals(1, $this->module->sCountNotes());
 
         // Add another article to the basket
         $randomArticleTwo = $this->db->fetchRow(
@@ -1981,13 +2160,13 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             [$randomArticleOne['id']]
         );
 
-        $this->assertTrue($this->module->sAddNote(
+        static::assertTrue($this->module->sAddNote(
             $randomArticleTwo['articleID'],
             $randomArticleTwo['name'],
             $randomArticleTwo['ordernumber']
         ));
 
-        $this->assertEquals(2, $this->module->sCountNotes());
+        static::assertEquals(2, $this->module->sCountNotes());
 
         return [[$randomArticleOne, $randomArticleTwo], $cookieId];
     }
@@ -2002,7 +2181,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         $_COOKIE['sUniqueID'] = $cookieId;
 
         // Null argument, return null
-        $this->assertFalse($this->module->sDeleteNote(null));
+        static::assertFalse($this->module->sDeleteNote(null));
 
         // Get random article that's not in the basket
         $randomNotPresentArticleId = $this->db->fetchOne(
@@ -2016,13 +2195,13 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         // Check that we currently have 2 articles
-        $this->assertEquals(2, $this->module->sCountNotes());
+        static::assertEquals(2, $this->module->sCountNotes());
 
         // Get true even if article is not in the wishlist
-        $this->assertTrue($this->module->sDeleteNote($randomNotPresentArticleId));
+        static::assertTrue($this->module->sDeleteNote($randomNotPresentArticleId));
 
         // Check that we still have 2 articles
-        $this->assertEquals(2, $this->module->sCountNotes());
+        static::assertEquals(2, $this->module->sCountNotes());
 
         $noteIds = $this->db->fetchCol(
             'SELECT id FROM s_order_notes detail
@@ -2031,16 +2210,16 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         // Get true even if article is not in the wishlist
-        $this->assertTrue($this->module->sDeleteNote($noteIds[0]));
+        static::assertTrue($this->module->sDeleteNote($noteIds[0]));
 
         // Check that we now have 1 article
-        $this->assertEquals(1, $this->module->sCountNotes());
+        static::assertEquals(1, $this->module->sCountNotes());
 
         // Get true even if article is not in the wishlist
-        $this->assertTrue($this->module->sDeleteNote($noteIds[1]));
+        static::assertTrue($this->module->sDeleteNote($noteIds[1]));
 
         // Check that we now have an empty wishlist
-        $this->assertEquals(0, $this->module->sCountNotes());
+        static::assertEquals(0, $this->module->sCountNotes());
     }
 
     /**
@@ -2049,7 +2228,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     public function testsUpdateArticle()
     {
         // Null args, false result
-        $this->assertFalse($this->module->sUpdateArticle(null, null));
+        static::assertFalse($this->module->sUpdateArticle(null, null));
 
         $this->generateBasketSession();
 
@@ -2076,18 +2255,18 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         // Store previous amount
         $previousAmount = $this->module->sGetAmount();
-        $this->assertEquals(['totalAmount' => 0.01], $previousAmount);
+        static::assertEquals(['totalAmount' => 0.01], $previousAmount);
 
         // Update the article, prices are recalculated
-        $this->assertNull($this->module->sUpdateArticle($basketId, 1));
+        static::assertNull($this->module->sUpdateArticle($basketId, 1));
         $oneAmount = $this->module->sGetAmount();
-        $this->assertGreaterThan($previousAmount['totalAmount'], $oneAmount['totalAmount']);
+        static::assertGreaterThan($previousAmount['totalAmount'], $oneAmount['totalAmount']);
 
         // Update from 1 to 2, we should get a more expensive cart
-        $this->assertNull($this->module->sUpdateArticle($basketId, 2));
+        static::assertNull($this->module->sUpdateArticle($basketId, 2));
         $twoAmount = $this->module->sGetAmount();
-        $this->assertGreaterThanOrEqual($oneAmount['totalAmount'], $twoAmount['totalAmount']);
-        $this->assertLessThanOrEqual(2 * $oneAmount['totalAmount'], $twoAmount['totalAmount']);
+        static::assertGreaterThanOrEqual($oneAmount['totalAmount'], $twoAmount['totalAmount']);
+        static::assertLessThanOrEqual(2 * $oneAmount['totalAmount'], $twoAmount['totalAmount']);
 
         // Housekeeping
         $this->db->delete(
@@ -2102,7 +2281,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     public function testsCheckForESD()
     {
         // No session, expect false
-        $this->assertFalse($this->module->sCheckForESD());
+        static::assertFalse($this->module->sCheckForESD());
 
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
@@ -2119,9 +2298,9 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             AND esd.id IS NULL LIMIT 1
         ');
 
-        $this->assertGreaterThan(0, $this->module->sAddArticle($randomNoESDArticle['ordernumber'], 1));
+        static::assertGreaterThan(0, $this->module->sAddArticle($randomNoESDArticle['ordernumber'], 1));
 
-        $this->assertFalse($this->module->sCheckForESD());
+        static::assertFalse($this->module->sCheckForESD());
 
         // Get random esd article
         $randomESDArticle = $this->db->fetchRow(
@@ -2145,7 +2324,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
         $this->module->sAddArticle($randomESDArticle['ordernumber'], 1);
 
-        $this->assertTrue($this->module->sCheckForESD());
+        static::assertTrue($this->module->sCheckForESD());
 
         // Housekeeping
         $this->db->delete(
@@ -2170,12 +2349,12 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     public function testsDeleteBasket()
     {
         // No session, expect false
-        $this->assertFalse($this->module->sDeleteBasket());
+        static::assertFalse($this->module->sDeleteBasket());
 
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
-        $this->assertNull($this->module->sDeleteBasket());
+        static::assertNull($this->module->sDeleteBasket());
 
         // Get random article and add it to the basket
         $randomArticle = $this->db->fetchRow(
@@ -2197,11 +2376,11 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         $this->module->sAddArticle($randomArticle['ordernumber'], 1);
 
-        $this->assertNotEquals(0, $this->module->sCountBasket());
+        static::assertNotEquals(0, $this->module->sCountBasket());
 
         $this->module->sDeleteBasket();
 
-        $this->assertEquals(0, $this->module->sCountBasket());
+        static::assertEquals(0, $this->module->sCountBasket());
     }
 
     /**
@@ -2210,10 +2389,10 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     public function testsDeleteArticle()
     {
         // No id, expect null
-        $this->assertNull($this->module->sDeleteArticle(null));
+        static::assertNull($this->module->sDeleteArticle(null));
 
         // Random id, expect null
-        $this->assertNull($this->module->sDeleteArticle(9999999));
+        static::assertNull($this->module->sDeleteArticle(9999999));
 
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
@@ -2236,10 +2415,10 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             LIMIT 1'
         );
         $idOne = $this->module->sAddArticle($randomArticle['ordernumber'], 1);
-        $this->assertEquals(1, $this->module->sCountBasket());
+        static::assertEquals(1, $this->module->sCountBasket());
 
         $this->module->sDeleteArticle($idOne);
-        $this->assertEquals(0, $this->module->sCountBasket());
+        static::assertEquals(0, $this->module->sCountBasket());
     }
 
     /**
@@ -2248,7 +2427,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     public function testsAddArticle()
     {
         // No id, expect false
-        $this->assertFalse($this->module->sAddArticle(null));
+        static::assertFalse($this->module->sAddArticle(null));
 
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
@@ -2275,14 +2454,14 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         // Adding article without quantity adds one
         $this->module->sAddArticle($randomArticleOne['ordernumber']);
         $basket = $this->module->sGetBasket();
-        $this->assertEquals(1, $basket['Quantity']);
-        $this->assertEquals(1, $basket['content'][0]['quantity']);
+        static::assertEquals(1, $basket['Quantity']);
+        static::assertEquals(1, $basket['content'][0]['quantity']);
 
         // Adding article with quantity adds correctly, finds stacks
         $this->module->sAddArticle($randomArticleOne['ordernumber'], 2);
         $basket = $this->module->sGetBasket();
-        $this->assertEquals(1, $basket['Quantity']);
-        $this->assertEquals(3, $basket['content'][0]['quantity']);
+        static::assertEquals(1, $basket['Quantity']);
+        static::assertEquals(3, $basket['content'][0]['quantity']);
 
         // Start over
         $this->module->sDeleteBasket();
@@ -2290,8 +2469,8 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         // Adding article with quantity over stock, check that we have the available stock
         $this->module->sAddArticle($randomArticleOne['ordernumber'], $randomArticleOne['instock'] + 200);
         $basket = $this->module->sGetBasket();
-        $this->assertEquals(1, $basket['Quantity']);
-        $this->assertEquals(min($randomArticleOne['instock'], 100), $basket['content'][0]['quantity']);
+        static::assertEquals(1, $basket['Quantity']);
+        static::assertEquals(min($randomArticleOne['instock'], 100), $basket['content'][0]['quantity']);
 
         // Start over
         $this->module->sDeleteBasket();
@@ -2316,8 +2495,8 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         // Adding article with quantity over stock, check that we have the desired quantity
         $this->module->sAddArticle($randomArticleTwo['ordernumber'], $randomArticleTwo['instock'] + 20);
         $basket = $this->module->sGetBasket();
-        $this->assertEquals(1, $basket['Quantity']);
-        $this->assertEquals(min($randomArticleTwo['instock'] + 20, 100), $basket['content'][0]['quantity']);
+        static::assertEquals(1, $basket['Quantity']);
+        static::assertEquals(min($randomArticleTwo['instock'] + 20, 100), $basket['content'][0]['quantity']);
 
         // Housekeeping
         $this->db->delete(
@@ -2383,18 +2562,18 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         $basketItemId = $this->module->sAddArticle($article->getMainDetail()->getNumber(), 1);
 
         // Check that the article has been added to the basket
-        $this->assertNotEquals(false, $basketItemId);
+        static::assertNotEquals(false, $basketItemId);
 
         // Check that the final price equals the net price for the basket item
         $basketItem = Shopware()->Db()->fetchRow(
             'SELECT * FROM s_order_basket WHERE id = :id',
             [':id' => $basketItemId]
         );
-        $this->assertEquals($basketItem['price'], $basketItem['netprice']);
+        static::assertEquals($basketItem['price'], $basketItem['netprice']);
 
         // Check that the final price equals the net price for the whole basket
         $basketData = $this->module->sGetBasketData();
-        $this->assertEquals($basketData['AmountNumeric'], $basketData['AmountNetNumeric']);
+        static::assertEquals($basketData['AmountNumeric'], $basketData['AmountNetNumeric']);
 
         // Delete test resources
         $resourceHelper->cleanUp();
@@ -2419,9 +2598,9 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     {
         $date = new DateTime();
         $date->modify('-8 days');
-        $lastLogin = $date->format(DateTime::ISO8601);
+        $lastLogin = $date->format(DateTime::ATOM);
 
-        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
+        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ATOM);
 
         $testData = [
             'password' => 'fooobar',

@@ -31,74 +31,85 @@ use Shopware\Components\Model\ModelEntity;
  * @deprecated since 5.2 will be removed in 6.0, use \Shopware\Models\Attribute\Configuration instead
  *
  * @ORM\Table(name="s_core_engine_elements")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Element extends ModelEntity
 {
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="type", type="string", nullable=false)
      */
     private $type;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="`default`", type="string", nullable=true)
      */
     private $default;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="store", type="string", nullable=true)
      */
     private $store;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="label", type="string", nullable=true)
      */
     private $label;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="required", type="boolean")
      */
     private $required = false;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="help", type="string", nullable=true)
      */
     private $help;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="translatable", type="boolean")
      */
     private $translatable = false;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="variantable", type="boolean")
      */
     private $variantable = false;
 
     /**
-     * @var string
+     * @var int
+     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;
@@ -256,7 +267,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getPosition()
     {
@@ -264,7 +275,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param string $position
+     * @param int $position
      */
     public function setPosition($position)
     {

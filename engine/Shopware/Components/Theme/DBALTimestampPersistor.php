@@ -33,9 +33,6 @@ class DBALTimestampPersistor implements TimestampPersistor
      */
     private $connection;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
@@ -63,7 +60,7 @@ sql;
         $timestamp = time();
         $this->updateTimestamp($shopId, $timestamp);
 
-        return $timestamp;
+        return (string) $timestamp;
     }
 
     /**

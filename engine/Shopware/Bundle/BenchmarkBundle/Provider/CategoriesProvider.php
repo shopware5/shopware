@@ -61,6 +61,7 @@ class CategoriesProvider implements BenchmarkProviderInterface
     public function getBenchmarkData(ShopContextInterface $shopContext)
     {
         $this->shopContext = $shopContext;
+        $this->categoryIds = [];
 
         return [
             'products' => $this->getCategoryProductData(),
@@ -157,6 +158,17 @@ class CategoriesProvider implements BenchmarkProviderInterface
             ->execute()
             ->fetchAll();
 
+        $categories = array_map(function ($item) {
+            $item['active'] = (bool) $item['active'];
+            $item['isBlog'] = (bool) $item['isBlog'];
+            $item['hiddenFromTopMenu'] = (bool) $item['hiddenFromTopMenu'];
+            $item['noFilters'] = (bool) $item['noFilters'];
+            $item['noSortings'] = (bool) $item['noSortings'];
+            $item['hasProductStream'] = (bool) $item['hasProductStream'];
+
+            return $item;
+        }, $categories);
+
         return $this->buildTree($categories);
     }
 
@@ -190,8 +202,6 @@ class CategoriesProvider implements BenchmarkProviderInterface
 
     /**
      * Builds an actual category tree.
-     *
-     * @param array $categories
      *
      * @return array
      */

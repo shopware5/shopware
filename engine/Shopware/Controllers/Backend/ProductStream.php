@@ -21,16 +21,19 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Components\ProductStream\RepositoryInterface;
+use Shopware\Models\ProductStream\ProductStream;
+use Shopware\Models\Shop\Shop;
 
 class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Backend_Application
 {
-    protected $model = 'Shopware\Models\ProductStream\ProductStream';
+    protected $model = ProductStream::class;
     protected $alias = 'stream';
 
     public function copyStreamAttributesAction()
@@ -58,6 +61,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
             $sorting = $this->Request()->getParam('sort');
 
             if ($sorting !== null) {
+                /** @var \Shopware\Bundle\SearchBundle\SortingInterface[] $sorting */
                 $sorting = $streamRepo->unserialize($sorting);
 
                 foreach ($sorting as $sort) {
@@ -74,9 +78,10 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
                     throw new \InvalidArgumentException('Could not decode JSON: ' . json_last_error_msg());
                 }
 
+                /** @var \Shopware\Bundle\SearchBundle\ConditionInterface[] $conditions */
                 $conditions = $streamRepo->unserialize($conditions);
 
-                foreach ($conditions as $condition) { /* @var $condition \Shopware\Bundle\SearchBundle\ConditionInterface */
+                foreach ($conditions as $condition) {
                     $criteria->addCondition($condition);
                 }
             }
@@ -184,11 +189,11 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
     public function removeSelectedProductAction()
     {
         $streamId = $this->Request()->getParam('streamId');
-        $articleId = $this->Request()->getParam('articleId');
+        $productId = $this->Request()->getParam('articleId');
 
         Shopware()->Container()->get('dbal_connection')->executeUpdate(
             'DELETE FROM s_product_streams_selection WHERE stream_id = :streamId AND article_id = :articleId',
-            [':streamId' => $streamId, ':articleId' => $articleId]
+            [':streamId' => $streamId, ':articleId' => $productId]
         );
 
         $this->View()->assign('success', true);
@@ -197,11 +202,11 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
     public function addSelectedProductAction()
     {
         $streamId = $this->Request()->getParam('streamId');
-        $articleId = $this->Request()->getParam('articleId');
+        $productId = $this->Request()->getParam('articleId');
 
         Shopware()->Container()->get('dbal_connection')->executeUpdate(
             'INSERT IGNORE INTO s_product_streams_selection(stream_id, article_id) VALUES (:streamId, :articleId)',
-            [':streamId' => $streamId, ':articleId' => $articleId]
+            [':streamId' => $streamId, ':articleId' => $productId]
         );
 
         $this->View()->assign('success', true);
@@ -266,7 +271,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
     private function createContext($shopId, $currencyId = null, $customerGroupKey = null)
     {
         /** @var Shopware\Models\Shop\Repository $repo */
-        $repo = Shopware()->Container()->get('models')->getRepository('Shopware\Models\Shop\Shop');
+        $repo = Shopware()->Container()->get('models')->getRepository(Shop::class);
 
         $shop = $repo->getActiveById($shopId);
 

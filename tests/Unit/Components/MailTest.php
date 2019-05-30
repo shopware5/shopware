@@ -27,7 +27,7 @@ namespace Shopware\Tests\Unit\Components;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -38,7 +38,7 @@ class MailTest extends TestCase
         $mail = new \Enlight_Components_Mail();
         $mail->setFrom('foo@example.com', 'Sender\'s name');
 
-        $this->assertSame('foo@example.com', $mail->getFrom());
+        static::assertSame('foo@example.com', $mail->getFrom());
     }
 
     public function testCodeInjectionInFromHeader()

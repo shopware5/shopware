@@ -33,7 +33,6 @@ use Shopware\Bundle\EmotionBundle\ComponentHandler\CategoryTeaserComponentHandle
 use Shopware\Bundle\EmotionBundle\ComponentHandler\ManufacturerSliderComponentHandler;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
-use Shopware\Bundle\EmotionBundle\Struct\Library\Component;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Components\Compatibility\LegacyStructConverter;
@@ -61,12 +60,6 @@ class StructConverter
      */
     private $container;
 
-    /**
-     * @param LegacyStructConverter       $converter
-     * @param MediaServiceInterface       $mediaService
-     * @param \Enlight_Event_EventManager $eventManager
-     * @param ContainerInterface          $container
-     */
     public function __construct(LegacyStructConverter $converter, MediaServiceInterface $mediaService, \Enlight_Event_EventManager $eventManager, ContainerInterface $container)
     {
         $this->converter = $converter;
@@ -76,8 +69,6 @@ class StructConverter
     }
 
     /**
-     * @param Emotion $emotion
-     *
      * @return array
      */
     public function convertEmotion(Emotion $emotion)
@@ -113,8 +104,6 @@ class StructConverter
     }
 
     /**
-     * @param Element $element
-     *
      * @return array
      */
     public function convertEmotionElement(Element $element)
@@ -124,7 +113,7 @@ class StructConverter
         $elementArray['component']['cls'] = $element->getComponent()->getCssClass();
 
         $elementArray['data'] = array_merge($element->getConfig()->getAll(), $element->getData()->getAll());
-        $elementArray['data']['objectId'] = md5($element->getId());
+        $elementArray['data']['objectId'] = md5((string) $element->getId());
 
         switch ($element->getComponent()->getType()) {
             case BannerSliderComponentHandler::COMPONENT_NAME:

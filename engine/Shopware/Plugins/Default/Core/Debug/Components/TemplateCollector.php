@@ -27,7 +27,7 @@ namespace Shopware\Plugin\Debug\Components;
 use Shopware\Components\Logger;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -49,9 +49,7 @@ class TemplateCollector implements CollectorInterface
     private $utils;
 
     /**
-     * @param \Enlight_Template_Manager $template
-     * @param Utils                     $utils
-     * @param string                    $rootDir
+     * @param string $rootDir
      */
     public function __construct(\Enlight_Template_Manager $template, Utils $utils, $rootDir)
     {

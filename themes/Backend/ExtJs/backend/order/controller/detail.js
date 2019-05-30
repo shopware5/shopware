@@ -53,6 +53,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
     snippets: {
         successTitle:'{s name=message/save/success_title}Successful{/s}',
         failureTitle:'{s name=message/save/error_title}Error{/s}',
+        warningTitle:'{s name=message/save/warning_title}Warning{/s}',
         internalComment: {
             successMessage: '{s name=message/internal_comment/success}Internal comment has been saved successfully for order [0]{/s}',
             failureMessage: '{s name=message/internal_comment/failure}An error has occurred while saving the internal comment for order [0].{/s}'
@@ -91,7 +92,11 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
         },
         overwriteOrder: {
             title: '{s name=overwriteOrder/title}Overwrite most recent changes{/s}',
-            message: '{s name=overwriteOrder/message}Do you really want to overwrite the latest changes?{/s}',
+            message: '{s name=overwriteOrder/message}The order has been changed by another user in the meantime. To prevent overwriting these changes, saving the order was aborted. To show these changes, please close the order and re-open it.<br /><br /><b>Do you want to overwrite the latest changes?</b>{/s}',
+        },
+        overwriteDocument: {
+            title: '{s name=document/overwrite/confirmation/title}{/s}',
+            message: '{s name=document/overwrite/confirmation/message}{/s}',
         },
         growlMessage: '{s name=growlMessage}Order{/s}'
     },
@@ -118,7 +123,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             'order-detail-window order-overview-panel': {
                 saveOverview: me.onSaveOverview,
                 updateForms: me.onUpdateDetailPage,
-                convertOrder: me.onConvertOrder
+                convertOrder: me.onConvertOrder,
+                openCustomer: me.onOpenCustomer
             },
             'order-billing-field-set': {
                 countryChanged: me.onCountryChanged
@@ -300,7 +306,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
 
         e.record.save({
             params: {
-                changed: order.get('changed'),
+                changed: order.get('changed') ? order.get('changed').toISOString() : null,
             },
             callback:function (data, operation) {
                 var records = operation.getRecords(),
@@ -422,7 +428,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             store.remove(positions);
             store.getProxy().extraParams = {
                 orderID: orderId,
-                changed: order.get('changed'),
+                changed: order.get('changed') ? order.get('changed').toISOString() : null,
             };
             store.sync({
                 callback:function (batch, operation) {
@@ -573,13 +579,45 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
      *
      * @param [Ext.data.Model]          The record of the detail page (Shopware.apps.Order.model.Order)
      * @param [Ext.data.Model]          The configuration record of the document form (Shopware.apps.Order.model.Configuration)
-     * @param [Ext.container.Container] me
+     * @param [Ext.container.Container] The panel
      */
     onCreateDocument: function(order, config, panel) {
         var me = this,
-            store = Ext.create('Shopware.apps.Order.store.Configuration');
+            documentAlreadyCreated = false;
 
         panel.setLoading(true);
+
+        order.getReceiptStore.each(function (record) {
+            if (record.get('typeId') === config.get('documentType')) {
+                documentAlreadyCreated = true;
+            }
+        });
+
+        if (documentAlreadyCreated) {
+            Ext.MessageBox.confirm(
+                me.snippets.overwriteDocument.title,
+                me.snippets.overwriteDocument.message,
+                function (clickedButton) {
+                    if (clickedButton === 'no' || clickedButton === 'cancel') {
+                        panel.setLoading(false);
+                        return;
+                    }
+                    me.createDocument(order, config, panel);
+                }
+            );
+        } else {
+            me.createDocument(order, config, panel);
+        }
+    },
+
+    /**
+     * @param [Ext.data.Model]          The record of the detail page (Shopware.apps.Order.model.Order)
+     * @param [Ext.data.Model]          The configuration record of the document form (Shopware.apps.Order.model.Configuration)
+     * @param [Ext.container.Container] The panel
+     */
+    createDocument: function(order, config, panel) {
+        var me = this,
+            store = Ext.create('Shopware.apps.Order.store.Configuration');
 
         config.set('orderId', order.get('id'));
         store.add(config);
@@ -717,6 +755,10 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
 
                 if ( operation.success === true ) {
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, successMessage, me.snippets.growlMessage);
+                    if (rawData && rawData.warning) {
+                        Shopware.Notification.createGrowlMessage(me.snippets.warningTitle, rawData.warning, me.snippets.growlMessage);
+                    }
+
                     order.set('invoiceAmount', rawData.data.invoiceAmount);
 
                     //Check if a status mail content created and create a model with the returned data and open the mail window.
@@ -741,7 +783,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                     }
                 }
                 // reload the order list
-                me.getOrderList().store.load();
+                me.subApplication.getStore('Order').load();
             }
         });
     },
@@ -750,6 +792,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
      * Opens the status mail window
      *
      * @param mail
+     * @param record
      */
     showOrderMail: function(mail, record) {
         var me = this,
@@ -763,7 +806,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                         record.get('id')
                     ],
                     record: record,
-                    listStore: me.getOrderList().getStore(),
+                    order: record,
+                    listStore: me.subApplication.getStore('Order'),
                     documentTypeStore: documentTypeStore,
                     mail: mail
                 }).show();

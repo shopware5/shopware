@@ -83,7 +83,7 @@
         reset: function() {
             var me = this;
 
-            me.$el.find('.' + me.opts.loaderCls).prop('disabled', false).remove();
+            me.$el.prop('disabled', false).find('.' + me.opts.loaderCls).remove();
         }
     });
 })(jQuery, window);

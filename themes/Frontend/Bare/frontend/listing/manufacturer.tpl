@@ -3,7 +3,7 @@
 {namespace name="frontend/listing/listing"}
 
 {block name='frontend_index_header_meta_tags_opengraph'}
-    {$description = "{s name='IndexMetaDescriptionStandard'}{/s}"}
+    {s name="IndexMetaDescriptionStandard" assign="description"}{/s}
     {if $manufacturer->getDescription()}
         {$description = "{$manufacturer->getDescription()|strip_tags|trim|truncate:240}"}
     {/if}
@@ -40,7 +40,8 @@
             data-loadMoreSnippet="{s name="ListingActionsLoadMore"}{/s}"
             data-categoryId="{$Shop->getCategory()->getId()}"
             data-pages="{$pages}"
-            data-threshold="{$theme.infiniteThreshold}"{/if}>
+            data-threshold="{$theme.infiniteThreshold}"{/if}
+            data-pageShortParameter="{$shortParameters.sPage}">
 
         {* Actual listing *}
         {block name="frontend_listing_list_inline"}

@@ -27,56 +27,58 @@ namespace Shopware\Models\Article;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\ArticleEsd as ProductEsdAttribute;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_articles_esd")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Esd extends ModelEntity
 {
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleEsd", mappedBy="articleEsd", cascade={"persist"})
+     * @var ProductEsdAttribute
      *
-     * @var \Shopware\Models\Attribute\ArticleEsd
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleEsd", mappedBy="articleEsd", cascade={"persist"})
      */
     protected $attribute;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\EsdSerial", mappedBy="esd")
+     * @var ArrayCollection
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\EsdSerial", mappedBy="esd")
      */
     protected $serials;
 
     /**
      * OWNING SIDE
      *
+     * @var Article
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="esds")
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Article\Article
      */
     protected $article;
 
     /**
      * OWNING SIDE
      *
+     * @var Detail
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Detail", inversedBy="esd")
      * @ORM\JoinColumn(name="articleDetailsID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Article\Detail
      */
     protected $articleDetail;
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -124,22 +126,19 @@ class Esd extends ModelEntity
     private $maxdownloads = 0;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="datum", type="datetime", nullable=true)
      */
-    private $date = null;
+    private $date;
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         $this->serials = new ArrayCollection();
     }
 
     /**
-     * @return \Shopware\Models\Attribute\ArticleEsd
+     * @return ProductEsdAttribute
      */
     public function getAttribute()
     {
@@ -147,13 +146,13 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\ArticleEsd|array|null $attribute
+     * @param ProductEsdAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\ArticleEsd
+     * @return Esd
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ArticleEsd', 'attribute', 'articleEsd');
+        return $this->setOneToOne($attribute, ProductEsdAttribute::class, 'attribute', 'articleEsd');
     }
 
     /**
@@ -165,7 +164,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $serials
+     * @param ArrayCollection $serials
      */
     public function setSerials($serials)
     {
@@ -173,7 +172,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getSerials()
     {
@@ -181,32 +180,31 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Article $article
+     * @param Article $article
+     *
+     * @throws \RuntimeException
      */
     public function setArticle($article)
     {
-        throw new \Exception('Article should be set implicit with setArticleDetail');
+        throw new \RuntimeException('Article should be set implicit with setArticleDetail');
     }
 
     /**
-     * @return \Shopware\Models\Article\Article
+     * @return Article
      */
     public function getArticle()
     {
         return $this->article;
     }
 
-    /**
-     * @param \Shopware\Models\Article\Detail $articleDetail
-     */
-    public function setArticleDetail(\Shopware\Models\Article\Detail $articleDetail)
+    public function setArticleDetail(Detail $articleDetail)
     {
         $this->articleDetail = $articleDetail;
         $this->article = $articleDetail->getArticle();
     }
 
     /**
-     * @return \Shopware\Models\Article\Detail
+     * @return Detail
      */
     public function getArticleDetail()
     {
@@ -214,13 +212,13 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param null|\DateTime|string $date
+     * @param \DateTimeInterface|string|null $date
      *
      * @return Esd
      */
     public function setDate($date = null)
     {
-        if ($date !== null && !($date instanceof \DateTime)) {
+        if ($date !== null && !($date instanceof \DateTimeInterface)) {
             $this->date = new \DateTime($date);
         } else {
             $this->date = $date;
@@ -230,7 +228,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDate()
     {
@@ -304,7 +302,7 @@ class Esd extends ModelEntity
     /**
      * Sets date on pre persist
      *
-     * @ORM\PrePersist
+     * @ORM\PrePersist()
      */
     public function onPrePersist()
     {

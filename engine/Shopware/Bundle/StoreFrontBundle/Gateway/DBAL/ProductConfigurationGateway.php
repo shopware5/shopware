@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -60,11 +60,6 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
      */
     private $connection;
 
-    /**
-     * @param Connection                    $connection
-     * @param FieldHelper                   $fieldHelper
-     * @param Hydrator\ConfiguratorHydrator $configuratorHydrator
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
@@ -102,7 +97,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
 
         $query = $this->getQuery($ids, $context);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);
@@ -116,8 +111,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
     }
 
     /**
-     * @param $ids
-     * @param Struct\ShopContextInterface $context
+     * @param int[] $ids
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */

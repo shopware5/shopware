@@ -38,8 +38,6 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
     /**
      * Validates if the criteria part can be handled by this handler
      *
-     * @param CriteriaPartInterface $criteriaPart
-     *
      * @return bool
      */
     public function supports(CriteriaPartInterface $criteriaPart)
@@ -49,11 +47,6 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
 
     /**
      * Handles the criteria part and adds the provided condition as post filter.
-     *
-     * @param CriteriaPartInterface $criteriaPart
-     * @param Criteria              $criteria
-     * @param Search                $search
-     * @param ShopContextInterface  $context
      */
     public function handleFilter(
         CriteriaPartInterface $criteriaPart,
@@ -66,11 +59,6 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
 
     /**
      * Handles the criteria part and extends the provided search.
-     *
-     * @param CriteriaPartInterface $criteriaPart
-     * @param Criteria              $criteria
-     * @param Search                $search
-     * @param ShopContextInterface  $context
      */
     public function handlePostFilter(
         CriteriaPartInterface $criteriaPart,
@@ -86,7 +74,7 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
         $groupBy = $this->buildGroupBy($criteria);
 
         if ($groupBy) {
-            $search->addPostFilter(new TermQuery($groupBy, 1));
+            $search->addPostFilter(new TermQuery($groupBy, true));
 
             /* @var VariantCondition $criteriaPart */
             $search->addPostFilter(
@@ -99,7 +87,7 @@ class VariantConditionHandler implements PartialConditionHandlerInterface
             return;
         }
 
-        $search->addPostFilter(new TermQuery('isMainVariant', 1));
+        $search->addPostFilter(new TermQuery('isMainVariant', true));
 
         /* @var VariantCondition $criteriaPart */
         $search->addPostFilter(

@@ -25,7 +25,6 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -33,7 +32,7 @@ use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -94,13 +93,9 @@ EOF
             return 1;
         }
 
-        $pluginPath = Shopware()->AppPath(implode('_', [
-            'Plugins',
-            $plugin->getSource(),
-            $plugin->getNamespace(),
-            $plugin->getName(),
-        ]));
+        $pluginPath = $pluginManager->getPluginPath($pluginName);
 
+        $message = null;
         if ($plugin->getSource() === 'Default') {
             $message = "'Default' Plugins may not be deleted.";
         } elseif ($plugin->getInstalled() !== null) {
@@ -112,7 +107,7 @@ EOF
             Shopware()->Models()->flush();
         }
 
-        if (isset($message)) {
+        if ($message) {
             $output->writeln($message);
 
             return 1;

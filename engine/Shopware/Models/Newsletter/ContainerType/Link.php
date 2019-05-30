@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Newsletter\ContainerType;
+namespace Shopware\Models\Newsletter\ContainerType;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -39,18 +39,19 @@ class Link extends ModelEntity
      * OWNING SIDE
      * Owning side of relation between container type 'article' and parent container
      *
+     * @var \Shopware\Models\Newsletter\Container
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="links")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Newsletter\Container
      */
     protected $container;
+
     /**
      * Autoincrement ID
      *
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -63,7 +64,7 @@ class Link extends ModelEntity
      *
      * @ORM\Column(name="parentID", type="integer", length=11, nullable=true)
      */
-    private $containerId = null;
+    private $containerId;
 
     /**
      * Description of the link / link text
@@ -165,14 +166,11 @@ class Link extends ModelEntity
 
     /**
      * @param \Shopware\Models\Newsletter\Container $container
-     *
-     * @return \Shopware\Models\Newsletter\Container
      */
     public function setContainer($container)
     {
         $this->container = $container;
         $container->setType('ctLinks');
-        //        return $this->setOneToOne($container, '\Shopware\Models\Newsletter\Container', 'container', 'text');
     }
 
     /**

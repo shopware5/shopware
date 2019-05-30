@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\AttributeBundle\Service;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -87,7 +87,7 @@ class ConfigurationStruct implements \JsonSerializable
     private $columnName;
 
     /**
-     * @var null|string|int|float
+     * @var string|int|float|null
      */
     private $defaultValue;
 
@@ -107,7 +107,7 @@ class ConfigurationStruct implements \JsonSerializable
     private $columnType;
 
     /**
-     * @var string
+     * @var array
      */
     private $elasticSearchType;
 
@@ -148,7 +148,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getLabel()
     {
@@ -156,7 +156,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @param null|string $label
+     * @param string|null $label
      */
     public function setLabel($label)
     {
@@ -164,7 +164,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getHelpText()
     {
@@ -172,7 +172,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @param null|string $helpText
+     * @param string|null $helpText
      */
     public function setHelpText($helpText)
     {
@@ -180,7 +180,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getSupportText()
     {
@@ -188,7 +188,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @param null|string $supportText
+     * @param string|null $supportText
      */
     public function setSupportText($supportText)
     {
@@ -196,7 +196,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getPosition()
     {
@@ -425,7 +425,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getElasticSearchType()
     {
@@ -433,7 +433,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @param string $elasticSearchType
+     * @param array $elasticSearchType
      */
     public function setElasticSearchType($elasticSearchType)
     {
@@ -441,7 +441,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @return null|string|int|float
+     * @return string|int|float|null
      */
     public function getDefaultValue()
     {
@@ -449,7 +449,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @param null|string|int|float $defaultValue
+     * @param string|int|float|null $defaultValue
      */
     public function setDefaultValue($defaultValue)
     {

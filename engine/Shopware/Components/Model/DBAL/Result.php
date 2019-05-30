@@ -117,8 +117,6 @@ class Result
      * Modifies the passed DBAL query builder object to calculate
      * the total count.
      *
-     * @param QueryBuilder $builder
-     *
      * @return $this
      */
     private function addTotalCountSelect(QueryBuilder $builder)

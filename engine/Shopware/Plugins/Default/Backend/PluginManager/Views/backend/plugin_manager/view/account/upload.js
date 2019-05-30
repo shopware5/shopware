@@ -26,9 +26,9 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/plugin_manager/translation}
+// {namespace name=backend/plugin_manager/translation}
 
-//{block name="backend/plugin_manager/view/account/upload"}
+// {block name="backend/plugin_manager/view/account/upload"}
 Ext.define('Shopware.apps.PluginManager.view.account.Upload', {
     cls: 'plugin-manager-upload-window',
 
@@ -82,9 +82,9 @@ Ext.define('Shopware.apps.PluginManager.view.account.Upload', {
         });
 
         me.info = Ext.create('Ext.form.FieldSet', {
-            cls : 'info',
+            cls: 'info',
             title: '{s name="upload_info_title"}Tip{/s}',
-            html: '{s name="upload_info_text"}Here you can upload and install your plugins manually. Please keep in mind that plugins have to be in a ZIP archive and the file size can´t exceed the configured upload size limit.{/s}'
+            html: '{s name="upload_info_text"}Here you can upload and install your plugins manually. Please keep in mind that plugins have to be in a ZIP archive and the file size can\'t exceed the configured upload size limit.{/s}'
         });
 
         me.form = Ext.create('Ext.form.Panel', {
@@ -131,8 +131,8 @@ Ext.define('Shopware.apps.PluginManager.view.account.Upload', {
 
         return Ext.create('Ext.toolbar.Toolbar', {
             dock: 'bottom',
-            items: [me.cancelButton, '->', me.uploadButton ]
+            items: [me.cancelButton, '->', me.uploadButton]
         });
     }
 });
-//{/block}
+// {/block}

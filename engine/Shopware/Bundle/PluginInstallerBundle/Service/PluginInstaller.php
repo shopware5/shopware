@@ -25,6 +25,18 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Doctrine\DBAL\Connection;
+use Enlight_Event_EventManager;
+use Shopware\Bundle\PluginInstallerBundle\Events\PluginEvent;
+use Shopware\Bundle\PluginInstallerBundle\Events\PostPluginActivateEvent;
+use Shopware\Bundle\PluginInstallerBundle\Events\PostPluginDeactivateEvent;
+use Shopware\Bundle\PluginInstallerBundle\Events\PostPluginInstallEvent;
+use Shopware\Bundle\PluginInstallerBundle\Events\PostPluginUninstallEvent;
+use Shopware\Bundle\PluginInstallerBundle\Events\PostPluginUpdateEvent;
+use Shopware\Bundle\PluginInstallerBundle\Events\PrePluginActivateEvent;
+use Shopware\Bundle\PluginInstallerBundle\Events\PrePluginDeactivateEvent;
+use Shopware\Bundle\PluginInstallerBundle\Events\PrePluginInstallEvent;
+use Shopware\Bundle\PluginInstallerBundle\Events\PrePluginUninstallEvent;
+use Shopware\Bundle\PluginInstallerBundle\Events\PrePluginUpdateEvent;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin as PluginBootstrap;
 use Shopware\Components\Plugin\Context\ActivateContext;
@@ -83,18 +95,19 @@ class PluginInstaller
     private $release;
 
     /**
-     * @param ModelManager          $em
-     * @param DatabaseHandler       $snippetHandler
-     * @param RequirementValidator  $requirementValidator
-     * @param \PDO                  $pdo
-     * @param string|string[]       $pluginDirectories
-     * @param ShopwareReleaseStruct $release
+     * @var Enlight_Event_EventManager
+     */
+    private $events;
+
+    /**
+     * @param string|string[] $pluginDirectories
      */
     public function __construct(
         ModelManager $em,
         DatabaseHandler $snippetHandler,
         RequirementValidator $requirementValidator,
         \PDO $pdo,
+        Enlight_Event_EventManager $events,
         $pluginDirectories,
         ShopwareReleaseStruct $release
     ) {
@@ -103,13 +116,12 @@ class PluginInstaller
         $this->snippetHandler = $snippetHandler;
         $this->requirementValidator = $requirementValidator;
         $this->pdo = $pdo;
+        $this->events = $events;
         $this->pluginDirectories = (array) $pluginDirectories;
         $this->release = $release;
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      *
      * @return InstallContext
@@ -124,6 +136,7 @@ class PluginInstaller
         $this->requirementValidator->validate($pluginBootstrap->getPath() . '/plugin.xml', $this->release->getVersion());
 
         $this->em->transactional(function ($em) use ($pluginBootstrap, $plugin, $context) {
+            $this->events->notify(PluginEvent::PRE_INSTALL, new PrePluginInstallEvent($context, $pluginBootstrap));
             $this->installResources($pluginBootstrap, $plugin);
 
             // Makes sure the version is updated in the db after a re-installation
@@ -135,6 +148,8 @@ class PluginInstaller
 
             $pluginBootstrap->install($context);
 
+            $this->events->notify(PluginEvent::POST_INSTALL, new PostPluginInstallEvent($context, $pluginBootstrap));
+
             $plugin->setInstalled(new \DateTime());
             $plugin->setUpdated(new \DateTime());
 
@@ -145,8 +160,7 @@ class PluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
-     * @param bool   $removeData
+     * @param bool $removeData
      *
      * @throws \Exception
      * @throws \Doctrine\DBAL\DBALException
@@ -159,10 +173,16 @@ class PluginInstaller
         $context = new UninstallContext($plugin, $this->release->getVersion(), $plugin->getVersion(), !$removeData);
         $bootstrap = $this->getPluginByName($plugin->getName());
 
+        $this->events->notify(PluginEvent::PRE_DEACTIVATE, new PrePluginDeactivateEvent($context, $bootstrap));
+        $this->events->notify(PluginEvent::PRE_UNINSTALL, new PrePluginUninstallEvent($context, $bootstrap));
+
         $bootstrap->uninstall($context);
 
         $plugin->setInstalled(null);
         $plugin->setActive(false);
+
+        $this->events->notify(PluginEvent::POST_UNINSTALL, new PostPluginUninstallEvent($context, $bootstrap));
+        $this->events->notify(PluginEvent::POST_DEACTIVATE, new PostPluginDeactivateEvent($context, $bootstrap));
 
         $this->em->flush($plugin);
 
@@ -183,8 +203,6 @@ class PluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      *
      * @return UpdateContext
@@ -202,9 +220,13 @@ class PluginInstaller
         );
 
         $this->em->transactional(function ($em) use ($pluginBootstrap, $plugin, $context) {
+            $this->events->notify(PluginEvent::PRE_UPDATE, new PrePluginUpdateEvent($context, $pluginBootstrap));
+
             $this->installResources($pluginBootstrap, $plugin);
 
             $pluginBootstrap->update($context);
+
+            $this->events->notify(PluginEvent::POST_UPDATE, new PostPluginUpdateEvent($context, $pluginBootstrap));
 
             $plugin->setVersion($context->getUpdateVersion());
             $plugin->setUpdateVersion(null);
@@ -218,8 +240,6 @@ class PluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      * @throws \Doctrine\ORM\OptimisticLockException
      *
@@ -227,10 +247,16 @@ class PluginInstaller
      */
     public function activatePlugin(Plugin $plugin)
     {
+        $bootstrap = $this->getPluginByName($plugin->getName());
+        $this->requirementValidator->validate($bootstrap->getPath() . '/plugin.xml', $this->release->getVersion());
+
         $context = new ActivateContext($plugin, $this->release->getVersion(), $plugin->getVersion());
 
-        $bootstrap = $this->getPluginByName($plugin->getName());
+        $this->events->notify(PluginEvent::PRE_ACTIVATE, new PrePluginActivateEvent($context, $bootstrap));
+
         $bootstrap->activate($context);
+
+        $this->events->notify(PluginEvent::POST_ACTIVATE, new PostPluginActivateEvent($context, $bootstrap));
 
         $plugin->setActive(true);
         $plugin->setInSafeMode(false);
@@ -240,8 +266,6 @@ class PluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      * @throws \Doctrine\ORM\OptimisticLockException
      *
@@ -251,17 +275,20 @@ class PluginInstaller
     {
         $context = new DeactivateContext($plugin, $this->release->getVersion(), $plugin->getVersion());
         $bootstrap = $this->getPluginByName($plugin->getName());
+
+        $this->events->notify(PluginEvent::PRE_DEACTIVATE, new PrePluginDeactivateEvent($context, $bootstrap));
+
         $bootstrap->deactivate($context);
 
         $plugin->setActive(false);
+        $this->events->notify(PluginEvent::POST_DEACTIVATE, new PostPluginDeactivateEvent($context, $bootstrap));
+
         $this->em->flush($plugin);
 
         return $context;
     }
 
     /**
-     * @param \DateTimeInterface $refreshDate
-     *
      * @throws \RuntimeException
      */
     public function refreshPluginList(\DateTimeInterface $refreshDate)
@@ -270,6 +297,7 @@ class PluginInstaller
             $this->pdo,
             $this->pluginDirectories
         );
+
         $plugins = $initializer->initializePlugins();
 
         foreach ($plugins as $plugin) {
@@ -305,7 +333,7 @@ class PluginInstaller
             $info['link'] = isset($info['link']) ? $info['link'] : null;
 
             $data = [
-                'namespace' => 'ShopwarePlugins',
+                'namespace' => $plugin->getNamespace(),
                 'version' => $info['version'],
                 'author' => $info['author'],
                 'name' => $plugin->getName(),
@@ -348,8 +376,6 @@ class PluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      *
      * @return string
@@ -363,8 +389,7 @@ class PluginInstaller
     }
 
     /**
-     * @param PluginBootstrap $bootstrap
-     * @param bool            $removeDirty
+     * @param bool $removeDirty
      */
     private function removeSnippets(PluginBootstrap $bootstrap, $removeDirty)
     {
@@ -372,9 +397,6 @@ class PluginInstaller
     }
 
     /**
-     * @param PluginBootstrap $bootstrap
-     * @param Plugin          $plugin
-     *
      * @throws \Exception
      */
     private function installResources(PluginBootstrap $bootstrap, Plugin $plugin)
@@ -396,16 +418,12 @@ class PluginInstaller
         }
     }
 
-    /**
-     * @param PluginBootstrap $bootstrap
-     */
     private function installSnippets(PluginBootstrap $bootstrap)
     {
         $this->snippetHandler->loadToDatabase($bootstrap->getPath() . '/Resources/snippets/');
     }
 
     /**
-     * @param Plugin $plugin
      * @param string $file
      *
      * @throws \Exception
@@ -420,7 +438,6 @@ class PluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
      * @param string $file
      *
      * @throws \InvalidArgumentException
@@ -435,7 +452,6 @@ class PluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
      * @param string $file
      *
      * @throws \InvalidArgumentException

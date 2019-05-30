@@ -22,26 +22,25 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Dispatch;
+namespace Shopware\Models\Dispatch;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
-use Shopware\Models\Customer;
 
 /**
  * Repository for the customer model (Shopware\Models\Dispatch\Dispatch).
- * <br>
+ *
  * The dispatch models accumulates all data needed for a specific dispatch service
  */
 class Repository extends ModelRepository
 {
     /**
-     * @param $filter
-     * @param $order
-     * @param $offset
-     * @param $limit
+     * @param array|null        $filter
+     * @param string|array|null $order
+     * @param int|null          $offset
+     * @param int|null          $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -60,8 +59,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDispatchesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $filter
-     * @param null $order
+     * @param array|null        $filter
+     * @param string|array|null $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -71,7 +70,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select('dispatches');
         $builder->setAlias('dispatches');
-        $builder->from('Shopware\Models\Dispatch\Dispatch', 'dispatches');
+        $builder->from(\Shopware\Models\Dispatch\Dispatch::class, 'dispatches');
         $builder->setAlias('dispatches');
 
         if (!empty($filter)) {
@@ -87,16 +86,17 @@ class Repository extends ModelRepository
     /**
      * Returns all info about known shipping and dispatch settings
      *
-     * @param $dispatchId - If this parameter is given, only one data set will be returned
-     * @param null  $filter - Used to search in the name and description of the dispatch data set
-     * @param array $order  - Name of the field which should considered as sorting field
-     * @param null  $limit  - Reduce the number of returned data sets
-     * @param null  $offset - Start the output based on that offset
+     * @param int         $dispatchId - If this parameter is given, only one data set will be returned
+     * @param string|null $filter     - Used to search in the name and description of the dispatch data set
+     * @param array       $order      - Name of the field which should considered as sorting field
+     * @param int|null    $limit      - Reduce the number of returned data sets
+     * @param int|null    $offset     - Start the output based on that offset
      *
      * @return \Doctrine\ORM\Query
      */
     public function getShippingCostsQuery($dispatchId = null, $filter = null, $order = [], $limit = null, $offset = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getShippingCostsQueryBuilder($dispatchId, $filter, $order);
         if (!empty($offset)) {
             $builder->setFirstResult($offset);
@@ -111,15 +111,16 @@ class Repository extends ModelRepository
     /**
      * Returns basic info about known shipping and dispatch settings
      *
-     * @param null  $filter - Used to search in the name and description of the dispatch data set
-     * @param array $order  - Name of the field which should considered as sorting field
-     * @param null  $limit  - Reduce the number of returned data sets
-     * @param null  $offset - Start the output based on that offset
+     * @param string|null $filter - Used to search in the name and description of the dispatch data set
+     * @param array       $order  - Name of the field which should considered as sorting field
+     * @param int|null    $limit  - Reduce the number of returned data sets
+     * @param int|null    $offset - Start the output based on that offset
      *
      * @return \Doctrine\ORM\Query
      */
     public function getListQuery($filter = null, $order = [], $limit = null, $offset = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getListQueryBuilder($filter, $order);
         if (!empty($offset)) {
             $builder->setFirstResult($offset);
@@ -135,14 +136,15 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getShippingCostsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $dispatchId - If this parameter is given, only one data set will be returned
-     * @param null  $filter - Used to search in the name and description of the dispatch data set
-     * @param array $order  - Name of the field which should considered as sorting field
+     * @param int         $dispatchId - If this parameter is given, only one data set will be returned
+     * @param string|null $filter     - Used to search in the name and description of the dispatch data set
+     * @param array       $order      - Name of the field which should considered as sorting field
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getShippingCostsQueryBuilder($dispatchId = null, $filter = null, $order = [])
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->createQueryBuilder('dispatch');
 
         // Build the query
@@ -152,12 +154,12 @@ class Repository extends ModelRepository
                 ->leftJoin('dispatch.holidays', 'holidays')
                 ->leftJoin('dispatch.attribute', 'attribute')
                 ->leftJoin('dispatch.payments', 'payments');
-        if (null !== $dispatchId) {
+        if ($dispatchId !== null) {
             $builder->where('dispatch.id = ?2')->setParameter(2, $dispatchId);
         }
 
         // Set the filtering logic
-        if (null !== $filter) {
+        if ($filter !== null) {
             $builder->andWhere('(dispatch.name LIKE ?1 OR dispatch.description LIKE ?1)');
             $builder->setParameter(1, '%' . $filter . '%');
         }
@@ -172,20 +174,21 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getShippingCostsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null  $filter - Used to search in the name and description of the dispatch data set
-     * @param array $order  - Name of the field which should considered as sorting field
+     * @param string|null $filter - Used to search in the name and description of the dispatch data set
+     * @param array       $order  - Name of the field which should considered as sorting field
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getListQueryBuilder($filter = null, $order = [])
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->createQueryBuilder('dispatch');
 
         // Build the query
         $builder->select(['dispatch']);
 
         // Set the filtering logic
-        if (null !== $filter) {
+        if ($filter !== null) {
             $builder->andWhere('(dispatch.name LIKE ?1 OR dispatch.description LIKE ?1)');
             $builder->setParameter(1, '%' . $filter . '%');
         }
@@ -200,7 +203,7 @@ class Repository extends ModelRepository
      * Get the shipping costs for a dispatch setting.
      *
      * @param int         $dispatchId Unique id
-     * @param null|string $filter     string which is filtered
+     * @param string|null $filter     string which is filtered
      * @param int|null    $limit      Count of the selected data
      * @param int|null    $offset     Start index of the selected data
      *
@@ -208,7 +211,8 @@ class Repository extends ModelRepository
      */
     public function getShippingCostsMatrixQuery($dispatchId = null, $filter = null, $limit = null, $offset = null)
     {
-        $builder = $this->getShippingCostsMatrixQueryBuilder($dispatchId, $filter);
+        /** @var QueryBuilder $builder */
+        $builder = $this->getShippingCostsMatrixQueryBuilder($dispatchId);
 
         return $builder->getQuery();
     }
@@ -217,23 +221,21 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getShippingCostsMatrixQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $dispatchId - If this parameter is given, only one data set will be returned
-     * @param null  $filter - Used to search in the name and description of the dispatch data set
-     * @param array $order  - Name of the field which should considered as sorting field
+     * @param int $dispatchId - If this parameter is given, only one data set will be returned
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getShippingCostsMatrixQueryBuilder($dispatchId = null, $filter = null, $limit = null)
+    public function getShippingCostsMatrixQueryBuilder($dispatchId = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->from('Shopware\Models\Dispatch\ShippingCost', 'shippingcosts')->select(['shippingcosts']);
+        $builder->from(\Shopware\Models\Dispatch\ShippingCost::class, 'shippingcosts')->select(['shippingcosts']);
 
-        // assure that we will get an empty result set when no dispatch ID is provided
-        if (is_null($dispatchId) || empty($dispatchId)) {
+        // Assure that we will get an empty result set when no dispatch ID is provided
+        if ($dispatchId === null || empty($dispatchId)) {
             $dispatchId = '-1';
         }
         $builder->where('shippingcosts.dispatchId = :dispatchId')->setParameter('dispatchId', $dispatchId);
-        // we need a hard coded sorting here.
+        // We need a hard coded sorting here.
         $builder->orderBy('shippingcosts.from');
 
         return $builder;
@@ -256,16 +258,16 @@ class Repository extends ModelRepository
     /**
      * Receives all known means of payment, even disabled ones
      *
-     * @param null $filter
-     * @param null $order
-     * @param null $limit
-     * @param null $offset
+     * @param array|null $filter
+     * @param array|null $order
+     * @param int|null   $limit
+     * @param int|null   $offset
      *
      * @return \Doctrine\ORM\Query
      */
     public function getPaymentQuery($filter = null, $order = null, $limit = null, $offset = null)
     {
-        // get the query and prepare the limit statement
+        // Get the query and prepare the limit statement
         $builder = $this->getPaymentQueryBuilder($filter, $order);
 
         if ($offset !== null && $limit !== null) {
@@ -280,27 +282,28 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getPaymentQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $filter
-     * @param null $order
+     * @param array|null $filter
+     * @param array|null $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getPaymentQueryBuilder($filter = null, $order = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         $filters = [];
-        if (null !== $filter && is_array($filter)) {
+        if ($filter !== null && is_array($filter)) {
             foreach ($filter as $singleFilter) {
                 $filters[$singleFilter['property']] = $singleFilter['value'];
             }
         }
         // Build the query
-        $builder->from('Shopware\Models\Payment\Payment', 'payment')
+        $builder->from(\Shopware\Models\Payment\Payment::class, 'payment')
                 ->select(['payment']);
         // Set the order logic
         $builder = $this->sortOrderQuery($builder, 'payment', $order);
-        // use the filter
+        // Use the filter
         if (!empty($filters['usedIds'])) {
             $builder->andWhere('payment.id NOT IN (:usedIds)')
                 ->setParameter('usedIds', $filters['usedIds'], Connection::PARAM_INT_ARRAY);
@@ -312,10 +315,10 @@ class Repository extends ModelRepository
     /**
      * Receives all known countries, even disabled ones
      *
-     * @param null $filter
-     * @param null $order
-     * @param null $limit
-     * @param null $offset
+     * @param array|null $filter
+     * @param array|null $order
+     * @param int|null   $limit
+     * @param int|null   $offset
      *
      * @return \Doctrine\ORM\Query
      */
@@ -336,29 +339,30 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getCountryQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $filter
-     * @param null $order
+     * @param array|null $filter
+     * @param array|null $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getCountryQueryBuilder($filter = null, $order = null)
     {
         $filters = [];
-        if (null !== $filter && is_array($filter)) {
+        if ($filter !== null && is_array($filter)) {
             foreach ($filter as $singleFilter) {
                 $filters[$singleFilter['property']] = $singleFilter['value'];
             }
         }
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         // Build the query
-        $builder->from('Shopware\Models\Country\Country', 'country')
+        $builder->from(\Shopware\Models\Country\Country::class, 'country')
                 ->select(['country']);
 
         // Set the order logic
         $builder = $this->sortOrderQuery($builder, 'country', $order);
 
-        // use the filter
+        // Use the filter
         if (!empty($filters['usedIds'])) {
             $builder->andWhere('country.id NOT IN (:usedIds)')
                 ->setParameter('usedIds', $filters['usedIds'], Connection::PARAM_INT_ARRAY);
@@ -374,16 +378,16 @@ class Repository extends ModelRepository
     /**
      * Receives all known countries, even disabled ones
      *
-     * @param null $filter
-     * @param null $order
-     * @param null $limit
-     * @param null $offset
+     * @param array|null $filter
+     * @param array|null $order
+     * @param int|null   $limit
+     * @param int|null   $offset
      *
      * @return \Doctrine\ORM\Query
      */
     public function getHolidayQuery($filter = null, $order = null, $limit = null, $offset = null)
     {
-        // get the query and prepare the limit statement
+        /** @var QueryBuilder $builder */
         $builder = $this->getHolidayQueryBuilder($filter, $order);
         if ($offset !== null && $limit !== null) {
             $builder->setFirstResult($offset)
@@ -397,8 +401,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getHolidayQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $filter
-     * @param null $order
+     * @param array|null $filter
+     * @param array|null $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -407,7 +411,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         // Build the query
-        $builder->from('Shopware\Models\Dispatch\Holiday', 'holiday')
+        $builder->from(\Shopware\Models\Dispatch\Holiday::class, 'holiday')
                 ->select(['holiday']);
 
         // Set the order logic
@@ -442,9 +446,8 @@ class Repository extends ModelRepository
     /**
      * Helper function which set the orderBy path for the order list query.
      *
-     * @param \Doctrine\ORM\QueryBuilder $builder
-     * @param $modelPrefix
-     * @param $orderBy
+     * @param string     $modelPrefix
+     * @param array|null $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

@@ -29,7 +29,7 @@ use Enlight_Event_EventArgs as EventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -38,13 +38,10 @@ class AttributeSubscriber implements SubscriberInterface
     const redirectCookieString = 'ShopwarePluginsCoreSelfHealingRedirect';
 
     /**
-     * @var ModelManager
+     * @var ContainerInterface
      */
     private $container;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -62,9 +59,6 @@ class AttributeSubscriber implements SubscriberInterface
         ];
     }
 
-    /**
-     * @param EventArgs $args
-     */
     public function onDispatchEvent(EventArgs $args)
     {
         if (!$args->getResponse()->isException()) {
@@ -76,7 +70,7 @@ class AttributeSubscriber implements SubscriberInterface
     }
 
     /**
-     * @param $exception \Exception
+     * @param \Exception $exception
      *
      * @throws \Exception
      */
@@ -93,7 +87,7 @@ class AttributeSubscriber implements SubscriberInterface
                     $request->getRequestUri()
                 );
 
-                setcookie(self::redirectCookieString, true, time() + 5);
+                setcookie(self::redirectCookieString, '1', time() + 5);
                 $response->sendResponse();
                 exit();
             }
@@ -103,8 +97,6 @@ class AttributeSubscriber implements SubscriberInterface
 
     /**
      * Helper function to validate if the thrown exception is an shopware attribute model exception.
-     *
-     * @param $exception \Exception
      *
      * @return bool
      */

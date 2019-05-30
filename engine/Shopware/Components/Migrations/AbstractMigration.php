@@ -25,7 +25,7 @@
 namespace Shopware\Components\Migrations;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -44,9 +44,6 @@ abstract class AbstractMigration
      */
     protected $sql = [];
 
-    /**
-     * @param \PDO $connection
-     */
     public function __construct(\PDO $connection)
     {
         $this->connection = $connection;
@@ -95,7 +92,7 @@ abstract class AbstractMigration
     public function getVersion()
     {
         $result = [];
-        $regexPattern = '/[0-9]*$/i';
+        $regexPattern = '/[0-9]*$/';
 
         preg_match($regexPattern, get_class($this), $result);
 

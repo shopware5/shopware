@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Set;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -80,8 +80,6 @@ class Product extends ListProduct
     protected $configuration = [];
 
     /**
-     * @param ListProduct $listProduct
-     *
      * @return Product
      */
     public static function createFromListProduct(ListProduct $listProduct)
@@ -121,7 +119,7 @@ class Product extends ListProduct
      */
     public function getThumbnailsBySize($index)
     {
-        /** @var $media Media */
+        /** @var Media $media */
         $result = array_filter($this->media, function (Media $media) {
             return $media->getType() === Media::TYPE_IMAGE;
         });
@@ -140,7 +138,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Property\Set
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Property\Set|null
      */
     public function getPropertySet()
     {

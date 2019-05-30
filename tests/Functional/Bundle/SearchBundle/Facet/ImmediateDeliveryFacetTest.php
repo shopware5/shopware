@@ -48,7 +48,7 @@ class ImmediateDeliveryFacetTest extends TestCase
             [new ImmediateDeliveryFacet()]
         );
         $facet = $result->getFacets()[0];
-        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult', $facet);
+        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult', $facet);
     }
 
     public function testFacetWithMinPurchase()
@@ -65,7 +65,7 @@ class ImmediateDeliveryFacetTest extends TestCase
             [new ImmediateDeliveryFacet()]
         );
         $facet = $result->getFacets()[0];
-        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult', $facet);
+        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult', $facet);
     }
 
     public function testFacetWithNoData()
@@ -81,13 +81,12 @@ class ImmediateDeliveryFacetTest extends TestCase
             [],
             [new ImmediateDeliveryFacet()]
         );
-        $this->assertCount(0, $result->getFacets());
+        static::assertCount(0, $result->getFacets());
     }
 
     /**
-     * @param $number
+     * @param string                             $number
      * @param \Shopware\Models\Category\Category $category
-     * @param ShopContext                        $context
      * @param array                              $data
      *
      * @return array

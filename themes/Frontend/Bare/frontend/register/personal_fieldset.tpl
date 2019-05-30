@@ -18,7 +18,7 @@
                         <input type="hidden" name="register[personal][sValidation]" value="{$form_data.sValidation|escape}" />
                     {else}
                         <div class="register--customertype">
-                            {if {config name=showCompanySelectField}}
+                            {if {config name=showCompanySelectField} == 0}
                                 <div class="select-field">
                                     <select id="register_personal_customer_type"
                                             name="register[personal][customer_type]"
@@ -39,8 +39,15 @@
                                         </option>
                                     </select>
                                 </div>
+                            {elseif {config name=showCompanySelectField} == 2}
+                                {* Register as a business customer*}
+                                <div class="select-field is--hidden">
+                                    <select id="register_personal_customer_type" name="register[personal][customer_type]">
+                                        <option value="business" selected="selected">{s name='RegisterPersonalLabelBusiness'}{/s}</option>
+                                    </select>
+                                </div>
                             {else}
-                                {* Always register as a private customer*}
+                                {* Register as a private customer*}
                                 <div class="select-field is--hidden">
                                     <select id="register_personal_customer_type" name="register[personal][customer_type]">
                                         <option value="private" selected="selected">{s name='RegisterPersonalLabelPrivate'}{/s}</option>
@@ -123,22 +130,24 @@
                 {* Skip login *}
                 {if !$update}
                     {block name='frontend_register_personal_fieldset_skip_login'}
-                        {if ($showNoAccount || $form_data.accountmode) && !$sEsd && !$form_data.sValidation && !{config name=NoAccountDisable}}
+                        <input type="hidden"
+                               value="0"
+                               name="register[personal][accountmode]"
+                               class="register--checkbox chkbox"/>
+                        {if ($showNoAccount || $form_data.accountmode) && !$sEsd && !$form_data.sValidation && ({config name=NoAccountDisable} == 1 || {config name=NoAccountDisable} == 2)}
+                            {$accountModeChecked = {config name=NoAccountDisable} == 1}
+                            {if isset($form_data.accountmode)}
+                                {$accountModeChecked = $form_data.accountmode}
+                            {/if}
                             <div class="register--check">
                                 <input type="checkbox"
                                        value="1"
                                        id="register_personal_skipLogin"
                                        name="register[personal][accountmode]"
-                                       class="register--checkbox chkbox" {if $form_data.accountmode || $accountmode}checked="checked" {/if}/>
+                                       class="register--checkbox chkbox" {if $accountModeChecked}checked="checked" {/if}/>
 
                                 <label for="register_personal_skipLogin" class="chklabel is--bold">{s name='RegisterLabelNoAccount'}{/s}</label>
                             </div>
-                        {else}
-                            <input type="hidden"
-                                   value="0"
-                                   id="register_personal_skipLogin"
-                                   name="register[personal][accountmode]"
-                                   class="register--checkbox chkbox" {if $form_data.accountmode || $accountmode}checked="checked" {/if}/>
                         {/if}
                     {/block}
 

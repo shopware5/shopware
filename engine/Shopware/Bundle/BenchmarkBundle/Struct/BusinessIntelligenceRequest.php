@@ -41,7 +41,7 @@ class BusinessIntelligenceRequest
 
     public function __toString()
     {
-        return sprintf('token=%s', $this->token);
+        return sprintf('responseToken=%s', $this->token);
     }
 
     /**

@@ -30,7 +30,7 @@ use Shopware\Models\Config\Value;
 use Shopware\Models\Shop\Shop;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -97,7 +97,7 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
     protected function assertArrayEquals(array $expected, array $result, array $properties)
     {
         foreach ($properties as $property) {
-            $this->assertEquals($expected[$property], $result[$property]);
+            static::assertEquals($expected[$property], $result[$property]);
         }
     }
 
@@ -123,7 +123,7 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
             $findBy['form'] = $form;
         }
 
-        /** @var $element \Shopware\Models\Config\Element */
+        /** @var \Shopware\Models\Config\Element $element */
         $element = $elementRepository->findOneBy($findBy);
 
         $defaultValue = $element->getValue();

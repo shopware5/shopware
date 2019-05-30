@@ -50,8 +50,6 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
     /**
      * Tests that setting a value inside any core class is equivalent to setting it in the
      * global $_POST
-     *
-     * @return mixed
      */
     public function testSetPost()
     {
@@ -62,11 +60,11 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
         }
 
         $getData = Shopware()->Front()->Request()->getPost();
-        $this->assertNotEquals($previousGetData, $getData);
+        static::assertNotEquals($previousGetData, $getData);
 
         foreach (self::$resources as $name) {
             if (property_exists($name, 'sSYSTEM')) {
-                $this->assertEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
+                static::assertEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
             }
         }
 
@@ -79,19 +77,18 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
      *
      * @param $getData
      *
-     * @return mixed
      * @depends testSetPost
      */
     public function testOverwriteAndClearPost($getData)
     {
-        $this->assertNotEquals($getData, Shopware()->Front()->Request()->getPost());
+        static::assertNotEquals($getData, Shopware()->Front()->Request()->getPost());
 
         foreach (self::$resources as $name) {
             if (property_exists($name, 'sSYSTEM')) {
-                $this->assertEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
+                static::assertEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
                 Shopware()->Modules()->getModule($name)->sSYSTEM->_POST = [];
                 Shopware()->Front()->Request()->setPost($getData);
-                $this->assertNotEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
+                static::assertNotEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
             }
         }
 
@@ -113,11 +110,11 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
         }
 
         $getData = Shopware()->Front()->Request()->getPost();
-        $this->assertNotEquals($previousGetData, $getData);
+        static::assertNotEquals($previousGetData, $getData);
 
         foreach (self::$resources as $name) {
             if (property_exists($name, 'sSYSTEM')) {
-                $this->assertEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
+                static::assertEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
             }
         }
     }

@@ -50,7 +50,7 @@ class OpenSSLEncryption
             return false;
         }
 
-        if (!in_array($encryptionMethod, openssl_get_cipher_methods('true'))) {
+        if (!in_array($encryptionMethod, openssl_get_cipher_methods(true))) {
             return false;
         }
 
@@ -74,14 +74,14 @@ class OpenSSLEncryption
         $ivLength = openssl_cipher_iv_length($encryptionMethod);
         $iv = Random::getBytes($ivLength);
 
-        $encryptedMessage = openssl_encrypt($data, $encryptionMethod, $key, false, $iv);
+        $encryptedMessage = openssl_encrypt($data, $encryptionMethod, $key, 0, $iv);
 
         $encryptedKey = '';
-        if (!true === openssl_public_encrypt($key, $encryptedKey, $publicKey)) {
+        if (!openssl_public_encrypt($key, $encryptedKey, $publicKey)) {
             $errors = [];
             while ($errors[] = openssl_error_string());
             $errorString = implode("\n", $errors);
-            throw new \Exception('Got openssl error' . $errorString);
+            throw new \Exception(sprintf('Got openssl error %s', $errorString));
         }
 
         $result = [

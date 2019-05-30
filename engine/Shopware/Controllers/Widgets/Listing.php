@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\SearchBundle\ProductSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
@@ -32,6 +33,14 @@ use Shopware\Components\Compatibility\LegacyStructConverter;
  */
 class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 {
+    /**
+     * Pre dispatch method
+     */
+    public function preDispatch()
+    {
+        $this->Response()->setHeader('x-robots', 'noindex');
+    }
+
     /**
      * Product navigation as json string
      */
@@ -56,7 +65,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
                 $this->Request()->setParam('sSort', $default);
             }
 
-            /** @var $articleModule \sArticles */
+            /** @var \sArticles $articleModule */
             $articleModule = Shopware()->Modules()->Articles();
             $navigation = $articleModule->getProductNavigation($orderNumber, $categoryId, $this->Request());
 
@@ -126,8 +135,13 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         $convertedProducts = $this->container->get('legacy_struct_converter')->convertListProductStructList($products);
 
-        $this->View()->assign(['sArticles' => $convertedProducts, 'articles' => $convertedProducts]);
+        /*
+         * @Deprecated
+         * The assignment of all request parameters to the view below is deprecated
+         * and about to be removed in 5.6
+         */
         $this->View()->assign($this->Request()->getParams());
+        $this->View()->assign(['sArticles' => $convertedProducts, 'articles' => $convertedProducts]);
     }
 
     public function streamAction()
@@ -155,9 +169,13 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         $convertedProducts = $this->container->get('legacy_struct_converter')
             ->convertListProductStructList($products->getProducts());
-
-        $this->View()->assign(['sArticles' => $convertedProducts, 'articles' => $convertedProducts]);
+        /*
+         * @Deprecated
+         * The assignment of all request parameters to the view below is deprecated
+         * and about to be removed in 5.6
+         */
         $this->View()->assign($this->Request()->getParams());
+        $this->View()->assign(['sArticles' => $convertedProducts, 'articles' => $convertedProducts]);
     }
 
     /**
@@ -194,10 +212,15 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         }
 
         $categoryId = (int) $this->Request()->getParam('sCategory');
-        $productStreamId = $this->findStreamIdByCategoryId($categoryId);
 
-        if ($productStreamId) {
-            $result = $this->fetchStreamListing($categoryId, $productStreamId);
+        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+
+        $category = $this->container->get('shopware_storefront.category_gateway')->get([$categoryId], $context);
+
+        $productStream = $category->getProductStream();
+
+        if ($productStream) {
+            $result = $this->fetchStreamListing($categoryId, $productStream->getId());
             $this->setSearchResultResponse($result);
 
             return;
@@ -224,12 +247,19 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     public function getCustomPageAction()
     {
-        $pageId = (int) $this->Request()->getParam('pageId', 0);
-        $groupKey = $this->Request()->getParam('groupKey', 'gLeft');
+        $shopPageGateway = $this->container->get('shopware_storefront.shop_page_service');
+        $list = $shopPageGateway->getList(
+            [(int) $this->Request()->getParam('pageId', 0)],
+            $this->container->get('shopware_storefront.context_service')->getShopContext()
+        );
 
-        $customPage = Shopware()->Modules()->Cms()->sGetStaticPageChildrensById($pageId, $groupKey);
+        $list = $this->container->get('legacy_struct_converter')->convertShopPageStructList($list);
+        $page = current($list);
 
-        $this->View()->assign('customPage', $customPage);
+        $this->View()->assign('customPage', [
+            'parent' => $page,
+            'children' => $page['children'],
+        ]);
     }
 
     /**
@@ -282,28 +312,6 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         return $query->execute()->fetchAll(PDO::FETCH_COLUMN);
     }
 
-    /**
-     * @param int $categoryId
-     *
-     * @return int|null
-     */
-    private function findStreamIdByCategoryId($categoryId)
-    {
-        $streamId = $this->get('dbal_connection')->fetchColumn(
-            'SELECT stream_id FROM s_categories WHERE id = :id',
-            ['id' => $categoryId]
-        );
-
-        if ($streamId) {
-            return (int) $streamId;
-        }
-
-        return null;
-    }
-
-    /**
-     * @param ProductSearchResult $result
-     */
     private function setSearchResultResponse(ProductSearchResult $result)
     {
         $body = [
@@ -450,8 +458,6 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @param ProductSearchResult $result
-     *
      * @return string
      */
     private function fetchListing(ProductSearchResult $result)
@@ -490,8 +496,6 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @param ProductSearchResult $result
-     *
      * @return string
      */
     private function fetchPagination(ProductSearchResult $result)
@@ -520,8 +524,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @param ProductSearchResult $result
-     * @param null|int            $categoryId
+     * @param int|null $categoryId
      *
      * @return array
      */

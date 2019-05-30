@@ -33,6 +33,156 @@ UPDATE s_core_customergroups SET description = 'B2B / Reseller ' WHERE `groupkey
 UPDATE s_core_countries SET countryname = CONCAT(UPPER(SUBSTRING(countryen, 1,1)),LOWER(SUBSTRING(countryen, 2)));
 UPDATE s_core_countries SET active = 1, areaID = 1 WHERE countryiso = 'GB';
 UPDATE s_core_countries SET active = 0, areaID = 3 WHERE countryiso = 'DE';
+UPDATE s_core_countries SET `countryname` = 'Germany' WHERE id = 2;
+UPDATE s_core_countries SET `countryname` = 'Arab Emirates' WHERE id = 3;
+UPDATE s_core_countries SET `countryname` = 'Australia' WHERE id = 4;
+UPDATE s_core_countries SET `countryname` = 'Belgium' WHERE id = 5;
+UPDATE s_core_countries SET `countryname` = 'Denmark' WHERE id = 7;
+UPDATE s_core_countries SET `countryname` = 'Finland' WHERE id = 8;
+UPDATE s_core_countries SET `countryname` = 'France' WHERE id = 9;
+UPDATE s_core_countries SET `countryname` = 'Greece' WHERE id = 10;
+UPDATE s_core_countries SET `countryname` = 'Great Britain' WHERE id = 11;
+UPDATE s_core_countries SET `countryname` = 'Ireland' WHERE id = 12;
+UPDATE s_core_countries SET `countryname` = 'Iceland' WHERE id = 13;
+UPDATE s_core_countries SET `countryname` = 'Italy' WHERE id = 14;
+UPDATE s_core_countries SET `countryname` = 'Canada' WHERE id = 16;
+UPDATE s_core_countries SET `countryname` = 'Luxembourg' WHERE id = 18;
+UPDATE s_core_countries SET `countryname` = 'Netherlands' WHERE id = 21;
+UPDATE s_core_countries SET `countryname` = 'Norway' WHERE id = 22;
+UPDATE s_core_countries SET `countryname` = 'Austria' WHERE id = 23;
+UPDATE s_core_countries SET `countryname` = 'Sweden' WHERE id = 25;
+UPDATE s_core_countries SET `countryname` = 'Switzerland' WHERE id = 26;
+UPDATE s_core_countries SET `countryname` = 'Spain' WHERE id = 27;
+UPDATE s_core_countries SET `countryname` = 'Poland' WHERE id = 30;
+UPDATE s_core_countries SET `countryname` = 'Hungary' WHERE id = 31;
+UPDATE s_core_countries SET `countryname` = 'Turkey' WHERE id = 32;
+UPDATE s_core_countries SET `countryname` = 'Czech Republic' WHERE id = 33;
+UPDATE s_core_countries SET `countryname` = 'Slovakia' WHERE id = 34;
+UPDATE s_core_countries SET `countryname` = 'Romania' WHERE id = 35;
+UPDATE s_core_countries SET `countryname` = 'Brazil' WHERE id = 36;
+UPDATE s_core_countries SET `countryname` = 'Bulgaria' WHERE id = 38;
+UPDATE s_core_countries SET `countryname` = 'Estonia' WHERE id = 39;
+UPDATE s_core_countries SET `countryname` = 'Croatia' WHERE id = 40;
+UPDATE s_core_countries SET `countryname` = 'Lettland' WHERE id = 41;
+UPDATE s_core_countries SET `countryname` = 'Lithuania' WHERE id = 42;
+UPDATE s_core_countries SET `countryname` = 'Slovenia' WHERE id = 44;
+UPDATE s_core_countries SET `countryname` = 'Cyprus' WHERE id = 45;
+UPDATE s_core_countries SET `countryname` = 'Åland Islands' WHERE id = 47;
+UPDATE s_core_countries SET `countryname` = 'Albania' WHERE id = 48;
+UPDATE s_core_countries SET `countryname` = 'Algeria' WHERE id = 49;
+UPDATE s_core_countries SET `countryname` = 'American Samoa' WHERE id = 50;
+UPDATE s_core_countries SET `countryname` = 'Antarctica' WHERE id = 54;
+UPDATE s_core_countries SET `countryname` = 'Antigua And Barbuda' WHERE id = 55;
+UPDATE s_core_countries SET `countryname` = 'Argentina' WHERE id = 56;
+UPDATE s_core_countries SET `countryname` = 'Armenia' WHERE id = 57;
+UPDATE s_core_countries SET `countryname` = 'Azerbaijan' WHERE id = 59;
+UPDATE s_core_countries SET `countryname` = 'Bangladesh' WHERE id = 62;
+UPDATE s_core_countries SET `countryname` = 'Belarus' WHERE id = 64;
+UPDATE s_core_countries SET `countryname` = 'Bolivia' WHERE id = 69;
+UPDATE s_core_countries SET `countryname` = 'Bonaire, Sint Eustatius And Saba' WHERE id = 70;
+UPDATE s_core_countries SET `countryname` = 'Bosnia And Herzegovina' WHERE id = 71;
+UPDATE s_core_countries SET `countryname` = 'Bouvet Island' WHERE id = 73;
+UPDATE s_core_countries SET `countryname` = 'British Indian Ocean Territory' WHERE id = 74;
+UPDATE s_core_countries SET `countryname` = 'United States Minor Outlying Islands' WHERE id = 75;
+UPDATE s_core_countries SET `countryname` = 'Virgin Islands (British)' WHERE id = 76;
+UPDATE s_core_countries SET `countryname` = 'Virgin Islands (U.S.)' WHERE id = 77;
+UPDATE s_core_countries SET `countryname` = 'Brunei Darussalam' WHERE id = 78;
+UPDATE s_core_countries SET `countryname` = 'Cambodia' WHERE id = 81;
+UPDATE s_core_countries SET `countryname` = 'Cameroon' WHERE id = 82;
+UPDATE s_core_countries SET `countryname` = 'Cabo Verde' WHERE id = 83;
+UPDATE s_core_countries SET `countryname` = 'Cayman Islands' WHERE id = 84;
+UPDATE s_core_countries SET `countryname` = 'Central African Republic' WHERE id = 85;
+UPDATE s_core_countries SET `countryname` = 'Chad' WHERE id = 86;
+UPDATE s_core_countries SET `countryname` = 'Christmas Island' WHERE id = 89;
+UPDATE s_core_countries SET `countryname` = 'Cocos (Keeling) Islands' WHERE id = 90;
+UPDATE s_core_countries SET `countryname` = 'Colombia' WHERE id = 91;
+UPDATE s_core_countries SET `countryname` = 'Comoros' WHERE id = 92;
+UPDATE s_core_countries SET `countryname` = 'Congo' WHERE id = 93;
+UPDATE s_core_countries SET `countryname` = 'Congo (Democratic Republic)' WHERE id = 94;
+UPDATE s_core_countries SET `countryname` = 'Cook Islands' WHERE id = 95;
+UPDATE s_core_countries SET `countryname` = 'Cuba' WHERE id = 97;
+UPDATE s_core_countries SET `countryname` = 'Djibouti' WHERE id = 99;
+UPDATE s_core_countries SET `countryname` = 'Dominican Republic' WHERE id = 101;
+UPDATE s_core_countries SET `countryname` = 'Egypt' WHERE id = 103;
+UPDATE s_core_countries SET `countryname` = 'Equatorial Guinea' WHERE id = 105;
+UPDATE s_core_countries SET `countryname` = 'Ethiopia' WHERE id = 107;
+UPDATE s_core_countries SET `countryname` = 'Falkland Islands (Malvinas)' WHERE id = 108;
+UPDATE s_core_countries SET `countryname` = 'Faroe Islands' WHERE id = 109;
+UPDATE s_core_countries SET `countryname` = 'Fiji' WHERE id = 110;
+UPDATE s_core_countries SET `countryname` = 'French Guiana' WHERE id = 111;
+UPDATE s_core_countries SET `countryname` = 'French Polynesia' WHERE id = 112;
+UPDATE s_core_countries SET `countryname` = 'French Southern Territories' WHERE id = 113;
+UPDATE s_core_countries SET `countryname` = 'Gabon' WHERE id = 114;
+UPDATE s_core_countries SET `countryname` = 'Georgia' WHERE id = 116;
+UPDATE s_core_countries SET `countryname` = 'Greenland' WHERE id = 119;
+UPDATE s_core_countries SET `countryname` = 'Heard Island And McDonald Islands' WHERE id = 129;
+UPDATE s_core_countries SET `countryname` = 'Holy SEE' WHERE id = 130;
+UPDATE s_core_countries SET `countryname` = 'India' WHERE id = 133;
+UPDATE s_core_countries SET `countryname` = 'Indonesia' WHERE id = 134;
+UPDATE s_core_countries SET `countryname` = "Côte D'Ivoire" WHERE id = 135;
+UPDATE s_core_countries SET `countryname` = 'Iraq' WHERE id = 137;
+UPDATE s_core_countries SET `countryname` = 'Isle Of Man' WHERE id = 138;
+UPDATE s_core_countries SET `countryname` = 'Jamaica' WHERE id = 139;
+UPDATE s_core_countries SET `countryname` = 'Jordan' WHERE id = 141;
+UPDATE s_core_countries SET `countryname` = 'Kazakhstan' WHERE id = 142;
+UPDATE s_core_countries SET `countryname` = 'Kenya' WHERE id = 143;
+UPDATE s_core_countries SET `countryname` = 'Kyrgyzstan' WHERE id = 146;
+UPDATE s_core_countries SET `countryname` = 'Lebanon' WHERE id = 148;
+UPDATE s_core_countries SET `countryname` = 'Libya' WHERE id = 151;
+UPDATE s_core_countries SET `countryname` = 'Macedonia' WHERE id = 153;
+UPDATE s_core_countries SET `countryname` = 'Madagascar' WHERE id = 154;
+UPDATE s_core_countries SET `countryname` = 'Maldives' WHERE id = 157;
+UPDATE s_core_countries SET `countryname` = 'Marshall Islands' WHERE id = 159;
+UPDATE s_core_countries SET `countryname` = 'Mauritania' WHERE id = 161;
+UPDATE s_core_countries SET `countryname` = 'Mexico' WHERE id = 164;
+UPDATE s_core_countries SET `countryname` = 'Micronesia' WHERE id = 165;
+UPDATE s_core_countries SET `countryname` = 'Moldova' WHERE id = 166;
+UPDATE s_core_countries SET `countryname` = 'Mongolia' WHERE id = 168;
+UPDATE s_core_countries SET `countryname` = 'Morocco' WHERE id = 171;
+UPDATE s_core_countries SET `countryname` = 'Mozambique' WHERE id = 172;
+UPDATE s_core_countries SET `countryname` = 'Nepal' WHERE id = 175;
+UPDATE s_core_countries SET `countryname` = 'New Caledonia' WHERE id = 176;
+UPDATE s_core_countries SET `countryname` = 'New Zealand' WHERE id = 177;
+UPDATE s_core_countries SET `countryname` = 'Norfolk Island' WHERE id = 182;
+UPDATE s_core_countries SET `countryname` = 'North Korea' WHERE id = 183;
+UPDATE s_core_countries SET `countryname` = 'Northern Mariana Islands' WHERE id = 184;
+UPDATE s_core_countries SET `countryname` = 'Palestine, State Of' WHERE id = 188;
+UPDATE s_core_countries SET `countryname` = 'Papua New Guinea' WHERE id = 190;
+UPDATE s_core_countries SET `countryname` = 'Philippines' WHERE id = 193;
+UPDATE s_core_countries SET `countryname` = 'Qatar' WHERE id = 196;
+UPDATE s_core_countries SET `countryname` = 'Russian Federation' WHERE id = 199;
+UPDATE s_core_countries SET `countryname` = 'Rwanda' WHERE id = 200;
+UPDATE s_core_countries SET `countryname` = 'Saint Helena' WHERE id = 202;
+UPDATE s_core_countries SET `countryname` = 'Saint Kitts And Nevis' WHERE id = 203;
+UPDATE s_core_countries SET `countryname` = 'Saint Pierre And Miquelon' WHERE id = 206;
+UPDATE s_core_countries SET `countryname` = 'Saint Vincent And The Grenadines' WHERE id = 207;
+UPDATE s_core_countries SET `countryname` = 'Sao Tome And Principe' WHERE id = 210;
+UPDATE s_core_countries SET `countryname` = 'Saudi Arabia' WHERE id = 211;
+UPDATE s_core_countries SET `countryname` = 'Serbia' WHERE id = 213 ;
+UPDATE s_core_countries SET `countryname` = 'Seychelles' WHERE id = 214;
+UPDATE s_core_countries SET `countryname` = 'Singapore' WHERE id = 216;
+UPDATE s_core_countries SET `countryname` = 'Sint Maarten (Dutch Part)' WHERE id = 217;
+UPDATE s_core_countries SET `countryname` = 'Solomon Islands' WHERE id = 218;
+UPDATE s_core_countries SET `countryname` = 'South Africa' WHERE id = 220;
+UPDATE s_core_countries SET `countryname` = 'South Georgia And The South Sandwich Islands' WHERE id = 221;
+UPDATE s_core_countries SET `countryname` = 'South Korea' WHERE id = 222;
+UPDATE s_core_countries SET `countryname` = 'South Sudan' WHERE id = 223;
+UPDATE s_core_countries SET `countryname` = 'Svalbard And Jan Mayen' WHERE id = 227;
+UPDATE s_core_countries SET `countryname` = 'Swaziland' WHERE id = 228;
+UPDATE s_core_countries SET `countryname` = 'Syrian Arab Republic' WHERE id = 229;
+UPDATE s_core_countries SET `countryname` = 'Tajikistan' WHERE id = 231;
+UPDATE s_core_countries SET `countryname` = 'Tanzania' WHERE id = 232;
+UPDATE s_core_countries SET `countryname` = 'Trinidad And Tobago' WHERE id = 238;
+UPDATE s_core_countries SET `countryname` = 'Tunisia' WHERE id = 239;
+UPDATE s_core_countries SET `countryname` = 'Turkmenistan' WHERE id = 240;
+UPDATE s_core_countries SET `countryname` = 'Turks And Caicos Islands' WHERE id = 241;
+UPDATE s_core_countries SET `countryname` = 'Uzbekistan' WHERE id = 246;
+UPDATE s_core_countries SET `countryname` = 'Venezuela' WHERE id = 248;
+UPDATE s_core_countries SET `countryname` = 'Wallis And Futuna' WHERE id = 250;
+UPDATE s_core_countries SET `countryname` = 'Western Sahara' WHERE id = 251;
+UPDATE s_core_countries SET `countryname` = 'Yemen' WHERE id = 252;
+UPDATE s_core_countries SET `countryname` = 'Zambia' WHERE id = 253;
+UPDATE s_core_countries SET `countryname` = 'Zimbabwe' WHERE id = 254;
 
 -- s_core_countries_areas --
 UPDATE s_core_countries_areas SET name = 'Great Britain' WHERE id = 1;
@@ -910,7 +1060,7 @@ UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = 
 Hello,
 
 thank you for evaluating the article {$sArticle.articleName}.
-Please confirm the evaluation by clicking the following link:
+Please confirm your evaluation using the following link:
 
 {$sConfirmLink}
 
@@ -920,7 +1070,7 @@ Please confirm the evaluation by clicking the following link:
         Hello,<br/>
         <br/>
         thank you for evaluating the article {$sArticle.articleName}.<br/>
-        Please confirm the evaluation by clicking the following link:<br/>
+        Please confirm your evaluation using the following link:<br/>
         <br/>
         <a href="{$sConfirmLink}">Confirm</a>
     </p>
@@ -928,6 +1078,94 @@ Please confirm the evaluation by clicking the following link:
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,
   `context` = 'a:2:{s:12:"sConfirmLink";s:133:"http://shopware.example/craft-tradition/men/business-bags/165/die-zeit-5?action=rating&sConfirmation=6avE5xLF22DTp8gNPaZ8KRUfJhflnvU9";s:8:"sArticle";a:1:{s:11:"articleName";s:24:"DIE ZEIT 5 Cowhide mokka";}}'
 WHERE `s_core_config_mails`.`name` = 'sOPTINVOTE';
+
+
+
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Please confirm your registration at {config name=shopName}',
+  `content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+thank you for signing up at {$sShop}.
+Please confirm your registration by clicking the following link:
+
+{$sConfirmLink}
+
+With this confirmation you also agree that we may send you further e-mails within the scope of the fulfilment of the contract.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+        thank you for signing up at {$sShop}.<br/>
+        Please confirm your registration by clicking the following link:<br/>
+        <br/>
+        <a href="{$sConfirmLink}">Confirm registration</a><br/>
+        <br/>
+        With this confirmation you also agree that we may send you further e-mails within the scope of the fulfilment of the contract.
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2
+WHERE `s_core_config_mails`.`name` = 'sOPTINREGISTER';
+
+
+
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Please confirm your e-mail address for your order at {config name=shopName}',
+  `content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+Please confirm your e-mail address using the following link:
+
+{$sConfirmLink}
+
+After the confirmation you will be directed your order overview, where you can check your order again and complete it.
+With this confirmation you also agree that we may send you further e-mails within the scope of the fulfilment of the contract.
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+        Please confirm your e-mail address using the following link:<br/>
+        <br/>
+        <a href="{$sConfirmLink}">Confirm e-mail</a><br/>
+        <br/>
+        After the confirmation you will be directed your order overview, where you can check your order again and complete it.<br/>
+        With this confirmation you also agree that we may send you further e-mails within the scope of the fulfilment of the contract.<br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2
+WHERE `s_core_config_mails`.`name` = 'sOPTINREGISTERACCOUNTLESS';
+
+
+
+UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Please confirm your blog article evaluation',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+thank you for evaluating the blog article "{$sArticle.title}".
+Please confirm your evaluation using the following link:
+
+{$sConfirmLink}
+
+{include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Hello,<br/>
+        <br/>
+        thank you for evaluating the blog article for "{$sArticle.title}".<br/>
+        Please confirm your evaluation using the following link:<br/>
+        <br/>
+        <a href="{$sConfirmLink}">Confirm</a><br/>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2
+WHERE `s_core_config_mails`.`name` = 'sOPTINBLOGCOMMENT';
 
 
 
@@ -1423,9 +1661,80 @@ thank you for your order at {config name=shopName}. In the attachments of this e
         thank you for your order at {config name=shopName}. In the attachments of this email you will find your order documents in PDF format.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
-</div>',`ishtml` = 1,`attachment` = '',`mailtype` = 2,
+</div>',`ishtml` = 1,`attachment` = '',
   `context` = 'a:4:{s:6:"sOrder";a:40:{s:7:"orderID";s:2:"66";s:11:"ordernumber";s:5:"20006";s:12:"order_number";s:5:"20006";s:6:"userID";s:1:"4";s:10:"customerID";s:1:"4";s:14:"invoice_amount";s:5:"701.4";s:18:"invoice_amount_net";s:6:"589.42";s:16:"invoice_shipping";s:3:"3.9";s:20:"invoice_shipping_net";s:4:"3.28";s:9:"ordertime";s:19:"2017-10-29 10:00:08";s:6:"status";s:1:"2";s:8:"statusID";s:1:"2";s:7:"cleared";s:2:"12";s:9:"clearedID";s:2:"12";s:9:"paymentID";s:1:"5";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:5:"netto";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";N;s:12:"cleared_date";N;s:12:"trackingcode";s:0:"";s:8:"language";s:1:"1";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:10:"dispatchID";s:1:"9";s:10:"currencyID";s:1:"1";s:12:"cleared_name";s:15:"completely_paid";s:19:"cleared_description";s:15:"Completely paid";s:11:"status_name";s:9:"completed";s:18:"status_description";s:9:"Completed";s:19:"payment_description";s:18:"Payment in advance";s:20:"dispatch_description";s:17:"Standard delivery";s:20:"currency_description";s:4:"Euro";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}s:13:"sOrderDetails";a:2:{i:0;a:20:{s:14:"orderdetailsID";s:3:"222";s:7:"orderID";s:2:"66";s:11:"ordernumber";s:5:"20006";s:9:"articleID";s:3:"166";s:18:"articleordernumber";s:7:"SW10166";s:5:"price";s:5:"69.95";s:8:"quantity";s:2:"10";s:7:"invoice";s:5:"699.5";s:4:"name";s:12:"DIE ZEIT 100";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:3:"tax";s:5:"19.00";s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";s:0:"";s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}i:1;a:20:{s:14:"orderdetailsID";s:3:"223";s:7:"orderID";s:2:"66";s:11:"ordernumber";s:5:"20006";s:9:"articleID";s:1:"0";s:18:"articleordernumber";s:16:"SHIPPINGDISCOUNT";s:5:"price";s:2:"-2";s:8:"quantity";s:1:"1";s:7:"invoice";s:2:"-2";s:4:"name";s:15:"Warenkorbrabatt";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"4";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"0";s:3:"tax";N;s:8:"tax_rate";s:2:"19";s:3:"esd";s:1:"0";s:10:"attributes";a:6:{s:10:"attribute1";N;s:10:"attribute2";N;s:10:"attribute3";N;s:10:"attribute4";N;s:10:"attribute5";N;s:10:"attribute6";N;}}}s:5:"sUser";a:82:{s:15:"billing_company";s:0:"";s:18:"billing_department";s:0:"";s:18:"billing_salutation";s:2:"mr";s:14:"customernumber";s:5:"20006";s:17:"billing_firstname";s:4:"John";s:16:"billing_lastname";s:3:"Doe";s:14:"billing_street";s:16:"Examplestreet 11";s:32:"billing_additional_address_line1";s:0:"";s:32:"billing_additional_address_line2";s:0:"";s:15:"billing_zipcode";s:4:"1234";s:12:"billing_city";s:11:"Examplecity";s:5:"phone";s:0:"";s:13:"billing_phone";s:0:"";s:17:"billing_countryID";s:1:"2";s:15:"billing_stateID";N;s:15:"billing_country";s:7:"Germany";s:18:"billing_countryiso";s:2:"DE";s:19:"billing_countryarea";s:7:"germany";s:17:"billing_countryen";s:7:"GERMANY";s:5:"ustid";s:0:"";s:13:"billing_text1";N;s:13:"billing_text2";N;s:13:"billing_text3";N;s:13:"billing_text4";N;s:13:"billing_text5";N;s:13:"billing_text6";N;s:7:"orderID";s:2:"66";s:16:"shipping_company";s:0:"";s:19:"shipping_department";s:0:"";s:19:"shipping_salutation";s:2:"mr";s:18:"shipping_firstname";s:4:"John";s:17:"shipping_lastname";s:3:"Doe";s:15:"shipping_street";s:16:"Examplestreet 11";s:33:"shipping_additional_address_line1";s:0:"";s:33:"shipping_additional_address_line2";s:0:"";s:16:"shipping_zipcode";s:4:"1234";s:13:"shipping_city";s:11:"Examplecity";s:16:"shipping_stateID";N;s:18:"shipping_countryID";s:1:"2";s:16:"shipping_country";s:7:"Germany";s:19:"shipping_countryiso";s:2:"DE";s:20:"shipping_countryarea";s:7:"germany";s:18:"shipping_countryen";s:7:"GERMANY";s:14:"shipping_text1";N;s:14:"shipping_text2";N;s:14:"shipping_text3";N;s:14:"shipping_text4";N;s:14:"shipping_text5";N;s:14:"shipping_text6";N;s:2:"id";s:1:"4";s:8:"password";s:60:"$2y$10$qcu486mGUDZ/qbUSJDi78uYwatm24dzQ/dCO79PVVP0MbGHJ0LLgq";s:7:"encoder";s:6:"bcrypt";s:5:"email";s:12:"xyz@mail.com";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2017-10-30";s:9:"lastlogin";s:19:"2017-10-30 12:02:18";s:9:"sessionID";s:26:"mpmqj6qoro0pg3ua9u5hprh646";s:10:"newsletter";s:1:"0";s:10:"validation";s:1:"0";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;s:15:"internalcomment";s:0:"";s:12:"failedlogins";s:1:"0";s:11:"lockeduntil";N;s:26:"default_billing_address_id";s:1:"6";s:27:"default_shipping_address_id";s:1:"6";s:5:"title";s:0:"";s:10:"salutation";s:2:"mr";s:9:"firstname";s:4:"John";s:8:"lastname";s:3:"Doe";s:8:"birthday";s:10:"2017-10-30";s:11:"login_token";s:38:"1f6f51a1-54c1-4db8-8b4f-fbe957f8b856.1";s:11:"preisgruppe";s:1:"1";s:11:"billing_net";s:1:"1";}s:9:"sDispatch";a:2:{s:4:"name";s:17:"Standard delivery";s:11:"description";s:0:"";}}'
 WHERE `s_core_config_mails`.`name` = 'sORDERDOCUMENTS';
+
+
+UPDATE `s_core_config_mails` SET  `subject` = 'Invoice for order {$orderNumber}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {$sUser.salutation|salutation} {$sUser.lastname},
+
+thank you for your order at {config name=shopName}. In the attachments of this email you will find your order documents in PDF format.
+
+{include file="string:{config name=emailfooterplain}"}', `contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {$sUser.salutation|salutation} {$sUser.lastname},<br/>
+        <br/>
+        thank you for your order at {config name=shopName}. In the attachments of this email you will find your order documents in PDF format.
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>' WHERE `s_core_config_mails`.`name` = 'document_invoice';
+
+
+UPDATE `s_core_config_mails` SET  `subject` = 'Delivery note for order {$orderNumber}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {$sUser.salutation|salutation} {$sUser.lastname},
+
+thank you for your order at {config name=shopName}. In the attachments of this email you will find your delivery note in PDF format.
+
+{include file="string:{config name=emailfooterplain}"}', `contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {$sUser.salutation|salutation} {$sUser.lastname},<br/>
+        <br/>
+        thank you for your order at {config name=shopName}. In the attachments of this email you will find your delivery note in PDF format.
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>' WHERE `s_core_config_mails`.`name` = 'document_delivery_note';
+
+
+UPDATE `s_core_config_mails` SET  `subject` = 'Credit note for order {$orderNumber}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {$sUser.salutation|salutation} {$sUser.lastname},
+
+thank you for your order at {config name=shopName}. In the attachments of this email you will find your credit note in PDF format.
+
+{include file="string:{config name=emailfooterplain}"}', `contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {$sUser.salutation|salutation} {$sUser.lastname},<br/>
+        <br/>
+        thank you for your order at {config name=shopName}. In the attachments of this email you will find the your credit note in PDF format.
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>' WHERE `s_core_config_mails`.`name` = 'document_credit';
+
+UPDATE `s_core_config_mails` SET  `subject` = 'Cancellation invoice for order {$orderNumber}',`content` = '{include file="string:{config name=emailheaderplain}"}
+
+Dear {$sUser.salutation|salutation} {$sUser.lastname},
+
+thank you for your order at {config name=shopName}. In the attachments of this email you will find your cancellation invoice in PDF format.
+
+{include file="string:{config name=emailfooterplain}"', `contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <br/><br/>
+    <p>
+        Dear {$sUser.salutation|salutation} {$sUser.lastname},<br/>
+        <br/>
+        thank you for your order at {config name=shopName}. In the attachments of this email you will find your cancellation invoice in PDF format.
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>' WHERE `s_core_config_mails`.`name` = 'document_cancellation';
 
 -- s_cms_static_groups --
 UPDATE s_cms_static_groups SET `name` = 'German left pane and service/support top' WHERE id = 1;

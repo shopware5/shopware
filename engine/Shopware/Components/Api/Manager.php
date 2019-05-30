@@ -26,18 +26,19 @@ namespace Shopware\Components\Api;
 
 use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 
 /**
  * API Manger
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Manager
 {
     /**
-     * @param $name
+     * @param string $name
      *
      * @return Resource\Resource
      */
@@ -45,13 +46,19 @@ class Manager
     {
         $container = Shopware()->Container();
         try {
-            /** @var $resource Resource\Resource */
-            $resource = $container->get('shopware.api.' . strtolower($name));
+            /** @var Resource\Resource $resource */
+            $serviceId = 'shopware.api.' . (new CamelCaseToSnakeCaseNameConverter())->normalize($name);
+            if ($container->has($serviceId)) {
+                $resource = $container->get($serviceId);
+            } else {
+                trigger_error(sprintf('The requested service with id %s is deprecated. Please use CamelCased service id instead.', $name), E_USER_DEPRECATED);
+                $resource = $container->get('shopware.api.' . strtolower($name));
+            }
         } catch (ServiceNotFoundException $e) {
             $name = ucfirst($name);
             $class = __NAMESPACE__ . '\\Resource\\' . $name;
 
-            /** @var $resource Resource\Resource */
+            /** @var Resource\Resource $resource */
             $resource = new $class();
         }
 

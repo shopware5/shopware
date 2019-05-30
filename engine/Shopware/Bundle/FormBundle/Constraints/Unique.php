@@ -64,7 +64,7 @@ class Unique extends Constraint
     }
 
     /**
-     * @return string
+     * @return string[]
      */
     public function getTargets()
     {

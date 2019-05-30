@@ -58,11 +58,6 @@ class Basic implements GeneratorInterface
      */
     private $optimizerService;
 
-    /**
-     * @param \Shopware_Components_Config $config
-     * @param MediaServiceInterface       $mediaService
-     * @param OptimizerServiceInterface   $optimizerService
-     */
     public function __construct(\Shopware_Components_Config $config, MediaServiceInterface $mediaService, OptimizerServiceInterface $optimizerService)
     {
         $this->fixGdImageBlur = $config->get('thumbnailNoiseFilter');
@@ -76,7 +71,7 @@ class Basic implements GeneratorInterface
     public function createThumbnail($imagePath, $destination, $maxWidth, $maxHeight, $keepProportions = false, $quality = 90)
     {
         if (!$this->mediaService->has($imagePath)) {
-            throw new \Exception('File not found: ' . $imagePath);
+            throw new \Exception(sprintf('File not found: %s', $imagePath));
         }
 
         $content = $this->mediaService->read($imagePath);
@@ -134,6 +129,7 @@ class Basic implements GeneratorInterface
      * method for the image extension
      *
      * @param string $fileContent
+     * @param string $imagePath
      *
      * @throws \RuntimeException
      *
@@ -151,7 +147,7 @@ class Basic implements GeneratorInterface
     /**
      * Returns the extension of the file with passed path
      *
-     * @param string
+     * @param string $path
      *
      * @return string
      */
@@ -165,9 +161,8 @@ class Basic implements GeneratorInterface
     /**
      * Calculate image proportion and set the new resolution
      *
-     * @param array $originalSize
-     * @param int   $width
-     * @param int   $height
+     * @param int $width
+     * @param int $height
      *
      * @return array
      */
@@ -207,7 +202,7 @@ class Basic implements GeneratorInterface
      * @param resource $image
      * @param array    $originalSize
      * @param array    $newSize
-     * @param bool     $extension
+     * @param string   $extension
      *
      * @return resource
      */
@@ -223,9 +218,9 @@ class Basic implements GeneratorInterface
             // Disables blending
             imagealphablending($newImage, false);
         }
-        // Saves the alpha informations
+        // Saves the alpha information
         imagesavealpha($newImage, true);
-        // Copies the original image into the new created image with resampling
+        // Copies the original image into the new created image with re-sampling
         imagecopyresampled(
             $newImage,
             $image,
@@ -303,11 +298,11 @@ class Basic implements GeneratorInterface
         try {
             $this->optimizerService->optimize($tmpFilename);
             $this->uploadImage($destination, $tmpFilename);
-            unlink($tmpFilename);
         } catch (OptimizerNotFoundException $exception) {
             // empty catch intended since no optimizer is available
+        } finally {
+            unlink($tmpFilename);
         }
-        unlink($tmpFilename);
     }
 
     /**

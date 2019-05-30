@@ -39,9 +39,6 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
      */
     private $connection;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
@@ -58,7 +55,7 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
             INNER JOIN s_emotion_categories categories 
                 ON categories.emotion_id = emotion.id 
                 AND categories.category_id = :id
-            WHERE emotion.customer_stream_ids IS NOT NULL   
+            WHERE emotion.customer_stream_ids IS NOT NULL AND emotion.active = 1
             LIMIT 1',
             [':id' => $categoryId]
         );
@@ -318,8 +315,6 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
     }
 
     /**
-     * @param DateTime $date
-     *
      * @return QueryBuilder
      */
     private function createAmountPerMonthQuery(DateTime $date)
@@ -346,8 +341,7 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
     }
 
     /**
-     * @param DateTime $date
-     * @param null|int $streamId
+     * @param int|null $streamId
      *
      * @return QueryBuilder
      */

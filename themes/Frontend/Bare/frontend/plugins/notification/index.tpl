@@ -3,23 +3,23 @@
 
     {if $NotifyValid == true}
         {$messageType="success"}
-        {$messageContent="{s name='DetailNotifyInfoValid'}{/s}"}
+        {s name="DetailNotifyInfoValid" assign="messageContent"}{/s}
     {elseif $NotifyInvalid == true && $NotifyAlreadyRegistered != true}
         {$messageType="warning"}
-        {$messageContent="{s name='DetailNotifyInfoInvalid'}{/s}"}
+        {s name="DetailNotifyInfoInvalid" assign="messageContent"}{/s}
     {elseif $NotifyEmailError == true}
         {$messageType="error"}
-        {$messageContent="{s name='DetailNotifyInfoErrorMail'}{/s}"}
+        {s name="DetailNotifyInfoErrorMail" assign="messageContent"}{/s}
     {elseif $WaitingForOptInApprovement}
         {$messageType="success"}
-        {$messageContent="{s name='DetailNotifyInfoSuccess'}{/s}"}
+        {s name="DetailNotifyInfoSuccess" assign="messageContent"}{/s}
     {elseif $NotifyAlreadyRegistered == true}
         {$messageType="warning"}
-        {$messageContent="{s name='DetailNotifyAlreadyRegistered'}{/s}"}
+        {s name="DetailNotifyAlreadyRegistered" assign="messageContent"}{/s}
     {else}
         {if $NotifyValid != true}
             {$messageType="warning"}
-            {$messageContent="{s name='DetailNotifyHeader'}{/s}"}
+            {s name="DetailNotifyHeader" assign="messageContent"}{/s}
         {/if}
     {/if}
 

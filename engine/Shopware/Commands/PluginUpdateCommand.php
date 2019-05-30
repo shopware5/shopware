@@ -32,17 +32,19 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PluginUpdateCommand extends ShopwareCommand
+class PluginUpdateCommand extends PluginCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('sw:plugin:update')
             ->setDescription('Updates specified plugins.')
@@ -80,7 +82,7 @@ EOF
 
         if (!empty($pluginNames)) {
             foreach ($pluginNames as $pluginName) {
-                $this->updatePlugin($pluginManager, $pluginName, $output);
+                $this->updatePlugin($pluginManager, $pluginName, $input, $output);
             }
 
             return 0;
@@ -92,9 +94,7 @@ EOF
     }
 
     /**
-     * @param InstallerService $pluginManager
-     * @param string           $batchUpdate
-     * @param OutputInterface  $output
+     * @param string $batchUpdate
      *
      * @return int 0 if everything went fine, or an error code
      */
@@ -149,13 +149,11 @@ EOF
     }
 
     /**
-     * @param InstallerService $pluginManager
-     * @param string           $pluginName
-     * @param OutputInterface  $output
+     * @param string $pluginName
      *
      * @return int 0 if everything went fine, or an error code
      */
-    private function updatePlugin(InstallerService $pluginManager, $pluginName, OutputInterface $output)
+    private function updatePlugin(InstallerService $pluginManager, $pluginName, InputInterface $input, OutputInterface $output)
     {
         try {
             $plugin = $pluginManager->getPluginByName($pluginName);
@@ -171,9 +169,10 @@ EOF
             return 0;
         }
 
-        $pluginManager->updatePlugin($plugin);
-
+        $updateContext = $pluginManager->updatePlugin($plugin);
         $output->writeln(sprintf('Plugin %s has been updated successfully.', $pluginName));
+
+        $this->clearCachesIfRequested($input, $output, $updateContext);
 
         return 0;
     }

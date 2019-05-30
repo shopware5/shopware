@@ -28,12 +28,14 @@ use Shopware\Bundle\ESIndexingBundle\FieldMappingInterface;
 use Shopware\Bundle\ESIndexingBundle\MappingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
-/**
- * Class PropertyMapping
- */
 class PropertyMapping implements MappingInterface
 {
     const TYPE = 'property';
+
+    /**
+     * @var bool
+     */
+    protected $isDebug;
 
     /**
      * @var FieldMappingInterface
@@ -41,11 +43,21 @@ class PropertyMapping implements MappingInterface
     private $fieldMapping;
 
     /**
-     * @param FieldMappingInterface $fieldMapping
+     * @var bool
      */
-    public function __construct(FieldMappingInterface $fieldMapping)
-    {
+    private $isDynamic;
+
+    /**
+     * @param bool $isDynamic
+     */
+    public function __construct(
+        FieldMappingInterface $fieldMapping,
+        $isDynamic = true,
+        $isDebug = false
+    ) {
         $this->fieldMapping = $fieldMapping;
+        $this->isDynamic = $isDynamic;
+        $this->isDebug = $isDebug;
     }
 
     /**
@@ -61,7 +73,8 @@ class PropertyMapping implements MappingInterface
      */
     public function get(Shop $shop)
     {
-        return [
+        $mapping = [
+            'dynamic' => $this->isDynamic,
             'properties' => [
                 'id' => ['type' => 'long'],
                 'name' => $this->fieldMapping->getLanguageField($shop),
@@ -74,5 +87,11 @@ class PropertyMapping implements MappingInterface
                 ],
             ],
         ];
+
+        if ($this->isDebug) {
+            unset($mapping['_source']);
+        }
+
+        return $mapping;
     }
 }

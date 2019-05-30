@@ -68,7 +68,6 @@ class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param Criteria $criteria
      * @param array[]  $customers
      * @param string[] $expectedNumbers
      *
@@ -95,10 +94,10 @@ class TestCase extends \Enlight_Components_Test_TestCase
         $result = $search->search($criteria);
 
         foreach ($expectedNumbers as $number) {
-            $this->assertTrue(in_array($number, $result->getNumbers()), 'Customer number: ' . $number . ' not found');
+            static::assertTrue(in_array($number, $result->getNumbers()), 'Customer number: ' . $number . ' not found');
         }
         foreach ($result->getNumbers() as $number) {
-            $this->assertTrue(in_array($number, $expectedNumbers), 'Customer number: ' . $number . ' not expected');
+            static::assertTrue(in_array($number, $expectedNumbers), 'Customer number: ' . $number . ' not expected');
         }
 
         return $result;
@@ -190,7 +189,6 @@ class TestCase extends \Enlight_Components_Test_TestCase
 
     /**
      * @param string $table
-     * @param array  $data
      *
      * @return string
      */

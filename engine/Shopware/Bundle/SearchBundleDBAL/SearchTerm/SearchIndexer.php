@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Components\MemoryLimit;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -55,10 +55,7 @@ class SearchIndexer implements SearchIndexerInterface
     private $batchSize;
 
     /**
-     * @param \Shopware_Components_Config $config
-     * @param Connection                  $connection
-     * @param TermHelperInterface         $termHelper
-     * @param int                         $batchSize
+     * @param int $batchSize
      */
     public function __construct(
         \Shopware_Components_Config $config,
@@ -130,7 +127,7 @@ class SearchIndexer implements SearchIndexerInterface
         // Get a list of all tables and columns in this tables that should be processed by search
         /**
          * Example return:
-         * tableID | table      | where  | referenz_table        | fieldIDs | fields                    | foreign_key
+         * tableID | table      | where  | reference_table       | fieldIDs | fields                    | foreign_key
          * 1       | s_articles | NULL   | NULL                  | 3,4      | name, keywords            | NULL
          * 2       | s_categories | NULL | s_articles_categories | 1,2      | metakeywords, description | categoryID
          */
@@ -340,8 +337,6 @@ class SearchIndexer implements SearchIndexerInterface
     }
 
     /**
-     * @param array $keywords
-     *
      * @return array
      */
     private function mapCategoryKeywords(array $keywords)
@@ -368,7 +363,8 @@ class SearchIndexer implements SearchIndexerInterface
             }
 
             unset($keyword['id']);
-            $field = array_pop(array_keys($keyword));
+            $keywords = array_keys($keyword);
+            $field = array_pop($keywords);
 
             $categoryTranslations = $translations[$id];
             foreach ($categoryTranslations as $translation) {

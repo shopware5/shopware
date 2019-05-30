@@ -1,7 +1,7 @@
 {namespace name="frontend/forms/elements"}
 
 {block name='frontend_forms_form_elements'}
-    <form id="support" name="support" class="{$sSupport.class}" method="post" action="{url controller='forms' action='index' id=$id}" enctype="multipart/form-data">
+    <form id="support" name="support" class="{$sSupport.class}" method="post" action="{url action='index' id=$id}" enctype="multipart/form-data">
         <input type="hidden" name="forceMail" value="{$forceMail|escape}">
 
         {* Form Content *}
@@ -12,7 +12,8 @@
                         {block name='frontend_forms_form_elements_form_builder'}
                             <div {if $sSupport.sElements[$sKey].typ eq 'textarea'}class="textarea"{elseif $sSupport.sElements[$sKey].typ eq 'checkbox'}class="forms--checkbox"{elseif $sSupport.sElements[$sKey].typ eq 'select'}class="field--select select-field"{/if}>
 
-                                {$sSupport.sFields[$sKey]|replace:'%*%':"{s name='RequiredField' namespace='frontend/register/index'}{/s}"}
+                                {s name="RequiredField" namespace="frontend/register/index" assign="snippetRequiredField"}{/s}
+                                {$sSupport.sFields[$sKey]|replace:'%*%':$snippetRequiredField}
 
                                 {if $sSupport.sElements[$sKey].typ eq 'checkbox'}
                                     {$sSupport.sLabels.$sKey|replace:':':''}

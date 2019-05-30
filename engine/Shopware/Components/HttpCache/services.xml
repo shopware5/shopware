@@ -1,0 +1,151 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="http_cache_warmer" class="Shopware\Components\HttpCache\CacheWarmer">
+            <argument type="service" id="corelogger" />
+            <argument type="service" id="guzzle_http_client_factory" />
+            <argument type="service" id="config"/>
+            <argument type="service" id="models"/>
+            <argument type="service" id="events"/>
+        </service>
+
+        <service id="shopware.http_cache.route_installer" class="Shopware\Components\HttpCache\CacheRouteInstaller">
+            <argument type="service" id="config_writer"/>
+        </service>
+
+        <service id="shopware.http_cache.default_route_service" class="Shopware\Components\HttpCache\DefaultRouteService">
+            <argument type="service" id="shopware.plugin.cached_config_reader"/>
+            <argument type="service" id="shopware.http_cache.cache_route_generation_service"/>
+        </service>
+
+        <service id="shopware.http_cache.cache_time_service"
+                 class="Shopware\Components\HttpCache\DynamicCacheTimeService">
+            <argument type="service" id="shopware.http_cache.cache_route_generation_service"/>
+            <argument type="service" id="shopware.http_cache.default_cache_time_service"/>
+            <argument type="tagged" tag="invalidation_date_provider" />
+        </service>
+
+        <service id="shopware.http_cache.default_cache_time_service"
+                 class="Shopware\Components\HttpCache\DefaultCacheTimeService"
+                 public="false">
+            <argument type="service" id="shopware.http_cache.default_route_service"/>
+        </service>
+
+        <service id="shopware.http_cache.cache_route_generation_service"
+                 class="Shopware\Components\HttpCache\CacheRouteGenerationService"/>
+
+        <!-- InvalidationTime Provider -->
+        <service id="shopware.http_cache.invalidation_date.listing_date_frontend" class="Shopware\Components\HttpCache\InvalidationDate\ListingDateFrontpage">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="service_container"/>
+
+            <tag name="invalidation_date_provider" />
+        </service>
+
+        <service id="shopware.http_cache.invalidation_date.listing_date" class="Shopware\Components\HttpCache\InvalidationDate\ListingDate">
+            <argument type="service" id="dbal_connection"/>
+
+            <tag name="invalidation_date_provider" />
+        </service>
+
+        <service id="shopware.http_cache.invalidation_date.blog_date" class="Shopware\Components\HttpCache\InvalidationDate\BlogDate">
+            <argument type="service" id="dbal_connection"/>
+
+            <tag name="invalidation_date_provider" />
+        </service>
+
+        <service id="shopware.http_cache.invalidation_date.blog_listing" class="Shopware\Components\HttpCache\InvalidationDate\BlogListingDate">
+            <argument type="service" id="dbal_connection"/>
+
+            <tag name="invalidation_date_provider" />
+        </service>
+
+        <service id="shopware.http_cache.invalidation_date.product_date" class="Shopware\Components\HttpCache\InvalidationDate\ProductDetailDate">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="front"/>
+
+            <tag name="invalidation_date_provider" />
+        </service>
+
+        <service id="shopware.http_cache.invalidation_date.campaign_date" class="Shopware\Components\HttpCache\InvalidationDate\CampaignDate">
+            <argument type="service" id="dbal_connection"/>
+
+            <tag name="invalidation_date_provider" />
+        </service>
+
+        <!--UrlProviderFactory-->
+        <service id="shopware_cache_warmer.url_provider_factory"
+                 class="Shopware\Components\HttpCache\UrlProviderFactory">
+            <argument type="tagged" tag="cache_warmer.url_provider"/>
+        </service>
+
+        <!--UrlProvider-->
+        <service id="shopware_cache_warmer.url_provider_category"
+                 class="Shopware\Components\HttpCache\UrlProvider\CategoryProvider">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="router"/>
+            <tag name="cache_warmer.url_provider"/>
+        </service>
+
+        <service id="shopware_cache_warmer.url_provider_emotion"
+                 class="Shopware\Components\HttpCache\UrlProvider\EmotionProvider">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="router"/>
+            <tag name="cache_warmer.url_provider"/>
+        </service>
+
+        <service id="shopware_cache_warmer.url_provider_blog"
+                 class="Shopware\Components\HttpCache\UrlProvider\BlogProvider">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="router"/>
+            <tag name="cache_warmer.url_provider"/>
+        </service>
+
+        <service id="shopware_cache_warmer.url_provider_manufacturer"
+                 class="Shopware\Components\HttpCache\UrlProvider\ManufacturerProvider">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="router"/>
+            <tag name="cache_warmer.url_provider"/>
+        </service>
+
+        <service id="shopware_cache_warmer.url_provider_static"
+                 class="Shopware\Components\HttpCache\UrlProvider\StaticProvider">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="router"/>
+            <tag name="cache_warmer.url_provider"/>
+        </service>
+
+        <service id="shopware_cache_warmer.url_provider_product"
+                 class="Shopware\Components\HttpCache\UrlProvider\ProductProvider">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="router"/>
+            <tag name="cache_warmer.url_provider"/>
+        </service>
+
+        <service id="shopware_cache_warmer.url_provider_productwithcategory"
+                 class="Shopware\Components\HttpCache\UrlProvider\ProductWithCategoryProvider">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="router"/>
+            <tag name="cache_warmer.url_provider"/>
+        </service>
+
+        <service id="shopware_cache_warmer.url_provider_productwithnumber"
+                 class="Shopware\Components\HttpCache\UrlProvider\ProductWithNumberProvider">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="router"/>
+            <tag name="cache_warmer.url_provider"/>
+        </service>
+
+        <service id="shopware_cache_warmer.url_provider_variantswitch"
+                 class="Shopware\Components\HttpCache\UrlProvider\VariantSwitchProvider">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="router"/>
+            <tag name="cache_warmer.url_provider"/>
+        </service>
+
+    </services>
+</container>

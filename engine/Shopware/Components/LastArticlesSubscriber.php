@@ -34,9 +34,6 @@ class LastArticlesSubscriber implements SubscriberInterface
      */
     private $container;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -54,9 +51,6 @@ class LastArticlesSubscriber implements SubscriberInterface
         ];
     }
 
-    /**
-     * @param \Enlight_Event_EventArgs $args
-     */
     public function refreshSessionId(\Enlight_Event_EventArgs $args)
     {
         $this->container->get('dbal_connection')->executeUpdate(
@@ -65,9 +59,6 @@ class LastArticlesSubscriber implements SubscriberInterface
         );
     }
 
-    /**
-     * @param \Enlight_Controller_ActionEventArgs $args
-     */
     public function onRefreshStatistics(\Enlight_Controller_ActionEventArgs $args)
     {
         $request = $args->getRequest();
@@ -76,21 +67,18 @@ class LastArticlesSubscriber implements SubscriberInterface
             return;
         }
 
-        $articleId = (int) $request->getParam('articleId');
+        $productId = (int) $request->getParam('articleId');
 
-        if (empty($articleId)) {
+        if (empty($productId)) {
             return;
         }
 
-        $this->setLastArticleById($articleId);
+        $this->setLastProductById($productId);
     }
 
-    /**
-     * @param \Enlight_Controller_ActionEventArgs $args
-     */
     public function onPostDispatch(\Enlight_Controller_ActionEventArgs $args)
     {
-        $this->cleanupLastArticles();
+        $this->cleanupLastProducts();
         $config = $this->container->get('config');
 
         if (empty($config->offsetGet('lastarticles_show'))) {
@@ -110,9 +98,9 @@ class LastArticlesSubscriber implements SubscriberInterface
     /**
      * Removes entries from s_emarketing_lastarticles which are older than allowed by the configuration
      */
-    private function cleanupLastArticles()
+    private function cleanupLastProducts()
     {
-        if (rand(0, 100) === 0) {
+        if (Random::getInteger(0, 100) === 0) {
             $time = (int) $this->container->get('config')->get('lastarticles_time', 15);
 
             $sql = 'DELETE FROM s_emarketing_lastarticles WHERE `time` < DATE_SUB(CONCAT_WS(" ", CURDATE(), ?), INTERVAL ? DAY)';
@@ -125,9 +113,9 @@ class LastArticlesSubscriber implements SubscriberInterface
     /**
      * Creates a new s_emarketing_lastarticles entry for the passed article id.
      *
-     * @param int $articleId
+     * @param int $productId
      */
-    private function setLastArticleById($articleId)
+    private function setLastProductById($productId)
     {
         $sessionId = $this->container->get('session')->get('sessionId');
 
@@ -137,7 +125,7 @@ class LastArticlesSubscriber implements SubscriberInterface
 
         $this->container->get('events')->notify('Shopware_Modules_Articles_Before_SetLastArticle', [
             'subject' => $this,
-            'article' => $articleId,
+            'article' => $productId,
         ]);
 
         $insertSql = 'INSERT INTO s_emarketing_lastarticles (`articleID`, `sessionID`, `time`, `userID`, `shopID`)
@@ -147,7 +135,7 @@ class LastArticlesSubscriber implements SubscriberInterface
         $this->container->get('dbal_connection')->executeUpdate(
             $insertSql,
             [
-                'articleId' => $articleId,
+                'articleId' => $productId,
                 'sessionId' => $sessionId,
                 'userId' => (int) Shopware()->Session()->get('sUserId'),
                 'shopId' => $this->container->get('shop')->getId(),

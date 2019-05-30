@@ -22,13 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Media;
+namespace Shopware\Models\Media;
 
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * The media repository used for the media manager backend module.
- * <br>
+ *
  * The repository is responsible to load the media data into the models.
  */
 class Repository extends ModelRepository
@@ -36,10 +37,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to access a list of media
      *
-     * @param $filter
-     * @param $orderBy
-     * @param $offset
-     * @param $limit
+     * @param array|null $filter
+     * @param array|null $orderBy
+     * @param int|null   $offset
+     * @param int|null   $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -58,13 +59,14 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getMediaListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $filter
-     * @param $orderBy
+     * @param array $filter
+     * @param array $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getMediaListQueryBuilder($filter, $orderBy)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select('media')
                 ->from(\Shopware\Models\Media\Media::class, 'media');
@@ -82,12 +84,12 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select the media of the passed album id.
      * Used for the backend media manager listing of the media.
      *
-     * @param      $albumId
-     * @param null $filter
-     * @param null $orderBy
-     * @param null $offset
-     * @param null $limit
-     * @param null $validTypes
+     * @param int                                                $albumId
+     * @param string|null                                        $filter
+     * @param array|string|\Doctrine\ORM\Query\Expr\OrderBy|null $orderBy
+     * @param int|null                                           $offset
+     * @param int|null                                           $limit
+     * @param array|null                                         $validTypes
      *
      * @return \Doctrine\ORM\Query
      */
@@ -106,10 +108,10 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getAlbumMediaQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param int  $albumId
-     * @param null $filter
-     * @param null $orderBy
-     * @param null $validTypes
+     * @param int                                          $albumId
+     * @param string|null                                  $filter
+     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $orderBy
+     * @param array|null                                   $validTypes
      *
      * @return \Doctrine\ORM\QueryBuilder
      */

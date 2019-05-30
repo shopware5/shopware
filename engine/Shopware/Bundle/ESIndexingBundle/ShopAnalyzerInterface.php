@@ -32,8 +32,6 @@ interface ShopAnalyzerInterface
      * @see https://www.elastic.co/guide/en/elasticsearch/guide/current/analysis-intro.html
      * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html
      *
-     * @param Shop $shop
-     *
      * @return string[]
      */
     public function get(Shop $shop);

@@ -27,25 +27,20 @@ namespace Shopware\Components\Emotion;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 
-class DeviceConfiguration
+class DeviceConfiguration implements DeviceConfigurationInterface
 {
     /**
      * @var Connection
      */
     private $connection;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }
 
     /**
-     * @param int $categoryId
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function get($categoryId)
     {
@@ -58,9 +53,11 @@ class DeviceConfiguration
             'emotion.fullscreen',
             'emotion.customer_stream_ids',
             'emotion.replacement',
+            'GROUP_CONCAT(shops.shop_id SEPARATOR \',\') as shopIds',
         ]);
 
         $query->from('s_emotion', 'emotion')
+            ->leftJoin('emotion', 's_emotion_shops', 'shops', 'shops.emotion_id = emotion.id')
             ->andWhere('emotion.active = 1')
             ->andWhere('emotion.is_landingpage = 0')
             ->andWhere('(emotion.valid_to   >= NOW() OR emotion.valid_to IS NULL)')
@@ -68,6 +65,7 @@ class DeviceConfiguration
             ->andWhere('emotion.preview_id IS NULL')
             ->addOrderBy('emotion.position', 'ASC')
             ->addOrderBy('emotion.id', 'ASC')
+            ->groupBy('emotion.id')
             ->setParameter(':categoryId', $categoryId);
 
         $query->innerJoin(
@@ -78,13 +76,14 @@ class DeviceConfiguration
              AND category.category_id = :categoryId'
         );
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         $emotions = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $emotions = array_map(function ($emotion) {
             $emotion['devicesArray'] = explode(',', $emotion['devices']);
+            $emotion['shopIds'] = array_filter(explode(',', $emotion['shopIds']));
 
             return $emotion;
         }, $emotions);
@@ -93,11 +92,7 @@ class DeviceConfiguration
     }
 
     /**
-     * @param $emotionId
-     *
-     * @throws \Exception
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getById($emotionId)
     {
@@ -113,18 +108,14 @@ class DeviceConfiguration
             ->where('emotion.id = :emotionId')
             ->setParameter(':emotionId', $emotionId);
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**
-     * @param $id
-     *
-     * @throws \Exception
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getLandingPage($id)
     {
@@ -149,11 +140,7 @@ class DeviceConfiguration
     }
 
     /**
-     * Get shops of landingpage by emotion id.
-     *
-     * @param $emotionId
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getLandingPageShops($emotionId)
     {
@@ -161,14 +148,14 @@ class DeviceConfiguration
 
         $query->setParameter(':id', $emotionId);
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     /**
-     * @param $id
+     * @param int $id
      *
      * @return array|null
      */
@@ -178,7 +165,7 @@ class DeviceConfiguration
             ->andWhere('emotion.id = :id')
             ->setParameter('id', $id);
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetch(\PDO::FETCH_ASSOC);
@@ -195,7 +182,7 @@ class DeviceConfiguration
             ->andWhere('emotion.parent_id = :id')
             ->setParameter(':id', $parentId);
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);

@@ -36,7 +36,7 @@ use Shopware\Components\Model\ModelEntity;
  *  - PRIMARY KEY (`id`)
  * </code>
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_core_states")
  */
 class Status extends ModelEntity
@@ -87,9 +87,9 @@ class Status extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Mail\Mail", mappedBy="status")
-     *
      * @var \Shopware\Models\Mail\Mail
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Mail\Mail", mappedBy="status")
      */
     protected $mail;
 
@@ -97,8 +97,7 @@ class Status extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Id()
      */
     private $id;
 
@@ -138,6 +137,14 @@ class Status extends ModelEntity
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**
@@ -239,7 +246,7 @@ class Status extends ModelEntity
     /**
      * @param \Shopware\Models\Mail\Mail|array|null $mail
      *
-     * @return \Shopware\Models\Mail\Mail
+     * @return Status
      */
     public function setMail($mail)
     {

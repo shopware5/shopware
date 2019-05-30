@@ -28,7 +28,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\CustomerStream\CustomerStreamRepositoryInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -40,9 +40,7 @@ class CustomerStreamReader extends GenericReader
     private $repository;
 
     /**
-     * @param string                                                            $entity
-     * @param ModelManager                                                      $entityManager
-     * @param \Shopware\Models\CustomerStream\CustomerStreamRepositoryInterface $repository
+     * @param string $entity
      */
     public function __construct($entity, ModelManager $entityManager, CustomerStreamRepositoryInterface $repository)
     {

@@ -10,7 +10,7 @@
         var value = '; ' + document.cookie,
             parts = value.split('; ' + name + '=');
 
-        if (parts.length == 2) {
+        if (parts.length === 2) {
             return parts.pop().split(';').shift();
         }
         return undefined;
@@ -36,6 +36,13 @@
          * Temporary request callback store
          */
         pendingRequests: {},
+
+        /**
+         * List of domains, where the csrf token will be send
+         */
+        allowedDomains: [
+            window.location.protocol + '//' + window.location.hostname
+        ],
 
         /**
          * Returns the token
@@ -97,6 +104,10 @@
                 formElement = $(formElement);
                 csrfInput = formElement.find('input[name="__csrf_token"]');
 
+                if (!CSRF.isLocalLink(formElement.attr('action'))) {
+                    return;
+                }
+
                 if (csrfInput.length > 0) {
                     csrfInput.val(me.getToken());
                 } else {
@@ -141,7 +152,7 @@
         _ajaxBeforeSend: function(event, request, settings) {
             settings = settings || {};
 
-            if (settings.hasOwnProperty('ignoreCSRFHeader') || settings.ignoreCSRFHeader === true) {
+            if (settings.hasOwnProperty('ignoreCSRFHeader') || settings.ignoreCSRFHeader === true || !this.isLocalLink(settings.url)) {
                 return;
             }
 
@@ -154,14 +165,16 @@
         requestToken: function() {
             var me = this;
 
-            $.ajax({
-                url: window.csrfConfig.generateUrl,
-                success: function(response, status, xhr) {
-                    me.saveToken(xhr.getResponseHeader('x-csrf-token'));
-                    $.publish('plugin/swCsrfProtection/requestToken', [ me, me.getToken() ]);
-                    me.afterInit();
-                }
-            });
+            if (window.StateManager.hasCookiesAllowed() || window.cookieRemoval === 1) {
+                $.ajax({
+                    url: window.csrfConfig.generateUrl,
+                    success: function(response, status, xhr) {
+                        me.saveToken(xhr.getResponseHeader('x-csrf-token'));
+                        $.publish('plugin/swCsrfProtection/requestToken', [ me, me.getToken() ]);
+                        me.afterInit();
+                    }
+                });
+            }
         },
 
         /**
@@ -199,6 +212,24 @@
             me.setupAjax();
 
             $.publish('plugin/swCsrfProtection/init', [ me ]);
+        },
+
+        /**
+         * @param {string} link
+         * @returns {boolean}
+         */
+        isLocalLink: function (link) {
+            if (link === undefined || link === null || link[0] === '/') {
+                return true;
+            }
+
+            for (var index in this.allowedDomains) {
+                if (link.indexOf(this.allowedDomains[index]) === 0) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
     };

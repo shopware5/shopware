@@ -23,7 +23,7 @@
  */
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -50,6 +50,6 @@ class ConfigTest extends Enlight_Components_Test_TestCase
         $adapter->write($config);
 
         // Section should not be modified
-        $this->assertEquals('1:1', $config->getSection());
+        static::assertEquals('1:1', $config->getSection());
     }
 }

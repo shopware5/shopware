@@ -72,9 +72,9 @@ class CustomerStreamTest extends \Enlight_Components_Test_TestCase
 
         $stream = $this->resource->create($data);
 
-        $this->assertInstanceOf(CustomerStreamEntity::class, $stream);
-        $this->assertNotNull($stream->getId());
-        $this->assertTrue($stream->isStatic());
+        static::assertInstanceOf(CustomerStreamEntity::class, $stream);
+        static::assertNotNull($stream->getId());
+        static::assertTrue($stream->isStatic());
 
         $ids = $this->connection->fetchAll(
             'SELECT customer_id FROM s_customer_streams_mapping WHERE stream_id = :streamId',
@@ -83,6 +83,6 @@ class CustomerStreamTest extends \Enlight_Components_Test_TestCase
 
         $ids = array_column($ids, 'customer_id');
 
-        $this->assertEquals([1], $ids);
+        static::assertEquals([1], $ids);
     }
 }

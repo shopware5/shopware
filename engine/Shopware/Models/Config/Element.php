@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Table(name="s_core_config_elements")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Element extends ModelEntity
 {
@@ -40,94 +40,104 @@ class Element extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Config\ElementTranslation", mappedBy="element", cascade={"all"})
+     * @var ArrayCollection<ElementTranslation>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Config\ElementTranslation", mappedBy="element", cascade={"all"})
      */
     protected $translations;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="value", type="object", nullable=true)
      */
     private $value;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="description", type="string", nullable=true)
      */
     private $description;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="label", type="string", nullable=true)
      */
     private $label;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="type", type="string", nullable=true)
      */
     private $type;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="required", type="boolean")
      */
     private $required = false;
 
     /**
-     * @var string
+     * @var int
+     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="scope", type="integer", nullable=false)
      */
     private $scope = 0;
 
     /**
      * @var array
+     *
      * @ORM\Column(name="options", type="array")
      */
     private $options;
 
     /**
      * @var Form
+     *
      * @ORM\ManyToOne(targetEntity="Form", inversedBy="elements")
      * @ORM\JoinColumn(name="form_id", referencedColumnName="id")
      */
     private $form;
 
     /**
-     * @var Value[]
+     * @var ArrayCollection<Value>
+     *
      * @ORM\OneToMany(targetEntity="Value", mappedBy="element", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="element_id")
      */
     private $values;
 
     /**
-     * Class constructor.
-     *
-     * @param $type
-     * @param $name
-     * @param array $options
+     * @param string     $type
+     * @param string     $name
+     * @param array|null $options
      */
     public function __construct($type, $name, $options = null)
     {
@@ -175,8 +185,6 @@ class Element extends ModelEntity
     /**
      * Set value
      *
-     * @param mixed $value
-     *
      * @return Element
      */
     public function setValue($value)
@@ -188,8 +196,6 @@ class Element extends ModelEntity
 
     /**
      * Get value
-     *
-     * @return mixed
      */
     public function getValue()
     {
@@ -260,9 +266,6 @@ class Element extends ModelEntity
         return $this->form;
     }
 
-    /**
-     * @param array $options
-     */
     public function setOptions(array $options)
     {
         $fields = ['label', 'value', 'description', 'required', 'scope', 'position'];
@@ -286,7 +289,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param string $position
+     * @param int $position
      *
      * @return Element
      */
@@ -298,7 +301,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getPosition()
     {
@@ -366,7 +369,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param Value[] $values
+     * @param ArrayCollection<Value> $values
      *
      * @return Element
      */
@@ -378,7 +381,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return Value[]
+     * @return ArrayCollection<Value>
      */
     public function getValues()
     {
@@ -386,7 +389,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection<ElementTranslation>
      */
     public function getTranslations()
     {
@@ -394,7 +397,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $translations
+     * @param ArrayCollection<ElementTranslation> $translations
      */
     public function setTranslations($translations)
     {
@@ -402,9 +405,9 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Config\ElementTranslation $translation
+     * @param ElementTranslation $translation
      *
-     * @return \Shopware\Models\Config\Element
+     * @return Element
      */
     public function addTranslation($translation)
     {

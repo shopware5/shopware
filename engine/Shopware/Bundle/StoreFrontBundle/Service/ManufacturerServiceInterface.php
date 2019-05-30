@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -39,9 +39,6 @@ interface ManufacturerServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ManufacturerGatewayInterface::get()
      *
-     * @param array                       $ids
-     * @param Struct\ShopContextInterface $context
-     *
      * @return Struct\Product\Manufacturer[] Indexed by the manufacturer id
      */
     public function getList(array $ids, Struct\ShopContextInterface $context);
@@ -52,8 +49,7 @@ interface ManufacturerServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ManufacturerGatewayInterface::get()
      *
-     * @param $id
-     * @param Struct\ShopContextInterface $context
+     * @param int $id
      *
      * @return Struct\Product\Manufacturer
      */

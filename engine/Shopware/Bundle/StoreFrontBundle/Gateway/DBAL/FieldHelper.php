@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\CacheInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -54,10 +54,6 @@ class FieldHelper
      */
     private $cache;
 
-    /**
-     * @param Connection     $connection
-     * @param CacheInterface $cache
-     */
     public function __construct(Connection $connection, CacheInterface $cache)
     {
         $this->connection = $connection;
@@ -102,7 +98,7 @@ class FieldHelper
     /**
      * Defines which s_articles fields should be selected.
      *
-     * @return array
+     * @return string[]
      */
     public function getArticleFields()
     {
@@ -143,7 +139,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getTopSellerFields()
     {
@@ -155,7 +151,7 @@ class FieldHelper
     /**
      * Defines which s_articles_details fields should be selected.
      *
-     * @return array
+     * @return string[]
      */
     public function getVariantFields()
     {
@@ -184,7 +180,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getEsdFields()
     {
@@ -210,7 +206,7 @@ class FieldHelper
     /**
      * Defines which s_core_tax fields should be selected
      *
-     * @return array
+     * @return string[]
      */
     public function getTaxFields()
     {
@@ -224,7 +220,7 @@ class FieldHelper
     /**
      * Defines which s_core_pricegroups fields should be selected
      *
-     * @return array
+     * @return string[]
      */
     public function getPriceGroupFields()
     {
@@ -237,7 +233,7 @@ class FieldHelper
     /**
      * Defines which s_articles_suppliers fields should be selected
      *
-     * @return array
+     * @return string[]
      */
     public function getManufacturerFields()
     {
@@ -261,7 +257,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getCategoryFields()
     {
@@ -296,7 +292,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getPriceFields()
     {
@@ -321,7 +317,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getUnitFields()
     {
@@ -339,7 +335,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getConfiguratorSetFields()
     {
@@ -351,7 +347,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getConfiguratorGroupFields()
     {
@@ -371,7 +367,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getConfiguratorOptionFields()
     {
@@ -390,7 +386,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getAreaFields()
     {
@@ -402,7 +398,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getCountryFields()
     {
@@ -421,6 +417,7 @@ class FieldHelper
             'country.iso3 as __country_iso3',
             'country.display_state_in_registration as __country_display_state_in_registration',
             'country.force_state_in_registration as __country_force_state_in_registration',
+            'country.allow_shipping as __country_allow_shipping',
         ];
 
         $fields = array_merge(
@@ -432,7 +429,7 @@ class FieldHelper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getStateFields()
     {
@@ -488,7 +485,7 @@ class FieldHelper
             'download.articleID as __download_articleID',
             'download.description as __download_description',
             'download.filename as __download_filename',
-            'download.size as __download_size',
+            'media.file_size as __download_size',
         ];
 
         $fields = array_merge(
@@ -551,7 +548,7 @@ class FieldHelper
      * Returns an array with all required media fields for a full media selection.
      * Requires that the s_media table is included with table alias 'media'
      *
-     * @return array
+     * @return string[]
      */
     public function getMediaFields()
     {
@@ -686,9 +683,12 @@ class FieldHelper
         ];
     }
 
+    /**
+     * @return string[]
+     */
     public function getShopFields()
     {
-        return [
+        $fields = [
             'shop.id as __shop_id',
             'shop.main_id as __shop_main_id',
             'shop.name as __shop_name',
@@ -710,8 +710,18 @@ class FieldHelper
             'shop.default as __shop_default',
             'shop.active as __shop_active',
         ];
+
+        $fields = array_merge(
+            $fields,
+            $this->getTableFields('s_core_shops_attributes', 'shopAttribute')
+        );
+
+        return $fields;
     }
 
+    /**
+     * @return string[]
+     */
     public function getCurrencyFields()
     {
         return [
@@ -726,6 +736,9 @@ class FieldHelper
         ];
     }
 
+    /**
+     * @return string[]
+     */
     public function getTemplateFields()
     {
         return [
@@ -744,6 +757,9 @@ class FieldHelper
         ];
     }
 
+    /**
+     * @return string[]
+     */
     public function getLocaleFields()
     {
         return [
@@ -758,7 +774,7 @@ class FieldHelper
      * Returns an array with all required related product stream fields.
      * Requires that the s_product_streams table is included with table alias 'stream'
      *
-     * @return array
+     * @return string[]
      */
     public function getRelatedProductStreamFields()
     {
@@ -781,7 +797,7 @@ class FieldHelper
      * Returns an array with all required shop page fields.
      * Requires that the s_cms_static table is included with table alias 'page'
      *
-     * @return array
+     * @return string[]
      */
     public function getShopPageFields()
     {
@@ -805,6 +821,7 @@ class FieldHelper
             'page.meta_description as __page_meta_description',
             'page.changed as __page_changed',
             'page.shop_ids as __page_shop_ids',
+            '(SELECT COUNT(*) FROM s_cms_static WHERE parentID = page.id) as __page_children_count',
         ];
 
         $fields = array_merge(
@@ -819,7 +836,7 @@ class FieldHelper
      * Returns an array with all required emotion fields.
      * Requires that the s_emotion table is included with table alias 'emotion'
      *
-     * @return array
+     * @return string[]
      */
     public function getEmotionFields()
     {
@@ -864,7 +881,7 @@ class FieldHelper
      * Returns an array with all required emotion fields.
      * Requires that the s_emotion_templates table is included with table alias 'emotionTemplate'
      *
-     * @return array
+     * @return string[]
      */
     public function getEmotionTemplateFields()
     {
@@ -881,7 +898,7 @@ class FieldHelper
      * Returns an array with all required emotion element fields.
      * Requires that the s_emotion_element table is included with table alias 'emotionElement'
      *
-     * @return array
+     * @return string[]
      */
     public function getEmotionElementFields()
     {
@@ -903,7 +920,7 @@ class FieldHelper
      * Returns an array with all required emotion element value fields.
      * Requires that the s_emotion_element_value table is included with table alias 'emotionElementValue'
      *
-     * @return array
+     * @return string[]
      */
     public function getEmotionElementValueFields()
     {
@@ -923,7 +940,7 @@ class FieldHelper
      * Returns an array with all required emotion component fields.
      * Requires that the s_library_component table is included with table alias 'emotionLibraryComponent'
      *
-     * @return array
+     * @return string[]
      */
     public function getEmotionElementLibraryFields()
     {
@@ -945,7 +962,7 @@ class FieldHelper
      * Returns an array with all required emotion component settings fields.
      * Requires that the s_library_component_fields table is included with table alias 'emotionLibraryComponentField'
      *
-     * @return array
+     * @return string[]
      */
     public function getEmotionElementLibraryFieldFields()
     {
@@ -975,7 +992,7 @@ class FieldHelper
      * Returns an array with all required emotion element viewport fields.
      * Requires that the s_emotion_element_viewport table is included with table alias 'emotionElementViewport'
      *
-     * @return array
+     * @return string[]
      */
     public function getEmotionElementViewportFields()
     {
@@ -1059,12 +1076,10 @@ class FieldHelper
     /**
      * Joins the translation table and selects the objectdata for the provided join conditions
      *
-     * @param string               $fromPart        Table which uses as from part
-     * @param string               $joinCondition   Join condition for the objectkey column
-     * @param string               $translationType Type of the translation
-     * @param string               $selectName      Name of the additional selection
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
+     * @param string      $fromPart        Table which uses as from part
+     * @param string      $translationType Type of the translation
+     * @param string|null $joinCondition   Join condition for the objectkey column
+     * @param string|null $selectName      Name of the additional selection
      */
     public function addTranslation(
         $fromPart,
@@ -1107,195 +1122,111 @@ class FieldHelper
         }
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addCountryTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
-        $this->addTranslation('country', 'config_countries', $query, $context, 1);
+        $this->addTranslation('country', 'config_countries', $query, $context, '1');
         $this->addTranslation('countryAttribute', 's_core_countries_attributes', $query, $context, 'country.id');
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addCountryStateTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
-        $this->addTranslation('countryState', 'config_country_states', $query, $context, 1);
+        $this->addTranslation('countryState', 'config_country_states', $query, $context, '1');
         $this->addTranslation('countryStateAttribute', 's_core_countries_states_attributes', $query, $context, 'countryStateAttribute.stateID');
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addMediaTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('mediaAttribute', 's_media_attributes', $query, $context, 'mediaAttribute.mediaID');
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addUnitTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
-        $this->addTranslation('unit', 'config_units', $query, $context, 1);
+        $this->addTranslation('unit', 'config_units', $query, $context, '1');
     }
 
-    /**
-     * @param QueryBuilder         $queryBuilder
-     * @param ShopContextInterface $context
-     */
     public function addEsdTranslation(QueryBuilder $queryBuilder, ShopContextInterface $context)
     {
         $this->addTranslation('esdAttribute', 's_articles_esd_attributes', $queryBuilder, $context, 'esd.id');
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addConfiguratorGroupTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('configuratorGroup', 'configuratorgroup', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addConfiguratorOptionTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('configuratorOption', 'configuratoroption', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addDownloadTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('downloadAttribute', 's_articles_downloads_attributes', $query, $context, 'download.id');
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addLinkTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('linkAttribute', 's_articles_information_attributes', $query, $context, 'link.id');
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addProductTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('product', 'article', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addVariantTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('variant', 'variant', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addPriceTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('priceAttribute', 's_articles_prices_attributes', $query, $context, 'price.id');
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addManufacturerTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('manufacturer', 'supplier', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addImageTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('image', 'articleimage', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addPropertySetTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('propertySet', 'propertygroup', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addPropertyGroupTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('propertyGroup', 'propertyoption', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addPropertyOptionTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('propertyOption', 'propertyvalue', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addProductStreamTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('stream', 'productStream', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addCategoryMainDataTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('category', 'category', $query, $context);
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addEmotionElementTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('emotionElementValue', 'emotionElement', $query, $context, 'emotionElementValue.elementID');
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addCustomSortingTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
-        $this->addTranslation('customSorting', 'custom_sorting', $query, $context, 1);
+        $this->addTranslation('customSorting', 'custom_sorting', $query, $context, '1');
     }
 
     /**
@@ -1304,7 +1235,7 @@ class FieldHelper
      */
     public function addCustomFacetTranslation($query, $context)
     {
-        $this->addTranslation('customFacet', 'custom_facet', $query, $context, 1);
+        $this->addTranslation('customFacet', 'custom_facet', $query, $context, '1');
     }
 
     public function addCategoryTranslation(QueryBuilder $query, ShopContextInterface $context)
@@ -1312,15 +1243,20 @@ class FieldHelper
         $this->addTranslation('categoryAttribute', 's_categories_attributes', $query, $context, 'category.id');
     }
 
-    /**
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     */
     public function addShopPageTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('page', 'page', $query, $context);
     }
 
+    public function addPaymentTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('payment', 'config_payment', $query, $context, '1');
+        $this->addTranslation('paymentAttribute', 's_core_paymentmeans_attributes', $query, $context, 'paymentAttribute.paymentmeanID');
+    }
+
+    /**
+     * @return string[]
+     */
     public function getCustomerFields()
     {
         $fields = [
@@ -1363,6 +1299,12 @@ class FieldHelper
         );
     }
 
+    /**
+     * Returns an array with all required payment fields.
+     * Requires that the s_core_paymentmeans table is included with table alias 'payment'
+     *
+     * @return string[]
+     */
     public function getPaymentFields()
     {
         $fields = [
@@ -1423,13 +1365,12 @@ class FieldHelper
     }
 
     /**
-     * @param string       $fromPart        Table which uses as from part
-     * @param string       $joinCondition   Join condition for the objectkey column
-     * @param string       $translationType Type of the translation
-     * @param string       $selectName      Name of the additional selection
-     * @param QueryBuilder $query
-     * @param int          $shopId
-     * @param string       $suffix
+     * @param string $fromPart        Table which uses as from part
+     * @param string $joinCondition   Join condition for the objectkey column
+     * @param string $translationType Type of the translation
+     * @param string $selectName      Name of the additional selection
+     * @param int    $shopId
+     * @param string $suffix
      */
     private function addTranslationWithSuffix(
         $fromPart,

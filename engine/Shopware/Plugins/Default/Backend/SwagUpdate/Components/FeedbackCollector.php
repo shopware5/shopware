@@ -28,7 +28,7 @@ use Shopware\Components\OpenSSLEncryption;
 use Shopware\Components\ShopwareReleaseStruct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -55,10 +55,8 @@ class FeedbackCollector
     private $release;
 
     /**
-     * @param string                $apiEndpoint
-     * @param OpenSSLEncryption     $encryption
-     * @param string                $uniqueId
-     * @param ShopwareReleaseStruct $release
+     * @param string $apiEndpoint
+     * @param string $uniqueId
      */
     public function __construct($apiEndpoint, OpenSSLEncryption $encryption, $uniqueId, ShopwareReleaseStruct $release)
     {
@@ -79,8 +77,6 @@ class FeedbackCollector
     }
 
     /**
-     * @param array $data
-     *
      * @return \Zend_Http_Response
      */
     private function submitData(array $data)
@@ -129,9 +125,9 @@ class FeedbackCollector
         $data = [
             'unique' => $this->uniqueId,
             'data' => [
-                'phpversion' => phpversion(),
+                'phpversion' => PHP_VERSION,
                 'phpversion_id' => PHP_VERSION_ID,
-                'os' => php_uname('s'),
+                'os' => PHP_OS,
                 'arch' => php_uname('m'),
                 'dist' => php_uname('r'),
                 'sapi' => PHP_SAPI,

@@ -39,15 +39,15 @@ use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatcher
 {
     /**
-     * @var string Current directory of the controller.
-     *             Will be set in the getControllerClass method or in the getControllerPath method.
+     * @var string current directory of the controller.
+     *             Will be set in the getControllerClass method or in the getControllerPath method
      */
     protected $curDirectory;
 
     /**
-     * @var string Contains the current module.
+     * @var string contains the current module.
      *             Will be set in the getControllerClass method or in the getControllerPath method.
-     *             If the property is set by the getControllerPath method, the string is formatted.
+     *             If the property is set by the getControllerPath method, the string is formatted
      */
     protected $curModule;
 
@@ -84,20 +84,27 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     protected $frontController;
 
     /**
-     * @var string contains the path delimiter character used to format action, controller and module names
-     */
-    protected $pathDelimiter = '_';
-
-    /**
-     * @var array contains the word delimiter characters used to format action, controller and module names
-     */
-    protected $wordDelimiter = ['-', '.'];
-
-    /**
      * @var array Contains all added controller directories. Used to get the controller
      *            directory of a module
      */
     protected $controllerDirectory = [];
+
+    /**
+     * @var \Shopware\Components\DispatchFormatHelper
+     */
+    protected $dispatchFormatHelper;
+
+    /**
+     * @return \Shopware\Components\DispatchFormatHelper
+     */
+    public function getDispatchFormatHelper()
+    {
+        if ($this->dispatchFormatHelper === null) {
+            $this->dispatchFormatHelper = Shopware()->Container()->get('shopware.components.dispatch_format_helper');
+        }
+
+        return $this->dispatchFormatHelper;
+    }
 
     /**
      * Adds a controller directory. If no module is given, the default module will be used.
@@ -169,7 +176,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     /**
      * Removes the controller directory for the given module.
      *
-     * @param $module
+     * @param string $module
      *
      * @return bool
      */
@@ -188,7 +195,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     /**
      * Adds the given path to the module directory
      *
-     * @param $path
+     * @param string $path
      *
      * @throws Enlight_Controller_Exception
      *
@@ -210,7 +217,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
             $module = $file->getFilename();
 
             // Don't use SCCS directories as modules
-            if (preg_match('/^[^a-z]/i', $module) || ('CVS' == $module)) {
+            if (preg_match('/^[^a-z]/i', $module) || ($module == 'CVS')) {
                 continue;
             }
 
@@ -224,43 +231,49 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     /**
      * Returns the formatted controller name. Removes all '_' .
      *
-     * @param $unFormatted
+     * @param string $unFormatted
      *
      * @return mixed
      */
     public function formatControllerName($unFormatted)
     {
-        return str_replace('_', '', $this->formatName($unFormatted));
+        $dispatchFormatHelper = $this->getDispatchFormatHelper();
+
+        return str_replace('_', '', $dispatchFormatHelper->formatNameForDispatch($unFormatted));
     }
 
     /**
      * Returns the formatted action name. Removes all '_' .
      *
-     * @param $unFormatted
+     * @param string $unFormatted
      *
      * @return mixed
      */
     public function formatActionName($unFormatted)
     {
-        return str_replace('_', '', $this->formatName($unFormatted));
+        $dispatchFormatHelper = $this->getDispatchFormatHelper();
+
+        return str_replace('_', '', $dispatchFormatHelper->formatNameForDispatch($unFormatted));
     }
 
     /**
      * Returns the formatted module name. Upper case the first character of the module name.
      *
-     * @param $unFormatted
+     * @param string $unFormatted
      *
      * @return string
      */
     public function formatModuleName($unFormatted)
     {
-        return ucfirst($this->formatName($unFormatted));
+        $dispatchFormatHelper = $this->getDispatchFormatHelper();
+
+        return ucfirst($dispatchFormatHelper->formatNameForDispatch($unFormatted));
     }
 
     /**
      * Sets the default controller name.
      *
-     * @param $controller
+     * @param string $controller
      *
      * @return Enlight_Controller_Dispatcher_Default
      */
@@ -284,7 +297,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     /**
      * Sets the default action name.
      *
-     * @param $action
+     * @param string $action
      *
      * @return Enlight_Controller_Dispatcher_Default
      */
@@ -308,7 +321,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     /**
      * Sets the default module name.
      *
-     * @param $module
+     * @param string $module
      *
      * @return Enlight_Controller_Dispatcher_Default
      */
@@ -371,6 +384,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         $controllerName = $request->getControllerName();
         $controllerName = $this->formatControllerName($controllerName);
         $moduleName = $this->formatModuleName($this->curModule);
+
         if ($event = Shopware()->Events()->notifyUntil(
                 'Enlight_Controller_Dispatcher_ControllerPath_' . $moduleName . '_' . $controllerName,
                 ['subject' => $this, 'request' => $request]
@@ -470,7 +484,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     /**
      * Checks if a controller directory exists for the given module.
      *
-     * @param $module
+     * @param string $module
      *
      * @return bool
      */
@@ -505,7 +519,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 
         if (!$this->isDispatchable($request)) {
             throw new Enlight_Controller_Exception(
-                'Controller "' . $request->getControllerName() . '" not found',
+                'Controller "' . $request->getControllerName() . '" not found for request url ' . $request->getScheme() . '://' . $request->getHttpHost() . $request->getRequestUri(),
                 Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found
             );
         }
@@ -526,7 +540,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 
         $proxy = Shopware()->Hooks()->getProxy($class);
 
-        /** @var $controller Enlight_Controller_Action */
+        /** @var Enlight_Controller_Action $controller */
         $controller = new $proxy($request, $response);
         $controller->setFront($this->Front());
 
@@ -562,31 +576,5 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
             $content = ob_get_clean();
             $response->appendBody($content);
         }
-    }
-
-    /**
-     * Internal helper function to format action, controller and module names.
-     *
-     * @param      $unFormatted
-     * @param bool $isAction
-     *
-     * @return string
-     */
-    protected function formatName($unFormatted, $isAction = false)
-    {
-        if (!$isAction) {
-            $segments = explode($this->pathDelimiter, $unFormatted);
-        } else {
-            $segments = (array) $unFormatted;
-        }
-
-        foreach ($segments as $key => $segment) {
-            $segment = preg_replace('#[A-Z]#', ' $0', $segment);
-            $segment = str_replace($this->wordDelimiter, ' ', strtolower($segment));
-            $segment = preg_replace('/[^a-z0-9 ]/', '', $segment);
-            $segments[$key] = str_replace(' ', '', ucwords($segment));
-        }
-
-        return implode('_', $segments);
     }
 }

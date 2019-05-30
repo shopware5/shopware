@@ -25,13 +25,13 @@
 namespace Shopware\Components\Log\Handler;
 
 use Enlight_Controller_Request_Request as Request;
-use Enlight_Controller_Response_Response as Response;
+use Enlight_Controller_Response_ResponseHttp as Response;
 use Monolog\Handler\ChromePHPHandler as BaseChromePhpHandler;
 
 /**
  * ChromePhpHandler.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -43,14 +43,10 @@ class ChromePhpHandler extends BaseChromePhpHandler
     private $headers = [];
 
     /**
-     * @var \Enlight_Controller_Response_ResponseHttp
+     * @var \Enlight_Controller_Response_ResponseHttp|null
      */
     private $response;
 
-    /**
-     * @param Request  $request
-     * @param Response $response
-     */
     public function setUp(Request $request, Response $response)
     {
         if (!$this->acceptsRequest($request)) {
@@ -80,8 +76,6 @@ class ChromePhpHandler extends BaseChromePhpHandler
     }
 
     /**
-     * @param Request $request
-     *
      * @return bool
      */
     public function acceptsRequest(Request $request)

@@ -21,12 +21,13 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\DependencyInjection\Container;
 
 /**
  * Shopware Application
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -60,9 +61,6 @@ class Shopware extends Enlight_Application
      */
     protected $container;
 
-    /**
-     * @param Container $container
-     */
     public function __construct(Container $container)
     {
         // Initialize global Shopware function
@@ -83,8 +81,6 @@ class Shopware extends Enlight_Application
      *
      * @throws Enlight_Exception
      *
-     * @return mixed
-     *
      * @deprecated 4.2
      */
     public function __call($name, $value = null)
@@ -96,7 +92,7 @@ class Shopware extends Enlight_Application
 
         if (!$this->container->has($name)) {
             throw new Enlight_Exception(
-                'Method "' . get_class($this) . '::' . $name . '" not found failure',
+                sprintf('Method "%s::%s" not found failure', get_class($this), $name),
                 Enlight_Exception::METHOD_NOT_FOUND
             );
         }
@@ -147,7 +143,7 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * Returns document path: <projectroot>/
+     * Returns document path: <project root>/
      *
      * @param string $path
      *
@@ -159,7 +155,7 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * Returns the application path: <projectroot>/engine/Shopware/
+     * Returns the application path: <project root>/engine/Shopware/
      *
      * @param string $path
      *
@@ -211,7 +207,7 @@ class Shopware extends Enlight_Application
     /**
      * Returns front controller instance
      *
-     * @return Enlight_Controller_Front
+     * @return Enlight_Controller_Front|null
      */
     public function Front()
     {
@@ -219,7 +215,7 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * @return Enlight_Template_Manager
+     * @return Enlight_Template_Manager|null
      */
     public function Template()
     {
@@ -227,7 +223,7 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * @return Shopware_Components_Config
+     * @return Shopware_Components_Config|null
      */
     public function Config()
     {
@@ -237,7 +233,7 @@ class Shopware extends Enlight_Application
     /**
      * Returns access layer to deprecated shopware frontend objects
      *
-     * @return Shopware_Components_Modules
+     * @return Shopware_Components_Modules|null
      */
     public function Modules()
     {
@@ -245,7 +241,7 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * @return \Shopware\Models\Shop\DetachedShop
+     * @return \Shopware\Models\Shop\DetachedShop|null
      */
     public function Shop()
     {
@@ -255,7 +251,7 @@ class Shopware extends Enlight_Application
     /**
      * Returns database instance
      *
-     * @return Enlight_Components_Db_Adapter_Pdo_Mysql
+     * @return Enlight_Components_Db_Adapter_Pdo_Mysql|null
      */
     public function Db()
     {
@@ -263,7 +259,7 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * @return Shopware\Components\Model\ModelManager
+     * @return Shopware\Components\Model\ModelManager|null
      */
     public function Models()
     {
@@ -271,7 +267,7 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * @return Enlight_Components_Session_Namespace
+     * @return Enlight_Components_Session_Namespace|null
      */
     public function Session()
     {
@@ -279,7 +275,7 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * @return Enlight_Components_Session_Namespace
+     * @return Enlight_Components_Session_Namespace|null
      */
     public function BackendSession()
     {
@@ -287,7 +283,7 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * @return Shopware_Components_Acl
+     * @return Shopware_Components_Acl|null
      */
     public function Acl()
     {
@@ -295,7 +291,7 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * @return Shopware_Components_TemplateMail
+     * @return Shopware_Components_TemplateMail|null
      */
     public function TemplateMail()
     {
@@ -303,7 +299,7 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * @return Enlight_Plugin_PluginManager
+     * @return Enlight_Plugin_PluginManager|null
      */
     public function Plugins()
     {
@@ -311,7 +307,7 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * @return Shopware_Components_Snippet_Manager
+     * @return Shopware_Components_Snippet_Manager|null
      */
     public function Snippets()
     {
@@ -319,7 +315,7 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * @return \Shopware\Components\Password\Manager
+     * @return \Shopware\Components\Password\Manager|null
      */
     public function PasswordEncoder()
     {
@@ -327,7 +323,7 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * @return Enlight_Event_EventManager
+     * @return Enlight_Event_EventManager|null
      */
     public function Events()
     {
@@ -342,8 +338,6 @@ class Shopware extends Enlight_Application
      * otherwise the function throws an exception.
      *
      * @deprecated since 5.2, to be removed in 6.0
-     *
-     * @param Enlight_Event_EventManager $manager
      */
     public function setEventManager(Enlight_Event_EventManager $manager)
     {

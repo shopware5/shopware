@@ -23,7 +23,6 @@
      *     <button>In den Warenkorb</button>
      * </form>
      *
-     *
      * You can either add an article by giving a specific url to the property "addArticleUrl" (First example)
      * or you can add hidden input fields to the element with name "sAdd" and "sQuantity" (Second example).
      *

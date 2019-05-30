@@ -24,12 +24,12 @@ Feature: Search things
 
     @javascript @noinfinitescrolling
     Scenario: Search with special uri characters
-        When I search for "20% alle"
-        Then I should see "Zu \"20% alle\" wurden 14 Artikel gefunden!"
+        When I search for "101% alle"
+        Then I should see "Zu \"101% alle\" wurden 74 Artikel gefunden!"
         But  I should see 12 elements of type "ArticleBox"
-        When I browse to next page
+        When I browse to next page 6 times
         Then I should see 2 elements of type "ArticleBox"
-        But  I should see "Zu \"20% alle\" wurden 14 Artikel gefunden!"
+        But  I should see "Zu \"101% alle\" wurden 74 Artikel gefunden!"
 
     Scenario: Search with no hits
         When I search for "foo"

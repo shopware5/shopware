@@ -22,11 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Country;
+namespace Shopware\Models\Country;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\Country as CountryAttribute;
 
 /**
  * Shopware country model represents a single country.
@@ -43,7 +44,7 @@ use Shopware\Components\Model\ModelEntity;
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_core_countries")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Country extends ModelEntity
 {
@@ -52,7 +53,8 @@ class Country extends ModelEntity
      * The area property is the owning side of the association between area and countries.
      * The association is joined over the area id field and the areaID field of the country.
      *
-     * @var \Shopware\Models\Country\Area
+     * @var Area
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Country\Area", inversedBy="countries")
      * @ORM\JoinColumn(name="areaID", referencedColumnName="id")
      */
@@ -63,25 +65,26 @@ class Country extends ModelEntity
      * The countries property is the inverse side of the association between area and countries.
      * The association is joined over the area id field and the areaID field of the country.
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Country\State", mappedBy="country", orphanRemoval=true, cascade={"persist"})
+     * @var ArrayCollection
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Country\State", mappedBy="country", orphanRemoval=true, cascade={"persist"})
      */
     protected $states;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Country", mappedBy="country", orphanRemoval=true, cascade={"persist"})
+     * @var CountryAttribute
      *
-     * @var \Shopware\Models\Attribute\Country
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Country", mappedBy="country", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -157,31 +160,40 @@ class Country extends ModelEntity
     private $iso3;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="display_state_in_registration", type="boolean", nullable=false)
      */
     private $displayStateInRegistration = false;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="force_state_in_registration", type="boolean", nullable=false)
      */
     private $forceStateInRegistration = false;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var bool
+     *
+     * @ORM\Column(name="allow_shipping", type="boolean", nullable=false)
+     */
+    private $allowShipping = true;
+
+    /**
+     * @var ArrayCollection
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Payment\Payment", mappedBy="countries")
      * @ORM\JoinTable(name="s_core_paymentmeans_countries",
-     *      joinColumns={@ORM\JoinColumn(name="countryID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="paymentID", referencedColumnName="id")}
+     *     joinColumns={@ORM\JoinColumn(name="countryID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="paymentID", referencedColumnName="id")}
      * )
      */
     private $payments;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="areaID", type="integer", nullable=false)
      */
     private $areaId;
@@ -253,7 +265,7 @@ class Country extends ModelEntity
     /**
      * Set en
      *
-     * @param $isoName
+     * @param string $isoName
      *
      * @return Country
      */
@@ -443,7 +455,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Country
+     * @return CountryAttribute
      */
     public function getAttribute()
     {
@@ -451,17 +463,17 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\Country|array|null $attribute
+     * @param CountryAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Country
+     * @return Country
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Country', 'attribute', 'country');
+        return $this->setOneToOne($attribute, CountryAttribute::class, 'attribute', 'country');
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getStates()
     {
@@ -469,20 +481,20 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $states
+     * @param State[]|null $states
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Country
      */
     public function setStates($states)
     {
-        return $this->setOneToMany($states, '\Shopware\Models\Country\State', 'states', 'country');
+        return $this->setOneToMany($states, State::class, 'states', 'country');
     }
 
     /**
      * OWNING SIDE
      * of the association between countries and area
      *
-     * @return \Shopware\Models\Country\Area
+     * @return Area|null
      */
     public function getArea()
     {
@@ -490,9 +502,9 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Country\Area|array|null $area
+     * @param Area|array|null $area
      *
-     * @return \Shopware\Models\Country\Country
+     * @return Country
      */
     public function setArea($area)
     {
@@ -502,7 +514,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getPayments()
     {
@@ -510,7 +522,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $payments
+     * @param ArrayCollection $payments
      *
      * @return Country
      */
@@ -522,7 +534,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param int $displayStateInRegistration
+     * @param bool $displayStateInRegistration
      */
     public function setDisplayStateInRegistration($displayStateInRegistration)
     {
@@ -530,7 +542,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return bool
      */
     public function getDisplayStateInRegistration()
     {
@@ -551,5 +563,21 @@ class Country extends ModelEntity
     public function getForceStateInRegistration()
     {
         return $this->forceStateInRegistration;
+    }
+
+    /**
+     * @param bool $allowShipping
+     */
+    public function setAllowShipping($allowShipping)
+    {
+        $this->allowShipping = $allowShipping;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAllowShipping()
+    {
+        return $this->allowShipping;
     }
 }

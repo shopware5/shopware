@@ -32,13 +32,13 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\PriceGroupDiscountGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\TaxGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Models;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -52,7 +52,7 @@ class ContextService implements ContextServiceInterface
     private $container;
 
     /**
-     * @var ProductContextInterface
+     * @var ShopContextInterface
      */
     private $context = null;
 
@@ -86,15 +86,6 @@ class ContextService implements ContextServiceInterface
      */
     private $countryGateway;
 
-    /**
-     * @param ContainerInterface                 $container
-     * @param CustomerGroupGatewayInterface      $customerGroupGateway
-     * @param TaxGatewayInterface                $taxGateway
-     * @param CountryGatewayInterface            $countryGateway
-     * @param PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway
-     * @param ShopGatewayInterface               $shopGateway
-     * @param CurrencyGatewayInterface           $currencyGateway
-     */
     public function __construct(
         ContainerInterface $container,
         CustomerGroupGatewayInterface $customerGroupGateway,
@@ -221,12 +212,12 @@ class ContextService implements ContextServiceInterface
      */
     private function getStoreFrontBaseUrl()
     {
-        /** @var $config \Shopware_Components_Config */
+        /** @var \Shopware_Components_Config $config */
         $config = $this->container->get('config');
 
         $request = null;
         if ($this->container->initialized('front')) {
-            /** @var $front \Enlight_Controller_Front */
+            /** @var \Enlight_Controller_Front $front */
             $front = $this->container->get('front');
             $request = $front->Request();
         }
@@ -243,7 +234,7 @@ class ContextService implements ContextServiceInterface
      */
     private function getStoreFrontShopId()
     {
-        /** @var $shop Models\Shop\Shop */
+        /** @var Models\Shop\Shop $shop */
         $shop = $this->container->get('shop');
 
         return $shop->getId();
@@ -254,7 +245,7 @@ class ContextService implements ContextServiceInterface
      */
     private function getStoreFrontCurrencyId()
     {
-        /** @var $shop Models\Shop\Shop */
+        /** @var Models\Shop\Shop $shop */
         $shop = $this->container->get('shop');
 
         return $shop->getCurrency()->getId();
@@ -265,13 +256,13 @@ class ContextService implements ContextServiceInterface
      */
     private function getStoreFrontCurrentCustomerGroupKey()
     {
-        /** @var $session Session */
+        /** @var Session $session */
         $session = $this->container->get('session');
         if ($session->offsetExists('sUserGroup') && $session->offsetGet('sUserGroup')) {
             return $session->offsetGet('sUserGroup');
         }
 
-        /** @var $shop Models\Shop\Shop */
+        /** @var Models\Shop\Shop $shop */
         $shop = $this->container->get('shop');
 
         return $shop->getCustomerGroup()->getKey();
@@ -282,7 +273,7 @@ class ContextService implements ContextServiceInterface
      */
     private function getStoreFrontAreaId()
     {
-        /** @var $session Session */
+        /** @var Session $session */
         $session = $this->container->get('session');
         if ($session->offsetGet('sArea')) {
             return $session->offsetGet('sArea');
@@ -296,7 +287,7 @@ class ContextService implements ContextServiceInterface
      */
     private function getStoreFrontCountryId()
     {
-        /** @var $session Session */
+        /** @var Session $session */
         $session = $this->container->get('session');
         if ($session->offsetGet('sCountry')) {
             return $session->offsetGet('sCountry');
@@ -310,7 +301,7 @@ class ContextService implements ContextServiceInterface
      */
     private function getStoreFrontStateId()
     {
-        /** @var $session Session */
+        /** @var Session $session */
         $session = $this->container->get('session');
         if ($session->offsetGet('sState')) {
             return $session->offsetGet('sState');
@@ -322,13 +313,14 @@ class ContextService implements ContextServiceInterface
     /**
      * @param string      $baseUrl
      * @param int         $shopId
-     * @param null|int    $currencyId
-     * @param null|string $currentCustomerGroupKey
-     * @param null|int    $areaId
-     * @param null|int    $countryId
-     * @param null|int    $stateId
+     * @param int|null    $currencyId
+     * @param string|null $currentCustomerGroupKey
+     * @param int|null    $areaId
+     * @param int|null    $countryId
+     * @param int|null    $stateId
+     * @param int[]       $streamIds
      *
-     * @return ShopContext
+     * @return ShopContextInterface
      */
     private function create(
         $baseUrl,
@@ -399,7 +391,7 @@ class ContextService implements ContextServiceInterface
     /**
      * @param int $customerId
      *
-     * @return array
+     * @return string[]
      */
     private function getStreamsOfCustomerId($customerId)
     {
@@ -428,6 +420,9 @@ class ContextService implements ContextServiceInterface
         return $this->getStreamsOfCustomerId($customerId);
     }
 
+    /**
+     * @return int|null
+     */
     private function getStoreFrontCustomerId()
     {
         $session = $this->container->get('session');

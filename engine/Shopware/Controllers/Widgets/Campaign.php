@@ -25,6 +25,14 @@
 class Shopware_Controllers_Widgets_Campaign extends Shopware_Controllers_Widgets_Emotion
 {
     /**
+     * Pre dispatch method
+     */
+    public function preDispatch()
+    {
+        $this->Response()->setHeader('x-robots', 'noindex');
+    }
+
+    /**
      * The getEmotion method for the emotion landing page
      *
      * @param \Shopware\Models\Emotion\Repository $repository
@@ -33,7 +41,7 @@ class Shopware_Controllers_Widgets_Campaign extends Shopware_Controllers_Widgets
      */
     public function getEmotion($repository)
     {
-        /** @var $repository \Shopware\Models\Emotion\Repository */
+        /** @var \Shopware\Models\Emotion\Repository $repository */
         $emotionId = (int) $this->Request()->getParam('emotionId');
         $query = $repository->getEmotionById($emotionId);
 

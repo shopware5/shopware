@@ -27,19 +27,13 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 use Shopware\Components\DependencyInjection\Container;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Plugins
 {
     /**
-     * @param Container                   $container
-     * @param \Enlight_Loader             $loader
-     * @param \Enlight_Event_EventManager $eventManager
-     * @param \Shopware                   $application
-     * @param array                       $pluginDirectories
-     *
      * @return \Enlight_Plugin_PluginManager
      */
     public function factory(

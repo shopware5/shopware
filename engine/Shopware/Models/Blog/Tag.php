@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware Blog Tag Model
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name=" s_blog_tags")
  */
 class Tag extends ModelEntity
@@ -44,11 +44,12 @@ class Tag extends ModelEntity
      * @ORM\JoinColumn(name="blog_id", referencedColumnName="id")
      */
     protected $blog;
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

@@ -64,9 +64,9 @@ class Enlight_Event_EventManager extends Enlight_Class
     /**
      * $eventManager->addListener('foo.action', array($listener, 'onFooAction'));
      *
-     * @param $eventName
-     * @param $listener
-     * @param int $priority
+     * @param string   $eventName
+     * @param callback|array<int, object|string> $listener
+     * @param int      $priority
      *
      * @return Enlight_Event_EventManager
      */
@@ -163,7 +163,7 @@ class Enlight_Event_EventManager extends Enlight_Class
     /**
      * Retrieve a list of listeners registered to a given event.
      *
-     * @param   $event
+     * @param $event
      *
      * @return Enlight_Event_Handler[]
      */
@@ -196,7 +196,6 @@ class Enlight_Event_EventManager extends Enlight_Class
      * throw an Enlight_Event_Exception.
      * Before the listener will be executed the the flag "processed" will be set to false in the event arguments.
      * After all event listeners has been executed the "processed" flag will be set to true.
-     *
      *
      * @param string                             $event
      * @param Enlight_Event_EventArgs|array|null $eventArgs
@@ -235,7 +234,6 @@ class Enlight_Event_EventManager extends Enlight_Class
      *
      * The event listeners will be executed until one of the listeners return not null.
      *
-     *
      * @param string                             $event
      * @param Enlight_Event_EventArgs|array|null $eventArgs
      *
@@ -255,7 +253,7 @@ class Enlight_Event_EventManager extends Enlight_Class
         $eventArgs->setProcessed(false);
 
         foreach ($this->getListeners($event) as $listener) {
-            if (null !== ($return = $listener->execute($eventArgs))
+            if (($return = $listener->execute($eventArgs)) !== null
                 || $eventArgs->isProcessed()
             ) {
                 $eventArgs->setProcessed(true);
@@ -280,7 +278,6 @@ class Enlight_Event_EventManager extends Enlight_Class
      *
      * The return value of the execute method will be set in the event arguments return value.
      *
-     *
      * @param string                             $event
      * @param mixed                              $value
      * @param Enlight_Event_EventArgs|array|null $eventArgs
@@ -301,7 +298,7 @@ class Enlight_Event_EventManager extends Enlight_Class
         $eventArgs->setProcessed(false);
 
         foreach ($this->getListeners($event) as $listener) {
-            if (null !== ($return = $listener->execute($eventArgs))) {
+            if (($return = $listener->execute($eventArgs)) !== null) {
                 $eventArgs->setReturn($return);
             }
         }
@@ -314,9 +311,9 @@ class Enlight_Event_EventManager extends Enlight_Class
      * Event which is fired to collect plugin parameters
      * to register additionally application components or configurations.
      *
-     * @param                 $event
+     * @param string          $event
      * @param ArrayCollection $collection
-     * @param null            $eventArgs
+     * @param array|null      $eventArgs
      *
      * @throws Enlight_Event_Exception
      *

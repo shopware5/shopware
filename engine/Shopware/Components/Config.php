@@ -45,7 +45,7 @@ class Shopware_Components_Config implements ArrayAccess
     protected $_cacheTime = false;
 
     /**
-     * @var bool|int
+     * @var string[]
      */
     protected $_cacheTags = ['Shopware_Config'];
 
@@ -55,7 +55,7 @@ class Shopware_Components_Config implements ArrayAccess
     protected $_data;
 
     /**
-     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
+     * @var \Zend_Db_Adapter_Abstract
      */
     protected $_db;
 
@@ -64,11 +64,6 @@ class Shopware_Components_Config implements ArrayAccess
      */
     protected $release;
 
-    /**
-     * @param array $config
-     *
-     * @throws Zend_Cache_Exception
-     */
     public function __construct(array $config)
     {
         $this->release = $config['release'];
@@ -104,8 +99,6 @@ class Shopware_Components_Config implements ArrayAccess
      * Magic getter
      *
      * @param string $name
-     *
-     * @return mixed
      */
     public function __get($name)
     {
@@ -116,9 +109,6 @@ class Shopware_Components_Config implements ArrayAccess
      * Magic setter
      *
      * @param string $name
-     * @param mixed  $value
-     *
-     * @return mixed
      */
     public function __set($name, $value)
     {
@@ -130,8 +120,6 @@ class Shopware_Components_Config implements ArrayAccess
      *
      * @param string $name
      * @param array  $args
-     *
-     * @return mixed
      */
     public function __call($name, $args = null)
     {
@@ -177,9 +165,6 @@ class Shopware_Components_Config implements ArrayAccess
      *
      * @param string $namespace
      * @param string $name
-     * @param mixed  $default
-     *
-     * @return mixed
      */
     public function getByNamespace($namespace, $name, $default = null)
     {
@@ -188,9 +173,6 @@ class Shopware_Components_Config implements ArrayAccess
 
     /**
      * @param string $name
-     * @param mixed  $default
-     *
-     * @return mixed
      */
     public function get($name, $default = null)
     {
@@ -201,8 +183,6 @@ class Shopware_Components_Config implements ArrayAccess
 
     /**
      * @param string $name
-     *
-     * @return mixed
      */
     public function offsetGet($name)
     {
@@ -243,9 +223,6 @@ class Shopware_Components_Config implements ArrayAccess
 
     /**
      * @param string $name
-     * @param mixed  $value
-     *
-     * @return mixed
      */
     public function offsetSet($name, $value)
     {

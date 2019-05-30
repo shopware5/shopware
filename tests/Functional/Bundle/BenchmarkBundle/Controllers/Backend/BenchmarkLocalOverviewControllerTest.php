@@ -38,14 +38,14 @@ class BenchmarkLocalOverviewControllerTest extends BenchmarkControllerTestCase
         /** @var \Shopware_Controllers_Backend_BenchmarkLocalOverview $controller */
         $controller = $this->getController();
 
-        $this->installDemoData('benchmark_config');
+        Shopware()->Db()->exec('DELETE FROM s_benchmark_config;');
         $controller->setView(new ViewMock(new \Enlight_Template_Manager()));
 
         $controller->renderAction();
 
         $loadedTemplate = $controller->View()->getTemplate();
 
-        $this->assertSame('backend/benchmark/template/local/start.tpl', $loadedTemplate);
+        static::assertSame('backend/benchmark/template/local/start.tpl', $loadedTemplate);
     }
 
     /**
@@ -64,6 +64,6 @@ class BenchmarkLocalOverviewControllerTest extends BenchmarkControllerTestCase
 
         $loadedTemplate = $controller->View()->getTemplate();
 
-        $this->assertSame('backend/benchmark/template/local/custom.tpl', $loadedTemplate);
+        static::assertSame('backend/benchmark/template/local/custom.tpl', $loadedTemplate);
     }
 }

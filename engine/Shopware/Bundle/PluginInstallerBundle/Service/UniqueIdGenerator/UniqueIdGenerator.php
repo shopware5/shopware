@@ -40,9 +40,6 @@ class UniqueIdGenerator implements UniqueIdGeneratorInterface
      */
     private $connection;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
@@ -65,7 +62,7 @@ class UniqueIdGenerator implements UniqueIdGeneratorInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     private function readUniqueIdFromDb()
     {

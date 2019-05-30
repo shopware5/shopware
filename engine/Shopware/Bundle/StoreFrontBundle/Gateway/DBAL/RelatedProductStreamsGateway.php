@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -50,11 +50,6 @@ class RelatedProductStreamsGateway implements Gateway\RelatedProductStreamsGatew
      */
     private $hydrator;
 
-    /**
-     * @param Connection                     $connection
-     * @param FieldHelper                    $fieldHelper
-     * @param Hydrator\ProductStreamHydrator $hydrator
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
@@ -99,7 +94,7 @@ class RelatedProductStreamsGateway implements Gateway\RelatedProductStreamsGatew
 
         $this->fieldHelper->addProductStreamTranslation($query, $context);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);

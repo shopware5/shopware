@@ -66,13 +66,6 @@ class sCms
      */
     private $translationComponent;
 
-    /**
-     * @param Enlight_Components_Db_Adapter_Pdo_Mysql|null $db
-     * @param Shopware_Components_Config|null              $config
-     * @param Enlight_Controller_Front|null                $front
-     * @param Shopware_Components_Modules|null             $moduleManager
-     * @param Shopware_Components_Translation|null         $translationComponent
-     */
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
         Shopware_Components_Config $config = null,
@@ -90,8 +83,8 @@ class sCms
     /**
      * Read a specific, static page (E.g. terms and conditions, etc.)
      *
-     * @param int $staticId The page id
-     * @param int $shopId   Id of the shop
+     * @param int|null $staticId The page id
+     * @param int|null $shopId   Id of the shop
      *
      * @return array|false Page data, or false if none found by given id
      */
@@ -130,16 +123,22 @@ class sCms
             return false;
         }
 
+        // load attributes
+        $staticPage['attribute'] = Shopware()->Container()->get('shopware_attribute.data_loader')->load('s_cms_static_attributes', $staticId);
+
         if ($translations) {
             foreach ($translations as $property => $translation) {
                 if (strlen($translation) > 0) {
+                    if (strpos($property, '__attribute_') === 0) {
+                        $property = str_replace('__attribute_', '', $property);
+                        $staticPage['attribute'][$property] = $translation;
+                        continue;
+                    }
                     $staticPage[$property] = $translation;
                 }
             }
         }
 
-        // load attributes
-        $staticPage['attribute'] = Shopware()->Container()->get('shopware_attribute.data_loader')->load('s_cms_static_attributes', $staticId);
         /*
          * Add support for sub pages
          */
@@ -160,11 +159,11 @@ class sCms
      *
      * @return array
      */
-    public function sGetStaticPageChildrensById($pageId = 0, $groupKey = 'gLeft')
+    public function sGetStaticPageChildrensById($pageId = 0, $groupKey = 'left')
     {
         $menu = [];
 
-        // fetch parent if exists
+        // Fetch parent if exists
         if ($pageId) {
             $sql = '
                 SELECT
@@ -177,7 +176,7 @@ class sCms
             $menu['parent'] = Shopware()->Db()->fetchRow($sql, ['parentId' => $pageId]);
         }
 
-        // fetch childrens
+        // Fetch children
         $sql = "
             SELECT
             p.id, p.description, p.link, p.target, p.parentID,
@@ -193,13 +192,11 @@ class sCms
     }
 
     /**
-     * Gets related pages for the given subpage
+     * Gets related pages for the given sub-page
      * If a shop id is provided, only content for that shop is displayed
      *
      * @param array    $staticPage
      * @param int|null $shopId
-     *
-     * @return mixed
      */
     private function getRelatedForSubPage($staticPage, $shopId = null)
     {
@@ -261,8 +258,6 @@ class sCms
      *
      * @param array    $staticPage
      * @param int|null $shopId
-     *
-     * @return mixed
      */
     private function getRelatedForPage($staticPage, $shopId = null)
     {

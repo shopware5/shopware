@@ -130,7 +130,6 @@ Ext.define('Shopware.apps.PluginManager', {
         'request-plugin-test-version',
         'check-store-login',
         'open-login',
-        'check-licence-plugin',
         'plugin-reloaded',
         'display-plugin-by-name',
         'load-store-listing',
@@ -224,13 +223,17 @@ Ext.define('Shopware.apps.PluginManager', {
         var me = this, activeWindows = [], subAppId = me.$subAppId;
         cbArgs = cbArgs || [];
 
+        if (!Ext.isDefined(Shopware.app.Application.subApplications)) {
+            return;
+        }
+
         Ext.each(Shopware.app.Application.subApplications.items, function (subApp) {
 
             if (!subApp || !subApp.windowManager || subApp.$subAppId === subAppId || !subApp.windowManager.hasOwnProperty('zIndexStack')) {
                 return;
             }
             Ext.each(subApp.windowManager.zIndexStack, function (item) {
-                if (typeof(item) !== 'undefined' && me.windowClasses.indexOf(item.$className) > -1) {
+                if (typeof item !== 'undefined' && me.windowClasses.indexOf(item.$className) > -1) {
                     activeWindows.push(item);
                 }
             });

@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -47,8 +47,7 @@ class GenericReader implements ReaderInterface
     /**
      * GenericReader constructor.
      *
-     * @param string       $entity
-     * @param ModelManager $entityManager
+     * @param string $entity
      */
     public function __construct($entity, ModelManager $entityManager)
     {

@@ -44,7 +44,7 @@ class SearchTermConditionHandler implements ConditionHandlerInterface
             'customer.salutation',
             'customer.firstname',
             'customer.lastname',
-            'customer.birthday',
+            'CAST(customer.birthday AS char)',
             'customer.customernumber',
             'customer.company',
             'customer.department',
@@ -54,8 +54,8 @@ class SearchTermConditionHandler implements ConditionHandlerInterface
             'customer.phone',
             'customer.additional_address_line1',
             'customer.additional_address_line2',
-            'customer.first_order_time',
-            'customer.last_order_time',
+            'CAST(customer.first_order_time AS char)',
+            'CAST(customer.last_order_time AS char)',
             'customer.ordered_products',
         ];
 

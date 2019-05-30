@@ -68,11 +68,7 @@ class StoreClient
     private $uniqueIdGenerator;
 
     /**
-     * @param HttpClientInterface        $httpClient
-     * @param string                     $apiEndPoint
-     * @param Struct\StructHydrator      $structHydrator
-     * @param OpenSSLVerifier            $openSSLVerifier
-     * @param UniqueIdGeneratorInterface $uniqueIdGenerator
+     * @param string $apiEndPoint
      */
     public function __construct(
         HttpClientInterface $httpClient,
@@ -130,10 +126,9 @@ class StoreClient
     }
 
     /**
-     * @param AccessTokenStruct $accessToken
-     * @param string            $resource
-     * @param array             $params
-     * @param array             $headers
+     * @param string $resource
+     * @param array  $params
+     * @param array  $headers
      *
      * @throws \Exception
      *
@@ -156,13 +151,11 @@ class StoreClient
     }
 
     /**
-     * @param $resource
-     * @param array $params
-     * @param array $headers
+     * @param string $resource
+     * @param array  $params
+     * @param array  $headers
      *
      * @throws \Exception
-     *
-     * @return mixed
      */
     public function doGetRequestRaw($resource, $params = [], $headers = [])
     {
@@ -176,14 +169,13 @@ class StoreClient
     }
 
     /**
-     * @param AccessTokenStruct $accessToken
-     * @param string            $resource
-     * @param array             $params
-     * @param array             $headers
+     * @param string $resource
+     * @param array  $params
+     * @param array  $headers
      *
      * @throws \Exception
      *
-     * @return array
+     * @return string
      */
     public function doAuthGetRequestRaw(
         AccessTokenStruct $accessToken,
@@ -222,9 +214,8 @@ class StoreClient
     }
 
     /**
-     * @param AccessTokenStruct $accessToken
-     * @param string            $resource
-     * @param array             $params
+     * @param string $resource
+     * @param array  $params
      *
      * @throws \Exception
      *
@@ -246,9 +237,8 @@ class StoreClient
     }
 
     /**
-     * @param AccessTokenStruct $accessToken
-     * @param $resource
-     * @param $params
+     * @param string $resource
+     * @param array  $params
      *
      * @throws \Exception
      *
@@ -305,10 +295,9 @@ class StoreClient
     }
 
     /**
-     * @param $resource
-     * @param array                  $params
-     * @param array                  $headers
-     * @param accessTokenStruct|null $token
+     * @param string $resource
+     * @param array  $params
+     * @param array  $headers
      *
      * @throws \Exception
      *
@@ -320,9 +309,8 @@ class StoreClient
     {
         $url = $this->apiEndPoint . $resource;
         if (!empty($params)) {
-            $url .= '?' . http_build_query($params, null, '&');
+            $url .= '?' . http_build_query($params, '', '&');
         }
-
         $header = [];
         if ($token) {
             $header['X-Shopware-Token'] = $token->getToken();
@@ -331,6 +319,8 @@ class StoreClient
         if (count($headers) > 0) {
             $header = array_merge($header, $headers);
         }
+
+        $response = null;
 
         try {
             $response = $this->httpClient->get($url, $header);
@@ -343,7 +333,7 @@ class StoreClient
     }
 
     /**
-     * @param $resource
+     * @param string            $resource
      * @param array             $params
      * @param array             $headers
      * @param AccessTokenStruct $token
@@ -366,6 +356,7 @@ class StoreClient
             $header = array_merge($header, $headers);
         }
 
+        $response = null;
         try {
             $response = $this->httpClient->post(
                 $url,
@@ -384,8 +375,6 @@ class StoreClient
      * Handles an Exception thrown by the HttpClient
      * Parses it to detect and extract details provided
      * by SBP about what happened
-     *
-     * @param RequestException $requestException
      *
      * @throws \Exception
      * @throws SbpServerException
@@ -516,15 +505,13 @@ class StoreClient
         );
     }
 
-    /**
-     * @param Response $response
-     */
     private function verifyResponseSignature(Response $response)
     {
-        $signature = $response->getHeader('x-shopware-signature');
+        $signatureHeaderName = 'x-shopware-signature';
+        $signature = $response->getHeader($signatureHeaderName);
 
         if (empty($signature)) {
-            throw new \RuntimeException('Signature not found in x-shopware-signature header');
+            throw new \RuntimeException(sprintf('Signature not found in header "%s"', $signatureHeaderName));
         }
 
         if (!$this->openSSLVerifier->isSystemSupported()) {

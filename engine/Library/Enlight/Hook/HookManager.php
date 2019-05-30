@@ -37,21 +37,21 @@
  * by the manager and overwriting the return of the corresponding method.
  *
  * @category   Enlight
- * @package    Enlight_Hook
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 class Enlight_Hook_HookManager extends Enlight_Class
 {
     /**
-     * @var null|Enlight_Hook_ProxyFactory instance of the Enlight_Hook_ProxyFactory.
+     * @var null|Enlight_Hook_ProxyFactory instance of the Enlight_Hook_ProxyFactory
      */
     protected $proxyFactory = null;
 
     /**
-     * @var array Internal list of all registered hook aliases.
+     * @var array internal list of all registered hook aliases
      */
-    protected $aliases = array();
+    protected $aliases = [];
 
     /**
      * @var Enlight_Event_EventManager
@@ -60,8 +60,9 @@ class Enlight_Hook_HookManager extends Enlight_Class
 
     /**
      * @param Enlight_Event_EventManager $eventManager
-     * @param Enlight_Loader $loader
-     * @param array $options
+     * @param Enlight_Loader             $loader
+     * @param array                      $options
+     *
      * @throws Exception
      */
     public function __construct(\Enlight_Event_EventManager $eventManager, \Enlight_Loader $loader, $options)
@@ -110,7 +111,8 @@ class Enlight_Hook_HookManager extends Enlight_Class
      *
      * @param string $class
      * @param string $method
-     * @return boolean
+     *
+     * @return bool
      */
     public function hasHooks($class, $method)
     {
@@ -123,6 +125,7 @@ class Enlight_Hook_HookManager extends Enlight_Class
      * @param string $class
      * @param string $method
      * @param string $type
+     *
      * @return string
      */
     public function getHookEvent($class, $method, $type)
@@ -138,7 +141,8 @@ class Enlight_Hook_HookManager extends Enlight_Class
      * Returns the proxy for the given class. If the Enlight_Hook_ProxyFactory hasn't
      * already instantiated it, the function instantiates it automatically.
      *
-     * @param $class
+     * @param string $class
+     *
      * @return mixed
      */
     public function getProxy($class)
@@ -149,7 +153,8 @@ class Enlight_Hook_HookManager extends Enlight_Class
     /**
      * Checks if a proxy exists for the given class.
      *
-     * @param $class
+     * @param string $class
+     *
      * @return bool
      */
     public function hasProxy($class)
@@ -162,8 +167,9 @@ class Enlight_Hook_HookManager extends Enlight_Class
      * execution result is returned.
      *
      * @param Enlight_Hook_Proxy $subject
-     * @param string $method
-     * @param array $args
+     * @param string             $method
+     * @param array              $args
+     *
      * @return mixed
      */
     public function executeHooks(Enlight_Hook_Proxy $subject, $method, array $args)
@@ -182,20 +188,24 @@ class Enlight_Hook_HookManager extends Enlight_Class
     /**
      * Sets the given name as alias for the given target.
      *
-     * @param $name
-     * @param $target
+     * @param string $name
+     * @param string $target
+     *
      * @return Enlight_Hook_HookManager
      */
     public function setAlias($name, $target)
     {
         $this->aliases[$target] = $name;
+
         return $this;
     }
 
     /**
      * Returns the alias for the given name.
-     * @param $name
-     * @return null
+     *
+     * @param string $name
+     *
+     * @return null|mixed
      */
     public function getAlias($name)
     {
@@ -204,11 +214,13 @@ class Enlight_Hook_HookManager extends Enlight_Class
 
     /**
      * Resets the aliases and registered hooks.
+     *
      * @return Enlight_Hook_HookManager
      */
     public function resetHooks()
     {
-        $this->aliases = array();
+        $this->aliases = [];
+
         return $this;
     }
 }

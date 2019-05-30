@@ -33,6 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Api\Resource;
+use Shopware\Components\Random;
 use Shopware\Kernel;
 use Shopware\Models;
 use Shopware\Models\Article\Configurator\Group as ConfiguratorGroup;
@@ -129,8 +130,6 @@ class Helper
     }
 
     /**
-     * @param StoreFrontBundle\Struct\ListProduct                                   $product
-     * @param StoreFrontBundle\Struct\ShopContext                                   $context
      * @param \Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway $productPropertyGateway
      *
      * @return StoreFrontBundle\Struct\Property\Set
@@ -149,9 +148,7 @@ class Helper
     }
 
     /**
-     * @param string               $numbers
-     * @param ShopContextInterface $context
-     * @param array                $configs
+     * @param string $numbers
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[]
      */
@@ -174,9 +171,7 @@ class Helper
     }
 
     /**
-     * @param string               $number
-     * @param ShopContextInterface $context
-     * @param array                $configs
+     * @param string $number
      *
      * @return StoreFrontBundle\Struct\ListProduct
      */
@@ -319,8 +314,6 @@ class Helper
     }
 
     /**
-     * @param array $data
-     *
      * @return Models\Article\Article
      */
     public function createArticle(array $data)
@@ -340,6 +333,14 @@ class Helper
             'data' => $this->getArticleTranslation(),
         ];
         $this->translationApi->create($data);
+    }
+
+    /**
+     * @param string $orderNumber
+     */
+    public function updateArticle($orderNumber, array $data)
+    {
+        return $this->articleApi->updateByNumber($orderNumber, $data);
     }
 
     public function createManufacturerTranslation($manufacturerId, $shopId)
@@ -550,8 +551,6 @@ class Helper
     }
 
     /**
-     * @param array $data
-     *
      * @return Models\Category\Category
      */
     public function createCategory(array $data = [])
@@ -568,8 +567,6 @@ class Helper
     }
 
     /**
-     * @param array $data
-     *
      * @return Models\Article\Supplier
      */
     public function createManufacturer(array $data = [])
@@ -688,8 +685,6 @@ class Helper
     }
 
     /**
-     * @param array $data
-     *
      * @return array
      */
     public function getProductData(array $data = [])
@@ -738,7 +733,7 @@ class Helper
     {
         return array_merge(
             [
-                'number' => 'Variant-' . uniqid(rand()),
+                'number' => 'Variant-' . uniqid(Random::getInteger(0, PHP_INT_MAX), true),
                 'supplierNumber' => 'kn12lk3nkl213',
                 'active' => 1,
                 'inStock' => 222,
@@ -806,7 +801,6 @@ class Helper
 
     /**
      * @param string $image
-     * @param array  $data
      *
      * @return array
      */
@@ -821,10 +815,7 @@ class Helper
     }
 
     /**
-     * @param Models\Customer\Group $currentCustomerGroup
      * @param Models\Customer\Group $fallbackCustomerGroup
-     * @param Models\Shop\Shop      $shop
-     * @param array                 $taxes
      * @param Models\Shop\Currency  $currency
      *
      * @return TestContext
@@ -898,25 +889,14 @@ class Helper
         return $kernel->isElasticSearchEnabled();
     }
 
-    /**
-     * @param Shop $shop
-     */
     public function refreshSearchIndexes(Shop $shop)
     {
         if (!$this->isElasticSearchEnabled()) {
             return;
         }
 
-        $factory = Shopware()->Container()->get('shopware_elastic_search.index_factory');
-        $index = $factory->createShopIndex($shop);
-
-        try {
-            $client = Shopware()->Container()->get('shopware_elastic_search.client');
-            $client->indices()->delete(['index' => $index->getName()]);
-        } catch (\Exception $e) {
-        }
-
         $indexer = Shopware()->Container()->get('shopware_elastic_search.shop_indexer');
+        $indexer->cleanupIndices();
         $indexer->index($shop, new ProgressHelper());
     }
 
@@ -931,7 +911,7 @@ class Helper
 
         foreach ($groups as $group) {
             $options = [];
-            /** @var $option Models\Article\Configurator\Option */
+            /** @var Models\Article\Configurator\Option $option */
             foreach ($group->getOptions() as $option) {
                 $options[] = [
                     'id' => $option->getId(),
@@ -997,8 +977,7 @@ class Helper
      * Helper function which creates all variants for
      * the passed groups with options.
      *
-     * @param $groups
-     * @param null  $numberPrefix
+     * @param array $groups
      * @param array $data
      *
      * @return array
@@ -1201,8 +1180,8 @@ class Helper
      * Helper function which combines all array elements
      * of the passed arrays.
      *
-     * @param $arrays
-     * @param int $i
+     * @param array $arrays
+     * @param int   $i
      *
      * @return array
      */
@@ -1231,9 +1210,7 @@ class Helper
      * Combinations merge the result of dimensional arrays not perfectly
      * so we have to clean up the first array level.
      *
-     * @param $combinations
-     *
-     * @return mixed
+     * @param array $combinations
      */
     private function cleanUpCombinations($combinations)
     {

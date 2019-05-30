@@ -18,7 +18,8 @@ module.exports = {
         files: [
             '../themes/Frontend/**/_public/src/js/*.js',
             '../engine/Shopware/Plugins/**/frontend/**/src/js/**/*.js',
-            '../custom/plugins/**/frontend/**/src/js/**/*.js'
+            '../custom/plugins/**/frontend/**/src/js/**/*.js',
+            '../custom/plugins/**/frontend/js/**/*.js'
         ],
         tasks: ['uglify:development'],
         options: {

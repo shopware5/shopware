@@ -60,8 +60,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
     /**
      * Event listener method
-     *
-     * @param Enlight_Controller_EventArgs $args
      */
     public function onRouteStartup(Enlight_Controller_EventArgs $args)
     {
@@ -110,8 +108,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
     /**
      * Event listener method
-     *
-     * @param Enlight_Controller_EventArgs $args
      */
     public function onRouteShutdown(Enlight_Controller_EventArgs $args)
     {
@@ -183,7 +179,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
      */
     protected function upgradeShop($request, $response)
     {
-        /** @var $shop DetachedShop */
+        /** @var DetachedShop $shop */
         $shop = $this->get('Shop');
 
         $cookieKey = null;
@@ -213,7 +209,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
 
         if ($cookieKey === 'shop' && $this->shouldRedirect($request, $shop)) {
-            /** @var $repository Shopware\Models\Shop\Repository */
+            /** @var Shopware\Models\Shop\Repository $repository */
             $repository = $this->get('models')->getRepository(Shop::class);
 
             $newShop = $repository->getActiveById($cookieValue);
@@ -304,8 +300,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     }
 
     /**
-     * @param Request $request
-     *
      * @return DetachedShop
      */
     protected function getShopByRequest(Request $request)
@@ -341,9 +335,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     }
 
     /**
-     * @param Request $request
-     * @param Shop    $newShop
-     *
      * @return string
      */
     protected function getNewShopUrl(
@@ -403,9 +394,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     }
 
     /**
-     * @param Request $request
-     * @param Shop    $shop
-     *
      * @return bool
      */
     protected function shouldRedirect(Request $request, Shop $shop)
@@ -428,10 +416,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     }
 
     /**
-     * @param Request $request
-     * @param Shop    $shop
-     *
-     * @return null|string
+     * @return string|null
      */
     private function createPathInfo(Request $request, Shop $shop)
     {
@@ -445,7 +430,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $requestUri = substr($requestUri, 0, $pos);
         }
 
-        /** @var $repository Shopware\Models\Shop\Repository */
+        /** @var Shopware\Models\Shop\Repository $repository */
         $repository = $this->get('models')->getRepository(Shop::class);
         $requestShop = $repository->getActiveShopByRequestAsArray($request);
 
@@ -471,7 +456,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
     /**
      * @param string $requestUri
-     * @param Shop   $shop
      *
      * @return string
      */
@@ -503,8 +487,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     }
 
     /**
-     * @param Shop $shop
-     *
      * @throws \RuntimeException
      */
     private function validateShop(Shop $shop)

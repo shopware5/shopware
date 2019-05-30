@@ -40,11 +40,6 @@ class PluginLicenceService
     private $connection;
 
     /**
-     * @var InstallerService
-     */
-    private $installer;
-
-    /**
      * @var StoreClient
      */
     private $storeClient;
@@ -54,48 +49,18 @@ class PluginLicenceService
      */
     private $unpackService;
 
-    /**
-     * @param Connection                $connection
-     * @param InstallerService          $installer
-     * @param StoreClient               $storeClient
-     * @param LocalLicenseUnpackService $unpackService
-     */
     public function __construct(
         Connection $connection,
-        InstallerService $installer,
         StoreClient $storeClient,
         LocalLicenseUnpackService $unpackService
     ) {
         $this->connection = $connection;
-        $this->installer = $installer;
         $this->storeClient = $storeClient;
         $this->unpackService = $unpackService;
     }
 
     /**
-     * @param string $licenceKey
-     *
-     * @return int
-     */
-    public function importLicence($licenceKey)
-    {
-        $persister = new \Shopware_Components_LicensePersister(
-            $this->connection
-        );
-
-        $info = \Shopware_Components_License::readLicenseInfo($licenceKey);
-
-        if ($info == false) {
-            throw new \RuntimeException();
-        }
-
-        return $persister->saveLicense($info, true);
-    }
-
-    /**
-     * @param UpdateLicencesRequest $request
-     *
-     * @return array
+     * @return \Shopware\Components\HttpClient\Response
      */
     public function updateLicences(UpdateLicencesRequest $request)
     {
@@ -181,9 +146,7 @@ class PluginLicenceService
     }
 
     /**
-     * @param array $licenses
-     *
-     * @return array $expirations
+     * @return array
      */
     private function getExpirations(array $licenses)
     {
@@ -233,8 +196,7 @@ class PluginLicenceService
     }
 
     /**
-     * @param PluginInformationStruct $plugin
-     * @param string                  $domain
+     * @param string $domain
      */
     private function createLocalLicenseInformation(PluginInformationStruct $plugin, $domain)
     {
@@ -264,10 +226,6 @@ class PluginLicenceService
         $this->connection->insert('s_core_licenses', $data);
     }
 
-    /**
-     * @param array                   $license
-     * @param PluginInformationStruct $plugin
-     */
     private function updateLocalLicenseExpirationInformation(array $license, PluginInformationStruct $plugin)
     {
         $expirationDate = $plugin->getLicenseExpiration();
@@ -283,14 +241,12 @@ class PluginLicenceService
      */
     private function getLicences()
     {
-        /** @var $connection Connection */
+        /** @var Connection $connection */
         $connection = $this->connection;
         $builder = $connection->createQueryBuilder();
 
         $builder->select(['license.module, license.label, license.expiration, license.license'])
-            ->from('s_core_licenses', 'license')
-            ->leftJoin('license', 's_core_plugins', 'plugin', 'plugin.name = license.module')
-            ->where('plugin.active = 1');
+            ->from('s_core_licenses', 'license');
 
         $builderExecute = $builder->execute();
 
@@ -298,11 +254,9 @@ class PluginLicenceService
     }
 
     /**
-     * @param \DateTime $expirationDate
-     *
      * @return bool
      */
-    private function isExpired(\DateTime $expirationDate)
+    private function isExpired(\DateTimeInterface $expirationDate)
     {
         $diff = $expirationDate->diff(new \DateTime('now'));
 
@@ -310,12 +264,11 @@ class PluginLicenceService
     }
 
     /**
-     * @param \DateTime $expirationDate
-     * @param int       $daysTillExpiration
+     * @param int $daysTillExpiration
      *
      * @return bool
      */
-    private function isSoonExpiring(\DateTime $expirationDate, $daysTillExpiration = 14)
+    private function isSoonExpiring(\DateTimeInterface $expirationDate, $daysTillExpiration = 14)
     {
         $diff = $expirationDate->diff(new \DateTime('now'));
 
@@ -323,8 +276,6 @@ class PluginLicenceService
     }
 
     /**
-     * @param array $data
-     *
      * @return PluginInformationStruct
      */
     private function createPluginInformationStruct(array $data)

@@ -26,9 +26,9 @@ namespace Shopware\Bundle\SearchBundle;
 
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\VariantListingPriceService;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Service\VariantListingPriceServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Models\Article\Configurator\Group;
 
 class VariantSearch implements ProductSearchInterface
@@ -39,7 +39,7 @@ class VariantSearch implements ProductSearchInterface
     private $decorated;
 
     /**
-     * @var VariantListingPriceService
+     * @var VariantListingPriceServiceInterface
      */
     private $listingPriceService;
 
@@ -50,7 +50,7 @@ class VariantSearch implements ProductSearchInterface
 
     public function __construct(
         ProductSearchInterface $decorated,
-        VariantListingPriceService $listingPriceService,
+        VariantListingPriceServiceInterface $listingPriceService,
         ConfiguratorServiceInterface $configuratorService
     ) {
         $this->decorated = $decorated;
@@ -58,10 +58,12 @@ class VariantSearch implements ProductSearchInterface
         $this->configuratorService = $configuratorService;
     }
 
-    public function search(Criteria $criteria, Struct\ProductContextInterface $context)
+    /**
+     * {@inheritdoc}
+     */
+    public function search(Criteria $criteria, ProductContextInterface $context)
     {
         $result = $this->decorated->search($criteria, $context);
-
         if (!$criteria->hasConditionOfClass(VariantCondition::class)) {
             return $result;
         }

@@ -23,7 +23,7 @@
  */
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -43,9 +43,6 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
 
     /**
      * @param string $name
-     * @param null   $value
-     *
-     * @return mixed
      */
     public function __call($name, $value = null)
     {
@@ -55,7 +52,7 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
     /**
      * Set class property
      *
-     * @param $system
+     * @param \sSystem $system
      */
     public function setSystem($system)
     {
@@ -66,12 +63,10 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
      * Reformat module name and return reference to module
      *
      * @param string $name
-     *
-     * @return mixed
      */
     public function getModule($name)
     {
-        if ($name[0] === 's') {
+        if (strpos($name, 's') === 0) {
             $name = substr($name, 1);
         }
         if ($name !== 'RewriteTable') {
@@ -88,15 +83,14 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
     }
 
     /**
-     * @param $offset
-     * @param $value
+     * @param string $offset
      */
     public function offsetSet($offset, $value)
     {
     }
 
     /**
-     * @param $offset
+     * @param string $offset
      *
      * @return bool
      */
@@ -114,8 +108,6 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
 
     /**
      * @param string $offset
-     *
-     * @return mixed
      */
     public function offsetGet($offset)
     {

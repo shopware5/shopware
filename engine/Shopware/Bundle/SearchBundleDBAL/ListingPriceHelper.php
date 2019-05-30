@@ -46,8 +46,6 @@ class ListingPriceHelper
     }
 
     /**
-     * @param ShopContextInterface $context
-     *
      * @return string
      */
     public function getSelection(ShopContextInterface $context)
@@ -89,8 +87,6 @@ class ListingPriceHelper
     }
 
     /**
-     * @param ShopContextInterface $context
-     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     public function getPriceTable(ShopContextInterface $context)
@@ -116,9 +112,6 @@ class ListingPriceHelper
         return $priceTable;
     }
 
-    /**
-     * @param \Doctrine\DBAL\Query\QueryBuilder $query
-     */
     public function joinPriceGroup(\Doctrine\DBAL\Query\QueryBuilder $query)
     {
         $discountStart = '1';
@@ -167,6 +160,9 @@ class ListingPriceHelper
             $switch[] = sprintf($template, $column, $column, $column);
         }
 
+        $switch[] = 'defaultPrice.articleID as product_id';
+        $switch[] = 'defaultPrice.articledetailsID as variant_id';
+
         return implode(',', $switch);
     }
 
@@ -180,15 +176,15 @@ class ListingPriceHelper
         $template = 'defaultPrice.%s';
         $switch = [];
         foreach ($this->getPriceColumns() as $column) {
-            $switch[] = sprintf($template, $column, $column, $column);
+            $switch[] = sprintf($template, $column);
         }
+        $switch[] = sprintf($template, 'articleID as product_id');
+        $switch[] = sprintf($template, 'articledetailsID as variant_id');
 
         return implode(',', $switch);
     }
 
     /**
-     * @param ShopContextInterface $context
-     *
      * @return bool
      */
     private function hasDifferentCustomerGroups(ShopContextInterface $context)
@@ -198,8 +194,6 @@ class ListingPriceHelper
 
     /**
      * Builds the tax cases for the price selection query
-     *
-     * @param ShopContextInterface $context
      *
      * @return string
      */

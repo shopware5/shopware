@@ -59,11 +59,6 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
      */
     private $queryAliasMapper;
 
-    /**
-     * @param ManufacturerServiceInterface         $manufacturerService
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper                     $queryAliasMapper
-     */
     public function __construct(
         ManufacturerServiceInterface $manufacturerService,
         \Shopware_Components_Snippet_Manager $snippetManager,
@@ -126,7 +121,6 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
     }
 
     /**
-     * @param Criteria       $criteria
      * @param Manufacturer[] $manufacturers
      *
      * @return array
@@ -134,13 +128,13 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
     private function createListItems(Criteria $criteria, $manufacturers)
     {
         $actives = [];
-        /** @var $condition ManufacturerCondition */
+        /** @var ManufacturerCondition $condition */
         if ($condition = $criteria->getCondition('manufacturer')) {
             $actives = $condition->getManufacturerIds();
         }
 
         $items = [];
-        /** @var $manufacturer Manufacturer */
+        /** @var Manufacturer $manufacturer */
         foreach ($manufacturers as $manufacturer) {
             $items[] = new ValueListItem(
                 $manufacturer->getId(),
@@ -158,8 +152,7 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
     }
 
     /**
-     * @param Criteria $criteria
-     * @param $items
+     * @param ValueListItem[] $items
      *
      * @return ValueListFacetResult
      */
@@ -169,7 +162,7 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
             $fieldName = 'sSupplier';
         }
 
-        /** @var ManufacturerFacet $facet */
+        /** @var ManufacturerFacet|null $facet */
         $facet = $criteria->getFacet('manufacturer');
         if ($facet && !empty($facet->getLabel())) {
             $label = $facet->getLabel();

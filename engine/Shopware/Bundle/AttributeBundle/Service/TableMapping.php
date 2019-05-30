@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Column;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -46,9 +46,6 @@ class TableMapping
 
     /**
      * TableMapping constructor.
-     *
-     * @param Connection $connection
-     * @param array      $tableMapping
      */
     public function __construct(Connection $connection, array $tableMapping)
     {
@@ -97,9 +94,9 @@ class TableMapping
     }
 
     /**
-     * @param $table
+     * @param string $table
      *
-     * @return null|string
+     * @return string|null
      */
     public function getTableModel($table)
     {
@@ -111,7 +108,7 @@ class TableMapping
     }
 
     /**
-     * @return string[]
+     * @return array
      */
     public function getAttributeTables()
     {
@@ -121,7 +118,7 @@ class TableMapping
     }
 
     /**
-     * @param $table
+     * @param string $table
      *
      * @return string
      */
@@ -166,7 +163,7 @@ class TableMapping
     public function getDependingTables($table)
     {
         if (!$this->isAttributeTable($table)) {
-            throw new \Exception(sprintf('Table %s is no supported attribute table'));
+            throw new \Exception(sprintf('Table %s is no supported attribute table', $table));
         }
 
         return $this->tables[$table]['dependingTables'];

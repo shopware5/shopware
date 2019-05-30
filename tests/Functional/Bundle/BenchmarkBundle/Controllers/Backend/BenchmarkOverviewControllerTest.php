@@ -38,13 +38,12 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
         /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
-        $this->installDemoData('benchmark_config');
-
+        Shopware()->Db()->exec('DELETE FROM s_benchmark_config;');
         $controller->indexAction();
 
         $redirect = $this->getRedirect($controller->Response());
 
-        $this->assertContains('BenchmarkLocalOverview/render/template/start', $redirect);
+        static::assertContains('BenchmarkLocalOverview/render/template/start', $redirect);
     }
 
     /**
@@ -64,7 +63,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $redirect = $this->getRedirect($controller->Response());
 
-        $this->assertContains('BenchmarkOverview/render', $redirect);
+        static::assertContains('BenchmarkOverview/render', $redirect);
     }
 
     /**
@@ -83,7 +82,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $redirect = $this->getRedirect($controller->Response());
 
-        $this->assertContains('BenchmarkLocalOverview/render/template/waiting', $redirect);
+        static::assertContains('BenchmarkLocalOverview/render/template/waiting', $redirect);
     }
 
     /**
@@ -102,7 +101,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $redirect = $this->getRedirect($controller->Response());
 
-        $this->assertContains('BenchmarkLocalOverview/render/template/waiting', $redirect);
+        static::assertContains('BenchmarkLocalOverview/render/template/waiting', $redirect);
     }
 
     /**
@@ -122,7 +121,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $redirect = $this->getRedirect($controller->Response());
 
-        $this->assertContains('BenchmarkLocalOverview/render/template/waiting', $redirect);
+        static::assertContains('BenchmarkLocalOverview/render/template/waiting', $redirect);
     }
 
     /**
@@ -143,7 +142,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $redirect = $this->getRedirect($controller->Response());
 
-        $this->assertContains('BenchmarkOverview/render', $redirect);
+        static::assertContains('BenchmarkOverview/render', $redirect);
     }
 
     public function testRenderAction_should_render_cached_template()
@@ -151,8 +150,11 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
         /** @var \Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
+        $now = new \DateTime('now');
+
         $this->installDemoData('benchmark_config');
         $this->setSetting('cached_template', '<h2>Placeholder</h2>');
+        $this->setSetting('last_received', $now->format('Y-m-d H:i:s'));
 
         $this->expectOutputString('<h2>Placeholder</h2>');
         $controller->renderAction();
@@ -166,13 +168,12 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
         $controller = parent::getController();
 
         Shopware()->Container()->set('auth', new AuthMock());
+        Shopware()->Plugins()->Backend()->Auth()->onInitResourceAuth(new \Enlight_Event_EventArgs());
 
         return $controller;
     }
 
     /**
-     * @param \Enlight_Controller_Response_ResponseHttp $response
-     *
      * @return string
      */
     private function getRedirect(\Enlight_Controller_Response_ResponseHttp $response)

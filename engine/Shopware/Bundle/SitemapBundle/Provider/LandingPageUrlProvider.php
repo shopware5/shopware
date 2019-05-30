@@ -25,49 +25,19 @@
 namespace Shopware\Bundle\SitemapBundle\Provider;
 
 use Shopware\Bundle\SitemapBundle\Struct\Url;
-use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing;
-use Shopware\Components\Routing\Router;
 use Shopware\Models\Emotion\Emotion;
 
-class LandingPageUrlProvider implements UrlProviderInterface
+class LandingPageUrlProvider extends BaseUrlProvider
 {
     /**
-     * @var Router
-     */
-    private $router;
-
-    /**
-     * @var bool
-     */
-    private $allExported = false;
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
-
-    /**
-     * @param ModelManager $modelManager
-     * @param Router       $router
-     */
-    public function __construct(ModelManager $modelManager, Router $router)
-    {
-        $this->router = $router;
-        $this->modelManager = $modelManager;
-    }
-
-    /**
-     * @param Routing\Context      $routingContext
-     * @param ShopContextInterface $shopContext
-     *
-     * @return null|Url[]
+     * {@inheritdoc}
      */
     public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext)
     {
         if ($this->allExported) {
-            return null;
+            return [];
         }
 
         $emotionRepository = $this->modelManager->getRepository(Emotion::class);
@@ -78,7 +48,7 @@ class LandingPageUrlProvider implements UrlProviderInterface
         $campaigns = $builder->getQuery()->getArrayResult();
 
         if (count($campaigns) === 0) {
-            return null;
+            return [];
         }
 
         foreach ($campaigns as $key => &$campaign) {
@@ -101,7 +71,7 @@ class LandingPageUrlProvider implements UrlProviderInterface
         $urls = [];
 
         for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
-            $urls[] = new Url($routes[$i], $campaigns[$i]['changed'], 'weekly');
+            $urls[] = new Url($routes[$i], $campaigns[$i]['changed'], 'weekly', Emotion::class, $campaigns[$i]['id']);
         }
 
         unset($campaign);
@@ -112,19 +82,11 @@ class LandingPageUrlProvider implements UrlProviderInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function reset()
-    {
-        $this->allExported = false;
-    }
-
-    /**
      * Helper function to filter emotion campaigns
      * Returns false, if the campaign starts later or is outdated
      *
-     * @param null|\DateTime $from
-     * @param null|\DateTime $to
+     * @param \DateTimeInterface|null $from
+     * @param \DateTimeInterface|null $to
      *
      * @return bool
      */
@@ -132,11 +94,11 @@ class LandingPageUrlProvider implements UrlProviderInterface
     {
         $now = new \DateTime();
 
-        if (isset($from) && $now < $from) {
+        if ($from !== null && $now < $from) {
             return false;
         }
 
-        if (isset($to) && $now > $to) {
+        if ($to !== null && $now > $to) {
             return false;
         }
 

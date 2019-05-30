@@ -103,7 +103,7 @@
         .addPlugin('*[data-modalbox="true"]', 'swModalbox')
 
         // Change the active tab to the customer reviews
-        .addPlugin('.is--ctl-detail', 'swJumpToTab')
+        .addPlugin('.is--ctl-detail', 'swJumpToTab', ['m', 'l', 'xl'])
         .addPlugin('*[data-ajax-shipping-payment="true"]', 'swShippingPayment')
 
         // Jump to ToS-Checkbox on invalid
@@ -175,11 +175,11 @@
             $('.add-voucher--panel')[method]('is--hidden');
         });
 
-        $('.table--shipping-costs-trigger').on('click touchstart', function (event) {
+        $('body').on('click touchstart', '.table--shipping-costs-trigger', function (event) {
             event.preventDefault();
 
             var $this = $(this),
-                $next = $this.next(),
+                $next = $this.parent().find('.table--shipping-costs'),
                 method = ($next.hasClass('is--hidden')) ? 'removeClass' : 'addClass';
 
             $next[method]('is--hidden');
@@ -201,14 +201,14 @@
                 url: ajaxCartRefresh,
                 dataType: 'json',
                 success: function (cart) {
-                    if (!cart.amount || !cart.quantity) {
+                    if (!cart.amount || isNaN(cart.quantity)) {
                         return;
                     }
 
                     $cartAmount.html(cart.amount);
                     $cartQuantity.html(cart.quantity).removeClass('is--hidden');
 
-                    if (cart.quantity == 0) {
+                    if (cart.quantity === 0) {
                         $cartQuantity.addClass('is--hidden');
                     }
 

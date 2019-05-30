@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundleDBAL\KeywordFinderInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -55,11 +55,6 @@ class KeywordFinder implements KeywordFinderInterface
      */
     private $termHelper;
 
-    /**
-     * @param \Shopware_Components_Config $config
-     * @param Connection                  $connection
-     * @param TermHelperInterface         $termHelper
-     */
     public function __construct(
         \Shopware_Components_Config $config,
         Connection $connection,

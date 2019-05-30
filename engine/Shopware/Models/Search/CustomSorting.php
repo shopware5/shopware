@@ -29,44 +29,50 @@ use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Table(name="s_search_custom_sorting")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class CustomSorting extends ModelEntity
 {
     /**
      * @var string
+     *
      * @ORM\Column(nullable=false)
      */
     protected $label;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="display_in_categories", type="boolean")
      */
     protected $displayInCategories;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="active", type="boolean")
      */
     protected $active;
 
     /**
      * @var int
+     *
      * @ORM\Column(type="integer", nullable=false)
      */
     protected $position;
 
     /**
      * @var string
+     *
      * @ORM\Column(nullable=true)
      */
     protected $sortings;
+
     /**
      * @var int
      *
      * @ORM\Column(type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

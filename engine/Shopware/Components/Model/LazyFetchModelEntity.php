@@ -28,8 +28,8 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
+ * @ORM\MappedSuperclass()
+ * @ORM\HasLifecycleCallbacks()
  */
 abstract class LazyFetchModelEntity extends ModelEntity
 {
@@ -41,7 +41,7 @@ abstract class LazyFetchModelEntity extends ModelEntity
     }
 
     /**
-     * @param $object
+     * @param object $object
      *
      * @return bool
      */
@@ -51,13 +51,13 @@ abstract class LazyFetchModelEntity extends ModelEntity
     }
 
     /**
-     * @param $object
+     * @param object        $object
      * @param array         $condition
      * @param EntityManager $em
      *
      * @throws \Exception
      *
-     * @return null|object
+     * @return object|null
      */
     public function fetchLazy($object, $condition, EntityManager $em = null)
     {

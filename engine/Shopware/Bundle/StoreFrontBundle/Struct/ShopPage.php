@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -122,7 +122,7 @@ class ShopPage extends Extendable
     protected $shops;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $changed;
 
@@ -140,6 +140,11 @@ class ShopPage extends Extendable
      * @var ShopPage
      */
     protected $parent;
+
+    /**
+     * @var int
+     */
+    protected $childrenCount;
 
     /**
      * @return int
@@ -414,17 +419,14 @@ class ShopPage extends Extendable
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getChanged()
     {
         return $this->changed;
     }
 
-    /**
-     * @param \DateTime $changed
-     */
-    public function setChanged(\DateTime $changed)
+    public function setChanged(\DateTimeInterface $changed)
     {
         $this->changed = $changed;
     }
@@ -491,6 +493,22 @@ class ShopPage extends Extendable
     public function setParentId($parentId)
     {
         $this->parentId = $parentId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getChildrenCount()
+    {
+        return $this->childrenCount;
+    }
+
+    /**
+     * @param int $childrenCount
+     */
+    public function setChildrenCount($childrenCount)
+    {
+        $this->childrenCount = $childrenCount;
     }
 
     /**

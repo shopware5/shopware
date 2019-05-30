@@ -43,31 +43,32 @@ use Shopware\Components\Model\ModelEntity;
  *
  * @ORM\Table(name="s_core_auth")
  * @ORM\Entity(repositoryClass="Repository")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class User extends ModelEntity
 {
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\User", mappedBy="user", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\User
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\User", mappedBy="user", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
 
     /**
+     * @var \Shopware\Models\Blog\Blog
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Blog", mappedBy="author")
      * @ORM\JoinColumn(name="id", referencedColumnName="author_id")
-     *
-     * @var \Shopware\Models\Blog\Blog
      */
     protected $blog;
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -122,7 +123,7 @@ class User extends ModelEntity
     private $sessionId = '';
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="lastlogin", type="datetime", nullable=false)
      */
@@ -157,7 +158,7 @@ class User extends ModelEntity
     private $failedLogins = 0;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="lockeduntil", type="datetime", nullable=false)
      */
@@ -182,6 +183,7 @@ class User extends ModelEntity
      * The association is joined over the s_core_auth_roles.id field and the s_core_auth.roleID
      *
      * @var \Shopware\Models\User\Role
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\User\Role", inversedBy="users")
      * @ORM\JoinColumn(name="roleID", referencedColumnName="id")
      */
@@ -309,13 +311,13 @@ class User extends ModelEntity
     /**
      * Set lastLogin
      *
-     * @param \DateTime|string $lastLogin
+     * @param \DateTimeInterface|string $lastLogin
      *
      * @return User
      */
     public function setLastLogin($lastLogin)
     {
-        if (!$lastLogin instanceof \DateTime) {
+        if (!$lastLogin instanceof \DateTimeInterface) {
             $lastLogin = new \DateTime((string) $lastLogin);
         }
         $this->lastLogin = $lastLogin;
@@ -326,7 +328,7 @@ class User extends ModelEntity
     /**
      * Get lastlogin
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getLastLogin()
     {
@@ -432,13 +434,11 @@ class User extends ModelEntity
     /**
      * Set lockedUntil
      *
-     * @param \DateTime|string $lockedUntil|
-     *
      * @return User
      */
     public function setLockedUntil($lockedUntil)
     {
-        if (!$lockedUntil instanceof \DateTime) {
+        if (!$lockedUntil instanceof \DateTimeInterface) {
             $lockedUntil = new \DateTime((string) $lockedUntil);
         }
         $this->lockedUntil = $lockedUntil;
@@ -449,7 +449,7 @@ class User extends ModelEntity
     /**
      * Get lockedUntil
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getLockedUntil()
     {
@@ -585,7 +585,7 @@ class User extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\User|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\User
+     * @return \Shopware\Models\User\User
      */
     public function setAttribute($attribute)
     {
@@ -594,10 +594,14 @@ class User extends ModelEntity
 
     /**
      * @param string $encoder
+     *
+     * @return \Shopware\Models\User\User
      */
     public function setEncoder($encoder)
     {
         $this->encoder = $encoder;
+
+        return $this;
     }
 
     /**

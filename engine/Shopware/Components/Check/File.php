@@ -30,7 +30,7 @@
  * $data = $list->toArray();
  * </code>
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -49,7 +49,12 @@ class Shopware_Components_Check_File
     /**
      * @var array
      */
-    private $skipList = [];
+    private $skipList;
+
+    /**
+     * @var string
+     */
+    private $filePath;
 
     /**
      * @param string $filePath
@@ -93,7 +98,7 @@ class Shopware_Components_Check_File
             $md5SumMatch = false;
             if ($fileAvailable) {
                 $md5Sum = md5_file($baseDir . $file);
-                $md5SumMatch = ($md5Sum == $expectedMd5Sum);
+                $md5SumMatch = ($md5Sum === $expectedMd5Sum);
             }
 
             if ($md5SumMatch) {

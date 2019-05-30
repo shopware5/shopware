@@ -35,7 +35,7 @@ use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -54,10 +54,7 @@ class ProductReader extends GenericReader
     /**
      * ProductReader constructor.
      *
-     * @param string                         $entity
-     * @param ModelManager                   $entityManager
-     * @param ContextServiceInterface        $contextService
-     * @param AdditionalTextServiceInterface $additionalTextService
+     * @param string $entity
      */
     public function __construct(
         $entity,
@@ -80,6 +77,7 @@ class ProductReader extends GenericReader
         $products = parent::getList($identifiers);
         $products = $this->assignAdditionalText($products);
         $products = $this->assignCategoryIds($products);
+        $products = $this->assignPrice($products);
 
         return $products;
     }
@@ -124,14 +122,14 @@ class ProductReader extends GenericReader
     }
 
     /**
-     * @param array[] $articles
+     * @param array[] $products
      *
      * @return array[]
      */
-    private function assignAdditionalText(array $articles)
+    private function assignAdditionalText(array $products)
     {
         /** @var Repository $shopRepo */
-        $shopRepo = $this->entityManager->getRepository('Shopware\Models\Shop\Shop');
+        $shopRepo = $this->entityManager->getRepository(Shop::class);
 
         /** @var Shop $shop */
         $shop = $shopRepo->getActiveDefault();
@@ -142,35 +140,35 @@ class ProductReader extends GenericReader
             ContextService::FALLBACK_CUSTOMER_GROUP
         );
 
-        $products = $this->buildListProducts($articles);
-        $products = $this->additionalTextService->buildAdditionalTextLists($products, $context);
+        $tempProducts = $this->buildListProducts($products);
+        $tempProducts = $this->additionalTextService->buildAdditionalTextLists($tempProducts, $context);
 
-        foreach ($products as $product) {
-            $number = $product->getNumber();
-            if (!isset($articles[$number])) {
+        foreach ($tempProducts as $tempProduct) {
+            $number = $tempProduct->getNumber();
+            if (!isset($products[$number])) {
                 continue;
             }
-            $articles[$number]['additionalText'] = $product->getAdditional();
-        }
-
-        return $articles;
-    }
-
-    /**
-     * @param array[] $articles
-     *
-     * @return ListProduct[]
-     */
-    private function buildListProducts(array $articles)
-    {
-        $products = [];
-        foreach ($articles as $article) {
-            $product = new ListProduct($article['articleId'], $article['variantId'], $article['number']);
-            $product->setAdditional($article['additionalText']);
-            $products[$article['number']] = $product;
+            $products[$number]['additionalText'] = $tempProduct->getAdditional();
         }
 
         return $products;
+    }
+
+    /**
+     * @param array[] $products
+     *
+     * @return ListProduct[]
+     */
+    private function buildListProducts(array $products)
+    {
+        $listProducts = [];
+        foreach ($products as $product) {
+            $listProduct = new ListProduct($product['articleId'], $product['variantId'], $product['number']);
+            $listProduct->setAdditional($product['additionalText']);
+            $listProducts[$product['number']] = $listProduct;
+        }
+
+        return $listProducts;
     }
 
     private function assignCategoryIds(array $products)
@@ -193,6 +191,32 @@ class ProductReader extends GenericReader
                 $mapping = array_values(array_filter(explode(',', $categories[$id])));
             }
             $product['categoryIds'] = $mapping;
+        }
+
+        return $products;
+    }
+
+    private function assignPrice(array $products)
+    {
+        $ids = array_column($products, 'articleId');
+        $variantIds = array_column($products, 'variantId');
+
+        $query = $this->entityManager->getConnection()->createQueryBuilder();
+        $query->select(['articledetailsID', 'price']);
+        $query->from('s_articles_prices');
+        $query->where('articleID IN (:ids)');
+        $query->andWhere('articledetailsID IN (:variantIds)');
+        $query->andWhere('`from` = 1');
+        $query->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
+        $query->setParameter('variantIds', $variantIds, Connection::PARAM_INT_ARRAY);
+
+        $prices = $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
+
+        foreach ($products as &$product) {
+            $id = $product['variantId'];
+            if (array_key_exists($id, $prices)) {
+                $product['price'] = $prices[$id];
+            }
         }
 
         return $products;

@@ -30,15 +30,9 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 interface SortingHandlerInterface
 {
     /**
-     * @param SortingInterface $sorting
-     *
      * @return bool
      */
     public function supports(SortingInterface $sorting);
 
-    /**
-     * @param SortingInterface $sorting
-     * @param QueryBuilder     $query
-     */
     public function handle(SortingInterface $sorting, QueryBuilder $query);
 }

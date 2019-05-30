@@ -24,13 +24,22 @@
 
 namespace Shopware\Components\MultiEdit\Resource\Product;
 
+use Doctrine\ORM\Query\Expr\Literal;
+use Shopware\Components\MultiEdit\Resource\Product;
+use Shopware\Models\MultiEdit\Queue;
+
 /**
- * The batch process resource handles the batch processes for updating articles
- *
- * Class BatchProcess
+ * The batch process resource handles the batch processes for updating products
  */
 class BatchProcess
 {
+    /**
+     * Issue SW-23934
+     *
+     * Due to a problem in PHP (https://bugs.php.net/bug.php?id=70110) long values can lead to a problem parsing the DQL
+     */
+    const MAX_VALUE_LENGTH = 2700;
+
     /**
      * Reference to an instance of the DqlHelper
      *
@@ -46,19 +55,18 @@ class BatchProcess
     protected $filterResource;
 
     /**
+     * @var Product\Queue
+     */
+    protected $queueResource;
+
+    /**
      * Reference to the config instance
      *
      * @var \Shopware_Components_Config
      */
     protected $configResource;
 
-    /**
-     * @param $dqlHelper DqlHelper
-     * @param $filter Filter
-     * @param $queue Queue
-     * @param $config \Shopware_Components_Config
-     */
-    public function __construct($dqlHelper, $filter, $queue, $config)
+    public function __construct(DqlHelper $dqlHelper, Filter $filter, Product\Queue $queue, \Shopware_Components_Config $config)
     {
         $this->dqlHelper = $dqlHelper;
         $this->filterResource = $filter;
@@ -137,27 +145,28 @@ class BatchProcess
                 case 'bigint':
                 case 'decimal':
                 case 'float':
-                    $attributes[$attribute] = ['set', 'add', 'subtract', 'devide', 'multiply'];
+                    $attributes[$attribute] = ['set', 'add', 'subtract', 'divide', 'multiply'];
                     break;
+
                 case 'text':
                 case 'string':
                     $attributes[$attribute] = ['set', 'prepend', 'append', 'removeString'];
                     break;
+
                 case 'boolean':
                     $attributes[$attribute] = ['set'];
                     break;
+
                 case 'date':
                     $attributes[$attribute] = ['set'];
                     break;
+
                 case 'datetime':
                     $attributes[$attribute] = ['set'];
                     break;
+
                 default:
-                    throw new \RuntimeException("Column with type {$type} was not configured, yet");
-            }
-            // Technically we're able to process DQL here. This should not be enabled by default and is quite limited
-            if (false) {
-                $attributes[$attribute][] = 'dql';
+                    throw new \RuntimeException(sprintf('Column with type %s was not configured, yet', $type));
             }
         }
 
@@ -168,8 +177,8 @@ class BatchProcess
      * Will apply a operation list to a given $detailIds. As the operations are grouped by entity, we just need one
      * update query and are able to apply modifications within one query
      *
-     * @param $operations
-     * @param $detailIds
+     * @param array $operations
+     * @param int[] $detailIds
      */
     public function applyOperations($operations, $detailIds)
     {
@@ -190,61 +199,72 @@ class BatchProcess
             list($prefix, $column) = explode('.', $operation['column']);
 
             $type = $columnInfo[ucfirst($prefix) . ucfirst($column)]['type'];
-            if ($operation['value'] && $type == 'decimal' || $type == 'integer' || $type == 'float') {
+            if ($operation['value'] && in_array($type, ['decimal', 'integer', 'float'], true)) {
                 $operation['value'] = str_replace(',', '.', $operation['value']);
             }
 
             // In set mode: If column is nullable and value is "" - set it to null
-            if ($operation['operator'] == 'set' && $columnInfo[ucfirst($prefix) . ucfirst($column)]['nullable'] && $operation['value'] == '') {
+            if ($operation['operator'] === 'set' && $columnInfo[ucfirst($prefix) . ucfirst($column)]['nullable'] && $operation['value'] == '') {
                 $operationValue = 'NULL';
             } else {
-                $operationValue = $builder->expr()->literal($operation['value']);
+                $operationValue = $builder->expr()->literal(
+                    // Limiting the value length to prevent possible parsing errors
+                    substr($operation['value'], 0, self::MAX_VALUE_LENGTH)
+                );
             }
 
             switch (strtolower($operation['operator'])) {
                 case 'removestring':
-                    $builder->set("{$prefix}.$column", new \Doctrine\ORM\Query\Expr\Literal("REPLACE({$prefix}.{$column}, '{$operation['value']}', '')"));
+                    $builder->set("{$prefix}.$column", new Literal(["REPLACE({$prefix}.{$column}, $operationValue, '')"]));
                     break;
+
+                case 'divide':
                 case 'devide':
                     $builder->set("{$prefix}.$column", $builder->expr()->quot("{$prefix}.$column", $operationValue));
                     break;
+
                 case 'multiply':
                     $builder->set("{$prefix}.$column", $builder->expr()->prod("{$prefix}.$column", $operationValue));
                     break;
+
                 case 'add':
                     $builder->set("{$prefix}.$column", $builder->expr()->sum("{$prefix}.$column", $operationValue));
                     break;
+
                 case 'subtract':
                     $builder->set("{$prefix}.$column", $builder->expr()->diff("{$prefix}.$column", $operationValue));
                     break;
+
                 case 'append':
                     $builder->set("{$prefix}.$column", $builder->expr()->concat("{$prefix}.$column", $operationValue));
                     break;
+
                 case 'prepend':
                     $builder->set("{$prefix}.$column", $builder->expr()->concat($operationValue, "{$prefix}.$column"));
                     break;
+
                 case 'dql':
-                    // This is quite limited, as many sql features are note supported. Also the update-statements
-                    // are limited to the current entity, so you will not be able to set an article's name
+                    // This is quite limited, as many sql features are not supported. Also the update-statements
+                    // are limited to the current entity, so you will not be able to set a product's name
                     // to its details number because the detail cannot be joined here.
-                    $builder->set("{$prefix}.$column", new \Doctrine\ORM\Query\Expr\Literal($operation['value']));
+                    $builder->set("{$prefix}.$column", new Literal($operation['value']));
                     break;
+
                 case 'set':
                 default:
                     $builder->set("{$prefix}.$column", $operationValue);
                     break;
             }
         }
+
         $builder->getQuery()->execute();
     }
 
     /**
-     * Updates a sine article details within batch mode
+     * Updates product details within batch mode
      *
-     * @param $detailIds
-     * @param $nestedOperations
-     *
-     * @throws Exception
+     * @param int[] $detailIds
+     * @param array $nestedOperations
      */
     public function updateDetails($detailIds, $nestedOperations)
     {
@@ -270,10 +290,10 @@ class BatchProcess
         }
 
         // Notify event - you might want register for this in order to clear the cache?
-        foreach ($this->getDqlHelper()->getIdForForeignEntity('article', $detailIds) as $articleId) {
+        foreach ($this->getDqlHelper()->getIdForForeignEntity('article', $detailIds) as $productId) {
             $this->getDqlHelper()->getEventManager()->notify(
                 'Shopware_Plugins_HttpCache_InvalidateCacheId',
-                ['subject' => $this, 'cacheId' => 'a' . $articleId]
+                ['subject' => $this, 'cacheId' => 'a' . $productId]
             );
         }
     }
@@ -281,7 +301,7 @@ class BatchProcess
     /**
      * Batch processes a given queue
      *
-     * @param $queueId
+     * @param int $queueId
      *
      * @throws \RuntimeException
      *
@@ -292,11 +312,11 @@ class BatchProcess
         $entityManager = $this->getDqlHelper()->getEntityManager();
         $connection = $entityManager->getConnection();
 
-        /** @var \Shopware\Models\MultiEdit\Queue $queue */
-        $queue = $entityManager->find('\Shopware\Models\MultiEdit\Queue', $queueId);
+        /** @var Queue|null $queue */
+        $queue = $entityManager->find(Queue::class, $queueId);
 
         if (!$queue) {
-            throw new \RuntimeException("Queue with ID {$queueId} not found");
+            throw new \RuntimeException(sprintf('Queue with ID %s not found', $queueId));
         }
 
         $operations = json_decode($queue->getOperations(), true);
@@ -314,11 +334,11 @@ class BatchProcess
             }
         } catch (\Exception $e) {
             $connection->rollBack();
-            throw new \RuntimeException("Error updating details: {$e->getMessage()}", 0, $e);
+            throw new \RuntimeException(sprintf('Error updating details: %s', $e->getMessage()), 0, $e);
         }
         $remaining = $queue->getArticleDetails()->count();
 
-        if ($remaining == 0) {
+        if ($remaining === 0) {
             $entityManager->remove($queue);
             $entityManager->flush();
         }
@@ -326,7 +346,7 @@ class BatchProcess
         return [
             'totalCount' => $queue->getInitialSize(),
             'remaining' => $remaining,
-            'done' => $remaining == 0,
+            'done' => $remaining === 0,
             'processed' => $queue->getInitialSize() - $remaining,
         ];
     }

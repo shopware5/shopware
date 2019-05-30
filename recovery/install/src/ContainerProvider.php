@@ -41,7 +41,7 @@ use Shopware\Recovery\Install\Service\TranslationService;
 use Shopware\Recovery\Install\Service\WebserverCheck;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -130,10 +130,8 @@ class ContainerProvider implements ServiceProviderInterface
         $container['shopware.theme_installer'] = function ($c) {
             $shopwareContainer = $c['shopware.container'];
 
-            /** @var $themeInstaller \Shopware\Components\Theme\Installer */
-            $themeInstaller = $shopwareContainer->get('theme_installer');
-
-            return $themeInstaller;
+            /* @var \Shopware\Components\Theme\Installer $themeInstaller */
+            return $shopwareContainer->get('theme_installer');
         };
 
         $container['http-client'] = function ($c) {
@@ -148,7 +146,7 @@ class ContainerProvider implements ServiceProviderInterface
         };
 
         $container['install.requirements'] = function ($c) {
-            return new Requirements(SW_PATH . '/engine/Shopware/Components/Check/Data/System.xml');
+            return new Requirements(SW_PATH . '/engine/Shopware/Components/Check/Data/System.xml', $c['translation.service']);
         };
 
         $container['install.requirementsPath'] = function ($c) {

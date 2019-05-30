@@ -53,12 +53,6 @@ class MediaReplaceService implements MediaReplaceServiceInterface
      */
     private $mappingService;
 
-    /**
-     * @param MediaServiceInterface                 $mediaService
-     * @param Manager                               $thumbnailManager
-     * @param ModelManager                          $modelManager
-     * @param MediaExtensionMappingServiceInterface $mappingService
-     */
     public function __construct(MediaServiceInterface $mediaService, Manager $thumbnailManager, ModelManager $modelManager, MediaExtensionMappingServiceInterface $mappingService)
     {
         $this->mediaService = $mediaService;
@@ -74,14 +68,20 @@ class MediaReplaceService implements MediaReplaceServiceInterface
      */
     public function replace($mediaId, UploadedFile $file)
     {
+        /** @var Media|null $media */
         $media = $this->modelManager->find(Media::class, $mediaId);
+
+        if ($media === null) {
+            throw new \InvalidArgumentException(sprintf('Media with id %s not found', $mediaId));
+        }
+
         $uploadedFileExtension = $this->getExtension($file);
 
         if ($media->getType() !== $this->mappingService->getType($uploadedFileExtension)) {
             throw new WrongMediaTypeForReplaceException($media->getType());
         }
 
-        if (false === $this->mappingService->isAllowed($uploadedFileExtension)) {
+        if ($this->mappingService->isAllowed($uploadedFileExtension) === false) {
             throw new MediaFileExtensionNotAllowedException($uploadedFileExtension);
         }
 
@@ -91,8 +91,9 @@ class MediaReplaceService implements MediaReplaceServiceInterface
 
         $media->setExtension($this->getExtension($file));
         $media->setFileSize(filesize($file->getRealPath()));
+        $media->setCreated(new \DateTime());
 
-        if ($media->getType() === $media::TYPE_IMAGE) {
+        if ($media->getType() === Media::TYPE_IMAGE) {
             $imageSize = getimagesize($file->getRealPath());
 
             if ($imageSize) {
@@ -109,9 +110,6 @@ class MediaReplaceService implements MediaReplaceServiceInterface
     }
 
     /**
-     * @param Media        $media
-     * @param UploadedFile $file
-     *
      * @return bool
      */
     private function validateMediaType(Media $media, UploadedFile $file)
@@ -122,8 +120,6 @@ class MediaReplaceService implements MediaReplaceServiceInterface
     }
 
     /**
-     * @param UploadedFile $file
-     *
      * @return string
      */
     private function getExtension(UploadedFile $file)

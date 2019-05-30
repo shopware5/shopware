@@ -30,11 +30,11 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ShopContext extends Extendable implements ProductContextInterface
+class ShopContext extends Extendable implements ShopContextInterface, ProductContextInterface
 {
     /**
      * @var Group
@@ -93,15 +93,8 @@ class ShopContext extends Extendable implements ProductContextInterface
 
     /**
      * @param string       $baseUrl
-     * @param Shop         $shop
-     * @param Currency     $currency
-     * @param Group        $currentCustomerGroup
-     * @param Group        $fallbackCustomerGroup
      * @param Tax[]        $taxRules
      * @param PriceGroup[] $priceGroups
-     * @param Area|null    $area
-     * @param Country|null $country
-     * @param State|null   $state
      * @param int[]        $customerStreamIds
      */
     public function __construct(

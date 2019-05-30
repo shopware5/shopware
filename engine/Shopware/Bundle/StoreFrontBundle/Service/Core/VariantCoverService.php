@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\VariantCoverServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -45,10 +45,6 @@ class VariantCoverService implements VariantCoverServiceInterface
      */
     private $variantMediaGateway;
 
-    /**
-     * @param Gateway\ProductMediaGatewayInterface $productMedia
-     * @param Gateway\VariantMediaGatewayInterface $variantMedia
-     */
     public function __construct(
         Gateway\ProductMediaGatewayInterface $productMedia,
         Gateway\VariantMediaGatewayInterface $variantMedia

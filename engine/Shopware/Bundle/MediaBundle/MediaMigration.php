@@ -45,10 +45,7 @@ class MediaMigration
     /**
      * Batch migration
      *
-     * @param MediaServiceInterface $fromFilesystem
-     * @param MediaServiceInterface $toFileSystem
-     * @param OutputInterface       $output
-     * @param bool                  $skipScan
+     * @param bool $skipScan
      */
     public function migrate(MediaServiceInterface $fromFilesystem, MediaServiceInterface $toFileSystem, OutputInterface $output, $skipScan = false)
     {
@@ -62,7 +59,7 @@ class MediaMigration
         }
 
         $progressBar = new ProgressBar($output, $filesToMigrate);
-        $progressBar->setFormat(' %current%/%max% [%bar%] %percent%% Elapsed: %elapsed%' . "\n" . ' Current file: %filename%');
+        $progressBar->setFormat(' %current%/%max% [%bar%] %percent%%,  %migrated% migrated, %skipped% skipped, %moved% moved, Elapsed: %elapsed%' . "\n" . ' Current file: %filename%');
         $progressBar->setMessage('', 'filename');
         $this->migrateFilesIn('media', $fromFilesystem, $toFileSystem, $progressBar);
         $progressBar->finish();
@@ -85,9 +82,7 @@ class MediaMigration
     /**
      * Migrate a single file
      *
-     * @param string                $path
-     * @param MediaServiceInterface $fromFilesystem
-     * @param MediaServiceInterface $toFileSystem
+     * @param string $path
      *
      * @throws \RuntimeException
      */
@@ -124,9 +119,8 @@ class MediaMigration
     }
 
     /**
-     * @param MediaServiceInterface $toFileSystem
-     * @param string                $path
-     * @param resource              $contents
+     * @param string   $path
+     * @param resource $contents
      *
      * @return bool
      */
@@ -147,10 +141,7 @@ class MediaMigration
     }
 
     /**
-     * @param string                $directory
-     * @param MediaServiceInterface $fromFilesystem
-     * @param MediaServiceInterface $toFilesystem
-     * @param ProgressBar           $progressBar
+     * @param string $directory
      */
     private function migrateFilesIn($directory, MediaServiceInterface $fromFilesystem, MediaServiceInterface $toFilesystem, ProgressBar $progressBar)
     {
@@ -169,15 +160,20 @@ class MediaMigration
                 }
 
                 $progressBar->setMessage($item['path'], 'filename');
+
                 $this->migrateFile($item['path'], $fromFilesystem, $toFilesystem);
+
+                foreach ($this->counter as $key => $value) {
+                    $progressBar->setMessage($value, $key);
+                }
+
                 $progressBar->advance();
             }
         }
     }
 
     /**
-     * @param string                $directory
-     * @param MediaServiceInterface $filesystem
+     * @param string $directory
      *
      * @return int
      */

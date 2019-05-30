@@ -33,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -74,13 +74,6 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
      */
     private $variantHelper;
 
-    /**
-     * @param Connection                  $connection
-     * @param FieldHelper                 $fieldHelper
-     * @param Hydrator\PriceHydrator      $priceHydrator
-     * @param \Shopware_Components_Config $config
-     * @param VariantHelperInterface      $variantHelper
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
@@ -154,7 +147,7 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
             ->setParameter(':variants', $variantIds, Connection::PARAM_INT_ARRAY)
             ->setParameter(':priceGroupCustomerGroup', $customerGroup->getId());
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $mainQuery->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -231,9 +224,6 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
     /**
      * Pre selection of the cheapest prices.
      *
-     * @param QueryBuilder $mainQuery
-     * @param Criteria     $criteria
-     *
      * @return QueryBuilder
      */
     private function getCheapestPriceQuery(QueryBuilder $mainQuery, Criteria $criteria)
@@ -309,7 +299,7 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
         $cheapestPriceIdQuery = $this->connection->createQueryBuilder();
 
         $joinCondition = ' cheapestPrices.articleID = details.articleID ';
-        /** @var $condition VariantCondition */
+        /** @var VariantCondition $condition */
         foreach ($criteria->getConditionsByClass(VariantCondition::class) as $condition) {
             if ($condition->expandVariants()) {
                 $joinCondition = $this->joinVariantCondition($mainQuery, $cheapestPriceIdQuery, $cheapestPriceQuery, $condition) . $joinCondition;

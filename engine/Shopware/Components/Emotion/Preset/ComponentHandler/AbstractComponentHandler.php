@@ -26,8 +26,9 @@ namespace Shopware\Components\Emotion\Preset\ComponentHandler;
 
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Api\Resource\Media as MediaResource;
+use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Media\Media;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class AbstractComponentHandler implements ComponentHandlerInterface
 {
@@ -41,17 +42,14 @@ abstract class AbstractComponentHandler implements ComponentHandlerInterface
      */
     protected $mediaService;
 
-    /**
-     * @param MediaServiceInterface $mediaService
-     * @param MediaResource         $mediaResource
-     * @param ContainerInterface    $container
-     */
-    public function __construct(MediaServiceInterface $mediaService, MediaResource $mediaResource, ContainerInterface $container)
+    public function __construct(MediaServiceInterface $mediaService, MediaResource $mediaResource, Container $container)
     {
         $this->mediaService = $mediaService;
         $this->mediaResource = $mediaResource;
         $this->mediaResource->setContainer($container);
-        $this->mediaResource->setManager($container->get('models'));
+        /** @var ModelManager $modelManager */
+        $modelManager = $container->get('models');
+        $this->mediaResource->setManager($modelManager);
     }
 
     /**
@@ -64,17 +62,15 @@ abstract class AbstractComponentHandler implements ComponentHandlerInterface
     {
         $media = $this->mediaResource->internalCreateMediaByFileLink($assetPath, $albumId);
 
-        if ($media) {
-            $this->mediaResource->getManager()->flush($media);
-        }
+        $this->mediaResource->getManager()->flush($media);
 
         return $media;
     }
 
     /**
-     * @param $id
+     * @param int $id
      *
-     * @return null|object
+     * @return object|null
      */
     protected function getMediaById($id)
     {
@@ -82,9 +78,9 @@ abstract class AbstractComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param $path
+     * @param string $path
      *
-     * @return null|object
+     * @return object|null
      */
     protected function getMediaByPath($path)
     {

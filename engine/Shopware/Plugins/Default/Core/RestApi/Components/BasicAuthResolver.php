@@ -28,7 +28,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\User\User;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -41,9 +41,6 @@ class BasicAuthResolver implements \Zend_Auth_Adapter_Http_Resolver_Interface
      */
     protected $modelManager;
 
-    /**
-     * @param ModelManager $modelManager
-     */
     public function __construct(ModelManager $modelManager)
     {
         $this->modelManager = $modelManager;

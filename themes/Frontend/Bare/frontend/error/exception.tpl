@@ -5,8 +5,8 @@
         {s name="ExceptionText"}The following hints should help you.{/s}
     </p>
 
-    <h3>{$exception->getMessage()} in {$error_file} on line {$exception->getLine()}</h3>
-    
+    <h3>{$exception->getMessage()|escape} in {$error_file|escape} on line {$exception->getLine()}</h3>
+
     <h3>Stack trace:</h3>
     <div style="overflow:auto;">
     <pre>{$error_trace|escape}</pre>

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\QueryAliasMapper;
 
 /**
@@ -61,8 +62,6 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
 
     /**
      * Optimize Sourcecode / Apply SEO rules
-     *
-     * @param Enlight_Controller_ActionEventArgs $args
      */
     public function onPostDispatch(Enlight_Controller_ActionEventArgs $args)
     {
@@ -79,7 +78,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
 
         $config = $this->get('config');
 
-        /** @var $mapper QueryAliasMapper */
+        /** @var QueryAliasMapper $mapper */
         $mapper = $this->get('query_alias_mapper');
 
         $controllerBlacklist = preg_replace('#\s#', '', $config['sSEOVIEWPORTBLACKLIST']);
@@ -142,22 +141,30 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
         $view->extendsTemplate('frontend/plugins/seo/index.tpl');
 
         if (!empty($metaRobots)) {
-            $view->SeoMetaRobots = $metaRobots;
+            $view->assign('SeoMetaRobots', $metaRobots);
         }
         if (!empty($metaDescription)) {
-            $view->SeoMetaDescription = $metaDescription;
+            $view->assign('SeoMetaDescription', $metaDescription);
         }
 
         if ($this->get('config')->get('hrefLangEnabled')) {
             $context = $this->get('shopware_storefront.context_service')->getShopContext();
-            $view->assign('sHrefLinks', $this->get('shopware_storefront.cached_href_lang_service')->getUrls($request->getParams(), $context));
+
+            $params = $request->getParams();
+            $sCategoryContent = $view->getAssign('sCategoryContent');
+
+            if ($sCategoryContent && $request->getControllerName() === 'listing' && isset($sCategoryContent['canonicalParams']) && is_array($sCategoryContent['canonicalParams'])) {
+                $params = $sCategoryContent['canonicalParams'];
+            }
+
+            $view->assign('sHrefLinks', $this->get('shopware_storefront.cached_href_lang_service')->getUrls($params, $context));
         }
+
+        $view->assign('SeoDescriptionMaxLength', (int) $this->get('config')->get('metaDescriptionLength'));
     }
 
     /**
      * Remove html-comments / whitespaces
-     *
-     * @param Enlight_Event_EventArgs $args
      *
      * @return mixed|string
      */

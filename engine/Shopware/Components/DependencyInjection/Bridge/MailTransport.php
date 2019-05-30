@@ -25,17 +25,13 @@
 namespace Shopware\Components\DependencyInjection\Bridge;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class MailTransport
 {
     /**
-     * @param \Enlight_Loader             $loader
-     * @param \Shopware_Components_Config $config
-     * @param array                       $options
-     *
      * @return \Enlight_Class|\Zend_Mail_Transport_Abstract
      */
     public function factory(\Enlight_Loader $loader, \Shopware_Components_Config $config, array $options)
@@ -79,14 +75,16 @@ class MailTransport
         }
         unset($options['type'], $options['charset']);
 
-        if ($transportName == 'Zend_Mail_Transport_Smtp') {
+        if ($transportName === 'Zend_Mail_Transport_Smtp') {
+            /** @var \Zend_Mail_Transport_Smtp $transport */
             $transport = \Enlight_Class::Instance($transportName, [$options['host'], $options]);
         } elseif (!empty($options)) {
+            /** @var \Zend_Mail_Transport_Abstract $transport */
             $transport = \Enlight_Class::Instance($transportName, [$options]);
         } else {
+            /** @var \Zend_Mail_Transport_Abstract $transport */
             $transport = \Enlight_Class::Instance($transportName);
         }
-        /* @var $transport \Zend_Mail_Transport_Abstract */
         \Enlight_Components_Mail::setDefaultTransport($transport);
 
         if (!isset($options['from']) && !empty($config->Mail)) {

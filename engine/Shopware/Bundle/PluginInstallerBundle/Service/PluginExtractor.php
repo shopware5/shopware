@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
+use Shopware\Components\Plugin\RequirementValidator;
+use Shopware\Components\ShopwareReleaseStruct;
 use Symfony\Component\Filesystem\Filesystem;
 
 class PluginExtractor
@@ -41,18 +43,34 @@ class PluginExtractor
     /**
      * @var string[]
      */
-    private $pluginDirectories = [];
+    private $pluginDirectories;
 
     /**
-     * @param string     $pluginDir
-     * @param Filesystem $filesystem
-     * @param string[]   $pluginDirectories
+     * @var ShopwareReleaseStruct
      */
-    public function __construct($pluginDir, Filesystem $filesystem, array $pluginDirectories = [])
-    {
+    private $release;
+
+    /**
+     * @var RequirementValidator
+     */
+    private $requirementsValidator;
+
+    /**
+     * @param string   $pluginDir
+     * @param string[] $pluginDirectories
+     */
+    public function __construct(
+        $pluginDir,
+        Filesystem $filesystem,
+        array $pluginDirectories = [],
+        ShopwareReleaseStruct $release,
+        RequirementValidator $requirementValidator
+    ) {
         $this->pluginDir = $pluginDir;
         $this->filesystem = $filesystem;
         $this->pluginDirectories = $pluginDirectories;
+        $this->release = $release;
+        $this->requirementsValidator = $requirementValidator;
     }
 
     /**
@@ -67,13 +85,12 @@ class PluginExtractor
         $destination = $this->pluginDir;
 
         if (!is_writable($destination)) {
-            throw new \Exception(
-                'Destination directory is not writable'
-            );
+            throw new \Exception(sprintf('Destination directory "%s" is not writable', $destination));
         }
 
         $prefix = $this->getPluginPrefix($archive);
         $this->validatePluginZip($prefix, $archive);
+        $this->validatePluginRequirements($prefix, $archive);
 
         $oldFile = $this->findOldFile($prefix);
         $backupFile = $this->createBackupFile($oldFile);
@@ -101,8 +118,7 @@ class PluginExtractor
      * path and validates the plugin namespace, directory traversal
      * and multiple plugin directories.
      *
-     * @param string      $prefix
-     * @param \ZipArchive $archive
+     * @param string $prefix
      */
     private function validatePluginZip($prefix, \ZipArchive $archive)
     {
@@ -115,8 +131,6 @@ class PluginExtractor
     }
 
     /**
-     * @param \ZipArchive $archive
-     *
      * @return string
      */
     private function getPluginPrefix(\ZipArchive $archive)
@@ -159,14 +173,12 @@ class PluginExtractor
     }
 
     /**
-     * @param $filename
+     * @param string $filename
      */
     private function assertNoDirectoryTraversal($filename)
     {
         if (strpos($filename, '../') !== false) {
-            throw new \RuntimeException(
-                sprintf('Directory Traversal detected')
-            );
+            throw new \RuntimeException('Directory Traversal detected');
         }
     }
 
@@ -197,7 +209,7 @@ class PluginExtractor
     }
 
     /**
-     * @param string $oldFile
+     * @param string|false $oldFile
      *
      * @return bool|string
      */
@@ -209,8 +221,23 @@ class PluginExtractor
 
         $backupFile = $oldFile . '.' . uniqid();
         $this->filesystem->rename($oldFile, $backupFile);
-        rename($oldFile, $backupFile);
 
         return $backupFile;
+    }
+
+    /**
+     * @param string $prefix
+     */
+    private function validatePluginRequirements($prefix, \ZipArchive $archive)
+    {
+        if ($xml = $archive->getFromName($prefix . '/plugin.xml')) {
+            $tmpFile = tempnam(sys_get_temp_dir(), uniqid()) . '.xml';
+            file_put_contents($tmpFile, $xml);
+            try {
+                $this->requirementsValidator->validate($tmpFile, $this->release->getVersion());
+            } finally {
+                unlink($tmpFile);
+            }
+        }
     }
 }

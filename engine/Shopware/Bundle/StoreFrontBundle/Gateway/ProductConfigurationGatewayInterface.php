@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -39,8 +39,7 @@ interface ProductConfigurationGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[] $products
      *
      * @return array indexed by the product order number, each array element contains a Struct\Configurator\Group array
      */
@@ -54,9 +53,6 @@ interface ProductConfigurationGatewayInterface
      * Required translation in the provided context language:
      * - Configurator groups
      * - Configurator options
-     *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Configurator\Group[]
      */

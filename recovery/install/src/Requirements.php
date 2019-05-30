@@ -24,8 +24,10 @@
 
 namespace Shopware\Recovery\Install;
 
+use Shopware\Recovery\Install\Service\TranslationService;
+
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -37,15 +39,22 @@ class Requirements
     private $sourceFile;
 
     /**
+     * @var string[]
+     */
+    private $translations;
+
+    /**
      * @param string $sourceFile
      */
-    public function __construct($sourceFile)
+    public function __construct($sourceFile, TranslationService $translations)
     {
         if (!is_readable($sourceFile)) {
             throw new \RuntimeException(sprintf('Cannot read requirements file in %s.', $sourceFile));
         }
 
         $this->sourceFile = $sourceFile;
+
+        $this->translations = $translations;
     }
 
     /**
@@ -56,12 +65,13 @@ class Requirements
     public function toArray()
     {
         $result = [
-            'hasIoncube'  => false,
             'hasErrors' => false,
             'hasWarnings' => false,
             'checks' => [],
+            'phpVersionNotSupported' => false,
         ];
 
+        $checks = [];
         foreach ($this->runChecks() as $requirement) {
             $check = [];
 
@@ -74,10 +84,24 @@ class Requirements
             $check['group'] = (string) $requirement->group;
             $check['notice'] = (string) $requirement->notice;
             $check['required'] = (string) $requirement->required;
-            $check['version']  = (string) $requirement->version;
-            $check['check']   = (bool) (string) $requirement->result;
-            $check['error']    = (bool) $requirement->error;
+            $check['version'] = (string) $requirement->version;
+            $check['maxCompatibleVersion'] = (string) $requirement->maxCompatibleVersion;
+            $check['check'] = (bool) (string) $requirement->result;
+            $check['error'] = (bool) $requirement->error;
 
+            if ($check['maxCompatibleVersion'] && $check['check']) {
+                $check = $this->handleMaxCompatibleVersion($check);
+                if ($check['notice']) {
+                    $result['phpVersionNotSupported'] = $check['notice'];
+                }
+            }
+
+            $checks[] = $check;
+        }
+
+        $checks = array_merge($checks, $this->checkOpcache());
+
+        foreach ($checks as $check) {
             if (!$check['check'] && $check['error']) {
                 $check['status'] = 'error';
                 $result['hasErrors'] = true;
@@ -86,10 +110,6 @@ class Requirements
                 $result['hasWarnings'] = true;
             } else {
                 $check['status'] = 'ok';
-
-                if (strtolower($check['name']) === 'ioncube loader') {
-                    $result['hasIoncube'] = true;
-                }
             }
             unset($check['check'], $check['error']);
 
@@ -181,24 +201,6 @@ class Requirements
     }
 
     /**
-     * Checks the ion cube loader
-     *
-     * @return bool|string
-     */
-    private function checkIonCubeLoader()
-    {
-        if (!extension_loaded('ionCube Loader')) {
-            return false;
-        }
-
-        if (!function_exists('ioncube_loader_version')) {
-            return false;
-        }
-
-        return ioncube_loader_version();
-    }
-
-    /**
      * Checks the php version
      *
      * @return bool|string
@@ -220,6 +222,44 @@ class Requirements
     private function checkModRewrite()
     {
         return isset($_SERVER['MOD_REWRITE']);
+    }
+
+    /**
+     * Checks the opcache configuration if the opcache exists.
+     */
+    private function checkOpcache()
+    {
+        if (!extension_loaded('Zend OPcache')) {
+            return [];
+        }
+
+        $useCwdOption = $this->compare('opcache.use_cwd', ini_get('opcache.use_cwd'), '1');
+        $opcacheRequirements = [[
+            'name' => 'opcache.use_cwd',
+            'group' => 'core',
+            'required' => 1,
+            'version' => ini_get('opcache.use_cwd'),
+            'result' => ini_get('opcache.use_cwd'),
+            'notice' => '',
+            'check' => $this->compare('opcache.use_cwd', ini_get('opcache.use_cwd'), '1'),
+            'error' => '',
+        ]];
+
+        if (fileinode('/') > 2) {
+            $validateRootOption = $this->compare('opcache.validate_root', ini_get('opcache.validate_root'), '1');
+            $opcacheRequirements[] = [
+                'name' => 'opcache.validate_root',
+                'group' => 'core',
+                'required' => 1,
+                'version' => ini_get('opcache.validate_root'),
+                'result' => ini_get('opcache.validate_root'),
+                'notice' => '',
+                'check' => $this->compare('opcache.validate_root', ini_get('opcache.validate_root'), '1'),
+                'error' => '',
+            ];
+        }
+
+        return $opcacheRequirements;
     }
 
     /**
@@ -378,16 +418,19 @@ class Requirements
      */
     private function decodePhpSize($val)
     {
-        $val = trim($val);
-        $last = strtolower($val[strlen($val) - 1]);
+        $val = strtolower(trim($val));
+        $last = substr($val, -1);
+
         $val = (float) $val;
         switch ($last) {
             /* @noinspection PhpMissingBreakStatementInspection */
             case 'g':
                 $val *= 1024;
             /* @noinspection PhpMissingBreakStatementInspection */
+            // no break
             case 'm':
                 $val *= 1024;
+                // no break
             case 'k':
                 $val *= 1024;
         }
@@ -411,12 +454,16 @@ class Requirements
             /* @noinspection PhpMissingBreakStatementInspection */
             case 'TB':
                 $val *= 1024;
+                // no break
             case 'GB':
                 $val *= 1024;
+                // no break
             case 'MB':
                 $val *= 1024;
+                // no break
             case 'KB':
                 $val *= 1024;
+                // no break
             case 'B':
                 $val = (float) $val;
         }
@@ -437,5 +484,21 @@ class Requirements
         for ($i = 0; $bytes >= 1024 && $i < (count($types) - 1); $bytes /= 1024, $i++);
 
         return round($bytes, 2) . ' ' . $types[$i];
+    }
+
+    /**
+     * @return array
+     */
+    private function handleMaxCompatibleVersion(array $check)
+    {
+        if (version_compare($check['version'], $check['maxCompatibleVersion'], '>')) {
+            $check['check'] = false;
+            $maxCompatibleVersion = str_replace('.99', '', $check['maxCompatibleVersion']);
+            $key = 'requirements_php_max_compatible_version';
+
+            $check['notice'] = sprintf($this->translations->translate($key), $maxCompatibleVersion);
+        }
+
+        return $check;
     }
 }

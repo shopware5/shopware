@@ -34,18 +34,18 @@ class InstallerTest extends Base
     public function testSynchronizeThemeDirectory()
     {
         $repository = $this->createMock(\Doctrine\ORM\EntityRepository::class);
-        $repository->expects($this->any())
+        $repository->expects(static::any())
             ->method('findOneBy')
             ->willReturn(null);
 
         $entityManager = $this->getEntityManager();
-        $entityManager->expects($this->exactly(2))
+        $entityManager->expects(static::exactly(2))
             ->method('persist');
 
-        $entityManager->expects($this->exactly(2))
+        $entityManager->expects(static::exactly(2))
             ->method('flush');
 
-        $entityManager->expects($this->once())
+        $entityManager->expects(static::once())
             ->method('getRepository')
             ->willReturn($repository);
 
@@ -71,6 +71,6 @@ class InstallerTest extends Base
             [$directories]
         );
 
-        $this->assertCount(2, $themes);
+        static::assertCount(2, $themes);
     }
 }

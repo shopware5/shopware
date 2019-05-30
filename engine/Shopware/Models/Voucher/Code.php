@@ -31,7 +31,7 @@ use Shopware\Components\Model\ModelEntity;
  * Standard Code Model Entity
  *
  * @ORM\Table(name="s_emarketing_voucher_codes")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Code extends ModelEntity
 {
@@ -39,7 +39,7 @@ class Code extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -74,12 +74,15 @@ class Code extends ModelEntity
 
     /**
      * @var \Shopware\Models\Voucher\Voucher
+     *
      * @ORM\ManyToOne(targetEntity="Voucher", inversedBy="codes")
      * @ORM\JoinColumn(name="voucherID", referencedColumnName="id")
      */
     private $voucher;
+
     /**
      * @var \Shopware\Models\Voucher\Voucher
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Customer\Customer")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
      */

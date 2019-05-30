@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -45,10 +45,6 @@ class VoteService implements Service\VoteServiceInterface
      */
     private $voteAverageGateway;
 
-    /**
-     * @param Gateway\VoteGatewayInterface        $voteGateway
-     * @param Gateway\VoteAverageGatewayInterface $voteAverageGateway
-     */
     public function __construct(
         Gateway\VoteGatewayInterface $voteGateway,
         Gateway\VoteAverageGatewayInterface $voteAverageGateway

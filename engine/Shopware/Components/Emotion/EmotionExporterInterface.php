@@ -29,7 +29,7 @@ interface EmotionExporterInterface
     /**
      * @param int $emotionId
      *
-     * @return \ZipArchive
+     * @return string Filename of \ZipArchive
      */
     public function export($emotionId);
 }

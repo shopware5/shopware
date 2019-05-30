@@ -24,11 +24,13 @@
 
 namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 
+use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Order\Order;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -40,9 +42,7 @@ class OrderReader extends GenericReader
     private $snippets;
 
     /**
-     * @param string                              $entity
-     * @param ModelManager                        $entityManager
-     * @param \Enlight_Components_Snippet_Manager $snippets
+     * @param string $entity
      */
     public function __construct($entity, ModelManager $entityManager, \Enlight_Components_Snippet_Manager $snippets)
     {
@@ -56,11 +56,13 @@ class OrderReader extends GenericReader
     public function getList($identifiers)
     {
         $data = parent::getList($identifiers);
+        $documents = $this->getDocuments($data);
 
         $namespace = $this->snippets->getNamespace('backend/static/order_status');
 
         foreach ($data as &$row) {
             $row['orderStateName'] = $namespace->get($row['orderStateKey']);
+            $row['orderDocuments'] = $this->getOrderDocuments($documents, $row);
         }
 
         return $data;
@@ -85,8 +87,8 @@ class OrderReader extends GenericReader
             'customer.id as customerId',
             'customer.email as email',
             'customer.groupKey as groupKey',
-            'customer.firstname as firstname',
-            'customer.lastname as lastname',
+            'billing.firstName as firstname',
+            'billing.lastName as lastname',
             'payment.id as paymentId',
             'payment.description as paymentName',
             'dispatch.id as dispatchId',
@@ -115,7 +117,34 @@ class OrderReader extends GenericReader
         $query->leftJoin('entity.billing', 'billing');
         $query->leftJoin('entity.shipping', 'shipping');
         $query->leftJoin('billing.country', 'billingCountry');
+        $query->andWhere('entity.number IS NOT NULL');
+        $query->andWhere('entity.status != :cancelStatus');
+        $query->setParameter(':cancelStatus', -1);
 
         return $query;
+    }
+
+    /**
+     * @return array
+     */
+    private function getDocuments(array $orders)
+    {
+        $query = $this->entityManager->getConnection()->createQueryBuilder();
+        $query->select('documents.orderID', 'documents.docID');
+        $query->from('s_order_documents', 'documents');
+        $query->where('documents.orderID IN (:ids)');
+        $query->setParameter(':ids', array_keys($orders), Connection::PARAM_INT_ARRAY);
+
+        return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @return array
+     */
+    private function getOrderDocuments(array $documents, array $row)
+    {
+        return array_values(array_filter(array_column(array_filter($documents, function (array $document) use ($row) {
+            return (int) $document['orderID'] === (int) $row['id'];
+        }), 'docID')));
     }
 }

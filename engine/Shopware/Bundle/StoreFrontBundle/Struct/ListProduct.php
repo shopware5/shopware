@@ -33,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -78,7 +78,7 @@ class ListProduct extends BaseProduct
      * Defines the date when the product was released / will be
      * released and can be ordered.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $releaseDate;
 
@@ -115,9 +115,17 @@ class ListProduct extends BaseProduct
      * Defines the date which the product was created in the
      * database.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $createdAt;
+
+    /**
+     * Defines the date which the product was last updated in
+     * the database.
+     *
+     * @var \DateTimeInterface
+     */
+    protected $updatedAt;
 
     /**
      * Defines a list of keywords for this product.
@@ -199,7 +207,7 @@ class ListProduct extends BaseProduct
      * Flag if the product should be displayed
      * with a teaser flag within listings.
      *
-     * @var float
+     * @var bool
      */
     protected $highlight;
 
@@ -297,7 +305,7 @@ class ListProduct extends BaseProduct
     protected $cover;
 
     /**
-     * @var PriceGroup
+     * @var PriceGroup|null
      */
     protected $priceGroup;
 
@@ -306,7 +314,7 @@ class ListProduct extends BaseProduct
      * States defines which processed the product has already passed through,
      * like the price calculation, translation or other states.
      *
-     * @var array
+     * @var string[]
      */
     protected $states = [];
 
@@ -370,7 +378,7 @@ class ListProduct extends BaseProduct
     /**
      * Adds a new product state.
      *
-     * @param $state
+     * @param string $state
      */
     public function addState($state)
     {
@@ -396,7 +404,7 @@ class ListProduct extends BaseProduct
     /**
      * Checks if the product has a specify state.
      *
-     * @param $state
+     * @param string $state
      *
      * @return bool
      */
@@ -461,16 +469,13 @@ class ListProduct extends BaseProduct
         $this->shippingFree = $shippingFree;
     }
 
-    /**
-     * @param Unit $unit
-     */
     public function setUnit(Unit $unit)
     {
         $this->unit = $unit;
     }
 
     /**
-     * @return Unit
+     * @return Unit|null
      */
     public function getUnit()
     {
@@ -494,7 +499,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\Price[] $prices
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\Price[]|null $prices
      */
     public function setPrices($prices)
     {
@@ -518,7 +523,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer|null
      */
     public function getManufacturer()
     {
@@ -534,7 +539,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Media
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Media|null
      */
     public function getCover()
     {
@@ -542,7 +547,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\Price $cheapestPrice
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\Price|null $cheapestPrice
      */
     public function setCheapestPrice($cheapestPrice)
     {
@@ -550,7 +555,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Price
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Price|null
      */
     public function getCheapestPrice()
     {
@@ -712,7 +717,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \DateTime $releaseDate
+     * @param \DateTimeInterface|null $releaseDate
      */
     public function setReleaseDate($releaseDate)
     {
@@ -720,7 +725,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface|null
      */
     public function getReleaseDate()
     {
@@ -828,7 +833,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface|null
      */
     public function getCreatedAt()
     {
@@ -836,7 +841,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \DateTime $createdAt
+     * @param \DateTimeInterface|null $createdAt
      */
     public function setCreatedAt($createdAt)
     {
@@ -844,7 +849,23 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return PriceGroup
+     * @return \DateTimeInterface|null
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTimeInterface|null $updatedAt
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * @return PriceGroup|null
      */
     public function getPriceGroup()
     {
@@ -868,7 +889,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule[] $priceRules
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule[]|null $priceRules
      */
     public function setPriceRules($priceRules)
     {
@@ -876,7 +897,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule|null
      */
     public function getCheapestPriceRule()
     {
@@ -884,7 +905,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule $cheapestPriceRule
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule|null $cheapestPriceRule
      */
     public function setCheapestPriceRule($cheapestPriceRule)
     {
@@ -1044,7 +1065,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return VoteAverage
+     * @return VoteAverage|null
      */
     public function getVoteAverage()
     {
@@ -1084,7 +1105,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param Price $cheapestUnitPrice
+     * @param Price|null $cheapestUnitPrice
      */
     public function setCheapestUnitPrice($cheapestUnitPrice)
     {
@@ -1176,9 +1197,6 @@ class ListProduct extends BaseProduct
         $this->categories = $categories;
     }
 
-    /**
-     * @param Price $price
-     */
     public function setListingPrice(Price $price)
     {
         $this->listingPrice = $price;

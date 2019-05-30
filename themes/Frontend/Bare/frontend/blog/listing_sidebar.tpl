@@ -6,7 +6,8 @@
         {block name='frontend_listing_actions_filter_container'}
 
             {block name='frontend_listing_actions_filter_closebtn'}
-                <a href="#" title="{"{s name="ListingActionsCloseFilter"}{/s}"|escape}" class="blog--filter-close-btn">{s namespace='frontend/listing/listing_actions' name='ListingActionsCloseFilter'}{/s} <i class="icon--arrow-right"></i></a>
+                {s name="ListingActionsCloseFilter" assign="snippetListingActionsCloseFilter"}{/s}
+                <a href="#" title="{$snippetListingActionsCloseFilter|escape}" class="blog--filter-close-btn">{s namespace='frontend/listing/listing_actions' name='ListingActionsCloseFilter'}{/s} <i class="icon--arrow-right"></i></a>
             {/block}
 
             <div class="filter--container">
@@ -52,7 +53,9 @@
 
                             {* Blog filter *}
                             {block name='frontend_blog_index_filter'}
-                                {include file="frontend/blog/filter.tpl"}
+                                {if !$sCategoryInfo.hideFilter}
+                                    {include file="frontend/blog/filter.tpl"}
+                                {/if}
                             {/block}
                         </div>
                     {/block}

@@ -100,14 +100,14 @@ Ext.define('Shopware.apps.Mail.model.Mail', {
             method: 'POST',
             params : { id : this.data.id },
             success: function(response, opts) {
-                if(typeof(callback) !== 'function') {
+                if(typeof callback !== 'function') {
                     return false;
                 }
 
                 callback.call(this, true, response);
             },
             failure: function(response, opts) {
-                if(typeof(callback) !== 'function') {
+                if(typeof callback !== 'function') {
                     return false;
                 }
 

@@ -70,6 +70,7 @@ Ext.define('Shopware.apps.Config.view.base.Detail', {
             form._record = undefined;
             form.reset();
         }
+        this.fireEvent('recordchange', this, record);
         form.fireEvent('recordchange', form, record);
     },
 

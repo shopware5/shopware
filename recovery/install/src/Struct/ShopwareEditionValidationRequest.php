@@ -25,7 +25,7 @@
 namespace Shopware\Recovery\Install\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -42,8 +42,7 @@ class ShopwareEditionValidationRequest
     private $host;
 
     /**
-     * @param ShopwareEdition $edition
-     * @param $host
+     * @param string $host
      */
     private function __construct(ShopwareEdition $edition, $host)
     {
@@ -52,8 +51,7 @@ class ShopwareEditionValidationRequest
     }
 
     /**
-     * @param ShopwareEdition $edition
-     * @param string          $host
+     * @param string $host
      *
      * @return static
      */
@@ -71,7 +69,7 @@ class ShopwareEditionValidationRequest
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getLicense()
     {

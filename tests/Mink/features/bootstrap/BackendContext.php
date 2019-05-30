@@ -137,8 +137,7 @@ class BackendContext extends SubContext
     /**
      * Checks via a string exists
      *
-     * @param string     $text
-     * @param SubContext $context
+     * @param string $text
      *
      * @return bool
      */

@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 use Zend\Mail\Protocol\ProtocolTrait;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -41,6 +41,6 @@ class ZendMailProtocolTest extends TestCase
      */
     public function testGetCryptoMethod()
     {
-        $this->assertGreaterThan(STREAM_CRYPTO_METHOD_TLSv1_0_CLIENT, $this->getCryptoMethod(), 'TLS protocol version should be greater than TLSv1.0');
+        static::assertGreaterThan(STREAM_CRYPTO_METHOD_TLSv1_0_CLIENT, $this->getCryptoMethod(), 'TLS protocol version should be greater than TLSv1.0');
     }
 }

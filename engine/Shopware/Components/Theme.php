@@ -31,7 +31,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Used as meta information container for a theme.
  * Contains the inheritance and config definition of a theme.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -139,7 +139,7 @@ class Theme
      * from the backend template module
      * to get the template hierarchy
      *
-     * @return null|string
+     * @return string|null
      */
     public function getExtend()
     {
@@ -181,8 +181,6 @@ class Theme
     /**
      * Helper function which returns the theme
      * directory name
-     *
-     * @return mixed
      */
     public function getTemplate()
     {
@@ -263,8 +261,6 @@ class Theme
      *
      *      $collection->add($set);
      *   }
-     *
-     * @param ArrayCollection $collection
      */
     public function createConfigSets(ArrayCollection $collection)
     {
@@ -287,7 +283,7 @@ class Theme
     }
 
     /**
-     * @param bool $discardedLessThemes
+     * @param array $discardedLessThemes
      */
     public function setDiscardedLessThemes($discardedLessThemes)
     {
@@ -314,7 +310,6 @@ class Theme
      * Creates a ext js tab panel.
      *
      * @param string $name
-     * @param array  $options
      *
      * @return Form\Container\TabContainer
      */
@@ -331,7 +326,6 @@ class Theme
      *
      * @param string $name
      * @param string $title
-     * @param array  $options
      *
      * @return Form\Container\FieldSet
      */
@@ -349,7 +343,6 @@ class Theme
      *
      * @param string $name
      * @param string $title
-     * @param array  $options
      *
      * @return Form\Container\Tab
      */
@@ -366,8 +359,6 @@ class Theme
      *
      * @param string $name
      * @param string $label
-     * @param mixed  $defaultValue
-     * @param array  $options
      *
      * @return Form\Field\Text
      */
@@ -386,8 +377,6 @@ class Theme
      *
      * @param string $name
      * @param string $label
-     * @param mixed  $defaultValue
-     * @param array  $options
      *
      * @return Form\Field\Number
      */
@@ -406,8 +395,6 @@ class Theme
      *
      * @param string $name
      * @param string $label
-     * @param mixed  $defaultValue
-     * @param array  $options
      *
      * @return Form\Field\Boolean
      */
@@ -426,8 +413,6 @@ class Theme
      *
      * @param string $name
      * @param string $label
-     * @param mixed  $defaultValue
-     * @param array  $options
      *
      * @return Form\Field\Color
      */
@@ -446,8 +431,6 @@ class Theme
      *
      * @param string $name
      * @param string $label
-     * @param mixed  $defaultValue
-     * @param array  $options
      *
      * @return Form\Field\Date
      */
@@ -466,8 +449,6 @@ class Theme
      *
      * @param string $name
      * @param string $label
-     * @param mixed  $defaultValue
-     * @param array  $options
      *
      * @return Form\Field\Em
      */
@@ -486,8 +467,6 @@ class Theme
      *
      * @param string $name
      * @param string $label
-     * @param mixed  $defaultValue
-     * @param array  $options
      *
      * @return Form\Field\Media
      */
@@ -506,8 +485,6 @@ class Theme
      *
      * @param string $name
      * @param string $label
-     * @param mixed  $defaultValue
-     * @param array  $options
      *
      * @return Form\Field\Percent
      */
@@ -526,8 +503,6 @@ class Theme
      *
      * @param string $name
      * @param string $label
-     * @param mixed  $defaultValue
-     * @param array  $options
      *
      * @return Form\Field\Pixel
      */
@@ -546,9 +521,7 @@ class Theme
      *
      * @param string  $name
      * @param string  $label
-     * @param mixed   $defaultValue
-     * @param array[] $store        [['text' => 'displayText', 'value'  => 10], ...]
-     * @param array   $options
+     * @param array[] $store [['text' => 'displayText', 'value'  => 10], ...]
      *
      * @return Form\Field\Selection
      */
@@ -567,8 +540,6 @@ class Theme
      *
      * @param string $name
      * @param string $label
-     * @param mixed  $defaultValue
-     * @param array  $options
      *
      * @return Form\Field\TextArea
      */

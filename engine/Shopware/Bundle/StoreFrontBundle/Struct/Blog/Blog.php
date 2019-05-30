@@ -66,7 +66,7 @@ class Blog extends Extendable
     protected $views;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $displayDate;
 
@@ -233,7 +233,7 @@ class Blog extends Extendable
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDisplayDate()
     {
@@ -241,7 +241,7 @@ class Blog extends Extendable
     }
 
     /**
-     * @param \DateTime $displayDate
+     * @param \DateTimeInterface $displayDate
      */
     public function setDisplayDate($displayDate)
     {

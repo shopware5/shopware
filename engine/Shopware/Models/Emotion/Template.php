@@ -35,24 +35,26 @@ use Shopware\Components\Model\ModelEntity;
  *
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_emotion_templates")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Template extends ModelEntity
 {
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Emotion\Emotion>
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Emotion", mappedBy="template")
      */
     protected $emotions;
+
     /**
      * Unique identifier field for the shopware emotion.
      *
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -68,6 +70,7 @@ class Template extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="file", type="string", length=255, nullable=false)
      */
     private $file;

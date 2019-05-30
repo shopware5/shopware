@@ -57,10 +57,6 @@ class PasswordValidator extends ConstraintValidator
      */
     private $config;
 
-    /**
-     * @param Shopware_Components_Snippet_Manager $snippets
-     * @param Shopware_Components_Config          $config
-     */
     public function __construct(
         Shopware_Components_Snippet_Manager $snippets,
         Shopware_Components_Config $config
@@ -70,8 +66,7 @@ class PasswordValidator extends ConstraintValidator
     }
 
     /**
-     * @param string     $password
-     * @param Constraint $constraint
+     * @param string $password
      */
     public function validate($password, Constraint $constraint)
     {
@@ -110,8 +105,6 @@ class PasswordValidator extends ConstraintValidator
     }
 
     /**
-     * @param FormInterface $form
-     *
      * @return bool
      */
     private function isFastLogin(FormInterface $form)

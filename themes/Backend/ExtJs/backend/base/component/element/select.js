@@ -40,6 +40,7 @@ Ext.define('Shopware.apps.Base.view.element.Select', {
     editable: true,
     valueField: 'id',
     displayField: 'name',
+    isCustomStore: false,
 
     initComponent:function () {
         var me = this;
@@ -60,12 +61,13 @@ Ext.define('Shopware.apps.Base.view.element.Select', {
             me.valueField = me.displayField;
         }
         // Eval the store string if it contains a statement.
-        if (typeof(me.store) == 'string' && me.store.indexOf('new ') !== -1) {
-            //me.value = parseInt(me.value);
+        if (typeof me.store === 'string' && me.store.indexOf('new ') !== -1) {
             eval('me.store = ' + me.store + ';');
-            // Remove value field for reasons of compatibility
-            me.valueField = me.displayField;
-        } else if (typeof(me.store) === 'string' && me.store.substring(0, 5) !== 'base.') {
+            // if is no custom store remove value field for reasons of compatibility
+            if(!me.isCustomStore) {
+                me.valueField = me.displayField;
+            }
+        } else if (typeof me.store === 'string' && me.store.substring(0, 5) !== 'base.') {
             me.store = me.getStoreById(me.store);
         }
 

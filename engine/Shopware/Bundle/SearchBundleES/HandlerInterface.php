@@ -34,19 +34,12 @@ interface HandlerInterface
     /**
      * Validates if the criteria part can be handled by this handler
      *
-     * @param CriteriaPartInterface $criteriaPart
-     *
      * @return bool
      */
     public function supports(CriteriaPartInterface $criteriaPart);
 
     /**
      * Handles the criteria part and extends the provided search.
-     *
-     * @param CriteriaPartInterface $criteriaPart
-     * @param Criteria              $criteria
-     * @param Search                $search
-     * @param ShopContextInterface  $context
      */
     public function handle(
         CriteriaPartInterface $criteriaPart,

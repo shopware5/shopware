@@ -160,7 +160,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     }
 
     /**
-     * @param $request
+     * @param \Enlight_Controller_Request_Request $request
      *
      * @return bool
      */
@@ -220,13 +220,10 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     /**
      * Refresh visitor log
      *
-     * @param Enlight_Controller_Request_Request $request
-     *
      * @throws \Exception
      */
     public function refreshLog(Enlight_Controller_Request_Request $request)
     {
-        $ip = $this->get('shopware.components.privacy.ip_anonymizer')->anonymize($request->getClientIp());
         $deviceType = $request->getDeviceType();
         $shopId = Shopware()->Shop()->getId();
         $isNewRecord = false;
@@ -260,10 +257,13 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
             $isNewRecord = true;
         }
 
-        $result = Shopware()->Db()->fetchOne('SELECT 1 FROM s_statistics_pool WHERE datum = CURDATE() AND remoteaddr = ?', [$ip]);
+        // IP is being hashed in a way to not be easily revertible
+        $userHash = md5($request->getClientIp() . $request->getHttpHost());
+
+        $result = Shopware()->Db()->fetchOne('SELECT 1 FROM s_statistics_pool WHERE datum = CURDATE() AND remoteaddr = ?', [$userHash]);
         if (empty($result)) {
             $sql = 'INSERT INTO s_statistics_pool (`remoteaddr`, `datum`) VALUES (?, NOW())';
-            Shopware()->Db()->query($sql, [$ip]);
+            Shopware()->Db()->query($sql, [$userHash]);
 
             if ($isNewRecord === false) {
                 $sql = 'UPDATE s_statistics_visitors SET pageimpressions=pageimpressions+1, uniquevisits=uniquevisits+1 WHERE datum=CURDATE() AND shopID = ? AND deviceType = ?';
@@ -316,10 +316,10 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
             return;
         }
         $shopId = Shopware()->Shop()->getId();
-        /** @var $repository \Shopware\Models\Tracking\Repository */
+        /** @var \Shopware\Models\Tracking\Repository $repository */
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Tracking\ArticleImpression::class);
         $articleImpressionQuery = $repository->getArticleImpressionQuery($articleId, $shopId, null, $deviceType);
-        /** @var $articleImpression \Shopware\Models\Tracking\ArticleImpression */
+        /** @var \Shopware\Models\Tracking\ArticleImpression $articleImpression */
         $articleImpression = $articleImpressionQuery->getOneOrNullResult();
 
         // If no Entry for this day exists - create a new one

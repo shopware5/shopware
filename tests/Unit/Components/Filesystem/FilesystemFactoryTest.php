@@ -63,7 +63,7 @@ class FilesystemFactoryTest extends TestCase
         $factory = $this->createCompleteFactory();
         $filesystem = $factory->factory($this->getValidFactoryConfig());
 
-        $this->assertInstanceOf(FilesystemInterface::class, $filesystem);
+        static::assertInstanceOf(FilesystemInterface::class, $filesystem);
     }
 
     public function testFactoryWithEmptyConfig()

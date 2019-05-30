@@ -27,7 +27,7 @@ namespace Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -74,9 +74,9 @@ class ProductAttributeFacet implements FacetInterface
     protected $digits;
 
     /**
-     * @param string $field
-     * @param string $mode
-     * @param $formFieldName
+     * @param string      $field
+     * @param string      $mode
+     * @param string      $formFieldName
      * @param string      $label
      * @param string|null $template
      * @param string      $suffix
@@ -141,7 +141,7 @@ class ProductAttributeFacet implements FacetInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getTemplate()
     {

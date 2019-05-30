@@ -37,14 +37,14 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
     /**
      * Adapter that is current active - has a valid user session
      *
-     * @var null
+     * @var \Zend_Auth_Adapter_Interface
      */
-    protected $_baseAdapter = null; // Current active adapter
+    protected $_baseAdapter; // Current active adapter
 
     /**
      * Get all adapters or certain one
      *
-     * @param null $index
+     * @param int|null $index
      *
      * @return array|Zend_Auth_Adapter_Interface
      */
@@ -59,8 +59,6 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
 
     /**
      * Add adapter to list
-     *
-     * @param Zend_Auth_Adapter_Interface $adapter
      *
      * @return Shopware_Components_Auth
      */
@@ -102,7 +100,7 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
     /**
      * Set current active adapter
      *
-     * @param $adapter
+     * @param \Zend_Auth_Adapter_Interface|null $adapter
      *
      * @return \Shopware_Components_Auth
      */
@@ -116,7 +114,7 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
     /**
      * Get current active adapter
      *
-     * @return Zend_Auth_Adapter_Interface
+     * @return \Zend_Auth_Adapter_Interface
      */
     public function getBaseAdapter()
     {
@@ -125,8 +123,6 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
 
     /**
      * Do a authentication approve with a defined adapter
-     *
-     * @param null|Zend_Auth_Adapter_Interface $adapter
      *
      * @return Zend_Auth_Result
      */
@@ -151,10 +147,6 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
 
     /**
      * Refresh authentication - for example expire date -
-     *
-     * @param null|Zend_Auth_Adapter_Interface $adapter
-     *
-     * @return mixed
      */
     public function refresh(Zend_Auth_Adapter_Interface $adapter = null)
     {
@@ -179,11 +171,14 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
      */
     public static function getInstance()
     {
-        if (null === self::$_instance) {
+        if (self::$_instance === null) {
             self::$_instance = new self();
         }
 
-        return self::$_instance;
+        /** @var \Shopware_Components_Auth $return */
+        $return = self::$_instance;
+
+        return $return;
     }
 
     /**

@@ -28,7 +28,7 @@ use ShopwarePlugins\SwagUpdate\Components\Download;
 use ShopwarePlugins\SwagUpdate\Components\Struct\Version;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -45,8 +45,7 @@ class DownloadStep
     private $destination;
 
     /**
-     * @param Version $version
-     * @param string  $destination
+     * @param string $destination
      */
     public function __construct(Version $version, $destination)
     {

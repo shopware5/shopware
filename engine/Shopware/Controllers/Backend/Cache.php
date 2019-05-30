@@ -49,7 +49,7 @@ use Shopware\Components\CacheManager;
  */
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -131,28 +131,25 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             }
         }
 
-        if ($cache['config'] === 'on' || $cache['backend'] === 'on' || $cache['frontend'] === 'on') {
-            $this->cacheManager->clearConfigCache();
+        $cacheTags = [];
+
+        foreach ($cache as $cacheTag => $value) {
+            if ($value === 'on') {
+                if ($cacheTag === 'frontend') {
+                    $cacheTags[] = CacheManager::CACHE_TAG_CONFIG;
+                    $cacheTags[] = CacheManager::CACHE_TAG_TEMPLATE;
+                    $cacheTags[] = CacheManager::CACHE_TAG_THEME;
+                    $cacheTags[] = CacheManager::CACHE_TAG_HTTP;
+                } elseif ($cacheTag === 'backend') {
+                    $cacheTags[] = CacheManager::CACHE_TAG_CONFIG;
+                    $cacheTags[] = CacheManager::CACHE_TAG_TEMPLATE;
+                } else {
+                    $cacheTags[] = $cacheTag;
+                }
+            }
         }
-        if ($cache['search'] === 'on') {
-            $this->cacheManager->clearSearchCache();
-        }
-        if ($cache['router'] === 'on') {
-            $this->cacheManager->clearRewriteCache();
-        }
-        if ($cache['template'] === 'on' || $cache['backend'] === 'on' || $cache['frontend'] === 'on') {
-            $this->cacheManager->clearTemplateCache();
-        }
-        if ($cache['theme'] === 'on' || $cache['frontend'] === 'on') {
-            $this->cacheManager->clearHttpCache();
-        }
-        if ($cache['http'] === 'on' || $cache['frontend'] === 'on') {
-            $this->cacheManager->clearHttpCache();
-        }
-        if ($cache['proxy'] === 'on') {
-            $this->cacheManager->clearProxyCache();
-            $this->cacheManager->clearOpCache();
-        }
+
+        $this->cacheManager->clearByTags($cacheTags);
 
         $this->View()->assign([
             'success' => true,
@@ -170,7 +167,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
 
         $query = $repository->getShopsWithThemes(['shop.id' => $shopId]);
 
-        /** @var $shop \Shopware\Models\Shop\Shop */
+        /** @var \Shopware\Models\Shop\Shop|null $shop */
         $shop = $query->getResult(
             AbstractQuery::HYDRATE_OBJECT
         )[0];
@@ -188,7 +185,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         }
 
         try {
-            /** @var $compiler \Shopware\Components\Theme\Compiler */
+            /** @var \Shopware\Components\Theme\Compiler $compiler */
             $compiler = $this->container->get('theme_compiler');
             $compiler->compileJavascript('new', $shop->getTemplate(), $shop);
             $compiler->compileLess('new', $shop->getTemplate(), $shop);
@@ -205,7 +202,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
 
     public function moveThemeFilesAction()
     {
-        /** @var $repository \Shopware\Models\Shop\Repository */
+        /** @var \Shopware\Models\Shop\Repository $repository */
         $repository = $this->get('models')->getRepository(\Shopware\Models\Shop\Shop::class);
         $shops = $repository->getShopsWithThemes()->getResult();
         $compiler = $this->container->get('theme_compiler');

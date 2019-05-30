@@ -31,7 +31,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -77,14 +77,14 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand
             return 1;
         }
 
-        /** @var Locale $locale */
-        $locale = $this->container->get('models')->getRepository('Shopware\Models\Shop\Locale')->findOneByLocale(
-            $input->getArgument('locale')
-        );
+        /** @var Locale|null $locale */
+        $locale = $this->container->get('models')
+            ->getRepository(\Shopware\Models\Shop\Locale::class)
+            ->findOneByLocale($input->getArgument('locale'));
         if (!$locale) {
             $output->writeln('<error>Provided locale not found</error>');
 
-            return;
+            return null;
         }
 
         $this->exportFormLabels($output, $locale, $dir);
@@ -95,9 +95,8 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand
     /**
      * Exports form labels from the database into a php file containing an array
      *
-     * @param OutputInterface $output
-     * @param $locale
-     * @param $dir
+     * @param \Shopware\Models\Shop\Locale $locale
+     * @param string                       $dir
      *
      * @throws \Exception
      */
@@ -133,9 +132,8 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand
     /**
      * Exports element labels from the database into a php file containing an array
      *
-     * @param OutputInterface $output
-     * @param $locale
-     * @param $dir
+     * @param Locale $locale
+     * @param string $dir
      *
      * @throws \Exception
      */

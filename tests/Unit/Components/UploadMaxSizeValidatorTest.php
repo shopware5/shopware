@@ -46,7 +46,7 @@ class UploadMaxSizeValidatorTest extends TestCase
 
         $this->SUT->validateContentLength($eventArgs);
 
-        $this->assertTrue(true, 'Empty Content-Length should not throw an Exception');
+        static::assertTrue(true, 'Empty Content-Length should not throw an Exception');
     }
 
     public function testContentLengthInRange()
@@ -56,7 +56,7 @@ class UploadMaxSizeValidatorTest extends TestCase
 
         $this->SUT->validateContentLength($eventArgs);
 
-        $this->assertTrue(true, 'In range Content-Length should not throw an Exception');
+        static::assertTrue(true, 'In range Content-Length should not throw an Exception');
     }
 
     public function testExceededContentLength()

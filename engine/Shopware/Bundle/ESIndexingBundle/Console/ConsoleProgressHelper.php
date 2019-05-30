@@ -45,13 +45,10 @@ class ConsoleProgressHelper implements ProgressHelperInterface
     private $count;
 
     /**
-     * @var
+     * @var int
      */
     private $current;
 
-    /**
-     * @param OutputInterface $output
-     */
     public function __construct(OutputInterface $output)
     {
         $this->output = $output;

@@ -32,9 +32,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class Validator
 {
     /**
-     * @param Configuration              $modelConfig
-     * @param ConstraintValidatorFactory $validatorFactory
-     *
      * @return ValidatorInterface
      */
     public static function create(Configuration $modelConfig, ConstraintValidatorFactory $validatorFactory)

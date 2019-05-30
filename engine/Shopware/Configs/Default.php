@@ -21,6 +21,9 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+use Shopware\Components\Logger;
+
 if (file_exists($this->DocPath() . 'config_' . $this->Environment() . '.php')) {
     $customConfig = $this->loadConfig($this->DocPath() . 'config_' . $this->Environment() . '.php');
 } elseif (file_exists($this->DocPath() . 'config.php')) {
@@ -35,7 +38,14 @@ if (!is_array($customConfig)) {
 
 return array_replace_recursive([
     'custom' => [],
+
+    /*
+     * For more information on working with reverse proxies and trusted headers see
+     * https://symfony.com/doc/current/deployment/proxies.html
+     */
     'trustedproxies' => [],
+    'trustedheaderset' => -1,
+
     'filesystem' => [
         'private' => [
             'type' => 'local',
@@ -47,6 +57,7 @@ return array_replace_recursive([
             'type' => 'local',
             'config' => [
                 'root' => realpath(__DIR__ . '/../../../web/'),
+                'url' => '',
             ],
         ],
     ],
@@ -89,6 +100,7 @@ return array_replace_recursive([
 
                 'bucket' => '',
                 'region' => '',
+                'endpoint' => null,
                 'credentials' => [
                     'key' => '',
                     'secret' => '',
@@ -133,7 +145,11 @@ return array_replace_recursive([
         'write_backlog' => true,
         'number_of_replicas' => null,
         'number_of_shards' => null,
+        'total_fields_limit' => null,
+        'max_result_window' => 10000,
         'wait_for_status' => 'green',
+        'dynamic_mapping_enabled' => true,
+        'batchsize' => 500,
         'backend' => [
             'write_backlog' => false,
             'enabled' => false,
@@ -143,6 +159,14 @@ return array_replace_recursive([
                 'localhost:9200',
             ],
         ],
+        'logger' => [
+            'level' => $this->Environment() !== 'production' ? Logger::DEBUG : Logger::ERROR,
+        ],
+        'max_expansions' => [
+            'name' => 2,
+            'number' => 2,
+        ],
+        'debug' => false,
     ],
     'front' => [
         'noErrorHandler' => false,
@@ -192,7 +216,7 @@ return array_replace_recursive([
         'cache_dir' => $this->getCacheDir() . '/html',
         'cache_cookies' => ['shop', 'currency', 'x-cache-context-hash'],
         /*
-         * The "ignored_url_parameters" configuration will spare your Shopware system from recaching a page when any
+         * The "ignored_url_parameters" configuration will spare your Shopware system from re-caching a page when any
          * of the parameters listed here is matched. This allows the caching system to be more efficient.
          */
         'ignored_url_parameters' => [
@@ -222,12 +246,13 @@ return array_replace_recursive([
            'cof',
            'siteurl',
            '_ga',
+           'fbclid',         // Facebook
         ],
     ],
     'bi' => [
         'endpoint' => [
-            'benchmark' => 'https://bi-staging.shopware.com/benchmark',
-            'statistics' => 'https://bi-staging.shopware.com/statistics',
+            'benchmark' => 'https://bi.shopware.com/benchmark',
+            'statistics' => 'https://bi.shopware.com/statistics',
         ],
     ],
     'session' => [
@@ -241,6 +266,8 @@ return array_replace_recursive([
     ],
     'sitemap' => [
         'batchsize' => 10000,
+        'excluded_urls' => [],
+        'custom_urls' => [],
     ],
     'phpsettings' => [
         'error_reporting' => E_ALL & ~E_USER_DEPRECATED,
@@ -272,8 +299,9 @@ return array_replace_recursive([
         'attributeDir' => $this->getCacheDir() . '/doctrine/attributes',
         'proxyDir' => $this->getCacheDir() . '/doctrine/proxies',
         'proxyNamespace' => $this->App() . '\Proxies',
-        'cacheProvider' => 'auto', // supports null, auto, Apcu, Array, Wincache, Xcache and redis
-        'cacheNamespace' => null, // custom namespace for doctrine cache provider (optional; null = auto-generated namespace)
+        'cacheProvider' => 'auto', // Supports null, auto, Apcu, Array, Wincache, Xcache and redis
+        'cacheNamespace' => null, // Custom namespace for doctrine cache provider (optional; null = auto-generated namespace)
+        'validOperators' => [], // Additional allowed QueryBuilder operators
     ],
     'backendsession' => [
         'name' => 'SHOPWAREBACKEND',
@@ -299,7 +327,6 @@ return array_replace_recursive([
     'web' => [
         'webDir' => $this->DocPath('web'),
         'cacheDir' => $this->DocPath('web_cache'),
-        'sitemapDir' => $this->DocPath('web_sitemap'),
     ],
     'mpdf' => [
         // Passed to \Mpdf\Mpdf::__construct:
@@ -353,6 +380,21 @@ return array_replace_recursive([
                     'BI' => 'verdanaz.ttf',
                 ],
             ],
+            'format' => 'A4',
         ],
+    ],
+    'media' => [
+        'whitelist' => [],
+    ],
+    'backward_compatibility' => [
+        /*
+         * @deprecated since Shopware 5.5
+         *
+         * Sorting of plugins will be active by default in 5.6 and this parameter will be removed with Shopware 5.7
+         */
+        'predictable_plugin_order' => false,
+    ],
+    'logger' => [
+        'level' => $this->Environment() !== 'production' ? Logger::DEBUG : Logger::ERROR,
     ],
 ], $customConfig);

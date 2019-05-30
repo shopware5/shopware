@@ -36,49 +36,62 @@
 Ext.define('Shopware.apps.Shipping.store.Country', {
     /**
      * Extend for the standard ExtJS 4
+     *
      * @string
      */
-    extend : 'Ext.data.Store',
+    extend: 'Ext.data.Store',
+
     /**
      * Auto load the store after the component
      * is initialized
+     *
      * @boolean
      */
-    autoLoad : false,
+    autoLoad: false,
+
     /**
      * Amount of data loaded at once
+     *
      * @integer
      */
-    pageSize : 30,
+    pageSize: 30,
+
     /**
-     * enables the remote filter system
-     * @boolen
+     * Enables the remote filter system
+     *
+     * @boolean
      */
     remoteFilter: true,
 
     /**
      * Define the used model for this store
+     *
      * @string
      */
-    model : 'Shopware.apps.Base.model.Country',
-              /**
+    model: 'Shopware.apps.Base.model.Country',
+
+    /**
      * Configure the data communication
+     *
      * @object
      */
-    proxy:{
+    proxy: {
         type:'ajax',
+
         /**
          * Configure the url mapping for the different
          * store operations based on
-         * @object
+         *
+         * @string
          */
-        url:'{url controller="shipping" action="getCountries"}',
+        url: '{url controller="shipping" action="getCountries"}',
 
         /**
          * Configure the data reader
+         *
          * @object
          */
-        reader:{
+        reader: {
             type: 'json',
             root: 'data',
             totalProperty: 'total'

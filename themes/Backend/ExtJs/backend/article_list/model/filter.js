@@ -31,12 +31,14 @@
 Ext.define('Shopware.apps.ArticleList.model.Filter', {
     /**
      * Extends the standard Ext Model
+     *
      * @string
      */
     extend: 'Ext.data.Model',
 
     /**
      * The fields used for this model
+     *
      * @array
      */
     fields: [
@@ -55,7 +57,6 @@ Ext.define('Shopware.apps.ArticleList.model.Filter', {
                 return record.get('isFavorite') ? '{s name=group_favorite}Favorite{/s}' : '{s name=group_filter}Filter{/s}';
             }
         }
-//        { name: 'groupName', type: 'string' },
     ],
 
     /**
@@ -65,6 +66,7 @@ Ext.define('Shopware.apps.ArticleList.model.Filter', {
     proxy:{
         /**
          * Set proxy type to ajax
+         *
          * @string
          */
         type:'ajax',
@@ -72,6 +74,7 @@ Ext.define('Shopware.apps.ArticleList.model.Filter', {
         /**
          * Configure the url mapping for the different
          * store operations based on
+         *
          * @object
          */
         api: {
@@ -82,6 +85,7 @@ Ext.define('Shopware.apps.ArticleList.model.Filter', {
 
         /**
          * Configure the data reader
+         *
          * @object
          */
         reader:{
@@ -90,8 +94,5 @@ Ext.define('Shopware.apps.ArticleList.model.Filter', {
             totalProperty:'total'
         }
     }
-
-
-
 });
 //{/block}

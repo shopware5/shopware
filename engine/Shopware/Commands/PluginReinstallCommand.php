@@ -30,13 +30,15 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PluginReinstallCommand extends ShopwareCommand
+class PluginReinstallCommand extends PluginCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('sw:plugin:reinstall')
             ->setDescription('Reinstalls the provided plugin')
@@ -44,12 +46,14 @@ class PluginReinstallCommand extends ShopwareCommand
                 'plugin',
                 InputArgument::REQUIRED,
                 'Name of the plugin to be installed.'
-            )->addOption(
+            )
+            ->addOption(
                 'removedata',
                 'r',
                 InputOption::VALUE_NONE,
                 'if supplied plugin data will be removed'
-            );
+            )
+        ;
     }
 
     /**
@@ -70,10 +74,12 @@ class PluginReinstallCommand extends ShopwareCommand
         }
 
         $removeData = $input->getOption('removedata');
-        $pluginManager->uninstallPlugin($plugin, $removeData);
-        $pluginManager->installPlugin($plugin);
-        $pluginManager->activatePlugin($plugin);
 
+        $uninstallationContext = $pluginManager->uninstallPlugin($plugin, $removeData);
+        $installationContext = $pluginManager->installPlugin($plugin);
+        $activationContext = $pluginManager->activatePlugin($plugin);
         $output->writeln(sprintf('Plugin %s has been reinstalled successfully.', $pluginName));
+
+        $this->clearCachesIfRequested($input, $output, $uninstallationContext, $installationContext, $activationContext);
     }
 }

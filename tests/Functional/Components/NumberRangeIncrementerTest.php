@@ -28,7 +28,7 @@ use Shopware\Components\NumberRangeIncrementer;
 use Shopware\Components\NumberRangeIncrementerInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -49,7 +49,7 @@ class NumberRangeIncrementerTest extends \PHPUnit\Framework\TestCase
     public function testItShouldImplementInterface()
     {
         $manager = new NumberRangeIncrementer($this->connection);
-        $this->assertInstanceOf(NumberRangeIncrementerInterface::class, $manager);
+        static::assertInstanceOf(NumberRangeIncrementerInterface::class, $manager);
     }
 
     public function testIncrement()
@@ -64,11 +64,11 @@ class NumberRangeIncrementerTest extends \PHPUnit\Framework\TestCase
                 $rangeName,
             ]
         );
-        $expectedNumber += 1;
+        ++$expectedNumber;
 
         $manager = new NumberRangeIncrementer($this->connection);
 
-        $this->assertEquals($expectedNumber, $manager->increment($rangeName));
+        static::assertEquals($expectedNumber, $manager->increment($rangeName));
     }
 
     public function testIncrementWithInvalidName()

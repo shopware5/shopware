@@ -25,7 +25,7 @@
 namespace ShopwarePlugins\SwagUpdate\Components;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -83,7 +83,7 @@ class FileSystem
             return $errors;
         }
 
-        /** @var $fileInfo \DirectoryIterator */
+        /** @var \DirectoryIterator $fileInfo */
         foreach (new \DirectoryIterator($directory) as $fileInfo) {
             if ($fileInfo->isDot()) {
                 continue;
@@ -121,9 +121,6 @@ class FileSystem
         return $errors;
     }
 
-    /**
-     * @param \SplFileInfo $fileInfo
-     */
     private function fixDirectoryPermission(\SplFileInfo $fileInfo)
     {
         try {
@@ -145,9 +142,6 @@ class FileSystem
         clearstatcache(false, $fileInfo->getPathname());
     }
 
-    /**
-     * @param \SplFileInfo $fileInfo
-     */
     private function fixFilePermission(\SplFileInfo $fileInfo)
     {
         try {

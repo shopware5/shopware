@@ -30,8 +30,6 @@ use Shopware\Bundle\BenchmarkBundle\Struct\BusinessIntelligenceResponse;
 interface BusinessIntelligenceClientInterface
 {
     /**
-     * @param BusinessIntelligenceRequest $biRequest
-     *
      * @return BusinessIntelligenceResponse
      */
     public function fetchBusinessIntelligence(BusinessIntelligenceRequest $biRequest);

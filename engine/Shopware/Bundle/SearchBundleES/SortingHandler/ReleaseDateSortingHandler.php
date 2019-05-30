@@ -53,7 +53,7 @@ class ReleaseDateSortingHandler implements HandlerInterface
     ) {
         /* @var ReleaseDateSorting $criteriaPart */
         $search->addSort(
-            new FieldSort('formattedCreatedAt', strtolower($criteriaPart->getDirection()))
+            new FieldSort('formattedCreatedAt', strtolower($criteriaPart->getDirection()), ['unmapped_type' => 'date'])
         );
     }
 }

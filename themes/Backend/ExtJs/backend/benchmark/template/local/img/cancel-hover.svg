@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+        <g id="cancel" transform="translate(1.000000, -3.000000)" stroke="#189EFF" stroke-width="3">
+            <g transform="translate(1.000000, 0.000000)" id="Group">
+                <g transform="translate(0.000000, 5.000000)">
+                    <path d="M0.27734375,0.3203125 L7.82608925,7.869058" id="Path-79"></path>
+                    <path d="M0.27734375,0.3203125 L7.82608925,7.869058" id="Path-79" transform="translate(4.051717, 4.094685) scale(-1, 1) translate(-4.051717, -4.094685) "></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

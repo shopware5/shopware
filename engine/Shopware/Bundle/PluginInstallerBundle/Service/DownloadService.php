@@ -34,7 +34,6 @@ use ShopwarePlugins\SwagUpdate\Components\Steps\DownloadStep;
 use ShopwarePlugins\SwagUpdate\Components\Steps\FinishResult;
 use ShopwarePlugins\SwagUpdate\Components\Steps\ValidResult;
 use ShopwarePlugins\SwagUpdate\Components\Struct\Version;
-use Symfony\Component\Filesystem\Filesystem;
 
 class DownloadService
 {
@@ -54,28 +53,28 @@ class DownloadService
     private $connection;
 
     /**
-     * @param array       $pluginDirectories
-     * @param StoreClient $storeClient
-     * @param Connection  $connection
+     * @var PluginExtractor
      */
+    private $pluginExtractor;
+
     public function __construct(
         array $pluginDirectories,
         StoreClient $storeClient,
-        Connection $connection
+        Connection $connection,
+        PluginExtractor $pluginExtractor
     ) {
         $this->pluginDirectories = $pluginDirectories;
         $this->storeClient = $storeClient;
         $this->connection = $connection;
+        $this->pluginExtractor = $pluginExtractor;
     }
 
     /**
-     * @param RangeDownloadRequest $request
-     *
      * @return FinishResult|ValidResult
      */
     public function downloadRange(RangeDownloadRequest $request)
     {
-        // Load SwagUpdate so the DownloadStep can be autoloaded
+        // Load SwagUpdate so the DownloadStep can be auto-loaded
         Shopware()->Plugins()->Backend()->SwagUpdate();
 
         $version = new Version([
@@ -109,17 +108,13 @@ class DownloadService
             $extractor = new LegacyPluginExtractor();
             $extractor->extract($archive, $destination);
         } elseif ($pluginZipDetector->isPlugin($archive)) {
-            $pluginDir = $this->pluginDirectories['ShopwarePlugins'];
-            $extractor = new PluginExtractor($pluginDir, new Filesystem(), $this->pluginDirectories);
-            $extractor->extract($archive);
+            $this->pluginExtractor->extract($archive);
         } else {
             throw new \RuntimeException('No Plugin found in archive.');
         }
     }
 
     /**
-     * @param MetaRequest $request
-     *
      * @throws \Exception
      *
      * @return MetaStruct
@@ -158,8 +153,6 @@ class DownloadService
     }
 
     /**
-     * @param DownloadRequest $request
-     *
      * @throws \Exception
      *
      * @return bool
@@ -188,7 +181,7 @@ class DownloadService
     }
 
     /**
-     * @param $content
+     * @param string $content
      *
      * @return string file path to the downloaded file
      */
@@ -201,7 +194,7 @@ class DownloadService
     }
 
     /**
-     * @param $name
+     * @param string $name
      *
      * @return string
      */
@@ -214,7 +207,7 @@ class DownloadService
             ->setParameter(':name', $name)
             ->setMaxResults(1);
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetch(\PDO::FETCH_COLUMN);

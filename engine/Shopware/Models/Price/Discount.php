@@ -31,7 +31,7 @@ use Shopware\Components\Model\ModelEntity;
  * Shopware Price Model
  *
  * @ORM\Table(name="s_core_pricegroups_discounts")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Discount extends ModelEntity
 {
@@ -39,13 +39,14 @@ class Discount extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var Group
+     * @var \Shopware\Models\Price\Group
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Price\Group", inversedBy="discounts")
      * @ORM\JoinColumn(name="groupID", referencedColumnName="id")
      */
@@ -53,6 +54,7 @@ class Discount extends ModelEntity
 
     /**
      * @var \Shopware\Models\Customer\Group
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Customer\Group")
      * @ORM\JoinColumn(name="customergroupID", referencedColumnName="id")
      */
@@ -74,12 +76,14 @@ class Discount extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="customergroupID", type="integer", nullable=true)
      */
     private $customerGroupId = null;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="groupID", type="integer", nullable=true)
      */
     private $groupId = null;
@@ -99,7 +103,7 @@ class Discount extends ModelEntity
      *
      * @param Group $group
      *
-     * @return discount
+     * @return Discount
      */
     public function setGroup($group)
     {
@@ -110,6 +114,8 @@ class Discount extends ModelEntity
 
     /**
      * Get group
+     *
+     * @return Group
      */
     public function getGroup()
     {
@@ -119,7 +125,7 @@ class Discount extends ModelEntity
     /**
      * Set customerGroup
      *
-     * @param $customerGroup
+     * @param \Shopware\Models\Customer\Group $customerGroup
      *
      * @return Discount
      */
@@ -132,6 +138,8 @@ class Discount extends ModelEntity
 
     /**
      * Get customerGroup
+     *
+     * @return \Shopware\Models\Customer\Group
      */
     public function getCustomerGroup()
     {
@@ -143,7 +151,7 @@ class Discount extends ModelEntity
      *
      * @param float $discount
      *
-     * @return discount
+     * @return Discount
      */
     public function setDiscount($discount)
     {
@@ -167,7 +175,7 @@ class Discount extends ModelEntity
      *
      * @param float $start
      *
-     * @return discount
+     * @return Discount
      */
     public function setStart($start)
     {

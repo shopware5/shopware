@@ -33,7 +33,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -47,8 +47,8 @@ class SwitchAliasCommand extends ShopwareCommand
         $this->setName('sw:es:switch:alias')
             ->setDescription('Allows to switch live-system aliases.')
             ->addArgument('shopId', InputArgument::REQUIRED)
-            ->addArgument('index', InputArgument::REQUIRED)
-        ;
+            ->addArgument('type', InputArgument::REQUIRED, 'Mapping type of the elasticsearch index (e.g. product, property)')
+            ->addArgument('index', InputArgument::REQUIRED);
     }
 
     /**
@@ -57,21 +57,22 @@ class SwitchAliasCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $shopId = $input->getArgument('shopId');
+        $type = $input->getArgument('type');
         $indexName = $input->getArgument('index');
 
-        /** @var $shop Shop */
+        /** @var Shop $shop */
         $shop = $this->container->get('shopware_storefront.shop_gateway_dbal')->get($shopId);
 
-        /** @var $index ShopIndex */
+        /** @var ShopIndex $index */
         $index = $this->container->get('shopware_elastic_search.index_factory')
-            ->createShopIndex($shop);
+            ->createShopIndex($shop, $type);
 
-        /** @var $client Client */
+        /** @var Client $client */
         $client = $this->container->get('shopware_elastic_search.client');
 
         $exist = $client->indices()->exists(['index' => $indexName]);
         if (!$exist) {
-            throw new \RuntimeException(sprintf('Index %s not exist', $indexName));
+            throw new \RuntimeException(sprintf('Index "%s" does not exist', $indexName));
         }
 
         $actions = [

@@ -41,14 +41,14 @@ class DownloadTest extends TestCase
 
         $downloads = Shopware()->Container()->get('shopware_storefront.product_download_service')->get($product, $context);
 
-        $this->assertCount(2, $downloads);
+        static::assertCount(2, $downloads);
 
-        /** @var $download Download */
+        /** @var Download $download */
         foreach ($downloads as $download) {
-            $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Download', $download);
-            $this->assertContains($download->getFile(), ['/var/www/first.txt', '/var/www/second.txt']);
-            $this->assertCount(1, $download->getAttributes());
-            $this->assertTrue($download->hasAttribute('core'));
+            static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Download', $download);
+            static::assertContains($download->getFile(), [$data['downloads'][0]['file'], $data['downloads'][1]['file']]);
+            static::assertCount(1, $download->getAttributes());
+            static::assertTrue($download->hasAttribute('core'));
         }
     }
 
@@ -67,23 +67,21 @@ class DownloadTest extends TestCase
         $downloads = Shopware()->Container()->get('shopware_storefront.product_download_service')
             ->getList($products, $context);
 
-        $this->assertCount(2, $downloads);
+        static::assertCount(2, $downloads);
 
         foreach ($downloads as $number => $productDownloads) {
-            $this->assertContains($number, $numbers);
-            $this->assertCount(2, $productDownloads);
+            static::assertContains($number, $numbers);
+            static::assertCount(2, $productDownloads);
         }
 
         foreach ($numbers as $number) {
-            $this->assertArrayHasKey($number, $downloads);
+            static::assertArrayHasKey($number, $downloads);
         }
     }
 
     /**
-     * @param $number
-     * @param ShopContext                        $context
+     * @param string                             $number
      * @param \Shopware\Models\Category\Category $category
-     * @param null                               $additionally
      *
      * @return array
      */
@@ -95,17 +93,19 @@ class DownloadTest extends TestCase
     ) {
         $product = parent::getProduct($number, $context, $category);
 
+        $mediaImgs = Shopware()->Db()->fetchCol('SELECT path FROM s_media LIMIT 2');
+
         $product['downloads'] = [
             [
                 'name' => 'first-download',
                 'size' => 100,
-                'file' => '/var/www/first.txt',
+                'file' => $mediaImgs[0],
                 'attribute' => ['id' => 20000],
             ],
             [
                 'name' => 'second-download',
                 'size' => 200,
-                'file' => '/var/www/second.txt',
+                'file' => $mediaImgs[0],
                 'attribute' => ['id' => 20000],
             ],
         ];

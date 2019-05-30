@@ -41,8 +41,7 @@ class PrefixFilesystem implements FilesystemInterface
     private $prefix;
 
     /**
-     * @param FilesystemInterface $filesystem
-     * @param string              $prefix
+     * @param string $prefix
      */
     public function __construct(FilesystemInterface $filesystem, $prefix)
     {
@@ -307,6 +306,20 @@ class PrefixFilesystem implements FilesystemInterface
     }
 
     /**
+     * @param string $path
+     *
+     * @return string
+     */
+    public function stripPrefix($path)
+    {
+        $prefix = rtrim($this->prefix, '/');
+        $path = preg_replace('#^' . $prefix . '#', '', $path);
+        $path = ltrim($path, '/');
+
+        return $path;
+    }
+
+    /**
      * @param string $prefix
      *
      * @return string
@@ -314,20 +327,6 @@ class PrefixFilesystem implements FilesystemInterface
     private function normalizePrefix($prefix)
     {
         return trim($prefix, '/') . '/';
-    }
-
-    /**
-     * @param string $path
-     *
-     * @return string
-     */
-    private function stripPrefix($path)
-    {
-        $prefix = rtrim($this->prefix, '/');
-        $path = str_replace($prefix, '', $path);
-        $path = ltrim($path, '/');
-
-        return $path;
     }
 
     /**

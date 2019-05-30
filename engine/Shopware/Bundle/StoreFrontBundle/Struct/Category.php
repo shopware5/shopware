@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Models\Category\Category as CategoryEntity;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -124,12 +124,12 @@ class Category extends Extendable
     protected $blockedCustomerGroupIds = [];
 
     /**
-     * @var null|string
+     * @var string|null
      */
     protected $productBoxLayout = null;
 
     /**
-     * @var null|ProductStream
+     * @var ProductStream|null
      */
     protected $productStream;
 
@@ -139,8 +139,6 @@ class Category extends Extendable
     protected $hideSortings;
 
     /**
-     * @param CategoryEntity $category
-     *
      * @return Category
      */
     public static function createFromCategoryEntity(CategoryEntity $category)
@@ -374,7 +372,7 @@ class Category extends Extendable
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Media
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Media|null
      */
     public function getMedia()
     {
@@ -462,7 +460,7 @@ class Category extends Extendable
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getProductBoxLayout()
     {
@@ -470,7 +468,7 @@ class Category extends Extendable
     }
 
     /**
-     * @param null|string $productBoxLayout
+     * @param string|null $productBoxLayout
      */
     public function setProductBoxLayout($productBoxLayout)
     {
@@ -478,16 +476,13 @@ class Category extends Extendable
     }
 
     /**
-     * @return null|ProductStream
+     * @return ProductStream|null
      */
     public function getProductStream()
     {
         return $this->productStream;
     }
 
-    /**
-     * @param null|ProductStream $productStream
-     */
     public function setProductStream(ProductStream $productStream = null)
     {
         $this->productStream = $productStream;

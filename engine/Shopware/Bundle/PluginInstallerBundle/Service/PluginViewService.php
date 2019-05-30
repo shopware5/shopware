@@ -53,11 +53,6 @@ class PluginViewService
      */
     private $hydrator;
 
-    /**
-     * @param PluginLocalService $localPluginService
-     * @param PluginStoreService $storePluginService
-     * @param StructHydrator     $hydrator
-     */
     public function __construct(
         PluginLocalService $localPluginService,
         PluginStoreService $storePluginService,
@@ -69,8 +64,6 @@ class PluginViewService
     }
 
     /**
-     * @param PluginsByTechnicalNameRequest $context
-     *
      * @return PluginStruct
      */
     public function getPlugin(PluginsByTechnicalNameRequest $context)
@@ -91,8 +84,6 @@ class PluginViewService
     }
 
     /**
-     * @param PluginsByTechnicalNameRequest $context
-     *
      * @return array
      */
     public function getPlugins(PluginsByTechnicalNameRequest $context)
@@ -125,10 +116,9 @@ class PluginViewService
                     $result[$name] = $localPlugin;
                     break;
 
-                case $storePlugin !== null: {
+                case $storePlugin !== null:
                     $result[$name] = $storePlugin;
                     break;
-                }
             }
         }
 
@@ -136,8 +126,6 @@ class PluginViewService
     }
 
     /**
-     * @param ListingRequest $context
-     *
      * @return ListingResultStruct
      */
     public function getStoreListing(ListingRequest $context)
@@ -153,8 +141,6 @@ class PluginViewService
     }
 
     /**
-     * @param ListingRequest $context
-     *
      * @return PluginStruct[]
      */
     public function getLocalListing(ListingRequest $context)
@@ -174,8 +160,6 @@ class PluginViewService
     }
 
     /**
-     * @param UpdateListingRequest $context
-     *
      * @return UpdateResultStruct
      */
     public function getUpdates(UpdateListingRequest $context)
@@ -199,7 +183,6 @@ class PluginViewService
 
     /**
      * @param PluginStruct[] $plugins
-     * @param BaseRequest    $context
      *
      * @return PluginStruct[]
      */

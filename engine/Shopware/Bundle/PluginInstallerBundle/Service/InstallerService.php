@@ -78,14 +78,6 @@ class InstallerService
      */
     private $release;
 
-    /**
-     * @param ModelManager          $em
-     * @param PluginInstaller       $pluginInstaller
-     * @param LegacyPluginInstaller $legacyPluginInstaller
-     * @param ConfigWriter          $configWriter
-     * @param ConfigReader          $configReader
-     * @param ShopwareReleaseStruct $release
-     */
     public function __construct(
         ModelManager $em,
         PluginInstaller $pluginInstaller,
@@ -131,11 +123,14 @@ class InstallerService
      */
     public function getPluginByName($pluginName)
     {
-        /** @var Plugin $plugin */
-        $plugin = $this->pluginRepository->findOneBy(['name' => $pluginName, 'capabilityEnable' => 1]);
+        /** @var Plugin|null $plugin */
+        $plugin = $this->pluginRepository->findOneBy([
+            'name' => $pluginName,
+            'capabilityEnable' => 1,
+        ]);
 
         if ($plugin === null) {
-            throw new \Exception(sprintf('Unknown plugin: %s.', $pluginName));
+            throw new \Exception(sprintf('Unknown plugin "%s".', $pluginName));
         }
 
         return $plugin;
@@ -143,8 +138,6 @@ class InstallerService
 
     /**
      * Returns a certain plugin by plugin id.
-     *
-     * @param Plugin $plugin
      *
      * @return \Shopware_Components_Plugin_Bootstrap|null
      */
@@ -154,8 +147,6 @@ class InstallerService
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      *
      * @return InstallContext
@@ -178,8 +169,7 @@ class InstallerService
     }
 
     /**
-     * @param Plugin $plugin
-     * @param bool   $removeData
+     * @param bool $removeData
      *
      * @throws \Exception
      *
@@ -203,8 +193,6 @@ class InstallerService
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      *
      * @return UpdateContext
@@ -227,8 +215,6 @@ class InstallerService
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      *
      * @return ActivateContext
@@ -241,7 +227,7 @@ class InstallerService
         }
 
         if (!$plugin->getInstalled()) {
-            throw new \Exception('Plugin has to be installed first.');
+            throw new \Exception(sprintf('Plugin "%s" has to be installed first before it can be activated.', $plugin->getName()));
         }
 
         if (!$plugin->isLegacyPlugin()) {
@@ -255,8 +241,6 @@ class InstallerService
     }
 
     /**
-     * @param Plugin $plugin
-     *
      * @throws \Exception
      *
      * @return DeactivateContext
@@ -279,8 +263,7 @@ class InstallerService
     }
 
     /**
-     * @param Plugin $plugin
-     * @param Shop   $shop
+     * @param Shop $shop
      *
      * @return array
      */
@@ -290,9 +273,8 @@ class InstallerService
     }
 
     /**
-     * @param Plugin $plugin
-     * @param array  $elements
-     * @param Shop   $shop
+     * @param array $elements
+     * @param Shop  $shop
      */
     public function savePluginConfig(Plugin $plugin, $elements, Shop $shop = null)
     {
@@ -305,9 +287,7 @@ class InstallerService
     }
 
     /**
-     * @param Plugin $plugin
      * @param string $name
-     * @param mixed  $value
      * @param Shop   $shop
      *
      * @throws \Exception

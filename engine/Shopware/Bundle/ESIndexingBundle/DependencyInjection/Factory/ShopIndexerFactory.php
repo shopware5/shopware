@@ -55,11 +55,6 @@ class ShopIndexerFactory
      */
     private $settings;
 
-    /**
-     * @param IteratorAggregate $indexer
-     * @param IteratorAggregate $mappings
-     * @param IteratorAggregate $settings
-     */
     public function __construct(IteratorAggregate $indexer, IteratorAggregate $mappings, IteratorAggregate $settings)
     {
         $this->indexer = iterator_to_array($indexer, false);
@@ -68,8 +63,6 @@ class ShopIndexerFactory
     }
 
     /**
-     * @param ContainerInterface $container
-     *
      * @throws \Exception
      *
      * @return ShopIndexerInterface
@@ -81,16 +74,26 @@ class ShopIndexerFactory
         $indexer = $this->collectIndexer();
         $mappings = $this->collectMappings();
         $settings = $this->collectSettings();
+        /** @var \Elasticsearch\Client $client */
+        $client = $this->container->get('shopware_elastic_search.client');
+        /** @var \Shopware\Bundle\ESIndexingBundle\BacklogReaderInterface $backlogReader */
+        $backlogReader = $this->container->get('shopware_elastic_search.backlog_reader');
+        /** @var \Shopware\Bundle\ESIndexingBundle\BacklogProcessorInterface $backlogProcessor */
+        $backlogProcessor = $this->container->get('shopware_elastic_search.backlog_processor');
+        /** @var \Shopware\Bundle\ESIndexingBundle\IndexFactoryInterface $indexFactory */
+        $indexFactory = $this->container->get('shopware_elastic_search.index_factory');
+        /** @var \Shopware\Bundle\ESIndexingBundle\Console\EvaluationHelperInterface $consoleHelper */
+        $consoleHelper = $this->container->get('shopware_elastic_search.console.console_evaluation_helper');
 
         return new ShopIndexer(
-            $this->container->get('shopware_elastic_search.client'),
-            $this->container->get('shopware_elastic_search.backlog_reader'),
-            $this->container->get('shopware_elastic_search.backlog_processor'),
-            $this->container->get('shopware_elastic_search.index_factory'),
+            $client,
+            $backlogReader,
+            $backlogProcessor,
+            $indexFactory,
+            $consoleHelper,
             $indexer,
             $mappings,
-            $settings,
-            $this->container->getParameter('shopware.es')
+            $settings
         );
     }
 

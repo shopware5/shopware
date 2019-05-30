@@ -1867,7 +1867,6 @@ class BasicEntityPersister implements EntityPersister
      *                             - value to be bound
      *                             - class to which the field belongs to
      *
-     *
      * @return array
      */
     private function expandToManyParameters($criteria)

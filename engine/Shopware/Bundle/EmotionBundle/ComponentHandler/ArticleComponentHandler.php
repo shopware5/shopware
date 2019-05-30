@@ -63,11 +63,6 @@ class ArticleComponentHandler implements ComponentHandlerInterface
      */
     private $additionalTextService;
 
-    /**
-     * @param StoreFrontCriteriaFactoryInterface $criteriaFactory
-     * @param ShopwareConfig                     $shopwareConfig
-     * @param AdditionalTextServiceInterface     $additionalTextService
-     */
     public function __construct(
         StoreFrontCriteriaFactoryInterface $criteriaFactory,
         ShopwareConfig $shopwareConfig,
@@ -120,7 +115,7 @@ class ArticleComponentHandler implements ComponentHandlerInterface
         $key = 'emotion-element--' . $element->getId();
         $type = $element->getConfig()->get('article_type');
 
-        /** @var ListProduct $product */
+        /** @var ListProduct|false $product */
         $product = current($collection->getBatchResult()->get($key));
         if ($product && $type === self::TYPE_STATIC_VARIANT) {
             $this->additionalTextService->buildAdditionalText($product, $context);
@@ -129,9 +124,6 @@ class ArticleComponentHandler implements ComponentHandlerInterface
         $element->getData()->set('product', $product);
     }
 
-    /**
-     * @param ListProduct $product
-     */
     private function switchPrice(ListProduct $product)
     {
         $prices = array_values($product->getPrices());
@@ -147,9 +139,6 @@ class ArticleComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param Element              $element
-     * @param ShopContextInterface $context
-     *
      * @return \Shopware\Bundle\SearchBundle\Criteria
      */
     private function generateCriteria(Element $element, ShopContextInterface $context)

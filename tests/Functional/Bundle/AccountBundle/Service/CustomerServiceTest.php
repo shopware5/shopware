@@ -101,7 +101,7 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
 
         self::$customerService->update($customer);
 
-        $this->assertEquals($newMail, $customer->getEmail());
+        static::assertEquals($newMail, $customer->getEmail());
 
         // reset back to default demo mail
         $customer->setEmail('mustermann@b2b.de');
@@ -152,9 +152,9 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
 
         self::$customerService->update($customer);
 
-        $this->assertEquals($updateData['salutation'], $customer->getSalutation());
-        $this->assertEquals($updateData['firstname'], $customer->getFirstname());
-        $this->assertEquals($updateData['lastname'], $customer->getLastname());
-        $this->assertEquals($updateData['birthday'], $customer->getBirthday()->format('Y-m-d'));
+        static::assertEquals($updateData['salutation'], $customer->getSalutation());
+        static::assertEquals($updateData['firstname'], $customer->getFirstname());
+        static::assertEquals($updateData['lastname'], $customer->getLastname());
+        static::assertEquals($updateData['birthday'], $customer->getBirthday()->format('Y-m-d'));
     }
 }

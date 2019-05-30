@@ -32,7 +32,7 @@ use Slim\Http\Response;
 use Slim\Slim;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -58,11 +58,6 @@ class RequirementsController
      */
     private $app;
 
-    /**
-     * @param Request   $request
-     * @param Response  $response
-     * @param Container $container
-     */
     public function __construct(Request $request, Response $response, Container $container, Slim $app)
     {
         $this->request = $request;

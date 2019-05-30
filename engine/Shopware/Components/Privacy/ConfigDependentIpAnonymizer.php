@@ -42,10 +42,6 @@ class ConfigDependentIpAnonymizer implements IpAnonymizerInterface
      */
     private $doAnonymize;
 
-    /**
-     * @param IpAnonymizerInterface      $ipAnonymizer
-     * @param Shopware_Components_Config $config
-     */
     public function __construct(IpAnonymizerInterface $ipAnonymizer, Shopware_Components_Config $config)
     {
         $this->ipAnonymizer = $ipAnonymizer;

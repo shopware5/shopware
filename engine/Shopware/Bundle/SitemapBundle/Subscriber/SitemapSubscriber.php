@@ -27,51 +27,9 @@ namespace Shopware\Bundle\SitemapBundle\Subscriber;
 use Enlight\Event\SubscriberInterface;
 use Enlight_Event_EventArgs;
 use Shopware\Bundle\SitemapBundle\Controller\SitemapIndexXml;
-use Shopware\Bundle\SitemapBundle\SitemapExporterInterface;
-use Shopware\Bundle\SitemapBundle\SitemapListerInterface;
-use Shopware\Components\DependencyInjection\Container;
-use Shopware\Components\Model\ModelManager;
-use Shopware\Models\Shop\Shop;
-use Shopware_Components_Config as Config;
-use Symfony\Component\HttpKernel\KernelEvents;
 
 class SitemapSubscriber implements SubscriberInterface
 {
-    /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @var SitemapListerInterface
-     */
-    private $sitemapLister;
-
-    /**
-     * @var SitemapExporterInterface
-     */
-    private $sitemapExporter;
-
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
-
-    /**
-     * SitemapSubscriber constructor.
-     *
-     * @param Config                   $config
-     * @param SitemapListerInterface   $sitemapLister
-     * @param SitemapExporterInterface $sitemapExporter
-     * @param ModelManager             $modelManager
-     */
-    public function __construct(Config $config, SitemapExporterInterface $sitemapExporter, ModelManager $modelManager)
-    {
-        $this->config = $config;
-        $this->sitemapExporter = $sitemapExporter;
-        $this->modelManager = $modelManager;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -79,7 +37,6 @@ class SitemapSubscriber implements SubscriberInterface
     {
         return [
             'Enlight_Controller_Dispatcher_ControllerPath_Frontend_SitemapIndexXml' => 'registerSitemapIndexXmlController',
-            KernelEvents::TERMINATE => 'onKernelTerminate',
         ];
     }
 
@@ -92,26 +49,12 @@ class SitemapSubscriber implements SubscriberInterface
     }
 
     /**
-     * @param Enlight_Event_EventArgs $args
+     * Sitemaps are now generated live in \Shopware\Bundle\SitemapBundle\Controller\SitemapIndexXml::indexAction
+     * when they are requested
+     *
+     * @deprecated Will be removed in 5.6 without replacement
      */
     public function onKernelTerminate(Enlight_Event_EventArgs $args)
     {
-        /** @var Container $container */
-        $container = $args->get('container');
-
-        // Is strategy live?
-        if ($this->config->get('sitemapRefreshStrategy') !== SitemapExporterInterface::STRATEGY_LIVE || !$container->initialized('shop')) {
-            return;
-        }
-
-        $lastGenerated = $this->config->get('sitemapLastRefresh');
-        $refreshInterval = $this->config->get('sitemapRefreshTime');
-
-        // Regeneration is required
-        if (time() > $refreshInterval + $lastGenerated) {
-            foreach ($this->modelManager->getRepository(Shop::class)->getActiveShopsFixed() as $shop) {
-                $this->sitemapExporter->generate($shop);
-            }
-        }
     }
 }

@@ -56,12 +56,12 @@ class PriceFacetTest extends TestCase
             $context
         );
 
-        /** @var $facet RangeFacetResult */
+        /** @var RangeFacetResult $facet */
         $facet = $result->getFacets()[0];
-        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult', $facet);
+        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult', $facet);
 
-        $this->assertEquals(110.00, $facet->getMin());
-        $this->assertEquals(120.00, $facet->getMax());
+        static::assertEquals(110.00, $facet->getMin());
+        static::assertEquals(120.00, $facet->getMax());
     }
 
     public function testFacetWithFallbackCustomerGroupPrices()
@@ -85,11 +85,11 @@ class PriceFacetTest extends TestCase
             $context
         );
 
-        /** @var $facet RangeFacetResult */
+        /** @var RangeFacetResult $facet */
         $facet = $result->getFacets()[0];
 
-        $this->assertEquals(105.00, $facet->getMin());
-        $this->assertEquals(130.00, $facet->getMax());
+        static::assertEquals(105.00, $facet->getMin());
+        static::assertEquals(130.00, $facet->getMax());
     }
 
     /**
@@ -115,11 +115,11 @@ class PriceFacetTest extends TestCase
             [],
             $context
         );
-        /** @var $facet RangeFacetResult */
+        /** @var RangeFacetResult $facet */
         $facet = $result->getFacets()[0];
 
-        $this->assertEquals(100.00, $facet->getMin());
-        $this->assertEquals(150.00, $facet->getMax());
+        static::assertEquals(100.00, $facet->getMin());
+        static::assertEquals(150.00, $facet->getMax());
     }
 
     /**
@@ -147,11 +147,11 @@ class PriceFacetTest extends TestCase
             [],
             $context
         );
-        /** @var $facet RangeFacetResult */
+        /** @var RangeFacetResult $facet */
         $facet = $result->getFacets()[0];
 
-        $this->assertEquals(250.00, $facet->getMin());
-        $this->assertEquals(375.00, $facet->getMax());
+        static::assertEquals(250.00, $facet->getMin());
+        static::assertEquals(375.00, $facet->getMax());
     }
 
     protected function getTestContext($displayGross, $discount = null)
@@ -172,8 +172,7 @@ class PriceFacetTest extends TestCase
     }
 
     /**
-     * @param $number
-     * @param ShopContext                        $context
+     * @param string                             $number
      * @param \Shopware\Models\Category\Category $category
      * @param array                              $prices
      *

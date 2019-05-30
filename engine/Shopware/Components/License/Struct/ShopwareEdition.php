@@ -25,7 +25,7 @@
 namespace Shopware\Components\License\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -86,8 +86,8 @@ class ShopwareEdition
     }
 
     /**
-     * @param $edition
-     * @param $licence
+     * @param string $edition
+     * @param string $licence
      *
      * @return ShopwareEdition
      */

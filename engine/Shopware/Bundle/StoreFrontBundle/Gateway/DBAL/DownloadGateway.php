@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -60,11 +60,6 @@ class DownloadGateway implements Gateway\DownloadGatewayInterface
      */
     private $connection;
 
-    /**
-     * @param Connection                $connection
-     * @param FieldHelper               $fieldHelper
-     * @param Hydrator\DownloadHydrator $downloadHydrator
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
@@ -102,12 +97,13 @@ class DownloadGateway implements Gateway\DownloadGatewayInterface
 
         $query->from('s_articles_downloads', 'download')
             ->leftJoin('download', 's_articles_downloads_attributes', 'downloadAttribute', 'downloadAttribute.downloadID = download.id')
+            ->innerJoin('download', 's_media', 'media', 'media.path = download.filename')
             ->where('download.articleID IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $this->fieldHelper->addDownloadTranslation($query, $context);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);

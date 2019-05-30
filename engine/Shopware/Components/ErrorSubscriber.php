@@ -69,8 +69,6 @@ class ErrorSubscriber implements SubscriberInterface
     }
 
     /**
-     * @param \Enlight_Controller_EventArgs $args
-     *
      * @throws \Exception
      */
     public function handleError(\Enlight_Controller_EventArgs $args)

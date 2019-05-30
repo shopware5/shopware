@@ -24,10 +24,11 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -36,21 +37,19 @@ interface ProductServiceInterface
     /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\ProductServiceInterface::get()
      *
-     * @param $numbers
-     * @param Struct\ProductContextInterface $context
+     * @param string[] $numbers
      *
-     * @return Struct\Product[] Indexed by the product order number
+     * @return Product[] Indexed by the product order number
      */
-    public function getList(array $numbers, Struct\ProductContextInterface $context);
+    public function getList(array $numbers, ProductContextInterface $context);
 
     /**
      * Returns a full \Shopware\Bundle\StoreFrontBundle\Struct\Product object.
      * A product struct contains all data about one single product.
      *
-     * @param $number
-     * @param Struct\ProductContextInterface $context
+     * @param string $number
      *
-     * @return Struct\Product
+     * @return Product|null
      */
-    public function get($number, Struct\ProductContextInterface $context);
+    public function get($number, ProductContextInterface $context);
 }

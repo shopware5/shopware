@@ -24,10 +24,11 @@
 
 namespace Shopware\Recovery\Install\Service;
 
+use Shopware\Recovery\Common\Service\UniqueIdGenerator;
 use Shopware\Recovery\Install\Struct\Shop;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -39,16 +40,17 @@ class ShopService
     private $connection;
 
     /**
-     * @param \PDO $connection
+     * @var UniqueIdGenerator
      */
-    public function __construct(\PDO $connection)
+    private $generator;
+
+    public function __construct(\PDO $connection, UniqueIdGenerator $generator)
     {
         $this->connection = $connection;
+        $this->generator = $generator;
     }
 
     /**
-     * @param Shop $shop
-     *
      * @throws \RuntimeException
      */
     public function updateShop(Shop $shop)
@@ -90,8 +92,6 @@ EOT;
     }
 
     /**
-     * @param Shop $shop
-     *
      * @throws \RuntimeException
      */
     public function updateConfig(Shop $shop)
@@ -103,6 +103,7 @@ EOT;
 
         $this->updateMailAddresses($shop);
         $this->updateShopName($shop);
+        $this->generateEsdKey();
     }
 
     /**
@@ -124,9 +125,6 @@ EOT;
         return (int) $fetchLanguageId;
     }
 
-    /**
-     * @param Shop $shop
-     */
     private function updateMailAddresses(Shop $shop)
     {
         $this->updateConfigValue('mail', $shop->email);
@@ -140,17 +138,18 @@ EOT;
         $prepareStatement->execute(['email' => $shop->email]);
     }
 
-    /**
-     * @param Shop $shop
-     */
     private function updateShopName(Shop $shop)
     {
         $this->updateConfigValue('shopName', $shop->name);
     }
 
+    private function generateEsdKey()
+    {
+        $this->updateConfigValue('esdKey', strtolower($this->generator->generateUniqueId(33)));
+    }
+
     /**
      * @param string $elementName
-     * @param mixed  $value
      */
     private function updateConfigValue($elementName, $value)
     {

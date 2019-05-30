@@ -3,7 +3,8 @@
 {* Breadcrumb *}
 {block name='frontend_index_start'}
     {$smarty.block.parent}
-    {$sBreadcrumb[] = ['name' => "{s name='ChangePaymentTitle'}{/s}", 'link' => {url}]}
+    {s name="ChangePaymentTitle" assign="snippetChangePaymentTitle"}{/s}
+    {$sBreadcrumb[] = ['name' => $snippetChangePaymentTitle, 'link' => {url}]}
     {$sActiveAction = 'payment'}
 {/block}
 
@@ -41,7 +42,8 @@
                                 <div class="account--actions">
                                     {block name="frontend_account_payment_action_button_back"}
                                         {if $sTarget}
-                                            <a class="btn is--secondary left" href="{url controller=$sTarget action=$sTargetAction|default:"index"}" title="{"{s name='PaymentLinkBack'}{/s}"|escape}">
+                                            {s name="PaymentLinkBack" assign="snippetPaymentLinkBack"}{/s}
+                                            <a class="btn is--secondary left" href="{url controller=$sTarget action=$sTargetAction|default:"index"}" title="{$snippetPaymentLinkBack|escape}">
                                                 {s name="PaymentLinkBack"}{/s}
                                             </a>
                                         {/if}

@@ -41,7 +41,7 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
 
     /**
      * Expects a request parameter 'licenseString' containing a shopware core license key string.
-     * Will validate and, if successfull, enter the license information into the database.
+     * Will validate and, if successful, enter the license information into the database.
      */
     public function checkLicenseAction()
     {
@@ -220,13 +220,13 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
     }
 
     /**
-     * @param $e
+     * @param Exception $e
      *
      * @return string
      */
     private function resolveLicenseException($e)
     {
-        // get class name without namespace
+        // Get class name without namespace
         $exceptionType = (new \ReflectionClass($e))->getShortName();
 
         if (in_array($exceptionType, $this->licenseException)) {
@@ -241,8 +241,6 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
 
     /**
      * Creates a readable string from a minified license key.
-     *
-     * @param LicenseInformation $licenseInformation
      *
      * @return LicenseInformation
      */

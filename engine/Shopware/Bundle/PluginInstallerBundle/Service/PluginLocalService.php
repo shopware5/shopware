@@ -48,10 +48,6 @@ class PluginLocalService
      */
     private $hydrator;
 
-    /**
-     * @param Connection     $connection
-     * @param StructHydrator $hydrator
-     */
     public function __construct(Connection $connection, StructHydrator $hydrator)
     {
         $this->connection = $connection;
@@ -59,8 +55,6 @@ class PluginLocalService
     }
 
     /**
-     * @param ListingRequest $context
-     *
      * @throws \Exception
      *
      * @return ListingResultStruct
@@ -69,17 +63,15 @@ class PluginLocalService
     {
         $query = $this->getQuery();
 
-        $query
-            ->andWhere("plugin.name != 'PluginManager'")
-            ->andWhere('plugin.capability_enable = 1')
-        ;
+        $query->andWhere("plugin.name != 'PluginManager'")
+            ->andWhere('plugin.capability_enable = 1');
 
         $this->addSortings($context, $query);
 
         $query->setFirstResult($context->getOffset())
             ->setMaxResults($context->getLimit());
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -93,8 +85,6 @@ class PluginLocalService
     }
 
     /**
-     * @param PluginsByTechnicalNameRequest $context
-     *
      * @return PluginStruct
      */
     public function getPlugin(PluginsByTechnicalNameRequest $context)
@@ -105,8 +95,6 @@ class PluginLocalService
     }
 
     /**
-     * @param PluginsByTechnicalNameRequest $context
-     *
      * @throws \Exception
      *
      * @return PluginStruct[]
@@ -121,7 +109,7 @@ class PluginLocalService
                 Connection::PARAM_STR_ARRAY
             );
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -139,16 +127,12 @@ class PluginLocalService
             ->from('s_core_plugins', 'plugin')
             ->where('plugin.capability_update = 1');
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 
-    /**
-     * @param ListingRequest $context
-     * @param QueryBuilder   $builder
-     */
     private function addSortings(ListingRequest $context, QueryBuilder $builder)
     {
         foreach ($context->getSortings() as $sort) {
@@ -165,9 +149,6 @@ class PluginLocalService
     }
 
     /**
-     * @param array       $plugins
-     * @param BaseRequest $context
-     *
      * @throws \Exception
      *
      * @return PluginStruct[]

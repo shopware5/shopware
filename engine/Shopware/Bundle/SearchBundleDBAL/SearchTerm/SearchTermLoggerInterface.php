@@ -29,7 +29,7 @@ use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -37,10 +37,6 @@ interface SearchTermLoggerInterface
 {
     /**
      * Traces the search result into the s_statistic_search
-     *
-     * @param Criteria                  $criteria
-     * @param ProductNumberSearchResult $result
-     * @param Shop                      $shop
      */
     public function logResult(Criteria $criteria, ProductNumberSearchResult $result, Shop $shop);
 }

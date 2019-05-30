@@ -86,7 +86,8 @@ class Enlight_Event_Subscriber_Config extends Enlight_Event_Subscriber
     /**
      * Registers a listener to an event.
      *
-     * @param   Enlight_Event_Handler $handler
+     * @param Enlight_Event_Handler $handler
+     *
      * @return  Enlight_Event_Subscriber
      */
     public function registerListener(Enlight_Event_Handler $handler)

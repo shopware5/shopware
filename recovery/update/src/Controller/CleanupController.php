@@ -35,7 +35,7 @@ use Slim\Slim;
 use Symfony\Component\Finder\Finder;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -87,14 +87,8 @@ class CleanupController
     private $cleanupService;
 
     /**
-     * @param Request            $request
-     * @param Response           $response
-     * @param DummyPluginFinder  $pluginFinder
-     * @param CleanupFilesFinder $filesFinder
-     * @param Slim               $app
-     * @param string             $shopwarePath
-     * @param \PDO               $conn
-     * @param string             $backupDir
+     * @param string $shopwarePath
+     * @param string $backupDir
      */
     public function __construct(
         Request $request,
@@ -248,9 +242,9 @@ SQL;
     }
 
     /**
-     * @param $field
-     * @param $value
-     * @param $shopId
+     * @param string $field
+     * @param string $value
+     * @param int    $shopId
      */
     private function updateShopConfig($field, $value, $shopId)
     {

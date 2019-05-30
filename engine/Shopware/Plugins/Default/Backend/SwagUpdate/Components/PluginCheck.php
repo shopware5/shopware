@@ -29,7 +29,7 @@ use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
 use Shopware\Components\DependencyInjection\Container;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -40,9 +40,6 @@ class PluginCheck
      */
     private $container;
 
-    /**
-     * @param Container $container
-     */
     public function __construct(Container $container)
     {
         $this->container = $container;
@@ -126,7 +123,7 @@ class PluginCheck
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     private function getLocale()
     {
@@ -152,7 +149,7 @@ class PluginCheck
             ->setParameter(':source', 'Default')
             ->setParameter(':names', ['PluginManager', 'StoreApi'], Connection::PARAM_STR_ARRAY);
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);

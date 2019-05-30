@@ -36,20 +36,19 @@
         {/block}
 
         {block name='frontend_detail_buy_laststock'}
+            {s name="DetailBuyInfoNotAvailable" namespace="frontend/detail/buy" assign="snippetDetailBuyInfoNotAvailable"}{/s}
             {if !$sArticle.isAvailable && !$sArticle.sConfigurator}
-                {include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailBuyInfoNotAvailable' namespace='frontend/detail/buy'}{/s}"}
-
+                {include file="frontend/_includes/messages.tpl" type="error" content=$snippetDetailBuyInfoNotAvailable}
             {elseif !$sArticle.isAvailable && $sArticle.isSelectionSpecified}
-                {include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailBuyInfoNotAvailable' namespace='frontend/detail/buy'}{/s}"}
-
+                {include file="frontend/_includes/messages.tpl" type="error" content=$snippetDetailBuyInfoNotAvailable}
             {elseif !$sArticle.isAvailable && !$sArticle.hasAvailableVariant}
-                {include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailBuyInfoNotAvailable' namespace='frontend/detail/buy'}{/s}"}
+                {include file="frontend/_includes/messages.tpl" type="error" content=$snippetDetailBuyInfoNotAvailable}
             {/if}
         {/block}
 
         {* Product email notification *}
         {block name="frontend_detail_index_notification"}
-            {if $ShowNotification && $sArticle.notification && $sArticle.instock <= 0}
+            {if $ShowNotification && $sArticle.notification && $sArticle.instock < $sArticle.minpurchase}
                 {* Support products with or without variants *}
                 {if ($sArticle.hasAvailableVariant && ($sArticle.isSelectionSpecified || !$sArticle.sConfigurator)) || !$sArticle.hasAvailableVariant}
                     {include file="frontend/plugins/notification/index.tpl"}
@@ -76,9 +75,18 @@
                         <meta itemprop="lowPrice" content="{$lowestPrice}"/>
                         <meta itemprop="highPrice" content="{$highestPrice}"/>
                         <meta itemprop="offerCount" content="{$sArticle.sBlockPrices|count}"/>
-                    {else}
-                        <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}"/>
                     {/if}
+
+                    {block name="frontend_detail_index_data_price_currency"}
+                        <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}"/>
+                    {/block}
+
+                    {block name="frontend_detail_index_data_price_valid_until"}{/block}
+
+                    {block name="frontend_detail_index_data_url"}
+                        <meta itemprop="url" content="{url sArticle=$sArticle.articleID title=$sArticle.articleName}"/>
+                    {/block}
+
                     {include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
                 {/block}
 

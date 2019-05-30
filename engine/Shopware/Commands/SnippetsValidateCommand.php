@@ -30,7 +30,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -82,11 +82,9 @@ class SnippetsValidateCommand extends ShopwareCommand
     }
 
     /**
-     * @param SnippetValidator $validator
-     *
      * @throws \Exception
      *
-     * @return \string[]
+     * @return string[]
      */
     protected function validatePlugins(SnippetValidator $validator)
     {
@@ -108,8 +106,7 @@ class SnippetsValidateCommand extends ShopwareCommand
     }
 
     /**
-     * @param SnippetValidator $validator
-     * @param string           $pluginBasePath
+     * @param string $pluginBasePath
      *
      * @return array
      */

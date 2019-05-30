@@ -49,8 +49,8 @@ class ShippingFreeFacetTest extends TestCase
             [$facet]
         );
 
-        $this->assertCount(1, $result->getFacets());
-        $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult', $result->getFacets()[0]);
+        static::assertCount(1, $result->getFacets());
+        static::assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult', $result->getFacets()[0]);
     }
 
     public function testShippingFreeWithoutMatch()
@@ -68,13 +68,12 @@ class ShippingFreeFacetTest extends TestCase
             [$facet]
         );
 
-        $this->assertCount(0, $result->getFacets());
+        static::assertCount(0, $result->getFacets());
     }
 
     /**
-     * @param $number
+     * @param string                             $number
      * @param \Shopware\Models\Category\Category $category
-     * @param ShopContext                        $context
      * @param bool                               $shippingFree
      *
      * @return array

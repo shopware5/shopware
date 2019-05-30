@@ -24,8 +24,8 @@
 
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
-use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\Address as AddressModel;
+use Shopware\Models\Customer\Customer;
 
 class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_Application
 {
@@ -71,7 +71,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
      */
     public function save($data)
     {
-        /* @var $model \Shopware\Models\Customer\Address */
+        /* @var AddressModel $model */
         if (!empty($data['id'])) {
             $model = $this->getRepository()->find($data['id']);
         } else {
@@ -134,6 +134,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
             return ['success' => false, 'error' => 'The id parameter contains no value.'];
         }
 
+        /** @var AddressModel $model */
         $model = $this->getManager()->find($this->model, $id);
 
         if (!($model instanceof $this->model)) {
@@ -194,8 +195,6 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
     }
 
     /**
-     * @param \Shopware\Components\Model\QueryBuilder $query
-     *
      * @return \Shopware\Components\Model\QueryBuilder
      */
     private function addAssociations(\Shopware\Components\Model\QueryBuilder $query)

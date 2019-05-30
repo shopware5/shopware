@@ -29,7 +29,7 @@ use Shopware\Components\Api\Exception as ApiException;
 /**
  * Property API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -40,7 +40,7 @@ class PropertyGroup extends Resource
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository('Shopware\Models\Property\Group');
+        return $this->getManager()->getRepository(\Shopware\Models\Property\Group::class);
     }
 
     /**
@@ -62,21 +62,19 @@ class PropertyGroup extends Resource
         $filters = [['property' => 'groups.id', 'expression' => '=', 'value' => $id]];
         $query = $this->getRepository()->getListGroupsQuery($filters);
 
-        /** @var \Shopware\Models\Property\Group $property */
+        /** @var \Shopware\Models\Property\Group|null $property */
         $property = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$property) {
-            throw new ApiException\NotFoundException("Property group by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('PropertyGroup by id %d not found', $id));
         }
 
         return $property;
     }
 
     /**
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $criteria
-     * @param array $orderBy
+     * @param int $offset
+     * @param int $limit
      *
      * @return array
      */
@@ -89,18 +87,16 @@ class PropertyGroup extends Resource
 
         $paginator = $this->getManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // Returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the property groups data
+        // Returns the property groups data
         $propertyGroups = $paginator->getIterator()->getArrayCopy();
 
         return ['data' => $propertyGroups, 'total' => $totalResult];
     }
 
     /**
-     * @param array $params
-     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Exception
      *
@@ -127,13 +123,11 @@ class PropertyGroup extends Resource
     }
 
     /**
-     * @param int   $id
-     * @param array $params
+     * @param int $id
      *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
      *
      * @return \Shopware\Models\Property\Group
      */
@@ -145,11 +139,11 @@ class PropertyGroup extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $propertyGroup \Shopware\Models\Property\Group */
+        /** @var \Shopware\Models\Property\Group|null $propertyGroup */
         $propertyGroup = $this->getRepository()->find($id);
 
         if (!$propertyGroup) {
-            throw new ApiException\NotFoundException("Property group by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('PropertyGroup by id %d not found', $id));
         }
 
         $params = $this->preparePropertyData($params, $propertyGroup);
@@ -181,11 +175,11 @@ class PropertyGroup extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var \Shopware\Models\Property\Group $propertyGroup */
+        /** @var \Shopware\Models\Property\Group|null $propertyGroup */
         $propertyGroup = $this->getRepository()->find($id);
 
         if (!$propertyGroup) {
-            throw new ApiException\NotFoundException("PropertyGroup by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('PropertyGroup by id %d not found', $id));
         }
 
         $this->getManager()->remove($propertyGroup);
@@ -194,19 +188,25 @@ class PropertyGroup extends Resource
         return $propertyGroup;
     }
 
-    private function preparePropertyData($params, $propertyGroup = null)
+    /**
+     * @param \Shopware\Models\Property\Group|null $propertyGroup
+     *
+     * @throws ApiException\CustomValidationException
+     *
+     * @return array
+     */
+    private function preparePropertyData(array $params, $propertyGroup = null)
     {
-        // if property group is created, we need to set some default values
+        // If property group is created, we need to set some default values
         if (!$propertyGroup) {
             if (!isset($params['name']) || empty($params['name'])) {
                 throw new ApiException\CustomValidationException('A name is required');
             }
+
             if (!isset($params['position']) || empty($params['position'])) {
-                // Set position to end
-                // $params['position'] = Shopware()->Db()->fetchOne("SELECT MAX(position)+1 FROM s_filter");
-                // Set position to zero
                 $params['position'] = 0;
             }
+
             if (!isset($params['comparable']) || empty($params['comparable'])) {
                 // Set comparable
                 $params['comparable'] = 0;
@@ -217,9 +217,9 @@ class PropertyGroup extends Resource
                 $params['sortmode'] = 0;
             }
 
-            //sortmode equals the old article_count sorting?
+            // Sortmode equals the old article_count sorting?
             if ($params['sortmode'] == 2) {
-                //fallback to the default sorting
+                // Fallback to the default sorting
                 $params['sortmode'] = 0;
             }
         } else {

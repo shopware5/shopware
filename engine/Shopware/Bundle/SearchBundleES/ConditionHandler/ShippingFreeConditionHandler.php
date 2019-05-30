@@ -52,7 +52,7 @@ class ShippingFreeConditionHandler implements PartialConditionHandlerInterface
         ShopContextInterface $context
     ) {
         $search->addFilter(
-            new TermQuery('shippingFree', 1)
+            new TermQuery('shippingFree', true)
         );
     }
 
@@ -66,7 +66,7 @@ class ShippingFreeConditionHandler implements PartialConditionHandlerInterface
         ShopContextInterface $context
     ) {
         $search->addPostFilter(
-            new TermQuery('shippingFree', 1)
+            new TermQuery('shippingFree', true)
         );
     }
 }

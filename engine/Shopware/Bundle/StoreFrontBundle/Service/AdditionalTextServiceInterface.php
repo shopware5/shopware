@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -42,9 +42,6 @@ interface AdditionalTextServiceInterface
      *
      * This behaviour can be optionally disabled using the backend settings
      *
-     * @param Struct\ListProduct          $product
-     * @param Struct\ShopContextInterface $context
-     *
      * @return Struct\ListProduct $product
      */
     public function buildAdditionalText(Struct\ListProduct $product, Struct\ShopContextInterface $context);
@@ -54,8 +51,7 @@ interface AdditionalTextServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface::buildAdditionalText()
      *
-     * @param Struct\ListProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\ListProduct[] $products
      *
      * @return Struct\ListProduct[] $products
      */

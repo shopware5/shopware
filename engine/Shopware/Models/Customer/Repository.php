@@ -22,10 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Customer;
+namespace Shopware\Models\Customer;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
+use Shopware\Models\Order\Order;
 
 /**
  * Repository for the customer model (Shopware\Models\Customer\Customer).
@@ -39,9 +41,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all data about a single customer.
      *
-     * @param $customerId
-     *
-     * @internal param $id
+     * @param int $customerId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -56,16 +56,16 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getCustomerDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $customerId
+     * @param int $customerId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getCustomerDetailQueryBuilder($customerId)
     {
-        // sub query to select the canceledOrderAmount. This can't be done with another join condition
+        // Sub query to select the canceledOrderAmount. This can't be done with another join condition
         $subQueryBuilder = $this->getEntityManager()->createQueryBuilder();
         $subQueryBuilder->select('SUM(canceledOrders.invoiceAmount)')
-            ->from('Shopware\Models\Customer\Customer', 'customer2')
+            ->from(Customer::class, 'customer2')
             ->leftJoin('customer2.orders', 'canceledOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'canceledOrders.cleared = 16')
             ->where('customer2.id = :customerId');
 
@@ -83,7 +83,7 @@ class Repository extends ModelRepository
             'SUM(doneOrders.invoiceAmount) as amount',
             '(' . $subQueryBuilder->getDQL() . ') as canceledOrderAmount',
         ]);
-        //join s_orders second time to display the count of canceled orders and the count and total amount of done orders
+        // Join s_orders second time to display the count of canceled orders and the count and total amount of done orders
         $builder->from($this->getEntityName(), 'customer')
                 ->leftJoin('customer.defaultBillingAddress', 'billing')
                 ->leftJoin('customer.defaultShippingAddress', 'shipping')
@@ -124,18 +124,16 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         return $builder->select(['groups'])
-                       ->from('Shopware\Models\Customer\Group', 'groups')
+                       ->from(Group::class, 'groups')
                        ->orderBy('groups.id');
     }
 
     /**
      * Returns a list of orders for the passed customer id and filtered by the filter parameter.
      *
-     * @param      $customerId
-     * @param null $filter
-     * @param null $orderBy
-     * @param null $limit
-     * @param null $offset
+     * @param int      $customerId
+     * @param int|null $limit
+     * @param int|null $offset
      *
      * @return \Doctrine\ORM\Query
      */
@@ -154,16 +152,17 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getOrdersQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param      $customerId
-     * @param      $filter
-     * @param null $orderBy
+     * @param int         $customerId
+     * @param string|null $filter
+     * @param array|null  $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getOrdersQueryBuilder($customerId, $filter = null, $orderBy = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
-        //select the different entities
+        // Select the different entities
         $builder->select([
             'orders.id as id',
             'orders.number as orderNumber',
@@ -175,14 +174,14 @@ class Repository extends ModelRepository
             'orders.cleared as paymentStatusId',
         ]);
 
-        //join the required tables for the order list
-        $builder->from('Shopware\Models\Order\Order', 'orders')
+        // Join the required tables for the order list
+        $builder->from(Order::class, 'orders')
                 ->leftJoin('orders.payment', 'payment')
                 ->leftJoin('orders.dispatch', 'dispatch')
                 ->leftJoin('orders.orderStatus', 'orderStatus')
                 ->leftJoin('orders.paymentStatus', 'paymentStatus');
 
-        //filter the displayed columns with the passed filter string
+        // Filter the displayed columns with the passed filter string
         if (!empty($filter)) {
             $builder->where('orders.customerId = :customerId');
             $builder->andWhere(
@@ -215,8 +214,9 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which search for customers
      * with the passed email address. The passed customer id is excluded.
      *
-     * @param null $email
-     * @param null $customerId
+     * @param string|null $email
+     * @param int|null    $customerId
+     * @param int|null    $shopId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -231,8 +231,9 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getValidateEmailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $email
-     * @param null $customerId
+     * @param string|null $email
+     * @param int|null    $customerId
+     * @param int|null    $shopId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -262,9 +263,9 @@ class Repository extends ModelRepository
      * Returns an instance of \Doctrine\ORM\Query object which selects a list of
      * all defined customer groups. Used to show all unselected customer groups to restrict the category
      *
-     * @param $usedIds
-     * @param $offset
-     * @param $limit
+     * @param int[] $usedIds
+     * @param int   $offset
+     * @param int   $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -279,16 +280,16 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getCustomerGroupsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $usedIds
-     * @param $offset
-     * @param $limit
+     * @param int[] $usedIds
+     * @param int   $offset
+     * @param int   $limit
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getCustomerGroupsWithoutIdsQueryBuilder($usedIds, $offset, $limit)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(['groups'])->from('Shopware\Models\Customer\Group', 'groups');
+        $builder->select(['groups'])->from(Group::class, 'groups');
         if (!empty($usedIds)) {
             $builder->where('groups.id NOT IN (:usedIds)')
                 ->setParameter('usedIds', $usedIds, Connection::PARAM_INT_ARRAY);

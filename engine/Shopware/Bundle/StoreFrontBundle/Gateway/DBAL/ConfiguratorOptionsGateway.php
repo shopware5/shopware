@@ -26,15 +26,14 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ConfiguratorOptionsGateway
+class ConfiguratorOptionsGateway implements Gateway\ConfiguratorOptionsGatewayInterface
 {
     /**
      * @var Hydrator\ConfiguratorHydrator
@@ -67,9 +66,6 @@ class ConfiguratorOptionsGateway
     private $mediaGateway;
 
     /**
-     * @param Connection                                                      $connection
-     * @param FieldHelper                                                     $fieldHelper
-     * @param Hydrator\ConfiguratorHydrator                                   $configuratorHydrator
      * @param \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface $mediaGateway
      */
     public function __construct(
@@ -85,11 +81,7 @@ class ConfiguratorOptionsGateway
     }
 
     /**
-     * Get groups with options by optionids
-     *
-     * @param array $optionIds
-     *
-     * @return Struct\Configurator\Group[]
+     * {@inheritdoc}
      */
     public function getOptions(array $optionIds, ShopContextInterface $context)
     {

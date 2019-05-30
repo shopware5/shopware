@@ -53,7 +53,6 @@ Ext.onReady(function() {
             "Février": 1,
             "Févr": 1,
             "Mars": 2,
-            "Mars": 2,
             "Avril": 3,
             "Avr": 3,
             "Mai": 4,

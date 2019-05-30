@@ -24,14 +24,16 @@
 
 namespace Shopware\Models\Property;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\PropertyValue as PropertyValueAttribute;
 use Shopware\Models\Media\Media;
 
 /**
  * Shopware Article Property Model
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_filter_values")
  */
 class Value extends ModelEntity
@@ -39,16 +41,17 @@ class Value extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyValue", mappedBy="propertyValue", orphanRemoval=true, cascade={"persist"})
+     * @var PropertyValueAttribute
      *
-     * @var \Shopware\Models\Attribute\PropertyValue
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyValue", mappedBy="propertyValue", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -79,7 +82,7 @@ class Value extends ModelEntity
     private $optionId;
 
     /**
-     * @var string
+     * @var Option
      *
      * @ORM\ManyToOne(targetEntity="Option", inversedBy="values", cascade={"persist"})
      * @ORM\JoinColumn(name="optionID", referencedColumnName="id")
@@ -87,40 +90,39 @@ class Value extends ModelEntity
     private $option;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\Article>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Article", mappedBy="propertyValues")
      * @ORM\JoinTable(name="s_filter_articles",
-     *      joinColumns={@ORM\JoinColumn(name="valueID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="articleID", referencedColumnName="id")}
+     *     joinColumns={@ORM\JoinColumn(name="valueID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="articleID", referencedColumnName="id")}
      * )
      */
     private $articles;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="media_id", type="integer", nullable=true)
      */
-    private $mediaId = null;
+    private $mediaId;
 
     /**
      * @var Media
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Media\Media", inversedBy="properties")
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
      */
     private $media;
 
     /**
-     * Class constructor.
-     *
-     * @param \Shopware\Models\Property\Option $option
-     * @param string                           $value
+     * @param string $value
      */
     public function __construct(Option $option, $value)
     {
         $this->option = $option;
         $this->setValue($value);
-        $this->articles = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->articles = new ArrayCollection();
     }
 
     /**
@@ -162,7 +164,7 @@ class Value extends ModelEntity
      *
      * @param int $position
      *
-     * @return \Shopware\Models\Property\Value
+     * @return Value
      */
     public function setPosition($position)
     {
@@ -198,7 +200,7 @@ class Value extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Media\Media
+     * @return Media
      */
     public function getMedia()
     {
@@ -206,7 +208,7 @@ class Value extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Media\Media $media
+     * @param Media $media
      */
     public function setMedia($media)
     {
@@ -214,7 +216,7 @@ class Value extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\PropertyValue
+     * @return PropertyValueAttribute
      */
     public function getAttribute()
     {
@@ -222,12 +224,12 @@ class Value extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\PropertyValue|array|null $attribute
+     * @param PropertyValueAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\PropertyValue
+     * @return Value
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\PropertyValue', 'attribute', 'propertyValue');
+        return $this->setOneToOne($attribute, PropertyValueAttribute::class, 'attribute', 'propertyValue');
     }
 }

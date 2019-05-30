@@ -25,7 +25,7 @@
 use PHPUnit\DbUnit\DataSet\IDataSet;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -45,7 +45,7 @@ class Shopware_RegressionTests_Ticket4609 extends Enlight_Components_Test_Plugin
         } catch (Exception $e) {
         }
 
-        $this->assertNull($e);
+        static::assertNull($e);
     }
 
     /**

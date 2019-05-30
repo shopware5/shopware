@@ -28,7 +28,7 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -40,10 +40,7 @@ interface VariantCheapestPriceGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VariantCheapestPriceGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
-     * @param Struct\Customer\Group       $customerGroup
-     * @param Criteria                    $criteria
+     * @param Struct\BaseProduct[] $products
      *
      * @return array ['price' => Struct\Product\PriceRule, 'different_price_count' => int] Indexed by the ordernumber
      */
@@ -68,11 +65,6 @@ interface VariantCheapestPriceGatewayInterface
      *  - Cheapest price requires the selected variant unit for base price calculation
      *  - The variants has to be active
      *  - Closeout variants can only be selected if the stock > min purchase
-     *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
-     * @param Struct\Customer\Group       $customerGroup
-     * @param Criteria                    $criteria
      *
      * @return array ['price' => Struct\Product\PriceRule, 'different_price_count' => int]
      */

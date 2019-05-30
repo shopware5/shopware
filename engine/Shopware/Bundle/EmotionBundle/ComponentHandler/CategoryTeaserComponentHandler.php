@@ -66,12 +66,6 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
      */
     private $connection;
 
-    /**
-     * @param StoreFrontCriteriaFactoryInterface $criteriaFactory
-     * @param CategoryServiceInterface           $categoryService
-     * @param Connection                         $connection
-     * @param BlogServiceInterface               $blogService
-     */
     public function __construct(StoreFrontCriteriaFactoryInterface $criteriaFactory, CategoryServiceInterface $categoryService, Connection $connection, BlogServiceInterface $blogService)
     {
         $this->criteriaFactory = $criteriaFactory;
@@ -81,8 +75,6 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param Element $element
-     *
      * @return bool
      */
     public function supports(Element $element)
@@ -92,8 +84,6 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param PrepareDataCollection            $collection
-     * @param Element                          $element
      * @param ShopContext|ShopContextInterface $context
      */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
@@ -126,11 +116,6 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
         }
     }
 
-    /**
-     * @param ResolvedDataCollection $collection
-     * @param Element                $element
-     * @param ShopContextInterface   $context
-     */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
         $imageType = $element->getConfig()->get('image_type');
@@ -155,7 +140,8 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
                     if (!$blog) {
                         break;
                     }
-                    $media = array_shift($blog->getMedias());
+                    $medias = $blog->getMedias();
+                    $media = array_shift($medias);
 
                     $element->getData()->set('blog', $blog);
                     $element->getData()->set('image', $media);
@@ -166,7 +152,7 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
                 $products = $collection->getBatchResult()->get($key);
                 shuffle($products);
 
-                /** @var ListProduct $product */
+                /** @var ListProduct|null $product */
                 $product = reset($products);
 
                 if (!$product || !$product->getCover()) {
@@ -181,10 +167,6 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
         $this->fetchCategory($element, $context);
     }
 
-    /**
-     * @param Element              $element
-     * @param ShopContextInterface $context
-     */
     private function fetchCategory(Element $element, ShopContextInterface $context)
     {
         $categoryId = (int) $element->getConfig()->get('category_selection');
@@ -198,10 +180,9 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param int                  $categoryId
-     * @param ShopContextInterface $context
+     * @param int $categoryId
      *
-     * @return Blog
+     * @return Blog|null
      */
     private function getRandomBlog($categoryId, ShopContextInterface $context)
     {

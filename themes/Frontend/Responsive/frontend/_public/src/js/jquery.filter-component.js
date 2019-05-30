@@ -62,6 +62,13 @@
                     var $el = $(event.currentTarget);
                     if ($el.is(':checked')) {
                         me.$inputs.not($el).attr('disabled', 'disabled').parent().addClass('is--disabled');
+                        
+                        /**
+                         * set timeout to be able to see the change before the dropdown is closed
+                         */
+                        window.setTimeout(function () {
+                            me.close();
+                        }, 250);
                     }
                     me.onChange(event);
                 });

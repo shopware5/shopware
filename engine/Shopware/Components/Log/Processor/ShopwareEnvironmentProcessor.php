@@ -28,7 +28,7 @@ namespace Shopware\Components\Log\Processor;
 /**
  * ShopwareEnvironmentProcessor.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -36,8 +36,6 @@ class ShopwareEnvironmentProcessor
 {
     /**
      * Adds request, shop and session info
-     *
-     * @param array $record
      *
      * @return array
      */
@@ -88,9 +86,7 @@ class ShopwareEnvironmentProcessor
     /**
      * Filters sensitive data from GET and POST
      *
-     * @param $data
-     *
-     * @return mixed
+     * @param array $data
      */
     private function filterRequestUserData($data)
     {
@@ -110,8 +106,8 @@ class ShopwareEnvironmentProcessor
     /**
      * Recursively searches for an unwanted key, and unsets every instance of it
      *
-     * @param $array array nested array to search
-     * @param $unwantedKey string unwanted key
+     * @param array  $array       nested array to search
+     * @param string $unwantedKey unwanted key
      */
     private function recursiveUnset(&$array, $unwantedKey)
     {

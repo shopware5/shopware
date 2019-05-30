@@ -21,6 +21,8 @@
 
         this.updateGraphs();
         this.updateLanguageInputs();
+
+        this.createEvent();
     };
 
     /**
@@ -82,6 +84,12 @@
         $inputElements.each(function (index, item) {
             $(item).val(window.i18n.locale);
         });
+    };
+
+    LanguageSwitch.prototype.createEvent = function () {
+        var event = new Event('languageSwitch');
+
+        this.$el[0].dispatchEvent(event);
     };
 
     $.fn.languageSwitch = function () {

@@ -29,7 +29,7 @@ use Shopware\Components\Api\Resource\Resource as APIResource;
 /**
  * Abstract TestCase for Resource-Tests
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -91,11 +91,11 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     {
         $aclMock = $this->createMock(\Shopware_Components_Acl::class);
 
-        $aclMock->expects($this->any())
+        $aclMock->expects(static::any())
                 ->method('has')
                 ->willReturn(true);
 
-        $aclMock->expects($this->any())
+        $aclMock->expects(static::any())
                 ->method('isAllowed')
                 ->willReturn(false);
 

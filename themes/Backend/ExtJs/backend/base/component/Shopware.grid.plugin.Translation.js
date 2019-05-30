@@ -256,13 +256,8 @@ Ext.define('Shopware.grid.plugin.Translation', {
         var me = this;
 
         if (!me.hasActionColumnTranslationItem(actionColumn)) {
-            if (actionColumn.rendered) {
-                actionColumn.setWidth(actionColumn.getWidth() + 30);
-                actionColumn.add(me.createTranslationActionColumnItem());
-            } else {
-                actionColumn.items.push(me.createTranslationActionColumnItem());
-                actionColumn.width = actionColumn.width + 30;
-            }
+            actionColumn.items.push(me.createTranslationActionColumnItem());
+            actionColumn.width = actionColumn.width + 30;
         }
     },
 
@@ -330,7 +325,7 @@ Ext.define('Shopware.grid.plugin.Translation', {
         }
 
         // Check if sub applications are supported
-        if(typeof(Shopware.app.Application.addSubApplication) !== 'function') {
+        if(typeof Shopware.app.Application.addSubApplication !== 'function') {
             Ext.Error.raise('Your ExtJS application does not support sub applications');
         }
 

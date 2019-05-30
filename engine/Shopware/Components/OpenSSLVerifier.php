@@ -32,7 +32,7 @@ class OpenSSLVerifier
     private $publicKeyPath;
 
     /**
-     * @var resource
+     * @var resource|null
      */
     private $keyResource;
 
@@ -44,10 +44,7 @@ class OpenSSLVerifier
     public function __construct($publicKey)
     {
         if (!is_readable($publicKey)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Public keyfile (%s) not readable',
-                $publicKey
-            ));
+            throw new \InvalidArgumentException(sprintf('Public keyfile "%s" not readable', $publicKey));
         }
 
         $this->publicKeyPath = $publicKey;

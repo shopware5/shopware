@@ -41,10 +41,6 @@ class LegacyCaptcha implements CaptchaInterface
      */
     private $templateManager;
 
-    /**
-     * @param \Shopware_Components_Config $config
-     * @param \Enlight_Template_Manager   $templateManager
-     */
     public function __construct(
         \Shopware_Components_Config $config,
         \Enlight_Template_Manager $templateManager
@@ -134,21 +130,21 @@ class LegacyCaptcha implements CaptchaInterface
             $colors = explode(',', '255,0,0');
         }
 
-        $black = imagecolorallocate($im, $colors[0], $colors[1], $colors[2]);
+        $black = imagecolorallocate($im, (int) $colors[0], (int) $colors[1], (int) $colors[2]);
 
         $string = implode(' ', str_split($string));
 
         if (!empty($font)) {
             for ($i = 0; $i <= strlen($string); ++$i) {
-                $rand1 = rand(35, 40);
-                $rand2 = rand(15, 20);
-                $rand3 = rand(60, 70);
+                $rand1 = Random::getInteger(35, 40);
+                $rand2 = Random::getInteger(15, 20);
+                $rand3 = Random::getInteger(60, 70);
                 imagettftext($im, $rand1, $rand2, ($i + 1) * 15, $rand3, $black, $font, substr($string, $i, 1));
                 imagettftext($im, $rand1, $rand2, (($i + 1) * 15) + 2, $rand3 + 2, $black, $font, substr($string, $i, 1));
             }
             for ($i = 0; $i < 8; ++$i) {
-                imageline($im, mt_rand(30, 70), mt_rand(0, 50), mt_rand(100, 150), mt_rand(20, 100), $black);
-                imageline($im, mt_rand(30, 70), mt_rand(0, 50), mt_rand(100, 150), mt_rand(20, 100), $black);
+                imageline($im, Random::getInteger(30, 70), Random::getInteger(0, 50), Random::getInteger(100, 150), Random::getInteger(20, 100), $black);
+                imageline($im, Random::getInteger(30, 70), Random::getInteger(0, 50), Random::getInteger(100, 150), Random::getInteger(20, 100), $black);
             }
         } else {
             $white = imagecolorallocate($im, 255, 255, 255);
@@ -165,7 +161,7 @@ class LegacyCaptcha implements CaptchaInterface
      *
      * @param string $fileName
      *
-     * @return null|string
+     * @return string|null
      */
     private function getCaptchaFile($fileName)
     {

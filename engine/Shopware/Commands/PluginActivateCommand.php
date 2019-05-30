@@ -25,23 +25,24 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PluginActivateCommand extends ShopwareCommand
+class PluginActivateCommand extends PluginCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('sw:plugin:activate')
             ->setDescription('Activates a plugin.')
@@ -85,8 +86,9 @@ EOF
             return 1;
         }
 
-        $pluginManager->activatePlugin($plugin);
+        $activationContext = $pluginManager->activatePlugin($plugin);
+        $output->writeln(sprintf('Plugin %s has been activated.', $pluginName));
 
-        $output->writeln(sprintf('Plugin %s has been activated', $pluginName));
+        $this->clearCachesIfRequested($input, $output, $activationContext);
     }
 }

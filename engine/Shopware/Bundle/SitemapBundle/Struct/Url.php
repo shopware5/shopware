@@ -36,7 +36,7 @@ class Url
     /**
      * Date and time of last modification
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $lastmod;
 
@@ -55,17 +55,31 @@ class Url
     private $priority;
 
     /**
-     * @param string    $loc
-     * @param \DateTime $lastmod
-     * @param string    $changefreq
-     * @param float     $priority
+     * @var string
      */
-    public function __construct($loc, $lastmod, $changefreq, $priority = 0.5)
+    private $resource;
+
+    /**
+     * @var int
+     */
+    private $identifier;
+
+    /**
+     * @param string             $loc
+     * @param \DateTimeInterface $lastmod
+     * @param string             $changefreq
+     * @param string             $resource
+     * @param int|null           $identifier
+     * @param float              $priority
+     */
+    public function __construct($loc, $lastmod, $changefreq, $resource, $identifier, $priority = 0.5)
     {
         $this->loc = $loc;
         $this->lastmod = $lastmod;
         $this->changefreq = $changefreq;
         $this->priority = $priority;
+        $this->resource = $resource;
+        $this->identifier = (int) $identifier;
     }
 
     /**
@@ -97,7 +111,7 @@ class Url
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getLastmod()
     {
@@ -105,7 +119,7 @@ class Url
     }
 
     /**
-     * @param \DateTime $lastmod
+     * @param \DateTimeInterface $lastmod
      */
     public function setLastmod($lastmod)
     {
@@ -142,5 +156,37 @@ class Url
     public function setPriority($priority)
     {
         $this->priority = $priority;
+    }
+
+    /**
+     * @param string $resource
+     */
+    public function setResource($resource)
+    {
+        $this->resource = $resource;
+    }
+
+    /**
+     * @return string
+     */
+    public function getResource()
+    {
+        return $this->resource;
+    }
+
+    /**
+     * @param int $identifier
+     */
+    public function setIdentifier($identifier)
+    {
+        $this->identifier = $identifier;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
     }
 }

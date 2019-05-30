@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware Article Image Rule model.
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_article_img_mapping_rules")
  */
 class Rule extends ModelEntity
@@ -39,6 +39,7 @@ class Rule extends ModelEntity
      * OWNING SIDE - BI DIRECTIONAL
      *
      * @var \Shopware\Models\Article\Image\Mapping
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Image\Mapping", inversedBy="rules")
      * @ORM\JoinColumn(name="mapping_id", referencedColumnName="id")
      */
@@ -48,15 +49,17 @@ class Rule extends ModelEntity
      * OWNING SIDE - UNI DIRECTIONAL
      *
      * @var \Shopware\Models\Article\Configurator\Option
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Configurator\Option")
      * @ORM\JoinColumn(name="option_id", referencedColumnName="id")
      */
     protected $option;
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

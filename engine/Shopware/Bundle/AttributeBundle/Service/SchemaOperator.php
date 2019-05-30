@@ -27,7 +27,7 @@ namespace Shopware\Bundle\AttributeBundle\Service;
 use Doctrine\DBAL\Connection;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -48,10 +48,6 @@ class SchemaOperator
      */
     private $nameBlacklist;
 
-    /**
-     * @param Connection   $connection
-     * @param TableMapping $tableMapping
-     */
     public function __construct(Connection $connection, TableMapping $tableMapping)
     {
         $this->connection = $connection;
@@ -63,7 +59,7 @@ class SchemaOperator
      * @param string                $table
      * @param string                $column
      * @param string                $type
-     * @param null|string|int|float $defaultValue
+     * @param string|int|float|null $defaultValue
      *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Exception
@@ -92,7 +88,7 @@ class SchemaOperator
      * @param string                $originalName
      * @param string                $newName
      * @param string                $type
-     * @param null|string|int|float $defaultValue
+     * @param string|int|float|null $defaultValue
      *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Exception
@@ -210,9 +206,9 @@ class SchemaOperator
     }
 
     /**
-     * @param null|float|int|string $defaultValue
+     * @param float|int|string|null $defaultValue
      *
-     * @return null|float|int|string
+     * @return float|int|string|null
      */
     private function filterDefaultValue($defaultValue)
     {

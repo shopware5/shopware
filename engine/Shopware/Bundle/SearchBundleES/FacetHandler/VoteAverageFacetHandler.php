@@ -50,10 +50,6 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
      */
     private $queryAliasMapper;
 
-    /**
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper                     $queryAliasMapper
-     */
     public function __construct(
         \Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper
@@ -110,23 +106,20 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
     }
 
     /**
-     * @param Criteria $criteria
-     * @param array    $buckets
-     *
      * @return RadioFacetResult
      */
     private function createFacet(Criteria $criteria, array $buckets)
     {
         $activeAverage = null;
         if ($criteria->hasCondition('vote_average')) {
-            /** @var $condition VoteAverageCondition */
+            /** @var VoteAverageCondition $condition */
             $condition = $criteria->getCondition('vote_average');
             $activeAverage = $condition->getAverage();
         }
 
         $values = $this->buildItems($buckets, $activeAverage);
 
-        /** @var VoteAverageFacet $facet */
+        /** @var VoteAverageFacet|null $facet */
         $facet = $criteria->getFacet('vote_average');
         if ($facet && !empty($facet->getLabel())) {
             $label = $facet->getLabel();
@@ -153,7 +146,7 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
 
     /**
      * @param array $data
-     * @param int   $activeAverage
+     * @param float $activeAverage
      *
      * @return array
      */
@@ -166,7 +159,7 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
         $values = [];
         for ($i = 1; $i <= 4; ++$i) {
             $affected = array_filter($data, function ($value) use ($i) {
-                return ($value['key'] / 2) >= $i;
+                return $i <= ($value['key'] / 2);
             });
 
             $count = array_sum(array_column($affected, 'doc_count'));
@@ -174,7 +167,7 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
                 continue;
             }
 
-            $values[] = new ValueListItem($i, $count, $activeAverage == $i);
+            $values[] = new ValueListItem($i, (string) $count, $activeAverage == $i);
         }
 
         usort($values, function (ValueListItem $a, ValueListItem $b) {

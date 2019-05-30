@@ -21,10 +21,11 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexerInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -126,8 +127,6 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
     /**
      * Event listener function of the search index rebuild cron job.
      *
-     * @param Enlight_Event_EventArgs $arguments
-     *
      * @return bool
      */
     public function onRefreshSeoIndex(Enlight_Event_EventArgs $arguments)
@@ -146,7 +145,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
         $this->RewriteTable()->sCreateRewriteTableCleanup();
 
         foreach ($shops as $shopId) {
-            /** @var $repository \Shopware\Models\Shop\Repository */
+            /** @var \Shopware\Models\Shop\Repository $repository */
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
             $shop = $repository->getActiveById($shopId);
             if ($shop === null) {
@@ -176,7 +175,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
             $this->RewriteTable()->sCreateRewriteTableCategories();
             $this->RewriteTable()->sCreateRewriteTableCampaigns();
             $this->RewriteTable()->sCreateRewriteTableContent();
-            $this->RewriteTable()->sCreateRewriteTableBlog();
+            $this->RewriteTable()->sCreateRewriteTableBlog(null, null, $context);
             $this->RewriteTable()->createManufacturerUrls($context);
             $this->RewriteTable()->sCreateRewriteTableStatic();
 
@@ -195,8 +194,6 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
     /**
      * Event listener function of the search index rebuild cron job.
      *
-     * @param Enlight_Event_EventArgs $arguments
-     *
      * @return bool
      */
     public function refreshSearchIndex(Enlight_Event_EventArgs $arguments)
@@ -207,7 +204,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
             return true;
         }
 
-        /* @var $indexer SearchIndexerInterface */
+        /* @var SearchIndexerInterface $indexer */
         $indexer = $this->get('shopware_searchdbal.search_indexer');
         $indexer->build();
 
@@ -219,8 +216,6 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
      *
      * The refreshSeoIndex method will only be called, if "live" mode is enabled. Else the process will be
      * triggered via plugin or manually
-     *
-     * @param Enlight_Controller_EventArgs $args
      */
     public function onAfterSendResponse(Enlight_Controller_EventArgs $args)
     {
@@ -249,8 +244,6 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
      * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_Seo
      * event. This event is fired when shopware trying to access the plugin SEO controller.
      *
-     * @param Enlight_Event_EventArgs $arguments
-     *
      * @return string
      */
     public function getSeoBackendController(Enlight_Event_EventArgs $arguments)
@@ -262,8 +255,6 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
      * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_SearchIndex
      * event. This event is fired when shopware trying to access the plugin SearchIndex controller.
      *
-     * @param Enlight_Event_EventArgs $arguments
-     *
      * @return string
      */
     public function getSearchIndexBackendController(Enlight_Event_EventArgs $arguments)
@@ -274,8 +265,6 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
     /**
      * Event listener function of the Enlight_Controller_Dispatcher_ControllerPath_Backend_SimilarShown
      * event. This event is fired when shopware trying to access the plugin AlsoBought controller.
-     *
-     * @param Enlight_Event_EventArgs $arguments
      *
      * @return string
      */

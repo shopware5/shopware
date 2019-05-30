@@ -27,7 +27,7 @@ namespace Shopware\Recovery\Update;
 use Shopware\Recovery\Common\HttpClient\Client;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -44,7 +44,6 @@ class StoreApi
     private $baseUrl;
 
     /**
-     * @param Client $client
      * @param string $baseUrl
      */
     public function __construct(Client $client, $baseUrl)

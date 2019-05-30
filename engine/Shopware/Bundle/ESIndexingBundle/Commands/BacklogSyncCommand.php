@@ -28,14 +28,30 @@ use Shopware\Bundle\ESIndexingBundle\Struct\Backlog;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class BacklogSyncCommand extends ShopwareCommand
 {
+    /**
+     * @var int
+     */
+    private $batchSize;
+
+    /**
+     * @param int $batchSize
+     */
+    public function __construct($batchSize = 500)
+    {
+        $this->batchSize = (int) $batchSize;
+
+        parent::__construct(null);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -43,8 +59,7 @@ class BacklogSyncCommand extends ShopwareCommand
     {
         $this
             ->setName('sw:es:backlog:sync')
-            ->setDescription('Synchronize events from the backlog to the live index.')
-        ;
+            ->setDescription('Synchronize events from the backlog to the live index.');
     }
 
     /**
@@ -53,21 +68,29 @@ class BacklogSyncCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $reader = $this->container->get('shopware_elastic_search.backlog_reader');
-        $backlogs = $reader->read($reader->getLastBacklogId(), 500);
+        $lastBackLogId = $reader->getLastBacklogId();
+        $backlogs = $reader->read($lastBackLogId, $this->batchSize);
+
+        $output->writeln(sprintf('Current last backlog id: %d', $lastBackLogId));
+
+        $io = new SymfonyStyle($input, $output);
 
         if (empty($backlogs)) {
-            return;
+            $io->success('Backlog is empty');
+
+            return null;
         }
 
-        /** @var $last Backlog */
+        /** @var Backlog $last */
         $last = $backlogs[count($backlogs) - 1];
         $reader->setLastBacklogId($last->getId());
-
         $shops = $this->container->get('shopware_elastic_search.identifier_selector')->getShops();
         foreach ($shops as $shop) {
-            $index = $this->container->get('shopware_elastic_search.index_factory')->createShopIndex($shop);
+            $index = $this->container->get('shopware_elastic_search.index_factory')->createShopIndex($shop, '');
             $this->container->get('shopware_elastic_search.backlog_processor')
                 ->process($index, $backlogs);
         }
+
+        $io->success(sprintf('Synchronized %d items', count($backlogs)));
     }
 }

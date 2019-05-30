@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="13px" height="16px" viewBox="0 0 13 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+        <g id="reset" transform="translate(1.000000, 0.000000)" stroke="#189EFF" stroke-width="3">
+            <g transform="translate(1.000000, 0.000000)" id="Group-23">
+                <g transform="translate(0.000000, 2.000000)">
+                    <path d="M4.65677897,11.6774495 C1.95560164,11.6434991 0.019124349,9.68597412 0.019124349,6.96065267 C0.019124349,4.23533122 2.45859782,2.50116984 4.65677897,2.50116984 C6.85496012,2.50116984 9.15649414,4.36233521 9.15649414,7.08930969" id="Path-5" transform="translate(4.587809, 7.089310) rotate(-90.000000) translate(-4.587809, -7.089310) "></path>
+                    <polyline id="Path-80" stroke-linejoin="round" points="4.73012288 0.191141764 7.35550604 2.70052299 4.9497304 5"></polyline>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

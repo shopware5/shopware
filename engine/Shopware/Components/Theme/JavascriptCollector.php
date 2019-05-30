@@ -28,7 +28,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Models\Shop;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -44,10 +44,6 @@ class JavascriptCollector
      */
     private $eventManager;
 
-    /**
-     * @param Inheritance                 $inheritance
-     * @param \Enlight_Event_EventManager $eventManager
-     */
     public function __construct(
         Inheritance $inheritance,
         \Enlight_Event_EventManager $eventManager
@@ -57,9 +53,6 @@ class JavascriptCollector
     }
 
     /**
-     * @param Shop\Template $template
-     * @param Shop\Shop     $shop
-     *
      * @throws \Exception
      *
      * @return string[] returns array with absolute javascript files paths
@@ -87,7 +80,7 @@ class JavascriptCollector
 
             $theme = $definition->getTheme();
 
-            // not all definitions are associated with a specific theme (e.g. plugins)
+            // Not all definitions are associated with a specific theme (e.g. plugins)
             if ($theme) {
                 $themeClassName = get_class($theme);
                 $discardJs = array_merge($discardJs, $theme->getDiscardedJavascriptThemes());
@@ -111,7 +104,7 @@ class JavascriptCollector
     }
 
     /**
-     * @param $inheritance
+     * @param array $inheritance
      *
      * @throws \Exception
      *
@@ -133,9 +126,6 @@ class JavascriptCollector
     }
 
     /**
-     * @param Shop\Shop     $shop
-     * @param Shop\Template $template
-     *
      * @throws \Enlight_Event_Exception
      * @throws \Exception
      *
@@ -155,7 +145,7 @@ class JavascriptCollector
         foreach ($collection as $file) {
             if (!file_exists($file)) {
                 throw new \Exception(
-                    sprintf("Some plugin tries to compress a javascript file, but the file %s doesn't exist", $file)
+                    sprintf('Some plugin tries to compress a javascript file, but the file %s doesn\'t exist', $file)
                 );
             }
         }
@@ -166,11 +156,11 @@ class JavascriptCollector
     }
 
     /**
-     * @param $definitions
+     * @param JavascriptDefinition[] $definitions
      *
      * @return array
      */
-    private function getUniqueFiles($definitions)
+    private function getUniqueFiles(array $definitions)
     {
         $files = [];
         /** @var JavascriptDefinition $definition */

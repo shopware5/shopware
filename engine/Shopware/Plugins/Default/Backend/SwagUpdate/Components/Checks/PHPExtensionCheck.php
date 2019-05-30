@@ -29,7 +29,7 @@ use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 use ShopwarePlugins\SwagUpdate\Components\Validation;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -42,9 +42,6 @@ class PHPExtensionCheck implements CheckInterface
      */
     private $namespace;
 
-    /**
-     * @param SnippetNamespace $namespace
-     */
     public function __construct(SnippetNamespace $namespace)
     {
         $this->namespace = $namespace;

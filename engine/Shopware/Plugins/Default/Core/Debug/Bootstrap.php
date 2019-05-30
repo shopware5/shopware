@@ -36,7 +36,7 @@ use Shopware\Plugin\Debug\Components\TemplateVarCollector;
 use Shopware\Plugin\Debug\Components\Utils;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -126,16 +126,13 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
         return $this->logger;
     }
 
-    /**
-     * @param CollectorInterface $collector
-     */
     public function pushCollector(CollectorInterface $collector)
     {
         $this->collectors[] = $collector;
     }
 
     /**
-     * Registeres active collectors
+     * Registers active collectors
      */
     public function registerCollectors()
     {
@@ -182,9 +179,6 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
         }
     }
 
-    /**
-     * @param \Enlight_Event_EventArgs $args
-     */
     public function onStartDispatch(\Enlight_Event_EventArgs $args)
     {
         /** @var \Enlight_Controller_Request_Request $request */
@@ -250,8 +244,6 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
     /**
      * Listener method of the Enlight_Controller_Front_DispatchLoopShutdown event.
      * On Dispatch Shutdown collects results and dumps to log component.
-     *
-     * @param \Enlight_Event_EventArgs $args
      */
     public function onDispatchLoopShutdown(\Enlight_Event_EventArgs $args)
     {

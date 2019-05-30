@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -40,9 +40,6 @@ class ProductDownloadService implements Service\ProductDownloadServiceInterface
      */
     private $gateway;
 
-    /**
-     * @param Gateway\DownloadGatewayInterface $gateway
-     */
     public function __construct(Gateway\DownloadGatewayInterface $gateway)
     {
         $this->gateway = $gateway;

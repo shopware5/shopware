@@ -398,10 +398,10 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                     return false;
                 }
 
-                if (typeof(item) !== 'undefined' && item.$className === 'Ext.window.Window' || item.$className === 'Enlight.app.Window' || item.$className == 'Ext.Window') {
+                if (typeof item !== 'undefined' && item.$className === 'Ext.window.Window' || item.$className === 'Enlight.app.Window' || item.$className === 'Ext.Window') {
                     activeWindows.push(item);
                 }
-                if (item.alternateClassName === 'Ext.window.Window' || item.alternateClassName === 'Enlight.app.Window' || item.alternateClassName == 'Ext.Window') {
+                if (item.alternateClassName === 'Ext.window.Window' || item.alternateClassName === 'Enlight.app.Window' || item.alternateClassName === 'Ext.Window') {
                     activeWindows.push(item);
                 }
             });

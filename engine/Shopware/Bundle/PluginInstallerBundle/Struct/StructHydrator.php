@@ -30,7 +30,7 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 class StructHydrator
 {
     /**
-     * @param $data
+     * @param array $data
      *
      * @return BasketStruct
      */
@@ -83,7 +83,7 @@ class StructHydrator
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return PluginStruct
      */
@@ -100,7 +100,7 @@ class StructHydrator
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return PluginStruct
      */
@@ -117,7 +117,7 @@ class StructHydrator
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return PluginStruct[] Indexed by plugin code
      */
@@ -141,7 +141,7 @@ class StructHydrator
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return PluginStruct[] Indexed by plugin code
      */
@@ -204,10 +204,6 @@ class StructHydrator
         }
     }
 
-    /**
-     * @param PluginStruct $storePlugin
-     * @param PluginStruct $localPlugin
-     */
     public function assignLocalPluginStruct(PluginStruct $storePlugin, PluginStruct $localPlugin)
     {
         $storePlugin->setId($localPlugin->getId());
@@ -243,7 +239,7 @@ class StructHydrator
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return CategoryStruct[]
      */
@@ -317,7 +313,7 @@ class StructHydrator
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return CategoryStruct
      */
@@ -333,8 +329,7 @@ class StructHydrator
     }
 
     /**
-     * @param PluginStruct $plugin
-     * @param $data
+     * @param array $data
      */
     public function assignLocalData(PluginStruct $plugin, $data)
     {
@@ -422,7 +417,7 @@ class StructHydrator
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return LocaleStruct[]
      */
@@ -443,7 +438,7 @@ class StructHydrator
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return BasketPositionStruct[]
      */
@@ -462,7 +457,7 @@ class StructHydrator
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return DomainStruct[]
      */
@@ -482,8 +477,8 @@ class StructHydrator
     }
 
     /**
-     * @param $billing
-     * @param $contact
+     * @param array $billing
+     * @param array $contact
      *
      * @return AddressStruct
      */
@@ -501,8 +496,7 @@ class StructHydrator
     }
 
     /**
-     * @param PluginStruct $plugin
-     * @param $data
+     * @param array $data
      */
     private function assignStoreData(PluginStruct $plugin, $data)
     {
@@ -576,7 +570,7 @@ class StructHydrator
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return PictureStruct[]
      */
@@ -595,7 +589,7 @@ class StructHydrator
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return PriceStruct[]
      */
@@ -639,6 +633,10 @@ class StructHydrator
                 $price->setSubscription((bool) $row['subscription']);
             }
 
+            if (isset($row['discount'])) {
+                $price->setDiscount($row['discount']);
+            }
+
             if (isset($row['duration'])) {
                 $price->setDuration($row['duration']);
             }
@@ -650,7 +648,7 @@ class StructHydrator
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return CommentStruct[]
      */

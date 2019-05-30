@@ -440,7 +440,7 @@
                 me.$minInputEl.prop('disabled', 'disabled')
                     .trigger('change');
             } else {
-                me.$minInputEl.val(value.toFixed(me.opts.digits))
+                me.$minInputEl.val(me.formatValueFloat(value))
                     .prop('disabled', false)
                     .trigger('change');
             }
@@ -459,7 +459,7 @@
                 me.$maxInputEl.prop('disabled', 'disabled')
                     .trigger('change');
             } else {
-                me.$maxInputEl.val(value.toFixed(me.opts.digits))
+                me.$maxInputEl.val(me.formatValueFloat(value))
                     .prop('disabled', false)
                     .trigger('change');
             }
@@ -512,6 +512,18 @@
             } else {
                 value = me.roundTo(value, 5);
             }
+
+            return value;
+        },
+
+        formatValueFloat: function (value) {
+            if (value != this.minRange && value != this.maxRange) {
+                value = this.roundValue(value);
+            }
+
+            var division = Math.pow(10, this.opts.digits);
+            value = Math.round(value * division) / division;
+            value = value.toFixed(this.opts.digits);
 
             return value;
         },

@@ -39,10 +39,6 @@ class PresetLoader implements PresetLoaderInterface
     /** @var MediaServiceInterface $mediaService */
     private $mediaService;
 
-    /**
-     * @param ModelManager          $modelManager
-     * @param MediaServiceInterface $mediaService
-     */
     public function __construct(ModelManager $modelManager, MediaServiceInterface $mediaService)
     {
         $this->modelManager = $modelManager;
@@ -80,8 +76,6 @@ class PresetLoader implements PresetLoaderInterface
     }
 
     /**
-     * @param array $elements
-     *
      * @return array
      */
     private function refreshElementData(array $elements)
@@ -116,8 +110,6 @@ class PresetLoader implements PresetLoaderInterface
 
     /**
      * Prepares preset data to be shown as preview in ui.
-     *
-     * @param array $presetData
      *
      * @return string $presetData
      */
@@ -159,8 +151,6 @@ class PresetLoader implements PresetLoaderInterface
     }
 
     /**
-     * @param array $collectedComponents
-     *
      * @return array
      */
     private function getComponentData(array $collectedComponents)

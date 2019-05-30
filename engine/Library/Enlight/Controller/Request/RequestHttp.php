@@ -152,6 +152,11 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     private $attributes = [];
 
     /**
+     * @var \Shopware\Components\DispatchFormatHelper
+     */
+    private $nameFormatter;
+
+    /**
      * Constructor
      *
      * If a $uri is passed, the object will attempt to populate itself using
@@ -161,7 +166,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function __construct($uri = null)
     {
-        if (null === $uri) {
+        if ($uri === null) {
             $this->setRequestUri();
         } else {
             $uri = Zend_Uri::factory($uri);
@@ -203,11 +208,23 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     }
 
     /**
+     * @return \Shopware\Components\DispatchFormatHelper
+     */
+    public function getNameFormatter()
+    {
+        if ($this->nameFormatter === null) {
+            $this->nameFormatter = Shopware()->Container()->get('shopware.components.dispatch_format_helper');
+        }
+
+        return $this->nameFormatter;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getAttribute($attribute, $default = null)
     {
-        if (false === array_key_exists($attribute, $this->attributes)) {
+        if (array_key_exists($attribute, $this->attributes) === false) {
             return $default;
         }
 
@@ -284,10 +301,10 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function getModuleName()
     {
-        if (null === $this->_module) {
+        if ($this->_module === null) {
             $module = $this->getParam($this->getModuleKey());
             if ($module) {
-                $this->_module = strtolower(trim($module));
+                $this->_module = strtolower($this->getNameFormatter()->formatNameForRequest($module));
             }
         }
 
@@ -319,8 +336,8 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function getControllerName()
     {
-        if (null === $this->_controller) {
-            $this->_controller = $this->getParam($this->getControllerKey());
+        if ($this->_controller === null) {
+            $this->_controller = $this->getNameFormatter()->formatNameForRequest($this->getParam($this->getControllerKey()), true);
         }
 
         return $this->_controller;
@@ -341,8 +358,8 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function getActionName()
     {
-        if (null === $this->_action) {
-            $this->_action = $this->getParam($this->getActionKey());
+        if ($this->_action === null) {
+            $this->_action = $this->getNameFormatter()->formatNameForRequest($this->getParam($this->getActionKey()));
         }
 
         return $this->_action;
@@ -357,7 +374,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
         /*
          * @see ZF-3465
          */
-        if (null === $value) {
+        if ($value === null) {
             $this->setParam($this->getActionKey(), $value);
         }
 
@@ -445,9 +462,9 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     {
         $key = (string) $key;
 
-        if ((null === $value) && isset($this->_params[$key])) {
+        if (($value === null) && isset($this->_params[$key])) {
             unset($this->_params[$key]);
-        } elseif (null !== $value) {
+        } elseif ($value !== null) {
             $this->_params[$key] = $value;
         }
 
@@ -549,16 +566,18 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
             unset($_GET[$spec]);
 
             return $this;
-        } elseif (is_array($spec) && empty($spec)) {
+        }
+
+        if (is_array($spec) && empty($spec)) {
             $_GET = [];
 
             return $this;
         }
 
-        if ((null === $value) && !is_array($spec)) {
+        if (($value === null) && !is_array($spec)) {
             throw new RuntimeException('Invalid value passed to setQuery(); must be either array of values or key/value pair');
         }
-        if ((null === $value) && is_array($spec)) {
+        if (($value === null) && is_array($spec)) {
             /** @var array $spec */
             foreach ($spec as $key => $value) {
                 $this->setQuery($key, $value);
@@ -576,7 +595,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function getQuery($key = null, $default = null)
     {
-        if (null === $key) {
+        if ($key === null) {
             return $_GET;
         }
 
@@ -600,16 +619,18 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
             unset($_POST[$spec]);
 
             return $this;
-        } elseif (is_array($spec) && empty($spec)) {
+        }
+
+        if (is_array($spec) && empty($spec)) {
             $_POST = [];
 
             return $this;
         }
 
-        if ((null === $value) && !is_array($spec)) {
+        if (($value === null) && !is_array($spec)) {
             throw new RuntimeException('Invalid value passed to setPost(); must be either array of values or key/value pair');
         }
-        if ((null === $value) && is_array($spec)) {
+        if (($value === null) && is_array($spec)) {
             foreach ($spec as $key => $value) {
                 $this->setPost($key, $value);
             }
@@ -626,7 +647,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function getPost($key = null, $default = null)
     {
-        if (null === $key) {
+        if ($key === null) {
             return $_POST;
         }
 
@@ -638,7 +659,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function getCookie($key = null, $default = null)
     {
-        if (null === $key) {
+        if ($key === null) {
             return $_COOKIE;
         }
 
@@ -650,7 +671,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function getServer($key = null, $default = null)
     {
-        if (null === $key) {
+        if ($key === null) {
             return $_SERVER;
         }
 
@@ -662,7 +683,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function getEnv($key = null, $default = null)
     {
-        if (null === $key) {
+        if ($key === null) {
             return $_ENV;
         }
 
@@ -675,13 +696,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     public function setRequestUri($requestUri = null)
     {
         if ($requestUri === null) {
-            if (isset($_SERVER['HTTP_X_ORIGINAL_URL'])) {
-                // IIS with Microsoft Rewrite Module
-                $requestUri = $_SERVER['HTTP_X_ORIGINAL_URL'];
-            } elseif (isset($_SERVER['HTTP_X_REWRITE_URL'])) {
-                // IIS with ISAPI_Rewrite
-                $requestUri = $_SERVER['HTTP_X_REWRITE_URL'];
-            } elseif (
+            if (
                 // IIS7 with URL Rewrite: make sure we get the unencoded url (double slash problem)
                 isset($_SERVER['IIS_WasUrlRewritten'])
                 && $_SERVER['IIS_WasUrlRewritten'] == '1'
@@ -708,7 +723,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
             return $this;
         } else {
             // Set GET items, if available
-            if (false !== ($pos = strpos($requestUri, '?'))) {
+            if (($pos = strpos($requestUri, '?')) !== false) {
                 // Get key => value pairs and set $_GET
                 $query = substr($requestUri, $pos + 1);
                 parse_str($query, $vars);
@@ -738,7 +753,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function setBaseUrl($baseUrl = null)
     {
-        if ((null !== $baseUrl) && !is_string($baseUrl)) {
+        if (($baseUrl !== null) && !is_string($baseUrl)) {
             return $this;
         }
 
@@ -770,20 +785,20 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
                 $seg = $segs[$index];
                 $baseUrl = '/' . $seg . $baseUrl;
                 ++$index;
-            } while (($last > $index) && (false !== ($pos = strpos($path, $baseUrl))) && (0 != $pos));
+            } while (($last > $index) && (($pos = strpos($path, $baseUrl)) !== false) && ($pos != 0));
         }
 
         // Does the baseUrl have anything in common with the request_uri?
         $requestUri = $this->getRequestUri();
 
-        if (0 === strpos($requestUri, $baseUrl)) {
+        if (strpos($requestUri, $baseUrl) === 0) {
             // full $baseUrl matches
             $this->_baseUrl = $baseUrl;
 
             return $this;
         }
 
-        if (0 === strpos($requestUri, dirname($baseUrl))) {
+        if (strpos($requestUri, dirname($baseUrl)) === 0) {
             // directory portion of $baseUrl matches
             $this->_baseUrl = rtrim(dirname($baseUrl), '/');
 
@@ -807,7 +822,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
         // out of baseUrl. $pos !== 0 makes sure it is not matching a value
         // from PATH_INFO or QUERY_STRING
         if ((strlen($requestUri) >= strlen($baseUrl))
-            && ((false !== ($pos = strpos($requestUri, $baseUrl))) && ($pos !== 0))) {
+            && ((($pos = strpos($requestUri, $baseUrl)) !== false) && ($pos !== 0))) {
             $baseUrl = substr($requestUri, 0, $pos + strlen($baseUrl));
         }
 
@@ -821,7 +836,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function getBaseUrl($raw = false)
     {
-        if (null === $this->_baseUrl) {
+        if ($this->_baseUrl === null) {
             $this->setBaseUrl();
         }
 
@@ -851,7 +866,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
             }
         }
 
-        if (0 === strpos(PHP_OS, 'WIN')) {
+        if (strpos(PHP_OS, 'WIN') === 0) {
             $basePath = str_replace('\\', '/', $basePath);
         }
 
@@ -865,7 +880,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function getBasePath()
     {
-        if (null === $this->_basePath) {
+        if ($this->_basePath === null) {
             $this->setBasePath();
         }
 
@@ -882,7 +897,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
             $baseUrlRaw = $this->getBaseUrl(false);
             $baseUrlEncoded = urlencode($baseUrlRaw);
 
-            if (null === ($requestUri = $this->getRequestUri())) {
+            if (($requestUri = $this->getRequestUri()) === null) {
                 return $this;
             }
 
@@ -1006,7 +1021,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function isPost()
     {
-        return 'POST' === $this->getMethod();
+        return $this->getMethod() === 'POST';
     }
 
     /**
@@ -1014,7 +1029,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function isGet()
     {
-        return 'GET' === $this->getMethod();
+        return $this->getMethod() === 'GET';
     }
 
     /**
@@ -1022,7 +1037,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function isPut()
     {
-        return 'PUT' === $this->getMethod();
+        return $this->getMethod() === 'PUT';
     }
 
     /**
@@ -1030,7 +1045,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function isDelete()
     {
-        return 'DELETE' === $this->getMethod();
+        return $this->getMethod() === 'DELETE';
     }
 
     /**
@@ -1038,7 +1053,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function isHead()
     {
-        return 'HEAD' === $this->getMethod();
+        return $this->getMethod() === 'HEAD';
     }
 
     /**
@@ -1046,7 +1061,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function isOptions()
     {
-        return 'OPTIONS' === $this->getMethod();
+        return $this->getMethod() === 'OPTIONS';
     }
 
     /**
@@ -1080,7 +1095,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
      */
     public function getRawBody()
     {
-        if (null === $this->_rawBody) {
+        if ($this->_rawBody === null) {
             $body = file_get_contents('php://input');
 
             if (strlen(trim($body)) > 0) {
@@ -1157,7 +1172,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
         $name = $this->getServer('SERVER_NAME');
         $port = $this->getServer('SERVER_PORT');
 
-        if (null === $name) {
+        if ($name === null) {
             return '';
         } elseif (($scheme == self::SCHEME_HTTP && $port == 80) || ($scheme == self::SCHEME_HTTPS && $port == 443)) {
             return $name;

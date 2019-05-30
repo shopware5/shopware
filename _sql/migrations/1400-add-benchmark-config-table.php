@@ -38,17 +38,5 @@ class Migrations_Migration1400 extends Shopware\Components\Migrations\AbstractMi
              PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
             ');
-
-        $configMissing = ((int) $this->connection
-                ->query('SELECT count(1) FROM s_benchmark_config')
-                ->fetchColumn(0)) === 0;
-
-        if ($configMissing) {
-            $uuid = \Ramsey\Uuid\Uuid::uuid4();
-            $this->addSql(
-                'INSERT INTO `s_benchmark_config` (`id`, `active`, `last_sent`, `last_received`, `last_order_id`, `orders_batch_size`, `industry`, `cached_template`)
-                 VALUES(' . $this->connection->quote($uuid->getBytes()) . ', 0, "1990-01-01 00:00:00", "1990-01-01 00:00:00", 0, 1000, NULL, NULL);'
-            );
-        }
     }
 }

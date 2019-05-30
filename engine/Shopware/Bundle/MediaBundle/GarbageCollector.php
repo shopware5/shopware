@@ -56,9 +56,7 @@ class GarbageCollector
     ];
 
     /**
-     * @param MediaPosition[]       $mediaPositions
-     * @param Connection            $dbConnection
-     * @param MediaServiceInterface $mediaService
+     * @param MediaPosition[] $mediaPositions
      */
     public function __construct(array $mediaPositions, Connection $dbConnection, MediaServiceInterface $mediaService)
     {
@@ -110,7 +108,7 @@ class GarbageCollector
      */
     private function createTempTable()
     {
-        $this->connection->exec('CREATE TEMPORARY TABLE IF NOT EXISTS s_media_used (id int auto_increment, mediaId int NOT NULL, PRIMARY KEY pkid (id))');
+        $this->connection->exec('CREATE TEMPORARY TABLE IF NOT EXISTS s_media_used (id int auto_increment, mediaId int NOT NULL, PRIMARY KEY pkid (id), INDEX media (mediaId))');
     }
 
     /**
@@ -125,15 +123,13 @@ class GarbageCollector
             LEFT JOIN s_media_album a
             ON m.albumID = a.id
             SET albumID=-13
-            WHERE a.garbage_collectable = 1 
+            WHERE a.garbage_collectable = 1
             AND u.id IS NULL
         ';
         $this->connection->exec($sql);
     }
 
     /**
-     * @param MediaPosition $mediaPosition
-     *
      * @throws \Doctrine\DBAL\DBALException
      */
     private function find(MediaPosition $mediaPosition)
@@ -162,8 +158,6 @@ class GarbageCollector
 
     /**
      * Handles tables with json content
-     *
-     * @param MediaPosition $mediaPosition
      */
     private function handleJsonTable(MediaPosition $mediaPosition)
     {
@@ -196,8 +190,6 @@ class GarbageCollector
 
     /**
      * Handles tables with serialized content
-     *
-     * @param MediaPosition $mediaPosition
      */
     private function handleSerializeTable(MediaPosition $mediaPosition)
     {
@@ -211,8 +203,6 @@ class GarbageCollector
 
     /**
      * Handles tables with html content
-     *
-     * @param MediaPosition $mediaPosition
      */
     private function handleHtmlTable(MediaPosition $mediaPosition)
     {
@@ -223,6 +213,8 @@ class GarbageCollector
             preg_match_all("/{{1}media[\s+]?path=[\"'](?'mediaTag'\S*)[\"']}{1}/mi", $value, $mediaMatches);
             // Src tag matches
             preg_match_all("/<?img[^<]*src=[\"'](?'srcTag'[^{]*?)[\"'][^>]*\/?>?/mi", $value, $srcMatches);
+            // Link matches
+            preg_match_all("/<?a[^<]*href=[\"'](?'hrefTag'[^{]*?)[\"'][^>]*\/?>?/mi", $value, $hrefMatches);
 
             if ($mediaMatches['mediaTag']) {
                 foreach ($mediaMatches['mediaTag'] as $match) {
@@ -235,6 +227,17 @@ class GarbageCollector
                 foreach ($srcMatches['srcTag'] as $match) {
                     $match = $this->mediaService->normalize($match);
                     $this->addMediaByPath($match);
+                }
+            }
+
+            if ($hrefMatches['hrefTag']) {
+                foreach ($hrefMatches['hrefTag'] as $match) {
+                    $match = $this->mediaService->normalize($match);
+
+                    // Only add normalized media links and not arbitrary links
+                    if (strpos($match, 'media/') === 0) {
+                        $this->addMediaByPath($match);
+                    }
                 }
             }
         }
@@ -260,8 +263,6 @@ class GarbageCollector
     }
 
     /**
-     * @param MediaPosition $mediaPosition
-     *
      * @throws \Doctrine\DBAL\DBALException
      */
     private function handleTable(MediaPosition $mediaPosition)
@@ -283,7 +284,7 @@ class GarbageCollector
     /**
      * Adds a media by path to used table
      *
-     * @param $path
+     * @param string $path
      */
     private function addMediaByPath($path)
     {
@@ -294,7 +295,7 @@ class GarbageCollector
     /**
      * Adds a media by id to used table
      *
-     * @param $mediaId
+     * @param int $mediaId
      */
     private function addMediaById($mediaId)
     {
@@ -313,7 +314,7 @@ class GarbageCollector
             $this->connection->executeQuery(
                 $sql,
                 [':mediaPaths' => $paths],
-                [':mediaPaths' => Connection::PARAM_INT_ARRAY]
+                [':mediaPaths' => Connection::PARAM_STR_ARRAY]
             );
         }
 
@@ -327,8 +328,6 @@ class GarbageCollector
     }
 
     /**
-     * @param MediaPosition $mediaPosition
-     *
      * @return array
      */
     private function fetchColumn(MediaPosition $mediaPosition)

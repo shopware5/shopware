@@ -5,6 +5,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true" />
+
         <service id="shopware_media.service_subscriber" class="Shopware\Bundle\MediaBundle\Subscriber\ServiceSubscriber">
             <argument type="service" id="service_container" />
             <tag name="shopware.event_subscriber" />
@@ -49,7 +51,9 @@
             <argument>%shopware.cdn.strategy%</argument>
         </service>
 
-        <service id="shopware_media.extension_mapping" class="Shopware\Bundle\MediaBundle\MediaExtensionMappingService"/>
+        <service id="shopware_media.extension_mapping" class="Shopware\Bundle\MediaBundle\MediaExtensionMappingService">
+            <argument>%shopware.media.whitelist%</argument>
+        </service>
 
         <!-- Optimizer -->
         <service id="shopware_media.cdn_optimizer_service" class="Shopware\Bundle\MediaBundle\CdnOptimizerService">
@@ -110,15 +114,15 @@
         <!-- Commands -->
 
         <service id="shopware_media.commands.media_cleanup" class="Shopware\Bundle\MediaBundle\Commands\MediaCleanupCommand">
-            <tag name="console.command" />
+            <tag name="console.command" command="sw:media:cleanup"/>
         </service>
 
         <service id="shopware_media.commands.image_migrate" class="Shopware\Bundle\MediaBundle\Commands\ImageMigrateCommand">
-            <tag name="console.command" />
+            <tag name="console.command" command="sw:media:migrate"/>
         </service>
 
         <service id="shopware_media.commands.media_optimize" class="Shopware\Bundle\MediaBundle\Commands\MediaOptimizeCommand">
-            <tag name="console.command" />
+            <tag name="console.command" command="sw:media:optimize"/>
         </service>
     </services>
 </container>

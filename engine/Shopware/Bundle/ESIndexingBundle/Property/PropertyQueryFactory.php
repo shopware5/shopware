@@ -37,16 +37,13 @@ class PropertyQueryFactory
      */
     private $connection;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }
 
     /**
-     * @param null|int $limit
+     * @param int|null $limit
      *
      * @return LastIdQuery
      */
@@ -56,7 +53,7 @@ class PropertyQueryFactory
     }
 
     /**
-     * @param null|int $limit
+     * @param int|null $limit
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */

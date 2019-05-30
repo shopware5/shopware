@@ -33,9 +33,6 @@ class Oyejorge implements LessCompiler
      */
     private $compiler;
 
-    /**
-     * @param \Less_Parser $compiler
-     */
     public function __construct(\Less_Parser $compiler)
     {
         $this->compiler = $compiler;
@@ -44,8 +41,6 @@ class Oyejorge implements LessCompiler
     /**
      * Allows to set different configurations for the less compiler,
      * like the compress mode or css source maps.
-     *
-     * @param array $configuration
      */
     public function setConfiguration(array $configuration)
     {
@@ -54,8 +49,6 @@ class Oyejorge implements LessCompiler
 
     /**
      * Allows to define import directories for the less compiler.
-     *
-     * @param array $directories
      */
     public function setImportDirectories(array $directories)
     {
@@ -65,8 +58,6 @@ class Oyejorge implements LessCompiler
     /**
      * Allows to set variables which can be used
      * in the compiled less files.
-     *
-     * @param array $variables
      */
     public function setVariables(array $variables)
     {

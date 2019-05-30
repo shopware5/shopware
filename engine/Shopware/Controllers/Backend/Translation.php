@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Shop\Shop;
+
 /**
  * Shopware Translation Controller
  */
@@ -31,14 +33,6 @@ class Shopware_Controllers_Backend_Translation extends Shopware_Controllers_Back
      * @var \Shopware_Components_Translation
      */
     protected $translation;
-
-    /**
-     * Setup Translation Component
-     */
-    public function init()
-    {
-        parent::init();
-    }
 
     /**
      * Assign available translation languages.
@@ -54,9 +48,8 @@ class Shopware_Controllers_Backend_Translation extends Shopware_Controllers_Back
             'value' => $node,
         ];
 
-        /** @var $repository Shopware\Models\Shop\Repository */
-        $repository = 'Shopware\Models\Shop\Shop';
-        $repository = Shopware()->Models()->getRepository($repository);
+        /** @var Shopware\Models\Shop\Repository $repository */
+        $repository = Shopware()->Models()->getRepository(Shop::class);
 
         $query = $repository->getListQuery($filter, $sort);
 
@@ -73,7 +66,7 @@ class Shopware_Controllers_Backend_Translation extends Shopware_Controllers_Back
     {
         $type = (string) $this->Request()->getParam('type');
         $merge = (bool) $this->Request()->getParam('merge');
-        $key = (string) $this->Request()->getParam('key', 1);
+        $key = (int) $this->Request()->getParam('key', 1);
         $language = (string) $this->Request()->getParam('language');
 
         $data = $this->getTranslation()->read($language, $type, $key, $merge);
@@ -90,7 +83,7 @@ class Shopware_Controllers_Backend_Translation extends Shopware_Controllers_Back
     {
         $type = (string) $this->Request()->getParam('type');
         $merge = (bool) $this->Request()->getParam('merge');
-        $key = (string) $this->Request()->getParam('key', 1);
+        $key = (int) $this->Request()->getParam('key', 1);
         $language = (string) $this->Request()->getParam('language');
         $data = (array) $this->Request()->getParam('data', []);
 
@@ -105,6 +98,9 @@ class Shopware_Controllers_Backend_Translation extends Shopware_Controllers_Back
         ]);
     }
 
+    /**
+     * @return Shopware_Components_Translation
+     */
     protected function getTranslation()
     {
         if (!isset($this->translation)) {

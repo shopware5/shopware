@@ -30,7 +30,7 @@ use Shopware\Components\Model\Configuration;
 /**
  * Service class to initialize the doctrine annotation driver.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -39,8 +39,7 @@ class ModelAnnotation
     /**
      * Creates the entity manager for the application.
      *
-     * @param Configuration $config
-     * @param string        $modelPath
+     * @param string $modelPath
      *
      * @return AnnotationDriver
      */

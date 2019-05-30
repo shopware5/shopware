@@ -26,7 +26,7 @@ use ShopwarePlugins\RestApi\Components\BasicAuthResolver;
 use ShopwarePlugins\RestApi\Components\StaticResolver;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -112,11 +112,11 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
         $request = $args->getRequest();
         $response = $args->getResponse();
 
-        if ($request->getModuleName() != 'api') {
+        if ($request->getModuleName() !== 'api') {
             return;
         }
 
-        /** @var $auth Shopware_Components_Auth */
+        /** @var Shopware_Components_Auth $auth */
         $auth = $this->get('auth');
         $result = $auth->authenticate();
 
@@ -169,9 +169,7 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
      * Initiate shopware auth resource
      * database adapter by default
      *
-     * @param Enlight_Event_EventArgs $args
-     *
-     * @return null|\Zend_Auth
+     * @return \Zend_Auth|null
      */
     public function onInitResourceAuth(Enlight_Event_EventArgs $args)
     {

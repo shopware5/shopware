@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\ProductFeed;
 
-use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * Repository for the ProductFeed model (Shopware\Models\ProductFeed\ProductFeed).
@@ -40,9 +40,8 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of defined
      * product feeds.
      *
-     * @param null $orderBy
-     * @param null $offset
-     * @param null $limit
+     * @param int|null $offset
+     * @param int|null $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -60,24 +59,24 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array|null $orderBy
-     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getListQueryBuilder(array $orderBy = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(
             [
                 'productFeed.id as id',
                 'productFeed.name as name',
+                'productFeed.active as active',
                 'productFeed.fileName as fileName',
                 'productFeed.countArticles as countArticles',
                 'productFeed.hash as hash',
                 'productFeed.lastExport as lastExport',
             ]
         );
-        $builder->from('Shopware\Models\ProductFeed\ProductFeed', 'productFeed');
+        $builder->from(\Shopware\Models\ProductFeed\ProductFeed::class, 'productFeed');
         if (!empty($orderBy)) {
             $builder->addOrderBy($orderBy);
         }
@@ -121,7 +120,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which
      * holds the detail information of the product feed
      *
-     * @param $feedId
+     * @param int $feedId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -136,7 +135,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $feedId
+     * @param int $feedId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -144,7 +143,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['feeds', 'suppliers', 'categories', 'articles'])
-                ->from('Shopware\Models\ProductFeed\ProductFeed', 'feeds')
+                ->from(\Shopware\Models\ProductFeed\ProductFeed::class, 'feeds')
                 ->leftJoin('feeds.categories', 'categories')
                 ->leftJoin('feeds.suppliers', 'suppliers')
                 ->leftJoin('feeds.articles', 'articles')
@@ -158,7 +157,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which search the product feed attributes
      * for the passed id.
      *
-     * @param $productFeedId
+     * @param int $productFeedId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -173,7 +172,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getAttributesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $productFeedId
+     * @param int $productFeedId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -181,7 +180,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
-                ->from('Shopware\Models\Attribute\ProductFeed', 'attribute')
+                ->from(\Shopware\Models\Attribute\ProductFeed::class, 'attribute')
                 ->where('attribute.productFeedId = ?1')
                 ->setParameter(1, $productFeedId);
 

@@ -28,7 +28,7 @@ use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Models\Premium\Premium;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -50,8 +50,6 @@ class PremiumSearcher extends GenericSearcher
     }
 
     /**
-     * @param SearchCriteria $criteria
-     *
      * @return array
      */
     protected function getSearchFields(SearchCriteria $criteria)

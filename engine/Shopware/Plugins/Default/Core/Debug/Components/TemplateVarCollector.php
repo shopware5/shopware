@@ -27,7 +27,7 @@ namespace Shopware\Plugin\Debug\Components;
 use Shopware\Components\Logger;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -40,9 +40,6 @@ class TemplateVarCollector implements CollectorInterface
 
     protected $results = [];
 
-    /**
-     * @param \Enlight_Event_EventManager $eventManager
-     */
     public function __construct(\Enlight_Event_EventManager $eventManager)
     {
         $this->eventManager = $eventManager;
@@ -57,11 +54,6 @@ class TemplateVarCollector implements CollectorInterface
         $this->eventManager->registerListener($event);
     }
 
-    /**
-     * @param Logger $log
-     *
-     * @return mixed
-     */
     public function logResults(Logger $log)
     {
         foreach ($this->results as $result) {
@@ -72,8 +64,6 @@ class TemplateVarCollector implements CollectorInterface
     /**
      * Listener method of the Enlight_Plugins_ViewRenderer_PostRender event.
      * Logs the template of the given Enlight_Event_EventArgs.
-     *
-     * @param \Enlight_Event_EventArgs $args
      */
     public function onAfterRenderView(\Enlight_Event_EventArgs $args)
     {
@@ -139,12 +129,11 @@ class TemplateVarCollector implements CollectorInterface
             if (strlen($data) > $length) {
                 $data = substr($data, 0, $length - 3) . '...';
             }
-            //$data = utf8_encode($data);
         } elseif ($data instanceof \ArrayObject) {
-            /** @var $data \ArrayObject */
+            /** @var \ArrayObject $data */
             $data = $this->encode($data->getArrayCopy());
         } elseif ($data instanceof \Zend_Config) {
-            /** @var $data \Zend_Config */
+            /** @var \Zend_Config $data */
             $data = $this->encode($data->toArray());
         } elseif (method_exists($data, '__toArray') || $data instanceof \stdClass) {
             $data = $this->encode((array) $data);

@@ -84,8 +84,6 @@ class PathBuilder
     }
 
     /**
-     * @param \SplFileInfo $file
-     *
      * @return string
      */
     public function createTargetPath(\SplFileInfo $file)
@@ -94,8 +92,6 @@ class PathBuilder
     }
 
     /**
-     * @param \SplFileInfo $file
-     *
      * @return string
      */
     public function createSourcePath(\SplFileInfo $file)
@@ -104,8 +100,6 @@ class PathBuilder
     }
 
     /**
-     * @param \SplFileInfo $file
-     *
      * @return string
      */
     public function createBackupPath(\SplFileInfo $file)

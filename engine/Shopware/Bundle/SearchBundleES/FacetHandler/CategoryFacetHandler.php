@@ -31,6 +31,7 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\CategoryTreeFacetResultBuilder;
+use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
@@ -62,12 +63,6 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
      */
     private $categoryTreeFacetResultBuilder;
 
-    /**
-     * @param CategoryServiceInterface       $categoryService
-     * @param CategoryDepthService           $categoryDepthService
-     * @param \Shopware_Components_Config    $config
-     * @param CategoryTreeFacetResultBuilder $categoryTreeFacetResultBuilder
-     */
     public function __construct(
         CategoryServiceInterface $categoryService,
         CategoryDepthService $categoryDepthService,
@@ -142,13 +137,13 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
             $categoryFacet
         );
 
+        if (!$facet instanceof FacetResultInterface) {
+            return;
+        }
         $result->addFacet($facet);
     }
 
     /**
-     * @param array                $ids
-     * @param ShopContextInterface $context
-     *
      * @return array
      */
     private function filterSystemCategories(array $ids, ShopContextInterface $context)
@@ -164,8 +159,6 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
     }
 
     /**
-     * @param Criteria $criteria
-     *
      * @return int[]
      */
     private function getFilteredIds(Criteria $criteria)

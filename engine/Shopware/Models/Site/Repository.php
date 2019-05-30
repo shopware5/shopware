@@ -22,9 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Site;
+namespace Shopware\Models\Site;
 
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * Repository for the site model (Shopware\Models\Site\Site).
@@ -36,10 +37,8 @@ class Repository extends ModelRepository
     /**
      * Returns the \Doctrine\ORM\Query to select all categories for example for the backend tree
      *
-     * @param array|null $filterBy
-     * @param array|null $orderBy
-     * @param int|null   $limit
-     * @param int|null   $offset
+     * @param int|null $limit
+     * @param int|null $offset
      *
      * @return \Doctrine\ORM\Query
      */
@@ -54,15 +53,14 @@ class Repository extends ModelRepository
      * Helper method to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array|null $filterBy
-     * @param array|null $orderBy
-     * @param int|null   $limit
-     * @param int|null   $offset
+     * @param int|null $limit
+     * @param int|null $offset
      *
-     * @return \Doctrine\ORM\Query
+     * @return \Doctrine\ORM\QueryBuilder
      */
     public function getGroupListQueryBuilder(array $filterBy = null, array $orderBy = null, $limit = null, $offset = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->from(\Shopware\Models\Site\Group::class, 'g');
         $builder->leftJoin('g.mapping', 'm');
@@ -168,7 +166,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
-                      ->from(\Shopware\Models\Site\Site::class, 'attribute')
+                      ->from(\Shopware\Models\Attribute\Site::class, 'attribute')
                       ->where('attribute.siteId = ?1')
                       ->setParameter(1, $siteId);
 

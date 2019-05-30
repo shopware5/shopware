@@ -25,22 +25,35 @@
 namespace Shopware\Components\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\QueryBuilder as BaseQueryBuilder;
 
 /**
  * The Shopware QueryBuilder is an extension of the standard Doctrine QueryBuilder.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class QueryBuilder extends BaseQueryBuilder
 {
     /**
-     * @var string
+     * @var string|null
      */
     protected $alias;
+
+    /**
+     * @var QueryOperatorValidator
+     */
+    protected $operatorValidator;
+
+    public function __construct(EntityManagerInterface $em, QueryOperatorValidator $operatorValidator)
+    {
+        $this->operatorValidator = $operatorValidator;
+
+        parent::__construct($em);
+    }
 
     /**
      * @param string $alias
@@ -103,8 +116,6 @@ class QueryBuilder extends BaseQueryBuilder
      *
      * @deprecated This method is deprecated since 5.4.
      *
-     * @param array $parameters
-     *
      * @return QueryBuilder this QueryBuilder instance
      */
     public function addParameters(array $parameters)
@@ -154,14 +165,12 @@ class QueryBuilder extends BaseQueryBuilder
      *      )));
      * </code>
      *
-     * @param array $filter
-     *
      * @return QueryBuilder
      */
     public function addFilter(array $filter)
     {
         foreach ($filter as $exprKey => $where) {
-            if (is_object($where)) {
+            if (\is_object($where)) {
                 $this->andWhere($where);
                 continue;
             }
@@ -169,7 +178,7 @@ class QueryBuilder extends BaseQueryBuilder
             $operator = null;
             $expression = null;
 
-            if (is_array($where) && isset($where['property'])) {
+            if (\is_array($where) && isset($where['property'])) {
                 $exprKey = $where['property'];
 
                 if (isset($where['expression']) && !empty($where['expression'])) {
@@ -183,34 +192,38 @@ class QueryBuilder extends BaseQueryBuilder
                 $where = $where['value'];
             }
 
-            if (!preg_match('#^[a-z][a-z0-9_.]+$#i', $exprKey)) {
+            if (!\preg_match('#^[a-z][a-z0-9_.]+$#i', $exprKey)) {
                 continue;
             }
 
-            $parameterKey = str_replace(['.'], ['_'], $exprKey) . uniqid();
-            if (isset($this->alias) && strpos($exprKey, '.') === false) {
+            // The return value of uniqid, even w/o parameters, may contain dots in some environments
+            // so we make sure to strip those as well
+            $parameterKey = \str_replace(['.'], ['_'], $exprKey . \uniqid());
+            if (isset($this->alias) && \strpos($exprKey, '.') === false) {
                 $exprKey = $this->alias . '.' . $exprKey;
             }
 
             if ($expression == null) {
                 switch (true) {
-                    case is_string($where):
-
+                    case \is_string($where):
                         $expression = 'LIKE';
                         break;
-                    case is_array($where):
+
+                    case \is_array($where):
                         $expression = 'IN';
                         break;
-                    case is_null($where):
+
+                    case $where === null:
                         $expression = 'IS NULL';
                         break;
+
                     default:
                         $expression = '=';
                         break;
                 }
             }
 
-            if (is_null($where)) {
+            if ($where === null) {
                 $expression = 'IS NULL';
             }
 
@@ -218,7 +231,9 @@ class QueryBuilder extends BaseQueryBuilder
             if (is_array($where)) {
                 $exprParameterKey = '(' . $exprParameterKey . ')';
             }
-            $expression = new Expr\Comparison($exprKey, $expression, $where !== null ? $exprParameterKey : null);
+
+            $this->operatorValidator->isValid($expression);
+            $expression = new Comparison($exprKey, $expression, $where !== null ? $exprParameterKey : null);
 
             if (isset($operator)) {
                 $this->orWhere($expression);
@@ -251,7 +266,7 @@ class QueryBuilder extends BaseQueryBuilder
      */
     public function addOrderBy($orderBy, $order = null)
     {
-        /** @var $select \Doctrine\ORM\Query\Expr\Select */
+        /** @var array<int, mixed|null> $select */
         $select = $this->getDQLPart('select');
         if (is_array($orderBy)) {
             foreach ($orderBy as $order) {
@@ -259,14 +274,13 @@ class QueryBuilder extends BaseQueryBuilder
                     continue;
                 }
 
-                if (isset($select[0])
-                    && $select[0]->count() === 1
-                    && isset($this->alias)
-                    && strpos($order['property'], '.') === false) {
+                if (isset($select[0], $this->alias) &&
+                    $select[0]->count() === 1 &&
+                    strpos($order['property'], '.') === false) {
                     $order['property'] = $this->alias . '.' . $order['property'];
                 }
 
-                if (isset($order['direction']) && $order['direction'] == 'DESC') {
+                if (isset($order['direction']) && $order['direction'] === 'DESC') {
                     $order['direction'] = 'DESC';
                 } else {
                     $order['direction'] = 'ASC';
@@ -294,7 +308,7 @@ class QueryBuilder extends BaseQueryBuilder
     {
         $query = parent::getQuery();
 
-        /** @var $em ModelManager */
+        /** @var ModelManager $em */
         $em = $this->getEntityManager();
 
         if ($em->isDebugModeEnabled() && $this->getType() === self::SELECT) {

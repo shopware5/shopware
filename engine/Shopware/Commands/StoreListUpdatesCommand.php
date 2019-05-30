@@ -31,7 +31,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -63,7 +63,7 @@ class StoreListUpdatesCommand extends StoreCommand
         $plugins = $this->container->get('shopware_plugininstaller.plugin_service_local')->getPluginsForUpdateCheck();
         $domain = $this->container->get('shopware_plugininstaller.account_manager_service')->getDomain();
         $service = $this->container->get('shopware_plugininstaller.plugin_service_view');
-        $request = new UpdateListingRequest(null, $version, $domain, $plugins);
+        $request = new UpdateListingRequest('', $version, $domain, $plugins);
         /** @var UpdateResultStruct $updates */
         $updates = $service->getUpdates($request);
         $plugins = $updates->getPlugins();
@@ -83,6 +83,6 @@ class StoreListUpdatesCommand extends StoreCommand
         $table->setHeaders(['Id', 'Technical name', 'Label',  'CurrentVersion', 'AvailableVersion'])
               ->setRows($result);
 
-        $table->render($output);
+        $table->render();
     }
 }

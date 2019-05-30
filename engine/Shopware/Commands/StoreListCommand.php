@@ -30,11 +30,6 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class StoreListCommand extends StoreCommand
 {
     /**
@@ -62,7 +57,7 @@ class StoreListCommand extends StoreCommand
         $domain = $this->setupDomain($input, $output);
 
         $context = new LicenceRequest(
-            null,
+            '',
             $version,
             $domain,
             $token
@@ -76,10 +71,12 @@ class StoreListCommand extends StoreCommand
                 'message' => $e->getMessage(),
             ]);
 
-            return;
+            return null;
         }
 
-        /** @var $licence LicenceStruct */
+        $result = null;
+
+        /** @var LicenceStruct $licence */
         foreach ($licences as $licence) {
             $result[] = [
                 'technicalName' => $licence->getTechnicalName(),
@@ -94,6 +91,6 @@ class StoreListCommand extends StoreCommand
         $table->setHeaders(['Technical name', 'Description', 'domain', 'Creation date', 'Type'])
               ->setRows($result);
 
-        $table->render($output);
+        $table->render();
     }
 }

@@ -32,11 +32,4 @@ interface SitemapNameGeneratorInterface
      * @return string
      */
     public function getSitemapFilename($shopId);
-
-    /**
-     * @param int $shopId
-     *
-     * @return string
-     */
-    public function getSitemapFilenameGlob($shopId);
 }

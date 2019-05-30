@@ -51,11 +51,6 @@ class PluginCategoryService
      */
     private $hydrator;
 
-    /**
-     * @param PluginStoreService $pluginService
-     * @param Connection         $connection
-     * @param StructHydrator     $hydrator
-     */
     public function __construct(
         PluginStoreService $pluginService,
         Connection $connection,
@@ -209,7 +204,7 @@ class PluginCategoryService
             ->where('categories.locale = :locale')
             ->setParameter(':locale', $locale);
 
-        /** @var $statement PDOStatement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_GROUP);

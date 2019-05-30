@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -37,9 +37,6 @@ interface PriceGroupDiscountGatewayInterface
      * The \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup requires the following data:
      * - Price group base data
      * - Price group discounts for the provided customer group
-     *
-     * @param Struct\Customer\Group       $customerGroup
-     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Product\PriceGroup[] Indexed by the price group id
      */

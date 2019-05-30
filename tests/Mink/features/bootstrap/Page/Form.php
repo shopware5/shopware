@@ -113,8 +113,6 @@ class Form extends Page implements HelperSelectorInterface
 
     /**
      * Fills the fields of the inquiry form with $data and submits it
-     *
-     * @param array $data
      */
     public function submitInquiryForm(array $data)
     {

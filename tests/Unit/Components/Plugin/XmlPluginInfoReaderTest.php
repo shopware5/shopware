@@ -42,12 +42,12 @@ class XmlPluginInfoReaderTest extends TestCase
     public function testCanReadAndVerifyMinimalExample()
     {
         $result = $this->SUT->read(__DIR__ . '/examples/plugin_minimal.xml');
-        $this->assertInternalType('array', $result);
+        static::assertInternalType('array', $result);
     }
 
     public function testCanReadAndVerify()
     {
         $result = $this->SUT->read(__DIR__ . '/examples/plugin.xml');
-        $this->assertInternalType('array', $result);
+        static::assertInternalType('array', $result);
     }
 }

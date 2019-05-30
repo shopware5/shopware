@@ -50,7 +50,7 @@
             /**
              * The DOM selector of emotion wrapper elements
              *
-             * @property wrapperSelector,
+             * @property wrapperSelector
              * @type {string}
              */
             wrapperSelector: '.emotion--wrapper',
@@ -330,7 +330,15 @@
              * @property videoElSelector
              * @type {string}
              */
-            videoElSelector: '.emotion--video'
+            videoElSelector: '.emotion--video',
+
+            /**
+             * The DOM selector of emotion wrapper elements
+             *
+             * @property wrapperSelector
+             * @type {string}
+             */
+            wrapperSelector: '.emotion--wrapper',
         },
 
         /**
@@ -345,7 +353,7 @@
 
             me.$contentMain = $('.content-main');
             me.$container = me.$el.parents('.content--emotions');
-            me.$wrapper = me.$el.parents('.emotion--wrapper');
+            me.$wrapper = me.$el.parents(me.opts.wrapperSelector);
 
             me.$elements = me.$el.find(me.opts.elementSelector);
             me.$gridSizer = me.$el.find(me.opts.gridSizerSelector);
@@ -431,6 +439,7 @@
 
             StateManager.updatePlugin('*[data-product-slider="true"]', 'swProductSlider');
             StateManager.updatePlugin('*[data-image-slider="true"]', 'swImageSlider');
+            StateManager.updatePlugin('*[data-modalbox="true"]', 'swModalbox');
 
             window.picturefill();
 

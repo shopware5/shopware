@@ -30,7 +30,7 @@ class Shopware_Tests_Controllers_Widgets_IndexTest extends Enlight_Components_Te
     public function testShopMenu()
     {
         $this->dispatch('/Widgets/Index/shopMenu');
-        $this->assertEquals(200, $this->Response()->getHttpResponseCode());
+        static::assertEquals(200, $this->Response()->getHttpResponseCode());
 
         Shopware()->Models()->flush();
     }

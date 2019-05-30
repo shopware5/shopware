@@ -39,7 +39,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  * $httpCacheApp->invalidate($request);
  * </code>
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -132,8 +132,7 @@ class AppCache extends HttpCache
     /**
      * Invalidates non-safe methods (like POST, PUT, and DELETE).
      *
-     * @param Request $request
-     * @param bool    $catch   Whether to process exceptions
+     * @param bool $catch Whether to process exceptions
      *
      * @return Response A Response instance
      */
@@ -179,8 +178,7 @@ class AppCache extends HttpCache
      *
      * {@inheritdoc}
      *
-     * @param Request $request
-     * @param bool    $catch
+     * @param bool $catch
      *
      * @return Response
      */
@@ -188,7 +186,7 @@ class AppCache extends HttpCache
     {
         $response = parent::lookup($request, $catch);
 
-        // If Response is not fresh age > 0 AND contains a mathing no cache tag
+        // If Response is not fresh age > 0 AND contains a matching no cache tag
         if ($response->getAge() > 0 && $this->containsNoCacheTag($request, $response)) {
             $response = $this->fetch($request);
         }
@@ -203,9 +201,6 @@ class AppCache extends HttpCache
     }
 
     /**
-     * @param Request  $request
-     * @param Response $response
-     *
      * @throws \Exception
      */
     protected function store(Request $request, Response $response)
@@ -221,9 +216,6 @@ class AppCache extends HttpCache
     /**
      * Checks whether or not the response header contains
      * a no-cache header that matches one in the request cookie
-     *
-     * @param Request  $request
-     * @param Response $response
      *
      * @return bool
      */
@@ -261,7 +253,7 @@ class AppCache extends HttpCache
     {
         $this->getKernel()->boot();
 
-        /** @var $container \Shopware\Components\DependencyInjection\Container */
+        /** @var \Shopware\Components\DependencyInjection\Container $container */
         $container = $this->getKernel()->getContainer();
         $container->set('HttpCache', $this);
 
@@ -297,8 +289,6 @@ class AppCache extends HttpCache
 
     /**
      * Checks if current purge request is allowed.
-     *
-     * @param \Symfony\Component\HttpFoundation\Request $request
      *
      * @return bool
      */
@@ -337,9 +327,6 @@ class AppCache extends HttpCache
         return $this->options['purge_allowed_ips'];
     }
 
-    /**
-     * @param Request $request
-     */
     private function checkSltCookie(Request $request)
     {
         if (!$request->cookies->has('slt')) {

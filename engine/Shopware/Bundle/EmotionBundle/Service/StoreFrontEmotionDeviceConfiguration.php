@@ -25,29 +25,22 @@
 namespace Shopware\Bundle\EmotionBundle\Service;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\Emotion\DeviceConfiguration;
+use Shopware\Components\Emotion\DeviceConfigurationInterface;
 
-class StoreFrontEmotionDeviceConfiguration
+class StoreFrontEmotionDeviceConfiguration implements StoreFrontEmotionDeviceConfigurationInterface
 {
     /**
-     * @var DeviceConfiguration
+     * @var DeviceConfigurationInterface
      */
     private $deviceConfiguration;
 
-    /**
-     * @param DeviceConfiguration $deviceConfiguration
-     */
-    public function __construct(DeviceConfiguration $deviceConfiguration)
+    public function __construct(DeviceConfigurationInterface $deviceConfiguration)
     {
         $this->deviceConfiguration = $deviceConfiguration;
     }
 
     /**
-     * @param int                  $categoryId
-     * @param ShopContextInterface $context
-     * @param bool                 $withStreams Consider customer stream emotions?
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getCategoryConfiguration($categoryId, ShopContextInterface $context, $withStreams = false)
     {
@@ -56,6 +49,11 @@ class StoreFrontEmotionDeviceConfiguration
         if (empty($configurations)) {
             return [];
         }
+
+        // filter by shop id
+        $configurations = array_filter($configurations, function ($config) use ($context) {
+            return empty($config['shopIds']) || in_array($context->getShop()->getId(), $config['shopIds']);
+        });
 
         //no active stream detected? display only emotions without customer stream configuration
         if (empty($context->getActiveCustomerStreamIds()) || $withStreams === false) {
@@ -91,8 +89,6 @@ class StoreFrontEmotionDeviceConfiguration
     }
 
     /**
-     * @param array $configurations
-     *
      * @return array
      */
     private function getReplacements(array $configurations)

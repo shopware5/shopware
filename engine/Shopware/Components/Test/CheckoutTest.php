@@ -24,14 +24,43 @@
 
 namespace Shopware\Components\Test;
 
+use Enlight_Controller_Request_RequestHttp;
 use Shopware\Components\Random;
+use Shopware\Models\Shop\Shop;
+use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 
 abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
 {
+    const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
+
+    public $clearBasketOnReset = true;
+
+    /**
+     * @var Helper
+     */
+    protected $apiHelper;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->apiHelper = new Helper();
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+        $this->apiHelper->cleanUp();
+    }
+
     public function reset()
     {
         parent::reset();
-        Shopware()->Container()->get('dbal_connection')->executeQuery('DELETE FROM s_order_basket');
+
+        if ($this->clearBasketOnReset) {
+            Shopware()->Container()->get('dbal_connection')->executeQuery('DELETE FROM s_order_basket');
+        }
+
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
     }
 
     /**
@@ -42,14 +71,14 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
      */
     protected function createArticle($price = 10, $taxRate = 19.0)
     {
-        $resourceHelper = new \Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper();
-        $orderNumber = 'swTEST' . uniqid(rand());
+        $orderNumber = 'swTEST' . uniqid((string) rand());
 
-        $resourceHelper->createArticle([
+        $this->apiHelper->createArticle([
             'name' => 'Testartikel',
             'description' => 'Test description',
             'active' => true,
             'mainDetail' => [
+                'active' => true,
                 'number' => $orderNumber,
                 'inStock' => 15,
                 'lastStock' => true,
@@ -71,11 +100,28 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
         return $orderNumber;
     }
 
+    protected function updateProductPrice($orderNumber, $price, $taxRate)
+    {
+        $this->apiHelper->updateArticle($orderNumber, [
+            'mainDetail' => [
+                'prices' => [
+                    [
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => '-',
+                        'price' => $price,
+                    ],
+                ],
+            ],
+            'tax' => $taxRate,
+        ]);
+    }
+
     /**
-     * @param $value
-     * @param $taxId
-     * @param int $percent
-     * @param string $taxConfig
+     * @param float $value
+     * @param int   $taxId
+     * @param int   $percent
+     *
      * @return string
      */
     protected function createVoucher($value, $taxId, $percent = 1)
@@ -93,7 +139,7 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
                 'modus' => 0,
                 'numorder' => 1000,
                 'percental' => $percent,
-                'taxconfig' => $taxId
+                'taxconfig' => $taxId,
             ]);
 
         return $code;
@@ -111,17 +157,17 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
         $cartItemFound = false;
         foreach ($sBasket as $item) {
             if ($item['articlename'] === $itemName) {
-                $this->assertEquals($itemOrdernumber, $item['ordernumber']);
-                $this->assertEquals($itemNetPrice, $item['netprice']);
-                $this->assertEquals($itemPrice, (float) str_replace(',', '.', $item['price']));
-                $this->assertEquals($itemOrdernumber, $item['ordernumber']);
-                $this->assertEquals(Shopware()->Modules()->Articles()->sFormatPrice($itemPrice - $itemNetPrice), $item['tax']);
+                static::assertEquals($itemOrdernumber, $item['ordernumber']);
+                static::assertEquals($itemNetPrice, $item['netprice']);
+                static::assertEquals($itemPrice, (float) str_replace(',', '.', $item['price']));
+                static::assertEquals($itemOrdernumber, $item['ordernumber']);
+                static::assertEquals(Shopware()->Modules()->Articles()->sFormatPrice($itemPrice - $itemNetPrice), $item['tax']);
                 $cartItemFound = true;
             }
         }
 
         if (!$cartItemFound) {
-            $this->fail(sprintf('Cart item by name "%s" not found', $itemName));
+            static::fail(sprintf('Cart item by name "%s" not found', $itemName));
         }
     }
 
@@ -185,5 +231,60 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
         ], [
             'ordercode' => $orderCode,
         ]);
+    }
+
+    /**
+     * Login as a frontend user
+     */
+    protected function loginFrontendUser()
+    {
+        Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
+        $user = Shopware()->Db()->fetchRow(
+            'SELECT id, email, password, subshopID, language FROM s_user WHERE id = 1'
+        );
+
+        /** @var \Shopware\Models\Shop\Repository $repository */
+        $repository = Shopware()->Models()->getRepository(Shop::class);
+        $shop = $repository->getActiveById($user['language']);
+
+        $shop->registerResources();
+
+        Shopware()->Session()->Admin = true;
+        Shopware()->System()->_POST = [
+            'email' => $user['email'],
+            'passwordMD5' => $user['password'],
+        ];
+        Shopware()->Modules()->Admin()->sLogin(true);
+    }
+
+    protected function addProduct($productNumber, $quantity = 1)
+    {
+        $this->reset();
+        $this->Request()->setMethod('POST');
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
+        $this->Request()->setParam('sQuantity', $quantity);
+        $this->Request()->setParam('sAdd', $productNumber);
+        $this->dispatch('/checkout/addArticle');
+    }
+
+    protected function visitCart()
+    {
+        $this->reset();
+        $this->dispatch('/checkout/cart');
+    }
+
+    protected function visitConfirm()
+    {
+        $this->reset();
+        $this->Request()->setMethod('POST');
+        $this->dispatch('/checkout/confirm');
+    }
+
+    protected function visitFinish()
+    {
+        $this->reset();
+        $this->Request()->setMethod('POST');
+        $this->Request()->setParam('sAGB', 'on');
+        $this->dispatch('/checkout/finish');
     }
 }

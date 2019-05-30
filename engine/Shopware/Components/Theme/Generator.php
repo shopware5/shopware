@@ -30,7 +30,7 @@ use Symfony\Component\Filesystem\Filesystem;
 /**
  * Class to generate shopware themes.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -180,11 +180,6 @@ EOD;
         ],
     ];
 
-    /**
-     * @param PathResolver                $pathResolver
-     * @param Filesystem                  $fileSystem
-     * @param \Enlight_Event_EventManager $eventManager
-     */
     public function __construct(PathResolver $pathResolver, Filesystem $fileSystem, \Enlight_Event_EventManager $eventManager)
     {
         $this->pathResolver = $pathResolver;
@@ -196,7 +191,6 @@ EOD;
      * Function which generates a new shopware theme
      * into the engine/Shopware/Themes directory.
      *
-     * @param array    $data
      * @param Template $parent
      *
      * @throws \Exception
@@ -205,17 +199,17 @@ EOD;
     {
         if (!is_writable($this->pathResolver->getFrontendThemeDirectory())) {
             throw new \Exception(
-                "Theme directory isn't writable"
+                sprintf('Theme directory %s isn\'t writable', $this->pathResolver->getFrontendThemeDirectory())
             );
         }
         if (!isset($data['template']) || empty($data['template'])) {
             throw new \Exception(
-                "Passed data array contains no valid theme name under the array key 'template'."
+                'Passed data array contains no valid theme name under the array key "template".'
             );
         }
 
-        //ensure that the first character is upper case.
-        //required for the directory structure and php namespace
+        // Ensure that the first character is upper case.
+        // Required for the directory structure and php namespace
         $data['template'] = ucfirst($data['template']);
 
         $this->createThemeDirectory($data['template']);
@@ -239,7 +233,7 @@ EOD;
     }
 
     /**
-     * @param $directory
+     * @param string $directory
      */
     private function movePreviewImage($directory)
     {
@@ -256,7 +250,7 @@ EOD;
     /**
      * Generates the theme directory in engine/Shopware/Themes
      *
-     * @param $name
+     * @param string $name
      */
     private function createThemeDirectory($name)
     {
@@ -273,7 +267,7 @@ EOD;
      * Helper function to generate the full theme directory name.
      * example: /var/www/engine/Shopware/Themes/MyTheme
      *
-     * @param $name
+     * @param string $name
      *
      * @return string
      */
@@ -285,7 +279,6 @@ EOD;
     /**
      * Generates the Theme.php file for the theme.
      *
-     * @param array    $data
      * @param Template $parent
      */
     private function generateThemePhp(array $data, Template $parent = null)
@@ -325,14 +318,12 @@ EOD;
      * @param string $content     Content which should be placed into the source
      * @param string $source      source template where the content should be injected
      * @param string $default     Fallback if the passed content is empty or isn't set
-     *
-     * @return mixed
      */
     private function replacePlaceholder($placeholder, $content, $source, $default = '')
     {
         $placeholder = strtoupper($placeholder);
 
-        if (!isset($content) || empty($content)) {
+        if (empty($content)) {
             $content = $default;
         }
 
@@ -345,8 +336,8 @@ EOD;
     /**
      * Generates the whole theme structure tree.
      *
-     * @param $directory
-     * @param $baseDir
+     * @param string[]|array<string[]> $directory
+     * @param string                   $baseDir
      */
     private function generateStructure($directory, $baseDir)
     {
@@ -356,7 +347,7 @@ EOD;
 
                 $this->generateStructure($value, $baseDir . DIRECTORY_SEPARATOR . $key);
             } else {
-                //switch between create file or create directory
+                // Switch between create file or create directory
                 if (strpos($value, '.') !== false) {
                     $output = new \SplFileObject(
                         $baseDir . DIRECTORY_SEPARATOR . $value,

@@ -61,8 +61,6 @@ class ArticleSlider extends SliderElement implements \Shopware\Tests\Mink\Helper
     /**
      * Returns the image source path
      *
-     * @param NodeElement $slide
-     *
      * @return string
      */
     public function getImageProperty(NodeElement $slide)
@@ -74,8 +72,6 @@ class ArticleSlider extends SliderElement implements \Shopware\Tests\Mink\Helper
 
     /**
      * Returns the link
-     *
-     * @param NodeElement $slide
      *
      * @return string
      */
@@ -93,8 +89,6 @@ class ArticleSlider extends SliderElement implements \Shopware\Tests\Mink\Helper
 
     /**
      * Returns the name
-     *
-     * @param NodeElement $slide
      *
      * @return string
      */
@@ -114,8 +108,6 @@ class ArticleSlider extends SliderElement implements \Shopware\Tests\Mink\Helper
 
     /**
      * Returns the price
-     *
-     * @param NodeElement $slide
      *
      * @return float
      */

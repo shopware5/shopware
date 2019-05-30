@@ -26,8 +26,12 @@ namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
+use Shopware\Bundle\BenchmarkBundle\Service\MatcherService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
+/**
+ * Not yet in use.
+ */
 class ShipmentsProvider implements BenchmarkProviderInterface
 {
     /**
@@ -45,9 +49,15 @@ class ShipmentsProvider implements BenchmarkProviderInterface
      */
     private $shipmentIds = [];
 
-    public function __construct(Connection $dbalConnection)
+    /**
+     * @var MatcherService
+     */
+    private $matcher;
+
+    public function __construct(Connection $dbalConnection, MatcherService $matcherService)
     {
         $this->dbalConnection = $dbalConnection;
+        $this->matcher = $matcherService;
     }
 
     public function getName()
@@ -61,17 +71,69 @@ class ShipmentsProvider implements BenchmarkProviderInterface
     public function getBenchmarkData(ShopContextInterface $shopContext)
     {
         $this->shopContext = $shopContext;
+        $this->shipmentIds = [];
 
         return [
-            'list' => $this->getShipments(),
-            'usages' => $this->getShipmentUsages(),
+            'list' => $this->getMatchedShipmentList(),
+            'usages' => $this->getMatchedShipmentUsages(),
         ];
     }
 
     /**
      * @return array
      */
-    private function getShipments()
+    private function getMatchedShipmentList()
+    {
+        $shipmentList = $this->getShipmentList();
+
+        $matches = [];
+        $others = [];
+        foreach ($shipmentList as $shipmentName => $prices) {
+            $matchedName = $this->matcher->matchString($shipmentName);
+
+            if ($matchedName === 'others') {
+                $others[] = $prices;
+                continue;
+            }
+
+            $matches[$matchedName] = ['name' => $matchedName] + $prices;
+        }
+
+        $matches['others']['name'] = 'others';
+        $matches['others']['minPrice'] = (float) min(array_column($others, 'minPrice'));
+        $matches['others']['maxPrice'] = (float) max(array_column($others, 'maxPrice'));
+
+        return array_values($matches);
+    }
+
+    /**
+     * @return array
+     */
+    private function getMatchedShipmentUsages()
+    {
+        $shipments = $this->getShipmentUsages();
+
+        $matches = [];
+        foreach ($shipments as $shipmentName => $usages) {
+            $match = $this->matcher->matchString($shipmentName);
+
+            if (!isset($matches[$match])) {
+                $matches[$match] = [
+                    'name' => $match,
+                    'usages' => 0,
+                ];
+            }
+
+            $matches[$match]['usages'] += $usages;
+        }
+
+        return array_values($matches);
+    }
+
+    /**
+     * @return array
+     */
+    private function getShipmentList()
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
@@ -102,11 +164,12 @@ class ShipmentsProvider implements BenchmarkProviderInterface
         return $queryBuilder->select('dispatches.name, COUNT(orders.id) as usages')
             ->from('s_order', 'orders')
             ->where('dispatches.id IN (:dispatchIds)')
+            ->andWhere('orders.status != -1')
             ->leftJoin('orders', 's_premium_dispatch', 'dispatches', 'dispatches.id = orders.dispatchID')
             ->groupBy('orders.dispatchID')
             ->setParameter(':dispatchIds', $this->getShipmentIds(), Connection::PARAM_INT_ARRAY)
             ->execute()
-            ->fetchAll();
+            ->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 
     /**
@@ -115,7 +178,7 @@ class ShipmentsProvider implements BenchmarkProviderInterface
     private function getShipmentIds()
     {
         $shopId = $this->shopContext->getShop()->getId();
-        if ($this->shipmentIds[$shopId]) {
+        if (array_key_exists($shopId, $this->shipmentIds)) {
             return $this->shipmentIds[$shopId];
         }
 
@@ -125,6 +188,7 @@ class ShipmentsProvider implements BenchmarkProviderInterface
 
         $dispatchIds = $queryBuilder->select('dispatch.id')
             ->from('s_premium_dispatch', 'dispatch')
+            ->where('dispatch.type != 3')
             ->execute()
             ->fetchAll(\PDO::FETCH_COLUMN);
 

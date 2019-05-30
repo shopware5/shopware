@@ -38,9 +38,6 @@ class BaseProductFactoryService implements BaseProductFactoryServiceInterface
      */
     private $connection;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
@@ -75,7 +72,7 @@ class BaseProductFactoryService implements BaseProductFactoryServiceInterface
             ->where('variant.ordernumber IN(:numbers)')
             ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);

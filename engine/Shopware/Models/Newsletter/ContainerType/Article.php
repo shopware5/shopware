@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Newsletter\ContainerType;
+namespace Shopware\Models\Newsletter\ContainerType;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\LazyFetchModelEntity;
@@ -30,7 +30,7 @@ use Shopware\Components\Model\LazyFetchModelEntity;
 /**
  * Shopware text model represents a text container type.
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_campaigns_articles")
  */
 class Article extends LazyFetchModelEntity
@@ -39,10 +39,10 @@ class Article extends LazyFetchModelEntity
      * OWNING SIDE
      * Owning side of relation between container type 'article' and parent container
      *
+     * @var \Shopware\Models\Newsletter\Container
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="articles")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Newsletter\Container
      */
     protected $container;
 
@@ -50,18 +50,19 @@ class Article extends LazyFetchModelEntity
      * OWNING SIDE
      * Owning side of the uni-direction relation between article-Container and article ordernumber
      *
+     * @var \Shopware\Models\Article\Detail
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail")
      * @ORM\JoinColumn(name="articleordernumber", referencedColumnName="ordernumber")
-     *
-     * @var \Shopware\Models\Article\Detail
      */
     protected $articleDetail;
+
     /**
      * Autoincrement ID
      *
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -77,19 +78,21 @@ class Article extends LazyFetchModelEntity
     private $containerId = null;
 
     /**
-     * Ordernumber of the article
+     * Ordernumber of the product
      *
      * @var string
-     * @ORM\Column(name="articleordernumber", type="string", length=255 , nullable=false)
+     *
+     * @ORM\Column(name="articleordernumber", type="string", length=255, nullable=false)
      */
     private $number = '';
 
     /**
      * Name of the article
-     * "Zufall" for random articles - else the article's name
+     * "Zufall" for random articles - else the product's name
      *
      * @var string
-     * @ORM\Column(name="name", type="string", length=16777215 , nullable=false)
+     *
+     * @ORM\Column(name="name", type="string", length=16777215, nullable=false)
      */
     private $name;
 
@@ -97,7 +100,8 @@ class Article extends LazyFetchModelEntity
      * Type of the container - "random" or "fix"
      *
      * @var string
-     * @ORM\Column(name="type", type="string", length=255 , nullable=false)
+     *
+     * @ORM\Column(name="type", type="string", length=255, nullable=false)
      */
     private $type;
 
@@ -105,7 +109,8 @@ class Article extends LazyFetchModelEntity
      * Position of this container
      *
      * @var int
-     * @ORM\Column(name="position", type="string", length=255 , nullable=false)
+     *
+     * @ORM\Column(name="position", type="string", length=255, nullable=false)
      */
     private $position;
 
@@ -119,8 +124,6 @@ class Article extends LazyFetchModelEntity
 
     /**
      * @param \Shopware\Models\Newsletter\Container $container
-     *
-     * @return \Shopware\Models\Newsletter\Container
      */
     public function setContainer($container)
     {
@@ -197,6 +200,9 @@ class Article extends LazyFetchModelEntity
      */
     public function getArticleDetail()
     {
-        return $this->fetchLazy($this->articleDetail, ['number' => $this->number]);
+        /** @var \Shopware\Models\Article\Detail $detail */
+        $detail = $this->fetchLazy($this->articleDetail, ['number' => $this->number]);
+
+        return $detail;
     }
 }

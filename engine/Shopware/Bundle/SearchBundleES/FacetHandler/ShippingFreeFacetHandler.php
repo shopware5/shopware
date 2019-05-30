@@ -50,10 +50,6 @@ class ShippingFreeFacetHandler implements HandlerInterface, ResultHydratorInterf
      */
     private $queryAliasMapper;
 
-    /**
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper                     $queryAliasMapper
-     */
     public function __construct(
         \Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper
@@ -83,7 +79,7 @@ class ShippingFreeFacetHandler implements HandlerInterface, ResultHydratorInterf
         $aggregation->setField('shippingFree');
 
         $filterAgg = new FilterAggregation('shipping_free_filter');
-        $filterAgg->setFilter(new TermQuery('shippingFree', 1));
+        $filterAgg->setFilter(new TermQuery('shippingFree', true));
         $filterAgg->addAggregation($aggregation);
 
         $search->addAggregation($filterAgg);
@@ -117,8 +113,6 @@ class ShippingFreeFacetHandler implements HandlerInterface, ResultHydratorInterf
     }
 
     /**
-     * @param Criteria $criteria
-     *
      * @return BooleanFacetResult
      */
     private function createFacet(Criteria $criteria)
@@ -127,7 +121,7 @@ class ShippingFreeFacetHandler implements HandlerInterface, ResultHydratorInterf
             $fieldName = 'shippingFree';
         }
 
-        /** @var ShippingFreeFacet $facet */
+        /** @var ShippingFreeFacet|null $facet */
         $facet = $criteria->getFacet('shipping_free');
         if ($facet && !empty($facet->getLabel())) {
             $label = $facet->getLabel();

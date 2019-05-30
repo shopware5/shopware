@@ -28,10 +28,13 @@ use Enlight\Event\SubscriberInterface;
 
 class EmotionComponentViewSubscriber implements SubscriberInterface
 {
+    /**
+     * @var string
+     */
     private $path;
 
     /**
-     * @param $path
+     * @param string $path
      */
     public function __construct($path)
     {
@@ -46,12 +49,9 @@ class EmotionComponentViewSubscriber implements SubscriberInterface
         ];
     }
 
-    /**
-     * @param \Enlight_Event_EventArgs $args
-     */
     public function registerBackendTemplates(\Enlight_Event_EventArgs $args)
     {
-        /** @var $view \Enlight_View_Default */
+        /** @var \Enlight_View_Default $view */
         $view = $args->get('subject')->View();
 
         $templateDir = $this->path . '/Resources/views/emotion_components/';
@@ -78,12 +78,9 @@ class EmotionComponentViewSubscriber implements SubscriberInterface
         }
     }
 
-    /**
-     * @param \Enlight_Event_EventArgs $args
-     */
     public function registerWidgetTemplates(\Enlight_Event_EventArgs $args)
     {
-        /** @var $view \Enlight_View_Default */
+        /** @var \Enlight_View_Default $view */
         $view = $args->get('subject')->View();
 
         if (file_exists($this->path . '/Resources/views/emotion_components/')) {

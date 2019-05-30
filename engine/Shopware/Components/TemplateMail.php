@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Mail\Mail;
 use Shopware\Models\Shop\Shop;
@@ -76,8 +77,6 @@ class Shopware_Components_TemplateMail
     ];
 
     /**
-     * @param ModelManager $modelManager
-     *
      * @return \Shopware_Components_TemplateMail
      */
     public function setModelManager(ModelManager $modelManager)
@@ -96,7 +95,7 @@ class Shopware_Components_TemplateMail
     }
 
     /**
-     * @param $shop
+     * @param Shop $shop
      *
      * @return \Shopware_Components_TemplateMail
      */
@@ -108,7 +107,7 @@ class Shopware_Components_TemplateMail
     }
 
     /**
-     * @return Shop
+     * @return Shop|null
      */
     public function getShop()
     {
@@ -142,8 +141,6 @@ class Shopware_Components_TemplateMail
     }
 
     /**
-     * @param \Shopware_Components_StringCompiler $stringCompiler
-     *
      * @return \Shopware_Components_TemplateMail
      */
     public function setStringCompiler(\Shopware_Components_StringCompiler $stringCompiler)
@@ -179,17 +176,18 @@ class Shopware_Components_TemplateMail
 
         if (!($mailModel instanceof Mail)) {
             $modelName = $mailModel;
-            /* @var $mailModel Mail */
+            /** @var Mail|null $mailModel */
             $mailModel = $this->getModelManager()->getRepository(Mail::class)->findOneBy(
                 ['name' => $modelName]
             );
             if (!$mailModel) {
-                throw new \Enlight_Exception("Mail-Template with name '{$modelName}' could not be found.");
+                throw new \Enlight_Exception(sprintf('Mail-Template with name "%s" could not be found.', $modelName));
             }
         }
 
         $config = Shopware()->Config();
         $inheritance = Shopware()->Container()->get('theme_inheritance');
+        $eventManager = Shopware()->Container()->get('events');
 
         if ($this->getShop() !== null) {
             $defaultContext = [
@@ -207,8 +205,6 @@ class Shopware_Components_TemplateMail
             }
 
             if ($theme) {
-                $eventManager = Shopware()->Container()->get('events');
-
                 $keys = $eventManager->filter(
                     'TemplateMail_CreateMail_Available_Theme_Config',
                     $this->themeVariables,
@@ -219,9 +215,15 @@ class Shopware_Components_TemplateMail
                 $defaultContext['theme'] = $theme;
             }
 
-            $isoCode = $this->getShop()->get('isocode');
+            $isoCode = $this->getShop()->getId();
             $translationReader = $this->getTranslationReader();
-            $translation = $translationReader->read($isoCode, 'config_mails', $mailModel->getId());
+
+            if ($fallback = $this->getShop()->getFallback()) {
+                $translation = $translationReader->readWithFallback($isoCode, $fallback->getId(), 'config_mails', $mailModel->getId());
+            } else {
+                $translation = $translationReader->read($isoCode, 'config_mails', $mailModel->getId());
+            }
+
             $mailModel->setTranslation($translation);
         } else {
             $defaultContext = [
@@ -231,6 +233,15 @@ class Shopware_Components_TemplateMail
 
         // Save current context to mail model
         $mailContext = json_decode(json_encode($context), true);
+
+        $mailContext = $eventManager->filter(
+            'TemplateMail_CreateMail_MailContext',
+            $mailContext,
+            [
+                'mailModel' => $mailModel,
+            ]
+        );
+
         $mailModel->setContext($mailContext);
         $this->getModelManager()->flush($mailModel);
 
@@ -244,9 +255,7 @@ class Shopware_Components_TemplateMail
     /**
      * Loads values from MailModel into Mail
      *
-     * @param \Enlight_Components_Mail $mail
-     * @param Mail                     $mailModel
-     * @param array                    $overrideConfig
+     * @param array $overrideConfig
      *
      * @throws \Enlight_Exception
      *
@@ -286,7 +295,7 @@ class Shopware_Components_TemplateMail
             $mail->setBodyHtml($stringCompiler->compileString($mailModel->getContentHtml()));
         }
 
-        /** @var $attachment \Shopware\Models\Mail\Attachment */
+        /** @var \Shopware\Models\Mail\Attachment $attachment */
         foreach ($mailModel->getAttachments() as $attachment) {
             if ($attachment->getShopId() !== null
                 && ($this->getShop() === null || $attachment->getShopId() !== $this->getShop()->getId())) {
@@ -301,6 +310,8 @@ class Shopware_Components_TemplateMail
                 $fileAttachment->filename = $attachment->getFileName();
             }
         }
+
+        $mail->setTemplateName($mailModel->getName());
 
         return $mail;
     }

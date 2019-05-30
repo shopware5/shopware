@@ -29,80 +29,88 @@ use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_article_configurator_sets")
  */
 class Set extends ModelEntity
 {
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\Configurator\Group>
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Group", inversedBy="sets", cascade={"persist"})
      * @ORM\JoinTable(name="s_article_configurator_set_group_relations",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="set_id", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="group_id", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="set_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="group_id", referencedColumnName="id")
+     *     }
      * )
      */
     protected $groups;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\Configurator\Option>
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Option", inversedBy="sets", cascade={"persist"})
      * @ORM\JoinTable(name="s_article_configurator_set_option_relations",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="set_id", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="option_id", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="set_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="option_id", referencedColumnName="id")
+     *     }
      * )
      */
     protected $options;
 
     /**
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Article", mappedBy="configuratorSet")
+     * @var ArrayCollection<\Shopware\Models\Article\Article>
      *
-     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Article", mappedBy="configuratorSet")
      */
     protected $articles;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\Configurator\Dependency>
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\Dependency", mappedBy="configuratorSet", orphanRemoval=true, cascade={"persist"})
      */
     protected $dependencies;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\Configurator\PriceVariation>
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\PriceVariation", mappedBy="configuratorSet", orphanRemoval=true, cascade={"persist"})
      */
     protected $priceVariations;
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
-     * @var int
+     * @var bool
+     *
      * @ORM\Column(name="public", type="boolean", nullable=false)
      */
     private $public = false;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="type", type="integer", nullable=false)
      */
     private $type = 0;
@@ -144,7 +152,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return bool
      */
     public function getPublic()
     {
@@ -152,7 +160,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param int $public
+     * @param bool $public
      */
     public function setPublic($public)
     {
@@ -160,7 +168,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Article\Configurator\Group>|null
      */
     public function getGroups()
     {
@@ -168,19 +176,19 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $groups
+     * @param Group[] $groups
      *
      * @return \Shopware\Models\Article\Configurator\Set
      */
     public function setGroups($groups)
     {
-        $this->setOneToMany($groups, '\Shopware\Models\Article\Configurator\Group', 'groups');
+        $this->setOneToMany($groups, Group::class, 'groups');
 
         return $this;
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Article\Article>
      */
     public function getArticles()
     {
@@ -188,7 +196,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $articles
+     * @param ArrayCollection<\Shopware\Models\Article\Article> $articles
      */
     public function setArticles($articles)
     {
@@ -196,7 +204,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Article\Configurator\Dependency>
      */
     public function getDependencies()
     {
@@ -204,7 +212,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $dependencies
+     * @param ArrayCollection<\Shopware\Models\Article\Configurator\Dependency> $dependencies
      */
     public function setDependencies($dependencies)
     {
@@ -212,7 +220,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Article\Configurator\Option>|null
      */
     public function getOptions()
     {
@@ -220,13 +228,13 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $options
+     * @param Option[] $options
      *
      * @return \Shopware\Models\Article\Configurator\Set
      */
     public function setOptions($options)
     {
-        $this->setOneToMany($options, '\Shopware\Models\Article\Configurator\Option', 'options');
+        $this->setOneToMany($options, Option::class, 'options');
 
         return $this;
     }

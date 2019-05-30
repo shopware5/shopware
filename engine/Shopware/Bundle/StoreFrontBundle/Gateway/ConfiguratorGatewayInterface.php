@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -49,9 +49,6 @@ interface ConfiguratorGatewayInterface
      * - Group name
      * - Option position
      * - Option name
-     *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Configurator\Set
      */
@@ -90,8 +87,6 @@ interface ConfiguratorGatewayInterface
      *     'white' => array(),
      *     'red'   => array()
      * )
-     *
-     * @param Struct\BaseProduct $product
      *
      * @return array Indexed by the option id
      */

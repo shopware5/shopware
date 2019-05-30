@@ -37,11 +37,11 @@ class UniqueIdGeneratorTest extends TestCase
             ->setMethods(['fetchColumn', 'executeUpdate'])
             ->getMock();
 
-        $connectionMock->expects($this->exactly(1))
+        $connectionMock->expects(static::exactly(1))
             ->method('fetchColumn')
             ->willReturn('s:32:"xErV4zUsI28DVKfayeIB6rqIOBjR8OEB";');
 
-        $connectionMock->expects($this->exactly(0))
+        $connectionMock->expects(static::exactly(0))
             ->method('executeUpdate')
             ->willReturn(true);
 
@@ -49,7 +49,7 @@ class UniqueIdGeneratorTest extends TestCase
             $connectionMock
         );
 
-        $this->assertEquals('xErV4zUsI28DVKfayeIB6rqIOBjR8OEB', $dbStorage->getUniqueId());
+        static::assertEquals('xErV4zUsI28DVKfayeIB6rqIOBjR8OEB', $dbStorage->getUniqueId());
     }
 
     /**
@@ -63,11 +63,11 @@ class UniqueIdGeneratorTest extends TestCase
             ->setMethods(['fetchColumn', 'executeUpdate'])
             ->getMock();
 
-        $connectionMock->expects($this->exactly(1))
+        $connectionMock->expects(static::exactly(1))
             ->method('fetchColumn')
             ->willReturn(null);
 
-        $connectionMock->expects($this->exactly(1))
+        $connectionMock->expects(static::exactly(1))
             ->method('executeUpdate')
             ->willReturn(true);
 
@@ -75,6 +75,6 @@ class UniqueIdGeneratorTest extends TestCase
             $connectionMock
         );
 
-        $this->assertNotNull($dbStorage->getUniqueId());
+        static::assertNotNull($dbStorage->getUniqueId());
     }
 }

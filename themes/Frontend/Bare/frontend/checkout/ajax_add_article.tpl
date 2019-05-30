@@ -58,6 +58,15 @@
                                 </a>
                             </li>
                             <li class="entry--ordernumber">{s name="AjaxAddLabelOrdernumber"}{/s}: {$sArticle.ordernumber}</li>
+
+                            {block name='checkout_ajax_add_information_essential_features'}
+                                {if {config name=alwaysShowMainFeatures}}
+                                    <div class="product--essential-features">
+                                        {$sBasketItem = $sArticle}
+                                        {include file="string:{config name=mainfeatures}"}
+                                    </div>
+                                {/if}
+                            {/block}
                         </ul>
                     </div>
                 {/block}

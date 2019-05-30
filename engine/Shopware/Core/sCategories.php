@@ -161,8 +161,7 @@ class sCategories
     }
 
     /**
-     * @param Category $category
-     * @param $childrenCounts
+     * @param array $childrenCounts
      *
      * @return array
      */
@@ -222,11 +221,10 @@ class sCategories
 
     /**
      * Returns the leaf category to which the
-     * article belongs, inside the category subtree.
+     * product belongs, inside the category subtree.
      *
-     * @param int  $articleId Id of the article to look for
-     * @param int  $parentId  Category subtree root id. If null, the shop category is used.
-     * @param null $shopId
+     * @param int $articleId Id of the product to look for
+     * @param int $parentId  Category subtree root id. If null, the shop category is used.
      *
      * @return int id of the leaf category, or 0 if none found
      */
@@ -252,7 +250,7 @@ class sCategories
         }
 
         $sql = '
-           SELECT ac.categoryID as id
+           SELECT ac.categoryID AS id
             FROM s_articles_categories ac
                 INNER JOIN s_categories c
                     ON  ac.categoryID = c.id
@@ -316,16 +314,17 @@ class sCategories
      *
      * @param int $parentId Id of the root category, defaults to the current shop category
      * @param int $depth    Depth to use, defaults to null (unlimited depth)
+     * @param int $shopId   Needed for shop limitation
      *
      * @return array Category tree for the provided args
      */
-    public function sGetWholeCategoryTree($parentId = null, $depth = null)
+    public function sGetWholeCategoryTree($parentId = null, $depth = null, $shopId = null)
     {
         if ($parentId === null) {
             $parentId = $this->baseId;
         }
 
-        $result = $this->repository->getActiveChildrenTree($parentId, $this->customerGroupId, $depth);
+        $result = $this->repository->getActiveChildrenTree($parentId, $this->customerGroupId, $depth, $shopId);
         $result = $this->mapCategoryTree($result);
 
         return $result;
@@ -336,7 +335,7 @@ class sCategories
      *
      * @param int $id
      *
-     * @return array
+     * @return array|null
      */
     public function sGetCategoryContent($id)
     {
@@ -356,11 +355,10 @@ class sCategories
     /**
      * @param int $categoryId
      *
-     * @return int
+     * @return int|string
      */
     public function getProductBoxLayout($categoryId)
     {
-        /** @var \Shopware\Models\Category\Category $category */
         $category = $this->repository->find($categoryId);
 
         if (!$category) {
@@ -459,7 +457,7 @@ class sCategories
      * Returns a key value array which contains the category id
      * as key and the count of category children as value.
      *
-     * @param $ids
+     * @param int[] $ids
      *
      * @return array
      */
@@ -474,7 +472,7 @@ class sCategories
             ->groupBy('parent')
             ->setParameter(':ids', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
 
-        /** @var $statement PDOStatement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
@@ -485,7 +483,7 @@ class sCategories
      * of the category.
      * The category id is used as array key and the parent id as array value.
      *
-     * @param $ids
+     * @param int[] $ids
      *
      * @return array
      */
@@ -493,15 +491,18 @@ class sCategories
     {
         $query = $this->connection->createQueryBuilder();
         $query->select(['category.id', 'category.parent']);
+        $shopId = $this->contextService->getShopContext()->getShop()->getId();
 
         $query->from('s_categories', 'category')
             ->where('(category.parent IN( :parentId ) OR category.id IN ( :parentId ))')
             ->andWhere('category.active = 1')
+            ->andWhere('category.shops IS NULL OR category.shops LIKE :shopId')
             ->orderBy('category.position', 'ASC')
             ->addOrderBy('category.id')
-            ->setParameter(':parentId', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
+            ->setParameter(':parentId', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+            ->setParameter(':shopId', '%|' . $shopId . '|%');
 
-        /** @var $statement PDOStatement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
@@ -511,7 +512,7 @@ class sCategories
      * Returns all ids, additionally with the provided one,
      * of the category path of the provided id.
      *
-     * @param $id
+     * @param int $id
      *
      * @return array
      */
@@ -523,7 +524,7 @@ class sCategories
             ->where('category.id = :id')
             ->setParameter(':id', $id);
 
-        /** @var $statement PDOStatement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
         $path = $statement->fetch(PDO::FETCH_COLUMN);

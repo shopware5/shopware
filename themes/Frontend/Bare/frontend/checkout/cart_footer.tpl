@@ -31,7 +31,8 @@
 
                     <div class="add-voucher--panel is--hidden block-group">
                         {block name='frontend_checkout_cart_footer_add_voucher_field'}
-                            <input type="text" class="add-voucher--field is--medium block" name="sVoucher" placeholder="{"{s name='CheckoutFooterAddVoucherLabelInline'}{/s}"|escape}" />
+                            {s name="CheckoutFooterAddVoucherLabelInline" assign="snippetCheckoutFooterAddVoucherLabelInline"}{/s}
+                            <input type="text" class="add-voucher--field is--medium block" name="sVoucher" placeholder="{$snippetCheckoutFooterAddVoucherLabelInline|escape}" />
                         {/block}
 
                         {block name='frontend_checkout_cart_footer_add_voucher_button'}
@@ -43,19 +44,25 @@
                 </form>
             {/block}
 
-            {* Shipping costs pre-calculation *}
-            {if $sBasket.content && !$sUserLoggedIn && !$sUserData.additional.user.id && {config name=basketShowCalculation}}
+			{* Shipping costs pre-calculation *}
+			{if $sBasket.content && !$sUserLoggedIn && !$sUserData.additional.user.id && {config name=basketShowCalculation} != 0}
 
-                {block name='frontend_checkout_shipping_costs_country_trigger'}
-                    <a href="#show-hide--shipping-costs" class="table--shipping-costs-trigger">
-                        {s name='CheckoutFooterEstimatedShippingCosts'}{/s} <i class="icon--arrow-right"></i>
-                    </a>
-                {/block}
+				{block name='frontend_checkout_shipping_costs_country_trigger'}
+					{if {config name=basketShowCalculation} == 1}
+                        <a href="#show-hide--shipping-costs" class="table--shipping-costs-trigger">
+							{s name='CheckoutFooterEstimatedShippingCosts'}{/s}
+                            <i class="icon--arrow-right"></i>
+                        </a>
+					{/if}
+				{/block}
 
-                {block name='frontend_checkout_shipping_costs_country_include'}
-                    {include file="frontend/checkout/shipping_costs.tpl"}
-                {/block}
-            {/if}
+				{block name='frontend_checkout_shipping_costs_country_include'}
+					{if {config name=basketShowCalculation} == 2}
+                        <span class="is--bold">{s name='CheckoutFooterEstimatedShippingCosts'}{/s}</span>
+					{/if}
+					{include file="frontend/checkout/shipping_costs.tpl" calculateShippingCosts=$calculateShippingCosts == true || {config name=basketShowCalculation} == 2}
+				{/block}
+			{/if}
         </div>
 
         {block name='frontend_checkout_cart_footer_field_labels'}

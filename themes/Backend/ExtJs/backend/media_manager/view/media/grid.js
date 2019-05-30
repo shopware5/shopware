@@ -59,7 +59,8 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
             'name': '{s name=grid/column/name}File name{/s}',
             'width': '{s name=grid/column/width}Image width{/s}',
             'height': '{s name=grid/column/height}Image height{/s}',
-            'type': '{s name=grid/column/type}File type{/s}'
+            'type': '{s name=grid/column/type}File type{/s}',
+            'fileSize': '{s name=grid/column/fileSize}File size{/s}'
         },
         types: {
             'video': '{s name=grid/types/video}Video{/s}',
@@ -160,6 +161,12 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
             header: me.snippets.column.type,
             flex: 1,
             renderer: me.typeRenderer
+        }, {
+            dataIndex: 'fileSize',
+            header: me.snippets.column.fileSize,
+            hidden: true,
+            flex: 1,
+            renderer: me.fileSizeRenderer
         }]
     },
 
@@ -175,33 +182,43 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
     previewRenderer: function(value, tdStyle, record) {
         var me = this,
             type = record.get('type').toLowerCase(),
-            value = value + '?' + new Date().getTime(),
             result;
+
+        if (!record.data.created) {
+            record.data.created = new Date();
+        }
+
+        value += '?' + record.data.created.getTime();
 
         switch(type) {
            case 'video':
                result = '<div class="sprite-blue-document-film" style="height:16px; width:16px;display:inline-block"></div>';
                break;
+
            case 'music':
                result = '<div class="sprite-blue-document-music" style="height:16px; width:16px;display:inline-block"></div>';
                break;
+
            case 'archive':
                result = '<div class="sprite-blue-document-zipper" style="height:16px; width:16px;display:inline-block"></div>';
                break;
+
            case 'pdf':
                result = '<div class="sprite-blue-document-pdf-text" style="height:16px; width:16px;display:inline-block"></div>';
                break;
+
            case 'vector':
                result = '<div class="sprite-blue-document-illustrator" style="height:16px; width:16px;display:inline-block"></div>';
             break;
+
            case 'image':
                if (Ext.Array.contains(['tif', 'tiff'], record.data.extension)) {
                    result = '<div class="sprite-blue-document-image" style="height:16px; width:16px;display:inline-block"></div>';
                } else {
                    result = Ext.String.format('<div class="small-preview-image"><img src="[0]" style="max-width:[1]px;max-height:[1]px" alt="[2]" /></div>', value, me.selectedPreviewSize, record.get('name'));
                }
-
                break;
+
            default:
                result = '<div class="sprite-blue-document-text" style="height:16px; width:16px;display:inline-block"></div>';
                break;
@@ -275,6 +292,17 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
         }
 
         return result;
+    },
+
+    /**
+     * Returns the rendered fileSize
+     * @param { integer } bytes
+     */
+    fileSizeRenderer: function(bytes) {
+        var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        if (bytes == 0) return '0 Byte';
+        var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+        return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
     }
 });
 //{/block}

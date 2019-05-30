@@ -122,7 +122,7 @@ Ext.define('Shopware.apps.Site.controller.Main', {
 
             //ask if the user wants to create a subSite of the currently selected one
             Ext.Msg.confirm('{s name=onCreateNewSiteConfirmationBoxCaption}Create subpage?{/s}', Ext.String.format('{s name=onCreateNewSiteConfirmationBoxText}Are you sure you want to create a subpage of \'[0]\'?{/s}', parentName), function(btn){
-                if (btn == 'yes'){
+                if (btn === 'yes'){
                     ddselector.toStore.removeAll();
                     ddselector.fromStore.load();
                     form.reset();
@@ -163,7 +163,7 @@ Ext.define('Shopware.apps.Site.controller.Main', {
         //open confirmation box, ask if the user really wants to delete the selected site
         //if yes, delete site with id and reload store
         Ext.Msg.confirm('{s name=onDeleteSiteConfirmationBoxCaption}Delete site?{/s}', Ext.String.format('{s name=onDeleteSiteConfirmationBoxText}Are you sure you want to delete \'[0]\'?{/s}', siteName), function(btn){
-            if (btn == 'yes'){
+            if (btn === 'yes'){
                 Ext.Ajax.request({
                     url : '{url action=deleteSite}',
                     scope: me,

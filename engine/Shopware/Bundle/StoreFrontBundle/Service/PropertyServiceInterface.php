@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -39,8 +39,7 @@ interface PropertyServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Service\PropertyServiceInterface::get()
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[] $products
      *
      * @return Struct\Property\Set[]
      */
@@ -52,10 +51,7 @@ interface PropertyServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductPropertyGatewayInterface::get()
      *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
-     *
-     * @return Struct\Property\Set
+     * @return Struct\Property\Set|null
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
 }

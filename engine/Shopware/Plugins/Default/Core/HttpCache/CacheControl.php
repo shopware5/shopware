@@ -25,10 +25,12 @@
 namespace ShopwarePlugins\HttpCache;
 
 use Enlight_Components_Session_Namespace as Session;
-use Enlight_Config as HttpCacheConfig;
 use Enlight_Controller_Request_Request as Request;
 use Enlight_Controller_Response_Response as Response;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\HttpCache\CacheRouteGenerationService;
+use Shopware\Components\HttpCache\CacheTimeServiceInterface;
+use Shopware\Components\HttpCache\DefaultRouteService;
 
 class CacheControl
 {
@@ -45,7 +47,7 @@ class CacheControl
     private $session;
 
     /**
-     * @var HttpCacheConfig
+     * @var array
      */
     private $config;
 
@@ -55,14 +57,34 @@ class CacheControl
     private $eventManager;
 
     /**
-     * @param Session         $session
-     * @param HttpCacheConfig $config
+     * @var CacheTimeServiceInterface
      */
-    public function __construct(Session $session, HttpCacheConfig $config, \Enlight_Event_EventManager $eventManager)
-    {
+    private $cacheTimeService;
+
+    /**
+     * @var DefaultRouteService
+     */
+    private $defaultRouteService;
+
+    /**
+     * @var CacheRouteGenerationService
+     */
+    private $cacheRouteGeneration;
+
+    public function __construct(
+        Session $session,
+        array $config,
+        \Enlight_Event_EventManager $eventManager,
+        DefaultRouteService $defaultRouteService,
+        CacheTimeServiceInterface $cacheTimeService,
+        CacheRouteGenerationService $cacheRouteGeneration
+    ) {
         $this->session = $session;
         $this->config = $config;
         $this->eventManager = $eventManager;
+        $this->cacheTimeService = $cacheTimeService;
+        $this->defaultRouteService = $defaultRouteService;
+        $this->cacheRouteGeneration = $cacheRouteGeneration;
     }
 
     /**
@@ -72,7 +94,7 @@ class CacheControl
      */
     public function isCacheableRoute(Request $request)
     {
-        $cacheTime = $this->getCacheTime($request);
+        $cacheTime = $this->cacheTimeService->getCacheTime($request);
 
         if ($cacheTime === null) {
             return false;
@@ -94,17 +116,25 @@ class CacheControl
     }
 
     /**
+     * Returns the cache time for the provided request route
+     *
+     * @return int|null
+     */
+    public function getCacheTime(Request $request)
+    {
+        return $this->cacheTimeService->getCacheTime($request);
+    }
+
+    /**
      * Validates if the provided route should get the `private, no-cache` header
      *
-     * @param Request  $request
-     * @param Response $response
-     * @param $shopId
+     * @param int $shopId
      *
      * @return bool
      */
     public function useNoCacheControl(Request $request, Response $response, $shopId)
     {
-        $cacheTime = $this->getCacheTime($request);
+        $cacheTime = $this->cacheTimeService->getCacheTime($request);
 
         if ($cacheTime === null) {
             return true;
@@ -122,12 +152,9 @@ class CacheControl
             return true;
         }
 
-        $controller = $this->getControllerRoute($request);
-        if ($controller === 'widgets/checkout' && (!empty($this->session->offsetGet('sBasketQuantity')) || !empty($this->session->offsetGet('sNotesQuantity')))) {
-            return true;
-        }
+        $controller = $this->cacheRouteGeneration->getControllerRoute($request);
 
-        return false;
+        return $controller === 'widgets/checkout' && (!empty($this->session->offsetGet('sBasketQuantity')) || !empty($this->session->offsetGet('sNotesQuantity')));
     }
 
     /**
@@ -140,23 +167,21 @@ class CacheControl
      * )
      * </code>
      *
-     * @param Request $request
-     * @param int     $shopId
+     * @param int $shopId
      *
      * @return array
      */
     public function getNoCacheTagsForRequest(Request $request, $shopId)
     {
         $tags = [];
-        $autoAdmin = $this->config->get('admin');
+        $autoAdmin = $this->config['admin'];
 
         if (!empty($autoAdmin)) {
             $tags[] = 'admin-' . $shopId;
         }
 
-        $configuredNoCacheTags = $this->getConfiguredNoCacheTags();
-
-        $routeTags = $this->findRouteValue($configuredNoCacheTags, $request);
+        $configuredNoCacheTags = $this->defaultRouteService->getDefaultNoCacheTags();
+        $routeTags = $this->defaultRouteService->findRouteValue($request, $configuredNoCacheTags);
 
         if (!$routeTags) {
             return $tags;
@@ -176,14 +201,11 @@ class CacheControl
     /**
      * Returns a list of tags which has to be added to the no cache cookie
      *
-     * @param Request              $request
-     * @param ShopContextInterface $context
-     *
      * @return \string[]
      */
     public function getTagsForNoCacheCookie(Request $request, ShopContextInterface $context)
     {
-        $auto = $this->findRouteValue(self::AUTO_NO_CACHE_CONTROLLERS, $request);
+        $auto = $this->defaultRouteService->findRouteValue($request, self::AUTO_NO_CACHE_CONTROLLERS);
 
         $tags = [];
         if ($auto !== null) {
@@ -199,11 +221,11 @@ class CacheControl
         }
 
         if (strtolower($request->getModuleName()) === 'frontend' && !empty($this->session->Admin)) {
-            // set admin-cookie if admin session is present
+            // Set admin-cookie if admin session is present
             $tags[] = 'admin';
         }
 
-        $action = $this->getActionRoute($request);
+        $action = $this->cacheRouteGeneration->getActionRoute($request);
         if ($action === 'frontend/account/logout') {
             $tags[] = '';
         }
@@ -214,14 +236,11 @@ class CacheControl
     /**
      * Returns a list of tags which has to be deleted from the no cache cookie
      *
-     * @param Request              $request
-     * @param ShopContextInterface $context
-     *
      * @return \string[]
      */
     public function getRemovableCacheTags(Request $request, ShopContextInterface $context)
     {
-        $action = $this->getActionRoute($request);
+        $action = $this->cacheRouteGeneration->getActionRoute($request);
 
         $tags = [];
         if (empty($this->session->offsetGet('sBasketQuantity')) && empty($this->session->offsetGet('sNotesQuantity'))) {
@@ -240,31 +259,17 @@ class CacheControl
     }
 
     /**
-     * Returns the cache time for the provided request route
-     *
-     * @param Request $request
-     *
-     * @return int|null
-     */
-    public function getCacheTime(Request $request)
-    {
-        $routes = $this->getCacheableRoutes();
-
-        return $this->findRouteValue($routes, $request);
-    }
-
-    /**
      * Defines if the provided route should add the nocache parameter for the generated esi url
      *
-     * @param Request $request
+     * @param string $targetName
      *
      * @return bool
      */
     public function useNoCacheParameterForEsi(Request $request, $targetName)
     {
-        $tags = $this->getConfiguredNoCacheTags();
+        $tags = $this->defaultRouteService->getDefaultNoCacheTags();
 
-        $autoNoCacheControls = $this->findRouteValue(self::AUTO_NO_CACHE_CONTROLLERS, $request);
+        $autoNoCacheControls = $this->defaultRouteService->findRouteValue($request, self::AUTO_NO_CACHE_CONTROLLERS);
 
         return isset($autoNoCacheControls) && isset($tags[$targetName]) && !empty(array_intersect($autoNoCacheControls, $tags[$targetName]));
     }
@@ -286,47 +291,7 @@ class CacheControl
     }
 
     /**
-     * @param array   $values
-     * @param Request $request
-     *
-     * @return mixed
-     */
-    private function findRouteValue(array $values, Request $request)
-    {
-        $route = $this->getActionRoute($request);
-
-        if (isset($values[$route])) {
-            return $values[$route];
-        }
-
-        $route = $this->getControllerRoute($request);
-        if (isset($values[$route])) {
-            return $values[$route];
-        }
-
-        return null;
-    }
-
-    private function getActionRoute(Request $request)
-    {
-        return implode('/', [
-            strtolower($request->getModuleName()),
-            strtolower($request->getControllerName()),
-            strtolower($request->getActionName()),
-        ]);
-    }
-
-    private function getControllerRoute(Request $request)
-    {
-        return implode('/', [
-            strtolower($request->getModuleName()),
-            strtolower($request->getControllerName()),
-        ]);
-    }
-
-    /**
-     * @param Request $request
-     * @param int     $shopId
+     * @param int $shopId
      *
      * @return bool
      */
@@ -336,76 +301,8 @@ class CacheControl
 
         $cookieTags = $this->getNoCacheTagsFromCookie($request);
 
-        //has cookie tag?
+        // Has cookie tag?
         return !empty(array_intersect($routeTags, $cookieTags));
-    }
-
-    /**
-     * Returns an array with cachable controllernames.
-     *
-     * Array-Key is controllername
-     * Array-Value is ttl
-     *
-     * <code>
-     * array (
-     *     'frontend/listing'       => '3600',
-     *     'frontend/index'         => '3600',
-     *     'widgets/recommendation' => '14400',
-     * )
-     * </code>
-     *
-     * @return array
-     */
-    private function getCacheableRoutes()
-    {
-        $controllers = $this->config->get('cacheControllers');
-        if (empty($controllers)) {
-            return [];
-        }
-
-        $result = [];
-        $controllers = str_replace(["\r\n", "\r"], "\n", $controllers);
-        $controllers = explode("\n", trim($controllers));
-        foreach ($controllers as $controller) {
-            list($controller, $cacheTime) = explode(' ', $controller);
-            $result[strtolower($controller)] = (int) $cacheTime;
-        }
-
-        return $result;
-    }
-
-    /**
-     * Returns an mapping array with nocache-tags to controllernames
-     *
-     * Array-Key is controllername
-     * Array-Value is cache tag
-     *
-     * <code>
-     * array (
-     *    'frontend/detail'  => ['price'],
-     *    'widgets/checkout' => ['checkout'],
-     *    'widgets/compare'  => ['compare'],
-     * )
-     * </code>
-     *
-     * @return array
-     */
-    private function getConfiguredNoCacheTags()
-    {
-        $controllers = $this->config->get('noCacheControllers');
-        if (empty($controllers)) {
-            return [];
-        }
-
-        $result = [];
-        $controllers = str_replace(["\r\n", "\r"], "\n", $controllers);
-        $controllers = explode("\n", trim($controllers));
-        foreach ($controllers as $controller) {
-            list($controller, $tag) = explode(' ', $controller);
-            $result[strtolower($controller)] = explode(',', $tag);
-        }
-
-        return $result;
     }
 
     /**
@@ -418,15 +315,13 @@ class CacheControl
      * )
      * </code>
      *
-     * @param Request $request
-     *
      * @return array
      */
     private function getNoCacheTagsFromCookie(Request $request)
     {
         $noCacheCookie = $request->getCookie('nocache', false);
 
-        if (false === $noCacheCookie) {
+        if ($noCacheCookie === false) {
             return [];
         }
 
@@ -440,23 +335,16 @@ class CacheControl
      * Validates if the provided request is a cacheable route which should not be cached if a specify tag is set
      * and the request contains the nocache parameter as get parameter
      *
-     * @param Request $request
-     *
      * @return bool
      */
     private function hasAllowedNoCacheParameter(Request $request)
     {
-        $configuredRoutes = $this->getConfiguredNoCacheTags();
-
-        $tag = $this->findRouteValue($configuredRoutes, $request);
+        $configuredRoutes = $this->defaultRouteService->getDefaultNoCacheTags();
+        $tag = $this->defaultRouteService->findRouteValue($request, $configuredRoutes);
 
         return isset($tag) && $request->getQuery('nocache') !== null;
     }
 
-    /**
-     * @param Request  $request
-     * @param Response $response
-     */
     private function resetCookies(Request $request, Response $response)
     {
         $response->setCookie(
@@ -467,11 +355,6 @@ class CacheControl
         );
     }
 
-    /**
-     * @param Request              $request
-     * @param ShopContextInterface $context
-     * @param Response             $response
-     */
     private function setContextCookie(Request $request, ShopContextInterface $context, Response $response)
     {
         $hash = json_encode($context->getTaxRules()) . json_encode($context->getCurrentCustomerGroup());

@@ -31,7 +31,7 @@ use Shopware\Components\Model\ModelEntity;
  * Standard Code Model Entity
  *
  * @ORM\Table(name=" s_blog_comments")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Comment extends ModelEntity
 {
@@ -39,7 +39,7 @@ class Comment extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -73,7 +73,7 @@ class Comment extends ModelEntity
     private $comment;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
@@ -83,6 +83,7 @@ class Comment extends ModelEntity
      * Flag which shows if the blog comment is active or not. 1= active otherwise inactive
      *
      * @var bool
+     *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active;
@@ -102,7 +103,23 @@ class Comment extends ModelEntity
     private $points;
 
     /**
+     * @var \Shopware\Models\Shop\Shop
+     *
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
+     * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
+     */
+    private $shop;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="shop_id", type="integer", nullable=true)
+     */
+    private $shopId;
+
+    /**
      * @var \Shopware\Models\Blog\Blog
+     *
      * @ORM\ManyToOne(targetEntity="Blog", inversedBy="comments")
      * @ORM\JoinColumn(name="blog_id", referencedColumnName="id")
      */
@@ -161,11 +178,11 @@ class Comment extends ModelEntity
     /**
      * Set creationDate
      *
-     * @param \DateTime|string $creationDate
+     * @param \DateTimeInterface|string $creationDate
      */
     public function setCreationDate($creationDate)
     {
-        if (!$creationDate instanceof \DateTime && strlen($creationDate) > 0) {
+        if (!$creationDate instanceof \DateTimeInterface && !empty($creationDate)) {
             $creationDate = new \DateTime($creationDate);
         }
         $this->creationDate = $creationDate;
@@ -174,7 +191,7 @@ class Comment extends ModelEntity
     /**
      * Get creationDate
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreationDate()
     {
@@ -264,7 +281,7 @@ class Comment extends ModelEntity
     /**
      * Get points
      *
-     * @return \Shopware\Models\Blog\double
+     * @return float
      */
     public function getPoints()
     {
@@ -274,10 +291,42 @@ class Comment extends ModelEntity
     /**
      * Set points
      *
-     * @param \Shopware\Models\Blog\double $points
+     * @param float $points
      */
     public function setPoints($points)
     {
         $this->points = $points;
+    }
+
+    /**
+     * @return \Shopware\Models\Shop\Shop|null
+     */
+    public function getShop()
+    {
+        return $this->shop;
+    }
+
+    /**
+     * @param \Shopware\Models\Shop\Shop|null $shop
+     */
+    public function setShop($shop)
+    {
+        $this->shop = $shop;
+    }
+
+    /**
+     * @return int
+     */
+    public function getShopId()
+    {
+        return $this->shopId;
+    }
+
+    /**
+     * @param int $shopId
+     */
+    public function setShopId($shopId)
+    {
+        $this->shopId = $shopId;
     }
 }

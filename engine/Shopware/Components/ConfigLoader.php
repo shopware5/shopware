@@ -33,7 +33,7 @@ namespace Shopware\Components;
  * The ShopwareKernel injects the loaded configuration and the Symfony DI-Container
  * into the Shopware_Application.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -99,14 +99,14 @@ class ConfigLoader
         $suffix = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
         if (!in_array($suffix, ['php', 'inc'])) {
-            throw new \Exception('Invalid configuration file provided; unknown config type');
+            throw new \Exception(sprintf('Invalid configuration file provided; unknown config type "%s"', $suffix));
         }
 
         $config = include $file;
 
         if (!is_array($config)) {
             throw new \Exception(
-                'Invalid configuration file provided; PHP file does not return array value'
+                'Invalid configuration file provided; PHP file does not return an array value'
             );
         }
 

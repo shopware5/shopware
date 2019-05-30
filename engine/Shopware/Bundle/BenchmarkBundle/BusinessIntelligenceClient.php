@@ -56,16 +56,12 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
     private $benchmarkEncryption;
 
     /**
-     * @var null|LoggerInterface
+     * @var LoggerInterface|null
      */
     private $logger;
 
     /**
-     * @param string                               $biEndpoint
-     * @param HttpClientInterface                  $client
-     * @param BusinessIntelligenceResponseHydrator $biResponseHydrator
-     * @param BenchmarkEncryption                  $benchmarkEncryption
-     * @param LoggerInterface|null                 $logger
+     * @param string $biEndpoint
      */
     public function __construct(
         $biEndpoint,
@@ -82,8 +78,6 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
     }
 
     /**
-     * @param BusinessIntelligenceRequest $biRequest
-     *
      * @throws BenchmarkSendingException
      *
      * @return Struct\BusinessIntelligenceResponse
@@ -95,7 +89,7 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
         ];
 
         try {
-            $response = $this->client->post($this->biEndpoint, $headers, (string) $biRequest);
+            $response = $this->client->get($this->biEndpoint . '?' . (string) $biRequest, $headers);
         } catch (\Exception $ex) {
             $this->logger->warning(sprintf('Could not retrieve BI data from %s', $this->biEndpoint), [$ex]);
 
@@ -106,41 +100,33 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
     }
 
     /**
-     * @param Response $response
-     *
      * @throws BenchmarkHydratingException
      *
      * @return Struct\BusinessIntelligenceResponse
      */
     private function hydrateBiResponse(Response $response)
     {
-        if (empty($response->getBody())) {
-            throw new BenchmarkHydratingException(sprintf('Could not retrieve BI response: %s', $response->getBody()));
+        $data = $response->getBody();
+
+        if (empty($data)) {
+            throw new BenchmarkHydratingException(sprintf('Could not retrieve BI response: %s', $data));
         }
 
-        $data = json_decode($response->getBody(), true);
+        $this->verifyResponseSignature($response);
 
-        if (!$data) {
-            throw new BenchmarkHydratingException(sprintf('BI response couldn\'t be parsed as JSON: %s', $response->getBody()));
-        }
-
-        // Deactivating Signatures for the moment
-        // $this->verifyResponseSignature($response);
-
-        return $this->biResponseHydrator->hydrate($data);
+        return $this->biResponseHydrator->hydrate(['html' => $data]);
     }
 
     /**
-     * @param Response $response
-     *
      * @throws \RuntimeException
      */
     private function verifyResponseSignature(Response $response)
     {
-        $signature = $response->getHeader('x-shopware-signature');
+        $signatureHeaderName = 'x-shopware-signature';
+        $signature = $response->getHeader($signatureHeaderName);
 
         if (empty($signature)) {
-            throw new \RuntimeException('Signature not found in x-shopware-signature header');
+            throw new \RuntimeException(sprintf('Signature not found in header "%s"', $signatureHeaderName));
         }
 
         if (!$this->benchmarkEncryption->isSignatureSupported()) {

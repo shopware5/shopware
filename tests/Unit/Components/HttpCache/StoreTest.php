@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -189,7 +189,7 @@ class StoreTest extends TestCase
         $method = $class->getMethod('generateCacheKey');
         $method->setAccessible(true);
 
-        $this->assertSame(
+        static::assertSame(
             'md' . hash('sha256', $expectedURL),
             $method->invokeArgs($this->httpCacheStore, [$originalRequest])
         );
@@ -210,7 +210,7 @@ class StoreTest extends TestCase
         $method = $class->getMethod('verifyIgnoredParameters');
         $method->setAccessible(true);
 
-        $this->assertSame(
+        static::assertSame(
             $expectedURL,
             $method->invokeArgs($this->httpCacheStore, [$originalRequest])
         );

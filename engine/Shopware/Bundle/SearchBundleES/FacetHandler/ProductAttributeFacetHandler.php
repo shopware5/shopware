@@ -36,6 +36,7 @@ use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Facet\ProductAttributeFacet;
+use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
@@ -53,7 +54,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     const AGGREGATION_SIZE = 5000;
 
     /**
-     * @var ProductAttributeFacet[]
+     * @var FacetInterface[]|CriteriaPartInterface[]
      */
     private $criteriaParts = [];
 
@@ -64,8 +65,6 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
 
     /**
      * ProductAttributeFacetHandler constructor.
-     *
-     * @param CrudService $crudService
      */
     public function __construct(CrudService $crudService)
     {
@@ -91,11 +90,22 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     ) {
         /** @var ProductAttributeFacet $criteriaPart */
         $field = 'attributes.core.' . $criteriaPart->getField();
+        $type = null;
+
+        try {
+            $attribute = $this->crudService->get('s_articles_attributes', $criteriaPart->getField());
+            $type = $attribute->getElasticSearchType()['type'];
+        } catch (\Exception $e) {
+        }
+
         $this->criteriaParts[] = $criteriaPart;
 
         switch ($criteriaPart->getMode()) {
             case ProductAttributeFacet::MODE_VALUE_LIST_RESULT:
             case ProductAttributeFacet::MODE_RADIO_LIST_RESULT:
+                if ($type === 'string') {
+                    $field .= '.raw';
+                }
                 $aggregation = new TermsAggregation($criteriaPart->getName());
                 $aggregation->setField($field);
                 $aggregation->addParameter('size', self::AGGREGATION_SIZE);
@@ -113,6 +123,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
             case ProductAttributeFacet::MODE_RANGE_RESULT:
                 $aggregation = new TermsAggregation($criteriaPart->getName());
                 $aggregation->setField($field);
+                $aggregation->addParameter('size', self::AGGREGATION_SIZE);
                 break;
 
             default:
@@ -142,7 +153,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
                 continue;
             }
 
-            /** @var ConfigurationStruct $attribute */
+            /** @var ConfigurationStruct|null $attribute */
             $attribute = $this->crudService->get('s_articles_attributes', $criteriaPart->getField());
 
             $type = $attribute ? $attribute->getColumnType() : null;
@@ -182,18 +193,12 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     }
 
     /**
-     * @param string                $type
-     * @param FacetResultInterface  $result
-     * @param ProductAttributeFacet $facet
+     * @param string $type
      *
      * @return FacetResultInterface
      */
     private function switchTemplate($type, FacetResultInterface $result, ProductAttributeFacet $facet)
     {
-        if ($result === null) {
-            return $result;
-        }
-
         if (!$result instanceof TemplateSwitchable) {
             return $result;
         }
@@ -222,35 +227,32 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     {
         switch (true) {
             case $type === TypeMapping::TYPE_DATE && $mode === ProductAttributeFacet::MODE_RANGE_RESULT:
-
                 return 'frontend/listing/filter/facet-date-range.tpl';
+
             case $type === TypeMapping::TYPE_DATE && $mode === ProductAttributeFacet::MODE_VALUE_LIST_RESULT:
-
                 return 'frontend/listing/filter/facet-date-multi.tpl';
+
             case $type === TypeMapping::TYPE_DATE && $mode !== ProductAttributeFacet::MODE_BOOLEAN_RESULT:
-
                 return 'frontend/listing/filter/facet-date.tpl';
+
             case $type === TypeMapping::TYPE_DATETIME && $mode === ProductAttributeFacet::MODE_RANGE_RESULT:
-
                 return 'frontend/listing/filter/facet-datetime-range.tpl';
+
             case $type === TypeMapping::TYPE_DATETIME && $mode === ProductAttributeFacet::MODE_VALUE_LIST_RESULT:
-
                 return 'frontend/listing/filter/facet-datetime-multi.tpl';
+
             case $type === TypeMapping::TYPE_DATETIME && $mode !== ProductAttributeFacet::MODE_BOOLEAN_RESULT:
-
                 return 'frontend/listing/filter/facet-datetime.tpl';
-            default:
 
+            default:
                 return $defaultTemplate;
         }
     }
 
     /**
-     * @param ProductAttributeFacet $criteriaPart
-     * @param $data
-     * @param Criteria $criteria
+     * @param array $data
      *
-     * @return null|RadioFacetResult|ValueListFacetResult
+     * @return RadioFacetResult|ValueListFacetResult|null
      */
     private function createItemListResult(
         ProductAttributeFacet $criteriaPart,
@@ -264,9 +266,14 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
 
         $actives = [];
 
-        /** @var $condition ProductAttributeCondition */
+        /** @var ProductAttributeCondition $condition */
         if ($condition = $criteria->getCondition($criteriaPart->getName())) {
             $actives = $condition->getValue();
+
+            // $condition->getValue() can return a string
+            if (!is_array($actives)) {
+                $actives = [$actives];
+            }
         }
 
         $items = array_map(function ($row) use ($actives) {
@@ -293,11 +300,9 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     }
 
     /**
-     * @param ProductAttributeFacet $criteriaPart
-     * @param $data
-     * @param Criteria $criteria
+     * @param array $data
      *
-     * @return null|BooleanFacetResult
+     * @return BooleanFacetResult|null
      */
     private function createBooleanResult(ProductAttributeFacet $criteriaPart, $data, Criteria $criteria)
     {
@@ -317,9 +322,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     }
 
     /**
-     * @param ProductAttributeFacet $criteriaPart
-     * @param $data
-     * @param Criteria $criteria
+     * @param array $data
      *
      * @return RangeFacetResult
      */
@@ -332,7 +335,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
         $activeMin = $min;
         $activeMax = $max;
 
-        /** @var $condition ProductAttributeCondition */
+        /** @var ProductAttributeCondition $condition */
         if ($condition = $criteria->getCondition($criteriaPart->getName())) {
             $data = $condition->getValue();
             $activeMin = $data['min'];
@@ -356,7 +359,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
     }
 
     /**
-     * @param array $aggregation
+     * @return array
      */
     private function formatDates(array $aggregation)
     {

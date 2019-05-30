@@ -25,7 +25,7 @@
 namespace Shopware\Components\Password\Encoder;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -59,7 +59,7 @@ class Bcrypt implements PasswordEncoderInterface
      */
     public function isCompatible()
     {
-        return version_compare(PHP_VERSION, '5.3.7', '>=');
+        return PHP_VERSION_ID >= 50307;
     }
 
     /**
@@ -80,7 +80,7 @@ class Bcrypt implements PasswordEncoderInterface
      */
     public function encodePassword($password)
     {
-        return password_hash($password, PASSWORD_DEFAULT, $this->options);
+        return password_hash($password, PASSWORD_BCRYPT, $this->options);
     }
 
     /**
@@ -90,6 +90,6 @@ class Bcrypt implements PasswordEncoderInterface
      */
     public function isReencodeNeeded($hash)
     {
-        return password_needs_rehash($hash, PASSWORD_DEFAULT, $this->options);
+        return password_needs_rehash($hash, PASSWORD_BCRYPT, $this->options);
     }
 }

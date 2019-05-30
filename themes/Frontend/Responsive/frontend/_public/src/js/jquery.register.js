@@ -216,6 +216,8 @@
                 opts = me.opts,
                 $el = me.$el;
 
+            me.applyDataAttributes();
+
             me.$personalEmail = $el.find(opts.personalEmailSelector);
             me.$personalPassword = $el.find(opts.personalPasswordSelector);
             me.$personalEmailConfirmation = $el.find(opts.personalEmailConfirmationSelector);
@@ -493,18 +495,15 @@
             me.$targetElement = $(relatedTarget);
 
             switch (id) {
-                case 'register_personal_email':
-                case 'register_personal_emailConfirmation':
+                case me.$personalEmail.prop('id'):
+                case me.$personalEmailConfirmation.prop('id'):
                     if (hasEmailConfirmation && (me.$personalEmail.val().length <= 0 || me.$personalEmailConfirmation.val().length <= 0)) {
                         break;
                     }
                     action = 'ajax_validate_email';
                     break;
-                case 'register_billing_ustid':
-                    action = 'ajax_validate_billing';
-                    break;
-                case 'register_personal_password':
-                case 'register_personal_passwordConfirmation':
+                case me.$personalPassword.prop('id'):
+                case me.$personalPasswordConfirmation.prop('id'):
                     if (hasPasswordConfirmation && (me.$personalPassword.val().length <= 0 || me.$personalPasswordConfirmation.val().length <= 0)) {
                         break;
                     }

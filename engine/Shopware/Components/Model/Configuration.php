@@ -38,7 +38,7 @@ use Doctrine\ORM\Repository\RepositoryFactory;
 use Shopware\Components\ShopwareReleaseStruct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -64,11 +64,6 @@ class Configuration extends BaseConfiguration
     protected $release;
 
     /**
-     * @param array                 $options
-     * @param \Zend_Cache_Core      $cache
-     * @param RepositoryFactory     $repositoryFactory
-     * @param ShopwareReleaseStruct $release
-     *
      * @throws \Exception
      * @throws \RuntimeException
      * @throws \Doctrine\ORM\ORMException
@@ -115,14 +110,12 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @param CacheProvider $cache
-     *
      * @return Configuration
      */
     public function setCache(CacheProvider $cache)
     {
         // Set namespace for doctrine cache provider to avoid collisions
-        $namespace = !is_null($this->cacheNamespace) ? $this->cacheNamespace : md5(
+        $namespace = $this->cacheNamespace !== null ? $this->cacheNamespace : md5(
             $this->getProxyDir() . $this->release->getRevision()
         );
         $cache->setNamespace('dc2_' . $namespace . '_');
@@ -135,7 +128,7 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @return null|CacheProvider
+     * @return CacheProvider|null
      */
     public function detectCacheProvider()
     {
@@ -151,8 +144,6 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @param array $options
-     *
      * @throws \Exception
      */
     public function setCacheProvider(array $options)
@@ -177,9 +168,6 @@ class Configuration extends BaseConfiguration
         }
     }
 
-    /**
-     * @param \Zend_Cache_Core $cacheResource
-     */
     public function setCacheResource(\Zend_Cache_Core $cacheResource)
     {
         $cache = new Cache($cacheResource, 'Shopware_Models_' . $this->release->getRevision() . '_', ['Shopware_Models']);
@@ -213,7 +201,7 @@ class Configuration extends BaseConfiguration
     public function setAttributeDir($dir)
     {
         if (!is_dir($dir)) {
-            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
+            if (@mkdir($dir, 0777, true) === false && !is_dir($dir)) {
                 throw new \RuntimeException(sprintf("Unable to create the doctrine attribute directory (%s)\n", $dir));
             }
         } elseif (!is_writable($dir)) {
@@ -245,7 +233,7 @@ class Configuration extends BaseConfiguration
     public function setProxyDir($dir)
     {
         if (!is_dir($dir)) {
-            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
+            if (@mkdir($dir, 0777, true) === false && !is_dir($dir)) {
                 throw new \RuntimeException(sprintf("Unable to create the doctrine proxy directory (%s)\n", $dir));
             }
         } elseif (!is_writable($dir)) {
@@ -256,8 +244,6 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @param array $options
-     *
      * @return RedisCache
      */
     private function createRedisCacheProvider(array $options)
@@ -279,17 +265,15 @@ class Configuration extends BaseConfiguration
 
         // RedisCache->setRedis might configure igbinary as serializer, which might cause problems
         // this enforces the PHP serializer
-        $redis->setOption(\Redis::OPT_SERIALIZER, \Redis::SERIALIZER_PHP);
+        $redis->setOption(\Redis::OPT_SERIALIZER, (string) \Redis::SERIALIZER_PHP);
 
         return $cache;
     }
 
     /**
-     * @param $provider
+     * @param string $provider
      *
      * @throws \Exception
-     *
-     * @return mixed
      */
     private function createDefaultProvider($provider)
     {
@@ -301,7 +285,7 @@ class Configuration extends BaseConfiguration
         }
 
         if (!class_exists($provider)) {
-            throw new \Exception('Doctrine cache provider "' . $provider . "' not found failure.");
+            throw new \Exception(sprintf('Doctrine cache provider "%s" not found failure.', $provider));
         }
 
         return new $provider();

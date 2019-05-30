@@ -21,10 +21,11 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Models\Analytics\Repository;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -83,7 +84,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             ['1']
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [
@@ -138,7 +139,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             new DateTime('2014-01-01')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [
@@ -165,7 +166,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             new DateTime('2014-01-01')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [
@@ -191,7 +192,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             new DateTime('2014-01-01')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [
@@ -217,7 +218,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             new DateTime('2014-01-01')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [
@@ -248,7 +249,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             ['1']
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [
@@ -274,7 +275,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             ['1']
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [
@@ -297,7 +298,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             ['1']
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [
@@ -322,7 +323,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             new DateTime('2014-01-01')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [
@@ -345,7 +346,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             new DateTime('2014-01-01')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [
@@ -368,7 +369,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             new DateTime('2014-01-01')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [
@@ -391,7 +392,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             new DateTime('2014-01-01')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [
@@ -414,7 +415,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             new DateTime('2014-01-01')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [
@@ -437,7 +438,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             new DateTime('2014-01-01')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [
@@ -460,7 +461,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             new DateTime('2014-01-01')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [
@@ -490,7 +491,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             ]
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [
@@ -512,7 +513,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             new DateTime('2014-01-01')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 '2013-06-15' => [
@@ -541,7 +542,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             ['1']
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 '2013-06-15' => [
@@ -573,7 +574,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             ['1']
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 '2013-06-15' => [
@@ -605,7 +606,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             new DateTime('2014-01-01')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 '2013-06-01' => [
@@ -628,7 +629,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             new DateTime('2014-01-01')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 '2013-06-01' => [
@@ -654,7 +655,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             new DateTime('2014-01-01')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [
@@ -677,7 +678,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             new DateTime('2014-01-01')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [
@@ -698,7 +699,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             25
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [
@@ -716,7 +717,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $result = $this->repository->getReferrerSearchTerms('phpunit');
         $data = $result->getData();
 
-        $this->assertEquals(
+        static::assertEquals(
             $data,
             [
                 [
@@ -726,7 +727,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             ]
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $this->getSearchTermFromReferrerUrl($data[0]['referrer']),
             'phpunit'
         );
@@ -745,7 +746,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             new DateTime('2014-01-01')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [
@@ -768,7 +769,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             new DateTime('2014-02-02')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             $result->getData(),
             [
                 [

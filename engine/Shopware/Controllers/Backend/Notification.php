@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Article\Article;
+
 /**
  * Shopware Backend Controller for the Notification Module
  *
@@ -38,19 +40,19 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
             $limit = (int) $this->Request()->limit;
             $offset = (int) $this->Request()->start;
 
-            /** @var $filter array */
+            /** @var array $filter */
             $filter = $this->Request()->getParam('filter', []);
 
             //order data
             $order = (array) $this->Request()->getParam('sort', []);
 
-            /** @var $repository \Shopware\Models\Article\Repository */
-            $repository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Article::class);
+            /** @var \Shopware\Models\Article\Repository $repository */
+            $repository = Shopware()->Models()->getRepository(Article::class);
             $dataQuery = $repository->getArticlesWithRegisteredNotificationsQuery($filter, $offset, $limit, $order);
             $data = $dataQuery->getArrayResult();
 
             // manually calc the totalAmount cause the paginate(Shopware()->Models()->getQueryCount) doesn't work with this query
-            $dataQuery->setFirstResult(null)->setMaxResults(null);
+            $dataQuery->setFirstResult(0);
             $totalCount = count($dataQuery->getArrayResult());
 
             $summaryQuery = $repository->getArticlesWithRegisteredNotificationsQuery($filter, $offset, $limit, $order, true);
@@ -78,17 +80,17 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
         try {
             $limit = (int) $this->Request()->limit;
             $offset = (int) $this->Request()->start;
-            $articleOrderNumber = $this->Request()->orderNumber;
+            $productOrderNumber = $this->Request()->orderNumber;
 
-            /** @var $filter array */
+            /** @var array $filter */
             $filter = $this->Request()->getParam('filter', []);
 
             //order data
             $order = (array) $this->Request()->getParam('sort', []);
 
-            /** @var $repository \Shopware\Models\Article\Repository */
-            $repository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Article::class);
-            $dataQuery = $repository->getNotificationCustomerByArticleQuery($articleOrderNumber, $filter, $offset, $limit, $order);
+            /** @var \Shopware\Models\Article\Repository $repository */
+            $repository = Shopware()->Models()->getRepository(Article::class);
+            $dataQuery = $repository->getNotificationCustomerByArticleQuery($productOrderNumber, $filter, $offset, $limit, $order);
             $totalCount = Shopware()->Models()->getQueryCount($dataQuery);
             $data = $dataQuery->getArrayResult();
 

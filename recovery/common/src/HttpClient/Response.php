@@ -25,7 +25,7 @@
 namespace Shopware\Recovery\Common\HttpClient;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -58,9 +58,6 @@ class Response
         $this->header = $header;
     }
 
-    /**
-     * @return mixed
-     */
     public function getHeader()
     {
         return $this->header;

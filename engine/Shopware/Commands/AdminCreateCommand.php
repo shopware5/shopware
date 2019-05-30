@@ -33,7 +33,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -119,10 +119,8 @@ class AdminCreateCommand extends ShopwareCommand
     }
 
     /**
-     * @param string          $field
-     * @param string          $label
-     * @param InputInterface  $input
-     * @param OutputInterface $output
+     * @param string $field
+     * @param string $label
      */
     private function fillOption($field, $label, InputInterface $input, OutputInterface $output)
     {
@@ -142,9 +140,11 @@ class AdminCreateCommand extends ShopwareCommand
         /** @var ModelManager $em */
         $em = $this->container->get('models');
 
-        $roleRepository = $em->getRepository('Shopware\Models\User\Role');
+        /** @var Role $return */
+        $return = $em->getRepository(\Shopware\Models\User\Role::class)
+            ->findOneBy(['name' => 'local_admins']);
 
-        return $roleRepository->findOneBy(['name' => 'local_admins']);
+        return $return;
     }
 
     /**
@@ -165,14 +165,10 @@ class AdminCreateCommand extends ShopwareCommand
             return $locales[$locale];
         }
 
-        throw new \RuntimeException(sprintf(
-            'Backend Locale not supported (%s)',
-            $locale
-        ));
+        throw new \RuntimeException(sprintf('Backend Locale "%s" not supported', $locale));
     }
 
     /**
-     * @param User   $user
      * @param string $plainPassword
      */
     private function setPassword(User $user, $plainPassword)
@@ -187,8 +183,6 @@ class AdminCreateCommand extends ShopwareCommand
     }
 
     /**
-     * @param User $user
-     *
      * @throws \Exception
      */
     private function persistUser(User $user)
@@ -213,9 +207,6 @@ class AdminCreateCommand extends ShopwareCommand
         return $user;
     }
 
-    /**
-     * @param InputInterface $input
-     */
     private function validateInput(InputInterface $input)
     {
         $option = $input->getOption('email');
@@ -235,7 +226,7 @@ class AdminCreateCommand extends ShopwareCommand
 
         $option = $input->getOption('locale');
         if (empty($option)) {
-            throw new \InvalidArgumentException('Locle is required');
+            throw new \InvalidArgumentException('Locale is required');
         }
 
         $option = $input->getOption('password');

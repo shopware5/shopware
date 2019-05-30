@@ -25,24 +25,25 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PluginUninstallCommand extends ShopwareCommand
+class PluginUninstallCommand extends PluginCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('sw:plugin:uninstall')
             ->setDescription('Uninstalls a plugin.')
@@ -88,8 +89,9 @@ EOF
 
         $removeData = !(bool) $input->getOption('secure');
 
-        $pluginManager->uninstallPlugin($plugin, $removeData);
-
+        $uninstallationContext = $pluginManager->uninstallPlugin($plugin, $removeData);
         $output->writeln(sprintf('Plugin %s has been uninstalled successfully.', $pluginName));
+
+        $this->clearCachesIfRequested($input, $output, $uninstallationContext);
     }
 }

@@ -58,112 +58,113 @@ class AnalyticsProvider implements BenchmarkProviderInterface
     {
         $this->shopId = $shopContext->getShop()->getId();
 
-        return [
-            'totalVisitsYesterday' => $this->getVisitsYesterday(),
-            'totalViewsYesterday' => $this->getViewsYesterday(),
-            'visitsByDeviceYesterday' => $this->getVisitsYesterdayPerDevice(),
-            'totalVisitsByDevice' => $this->getTotalVisitsByDevice(),
-            'totalVisits' => $this->getTotalVisits(),
+        $config = $this->getConfig();
+
+        $returnData = [
+            'list' => $this->getVisitsList((int) $config['last_analytics_id']),
+            'listByDevice' => $this->getVisitsPerDevice((int) $config['last_analytics_id']),
         ];
+
+        return $returnData;
     }
 
     /**
-     * @return int
+     * @param int $lastAnalyticsId
+     *
+     * @return array
      */
-    private function getVisitsYesterday()
+    private function getVisitsList($lastAnalyticsId)
     {
-        $queryBuilder = $this->getVisitsYesterdayQueryBuilder();
+        $queryBuilder = $this->getVisitsListQueryBuilder($lastAnalyticsId);
 
-        return (int) $queryBuilder->groupBy('visitors.datum')
-            ->execute()
-            ->fetchColumn();
+        $data = $queryBuilder->execute()->fetchAll(\PDO::FETCH_ASSOC);
+
+        $data = array_map(function ($item) {
+            $item['totalImpressions'] = (int) $item['totalImpressions'];
+            $item['totalUniqueVisits'] = (int) $item['totalUniqueVisits'];
+
+            return $item;
+        }, $data);
+
+        return $data;
     }
 
     /**
-     * @return int
+     * @param int $lastAnalyticsId
+     *
+     * @return array
      */
-    private function getViewsYesterday()
+    private function getVisitsPerDevice($lastAnalyticsId)
+    {
+        $queryBuilder = $this->getVisitsPerDeviceQueryBuilder($lastAnalyticsId);
+
+        $visitsPerDevice = $queryBuilder->execute()
+            ->fetchAll(\PDO::FETCH_ASSOC);
+
+        $visitsPerDevice = array_map(function ($item) {
+            $item['totalImpressions'] = (int) $item['totalImpressions'];
+            $item['totalUniqueVisits'] = (int) $item['totalUniqueVisits'];
+
+            return $item;
+        }, $visitsPerDevice);
+
+        return $visitsPerDevice;
+    }
+
+    /**
+     * @param int $lastAnalyticsId
+     *
+     * @return QueryBuilder
+     */
+    private function getVisitsPerDeviceQueryBuilder($lastAnalyticsId)
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
-        return (int) $queryBuilder->select('SUM(visitors.pageimpressions) as pageImpressions')
+        return $queryBuilder
+            ->addSelect('visitors.datum as date')
+            ->addSelect('visitors.deviceType')
+            ->addSelect('SUM(visitors.pageimpressions) as totalImpressions')
+            ->addSelect('SUM(visitors.uniquevisits) as totalUniqueVisits')
             ->from('s_statistics_visitors', 'visitors')
-            ->where('visitors.datum = CURDATE() - INTERVAL 1 DAY')
             ->andWhere('visitors.shopID = :shopId')
+            ->andWhere('visitors.id > :lastId')
             ->setParameter(':shopId', $this->shopId)
-            ->groupBy('visitors.datum')
-            ->execute()
-            ->fetchColumn();
+            ->setParameter(':lastId', $lastAnalyticsId)
+            ->groupBy('visitors.datum, visitors.deviceType');
     }
 
     /**
-     * @return array
-     */
-    private function getVisitsYesterdayPerDevice()
-    {
-        $queryBuilder = $this->getVisitsYesterdayQueryBuilder();
-
-        $visitsPerDevice = $queryBuilder->select('visitors.deviceType, SUM(visitors.uniquevisits) as uniqueVisits')
-            ->groupBy('visitors.datum, visitors.deviceType')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
-
-        $visitsPerDevice = array_map('intval', $visitsPerDevice);
-
-        return $visitsPerDevice;
-    }
-
-    /**
+     * @param int $lastAnalyticsId
+     *
      * @return QueryBuilder
      */
-    private function getVisitsYesterdayQueryBuilder()
+    private function getVisitsListQueryBuilder($lastAnalyticsId)
     {
         $queryBuilder = $this->dbalConnection->createQueryBuilder();
 
-        return $queryBuilder->select('SUM(visitors.uniquevisits) as uniqueVisits')
-            ->from('s_statistics_visitors', 'visitors')
-            ->where('visitors.datum = CURDATE() - INTERVAL 1 DAY')
-            ->andWhere('visitors.shopID = :shopId')
-            ->setParameter(':shopId', $this->shopId);
-    }
-
-    /**
-     * @return int
-     */
-    private function getTotalVisits()
-    {
-        $queryBuilder = $this->getTotalVisitsQueryBuilder();
-
-        return (int) $queryBuilder->execute()->fetchColumn();
-    }
-
-    /**
-     * @return array
-     */
-    private function getTotalVisitsByDevice()
-    {
-        $queryBuilder = $this->getTotalVisitsQueryBuilder();
-
-        $visitsPerDevice = $queryBuilder->select('visitors.deviceType, SUM(visitors.uniquevisits) as uniqueVisits')
-            ->groupBy('visitors.deviceType')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
-
-        $visitsPerDevice = array_map('intval', $visitsPerDevice);
-
-        return $visitsPerDevice;
-    }
-
-    /**
-     * @return QueryBuilder
-     */
-    private function getTotalVisitsQueryBuilder()
-    {
-        $queryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        return $queryBuilder->select('SUM(visitors.uniquevisits) as uniqueVisits')
+        return $queryBuilder->addSelect('visitors.datum as date')
+            ->addSelect('SUM(visitors.pageimpressions) as totalImpressions')
+            ->addSelect('SUM(visitors.uniquevisits) as totalUniqueVisits')
             ->from('s_statistics_visitors', 'visitors')
             ->where('visitors.shopID = :shopId')
-            ->setParameter(':shopId', $this->shopId);
+            ->andWhere('visitors.id > :lastId')
+            ->setParameter(':shopId', $this->shopId)
+            ->setParameter(':lastId', $lastAnalyticsId)
+            ->groupBy('visitors.datum');
+    }
+
+    /**
+     * @return array
+     */
+    private function getConfig()
+    {
+        $configsQueryBuilder = $this->dbalConnection->createQueryBuilder();
+
+        return $configsQueryBuilder->select('configs.*')
+            ->from('s_benchmark_config', 'configs')
+            ->where('configs.shop_id = :shopId')
+            ->setParameter(':shopId', $this->shopId)
+            ->execute()
+            ->fetch();
     }
 }

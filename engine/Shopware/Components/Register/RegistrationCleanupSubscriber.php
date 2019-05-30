@@ -33,9 +33,6 @@ class RegistrationCleanupSubscriber implements SubscriberInterface
      */
     private $cleanupService;
 
-    /**
-     * @param RegistrationCleanupServiceInterface $cleanupService
-     */
     public function __construct(RegistrationCleanupServiceInterface $cleanupService)
     {
         $this->cleanupService = $cleanupService;

@@ -40,7 +40,7 @@ use Shopware\Models\Shop;
  * uses the Theme\Configurator class to synchronize the
  * theme configuration with the database.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -86,15 +86,6 @@ class Installer
      */
     private $service;
 
-    /**
-     * @param ModelManager    $entityManager
-     * @param Configurator    $configurator
-     * @param PathResolver    $pathResolver
-     * @param Util            $util
-     * @param DatabaseHandler $snippetWriter
-     * @param Service         $service
-     * @param array           $snippetConfig
-     */
     public function __construct(
         ModelManager $entityManager,
         Configurator $configurator,
@@ -164,7 +155,7 @@ class Installer
         // Builds the theme inheritance
         $this->setParents($themes);
 
-        /** @var $theme Theme */
+        /** @var Theme $theme */
         foreach ($themes as $theme) {
             $this->configurator->synchronize($theme);
         }
@@ -174,7 +165,6 @@ class Installer
      * Helper function which iterates the engine\Shopware\Themes directory
      * and registers all stored themes within the directory as \Shopware\Models\Shop\Template.
      *
-     * @param \DirectoryIterator             $directories
      * @param \Shopware\Models\Plugin\Plugin $plugin
      *
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -190,7 +180,7 @@ class Installer
             AbstractQuery::HYDRATE_OBJECT
         );
 
-        /** @var $directory \DirectoryIterator */
+        /** @var \DirectoryIterator $directory */
         foreach ($directories as $directory) {
             // Check valid directory
 
@@ -253,7 +243,7 @@ class Installer
 
         $themes = [];
 
-        /** @var $plugin Plugin */
+        /** @var Plugin $plugin */
         foreach ($plugins as $plugin) {
             $path = $this->pathResolver->getPluginPath($plugin);
 
@@ -292,8 +282,6 @@ class Installer
      * into the database.
      *
      * The theme snippet namespace are prefixed with themes/theme-name
-     *
-     * @param Shop\Template $template
      */
     private function synchronizeSnippets(Shop\Template $template)
     {
@@ -317,8 +305,6 @@ class Installer
      * passed theme.
      * Used to update the Shopware\Models\Shop\Template entity with
      * the theme data.
-     *
-     * @param Theme $theme
      *
      * @return array
      */
@@ -351,7 +337,7 @@ class Installer
 
         $themes = $themes->getQuery()->getResult(AbstractQuery::HYDRATE_OBJECT);
 
-        /** @var $theme Shop\Template */
+        /** @var Shop\Template $theme */
         foreach ($themes as $theme) {
             $directory = $this->pathResolver->getDirectory($theme);
             if (!file_exists($directory)) {
@@ -366,13 +352,11 @@ class Installer
      * Helper function which resolves the theme parent for each
      * passed theme
      *
-     * @param array $themes
-     *
      * @throws \Exception
      */
     private function setParents(array $themes)
     {
-        /** @var $theme Theme */
+        /** @var Theme $theme */
         foreach ($themes as $theme) {
             if ($theme->getExtend() === null) {
                 continue;

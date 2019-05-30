@@ -392,8 +392,8 @@ class Zend_Mail_Storage_Writable_Maildir extends    Zend_Mail_Storage_Folder_Mai
     protected function _createUniqueId()
     {
         $id = '';
-        $id .= function_exists('microtime') ? microtime(true) : (time() . ' ' . rand(0, 100000));
-        $id .= '.' . (function_exists('posix_getpid') ? posix_getpid() : rand(50, 65535));
+        $id .= function_exists('microtime') ? microtime(true) : (time() . ' ' . Shopware\Components\Random::getInteger(0, 100000));
+        $id .= '.' . (function_exists('posix_getpid') ? posix_getpid() : Shopware\Components\Random::getInteger(50, 65535));
         $id .= '.' . php_uname('n');
 
         return $id;

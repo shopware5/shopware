@@ -27,7 +27,7 @@ namespace Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -40,9 +40,6 @@ interface ProductNumberSearchInterface
      *
      * The search gateway has to implement an event which plugin can be listened to,
      * to add their own handler classes.
-     *
-     * @param Criteria                    $criteria
-     * @param Struct\ShopContextInterface $context
      *
      * @return ProductNumberSearchResult
      */

@@ -22,10 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Payment;
+namespace Shopware\Models\Payment;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\Payment as PaymentAttribute;
+use Shopware\Models\Plugin\Plugin;
 
 /**
  * Shopware payment model represents a single payment type.
@@ -43,20 +46,21 @@ use Shopware\Components\Model\ModelEntity;
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_core_paymentmeans")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Payment extends ModelEntity
 {
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Country\Country>
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Country\Country", inversedBy="payments")
      * @ORM\JoinTable(name="s_core_paymentmeans_countries",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="paymentID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="countryID", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="paymentID", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="countryID", referencedColumnName="id")
+     *     }
      * )
      */
     protected $countries;
@@ -64,28 +68,29 @@ class Payment extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Payment", mappedBy="payment", orphanRemoval=true, cascade={"persist"})
+     * @var PaymentAttribute
      *
-     * @var \Shopware\Models\Attribute\Payment
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Payment", mappedBy="payment", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
 
     /**
-     * @var \Shopware\Models\Plugin\Plugin
+     * @var Plugin
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="payments")
      * @ORM\JoinColumn(name="pluginID", referencedColumnName="id")
      */
     protected $plugin;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Payment\PaymentInstance>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="paymentMean")
      */
     protected $paymentInstances;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Customer\PaymentData>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\PaymentData", mappedBy="paymentMean")
      */
@@ -95,7 +100,7 @@ class Payment extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -178,21 +183,21 @@ class Payment extends ModelEntity
     private $position = 0;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active = false;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="esdactive", type="boolean", nullable=false)
      */
     private $esdActive = false;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="mobile_inactive", type="boolean", nullable=false)
      */
@@ -217,38 +222,39 @@ class Payment extends ModelEntity
      *
      * @ORM\Column(name="action", type="string", length=255, nullable=true)
      */
-    private $action = null;
+    private $action;
 
     /**
      * @var int
      *
      * @ORM\Column(name="pluginID", type="integer", nullable=true)
      */
-    private $pluginId = null;
+    private $pluginId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="source", type="integer", nullable=true)
      */
-    private $source = null;
+    private $source;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Shop\Shop>
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinTable(name="s_core_paymentmeans_subshops",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="paymentID", referencedColumnName="id"
-     *      )},
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="subshopID", referencedColumnName="id")
-     *      }
-     * )
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="paymentID", referencedColumnName="id"
+     *         )},
+     *         inverseJoinColumns={
+     *             @ORM\JoinColumn(name="subshopID", referencedColumnName="id")
+     *         }
+     *     )
      */
     private $shops;
 
     /**
-     * @var
+     * @var ArrayCollection<\Shopware\Models\Payment\RuleSet>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\RuleSet", mappedBy="payment")
      * @ORM\JoinColumn(name="id", referencedColumnName="paymentID")
@@ -676,7 +682,7 @@ class Payment extends ModelEntity
     /**
      * Sets the pluginId of a payment
      *
-     * @param int $pluginId
+     * @param int|null $pluginId
      *
      * @return Payment
      */
@@ -690,7 +696,7 @@ class Payment extends ModelEntity
     /**
      * Gets the pluginId of a payment
      *
-     * @return int
+     * @return int|null
      */
     public function getPluginId()
     {
@@ -700,7 +706,7 @@ class Payment extends ModelEntity
     /**
      * Gets the countries related to the payment
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Country\Country>
      */
     public function getCountries()
     {
@@ -710,7 +716,7 @@ class Payment extends ModelEntity
     /**
      * Sets the countries related to the payment
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $countries
+     * @param ArrayCollection<\Shopware\Models\Country\Country> $countries
      *
      * @return Payment
      */
@@ -724,7 +730,7 @@ class Payment extends ModelEntity
     /**
      * Gets the shops related to the payment
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Shop\Shop>
      */
     public function getShops()
     {
@@ -734,7 +740,7 @@ class Payment extends ModelEntity
     /**
      * Sets the shops related to the payment
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $shops
+     * @param ArrayCollection<\Shopware\Models\Shop\Shop> $shops
      *
      * @return Payment
      */
@@ -749,7 +755,7 @@ class Payment extends ModelEntity
      * Sets the source of a payment.
      * NULL = default payment, 1 = self-created
      *
-     * @param int $source
+     * @param int|null $source
      *
      * @return Payment
      */
@@ -764,7 +770,7 @@ class Payment extends ModelEntity
      * Gets the source of a payment
      * NULL = default payment, 1 = self-created
      *
-     * @return int
+     * @return int|null
      */
     public function getSource()
     {
@@ -772,7 +778,7 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @return
+     * @return ArrayCollection<\Shopware\Models\Payment\RuleSet>
      */
     public function getRuleSets()
     {
@@ -780,9 +786,9 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @param  $ruleSets
+     * @param ArrayCollection<\Shopware\Models\Payment\RuleSet> $ruleSets
      *
-     * @return \Shopware\Models\Payment\Payment
+     * @return Payment
      */
     public function setRuleSets($ruleSets)
     {
@@ -792,7 +798,7 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Payment
+     * @return PaymentAttribute
      */
     public function getAttribute()
     {
@@ -800,17 +806,17 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\Payment|array|null $attribute
+     * @param PaymentAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Payment
+     * @return Payment
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Payment', 'attribute', 'payment');
+        return $this->setOneToOne($attribute, PaymentAttribute::class, 'attribute', 'payment');
     }
 
     /**
-     * @return \Shopware\Models\Plugin\Plugin
+     * @return Plugin
      */
     public function getPlugin()
     {
@@ -818,7 +824,7 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Plugin\Plugin $plugin
+     * @param Plugin $plugin
      */
     public function setPlugin($plugin)
     {
@@ -826,7 +832,7 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @param mixed $paymentInstances
+     * @param ArrayCollection<\Shopware\Models\Payment\PaymentInstance> $paymentInstances
      */
     public function setPaymentInstances($paymentInstances)
     {
@@ -834,7 +840,7 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection<\Shopware\Models\Payment\PaymentInstance>
      */
     public function getPaymentInstances()
     {
@@ -842,7 +848,7 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $paymentData
+     * @param ArrayCollection<\Shopware\Models\Customer\PaymentData> $paymentData
      */
     public function setPaymentData($paymentData)
     {
@@ -850,7 +856,7 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Customer\PaymentData>
      */
     public function getPaymentData()
     {

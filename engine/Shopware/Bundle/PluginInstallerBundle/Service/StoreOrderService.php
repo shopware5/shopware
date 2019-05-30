@@ -45,10 +45,6 @@ class StoreOrderService
      */
     private $hydrator;
 
-    /**
-     * @param StoreClient    $storeClient
-     * @param StructHydrator $hydrator
-     */
     public function __construct(
         StoreClient $storeClient,
         StructHydrator $hydrator
@@ -58,9 +54,6 @@ class StoreOrderService
     }
 
     /**
-     * @param AccessTokenStruct $token
-     * @param OrderRequest      $context
-     *
      * @return BasketStruct
      */
     public function getCheckout(
@@ -97,9 +90,6 @@ class StoreOrderService
     }
 
     /**
-     * @param AccessTokenStruct $accessToken
-     * @param OrderRequest      $context
-     *
      * @throws \Exception
      *
      * @return bool

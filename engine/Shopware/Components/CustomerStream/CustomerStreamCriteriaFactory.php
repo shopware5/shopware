@@ -40,10 +40,6 @@ class CustomerStreamCriteriaFactory implements CustomerStreamCriteriaFactoryInte
      */
     private $reflectionHelper;
 
-    /**
-     * @param Connection               $connection
-     * @param LogawareReflectionHelper $reflectionHelper
-     */
     public function __construct(Connection $connection, LogawareReflectionHelper $reflectionHelper)
     {
         $this->connection = $connection;

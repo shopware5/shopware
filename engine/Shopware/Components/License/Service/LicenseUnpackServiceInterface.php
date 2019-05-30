@@ -28,15 +28,13 @@ use Shopware\Components\License\Struct\LicenseInformation;
 use Shopware\Components\License\Struct\LicenseUnpackRequest;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface LicenseUnpackServiceInterface
 {
     /**
-     * @param LicenseUnpackRequest $request
-     *
      * @return LicenseInformation
      */
     public function evaluateLicense(LicenseUnpackRequest $request);

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface;
@@ -58,38 +59,36 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
         $result = $this->search($term, $criteria, $context);
 
         if ($result->getTotalCount() > 0) {
-            $articles = $this->convertProducts($result);
+            $products = $this->convertProducts($result);
             $this->View()->assign('searchResult', $result);
             $this->View()->assign('sSearchRequest', ['sSearch' => $term]);
             $this->View()->assign('sSearchResults', [
-                'sResults' => $articles,
+                'sResults' => $products,
                 'sArticlesCount' => $result->getTotalCount(),
             ]);
         }
     }
 
     /**
-     * @param ProductSearchResult $result
-     *
      * @return array
      */
     private function convertProducts(ProductSearchResult $result)
     {
-        $articles = [];
+        $products = [];
         foreach ($result->getProducts() as $product) {
-            $article = $this->get('legacy_struct_converter')->convertListProductStruct($product);
+            $productArray = $this->get('legacy_struct_converter')->convertListProductStruct($product);
 
-            $article['link'] = $this->Front()->Router()->assemble([
+            $productArray['link'] = $this->Front()->Router()->assemble([
                 'controller' => 'detail',
                 'sArticle' => $product->getId(),
                 'number' => $product->getNumber(),
                 'title' => $product->getName(),
             ]);
-            $article['name'] = $product->getName();
-            $articles[] = $article;
+            $productArray['name'] = $product->getName();
+            $products[] = $productArray;
         }
 
-        return $articles;
+        return $products;
     }
 
     private function setDefaultSorting()
@@ -104,9 +103,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
     }
 
     /**
-     * @param string               $term
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
+     * @param string $term
      *
      * @return ProductSearchResult
      */
@@ -117,7 +114,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
         // If the search for product numbers is active, do that first
         if ((int) $this->get('config')->get('activateNumberSearch') === 1) {
             // Check if search-term is a valid product-number
-            /** @var null|ListProduct $directHit */
+            /** @var ListProduct|null $directHit */
             $directHit = $this->get('shopware_storefront.list_product_service')
                 ->get($term, $context);
 

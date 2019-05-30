@@ -104,7 +104,7 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
     }
 
     /**
-     * @return null|AccessTokenStruct
+     * @return AccessTokenStruct|null
      */
     private function getAccessToken()
     {
@@ -112,16 +112,9 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
             return null;
         }
 
-        /** @var $token AccessTokenStruct */
-        $token = $this->get('BackendSession')->offsetGet('store_token');
-        $token = unserialize($token);
-
-        return $token;
+        return unserialize($this->get('BackendSession')->offsetGet('store_token'));
     }
 
-    /**
-     * @param Exception $e
-     */
     private function handleException(Exception $e)
     {
         if (!($e instanceof StoreException)) {
@@ -143,8 +136,6 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
     }
 
     /**
-     * @param StoreException $exception
-     *
      * @return mixed|string
      */
     private function getExceptionMessage(StoreException $exception)

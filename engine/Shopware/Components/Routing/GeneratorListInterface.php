@@ -25,16 +25,13 @@
 namespace Shopware\Components\Routing;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface GeneratorListInterface extends GeneratorInterface
 {
     /**
-     * @param array   $list
-     * @param Context $context
-     *
      * @return array
      */
     public function generateList(array $list, Context $context);

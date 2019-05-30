@@ -32,7 +32,7 @@ use Shopware\Tests\Unit\Components\DependencyInjection\Compiler\RegisterControll
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -45,56 +45,56 @@ class RegisterControllerCompilerPassTest extends TestCase
         $compilerPass = new RegisterControllerCompilerPass($plugins);
         $compilerPass->process($container);
 
-        $this->assertFalse(
+        static::assertFalse(
             $container->hasDefinition('shopware.generic_controller_listener')
         );
     }
 
     public function testWithPluginsWithoutControllers()
     {
-        $plugins = [new NoneController(true)];
+        $plugins = [new NoneController(true, 'ShopwarePlugins')];
         $container = new ContainerBuilder();
 
         $compilerPass = new RegisterControllerCompilerPass($plugins);
         $compilerPass->process($container);
 
-        $this->assertFalse(
+        static::assertFalse(
             $container->hasDefinition('shopware.generic_controller_listener')
         );
     }
 
     public function testWithBackendController()
     {
-        $plugins = [new BackendController(true)];
+        $plugins = [new BackendController(true, 'ShopwarePlugins')];
         $container = new ContainerBuilder();
 
         $compilerPass = new RegisterControllerCompilerPass($plugins);
         $compilerPass->process($container);
 
-        $this->assertTrue(
+        static::assertTrue(
             $container->hasDefinition('shopware.generic_controller_listener')
         );
 
         $definition = $container->getDefinition('shopware.generic_controller_listener');
-        $this->assertTrue($definition->hasTag('shopware.event_listener'));
+        static::assertTrue($definition->hasTag('shopware.event_listener'));
 
-        $this->assertCount(1, $definition->getTag('shopware.event_listener'));
+        static::assertCount(1, $definition->getTag('shopware.event_listener'));
     }
 
     public function testWithMultiplePlugins()
     {
-        $plugins = [new BackendController(true), new DifferentController(true)];
+        $plugins = [new BackendController(true, 'ShopwarePlugins'), new DifferentController(true, 'ShopwarePlugins')];
         $container = new ContainerBuilder();
 
         $compilerPass = new RegisterControllerCompilerPass($plugins);
         $compilerPass->process($container);
 
-        $this->assertTrue(
+        static::assertTrue(
             $container->hasDefinition('shopware.generic_controller_listener')
         );
 
         $definition = $container->getDefinition('shopware.generic_controller_listener');
-        $this->assertTrue($definition->hasTag('shopware.event_listener'));
-        $this->assertCount(5, $definition->getTag('shopware.event_listener'));
+        static::assertTrue($definition->hasTag('shopware.event_listener'));
+        static::assertCount(5, $definition->getTag('shopware.event_listener'));
     }
 }

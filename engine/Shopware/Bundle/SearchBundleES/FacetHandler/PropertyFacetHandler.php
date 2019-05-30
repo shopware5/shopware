@@ -79,13 +79,6 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
      */
     private $indexFactory;
 
-    /**
-     * @param QueryAliasMapper      $queryAliasMapper
-     * @param Client                $client
-     * @param Connection            $connection
-     * @param StructHydrator        $hydrator
-     * @param IndexFactoryInterface $indexFactory
-     */
     public function __construct(
         QueryAliasMapper $queryAliasMapper,
         Client $client,
@@ -150,12 +143,12 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
 
         $search = new Search();
         $search->addFilter(new IdsQuery($groupIds));
-        $search->addFilter(new TermQuery('filterable', 1));
+        $search->addFilter(new TermQuery('filterable', true));
         $search->addSort(new FieldSort('name', 'asc'));
         $search->setFrom(0);
         $search->setSize(self::AGGREGATION_SIZE);
 
-        $index = $this->indexFactory->createShopIndex($context->getShop());
+        $index = $this->indexFactory->createShopIndex($context->getShop(), PropertyMapping::TYPE);
         $data = $this->client->search([
             'index' => $index->getName(),
             'type' => PropertyMapping::TYPE,
@@ -274,8 +267,6 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
     }
 
     /**
-     * @param Criteria $criteria
-     *
      * @return array
      */
     private function getFilteredValues(Criteria $criteria)

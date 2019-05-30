@@ -27,7 +27,7 @@ namespace Shopware\Tests\Unit\Controller\Backend;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -60,7 +60,7 @@ class ExtJsTest extends TestCase
         $method = $class->getMethod('inflectPath');
         $method->setAccessible(true);
 
-        $this->assertSame(
+        static::assertSame(
             $expectedResult,
             $method->invokeArgs($SUT, $args)
         );

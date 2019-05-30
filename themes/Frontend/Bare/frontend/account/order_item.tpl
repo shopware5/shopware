@@ -90,6 +90,11 @@
                             {s name="OrderItemInfoShipped"}{/s}
                         {elseif $offerPosition.status==8}
                             {s name="OrderItemInfoClarificationNeeded"}{/s}
+                        {else}
+                            {block name="frontend_account_order_item_status_value_custom"}
+                                    {$snippetName = {"OrderItemInfo"|cat:$offerPosition.stateName}}
+                                    {$offerPosition.stateName|snippet:$snippetName:'frontend/account/order_item'}
+                            {/block}
                         {/if}
                     </div>
                 {/block}
@@ -99,8 +104,9 @@
         {* Order actions *}
         {block name="frontend_account_order_item_actions"}
             <div class="order--actions panel--td column--actions">
+                {s name="OrderActionSlide" assign="snippetOrderActionSlide"}{/s}
                 <a href="#order{$offerPosition.ordernumber}"
-                   title="{"{s name="OrderActionSlide"}{/s}"|escape} {$offerPosition.ordernumber}"
+                   title="{$snippetOrderActionSlide|escape} {$offerPosition.ordernumber}"
                    class="btn is--small"
                    data-collapse-panel="true"
                    data-collapseTarget="#order{$offerPosition.ordernumber}">

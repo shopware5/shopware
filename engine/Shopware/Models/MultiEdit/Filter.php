@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware SwagMultiEdit Plugin - Filter Model
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
@@ -45,7 +45,7 @@ class Filter extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -72,7 +72,7 @@ class Filter extends ModelEntity
     private $description;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="created", type="datetime", nullable=false)
      */
@@ -92,16 +92,13 @@ class Filter extends ModelEntity
      */
     private $isSimple = false;
 
-    /**
-     * @param \DateTime $created
-     */
-    public function setCreated(\DateTime $created)
+    public function setCreated(\DateTimeInterface $created)
     {
         $this->created = $created;
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getCreated()
     {

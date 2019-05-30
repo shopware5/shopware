@@ -27,7 +27,7 @@ namespace Shopware\Bundle\BenchmarkBundle\DependencyInjection\EventListener;
 use Enlight\Event\SubscriberInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */

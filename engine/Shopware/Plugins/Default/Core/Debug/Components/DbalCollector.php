@@ -29,7 +29,7 @@ use Shopware\Components\Logger;
 use Shopware\Components\Model\Configuration;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -44,9 +44,6 @@ class DbalCollector implements CollectorInterface
      */
     protected $modelLogger;
 
-    /**
-     * @param Configuration $modelConfig
-     */
     public function __construct(Configuration $modelConfig)
     {
         $this->modelConfig = $modelConfig;
@@ -74,7 +71,7 @@ class DbalCollector implements CollectorInterface
             return;
         }
 
-        /** @var $query Zend_Db_Profiler_Query */
+        /** @var \Zend_Db_Profiler_Query $query */
         foreach ($queries as $query) {
             $id = md5($query['sql']);
             $totalTime += $query['executionMS'];

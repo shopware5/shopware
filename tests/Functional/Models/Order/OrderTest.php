@@ -23,7 +23,7 @@
  */
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -63,7 +63,7 @@ class Shopware_Tests_Models_Order_OrderTest extends Enlight_Components_Test_Test
         $this->orderIsSaved($order);
 
         $history = $this->thenRetrieveHistoryOf($order);
-        $this->assertCount(0, $history);
+        static::assertCount(0, $history);
 
         $paymentStatusInProgress = $this->em->getReference('\Shopware\Models\Order\Status', 1);
         $orderStatusReserved = $this->em->getReference('\Shopware\Models\Order\Status', 18);
@@ -75,13 +75,27 @@ class Shopware_Tests_Models_Order_OrderTest extends Enlight_Components_Test_Test
         /** @var \Shopware\Models\Order\History[] $history */
         $history = $this->em->getRepository('\Shopware\Models\Order\History')->findBy(['order' => $order->getId()]);
 
-        $this->assertCount(1, $history);
+        static::assertCount(1, $history);
 
-        $this->assertSame($paymentStatusInProgress, $history[0]->getPaymentStatus());
-        $this->assertSame($previousPaymentStatus, $history[0]->getPreviousPaymentStatus());
+        static::assertSame($paymentStatusInProgress, $history[0]->getPaymentStatus());
+        static::assertSame($previousPaymentStatus, $history[0]->getPreviousPaymentStatus());
 
-        $this->assertSame($orderStatusReserved, $history[0]->getOrderStatus());
-        $this->assertSame($previousOrderStatus, $history[0]->getPreviousOrderStatus());
+        static::assertSame($orderStatusReserved, $history[0]->getOrderStatus());
+        static::assertSame($previousOrderStatus, $history[0]->getPreviousOrderStatus());
+    }
+
+    public function testSaveMoreThan255CharactersAsTrackingCode()
+    {
+        $order = $this->createOrder();
+        $this->orderIsSaved($order);
+
+        $trackingCode = 'trackingCodeWithMoreThan255Characters_1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890';
+
+        $order->setTrackingCode($trackingCode);
+        $this->em->flush($order);
+        $this->em->refresh($order);
+
+        static::assertSame($trackingCode, $order->getTrackingCode());
     }
 
     public function createOrder()
@@ -105,8 +119,8 @@ class Shopware_Tests_Models_Order_OrderTest extends Enlight_Components_Test_Test
         $partner->setCountryName('Dummy');
         $partner->setEmail('Dummy');
         $partner->setWeb('Dummy');
-        $partner->setProfile('Dummy')
-        ;
+        $partner->setProfile('Dummy');
+
         $this->em->persist($partner);
 
         $order = new \Shopware\Models\Order\Order();

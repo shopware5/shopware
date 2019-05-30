@@ -37,7 +37,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -68,13 +68,6 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
      */
     private $categoryTreeFacetResultBuilder;
 
-    /**
-     * @param CategoryServiceInterface       $categoryService
-     * @param QueryBuilderFactoryInterface   $queryBuilderFactory
-     * @param \Shopware_Components_Config    $config
-     * @param CategoryDepthServiceInterface  $categoryDepthService
-     * @param CategoryTreeFacetResultBuilder $categoryTreeFacetResultBuilder
-     */
     public function __construct(
         CategoryServiceInterface $categoryService,
         QueryBuilderFactoryInterface $queryBuilderFactory,
@@ -91,11 +84,8 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param FacetInterface|CategoryFacet $facet
-     * @param Criteria                     $reverted
-     * @param Criteria                     $criteria
-     * @param ShopContextInterface         $context
      *
-     * @return FacetResultInterface
+     * @return FacetResultInterface|null
      */
     public function generatePartialFacet(
         FacetInterface $facet,
@@ -136,9 +126,6 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param array                $ids
-     * @param ShopContextInterface $context
-     *
      * @return array
      */
     private function filterSystemCategories(array $ids, ShopContextInterface $context)
@@ -154,9 +141,6 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param Criteria             $reverted
-     * @param ShopContextInterface $context
-     *
      * @return int[]
      */
     private function fetchCategoriesOfProducts(Criteria $reverted, ShopContextInterface $context)
@@ -172,8 +156,6 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param Criteria $criteria
-     *
      * @return int[]
      */
     private function getFilteredIds(Criteria $criteria)

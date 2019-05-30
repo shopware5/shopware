@@ -36,9 +36,6 @@ class LastIdQuery
      */
     private $query;
 
-    /**
-     * @param QueryBuilder $query
-     */
     public function __construct(QueryBuilder $query)
     {
         $this->query = $query;
@@ -61,10 +58,10 @@ class LastIdQuery
      */
     public function fetchCount()
     {
-        /** @var $query QueryBuilder */
+        /** @var QueryBuilder $query */
         $query = clone $this->query;
 
-        //get first column for distinct selection
+        // Get first column for distinct selection
         $select = $query->getQueryPart('select');
 
         $query->resetQueryPart('orderBy');

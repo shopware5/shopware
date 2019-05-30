@@ -43,8 +43,7 @@ class EntityTransformer implements DataTransformerInterface
     /**
      * CustomerEntityTransformer constructor.
      *
-     * @param ModelManager $models
-     * @param string       $entityName
+     * @param string $entityName
      */
     public function __construct(ModelManager $models, $entityName)
     {
@@ -120,7 +119,7 @@ class EntityTransformer implements DataTransformerInterface
 
         $entity = $this->models->find($this->entityName, $entityId);
 
-        if (null === $entity) {
+        if ($entity === null) {
             // causes a validation error
             // this message is not shown to the user
             // see the invalid_message option

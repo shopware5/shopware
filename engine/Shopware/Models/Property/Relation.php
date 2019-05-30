@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware Article Model
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_filter_relations")
  */
 class Relation extends ModelEntity
@@ -39,7 +39,7 @@ class Relation extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

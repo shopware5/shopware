@@ -61,13 +61,13 @@ class InheritanceTest extends Base
         $custom = $this->getDummyTemplates();
 
         $util = $this->getUtilClass();
-        $util->expects($this->any())
+        $util->expects(static::any())
             ->method('getThemeByTemplate')
-            ->with($this->logicalOr(
-                $this->equalTo($custom),
-                $this->equalTo($custom->getParent())
+            ->with(static::logicalOr(
+                static::equalTo($custom),
+                static::equalTo($custom->getParent())
             ))
-            ->will($this->returnCallback([$this, 'getTheme']));
+            ->will(static::returnCallback([$this, 'getTheme']));
 
         $inheritance = new \Shopware\Components\Theme\Inheritance(
             Shopware()->Container()->get('models'),
@@ -79,15 +79,15 @@ class InheritanceTest extends Base
 
         $hierarchy = $inheritance->buildInheritances($custom);
 
-        $this->assertCount(2, $hierarchy['full']);
-        $this->assertEquals('TestResponsive', $hierarchy['full'][0]->getName());
-        $this->assertEquals('TestBare', $hierarchy['full'][1]->getName());
+        static::assertCount(2, $hierarchy['full']);
+        static::assertEquals('TestResponsive', $hierarchy['full'][0]->getName());
+        static::assertEquals('TestBare', $hierarchy['full'][1]->getName());
 
-        $this->assertCount(1, $hierarchy['bare']);
-        $this->assertCount(1, $hierarchy['custom']);
+        static::assertCount(1, $hierarchy['bare']);
+        static::assertCount(1, $hierarchy['custom']);
 
-        $this->assertEquals('TestBare', $hierarchy['bare'][0]->getName());
-        $this->assertEquals('TestResponsive', $hierarchy['custom'][0]->getName());
+        static::assertEquals('TestBare', $hierarchy['bare'][0]->getName());
+        static::assertEquals('TestResponsive', $hierarchy['custom'][0]->getName());
     }
 
     public function testSmartyDirectories()
@@ -97,10 +97,10 @@ class InheritanceTest extends Base
         $directories = Shopware()->Container()->get('theme_inheritance')
             ->getSmartyDirectories($custom);
 
-        $this->assertCount(2, $directories);
+        static::assertCount(2, $directories);
 
         foreach ($directories as $dir) {
-            $this->assertStringEndsWith('/_private/smarty/', $dir);
+            static::assertStringEndsWith('/_private/smarty/', $dir);
         }
     }
 
@@ -111,14 +111,14 @@ class InheritanceTest extends Base
         $directories = Shopware()->Container()->get('theme_inheritance')
             ->getTemplateDirectories($custom);
 
-        $this->assertCount(2, $directories);
+        static::assertCount(2, $directories);
 
-        $this->assertStringEndsWith(
+        static::assertStringEndsWith(
             'themes/Frontend/' . $custom->getTemplate() . '',
             $directories[0]
         );
 
-        $this->assertStringEndsWith(
+        static::assertStringEndsWith(
             'themes/Frontend/' . $custom->getParent()->getTemplate() . '',
             $directories[1]
         );
@@ -133,13 +133,13 @@ class InheritanceTest extends Base
 
         $bareTheme = $this->getBareTheme();
 
-        $util->expects($this->exactly(2))
+        $util->expects(static::exactly(2))
             ->method('getThemeByTemplate')
             ->with($template)
             ->willReturn($bareTheme);
 
         $pathResolver = $this->getPathResolver();
-        $pathResolver->expects($this->any())
+        $pathResolver->expects(static::any())
             ->method('getPublicDirectory')
             ->willReturn('public_directory');
 
@@ -152,20 +152,20 @@ class InheritanceTest extends Base
         );
 
         $files = $inheritance->getTemplateJavascriptFiles($template);
-        $this->assertCount(2, $files);
+        static::assertCount(2, $files);
 
         foreach ($files as $file) {
-            $this->assertStringEndsWith('.js', $file);
-            $this->assertStringStartsWith('public_directory', $file);
+            static::assertStringEndsWith('.js', $file);
+            static::assertStringStartsWith('public_directory', $file);
         }
 
         $files = $inheritance->getTemplateCssFiles($template);
 
-        $this->assertCount(2, $files);
+        static::assertCount(2, $files);
 
         foreach ($files as $file) {
-            $this->assertStringEndsWith('.css', $file);
-            $this->assertStringStartsWith('public_directory', $file);
+            static::assertStringEndsWith('.css', $file);
+            static::assertStringStartsWith('public_directory', $file);
         }
     }
 
@@ -202,16 +202,16 @@ class InheritanceTest extends Base
         /** @var Inheritance $inheritance */
         $inheritance = Shopware()->Container()->get('theme_inheritance');
         $config = $inheritance->buildConfig($template, $shop);
-        $this->assertArrayHasKey('brand-primary', $config);
-        $this->assertSame('#000', $config['brand-primary']);
+        static::assertArrayHasKey('brand-primary', $config);
+        static::assertSame('#000', $config['brand-primary']);
 
         $sub = new Shop();
         $sub->setName('sub shop of main');
         $sub->setMain($shop);
 
         $config = $inheritance->buildConfig($template, $sub);
-        $this->assertArrayHasKey('brand-primary', $config);
-        $this->assertSame('#000', $config['brand-primary']);
+        static::assertArrayHasKey('brand-primary', $config);
+        static::assertSame('#000', $config['brand-primary']);
 
         $connection->rollBack();
     }

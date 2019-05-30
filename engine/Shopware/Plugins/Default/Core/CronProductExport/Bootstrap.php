@@ -45,14 +45,11 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
             'Shopware_CronJob_ProductExport',
             'onRun'
         );
-        $this->createCronJob('Product Export', 'ProductExport', 86400);
+        $this->createCronJob('Product Export', 'ProductExport');
 
         return true;
     }
 
-    /**
-     * @param Enlight_Components_Cron_EventArgs $job
-     */
     public function onRun(Enlight_Components_Cron_EventArgs $job)
     {
         $this->exportProductFiles();
@@ -70,7 +67,7 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
         $cacheDir = Shopware()->Container()->getParameter('kernel.cache_dir');
         $cacheDir .= '/productexport/';
         if (!is_dir($cacheDir)) {
-            if (false === @mkdir($cacheDir, 0777, true)) {
+            if (@mkdir($cacheDir, 0777, true) === false) {
                 throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'Productexport', $cacheDir));
             }
         } elseif (!is_writable($cacheDir)) {

@@ -38,17 +38,12 @@ class HtmlCodeComponentHandler implements ComponentHandlerInterface
      */
     private $eventManager;
 
-    /**
-     * @param \Enlight_Event_EventManager $eventManager
-     */
     public function __construct(\Enlight_Event_EventManager $eventManager)
     {
         $this->eventManager = $eventManager;
     }
 
     /**
-     * @param Element $element
-     *
      * @return bool
      */
     public function supports(Element $element)
@@ -56,20 +51,10 @@ class HtmlCodeComponentHandler implements ComponentHandlerInterface
         return $element->getComponent()->getType() === self::COMPONENT_NAME;
     }
 
-    /**
-     * @param PrepareDataCollection $collection
-     * @param Element               $element
-     * @param ShopContextInterface  $context
-     */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
     }
 
-    /**
-     * @param ResolvedDataCollection $collection
-     * @param Element                $element
-     * @param ShopContextInterface   $context
-     */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
         $elementData = json_decode(json_encode($element), true);
@@ -77,7 +62,7 @@ class HtmlCodeComponentHandler implements ComponentHandlerInterface
         $elementData['component']['cls'] = $element->getComponent()->getCssClass();
 
         $data = array_merge($element->getConfig()->getAll(), $element->getData()->getAll());
-        $data['objectId'] = md5($element->getId());
+        $data['objectId'] = md5((string) $element->getId());
 
         foreach ($data as $key => $value) {
             $element->getData()->set($key, $value);

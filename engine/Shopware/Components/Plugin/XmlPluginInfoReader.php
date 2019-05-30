@@ -26,6 +26,13 @@ namespace Shopware\Components\Plugin;
 
 use Symfony\Component\Config\Util\XmlUtils;
 
+/**
+ * @deprecated This class will be removed in 5.6
+ *
+ * Use new class Shopware\Components\Plugin\XmlReader\XmlPluginInfoReader (see Shopware 5.6)
+ *
+ * https://github.com/shopware/shopware/blob/5.6/engine/Shopware/Components/Plugin/XmlReader/XmlPluginInfoReader.php
+ */
 class XmlPluginInfoReader
 {
     public function read($file)
@@ -40,15 +47,15 @@ class XmlPluginInfoReader
     }
 
     /**
-     * @param \DOMDocument $xml
-     *
-     * @return array
+     * @return array|void
      */
     private function parseInfo(\DOMDocument $xml)
     {
         $xpath = new \DOMXPath($xml);
 
-        if (false === $entries = $xpath->query('//plugin')) {
+        /** @var \DOMNodeList|false $entries */
+        $entries = $xpath->query('//plugin');
+        if ($entries === false) {
             return;
         }
 
@@ -101,9 +108,6 @@ class XmlPluginInfoReader
     /**
      * Get child elements by name.
      *
-     * @param \DOMNode $node
-     * @param mixed    $name
-     *
      * @return \DOMElement[]
      */
     private function getChildren(\DOMNode $node, $name)
@@ -119,10 +123,9 @@ class XmlPluginInfoReader
     }
 
     /**
-     * @param \DOMNode $node
-     * @param $name
+     * @param string $name
      *
-     * @return null|\DOMElement
+     * @return \DOMElement|null
      */
     private function getFirstChild(\DOMNode $node, $name)
     {
@@ -136,10 +139,7 @@ class XmlPluginInfoReader
     /**
      * Get child element values by name.
      *
-     * @param \DOMNode $node
-     * @param mixed    $name
-     *
-     * @return \DOMElement[]
+     * @return string[]
      */
     private function getChildrenValues(\DOMNode $node, $name)
     {
@@ -154,9 +154,9 @@ class XmlPluginInfoReader
     }
 
     /**
-     * @param $requiredPlugins
+     * @param \DOMNode $requiredPlugins
      *
-     * @return array
+     * @return array<int, array<string, array<string>|string>>
      */
     private function parseRequiredPlugins($requiredPlugins)
     {

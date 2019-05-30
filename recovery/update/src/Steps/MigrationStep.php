@@ -34,9 +34,6 @@ class MigrationStep
      */
     private $migrationManager;
 
-    /**
-     * @param Manager $migrationManager
-     */
     public function __construct(Manager $migrationManager)
     {
         $this->migrationManager = $migrationManager;
@@ -62,7 +59,7 @@ class MigrationStep
 
         $migration = $this->migrationManager->getNextMigrationForVersion($currentVersion);
 
-        if (null === $migration) {
+        if ($migration === null) {
             return new FinishResult($offset, $totalCount);
         }
 

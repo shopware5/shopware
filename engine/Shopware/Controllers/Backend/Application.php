@@ -21,6 +21,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Shopware\Components\Model\QueryBuilder;
 
 /**
@@ -54,7 +56,7 @@ use Shopware\Components\Model\QueryBuilder;
  *  - For example you can limit the sortable fields by using the $sortFields property
  *  - Or you can limit the filterable fields by using the $filterFields property.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -152,8 +154,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     /**
      * Allows to set the repository property of this class.
      * The repository is used for find queries for the configured model.
-     *
-     * @param \Shopware\Components\Model\ModelRepository $repository
      */
     public function setRepository(\Shopware\Components\Model\ModelRepository $repository)
     {
@@ -163,8 +163,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     /**
      * Allows to set the manager property of this class.
      * The manager is used for each data operation with doctrine models.
-     *
-     * @param \Shopware\Components\Model\ModelManager $manager
      */
     public function setManager(\Shopware\Components\Model\ModelManager $manager)
     {
@@ -277,22 +275,22 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     {
         $this->View()->assign(
             $this->delete(
-                $this->Request()->getParam('id', null)
+                $this->Request()->getParam('id')
             )
         );
     }
 
     /**
      * Controller action which called to reload associated data.
-     * This function is used to load @ORM\OneToMany associations
+     * This function is used to load @ORM\OneToMany() associations
      * which should be displayed in an own listing on the detail page.
      */
     public function reloadAssociationAction()
     {
         $this->View()->assign(
             $this->reloadAssociation(
-                $this->Request()->getParam('id', null),
-                $this->Request()->getParam('association', null),
+                $this->Request()->getParam('id'),
+                $this->Request()->getParam('association'),
                 $this->Request()->getParam('start', 0),
                 $this->Request()->getParam('limit', 20),
                 $this->Request()->getParam('sort', []),
@@ -304,7 +302,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     /**
      * Controller action which called to search associated data of the configured model.
      * This function is used from the {@link Shopware.form.field.Search} backend component
-     * to resolve @ORM\ManyToMany or @ORM\ManyToOne associations in the different backend components.
+     * to resolve @ORM\ManyToMany() or @ORM\ManyToOne() associations in the different backend components.
      *
      * The function expects the following request parameter:
      *  query - Search string which inserted in the search field.
@@ -319,11 +317,11 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     {
         $this->View()->assign(
             $this->searchAssociation(
-                $this->Request()->getParam('query', null),
-                $this->Request()->getParam('association', null),
+                $this->Request()->getParam('query'),
+                $this->Request()->getParam('association'),
                 $this->Request()->getParam('start', 0),
                 $this->Request()->getParam('limit', 20),
-                $this->Request()->getParam('id', null),
+                $this->Request()->getParam('id'),
                 $this->Request()->getParam('filter', []),
                 $this->Request()->getParam('sort', [])
             )
@@ -387,13 +385,13 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * If the save process was successfully, the function returns a success array with the
      * updated model data.
      *
-     * @param $data
+     * @param array $data
      *
      * @return array
      */
     public function save($data)
     {
-        /* @var $model \Shopware\Components\Model\ModelEntity */
+        /* @var \Shopware\Components\Model\ModelEntity $model */
         if (!empty($data['id'])) {
             $model = $this->getRepository()->find($data['id']);
         } else {
@@ -406,7 +404,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
 
         $violations = $this->getManager()->validate($model);
         $errors = [];
-        /** @var $violation Symfony\Component\Validator\ConstraintViolation */
+        /** @var Symfony\Component\Validator\ConstraintViolation $violation */
         foreach ($violations as $violation) {
             $errors[] = [
                 'message' => $violation->getMessage(),
@@ -436,8 +434,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *  3. array('success' => true)
      *   => Delete was successfully.
      *
-     *
-     * @param $id
+     * @param int $id
      *
      * @return array
      */
@@ -461,23 +458,22 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
 
     /**
      * Internal function which called from the {@link #reloadAssociationAction}.
-     * This function contains the logic to reload an association listing for @ORM\OneToMany
+     * This function contains the logic to reload an association listing for @ORM\OneToMany()
      * associations.
      *
      * The passed id is the primary key value of the configured main model in the {@link #model}
      * property.
      * The passed associationKey contains the property name of the association.
      *
-     *
      * Important: This function works only for associations of the configured {@link #model} property.
      * If you want to reload association listings of other models, you have to override this function.
      *
-     * @param $id
-     * @param $associationKey
-     * @param $offset
-     * @param $limit
-     * @param array $sort
-     * @param array $filter
+     * @param int    $id
+     * @param string $associationKey
+     * @param int    $offset
+     * @param int    $limit
+     * @param array  $sort
+     * @param array  $filter
      *
      * @return array
      */
@@ -537,7 +533,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
 
     /**
      * This function is used from the {@link #searchAssociationAction} function
-     * and is used to find associated data of the configured model like @ORM\ManyToMany or @ORM\ManyToOne associations.
+     * and is used to find associated data of the configured model like @ORM\ManyToMany() or @ORM\ManyToOne() associations.
      *
      * The function expects the following parameter:
      *  query - Search string which inserted in the search field.
@@ -549,7 +545,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * @param string   $association
      * @param int      $offset
      * @param int      $limit
-     * @param null|int $id
+     * @param int|null $id
      * @param array    $filter
      * @param array    $sort
      *
@@ -621,11 +617,11 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * The listing query created in the getListQuery function.
      * The pagination of the listing is handled inside this function.
      *
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $sort        Contains an array of Ext JS sort conditions
-     * @param array $filter      Contains an array of Ext JS filters
-     * @param array $wholeParams Contains all passed request parameters
+     * @param int|null $offset
+     * @param int|null $limit
+     * @param array    $sort        Contains an array of Ext JS sort conditions
+     * @param array    $filter      Contains an array of Ext JS filters
+     * @param array    $wholeParams Contains all passed request parameters
      *
      * @return array
      */
@@ -689,7 +685,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * Important: We suggest to select not to much association in one query, because the query
      * result could be to big to select the whole data in one query. You can select and add additional
      * data in the {@link #getAdditionalDetailData} function.
-     * This function should be used to select @ORM\OneToOne associations.
+     * This function should be used to select @ORM\OneToOne() associations.
      *
      * @example
      *      protected function getDetailQuery($id)
@@ -700,9 +696,9 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *          return $builder;
      *      }
      *
-     * @param $id
+     * @param int $id
      *
-     * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
+     * @return QueryBuilder
      */
     protected function getDetailQuery($id)
     {
@@ -721,9 +717,9 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * model and if the $search parameter contains a search value, the function creates an orWhere
      * condition for each model field with a like operation.
      *
-     * @param $association
-     * @param $model
-     * @param $search
+     * @param string $association
+     * @param string $model
+     * @param string $search
      *
      * @return QueryBuilder
      */
@@ -750,9 +746,9 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     /**
      * Creates the query builder object for the {@link #reloadAssociation} function.
      *
-     * @param $model - Full model class name which will be selected
-     * @param $alias - Query alias for the selected model
-     * @param $fieldName - Property name of the foreign key column in the associated model
+     * @param string $model     - Full model class name which will be selected
+     * @param string $alias     - Query alias for the selected model
+     * @param string $fieldName - Property name of the foreign key column in the associated model
      *
      * @return QueryBuilder
      */
@@ -771,29 +767,27 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * Helper function which resolves the passed Ext JS data of an model.
      * This function resolves the following associations automatically:
      *
-     * @ORM\OneToOne associations
-     *      => Ext JS sends even for @ORM\OneToOne associations, a multi dimensional array
+     * @ORM\OneToOne() associations
+     *      => Ext JS sends even for @ORM\OneToOne() associations, a multi dimensional array
      *      => array('billing' => array( 0 => array('id' => ...) ))
      *      => The function removes the first level of the array to have to model data directly in the association property.
      *      => array('billing' => array('id' => ...))
      *
-     * @ORM\ManyToOne associations
-     *      => @ORM\ManyToOne requires the related doctrine model in the association key property.
+     * @ORM\ManyToOne() associations
+     *      => @ORM\ManyToOne() requires the related doctrine model in the association key property.
      *      => But Ext JS sends only the foreign key property.
      *      => 'article' => array('id' => 1, ... , 'shopId' => 1, 'shop' => null)
      *      => This function resolves the foreign key, removes the foreign key property from the data array and sets the founded doctrine model into the association property.
      *      => 'article' => array('id' => 1, ... , 'shop' => $this->getManager()->find(Model, $data['shopId']);
      *
-     * @ORM\ManyToMany associations
-     *      => @ORM\ManyToMany requires like the @ORM\ManyToOne associations the resolved doctrine models in the association property.
+     * @ORM\ManyToMany() associations
+     *      => @ORM\ManyToMany() requires like the @ORM\ManyToOne() associations the resolved doctrine models in the association property.
      *      => But Ext JS sends only an array of foreign keys.
      *      => 'article' => array('id' => 1, 'categories' => array(array('id'=>1), array('id'=>2), ...)
      *      => This function iterates the association property and resolves each foreign key value with the corresponding doctrine model
      *      => 'article' => array('id' => 1, 'categories' => array($this->getManager()->find(Model, 1), $this->getManager()->find(Model, 2), ...)
      *
-     * @param $data
-     *
-     * @return mixed
+     * @param array $data
      */
     protected function resolveExtJsData($data)
     {
@@ -827,7 +821,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
              *
              * So we have to remove the first level of the posted data.
              */
-            if ($mapping['type'] === 1) {
+            if ($mapping['type'] === ClassMetadataInfo::ONE_TO_ONE) {
                 $mappingData = $data[$mapping['fieldName']];
                 if (array_key_exists(0, $mappingData)) {
                     $data[$mapping['fieldName']] = $data[$mapping['fieldName']][0];
@@ -838,7 +832,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                 continue;
             }
 
-            if ($mapping['type'] === 2) {
+            if ($mapping['type'] === ClassMetadataInfo::MANY_TO_ONE) {
                 /**
                  * @ORM\ManyToOne associations.
                  *
@@ -865,7 +859,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                     //remove the foreign key data.
                     unset($data[$field]);
                 }
-            } elseif ($mapping['type'] === 8) {
+            } elseif ($mapping['type'] === ClassMetadataInfo::MANY_TO_MANY) {
                 /**
                  * @ORM\ManyToMany associations.
                  *
@@ -903,7 +897,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * additional queries.
      *
      * @example
-     *  You have an @ORM\ManyToMany association in your doctrine model and won't select
+     *  You have an @ORM\ManyToMany() association in your doctrine model and won't select
      *  this data over the detail query builder, because the result set would be to big
      *  for a single select.
      *  So you can override this function and add the additional data into the passed data array:
@@ -919,8 +913,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *          return $data;
      *      }
      *
-     * @param array $data
-     *
      * @return array
      */
     protected function getAdditionalDetailData(array $data)
@@ -932,8 +924,8 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * Helper function which return the model name of an association for
      * the passed model and property name.
      *
-     * @param $model
-     * @param $property
+     * @param string $model
+     * @param string $property
      *
      * @return string
      */
@@ -950,8 +942,8 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * This function is used to reload association listings over the {@link #reloadAssociation}
      * function.
      *
-     * @param $model
-     * @param $property
+     * @param string $model
+     * @param string $property
      *
      * @return array
      */
@@ -987,10 +979,10 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * Shopware resolves the passed Ext JS name over this function and use the alias of the field
      * to sort the query builder.
      *
-     * @param array $sort
-     * @param $model
-     * @param $alias
-     * @param array $whiteList
+     * @param array  $sort
+     * @param string $model
+     * @param string $alias
+     * @param array  $whiteList
      *
      * @return array
      */
@@ -1046,10 +1038,10 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *      ),
      *  )
      *
-     * @param $filters - List of filter conditions in Ext JS format
-     * @param $model - Full name of the selected model
-     * @param $alias - Query alias of the FROM query path
-     * @param array $whiteList - Array of filterable fields, or an empty array
+     * @param array  $filters   - List of filter conditions in Ext JS format
+     * @param string $model     - Full name of the selected model
+     * @param string $alias     - Query alias of the FROM query path
+     * @param array  $whiteList - Array of filterable fields, or an empty array
      *
      * @return array
      */
@@ -1122,8 +1114,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * the search value.
      *
      * @param string      $value
-     * @param array       $field
-     * @param null|string $expression
+     * @param string|null $expression
      *
      * @return string
      */
@@ -1174,8 +1165,8 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *
      * The returned array is associated with the model field names.
      *
-     * @param string $model - Model class name
-     * @param null   $alias - Allows to add an query alias like 'article.name'.
+     * @param string      $model - Model class name
+     * @param string|null $alias - Allows to add an query alias like 'article.name'.
      *
      * @return array
      */
@@ -1234,9 +1225,8 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * Filters the search association query by the identifier field.
      * Used for form loading if the raw value is set to the value.
      *
-     * @param string       $association
-     * @param int          $id
-     * @param QueryBuilder $builder
+     * @param string $association
+     * @param int    $id
      */
     private function addIdentifierCondition($association, $id, QueryBuilder $builder)
     {

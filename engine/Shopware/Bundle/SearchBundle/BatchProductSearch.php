@@ -40,10 +40,6 @@ class BatchProductSearch
      */
     private $listProductService;
 
-    /**
-     * @param BatchProductNumberSearch    $productNumberSearch
-     * @param ListProductServiceInterface $listProductService
-     */
     public function __construct(
         BatchProductNumberSearch $productNumberSearch,
         ListProductServiceInterface $listProductService
@@ -56,9 +52,6 @@ class BatchProductSearch
      * Creates a search request on the internal search gateway to
      * get the product result for the passed criteria object.
      *
-     * @param BatchProductNumberSearchRequest $request
-     * @param Struct\ShopContextInterface     $context
-     *
      * @return BatchProductSearchResult
      */
     public function search(BatchProductNumberSearchRequest $request, Struct\ShopContextInterface $context)
@@ -70,8 +63,7 @@ class BatchProductSearch
     }
 
     /**
-     * @param BatchProductNumberSearchResult $searchResult
-     * @param ListProduct[]                  $listProducts
+     * @param ListProduct[] $listProducts
      *
      * @return BatchProductSearchResult
      */
@@ -90,8 +82,8 @@ class BatchProductSearch
     }
 
     /**
-     * @param Struct\ListProduct[] $products
-     * @param Struct\BaseProduct[] $searchProducts
+     * @param array<string, Struct\ListProduct|null> $products
+     * @param Struct\BaseProduct[]                   $searchProducts
      *
      * @return Struct\ListProduct[]
      */

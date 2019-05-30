@@ -42,10 +42,6 @@ class FieldMapping implements FieldMappingInterface
      */
     private $textMapping;
 
-    /**
-     * @param ShopAnalyzerInterface $shopAnalyzer
-     * @param TextMappingInterface  $textMapping
-     */
     public function __construct(
         ShopAnalyzerInterface $shopAnalyzer,
         TextMappingInterface $textMapping
@@ -55,8 +51,6 @@ class FieldMapping implements FieldMappingInterface
     }
 
     /**
-     * @param ShopContextInterface $context
-     *
      * @return string
      */
     public function getPriceField(ShopContextInterface $context)
@@ -68,8 +62,6 @@ class FieldMapping implements FieldMappingInterface
     }
 
     /**
-     * @param Shop $shop
-     *
      * @return array
      */
     public function getLanguageField(Shop $shop)

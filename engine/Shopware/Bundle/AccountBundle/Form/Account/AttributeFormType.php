@@ -53,10 +53,6 @@ class AttributeFormType extends AbstractType
 
     /**
      * AttributeFormType constructor.
-     *
-     * @param ModelManager    $entityManager
-     * @param CrudService     $attributeService
-     * @param LoggerInterface $logger
      */
     public function __construct(
         ModelManager $entityManager,
@@ -76,18 +72,11 @@ class AttributeFormType extends AbstractType
         return 'attribute';
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(['allow_extra_fields' => true]);
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $metaData = $this->entityManager->getClassMetadata($options['data_class']);

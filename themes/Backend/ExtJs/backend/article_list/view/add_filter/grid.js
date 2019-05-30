@@ -257,7 +257,7 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Grid', {
     getDefaultValueEditor: function() {
         var me = this;
 
-        Ext.define("Post", {
+        Ext.define('Post', {
             extend: 'Ext.data.Model',
             fields: [
                 { name: 'id' },
@@ -282,7 +282,7 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Grid', {
         });
 
         return Ext.create('Ext.form.field.ComboBox', {
-            queryMode: "remote",
+            queryMode: 'remote',
             queryCaching: true,
             store: me.valueStore,
             displayField: 'title',
@@ -314,7 +314,7 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Grid', {
 
         operators = me.filterableColumns[record.get('name')];
         Ext.each(operators, function(operator) {
-            if (operator != 'IN' ) {
+            if (operator != 'IN' && operator != 'NOT IN' ) {
                 operatorStore.add({ name: operator });
             }
         });

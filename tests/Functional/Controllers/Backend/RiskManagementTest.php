@@ -23,7 +23,7 @@
  */
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -50,21 +50,19 @@ class Shopware_Tests_Controllers_Backend_RiskManagementTest extends Enlight_Comp
     {
         /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/risk_management/getPayments');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('total', $jsonBody);
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('total', $jsonBody);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
     }
 
     /**
      * This test tests the creating of a new premium-article.
      * The response has to contain the id of the created article.
      * This function is called before testEditPremiumArticle and testDeletePremiumArticle
-     *
-     * @return mixed
      */
     public function testCreateRule()
     {
@@ -92,13 +90,13 @@ class Shopware_Tests_Controllers_Backend_RiskManagementTest extends Enlight_Comp
         );
 
         $this->dispatch('backend/risk_management/createRule');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
-        $this->assertArrayHasKey('id', $jsonBody['data']);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('id', $jsonBody['data']);
 
         return $jsonBody['data']['id'];
     }
@@ -128,8 +126,8 @@ class Shopware_Tests_Controllers_Backend_RiskManagementTest extends Enlight_Comp
 
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
     }
 
     /**
@@ -147,6 +145,6 @@ class Shopware_Tests_Controllers_Backend_RiskManagementTest extends Enlight_Comp
 
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
     }
 }

@@ -32,7 +32,7 @@ use Shopware\Bundle\SearchBundleDBAL\SearchTermQueryBuilderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -45,9 +45,6 @@ class SearchTermConditionHandler implements ConditionHandlerInterface
      */
     private $searchTermQueryBuilder;
 
-    /**
-     * @param SearchTermQueryBuilderInterface $searchTermQueryBuilder
-     */
     public function __construct(SearchTermQueryBuilderInterface $searchTermQueryBuilder)
     {
         $this->searchTermQueryBuilder = $searchTermQueryBuilder;

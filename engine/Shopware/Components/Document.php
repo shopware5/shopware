@@ -21,12 +21,13 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\NumberRangeIncrementerInterface;
 
 /**
  * Shopware document generator
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -75,6 +76,14 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     public $_valuesAssigend = false;
 
     /**
+     * Does this document support the creation of multiple documents of the same type instead of overwriting
+     * existing ones?
+     *
+     * @var bool
+     */
+    public $_allowMultipleDocuments = false;
+
+    /**
      * Subshop-Configuration
      *
      * @var array
@@ -105,7 +114,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     /**
      * Document-Metadata / Properties
      *
-     * @var array
+     * @var ArrayObject
      */
     public $_document;
 
@@ -161,10 +170,9 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             $config['_preview'] = true;
         }
 
-        /** @var $document Shopware_Components_Document */
-        $document = Enlight_Class::Instance('Shopware_Components_Document'); //new Shopware_Components_Document();
+        /** @var Shopware_Components_Document $document */
+        $document = Enlight_Class::Instance('Shopware_Components_Document');
 
-        //$d->setOrder(new Shopware_Models_Document_Order($orderID,$config));
         $document->setOrder(Enlight_Class::Instance('Shopware_Models_Document_Order', [$orderID, $config]));
 
         $document->setConfig($config);
@@ -195,7 +203,10 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             }
 
             if (empty($document->_subshop['id'])) {
-                throw new Enlight_Exception("Could not load template path for order $orderID");
+                throw new Enlight_Exception(sprintf('Could not load template path for order "%s"', $orderID));
+            }
+            if (!empty($config['_allowMultipleDocuments'])) {
+                $document->_allowMultipleDocuments = $config['_allowMultipleDocuments'];
             }
         } else {
             $document->_subshop = Shopware()->Db()->fetchRow("
@@ -226,7 +237,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     /**
      * Start renderer / pdf-generation
      *
-     * @param string optional define renderer (pdf,html,return)
+     * @param string $_renderer optional define renderer (pdf,html,return)
      *
      * @throws \Enlight_Event_Exception
      * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
@@ -240,7 +251,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             $this->assignValues();
         }
 
-        /* @var $template \Shopware\Models\Shop\Template */
+        /* @var \Shopware\Models\Shop\Template $template */
         if (!empty($this->_subshop['doc_template_id'])) {
             $template = Shopware()->Container()->get('models')->find(\Shopware\Models\Shop\Template::class, $this->_subshop['doc_template_id']);
 
@@ -248,13 +259,28 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             $this->_template->setTemplateDir($inheritance);
         }
 
-        $data = $this->_template->fetch('documents/' . $this->_document['template'], $this->_view);
+        $html = $this->_template->fetch('documents/' . $this->_document['template'], $this->_view);
+
+        /** @var \Enlight_Event_EventManager $eventManager */
+        $eventManager = Shopware()->Container()->get('events');
+        $html = $eventManager->filter('Shopware_Components_Document_Render_FilterHtml', $html, [
+            'subject' => $this,
+        ]);
 
         if ($this->_renderer === 'html' || !$this->_renderer) {
-            echo $data;
+            echo $html;
         } elseif ($this->_renderer === 'pdf') {
+            $defaultConfig = Shopware()->Container()->getParameter('shopware.mpdf.defaultConfig');
+            $defaultConfig = $eventManager->filter(
+                'Shopware_Components_Document_Render_FilterMpdfConfig',
+                $defaultConfig,
+                [
+                    'template' => $this->_document['template'],
+                    'document' => $this->_document,
+                ]
+            );
             $mpdfConfig = array_replace_recursive(
-                Shopware()->Container()->getParameter('shopware.mpdf.defaultConfig'),
+                $defaultConfig,
                 [
                     'margin_left' => $this->_document['left'],
                     'margin_right' => $this->_document['right'],
@@ -264,14 +290,14 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             );
             if ($this->_preview == true || !$this->_documentHash) {
                 $mpdf = new \Mpdf\Mpdf($mpdfConfig);
-                $mpdf->WriteHTML($data);
+                $mpdf->WriteHTML($html);
                 $mpdf->Output();
                 exit;
             }
 
             $tmpFile = tempnam(sys_get_temp_dir(), 'document');
             $mpdf = new \Mpdf\Mpdf($mpdfConfig);
-            $mpdf->WriteHTML($data);
+            $mpdf->WriteHTML($html);
             $mpdf->Output($tmpFile, 'F');
 
             $stream = fopen($tmpFile, 'rb');
@@ -332,7 +358,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     /**
      * Get voucher (s_vouchers.id)
      *
-     * @param $id
+     * @param int $id
      *
      * @return bool|mixed
      */
@@ -373,6 +399,26 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         }
 
         return $getVoucher;
+    }
+
+    /**
+     * Get user_attributes (s_user_attributes)
+     *
+     * @param int $userID
+     *
+     * @throws \Exception
+     *
+     * @return array
+     */
+    public function getUserAttributes($userID)
+    {
+        if (empty($userID)) {
+            return [];
+        }
+
+        $service = Shopware()->Container()->get('shopware_attribute.data_loader');
+
+        return $service->load('s_user_attributes', $userID);
     }
 
     /**
@@ -461,6 +507,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 'countryShipping' => $order->shipping->country,
                 'country' => $order->billing->country,
             ],
+            'attributes' => $this->getUserAttributes($order->userID),
         ];
         $this->_view->assign('User', $user);
     }
@@ -505,7 +552,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             \PDO::FETCH_ASSOC
         );
 
-        $translation = $this->translationComponent->read($this->_order->order->language, 'documents', 1);
+        $translation = $this->translationComponent->read($this->_order->order->language, 'documents');
         $this->_document->containers = new ArrayObject();
         foreach ($containers as $key => $container) {
             if (!is_numeric($key)) {
@@ -557,8 +604,6 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     }
 
     /**
-     * @param Shopware_Models_Document_Order $order
-     *
      * @throws \Exception
      */
     protected function setOrder(Shopware_Models_Document_Order $order)
@@ -577,8 +622,6 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
     /**
      * Set object configuration from array
-     *
-     * @param array $config
      */
     protected function setConfig(array $config)
     {
@@ -619,8 +662,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         SELECT id , docID , hash FROM s_order_documents WHERE userID = ? AND orderID = ? AND `type` = ?
         ', [$this->_order->userID, $this->_order->id, $typID]);
 
-        if (!empty($checkForExistingDocument['id'])) {
-            // Document already exist. Update date and amount!
+        if (!$this->_allowMultipleDocuments && !empty($checkForExistingDocument['id'])) {
+            // Document already exist, and multiple documents are not allowed. Update date and amount!
             $update = '
             UPDATE `s_order_documents` SET `date` = now(),`amount` = ?
             WHERE `type` = ? AND userID = ? AND orderID = ? LIMIT 1

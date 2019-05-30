@@ -35,7 +35,7 @@ use Shopware\Models\Shop\Shop as ShopModel;
 /**
  * Address API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -56,7 +56,7 @@ class Address extends Resource
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository('Shopware\Models\Customer\Address');
+        return $this->getManager()->getRepository(\Shopware\Models\Customer\Address::class);
     }
 
     /**
@@ -77,21 +77,19 @@ class Address extends Resource
 
         $query = $this->getRepository()->getOne($id);
 
-        /** @var $address \Shopware\Models\Customer\Address */
+        /** @var \Shopware\Models\Customer\Address|null $address $address */
         $address = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$address) {
-            throw new ApiException\NotFoundException("Address by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Address by id %d not found', $id));
         }
 
         return $address;
     }
 
     /**
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $criteria
-     * @param array $orderBy
+     * @param int $offset
+     * @param int $limit
      *
      * @return array
      */
@@ -104,18 +102,16 @@ class Address extends Resource
 
         $paginator = $this->getManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // Returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the address data
+        // Returns the address data
         $addresses = $paginator->getIterator()->getArrayCopy();
 
         return ['data' => $addresses, 'total' => $totalResult];
     }
 
     /**
-     * @param array $params
-     *
      * @throws ApiException\CustomValidationException
      * @throws ApiException\NotFoundException
      *
@@ -130,7 +126,7 @@ class Address extends Resource
 
         $customer = $this->getContainer()->get('models')->find(CustomerModel::class, $customerId);
         if (!$customer) {
-            throw new ApiException\NotFoundException("Customer by id $customerId not found");
+            throw new ApiException\NotFoundException(sprintf('Customer by id %s not found', $customerId));
         }
 
         $this->setupContext($customer->getShop()->getId());
@@ -158,8 +154,7 @@ class Address extends Resource
     }
 
     /**
-     * @param int   $id
-     * @param array $params
+     * @param int $id
      *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
@@ -175,11 +170,11 @@ class Address extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $address \Shopware\Models\Customer\Address */
+        /** @var \Shopware\Models\Customer\Address|null $address */
         $address = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$address) {
-            throw new ApiException\NotFoundException("Address by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Address by id %d not found', $id));
         }
 
         $this->setupContext($address->getCustomer()->getShop()->getId());
@@ -216,11 +211,11 @@ class Address extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $address \Shopware\Models\Customer\Address */
+        /** @var \Shopware\Models\Customer\Address|null $address */
         $address = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$address) {
-            throw new ApiException\NotFoundException("Address by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Address by id %d not found', $id));
         }
 
         $this->addressService->delete($address);
@@ -251,8 +246,7 @@ class Address extends Resource
     /**
      * Resolves ids to models
      *
-     * @param array    $data
-     * @param null|int $customerId
+     * @param int|null $customerId
      * @param bool     $filter
      *
      * @throws ApiException\NotFoundException         if the given customer id in the data array is invalid

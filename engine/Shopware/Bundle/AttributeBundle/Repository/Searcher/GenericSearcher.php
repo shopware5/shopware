@@ -31,7 +31,7 @@ use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\Model\SearchBuilder;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -54,7 +54,6 @@ class GenericSearcher implements SearcherInterface
 
     /**
      * @param string        $entity
-     * @param ModelManager  $entityManager
      * @param SearchBuilder $searchBuilder
      */
     public function __construct($entity, ModelManager $entityManager, SearchBuilder $searchBuilder = null)
@@ -68,12 +67,11 @@ class GenericSearcher implements SearcherInterface
     }
 
     /**
-     * @param SearchCriteria $criteria
-     *
      * @return SearcherResult
      */
     public function search(SearchCriteria $criteria)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->createQuery($criteria);
 
         $builder->setFirstResult($criteria->offset)
@@ -93,8 +91,6 @@ class GenericSearcher implements SearcherInterface
     }
 
     /**
-     * @param SearchCriteria $criteria
-     *
      * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
      */
     protected function createQuery(SearchCriteria $criteria)
@@ -107,18 +103,12 @@ class GenericSearcher implements SearcherInterface
         return $builder;
     }
 
-    /**
-     * @param SearchCriteria $criteria
-     * @param QueryBuilder   $builder
-     */
     protected function addSearchTermCondition(SearchCriteria $criteria, QueryBuilder $builder)
     {
         $this->searchBuilder->addSearchTerm($builder, $criteria->term, $this->getSearchFields($criteria));
     }
 
     /**
-     * @param SearchCriteria $criteria
-     *
      * @return string[]
      */
     protected function getSearchFields(SearchCriteria $criteria)
@@ -131,8 +121,6 @@ class GenericSearcher implements SearcherInterface
     }
 
     /**
-     * @param QueryBuilder $builder
-     *
      * @return SearcherResult
      */
     protected function createResult(QueryBuilder $builder)

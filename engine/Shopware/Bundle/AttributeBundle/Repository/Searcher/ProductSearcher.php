@@ -28,7 +28,7 @@ use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Models\Article\Detail;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -44,18 +44,12 @@ class ProductSearcher extends GenericSearcher
         $builder->from(Detail::class, 'entity');
         $builder->innerJoin('entity.article', 'article');
 
-        if ($criteria->entity === 'Shopware\Models\Article\Article') {
-            $builder->andWhere('entity.kind = 1');
-        }
-
         $builder->setAlias('entity');
 
         return $builder;
     }
 
     /**
-     * @param SearchCriteria $criteria
-     *
      * @return array
      */
     protected function getSearchFields(SearchCriteria $criteria)

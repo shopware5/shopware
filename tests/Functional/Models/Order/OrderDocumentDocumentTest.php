@@ -30,8 +30,8 @@ class Shopware_Tests_Models_Order_Document_DocumentTest extends Enlight_Componen
         $attribute = new \Shopware\Models\Attribute\Document();
         $document->setAttribute($attribute);
 
-        $this->assertSame($document, $attribute->getDocument());
-        $this->assertSame($attribute, $document->getAttribute());
+        static::assertSame($document, $attribute->getDocument());
+        static::assertSame($attribute, $document->getAttribute());
     }
 
     /*
@@ -69,7 +69,91 @@ class Shopware_Tests_Models_Order_Document_DocumentTest extends Enlight_Componen
             Shopware()->Models()->flush($shop);
 
             // Check that document was actually created
-            $this->assertNotNull($document);
+            static::assertNotNull($document);
         }
+    }
+
+    /**
+     * Test the creation of multiple documents of the same order and the same type.
+     * Asserts the number of created documents is 2 if the _allowMultipleDocuments flag is set.
+     */
+    public function testMultipleDocumentsOfTheSameType()
+    {
+        $document1 = Shopware_Components_Document::initDocument(
+            15,
+            1,
+            [
+                '_renderer' => 'pdf',
+                '_preview' => false,
+                '_allowMultipleDocuments' => true,
+            ]
+        );
+        $document1->render();
+
+        $document2 = Shopware_Components_Document::initDocument(
+            15,
+            1,
+            [
+                '_renderer' => 'pdf',
+                '_preview' => false,
+                '_allowMultipleDocuments' => true,
+            ]
+        );
+        $document2->render();
+
+        $documents = Shopware()->Container()->get('models')->getRepository(\Shopware\Models\Order\Document\Document::class)
+            ->findBy([
+                'typeId' => 1,
+                'orderId' => 15,
+            ]);
+        static::assertCount(2, $documents);
+
+        // Revert changes of this test
+        foreach ($documents as $document) {
+            Shopware()->Container()->get('models')->remove($document);
+        }
+        Shopware()->Container()->get('models')->flush();
+    }
+
+    /**
+     * Test the creation of multiple documents of the same order and the same type.
+     * Asserts the number of created documents stays 1 if the _allowMultipleDocuments flag is not set.
+     */
+    public function testMultipleDocumentsOfTheSameTypeNegative()
+    {
+        $document1 = Shopware_Components_Document::initDocument(
+            15,
+            1,
+            [
+                '_renderer' => 'pdf',
+                '_preview' => false,
+                '_allowMultipleDocuments' => false,
+            ]
+        );
+        $document1->render();
+
+        $document2 = Shopware_Components_Document::initDocument(
+            15,
+            1,
+            [
+                '_renderer' => 'pdf',
+                '_preview' => false,
+                '_allowMultipleDocuments' => false,
+            ]
+        );
+        $document2->render();
+
+        $documents = Shopware()->Container()->get('models')->getRepository(\Shopware\Models\Order\Document\Document::class)
+            ->findBy([
+                'typeId' => 1,
+                'orderId' => 15,
+            ]);
+        static::assertCount(1, $documents);
+
+        // Revert changes of this test
+        foreach ($documents as $document) {
+            Shopware()->Container()->get('models')->remove($document);
+        }
+        Shopware()->Container()->get('models')->flush();
     }
 }

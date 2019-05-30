@@ -294,6 +294,13 @@ Ext.define('Shopware.form.plugin.Translation',
             if (field.getValue()) {
                 if (config.xtype != 'tinymce') {
                     config.emptyText = field.getValue();
+
+                    if (config.xtype === 'productstreamselection') {
+                        config.emptyText = field.store.findRecord('id', config.emptyText).get('name');
+                    }
+                }
+                if (config.xtype == 'checkbox') {
+                    config.checked = field.checked;
                 }
             }
             result.push(config)

@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -46,10 +46,6 @@ class ProductNumberService implements ProductNumberServiceInterface
      */
     private $config;
 
-    /**
-     * @param Connection                  $connection
-     * @param \Shopware_Components_Config $config
-     */
     public function __construct(
         Connection $connection,
         \Shopware_Components_Config $config
@@ -70,13 +66,10 @@ class ProductNumberService implements ProductNumberServiceInterface
             ->where('variant.articleID = :id')
             ->setParameter(':id', $productId);
 
-        /** @var $statement \PDOStatement */
-        $statement = $query->execute();
-
-        $number = $statement->fetch(\PDO::FETCH_COLUMN);
+        $number = $query->execute()->fetch(\PDO::FETCH_COLUMN);
 
         if (!$number) {
-            throw new \RuntimeException('No valid product number found');
+            throw new \RuntimeException(sprintf('No valid product number found by id %d', $productId));
         }
 
         return $number;
@@ -89,11 +82,11 @@ class ProductNumberService implements ProductNumberServiceInterface
     {
         $productId = $this->getProductIdByNumber($number);
         if (!$productId) {
-            throw new \RuntimeException('No valid product id found');
+            throw new \RuntimeException(sprintf('No valid product id found for product with number "%s"', $number));
         }
 
         if (!$this->isProductAvailableInShop($productId, $context->getShop())) {
-            throw new \RuntimeException('Product not available in current shop');
+            throw new \RuntimeException(sprintf('Product with number "%s" is not available in current shop', $number));
         }
 
         $selected = null;
@@ -111,7 +104,7 @@ class ProductNumberService implements ProductNumberServiceInterface
 
         $selected = $this->findFallbackById($productId);
         if (!$selected) {
-            throw new \RuntimeException('No active product variant found');
+            throw new \RuntimeException(sprintf('No active product variant found for product with number "%s" and id "%s"', $number, $productId));
         }
 
         return $selected;
@@ -142,7 +135,7 @@ class ProductNumberService implements ProductNumberServiceInterface
      *
      * @param string $number
      *
-     * @return string|false
+     * @return int|null
      */
     private function getProductIdByNumber($number)
     {
@@ -152,17 +145,13 @@ class ProductNumberService implements ProductNumberServiceInterface
             ->where('variant.ordernumber = :number')
             ->setParameter(':number', $number);
 
-        /** @var $statement \PDOStatement */
-        $statement = $query->execute();
-
-        return $statement->fetch(\PDO::FETCH_COLUMN);
+        return $query->execute()->fetch(\PDO::FETCH_COLUMN);
     }
 
     /**
      * Returns a single order number for the passed product configuration selection.
      *
-     * @param int   $productId
-     * @param array $selection
+     * @param int $productId
      *
      * @return string|false
      */
@@ -195,7 +184,7 @@ class ProductNumberService implements ProductNumberServiceInterface
             $query->andWhere('(variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)');
         }
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetch(\PDO::FETCH_COLUMN);
@@ -295,6 +284,8 @@ class ProductNumberService implements ProductNumberServiceInterface
      *
      * @param int  $productId
      * @param Shop $shop
+     *
+     * @return string|null
      */
     private function isProductAvailableInShop($productId, $shop)
     {

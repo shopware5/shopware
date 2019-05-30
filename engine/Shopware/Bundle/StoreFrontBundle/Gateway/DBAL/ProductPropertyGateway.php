@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -60,11 +60,6 @@ class ProductPropertyGateway implements Gateway\ProductPropertyGatewayInterface
      */
     private $connection;
 
-    /**
-     * @param Connection                $connection
-     * @param FieldHelper               $fieldHelper
-     * @param Hydrator\PropertyHydrator $propertyHydrator
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
@@ -128,7 +123,7 @@ class ProductPropertyGateway implements Gateway\ProductPropertyGatewayInterface
         $this->fieldHelper->addPropertyOptionTranslation($query, $context);
         $this->fieldHelper->addMediaTranslation($query, $context);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);
 

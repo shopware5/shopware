@@ -30,33 +30,37 @@ use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Table(name="s_core_templates_config_layout")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Layout extends ModelEntity
 {
     /**
-     * @var
+     * @var string
+     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     protected $name;
 
     /**
-     * @var
+     * @var string
+     *
      * @ORM\Column(name="type", type="string", nullable=false)
      */
     protected $type;
 
     /**
-     * @var
+     * @var int
+     *
      * @ORM\Column(name="template_id", type="integer", nullable=false)
      */
     protected $templateId;
 
     /**
-     * @var Element
+     * @var \Shopware\Models\Shop\Template
+     *
      * @ORM\ManyToOne(
-     *      targetEntity="Shopware\Models\Shop\Template",
-     *      inversedBy="layouts"
+     *     targetEntity="Shopware\Models\Shop\Template",
+     *     inversedBy="layouts"
      * )
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      */
@@ -79,12 +83,14 @@ class Layout extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column()
      */
     protected $title;
 
     /**
-     * @var string
+     * @var string[]
+     *
      * @ORM\Column(name="attributes", type="array", nullable=false)
      */
     protected $attributes;
@@ -92,22 +98,23 @@ class Layout extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection
+     * @var ArrayCollection<Layout>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Shop\TemplateConfig\Layout", mappedBy="parent"))
      */
     protected $children;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<Element>
      * @ORM\OneToMany(targetEntity="Element", mappedBy="container"))
      */
     protected $elements;
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -135,7 +142,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -175,7 +182,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @param mixed $template
+     * @param \Shopware\Models\Shop\Template $template
      */
     public function setTemplate($template)
     {
@@ -183,7 +190,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return \Shopware\Models\Shop\Template
      */
     public function getTemplate()
     {
@@ -207,7 +214,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getType()
     {
@@ -215,7 +222,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @param mixed $type
+     * @param string $type
      */
     public function setType($type)
     {
@@ -223,7 +230,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getName()
     {
@@ -231,7 +238,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @param mixed $name
+     * @param string $name
      */
     public function setName($name)
     {
@@ -255,7 +262,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string[]
      */
     public function getAttributes()
     {
@@ -263,7 +270,7 @@ class Layout extends ModelEntity
     }
 
     /**
-     * @param string $attributes
+     * @param string[] $attributes
      */
     public function setAttributes($attributes)
     {

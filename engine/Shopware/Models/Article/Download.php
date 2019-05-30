@@ -26,44 +26,46 @@ namespace Shopware\Models\Article;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\ArticleDownload as ProductDownloadAttribute;
 
 /**
  * @ORM\Table(name="s_articles_downloads")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Download extends ModelEntity
 {
     /**
      * OWNING SIDE
      *
+     * @var \Shopware\Models\Article\Article
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="downloads")
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Article\Article
      */
     protected $article;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleDownload", mappedBy="articleDownload", cascade={"persist"})
+     * @var ProductDownloadAttribute
      *
-     * @var \Shopware\Models\Attribute\ArticleDownload
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleDownload", mappedBy="articleDownload", cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @ORM\Column(name="articleID", type="integer", nullable=false)
+     * @var int
      *
-     * @var
+     * @ORM\Column(name="articleID", type="integer", nullable=false)
      */
     private $articleId;
 
@@ -83,6 +85,10 @@ class Download extends ModelEntity
 
     /**
      * @var float
+     *
+     * @deprecated since 5.5.9 and will be removed in 5.7. Use media_service to get size of file
+     *
+     * @todo remove in 5.7
      *
      * @ORM\Column(name="size", type="float", nullable=false)
      */
@@ -176,6 +182,10 @@ class Download extends ModelEntity
      * @param float $size
      *
      * @return Download
+     *
+     * @deprecated since 5.5.9 and will be removed in 5.7 without alternative
+     *
+     * @todo remove in 5.7
      */
     public function setSize($size)
     {
@@ -188,6 +198,10 @@ class Download extends ModelEntity
      * Get size
      *
      * @return float
+     *
+     * @deprecated since 5.5.9 and will be removed in 5.7. Use media_service to get size of file
+     *
+     * @todo remove in 5.7
      */
     public function getSize()
     {
@@ -195,7 +209,7 @@ class Download extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\ArticleDownload
+     * @return ProductDownloadAttribute
      */
     public function getAttribute()
     {
@@ -203,12 +217,12 @@ class Download extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\ArticleDownload|array|null $attribute
+     * @param ProductDownloadAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\ArticleDownload
+     * @return Download
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ArticleDownload', 'attribute', 'articleDownload');
+        return $this->setOneToOne($attribute, ProductDownloadAttribute::class, 'attribute', 'articleDownload');
     }
 }

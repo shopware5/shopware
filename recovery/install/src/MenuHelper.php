@@ -27,7 +27,7 @@ namespace Shopware\Recovery\Install;
 use Shopware\Recovery\Install\Service\TranslationService;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -48,11 +48,6 @@ class MenuHelper
      */
     private $translations;
 
-    /**
-     * @param \Slim\Slim         $slim
-     * @param TranslationService $translations
-     * @param array              $entries
-     */
     public function __construct(\Slim\Slim $slim, TranslationService $translations, array $entries)
     {
         $this->entries = $entries;
@@ -91,7 +86,7 @@ class MenuHelper
      */
     public function setCurrent($name)
     {
-        if (false === array_search($name, $this->entries)) {
+        if (array_search($name, $this->entries) === false) {
             throw new \Exception('could not find entrie');
         }
 

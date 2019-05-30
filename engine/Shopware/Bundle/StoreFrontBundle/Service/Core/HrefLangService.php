@@ -31,7 +31,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing\Context;
-use Shopware\Components\Routing\Router;
+use Shopware\Components\Routing\PreFilterInterface;
+use Shopware\Components\Routing\RouterInterface;
 use Shopware\Models\Shop\Shop as ShopModel;
 use Shopware_Components_Config as Config;
 
@@ -43,7 +44,7 @@ class HrefLangService implements HrefLangServiceInterface
     private $connection;
 
     /**
-     * @var Router
+     * @var RouterInterface
      */
     private $router;
 
@@ -55,7 +56,7 @@ class HrefLangService implements HrefLangServiceInterface
     /**
      * @var array
      */
-    private $routerCache = [];
+    private $contextCache = [];
 
     /**
      * @var ModelManager
@@ -63,17 +64,17 @@ class HrefLangService implements HrefLangServiceInterface
     private $modelManager;
 
     /**
-     * @param Connection   $connection
-     * @param Router       $router
-     * @param Config       $config
-     * @param ModelManager $modelManager
+     * @var PreFilterInterface[]
      */
-    public function __construct(Connection $connection, Router $router, Config $config, ModelManager $modelManager)
+    private $preFilters;
+
+    public function __construct(Connection $connection, RouterInterface $router, Config $config, ModelManager $modelManager, \IteratorAggregate $preFilters)
     {
         $this->connection = $connection;
         $this->router = $router;
         $this->config = $config;
         $this->modelManager = $modelManager;
+        $this->preFilters = iterator_to_array($preFilters, false);
     }
 
     /**
@@ -93,13 +94,18 @@ class HrefLangService implements HrefLangServiceInterface
             $href = new HrefLang();
             $href->setShopId($languageShop['id']);
             $href->setLocale($languageShop['locale']);
-            $href->setLink($this->getRouter($languageShop['id'])->assemble($parameters));
+            $routingContext = $this->getContext($languageShop['id']);
+            $href->setLink($this->filterUrl($this->router->assemble($parameters, $routingContext), $parameters));
 
             if (!$this->config->get('hrefLangCountry')) {
                 $href->setLocale(explode('-', $languageShop['locale'])[0]);
             }
 
-            if (!$this->isSeoUrl($parameters, $href->getLink())) {
+            if ((int) $languageShop['id'] === $this->config->get('hrefLangDefaultShop')) {
+                $href->setLocale('x-default');
+            }
+
+            if (!$this->isSeoUrl($parameters, $href->getLink(), $routingContext)) {
                 continue;
             }
 
@@ -114,13 +120,16 @@ class HrefLangService implements HrefLangServiceInterface
     }
 
     /**
-     * @param array  $parameters
      * @param string $url
      *
      * @return bool
      */
-    protected function isSeoUrl(array $parameters, $url)
+    protected function isSeoUrl(array $parameters, $url, Context $context)
     {
+        foreach ($this->preFilters as $preFilter) {
+            $parameters = $preFilter->preFilter($parameters, $context);
+        }
+
         if (strpos($url, $parameters['controller']) !== false && strpos($url, $parameters['action']) !== false) {
             return false;
         }
@@ -129,23 +138,53 @@ class HrefLangService implements HrefLangServiceInterface
     }
 
     /**
-     * @param Shop $shop
+     * @param string $url
      *
+     * @return string
+     */
+    protected function filterUrl($url, array $parameters)
+    {
+        // We don't filter category href links
+        if ($this->isCategoryLink($parameters)) {
+            return $url;
+        }
+
+        $query = parse_url($url, PHP_URL_QUERY);
+
+        if ($query === null) {
+            return $url;
+        }
+
+        return str_replace('?' . $query, '', $url);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isCategoryLink(array $parameters)
+    {
+        return
+            (isset($parameters['controller']) && $parameters['controller'] === 'listing') ||
+            (isset($parameters['controller']) && $parameters['controller'] === 'cat') ||
+            (isset($parameters['sViewport']) && $parameters['sViewport'] === 'cat') ||
+            (isset($parameters['sViewport']) && $parameters['sViewport'] === 'listing');
+    }
+
+    /**
      * @return array
      */
     private function getLanguageShops(Shop $shop)
     {
         $parentId = $shop->getParentId() ?: $shop->getId();
 
-        $qb = $this->connection->createQueryBuilder();
-
-        return $qb
+        return $this->connection->createQueryBuilder()
             ->addSelect('shop.id')
             ->addSelect('REPLACE(locale.locale, "_", "-") as locale')
             ->from('s_core_shops', 'shop')
             ->innerJoin('shop', 's_core_locales', 'locale', 'locale.id = shop.locale_id')
             ->where('shop.id = :shopId')
             ->orWhere('shop.main_id = :shopId')
+            ->andWhere('active=1')
             ->setParameter('shopId', $parentId)
             ->execute()
             ->fetchAll();
@@ -154,20 +193,17 @@ class HrefLangService implements HrefLangServiceInterface
     /**
      * @param int $shopId
      *
-     * @return Router
+     * @return Context
      */
-    private function getRouter($shopId)
+    private function getContext($shopId)
     {
-        if (isset($this->routerCache[$shopId])) {
-            return $this->routerCache[$shopId];
+        if (!isset($this->contextCache[$shopId])) {
+            $shop = $this->modelManager->getRepository(ShopModel::class)->getById($shopId);
+            $config = clone $this->config;
+            $config->setShop($shop);
+            $this->contextCache[$shopId] = Context::createFromShop($shop, $config);
         }
 
-        $shop = $this->modelManager->getRepository(ShopModel::class)->getById($shopId);
-        $languageRouter = clone $this->router;
-        $languageRouter->setContext(Context::createFromShop($shop, $this->config));
-
-        $this->routerCache[$shopId] = $languageRouter;
-
-        return $languageRouter;
+        return $this->contextCache[$shopId];
     }
 }

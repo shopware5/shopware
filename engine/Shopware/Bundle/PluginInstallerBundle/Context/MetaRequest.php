@@ -29,7 +29,7 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 class MetaRequest
 {
     /**
-     * @var null|AccessTokenStruct
+     * @var AccessTokenStruct|null
      */
     private $token = null;
 
@@ -52,7 +52,7 @@ class MetaRequest
      * @param string                 $technicalName
      * @param string                 $version
      * @param string                 $domain
-     * @param null|AccessTokenStruct $token
+     * @param AccessTokenStruct|null $token
      */
     public function __construct($technicalName, $version, $domain, $token = null)
     {
@@ -63,7 +63,7 @@ class MetaRequest
     }
 
     /**
-     * @return null|AccessTokenStruct
+     * @return AccessTokenStruct|null
      */
     public function getToken()
     {

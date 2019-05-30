@@ -25,23 +25,24 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PluginDeactivateCommand extends ShopwareCommand
+class PluginDeactivateCommand extends PluginCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('sw:plugin:deactivate')
             ->setDescription('Deactivates a plugin.')
@@ -79,8 +80,9 @@ EOF
             return 1;
         }
 
-        $pluginManager->deactivatePlugin($plugin);
-
+        $deactivationContext = $pluginManager->deactivatePlugin($plugin);
         $output->writeln(sprintf('Plugin %s has been deactivated', $pluginName));
+
+        $this->clearCachesIfRequested($input, $output, $deactivationContext);
     }
 }

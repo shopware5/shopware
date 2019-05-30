@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\AttributeBundle\Repository;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -39,8 +39,6 @@ interface RepositoryInterface
     public function supports($entity);
 
     /**
-     * @param SearchCriteria $criteria
-     *
      * @return SearchResult
      */
     public function search(SearchCriteria $criteria);

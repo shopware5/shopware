@@ -27,6 +27,7 @@ namespace Shopware\Recovery\Update;
 use DirectoryIterator;
 use FilesystemIterator;
 use RecursiveIteratorIterator;
+use Shopware\Recovery\Update\Results\DeleteResult;
 
 class Cleanup
 {
@@ -110,7 +111,7 @@ class Cleanup
     /**
      * Deletes the old cache directories
      *
-     * @param $deletedFileCount
+     * @param int $deletedFileCount
      *
      * @return DeleteResult
      */
@@ -130,9 +131,9 @@ class Cleanup
                 RecursiveIteratorIterator::CHILD_FIRST
             );
 
-            /** @var $path \SplFileInfo */
+            /** @var \SplFileInfo $path */
             foreach ($iterator as $path) {
-                if ($path->getFilename() == '.gitkeep') {
+                if ($path->getFilename() === '.gitkeep') {
                     continue;
                 }
 
@@ -154,7 +155,7 @@ class Cleanup
     /**
      * Deletes the temporary backup files of this update
      *
-     * @param $deletedFileCount
+     * @param int $deletedFileCount
      *
      * @return DeleteResult
      */
@@ -178,7 +179,7 @@ class Cleanup
                 RecursiveIteratorIterator::CHILD_FIRST
             );
 
-            /** @var $path \SplFileInfo */
+            /** @var \SplFileInfo $path */
             foreach ($iterator as $path) {
                 $this->delete($path, $deleteResult);
 
@@ -199,9 +200,6 @@ class Cleanup
 
     /**
      * Deletes a file / directory
-     *
-     * @param \SplFileInfo $file
-     * @param DeleteResult $deleteResult
      */
     private function delete(\SplFileInfo $file, DeleteResult &$deleteResult)
     {
@@ -210,7 +208,7 @@ class Cleanup
     }
 
     /**
-     * @param $path
+     * @param string $path
      *
      * @return array|DirectoryIterator
      */

@@ -26,10 +26,10 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use PDO;
+use Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomerHydrator;
-use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 
-class CustomerGateway
+class CustomerGateway implements CustomerGatewayInterface
 {
     /**
      * @var Connection
@@ -46,11 +46,6 @@ class CustomerGateway
      */
     private $hydrator;
 
-    /**
-     * @param Connection       $connection
-     * @param FieldHelper      $fieldHelper
-     * @param CustomerHydrator $hydrator
-     */
     public function __construct(Connection $connection, FieldHelper $fieldHelper, CustomerHydrator $hydrator)
     {
         $this->connection = $connection;
@@ -59,9 +54,7 @@ class CustomerGateway
     }
 
     /**
-     * @param int[] $ids
-     *
-     * @return Customer[]
+     * {@inheritdoc}
      */
     public function getList($ids)
     {

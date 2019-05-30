@@ -35,7 +35,7 @@ use Shopware\Models\User\User as UserModel;
 /**
  * User API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -80,20 +80,23 @@ class User extends Resource
             ->where('users.id = ?1')
             ->setParameter(1, $id);
 
-        /** @var $user UserModel */
+        /** @var UserModel|array|null $user */
         $user = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$user) {
             throw new ApiException\NotFoundException(sprintf('User by id %s not found', $id));
         }
 
-        if (is_array($user)) {
-            unset($user['apiKey'], $user['sessionId'], $user['password'], $user['encoder']);
-        } else {
-            $user->setApiKey('');
-            $user->setSessionId('');
-            $user->setPassword('');
-            $user->setEncoder('');
+        if (!$this->hasPrivilege('create', 'usermanager') &&
+            !$this->hasPrivilege('update', 'usermanager')) {
+            if (is_array($user)) {
+                unset($user['apiKey'], $user['sessionId'], $user['password'], $user['encoder']);
+            } else {
+                $user->setApiKey('');
+                $user->setSessionId('');
+                $user->setPassword('');
+                $user->setEncoder('');
+            }
         }
 
         return $user;
@@ -102,10 +105,8 @@ class User extends Resource
     /**
      * Returns a list of user objects.
      *
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $criteria
-     * @param array $orderBy
+     * @param int $offset
+     * @param int $limit
      *
      * @return array
      */
@@ -143,18 +144,13 @@ class User extends Resource
     }
 
     /**
-     * @param array $params
-     *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     *
      * @return UserModel
      */
     public function create(array $params)
     {
         $this->checkPrivilege('create', 'usermanager');
 
-        // create models
+        // Create models
         $user = new UserModel();
         $params = $this->prepareAssociatedData($params, $user);
         $user->fromArray($params);
@@ -170,13 +166,10 @@ class User extends Resource
     }
 
     /**
-     * @param int   $id
-     * @param array $params
+     * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\ValidationException
      *
      * @return UserModel
      */
@@ -200,7 +193,7 @@ class User extends Resource
             ->where('user.id = ?1')
             ->setParameter(1, $id);
 
-        /** @var $user UserModel */
+        /** @var UserModel|null $user */
         $user = $builder->getQuery()->getOneOrNullResult(self::HYDRATE_OBJECT);
 
         if (!$user) {
@@ -236,7 +229,7 @@ class User extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $user UserModel */
+        /** @var UserModel|null $user */
         $user = $this->getRepository()->find($id);
 
         if (!$user) {
@@ -250,8 +243,8 @@ class User extends Resource
     }
 
     /**
-     * @param string      $privilege
-     * @param string|null $resource
+     * @param string                                   $privilege
+     * @param string|\Zend_Acl_Resource_Interface|null $resource
      *
      * @throws ApiException\PrivilegeException
      */
@@ -268,20 +261,20 @@ class User extends Resource
         }
 
         if (!$this->getAcl()->has($resource)) {
-            $message = sprintf('No resource "%s" found', $resource);
-            throw new ApiException\PrivilegeException($message);
+            throw new ApiException\PrivilegeException(sprintf('No resource "%s" found', $resource));
         }
 
         $role = $this->getRole();
 
         if (!$this->getAcl()->isAllowed($role, $resource, $privilege)) {
-            $message = sprintf(
-                'Role "%s" is not allowed to "%s" on resource "%s"',
-                is_string($role) ? $role : $role->getRoleId(),
-                $privilege,
-                is_string($resource) ? $resource : $resource->getResourceId()
+            throw new ApiException\PrivilegeException(
+                sprintf(
+                    'Role "%s" is not allowed to "%s" on resource "%s"',
+                    is_string($role) ? $role : $role->getRoleId(),
+                    $privilege,
+                    is_string($resource) ? $resource : $resource->getResourceId()
+                )
             );
-            throw new ApiException\PrivilegeException($message);
         }
     }
 
@@ -303,16 +296,13 @@ class User extends Resource
     }
 
     /**
-     * @param array     $data
-     * @param UserModel $user
-     *
      * @throws ApiException\CustomValidationException
      *
      * @return array
      */
     protected function prepareAssociatedData(array $data, UserModel $user)
     {
-        // check if a role id or role name is passed and load the role model or set the role parameter to null.
+        // Check if a role id or role name is passed and load the role model or set the role parameter to null.
         if (!empty($data['roleId'])) {
             $data['role'] = $this->getManager()->find(Role::class, $data['roleId']);
 
@@ -330,7 +320,7 @@ class User extends Resource
             unset($data['role']);
         }
 
-        // check if a locale id or name is passed.
+        // Check if a locale id or name is passed.
         if (!empty($data['localeId'])) {
             if (!$this->isLocaleId($data['localeId'])) {
                 throw new ApiException\CustomValidationException(sprintf('Locale by id %s not found', $data['localeId']));
@@ -400,13 +390,13 @@ class User extends Resource
     /**
      * @param string $locale
      *
-     * @return int
+     * @return int|null
      */
     private function getLocaleIdFromLocale($locale)
     {
         $localeRepository = Shopware()->Models()->getRepository(Locale::class);
 
-        /** @var \Shopware\Models\Shop\Locale $locale */
+        /** @var \Shopware\Models\Shop\Locale|null $locale */
         $locale = $localeRepository->findOneByLocale($locale);
         if (!$locale) {
             return null;

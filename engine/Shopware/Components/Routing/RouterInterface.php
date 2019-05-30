@@ -35,7 +35,7 @@ namespace Shopware\Components\Routing;
  * @see \Enlight_Controller_Router
  * @see http://framework.zend.com/manual/1.12/de/zend.controller.router.html#zend.controller.router.subclassing
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -43,7 +43,6 @@ interface RouterInterface
 {
     /**
      * @param array[]|string[] $list
-     * @param Context|null     $context
      *
      * @return string[]|false[]
      */
@@ -51,7 +50,6 @@ interface RouterInterface
 
     /**
      * @param array|string $userParams
-     * @param Context|null $context
      *
      * @return string|false
      */
@@ -59,8 +57,6 @@ interface RouterInterface
 
     /**
      * Switch the context
-     *
-     * @param Context $context
      */
     public function setContext(Context $context);
 
@@ -70,8 +66,7 @@ interface RouterInterface
     public function getContext();
 
     /**
-     * @param string       $pathInfo
-     * @param Context|null $context
+     * @param string $pathInfo
      *
      * @return array|false
      */

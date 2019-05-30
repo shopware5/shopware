@@ -30,7 +30,7 @@ use Shopware\Components\Model\DBAL\Types\DateStringType;
 use Shopware\Components\Model\DBAL\Types\DateTimeStringType;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -51,13 +51,6 @@ class DataPersister
      */
     private $dataLoader;
 
-    /**
-     * DataPersister constructor.
-     *
-     * @param Connection   $connection
-     * @param TableMapping $mapping
-     * @param DataLoader   $dataLoader
-     */
     public function __construct(Connection $connection, TableMapping $mapping, DataLoader $dataLoader)
     {
         $this->connection = $connection;
@@ -81,7 +74,7 @@ class DataPersister
             throw new \Exception(sprintf('Table %s is no attribute table', $table));
         }
         if (!$foreignKey) {
-            throw new \Exception(sprintf('No foreign key provided'));
+            throw new \Exception('No foreign key provided');
         }
         $data = $this->filter($table, $data);
 
@@ -113,7 +106,7 @@ class DataPersister
             throw new \Exception(sprintf('Table %s is no attribute table', $table));
         }
         if (!$sourceForeignKey) {
-            throw new \Exception(sprintf('No foreign key provided'));
+            throw new \Exception('No foreign key provided');
         }
         $data = $this->dataLoader->load($table, $sourceForeignKey);
 
@@ -139,7 +132,7 @@ class DataPersister
             throw new \Exception(sprintf('Table %s is no attribute table', $table));
         }
         if (!$sourceForeignKey) {
-            throw new \Exception(sprintf('No foreign key provided'));
+            throw new \Exception('No foreign key provided');
         }
 
         $translations = $this->dataLoader->loadTranslations($table, $sourceForeignKey);
@@ -261,8 +254,6 @@ class DataPersister
     }
 
     /**
-     * @param Column $column
-     *
      * @return bool
      */
     private function isDateColumn(Column $column)

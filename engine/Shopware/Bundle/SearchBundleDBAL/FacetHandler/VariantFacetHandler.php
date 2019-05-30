@@ -38,7 +38,7 @@ use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorOptionsGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorOptionsGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
@@ -61,18 +61,12 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
     private $helper;
 
     /**
-     * @var ConfiguratorOptionsGateway
+     * @var ConfiguratorOptionsGatewayInterface
      */
     private $gateway;
 
-    /**
-     * @param ConfiguratorOptionsGateway   $gateway
-     * @param QueryBuilderFactoryInterface $queryBuilderFactory
-     * @param QueryAliasMapper             $queryAliasMapper
-     * @param PriceHelperInterface         $helper
-     */
     public function __construct(
-        ConfiguratorOptionsGateway $gateway,
+        ConfiguratorOptionsGatewayInterface $gateway,
         QueryBuilderFactoryInterface $queryBuilderFactory,
         QueryAliasMapper $queryAliasMapper,
         PriceHelperInterface $helper
@@ -96,9 +90,6 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param FacetInterface|VariantFacet $facet
-     * @param Criteria                    $reverted
-     * @param Criteria                    $criteria
-     * @param ShopContextInterface        $context
      *
      * @return FacetResultInterface|null
      */
@@ -111,9 +102,10 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
         if (empty($facet->getGroupIds())) {
             return null;
         }
+        /** @var VariantFacet $facet */
         $options = $this->getOptions($context, $reverted, $facet);
 
-        if (null === $options) {
+        if ($options === null) {
             return null;
         }
         $actives = $this->getFilteredValues($criteria);
@@ -122,18 +114,14 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param ShopContextInterface $context
-     * @param Criteria             $queryCriteria
-     * @param VariantFacet         $facet
-     *
-     * @return null|Group[]
+     * @return Group[]|null
      */
     protected function getOptions(ShopContextInterface $context, Criteria $queryCriteria, VariantFacet $facet)
     {
         $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
         $this->rebuildQuery($queryCriteria, $query, $facet);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $valueIds = $statement->fetchAll(\PDO::FETCH_COLUMN);
@@ -147,10 +135,6 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * Modifies the query reading products from the database to reflect the selected options
-     *
-     * @param Criteria     $criteria
-     * @param QueryBuilder $query
-     * @param VariantFacet $facet
      */
     private function rebuildQuery(Criteria $criteria, QueryBuilder $query, VariantFacet $facet)
     {
@@ -176,8 +160,6 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param Criteria $criteria
-     *
      * @return array
      */
     private function getFilteredValues(Criteria $criteria)
@@ -195,9 +177,8 @@ class VariantFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param VariantFacet $facet
-     * @param Group[]      $groups
-     * @param int[]        $actives
+     * @param Group[] $groups
+     * @param int[]   $actives
      *
      * @return FacetResultGroup|FacetResultInterface
      */

@@ -34,7 +34,6 @@ class UninstallContext extends InstallContext
     private $keepUserData;
 
     /**
-     * @param Plugin $plugin
      * @param string $shopwareVersion
      * @param string $currentVersion
      * @param bool   $keepUserData

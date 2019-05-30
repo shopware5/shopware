@@ -31,8 +31,7 @@ interface MediaReplaceServiceInterface
     /**
      * replace the media by the given mediaId with the given file content
      *
-     * @param int          $mediaId
-     * @param UploadedFile $file
+     * @param int $mediaId
      *
      * @throws \Exception
      */

@@ -40,6 +40,7 @@ Ext.define('Shopware.apps.Site', {
     * @string
     */
     extend : 'Enlight.app.SubApplication',
+
     /**
     * The name of the module. Used for internal purpose
     * @string
@@ -60,21 +61,25 @@ Ext.define('Shopware.apps.Site', {
      * @string
      */
     loadPath: '{url action=load}',
+
     /**
      * Required controllers for sub-application
      * @array
      */
     controllers: [ 'Tree', 'Form', 'Main' ],
+
     /**
      * Required views for controller
      * @array
      */
     views: [ 'main.Window', 'site.Tree', 'site.Form', 'site.GroupDialog' ],
+
     /**
      * Required stores for controller
      * @array
      */
     stores: [ 'Nodes', 'Groups', 'Selected', 'Shop' ],
+
     /**
      * Required models for sub-application
      * @array
@@ -100,6 +105,5 @@ Ext.define('Shopware.apps.Site', {
 
         return mainController.mainWindow;
     }
-
 });
 //{/block}

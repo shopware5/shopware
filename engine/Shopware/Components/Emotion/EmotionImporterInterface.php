@@ -39,9 +39,7 @@ interface EmotionImporterInterface
 
     /**
      * @param string   $filePath
-     * @param null|int $presetId
-     *
-     * @return mixed
+     * @param int|null $presetId
      */
     public function cleanupImport($filePath, $presetId = null);
 }

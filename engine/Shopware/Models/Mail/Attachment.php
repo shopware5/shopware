@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Mail;
+namespace Shopware\Models\Mail;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -42,9 +42,9 @@ use Doctrine\ORM\Mapping as ORM;
  *   - UNIQUE KEY `name` (`name`, `supportID`)
  * </code>
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_core_config_mails_attachments")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Attachment extends File
 {
@@ -52,6 +52,7 @@ class Attachment extends File
      * The role property is the owning side of the association between attachment and shop.
      *
      * @var \Shopware\Models\Shop\Shop
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="shopID", referencedColumnName="id", nullable=true)
      */
@@ -62,16 +63,12 @@ class Attachment extends File
      * The role property is the owning side of the association between attachment and mail.
      *
      * @var \Shopware\Models\Mail\Mail
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Mail\Mail", inversedBy="attachments")
      * @ORM\JoinColumn(name="mailID", referencedColumnName="id")
      */
     protected $mail;
 
-    /**
-     * @param \Shopware\Models\Mail\Mail      $mail
-     * @param \Shopware\Models\Media\Media    $media
-     * @param null|\Shopware\Models\Shop\Shop $shop
-     */
     public function __construct(\Shopware\Models\Mail\Mail $mail, \Shopware\Models\Media\Media $media, \Shopware\Models\Shop\Shop $shop = null)
     {
         $this->mail = $mail;
@@ -115,9 +112,6 @@ class Attachment extends File
         return null;
     }
 
-    /**
-     * @param \Shopware\Models\Shop\Shop $shop
-     */
     public function setShop(\Shopware\Models\Shop\Shop $shop)
     {
         $this->shop = $shop;

@@ -27,69 +27,76 @@ namespace Shopware\Models\Shop;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Shop\TemplateConfig\Layout;
 use Shopware\Models\Shop\TemplateConfig\Set;
 
 /**
  * Template Model Entity
  *
  * @ORM\Table(name="s_core_templates")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Template extends ModelEntity
 {
     /**
      * @var \Shopware\Models\Shop\Template
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Shop\Template")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     protected $parent = null;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Shop\Shop>
+     *
      * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\Shop",
-     *      mappedBy="template"
+     *     targetEntity="Shopware\Models\Shop\Shop",
+     *     mappedBy="template"
      * )
      */
     protected $shops;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Element>
+     *
      * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Element",
-     *      mappedBy="template",
-     *      orphanRemoval=true,
-     *      cascade={"persist"}
+     *     targetEntity="Shopware\Models\Shop\TemplateConfig\Element",
+     *     mappedBy="template",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
      * )
      */
     protected $elements;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Layout>
+     *
      * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Layout",
-     *      mappedBy="template",
-     *      orphanRemoval=true,
-     *      cascade={"persist"}
+     *     targetEntity="Shopware\Models\Shop\TemplateConfig\Layout",
+     *     mappedBy="template",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
      * )
      */
     protected $layouts;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Set>
+     *
      * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Set",
-     *      mappedBy="template",
-     *      orphanRemoval=true,
-     *      cascade={"persist"}
+     *     targetEntity="Shopware\Models\Shop\TemplateConfig\Set",
+     *     mappedBy="template",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
      * )
      */
     protected $configSets;
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -98,6 +105,7 @@ class Template extends ModelEntity
      * Name of template in filesystem
      *
      * @var string
+     *
      * @ORM\Column(name="template", type="string", length=255, nullable=false)
      */
     private $template;
@@ -106,6 +114,7 @@ class Template extends ModelEntity
      * Human readable name of the template
      *
      * @var string
+     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
@@ -114,6 +123,7 @@ class Template extends ModelEntity
      * Description of the template
      *
      * @var string
+     *
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
      */
     private $description;
@@ -122,6 +132,7 @@ class Template extends ModelEntity
      * Author of the template
      *
      * @var string
+     *
      * @ORM\Column(name="author", type="string", length=255, nullable=true)
      */
     private $author;
@@ -130,6 +141,7 @@ class Template extends ModelEntity
      * License of the template e.G. BSD / MIT / GPL
      *
      * @var string
+     *
      * @ORM\Column(name="license", type="string", length=255, nullable=true)
      */
     private $license;
@@ -138,6 +150,7 @@ class Template extends ModelEntity
      * Whether or not this template support Edge Side Includes (ESI)
      *
      * @var bool
+     *
      * @ORM\Column(name="esi", type="boolean")
      */
     private $esi = false;
@@ -146,6 +159,7 @@ class Template extends ModelEntity
      * Whether or not this template is Style Assist compatible
      *
      * @var bool
+     *
      * @ORM\Column(name="style_support", type="boolean")
      */
     private $style = false;
@@ -154,24 +168,28 @@ class Template extends ModelEntity
      * Whether or not this template is EMOTIONS compatible
      *
      * @var bool
+     *
      * @ORM\Column(name="emotion", type="boolean")
      */
     private $emotion = false;
 
     /**
-     * @var string
+     * @var int
+     *
      * @ORM\Column(name="version", type="integer")
      */
     private $version = 1;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="plugin_id", type="integer", nullable=true)
      */
     private $pluginId;
 
     /**
      * @var \Shopware\Models\Plugin\Plugin
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="templates")
      * @ORM\JoinColumn(name="plugin_id", referencedColumnName="id")
      */
@@ -179,9 +197,10 @@ class Template extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
-    private $parentId = null;
+    private $parentId;
 
     public function __construct()
     {
@@ -206,7 +225,7 @@ class Template extends ModelEntity
      *
      * @param string $name
      *
-     * @return \Shopware\Models\Snippet\Snippet
+     * @return Template
      */
     public function setName($name)
     {
@@ -336,7 +355,7 @@ class Template extends ModelEntity
     /**
      * @param bool $emotion
      *
-     * @return Template
+     * @return bool
      */
     public function getEmotion($emotion)
     {
@@ -382,7 +401,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Plugin\Plugin
+     * @return \Shopware\Models\Plugin\Plugin|null
      */
     public function getPlugin()
     {
@@ -406,7 +425,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\Template $parent
+     * @param \Shopware\Models\Shop\Template|null $parent
      */
     public function setParent(Template $parent = null)
     {
@@ -414,7 +433,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Template
+     * @return \Shopware\Models\Shop\Template|null
      */
     public function getParent()
     {
@@ -422,20 +441,20 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param mixed $elements
+     * @param \Shopware\Models\Shop\TemplateConfig\Element[]|null $elements
      */
     public function setElements($elements)
     {
         $this->setOneToMany(
             $elements,
-            '\Shopware\Models\Shop\TemplateConfig\Element',
+            \Shopware\Models\Shop\TemplateConfig\Element::class,
             'elements',
             'template'
         );
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Element>
      */
     public function getElements()
     {
@@ -443,7 +462,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection $shops
+     * @param ArrayCollection<\Shopware\Models\Shop\Shop> $shops
      */
     public function setShops($shops)
     {
@@ -451,7 +470,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Shop\Shop>
      */
     public function getShops()
     {
@@ -459,20 +478,20 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $layouts
+     * @param Layout[]|null $layouts
      */
     public function setLayouts($layouts)
     {
         $this->setOneToMany(
             $layouts,
-            '\Shopware\Models\Shop\TemplateConfig\Layout',
+            \Shopware\Models\Shop\TemplateConfig\Layout::class,
             'layouts',
             'template'
         );
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection<Layout>
      */
     public function getLayouts()
     {
@@ -480,7 +499,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return Set[]
+     * @return ArrayCollection<Set>
      */
     public function getConfigSets()
     {
@@ -488,7 +507,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param Set[] $configSets
+     * @param ArrayCollection<Set> $configSets
      */
     public function setConfigSets($configSets)
     {

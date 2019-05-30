@@ -29,7 +29,7 @@ use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Table(name="s_core_config_form_translations")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class FormTranslation extends ModelEntity
 {
@@ -50,34 +50,40 @@ class FormTranslation extends ModelEntity
      * @ORM\JoinColumn(name="locale_id", referencedColumnName="id")
      */
     protected $locale;
+
     /**
      * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="label", type="string", nullable=true)
      */
-    private $label = null;
+    private $label;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="description", type="string", nullable=true)
      */
-    private $description = null;
+    private $description;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="form_id", type="integer", nullable=false)
      */
     private $formId;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="locale_id", type="integer", nullable=false)
      */
     private $localeId;
@@ -93,9 +99,9 @@ class FormTranslation extends ModelEntity
     }
 
     /**
-     * @param $label
+     * @param string $label
      *
-     * @return Form
+     * @return FormTranslation
      */
     public function setLabel($label)
     {
@@ -117,7 +123,7 @@ class FormTranslation extends ModelEntity
      *
      * @param string $description
      *
-     * @return string
+     * @return FormTranslation
      */
     public function setDescription($description)
     {

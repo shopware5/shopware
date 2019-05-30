@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Document;
+namespace Shopware\Models\Document;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -30,9 +30,9 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware document model represents a document.
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_core_documents_box")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Element extends ModelEntity
 {
@@ -41,8 +41,9 @@ class Element extends ModelEntity
      * doctrine associations can be defined over this field
      *
      * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -51,14 +52,16 @@ class Element extends ModelEntity
      * Contains the name of the document.
      *
      * @var int
+     *
      * @ORM\Column(name="documentID", type="integer", nullable=false)
      */
-    private $documentId = '';
+    private $documentId;
 
     /**
      * Contains the name of the document.
      *
      * @var string
+     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name = '';
@@ -67,6 +70,7 @@ class Element extends ModelEntity
      * Contains the name of the document.
      *
      * @var string
+     *
      * @ORM\Column(name="style", type="string", nullable=false)
      */
     private $style = '';
@@ -75,6 +79,7 @@ class Element extends ModelEntity
      * Contains the name of the document.
      *
      * @var string
+     *
      * @ORM\Column(name="value", type="string", nullable=false)
      */
     private $value = '';
@@ -82,10 +87,10 @@ class Element extends ModelEntity
     /**
      * Owning Side
      *
+     * @var \Shopware\Models\Document\Document
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Document\Document", inversedBy="elements")
      * @ORM\JoinColumn(name="documentID", referencedColumnName="id")
-     *
-     * @var \Shopware\Models\Document\Document
      */
     private $document;
 

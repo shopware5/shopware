@@ -22,13 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Country;
+namespace Shopware\Models\Country;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_core_countries_areas")
  */
 class Area extends ModelEntity
@@ -38,16 +38,17 @@ class Area extends ModelEntity
      * The countries property is the inverse side of the association between area and countries.
      * The association is joined over the area id field and the areaID field of the country.
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Country\Country", mappedBy="area", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Country\Country>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Country\Country", mappedBy="area", orphanRemoval=true, cascade={"persist"})
      */
     protected $countries;
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -81,7 +82,7 @@ class Area extends ModelEntity
      *
      * @param string $name
      *
-     * @return Country
+     * @return Area
      */
     public function setName($name)
     {
@@ -105,7 +106,7 @@ class Area extends ModelEntity
      *
      * @param int $active
      *
-     * @return Country
+     * @return Area
      */
     public function setActive($active)
     {
@@ -125,7 +126,7 @@ class Area extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Country\Country>
      */
     public function getCountries()
     {
@@ -133,12 +134,12 @@ class Area extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $countries
+     * @param \Shopware\Models\Country\Country[]|null $countries
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Area
      */
     public function setCountries($countries)
     {
-        return $this->setOneToMany($countries, '\Shopware\Models\Country\Country', 'countries', 'area');
+        return $this->setOneToMany($countries, \Shopware\Models\Country\Country::class, 'countries', 'area');
     }
 }

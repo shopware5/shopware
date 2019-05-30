@@ -38,10 +38,6 @@ class AddressHydrator extends Hydrator
      */
     private $attributeHydrator;
 
-    /**
-     * @param CountryHydrator   $countryHydrator
-     * @param AttributeHydrator $attributeHydrator
-     */
     public function __construct(CountryHydrator $countryHydrator, AttributeHydrator $attributeHydrator)
     {
         $this->countryHydrator = $countryHydrator;
@@ -49,8 +45,6 @@ class AddressHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return Address
      */
     public function hydrate(array $data)
@@ -71,7 +65,7 @@ class AddressHydrator extends Hydrator
         $address->setVatId($data['__address_ustid']);
         $address->setPhone($data['__address_phone']);
         $address->setAdditionalAddressLine1($data['__address_additional_address_line1']);
-        $address->setAdditionalAddressLine1($data['__address_additional_address_line2']);
+        $address->setAdditionalAddressLine2($data['__address_additional_address_line2']);
 
         if ($address->getCountryId()) {
             $address->setCountry(

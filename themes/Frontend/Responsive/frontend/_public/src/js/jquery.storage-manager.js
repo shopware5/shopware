@@ -36,13 +36,7 @@
         var storage = {
             }, p;
 
-        try {
-            storage = {
-                local: window.localStorage,
-                session: window.sessionStorage
-            };
-        } catch (err) {
-            // User has blocked local storage in browser settings
+        var enableBlackHoleStorage = function () {
             var blackHoleStorage = {
                 length: 0,
                 clear: function () {},
@@ -56,6 +50,20 @@
                 local: blackHoleStorage,
                 session: blackHoleStorage
             };
+        };
+
+        try {
+            if (window.StateManager.hasCookiesAllowed()) {
+                storage = {
+                    local: window.localStorage,
+                    session: window.sessionStorage
+                };
+            } else {
+                enableBlackHoleStorage();
+            }
+        } catch (err) {
+            // User has blocked local storage in browser settings
+            enableBlackHoleStorage();
         }
 
         /**

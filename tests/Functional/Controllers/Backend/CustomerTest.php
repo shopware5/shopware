@@ -23,14 +23,15 @@
  */
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components_Test_Controller_TestCase
 {
-    /** @var $model \Shopware\Models\Customer\Customer */
+    /** @var \Shopware\Models\Customer\Customer $repository */
     protected $repository = null;
+
     /** @var Shopware\Components\Model\ModelManager */
     private $manager = null;
 
@@ -58,7 +59,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
     {
         $customer = $this->createDummyCustomer();
 
-        $this->assertEquals(0, $customer->getPaymentId());
+        static::assertEquals(0, $customer->getPaymentId());
 
         $debit = $this->manager
             ->getRepository(\Shopware\Models\Payment\Payment::class)
@@ -67,17 +68,17 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         $params = [
             'id' => $customer->getId(),
             'paymentId' => $debit->getId(),
-            'changed' => $customer->getChanged()->format('c')
+            'changed' => $customer->getChanged()->format('c'),
         ];
         $this->Request()->setMethod('POST')->setPost($params);
         $this->dispatch('/backend/Customer/save');
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertTrue($this->View()->success);
-        $this->assertEquals($debit->getId(), $jsonBody['data']['paymentId']);
+        static::assertTrue($this->View()->success);
+        static::assertEquals($debit->getId(), $jsonBody['data']['paymentId']);
 
         $this->manager->refresh($customer);
-        $this->assertEquals($debit->getId(), $customer->getPaymentId());
+        static::assertEquals($debit->getId(), $customer->getPaymentId());
 
         $this->manager->remove($customer);
         $this->manager->flush();
@@ -110,24 +111,24 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         $this->dispatch('/backend/Customer/save');
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertTrue($this->View()->success);
-        $this->assertEquals($debit->getId(), $jsonBody['data']['paymentId']);
+        static::assertTrue($this->View()->success);
+        static::assertEquals($debit->getId(), $jsonBody['data']['paymentId']);
 
         $dummyData = $this->repository->find($this->View()->data['id']);
 
-        $this->assertEquals($debit->getId(), $dummyData->getPaymentId());
-        $this->assertCount(1, $dummyData->getPaymentData()->toArray());
+        static::assertEquals($debit->getId(), $dummyData->getPaymentId());
+        static::assertCount(1, $dummyData->getPaymentData()->toArray());
 
         /** @var \Shopware\Models\Customer\PaymentData $paymentData */
         $paymentData = array_shift($dummyData->getPaymentData()->toArray());
-        $this->assertInstanceOf(\Shopware\Models\Customer\PaymentData::class, $paymentData);
-        $this->assertEquals('Account Holder Name', $paymentData->getAccountHolder());
-        $this->assertEquals('1234567890', $paymentData->getAccountNumber());
-        $this->assertEquals('2345678901', $paymentData->getBankCode());
-        $this->assertEquals('Bank name', $paymentData->getBankName());
-        $this->assertEmpty($paymentData->getBic());
-        $this->assertEmpty($paymentData->getIban());
-        $this->assertFalse($paymentData->getUseBillingData());
+        static::assertInstanceOf(\Shopware\Models\Customer\PaymentData::class, $paymentData);
+        static::assertEquals('Account Holder Name', $paymentData->getAccountHolder());
+        static::assertEquals('1234567890', $paymentData->getAccountNumber());
+        static::assertEquals('2345678901', $paymentData->getBankCode());
+        static::assertEquals('Bank name', $paymentData->getBankName());
+        static::assertEmpty($paymentData->getBic());
+        static::assertEmpty($paymentData->getIban());
+        static::assertFalse($paymentData->getUseBillingData());
 
         return $dummyData->getId();
     }
@@ -150,8 +151,8 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         $this->dispatch('/backend/Customer/save');
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertTrue($this->View()->success);
-        $this->assertEquals($debit->getId(), $jsonBody['data']['paymentId']);
+        static::assertTrue($this->View()->success);
+        static::assertEquals($debit->getId(), $jsonBody['data']['paymentId']);
 
         $params = [
             'id' => null,
@@ -173,11 +174,11 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
             'additionalAddressLine1' => 'additionalAddressLine1',
             'additionalAddressLine2' => 'additionalAddressLine2',
             'countryId' => 3,
-            'stateId' => NULL,
+            'stateId' => null,
             'phone' => '',
             'customer' => [],
             'country' => [],
-            'state' => []
+            'state' => [],
         ];
 
         $this->reset();
@@ -192,27 +193,27 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         /** @var \Shopware\Models\Customer\Customer $dummyData */
         $dummyData = $this->repository->find($params['user_id']);
 
-        $this->assertEquals('firstname', $dummyData->getDefaultBillingAddress()->getFirstname());
-        $this->assertEquals('lastname', $dummyData->getDefaultBillingAddress()->getLastname());
-        $this->assertEquals('department', $dummyData->getDefaultBillingAddress()->getDepartment());
-        $this->assertEquals('vatId', $dummyData->getDefaultBillingAddress()->getVatId());
-        $this->assertEquals('title', $dummyData->getDefaultBillingAddress()->getTitle());
-        $this->assertEquals('zipcode', $dummyData->getDefaultBillingAddress()->getZipcode());
-        $this->assertEquals('city', $dummyData->getDefaultBillingAddress()->getCity());
-        $this->assertEquals('street', $dummyData->getDefaultBillingAddress()->getStreet());
-        $this->assertEquals('additionalAddressLine1', $dummyData->getDefaultBillingAddress()->getAdditionalAddressLine1());
-        $this->assertEquals('additionalAddressLine2', $dummyData->getDefaultBillingAddress()->getAdditionalAddressLine2());
+        static::assertEquals('firstname', $dummyData->getDefaultBillingAddress()->getFirstname());
+        static::assertEquals('lastname', $dummyData->getDefaultBillingAddress()->getLastname());
+        static::assertEquals('department', $dummyData->getDefaultBillingAddress()->getDepartment());
+        static::assertEquals('vatId', $dummyData->getDefaultBillingAddress()->getVatId());
+        static::assertEquals('title', $dummyData->getDefaultBillingAddress()->getTitle());
+        static::assertEquals('zipcode', $dummyData->getDefaultBillingAddress()->getZipcode());
+        static::assertEquals('city', $dummyData->getDefaultBillingAddress()->getCity());
+        static::assertEquals('street', $dummyData->getDefaultBillingAddress()->getStreet());
+        static::assertEquals('additionalAddressLine1', $dummyData->getDefaultBillingAddress()->getAdditionalAddressLine1());
+        static::assertEquals('additionalAddressLine2', $dummyData->getDefaultBillingAddress()->getAdditionalAddressLine2());
 
-        $this->assertEquals('firstname', $dummyData->getDefaultShippingAddress()->getFirstname());
-        $this->assertEquals('lastname', $dummyData->getDefaultShippingAddress()->getLastname());
-        $this->assertEquals('department', $dummyData->getDefaultShippingAddress()->getDepartment());
-        $this->assertEquals('vatId', $dummyData->getDefaultShippingAddress()->getVatId());
-        $this->assertEquals('title', $dummyData->getDefaultShippingAddress()->getTitle());
-        $this->assertEquals('zipcode', $dummyData->getDefaultShippingAddress()->getZipcode());
-        $this->assertEquals('city', $dummyData->getDefaultShippingAddress()->getCity());
-        $this->assertEquals('street', $dummyData->getDefaultShippingAddress()->getStreet());
-        $this->assertEquals('additionalAddressLine1', $dummyData->getDefaultShippingAddress()->getAdditionalAddressLine1());
-        $this->assertEquals('additionalAddressLine2', $dummyData->getDefaultShippingAddress()->getAdditionalAddressLine2());
+        static::assertEquals('firstname', $dummyData->getDefaultShippingAddress()->getFirstname());
+        static::assertEquals('lastname', $dummyData->getDefaultShippingAddress()->getLastname());
+        static::assertEquals('department', $dummyData->getDefaultShippingAddress()->getDepartment());
+        static::assertEquals('vatId', $dummyData->getDefaultShippingAddress()->getVatId());
+        static::assertEquals('title', $dummyData->getDefaultShippingAddress()->getTitle());
+        static::assertEquals('zipcode', $dummyData->getDefaultShippingAddress()->getZipcode());
+        static::assertEquals('city', $dummyData->getDefaultShippingAddress()->getCity());
+        static::assertEquals('street', $dummyData->getDefaultShippingAddress()->getStreet());
+        static::assertEquals('additionalAddressLine1', $dummyData->getDefaultShippingAddress()->getAdditionalAddressLine1());
+        static::assertEquals('additionalAddressLine2', $dummyData->getDefaultShippingAddress()->getAdditionalAddressLine2());
     }
 
     /**
@@ -231,8 +232,8 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
             ->getRepository(\Shopware\Models\Payment\Payment::class)
             ->findOneBy(['name' => 'debit']);
 
-        $this->assertEquals($debit->getId(), $dummyData->getPaymentId());
-        $this->assertCount(1, $dummyData->getPaymentData()->toArray());
+        static::assertEquals($debit->getId(), $dummyData->getPaymentId());
+        static::assertCount(1, $dummyData->getPaymentData()->toArray());
 
         $params = [
             'id' => $dummyData->getId(),
@@ -246,44 +247,44 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
                 'iban' => '456iban654',
                 'useBillingData' => true,
             ]],
-            'changed' => $dummyData->getChanged()->format('c')
+            'changed' => $dummyData->getChanged()->format('c'),
         ];
         $this->Request()->setMethod('POST')->setPost($params);
         $this->dispatch('/backend/Customer/save');
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertTrue($this->View()->success);
-        $this->assertEquals($sepa->getId(), $jsonBody['data']['paymentId']);
+        static::assertTrue($this->View()->success);
+        static::assertEquals($sepa->getId(), $jsonBody['data']['paymentId']);
 
         $this->manager->refresh($dummyData);
 
-        $this->assertEquals($sepa->getId(), $dummyData->getPaymentId());
+        static::assertEquals($sepa->getId(), $dummyData->getPaymentId());
         $paymentDataArray = $dummyData->getPaymentData()->toArray();
-        $this->assertCount(2, $paymentDataArray);
+        static::assertCount(2, $paymentDataArray);
 
         // Old debit payment data is still there, it's just not used currently
         /** @var \Shopware\Models\Customer\PaymentData $paymentData */
         $paymentData = array_shift($paymentDataArray);
-        $this->assertInstanceOf(\Shopware\Models\Customer\PaymentData::class, $paymentData);
-        $this->assertEquals('Account Holder Name', $paymentData->getAccountHolder());
-        $this->assertEquals('1234567890', $paymentData->getAccountNumber());
-        $this->assertEquals('2345678901', $paymentData->getBankCode());
-        $this->assertEquals('Bank name', $paymentData->getBankName());
-        $this->assertEmpty($paymentData->getBic());
-        $this->assertEmpty($paymentData->getIban());
-        $this->assertFalse($paymentData->getUseBillingData());
+        static::assertInstanceOf(\Shopware\Models\Customer\PaymentData::class, $paymentData);
+        static::assertEquals('Account Holder Name', $paymentData->getAccountHolder());
+        static::assertEquals('1234567890', $paymentData->getAccountNumber());
+        static::assertEquals('2345678901', $paymentData->getBankCode());
+        static::assertEquals('Bank name', $paymentData->getBankName());
+        static::assertEmpty($paymentData->getBic());
+        static::assertEmpty($paymentData->getIban());
+        static::assertFalse($paymentData->getUseBillingData());
 
         // New SEPA data
         /** @var \Shopware\Models\Customer\PaymentData $paymentData */
         $paymentData = array_shift($paymentDataArray);
-        $this->assertInstanceOf(\Shopware\Models\Customer\PaymentData::class, $paymentData);
-        $this->assertEmpty($paymentData->getAccountHolder());
-        $this->assertEmpty($paymentData->getAccountNumber());
-        $this->assertEmpty($paymentData->getBankCode());
-        $this->assertEquals('European bank name', $paymentData->getBankName());
-        $this->assertEquals('123bic312', $paymentData->getBic());
-        $this->assertEquals('456iban654', $paymentData->getIban());
-        $this->assertTrue($paymentData->getUseBillingData());
+        static::assertInstanceOf(\Shopware\Models\Customer\PaymentData::class, $paymentData);
+        static::assertEmpty($paymentData->getAccountHolder());
+        static::assertEmpty($paymentData->getAccountNumber());
+        static::assertEmpty($paymentData->getBankCode());
+        static::assertEquals('European bank name', $paymentData->getBankName());
+        static::assertEquals('123bic312', $paymentData->getBic());
+        static::assertEquals('456iban654', $paymentData->getIban());
+        static::assertTrue($paymentData->getUseBillingData());
 
         $this->manager->remove($dummyData);
         $this->manager->flush();
@@ -303,13 +304,13 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
 
         $headerLocation = $response->getHeader('Location');
         $this->reset();
-        $this->assertNotEmpty($headerLocation);
+        static::assertNotEmpty($headerLocation);
         $newLocation = explode('/backend/', $headerLocation);
         $response = $this->dispatch('backend/' . $newLocation[1]);
 
         $cookie = $this->getCookie($response, 'session-1');
-        $this->assertTrue(strpos($headerLocation, $cookie['value']) !== false);
-        $this->assertEquals(0, $cookie['expire']);
+        static::assertNotEmpty($cookie);
+        static::assertEquals(0, $cookie['expire']);
     }
 
     /**
@@ -332,7 +333,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
             ->setMethod('POST')
             ->setPost($postData);
         $this->dispatch('backend/Customer/save');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         // Now use an outdated timestamp. The controller should detect this and fail.
         $postData['changed'] = '2008-08-07 18:11:31';
@@ -340,7 +341,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
             ->setMethod('POST')
             ->setPost($postData);
         $this->dispatch('backend/Customer/save');
-        $this->assertFalse($this->View()->success);
+        static::assertFalse($this->View()->success);
     }
 
     /**
@@ -352,8 +353,8 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
 
         $customer = Shopware()->Models()->find(\Shopware\Models\Customer\Customer::class, $dummy->getId());
 
-        $this->assertInstanceOf(\Shopware\Models\Customer\Customer::class, $customer);
-        $this->assertEquals('1', $customer->getGroup()->getId());
+        static::assertInstanceOf(\Shopware\Models\Customer\Customer::class, $customer);
+        static::assertEquals('1', $customer->getGroup()->getId());
     }
 
     private function getCookie(\Enlight_Controller_Response_Response $response, $name)

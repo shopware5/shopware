@@ -84,7 +84,26 @@ class SchemaOperatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $types
+     * @covers \CrudService::parseDefaultValue
+     *
+     * @throws \Exception
+     */
+    public function testDefaultValuesBoolean()
+    {
+        $this->iterateTypeArray(['boolean' => 1]);
+        $this->iterateTypeArray(['boolean' => 0]);
+        $this->iterateTypeArray(['boolean' => true]);
+        $this->iterateTypeArray(['boolean' => false]);
+        $this->iterateTypeArray(['boolean' => null]);
+        $this->iterateTypeArray(['boolean' => '1']);
+        $this->iterateTypeArray(['boolean' => '0']);
+        $this->iterateTypeArray(['boolean' => 'true']);
+        $this->iterateTypeArray(['boolean' => 'false']);
+        $this->iterateTypeArray(['boolean' => 'null']);
+    }
+
+    /**
+     * @param array $types
      *
      * @throws \Exception
      */
@@ -103,7 +122,7 @@ class SchemaOperatorTest extends \PHPUnit\Framework\TestCase
 
             $service->update('s_articles_attributes', $name, $type, [], null, false, $default);
 
-            $this->assertTrue($tableMapping->isTableColumn($table, $name));
+            static::assertTrue($tableMapping->isTableColumn($table, $name));
             $service->delete($table, $name);
         }
     }

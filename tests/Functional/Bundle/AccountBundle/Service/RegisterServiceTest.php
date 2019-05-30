@@ -171,7 +171,7 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
 
         self::$registerService->register($shop, $customer, $billing);
 
-        $this->assertGreaterThan(0, $customer->getId());
+        static::assertGreaterThan(0, $customer->getId());
 
         self::$modelManager->refresh($customer);
 
@@ -206,7 +206,7 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
 
         self::$registerService->register($shop, $customer, $billing, $shipping);
 
-        $this->assertGreaterThan(0, $customer->getId());
+        static::assertGreaterThan(0, $customer->getId());
 
         self::$modelManager->refresh($customer);
 
@@ -324,8 +324,6 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param Country $country
-     *
      * @return State
      */
     private function createState(Country $country)
@@ -345,45 +343,39 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         return self::$modelManager->merge($state);
     }
 
-    /**
-     * @param array    $demoData
-     * @param Customer $customer
-     */
     private function assertCustomer(array $demoData, Customer $customer)
     {
-        $this->assertEquals($demoData['salutation'], $customer->getSalutation());
-        $this->assertEquals($demoData['firstname'], $customer->getFirstname());
-        $this->assertEquals($demoData['lastname'], $customer->getLastname());
-        $this->assertEquals($demoData['email'], $customer->getEmail());
-        $this->assertEquals('EK', $customer->getGroup()->getKey());
-        $this->assertNotEmpty($customer->getPassword());
+        static::assertEquals($demoData['salutation'], $customer->getSalutation());
+        static::assertEquals($demoData['firstname'], $customer->getFirstname());
+        static::assertEquals($demoData['lastname'], $customer->getLastname());
+        static::assertEquals($demoData['email'], $customer->getEmail());
+        static::assertEquals('EK', $customer->getGroup()->getKey());
+        static::assertNotEmpty($customer->getPassword());
 
-        $this->assertNotNull($customer->getDefaultBillingAddress());
-        $this->assertNotNull($customer->getDefaultShippingAddress());
+        static::assertNotNull($customer->getDefaultBillingAddress());
+        static::assertNotNull($customer->getDefaultShippingAddress());
     }
 
     /**
-     * @param array    $demoData
-     * @param Customer $customer
-     * @param bool     $shipping
+     * @param bool $shipping
      */
     private function assertAddress(array $demoData, Customer $customer, $shipping = false)
     {
         $legacyAddress = $shipping ? $customer->getDefaultShippingAddress() : $customer->getDefaultBillingAddress();
         $address = $shipping ? $customer->getDefaultShippingAddress() : $customer->getDefaultBillingAddress();
 
-        $this->assertEquals($demoData['firstname'], $legacyAddress->getFirstName());
-        $this->assertEquals($demoData['firstname'], $address->getFirstname());
+        static::assertEquals($demoData['firstname'], $legacyAddress->getFirstName());
+        static::assertEquals($demoData['firstname'], $address->getFirstname());
 
-        $this->assertEquals($demoData['lastname'], $legacyAddress->getLastName());
-        $this->assertEquals($demoData['lastname'], $address->getLastname());
+        static::assertEquals($demoData['lastname'], $legacyAddress->getLastName());
+        static::assertEquals($demoData['lastname'], $address->getLastname());
 
-        $this->assertEquals($demoData['country']->getId(), $legacyAddress->getCountry()->getId());
-        $this->assertEquals($demoData['country']->getId(), $address->getCountry()->getId());
+        static::assertEquals($demoData['country']->getId(), $legacyAddress->getCountry()->getId());
+        static::assertEquals($demoData['country']->getId(), $address->getCountry()->getId());
 
         if (!empty($demoData['state'])) {
-            $this->assertEquals($demoData['state']->getId(), $legacyAddress->getState()->getId());
-            $this->assertEquals($demoData['state']->getId(), $address->getState()->getId());
+            static::assertEquals($demoData['state']->getId(), $legacyAddress->getState()->getId());
+            static::assertEquals($demoData['state']->getId(), $address->getState()->getId());
         }
     }
 }

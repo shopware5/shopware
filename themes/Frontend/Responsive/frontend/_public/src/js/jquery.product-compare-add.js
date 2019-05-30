@@ -69,7 +69,8 @@
                 dataType: 'html',
                 method: 'POST',
                 success: function (data) {
-                    var compareMenu = $(me.opts.compareMenuSelector);
+                    var compareMenu = $(me.opts.compareMenuSelector),
+                        modal;
 
                     if (compareMenu.hasClass(me.opts.hiddenCls)) {
                         compareMenu.removeClass(me.opts.hiddenCls);
@@ -78,9 +79,14 @@
                     // Check if error thrown
                     if (data.indexOf('data-max-reached="true"') !== -1) {
                         $.loadingIndicator.close(function () {
-                            $.modal.open(data, {
-                                sizing: 'content'
+                            modal = $.modal.open(data, {
+                                sizing: 'content',
+                                overlay: false
                             });
+
+                            // Hack necessary to close the overlay upon closing the modal.
+                            // The overlay may not be opened by the modal though, since we already have an overlay opened here
+                            modal.options.overlay = true;
                         });
                     } else {
                         compareMenu.html(data);

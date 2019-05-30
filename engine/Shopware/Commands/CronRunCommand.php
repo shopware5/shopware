@@ -32,7 +32,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -103,10 +103,8 @@ EOF
     }
 
     /**
-     * @param OutputInterface                 $output
-     * @param Enlight_Components_Cron_Manager $manager
-     * @param string                          $cronjob
-     * @param bool                            $force
+     * @param string $cronjob
+     * @param bool   $force
      */
     private function runSingleCronjob(OutputInterface $output, Enlight_Components_Cron_Manager $manager, $cronjob, $force)
     {
@@ -121,8 +119,7 @@ EOF
     }
 
     /**
-     * @param bool                        $force
-     * @param Enlight_Components_Cron_Job $job
+     * @param bool $force
      *
      * @return bool
      */
@@ -141,12 +138,11 @@ EOF
 
     /**
      * Tries to resolve a string to a cronjob action name.
-     * This is neccessary since Shopware currently renames
+     * This is necessary since Shopware currently renames
      * a cronjob action after first run when it is in a
      * unknown format
      *
-     * @param Enlight_Components_Cron_Manager $manager
-     * @param string                          $action
+     * @param string $action
      *
      * @throws \RuntimeException
      *
@@ -156,19 +152,20 @@ EOF
     {
         $job = $manager->getJobByAction($action);
 
-        if ($job != null) {
+        if ($job !== null) {
             return $job;
         }
 
         if (strpos($action, 'Shopware_') !== 0) {
             $action = str_replace(' ', '', ucwords(str_replace('_', ' ', $action)));
-            $job = $manager->getJobByAction('Shopware_CronJob_' . $action);
+            $action = 'Shopware_CronJob_' . $action;
+            $job = $manager->getJobByAction($action);
         }
 
         if ($job != null) {
             return $job;
         }
 
-        throw new \RuntimeException('Cron not found by given action name.');
+        throw new \RuntimeException(sprintf('Cron not found by action name "%s".', $action));
     }
 }

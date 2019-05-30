@@ -43,7 +43,7 @@ class SearchBundleDBALSubscriberTest extends \PHPUnit\Framework\TestCase
             $criteriaRequestHandler,
         ]);
 
-        $this->assertInstanceOf('\Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber', $subscriber);
+        static::assertInstanceOf('\Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber', $subscriber);
     }
 
     /**
@@ -61,7 +61,7 @@ class SearchBundleDBALSubscriberTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage No handlers provided in \Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber
+     * @expectedExceptionMessage No handlers provided in Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber
      */
     public function testEmptyArray()
     {

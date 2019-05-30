@@ -25,13 +25,13 @@
 namespace Shopware\Components\Log\Handler;
 
 use Enlight_Controller_Request_Request as Request;
-use Enlight_Controller_Response_Response as Response;
+use Enlight_Controller_Response_ResponseHttp as Response;
 use Monolog\Handler\FirePHPHandler as BaseFirePHPHandler;
 
 /**
  * FirePHPHandler.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -43,14 +43,10 @@ class FirePHPHandler extends BaseFirePHPHandler
     private $headers = [];
 
     /**
-     * @var \Enlight_Controller_Response_ResponseHttp
+     * @var \Enlight_Controller_Response_ResponseHttp|null
      */
     private $response;
 
-    /**
-     * @param Request  $request
-     * @param Response $response
-     */
     public function setUp(Request $request, Response $response)
     {
         if (!$this->acceptsRequest($request)) {
@@ -80,8 +76,6 @@ class FirePHPHandler extends BaseFirePHPHandler
     }
 
     /**
-     * @param Request $request
-     *
      * @return bool
      */
     public function acceptsRequest(Request $request)
@@ -113,9 +107,7 @@ class FirePHPHandler extends BaseFirePHPHandler
      *
      * @see createHeader()
      *
-     * @param array $record
-     *
-     * @return string
+     * @return array
      */
     protected function createRecordHeader(array $record)
     {
@@ -166,8 +158,6 @@ class FirePHPHandler extends BaseFirePHPHandler
      *
      * @see sendHeader()
      * @see sendInitHeaders()
-     *
-     * @param array $record
      */
     protected function write(array $record)
     {

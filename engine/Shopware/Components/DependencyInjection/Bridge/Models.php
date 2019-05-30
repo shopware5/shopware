@@ -30,6 +30,7 @@ use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Shopware\Components\Model\Configuration;
 use Shopware\Components\Model\LazyFetchModelEntity;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\QueryOperatorValidator;
 
 /**
  * Wrapper service class for the doctrine entity manager.
@@ -37,7 +38,7 @@ use Shopware\Components\Model\ModelManager;
  * The class constructor injects all required components and services
  * which required for the entity manager.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -46,12 +47,6 @@ class Models
     /**
      * Creates the entity manager for the application.
      *
-     * @param EventManager     $eventManager
-     * @param Configuration    $config
-     * @param \Enlight_Loader  $loader
-     * @param Connection       $connection
-     * @param AnnotationDriver $modelAnnotation
-     *
      * @return ModelManager
      */
     public function factory(
@@ -59,8 +54,9 @@ class Models
         Configuration $config,
         \Enlight_Loader $loader,
         Connection $connection,
-        // annotation driver is not really used here but has to be loaded first
-        AnnotationDriver $modelAnnotation
+        // Annotation driver is not really used here but has to be loaded first
+        AnnotationDriver $modelAnnotation,
+        QueryOperatorValidator $operatorValidator = null
     ) {
         $loader->registerNamespace(
             'Shopware\Models\Attribute',
@@ -73,7 +69,8 @@ class Models
         $entityManager = ModelManager::createInstance(
             $connection,
             $config,
-            $eventManager
+            $eventManager,
+            $operatorValidator
         );
 
         LazyFetchModelEntity::setEntityManager($entityManager);

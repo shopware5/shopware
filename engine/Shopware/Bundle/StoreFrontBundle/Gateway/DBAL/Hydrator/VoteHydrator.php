@@ -27,15 +27,13 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class VoteHydrator extends Hydrator
 {
     /**
-     * @param array $data
-     *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage
      */
     public function hydrateAverage(array $data)
@@ -60,8 +58,6 @@ class VoteHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return Struct\Product\Vote
      */
     public function hydrate(array $data)
@@ -112,7 +108,7 @@ class VoteHydrator extends Hydrator
     }
 
     /**
-     * @param $data
+     * @param array $data
      */
     private function sortByPointsDescending($data)
     {

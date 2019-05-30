@@ -28,12 +28,26 @@ use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Theme\PathResolver;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CacheManager
 {
+    const CACHE_TAG_TEMPLATE = 'template';
+
+    const CACHE_TAG_CONFIG = 'config';
+
+    const CACHE_TAG_ROUTER = 'router';
+
+    const CACHE_TAG_PROXY = 'proxy';
+
+    const CACHE_TAG_THEME = 'theme';
+
+    const CACHE_TAG_HTTP = 'http';
+
+    const CACHE_TAG_SEARCH = 'search';
+
     /**
      * @var Container
      */
@@ -69,9 +83,6 @@ class CacheManager
      */
     private $themePathResolver;
 
-    /**
-     * @param Container $container
-     */
     public function __construct(Container $container)
     {
         $this->container = $container;
@@ -233,7 +244,7 @@ class CacheManager
     /**
      * Returns cache information
      *
-     * @param null $request
+     * @param \Enlight_Controller_Request_Request|null $request
      *
      * @return array
      */
@@ -265,16 +276,26 @@ class CacheManager
      */
     public function getConfigCacheInfo()
     {
-        $cacheConfig = $this->container->getParameter('shopware.cache');
+        $backendCache = $this->cache->getBackend();
 
-        if ($this->cache->getBackend() instanceof \Zend_Cache_Backend_Apcu) {
+        if ($backendCache instanceof \Zend_Cache_Backend_Apcu) {
             $info = [];
             $apcInfo = apcu_cache_info('user');
             $info['files'] = $apcInfo['num_entries'];
             $info['size'] = $this->encodeSize($apcInfo['mem_size']);
             $apcInfo = apcu_sma_info();
             $info['freeSpace'] = $this->encodeSize($apcInfo['avail_mem']);
+        } elseif ($backendCache instanceof \Zend_Cache_Backend_Redis) {
+            $info = [];
+
+            /** @var \Redis $redis */
+            $redis = $backendCache->getRedis();
+            $info['files'] = $redis->dbSize();
+            $info['size'] = $this->encodeSize($redis->info()['used_memory']);
         } else {
+            $cacheConfig = $this->container->getParameter('shopware.cache');
+            $dir = null;
+
             if (!empty($cacheConfig['backendOptions']['cache_dir'])) {
                 $dir = $cacheConfig['backendOptions']['cache_dir'];
             } elseif (!empty($cacheConfig['backendOptions']['slow_backend_options']['cache_dir'])) {
@@ -285,7 +306,7 @@ class CacheManager
 
         $info['name'] = 'Shopware configuration';
 
-        $backend = get_class($this->cache->getBackend());
+        $backend = get_class($backendCache);
         $backend = str_replace('Zend_Cache_Backend_', '', $backend);
 
         $info['backend'] = $backend;
@@ -380,7 +401,7 @@ class CacheManager
      */
     public function getDirectoryInfo($dir)
     {
-        $docRoot = $this->container->getParameter('kernel.root_dir') . '/';
+        $docRoot = $this->container->getParameter('shopware.app.rootdir') . '/';
 
         $info = [];
         $info['dir'] = str_replace($docRoot, '', $dir);
@@ -412,7 +433,7 @@ class CacheManager
             \RecursiveIteratorIterator::LEAVES_ONLY
         );
 
-        /** @var $entry \SplFileInfo */
+        /** @var \SplFileInfo $entry */
         foreach ($iterator as $entry) {
             if ($entry->getFilename() === '.gitkeep') {
                 continue;
@@ -445,6 +466,61 @@ class CacheManager
         for ($i = 0; $bytes >= 1024 && $i < (count($types) - 1); $bytes /= 1024, $i++);
 
         return round($bytes, 2) . ' ' . $types[$i];
+    }
+
+    /**
+     * Clear caches by list of CacheManager::CACHE_TAG_* items
+     *
+     * @param string[] $tags
+     *
+     * @return int
+     */
+    public function clearByTags(array $tags)
+    {
+        $count = 0;
+
+        foreach (array_unique($tags) as $tag) {
+            $count += (int) $this->clearByTag($tag);
+        }
+
+        return $count;
+    }
+
+    /**
+     * Clear cache by its tag of CacheManager::CACHE_TAG_*
+     *
+     * @param string $tag
+     *
+     * @return bool
+     */
+    public function clearByTag($tag)
+    {
+        switch ($tag) {
+            case self::CACHE_TAG_CONFIG:
+                $this->clearConfigCache();
+                break;
+            case self::CACHE_TAG_SEARCH:
+                $this->clearSearchCache();
+                break;
+            case self::CACHE_TAG_ROUTER:
+                $this->clearRewriteCache();
+                break;
+            case self::CACHE_TAG_TEMPLATE:
+                $this->clearTemplateCache();
+                break;
+            case self::CACHE_TAG_THEME:
+            case self::CACHE_TAG_HTTP:
+                $this->clearHttpCache();
+                break;
+            case self::CACHE_TAG_PROXY:
+                $this->clearProxyCache();
+                $this->clearOpCache();
+                break;
+            default:
+                return false;
+        }
+
+        return true;
     }
 
     /**

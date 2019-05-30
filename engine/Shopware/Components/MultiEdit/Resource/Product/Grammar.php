@@ -44,8 +44,8 @@ class Grammar
     protected $eventManager;
 
     /**
-     * @param $dqlHelper DqlHelper
-     * @param $eventManager \Enlight_Event_EventManager
+     * @param DqlHelper                   $dqlHelper
+     * @param \Enlight_Event_EventManager $eventManager
      */
     public function __construct($dqlHelper, $eventManager)
     {
@@ -104,11 +104,11 @@ class Grammar
                 case 'integer':
                 case 'decimal':
                 case 'float':
-                    $attributes[$formattedColumn] = ['>', '>=', '<', '<=', '=', '!=', 'ISNULL'];
+                    $attributes[$formattedColumn] = ['>', '>=', '<', '<=', '=', '!=', 'ISNULL', 'IN', 'NOT IN'];
                     break;
                 case 'text':
                 case 'string':
-                    $attributes[$formattedColumn] = ['=', '~', '!~', 'IN', '!=', 'ISNULL'];
+                    $attributes[$formattedColumn] = ['=', '~', '!~', 'IN', '!=', 'ISNULL', 'NOT IN'];
                     break;
                 case 'boolean':
                     $attributes[$formattedColumn] = ['ISTRUE', 'ISFALSE', 'ISNULL'];
@@ -132,7 +132,7 @@ class Grammar
                     )) {
                         $attributes[$formattedColumn] = $event->getReturn();
                     } else {
-                        throw new \RuntimeException("Column with type {$type} was not configured, yet");
+                        throw new \RuntimeException(sprintf('Column with type %s was not configured, yet', $type));
                     }
             }
         }
@@ -163,6 +163,7 @@ class Grammar
             ],
             'binaryOperators' => [
                 'IN' => ['('],
+                'NOT IN' => ['('],
                 '>=' => ['/(^-{0,1}[0-9.]+$)/', '/"(.*?)"/'],
                 '=' => ['/(^-{0,1}[0-9.]+$)/', '/"(.*?)"/'],
                 '!=' => ['/(^-{0,1}[0-9.]+$)/', '/"(.*?)"/'],

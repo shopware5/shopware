@@ -34,7 +34,7 @@ use Shopware\Models\Shop;
  * which contains different small functions
  * which used in all other Theme\* classes.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -56,9 +56,6 @@ class Util
 
     /**
      * Class constructor which injects all dependencies.
-     *
-     * @param ModelManager $entityManager
-     * @param PathResolver $pathResolver
      */
     public function __construct(ModelManager $entityManager, PathResolver $pathResolver)
     {
@@ -70,9 +67,7 @@ class Util
      * Returns the preview image of the passed shopware template.
      * The image will be encoded as base 64 image.
      *
-     * @param Shop\Template $template
-     *
-     * @return null|string
+     * @return string|null
      */
     public function getPreviewImage(Shop\Template $template)
     {
@@ -84,8 +79,6 @@ class Util
      * of the passed shopware template.
      * The function resolves the theme directory over the
      * getDirectory function of the PathResolver
-     *
-     * @param Shop\Template $template
      *
      * @throws \Exception
      *
@@ -103,7 +96,7 @@ class Util
         if (!file_exists($file)) {
             throw new \Exception(sprintf(
                 'Theme directory %s contains no Theme.php',
-                $template->getTemplate()
+                $directory
             ));
         }
 
@@ -115,8 +108,6 @@ class Util
     /**
      * Resolves the passed directory to a theme class.
      * Returns a new instance of the \Shopware\Theme
-     *
-     * @param \DirectoryIterator $directory
      *
      * @throws \Exception
      *
@@ -132,7 +123,7 @@ class Util
         if (!file_exists($file)) {
             throw new \Exception(sprintf(
                 'Theme directory %s contains no Theme.php',
-                $directory->getFilename()
+                $directory->getPathname()
             ));
         }
 
@@ -151,8 +142,6 @@ class Util
 
     /**
      * Returns the snippet namespace for the passed theme.
-     *
-     * @param Shop\Template $template
      *
      * @return string
      */
@@ -185,7 +174,7 @@ class Util
      *
      * @param \Shopware\Models\Shop\Template $theme
      *
-     * @return null|string
+     * @return string|null
      */
     private function getThemeImage(Shop\Template $theme)
     {

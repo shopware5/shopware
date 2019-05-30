@@ -6,25 +6,29 @@
 
 {* Meta-Tags *}
 {block name='frontend_index_header_meta_tags'}
-    <meta name="author" content="{s name='IndexMetaAuthor'}{/s}" />
-    {* <meta name="copyright" content="{s name='IndexMetaCopyright'}{/s}" /> *}
-    <meta name="robots" content="{block name='frontend_index_header_meta_robots'}{s name='IndexMetaRobots'}{/s}{/block}" />
-    <meta name="revisit-after" content="{s name='IndexMetaRevisit'}{/s}" />
-    <meta name="keywords" content="{block name='frontend_index_header_meta_keywords'}{if $sCategoryContent.metaKeywords}{$sCategoryContent.metaKeywords|escapeHtml}{else}{s name='IndexMetaKeywordsStandard'}{/s}{/if}{/block}" />
-    <meta name="description" content="{block name='frontend_index_header_meta_description'}{s name='IndexMetaDescriptionStandard'}{/s}{/block}" />
+    {block name='frontend_index_header_meta_tags_inner'}
+        <meta name="author" content="{s name='IndexMetaAuthor'}{/s}" />
+        <meta name="robots" content="{block name='frontend_index_header_meta_robots'}{s name='IndexMetaRobots'}{/s}{/block}" />
+        <meta name="revisit-after" content="{s name='IndexMetaRevisit'}{/s}" />
+        <meta name="keywords" content="{block name='frontend_index_header_meta_keywords'}{if $sCategoryContent.metaKeywords}{$sCategoryContent.metaKeywords|escapeHtml}{else}{s name='IndexMetaKeywordsStandard'}{/s}{/if}{/block}" />
+        {s name="IndexMetaDescriptionStandard" assign="snippetIndexMetaDescriptionStandard"}{/s}
+        <meta name="description" content="{block name='frontend_index_header_meta_description'}{$snippetIndexMetaDescriptionStandard|truncate:$SeoDescriptionMaxLength:'…'}{/block}" />
+    {/block}
 
     {* Meta opengraph tags *}
     {block name='frontend_index_header_meta_tags_opengraph'}
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />
         <meta property="og:title" content="{{config name=sShopname}|escapeHtml}" />
-        <meta property="og:description" content="{block name='frontend_index_header_meta_description_og'}{s name='IndexMetaDescriptionStandard'}{/s}{/block}" />
+        {s name="IndexMetaDescriptionStandard" assign="snippetIndexMetaDescriptionStandard"}{/s}
+        <meta property="og:description" content="{block name='frontend_index_header_meta_description_og'}{$snippetIndexMetaDescriptionStandard|truncate:$SeoDescriptionMaxLength:'…'}{/block}" />
         <meta property="og:image" content="{link file=$theme.desktopLogo fullPath}" />
 
         <meta name="twitter:card" content="website" />
         <meta name="twitter:site" content="{{config name=sShopname}|escapeHtml}" />
         <meta name="twitter:title" content="{{config name=sShopname}|escapeHtml}" />
-        <meta name="twitter:description" content="{block name='frontend_index_header_meta_description_twitter'}{s name='IndexMetaDescriptionStandard'}{/s}{/block}" />
+        {s name="IndexMetaDescriptionStandard" assign="snippetIndexMetaDescriptionStandard"}{/s}
+        <meta name="twitter:description" content="{block name='frontend_index_header_meta_description_twitter'}{$snippetIndexMetaDescriptionStandard|truncate:$SeoDescriptionMaxLength:'…'}{/block}" />
         <meta name="twitter:image" content="{link file=$theme.desktopLogo fullPath}" />
     {/block}
 
@@ -36,7 +40,7 @@
     {/block}
 
     {block name='frontend_index_header_meta_tags_mobile'}
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-title" content="{if $theme.appleWebAppTitle != ""}{$theme.appleWebAppTitle|escapeHtml}{else}{{config name=sShopname}|escapeHtml}{/if}">
         <meta name="apple-mobile-web-app-capable" content="yes">
@@ -86,7 +90,9 @@
 {block name="frontend_index_header_css_screen"}
     {{compileLess timestamp={themeTimestamp} output="lessFiles"}}
     {foreach $lessFiles as $stylesheet}
-        <link href="{$stylesheet}" media="all" rel="stylesheet" type="text/css" />
+        {block name="frontend_index_header_css_screen_stylesheet"}
+            <link href="{$stylesheet}" media="all" rel="stylesheet" type="text/css" />
+        {/block}
     {/foreach}
 
     {if $theme.additionalCssData}

@@ -28,15 +28,13 @@ use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class ClientFactory
 {
     /**
-     * @param array $config
-     *
      * @return Client
      */
     public static function createClient(array $config)
@@ -44,6 +42,17 @@ class ClientFactory
         $clientBuilder = ClientBuilder::create();
 
         $clientBuilder->setHosts($config['hosts']);
+        $clientBuilder->setConnectionParams(
+            [
+                'client' => [
+                    'curl' => [
+                        CURLOPT_HTTPHEADER => [
+                            'Content-type: application/json',
+                        ],
+                    ],
+                ],
+            ]
+        );
 
         return $clientBuilder->build();
     }

@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Emotion;
+namespace Shopware\Models\Emotion;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelRepository;
@@ -30,7 +30,7 @@ use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Attribute\Emotion as EmotionAttribute;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -40,19 +40,20 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array $filter
-     * @param array $orderBy
+     * @param string $filter
+     * @param array  $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getListQueryBuilder($filter = null, $orderBy = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['emotions', 'categories'])
             ->from(\Shopware\Models\Emotion\Emotion::class, 'emotions')
             ->leftJoin('emotions.categories', 'categories');
 
-        //filter the displayed columns with the passed filter string
+        // Filter the displayed columns with the passed filter string
         if (!empty($filter)) {
             $builder->where('categories.name LIKE ?2')
                 ->orWhere('emotions.name LIKE ?2')
@@ -67,9 +68,9 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param null|array $filter
-     * @param null|array $filterBy
-     * @param null|int   $categoryId
+     * @param array|null  $filter
+     * @param string|null $filterBy
+     * @param int|null    $categoryId
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
@@ -183,7 +184,7 @@ class Repository extends ModelRepository
             );
         }
 
-        // skip preview entries
+        // Skip preview entries
         $builder->andWhere('emotions.preview_id IS NULL');
 
         return $builder;
@@ -192,10 +193,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object
      *
-     * @param null  $filter
-     * @param array $orderBy
-     * @param int   $offset
-     * @param int   $limit
+     * @param bool|null $filter
+     * @param array     $orderBy
+     * @param int       $offset
+     * @param int       $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -214,13 +215,14 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getLandingPageListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array $filter
+     * @param bool  $filter
      * @param array $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getNameListQueryBuilder($filter = null, $orderBy = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['emotions.id', 'emotions.name'])
             ->from(\Shopware\Models\Emotion\Emotion::class, 'emotions');
@@ -409,12 +411,13 @@ class Repository extends ModelRepository
     /**
      * This function selects all elements and components of the passed emotion id.
      *
-     * @param $emotionId
+     * @param int $emotionId
      *
      * @return QueryBuilder
      */
     public function getEmotionElementsQuery($emotionId)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['elements', 'component']);
         $builder->from(Element::class, 'elements');
@@ -428,8 +431,8 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param $offset
-     * @param $limit
+     * @param int $offset
+     * @param int $limit
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -449,7 +452,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param $shopId
+     * @param int $shopId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -466,7 +469,7 @@ class Repository extends ModelRepository
     /**
      * @param int $id
      *
-     * @return \Doctrine\ORM\Query
+     * @return QueryBuilder
      */
     public function getEmotionById($id)
     {

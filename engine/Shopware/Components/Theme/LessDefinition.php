@@ -60,7 +60,7 @@ use Shopware\Components\Theme;
  *      }
  * </code>
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -77,7 +77,8 @@ class LessDefinition
     /**
      * The corresponding theme
      *
-     * @var Theme */
+     * @var Theme
+     */
     private $theme;
 
     /**
@@ -104,12 +105,12 @@ class LessDefinition
     private $config;
 
     /**
-     * @param array $config          contains the less variables, has to be a key value array
-     * @param array $files           contains the full file name paths
-     * @param null  $importDirectory Full path to the import directory for less @import commands
-     * @param null  $theme           the corresponding theme
+     * @param array       $config          contains the less variables, has to be a key value array
+     * @param array       $files           contains the full file name paths
+     * @param string|null $importDirectory Full path to the import directory for less @import commands
+     * @param Theme|null  $theme           the corresponding theme
      */
-    public function __construct(array $config = [], array $files = [], $importDirectory = null, $theme = null)
+    public function __construct(array $config = [], array $files = [], $importDirectory = null, Theme $theme = null)
     {
         $this->config = $config;
         $this->files = $files;
@@ -117,25 +118,16 @@ class LessDefinition
         $this->theme = $theme;
     }
 
-    /**
-     * @param mixed $config
-     */
     public function setConfig($config)
     {
         $this->config = $config;
     }
 
-    /**
-     * @return mixed
-     */
     public function getConfig()
     {
         return $this->config;
     }
 
-    /**
-     * @param mixed $files
-     */
     public function setFiles($files)
     {
         $this->files = $files;
@@ -166,17 +158,14 @@ class LessDefinition
     }
 
     /**
-     * @return Theme
+     * @return Theme|null
      */
     public function getTheme()
     {
         return $this->theme;
     }
 
-    /**
-     * @param Theme $theme
-     */
-    public function setTheme($theme)
+    public function setTheme(Theme $theme)
     {
         $this->theme = $theme;
     }

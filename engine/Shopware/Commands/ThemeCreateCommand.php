@@ -35,7 +35,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -148,9 +148,6 @@ EOF
     /**
      * Helper function to ask for optional data
      *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
      * @return array
      */
     private function dialog(InputInterface $input, OutputInterface $output)
@@ -167,11 +164,7 @@ EOF
     /**
      * Helper function to ask the user a question
      *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param $optionKey
-     *
-     * @return mixed
+     * @param string $optionKey
      */
     private function askForOptionalData(InputInterface $input, OutputInterface $output, $optionKey)
     {

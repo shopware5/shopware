@@ -25,7 +25,7 @@
 namespace Shopware\Recovery\Common;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -115,9 +115,6 @@ class DumpIterator implements \SeekableIterator, \Countable
         $this->position = 0;
     }
 
-    /**
-     * @return mixed
-     */
     public function current()
     {
         return $this->current;

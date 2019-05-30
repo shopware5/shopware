@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SitemapBundle\Provider;
 
 use DateTime;
-use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
 use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -34,26 +34,21 @@ use Shopware\Components\Routing;
 class StaticUrlProvider implements UrlProviderInterface
 {
     /**
-     * @var Routing\Router
+     * @var Routing\RouterInterface
      */
     private $router;
+
     /**
-     * @var Connection
+     * @var ConnectionInterface
      */
     private $connection;
 
     /**
      * @var bool
      */
-    private $allExported = false;
+    private $allExported;
 
-    /**
-     * StaticUrlProvider constructor.
-     *
-     * @param Routing\Router $router
-     * @param Connection     $connection
-     */
-    public function __construct(Routing\Router $router, Connection $connection)
+    public function __construct(Routing\RouterInterface $router, ConnectionInterface $connection)
     {
         $this->router = $router;
         $this->connection = $connection;
@@ -99,7 +94,7 @@ class StaticUrlProvider implements UrlProviderInterface
         $urls = [];
 
         for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
-            $urls[] = new Url($routes[$i], $sites[$i]['changed'], 'weekly');
+            $urls[] = new Url($routes[$i], $sites[$i]['changed'], 'weekly', \Shopware\Models\Site\Site::class, $sites[$i]['id']);
         }
 
         return $urls;
@@ -118,14 +113,11 @@ class StaticUrlProvider implements UrlProviderInterface
      *
      * @param int $shopId
      *
-     * @throws \Doctrine\DBAL\DBALException
-     *
      * @return array
      */
     private function getSitesByShopId($shopId)
     {
-        $qb = $this->connection->createQueryBuilder();
-        $keys = $qb
+        $keys = $this->connection->createQueryBuilder()
             ->select('shopGroups.key')
             ->from('s_core_shop_pages', 'shopPages')
             ->innerJoin('shopPages', 's_cms_static_groups', 'shopGroups', 'shopGroups.id = shopPages.group_id')
@@ -139,12 +131,13 @@ class StaticUrlProvider implements UrlProviderInterface
             $builder = $this->connection->createQueryBuilder();
             $current = $builder->from('s_cms_static', 'sites')
                 ->select('*')
+                ->where('sites.active = 1')
                 ->andWhere(
                     $builder->expr()->orX(
-                        $builder->expr()->eq('sites.grouping', ':g1'),        // = gBottom
-                        $builder->expr()->like('sites.grouping', ':g2'),      //like 'gBottom|%
-                        $builder->expr()->like('sites.grouping', ':g3'),      //like '|gBottom
-                        $builder->expr()->like('sites.grouping', ':g4')      //like '|gBottom|
+                        $builder->expr()->eq('sites.grouping', ':g1'),   //  = bottom
+                        $builder->expr()->like('sites.grouping', ':g2'), // like 'bottom|%
+                        $builder->expr()->like('sites.grouping', ':g3'), // like '|bottom
+                        $builder->expr()->like('sites.grouping', ':g4')  // like '|bottom|
                     )
                 )
                 ->andWhere(
@@ -161,10 +154,12 @@ class StaticUrlProvider implements UrlProviderInterface
                 ->execute()
                 ->fetchAll(\PDO::FETCH_ASSOC);
 
-            $sites = array_merge($sites, $current);
+            foreach ($current as $item) {
+                $sites[$item['id']] = $item;
+            }
         }
 
-        return $sites;
+        return array_values($sites);
     }
 
     /**

@@ -5,6 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true" />
 
         <service id="shopware_plugininstaller.http_client" class="Shopware\Components\HttpClient\GuzzleHttpClient">
             <argument type="service" id="guzzle_http_client_factory"/>
@@ -33,9 +34,10 @@
             <argument type="service" id="shopware.snippet_database_handler" />
             <argument type="service" id="shopware.plugin_requirement_validator" />
             <argument type="service" id="db_connection" />
+            <argument type="service" id="events" />
             <argument type="collection">
-                <argument type="string">%shopware.plugin_directories.ShopwarePlugins%</argument>
-                <argument type="string">%shopware.plugin_directories.ProjectPlugins%</argument>
+                <argument type="string" key="ShopwarePlugins">%shopware.plugin_directories.ShopwarePlugins%</argument>
+                <argument type="string" key="ProjectPlugins">%shopware.plugin_directories.ProjectPlugins%</argument>
             </argument>
             <argument type="service" id="shopware.release" />
         </service>
@@ -61,6 +63,7 @@
             <argument>%shopware.plugin_directories%</argument>
             <argument type="service" id="shopware_plugininstaller.store_client"/>
             <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware_plugininstaller.plugin_extractor" />
         </service>
 
         <service id="shopware_plugininstaller.plugin_service_store" alias="shopware_plugininstaller.plugin_service_store_production" />
@@ -97,7 +100,6 @@
 
         <service id="shopware_plugininstaller.plugin_licence_service" class="Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService">
             <argument type="service" id="dbal_connection" />
-            <argument type="service" id="shopware_plugininstaller.plugin_manager" />
             <argument type="service" id="shopware_plugininstaller.store_client" />
             <argument type="service" id="shopware_core.local_license_unpack_service" />
         </service>
@@ -110,6 +112,14 @@
             <argument type="service" id="models"/>
             <argument type="service" id="shopware_plugininstaller.plugin_licence_service" />
             <argument type="service" id="shopware.release" />
+        </service>
+
+        <service id="shopware_plugininstaller.plugin_extractor" class="Shopware\Bundle\PluginInstallerBundle\Service\PluginExtractor">
+            <argument>%shopware.plugin_directories.ShopwarePlugins%</argument>
+            <argument type="service" id="file_system" />
+            <argument>%shopware.plugin_directories%</argument>
+            <argument type="service" id="shopware.release" />
+            <argument type="service" id="shopware.plugin_requirement_validator" />
         </service>
     </services>
 </container>

@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Payment;
+namespace Shopware\Models\Payment;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -31,7 +31,7 @@ use Shopware\Components\Model\ModelEntity;
  * Shopware ruleSets-model represents a single ruleSet.
  *
  * @ORM\Table(name="s_core_rulesets")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class RuleSet extends ModelEntity
 {
@@ -39,7 +39,7 @@ class RuleSet extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -80,7 +80,7 @@ class RuleSet extends ModelEntity
     private $value2;
 
     /**
-     * @var
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment>
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Payment\Payment", inversedBy="ruleSets")
      * @ORM\JoinColumn(name="paymentID", referencedColumnName="id")
@@ -220,7 +220,7 @@ class RuleSet extends ModelEntity
     /**
      * Gets the corresponding payment-model.
      *
-     * @return
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment>
      */
     public function getPayment()
     {
@@ -230,7 +230,7 @@ class RuleSet extends ModelEntity
     /**
      * Sets the payment-model.
      *
-     * @param  $payment
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment> $payment
      *
      * @return \Shopware\Models\Payment\RuleSet
      */

@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -66,12 +66,6 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
      */
     private $mediaService;
 
-    /**
-     * @param Connection                $connection
-     * @param FieldHelper               $fieldHelper
-     * @param Hydrator\CategoryHydrator $categoryHydrator
-     * @param MediaServiceInterface     $mediaService
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
@@ -89,7 +83,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
      */
     public function get($id, Struct\ShopContextInterface $context)
     {
-        $categories = $this->getList($id, $context);
+        $categories = $this->getList([$id], $context);
 
         return array_shift($categories);
     }
@@ -117,8 +111,12 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
                 continue;
             }
 
+            /** @var int[] $ids */
+            $ids = explode(',', $mapping[$id]);
+
+            /** @var int[] $productCategories */
             $productCategories = $this->getProductCategories(
-                explode(',', $mapping[$id]),
+                $ids,
                 $categories
             );
             $result[$product->getNumber()] = $productCategories;
@@ -150,15 +148,17 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
             ->leftJoin('stream', 's_product_streams_attributes', 'productStreamAttribute', 'stream.id = productStreamAttribute.streamId')
             ->where('category.id IN (:categories)')
             ->andWhere('category.active = 1')
+            ->andWhere('category.shops IS NULL OR category.shops LIKE :shopId')
             ->addGroupBy('category.id')
-            ->setParameter(':categories', $ids, Connection::PARAM_INT_ARRAY);
+            ->setParameter(':categories', $ids, Connection::PARAM_INT_ARRAY)
+            ->setParameter(':shopId', '%|' . $context->getShop()->getId() . '|%');
 
         $this->fieldHelper->addCategoryTranslation($query, $context);
         $this->fieldHelper->addMediaTranslation($query, $context);
         $this->fieldHelper->addProductStreamTranslation($query, $context);
         $this->fieldHelper->addCategoryMainDataTranslation($query, $context);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -175,7 +175,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         $categories = [];
         foreach ($data as $row) {
             $id = $row['__category_id'];
-            $categories[$id] = $this->categoryHydrator->hydrate($this->translateCategoryMedia($row, $context));
+            $categories[$id] = $this->categoryHydrator->hydrate($this->translateCategoryData($row, $context));
         }
 
         return $categories;
@@ -184,7 +184,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     /**
      * @param int[] $ids
      *
-     * @return string[] indexed by product id
+     * @return array<int, string> indexed by product id
      */
     private function getMapping(array $ids)
     {
@@ -211,6 +211,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         foreach ($mapping as $row) {
             $ids = array_merge($ids, explode(',', $row));
         }
+        /** @var array<int> $ids */
         $ids = array_unique($ids);
 
         return $ids;
@@ -236,14 +237,11 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     }
 
     /**
-     * Resolves translated category media
-     *
-     * @param array                       $category
-     * @param Struct\ShopContextInterface $context
+     * Resolves translated data for media and streamId
      *
      * @return array
      */
-    private function translateCategoryMedia(array $category, Struct\ShopContextInterface $context)
+    private function translateCategoryData(array $category, Struct\ShopContextInterface $context)
     {
         if (empty($category['__category_translation'])) {
             return $category;
@@ -253,6 +251,10 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
 
         if (!empty($translation['imagePath'])) {
             $category['mediaTranslation'] = $this->mediaService->get($translation['imagePath'], $context);
+        }
+
+        if (!empty($translation['streamId'])) {
+            $category['__stream_id'] = $translation['streamId'];
         }
 
         return $category;

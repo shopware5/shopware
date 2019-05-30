@@ -29,8 +29,6 @@ use Shopware\Bundle\SearchBundle\Criteria;
 interface CustomerNumberSearchInterface
 {
     /**
-     * @param Criteria $criteria
-     *
      * @return CustomerNumberSearchResult
      */
     public function search(Criteria $criteria);

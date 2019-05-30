@@ -72,13 +72,6 @@ class Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zend_Cache_
     protected $_redis = null;
 
     /**
-     * @var array
-     */
-    private $release;
-
-    /**
-     * Constructor
-     *
      * @param array $options associative array of options
      *
      * @throws Zend_Cache_Exception
@@ -111,7 +104,7 @@ class Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zend_Cache_
             }
 
             // SW-20299 - sw-fix: support redis auth configuration
-            if ($server['redisAuth']) {
+            if (isset($server['redisAuth'])) {
                 $this->_redis->auth($server['redisAuth']);
             }
 
@@ -125,6 +118,16 @@ class Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zend_Cache_
                 $this->_redis = null;
             }
         }
+    }
+
+    /**
+     * Gets the redis instance used by the cache.
+     *
+     * @return Redis|null
+     */
+    public function getRedis()
+    {
+        return $this->_redis;
     }
 
     /**

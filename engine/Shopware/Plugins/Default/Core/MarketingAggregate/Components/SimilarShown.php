@@ -28,7 +28,7 @@
  * This components refresh and initials the similar shown data
  * in the s_articles_similar_shown_ro
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -57,6 +57,9 @@ class Shopware_Components_SimilarShown extends Enlight_Class
      * of articles.
      * The articles are used for the aggregate query which is
      * faster if an constant where condition is used.
+     *
+     * @param int|null $offset
+     * @param int|null $limit
      */
     public function initSimilarShown($offset = null, $limit = null)
     {
@@ -103,6 +106,8 @@ class Shopware_Components_SimilarShown extends Enlight_Class
      * Helper function to refresh the elapsed similar shown article data.
      * This function use the getSimilarShownValidationTime to get the date
      * of invalid data.
+     *
+     * @param int|null $limit
      */
     public function updateElapsedSimilarShownArticles($limit = null)
     {
@@ -155,8 +160,8 @@ class Shopware_Components_SimilarShown extends Enlight_Class
      * This function is used to insert or update the similar shown table
      * for a single buy combination of two articles.
      *
-     * @param $articleId
-     * @param $relatedArticleId
+     * @param int $articleId
+     * @param int $relatedArticleId
      */
     public function refreshSimilarShown($articleId, $relatedArticleId)
     {

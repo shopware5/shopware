@@ -32,7 +32,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -52,7 +52,8 @@ class DatabaseSetupCommand extends ShopwareCommand
      */
     protected function configure()
     {
-        $this->setName('sw:database:setup');
+        $this->setName('sw:database:setup')
+            ->setDescription('Setups shopware database');
 
         $this->addOption(
             'steps',
@@ -166,8 +167,6 @@ class DatabaseSetupCommand extends ShopwareCommand
     }
 
     /**
-     * @param array $dbConfig
-     *
      * @return string
      */
     private function buildConnectionString(array $dbConfig)
@@ -196,8 +195,6 @@ class DatabaseSetupCommand extends ShopwareCommand
     }
 
     /**
-     * @param array $dbConfig
-     *
      * @return \PDO
      */
     private function createConnection(array $dbConfig)
@@ -226,8 +223,6 @@ class DatabaseSetupCommand extends ShopwareCommand
     }
 
     /**
-     * @param InputInterface $input
-     *
      * @return string
      */
     private function parseUrl(InputInterface $input)

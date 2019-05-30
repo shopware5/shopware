@@ -118,7 +118,7 @@ class Md5StrategyTest extends TestCase
      */
     public function testNormalizer($path, $expected)
     {
-        $this->assertEquals(
+        static::assertEquals(
             $expected,
             $this->strategy->normalize($path)
         );
@@ -126,18 +126,18 @@ class Md5StrategyTest extends TestCase
 
     public function testEncodedPath()
     {
-        $this->assertTrue($this->strategy->isEncoded('media/image/53/3d/af/my-image.png'));
-        $this->assertTrue($this->strategy->isEncoded('http://www.shopware.com/media/image/53/3d/af/my-image.png'));
+        static::assertTrue($this->strategy->isEncoded('media/image/53/3d/af/my-image.png'));
+        static::assertTrue($this->strategy->isEncoded('http://www.shopware.com/media/image/53/3d/af/my-image.png'));
     }
 
     public function testNotEncodedPath()
     {
-        $this->assertFalse($this->strategy->isEncoded('media/image/my-image.png'));
-        $this->assertFalse($this->strategy->isEncoded('media/image/53/'));
-        $this->assertFalse($this->strategy->isEncoded('media/image/53/foo'));
-        $this->assertFalse($this->strategy->isEncoded('media/image/53/a4/d3/'));
-        $this->assertFalse($this->strategy->isEncoded('media/image/53/a4/d3/foo'));
-        $this->assertFalse($this->strategy->isEncoded('http://www.shopware.com/media/image/53/'));
+        static::assertFalse($this->strategy->isEncoded('media/image/my-image.png'));
+        static::assertFalse($this->strategy->isEncoded('media/image/53/'));
+        static::assertFalse($this->strategy->isEncoded('media/image/53/foo'));
+        static::assertFalse($this->strategy->isEncoded('media/image/53/a4/d3/'));
+        static::assertFalse($this->strategy->isEncoded('media/image/53/a4/d3/foo'));
+        static::assertFalse($this->strategy->isEncoded('http://www.shopware.com/media/image/53/'));
     }
 
     /**
@@ -147,12 +147,12 @@ class Md5StrategyTest extends TestCase
      */
     public function testEncodingWithInvalidPaths($path)
     {
-        $this->assertEquals('', $this->strategy->encode($path));
+        static::assertEquals('', $this->strategy->encode($path));
     }
 
     public function testEncodingBlacklist()
     {
-        $this->assertFalse($this->invokeMethod($this->strategy, 'isEncoded', ['media/image/f1/d3/ad/foo.jpg']));
+        static::assertFalse($this->invokeMethod($this->strategy, 'isEncoded', ['media/image/f1/d3/ad/foo.jpg']));
     }
 
     /**
@@ -163,7 +163,7 @@ class Md5StrategyTest extends TestCase
      */
     public function testSubstringPath($path, $expectedPath)
     {
-        $this->assertEquals($expectedPath, $this->invokeMethod($this->strategy, 'substringPath', [$path]));
+        static::assertEquals($expectedPath, $this->invokeMethod($this->strategy, 'substringPath', [$path]));
     }
 
     /**
@@ -174,6 +174,6 @@ class Md5StrategyTest extends TestCase
      */
     public function testEncode($path, $expectedPath)
     {
-        $this->assertEquals($expectedPath, $this->strategy->encode($path));
+        static::assertEquals($expectedPath, $this->strategy->encode($path));
     }
 }

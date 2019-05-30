@@ -27,7 +27,7 @@ namespace Shopware\Recovery\Common\Archive\Entry;
 use ZipArchive;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -67,9 +67,6 @@ class Zip
         return $this->stream->getStream($this->name);
     }
 
-    /**
-     * @return mixed
-     */
     public function getContents()
     {
         return $this->stream->getFromIndex($this->position);

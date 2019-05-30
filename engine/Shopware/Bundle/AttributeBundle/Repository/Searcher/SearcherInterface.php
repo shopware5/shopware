@@ -27,15 +27,13 @@ namespace Shopware\Bundle\AttributeBundle\Repository\Searcher;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 interface SearcherInterface
 {
     /**
-     * @param SearchCriteria $criteria
-     *
      * @return SearcherResult
      */
     public function search(SearchCriteria $criteria);

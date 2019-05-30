@@ -30,7 +30,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -57,9 +57,6 @@ abstract class ShopwareCommand extends Command implements ContainerAwareInterfac
         return $this->container;
     }
 
-    /**
-     * @param OutputInterface $output
-     */
     public function registerErrorHandler(OutputInterface $output)
     {
         error_reporting(-1);

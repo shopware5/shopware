@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -39,8 +39,7 @@ interface CategoryServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGatewayInterface::getList()
      *
-     * @param $ids
-     * @param Struct\ShopContextInterface $context
+     * @param int[] $ids
      *
      * @return Struct\Category[] indexed by the category id
      */
@@ -52,16 +51,14 @@ interface CategoryServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGatewayInterface::get()
      *
-     * @param $id
-     * @param Struct\ShopContextInterface $context
+     * @param int $id
      *
      * @return Struct\Category
      */
     public function get($id, Struct\ShopContextInterface $context);
 
     /**
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[] $products
      *
      * @return array Indexed by product number, contains all categories of a product
      */

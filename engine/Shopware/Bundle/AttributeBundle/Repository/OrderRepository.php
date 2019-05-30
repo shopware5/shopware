@@ -26,7 +26,7 @@ namespace Shopware\Bundle\AttributeBundle\Repository;
 
 use Shopware\Bundle\AttributeBundle\Repository\Reader\ReaderInterface;
 use Shopware\Bundle\AttributeBundle\Repository\Searcher\SearcherInterface;
-use Shopware\Bundle\EsBackend\EsAwareRepository;
+use Shopware\Bundle\EsBackendBundle\EsAwareRepository;
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 use Shopware\Bundle\ESIndexingBundle\TextMappingInterface;
 use Shopware\Components\Model\ModelManager;
@@ -39,11 +39,7 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
     private $textMapping;
 
     /**
-     * @param string               $entity
-     * @param ModelManager         $entityManager
-     * @param ReaderInterface      $reader
-     * @param SearcherInterface    $searcher
-     * @param TextMappingInterface $textMapping
+     * @param string $entity
      */
     public function __construct(
         $entity,
@@ -80,7 +76,7 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
         return [
             'properties' => [
                 'id' => ['type' => 'long'],
-                'number' => $this->textMapping->getNotAnalyzedField(),
+                'number' => $this->getTextFieldWithRawData(),
                 'invoiceAmount' => ['type' => 'double'],
                 'invoiceShipping' => ['type' => 'double'],
                 'orderTime' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
@@ -90,10 +86,11 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
                 'billingCountryId' => ['type' => 'long'],
                 'shippingCountryId' => ['type' => 'long'],
                 'groupKey' => $this->textMapping->getNotAnalyzedField(),
-                'email' => $this->textMapping->getNotAnalyzedField(),
+                'email' => $this->getTextFieldWithRawData(),
+                'orderDocuments' => $this->getTextFieldWithRawData(),
                 'transactionId' => $this->textMapping->getNotAnalyzedField(),
-                'firstname' => $this->textMapping->getTextField(),
-                'lastname' => $this->textMapping->getTextField(),
+                'firstname' => $this->getTextFieldWithRawData(),
+                'lastname' => $this->getTextFieldWithRawData(),
                 'paymentId' => ['type' => 'long'],
                 'paymentName' => $this->textMapping->getTextField(),
                 'dispatchId' => ['type' => 'long'],
@@ -108,6 +105,8 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
                 'city' => $this->textMapping->getTextField(),
                 'phone' => $this->textMapping->getNotAnalyzedField(),
                 'countryName' => $this->textMapping->getTextField(),
+
+                'swag_all' => $this->textMapping->getTextField(),
             ],
         ];
     }
@@ -118,5 +117,18 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
     public function getDomainName()
     {
         return 'orders';
+    }
+
+    private function getTextFieldWithRawData()
+    {
+        return array_merge(
+            $this->textMapping->getTextField(),
+            [
+                'fields' => [
+                    'raw' => $this->textMapping->getNotAnalyzedField(),
+                ],
+                'copy_to' => 'swag_all',
+            ]
+        );
     }
 }

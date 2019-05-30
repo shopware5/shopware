@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -42,9 +42,6 @@ class AdditionalTextService implements AdditionalTextServiceInterface
      */
     private $configuratorService;
 
-    /**
-     * @param ConfiguratorServiceInterface $configuratorService
-     */
     public function __construct(ConfiguratorServiceInterface $configuratorService)
     {
         $this->configuratorService = $configuratorService;
@@ -81,7 +78,7 @@ class AdditionalTextService implements AdditionalTextServiceInterface
             $context
         );
 
-        /** @var $required ListProduct[] */
+        /** @var ListProduct[] $required */
         foreach ($required as &$product) {
             if (!array_key_exists($product->getNumber(), $configurations)) {
                 continue;

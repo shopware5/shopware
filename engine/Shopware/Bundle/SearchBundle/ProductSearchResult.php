@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 /**
  * Defines the search result of the search gateway.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -55,14 +55,11 @@ class ProductSearchResult extends ProductNumberSearchResult
      * @param ListProduct[]          $products   Indexed by the product order number
      * @param int                    $totalCount
      * @param FacetResultInterface[] $facets
-     * @param Criteria               $criteria
-     * @param ShopContextInterface   $context
      */
     public function __construct($products, $totalCount, $facets, Criteria $criteria, ShopContextInterface $context)
     {
-        $this->products = $products;
-        $this->totalCount = $totalCount;
-        $this->facets = $facets;
+        parent::__construct($products, $totalCount, $facets);
+
         $this->criteria = $criteria;
         $this->context = $context;
     }

@@ -158,6 +158,17 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
         });
     },
 
+    deleteExpiredPluginEvent: function(record, pluginEntry) {
+        var me = this;
+
+        Shopware.app.Application.fireEvent('expired-delete-plugin', record, function() {
+            me.removeLocalData(record);
+            Shopware.app.Application.fireEvent(me.getPluginReloadedEventName(record), record);
+            Shopware.app.Application.fireEvent('plugin-reloaded', record);
+            pluginEntry.destroy();
+        });
+    },
+
     requestPluginTestVersionEvent: function(record, price) {
         var me = this;
 

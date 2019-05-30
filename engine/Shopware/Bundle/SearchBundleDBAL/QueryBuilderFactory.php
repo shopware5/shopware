@@ -35,7 +35,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -62,12 +62,6 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     private $conditionHandlers;
 
     /**
-     * @param Connection                  $connection
-     * @param \Enlight_Event_EventManager $eventManager
-     * @param IteratorAggregate           $conditionHandlers
-     * @param IteratorAggregate           $sortingHandlers
-     * @param ContainerInterface          $container
-     *
      * @throws \RuntimeException
      * @throws \Enlight_Event_Exception
      */
@@ -193,13 +187,6 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
         return new QueryBuilder($this->connection);
     }
 
-    /**
-     * @param Criteria             $criteria
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     *
-     * @throws \Exception
-     */
     private function addConditions(Criteria $criteria, QueryBuilder $query, ShopContextInterface $context)
     {
         foreach ($criteria->getConditions() as $condition) {
@@ -208,13 +195,6 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
         }
     }
 
-    /**
-     * @param Criteria             $criteria
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
-     *
-     * @throws \Exception
-     */
     private function addSorting(Criteria $criteria, QueryBuilder $query, ShopContextInterface $context)
     {
         foreach ($criteria->getSortings() as $sorting) {
@@ -225,8 +205,6 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     }
 
     /**
-     * @param SortingInterface $sorting
-     *
      * @throws \Exception
      *
      * @return SortingHandlerInterface
@@ -243,8 +221,6 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     }
 
     /**
-     * @param ConditionInterface $condition
-     *
      * @throws \Exception
      *
      * @return ConditionHandlerInterface
@@ -261,9 +237,6 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     }
 
     /**
-     * @throws \RuntimeException
-     * @throws \Enlight_Event_Exception
-     *
      * @return SortingHandlerInterface[]
      */
     private function registerSortingHandlers()
@@ -280,9 +253,6 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     }
 
     /**
-     * @throws \RuntimeException
-     * @throws \Enlight_Event_Exception
-     *
      * @return ConditionHandlerInterface[]
      */
     private function registerConditionHandlers()
@@ -299,8 +269,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     }
 
     /**
-     * @param ArrayCollection $objects
-     * @param string          $class
+     * @param string $class
      *
      * @throws \RuntimeException
      */

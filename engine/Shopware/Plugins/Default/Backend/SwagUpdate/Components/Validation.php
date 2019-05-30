@@ -27,7 +27,7 @@ namespace ShopwarePlugins\SwagUpdate\Components;
 /**
  * Used for plugin and system requirement validation.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -59,9 +59,6 @@ class Validation
      */
     private $checks;
 
-    /**
-     * @param \Enlight_Components_Snippet_Namespace $namespace
-     */
     public function __construct(\Enlight_Components_Snippet_Namespace $namespace, array $checks)
     {
         $this->namespace = $namespace;
@@ -102,7 +99,7 @@ class Validation
     }
 
     /**
-     * @param $requirement
+     * @param array $requirement
      *
      * @return array
      */

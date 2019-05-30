@@ -35,7 +35,7 @@ use Symfony\Component\DependencyInjection\Container;
 /**
  * CategorySubscriber
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -76,9 +76,6 @@ class CategorySubscriber implements BaseEventSubscriber
      */
     private $container;
 
-    /**
-     * @param Container $container
-     */
     public function __construct(Container $container)
     {
         $this->container = $container;
@@ -89,7 +86,9 @@ class CategorySubscriber implements BaseEventSubscriber
      */
     public function getCategoryComponent()
     {
-        $this->categoryDenormalization = $this->container->get('CategoryDenormalization');
+        /** @var CategoryDenormalization $categoryDenormalization */
+        $categoryDenormalization = $this->container->get('CategoryDenormalization');
+        $this->categoryDenormalization = $categoryDenormalization;
 
         $this->categoryDenormalization->disableTransactions();
 
@@ -114,16 +113,13 @@ class CategorySubscriber implements BaseEventSubscriber
         return [Events::onFlush, Events::postFlush];
     }
 
-    /**
-     * @param OnFlushEventArgs $eventArgs
-     */
     public function onFlush(OnFlushEventArgs $eventArgs)
     {
         if ($this->disabledForNextFlush) {
             return;
         }
 
-        /** @var $em ModelManager */
+        /** @var ModelManager $em */
         $em = $eventArgs->getEntityManager();
         $uow = $em->getUnitOfWork();
 
@@ -135,19 +131,19 @@ class CategorySubscriber implements BaseEventSubscriber
         // Entity deletions
         foreach ($uow->getScheduledEntityDeletions() as $entity) {
             if ($entity instanceof Category) {
-                /* @var $entity Category */
+                /* @var Category $entity */
                 $this->backlogRemoveCategory($entity->getId());
             }
 
             if ($entity instanceof Article) {
-                /* @var $entity Article */
+                /* @var Article $entity */
                 $this->backlogRemoveArticle($entity->getId());
             }
         }
 
         // Entity Insertions
         foreach ($uow->getScheduledEntityInsertions() as $category) {
-            /* @var $category Category */
+            /* @var Category $category */
             if (!($category instanceof Category)) {
                 continue;
             }
@@ -160,7 +156,7 @@ class CategorySubscriber implements BaseEventSubscriber
 
         // Entity updates
         foreach ($uow->getScheduledEntityUpdates() as $category) {
-            /* @var $category Category */
+            /* @var Category $category */
             if (!($category instanceof Category)) {
                 continue;
             }
@@ -178,7 +174,7 @@ class CategorySubscriber implements BaseEventSubscriber
                 continue;
             }
 
-            if ($oldParentCategory->getId() == $newParentCategory->getId()) {
+            if ((int) $oldParentCategory->getId() === (int) $newParentCategory->getId()) {
                 continue;
             }
 
@@ -190,7 +186,7 @@ class CategorySubscriber implements BaseEventSubscriber
             $this->addPendingMove($category);
         }
 
-        /* @var $col \Doctrine\ORM\PersistentCollection */
+        /* @var \Doctrine\ORM\PersistentCollection $col */
         foreach ($uow->getScheduledCollectionDeletions() as $col) {
             if (!$col->getOwner() instanceof Article) {
                 continue;
@@ -201,24 +197,24 @@ class CategorySubscriber implements BaseEventSubscriber
                     continue;
                 }
 
-                /** @var $article Article */
-                $article = $col->getOwner();
-                $this->addPendingRemoveAssignment($article, $category);
+                /** @var Article $product */
+                $product = $col->getOwner();
+                $this->addPendingRemoveAssignment($product, $category);
             }
         }
 
-        /* @var $col \Doctrine\ORM\PersistentCollection */
+        /* @var \Doctrine\ORM\PersistentCollection $col */
         foreach ($uow->getScheduledCollectionUpdates() as $col) {
             if ($col->getOwner() instanceof Article) {
-                /** @var $article Article */
-                $article = $col->getOwner();
+                /** @var Article $product */
+                $product = $col->getOwner();
 
                 foreach ($col->getInsertDiff() as $category) {
                     if (!$category instanceof Category) {
                         continue;
                     }
 
-                    $this->addPendingAddAssignment($article, $category);
+                    $this->addPendingAddAssignment($product, $category);
                 }
 
                 foreach ($col->getDeleteDiff() as $category) {
@@ -226,36 +222,33 @@ class CategorySubscriber implements BaseEventSubscriber
                         continue;
                     }
 
-                    $this->addPendingRemoveAssignment($article, $category);
+                    $this->addPendingRemoveAssignment($product, $category);
                 }
             }
 
             if ($col->getOwner() instanceof Category) {
-                /* @var $category Category */
+                /* @var Category $category */
                 $category = $col->getOwner();
 
-                foreach ($col->getInsertDiff() as $article) {
-                    if (!$article instanceof Article) {
+                foreach ($col->getInsertDiff() as $product) {
+                    if (!$product instanceof Article) {
                         continue;
                     }
 
-                    $this->addPendingAddAssignment($article, $category);
+                    $this->addPendingAddAssignment($product, $category);
                 }
 
-                foreach ($col->getDeleteDiff() as $article) {
-                    if (!$article instanceof Article) {
+                foreach ($col->getDeleteDiff() as $product) {
+                    if (!$product instanceof Article) {
                         continue;
                     }
 
-                    $this->addPendingRemoveAssignment($article, $category);
+                    $this->addPendingRemoveAssignment($product, $category);
                 }
             }
         }
     }
 
-    /**
-     * @param PostFlushEventArgs $eventArgs
-     */
     public function postFlush(/* @noinspection PhpUnusedParameterInspection */ PostFlushEventArgs $eventArgs)
     {
         if ($this->disabledForNextFlush) {
@@ -264,7 +257,7 @@ class CategorySubscriber implements BaseEventSubscriber
             return;
         }
 
-        // Remove assignments that noutralize each other
+        // Remove assignments that neutralize each other
         foreach ($this->pendingRemoveAssignments as $key => $pendingRemove) {
             if (isset($this->pendingAddAssignments[$key])) {
                 unset($this->pendingAddAssignments[$key]);
@@ -273,25 +266,25 @@ class CategorySubscriber implements BaseEventSubscriber
         }
 
         foreach ($this->pendingRemoveAssignments as $pendingRemove) {
-            /** @var $category Category */
+            /** @var Category $category */
             $category = $pendingRemove['category'];
-            /** @var $article Article */
-            $article = $pendingRemove['article'];
+            /** @var Article $product */
+            $product = $pendingRemove['article'];
 
-            $this->backlogRemoveAssignment($article->getId(), $category->getId());
+            $this->backlogRemoveAssignment($product->getId(), $category->getId());
         }
 
         foreach ($this->pendingAddAssignments as $pendingAdd) {
-            /** @var $category Category */
+            /** @var Category $category */
             $category = $pendingAdd['category'];
-            /** @var $article Article */
-            $article = $pendingAdd['article'];
+            /** @var Article $product */
+            $product = $pendingAdd['article'];
 
-            $this->backlogAddAssignment($article->getId(), $category->getId());
+            $this->backlogAddAssignment($product->getId(), $category->getId());
         }
 
         foreach ($this->pendingMoves as $pendingMove) {
-            /** @var $category Category */
+            /** @var Category $category */
             $category = $pendingMove['category'];
             $this->backlogMoveCategory($category->getId());
         }
@@ -300,14 +293,11 @@ class CategorySubscriber implements BaseEventSubscriber
     /**
      * Sets the internal path field for given category based on it's parents
      *
-     * @param Category $category
-     *
      * @return Category
      */
     public function setPathForCategory(Category $category)
     {
-        $parent = $category->getParent();
-        $parentId = $parent->getId();
+        $parentId = $category->getParent()->getId();
 
         $parents = $this->getCategoryComponent()->getParentCategoryIds($parentId);
         $path = implode('|', $parents);
@@ -368,10 +358,6 @@ class CategorySubscriber implements BaseEventSubscriber
         $component->rebuildAssignments($categoryId);
     }
 
-    /**
-     * @param Article  $article
-     * @param Category $category
-     */
     protected function addPendingAddAssignment(Article $article, Category $category)
     {
         $this->pendingAddAssignments[$category->getId() . '_' . $article->getId()] = [
@@ -380,10 +366,6 @@ class CategorySubscriber implements BaseEventSubscriber
         ];
     }
 
-    /**
-     * @param Article  $article
-     * @param Category $category
-     */
     protected function addPendingRemoveAssignment(Article $article, Category $category)
     {
         $this->pendingRemoveAssignments[$category->getId() . '_' . $article->getId()] = [
@@ -392,9 +374,6 @@ class CategorySubscriber implements BaseEventSubscriber
         ];
     }
 
-    /**
-     * @param Category $category
-     */
     protected function addPendingMove(Category $category)
     {
         $this->pendingMoves[$category->getId()] = [

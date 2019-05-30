@@ -44,9 +44,9 @@ Ext.define('Shopware.apps.Base.store.Shop', {
     remoteFilter: true,
 
     proxy:{
-        type:'ajax',
+        type: 'ajax',
         url: '{url action=getShops}',
-        reader:{
+        reader: {
             type:'json',
             root:'data',
             totalProperty:'total'

@@ -29,15 +29,16 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query\Expr\From;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
+use Shopware\Components\Model\QueryOperatorValidator;
 
 class ModelRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testPassingIndexByParameter()
     {
         $em = $this->getMockBuilder(EntityManagerInterface::class)->disableOriginalConstructor()->getMock();
-        $em->expects($this->once())
+        $em->expects(static::once())
             ->method('createQueryBuilder')
-            ->willReturn(new QueryBuilder($em));
+            ->willReturn(new QueryBuilder($em, new QueryOperatorValidator()));
 
         $class = $this->getMockBuilder(ClassMetadata::class)->disableOriginalConstructor()->getMock();
 
@@ -48,12 +49,12 @@ class ModelRepositoryTest extends \PHPUnit\Framework\TestCase
         /** @var From[] $from */
         $from = $builder->getDQLPart('from');
 
-        $this->assertInternalType('array', $from);
-        $this->assertCount(1, $from);
+        static::assertInternalType('array', $from);
+        static::assertCount(1, $from);
 
         /** @var From $from */
         $from = array_shift($from);
 
-        $this->assertEquals('bar', $from->getIndexBy());
+        static::assertEquals('bar', $from->getIndexBy());
     }
 }

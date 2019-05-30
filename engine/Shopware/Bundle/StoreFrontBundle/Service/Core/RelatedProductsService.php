@@ -24,34 +24,32 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\RelatedProductsGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class RelatedProductsService implements Service\RelatedProductsServiceInterface
 {
     /**
-     * @var Gateway\RelatedProductsGatewayInterface
+     * @var RelatedProductsGatewayInterface
      */
     private $gateway;
 
     /**
-     * @var Service\ListProductServiceInterface
+     * @var ListProductServiceInterface
      */
     private $listProductService;
 
-    /**
-     * @param Gateway\RelatedProductsGatewayInterface $gateway
-     * @param Service\ListProductServiceInterface     $listProductService
-     */
     public function __construct(
-        Gateway\RelatedProductsGatewayInterface $gateway,
-        Service\ListProductServiceInterface $listProductService
+        RelatedProductsGatewayInterface $gateway,
+        ListProductServiceInterface $listProductService
     ) {
         $this->gateway = $gateway;
         $this->listProductService = $listProductService;
@@ -60,7 +58,7 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get(Struct\BaseProduct $product, Struct\ProductContextInterface $context)
+    public function get(BaseProduct $product, ProductContextInterface $context)
     {
         $related = $this->getList([$product], $context);
 
@@ -70,17 +68,18 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ProductContextInterface $context)
+    public function getList($products, ProductContextInterface $context)
     {
-        /**
-         * returns an array which is associated with the different product numbers.
+        /*
+         * Returns an array which is associated with the different product numbers.
          * Each array contains a list of product numbers which are related to the reference product.
          */
         $numbers = $this->gateway->getList($products);
 
-        //loads the list product data for the selected numbers.
-        //all numbers are joined in the extractNumbers function to prevent that a product will be
-        //loaded multiple times
+        /*
+         * Loads the list product data for the selected numbers.
+         * All numbers are joined in the `extractNumbers` function to prevent that a product will be loaded multiple times
+         */
         $listProducts = $this->listProductService->getList(
             $this->extractNumbers($numbers),
             $context
@@ -102,10 +101,10 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
     }
 
     /**
-     * @param Struct\BaseProduct[] $products
-     * @param string[]             $numbers
+     * @param BaseProduct[] $products
+     * @param string[]      $numbers
      *
-     * @return Struct\BaseProduct[]
+     * @return BaseProduct[]
      */
     private function getProductsByNumbers($products, array $numbers)
     {
@@ -121,19 +120,19 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
     }
 
     /**
-     * @param $numbers
+     * @param array<string, string[]> $numbers
      *
      * @return array
      */
     private function extractNumbers($numbers)
     {
-        //collect all numbers to send a single list product request.
+        // Collect all numbers to send a single list product request.
         $related = [];
         foreach ($numbers as $value) {
             $related = array_merge($related, $value);
         }
 
-        //filter duplicate numbers to prevent duplicate data requests and iterations.
+        // Filter duplicate numbers to prevent duplicate data requests and iterations.
         $unique = array_unique($related);
 
         return array_values($unique);

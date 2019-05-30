@@ -28,7 +28,7 @@ use Enlight_Components_Snippet_Namespace as SnippetNamespace;
 use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -47,8 +47,7 @@ class RegexCheck implements CheckInterface
     private $userLang;
 
     /**
-     * @param SnippetNamespace $namespace
-     * @param string           $userLang
+     * @param string $userLang
      */
     public function __construct(SnippetNamespace $namespace, $userLang)
     {
@@ -141,8 +140,8 @@ class RegexCheck implements CheckInterface
     /**
      * Searches inside a file for a given regex. Will return Match-Objects or false if no match was found
      *
-     * @param $file
-     * @param $regex
+     * @param string $file
+     * @param string $regex
      *
      * @return bool
      */
@@ -157,7 +156,7 @@ class RegexCheck implements CheckInterface
     }
 
     /**
-     * @param $messages
+     * @param array $messages
      *
      * @return string
      */

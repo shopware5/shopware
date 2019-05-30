@@ -25,6 +25,7 @@
 use Shopware\Components\DependencyInjection\Bridge\Db;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Session\PdoSessionHandler;
+use Shopware\Models\Shop\Locale;
 
 /**
  * Shopware Auth Plugin
@@ -123,7 +124,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     /**
      * Returns true if and only if the Role has access to the Resource
      *
-     * @param $params
+     * @param array $params
      *
      * @return bool
      */
@@ -217,11 +218,11 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     /**
      * @throws Enlight_Controller_Exception
      *
-     * @return null|Shopware_Components_Auth
+     * @return Shopware_Components_Auth|null
      */
     public function checkAuth()
     {
-        /** @var $auth Shopware_Components_Auth */
+        /** @var Shopware_Components_Auth $auth */
         $auth = Shopware()->Container()->get('Auth');
         if ($auth->hasIdentity()) {
             $auth->refresh();
@@ -281,7 +282,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
             $this->aclRole = $identity->role;
         }
 
-        /** @var $engine Enlight_Template_Manager */
+        /** @var Enlight_Template_Manager $engine */
         $engine = $container->get('Template');
         $engine->unregisterPlugin(
             Smarty::PLUGIN_FUNCTION,
@@ -358,8 +359,6 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     }
 
     /**
-     * @param Enlight_Event_EventArgs $args
-     *
      * @throws Exception
      *
      * @return Enlight_Components_Session_Namespace
@@ -380,8 +379,6 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     /**
      * Initiate shopware auth resource
      * database adapter by default
-     *
-     * @param Enlight_Event_EventArgs $args
      *
      * @throws \Exception
      * @throws \SmartyException
@@ -452,13 +449,19 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     protected function getCurrentLocale()
     {
         $options = $this->getSessionOptions();
+        $modelManager = $this->get('models');
 
         Enlight_Components_Session::setOptions($options);
 
         if (Enlight_Components_Session::sessionExists()) {
-            $auth = Shopware()->Container()->get('Auth');
+            $auth = $this->get('Auth');
             if ($auth->hasIdentity()) {
                 $user = $auth->getIdentity();
+
+                if ($user->locale instanceof __PHP_Incomplete_Class) {
+                    $user->locale = $modelManager->getRepository(Locale::class)->find($user->localeID);
+                }
+
                 if (isset($user->locale)) {
                     return $user->locale;
                 }
@@ -466,9 +469,8 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         }
 
         $default = $this->getDefaultLocale();
-        $locale = Shopware()->Models()->getRepository('Shopware\Models\Shop\Locale')->find($default);
 
-        return $locale;
+        return $modelManager->getRepository(Locale::class)->find($default);
     }
 
     /**
@@ -496,8 +498,6 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     }
 
     /**
-     * @param Container $container
-     *
      * @throws \InvalidArgumentException
      *
      * @return \SessionHandlerInterface|null

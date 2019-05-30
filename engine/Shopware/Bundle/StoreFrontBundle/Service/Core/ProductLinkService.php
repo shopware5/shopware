@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -40,9 +40,6 @@ class ProductLinkService implements Service\ProductLinkServiceInterface
      */
     private $gateway;
 
-    /**
-     * @param Gateway\LinkGatewayInterface $gateway
-     */
     public function __construct(Gateway\LinkGatewayInterface $gateway)
     {
         $this->gateway = $gateway;

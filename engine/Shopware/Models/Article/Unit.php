@@ -29,7 +29,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_core_units")
  */
 class Unit extends ModelEntity
@@ -37,16 +37,17 @@ class Unit extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Detail", mappedBy="unit")
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Detail>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Detail", mappedBy="unit")
      */
     protected $articles;
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -129,7 +130,7 @@ class Unit extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Detail>
      */
     public function getArticles()
     {
@@ -137,9 +138,7 @@ class Unit extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $articles
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Detail>|null $articles
      */
     public function setArticles($articles)
     {

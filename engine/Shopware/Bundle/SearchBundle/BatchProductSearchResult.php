@@ -35,9 +35,6 @@ class BatchProductSearchResult
      */
     protected $storage = [];
 
-    /**
-     * @param array $storage
-     */
     public function __construct(array $storage)
     {
         $this->storage = $storage;
@@ -50,7 +47,7 @@ class BatchProductSearchResult
      *
      * @throws \OutOfBoundsException
      *
-     * @return ListProduct[]
+     * @return array<string, ListProduct|null>
      */
     public function get($key)
     {

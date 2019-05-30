@@ -46,11 +46,6 @@ class ShopGateway implements ShopGatewayInterface
      */
     private $connection;
 
-    /**
-     * @param ShopHydrator $hydrator
-     * @param FieldHelper  $fieldHelper
-     * @param Connection   $connection
-     */
     public function __construct(
         ShopHydrator $hydrator,
         FieldHelper $fieldHelper,
@@ -82,7 +77,7 @@ class ShopGateway implements ShopGatewayInterface
     {
         $shops = $this->getShops($ids);
 
-        //check if parent shops has to be loaded
+        // Check if parent shops has to be loaded
         $mainIds = array_values(array_unique(array_filter(array_column($shops, '__shop_main_id'))));
         $mainIds = array_diff($mainIds, $ids);
 
@@ -113,7 +108,7 @@ class ShopGateway implements ShopGatewayInterface
     /**
      * @param int[] $ids
      *
-     * @return \array[]
+     * @return array[]
      */
     private function getShops($ids)
     {
@@ -128,6 +123,7 @@ class ShopGateway implements ShopGatewayInterface
             ->addSelect($this->fieldHelper->getMediaFields());
 
         $query->from('s_core_shops', 'shop')
+            ->leftJoin('shop', 's_core_shops_attributes', 'shopAttribute', 'shopAttribute.shopID = shop.id')
             ->leftJoin('shop', 's_core_currencies', 'currency', 'currency.id = shop.currency_id')
             ->leftJoin('shop', 's_core_templates', 'template', 'shop.template_id = template.id')
             ->leftJoin('shop', 's_core_locales', 'locale', 'locale.id = shop.locale_id')

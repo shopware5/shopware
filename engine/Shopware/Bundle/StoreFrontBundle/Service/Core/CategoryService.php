@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -40,9 +40,6 @@ class CategoryService implements Service\CategoryServiceInterface
      */
     private $categoryGateway;
 
-    /**
-     * @param Gateway\CategoryGatewayInterface $categoryGateway
-     */
     public function __construct(Gateway\CategoryGatewayInterface $categoryGateway)
     {
         $this->categoryGateway = $categoryGateway;
@@ -84,8 +81,7 @@ class CategoryService implements Service\CategoryServiceInterface
     }
 
     /**
-     * @param Struct\Category[]           $categories
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\Category[] $categories
      *
      * @return Struct\Category[] $categories Indexed by the category id
      */

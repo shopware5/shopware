@@ -25,6 +25,8 @@
 namespace Shopware\Components\Api\Resource;
 
 use Doctrine\Common\Collections\Collection;
+use Exception;
+use RuntimeException;
 use Shopware\Components\Api\BatchInterface;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException;
@@ -32,12 +34,13 @@ use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
+use Shopware_Components_Acl as AclComponent;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
  * Abstract API Resource Class
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -48,17 +51,18 @@ abstract class Resource
      * Hydrates an object graph. This is the default behavior.
      */
     const HYDRATE_OBJECT = 1;
+
     /**
      * Hydrates an array graph.
      */
     const HYDRATE_ARRAY = 2;
 
     /**
-     * Contains the shopware model manager
+     * Contains the Shopware model manager
      *
      * @var ModelManager
      */
-    protected $manager = null;
+    protected $manager;
 
     /**
      * @var bool
@@ -71,19 +75,21 @@ abstract class Resource
     protected $resultMode = self::HYDRATE_ARRAY;
 
     /**
-     * @var \Shopware_Components_Acl
+     * @var AclComponent
      */
-    protected $acl = null;
+    protected $acl;
 
     /**
      * Contains the current role
      *
      * @var string|\Zend_Acl_Role_Interface
      */
-    protected $role = null;
+    protected $role;
 
-    /** @var Container */
-    protected $container = null;
+    /**
+     * @var Container|null
+     */
+    protected $container;
 
     /**
      * @return Container
@@ -97,10 +103,7 @@ abstract class Resource
         return $this->container;
     }
 
-    /**
-     * @param $container
-     */
-    public function setContainer($container)
+    public function setContainer(Container $container)
     {
         $this->container = $container;
     }
@@ -116,8 +119,9 @@ abstract class Resource
             return;
         }
 
-        $calledClass = get_called_class();
+        $calledClass = static::class;
         $calledClass = explode('\\', $calledClass);
+        /** @var \Zend_Acl_Resource_Interface|string $resource */
         $resource = strtolower(end($calledClass));
 
         if (!$this->getAcl()->has($resource)) {
@@ -137,9 +141,6 @@ abstract class Resource
         }
     }
 
-    /**
-     * @param ModelManager $manager
-     */
     public function setManager(ModelManager $manager)
     {
         $this->manager = $manager;
@@ -154,11 +155,9 @@ abstract class Resource
     }
 
     /**
-     * @param \Shopware_Components_Acl $acl
-     *
-     * @return resource
+     * @return \Shopware\Components\Api\Resource\Resource
      */
-    public function setAcl(\Shopware_Components_Acl $acl)
+    public function setAcl(AclComponent $acl)
     {
         $this->acl = $acl;
 
@@ -166,7 +165,7 @@ abstract class Resource
     }
 
     /**
-     * @return \Shopware_Components_Acl
+     * @return AclComponent|null
      */
     public function getAcl()
     {
@@ -176,7 +175,7 @@ abstract class Resource
     /**
      * @param string|\Zend_Acl_Role_Interface $role
      *
-     * @return resource
+     * @return \Shopware\Components\Api\Resource\Resource
      */
     public function setRole($role)
     {
@@ -186,7 +185,7 @@ abstract class Resource
     }
 
     /**
-     * @return string|\Zend_Acl_Role_Interface
+     * @return string|\Zend_Acl_Role_Interface|null
      */
     public function getRole()
     {
@@ -222,13 +221,13 @@ abstract class Resource
      */
     public function getResultMode()
     {
-        return $this->resultMode;
+        return (int) $this->resultMode;
     }
 
     /**
      * @param object $entity
      *
-     * @throws \Shopware\Components\Api\Exception\OrmException
+     * @throws ApiException\OrmException
      */
     public function flush($entity = null)
     {
@@ -238,13 +237,20 @@ abstract class Resource
                 $this->getManager()->flush($entity);
                 $this->getManager()->getConnection()->commit();
                 $this->getManager()->clear();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->getManager()->getConnection()->rollBack();
                 throw new ApiException\OrmException($e->getMessage(), 0, $e);
             }
         }
     }
 
+    /**
+     * @param array $data
+     *
+     * @throws BatchInterfaceNotImplementedException
+     *
+     * @return array
+     */
     public function batchDelete($data)
     {
         if (!$this instanceof BatchInterface) {
@@ -253,6 +259,7 @@ abstract class Resource
 
         $results = [];
         foreach ($data as $key => $datum) {
+            /** @var BatchInterface $this */
             $id = $this->getIdByData($datum);
 
             try {
@@ -261,12 +268,12 @@ abstract class Resource
                     'operation' => 'delete',
                     'data' => $this->delete($id),
                 ];
-                if ($this->getResultMode() == self::HYDRATE_ARRAY) {
+                if ($this->getResultMode() === self::HYDRATE_ARRAY) {
                     $results[$key]['data'] = Shopware()->Models()->toArray(
                         $results[$key]['data']
                     );
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 if (!$this->getManager()->isOpen()) {
                     $this->resetEntityManager();
                 }
@@ -290,7 +297,7 @@ abstract class Resource
      * This method will update/create a whole list of entities.
      * The resource needs to implement BatchInterface for that.
      *
-     * @param $data
+     * @param array $data
      *
      * @throws BatchInterfaceNotImplementedException
      *
@@ -304,6 +311,7 @@ abstract class Resource
 
         $results = [];
         foreach ($data as $key => $datum) {
+            /** @var BatchInterface|null $this */
             $id = $this->getIdByData($datum);
 
             try {
@@ -320,12 +328,12 @@ abstract class Resource
                         'data' => $this->create($datum),
                     ];
                 }
-                if ($this->getResultMode() == self::HYDRATE_ARRAY) {
+                if ($this->getResultMode() === self::HYDRATE_ARRAY) {
                     $results[$key]['data'] = Shopware()->Models()->toArray(
                         $results[$key]['data']
                     );
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 if (!$this->getManager()->isOpen()) {
                     $this->resetEntityManager();
                 }
@@ -346,24 +354,23 @@ abstract class Resource
     }
 
     /**
-     * Returns a new api resource which contains the
-     * same configuration for the model manager and acl
+     * Returns a new api resource which contains the same configuration for the model manager and ACL
      * as the current resource.
      *
-     * @param $name
+     * @param string $name
      *
-     * @return resource
+     * @return \Shopware\Components\Api\Resource\Resource
      */
     protected function getResource($name)
     {
         try {
-            /** @var $resource \Shopware\Components\Api\Resource\Resource */
+            /** @var \Shopware\Components\Api\Resource\Resource $resource */
             $resource = $this->getContainer()->get('shopware.api.' . strtolower($name));
         } catch (ServiceNotFoundException $e) {
             $name = ucfirst($name);
             $class = __NAMESPACE__ . '\\Resource\\' . $name;
 
-            /** @var $resource \Shopware\Components\Api\Resource\Resource */
+            /** @var \Shopware\Components\Api\Resource\Resource $resource */
             $resource = new $class();
         }
 
@@ -382,15 +389,15 @@ abstract class Resource
 
     /**
      * Helper function which checks the option configuration for the passed collection.
+     *
      * If the data property contains the "__options_$optionName" value and this value contains
-     * the "replace" parameter the collection will be cleared.
+     * the "replace" parameter, the collection will be cleared.
      *
-     * @param Collection $collection
-     * @param $data
-     * @param $optionName
-     * @param $defaultReplace
+     * @param array  $data
+     * @param string $optionName
+     * @param bool   $defaultReplace
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection<\Shopware\Models\Article\Image>
      */
     protected function checkDataReplacement(Collection $collection, $data, $optionName, $defaultReplace)
     {
@@ -408,10 +415,11 @@ abstract class Resource
 
     /**
      * @param Collection|array $collection
-     * @param $property
-     * @param $value
+     * @param string           $property
      *
-     * @throws \Exception
+     * @throws Exception
+     *
+     * @return mixed|null
      */
     protected function getCollectionElementByProperty($collection, $property, $value)
     {
@@ -419,7 +427,7 @@ abstract class Resource
             $method = 'get' . ucfirst($property);
 
             if (!method_exists($entity, $method)) {
-                throw new \Exception(
+                throw new RuntimeException(
                     sprintf('Method %s not found on entity %s', $method, get_class($entity))
                 );
                 continue;
@@ -433,8 +441,7 @@ abstract class Resource
     }
 
     /**
-     * @param Collection $collection
-     * @param array      $conditions
+     * @return mixed|null
      */
     protected function getCollectionElementByProperties(Collection $collection, array $conditions)
     {
@@ -453,24 +460,24 @@ abstract class Resource
     }
 
     /**
-     * Helper function to execute different findOneBy statements which different conditions
+     * Helper function to execute different `findOneBy` statements with different conditions
      * until a passed entity instance found.
      *
-     * @param $entity
-     * @param array $conditions
+     * @param string $entity
      *
-     * @throws \Exception
+     * @throws Exception
      *
-     * @return null|ModelEntity
+     * @return ModelEntity|null
      */
     protected function findEntityByConditions($entity, array $conditions)
     {
         $repo = $this->getManager()->getRepository($entity);
         if (!$repo instanceof ModelRepository) {
-            throw new \Exception(sprintf('Passed entity has no configured repository: %s', $entity));
+            throw new RuntimeException(sprintf('Passed entity has no configured repository: %s', $entity));
         }
 
         foreach ($conditions as $condition) {
+            /** @var ModelEntity|null $instance */
             $instance = $repo->findOneBy($condition);
             if ($instance) {
                 return $instance;
@@ -492,14 +499,13 @@ abstract class Resource
      * If no property is set, the function creates a new entity and adds the instance into the
      * passed collection and persist the entity.
      *
-     * @param Collection $collection
-     * @param $data
-     * @param $entityType
-     * @param array $conditions
+     * @param array  $data
+     * @param string $entityType
+     * @param array  $conditions
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws ApiException\CustomValidationException
      *
-     * @return null|object
+     * @return ModelEntity
      */
     protected function getOneToManySubElement(Collection $collection, $data, $entityType, $conditions = ['id'])
     {
@@ -525,26 +531,27 @@ abstract class Resource
     }
 
     /**
-     * Helper function to resolve many to many associations for an entity.
-     * The function do the following thinks:
-     * It iterates all conditions which passed. The conditions contains the property names
-     * which can be used as identifier like array("id", "name", "number", ...).
-     * If the property isn't set in the passed data array the function continue with the next condition.
-     * If the property is set, the function looks into the passed collection element if
-     * the item is already exist in the entity collection.
-     * In case that the collection don't contains the entity, the function creates a findOneBy
-     * statement for the passed entity type.
-     * In case that the findOneBy statement finds no entity, the function throws an exception.
-     * Otherwise the item will be
+     * Helper function to resolve many to many associations for an entity. The function does the following:
      *
-     * @param Collection $collection
-     * @param $data
-     * @param $entityType
-     * @param array $conditions
+     * It iterates over all conditions which are passed to it. The conditions contain the property names
+     * which can be used as an identifier like array("id", "name", "number", ...).
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * If the property isn't set in the passed data array, the function continues with the next condition.
+     * If the property IS defined, the function looks into the passed collection element if an
+     * item does already exist in the entity collection.
      *
-     * @return null|object
+     * In case the collection doesn't contain the entity, the function creates a `findOneBy`-statement
+     * for the passed entity type.
+     * In case that the `findOneBy`-statement finds no entity, the function throws an exception.
+     * Otherwise the item will be added to the collection and returned.
+     *
+     * @param array  $data
+     * @param string $entityType
+     * @param array  $conditions
+     *
+     * @throws ApiException\CustomValidationException
+     *
+     * @return object|null
      */
     protected function getManyToManySubElement(Collection $collection, $data, $entityType, $conditions = ['id'])
     {
@@ -577,16 +584,16 @@ abstract class Resource
 
     /**
      * This helper method will reload the EntityManager.
-     * This is useful if the EntityManager was closed due to an error on the
-     * PDO connection.
+     *
+     * This is useful if the EntityManager was closed due to an error on the PDO connection.
      */
     protected function resetEntityManager()
     {
         $this->getContainer()->reset('models')
-                                  ->reset('db_connection')
-                                  ->load('models');
+            ->reset('dbal_connection')
+            ->load('models');
 
-        $this->getContainer()->load('db_connection');
+        $this->getContainer()->load('dbal_connection');
 
         $this->setManager($this->container->get('models'));
     }

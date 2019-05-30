@@ -26,9 +26,11 @@ namespace Shopware\Models\Article\Configurator\Template;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\LazyFetchModelEntity;
+use Shopware\Models\Attribute\TemplatePrice as TemplatePriceAttribute;
+use Shopware\Models\Customer\Group as CustomerGroup;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_article_configurator_template_prices")
  */
 class Price extends LazyFetchModelEntity
@@ -36,7 +38,8 @@ class Price extends LazyFetchModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Configurator\Template\Template
+     * @var Template
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Template\Template", inversedBy="prices")
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      * @ORM\OrderBy({"customerGroupKey" = "ASC", "from" = "ASC"})
@@ -46,22 +49,24 @@ class Price extends LazyFetchModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\TemplatePrice", mappedBy="templatePrice", cascade={"persist"})
+     * @var TemplatePriceAttribute
      *
-     * @var \Shopware\Models\Attribute\TemplatePrice
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\TemplatePrice", mappedBy="templatePrice", cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="template_id", type="integer", nullable=false)
      */
     private $templateId;
@@ -80,7 +85,7 @@ class Price extends LazyFetchModelEntity
     private $from;
 
     /**
-     * @var int
+     * @var int|string
      *
      * @ORM\Column(name="`to`", type="string", nullable=true)
      */
@@ -108,7 +113,7 @@ class Price extends LazyFetchModelEntity
     private $percent = 0;
 
     /**
-     * @var \Shopware\Models\Customer\Group
+     * @var CustomerGroup
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Customer\Group")
      * @ORM\JoinColumn(name="customer_group_key", referencedColumnName="groupkey")
@@ -128,9 +133,9 @@ class Price extends LazyFetchModelEntity
     /**
      * Set priceGroup
      *
-     * @param $customerGroup
+     * @param CustomerGroup $customerGroup
      *
-     * @return \Shopware\Models\Article\Configurator\Template\Price
+     * @return Price
      */
     public function setCustomerGroup($customerGroup)
     {
@@ -142,19 +147,22 @@ class Price extends LazyFetchModelEntity
     /**
      * Get priceGroup
      *
-     * @return \Shopware\Models\Customer\Group
+     * @return CustomerGroup
      */
     public function getCustomerGroup()
     {
-        return $this->fetchLazy($this->customerGroup, ['key' => $this->customerGroupKey]);
+        /** @var CustomerGroup $return */
+        $return = $this->fetchLazy($this->customerGroup, ['key' => $this->customerGroupKey]);
+
+        return $return;
     }
 
     /**
      * Set from
      *
-     * @param $from
+     * @param int $from
      *
-     * @return \Shopware\Models\Article\Configurator\Template\Price
+     * @return Price
      */
     public function setFrom($from)
     {
@@ -176,9 +184,9 @@ class Price extends LazyFetchModelEntity
     /**
      * Set to
      *
-     * @param $to
+     * @param int|string|null $to
      *
-     * @return \Shopware\Models\Article\Configurator\Template\Price
+     * @return Price
      */
     public function setTo($to)
     {
@@ -193,7 +201,7 @@ class Price extends LazyFetchModelEntity
     /**
      * Get to
      *
-     * @return int|null
+     * @return int|string|null
      */
     public function getTo()
     {
@@ -203,9 +211,9 @@ class Price extends LazyFetchModelEntity
     /**
      * Set price
      *
-     * @param $price
+     * @param float $price
      *
-     * @return \Shopware\Models\Article\Configurator\Template\Price
+     * @return Price
      */
     public function setPrice($price)
     {
@@ -227,9 +235,9 @@ class Price extends LazyFetchModelEntity
     /**
      * Set pseudoPrice
      *
-     * @param $pseudoPrice
+     * @param float $pseudoPrice
      *
-     * @return \Shopware\Models\Article\Configurator\Template\Price
+     * @return Price
      */
     public function setPseudoPrice($pseudoPrice)
     {
@@ -253,7 +261,7 @@ class Price extends LazyFetchModelEntity
      *
      * @param float $percent
      *
-     * @return \Shopware\Models\Article\Configurator\Template\Price
+     * @return Price
      */
     public function setPercent($percent)
     {
@@ -273,7 +281,7 @@ class Price extends LazyFetchModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\TemplatePrice
+     * @return TemplatePriceAttribute
      */
     public function getAttribute()
     {
@@ -281,17 +289,17 @@ class Price extends LazyFetchModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\TemplatePrice|array|null $attribute
+     * @param TemplatePriceAttribute|array|null $attribute
      *
-     * @return \Shopware\Components\Model\ModelEntity
+     * @return Price
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\TemplatePrice', 'attribute', 'templatePrice');
+        return $this->setOneToOne($attribute, TemplatePriceAttribute::class, 'attribute', 'templatePrice');
     }
 
     /**
-     * @return \Shopware\Models\Article\Configurator\Template\Template
+     * @return Template
      */
     public function getTemplate()
     {
@@ -299,7 +307,7 @@ class Price extends LazyFetchModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Configurator\Template\Template $template
+     * @param Template $template
      */
     public function setTemplate($template)
     {

@@ -29,7 +29,7 @@ use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use Shopware\Components\Model\ModelManager;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -72,11 +72,17 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
 
     public function resetDataAction()
     {
-        $table = $this->Request()->getParam('tableName');
-        $column = $this->Request()->getParam('columnName');
+        $tableParamName = 'tableName';
+        $columnParamName = 'columnName';
+        $table = $this->Request()->getParam($tableParamName);
+        $column = $this->Request()->getParam($columnParamName);
 
-        if (!$table || !$column) {
-            throw new Exception('Required parameter not found');
+        if (!$table) {
+            throw new Exception(sprintf('Required parameter "%s" not found', $tableParamName));
+        }
+
+        if (!$column) {
+            throw new Exception(sprintf('Required parameter "%s" not found', $columnParamName));
         }
 
         /** @var SchemaOperator $schemaOperator */

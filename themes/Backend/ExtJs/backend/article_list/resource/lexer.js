@@ -99,7 +99,7 @@ Ext.define('Lexer', {
             expectation,
             valid,
             finalCheck,
-            i, token, tokenType, tokenLength = tokens.length;
+            i, token, originalToken, tokenType, tokenLength = tokens.length;
 
         me.tokens = tokens;
         me.canceled = false;
@@ -128,6 +128,7 @@ Ext.define('Lexer', {
             if (me.canceled) {
                 return;
             }
+            originalToken = token;
             token = token.toUpperCase();
             tokenType = me.getTokenType(token);
 
@@ -136,7 +137,7 @@ Ext.define('Lexer', {
             }
 
             // subOperators, Lists and OR are not possible in simple queries
-            if (token == 'IN' || tokenType == 'subOperators' || (tokenType == 'boolOperators' && token == 'OR')) {
+            if (token == 'IN' || token == 'NOT IN' || tokenType == 'subOperators' || (tokenType == 'boolOperators' && token == 'OR')) {
                 me.setExpressionNotSimple();
             } else if (tokenType == 'boolOperators' && token == 'AND') {
                 me.addToSimpleResult();
@@ -148,7 +149,7 @@ Ext.define('Lexer', {
             }
 
             // Check for list
-            if (token == 'IN') {
+            if (token == 'IN' || token == 'NOT IN') {
                 me.inList = true;
             }
 
@@ -170,7 +171,7 @@ Ext.define('Lexer', {
             }
 
 
-            me.addToAst(token, tokenType);
+            me.addToAst(token, originalToken, tokenType);
 
             if (me.inList && token == ')') {
                 me.inList = false;
@@ -248,8 +249,18 @@ Ext.define('Lexer', {
      * @param token
      * @param tokenType
      */
-    addToAst: function(token, tokenType) {
+    addToAst: function(token, originalToken, tokenType) {
         var me = this;
+
+        if (tokenType === 'values') {
+            /* 
+             * Do not use `token` which was usually generated from `originalToken.toUpperCase()`
+             * because the following is not always true and would make filtering certain values impossible:
+             * str.toUpperCase().toLowerCase() === str.toLowerCase()
+             * e.g. 'ß'.toUpperCase() == 'SS'
+             */
+            token = originalToken;
+        }
 
         this.astFlat.push({
             type: tokenType,
@@ -381,7 +392,7 @@ Ext.define('Lexer', {
                 me.setSuggestion('value');
                 return { rules: me.grammar.values, message: '{s name=lexer/value}Value{/s}'}
             }
-            if (token == 'IN') {
+            if (token == 'IN' || token == 'NOT IN') {
                 me.setSuggestion(['(']);
                 return { rules: '(', message: '{s name=lexer/openingBrace}({/s}'}
             }

@@ -26,6 +26,13 @@ namespace Shopware\Components\Plugin;
 
 use Symfony\Component\Config\Util\XmlUtils;
 
+/**
+ * @deprecated This class will be removed in 5.6
+ *
+ * Use new class Shopware\Components\Plugin\XmlReader\XmlMenuReader (see Shopware 5.6)
+ *
+ * https://github.com/shopware/shopware/blob/5.6/engine/Shopware/Components/Plugin/XmlReader/XmlMenuReader.php
+ */
 class XmlMenuReader
 {
     /**
@@ -45,15 +52,15 @@ class XmlMenuReader
     }
 
     /**
-     * @param \DOMDocument $xml
-     *
      * @return array
      */
     private function parseMenu(\DOMDocument $xml)
     {
         $xpath = new \DOMXPath($xml);
 
-        if (false === $entries = $xpath->query('//entries/entry')) {
+        /** @var \DOMNodeList|false $entries */
+        $entries = $xpath->query('//entries/entry');
+        if ($entries === false) {
             throw new \RuntimeException('Required element "entry" is missing.');
         }
 
@@ -66,8 +73,6 @@ class XmlMenuReader
     }
 
     /**
-     * @param \DOMElement $entry
-     *
      * @return array
      */
     private function parseEntry(\DOMElement $entry)
@@ -111,10 +116,9 @@ class XmlMenuReader
     }
 
     /**
-     * @param \DOMNode $node
-     * @param $name
+     * @param string $name
      *
-     * @return null|string
+     * @return string|null
      */
     private function getFirstChild(\DOMNode $node, $name)
     {
@@ -127,9 +131,6 @@ class XmlMenuReader
 
     /**
      * Get child elements by name.
-     *
-     * @param \DOMNode $node
-     * @param mixed    $name
      *
      * @return \DOMElement[]
      */

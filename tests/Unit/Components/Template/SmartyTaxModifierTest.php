@@ -31,21 +31,19 @@ use PHPUnit\Framework\TestCase;
 class SmartyTaxModifierTest extends TestCase
 {
     /**
-     * @param mixed     $tax
      * @param int|float $expected
      * @param string    $locale
      * @dataProvider taxProvider
      */
     public function testTaxModifierWithValid($tax, $expected, $locale)
     {
-        $this->assertSame(
+        static::assertSame(
             $expected,
             smarty_modifier_tax($tax, $locale)
         );
     }
 
     /**
-     * @param mixed  $tax
      * @param string $locale
      * @dataProvider taxProviderInvalid
      */

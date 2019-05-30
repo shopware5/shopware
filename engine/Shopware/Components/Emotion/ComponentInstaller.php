@@ -36,14 +36,12 @@ class ComponentInstaller
         'cls' => '',
         'xtype' => 'emotion-components-base',
     ];
+
     /**
      * @var ModelManager
      */
     private $em;
 
-    /**
-     * @param ModelManager $em
-     */
     public function __construct(ModelManager $em)
     {
         $this->em = $em;
@@ -52,7 +50,6 @@ class ComponentInstaller
     /**
      * @param string $pluginName
      * @param string $componentName
-     * @param array  $data
      *
      * @throws \Exception
      *
@@ -61,6 +58,7 @@ class ComponentInstaller
     public function createOrUpdate($pluginName, $componentName, array $data)
     {
         $repo = $this->em->getRepository(Plugin::class);
+        /** @var Plugin|null $plugin */
         $plugin = $repo->findOneBy(['name' => $pluginName]);
 
         if (!$plugin) {
@@ -68,6 +66,7 @@ class ComponentInstaller
         }
 
         $repo = $this->em->getRepository(Component::class);
+        /** @var Component|null $component */
         $component = $repo->findOneBy([
             'name' => $componentName,
             'pluginId' => $plugin->getId(),

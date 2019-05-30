@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Order;
+namespace Shopware\Models\Order;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\AbstractQuery;
@@ -48,10 +48,10 @@ class Repository extends ModelRepository
     /**
      * Returns a query-object for all known payment status
      *
-     * @param null|array                              $filter
+     * @param array|null                              $filter
      * @param string|\Doctrine\ORM\Query\Expr\OrderBy $order
-     * @param null|int                                $offset
-     * @param null|int                                $limit
+     * @param int|null                                $offset
+     * @param int|null                                $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -70,7 +70,7 @@ class Repository extends ModelRepository
      * Helper method to create the query builder for the "getPaymentStatusQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null|array                              $filter
+     * @param array|null                              $filter
      * @param string|\Doctrine\ORM\Query\Expr\OrderBy $order
      *
      * @return QueryBuilder
@@ -99,12 +99,12 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Returns a query-object for all known order stati
+     * Returns a query-object for all known order statuses
      *
-     * @param null|array  $filter
-     * @param null|string $order
-     * @param null|int    $offset
-     * @param null|int    $limit
+     * @param array|null  $filter
+     * @param string|null $order
+     * @param int|null    $offset
+     * @param int|null    $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -123,8 +123,8 @@ class Repository extends ModelRepository
      * Helper method to create the query builder for the "getOrderStatusQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null|array  $filter
-     * @param null|string $order
+     * @param array|null  $filter
+     * @param string|null $order
      *
      * @return QueryBuilder
      */
@@ -154,12 +154,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
-     * @param null|array[] $filters
-     * @param null|string  $orderBy
-     * @param null|int     $offset
-     * @param null|int     $limit
-     *
-     * @internal param $ids
+     * @param array[]|null $filters
+     * @param string|null  $orderBy
+     * @param int|null     $offset
+     * @param int|null     $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -178,8 +176,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getOrdersQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null|array[] $filters
-     * @param null|string  $orderBy
+     * @param array[]|null $filters
+     * @param string|null  $orderBy
      *
      * @return QueryBuilder
      */
@@ -257,15 +255,13 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Returns an instance of the \Doctrine\ORM\Query object which .....
+     * Returns an instance of the \Doctrine\ORM\Query object which can be extended for customization
      *
      * @return \Doctrine\ORM\Query
      */
     public function getDetailStatusQuery()
     {
-        $builder = $this->getDetailStatusQueryBuilder();
-
-        return $builder->getQuery();
+        return $this->getDetailStatusQueryBuilder()->getQuery();
     }
 
     /**
@@ -288,9 +284,9 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
      * @param int         $orderId
-     * @param null|string $orderBy
-     * @param null|int    $offset
-     * @param null|int    $limit
+     * @param string|null $orderBy
+     * @param int|null    $offset
+     * @param int|null    $limit
      *
      * @return \Doctrine\ORM\Query
      */
@@ -338,15 +334,13 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Returns an instance of the \Doctrine\ORM\Query object which .....
+     * Returns an instance of the \Doctrine\ORM\Query object which can be extended for customization
      *
      * @return \Doctrine\ORM\Query
      */
     public function getDocumentTypesQuery()
     {
-        $builder = $this->getDocumentTypesQueryBuilder();
-
-        return $builder->getQuery();
+        return $this->getDocumentTypesQueryBuilder()->getQuery();
     }
 
     /**
@@ -403,6 +397,18 @@ class Repository extends ModelRepository
      */
     public function getList($ids)
     {
+        $query = $this->getListQueryBuilder();
+        $query->where('orders.id IN (:ids)');
+        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+
+        return $query->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    public function getListQueryBuilder()
+    {
         $query = $this->getEntityManager()->createQueryBuilder();
 
         $query->select([
@@ -438,10 +444,25 @@ class Repository extends ModelRepository
         $query->leftJoin('billing.state', 'billingState');
         $query->leftJoin('orders.shop', 'shop');
         $query->leftJoin('orders.dispatch', 'dispatch');
-        $query->where('orders.id IN (:ids)');
-        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        return $query->getQuery()->getArrayResult();
+        return $query;
+    }
+
+    /**
+     * @param int[] $orderIds
+     *
+     * @return QueryBuilder
+     */
+    public function getDocumentsQueryBuilder(array $orderIds)
+    {
+        $query = $this->getEntityManager()->createQueryBuilder();
+        $query->select(['document', 'documentType']);
+        $query->from(\Shopware\Models\Order\Document\Document::class, 'document');
+        $query->leftJoin('document.type', 'documentType');
+        $query->where('IDENTITY(document.order) IN (:ids)');
+        $query->setParameter(':ids', $orderIds, Connection::PARAM_INT_ARRAY);
+
+        return $query;
     }
 
     /**
@@ -451,14 +472,24 @@ class Repository extends ModelRepository
      */
     public function getDocuments(array $orderIds)
     {
+        return $this->getDocumentsQueryBuilder($orderIds)->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @param int[] $orderIds
+     *
+     * @return QueryBuilder
+     */
+    public function getDetailsQueryBuilder(array $orderIds)
+    {
         $query = $this->getEntityManager()->createQueryBuilder();
-        $query->select(['document', 'documentType']);
-        $query->from(\Shopware\Models\Order\Document\Document::class, 'document');
-        $query->leftJoin('document.type', 'documentType');
-        $query->where('IDENTITY(document.order) IN (:ids)');
+        $query->select(['details', 'attribute']);
+        $query->from(\Shopware\Models\Order\Detail::class, 'details');
+        $query->leftJoin('details.attribute', 'attribute');
+        $query->where('IDENTITY(details.order) IN (:ids)');
         $query->setParameter(':ids', $orderIds, Connection::PARAM_INT_ARRAY);
 
-        return $query->getQuery()->getArrayResult();
+        return $query;
     }
 
     /**
@@ -468,14 +499,23 @@ class Repository extends ModelRepository
      */
     public function getDetails(array $orderIds)
     {
+        return $this->getDetailsQueryBuilder($orderIds)->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @param int[] $orderIds
+     *
+     * @return QueryBuilder
+     */
+    public function getPaymentsQueryBuilder(array $orderIds)
+    {
         $query = $this->getEntityManager()->createQueryBuilder();
-        $query->select(['details', 'attribute']);
-        $query->from(\Shopware\Models\Order\Detail::class, 'details');
-        $query->leftJoin('details.attribute', 'attribute');
-        $query->where('IDENTITY(details.order) IN (:ids)');
+        $query->select(['payments']);
+        $query->from(\Shopware\Models\Payment\PaymentInstance::class, 'payments');
+        $query->where('IDENTITY(payments.order) IN (:ids)');
         $query->setParameter(':ids', $orderIds, Connection::PARAM_INT_ARRAY);
 
-        return $query->getQuery()->getArrayResult();
+        return $query;
     }
 
     /**
@@ -485,18 +525,12 @@ class Repository extends ModelRepository
      */
     public function getPayments(array $orderIds)
     {
-        $query = $this->getEntityManager()->createQueryBuilder();
-        $query->select(['payments']);
-        $query->from(\Shopware\Models\Payment\PaymentInstance::class, 'payments');
-        $query->where('IDENTITY(payments.order) IN (:ids)');
-        $query->setParameter(':ids', $orderIds, Connection::PARAM_INT_ARRAY);
-
-        return $query->getQuery()->getArrayResult();
+        return $this->getPaymentsQueryBuilder($orderIds)->getQuery()->getArrayResult();
     }
 
     /**
-     * @param null|int $offset
-     * @param null|int $limit
+     * @param int|null $offset
+     * @param int|null $limit
      * @param array[]  $filters
      * @param array[]  $sortings
      *
@@ -583,21 +617,25 @@ class Repository extends ModelRepository
                     $builder->andWhere('orders.id IN (?4)');
                     $builder->setParameter(4, $orderIds, Connection::PARAM_INT_ARRAY);
                     break;
+
                 case 'from':
                     $tmp = new \DateTime($filter['value']);
                     $builder->andWhere('orders.orderTime >= :orderTimeFrom');
                     $builder->setParameter('orderTimeFrom', $tmp->format('Ymd'));
                     break;
+
                 case 'to':
                     $tmp = new \DateTime($filter['value']);
                     $tmp->add(new \DateInterval('P1D'));
                     $builder->andWhere('orders.orderTime <= :orderTimeTo');
                     $builder->setParameter('orderTimeTo', $tmp->format('Ymd'));
                     break;
+
                 case 'details.articleNumber':
                     $builder->andWhere('details.articleNumber LIKE :articleNumber');
                     $builder->setParameter('articleNumber', $filter['value']);
                     break;
+
                 default:
                     $builder->addFilter([$filter]);
             }
@@ -607,8 +645,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param QueryBuilder $builder
-     * @param string       $alias
+     * @param string $alias
      */
     protected function addAliasJoin(QueryBuilder $builder, $alias)
     {
@@ -620,39 +657,73 @@ class Repository extends ModelRepository
             case 'shipping':
                 $builder->leftJoin('orders.shipping', 'shipping');
                 break;
+
             case 'billing':
                 $builder->leftJoin('orders.billing', 'billing');
                 break;
+
             case 'details':
                 $builder->leftJoin('orders.details', 'details');
                 break;
+
             case 'payment':
                 $builder->leftJoin('orders.payment', 'payment');
                 break;
+
             case 'paymentStatus':
                 $builder->leftJoin('orders.paymentStatus', 'paymentStatus');
                 break;
+
             case 'orderStatus':
                 $builder->leftJoin('orders.orderStatus', 'orderStatus');
                 break;
+
             case 'customer':
                 $builder->leftJoin('orders.customer', 'customer');
                 break;
+
             case 'billingCountry':
                 $this->addAliasJoin($builder, 'billing');
                 $builder->leftJoin('billing.country', 'billingCountry');
                 break;
+
             case 'billingState':
                 $this->addAliasJoin($builder, 'billing');
                 $builder->leftJoin('billing.state', 'billingState');
                 break;
+
             case 'shop':
                 $builder->leftJoin('orders.shop', 'shop');
                 break;
+
             case 'dispatch':
                 $builder->leftJoin('orders.dispatch', 'dispatch');
                 break;
         }
+    }
+
+    /**
+     * @param string $term
+     *
+     * @return int[]
+     */
+    protected function searchInOrders($term)
+    {
+        $query = $this->getEntityManager()->getConnection()->createQueryBuilder();
+        $query->select('orders.id');
+        $query->from('s_order', 'orders');
+        $builder = Shopware()->Container()->get('shopware.model.search_builder');
+        $builder->addSearchTerm($query, $term, [
+            'orders.ordernumber^3',
+            'orders.transactionID^1',
+            'orders.comment^0.2',
+            'orders.customercomment^0.2',
+            'orders.internalcomment^0.2',
+        ]);
+
+        $query->setMaxResults(self::SEARCH_TERM_LIMIT);
+
+        return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     /**
@@ -671,8 +742,11 @@ class Repository extends ModelRepository
         $orders = array_keys(array_flip(array_merge($orders, $billing)));
 
         $shipping = $this->searchAddressTable($term, 's_order_shippingaddress', $orders);
+        $orders = array_keys(array_flip(array_merge($orders, $shipping)));
 
-        return array_keys(array_flip(array_merge($orders, $shipping)));
+        $documents = $this->searchDocumentsTable($term, 's_order_documents', $orders);
+
+        return array_keys(array_flip(array_merge($orders, $documents)));
     }
 
     /**
@@ -751,23 +825,25 @@ class Repository extends ModelRepository
 
     /**
      * @param string $term
+     * @param string $table
+     * @param int[]  $excludedOrderIds
      *
      * @return int[]
      */
-    private function searchInOrders($term)
+    private function searchDocumentsTable($term, $table, array $excludedOrderIds = [])
     {
         $query = $this->getEntityManager()->getConnection()->createQueryBuilder();
-        $query->select('orders.id');
-        $query->from('s_order', 'orders');
+        $query->select('documents.orderID');
+        $query->from($table, 'documents');
         $builder = Shopware()->Container()->get('shopware.model.search_builder');
         $builder->addSearchTerm($query, $term, [
-            'orders.ordernumber^3',
-            'orders.transactionID^1',
-            'orders.comment^0.2',
-            'orders.customercomment^0.2',
-            'orders.internalcomment^0.2',
+            'documents.docID^1',
         ]);
 
+        if (!empty($excludedOrderIds)) {
+            $query->andWhere('documents.orderID NOT IN (:ids)');
+            $query->setParameter(':ids', $excludedOrderIds, Connection::PARAM_INT_ARRAY);
+        }
         $query->setMaxResults(self::SEARCH_TERM_LIMIT);
 
         return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);

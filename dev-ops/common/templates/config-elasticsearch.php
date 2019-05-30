@@ -76,9 +76,13 @@ return [
                     'port' => '9200',
                     'scheme' => 'http',
                     'user' => 'elastic',
-                    'pass' => 'changeme'
-                ]
+                    'pass' => 'changeme',
+                ],
             ],
+        ],
+        'backend' => [
+            'enabled' => true,
+            'write_backlog' => true,
         ],
     ],
 

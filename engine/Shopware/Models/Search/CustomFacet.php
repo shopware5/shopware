@@ -29,56 +29,64 @@ use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Table(name="s_search_custom_facet")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class CustomFacet extends ModelEntity
 {
     /**
      * @var string
+     *
      * @ORM\Column(nullable=false)
      */
     protected $name;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="unique_key", nullable=true)
      */
     protected $uniqueKey;
 
     /**
      * @var bool
+     *
      * @ORM\Column(type="boolean")
      */
     protected $active;
 
     /**
      * @var bool
+     *
      * @ORM\Column(type="boolean")
      */
     protected $deletable;
 
     /**
      * @var int
+     *
      * @ORM\Column(type="integer", nullable=false)
      */
     protected $position;
 
     /**
      * @var string
+     *
      * @ORM\Column(nullable=false)
      */
     protected $facet;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="display_in_categories", type="boolean")
      */
     protected $displayInCategories;
+
     /**
      * @var int
      *
      * @ORM\Column(type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

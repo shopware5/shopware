@@ -27,30 +27,32 @@ namespace Shopware\Models\Article\Configurator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\ConfiguratorOption as ConfiguratorOptionAttribute;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_article_configurator_options")
  */
 class Option extends ModelEntity
 {
     /**
+     * @var ArrayCollection<\Shopware\Models\Article\Detail>
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Detail", mappedBy="configuratorOptions")
      * @ORM\JoinTable(name="s_article_configurator_option_relations",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="article_id", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="option_id", referencedColumnName="id")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="article_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="option_id", referencedColumnName="id")
+     *     }
      * )
-     *
-     * @var ArrayCollection
      */
     protected $articles;
 
     /**
-     * @var \Shopware\Models\Article\Configurator\Set
+     * @var ArrayCollection<\Shopware\Models\Article\Configurator\Set>
+     *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Set", mappedBy="options")
      */
     protected $sets;
@@ -58,66 +60,71 @@ class Option extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ConfiguratorOption", mappedBy="configuratorOption", orphanRemoval=true, cascade={"persist"})
+     * @var ConfiguratorOptionAttribute
      *
-     * @var \Shopware\Models\Attribute\ConfiguratorOption
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ConfiguratorOption", mappedBy="configuratorOption", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="group_id", type="integer", nullable=true)
      */
-    private $groupId = null;
+    private $groupId;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position;
 
     /**
-     * @var \Shopware\Models\Article\Configurator\Group
+     * @var Group
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Group", inversedBy="options")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="id")
      */
     private $group;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\Configurator\Dependency>
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\Dependency", mappedBy="parentOption", orphanRemoval=true)
      */
     private $dependencyParents;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\Configurator\Dependency>
+     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\Dependency", mappedBy="childOption", orphanRemoval=true)
      */
     private $dependencyChildren;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="media_id", type="integer", nullable=true)
      */
     private $mediaId;
 
-    /**
-     * Class constructor, initials the array collections for the associations.
-     */
     public function __construct()
     {
         $this->dependencyChildren = new ArrayCollection();
@@ -165,7 +172,7 @@ class Option extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Configurator\Group
+     * @return Group
      */
     public function getGroup()
     {
@@ -173,7 +180,7 @@ class Option extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Configurator\Group $group
+     * @param Group $group
      */
     public function setGroup($group)
     {
@@ -181,7 +188,7 @@ class Option extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Article\Configurator\Dependency>
      */
     public function getDependencyParents()
     {
@@ -189,7 +196,7 @@ class Option extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $dependencyParents
+     * @param ArrayCollection<\Shopware\Models\Article\Configurator\Dependency> $dependencyParents
      */
     public function setDependencyParents($dependencyParents)
     {
@@ -197,7 +204,7 @@ class Option extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection<\Shopware\Models\Article\Configurator\Dependency>
      */
     public function getDependencyChildren()
     {
@@ -205,7 +212,7 @@ class Option extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $dependencyChildren
+     * @param ArrayCollection<\Shopware\Models\Article\Configurator\Dependency> $dependencyChildren
      */
     public function setDependencyChildren($dependencyChildren)
     {
@@ -213,7 +220,7 @@ class Option extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\ConfiguratorOption
+     * @return ConfiguratorOptionAttribute
      */
     public function getAttribute()
     {
@@ -221,20 +228,26 @@ class Option extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\ConfiguratorOption|array|null $attribute
+     * @param ConfiguratorOptionAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\ConfiguratorOption
+     * @return Option
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ConfiguratorOption', 'attribute', 'configuratorOption');
+        return $this->setOneToOne($attribute, ConfiguratorOptionAttribute::class, 'attribute', 'configuratorOption');
     }
 
+    /**
+     * @return int
+     */
     public function getMediaId()
     {
         return $this->mediaId;
     }
 
+    /**
+     * @param int $mediaId
+     */
     public function setMediaId($mediaId)
     {
         $this->mediaId = $mediaId;

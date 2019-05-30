@@ -51,10 +51,6 @@ class ProfileUpdateFormType extends AbstractType
      */
     protected $config;
 
-    /**
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param \Shopware_Components_Config          $config
-     */
     public function __construct(
         \Shopware_Components_Snippet_Manager $snippetManager,
         \Shopware_Components_Config $config
@@ -63,9 +59,6 @@ class ProfileUpdateFormType extends AbstractType
         $this->config = $config;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -74,15 +67,11 @@ class ProfileUpdateFormType extends AbstractType
         ]);
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $data = $event->getData();
-            array_walk_recursive($data, function (&$item, $key) {
+            array_walk_recursive($data, function (&$item) {
                 $item = strip_tags($item);
             });
             $event->setData($data);

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Models\Form\Field;
 use Shopware\Models\Form\Form;
 
@@ -108,7 +109,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        /* @var $result Form */
+        /* @var Form $result */
         $result = $this->getRepository()->find($id);
         if (!$result) {
             $this->View()->assign(['success' => false, 'message' => 'Form not found']);
@@ -144,7 +145,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        /* @var $result Form */
+        /* @var Form $result */
         $result = $this->getRepository()->find($id);
         if (!$result) {
             $this->View()->assign(['success' => false, 'message' => 'Form not found']);
@@ -173,7 +174,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        /* @var $result Form */
+        /* @var Form $result */
         $result = $this->getRepository()->find($id);
         if (!$result) {
             $this->View()->assign(['success' => false, 'message' => 'Form not found']);
@@ -228,7 +229,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        /* @var $result Field */
+        /* @var Field $result */
         $result = $this->getManager()->getRepository(\Shopware\Models\Form\Field::class)->find($id);
         if (!$result) {
             $this->View()->assign(['success' => false, 'message' => 'Field not found']);
@@ -260,7 +261,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        /* @var $form Form */
+        /** @var Form|null $form */
         $form = $this->getRepository()->find($id);
         if (!$form) {
             $this->View()->assign(['success' => false, 'message' => 'Form not found']);
@@ -297,7 +298,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        /* @var $result Field */
+        /* @var Field $result */
         $result = $this->getManager()->find(\Shopware\Models\Form\Field::class, $id);
         if (!$result) {
             $this->View()->assign(['success' => false, 'message' => 'Field not found']);
@@ -378,7 +379,6 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     /**
      * Helper method to prefix properties
      *
-     * @param array  $properties
      * @param string $prefix
      *
      * @return array

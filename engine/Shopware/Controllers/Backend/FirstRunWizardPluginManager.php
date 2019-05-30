@@ -253,7 +253,7 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
      * Fetches known server locales. Returns a struct in server format containing
      * info about the current user's locale.
      *
-     * @return LocaleStruct Information about the current locale
+     * @return LocaleStruct|null Information about the current locale
      */
     private function getCurrentLocale()
     {
@@ -272,7 +272,7 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
         }
 
         $user = Shopware()->Container()->get('Auth')->getIdentity();
-        /** @var $locale \Shopware\Models\Shop\Locale */
+        /** @var \Shopware\Models\Shop\Locale $locale */
         $locale = $user->locale;
         $localeCode = $locale->getLocale();
 

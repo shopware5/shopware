@@ -62,7 +62,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
 
         $hostname = $helper->Shop()->getHost();
         if (empty($hostname)) {
-            $this->markTestSkipped(
+            static::markTestSkipped(
                 'Hostname is not available.'
             );
         }
@@ -99,17 +99,17 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
         $client = new Zend_Http_Client($this->apiBaseUrl . '/customers/');
         $response = $client->request('GET');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(401, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(401, $response->getStatus());
 
         $result = $response->getBody();
 
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     public function testGetCustomersWithInvalidIdShouldReturnMessage()
@@ -119,17 +119,17 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
                          ->setUri($this->apiBaseUrl . '/customers/' . $id)
                          ->request('GET');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(404, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
 
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     public function testPostCustomersShouldBeSuccessful()
@@ -193,20 +193,20 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
 
         $response = $client->request('POST');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(201, $response->getStatus());
-        $this->assertArrayHasKey('Location', $response->getHeaders());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(201, $response->getStatus());
+        static::assertArrayHasKey('Location', $response->getHeaders());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
         $location = $response->getHeader('Location');
         $identifier = (int) array_pop(explode('/', $location));
 
-        $this->assertGreaterThan(0, $identifier);
+        static::assertGreaterThan(0, $identifier);
 
         return $identifier;
     }
@@ -274,29 +274,29 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
 
         $response = $client->request('POST');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(201, $response->getStatus());
-        $this->assertArrayHasKey('Location', $response->getHeaders());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(201, $response->getStatus());
+        static::assertArrayHasKey('Location', $response->getHeaders());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
         $location = $response->getHeader('Location');
         $identifier = (int) array_pop(explode('/', $location));
 
-        $this->assertGreaterThan(0, $identifier);
+        static::assertGreaterThan(0, $identifier);
 
         $customer = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($identifier);
         $paymentData = array_shift($customer->getPaymentData()->toArray());
 
-        $this->assertNotNull($paymentData);
-        $this->assertEquals('Max Mustermann', $paymentData->getAccountHolder());
-        $this->assertEquals('Fake Account', $paymentData->getAccountNumber());
-        $this->assertEquals('Fake Bank', $paymentData->getBankName());
-        $this->assertEquals('55555555', $paymentData->getBankCode());
+        static::assertNotNull($paymentData);
+        static::assertEquals('Max Mustermann', $paymentData->getAccountHolder());
+        static::assertEquals('Fake Account', $paymentData->getAccountNumber());
+        static::assertEquals('Fake Bank', $paymentData->getBankName());
+        static::assertEquals('55555555', $paymentData->getBankCode());
 
         $this->testDeleteCustomersShouldBeSuccessful($identifier);
     }
@@ -367,29 +367,29 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
 
         $response = $client->request('POST');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(201, $response->getStatus());
-        $this->assertArrayHasKey('Location', $response->getHeaders());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(201, $response->getStatus());
+        static::assertArrayHasKey('Location', $response->getHeaders());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
         $location = $response->getHeader('Location');
         $identifier = (int) array_pop(explode('/', $location));
 
-        $this->assertGreaterThan(0, $identifier);
+        static::assertGreaterThan(0, $identifier);
 
         $customer = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($identifier);
         $paymentData = array_shift($customer->getPaymentData()->toArray());
 
-        $this->assertNotNull($paymentData);
-        $this->assertEquals('Max Mustermann', $paymentData->getAccountHolder());
-        $this->assertEquals('Fake Account', $paymentData->getAccountNumber());
-        $this->assertEquals('Fake Bank', $paymentData->getBankName());
-        $this->assertEquals('55555555', $paymentData->getBankCode());
+        static::assertNotNull($paymentData);
+        static::assertEquals('Max Mustermann', $paymentData->getAccountHolder());
+        static::assertEquals('Fake Account', $paymentData->getAccountNumber());
+        static::assertEquals('Fake Bank', $paymentData->getBankName());
+        static::assertEquals('55555555', $paymentData->getBankCode());
 
         $this->testDeleteCustomersShouldBeSuccessful($identifier);
     }
@@ -411,15 +411,15 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('POST');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(400, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(400, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
+        static::assertArrayHasKey('message', $result);
     }
 
     /**
@@ -431,31 +431,31 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
                          ->setUri($this->apiBaseUrl . '/customers/' . $id)
                          ->request('GET');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(200, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
-        $this->assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('data', $result);
 
         $data = $result['data'];
-        $this->assertInternalType('array', $data);
-        $this->assertArrayHasKey('id', $data);
-        $this->assertArrayHasKey('active', $data);
-        $this->assertArrayHasKey('paymentData', $data);
+        static::assertInternalType('array', $data);
+        static::assertArrayHasKey('id', $data);
+        static::assertArrayHasKey('active', $data);
+        static::assertArrayHasKey('paymentData', $data);
 
-        $this->assertContains('test@foobar.com', $data['email']);
+        static::assertContains('test@foobar.com', $data['email']);
 
         $paymentInfo = array_shift($data['paymentData']);
 
-        $this->assertEquals('Max Mustermann', $paymentInfo['accountHolder']);
-        $this->assertEquals('55555555', $paymentInfo['bankCode']);
-        $this->assertEquals('Fake Bank', $paymentInfo['bankName']);
-        $this->assertEquals('Fake Account', $paymentInfo['accountNumber']);
+        static::assertEquals('Max Mustermann', $paymentInfo['accountHolder']);
+        static::assertEquals('55555555', $paymentInfo['bankCode']);
+        static::assertEquals('Fake Bank', $paymentInfo['bankName']);
+        static::assertEquals('Fake Account', $paymentInfo['accountNumber']);
     }
 
     public function testPutBatchCustomersShouldFail()
@@ -471,15 +471,15 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(405, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(405, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
-        $this->assertEquals('This resource has no support for batch operations.', $result['message']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
+        static::assertEquals('This resource has no support for batch operations.', $result['message']);
     }
 
     /**
@@ -498,16 +498,16 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(400, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(400, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     /**
@@ -528,9 +528,9 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
 
-        $this->assertEquals(200, $response->getStatus());
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertNull(
+        static::assertEquals(200, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertNull(
             $response->getHeader('location',
             'There should be no location header set.'
         ));
@@ -538,8 +538,8 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
         return $id;
     }
@@ -553,14 +553,14 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
 
         $response = $client->request('DELETE');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(200, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
         return $id;
     }
@@ -572,16 +572,16 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
 
         $response = $client->request('DELETE');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(404, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     public function testPutCustomersWithInvalidIdShouldReturnMessage()
@@ -598,16 +598,16 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(404, $response->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertFalse($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
 
-        $this->assertArrayHasKey('message', $result);
+        static::assertArrayHasKey('message', $result);
     }
 
     public function testGetCustomersShouldBeSuccessful()
@@ -615,21 +615,21 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers');
         $result = $client->request('GET');
 
-        $this->assertEquals('application/json', $result->getHeader('Content-Type'));
-        $this->assertEquals(200, $result->getStatus());
+        static::assertEquals('application/json', $result->getHeader('Content-Type'));
+        static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
         $result = Zend_Json::decode($result);
 
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
 
-        $this->assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('data', $result);
 
-        $this->assertArrayHasKey('total', $result);
-        $this->assertInternalType('int', $result['total']);
+        static::assertArrayHasKey('total', $result);
+        static::assertInternalType('int', $result['total']);
 
         $data = $result['data'];
-        $this->assertInternalType('array', $data);
+        static::assertInternalType('array', $data);
     }
 }

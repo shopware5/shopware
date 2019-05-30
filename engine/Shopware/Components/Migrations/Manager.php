@@ -32,7 +32,7 @@ namespace Shopware\Components\Migrations;
  * $migrationManager->run();
  * </code>
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -49,7 +49,6 @@ class Manager
     protected $migrationPath;
 
     /**
-     * @param \PDO   $connection
      * @param string $migrationPath
      */
     public function __construct(\PDO $connection, $migrationPath)
@@ -60,8 +59,6 @@ class Manager
     }
 
     /**
-     * @param \PDO $connection
-     *
      * @return Manager
      */
     public function setConnection(\PDO $connection)
@@ -91,9 +88,6 @@ class Manager
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getMigrationPath()
     {
         return $this->migrationPath;
@@ -102,7 +96,7 @@ class Manager
     /**
      * Log string to stdout
      *
-     * @param $str
+     * @param string $str
      */
     public function log($str)
     {
@@ -112,7 +106,7 @@ class Manager
     }
 
     /**
-     * Creates schama version table if not exists
+     * Creates schema version table if not exists
      */
     public function createSchemaTable()
     {
@@ -130,7 +124,7 @@ class Manager
     }
 
     /**
-     * Returns current schma version found in database
+     * Returns current schema version found in database
      *
      * @return int
      */
@@ -146,7 +140,7 @@ class Manager
      *
      * @param int $currentVersion
      *
-     * @return AbstractMigration
+     * @return AbstractMigration|null
      */
     public function getNextMigrationForVersion($currentVersion)
     {
@@ -194,14 +188,14 @@ class Manager
             }
 
             try {
-                /** @var $migrationClass AbstractMigration */
+                /** @var AbstractMigration $migrationClass */
                 $migrationClass = new $migrationClassName($this->getConnection());
             } catch (\Exception $e) {
                 throw new \Exception('Could not instantiate Object');
             }
 
             if (!($migrationClass instanceof AbstractMigration)) {
-                throw new \Exception("$migrationClassName is not instanceof AbstractMigration");
+                throw new \Exception(sprintf('%s is not instanceof AbstractMigration', $migrationClassName));
             }
 
             if ($migrationClass->getVersion() != $result['0']) {
@@ -225,8 +219,7 @@ class Manager
     /**
      * Applies given $migration to database
      *
-     * @param AbstractMigration $migration
-     * @param string            $modus
+     * @param string $modus
      *
      * @throws \Exception
      */

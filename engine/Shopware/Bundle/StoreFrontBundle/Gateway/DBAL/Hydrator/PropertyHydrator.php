@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -43,10 +43,6 @@ class PropertyHydrator extends Hydrator
      */
     private $mediaHydrator;
 
-    /**
-     * @param AttributeHydrator $attributeHydrator
-     * @param MediaHydrator     $mediaHydrator
-     */
     public function __construct(
         AttributeHydrator $attributeHydrator,
         MediaHydrator $mediaHydrator
@@ -56,8 +52,6 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return Struct\Property\Set[]
      */
     public function hydrateValues(array $data)
@@ -108,8 +102,6 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return Struct\Property\Group
      */
     public function hydrateGroup(array $data)
@@ -130,8 +122,6 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return Struct\Property\Option
      */
     public function hydrateOption(array $data)
@@ -158,8 +148,6 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return Struct\Property\Set
      */
     private function hydrateSet(array $data)
@@ -182,8 +170,6 @@ class PropertyHydrator extends Hydrator
 
     /**
      * Sort groups by position in set
-     *
-     * @param array $data
      */
     private function sortGroups(array &$data)
     {
@@ -197,8 +183,8 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param $options Struct\Property\Option[]
-     * @param int $sortMode
+     * @param Struct\Property\Option[] $options
+     * @param int                      $sortMode
      */
     private function sortOptions(&$options, $sortMode)
     {
@@ -218,7 +204,7 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param $options Struct\Property\Option[]
+     * @param Struct\Property\Option[] $options
      */
     private function sortOptionsByPosition(&$options)
     {
@@ -232,7 +218,7 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param $options Struct\Property\Option[]
+     * @param Struct\Property\Option[] $options
      */
     private function sortOptionsNumercialValue(&$options)
     {
@@ -249,7 +235,7 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param $options Struct\Property\Option[]
+     * @param Struct\Property\Option[] $options
      */
     private function sortOptionsAlphanumeric(&$options)
     {

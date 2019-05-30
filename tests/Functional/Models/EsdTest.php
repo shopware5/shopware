@@ -25,7 +25,7 @@
 use Shopware\Models\Article\Esd;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -89,7 +89,7 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
 
             $esd->$setMethod($value);
 
-            $this->assertEquals($esd->$getMethod(), $value);
+            static::assertEquals($esd->$getMethod(), $value);
         }
     }
 
@@ -103,11 +103,11 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
 
         foreach ($this->testData as $fieldname => $value) {
             $getMethod = 'get' . ucfirst($fieldname);
-            $this->assertEquals($esd->$getMethod(), $value);
+            static::assertEquals($esd->$getMethod(), $value);
         }
     }
 
-    /**detail
+    /**
      * Test case
      */
     public function testEsdShouldBePersisted()
@@ -124,7 +124,7 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
 
         $esdId = $esd->getId();
 
-        // remove esd from entity manager
+        // Remove esd from entity manager
         $this->em->detach($esd);
         unset($esd);
 
@@ -132,9 +132,43 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
 
         foreach ($this->testData as $fieldname => $value) {
             $getMethod = 'get' . ucfirst($fieldname);
-            $this->assertEquals($esd->$getMethod(), $value);
+            static::assertEquals($esd->$getMethod(), $value);
         }
 
-        $this->assertInstanceOf('\DateTime', $esd->getDate());
+        static::assertInstanceOf(\DateTime::class, $esd->getDate());
     }
+
+    /**
+     * Test case
+     */
+    public function testEsdShouldBePersistedWithCustomDateTime()
+    {
+        $esd = new Esd();
+
+        $articleDetail = Shopware()->Models()->getRepository(\Shopware\Models\Article\Detail::class)->findOneBy(['active' => true]);
+        $esd->setArticleDetail($articleDetail);
+
+        $esd->fromArray($this->testData);
+
+        $esd->setDate(new Carbon());
+
+        static::assertInstanceOf(Carbon::class, $esd->getDate());
+
+        $this->em->persist($esd);
+        $this->em->flush();
+
+        $esdId = $esd->getId();
+
+        // Remove esd from entity manager
+        $this->em->detach($esd);
+        unset($esd);
+
+        $esd = $this->repo->find($esdId);
+
+        static::assertInstanceOf(\DateTime::class, $esd->getDate());
+    }
+}
+
+class Carbon extends \DateTime
+{
 }

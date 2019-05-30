@@ -15,9 +15,10 @@
     {$smarty.block.parent}
     {block name='frontend_register_index_back_to_shop_button'}
         {if $theme.checkoutHeader && !$toAccount}
+            {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish" assign="snippetFinishButtonBackToShop"}{/s}
             <a href="{url controller='index'}"
                class="btn is--small btn--back-top-shop is--icon-left"
-               title="{"{s name='FinishButtonBackToShop' namespace='frontend/checkout/finish'}{/s}"|escape}">
+               title="{$snippetFinishButtonBackToShop|escape}">
                 <i class="icon--arrow-left"></i>
                 {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish"}{/s}
             </a>
@@ -113,19 +114,26 @@
             {/block}
 
             {block name='frontend_register_index_form'}
-                <form method="post" action="{url action=saveRegister sTarget=$sTarget sTargetAction=$sTargetAction}" class="panel register--form">
+                <form method="post" action="{url action=saveRegister sTarget=$sTarget sTargetAction=$sTargetAction}" class="panel register--form" id="register--form">
 
                     {* Successful optin verification *}
                     {block name='frontend_register_index_form_optin_success'}
-                        {if $smarty.get.optinsuccess && {config name=optinregister}}
-                            {include file="frontend/_includes/messages.tpl" type="success" content="{s name="RegisterInfoSuccessOptin"}{/s}"}
+                        {if $smarty.get.optinsuccess && ({config name=optinregister} || {config name=optinaccountless})}
+                            {if $isAccountless}
+                                {s name="RegisterInfoSuccessOptinAccountless" assign="snippetRegisterInfoSuccessOptinAccountless"}{/s}
+                                {include file="frontend/_includes/messages.tpl" type="success" content=$snippetRegisterInfoSuccessOptinAccountless}
+                            {else}
+                                {s name="RegisterInfoSuccessOptin" assign="snippetRegisterInfoSuccessOptin"}{/s}
+                                {include file="frontend/_includes/messages.tpl" type="success" content=$snippetRegisterInfoSuccessOptin}
+                            {/if}
                         {/if}
                     {/block}
 
                     {* Invalid hash while option verification process *}
                     {block name='frontend_register_index_form_optin_invalid_hash'}
-                        {if $smarty.get.optinhashinvalid && {config name=optinregister}}
-                            {include file="frontend/_includes/messages.tpl" type="error" content="{s name="RegisterInfoInvalidHash"}{/s}"}
+                        {if $smarty.get.optinhashinvalid && ({config name=optinregister} || {config name=optinaccountless})}
+                            {s name="RegisterInfoInvalidHash" assign="snippetRegisterInfoInvalidHash"}{/s}
+                            {include file="frontend/_includes/messages.tpl" type="error" content=$snippetRegisterInfoInvalidHash}
                         {/if}
                     {/block}
 
@@ -163,8 +171,8 @@
 
                     {* Captcha *}
                     {block name='frontend_register_index_form_captcha'}
-                        {$captchaHasError = $errors.captcha}
                         {$captchaName = {config name=registerCaptcha}}
+                        {$captchaHasError = $errors.captcha}
                         {include file="widgets/captcha/custom_captcha.tpl" captchaName=$captchaName captchaHasError=$captchaHasError}
                     {/block}
 

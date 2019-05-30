@@ -1,24 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Template
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 require_once 'Smarty/Smarty.class.php';
@@ -30,7 +31,7 @@ require_once 'Smarty/Smarty.class.php';
  * it is also possible to overwrite all the individual blocks within the template.
  *
  * @category   Enlight
- * @package    Enlight_Template
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -62,22 +63,39 @@ class Enlight_Template_Manager extends Smarty
      * Class constructor, initializes basic smarty properties:
      * Template, compile, plugin, cache and config directory.
      *
-     * @param   null|array|Enlight_Config $options
+     * @param array|Enlight_Config|null $options
+     * @param array                     $backendOptions
      */
-    public function __construct($options = null)
+    public function __construct($options = null, $backendOptions = [])
     {
-        // self pointer needed by some other class methods
+        // Self pointer needed by some other class methods
         $this->smarty = $this;
 
         $this->start_time = microtime(true);
 
-        $this->_file_perms = 0666 & ~umask();
-        $this->_dir_perms = 0777 & ~umask();
+        if (!isset($backendOptions['cache_file_perm'])) {
+            $backendOptions['cache_file_perm'] = 0666 & ~umask();
+        }
 
-        // set default dirs
+        if (is_string($backendOptions['cache_file_perm'])) {
+            $backendOptions['cache_file_perm'] = octdec($backendOptions['cache_file_perm']);
+        }
+
+        if (!isset($backendOptions['hashed_directory_perm'])) {
+            $backendOptions['hashed_directory_perm'] = 0777 & ~umask();
+        }
+
+        if (is_string($backendOptions['hashed_directory_perm'])) {
+            $backendOptions['hashed_directory_perm'] = octdec($backendOptions['hashed_directory_perm']);
+        }
+
+        $this->_file_perms = $backendOptions['cache_file_perm'];
+        $this->_dir_perms = $backendOptions['hashed_directory_perm'];
+
+        // Set default dirs
         $this->setTemplateDir('.' . DS . 'templates' . DS)
             ->setCompileDir('.' . DS . 'templates_c' . DS)
-            ->setPluginsDir(array(dirname(__FILE__) . '/Plugins/', SMARTY_PLUGINS_DIR))
+            ->setPluginsDir([dirname(__FILE__) . '/Plugins/', SMARTY_PLUGINS_DIR])
             ->setCacheDir('.' . DS . 'cache' . DS)
             ->setConfigDir('.' . DS . 'configs' . DS);
 
@@ -88,8 +106,31 @@ class Enlight_Template_Manager extends Smarty
     }
 
     /**
-     * @param   $charset
-     * @return  Enlight_Template_Manager
+     * Technically smarty security is enabled, if a security policy is set for the template manager instance. The
+     * security policy holds a reference to the template manager instance. When cloning the template manager, the
+     * reference of the security_policy to the Smarty instance has be updated to the new cloned Smarty instance.
+     *
+     * Without doing this, every self::fetch() after a directory was added with self::addTemplateDir(), would lead to a
+     * SmartyException with message 'directory [...] not allowed by security setting'. This is because
+     * the security_policy still holds a reference to the old Smarty instance that does not know this new directories
+     * as template sources.
+     *
+     * The security_policy is also cloned so other instances of the Enlight_Template_Manager do not get affected.
+     */
+    public function __clone()
+    {
+        parent::__clone();
+
+        if ($this->security_policy !== null) {
+            $this->security_policy = clone $this->security_policy;
+            $this->security_policy->smarty = $this;
+        }
+    }
+
+    /**
+     * @param string $charset
+     *
+     * @return Enlight_Template_Manager
      */
     public function setCharset($charset = null)
     {
@@ -97,12 +138,14 @@ class Enlight_Template_Manager extends Smarty
             self::$_CHARSET = $charset;
         }
         mb_internal_encoding(self::$_CHARSET);
+
         return $this;
     }
 
     /**
-     * @param   array|Enlight_Config $options
-     * @return  Enlight_Template_Manager
+     * @param array|Enlight_Config $options
+     *
+     * @return Enlight_Template_Manager
      */
     public function setOptions($options = null)
     {
@@ -126,6 +169,7 @@ class Enlight_Template_Manager extends Smarty
      * Set template directory
      *
      * @param string|array $template_dir directory(s) of template sources
+     *
      * @return Smarty current Smarty instance for chaining
      */
     public function setTemplateDir($template_dir)
@@ -139,16 +183,12 @@ class Enlight_Template_Manager extends Smarty
             }
         }
 
-        /**
-         * Filter all directories which includes the new shopware themes.
-         */
-        $themeDirectories = array_filter($template_dir, function ($themeDir) {
-            return (stripos($themeDir, '/Themes/Frontend/'));
+        // Filter all directories which includes the new shopware themes
+        $themeDirectories = array_filter($template_dir, static function ($themeDir) {
+            return stripos($themeDir, '/Themes/Frontend/');
         });
 
-        /**
-         * If no shopware theme assigned, we have to use the passed inheritance
-         */
+        // If no shopware theme assigned, we have to use the passed inheritance
         if (empty($themeDirectories)) {
             return parent::setTemplateDir($template_dir);
         }
@@ -169,9 +209,10 @@ class Enlight_Template_Manager extends Smarty
     /**
      * Add template directory(s)
      *
-     * @param string|array $template_dir directory(s) of template sources
-     * @param string       $key          of the array element to assign the template dir to
-     * @param null $position
+     * @param string|string[] $template_dir directory(s) of template sources
+     * @param string          $key          of the array element to assign the template dir to
+     * @param null|string     $position
+     *
      * @return Smarty current Smarty instance for chaining
      */
     public function addTemplateDir($template_dir, $key = null, $position = null)
@@ -180,6 +221,7 @@ class Enlight_Template_Manager extends Smarty
             foreach ($template_dir as $k => $v) {
                 $this->addTemplateDir($v, is_int($k) ? null : $k);
             }
+
             return $this;
         }
         $_template_dir = $this->getTemplateDir();
@@ -187,7 +229,7 @@ class Enlight_Template_Manager extends Smarty
             if ($key === null) {
                 array_unshift($_template_dir, $template_dir);
             } else {
-                $_template_dir = array_merge(array($key => $template_dir), $_template_dir);
+                $_template_dir = array_merge([$key => $template_dir], $_template_dir);
                 $_template_dir[$key] = $template_dir;
             }
         } elseif ($key !== null) {
@@ -196,13 +238,15 @@ class Enlight_Template_Manager extends Smarty
             $_template_dir[] = $template_dir;
         }
         $this->setTemplateDir($_template_dir);
+
         return $this;
     }
 
     /**
-     * @param   string $templateDir
-     * @param   int|null $key
-     * @return  string
+     * @param string   $templateDir
+     * @param int|null $key
+     *
+     * @return string
      */
     public function resolveTemplateDir($templateDir, $key = null)
     {
@@ -210,38 +254,29 @@ class Enlight_Template_Manager extends Smarty
             $templateDir = $this->eventManager->filter(
                 __CLASS__ . '_ResolveTemplateDir',
                 $templateDir,
-                array('subject' => $this, 'key' => $key)
+                ['subject' => $this, 'key' => $key]
             );
         }
         $templateDir = Enlight_Loader::isReadable($templateDir);
+
         return $templateDir;
     }
 
     /**
-     * @param   $eventManager
-     * @return  Enlight_Template_Manager
+     * @param \Enlight_Event_EventManager $eventManager
+     *
+     * @return Enlight_Template_Manager
      */
     public function setEventManager($eventManager)
     {
-        //Enlight_Template_Manager_AddTemplateDir
         $this->eventManager = $eventManager;
+
         return $this;
     }
 
     /**
      * @param string[] $inheritance
-     * @return string[]
-     */
-    private function enforceEndingSlash($inheritance)
-    {
-        return array_map(function ($dir) {
-            $dir = rtrim($dir, '/') . '/';
-            return $dir;
-        }, $inheritance);
-    }
-
-    /**
-     * @param string[] $inheritance
+     *
      * @return string[]
      */
     public function unifyDirectories($inheritance)
@@ -250,12 +285,14 @@ class Enlight_Template_Manager extends Smarty
         $inheritance = array_map('Enlight_Loader::realpath', $inheritance);
         $inheritance = array_filter($inheritance);
         $inheritance = array_unique($inheritance);
+
         return $inheritance;
     }
 
     /**
      * @param string[] $themeDirectories
      * @param string[] $pluginDirs
+     *
      * @return string[]
      */
     public function buildInheritance($themeDirectories, $pluginDirs)
@@ -274,7 +311,7 @@ class Enlight_Template_Manager extends Smarty
             $parts = explode('/', $dir);
             $name = array_pop($parts);
 
-            $class = "\\Shopware\\Themes\\" . $name . '\\Theme';
+            $class = '\\Shopware\\Themes\\' . $name . '\\Theme';
 
             /** @var \Shopware\Components\Theme $theme */
             $theme = new $class();
@@ -285,28 +322,30 @@ class Enlight_Template_Manager extends Smarty
                 $after[] = $dir;
             }
         }
-        return array_merge($after, $pluginDirs, $before);
+
+        $folders = array_merge($after, $pluginDirs, $before);
+
+        if ($this->eventManager) {
+            $folders = $this->eventManager->filter('Enlight_Template_Manager_FilterBuildInheritance', $folders, [
+                'themeDirectories' => $themeDirectories,
+                'pluginDirectories' => $pluginDirs,
+            ]);
+        }
+
+        return $folders;
     }
 
     /**
-     * Technically smarty security is enabled, if a security policy is set for the template manager instance. The
-     * security policy holds a reference to the template manager instance. When cloning the template manager, the
-     * reference of the security_policy to the Smarty instance has be updated to the new cloned Smarty instance.
+     * @param string[] $inheritance
      *
-     * Without doing this, every self::fetch() after a directory was added with self::addTemplateDir(), would lead to a
-     * SmartyException with message 'directory [...] not allowed by security setting'. This is because
-     * the security_policy still holds a reference to the old Smarty instance that does not know this new directories
-     * as template sources.
-     *
-     * The security_policy is also cloned so other instances of the Enlight_Template_Manager do not get affected.
+     * @return string[]
      */
-    public function __clone()
+    private function enforceEndingSlash($inheritance)
     {
-        parent::__clone();
+        return array_map(function ($dir) {
+            $dir = rtrim($dir, '/') . '/';
 
-        if ($this->security_policy !== null) {
-            $this->security_policy = clone $this->security_policy;
-            $this->security_policy->smarty = $this;
-        }
+            return $dir;
+        }, $inheritance);
     }
 }

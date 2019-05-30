@@ -25,10 +25,9 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Models\Country\Area;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -39,18 +38,13 @@ class CountryHydrator extends Hydrator
      */
     private $attributeHydrator;
 
-    /**
-     * @param AttributeHydrator $attributeHydrator
-     */
     public function __construct(AttributeHydrator $attributeHydrator)
     {
         $this->attributeHydrator = $attributeHydrator;
     }
 
     /**
-     * @param array $data
-     *
-     * @return Area
+     * @return Struct\Country\Area
      */
     public function hydrateArea(array $data)
     {
@@ -62,8 +56,6 @@ class CountryHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return Struct\Country
      */
     public function hydrateCountry(array $data)
@@ -101,6 +93,10 @@ class CountryHydrator extends Hydrator
             $country->setRequiresStateSelection((bool) $data['__country_force_state_in_registration']);
         }
 
+        if (isset($data['__country_allow_shipping'])) {
+            $country->setAllowShipping((bool) $data['__country_allow_shipping']);
+        }
+
         if (isset($data['__country_taxfree'])) {
             $country->setTaxFree((bool) $data['__country_taxfree']);
         }
@@ -124,8 +120,6 @@ class CountryHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Country\State
      */
     public function hydrateState(array $data)

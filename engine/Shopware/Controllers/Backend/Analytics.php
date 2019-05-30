@@ -28,7 +28,7 @@ use Shopware\Models\Analytics\Repository;
 /**
  * Statistics controller
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -45,9 +45,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     /**
      * Entity Manager
      *
-     * @var null
+     * @var \Shopware\Components\Model\ModelManager
      */
-    protected $manager = null;
+    protected $manager;
 
     /**
      * @var \Shopware\Models\Shop\Repository
@@ -60,18 +60,21 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     protected $articleImpressionRepository;
 
     /**
-     * @var Repository
+     * @var Repository|null
      */
-    protected $repository = null;
+    protected $repository;
 
-    protected $format = null;
+    /**
+     * @var string
+     */
+    protected $format;
 
     public function preDispatch()
     {
         if ($this->Request()->has('format')) {
-            $this->format = $this->Request()->getParam('format', null);
+            $this->format = $this->Request()->getParam('format');
 
-            //remove limit parameter to export all data.
+            // Remove limit parameter to export all data.
             $this->Request()->setParam('limit', null);
         }
         parent::preDispatch();
@@ -129,7 +132,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     public function getShopRepository()
     {
         if ($this->shopRepository === null) {
-            $this->shopRepository = $this->getManager()->getRepository('Shopware\Models\Shop\Shop');
+            $this->shopRepository = $this->getManager()->getRepository(\Shopware\Models\Shop\Shop::class);
         }
 
         return $this->shopRepository;
@@ -201,14 +204,15 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             }
         }
 
-        //sets the correct limit
+        // Sets the correct limit
         $limit = 25;
-        if (strtolower($this->format) == 'csv') {
+        if (strtolower($this->format) === 'csv') {
             $limit = count($data);
         }
 
+        $values = array_values($data);
         $splice = array_splice(
-            array_values($data),
+            $values,
             $this->Request()->getParam('start', 0),
             $this->Request()->getParam('limit', $limit)
         );
@@ -276,10 +280,11 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             }
         }
 
+        $values = array_values($data);
         $splice = array_splice(
-            array_values($data),
-            $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', 25)
+            $values,
+            (int) $this->Request()->getParam('start', 0),
+            (int) $this->Request()->getParam('limit', 25)
         );
 
         $this->send($splice, count($data));
@@ -287,7 +292,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     public function getReferrerRevenueAction()
     {
-        $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
+        $shop = $this->getManager()->getRepository(\Shopware\Models\Shop\Shop::class)->getActiveDefault();
         $shop->registerResources();
 
         $result = $this->getRepository()->getReferrerRevenue(
@@ -366,7 +371,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getPartnerRevenue(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('limit'),
             $this->getFromDate(),
             $this->getToDate()
         );
@@ -403,7 +408,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getVisitedReferrer(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('limit'),
             $this->getFromDate(),
             $this->getToDate()
         );
@@ -432,7 +437,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getProductSales(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('limit'),
             $this->getFromDate(),
             $this->getToDate()
         );
@@ -447,7 +452,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getToDate()
         );
 
+        /** @var array<string, mixed> $customers */
         $customers = [];
+        /** @var array<string, mixed> $users */
         $users = [];
 
         foreach ($result->getData() as $row) {
@@ -671,7 +678,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getProductAmountPerManufacturer(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('limit'),
             $this->getFromDate(),
             $this->getToDate()
         );
@@ -703,7 +710,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getSearchTerms(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('limit'),
             $this->getFromDate(),
             $this->getToDate(),
             $this->Request()->getParam('sort', [
@@ -725,7 +732,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getVisitorImpressions(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('limit'),
             $this->getFromDate(),
             $this->getToDate(),
             $this->Request()->getParam('sort', [
@@ -747,7 +754,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getProductImpressions(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', null),
+            $this->Request()->getParam('limit'),
             $this->getFromDate(),
             $this->getToDate(),
             $this->Request()->getParam('sort', [
@@ -805,7 +812,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $result = $this->getRepository()->getReferrerUrls(
             $selectedReferrer,
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', null)
+            $this->Request()->getParam('limit')
         );
 
         $this->View()->assign([
@@ -893,7 +900,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     /**
      * Internal helper function to get access to the entity manager.
      *
-     * @return null|\Shopware\Components\Model\ModelManager
+     * @return \Shopware\Components\Model\ModelManager
      */
     private function getManager()
     {
@@ -1002,23 +1009,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 
-    private function isTimestamp($input)
-    {
-        if (strlen($input) != 11) {
-            return false;
-        }
-
-        if (is_int($input)) {
-            return true;
-        }
-
-        if (is_string($input)) {
-            return ctype_digit($input);
-        }
-
-        return false;
-    }
-
     private function getCsvFileName()
     {
         $name = $this->Request()->getActionName();
@@ -1059,14 +1049,14 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     /**
      * helper to get the from date in the right format
      *
-     * return \DateTime | fromDate
+     * return \DateTimeInterface | fromDate
      */
     private function getFromDate()
     {
         $fromDate = $this->Request()->getParam('fromDate');
         if (empty($fromDate)) {
             $fromDate = new \DateTime();
-            $fromDate = $fromDate->sub(new DateInterval('P1M'));
+            $fromDate = $fromDate->sub(new \DateInterval('P1M'));
         } else {
             $fromDate = new \DateTime($fromDate);
         }
@@ -1089,8 +1079,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $toDate = new \DateTime($toDate);
         }
         //to get the right value cause 2012-02-02 is smaller than 2012-02-02 15:33:12
-        $toDate = $toDate->add(new DateInterval('P1D'));
-        $toDate = $toDate->sub(new DateInterval('PT1S'));
+        $toDate = $toDate->add(new \DateInterval('P1D'));
+        $toDate = $toDate->sub(new \DateInterval('PT1S'));
 
         return $toDate;
     }

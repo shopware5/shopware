@@ -29,7 +29,7 @@ use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\MatcherInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -46,8 +46,7 @@ class DefaultMatcher implements MatcherInterface
     protected $separator;
 
     /**
-     * @param EnlightDispatcher $dispatcher
-     * @param string            $separator
+     * @param string $separator
      */
     public function __construct(EnlightDispatcher $dispatcher, $separator = '/')
     {
@@ -100,8 +99,7 @@ class DefaultMatcher implements MatcherInterface
     /**
      * Fills up default values for module, controller and action
      *
-     * @param Context $context
-     * @param array   $query
+     * @param array $query
      *
      * @return array
      */

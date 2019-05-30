@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Doctrine\ORM\ORMException;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Random;
 use Shopware\Components\Thumbnail\Manager;
@@ -35,7 +36,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * Media API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -70,24 +71,26 @@ class Media extends Resource
         $filters = [['property' => 'media.id', 'expression' => '=', 'value' => $id]];
         $query = $this->getRepository()->getMediaListQuery($filters, [], 1);
 
-        /** @var $media MediaModel */
+        /** @var MediaModel|array $media */
         $media = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$media) {
-            throw new ApiException\NotFoundException("Media by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Media by id %d not found', $id));
         }
 
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        $media['path'] = $mediaService->getUrl($media['path']);
+        if (is_array($media)) {
+            $media['path'] = $mediaService->getUrl($media['path']);
+        } else {
+            $media->setPath($mediaService->getUrl($media->getPath()));
+        }
 
         return $media;
     }
 
     /**
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $criteria
-     * @param array $orderBy
+     * @param int $offset
+     * @param int $limit
      *
      * @return array
      */
@@ -100,10 +103,10 @@ class Media extends Resource
 
         $paginator = $this->getManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // Returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the category data
+        // Returns the category data
         $media = $paginator->getIterator()->getArrayCopy();
 
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
@@ -115,8 +118,6 @@ class Media extends Resource
     }
 
     /**
-     * @param array $params
-     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Exception
      *
@@ -142,8 +143,8 @@ class Media extends Resource
         $this->getManager()->persist($media);
         $this->flush();
 
-        if ($media->getType() == MediaModel::TYPE_IMAGE) {
-            /** @var $manager Manager */
+        if ($media->getType() === MediaModel::TYPE_IMAGE) {
+            /** @var Manager $manager */
             $manager = $this->getContainer()->get('thumbnail_manager');
 
             $manager->createMediaThumbnail($media, [], true);
@@ -153,10 +154,8 @@ class Media extends Resource
     }
 
     /**
-     * @param int   $id
-     * @param array $params
+     * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
@@ -171,7 +170,7 @@ class Media extends Resource
             throw new ApiException\ParameterMissingException('id');
         }
 
-        /** @var $media MediaModel */
+        /** @var MediaModel|null $media */
         $media = $this->getRepository()->find($id);
 
         if (!$media) {
@@ -179,14 +178,14 @@ class Media extends Resource
         }
 
         if (!empty($params['file'])) {
-            $tmpFile = $this->saveAsTempMediaFile($params['file']);
-            $file = new UploadedFile($tmpFile, $params['file']);
+            $path = $this->load($params['file'], $media->getFileName());
+            $file = new UploadedFile($path, $params['file']);
 
             try {
                 $this->getContainer()->get('shopware_media.replace_service')->replace($id, $file);
-                @unlink($tmpFile);
+                @unlink($path);
             } catch (\Exception $exception) {
-                @unlink($tmpFile);
+                @unlink($path);
                 throw new ApiException\CustomValidationException($exception->getMessage());
             }
         }
@@ -210,11 +209,11 @@ class Media extends Resource
             throw new ApiException\ParameterMissingException('id');
         }
 
-        /** @var $media MediaModel */
+        /** @var MediaModel|null $media */
         $media = $this->getRepository()->find($id);
 
         if (!$media) {
-            throw new ApiException\NotFoundException("Media by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Media by id %d not found', $id));
         }
 
         $this->getManager()->remove($media);
@@ -227,8 +226,8 @@ class Media extends Resource
      * Internal helper function which is used to upload the passed image link
      * to the server and create a media object for the image.
      *
-     * @param $link
-     * @param $albumId
+     * @param string $link
+     * @param int    $albumId
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      *
@@ -252,9 +251,11 @@ class Media extends Resource
         $media->setCreated(new \DateTime());
         $media->setUserId(0);
 
-        /** @var $album Album */
+        /** @var Album|null $album */
         $album = $this->getManager()->find(Album::class, $albumId);
         if (!$album) {
+            // Cleanup temporary file
+            $this->deleteTmpFile($file);
             throw new ApiException\CustomValidationException(
                 sprintf('Album by id %s not found', $albumId)
             );
@@ -263,16 +264,19 @@ class Media extends Resource
         $media->setAlbum($album);
 
         try {
-            //persist the model into the model manager this uploads and resizes the image
+            // Persist the model into the model manager this uploads and resizes the image
             $this->getManager()->persist($media);
-        } catch (\Doctrine\ORM\ORMException $e) {
+        } catch (ORMException $e) {
             throw new ApiException\CustomValidationException(
-                sprintf('Some error occurred while loading your image')
+                sprintf('Some error occurred while persisting your media')
             );
+        } finally {
+            // Cleanup temporary file
+            $this->deleteTmpFile($file);
         }
 
         if ($media->getType() === MediaModel::TYPE_IMAGE) {
-            /** @var $manager Manager */
+            /** @var Manager $manager */
             $manager = Shopware()->Container()->get('thumbnail_manager');
 
             $manager->createMediaThumbnail($media, [], true);
@@ -303,34 +307,27 @@ class Media extends Resource
             return $this->uploadBase64File($url, $destPath, $baseFilename);
         }
 
-        $urlArray = parse_url($url);
-        $urlArray['path'] = explode('/', $urlArray['path']);
-        switch ($urlArray['scheme']) {
-            case 'ftp':
-            case 'ftps':
-            case 'http':
-            case 'https':
-            case 'file':
-                $filename = $this->getUniqueFileName($destPath, $baseFilename);
+        $this->getContainer()->get('shopware.components.stream_protocol_validator')->validate($url);
 
-                if (!$put_handle = fopen("$destPath/$filename", 'wb+')) {
-                    throw new \Exception("Could not open $destPath/$filename for writing");
-                }
+        $filename = $this->getUniqueFileName($destPath, $baseFilename);
+        $filePath = sprintf('%s/%s', $destPath, $filename);
 
-                if (!$get_handle = fopen($url, 'rb')) {
-                    throw new \Exception("Could not open $url for reading");
-                }
-                while (!feof($get_handle)) {
-                    fwrite($put_handle, fgets($get_handle, 4096));
-                }
-                fclose($get_handle);
-                fclose($put_handle);
-
-                return "$destPath/$filename";
+        if (!$put_handle = fopen($filePath, 'wb+')) {
+            throw new \Exception(sprintf('Could not open %s for writing', $filePath));
         }
-        throw new \InvalidArgumentException(
-            sprintf("Unsupported schema '%s'.", $urlArray['scheme'])
-        );
+
+        if (!$get_handle = fopen($url, 'rb')) {
+            throw new \Exception(sprintf('Could not open %s for reading', $url));
+        }
+
+        while (!feof($get_handle)) {
+            fwrite($put_handle, fgets($get_handle, 4096));
+        }
+
+        fclose($get_handle);
+        fclose($put_handle);
+
+        return sprintf('%s/%s', $destPath, $filename);
     }
 
     /**
@@ -339,7 +336,7 @@ class Media extends Resource
      * @param string      $destPath
      * @param string|null $baseFileName
      *
-     * @return null|string
+     * @return string|null
      */
     public function getUniqueFileName($destPath, $baseFileName = null)
     {
@@ -380,9 +377,9 @@ class Media extends Resource
      * If the passed baseFilename already exists in the destination path,
      * the function creates a unique file name.
      *
-     * @param $url
-     * @param $destinationPath
-     * @param $baseFilename
+     * @param string $url
+     * @param string $destinationPath
+     * @param string $baseFilename
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @throws \Exception
@@ -392,17 +389,17 @@ class Media extends Resource
     protected function uploadBase64File($url, $destinationPath, $baseFilename)
     {
         if (!$get_handle = fopen($url, 'r')) {
-            throw new \Exception("Could not open $url for reading");
+            throw new \Exception(sprintf('Could not open %s for reading', $url));
         }
 
         $meta = stream_get_meta_data($get_handle);
         if (!strpos($meta['mediatype'], 'image/') === false) {
-            throw new ApiException\CustomValidationException('No valid media type passed for the article image : ' . $url);
+            throw new ApiException\CustomValidationException(sprintf('No valid media type passed for the product image: %s', $url));
         }
 
         $extension = str_replace('image/', '', $meta['mediatype']);
-        $filename = $this->getUniqueFileName($destinationPath, $baseFilename);
-        $filename .= '.' . $extension;
+        $filename = $this->getUniqueFileName($destinationPath, $baseFilename) . '.' . $extension;
+        $destinationFilePath = sprintf('%s/%s', $destinationPath, $filename);
 
         if (!$put_handle = fopen("$destinationPath/$filename", 'wb+')) {
             throw new \Exception("Could not open $destinationPath/$filename for writing");
@@ -413,20 +410,19 @@ class Media extends Resource
         fclose($get_handle);
         fclose($put_handle);
 
-        return "$destinationPath/$filename";
+        return $destinationFilePath;
     }
 
     /**
-     * @param array      $params
      * @param MediaModel $media
      *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Exception
      *
-     * @return mixed
+     * @return array
      */
-    private function prepareMediaData($params, $media = null)
+    private function prepareMediaData(array $params, $media = null)
     {
         // in create mode, album is a required param
         if (!$media && (!isset($params['album']) || empty($params['album']))) {
@@ -465,7 +461,9 @@ class Media extends Resource
             $params['name'] = $this->getUniqueFileName($params['file'], $params['name']);
             $originalName = $params['file'];
 
-            if (!file_exists($params['file'])) {
+            $this->getContainer()->get('shopware.components.stream_protocol_validator')->validate($params['file']);
+
+            if (!file_exists($params['file']) || strpos($params['file'], 'ftp://') === 0) {
                 try {
                     $path = $this->load($params['file'], $params['name']);
 
@@ -473,10 +471,10 @@ class Media extends Resource
                         $originalName = $params['name'];
                     }
                 } catch (\Exception $e) {
-                    throw new \Exception(sprintf('Could not load image %s', $params['file']));
+                    throw new \Exception(sprintf('Could not load image %s', $params['file']), $e->getCode(), $e);
                 }
             } else {
-                $path = $params['file'];
+                $path = str_replace('file://', '', $params['file']);
             }
             $params['file'] = new UploadedFile($path, $originalName);
         }
@@ -506,26 +504,13 @@ class Media extends Resource
     }
 
     /**
-     * @param string $url
-     *
-     * @throws \RuntimeException
-     *
-     * @return string
+     * @param string $file
      */
-    private function saveAsTempMediaFile($url)
+    private function deleteTmpFile($file)
     {
-        $tmpFile = tempnam(sys_get_temp_dir(), 'media_update');
-        $localStream = fopen($tmpFile, 'wb');
-
-        if (!$remoteStream = fopen($url, 'rb')) {
-            throw new \RuntimeException(sprintf('Could not open url for reading: %s', $url));
+        if (file_exists($file)) {
+            unlink($file);
+            rmdir(dirname($file));
         }
-
-        stream_copy_to_stream($remoteStream, $localStream);
-
-        fclose($remoteStream);
-        fclose($localStream);
-
-        return $tmpFile;
     }
 }

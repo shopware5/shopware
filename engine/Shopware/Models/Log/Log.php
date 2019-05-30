@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Log;
+namespace Shopware\Models\Log;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -32,7 +32,7 @@ use Shopware\Components\Model\ModelEntity;
  *
  * This is the model for the premium-module, which contains a single row from s_addon_premiums.
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_core_log")
  */
 class Log extends ModelEntity
@@ -41,7 +41,7 @@ class Log extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -68,7 +68,7 @@ class Log extends ModelEntity
     private $text;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="date", type="datetime", nullable=false)
      */
@@ -187,7 +187,7 @@ class Log extends ModelEntity
     /**
      * Set date
      *
-     * @param \DateTime $date
+     * @param \DateTimeInterface $date
      *
      * @return Log
      */
@@ -201,7 +201,7 @@ class Log extends ModelEntity
     /**
      * Get date
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDate()
     {

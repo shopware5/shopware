@@ -69,7 +69,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
     {
         $criteriaList = $this->invokeMethod($this->batchSearch, 'getOptimizedCriteriaList', [[]]);
 
-        $this->assertSame([], $criteriaList);
+        static::assertSame([], $criteriaList);
     }
 
     /**
@@ -100,7 +100,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals($expectedOptimizedCriteriaList, $criteriaList);
+        static::assertEquals($expectedOptimizedCriteriaList, $criteriaList);
     }
 
     /**
@@ -137,7 +137,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals($expectedOptimizedCriteriaList, $criteriaList);
+        static::assertEquals($expectedOptimizedCriteriaList, $criteriaList);
     }
 
     /**
@@ -188,7 +188,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals($expectedOptimizedCriteriaList, $criteriaList);
+        static::assertEquals($expectedOptimizedCriteriaList, $criteriaList);
     }
 
     /**
@@ -240,7 +240,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals($expectedOptimizedCriteriaList, $criteriaList);
+        static::assertEquals($expectedOptimizedCriteriaList, $criteriaList);
     }
 
     /**
@@ -281,7 +281,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals($expectedOptimizedCriteriaList, $criteriaList);
+        static::assertEquals($expectedOptimizedCriteriaList, $criteriaList);
     }
 
     /**
@@ -352,7 +352,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals($expectedOptimizedCriteriaList, $criteriaList);
+        static::assertEquals($expectedOptimizedCriteriaList, $criteriaList);
     }
 
     public function testOptimizeCriteriaListWithEqualCriteriaButDifferentSorting()
@@ -401,7 +401,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertEquals($expectedOptimizedCriteriaList, $criteriaList);
+        static::assertEquals($expectedOptimizedCriteriaList, $criteriaList);
     }
 
     /**
@@ -410,7 +410,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
     public function testGetBaseProductsRangeWithEmptyProducts()
     {
         $products = $this->invokeMethod($this->batchSearch, 'getBaseProductsRange', [0, [], 1]);
-        $this->assertSame([], $products);
+        static::assertSame([], $products);
     }
 
     /**
@@ -430,7 +430,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
             new BaseProduct(1, 1, 1),
         ];
 
-        $this->assertEquals($expectedProducts, $result);
+        static::assertEquals($expectedProducts, $result);
     }
 
     /**
@@ -451,7 +451,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
             new BaseProduct(1, 1, 1),
         ];
 
-        $this->assertEquals($expectedProducts, $result);
+        static::assertEquals($expectedProducts, $result);
 
         // second call should not return the same product
         $result = $this->invokeMethod($this->batchSearch, 'getBaseProductsRange', [0, $products, 2]);
@@ -460,7 +460,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
             new BaseProduct(3, 3, 3),
         ];
 
-        $this->assertEquals($expectedProducts, $result);
+        static::assertEquals($expectedProducts, $result);
     }
 
     /**
@@ -485,7 +485,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
             new BaseProduct(2, 2, 2),
         ];
 
-        $this->assertEquals($expectedProducts, $result);
+        static::assertEquals($expectedProducts, $result);
     }
 
     /**
@@ -510,7 +510,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
             new BaseProduct(2, 2, 2),
         ];
 
-        $this->assertEquals($expectedProducts, $result);
+        static::assertEquals($expectedProducts, $result);
 
         $result = $this->invokeMethod($this->batchSearch, 'getBaseProductsRange', [1, $products, 6]);
         $expectedProducts = [
@@ -522,6 +522,6 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
             new BaseProduct(2, 2, 2),
         ];
 
-        $this->assertEquals($expectedProducts, $result);
+        static::assertEquals($expectedProducts, $result);
     }
 }

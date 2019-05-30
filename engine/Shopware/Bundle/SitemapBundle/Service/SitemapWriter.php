@@ -24,6 +24,9 @@
 
 namespace Shopware\Bundle\SitemapBundle\Service;
 
+use League\Flysystem\FilesystemInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Shopware\Bundle\SitemapBundle\Exception\UnknownFileException;
 use Shopware\Bundle\SitemapBundle\SitemapWriterInterface;
 use Shopware\Bundle\SitemapBundle\Struct\Sitemap;
@@ -33,14 +36,9 @@ use Shopware\Models\Shop\Shop;
 class SitemapWriter implements SitemapWriterInterface
 {
     /**
-     * @var string
+     * @var FilesystemInterface
      */
-    private $sitemapDir;
-
-    /**
-     * @var string
-     */
-    private $tempPath;
+    private $filesystem;
 
     /**
      * @var SitemapNameGenerator
@@ -53,47 +51,26 @@ class SitemapWriter implements SitemapWriterInterface
     private $files = [];
 
     /**
-     * @var Sitemap[]
+     * @var array<Sitemap[]>
      */
     private $sitemaps = [];
 
     /**
-     * @param SitemapNameGenerator $sitemapNameGenerator
-     * @param string               $sitemapDir
-     * @param string               $tempPath
+     * @var LoggerInterface
      */
-    public function __construct(SitemapNameGenerator $sitemapNameGenerator, $sitemapDir, $tempPath = '/temp')
-    {
+    private $logger;
+
+    public function __construct(
+        SitemapNameGenerator $sitemapNameGenerator,
+        FilesystemInterface $filesystem,
+        LoggerInterface $logger = null
+    ) {
         $this->sitemapNameGenerator = $sitemapNameGenerator;
-        $this->sitemapDir = $sitemapDir;
-        $this->tempPath = $tempPath;
+        $this->filesystem = $filesystem;
+        $this->logger = $logger ?: new NullLogger();
     }
 
     /**
-     * Makes sure all files get closed and replaces the old sitemaps with the freshly generated ones
-     */
-    public function __destruct()
-    {
-        /** @var Sitemap[] $sitemaps */
-        foreach ($this->sitemaps as $shopId => $sitemaps) {
-            try {
-                $this->closeFile($shopId);
-            } catch (UnknownFileException $ex) {
-                // Ok, got closed already
-            }
-
-            // Delete old sitemaps for this siteId
-            array_map('unlink', glob(rtrim($this->sitemapDir, '/') . '/sitemap-shop-' . $shopId . '-*.xml.gz'));
-
-            // Move new Sitemaps into place
-            foreach ($sitemaps as $sitemap) {
-                rename($sitemap->getFilename(), $this->sitemapNameGenerator->getSitemapFilename($shopId));
-            }
-        }
-    }
-
-    /**
-     * @param Shop  $shop
      * @param Url[] $urls
      *
      * @return bool
@@ -118,11 +95,18 @@ class SitemapWriter implements SitemapWriterInterface
         }
     }
 
+    /**
+     * Closes open file handles and moves sitemaps to their target location.
+     *
+     * @throws UnknownFileException
+     */
     public function closeFiles()
     {
         foreach ($this->files as $shopId => $params) {
             $this->closeFile($shopId);
         }
+
+        $this->moveFiles();
     }
 
     /**
@@ -170,7 +154,7 @@ class SitemapWriter implements SitemapWriterInterface
 
         $filePath = sprintf(
             '%s/sitemap-shop-%d-%s.xml.gz',
-            rtrim($this->tempPath, '/'),
+            rtrim(sys_get_temp_dir(), '/'),
             $shopId,
             microtime(true) * 10000
         );
@@ -178,6 +162,8 @@ class SitemapWriter implements SitemapWriterInterface
         $fileHandler = gzopen($filePath, 'wb');
 
         if (!$fileHandler) {
+            $this->logger->error(sprintf('Could not generate sitemap file, unable to write to "%s"', $filePath));
+
             return false;
         }
 
@@ -200,5 +186,32 @@ class SitemapWriter implements SitemapWriterInterface
     private function write($fileHandler, $content)
     {
         gzwrite($fileHandler, $content);
+    }
+
+    /**
+     * Makes sure all files get closed and replaces the old sitemaps with the freshly generated ones
+     */
+    private function moveFiles()
+    {
+        /** @var Sitemap[] $sitemaps */
+        foreach ($this->sitemaps as $shopId => $sitemaps) {
+            // Delete old sitemaps for this siteId
+            foreach ($this->filesystem->listContents(sprintf('shop-%d', $shopId)) as $file) {
+                $this->filesystem->delete($file['path']);
+            }
+
+            // Move new sitemaps into place
+            foreach ($sitemaps as $sitemap) {
+                $sitemapFileName = $this->sitemapNameGenerator->getSitemapFilename($shopId);
+                try {
+                    $this->filesystem->write($sitemapFileName, file_get_contents($sitemap->getFilename()));
+                } catch (\League\Flysystem\Exception $exception) {
+                    // If we could not move the file to it's target, we remove it here to not clutter tmp dir
+                    unlink($sitemap->getFilename());
+
+                    $this->logger->error(sprintf('Could not move sitemap to "%s" in the location for sitemaps', $sitemapFileName));
+                }
+            }
+        }
     }
 }

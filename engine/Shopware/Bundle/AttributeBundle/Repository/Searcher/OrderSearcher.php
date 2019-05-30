@@ -42,6 +42,7 @@ class OrderSearcher extends GenericSearcher
         $query->leftJoin('entity.shop', 'shop');
         $query->leftJoin('entity.billing', 'billing');
         $query->leftJoin('entity.customer', 'customer');
+        $query->leftJoin('entity.documents', 'document');
         $query->leftJoin('billing.country', 'billingCountry');
         $query->setAlias('entity');
 
@@ -49,8 +50,6 @@ class OrderSearcher extends GenericSearcher
     }
 
     /**
-     * @param SearchCriteria $criteria
-     *
      * @return array
      */
     protected function getSearchFields(SearchCriteria $criteria)
@@ -63,6 +62,7 @@ class OrderSearcher extends GenericSearcher
             'billing.zipCode^0.5',
             'billing.city^0.5',
             'billing.company^0.5',
+            'document.documentId^3',
         ];
     }
 }

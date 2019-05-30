@@ -34,7 +34,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -55,11 +55,6 @@ class ShippingFreeFacetHandler implements PartialFacetHandlerInterface
      */
     private $fieldName;
 
-    /**
-     * @param QueryBuilderFactoryInterface         $queryBuilderFactory
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper                     $queryAliasMapper
-     */
     public function __construct(
         QueryBuilderFactoryInterface $queryBuilderFactory,
         \Shopware_Components_Snippet_Manager $snippetManager,
@@ -87,7 +82,7 @@ class ShippingFreeFacetHandler implements PartialFacetHandlerInterface
             ->andWhere('variant.shippingfree = 1')
             ->setMaxResults(1);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $total = $statement->fetch(\PDO::FETCH_COLUMN);

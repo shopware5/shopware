@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  */
 class HrefLang extends Extendable
 {

@@ -35,7 +35,7 @@ use Shopware\Models\Shop;
  * The Theme\Compiler class is used for the less compiling in the store front.
  * This class handles additionally the css and javascript minification.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -67,7 +67,7 @@ class Compiler
     private $eventManager;
 
     /**
-     * @var Js
+     * @var CompressorInterface
      */
     private $jsCompressor;
 
@@ -97,15 +97,7 @@ class Compiler
     private $release;
 
     /**
-     * @param string                      $rootDir
-     * @param LessCompiler                $compiler
-     * @param PathResolver                $pathResolver
-     * @param Inheritance                 $inheritance
-     * @param Service                     $service
-     * @param CompressorInterface         $jsCompressor
-     * @param \Enlight_Event_EventManager $eventManager
-     * @param TimestampPersistor          $timestampPersistor
-     * @param ShopwareReleaseStruct       $release
+     * @param string $rootDir
      */
     public function __construct(
         $rootDir,
@@ -144,8 +136,6 @@ class Compiler
      * Helper function which compiles a shop with new theme.
      * The function is called when the template cache is cleared.
      *
-     * @param Shop\Shop $shop
-     *
      * @throws \Exception
      */
     public function compile(Shop\Shop $shop)
@@ -177,8 +167,6 @@ class Compiler
     }
 
     /**
-     * @param Shop\Shop $shop
-     *
      * @throws \Exception
      *
      * @return Configuration
@@ -228,9 +216,7 @@ class Compiler
      * compresses the theme and plugin javascript and css files
      * into one file.
      *
-     * @param int           $timestamp
-     * @param Shop\Template $template
-     * @param Shop\Shop     $shop
+     * @param string $timestamp
      *
      * @throws \Exception
      */
@@ -244,7 +230,7 @@ class Compiler
 
         $dir = dirname($file);
         if (!is_dir($dir)) {
-            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
+            if (@mkdir($dir, 0777, true) === false && !is_dir($dir)) {
                 throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'web', $dir));
             }
         } elseif (!is_writable($dir)) {
@@ -282,9 +268,7 @@ class Compiler
     /**
      * Compiles the javascript files for the passed shop template.
      *
-     * @param string        $timestamp
-     * @param Shop\Template $template
-     * @param Shop\Shop     $shop
+     * @param string $timestamp
      *
      * @throws \Exception
      */
@@ -322,9 +306,7 @@ class Compiler
     /**
      * Helper function which reads and creates the theme timestamp for the css and js files.
      *
-     * @param Shop\Shop $shop
-     *
-     * @return int
+     * @return string
      */
     public function getThemeTimestamp(Shop\Shop $shop)
     {
@@ -332,8 +314,7 @@ class Compiler
     }
 
     /**
-     * @param Shop\Shop $shop
-     * @param int       $timestamp
+     * @param int $timestamp
      */
     public function createThemeTimestamp(Shop\Shop $shop, $timestamp)
     {
@@ -344,8 +325,7 @@ class Compiler
      * Clear existing theme cache
      * Removes all assets and timestamp files
      *
-     * @param Shop\Shop $shop
-     * @param int       $timestamp
+     * @param int $timestamp
      */
     public function clearThemeCache(Shop\Shop $shop, $timestamp)
     {
@@ -364,9 +344,6 @@ class Compiler
     /**
      * Helper function which compiles the passed less definition.
      * The shop parameter is required to build the shop url for the files.
-     *
-     * @param Shop\Shop      $shop
-     * @param LessDefinition $definition
      *
      * @throws \Enlight_Event_Exception
      */
@@ -415,16 +392,13 @@ class Compiler
      * the function throws the event `Theme_Compiler_Collect_Plugin_Less_Config`
      * to allow plugins to override the theme configuration.
      *
-     * @param Shop\Template $template
-     * @param Shop\Shop     $shop
-     *
      * @throws \Exception
      *
      * @return array
      */
     private function getConfig(Shop\Template $template, Shop\Shop $shop)
     {
-        $config = $this->inheritance->buildConfig($template, $shop, true);
+        $config = $this->inheritance->buildConfig($template, $shop);
         $config['shopware-revision'] = $this->release->getRevision();
 
         $collection = new ArrayCollection();
@@ -437,7 +411,7 @@ class Compiler
 
         foreach ($collection as $temp) {
             if (!is_array($temp)) {
-                throw new \Exception("The passed plugin less config isn't an array!");
+                throw new \Exception('The passed plugin less config isn\'t an array!');
             }
             $config = array_merge($config, $temp);
         }
@@ -447,8 +421,6 @@ class Compiler
 
     /**
      * Builds the configuration for the less compiler class.
-     *
-     * @param Shop\Shop $shop
      *
      * @throws \Enlight_Event_Exception
      *
@@ -504,8 +476,6 @@ class Compiler
     /**
      * Helper function to clear the theme cache directory
      * before the new css and js files are compiled.
-     *
-     * @param array $names
      */
     private function clearDirectory(array $names = [])
     {

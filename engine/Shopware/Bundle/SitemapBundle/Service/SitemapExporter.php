@@ -24,8 +24,11 @@
 
 namespace Shopware\Bundle\SitemapBundle\Service;
 
+use Shopware\Bundle\SitemapBundle\Exception\AlreadyLockedException;
 use Shopware\Bundle\SitemapBundle\SitemapExporterInterface;
+use Shopware\Bundle\SitemapBundle\SitemapLockInterface;
 use Shopware\Bundle\SitemapBundle\SitemapWriterInterface;
+use Shopware\Bundle\SitemapBundle\UrlFilterInterface;
 use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\ConfigWriter;
@@ -61,24 +64,34 @@ class SitemapExporter implements SitemapExporterInterface
     private $configWriter;
 
     /**
-     * @param SitemapWriterInterface                   $sitemapWriter
-     * @param ContextServiceInterface                  $contextService
-     * @param ShopwareConfig                           $shopwareConfig
+     * @var SitemapLockInterface
+     */
+    private $sitemapLock;
+
+    /**
+     * @var UrlFilterInterface
+     */
+    private $urlFilter;
+
+    /**
      * @param \IteratorAggregate<UrlProviderInterface> $urlProvider
-     * @param ConfigWriter                             $configWriter
      */
     public function __construct(
         SitemapWriterInterface $sitemapWriter,
         ContextServiceInterface $contextService,
         ShopwareConfig $shopwareConfig,
         \IteratorAggregate $urlProvider,
-        ConfigWriter $configWriter
+        ConfigWriter $configWriter,
+        SitemapLockInterface $sitemapLock,
+        UrlFilterInterface $urlFilter
     ) {
         $this->sitemapWriter = $sitemapWriter;
-        $this->urlProvider = $urlProvider;
+        $this->urlProvider = iterator_to_array($urlProvider, false);
         $this->shopwareConfig = $shopwareConfig;
         $this->contextService = $contextService;
         $this->configWriter = $configWriter;
+        $this->sitemapLock = $sitemapLock;
+        $this->urlFilter = $urlFilter;
     }
 
     /**
@@ -86,12 +99,22 @@ class SitemapExporter implements SitemapExporterInterface
      */
     public function generate(Shop $shop)
     {
+        if (!$this->sitemapLock->doLock($shop, $this->shopwareConfig->get('sitemapRefreshTime'))) {
+            throw new AlreadyLockedException(sprintf('Cannot acquire lock for shop %d', $shop->getId()));
+        }
+
         $routerContext = Context::createFromShop($shop, $this->shopwareConfig);
         $shopContext = $this->contextService->createShopContext($shop->getId(), $shop->getCurrency()->getId(), $shop->getCustomerGroup()->getKey());
 
         foreach ($this->urlProvider as $urlProvider) {
             $urlProvider->reset();
             while ($urls = $urlProvider->getUrls($routerContext, $shopContext)) {
+                $urls = $this->urlFilter->filter($urls, (int) $shop->getId());
+
+                if (!$urls) {
+                    continue;
+                }
+
                 $this->sitemapWriter->writeFile($shop, $urls);
             }
         }
@@ -99,5 +122,7 @@ class SitemapExporter implements SitemapExporterInterface
         $this->sitemapWriter->closeFiles();
 
         $this->configWriter->save('sitemapLastRefresh', time());
+
+        $this->sitemapLock->unLock($shop);
     }
 }

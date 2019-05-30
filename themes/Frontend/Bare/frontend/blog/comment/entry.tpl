@@ -54,7 +54,8 @@
                                     {/block}
 
                                     {block name='frontend_blog_comments_comment_date_creationdate'}
-                                        <span class="date--creation" itemprop="commentTime">
+                                        <meta itemprop="commentTime" content="{$vote.creationDate->format(DateTime::ATOM)|escapeHtml}">
+                                        <span class="date--creation">
                                             {$vote.creationDate|date:date_long}
                                         </span>
                                     {/block}

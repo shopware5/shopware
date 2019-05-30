@@ -57,7 +57,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 class ConstraintValidatorFactory implements ConstraintValidatorFactoryInterface
 {
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     protected $container;
 
@@ -69,8 +69,7 @@ class ConstraintValidatorFactory implements ConstraintValidatorFactoryInterface
     /**
      * Constructor.
      *
-     * @param ContainerInterface $container  The service container
-     * @param array              $validators
+     * @param ContainerInterface $container The service container
      */
     public function __construct(ContainerInterface $container, array $validators = [])
     {
@@ -97,7 +96,7 @@ class ConstraintValidatorFactory implements ConstraintValidatorFactoryInterface
             $this->validators[$name] = $this->container->get($this->validators[$name]);
         }
         if (!$this->validators[$name] instanceof ConstraintValidatorInterface) {
-            throw new UnexpectedTypeException($this->validators[$name], 'Symfony\Component\Validator\ConstraintValidatorInterface');
+            throw new UnexpectedTypeException($this->validators[$name], \Symfony\Component\Validator\ConstraintValidatorInterface::class);
         }
 
         return $this->validators[$name];

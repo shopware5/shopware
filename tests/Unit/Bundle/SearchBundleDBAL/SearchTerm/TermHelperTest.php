@@ -55,7 +55,7 @@ class TermHelperTest extends TestCase
      */
     public function testSplitTerm($testString, $expectedResult)
     {
-        $this->assertEquals(
+        static::assertEquals(
             $expectedResult,
             $this->termHelper->splitTerm($testString)
         );

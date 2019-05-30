@@ -22,10 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Banner;
+namespace Shopware\Models\Banner;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\Banner as BannerAttribute;
 
 /**
  * Banner Model
@@ -52,25 +53,26 @@ use Shopware\Components\Model\ModelEntity;
  *
  * @ORM\Table(name="s_emarketing_banners")
  * @ORM\Entity(repositoryClass="Repository")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Banner extends ModelEntity
 {
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Banner", mappedBy="banner", cascade={"persist"})
+     * @var BannerAttribute
      *
-     * @var \Shopware\Models\Attribute\Banner
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Banner", mappedBy="banner", cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * Primary Key - autoincrement value
      *
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -87,7 +89,7 @@ class Banner extends ModelEntity
     /**
      * Defines the date and time when this banner should be displayed
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="valid_from", type="datetime", nullable=false)
      */
@@ -96,7 +98,7 @@ class Banner extends ModelEntity
     /**
      * Defines the date and time when this banner should not more displayed
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="valid_to", type="datetime", nullable=false)
      */
@@ -190,7 +192,7 @@ class Banner extends ModelEntity
      *
      * This field may be null or empty
      *
-     * @param \DateTime|string $validFrom
+     * @param \DateTimeInterface|string $validFrom
      *
      * @return Banner
      */
@@ -199,8 +201,8 @@ class Banner extends ModelEntity
         if (empty($validFrom)) {
             $validFrom = null;
         }
-        // if the date isn't null try to transform it to a DateTime Object.
-        if (!$validFrom instanceof \DateTime && !is_null($validFrom)) {
+        // If the date isn't null try to transform it to a DateTime Object.
+        if (!$validFrom instanceof \DateTimeInterface && $validFrom !== null) {
             $validFrom = new \DateTime($validFrom);
         }
 
@@ -212,7 +214,7 @@ class Banner extends ModelEntity
     /**
      * Returns a datetime object containing the date this banner should displayed.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getValidFrom()
     {
@@ -222,7 +224,7 @@ class Banner extends ModelEntity
     /**
      * Sets the date and time this banner should stopped to been displayed
      *
-     * @param \DateTime|string $validTo
+     * @param \DateTimeInterface|string $validTo
      *
      * @return Banner
      */
@@ -231,8 +233,8 @@ class Banner extends ModelEntity
         if (empty($validTo)) {
             $validTo = null;
         }
-        // if the date isn't null try to transform it to a DateTime Object.
-        if (!$validTo instanceof \DateTime && !is_null($validTo)) {
+        // If the date isn't null try to transform it to a DateTime Object.
+        if (!$validTo instanceof \DateTimeInterface && $validTo !== null) {
             $validTo = new \DateTime($validTo);
         }
         $this->validTo = $validTo;
@@ -243,7 +245,7 @@ class Banner extends ModelEntity
     /**
      * Returns a dateTime object with the datetime on which this banner should no more displayed
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getValidTo()
     {
@@ -392,7 +394,7 @@ class Banner extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Banner
+     * @return BannerAttribute
      */
     public function getAttribute()
     {
@@ -400,12 +402,12 @@ class Banner extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\Banner|array|null $attribute
+     * @param BannerAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\Banner
+     * @return Banner
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Banner', 'attribute', 'banner');
+        return $this->setOneToOne($attribute, BannerAttribute::class, 'attribute', 'banner');
     }
 }

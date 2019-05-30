@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundleDBAL;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -43,7 +43,7 @@ interface SearchTermQueryBuilderInterface
      *
      * Returns null if no keywords or search tables are found
      *
-     * @param $term
+     * @param string $term
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder|null
      */

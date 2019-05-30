@@ -40,6 +40,11 @@ Ext.define('Shopware.apps.Benchmark.view.overview.Window', {
     getItems: function () {
         var url = '{url controller=BenchmarkOverview}';
 
+        if (this.shopId) {
+            url = '{url controller=BenchmarkOverview shopId=replaceShopId}';
+            url = url.replace('replaceShopId', this.shopId);
+        }
+
         return [
             Ext.create('Ext.container.Container', {
                 html: '<iframe src="' + url + '" width="100%" height="100%"></iframe>'

@@ -27,12 +27,12 @@ namespace Shopware;
 use Enlight_Controller_Request_RequestHttp as EnlightRequest;
 use Enlight_Controller_Response_ResponseHttp as EnlightResponse;
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\StaticResourcesCompilerPass;
+use Shopware\Bundle\BenchmarkBundle\DependencyInjection\Compiler\MatcherCompilerPass;
 use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\RegisterControllerCompilerPass;
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\AddConstraintValidatorsPass;
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginInitializer;
 use Shopware\Components\ConfigLoader;
-use Shopware\Components\DependencyInjection\Compiler\AddConsoleCommandPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
@@ -42,6 +42,7 @@ use Shopware\Components\Plugin;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
+use Symfony\Component\Console\DependencyInjection\AddConsoleCommandPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -59,7 +60,7 @@ use Symfony\Component\HttpKernel\TerminableInterface;
  * Middleware class between the old Shopware bootstrap mechanism
  * and the Symfony Kernel handling
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -101,7 +102,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
     protected $config;
 
     /**
-     * @var Container
+     * @var Container|null
      */
     protected $container;
 
@@ -170,7 +171,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         }
 
         if ($trustedProxies = $this->config['trustedproxies']) {
-            SymfonyRequest::setTrustedProxies($trustedProxies);
+            SymfonyRequest::setTrustedProxies($trustedProxies, $this->config['trustedheaderset']);
         }
     }
 
@@ -191,7 +192,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
             $this->boot();
         }
 
-        /** @var $front \Enlight_Controller_Front * */
+        /** @var \Enlight_Controller_Front $front */
         $front = $this->container->get('front');
 
         $enlightRequest = $this->transformSymfonyRequestToEnlightRequest($request);
@@ -208,7 +209,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
                 ->clearBody();
 
             $response->setHttpResponseCode(200);
-            $enlightRequest->setDispatched(true);
+            $enlightRequest->setDispatched();
             $dispatcher->dispatch($enlightRequest, $response);
         }
 
@@ -219,8 +220,6 @@ class Kernel implements HttpKernelInterface, TerminableInterface
     }
 
     /**
-     * @param SymfonyRequest $request
-     *
      * @return EnlightRequest
      */
     public function transformSymfonyRequestToEnlightRequest(SymfonyRequest $request)
@@ -239,8 +238,6 @@ class Kernel implements HttpKernelInterface, TerminableInterface
     }
 
     /**
-     * @param EnlightResponse $response
-     *
      * @throws \InvalidArgumentException
      *
      * @return SymfonyResponse
@@ -328,7 +325,6 @@ class Kernel implements HttpKernelInterface, TerminableInterface
     /**
      * Sets the php settings from the config
      *
-     * @param array  $settings
      * @param string $prefix
      */
     public function setPhpSettings(array $settings, $prefix = '')
@@ -390,7 +386,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
      */
     public function getRootDir()
     {
-        return realpath(__DIR__ . '/../../');
+        return dirname(dirname(__DIR__));
     }
 
     /**
@@ -411,9 +407,6 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         return $this->getRootDir() . '/var/log';
     }
 
-    /**
-     * @param ContainerBuilder $container
-     */
     public function addResources(ContainerBuilder $container)
     {
         $files = [
@@ -476,7 +469,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
      */
     public function terminate(SymfonyRequest $request, SymfonyResponse $response)
     {
-        if ($this->container->initialized('events')) {
+        if ($this->container && $this->container->initialized('events')) {
             $this->container->get('events')->notify(KernelEvents::TERMINATE, [
                 'postResponseEvent' => new PostResponseEvent($this, $request, $response),
                 'container' => $this->container,
@@ -489,12 +482,19 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         $initializer = new PluginInitializer(
             $this->connection,
             [
-                $this->config['plugin_directories']['ShopwarePlugins'],
-                $this->config['plugin_directories']['ProjectPlugins'],
+                'ShopwarePlugins' => $this->config['plugin_directories']['ShopwarePlugins'],
+                'ProjectPlugins' => $this->config['plugin_directories']['ProjectPlugins'],
             ]
         );
 
         $this->plugins = $initializer->initializePlugins();
+
+        /*
+         * @deprecated since 5.5, sorting will be default in Shopware 5.6
+         */
+        if ($this->config['backward_compatibility']['predictable_plugin_order'] !== false) {
+            ksort($this->plugins);
+        }
 
         $this->activePlugins = $initializer->getActivePlugins();
 
@@ -644,6 +644,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         $loader->load('services.xml');
         $loader->load('theme.xml');
         $loader->load('logger.xml');
+        $loader->load('commands.xml');
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/Bundle/'));
         $loader->load('SearchBundle/services.xml');
@@ -659,7 +660,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         $loader->load('SearchBundleES/services.xml');
         $loader->load('CustomerSearchBundleDBAL/services.xml');
         $loader->load('BenchmarkBundle/services.xml');
-        $loader->load('EsBackend/services.xml');
+        $loader->load('EsBackendBundle/services.xml');
         $loader->load('SitemapBundle/services.xml');
 
         if (is_file($file = __DIR__ . '/Components/DependencyInjection/services_local.xml')) {
@@ -676,6 +677,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         $container->addCompilerPass(new AddConstraintValidatorsPass());
         $container->addCompilerPass(new StaticResourcesCompilerPass());
         $container->addCompilerPass(new AddConsoleCommandPass());
+        $container->addCompilerPass(new MatcherCompilerPass());
 
         $container->setParameter('active_plugins', $this->activePlugins);
 
@@ -686,9 +688,8 @@ class Kernel implements HttpKernelInterface, TerminableInterface
      * Adds all shopware configuration as di container parameter.
      * Each shopware configuration has the alias "shopware."
      *
-     * @param \Shopware\Components\DependencyInjection\Container|\Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string                                                                                                     $alias
-     * @param array                                                                                                      $options
+     * @param string $alias
+     * @param array  $options
      */
     protected function addShopwareConfig(ContainerBuilder $container, $alias, $options)
     {
@@ -734,7 +735,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
             'shopware.release.version' => $this->release['version'],
             'shopware.release.version_text' => $this->release['version_text'],
             'shopware.release.revision' => $this->release['revision'],
-            'kernel.default_error_level' => $this->debug ? \Monolog\Logger::DEBUG : \Monolog\Logger::INFO,
+            'kernel.default_error_level' => $this->config['logger']['level'],
         ];
     }
 
@@ -765,9 +766,6 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         return sha1($string);
     }
 
-    /**
-     * @param ContainerBuilder $container
-     */
     private function loadPlugins(ContainerBuilder $container)
     {
         if (count($this->plugins) === 0) {

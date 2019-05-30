@@ -31,8 +31,5 @@ interface PresetInstallerInterface
      */
     public function installOrUpdate(array $presetMetaData);
 
-    /**
-     * @param array $presetNames
-     */
     public function uninstall(array $presetNames);
 }

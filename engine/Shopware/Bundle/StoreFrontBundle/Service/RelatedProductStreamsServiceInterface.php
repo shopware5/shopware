@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -36,8 +36,7 @@ interface RelatedProductStreamsServiceInterface
     /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\RelatedProductStreamsServiceInterface::get()
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[] $products
      *
      * @return array indexed with the product number, each array element contains product stream structs
      */
@@ -45,9 +44,6 @@ interface RelatedProductStreamsServiceInterface
 
     /**
      * Selects all related product stream ids for the provided product.
-     *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
      *
      * @return int[] array of product stream structs, indexed by the product order number
      */

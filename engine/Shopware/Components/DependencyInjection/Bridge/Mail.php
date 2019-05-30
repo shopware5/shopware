@@ -27,17 +27,13 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 use Shopware\Components\DependencyInjection\Container;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Mail
 {
     /**
-     * @param Container                   $container
-     * @param \Shopware_Components_Config $config
-     * @param array                       $options
-     *
      * @return \Enlight_Components_Mail|null
      */
     public function factory(Container $container, \Shopware_Components_Config $config, array $options)

@@ -45,7 +45,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     private $eventManager;
 
     /**
-     * @var array
+     * @var ComponentHandlerInterface[]
      */
     private $componentHandlers;
 
@@ -55,17 +55,16 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     private $rootDir;
 
     /**
-     * @param ModelManager                $modelManager
-     * @param \Enlight_Event_EventManager $eventManager
-     * @param IteratorAggregate           $componentHandlers
+     * @param string $rootDir
      */
     public function __construct(ModelManager $modelManager, \Enlight_Event_EventManager $eventManager, IteratorAggregate $componentHandlers, $rootDir)
     {
         $this->modelManager = $modelManager;
         $this->eventManager = $eventManager;
 
-        $this->componentHandlers = iterator_to_array($componentHandlers, false);
-        $this->componentHandlers = $this->registerComponentHandlers();
+        $this->componentHandlers = $this->registerComponentHandlers(
+            iterator_to_array($componentHandlers, false)
+        );
         $this->rootDir = $rootDir;
     }
 
@@ -81,7 +80,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
         $presetData = json_decode($preset->getPresetData(), true);
 
         if (!$presetData || !is_array($presetData) || !array_key_exists('elements', $presetData)) {
-            throw new PresetAssetImportException('The preset data of the ' . $preset->getName() . ' preset seems to be invalid.');
+            throw new PresetAssetImportException(sprintf('The preset data of the %s preset seems to be invalid.', $preset->getName()));
         }
 
         // continue if no sync data present or we just have an assets key which is empty
@@ -153,9 +152,6 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     }
 
     /**
-     * @param Preset $preset
-     * @param array  $element
-     *
      * @throws PresetAssetImportException
      */
     private function synchronizeData(Preset $preset, array $element)
@@ -177,7 +173,6 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     }
 
     /**
-     * @param array  $presetData
      * @param string $elementSyncKey
      *
      * @return array
@@ -196,7 +191,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     /**
      * @return array
      */
-    private function registerComponentHandlers()
+    private function registerComponentHandlers(array $defaultComponentHandlers)
     {
         $componentHandlers = new ArrayCollection();
         $componentHandlers = $this->eventManager->collect(
@@ -204,12 +199,10 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
             $componentHandlers
         );
 
-        return array_merge($this->componentHandlers, $componentHandlers->toArray());
+        return array_merge($defaultComponentHandlers, $componentHandlers->toArray());
     }
 
     /**
-     * @param array $element
-     *
      * @return ComponentHandlerInterface|bool
      */
     private function findComponentHandler(array $element)
@@ -231,8 +224,6 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
 
     /**
      * Sets paths for assets coming from plugins which use relative paths.
-     *
-     * @param ParameterBag $syncData
      */
     private function setAssetPaths(ParameterBag $syncData)
     {

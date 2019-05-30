@@ -23,7 +23,7 @@
  */
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -48,20 +48,18 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
     {
         /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/log/getLogs');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('total', $jsonBody);
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('total', $jsonBody);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
     }
 
     /**
      * This test tests the creating of a new log.
      * This function is called before testDeleteLogs
-     *
-     * @return mixed
      */
     public function testCreateLog()
     {
@@ -78,13 +76,13 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
         );
 
         $this->dispatch('backend/log/createLog');
-        $this->assertTrue($this->View()->success);
+        static::assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('data', $jsonBody);
-        $this->assertArrayHasKey('success', $jsonBody);
-        $this->assertArrayHasKey('id', $jsonBody['data']);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('id', $jsonBody['data']);
 
         return $jsonBody['data']['id'];
     }
@@ -104,7 +102,7 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
 
         $jsonBody = $this->View()->getAssign();
 
-        $this->assertArrayHasKey('success', $jsonBody);
-        $this->assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
+        static::assertArrayHasKey('data', $jsonBody);
     }
 }

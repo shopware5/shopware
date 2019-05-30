@@ -117,15 +117,15 @@ class EmotionImporter implements EmotionImporterInterface
         $zip = new \ZipArchive();
 
         if ($zip->open($filePath) !== true) {
-            throw new EmotionImportException('Could not open zip file!');
+            throw new EmotionImportException(sprintf('Could not open zip file "%s"!', $filePath));
         }
 
         if ($zip->locateName('emotion.json') === false) {
-            throw new EmotionImportException('Missing emotion data file!');
+            throw new EmotionImportException(sprintf('Missing emotion.json in %s!', $filePath));
         }
 
         if ($zip->extractTo($extractPath) !== true) {
-            throw new EmotionImportException('Could not extract zip file!');
+            throw new EmotionImportException(sprintf('Could not extract zip file %s to %s!', $filePath, $extractPath));
         }
 
         $zip->close();
@@ -135,8 +135,6 @@ class EmotionImporter implements EmotionImporterInterface
     }
 
     /**
-     * @param array $requiredPlugins
-     *
      * @throws EmotionImportException
      */
     private function checkRequiredPlugins(array $requiredPlugins)
@@ -173,13 +171,14 @@ class EmotionImporter implements EmotionImporterInterface
         }
 
         if ($missingPlugins) {
-            throw new EmotionImportException('The following plugins are required to use this shopping world: <br>' . implode('<br>', $missingPlugins));
+            throw new EmotionImportException(
+                sprintf('The following plugins are required to use this shopping world: <br>%s', implode('<br>', $missingPlugins))
+            );
         }
     }
 
     /**
-     * @param ParameterBag $syncData
-     * @param string       $extractPath
+     * @param string $extractPath
      */
     private function setFilePaths(ParameterBag $syncData, $extractPath)
     {

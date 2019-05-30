@@ -23,12 +23,82 @@
  */
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Frontend_ListingTest extends Enlight_Components_Test_Controller_TestCase
 {
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
+    private $connection;
+
+    /**
+     * Set up test case, fix demo data where needed
+     */
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection->beginTransaction();
+    }
+
+    /**
+     * Cleaning up testData
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+        $this->connection->rollBack();
+    }
+
+    /**
+     * Test that requesting an existing category-id is successfull
+     */
+    public function testDispatchExistingCategory()
+    {
+        $this->dispatch('/cat/?sCategory=14');
+        static::assertEquals(200, $this->Response()->getHttpResponseCode());
+    }
+
+    /**
+     * Test that requesting a non-existing category-id throws an error
+     *
+     * @expectedException \Enlight_Exception
+     */
+    public function testDispatchNonexistingCategory()
+    {
+        $this->dispatch('/cat/?sCategory=4711');
+        static::assertEquals(404, $this->Response()->getHttpResponseCode());
+        static::assertTrue($this->Response()->isRedirect());
+    }
+
+    /**
+     * Test that requesting a non-existing category-id throws an error
+     *
+     * @expectedException \Enlight_Exception
+     */
+    public function testDispatchEmptyCategoryId()
+    {
+        $this->dispatch('/cat/?sCategory=');
+        static::assertEquals(404, $this->Response()->getHttpResponseCode());
+        static::assertTrue($this->Response()->isRedirect());
+    }
+
+    /**
+     * Test that requesting a blog category-id creates a redirect
+     *
+     * @expectedException \Enlight_Exception
+     */
+    public function testDispatchBlogCategory()
+    {
+        $this->dispatch('/cat/?sCategory=17');
+        static::assertEquals(404, $this->Response()->getHttpResponseCode());
+        static::assertTrue($this->Response()->isRedirect());
+    }
+
     /**
      * Test the home redirect if the base category called directly
      * The request should return a 301 redirection to the base homepage.
@@ -41,6 +111,6 @@ class Shopware_Tests_Controllers_Frontend_ListingTest extends Enlight_Components
 
         $this->dispatch('/cat/index/sCategory/' . $mainCategory);
 
-        $this->assertEquals(301, $this->Response()->getHttpResponseCode());
+        static::assertEquals(301, $this->Response()->getHttpResponseCode());
     }
 }

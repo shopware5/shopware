@@ -31,9 +31,30 @@ class Migrations_Migration1226 extends Shopware\Components\Migrations\AbstractMi
 
         // Update label in backend settings
         $sql = "UPDATE `s_core_config_elements`
-                SET `label` = 'Double-Opt-In für Blog- & Artikel-Bewertungen'
+                SET
+                  `label` = 'Double-Opt-In für Blog- & Artikel-Bewertungen',
+                  `value` = 'b:0;'
                 WHERE `id` = @optinid";
         $this->addSql($sql);
+
+        // Don't change old settings
+        if ($modus === self::MODUS_UPDATE) {
+            // Insert for every subshop whichs setting was 'on' (standard)
+            $sql = "INSERT INTO `s_core_config_values` (`element_id`, `shop_id`, `value`)
+                    SELECT 
+                      @optinid,
+                      `id`,
+                      'b:1;'
+                    FROM s_core_shops
+                    WHERE id NOT IN (SELECT `shop_id` FROM `s_core_config_values` WHERE `element_id` = @optinid)";
+            $this->addSql($sql);
+
+            // Delete every old setting / apply new default
+            $sql = 'DELETE FROM `s_core_config_values`
+                    WHERE `element_id` = @optinid
+                    AND   `value` = "b:0;"';
+            $this->addSql($sql);
+        }
 
         // Update english label too
         $sql = "UPDATE `s_core_config_element_translations`
@@ -93,6 +114,7 @@ Bitte bestätigen Sie die Bewertung über den nachfolgenden Link:
     '0'
 )
 EOD;
+            $this->addSql($sql);
         }
         // Add new Mailtemplate - English (Fallback)
         else {
@@ -109,9 +131,10 @@ VALUES
 Hello,
 
 thank you for evaluating the blog article "{$sArticle.title}".
-Please confirm the evaluation by clicking the following link:
+Please confirm your evaluation using the following link:
 
 {$sConfirmLink}
+
 {include file="string:{config name=emailfooterplain}"}',
     '<div style="font-family:arial; font-size:12px;">
     {include file="string:{config name=emailheaderhtml}"}
@@ -120,7 +143,7 @@ Please confirm the evaluation by clicking the following link:
         Hello,<br/>
         <br/>
         thank you for evaluating the blog article for "{$sArticle.title}".<br/>
-        Please confirm the evaluation by clicking the following link:<br/>
+        Please confirm your evaluation using the following link:<br/>
         <br/>
         <a href="{$sConfirmLink}">Confirm</a><br/>
     </p>
@@ -132,7 +155,37 @@ Please confirm the evaluation by clicking the following link:
     '0'
 )
 EOD;
+            $this->addSql($sql);
+
+            // Fix other, similar template too
+            $sql = <<<'EOD'
+UPDATE `s_core_config_mails`
+SET `content` = '{include file="string:{config name=emailheaderplain}"}
+
+Hello,
+
+thank you for evaluating the article {$sArticle.articleName}.
+Please confirm your evaluation using the following link:
+
+{$sConfirmLink}
+
+{include file="string:{config name=emailfooterplain}"}',
+`contentHTML` = '<div style="font-family:arial; font-size:12px;">
+    {include file="string:{config name=emailheaderhtml}"}
+    <p>
+        Hello,<br/>
+        <br/>
+        thank you for evaluating the article {$sArticle.articleName}.<br/>
+        Please confirm your evaluation using the following link:<br/>
+        <br/>
+        <a href="{$sConfirmLink}">Confirm</a>
+    </p>
+    {include file="string:{config name=emailfooterhtml}"}
+</div>'
+WHERE `s_core_config_mails`.`name` = 'sOPTINVOTE'
+AND   `dirty` = 0;
+EOD;
+            $this->addSql($sql);
         }
-        $this->addSql($sql);
     }
 }

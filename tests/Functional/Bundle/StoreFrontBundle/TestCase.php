@@ -61,9 +61,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param array       $products
-     * @param ShopContext $context
-     * @param Category    $category
+     * @param array $products
      *
      * @return Article[]
      */
@@ -71,7 +69,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     {
         $articles = [];
         foreach ($products as $number => $additionally) {
-            $articles[] = $this->createProduct(
+            $articles[$number] = $this->createProduct(
                 $number,
                 $context,
                 $category,
@@ -99,8 +97,6 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
      * @param ConditionInterface[] $conditions
      * @param FacetInterface[]     $facets
      * @param SortingInterface[]   $sortings
-     * @param null                 $context
-     * @param array                $configs
      * @param bool                 $variantSearch
      *
      * @return ProductNumberSearchResult
@@ -165,10 +161,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param Criteria $criteria
-     * @param Category $category
-     * @param $conditions
-     * @param ShopContext $context
+     * @param array $conditions
      */
     protected function addCategoryBaseCondition(
         Criteria $criteria,
@@ -184,7 +177,6 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param Criteria             $criteria
      * @param ConditionInterface[] $conditions
      */
     protected function addConditions(Criteria $criteria, $conditions)
@@ -195,7 +187,6 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param Criteria         $criteria
      * @param FacetInterface[] $facets
      */
     protected function addFacets(Criteria $criteria, $facets)
@@ -206,7 +197,6 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param Criteria           $criteria
      * @param SortingInterface[] $sortings
      */
     protected function addSortings(Criteria $criteria, $sortings)
@@ -217,9 +207,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param $number
-     * @param ShopContext $context
-     * @param Category    $category
+     * @param int $number
      * @param $additionally
      *
      * @return Article
@@ -240,10 +228,6 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
         return $this->helper->createArticle($data);
     }
 
-    /**
-     * @param ProductNumberSearchResult $result
-     * @param array                     $expectedNumbers
-     */
     protected function assertSearchResult(
         ProductNumberSearchResult $result,
         array $expectedNumbers
@@ -253,14 +237,14 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
         }, $result->getProducts());
 
         foreach ($numbers as $number) {
-            $this->assertContains($number, $expectedNumbers, sprintf('Product with number: `%s` found but not expected', $number));
+            static::assertContains($number, $expectedNumbers, sprintf('Product with number: `%s` found but not expected', $number));
         }
         foreach ($expectedNumbers as $number) {
-            $this->assertContains($number, $numbers, sprintf('Expected product number: `%s` not found', $number));
+            static::assertContains($number, $numbers, sprintf('Expected product number: `%s` not found', $number));
         }
 
-        $this->assertCount(count($expectedNumbers), $result->getProducts());
-        $this->assertEquals(count($expectedNumbers), $result->getTotalCount());
+        static::assertCount(count($expectedNumbers), $result->getProducts());
+        static::assertEquals(count($expectedNumbers), $result->getTotalCount());
     }
 
     protected function assertSearchResultSorting(
@@ -273,7 +257,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
         foreach ($productResult as $index => $product) {
             $expectedProduct = $expectedNumbers[$index];
 
-            $this->assertEquals(
+            static::assertEquals(
                 $expectedProduct,
                 $product->getNumber(),
                 sprintf(
@@ -309,10 +293,9 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param string      $number
-     * @param ShopContext $context
-     * @param Category    $category
-     * @param array       $additionally
+     * @param string   $number
+     * @param Category $category
+     * @param array    $additionally
      *
      * @return array
      */
@@ -348,7 +331,6 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
      * Allows to set a Shopware config
      *
      * @param string $name
-     * @param mixed  $value
      */
     protected function setConfig($name, $value)
     {

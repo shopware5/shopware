@@ -75,10 +75,9 @@ class ManufacturerConditionTest extends TestCase
     }
 
     /**
-     * @param $number
+     * @param string                             $number
      * @param \Shopware\Models\Category\Category $category
      * @param Supplier                           $manufacturer
-     * @param ShopContext                        $context
      *
      * @return array
      */

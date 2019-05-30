@@ -27,16 +27,13 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 use Shopware\Components\DependencyInjection\Container;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Currency
 {
     /**
-     * @param Container    $container
-     * @param \Zend_Locale $locale
-     *
      * @return \Zend_Currency
      */
     public function factory(Container $container, \Zend_Locale $locale)

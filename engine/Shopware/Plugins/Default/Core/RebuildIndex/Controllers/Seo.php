@@ -23,7 +23,7 @@
  */
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -69,6 +69,10 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         ]);
     }
 
+    /**
+     * Assigns the amount of the seo links which to build for this shop
+     * Bind for: Shopware_Controllers_Seo_filterCounts
+     */
     public function getCountAction()
     {
         $shopId = (int) $this->Request()->getParam('shopId', 1);
@@ -93,7 +97,8 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
 
         $counts = $this->get('events')->filter(
             'Shopware_Controllers_Seo_filterCounts',
-            $counts
+            $counts,
+            ['shopId' => $shopId]
         );
 
         $this->View()->assign([
@@ -157,7 +162,8 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $shop = $this->SeoIndex()->registerShop($shopId);
 
         $this->RewriteTable()->baseSetup();
-        $this->RewriteTable()->sCreateRewriteTableBlog($offset, $limit);
+        $context = $this->get('shopware_storefront.context_service')->createShopContext($shopId);
+        $this->RewriteTable()->sCreateRewriteTableBlog($offset, $limit, $context);
 
         $this->View()->assign([
             'success' => true,
@@ -242,7 +248,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
     public function seoSupplierAction()
     {
         $seoSupplierConfig = Shopware()->Config()->get('sSEOSUPPLIER');
-        if (is_null($seoSupplierConfig) || $seoSupplierConfig === false) {
+        if ($seoSupplierConfig === null || $seoSupplierConfig === false) {
             $this->View()->assign([
                 'success' => true,
             ]);
@@ -273,9 +279,9 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      * passed shop id. The offset and limit parameter are used
      * to update only an offset of article urls.
      *
-     * @param $offset int
-     * @param $limit int
-     * @param $shop Shopware\Models\Shop\Shop
+     * @param int                       $offset
+     * @param int                       $limit
+     * @param Shopware\Models\Shop\Shop $shop
      */
     protected function seoArticle($offset, $limit, $shop)
     {

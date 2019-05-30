@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct\Configurator;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -122,9 +122,6 @@ class Group extends Extendable
         $this->options = $options;
     }
 
-    /**
-     * @param Option $option
-     */
     public function addOption(Option $option)
     {
         $this->options[] = $option;

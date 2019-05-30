@@ -127,11 +127,7 @@ This can take a very long time, depending on the number of files that need to be
     }
 
     /**
-     * @param string                    $directory
-     * @param MediaServiceInterface     $mediaService
-     * @param OptimizerServiceInterface $optimizerService
-     * @param ProgressBar               $progressBar
-     * @param OutputInterface           $output
+     * @param string $directory
      */
     private function optimizeFiles(
         $directory,
@@ -177,7 +173,6 @@ This can take a very long time, depending on the number of files that need to be
     }
 
     /**
-     * @param OutputInterface      $output
      * @param OptimizerInterface[] $capabilities
      */
     private function displayCapabilities(OutputInterface $output, array $capabilities)

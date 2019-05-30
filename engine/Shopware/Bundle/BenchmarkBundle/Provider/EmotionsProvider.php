@@ -62,6 +62,7 @@ class EmotionsProvider implements BenchmarkProviderInterface
     public function getBenchmarkData(ShopContextInterface $shopContext)
     {
         $this->shopContext = $shopContext;
+        $this->emotionIds = [];
 
         return [
             'total' => $this->getTotalEmotions(),
@@ -115,7 +116,7 @@ class EmotionsProvider implements BenchmarkProviderInterface
 
         $emotionIds = $this->getEmotionIds();
 
-        return $queryBuilder->select('COUNT(element.id) as elementCount, element.x_type as elementName')
+        $data = $queryBuilder->select('COUNT(element.id) as elementCount, element.x_type as elementName')
             ->from('s_emotion_element', 'elementRelation')
             ->innerJoin('elementRelation', 's_library_component', 'element', 'element.id = elementRelation.componentID')
             ->where('elementRelation.emotionID IN (:emotionIds)')
@@ -123,6 +124,14 @@ class EmotionsProvider implements BenchmarkProviderInterface
             ->setParameter(':emotionIds', $emotionIds, Connection::PARAM_INT_ARRAY)
             ->execute()
             ->fetchAll();
+
+        $data = array_map(function ($item) {
+            $item['elementCount'] = (int) $item['elementCount'];
+
+            return $item;
+        }, $data);
+
+        return $data;
     }
 
     /**
@@ -140,9 +149,9 @@ class EmotionsProvider implements BenchmarkProviderInterface
             ->execute()
             ->fetchColumn();
 
-        $devicesUsed = explode(',', $devicesUsed);
+        $devicesUsed = array_filter(explode(',', $devicesUsed), 'strlen');
 
-        $deviceCounts = [];
+        $deviceCounts = [0, 0, 0, 0, 0];
         foreach ($devicesUsed as $device) {
             if (array_key_exists($device, $deviceCounts)) {
                 ++$deviceCounts[$device];

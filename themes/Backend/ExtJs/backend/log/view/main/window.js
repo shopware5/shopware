@@ -63,7 +63,8 @@ Ext.define('Shopware.apps.Log.view.main.Window', {
 
         me.items = [Ext.create('Ext.tab.Panel', {
             layout: 'fit',
-            items: items
+            items: items,
+            activeTab: me.mode === 'systemlogs' ? 1 : 0
         })];
 
         me.callParent(arguments);

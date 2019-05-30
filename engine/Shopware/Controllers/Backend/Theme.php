@@ -24,6 +24,8 @@
 
 use Shopware\Bundle\PluginInstallerBundle\Service\ZipUtils;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\OptinServiceInterface;
+use Shopware\Components\Theme;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
 use Symfony\Component\Filesystem\Filesystem;
@@ -32,7 +34,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * Backend controller for the theme manager 2.0
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -43,7 +45,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      *
      * @var string
      */
-    protected $model = 'Shopware\Models\Shop\Template';
+    protected $model = Template::class;
 
     /**
      * SQL alias for the internal query builder
@@ -85,18 +87,19 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     public function previewAction()
     {
         $themeId = $this->Request()->getParam('themeId');
-
         $shopId = $this->Request()->getParam('shopId');
 
-        /** @var $theme Template */
+        /** @var Template $theme */
         $theme = $this->getRepository()->find($themeId);
 
-        /** @var $shop \Shopware\Models\Shop\Shop */
-        $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveById($shopId);
+        /** @var Shop $shop */
+        $shop = $this->getManager()->getRepository(Shop::class)->getActiveById($shopId);
         $shop->registerResources();
 
-        Shopware()->Session()->template = $theme->getTemplate();
-        Shopware()->Session()->Admin = true;
+        $session = $this->get('session');
+
+        $session->template = $theme->getTemplate();
+        $session->Admin = true;
 
         if (!$this->Request()->isXmlHttpRequest()) {
             $this->get('events')->notify('Shopware_Theme_Preview_Starts', [
@@ -105,10 +108,15 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
                 'theme' => $theme,
             ]);
 
+            $hash = $this->container->get('shopware.components.optin_service')->add(OptinServiceInterface::TYPE_THEME_PREVIEW, 300, [
+                'sessionName' => session_name(),
+                'sessionValue' => $session->get('sessionId'),
+            ]);
+
             $url = $this->Front()->Router()->assemble([
                 'module' => 'frontend',
                 'controller' => 'index',
-                'appendSession' => true,
+                'themeHash' => $hash,
             ]);
 
             $this->redirect($url);
@@ -127,8 +135,8 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             return;
         }
 
-        /** @var $shop \Shopware\Models\Shop\Shop */
-        $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveById(
+        /** @var Shop $shop */
+        $shop = $this->getManager()->getRepository(Shop::class)->getActiveById(
             $shopId
         );
 
@@ -138,7 +146,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         $shop->registerResources();
 
-        Shopware()->Session()->template = null;
+        Shopware()->Session()->offsetSet('template', null);
     }
 
     /**
@@ -216,7 +224,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     /**
      * Saves the passed theme configuration.
      *
-     * @param $data
+     * @param array $data
      *
      * @return array
      */
@@ -240,7 +248,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      */
     public function uploadAction()
     {
-        /** @var $file UploadedFile */
+        /** @var UploadedFile $file */
         $file = Symfony\Component\HttpFoundation\Request::createFromGlobals()->files->get('fileId');
         $system = new Filesystem();
 
@@ -317,18 +325,16 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     /**
      * Override to get all snippet definitions for the loaded theme configuration.
      *
-     * @param array $data
-     *
      * @return array
      */
     protected function getAdditionalDetailData(array $data)
     {
-        /** @var $template Template */
+        /** @var Template $template */
         $template = $this->getRepository()->find($data['id']);
 
-        /** @var $shop Shop */
+        /** @var Shop $shop */
         $shop = $this->getManager()->find(
-            'Shopware\Models\Shop\Shop',
+            Shop::class,
             $this->Request()->getParam('shopId')
         );
 
@@ -368,11 +374,11 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         $data = parent::getList(null, null, $sort, $filter, $wholeParams);
 
-        /** @var $shop Shop */
-        $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $wholeParams['shopId']);
+        /** @var Shop $shop */
+        $shop = $this->getManager()->find(Shop::class, $wholeParams['shopId']);
 
         foreach ($data['data'] as &$theme) {
-            /** @var $instance Template */
+            /** @var Template $instance */
             $instance = $this->getRepository()->find($theme['id']);
 
             $theme['screen'] = $this->container->get('theme_util')->getPreviewImage(
@@ -425,8 +431,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     /**
      * Helper function to decompress zip files.
      *
-     * @param UploadedFile $file
-     * @param $targetDirectory
+     * @param string $targetDirectory
      *
      * @throws Exception
      */
@@ -441,13 +446,11 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      * Helper function which checks if the passed template
      * or the inheritance templates has configuration sets.
      *
-     * @param Template $template
-     *
      * @return bool
      */
     private function hasTemplateConfigSet(Template $template)
     {
-        /** @var $theme \Shopware\Components\Theme */
+        /** @var Theme $theme */
         $theme = $this->get('theme_util')->getThemeByTemplate($template);
 
         if ($template->getConfigSets()->count() > 0) {
@@ -472,14 +475,12 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     }
 
     /**
-     * @param Template $template
-     *
      * @return string|null
      */
     private function getThemeInfo(Template $template)
     {
         $user = $this->get('Auth')->getIdentity();
-        /** @var $locale Locale */
+        /** @var Locale $locale */
         $locale = $user->locale;
         $localeCode = $locale->getLocale();
 

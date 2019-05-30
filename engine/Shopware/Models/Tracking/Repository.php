@@ -35,16 +35,16 @@ class Repository extends ModelRepository
      * Returns an Banner Statistic Model.Either a new one or an existing one. If no date given
      * the current date will be used.
      *
-     * @param $bannerId
-     * @param \DateTime $date
+     * @param int $bannerId
      *
      * @return Banner
      */
-    public function getOrCreateBannerStatsModel($bannerId, \DateTime $date = null)
+    public function getOrCreateBannerStatsModel($bannerId, \DateTimeInterface $date = null)
     {
-        if (is_null($date)) {
+        if ($date === null) {
             $date = new \DateTime();
         }
+        /** @var Banner|null $bannerStatistics */
         $bannerStatistics = $this->findOneBy(['bannerId' => $bannerId, 'displayDate' => $date]);
 
         // If no Entry for this day exists - create a new one
@@ -61,10 +61,10 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the article impression
      *
-     * @param $articleId
-     * @param $shopId
-     * @param null $date
-     * @param null $deviceType
+     * @param int                     $articleId
+     * @param int                     $shopId
+     * @param \DateTimeInterface|null $date
+     * @param string|null             $deviceType
      *
      * @return \Doctrine\ORM\Query
      */
@@ -82,10 +82,10 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getArticleImpressionQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $articleId
-     * @param $shopId
-     * @param $date
-     * @param $deviceType
+     * @param int                $articleId
+     * @param int                $shopId
+     * @param \DateTimeInterface $date
+     * @param string|null        $deviceType
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -93,7 +93,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select('articleImpression')
-                ->from('Shopware\Models\Tracking\ArticleImpression', 'articleImpression')
+                ->from(\Shopware\Models\Tracking\ArticleImpression::class, 'articleImpression')
                 ->where('articleImpression.articleId = :articleId')
                 ->andWhere('articleImpression.shopId = :shopId')
                 ->andWhere('articleImpression.date = :fromDate')

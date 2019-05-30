@@ -50,10 +50,6 @@ class ImmediateDeliveryFacetHandler implements HandlerInterface, ResultHydratorI
      */
     private $queryAliasMapper;
 
-    /**
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper                     $queryAliasMapper
-     */
     public function __construct(
         \Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper
@@ -83,7 +79,7 @@ class ImmediateDeliveryFacetHandler implements HandlerInterface, ResultHydratorI
         $aggregation->setField('hasAvailableVariant');
 
         $filter = new FilterAggregation('has_available_variant_filter');
-        $filter->setFilter(new TermQuery('hasAvailableVariant', 1));
+        $filter->setFilter(new TermQuery('hasAvailableVariant', true));
         $filter->addAggregation($aggregation);
 
         $search->addAggregation($filter);
@@ -117,13 +113,11 @@ class ImmediateDeliveryFacetHandler implements HandlerInterface, ResultHydratorI
     }
 
     /**
-     * @param Criteria $criteria
-     *
      * @return BooleanFacetResult
      */
     private function createFacet(Criteria $criteria)
     {
-        /** @var ImmediateDeliveryFacet $facet */
+        /** @var ImmediateDeliveryFacet|null $facet */
         $facet = $criteria->getFacet('immediate_delivery');
         if ($facet && !empty($facet->getLabel())) {
             $label = $facet->getLabel();

@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             successMessage: '{s name=domainRegistration/successMessage}Domain registration successful{/s}',
             waitTitle: '{s name=domainRegistration/waitTitle}Registering domain{/s}',
             waitMessage: '{s name=domainRegistration/waitMessage}This process might take a few seconds{/s}',
-            validationFailed: "{s name=domainRegistration/validationFailed}<p>You have successfully logged in using your Shopware ID, but the domain validation process failed.<br><p>Please click <a href='http://en.wiki.shopware.com/Shopware-ID-Shopware-Account_detail_1433.html#Add_shop_.2F_domain' target='_blank'>here</a> to use manual domain validation.</p>{/s}"
+            validationFailed: "{s name=domainRegistration/validationFailed}<p>You have successfully logged in using your Shopware ID, but the domain validation process failed.<br><p>Please click <a href='https://docs.shopware.com/en/shopware-5-en/first-steps/shopware-account#link-your-shop' title='Shopware Account documentation' target='_blank'>here</a> to use manual domain validation.</p>{/s}"
         },
 
         login: {
@@ -98,10 +98,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             'rent-plugin':                 me.purchasePlugin,
             'download-free-plugin':        me.purchasePlugin,
             'request-plugin-test-version': me.purchasePlugin,
-            'import-plugin-licence':       me.importLicenceKey,
 
             'upload-plugin':               me.uploadPlugin,
             'delete-plugin':               me.deletePlugin,
+            'expired-delete-plugin':       me.deleteExpiredPlugin,
             'reload-plugin':               me.reloadPlugin,
             'reload-local-listing':        me.reloadLocalListing,
             'save-plugin-configuration':   me.saveConfiguration,
@@ -110,7 +110,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             'open-login':                  me.openLogin,
             'destroy-login':               me.destroyLogin,
             'store-register':              me.register,
-            'check-licence-plugin':        me.checkLicencePlugin,
             'clear-all-cache':             me.clearAllCache,
             scope: me
         };
@@ -173,24 +172,19 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                         });
                     }
                 });
-            });
+            }, true);
         });
     },
 
     updateDummyPlugin: function(plugin, callback) {
         var me = this;
 
-        if (plugin.get('technicalName') == 'SwagLicense') {
-            me.checkIonCube(plugin, function() {
-                me.startPluginDownload(plugin, callback);
-            });
-        } else {
-            me.startPluginDownload(plugin, callback);
-        }
+        me.startPluginDownload(plugin, callback);
     },
 
-    startPluginDownload: function(plugin, callback) {
+    startPluginDownload: function(plugin, callback, isUpdate) {
         var me = this;
+        isUpdate = isUpdate || false;
 
         me.displayLoadingMask(plugin, '{s name="initial_download"}Initial plugin download{/s}');
 
@@ -199,6 +193,14 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             { technicalName: plugin.get('technicalName') },
             function(response) {
                 me.hideLoadingMask();
+
+                if (response.data.binaryVersion === plugin.get('version') && isUpdate) {
+                    Shopware.Notification.createStickyGrowlMessage({
+                        title: '{s name="title"}{/s}',
+                        text: '{s name="subscriptionUpdate"}{/s}'
+                    });
+                    return;
+                }
 
                 var mask = me.createDownloadMask(plugin, response.data, function(fileName) {
                     me.sendAjaxRequest(
@@ -241,182 +243,62 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                     me.checkoutWindow.hide();
 
                     me.startPluginDownload(plugin, function() {
-                        me.importPluginLicence(plugin, function() {
-                            me.pluginBoughtEvent(plugin);
-                            callback();
-                        });
+                        me.pluginBoughtEvent(plugin);
+                        callback();
                     });
                 }
             );
         });
     },
 
-    importPluginLicence: function(plugin, callback) {
-        var me = this;
-
-        me.displayLoadingMask(plugin, '{s name="licence_is_being_imported"}Plugin license is being imported{/s}');
-
-        me.sendAjaxRequest(
-            '{url controller="PluginManager" action="importPluginLicence"}',
-            { technicalName: plugin.get('technicalName') },
-            callback
-        );
-    },
-
-    importLicenceKey: function(licence, callback) {
-        var me = this;
-
-        me.displayLoadingMask(licence, '{s name="licence_is_being_imported"}Plugin license is being imported{/s}');
-
-        if (!licence.get('licenseKey')) {
-            me.hideLoadingMask();
-            callback();
-            return;
-        }
-
-        me.checkIonCube(licence, function() {
-
-            me.checkLicencePlugin(licence, function () {
-
-                me.displayLoadingMask(licence, '{s name="licence_is_being_imported"}Plugin license is being imported{/s}');
-
-                me.sendAjaxRequest(
-                    '{url controller="PluginManager" action="importLicenceKey"}',
-                    {
-                        licenceKey: licence.get('licenseKey')
-                    },
-                    callback
-                );
-
-            }, true);
-        });
-    },
-
     downloadPluginLicenceDirect: function(licence, callback) {
         var me = this;
 
-        me.checkIonCube(licence, function() {
-            me.checkLicencePlugin(licence, function () {
-                me.startPluginDownload(licence, function() {
-                    me.importLicenceKey(licence, callback);
-                });
-            });
-        });
+        me.startPluginDownload(licence);
     },
 
     checkout: function(plugin, price, callback) {
         var me = this;
 
         me.displayLoadingMask(plugin, '{s name="open_basket"}Preparing order process{/s}');
-        me.checkIonCube(plugin, function() {
+        me.checkLogin(function() {
 
-            me.checkLicencePlugin(plugin, function() {
+            var store = Ext.create('Shopware.apps.PluginManager.store.Basket');
 
-                me.checkLogin(function() {
+            var positions = [{
+                orderNumber: plugin.get('code'),
+                price: price.get('price'),
+                type: price.get('type'),
+                technicalName: plugin.get('technicalName')
+            }];
 
-                    var store = Ext.create('Shopware.apps.PluginManager.store.Basket');
+            store.getProxy().extraParams = {
+                positions: Ext.encode(positions)
+            };
 
-                    var positions = [{
-                        orderNumber: plugin.get('code'),
-                        price: price.get('price'),
-                        type: price.get('type'),
-                        technicalName: plugin.get('technicalName')
-                    }];
+            //add event listener to the model proxy to get access on thrown exceptions
+            store.getProxy().on('exception', function (proxy, response) {
+                response = Ext.decode(response.responseText);
+                me.displayErrorMessage(response);
+            }, me, { single: true });
 
-                    store.getProxy().extraParams = {
-                        positions: Ext.encode(positions)
-                    };
+            store.load({
+                callback: function(records) {
+                    if (records) {
+                        var basket = records[0];
 
-                    //add event listener to the model proxy to get access on thrown exceptions
-                    store.getProxy().on('exception', function (proxy, response) {
-                        response = Ext.decode(response.responseText);
-                        me.displayErrorMessage(response);
-                    }, me, { single: true });
+                        me.checkoutWindow = me.getView('account.Checkout').create({
+                            basket: basket,
+                            callback: callback
+                        });
 
-                    store.load({
-                        callback: function(records) {
-                            if (records) {
-                                var basket = records[0];
+                        me.checkoutWindow.show();
+                    }
 
-                                me.hideLoadingMask();
-
-                                me.checkoutWindow = me.getView('account.Checkout').create({
-                                    basket: basket,
-                                    callback: callback
-                                });
-
-                                me.checkoutWindow.show();
-                            }
-                        }
-                    });
-
-                });
+                    me.hideLoadingMask();
+                }
             });
-        });
-    },
 
-    checkLicencePlugin: function(plugin, callback, force) {
-        var me = this;
-
-        if (plugin && !plugin.get('licenceCheck') && !force) {
-            callback();
-            return;
-        }
-
-        Ext.Ajax.request({
-            url: '{url controller=PluginManager action=checkLicencePlugin}',
-            method: 'POST',
-            success: function(operation, opts) {
-                var response = Ext.decode(operation.responseText);
-
-                if (response.success === true && Ext.isFunction(callback)) {
-                    callback(response);
-                    return;
-                }
-
-                var licence = Ext.create('Shopware.apps.PluginManager.model.Plugin', response.data);
-
-                switch(response.state) {
-                    case 'download':
-                        me.confirmMessage(
-                            '{s name="licence_plugin_required_title"}License plugin required{/s}',
-                            me.snippets.licencePluginDownloadInstall,
-                            function() {
-                                me.updateDummyPlugin(licence, function () {
-                                    me.installPlugin(licence, function () {
-                                        me.activatePlugin(licence, callback);
-                                    });
-                                });
-                            }
-                        );
-                        break;
-
-                    case 'install':
-                        me.confirmMessage(
-                            '{s name="licence_plugin_required_title"}License plugin required{/s}',
-                            me.snippets.licencePluginDownloadActivate,
-                            function() {
-                                me.installPlugin(licence, function() {
-                                    me.activatePlugin(licence, callback);
-                                });
-                            }
-                        );
-
-                        break;
-
-                    case 'activate':
-                        me.confirmMessage(
-                            '{s name="licence_plugin_required_title"}License plugin required{/s}',
-                            me.snippets.licencePluginActivate,
-                            function() {
-                                me.activatePlugin(licence, callback);
-                            }
-                        );
-
-                        break;
-                }
-
-            }
         });
     },
 
@@ -471,7 +353,21 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                 }, me);
                 callback(response);
             },
-            null,
+            // Error callback
+            function(response) {
+                // If a plugin update fails it will be disabled, however the list will not reload
+                // so that the plugin is listed as activated even though it is disabled.
+
+                // Reload menu to hide disabled menu items and reload the plugin listing so that
+                // plugins are shown in the correct status of activated, disabled or not installed.
+                me.reloadMenu();
+                me.reloadLocalListing();
+
+                // Standard error handling functionality which would be executed if no error
+                // handler was specified.
+                me.displayErrorMessage(response);
+                me.hideLoadingMask();
+            },
             300000
         );
     },
@@ -763,6 +659,28 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                 );
             }
         );
+    },
+
+    deleteExpiredPlugin: function(plugin, callback) {
+        var me = this;
+
+        if (plugin.get('installationDate')) {
+            me.uninstallPlugin(plugin, function () {
+                me.displayLoadingMask(plugin, '{s name="plugin_is_being_deleted"}Plugin is being deleted{/s}');
+                me.sendAjaxRequest(
+                    '{url controller=PluginInstaller action=deletePlugin}',
+                    { technicalName: plugin.get('technicalName') },
+                    callback
+                );
+            });
+        } else {
+            me.displayLoadingMask(plugin, '{s name="plugin_is_being_deleted"}Plugin is being deleted{/s}');
+            me.sendAjaxRequest(
+                '{url controller=PluginInstaller action=deletePlugin}',
+                { technicalName: plugin.get('technicalName') },
+                callback
+            );
+        }
     },
 
     activatePlugin: function(plugin, callback) {

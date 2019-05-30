@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\AttributeBundle\Repository;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -33,8 +33,6 @@ interface RegistryInterface
 {
     /**
      * Returns a search repository for the provided criteria class.
-     *
-     * @param SearchCriteria $criteria
      *
      * @return GenericRepository|RepositoryInterface
      */

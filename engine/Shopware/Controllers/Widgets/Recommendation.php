@@ -36,6 +36,14 @@ class Shopware_Controllers_Widgets_Recommendation extends Enlight_Controller_Act
     /** @var sMarketing */
     protected $marketingModule;
 
+    /**
+     * Pre dispatch method
+     */
+    public function preDispatch()
+    {
+        $this->Response()->setHeader('x-robots', 'noindex');
+    }
+
     public function init()
     {
         $this->config = Shopware()->Config();
@@ -48,19 +56,19 @@ class Shopware_Controllers_Widgets_Recommendation extends Enlight_Controller_Act
      */
     public function viewedAction()
     {
-        $articleId = (int) $this->Request()->getParam('articleId');
+        $productId = (int) $this->Request()->getParam('articleId');
         $maxPages = (int) $this->config->get('similarViewedMaxPages', 10);
         $perPage = (int) $this->config->get('similarViewedPerPage', 4);
 
-        $this->marketingModule->sBlacklist[] = $articleId;
-        $articles = $this->marketingModule->sGetSimilaryShownArticles($articleId, $maxPages * $perPage);
+        $this->marketingModule->sBlacklist[] = $productId;
+        $products = $this->marketingModule->sGetSimilaryShownArticles($productId, $maxPages * $perPage);
 
-        $numbers = array_column($articles, 'number');
+        $numbers = array_column($products, 'number');
         $result = $this->getPromotions($numbers);
 
-        $this->View()->maxPages = $maxPages;
-        $this->View()->perPage = $perPage;
-        $this->View()->viewedArticles = $result;
+        $this->View()->assign('maxPages', $maxPages);
+        $this->View()->assign('perPage', $perPage);
+        $this->View()->assign('viewedArticles', $result);
     }
 
     /**
@@ -68,19 +76,19 @@ class Shopware_Controllers_Widgets_Recommendation extends Enlight_Controller_Act
      */
     public function boughtAction()
     {
-        $articleId = (int) $this->Request()->getParam('articleId');
+        $productId = (int) $this->Request()->getParam('articleId');
         $maxPages = (int) $this->config->get('alsoBoughtMaxPages', 10);
         $perPage = (int) $this->config->get('alsoBoughtPerPage', 4);
 
-        $this->marketingModule->sBlacklist[] = $articleId;
-        $articles = $this->marketingModule->sGetAlsoBoughtArticles($articleId, $maxPages * $perPage);
+        $this->marketingModule->sBlacklist[] = $productId;
+        $product = $this->marketingModule->sGetAlsoBoughtArticles($productId, $maxPages * $perPage);
 
-        $numbers = array_column($articles, 'number');
+        $numbers = array_column($product, 'number');
         $result = $this->getPromotions($numbers);
 
-        $this->View()->maxPages = $maxPages;
-        $this->View()->perPage = $perPage;
-        $this->View()->boughtArticles = $result;
+        $this->View()->assign('maxPages', $maxPages);
+        $this->View()->assign('perPage', $perPage);
+        $this->View()->assign('boughtArticles', $result);
     }
 
     /**

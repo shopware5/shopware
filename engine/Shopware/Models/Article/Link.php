@@ -26,18 +26,20 @@ namespace Shopware\Models\Article;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\ArticleLink as ProductLinkAttribute;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="s_articles_information")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Link extends ModelEntity
 {
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Article
+     * @var Article
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="links")
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
      */
@@ -46,41 +48,42 @@ class Link extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleLink", mappedBy="articleLink", cascade={"persist"})
+     * @var ProductLinkAttribute
      *
-     * @var \Shopware\Models\Attribute\ArticleLink
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleLink", mappedBy="articleLink", cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @ORM\Column(name="articleID", type="integer", nullable=false)
+     * @var int
      *
-     * @var
+     * @ORM\Column(name="articleID", type="integer", nullable=false)
      */
     private $articleId;
 
     /**
-     * @Assert\NotBlank
-     *
      * @var string
+     *
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="description", type="string", nullable=false)
      */
     private $name;
 
     /**
-     * @Assert\NotBlank
-     * @Assert\Url
-     *
      * @var string
+     *
+     * @Assert\Url()
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="link", type="string", nullable=false)
      */
@@ -200,7 +203,7 @@ class Link extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\ArticleLink
+     * @return ProductLinkAttribute
      */
     public function getAttribute()
     {
@@ -208,12 +211,12 @@ class Link extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\ArticleLink|array|null $attribute
+     * @param ProductLinkAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\ArticleLink
+     * @return Link
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ArticleLink', 'attribute', 'articleLink');
+        return $this->setOneToOne($attribute, ProductLinkAttribute::class, 'attribute', 'articleLink');
     }
 }

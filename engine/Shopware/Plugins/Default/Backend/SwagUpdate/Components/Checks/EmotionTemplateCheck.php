@@ -30,7 +30,7 @@ use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 use ShopwarePlugins\SwagUpdate\Components\Validation;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -48,10 +48,6 @@ class EmotionTemplateCheck implements CheckInterface
      */
     private $connection;
 
-    /**
-     * @param Connection       $connection
-     * @param SnippetNamespace $namespace
-     */
     public function __construct(Connection $connection, SnippetNamespace $namespace)
     {
         $this->namespace = $namespace;

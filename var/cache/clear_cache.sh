@@ -17,4 +17,10 @@ rm -f $DIR/../../web/cache/*.txt
 
 $DIR/../../bin/console sw:generate:attributes
 
+if [[ -x "$(command -v rsync)" ]]; then
+    mkdir $DIR/blank
+    rsync -a --delete $DIR/blank $DIR/delete/
+    rm -Rf $DIR/blank
+fi
+
 rm -Rf $DIR/delete/

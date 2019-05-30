@@ -2,22 +2,24 @@
 Language Flags
 ==================================================
 Displays a country flag the size of 14px x 11px used for language selections purposes.
+
+inspired by: https://github.com/dhanishgajjar/css-flags
+
+en_GB: we need to use svg for en_GB, cause it's smaller than the CSS-Version
 */
 
 .language--flag {
     .unitize-height(11);
     .unitize-width(14);
-    background: url("../../img/ico-flags.png") no-repeat 0 0;
     display: inline-block;
     text-indent: 100%;
     white-space: nowrap;
     overflow: hidden;
 
-    // We need to work with pixels here
-    &.de_DE { background-position: 0 0; }
-    &.en_GB { background-position: 0 -11px; }
-    &.nl_NL { background-position: 0 -22px; }
-    &.fr_FR { background-position: 0 -33px; }
-    &.es_ES { background-position: 0 -44px; }
-    &.it_IT { background-position: 0 -55px; }
+    &.de_DE { background-position: 0 0; background-image: linear-gradient(to bottom, black 33%, #DD0000 33%, #DD0000 66%, #FFCE00 66%); }
+    &.en_GB { background-position: 0 0; background-size: 100%; background-repeat: no-repeat; background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='640' height='480'%3E%3Cdefs%3E%3CclipPath id='a'%3E%3Cpath d='M-85 0h682v512H-85z'%2F%3E%3C%2FclipPath%3E%3C%2Fdefs%3E%3Cg clip-path='url%28%23a%29' transform='translate%2880%29 scale%28.94%29'%3E%3Cpath fill='%23006' d='M-256 0H768v512H-256z'%2F%3E%3Cpath fill='%23fff' d='M-256 0v57l910 455h114v-57L-141 0h-115zM768 0v57l-909 455h-115v-57L654 0h114z'%2F%3E%3Cpath fill='%23fff' d='M171 0v512h170V0H171zm-427 171v170H768V171H-256z'%2F%3E%3Cpath fill='%23c00' d='M-256 205v102H768V205H-256zM205 0v512h102V0H205zm-461 512L85 341h77l-342 171h-76zm0-512L85 171H9L-256 38V0zm606 171L692 0h76L427 171h-77zm418 341L427 341h76l265 133v38z'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");}
+    &.nl_NL { background-position: 0 0; background-image: linear-gradient(to bottom, #DD0000 33%, white 33%, white 66%, #21468B 66%); }
+    &.fr_FR { background-position: 0 0; background-image: linear-gradient(to right, #21468B 33%, white 33%, white 66%, #DD0000 66%); }
+    &.es_ES { background-position: 0 0; background-image: linear-gradient(#DD0000 25%, #FFCE00 25%, #FFCE00 75%, #DD0000 75%);}
+    &.it_IT { background-position: 0 0; background-image: linear-gradient(to right, #009246 33%, white 33%, white 66%, #DD0000 66%);}
 }

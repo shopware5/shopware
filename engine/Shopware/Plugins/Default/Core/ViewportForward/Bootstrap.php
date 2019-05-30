@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Shopware_Plugins_Core_ViewportForward_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     public function install()
@@ -61,8 +62,15 @@ class Shopware_Plugins_Core_ViewportForward_Bootstrap extends Shopware_Component
                 }
                 break;
             case 'cat':
-            case 'supplier':
                 $request->setControllerName('listing')->setDispatched(false);
+                break;
+            case 'supplier':
+                $url = $args->getSubject()->Router()->assemble([
+                        'controller' => 'listing',
+                        'action' => 'manufacturer',
+                        'sSupplier' => $request->getParam('sSupplier'),
+                ]);
+                $args->getSubject()->Response()->setRedirect($url, 301);
                 break;
             case 'captcha':
                 $request->setModuleName('widgets')->setControllerName('captcha')->setDispatched(false);

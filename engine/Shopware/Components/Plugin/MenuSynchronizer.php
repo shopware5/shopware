@@ -43,9 +43,6 @@ class MenuSynchronizer
      */
     private $menuRepository;
 
-    /**
-     * @param ModelManager $em
-     */
     public function __construct(ModelManager $em)
     {
         $this->em = $em;
@@ -53,9 +50,6 @@ class MenuSynchronizer
     }
 
     /**
-     * @param Plugin $plugin
-     * @param array  $menu
-     *
      * @throws \InvalidArgumentException
      */
     public function synchronize(Plugin $plugin, array $menu)
@@ -70,12 +64,14 @@ class MenuSynchronizer
                     $menuNames = array_merge($menuNames, $childMenuNames);
                 }
             }
+
             if ($menuItem['isRootMenu']) {
                 $parent = null;
             } else {
                 if (!isset($menuItem['parent'])) {
                     throw new \InvalidArgumentException('Root Menu Item must provide parent element');
                 }
+                /** @var Menu|null $parent */
                 $parent = $this->menuRepository->findOneBy($menuItem['parent']);
                 if (!$parent) {
                     throw new \InvalidArgumentException(sprintf('Unable to find parent for query %s', print_r($menuItem['parent'], true)));
@@ -90,7 +86,6 @@ class MenuSynchronizer
     }
 
     /**
-     * @param array  $labels
      * @param string $name
      *
      * @throws \Exception
@@ -114,10 +109,6 @@ class MenuSynchronizer
     }
 
     /**
-     * @param Plugin    $plugin
-     * @param Menu|null $parent
-     * @param array     $menuItem
-     *
      * @throws \RuntimeException
      *
      * @return Menu
@@ -127,6 +118,7 @@ class MenuSynchronizer
         $item = null;
 
         if ($plugin->getId()) {
+            /** @var Menu $item */
             $item = $this->menuRepository->findOneBy([
                 'pluginId' => $plugin->getId(),
                 'label' => $menuItem['name'],
@@ -194,8 +186,7 @@ class MenuSynchronizer
     }
 
     /**
-     * @param int   $pluginId
-     * @param array $menuNames
+     * @param int $pluginId
      */
     private function removeNotExistingEntries($pluginId, array $menuNames)
     {

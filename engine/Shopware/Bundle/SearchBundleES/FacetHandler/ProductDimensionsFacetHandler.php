@@ -102,10 +102,8 @@ class ProductDimensionsFacetHandler implements HandlerInterface, ResultHydratorI
 
     /**
      * @param WeightFacet|WidthFacet|LengthFacet|HeightFacet|FacetInterface $facet
-     * @param array                                                         $stats
-     * @param Criteria                                                      $criteria
      *
-     * @return null|RangeFacetResult
+     * @return RangeFacetResult|null
      */
     private function createRangeFacet(FacetInterface $facet, array $stats, Criteria $criteria)
     {
@@ -120,7 +118,7 @@ class ProductDimensionsFacetHandler implements HandlerInterface, ResultHydratorI
         $activeMin = $min;
         $activeMax = $max;
 
-        /** @var $condition WeightCondition|WidthCondition|LengthCondition|HeightCondition */
+        /** @var WeightCondition|WidthCondition|LengthCondition|HeightCondition $condition */
         if ($condition = $criteria->getCondition($name)) {
             $method = 'get' . ucfirst($minField);
             $activeMin = $condition->$method();

@@ -30,7 +30,7 @@ use Shopware\Bundle\SearchBundleDBAL\KeywordFinderInterface;
 use Shopware\Bundle\SearchBundleDBAL\SearchTermQueryBuilderInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -47,7 +47,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
     private $connection;
 
     /**
-     * @var KeywordFinder
+     * @var KeywordFinderInterface
      */
     private $keywordFinder;
 
@@ -56,13 +56,6 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
      */
     private $termHelper;
 
-    /**
-     * @param \Shopware_Components_Config $config
-     * @param Connection                  $connection
-     * @param KeywordFinderInterface      $keywordFinder
-     * @param SearchIndexerInterface      $searchIndexer
-     * @param TermHelperInterface         $termHelper
-     */
     public function __construct(
         \Shopware_Components_Config $config,
         Connection $connection,
@@ -82,7 +75,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
      * Required table fields:
      *  - product_id : id of the product, used as join
      *
-     * @param $term
+     * @param string $term
      *
      * @return QueryBuilder|null
      */
@@ -133,7 +126,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
      * Generates a single query builder from the provided keywords array.
      *
      * @param Keyword[] $keywords
-     * @param $tables
+     * @param array     $tables
      *
      * @return QueryBuilder
      */
@@ -191,8 +184,6 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
     /**
      * Calculates the search tolerance and adds an where condition
      * to the query.
-     *
-     * @param QueryBuilder $query
      */
     private function addToleranceCondition(QueryBuilder $query)
     {

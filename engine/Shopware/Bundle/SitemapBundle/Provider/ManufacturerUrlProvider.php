@@ -24,49 +24,44 @@
 
 namespace Shopware\Bundle\SitemapBundle\Provider;
 
-use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Routing;
+use Shopware\Models\Article\Supplier as Manufacturer;
 
 class ManufacturerUrlProvider implements UrlProviderInterface
 {
     /**
-     * @var Routing\Router
+     * @var Routing\RouterInterface
      */
     private $router;
 
     /**
-     * @var Connection
+     * @var ConnectionInterface
      */
     private $connection;
 
     /**
      * @var bool
      */
-    private $allExported = false;
+    private $allExported;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct(Connection $connection, Routing\Router $router)
+    public function __construct(ConnectionInterface $connection, Routing\RouterInterface $router)
     {
         $this->router = $router;
         $this->connection = $connection;
     }
 
     /**
-     * @param Routing\Context      $routingContext
-     * @param ShopContextInterface $shopContext
-     *
-     * @return Url[]
+     * {@inheritdoc}
      */
     public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext)
     {
         if ($this->allExported) {
-            return null;
+            return [];
         }
 
         $manufacturers = $this->getManufacturersForSitemap($shopContext);
@@ -86,7 +81,7 @@ class ManufacturerUrlProvider implements UrlProviderInterface
         $urls = [];
 
         for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
-            $urls[] = new Url($routes[$i], $manufacturers[$i]['changed'], 'weekly');
+            $urls[] = new Url($routes[$i], $manufacturers[$i]['changed'], 'weekly', Manufacturer::class, $manufacturers[$i]['id']);
         }
 
         $this->allExported = true;
@@ -105,15 +100,13 @@ class ManufacturerUrlProvider implements UrlProviderInterface
     /**
      * Gets all suppliers that have products for the current shop
      *
-     * @param ShopContextInterface $shopContext
-     *
      * @return array
      */
     private function getManufacturersForSitemap(ShopContextInterface $shopContext)
     {
         $categoryId = $shopContext->getShop()->getCategory()->getId();
 
-        /** @var $query QueryBuilder */
+        /** @var QueryBuilder $query */
         $query = $this->connection->createQueryBuilder();
         $query->select(['manufacturer.id', 'manufacturer.name', 'manufacturer.changed']);
 
@@ -124,7 +117,7 @@ class ManufacturerUrlProvider implements UrlProviderInterface
 
         $query->groupBy('manufacturer.id');
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);

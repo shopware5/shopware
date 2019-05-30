@@ -27,7 +27,7 @@ namespace Shopware\Components\Snippet;
 use Doctrine\DBAL\Connection;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -38,9 +38,6 @@ class SnippetValidator
      */
     private $db;
 
-    /**
-     * @param Connection $db
-     */
     public function __construct(Connection $db)
     {
         $this->db = $db;
@@ -54,7 +51,7 @@ class SnippetValidator
     public function validate($snippetsDir)
     {
         if (!file_exists($snippetsDir)) {
-            throw new \RuntimeException('Could not find ' . $snippetsDir . ' folder for snippet validation');
+            throw new \RuntimeException(sprintf('Could not find %s folder for snippet validation', $snippetsDir));
         }
 
         $dirIterator = new \RecursiveDirectoryIterator($snippetsDir, \RecursiveDirectoryIterator::SKIP_DOTS);
@@ -66,7 +63,7 @@ class SnippetValidator
         $invalidSnippets = [];
         $validLocales = $this->getValidLocales();
 
-        /** @var $entry \SplFileInfo */
+        /** @var \SplFileInfo $entry */
         foreach ($iterator as $entry) {
             if (!$entry->isFile() || substr($entry->getFilename(), -4) !== '.ini') {
                 continue;

@@ -88,7 +88,7 @@ class PrefixFilesystemTest extends TestCase
         return [
             ['simplePrefix', 'simplePrefix/swag/file.txt', 'swag/file.txt'],
             ['simplePrefix/', 'simplePrefix/swag/', 'swag/'],
-            ['/simplePrefix/', 'simplePrefix/simplePrefix/foo.txt', 'foo.txt'],
+            ['/simplePrefix/', 'simplePrefix/simplePrefix/foo.txt', 'simplePrefix/foo.txt'],
             ['//simplePrefix//', 'prefix/swag.txt', 'prefix/swag.txt'],
         ];
     }
@@ -104,7 +104,7 @@ class PrefixFilesystemTest extends TestCase
         $filesystem = $this->prophesize(FilesystemInterface::class)->reveal();
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
 
-        $this->assertSame(
+        static::assertSame(
             $expectedPrefix,
             $this->invokeMethod($prefixFilesystem, 'normalizePrefix', [$prefix])
         );
@@ -122,7 +122,7 @@ class PrefixFilesystemTest extends TestCase
         $filesystem = $this->prophesize(FilesystemInterface::class)->reveal();
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
 
-        $this->assertSame(
+        static::assertSame(
             $expectedPath,
             $this->invokeMethod($prefixFilesystem, 'stripPrefix', [$path])
         );
@@ -222,7 +222,7 @@ class PrefixFilesystemTest extends TestCase
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $content = $prefixFilesystem->listContents('');
 
-        $this->assertSame($expectedListContent, $content);
+        static::assertSame($expectedListContent, $content);
     }
 
     public function testGetMetadata()
@@ -257,7 +257,7 @@ class PrefixFilesystemTest extends TestCase
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $metadata = $prefixFilesystem->getMetadata($path);
 
-        $this->assertSame($expectedMetadata, $metadata);
+        static::assertSame($expectedMetadata, $metadata);
     }
 
     public function testGetSize()

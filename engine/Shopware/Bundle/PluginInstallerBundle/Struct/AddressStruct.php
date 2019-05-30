@@ -70,8 +70,8 @@ class AddressStruct implements \JsonSerializable
      * @param string $city
      * @param string $street
      * @param string $email
-     * @param $firstName
-     * @param $lastName
+     * @param string $firstName
+     * @param string $lastName
      */
     public function __construct($countryName, $zipCode, $city, $street, $email, $firstName, $lastName)
     {

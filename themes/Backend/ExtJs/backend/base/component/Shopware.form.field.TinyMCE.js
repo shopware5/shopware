@@ -140,7 +140,7 @@ Ext.define('Shopware.form.field.TinyMCE',
             theme_advanced_statusbar_location: "bottom",
             extended_valid_elements : "font[size],iframe[frameborder|src|width|height|name|align|frameborder|allowfullscreen|id|class|style],script[src|type],object[width|height|classid|codebase|ID|value],param[name|value],embed[name|src|type|wmode|width|height|style|allowScriptAccess|menu|quality|pluginspage],video[autoplay|class|controls|id|lang|loop|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|preload|poster|src|style|title|width|height],audio[autoplay|class|controls|id|lang|loop|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|preload|src|style|title]",
             document_base_url: '{"{url controller="index" fullPath}"}/'.replace('/backend', ''),
-            
+
             // Content CSS - Styles the tiny mce editor. Please note the append timestamp. It's used to prevent caching the stylesheet
             contentCSS: '{link file="backend/_resources/styles/tiny_mce.css" fullPath}?_dc=' + new Date().getTime(),
 
@@ -701,7 +701,11 @@ Ext.define('Shopware.form.field.TinyMCE',
                 me.mixins.field.setValue.call(me, value);
 
                 if (me.tinymce) {
-                    me.tinymce.setContent(value);
+                    try {
+                        me.tinymce.setContent(value);
+                    } catch (e) {
+                        // Tinymce is still loading, the content will be set automatically when Tinymce is done
+                    }
                 }
             });
 

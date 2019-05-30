@@ -29,7 +29,7 @@ use Shopware\Recovery\Common\HttpClient\ClientException;
 use Shopware\Recovery\Install\Struct\Shop;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -54,7 +54,6 @@ class WebserverCheck
      * @param string $pingUrl
      * @param string $checkUrl
      * @param string $tokenPath
-     * @param Client $httpClient
      */
     public function __construct($pingUrl, $checkUrl, $tokenPath, Client $httpClient)
     {
@@ -65,8 +64,6 @@ class WebserverCheck
     }
 
     /**
-     * @param Shop $shop
-     *
      * @throws \RuntimeException
      *
      * @return bool
@@ -93,8 +90,6 @@ class WebserverCheck
     }
 
     /**
-     * @param Shop $shop
-     *
      * @return string
      */
     public function buildPingUrl(Shop $shop)

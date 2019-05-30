@@ -50,8 +50,6 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
 
     /**
      * ProductAttributeConditionHandler constructor.
-     *
-     * @param CrudService $attributeService
      */
     public function __construct(CrudService $attributeService)
     {
@@ -97,8 +95,6 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
     }
 
     /**
-     * @param ProductAttributeCondition $criteriaPart
-     *
      * @return BuilderInterface
      */
     private function createQuery(ProductAttributeCondition $criteriaPart)
@@ -114,6 +110,9 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
 
         switch ($criteriaPart->getOperator()) {
             case ProductAttributeCondition::OPERATOR_EQ:
+                if ($type === 'string') {
+                    $field .= '.raw';
+                }
                 if ($criteriaPart->getValue() === null) {
                     $filter = new BoolQuery();
                     $filter->add(new ExistsQuery($field), BoolQuery::MUST_NOT);

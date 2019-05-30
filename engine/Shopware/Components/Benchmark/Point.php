@@ -27,6 +27,8 @@
  * $pointComponent = new Shopware_Components_Benchmark_Point
  * $pointComponent->Start($label);
  * </code>
+ *
+ * @deprecated Will be removed without replacement in 5.6
  */
 class Shopware_Components_Benchmark_Point
 {

@@ -32,7 +32,7 @@ use Shopware\Models\Media\Media as MediaModel;
 /**
  * Supplier API Resource
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -43,7 +43,7 @@ class Manufacturer extends Resource
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository('Shopware\Models\Article\Supplier');
+        return $this->getManager()->getRepository(\Shopware\Models\Article\Supplier::class);
     }
 
     /**
@@ -64,21 +64,19 @@ class Manufacturer extends Resource
 
         $query = $this->getRepository()->getDetailQuery($id);
 
-        /** @var $manufacturer \Shopware\Models\Article\Supplier */
+        /** @var \Shopware\Models\Article\Supplier|null $manufacturer */
         $manufacturer = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$manufacturer) {
-            throw new ApiException\NotFoundException("Manufacturer by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Manufacturer by id %d not found', $id));
         }
 
         return $manufacturer;
     }
 
     /**
-     * @param int   $offset
-     * @param int   $limit
-     * @param array $criteria
-     * @param array $orderBy
+     * @param int $offset
+     * @param int $limit
      *
      * @return array
      */
@@ -91,18 +89,16 @@ class Manufacturer extends Resource
 
         $paginator = $this->getManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // Returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the manufacturer data
+        // Returns the manufacturer data
         $manufacturers = $paginator->getIterator()->getArrayCopy();
 
         return ['data' => $manufacturers, 'total' => $totalResult];
     }
 
     /**
-     * @param array $params
-     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      *
      * @return \Shopware\Models\Article\Supplier
@@ -119,7 +115,7 @@ class Manufacturer extends Resource
         $manufacturer->fromArray($params);
 
         if (isset($params['id'])) {
-            $metaData = $this->getManager()->getMetadataFactory()->getMetadataFor('Shopware\Models\Article\Supplier');
+            $metaData = $this->getManager()->getMetadataFactory()->getMetadataFor(\Shopware\Models\Article\Supplier::class);
             $metaData->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
             $manufacturer->setPrimaryIdentifier($params['id']);
         }
@@ -136,8 +132,7 @@ class Manufacturer extends Resource
     }
 
     /**
-     * @param int   $id
-     * @param array $params
+     * @param int $id
      *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
@@ -153,11 +148,11 @@ class Manufacturer extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $manufacturer \Shopware\Models\Article\Supplier */
+        /** @var \Shopware\Models\Article\Supplier|null $manufacturer */
         $manufacturer = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$manufacturer) {
-            throw new ApiException\NotFoundException("Manufacturer by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Manufacturer by id %d not found', $id));
         }
 
         $params = $this->prepareManufacturerData($params);
@@ -190,11 +185,11 @@ class Manufacturer extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $manufacturer \Shopware\Models\Article\Supplier */
+        /** @var \Shopware\Models\Article\Supplier|null $manufacturer */
         $manufacturer = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$manufacturer) {
-            throw new ApiException\NotFoundException("Manufacturer by id $id not found");
+            throw new ApiException\NotFoundException(sprintf('Manufacturer by id %d not found', $id));
         }
 
         $this->getManager()->remove($manufacturer);
@@ -204,8 +199,6 @@ class Manufacturer extends Resource
     }
 
     /**
-     * @param array $params
-     *
      * @throws ApiException\CustomValidationException
      *
      * @return array
@@ -229,9 +222,6 @@ class Manufacturer extends Resource
     }
 
     /**
-     * @param array             $data
-     * @param ManufacturerModel $manufacturerModel
-     *
      * @throws ApiException\CustomValidationException
      *
      * @return array
@@ -250,7 +240,7 @@ class Manufacturer extends Resource
             $media = $resource->internalCreateMediaByFileLink($data['image']['link'], Album::ALBUM_SUPPLIER);
         } elseif (!empty($data['image']['mediaId'])) {
             $media = $this->getManager()->find(
-                'Shopware\Models\Media\Media',
+                \Shopware\Models\Media\Media::class,
                 (int) $data['image']['mediaId']
             );
 
@@ -259,7 +249,7 @@ class Manufacturer extends Resource
             }
         }
 
-        $manufacturerModel->setImage($media->getPath());
+        $manufacturerModel->setImage($media ? $media->getPath() : '');
         unset($data['image']);
 
         return $data;

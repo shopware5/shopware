@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -60,11 +60,6 @@ class BlogGateway implements Gateway\BlogGatewayInterface
      */
     private $connection;
 
-    /**
-     * @param Connection            $connection
-     * @param FieldHelper           $fieldHelper
-     * @param Hydrator\BlogHydrator $blogHydrator
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,

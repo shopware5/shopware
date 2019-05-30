@@ -31,9 +31,9 @@ use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Proxy\Proxy;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use Shopware\Components\Model\Query\SqlWalker;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -41,7 +41,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * Global Manager which is responsible for initializing the adapter classes.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -55,25 +55,34 @@ class ModelManager extends EntityManager
     protected $debugMode = false;
 
     /**
-     * @return DBALQueryBuilder
+     * @var QueryOperatorValidator
      */
-    public function getDBALQueryBuilder()
+    protected $operatorValidator;
+
+    public function __construct(
+        Connection $conn,
+        Configuration $config,
+        QueryOperatorValidator $operatorValidator,
+        EventManager $eventManager = null)
     {
-        return new DBALQueryBuilder($this->getConnection());
+        $this->operatorValidator = $operatorValidator;
+        parent::__construct($conn, $config, $eventManager);
     }
 
     /**
      * Factory method to create EntityManager instances.
      *
-     * @param Connection    $conn
-     * @param Configuration $config
-     * @param EventManager  $eventManager
+     * @param EventManager $eventManager
      *
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ORMException
      *
      * @return ModelManager
      */
-    public static function createInstance(Connection $conn, Configuration $config, EventManager $eventManager = null)
+    public static function createInstance(
+        Connection $conn,
+        Configuration $config,
+        EventManager $eventManager = null,
+        QueryOperatorValidator $operatorValidator = null)
     {
         if (!$config->getMetadataDriverImpl()) {
             throw ORMException::missingMappingDriverImpl();
@@ -83,13 +92,25 @@ class ModelManager extends EntityManager
             throw ORMException::mismatchedEventManager();
         }
 
-        return new self($conn, $config, $conn->getEventManager());
+        if ($operatorValidator === null) {
+            $operatorValidator = new QueryOperatorValidator();
+        }
+
+        return new self($conn, $config, $operatorValidator, $conn->getEventManager());
+    }
+
+    /**
+     * @return DBALQueryBuilder
+     */
+    public function getDBALQueryBuilder()
+    {
+        return new DBALQueryBuilder($this->getConnection());
     }
 
     /**
      * Serialize an entity or an array of entities to an array
      *
-     * @param   $entity
+     * @param \Traversable|array|ModelEntity $entity
      *
      * @return array
      */
@@ -109,15 +130,11 @@ class ModelManager extends EntityManager
     /**
      * Returns the total count of the passed query builder.
      *
-     * @param Query $query
-     *
      * @return int|null
      */
     public function getQueryCount(Query $query)
     {
-        $pagination = $this->createPaginator($query);
-
-        return $pagination->count();
+        return $this->createPaginator($query)->count();
     }
 
     /**
@@ -130,8 +147,6 @@ class ModelManager extends EntityManager
      *
      * @since 4.1.4
      *
-     * @param Query $query
-     *
      * @return Paginator
      */
     public function createPaginator(Query $query)
@@ -143,11 +158,11 @@ class ModelManager extends EntityManager
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
+     * @return QueryBuilder
      */
     public function createQueryBuilder()
     {
-        return new QueryBuilder($this);
+        return new QueryBuilder($this, $this->operatorValidator);
     }
 
     /**
@@ -159,7 +174,7 @@ class ModelManager extends EntityManager
     }
 
     /**
-     * @param $object
+     * @param object $object
      *
      * @return ConstraintViolationListInterface
      */
@@ -169,7 +184,7 @@ class ModelManager extends EntityManager
     }
 
     /**
-     * @param array $tableNames
+     * @param string[] $tableNames
      */
     public function generateAttributeModels($tableNames = [])
     {
@@ -182,7 +197,7 @@ class ModelManager extends EntityManager
     /**
      * Generates Doctrine proxy classes
      *
-     * @param array $tableNames
+     * @param string[] $tableNames
      */
     public function regenerateAttributeProxies($tableNames = [])
     {
@@ -196,13 +211,13 @@ class ModelManager extends EntityManager
         $proxyFactory = $this->getProxyFactory();
 
         $attributeMetaData = [];
-        /** @var $metaData \Doctrine\ORM\Mapping\ClassMetadata */
+        /** @var ClassMetadata $metaData */
         foreach ($allMetaData as $metaData) {
             $tableName = $metaData->getTableName();
             if (strpos($tableName, '_attributes') === false) {
                 continue;
             }
-            if (!empty($tableNames) && !in_array($tableName, $tableNames)) {
+            if (!empty($tableNames) && !in_array($tableName, $tableNames, true)) {
                 continue;
             }
             $attributeMetaData[] = $metaData;
@@ -223,19 +238,15 @@ class ModelManager extends EntityManager
     /**
      * Helper function to add mysql specified command to increase the sql performance.
      *
-     * @param Query $query
-     * @param null  $index        Name of the forced index
-     * @param bool  $straightJoin true or false. Allow to add STRAIGHT_JOIN select condition
-     * @param bool  $sqlNoCache
+     * @param mixed|null $index        Name of the forced index
+     * @param bool       $straightJoin true or false. Allow to add STRAIGHT_JOIN select condition
+     * @param bool       $sqlNoCache
      *
      * @return Query
      */
     public function addCustomHints(Query $query, $index = null, $straightJoin = false, $sqlNoCache = false)
     {
-        $query->setHint(
-            Query::HINT_CUSTOM_OUTPUT_WALKER,
-            'Shopware\Components\Model\Query\SqlWalker\ForceIndexWalker'
-        );
+        $query->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, SqlWalker\ForceIndexWalker::class);
 
         if ($straightJoin === true) {
             $query->setHint(SqlWalker\ForceIndexWalker::HINT_STRAIGHT_JOIN, true);
@@ -299,7 +310,7 @@ class ModelManager extends EntityManager
      * @see        http://borisguery.github.com/bgylibrary
      * @see         https://gist.github.com/1034079#file_serializable_entity.php
      *
-     * @param   $entity
+     * @param ModelEntity|null $entity
      *
      * @return array
      */
@@ -309,8 +320,8 @@ class ModelManager extends EntityManager
             return [];
         }
 
-        if ($entity instanceof \Doctrine\ORM\Proxy\Proxy) {
-            /* @var $entity \Doctrine\ORM\Proxy\Proxy */
+        if ($entity instanceof Proxy) {
+            /* @var Proxy $entity */
             $entity->__load();
             $className = get_parent_class($entity);
         } else {
@@ -332,11 +343,9 @@ class ModelManager extends EntityManager
                 }
             } elseif ($mapping['isOwningSide'] && $mapping['type'] & ClassMetadata::TO_ONE) {
                 if ($metadata->reflFields[$field]->getValue($entity) !== null) {
-                    $data[$key] = $this->getUnitOfWork()
-                        ->getEntityIdentifier(
-                            $metadata->reflFields[$field]
-                                ->getValue($entity)
-                            );
+                    $data[$key] = $this->getUnitOfWork()->getEntityIdentifier(
+                        $metadata->reflFields[$field]->getValue($entity)
+                    );
                 } else {
                     // In some case the relationship may not exist, but we want
                     // to know about it
@@ -346,43 +355,5 @@ class ModelManager extends EntityManager
         }
 
         return $data;
-    }
-
-    /**
-     * Convert SQL column types to attribute bundle type mapping
-     *
-     * @param string $type
-     *
-     * @return string
-     */
-    private function convertColumnType($type)
-    {
-        switch (true) {
-            case (bool) preg_match('#\b(char\b|varchar)\b#i', $type):
-                $type = TypeMapping::TYPE_STRING;
-                break;
-            case (bool) preg_match('#\b(text|blob|array|simple_array|json_array|object|binary|guid)\b#i', $type):
-                $type = TypeMapping::TYPE_TEXT;
-                break;
-            case (bool) preg_match('#\b(datetime|timestamp)\b#i', $type):
-                $type = TypeMapping::TYPE_DATETIME;
-                break;
-            case (bool) preg_match('#\b(date|datetimetz)\b#i', $type):
-                $type = TypeMapping::TYPE_DATE;
-                break;
-            case (bool) preg_match('#\b(int|integer|smallint|tinyint|mediumint|bigint)\b#i', $type):
-                $type = TypeMapping::TYPE_INTEGER;
-                break;
-            case (bool) preg_match('#\b(float|double|decimal|dec|fixed|numeric)\b#i', $type):
-                $type = TypeMapping::TYPE_FLOAT;
-                break;
-            case (bool) preg_match('#\b(bool|boolean)\b#i', $type):
-                $type = TypeMapping::TYPE_BOOLEAN;
-                break;
-            default:
-                throw new \InvalidArgumentException(sprintf('Column type "%s" cannot be converted.', $type));
-        }
-
-        return $type;
     }
 }

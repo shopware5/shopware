@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\CSRFWhitelistAware;
 
 /**
@@ -79,6 +80,8 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      */
     public function viewAction()
     {
+        $hash = null;
+
         if ($this->Request()->getParam('id')) {
             $mailingID = (int) $this->Request()->getParam('id');
             if (!Shopware()->Container()->get('Auth')->hasIdentity()) {
@@ -226,6 +229,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             $template->assign('sCampaignHash', $hash, true);
             $template->assign('sRecommendations', $this->getMailingSuggest($mailing['id'], $user['userID']), true);
 
+            /** @var array $voucher */
             $voucher = $template->getTemplateVars('sVoucher');
             if (!empty($voucher['id'])) {
                 $voucher['code'] = $this->getVoucherCode($voucher['id']);
@@ -294,7 +298,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      */
     public function cronAction()
     {
-        /** @var Shopware_Plugins_Core_Cron_Bootstrap $cronBootstrap */
+        /** @var Shopware_Plugins_Core_Cron_Bootstrap|null $cronBootstrap */
         $cronBootstrap = $this->getPluginBootstrap('Cron');
         if ($cronBootstrap && !$cronBootstrap->authorizeCronAction($this->Request())) {
             $this->Response()
@@ -391,6 +395,10 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      * Init template method
      *
      * Initializes the template using the mailing data.
+     *
+     * @param array $mailing
+     *
+     * @return Enlight_Template_Manager
      */
     public function initTemplate($mailing)
     {
@@ -415,7 +423,13 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $template->assign('sBasefile', Shopware()->Config()->BaseFile);
         $template->assign('theme', $config);
 
-        if (!$template->isCached($mailing['template'])) {
+        $templatePath = 'newsletter/index/' . $mailing['template'];
+
+        if (!empty($mailing['plaintext'])) {
+            $templatePath = 'newsletter/alt/' . $mailing['template'];
+        }
+
+        if (!$template->isCached($templatePath)) {
             $template->assign('sMailing', $mailing);
             $template->assign('sStart', ($shop->getSecure() ? 'https://' : 'http://') . $shop->getHost() . $shop->getBaseUrl());
             $template->assign('sUserGroup', Shopware()->System()->sUSERGROUP);
@@ -530,6 +544,8 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             return false;
         }
 
+        $customerGroups = null;
+        $recipientGroups = null;
         $mailing['groups'] = unserialize($mailing['groups']);
 
         // The first element holds the selected customer groups for the current newsletter
@@ -597,7 +613,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      *
      * @param int $voucherID
      *
-     * @return string
+     * @return string|false
      */
     public function getVoucherCode($voucherID)
     {
@@ -760,7 +776,6 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
     {
         // todo@all Create new method to get same secret hashes for values
         $license = '';
-        //($license = Shopware()->License()->getLicense('sCORE')) || ($license = Shopware()->License()->getLicense('sCOMMUNITY'));
         $parts = func_get_args();
         $parts[] = $license;
 
@@ -785,8 +800,8 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             return null;
         }
 
-        /** @var $plugin \Shopware\Models\Plugin\Plugin */
-        $plugin = Shopware()->Models()->find('\Shopware\Models\Plugin\Plugin', $pluginBootstrap->getId());
+        /** @var \Shopware\Models\Plugin\Plugin|null $plugin */
+        $plugin = Shopware()->Models()->find(\Shopware\Models\Plugin\Plugin::class, $pluginBootstrap->getId());
         if (!$plugin) {
             return null;
         }

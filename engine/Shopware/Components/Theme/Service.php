@@ -37,7 +37,7 @@ use Shopware\Models\Theme\Settings;
  * It supports to get translated data, nested configuration
  * and shop configuration.
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -69,12 +69,6 @@ class Service
      */
     private $mediaService;
 
-    /**
-     * @param ModelManager                         $entityManager
-     * @param \Shopware_Components_Snippet_Manager $snippets
-     * @param Util                                 $util
-     * @param MediaServiceInterface                $mediaService
-     */
     public function __construct(
         ModelManager $entityManager,
         \Shopware_Components_Snippet_Manager $snippets,
@@ -100,7 +94,7 @@ class Service
     {
         $builder = $this->entityManager->createQueryBuilder();
         $builder->select(['settings'])
-            ->from('Shopware\Models\Theme\Settings', 'settings')
+            ->from(\Shopware\Models\Theme\Settings::class, 'settings')
             ->orderBy('settings.id', 'ASC')
             ->setFirstResult(0)
             ->setMaxResults(1);
@@ -113,7 +107,7 @@ class Service
     /**
      * Saves the passed configuration data into the database.
      *
-     * @param $data
+     * @param array $data
      */
     public function saveSystemConfiguration($data)
     {
@@ -133,8 +127,7 @@ class Service
      * If a shop instance passed, the function selects additionally the
      * element values of the passed shop.
      *
-     * @param Shop\Template $template
-     * @param Shop\Shop     $shop
+     * @param Shop\Shop $shop
      *
      * @return array
      */
@@ -160,9 +153,8 @@ class Service
      * will also be returned.
      * If provided, only option in $optionNames will be returned
      *
-     * @param Shop\Template $template
-     * @param Shop\Shop     $shop
-     * @param array         $optionNames
+     * @param Shop\Shop $shop
+     * @param array     $optionNames
      *
      * @return array
      */
@@ -172,7 +164,7 @@ class Service
         $builder->select([
             'elements',
         ])
-            ->from('Shopware\Models\Shop\TemplateConfig\Element', 'elements')
+            ->from(\Shopware\Models\Shop\TemplateConfig\Element::class, 'elements')
             ->where('elements.templateId = :templateId')
             ->orderBy('elements.id')
             ->setParameter('templateId', $template->getId());
@@ -196,8 +188,6 @@ class Service
      * configuration sets of the passed template.
      * The sets are translated automatically.
      *
-     * @param Shop\Template $template
-     *
      * @return array
      */
     public function getConfigSets(Shop\Template $template)
@@ -207,7 +197,7 @@ class Service
             'template',
             'sets',
         ])
-            ->from('Shopware\Models\Shop\Template', 'template')
+            ->from(\Shopware\Models\Shop\Template::class, 'template')
             ->innerJoin('template.configSets', 'sets')
             ->where('sets.templateId = :templateId')
             ->orderBy('sets.name')
@@ -243,21 +233,21 @@ class Service
     /**
      * Assigns the passed template id to the passed sub shop.
      *
-     * @param $shopId
-     * @param $templateId
+     * @param int $shopId
+     * @param int $templateId
      *
      * @throws \Exception
      */
     public function assignShopTemplate($shopId, $templateId)
     {
-        /** @var $shop Shop\Shop */
+        /** @var Shop\Shop $shop */
         $shop = $this->entityManager->find('Shopware\Models\Shop\Shop', $shopId);
 
         if (!$shop instanceof Shop\Shop) {
             throw new \Exception();
         }
 
-        /** @var $template Shop\Template */
+        /** @var Shop\Template $template */
         $template = $this->entityManager->find('Shopware\Models\Shop\Template', $templateId);
 
         if (!$template instanceof Shop\Template) {
@@ -276,9 +266,6 @@ class Service
      * element name.
      * The values array can contains multiple sub shop values,
      * which identified over the shopId parameter inside the values array.
-     *
-     * @param Shop\Template $template
-     * @param array         $values
      */
     public function saveConfig(Shop\Template $template, array $values)
     {
@@ -298,7 +285,7 @@ class Service
                 $data['shopId']
             );
 
-            /** @var $shop Shop\Shop */
+            /** @var Shop\Shop $shop */
             $shop = $this->entityManager->getReference(
                 'Shopware\Models\Shop\Shop',
                 $data['shopId']
@@ -325,9 +312,6 @@ class Service
     /**
      * Translates the theme meta data.
      *
-     * @param Shop\Template $template
-     * @param array         $data
-     *
      * @return array
      */
     public function translateTheme(Shop\Template $template, array $data)
@@ -341,10 +325,9 @@ class Service
     /**
      * Translates the passed config set data.
      *
-     * @param $set
-     * @param \Enlight_Components_Snippet_Namespace $namespace
+     * @param array $set
      *
-     * @return mixed
+     * @return array
      */
     public function translateConfigSet($set, \Enlight_Components_Snippet_Namespace $namespace)
     {
@@ -367,10 +350,6 @@ class Service
      * the template parent namespace and calls himself again.
      * This is required because the theme configuration are copied
      * from the extended theme but the snippets are not copied.
-     *
-     * @param array                                 $container
-     * @param Shop\Template                         $template
-     * @param \Enlight_Components_Snippet_Namespace $namespace
      *
      * @return array
      */
@@ -407,6 +386,11 @@ class Service
                     $element['attributes']['helpText'],
                     $namespace
                 );
+
+                $element['attributes']['boxLabel'] = $this->convertSnippet(
+                    $element['attributes']['boxLabel'],
+                    $namespace
+                );
             }
 
             if (isset($element['selection'])) {
@@ -423,12 +407,12 @@ class Service
             $namespace
         );
 
-        //recursive call for sub children
+        // Recursive call for sub children
         foreach ($container['children'] as &$child) {
             $child = $this->translateContainer($child, $template, $namespace);
         }
 
-        //start recursive translation for the inheritance configuration
+        // Start recursive translation for the inheritance configuration
         if ($template->getParent() instanceof Shop\Template) {
             $parentNamespace = $this->getConfigSnippetNamespace($template->getParent());
             $namespace->read();
@@ -444,9 +428,7 @@ class Service
      * If a shop instance passed, the function selects additionally the
      * element values of the passed shop.
      *
-     * @param Shop\Template $template
-     * @param Shop\Shop     $shop
-     * @param null          $parentId
+     * @param Shop\Shop $shop
      *
      * @return array
      */
@@ -460,7 +442,7 @@ class Service
             'layout',
             'elements',
         ])
-            ->from('Shopware\Models\Shop\TemplateConfig\Layout', 'layout')
+            ->from(\Shopware\Models\Shop\TemplateConfig\Layout::class, 'layout')
             ->leftJoin('layout.elements', 'elements')
             ->where('layout.templateId = :templateId')
             ->orderBy('elements.id')
@@ -495,9 +477,6 @@ class Service
     /**
      * Internal helper function which translates the theme meta data.
      *
-     * @param array                                 $data
-     * @param \Enlight_Components_Snippet_Namespace $namespace
-     *
      * @return array
      */
     protected function translateThemeData(array $data, \Enlight_Components_Snippet_Namespace $namespace)
@@ -513,10 +492,7 @@ class Service
     /**
      * Helper function to translate nested arrays recursive.
      *
-     * @param $data
-     * @param \Enlight_Components_Snippet_Namespace $namespace
-     *
-     * @return mixed
+     * @param string|array $data
      */
     private function translateRecursive($data, \Enlight_Components_Snippet_Namespace $namespace)
     {
@@ -535,10 +511,7 @@ class Service
      * Helper function to check, convert and load the translation for
      * the passed value.
      *
-     * @param $snippet
-     * @param \Enlight_Components_Snippet_Namespace $namespace
-     *
-     * @return mixed
+     * @param string $snippet
      */
     private function convertSnippet($snippet, \Enlight_Components_Snippet_Namespace $namespace)
     {
@@ -555,21 +528,21 @@ class Service
     /**
      * Checks if the passed value match the snippet pattern.
      *
-     * @param $value
+     * @param string $value
      *
      * @return bool
      */
     private function isSnippet($value)
     {
-        return (bool) (substr($value, -2) == '__'
-            && substr($value, 0, 2) == '__');
+        return (bool) (substr($value, -2) === '__'
+            && substr($value, 0, 2) === '__');
     }
 
     /**
      * Helper function to remove the snippet pattern
      * of the passed snippet name.
      *
-     * @param $name
+     * @param string $name
      *
      * @return string
      */
@@ -584,16 +557,15 @@ class Service
      * Helper function which checks if the element name is already exists in the
      * passed collection of config elements.
      *
-     * @param Collection $collection
-     * @param string     $name
+     * @param string $name
      *
-     * @return Shop\TemplateConfig\Element
+     * @return Shop\TemplateConfig\Element|null
      */
     private function getElementByName(Collection $collection, $name)
     {
-        /** @var $element Shop\TemplateConfig\Element */
+        /** @var Shop\TemplateConfig\Element $element */
         foreach ($collection as $element) {
-            if ($element->getName() == $name) {
+            if ($element->getName() === $name) {
                 return $element;
             }
         }
@@ -606,14 +578,13 @@ class Service
      * value collection.
      * If no shop value exist, the function creates a new value object.
      *
-     * @param Collection $collection
-     * @param int        $shopId
+     * @param int $shopId
      *
      * @return Shop\TemplateConfig\Value
      */
     private function getElementShopValue(Collection $collection, $shopId)
     {
-        /** @var $value Shop\TemplateConfig\Value */
+        /** @var Shop\TemplateConfig\Value $value */
         foreach ($collection as $value) {
             if ($value->getShop() && $value->getShop()->getId() == $shopId) {
                 return $value;
@@ -627,8 +598,6 @@ class Service
 
     /**
      * Returns the snippet namespace for the passed template.
-     *
-     * @param Shop\Template $template
      *
      * @return \Enlight_Components_Snippet_Namespace
      */

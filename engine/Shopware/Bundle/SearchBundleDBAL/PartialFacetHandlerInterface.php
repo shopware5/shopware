@@ -32,12 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface PartialFacetHandlerInterface
 {
     /**
-     * @param FacetInterface       $facet
-     * @param Criteria             $reverted
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
-     *
-     * @return FacetResultInterface
+     * @return FacetResultInterface|FacetResultInterface[]|null
      */
     public function generatePartialFacet(
         FacetInterface $facet,
@@ -48,8 +43,6 @@ interface PartialFacetHandlerInterface
 
     /**
      * Checks if the provided facet can be handled by this class.
-     *
-     * @param FacetInterface $facet
      *
      * @return bool
      */

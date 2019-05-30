@@ -52,10 +52,10 @@ class Price
     /**
      * Price constructor.
      *
-     * @param float $price
-     * @param float $netPrice
-     * @param float $taxRate
-     * @param float $tax
+     * @param float      $price
+     * @param float      $netPrice
+     * @param float      $taxRate
+     * @param float|null $tax
      */
     public function __construct($price, $netPrice, $taxRate, $tax)
     {

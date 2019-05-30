@@ -25,7 +25,7 @@
 /**
  * Shopware SwagAboCommerce Plugin - Bootstrap
  *
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) 2014, shopware AG (http://www.shopware.de)
  */
@@ -45,17 +45,12 @@ class DatabaseInteractor
      */
     private $IOHelper;
 
-    /**
-     * @param IOHelper $IOHelper
-     */
     public function __construct(IOHelper $IOHelper)
     {
         $this->IOHelper = $IOHelper;
     }
 
     /**
-     * @param DatabaseConnectionInformation $connectionInformation
-     *
      * @return DatabaseConnectionInformation
      */
     public function askDatabaseConnectionInformation(
@@ -80,8 +75,6 @@ class DatabaseInteractor
     }
 
     /**
-     * @param \PDO $connection
-     *
      * @return string
      */
     public function createDatabase(\PDO $connection)
@@ -96,8 +89,7 @@ class DatabaseInteractor
     }
 
     /**
-     * @param $databaseName
-     * @param \PDO $pdo
+     * @param string $databaseName
      *
      * @return bool
      */
@@ -124,8 +116,6 @@ class DatabaseInteractor
     /**
      * Facade for asking questions
      *
-     * @param Question $question
-     *
      * @return string
      */
     public function askQuestion(Question $question)
@@ -144,7 +134,7 @@ class DatabaseInteractor
         $question = new Question(sprintf('Please enter database host (%s): ', $defaultHostname), $defaultHostname);
         $question->setValidator(
             function ($answer) {
-                if ('' === trim($answer)) {
+                if (trim($answer) === '') {
                     throw new \Exception('The database user can not be empty');
                 }
 
@@ -173,7 +163,7 @@ class DatabaseInteractor
 
         $question->setValidator(
             function ($answer) {
-                if ('' === trim($answer)) {
+                if (trim($answer) === '') {
                     throw new \Exception('The database user can not be empty');
                 }
 
@@ -215,7 +205,7 @@ class DatabaseInteractor
         $question = new Question(sprintf('Please enter database port (%s): ', $defaultPort), $defaultPort);
         $question->setValidator(
             function ($answer) {
-                if ('' === trim($answer)) {
+                if (trim($answer) === '') {
                     throw new \Exception('The database port can not be empty');
                 }
 

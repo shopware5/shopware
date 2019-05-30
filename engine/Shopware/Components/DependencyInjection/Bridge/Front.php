@@ -27,7 +27,7 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 use Shopware\Components\DependencyInjection\Container;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -39,10 +39,6 @@ class Front
      * front dispatcher. After the controller path is set to the dispatcher,
      * the plugin namespace of the front resource is set.
      *
-     * @param Container                   $container
-     * @param \Enlight_Event_EventManager $eventManager
-     * @param array                       $options
-     *
      * @throws \Exception
      *
      * @return \Enlight_Controller_Front
@@ -52,7 +48,7 @@ class Front
         \Enlight_Event_EventManager $eventManager,
         array $options
     ) {
-        /** @var $front \Enlight_Controller_Front */
+        /** @var \Enlight_Controller_Front $front */
         $front = \Enlight_Class::Instance('Enlight_Controller_Front', [$eventManager]);
 
         $front->setDispatcher($container->get('Dispatcher'));
@@ -65,7 +61,7 @@ class Front
 
         $front->setParams($options);
 
-        /** @var $plugins \Enlight_Plugin_PluginManager */
+        /** @var \Enlight_Plugin_PluginManager $plugins */
         $plugins = $container->get('Plugins');
 
         $plugins->registerNamespace($front->Plugins());

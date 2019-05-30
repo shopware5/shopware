@@ -53,12 +53,6 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
      */
     private $config;
 
-    /**
-     * @param Connection                  $connection
-     * @param FieldHelper                 $fieldHelper
-     * @param CustomListingHydrator       $hydrator
-     * @param \Shopware_Components_Config $config
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
@@ -101,6 +95,9 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
         );
 
         $categorySortings = [];
+
+        /** @var int $categoryId */
+        /** @var int[] $sortingIds */
         foreach ($mapping as $categoryId => $sortingIds) {
             $categorySortings[$categoryId] = $this->getAndSortElementsByIds(
                 $sortingIds,
@@ -141,8 +138,6 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
     /**
      * Returns the base query to select the custom sorting data.
      *
-     * @param ShopContextInterface $context
-     *
      * @return QueryBuilder
      */
     private function createQuery(ShopContextInterface $context)
@@ -157,8 +152,6 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
     }
 
     /**
-     * @param array $data
-     *
      * @return CustomSorting[]
      */
     private function hydrate(array $data)

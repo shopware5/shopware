@@ -43,9 +43,6 @@ class AddressService implements AddressServiceInterface
 
     /**
      * AddressService constructor.
-     *
-     * @param ModelManager              $modelManager
-     * @param AddressValidatorInterface $validator
      */
     public function __construct(ModelManager $modelManager, AddressValidatorInterface $validator)
     {
@@ -124,6 +121,7 @@ class AddressService implements AddressServiceInterface
     public function setDefaultShippingAddress(Address $address)
     {
         $customer = $address->getCustomer();
+
         $customer->setDefaultShippingAddress($address);
 
         $this->update($address);

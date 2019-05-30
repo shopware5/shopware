@@ -25,7 +25,7 @@
 namespace Shopware\Components\Check;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -42,10 +42,14 @@ class Requirements
     private $connection;
 
     /**
-     * @param string $sourceFile
-     * @param \PDO   $connection
+     * @var \Shopware_Components_Snippet_Manager
      */
-    public function __construct($sourceFile, $connection)
+    private $snippetManager;
+
+    /**
+     * @param string $sourceFile
+     */
+    public function __construct($sourceFile, \PDO $connection, \Shopware_Components_Snippet_Manager $snippetManager)
     {
         if (!is_readable($sourceFile)) {
             throw new \RuntimeException(sprintf('Cannot read requirements file in %s.', $sourceFile));
@@ -53,6 +57,7 @@ class Requirements
 
         $this->sourceFile = $sourceFile;
         $this->connection = $connection;
+        $this->snippetManager = $snippetManager;
     }
 
     /**
@@ -68,6 +73,7 @@ class Requirements
             'checks' => [],
         ];
 
+        $checks = [];
         foreach ($this->runChecks() as $requirement) {
             $check = [];
             $check['name'] = (string) $requirement->name;
@@ -75,10 +81,21 @@ class Requirements
             $check['notice'] = (string) $requirement->notice;
             $check['required'] = (string) $requirement->required;
             $check['version'] = (string) $requirement->version;
+            $check['maxCompatibleVersion'] = (string) $requirement->maxCompatibleVersion;
             $check['check'] = (bool) (string) $requirement->result;
             $check['result'] = (bool) $requirement->result;
             $check['error'] = (bool) $requirement->error;
 
+            if ($check['maxCompatibleVersion'] && $check['check']) {
+                $check = $this->handleMaxCompatibleVersion($check);
+            }
+
+            $checks[] = $check;
+        }
+
+        $checks = array_merge($checks, $this->checkOpcache());
+
+        foreach ($checks as $check) {
             if (!$check['check'] && $check['error']) {
                 $check['status'] = 'error';
                 $result['hasErrors'] = true;
@@ -99,11 +116,11 @@ class Requirements
     /**
      * Returns the check list
      *
-     * @return \SimpleXMLElement[]
+     * @return \SimpleXMLElement
      */
     private function runChecks()
     {
-        $xmlObject = simplexml_load_file($this->sourceFile);
+        $xmlObject = simplexml_load_string(file_get_contents($this->sourceFile));
 
         if (!is_object($xmlObject->requirements)) {
             throw new \RuntimeException('Requirements XML file is not valid.');
@@ -202,18 +219,18 @@ class Requirements
      */
     private function checkPhp()
     {
-        if (strpos(phpversion(), '-')) {
-            return substr(phpversion(), 0, strpos(phpversion(), '-'));
+        if (strpos(PHP_VERSION, '-')) {
+            return substr(PHP_VERSION, 0, strpos(PHP_VERSION, '-'));
         }
 
-        return phpversion();
+        return PHP_VERSION;
     }
 
     private function checkMysqlStrictMode()
     {
         try {
             $sql = 'SELECT @@SESSION.sql_mode;';
-            $result = $this->connection->query($sql)->fetchColumn(0);
+            $result = $this->connection->query($sql)->fetchColumn();
             if (strpos($result, 'STRICT_TRANS_TABLES') !== false || strpos($result, 'STRICT_ALL_TABLES') !== false) {
                 return true;
             }
@@ -237,6 +254,44 @@ class Requirements
         }
 
         return $v;
+    }
+
+    /**
+     * Checks the opcache configuration if the opcache exists.
+     */
+    private function checkOpcache()
+    {
+        if (!extension_loaded('Zend OPcache')) {
+            return [];
+        }
+
+        $useCwdOption = $this->compare('opcache.use_cwd', ini_get('opcache.use_cwd'), '1');
+        $opcacheRequirements = [[
+            'name' => 'opcache.use_cwd',
+            'group' => 'core',
+            'required' => 1,
+            'version' => ini_get('opcache.use_cwd'),
+            'result' => ini_get('opcache.use_cwd'),
+            'notice' => '',
+            'check' => $this->compare('opcache.use_cwd', ini_get('opcache.use_cwd'), '1'),
+            'error' => '',
+        ]];
+
+        if (fileinode('/') > 2) {
+            $validateRootOption = $this->compare('opcache.validate_root', ini_get('opcache.validate_root'), '1');
+            $opcacheRequirements[] = [
+                'name' => 'opcache.validate_root',
+                'group' => 'core',
+                'required' => 1,
+                'version' => ini_get('opcache.validate_root'),
+                'result' => ini_get('opcache.validate_root'),
+                'notice' => '',
+                'check' => $this->compare('opcache.validate_root', ini_get('opcache.validate_root'), '1'),
+                'error' => '',
+            ];
+        }
+
+        return $opcacheRequirements;
     }
 
     /**
@@ -424,8 +479,10 @@ class Requirements
             case 'g':
                 $val *= 1024;
             /* @noinspection PhpMissingBreakStatementInspection */
+            // no break
             case 'm':
                 $val *= 1024;
+                // no break
             case 'k':
                 $val *= 1024;
         }
@@ -449,12 +506,16 @@ class Requirements
             /* @noinspection PhpMissingBreakStatementInspection */
             case 'TB':
                 $val *= 1024;
+                // no break
             case 'GB':
                 $val *= 1024;
+                // no break
             case 'MB':
                 $val *= 1024;
+                // no break
             case 'KB':
                 $val *= 1024;
+                // no break
             case 'B':
                 $val = (float) $val;
         }
@@ -475,5 +536,19 @@ class Requirements
         for ($i = 0; $bytes >= 1024 && $i < (count($types) - 1); $bytes /= 1024, $i++);
 
         return round($bytes, 2) . ' ' . $types[$i];
+    }
+
+    /**
+     * @return array
+     */
+    private function handleMaxCompatibleVersion(array $check)
+    {
+        if (version_compare($check['version'], $check['maxCompatibleVersion'], '>')) {
+            $check['check'] = false;
+            $maxCompatibleVersion = str_replace('.99', '', $check['maxCompatibleVersion']);
+            $check['notice'] = sprintf($this->snippetManager->getNamespace('backend/systeminfo/view')->get('php_version_is_too_new_warning'), $maxCompatibleVersion);
+        }
+
+        return $check;
     }
 }

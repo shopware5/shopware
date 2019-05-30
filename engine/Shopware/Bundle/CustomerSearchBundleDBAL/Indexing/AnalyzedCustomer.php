@@ -34,8 +34,6 @@ class AnalyzedCustomer extends Customer
     protected $orderInformation;
 
     /**
-     * @param Customer $customer
-     *
      * @return AnalyzedCustomer
      */
     public static function createFromCustomer(Customer $customer)

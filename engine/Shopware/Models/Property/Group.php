@@ -27,6 +27,8 @@ namespace Shopware\Models\Property;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Article\Article;
+use Shopware\Models\Attribute\PropertyGroup as PropertyGroupAttribute;
 
 /**
  * Shopware Article Property Model
@@ -39,16 +41,17 @@ class Group extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyGroup", mappedBy="propertyGroup", orphanRemoval=true, cascade={"persist"})
+     * @var PropertyGroupAttribute
      *
-     * @var \Shopware\Models\Attribute\PropertyGroup
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyGroup", mappedBy="propertyGroup", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -82,25 +85,25 @@ class Group extends ModelEntity
     private $sortMode;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection<Option>
      *
      * @ORM\ManyToMany(targetEntity="Option")
      * @ORM\JoinTable(name="s_filter_relations",
-     *      joinColumns={@ORM\JoinColumn(name="groupID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="optionID", referencedColumnName="id")}
-     *      )
+     *     joinColumns={@ORM\JoinColumn(name="groupID", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="optionID", referencedColumnName="id")}
+     * )
      */
     private $options;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection<Relation>
      *
      * @ORM\OneToMany(targetEntity="Relation", mappedBy="group")
      */
     private $relations;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection<\Shopware\Models\Article\Article>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Article", mappedBy="propertyGroup", fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(name="id", referencedColumnName="filtergroupID")
@@ -223,7 +226,7 @@ class Group extends ModelEntity
     /**
      * Returns Array of associated Options
      *
-     * @return \Shopware\Models\Property\Option[]
+     * @return Option[]
      */
     public function getOptions()
     {
@@ -231,9 +234,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param Option $option
-     *
-     * @return \Shopware\Models\Property\Group
+     * @return Group
      */
     public function removeOption(Option $option)
     {
@@ -243,9 +244,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param Option $option
-     *
-     * @return \Shopware\Models\Property\Group
+     * @return Group
      */
     public function addOption(Option $option)
     {
@@ -255,7 +254,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Property\Option[] $options
+     * @param Option[] $options
      *
      * @return Group
      */
@@ -273,7 +272,7 @@ class Group extends ModelEntity
     /**
      * Return array of associated Articles
      *
-     * @return \Shopware\Models\Article\Article[]
+     * @return Article[]
      */
     public function getArticles()
     {
@@ -281,7 +280,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\PropertyGroup
+     * @return PropertyGroupAttribute
      */
     public function getAttribute()
     {
@@ -289,12 +288,12 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\PropertyGroup|array|null $attribute
+     * @param PropertyGroupAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Attribute\PropertyGroup
+     * @return Group
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\PropertyGroup', 'attribute', 'propertyGroup');
+        return $this->setOneToOne($attribute, PropertyGroupAttribute::class, 'attribute', 'propertyGroup');
     }
 }

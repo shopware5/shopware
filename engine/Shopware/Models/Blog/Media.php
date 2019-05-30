@@ -28,7 +28,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_blog_media")
  */
 class Media extends ModelEntity
@@ -37,6 +37,7 @@ class Media extends ModelEntity
      * OWNING SIDE
      *
      * @var Blog
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Blog\Blog", inversedBy="media")
      * @ORM\JoinColumn(name="blog_id", referencedColumnName="id")
      */
@@ -46,33 +47,38 @@ class Media extends ModelEntity
      * OWNING SIDE
      *
      * @var Media
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Media\Media", inversedBy="blogMedia")
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
      */
     protected $media;
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="blog_id", type="integer", nullable=false)
      */
     private $blogId;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="media_id", type="integer", nullable=false)
      */
     private $mediaId;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="preview", type="boolean", nullable=false)
      */
     private $preview;

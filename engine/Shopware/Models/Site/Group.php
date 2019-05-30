@@ -32,7 +32,7 @@ use Shopware\Components\Model\ModelEntity;
  *
  * This is the model for the Site module, which represents a single site of the shop.
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_cms_static_groups")
  */
 class Group extends ModelEntity
@@ -41,30 +41,35 @@ class Group extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="`key`", type="string", nullable=false)
      */
     private $key;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active = true;
 
     /**
+     * @var \Shopware\Models\Site\Group
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Site\Group")
      * @ORM\JoinColumn(name="mapping_id", nullable=true, referencedColumnName="id")
      */
@@ -111,7 +116,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @return \Shopware\Models\Site\Group|null
      */
     public function getMapping()
     {
@@ -119,7 +124,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param $mapping
+     * @param \Shopware\Models\Site\Group|null $mapping
      */
     public function setMapping($mapping)
     {

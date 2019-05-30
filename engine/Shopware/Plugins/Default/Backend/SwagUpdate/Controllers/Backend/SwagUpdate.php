@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Psr\Log\LoggerInterface;
 use Shopware\Components\CSRFWhitelistAware;
 use ShopwarePlugins\SwagUpdate\Components\Checks\EmotionTemplateCheck;
@@ -31,6 +32,7 @@ use ShopwarePlugins\SwagUpdate\Components\Checks\PHPExtensionCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\PHPVersionCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\RegexCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\WritableCheck;
+use ShopwarePlugins\SwagUpdate\Components\ExtensionMissingException;
 use ShopwarePlugins\SwagUpdate\Components\ExtJsResultMapper;
 use ShopwarePlugins\SwagUpdate\Components\FeedbackCollector;
 use ShopwarePlugins\SwagUpdate\Components\Steps\DownloadStep;
@@ -44,7 +46,7 @@ use ShopwarePlugins\SwagUpdate\Components\Validation;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -67,6 +69,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             $this->View()->assign([
                 'success' => false,
                 'data' => [],
+                'message' => $e->getMessage(),
             ]);
 
             return;
@@ -226,7 +229,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             return;
         }
 
-        if (!ftp_fget($connection, $remoteFh, $testFile, FTP_ASCII, 0)) {
+        if (!ftp_fget($connection, $remoteFh, $testFile, FTP_ASCII)) {
             $this->View()->assign([
                 'success' => false,
                 'error' => 'Could not read files from connection.',
@@ -257,9 +260,6 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         ]);
     }
 
-    /**
-     * @return array('success' => true, 'data' => array('...'))
-     */
     public function popupAction()
     {
         $config = $this->getPluginConfig();
@@ -279,7 +279,24 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             }
         }
 
-        $data = $this->fetchUpdateVersion();
+        try {
+            $data = $this->fetchUpdateVersion();
+        } catch (Exception $e) {
+            $opensslMissing = false;
+
+            if ($e instanceof ExtensionMissingException) {
+                $opensslMissing = $e->getMessage() === 'openssl';
+            }
+
+            $this->View()->assign([
+                'success' => false,
+                'data' => [],
+                'message' => $e->getMessage(),
+                'opensslMissing' => $opensslMissing,
+            ]);
+
+            return;
+        }
 
         if ($data instanceof Version && $data->isNewer) {
             $this->View()->assign([
@@ -298,7 +315,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         $base = $this->Request()->getBaseUrl();
         $user = Shopware()->Container()->get('Auth')->getIdentity();
 
-        /** @var $locale \Shopware\Models\Shop\Locale */
+        /** @var \Shopware\Models\Shop\Locale $locale */
         $locale = $user->locale;
 
         $payload = [
@@ -317,9 +334,10 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
         $payload = json_encode($payload);
         $projectDir = $this->container->getParameter('shopware.app.rootdir');
+        $updateFilePath = $projectDir . 'files/update/update.json';
 
-        if (!file_put_contents($projectDir . 'files/update/update.json', $payload)) {
-            throw new \Exception('Could not write update.json');
+        if (!file_put_contents($updateFilePath, $payload)) {
+            throw new \Exception(sprintf('Could not write file %s', $updateFilePath));
         }
 
         $this->redirect($base . '/recovery/update/index.php');
@@ -415,7 +433,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
         $fs = new Filesystem();
 
-        /** @var $file \SplFileInfo */
+        /** @var \SplFileInfo $file */
         foreach ($iterator as $file) {
             $sourceFile = $file->getPathname();
             $destinationFile = Shopware()->DocPath() . str_replace($fileDir, '', $file->getPathname());
@@ -430,7 +448,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
      * Checks if two file handles contain the identical bytes.
      *
      * Warning:
-     * The file handles are rewinded and closes afterwards.
+     * The file handles are being rewound and closed afterwards.
      *
      * @param resource $fp1
      * @param resource $fp2
@@ -541,8 +559,6 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     }
 
     /**
-     * @param Version $version
-     *
      * @return string path to update file
      */
     private function createDestinationFromVersion(Version $version)
@@ -567,8 +583,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     }
 
     /**
-     * @param Version $version
-     * @param array   $languages
+     * @param array $languages
      *
      * @return string
      */
@@ -584,13 +599,11 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     }
 
     /**
-     * @param stdClass $user
-     *
      * @return string
      */
     private function getUserLanguage(stdClass $user)
     {
-        /** @var $locale \Shopware\Models\Shop\Locale */
+        /** @var \Shopware\Models\Shop\Locale $locale */
         $locale = $user->locale;
         $locale = strtolower($locale->getLocale());
 

@@ -26,18 +26,20 @@ namespace Shopware\Models\CustomerStream;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\CustomerStream as CustomerStreamAttribute;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="s_customer_streams")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class CustomerStream extends ModelEntity
 {
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\CustomerStream
+     * @var CustomerStreamAttribute
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerStream", mappedBy="customerStream", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
@@ -46,14 +48,16 @@ class CustomerStream extends ModelEntity
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var string
-     * @Assert\NotBlank
+     *
+     * @Assert\NotBlank()
+     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
@@ -67,19 +71,23 @@ class CustomerStream extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="conditions", type="string", nullable=true)
      */
     private $conditions;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="static", type="boolean", nullable=false)
      */
     private $static = false;
 
     /**
-     * @var \DateTime
-     * @Assert\DateTime
+     * @var \DateTimeInterface
+     *
+     * @Assert\DateTime()
+     *
      * @ORM\Column(name="freeze_up", type="datetime", nullable=true)
      */
     private $freezeUp;
@@ -101,7 +109,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @param $name string
+     * @param string $name
      */
     public function setName($name)
     {
@@ -141,7 +149,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @return \DateTime|null
+     * @return \DateTimeInterface|null
      */
     public function getFreezeUp()
     {
@@ -149,7 +157,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @param $freezeUp \DateTime|string|null
+     * @param \DateTimeInterface|string|null $freezeUp
      */
     public function setFreezeUp($freezeUp)
     {
@@ -168,10 +176,28 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @param $static bool
+     * @param bool $static
      */
     public function setStatic($static)
     {
         $this->static = $static;
+    }
+
+    /**
+     * @return CustomerStreamAttribute
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * @param CustomerStreamAttribute|array|null $attribute
+     *
+     * @return CustomerStream
+     */
+    public function setAttribute($attribute)
+    {
+        return $this->setOneToOne($attribute, CustomerStreamAttribute::class, 'attribute', 'customerStream');
     }
 }

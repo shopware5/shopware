@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Struct;
 
+use Shopware\Models\Benchmark\BenchmarkConfig;
+
 class StatisticsRequest
 {
     /**
@@ -32,15 +34,32 @@ class StatisticsRequest
     private $data;
 
     /**
+     * @var BenchmarkConfig
+     */
+    private $config;
+
+    /**
      * @param string $data
      */
-    public function __construct($data)
+    public function __construct($data, BenchmarkConfig $config)
     {
         $this->data = $data;
+        $this->config = $config;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->data;
+    }
+
+    /**
+     * @return BenchmarkConfig
+     */
+    public function getConfig()
+    {
+        return $this->config;
     }
 }

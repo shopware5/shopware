@@ -34,18 +34,18 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 interface IndexFactoryInterface
 {
     /**
-     * @param Shop $shop
+     * @param string $mappingType
      *
      * @return IndexConfiguration
      */
-    public function createIndexConfiguration(Shop $shop);
+    public function createIndexConfiguration(Shop $shop, $mappingType);
 
     /**
-     * @param Shop $shop
+     * @param string $mappingType
      *
      * @return ShopIndex
      */
-    public function createShopIndex(Shop $shop);
+    public function createShopIndex(Shop $shop, $mappingType);
 
     /**
      * @return string

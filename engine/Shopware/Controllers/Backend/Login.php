@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\CSRFWhitelistAware;
 
 /**
@@ -65,7 +66,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
             return;
         }
 
-        /** @var $auth Shopware_Components_Auth */
+        /** @var Shopware_Components_Auth $auth */
         $auth = Shopware()->Container()->get('Auth');
         $result = $auth->login($username, $password);
         $user = $auth->getIdentity();
@@ -93,7 +94,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
         }
 
         $messages = $result->getMessages();
-        /* @var $lockedUntil Zend_Date */
+        /* @var Zend_Date $lockedUntil */
         if (isset($messages['lockedUntil'])) {
             $lockedUntil = isset($messages['lockedUntil']) ? $messages['lockedUntil'] : null;
             $lockedUntil = $lockedUntil->toString(Zend_Date::ISO_8601);
@@ -117,7 +118,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
     }
 
     /**
-     * @return Shopware_Plugins_Backend_Locale_Bootstrap
+     * @return \Shopware_Plugins_Backend_Auth_Bootstrap
      */
     public function getPlugin()
     {
@@ -161,6 +162,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
      */
     public function getLoginStatusAction()
     {
+        $refresh = null;
         $auth = Shopware()->Container()->get('Auth');
         if ($auth->hasIdentity()) {
             $refresh = $auth->refresh();
@@ -181,7 +183,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
 
     public function validatePasswordAction()
     {
-        /** @var $auth Shopware_Components_Auth */
+        /** @var Shopware_Components_Auth $auth */
         $auth = Shopware()->Container()->get('Auth');
         $username = $auth->getIdentity()->username;
         $password = $this->Request()->get('password');

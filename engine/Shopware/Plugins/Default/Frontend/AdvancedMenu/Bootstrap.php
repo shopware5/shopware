@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 
@@ -102,8 +103,6 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
 
     /**
      * Event listener method
-     *
-     * @param Enlight_Controller_ActionEventArgs $args
      */
     public function onPostDispatch(Enlight_Controller_ActionEventArgs $args)
     {
@@ -139,11 +138,16 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     public function getAdvancedMenu($category, $activeCategoryId, $depth = null)
     {
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
-        $cacheKey = 'Shopware_AdvancedMenu_Tree_' . $context->getShop()->getId() . '_' . $category . '_' . $context->getCurrentCustomerGroup()->getId();
+
+        $cacheKey = sprintf('Shopware_AdvancedMenu_Tree_%s_%s_%s',
+            $context->getShop()->getId(),
+            $category,
+            ($this->Config()->get('includeCustomergroup') ? $context->getCurrentCustomerGroup()->getId() : 'x')
+        );
         $cache = Shopware()->Container()->get('cache');
 
         if ($this->Config()->get('caching') && $cache->test($cacheKey)) {
-            $menu = $cache->load($cacheKey);
+            $menu = $cache->load($cacheKey, true);
         } else {
             $ids = $this->getCategoryIdsOfDepth($category, $depth);
             $categories = Shopware()->Container()->get('shopware_storefront.category_service')->getList($ids, $context);
@@ -195,6 +199,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         $form->setElement('number', 'hoverDelay', [
             'label' => 'Hover Verzögerung (ms)',
             'value' => 250,
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
         ]);
 
         $form->setElement('text', 'levels', [
@@ -224,11 +229,20 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         $form->setElement('boolean', 'caching', [
             'label' => 'Caching aktivieren',
             'value' => 1,
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
         ]);
 
         $form->setElement('number', 'cachetime', [
             'label' => 'Cachezeit',
             'value' => 86400,
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
+        ]);
+
+        $form->setElement('boolean', 'includeCustomergroup', [
+            'label' => 'Kundengruppen für Cache berücksichtigen:',
+            'value' => 1,
+            'description' => 'Falls aktiv, wird der Cache des Menüs für jede Kundengruppe separat aufgebaut. Nutzen Sie diese Option, falls Sie Kategorien für gewisse Kundengruppen ausgeschlossen haben.<br>Falls inaktiv, erhalten alle Kundengruppen das gleiche Menü aus dem Cache. Diese Einstellung ist zwar performanter, jedoch funktioniert der Kategorieausschluss nach Kundengruppen dann nicht mehr korrekt.',
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
         ]);
 
         $this->translateForm();
@@ -244,6 +258,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
                 'cachetime' => ['label' => 'Caching time'],
                 'columnAmount' => ['label' => 'Teaser width'],
                 'hoverDelay' => ['label' => 'Hover delay (ms)'],
+                'includeCustomergroup' => ['label' => 'Consider customer groups for cache', 'description' => 'If active, the menu cache is created separately for each customer group. Use this option if you have excluded categories for certain customer groups. <br>If inactive, all customer groups receive the same menu from the cache. This setting is more performant, but the category exclusion by customer groups will then no longer work correctly.'],
             ],
         ];
 
@@ -281,9 +296,9 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
 
         $query->select('category.path')
-            ->from('s_categories', 'category')
-            ->where('category.id = :id')
-            ->setParameter(':id', $categoryId);
+              ->from('s_categories', 'category')
+              ->where('category.id = :id')
+              ->setParameter(':id', $categoryId);
 
         $path = $query->execute()->fetch(PDO::FETCH_COLUMN);
         $path = explode('|', $path);
@@ -305,15 +320,15 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     {
         $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
         $query->select('DISTINCT category.id')
-            ->from('s_categories', 'category')
-            ->where('category.path LIKE :path')
-            ->andWhere('category.active = 1')
-            ->andWhere('ROUND(LENGTH(path) - LENGTH(REPLACE (path, "|", "")) - 1) <= :depth')
-            ->orderBy('category.position')
-            ->setParameter(':depth', $depth)
-            ->setParameter(':path', '%|' . $parentId . '|%');
+              ->from('s_categories', 'category')
+              ->where('category.path LIKE :path')
+              ->andWhere('category.active = 1')
+              ->andWhere('ROUND(LENGTH(path) - LENGTH(REPLACE (path, "|", "")) - 1) <= :depth')
+              ->orderBy('category.position')
+              ->setParameter(':depth', $depth)
+              ->setParameter(':path', '%|' . $parentId . '|%');
 
-        /** @var $statement PDOStatement */
+        /** @var PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(PDO::FETCH_COLUMN);

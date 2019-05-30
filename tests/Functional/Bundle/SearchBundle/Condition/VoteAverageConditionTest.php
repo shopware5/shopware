@@ -176,8 +176,6 @@ class VoteAverageConditionTest extends TestCase
     }
 
     /**
-     * @param Shop $shop
-     *
      * @return Category
      */
     private function createCategory(Shop $shop)

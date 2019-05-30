@@ -22,15 +22,15 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Newsletter;
+namespace Shopware\Models\Newsletter;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
 /**
- * Shopware Data model represents a non-customer shop visior contact data.
+ * Shopware Data model represents a non-customer shop visitor contact data.
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_campaigns_maildata")
  */
 class ContactData extends ModelEntity
@@ -39,6 +39,7 @@ class ContactData extends ModelEntity
      * The actual email address
      *
      * @var string
+     *
      * @ORM\Column(name="email", type="string", nullable=false)
      */
     protected $email;
@@ -60,7 +61,7 @@ class ContactData extends ModelEntity
     protected $salutation;
 
     /**
-     * @var string title
+     * @var string
      *
      * @ORM\Column(name="title", type="string", nullable=true)
      */
@@ -102,21 +103,21 @@ class ContactData extends ModelEntity
     protected $city;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="added", type="datetime", nullable=false)
      */
     protected $added;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="double_optin_confirmed", type="datetime", nullable=false)
      */
     protected $doubleOptinConfirmed;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="deleted", type="datetime", nullable=true)
      */
@@ -127,14 +128,14 @@ class ContactData extends ModelEntity
      *
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @param \DateTime $added
+     * @param \DateTimeInterface $added
      */
     public function setAdded($added)
     {
@@ -142,7 +143,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getAdded()
     {
@@ -166,7 +167,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @param \DateTime $deleted
+     * @param \DateTimeInterface $deleted
      */
     public function setDeleted($deleted)
     {
@@ -174,7 +175,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDeleted()
     {
@@ -318,7 +319,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDoubleOptinConfirmed()
     {
@@ -326,7 +327,7 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @param \DateTime $doubleOptinConfirmed
+     * @param \DateTimeInterface $doubleOptinConfirmed
      */
     public function setDoubleOptinConfirmed($doubleOptinConfirmed)
     {

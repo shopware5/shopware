@@ -54,7 +54,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * Will be set in the class constructor. Passed to the class init and controller init function.
      * Required for the forward, dispatch and redirect functions.
      *
-     * @var Enlight_Controller_Request_Request
+     * @var Enlight_Controller_Request_RequestHttp
      */
     protected $request;
 
@@ -72,7 +72,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     protected $container;
 
     /**
-     * @var string contains the name of the controller
+     * @var string Contains the name of the controller
      */
     protected $controller_name;
 
@@ -80,7 +80,6 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * The Enlight_Controller_Action class constructor expects an instance of the
      * Enlight_Controller_Request_Request and an instance of the Enlight_Controller_Response_Response.
      * The response and request instance will be passed to the init events of the class and the controller.
-     *
      *
      * @param Enlight_Controller_Request_Request   $request
      * @param Enlight_Controller_Response_Response $response
@@ -123,7 +122,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     {
         if ('Action' === substr($name, -6)) {
             throw new Enlight_Controller_Exception(
-                'Action "' . $this->controller_name . '_' . $name . '" not found failure',
+                'Action "' . $this->controller_name . '_' . $name . '" not found failure for request url ' . $this->request->getScheme() . "://" . $this->request->getHttpHost() . $this->request->getRequestUri(),
                 Enlight_Controller_Exception::ActionNotFound
             );
         }
@@ -357,7 +356,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     /**
      * Returns view instance
      *
-     * @return Enlight_View_Default
+     * @return Enlight_View_Default|null
      */
     public function View()
     {
@@ -383,7 +382,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     /**
      * Returns request instance
      *
-     * @return Enlight_Controller_Request_Request
+     * @return Enlight_Controller_Request_RequestHttp
      */
     public function Request()
     {

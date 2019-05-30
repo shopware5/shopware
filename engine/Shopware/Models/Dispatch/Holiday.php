@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Dispatch;
+namespace Shopware\Models\Dispatch;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -44,7 +44,7 @@ use Shopware\Components\Model\ModelEntity;
  * </code>
  *
  * @ORM\Table(name="s_premium_holidays")
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Holiday extends ModelEntity
 {
@@ -53,7 +53,7 @@ class Holiday extends ModelEntity
      *
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -80,7 +80,7 @@ class Holiday extends ModelEntity
     /**
      * Next date on which this is due.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(name="date", type="date", nullable=false)
      */
@@ -147,7 +147,7 @@ class Holiday extends ModelEntity
     /**
      * Set date
      *
-     * @param \DateTime $date
+     * @param \DateTimeInterface $date
      *
      * @return Holiday
      */
@@ -161,7 +161,7 @@ class Holiday extends ModelEntity
     /**
      * Get date
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDate()
     {

@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\Snippet;
 
-use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Snippet\Writer\DatabaseWriter;
@@ -32,14 +31,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class DatabaseHandler
 {
     /**
-     * @var
+     * @var string
      */
     protected $kernelRoot;
 
@@ -54,14 +53,12 @@ class DatabaseHandler
     protected $db;
 
     /**
-     * @var OutputInterface optional output used in CLI
+     * @var OutputInterface|null optional output used in CLI
      */
     protected $output;
 
     /**
-     * @param ModelManager                            $em
-     * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
-     * @param $kernelRoot
+     * @param string $kernelRoot
      */
     public function __construct(ModelManager $em, \Enlight_Components_Db_Adapter_Pdo_Mysql $db, $kernelRoot)
     {
@@ -70,9 +67,6 @@ class DatabaseHandler
         $this->kernelRoot = $kernelRoot;
     }
 
-    /**
-     * @param OutputInterface $output
-     */
     public function setOutput(OutputInterface $output)
     {
         $this->output = $output;
@@ -82,9 +76,9 @@ class DatabaseHandler
      * Loads all snippets from all files in $snippetsDir
      * (including subfolders) and writes them to the database.
      *
-     * @param null   $snippetsDir
-     * @param bool   $force
-     * @param string $namespacePrefix allows to prefix the snippet namespace
+     * @param string|null $snippetsDir
+     * @param bool        $force
+     * @param string      $namespacePrefix allows to prefix the snippet namespace
      */
     public function loadToDatabase($snippetsDir = null, $force = false, $namespacePrefix = '')
     {
@@ -117,6 +111,7 @@ class DatabaseHandler
             $filePath = $file->getRelativePathname();
             if (strpos($filePath, '.ini') == strlen($filePath) - 4) {
                 $namespace = substr($filePath, 0, -4);
+                $namespace = str_replace('\\', '/', $namespace);
             } else {
                 continue;
             }
@@ -135,9 +130,12 @@ class DatabaseHandler
                     $locale = $localeRepository->findOneBy(['locale' => $index]);
                 }
 
-                $databaseWriter->write($values, $namespacePrefix . $namespace, $locale->getId(), 1);
+                // Only write entry if locale was found
+                if ($locale) {
+                    $databaseWriter->write($values, $namespacePrefix . $namespace, $locale->getId(), 1);
 
-                $this->printNotice('<info>Imported ' . count($values) . ' snippets into ' . $locale->getLocale() . '</info>');
+                    $this->printNotice('<info>Imported ' . count($values) . ' snippets into ' . $locale->getLocale() . '</info>');
+                }
             }
 
             $this->printNotice('<info></info>');
@@ -212,8 +210,8 @@ class DatabaseHandler
      * Loads all snippets from all files in $snippetsDir
      * (including subfolders) and removes them from the database.
      *
-     * @param null $snippetsDir
-     * @param bool $removeDirty
+     * @param string|null $snippetsDir
+     * @param bool        $removeDirty
      */
     public function removeFromDatabase($snippetsDir = null, $removeDirty = false)
     {
@@ -222,7 +220,7 @@ class DatabaseHandler
             return;
         }
 
-        $localeRepository = $this->em->getRepository('Shopware\Models\Shop\Locale');
+        $localeRepository = $this->em->getRepository(\Shopware\Models\Shop\Locale::class);
 
         $inputAdapter = new \Enlight_Config_Adapter_File([
             'configDir' => $snippetsDir,
@@ -243,6 +241,7 @@ class DatabaseHandler
             $filePath = $file->getRelativePathname();
             if (strpos($filePath, '.ini') == strlen($filePath) - 4) {
                 $namespace = substr($filePath, 0, -4);
+                $namespace = str_replace('\\', '/', $namespace);
             } else {
                 continue;
             }

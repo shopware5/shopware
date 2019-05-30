@@ -269,7 +269,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
      * @return void
      */
     onPerformOrder: function (record) {
-        window.open('{url action="performOrder"}?id=' + record.get('id'));
+        window.open('{url action="performOrder"}?id=' + record.get('id') + '&__csrf_token=' + Ext.CSRFService.getToken());
     },
 
     /**

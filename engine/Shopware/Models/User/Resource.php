@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\User;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -41,8 +42,8 @@ use Shopware\Components\Model\ModelEntity;
  * </code>
  *
  * @ORM\Table(name="s_core_acl_resources")
- * @ORM\Entity
- * @ORM\HasLifecycleCallbacks
+ * @ORM\Entity()
+ * @ORM\HasLifecycleCallbacks()
  */
 class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
 {
@@ -50,7 +51,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -73,9 +74,9 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
      * The privileges property is the inverse side of the association between resource and privileges.
      * The association is joined over the s_core_acl_privileges.resourceID field and the s_core_acl_resources.id
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\User\Privilege", mappedBy="resource")
+     * @var ArrayCollection<\Shopware\Models\User\Privilege>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\User\Privilege", mappedBy="resource")
      */
     private $privileges;
 
@@ -102,7 +103,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
      *
      * @param string $name
      *
-     * @return resource
+     * @return \Shopware\Models\User\Resource
      */
     public function setName($name)
     {
@@ -134,7 +135,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
     /**
      * Setter function for the pluginId property
      *
-     * @param int $pluginId
+     * @param int|null $pluginId
      */
     public function setPluginId($pluginId)
     {
@@ -147,7 +148,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
      * the Resource.privileges property (INVERSE SIDE) and the Privilege.resource (OWNING SIDE) property.
      * The privilege data is joined over the s_core_acl_privileges.resourceID field.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection<Privilege>
      */
     public function getPrivileges()
     {
@@ -160,7 +161,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
      * the Resource.privileges property (INVERSE SIDE) and the Privilege.resource (OWNING SIDE) property.
      * The privilege data is joined over the s_core_acl_privileges.resourceID field.
      *
-     * @param $privileges \Doctrine\Common\Collections\ArrayCollection
+     * @param ArrayCollection<Privilege> $privileges
      */
     public function setPrivileges($privileges)
     {
@@ -173,7 +174,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
      *
      * Removes the released resource.
      *
-     * @ORM\PreRemove
+     * @ORM\PreRemove()
      */
     public function onRemove()
     {

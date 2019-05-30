@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
     /**
      * Creates the grid toolbar
      *
-     * @return [Ext.toolbar.Toolbar] grid toolbar
+     * @return { Ext.toolbar.Toolbar } grid toolbar
      */
     getToolbar: function() {
         var me = this, buttons = [];
@@ -181,7 +181,6 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
                 }
             ]
         }];
-
     },
 
     /**
@@ -191,8 +190,7 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
      * @param operatorStore
      */
     setOperatorsForCurrentRecord: function(record, operatorStore) {
-        var me = this,
-            i, operators;
+        var operators;
 
         operatorStore.removeAll();
 
@@ -201,6 +199,5 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
             operatorStore.add({ id: record.get('id'), name: record.get('name') });
         });
     }
-
 });
 //{/block}

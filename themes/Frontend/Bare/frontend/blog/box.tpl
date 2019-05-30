@@ -46,8 +46,9 @@
                         {* Comments *}
                         {block name='frontend_blog_col_meta_data_comments'}
                             <span class="blog--metadata-comments blog--metadata is--nowrap{if $sArticle.sVoteAverage|round ==0} is--last{/if}">
+                                {s name="BlogLinkComments" namespace="frontend/blog/detail" assign="snippetBlogLinkComments"}{/s}
                                 <a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}#blog--comments-start"
-                                   title="{"{s name="BlogLinkComments" namespace="frontend/blog/detail"}{/s}"|escape}">
+                                   title="{$snippetBlogLinkComments|escape}">
                                     {if $sArticle.numberOfComments}{$sArticle.numberOfComments}{else}0{/if} {s name="BlogInfoComments"}{/s}
                                 </a>
                             </span>
@@ -83,7 +84,7 @@
                                          alt="{$sArticle.title|escape}"
                                          title="{$sArticle.title|escape|truncate:160}" />
                                 {else}
-                                    <img src="{link file='frontend/_public/src/img/no-picture.jpg'}"
+                                    <img src="{media path=$sArticle.media[0].media.path}"
                                          alt="{$sArticle.title|escape}"
                                          title="{$sArticle.title|escape|truncate:160}" />
                                 {/if}

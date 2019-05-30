@@ -28,7 +28,7 @@ use Shopware\Components\Api\Resource\Category;
 use Shopware\Components\Api\Resource\Resource;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -84,16 +84,17 @@ class CategoryTest extends TestCase
             ],
         ];
 
+        /** @var \Shopware\Models\Category\Category $category */
         $category = $this->resource->create($testData);
 
-        $this->assertInstanceOf('\Shopware\Models\Category\Category', $category);
-        $this->assertGreaterThan(0, $category->getId());
+        static::assertInstanceOf(\Shopware\Models\Category\Category::class, $category);
+        static::assertGreaterThan(0, $category->getId());
 
-        $this->assertEquals($category->getActive(), $testData['active']);
-        $this->assertEquals($category->getMetaDescription(), $testData['metaDescription']);
-        $this->assertEquals($category->getAttribute()->getAttribute1(), $testData['attribute'][1]);
-        $this->assertEquals($category->getAttribute()->getAttribute2(), $testData['attribute'][2]);
-        $this->assertEquals($category->getAttribute()->getAttribute6(), $testData['attribute'][6]);
+        static::assertEquals($category->getActive(), $testData['active']);
+        static::assertEquals($category->getMetaDescription(), $testData['metaDescription']);
+        static::assertEquals($category->getAttribute()->getAttribute1(), $testData['attribute'][1]);
+        static::assertEquals($category->getAttribute()->getAttribute2(), $testData['attribute'][2]);
+        static::assertEquals($category->getAttribute()->getAttribute6(), $testData['attribute'][6]);
 
         return $category->getId();
     }
@@ -104,7 +105,7 @@ class CategoryTest extends TestCase
     public function testGetOneShouldBeSuccessful($id)
     {
         $category = $this->resource->getOne($id);
-        $this->assertGreaterThan(0, $category['id']);
+        static::assertGreaterThan(0, $category['id']);
     }
 
     /**
@@ -114,11 +115,11 @@ class CategoryTest extends TestCase
     {
         $result = $this->resource->getList();
 
-        $this->assertArrayHasKey('data', $result);
-        $this->assertArrayHasKey('total', $result);
+        static::assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('total', $result);
 
-        $this->assertGreaterThanOrEqual(1, $result['total']);
-        $this->assertGreaterThanOrEqual(1, $result['data']);
+        static::assertGreaterThanOrEqual(1, $result['total']);
+        static::assertGreaterThanOrEqual(1, $result['data']);
     }
 
     /**
@@ -134,12 +135,12 @@ class CategoryTest extends TestCase
 
         $category = $this->resource->update($id, $testData);
 
-        $this->assertInstanceOf('\Shopware\Models\Category\Category', $category);
-        $this->assertEquals($id, $category->getId());
+        static::assertInstanceOf(\Shopware\Models\Category\Category::class, $category);
+        static::assertEquals($id, $category->getId());
 
-        $this->assertEquals($category->getActive(), $testData['active']);
-        $this->assertEquals($category->getName(), $testData['name']);
-        $this->assertEquals($category->getAttribute()->getAttribute1(), $testData['attribute'][1]);
+        static::assertEquals($category->getActive(), $testData['active']);
+        static::assertEquals($category->getName(), $testData['name']);
+        static::assertEquals($category->getAttribute()->getAttribute1(), $testData['attribute'][1]);
 
         return $id;
     }
@@ -167,8 +168,8 @@ class CategoryTest extends TestCase
     {
         $category = $this->resource->delete($id);
 
-        $this->assertInstanceOf('\Shopware\Models\Category\Category', $category);
-        $this->assertEquals(null, $category->getId());
+        static::assertInstanceOf('\Shopware\Models\Category\Category', $category);
+        static::assertEquals(null, $category->getId());
     }
 
     /**
@@ -199,24 +200,29 @@ class CategoryTest extends TestCase
 
         /** @var \Shopware\Models\Category\Category $category */
         $category = $this->resource->findCategoryByPath($path);
-        $this->assertEquals(null, $category);
+        static::assertEquals(null, $category);
 
         $category = $this->resource->findCategoryByPath($path, true);
         $this->resource->flush();
 
-        $this->assertEquals(array_pop($parts), $category->getName());
-        $this->assertEquals(array_pop($parts), $category->getParent()->getName());
-        $this->assertEquals(array_pop($parts), $category->getParent()->getParent()->getName());
-        $this->assertEquals(3, $category->getParent()->getParent()->getId());
+        static::assertEquals(array_pop($parts), $category->getName());
+        static::assertEquals(array_pop($parts), $category->getParent()->getName());
+        static::assertEquals(array_pop($parts), $category->getParent()->getParent()->getName());
+        static::assertEquals(3, $category->getParent()->getParent()->getId());
 
         $secondCategory = $this->resource->findCategoryByPath($path, true);
         $this->resource->flush();
 
-        $this->assertSame($category->getId(), $secondCategory->getId());
+        static::assertSame($category->getId(), $secondCategory->getId());
     }
 
     public function testCreateCategoryWithTranslation()
     {
+        /** @var \Shopware\Bundle\AttributeBundle\Service\CrudService $crud */
+        $crud = Shopware()->Container()->get('shopware_attribute.crud_service');
+
+        $crud->update('s_categories_attributes', 'underscore_test', 'string');
+
         $categoryData = [
             'name' => 'German',
             'parent' => 3,
@@ -224,9 +230,10 @@ class CategoryTest extends TestCase
                 2 => [
                     'shopId' => 2,
                     'description' => 'Englisch',
-                    '__attribute_attribute1' => 'Attr1'
-                ]
-            ]
+                    '__attribute_attribute1' => 'Attr1',
+                    '__attribute_underscore_test' => 'Attribute with underscore',
+                ],
+            ],
         ];
         $category = $this->resource->create($categoryData);
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
@@ -234,18 +241,20 @@ class CategoryTest extends TestCase
         $categoryResult = $this->resource->getOne($category->getId());
 
         if (isset($categoryData['translations'])) {
-            $this->assertEquals($categoryData['translations'], $categoryResult['translations']);
+            static::assertEquals($categoryData['translations'], $categoryResult['translations']);
         }
 
-        $this->assertEquals(1, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_core_translations WHERE objecttype = "category" AND objectkey = ?', [
-            $category->getId()
+        static::assertEquals(1, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_core_translations WHERE objecttype = "category" AND objectkey = ?', [
+            $category->getId(),
         ]));
 
         $this->resource->delete($category->getId());
 
-        $this->assertEquals(0, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_core_translations WHERE objecttype = "category" AND objectkey = ?', [
-            $category->getId()
+        static::assertEquals(0, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_core_translations WHERE objecttype = "category" AND objectkey = ?', [
+            $category->getId(),
         ]));
+
+        $crud->delete('s_categories_attributes', 'underscore_test');
     }
 
     public function testCreateCategoryWithTranslationWithUpdate()
@@ -257,9 +266,9 @@ class CategoryTest extends TestCase
                 2 => [
                     'shopId' => 2,
                     'description' => 'Englisch',
-                    '__attribute_attribute1' => 'Attr1'
-                ]
-            ]
+                    '__attribute_attribute1' => 'Attr1',
+                ],
+            ],
         ];
         $category = $this->resource->create($categoryData);
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
@@ -267,11 +276,11 @@ class CategoryTest extends TestCase
         $categoryResult = $this->resource->getOne($category->getId());
 
         if (isset($categoryData['translations'])) {
-            $this->assertEquals($categoryData['translations'], $categoryResult['translations']);
+            static::assertEquals($categoryData['translations'], $categoryResult['translations']);
         }
 
-        $this->assertEquals(1, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_core_translations WHERE objecttype = "category" AND objectkey = ?', [
-            $category->getId()
+        static::assertEquals(1, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_core_translations WHERE objecttype = "category" AND objectkey = ?', [
+            $category->getId(),
         ]));
 
         $categoryData = [
@@ -281,22 +290,22 @@ class CategoryTest extends TestCase
                 2 => [
                     'shopId' => 2,
                     'description' => 'Englisch2',
-                    '__attribute_attribute1' => 'Attr13'
-                ]
-            ]
+                    '__attribute_attribute1' => 'Attr13',
+                ],
+            ],
         ];
         $category = $this->resource->update($category->getId(), $categoryData);
 
         $categoryResult = $this->resource->getOne($category->getId());
 
         if (isset($categoryData['translations'])) {
-            $this->assertEquals($categoryData['translations'], $categoryResult['translations']);
+            static::assertEquals($categoryData['translations'], $categoryResult['translations']);
         }
 
         $this->resource->delete($category->getId());
 
-        $this->assertEquals(0, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_core_translations WHERE objecttype = "category" AND objectkey = ?', [
-            $category->getId()
+        static::assertEquals(0, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_core_translations WHERE objecttype = "category" AND objectkey = ?', [
+            $category->getId(),
         ]));
     }
 }

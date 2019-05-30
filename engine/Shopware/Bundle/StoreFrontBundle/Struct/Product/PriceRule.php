@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -52,7 +52,7 @@ class PriceRule extends Extendable
     protected $from;
 
     /**
-     * @var null|int
+     * @var int|null
      */
     protected $to = null;
 

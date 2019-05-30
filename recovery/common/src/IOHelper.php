@@ -32,7 +32,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -53,11 +53,6 @@ class IOHelper
      */
     private $questionHelper;
 
-    /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param QuestionHelper  $questionHelper
-     */
     public function __construct(
         InputInterface $input,
         OutputInterface $output,
@@ -121,7 +116,7 @@ class IOHelper
     /**
      * Write a message to STDOUT without trailing newline
      *
-     * @param $message
+     * @param string $message
      */
     public function write($message)
     {
@@ -131,7 +126,7 @@ class IOHelper
     /**
      * Write a message to STDOUT with trailing newline
      *
-     * @param $message
+     * @param string $message
      */
     public function writeln($message)
     {
@@ -142,7 +137,6 @@ class IOHelper
      * Ask a $question
      *
      * @param string|Question $question
-     * @param null            $default
      *
      * @return string
      */
@@ -157,7 +151,6 @@ class IOHelper
      * Ask for confirmation
      *
      * @param string|Question $question
-     * @param null            $default
      *
      * @return string
      */
@@ -176,7 +169,7 @@ class IOHelper
      * @param string|Question $question
      * @param bool|callable   $validator
      * @param bool|int        $attempts
-     * @param null|string     $default
+     * @param string|null     $default
      *
      * @return string
      */
@@ -196,8 +189,6 @@ class IOHelper
     }
 
     /**
-     * @param Question $question
-     *
      * @return string
      */
     public function askMultiLineQuestion(Question $question)

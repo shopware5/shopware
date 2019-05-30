@@ -29,9 +29,9 @@ use Bcremer\LineReader\LineReader;
 class LogfileParser
 {
     /**
-     * @param $file
+     * @param string   $file
      * @param int      $offset
-     * @param null|int $limit
+     * @param int|null $limit
      * @param bool     $reverse
      *
      * @return array
@@ -74,7 +74,7 @@ class LogfileParser
      */
     private function parseLine($log)
     {
-        $pattern = '/\[(?P<date>[^\[]*)\] (?P<channel>\w+).(?P<level>\w+): (?P<message>[^\[]+) (?P<context>[\[\{].*[\]\}]) (?P<extra>[\[\{].*[\]\}])/';
+        $pattern = '/\[(?P<date>[^\[]*)\] (?P<channel>\w+).(?P<level>\w+): (?P<message>[^\[{]+) (?P<context>[\[\{].*[\]\}]) (?P<extra>[\[\{].*[\]\}])/';
 
         preg_match($pattern, $log, $data);
 

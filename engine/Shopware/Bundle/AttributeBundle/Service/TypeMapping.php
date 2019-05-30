@@ -27,7 +27,7 @@ namespace Shopware\Bundle\AttributeBundle\Service;
 use Doctrine\DBAL\Types\Type;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
@@ -160,8 +160,6 @@ class TypeMapping
 
     /**
      * TypeMapping constructor.
-     *
-     * @param \Shopware_Components_Snippet_Manager $snippets
      */
     public function __construct(\Shopware_Components_Snippet_Manager $snippets)
     {
@@ -183,7 +181,7 @@ class TypeMapping
     }
 
     /**
-     * @return string[]
+     * @return array<array>
      */
     public function getEntities()
     {
@@ -212,6 +210,8 @@ class TypeMapping
             'Shopware\Models\Newsletter\Newsletter',
             'Shopware\Models\Partner\Partner',
             'Shopware\Models\Shop\Shop',
+            'Shopware\Models\Site\Site',
+            'Shopware\Models\Country\Country',
         ];
 
         $result = [];
@@ -223,8 +223,6 @@ class TypeMapping
     }
 
     /**
-     * @param Type $type
-     *
      * @return string
      */
     public function dbalToUnified(Type $type)

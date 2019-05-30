@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -59,11 +59,6 @@ class CustomerGroupGateway implements Gateway\CustomerGroupGatewayInterface
      */
     private $connection;
 
-    /**
-     * @param Connection                     $connection
-     * @param FieldHelper                    $fieldHelper
-     * @param Hydrator\CustomerGroupHydrator $customerGroupHydrator
-     */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
@@ -97,7 +92,7 @@ class CustomerGroupGateway implements Gateway\CustomerGroupGatewayInterface
             ->where('customerGroup.groupkey IN (:keys)')
             ->setParameter(':keys', $keys, Connection::PARAM_STR_ARRAY);
 
-        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);

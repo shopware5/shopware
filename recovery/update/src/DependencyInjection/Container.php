@@ -44,9 +44,6 @@ use Shopware\Recovery\Update\Utils;
 
 class Container extends BaseContainer
 {
-    /**
-     * @param \Pimple\Container $container
-     */
     public function setup(\Pimple\Container $container)
     {
         $backupDir = SW_PATH . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'backup' . DIRECTORY_SEPARATOR . 'auto_update';
@@ -188,10 +185,8 @@ class Container extends BaseContainer
         $container['shopware.theme_installer'] = function ($c) {
             $shopwareContainer = $c['shopware.container'];
 
-            /** @var $themeInstaller \Shopware\Components\Theme\Installer */
-            $themeInstaller = $shopwareContainer->get('theme_installer');
-
-            return $themeInstaller;
+            /* @var \Shopware\Components\Theme\Installer $themeInstaller */
+            return $shopwareContainer->get('theme_installer');
         };
 
         $container['shopware.update.cleanup'] = function ($container) use ($backupDir) {

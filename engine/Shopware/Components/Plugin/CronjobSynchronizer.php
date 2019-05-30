@@ -40,8 +40,6 @@ class CronjobSynchronizer
 
     /**
      * CronjobSyncronizer constructor.
-     *
-     * @param Connection $connection
      */
     public function __construct(Connection $connection)
     {
@@ -49,9 +47,6 @@ class CronjobSynchronizer
     }
 
     /**
-     * @param Plugin $plugin
-     * @param array  $cronjobs
-     *
      * @throws \InvalidArgumentException
      */
     public function synchronize(Plugin $plugin, array $cronjobs)
@@ -64,8 +59,7 @@ class CronjobSynchronizer
     }
 
     /**
-     * @param Plugin $plugin
-     * @param $cronjob
+     * @param array $cronjob
      */
     private function addCronjob(Plugin $plugin, $cronjob)
     {
@@ -77,7 +71,24 @@ class CronjobSynchronizer
             unset($cronjob['interval']);
         }
 
-        $id = $this->connection->fetchColumn('SELECT id FROM s_crontab WHERE `action` = ? AND pluginID = ?', [$cronjob['action'], $plugin->getId()]);
+        $action = $cronjob['action'];
+        $selectStatement = 'SELECT id FROM s_crontab WHERE `action` = ? AND pluginID = ?';
+        $params = [
+            $action,
+            $plugin->getId(),
+        ];
+
+        $id = $this->connection->fetchColumn($selectStatement, $params);
+
+        /*
+         * Check if this cronjob's action is named without a preceding 'Shopware_CronJob_',
+         * which is valid but after first run, every cronjob gets prefixed with that, so we might not have gotten
+         * the id because we were asking for the wrong action.
+         */
+        if (!$id && strpos($action, 'Shopware_CronJob_') !== 0) {
+            $params[0] = 'Shopware_CronJob_' . $action;
+            $id = $this->connection->fetchColumn($selectStatement, $params);
+        }
 
         if ($id) {
             // Don't overwrite user cronjob state
@@ -92,8 +103,7 @@ class CronjobSynchronizer
     }
 
     /**
-     * @param int   $pluginId
-     * @param array $cronjobActions
+     * @param int $pluginId
      */
     private function removeNotExistingEntries($pluginId, array $cronjobActions)
     {

@@ -42,7 +42,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -99,7 +99,7 @@ class StoreDownloadCommand extends StoreCommand
             $token = $this->checkAuthentication();
 
             if ($token) {
-                $context = new LicenceRequest(null, $version, $domain, $token);
+                $context = new LicenceRequest('', $version, $domain, $token);
 
                 try {
                     /** @var PluginStoreService $pluginStoreService */
@@ -118,7 +118,8 @@ class StoreDownloadCommand extends StoreCommand
                     $plugin = array_shift($licences);
                 } catch (\Exception $e) {
                     $io->error('An error occured: ' . $e->getMessage());
-                    exit(1);
+
+                    return 1;
                 }
             }
         }
@@ -126,7 +127,7 @@ class StoreDownloadCommand extends StoreCommand
         if (!$plugin) {
             $io->error(sprintf('Plugin %s not found', $technicalName));
 
-            return;
+            return null;
         }
 
         $io->section($plugin->getLabel());
@@ -134,10 +135,7 @@ class StoreDownloadCommand extends StoreCommand
 
         $plugin = $this->createPluginStruct($plugin);
 
-        $this->checkLicenceManager($plugin);
-        $this->checkIonCubeLoader($plugin);
-
-        $isDummy = ($plugin->hasCapabilityDummy() || $plugin->getTechnicalName() === 'SwagLicense');
+        $isDummy = $plugin->hasCapabilityDummy();
 
         try {
             switch (true) {
@@ -172,9 +170,8 @@ class StoreDownloadCommand extends StoreCommand
     }
 
     /**
-     * @param PluginStruct $plugin
-     * @param string       $domain
-     * @param string       $version
+     * @param string $domain
+     * @param string $version
      *
      * @throws \Exception
      */
@@ -200,9 +197,8 @@ class StoreDownloadCommand extends StoreCommand
     }
 
     /**
-     * @param PluginStruct $plugin
-     * @param string       $version
-     * @param $domain
+     * @param string $version
+     * @param string $domain
      *
      * @throws \Exception
      */
@@ -216,7 +212,6 @@ class StoreDownloadCommand extends StoreCommand
     }
 
     /**
-     * @param PluginStruct      $plugin
      * @param string            $domain
      * @param string            $version
      * @param AccessTokenStruct $token
@@ -245,7 +240,6 @@ class StoreDownloadCommand extends StoreCommand
     }
 
     /**
-     * @param PluginStruct      $plugin
      * @param string            $domain
      * @param string            $version
      * @param AccessTokenStruct $token
@@ -256,16 +250,8 @@ class StoreDownloadCommand extends StoreCommand
 
         $request = new DownloadRequest($plugin->getTechnicalName(), $version, $domain, $token);
 
-        /* @var $service PluginLicenceService */
+        /* @var PluginLicenceService $service */
         $this->container->get('shopware_plugininstaller.plugin_download_service')->download($request);
-    }
-
-    /**
-     * @return bool
-     */
-    private function isIonCubeLoaderLoaded()
-    {
-        return extension_loaded('ionCube Loader');
     }
 
     /**
@@ -307,52 +293,7 @@ class StoreDownloadCommand extends StoreCommand
     }
 
     /**
-     * @param PluginStruct $struct
-     */
-    private function checkLicenceManager(PluginStruct $struct)
-    {
-        if (!$struct->hasLicenceCheck()) {
-            return;
-        }
-
-        $repo = $this->container->get('models')->getRepository(Plugin::class);
-
-        /** @var Plugin $plugin */
-        $plugin = $repo->findOneBy(['name' => 'SwagLicense']);
-
-        switch (true) {
-            case !$plugin instanceof Plugin:
-                $this->handleError(['message' => sprintf("Plugin %s contains a licence check and the licence manager doesn't exist in your system.", $struct->getLabel())]);
-                break;
-            case $plugin->getInstalled() === null:
-                $this->handleError(['message' => sprintf('Plugin %s contains a licence check and the licence manager is not installed', $struct->getLabel())]);
-                break;
-            case !$plugin->getActive():
-                $this->handleError(['message' => sprintf("Plugin %s contains a licence check and the licence manager isn't activated", $struct->getLabel())]);
-                break;
-        }
-    }
-
-    /**
-     * @param PluginStruct $plugin
-     */
-    private function checkIonCubeLoader(PluginStruct $plugin)
-    {
-        if (!$plugin->isEncrypted()) {
-            return;
-        }
-
-        if ($this->isIonCubeLoaderLoaded()) {
-            return;
-        }
-
-        $this->handleError([
-            'message' => sprintf('Plugin %s is encrypted and requires the ioncube loader extension', $plugin->getLabel()),
-        ]);
-    }
-
-    /**
-     * @return AccessTokenStruct
+     * @return AccessTokenStruct|null
      */
     private function checkAuthentication()
     {
@@ -454,7 +395,7 @@ class StoreDownloadCommand extends StoreCommand
         $this->io->comment('Searching for plugin: ' . $technicalName);
 
         $service = $this->container->get('shopware_plugininstaller.plugin_service_view');
-        $context = new PluginsByTechnicalNameRequest(null, $version, [$technicalName]);
+        $context = new PluginsByTechnicalNameRequest('', $version, [$technicalName]);
 
         return $service->getPlugin($context);
     }

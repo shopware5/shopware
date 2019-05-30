@@ -30,7 +30,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -53,7 +53,7 @@ class StoreListIntegratedCommand extends StoreCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $shopwareVersion = $this->container->getParameter('shopware.release.version');
-        $context = new ListingRequest(null, $shopwareVersion, 0, 1000, [['property' => 'dummy', 'value' => 1]], []);
+        $context = new ListingRequest('', $shopwareVersion, 0, 1000, [['property' => 'dummy', 'value' => 1]], []);
         $listing = $this->container->get('shopware_plugininstaller.plugin_service_view')->getStoreListing($context);
 
         $result = [];
@@ -72,6 +72,6 @@ class StoreListIntegratedCommand extends StoreCommand
         $table->setHeaders(['Id', 'Technical name', 'Label', 'Installed', 'Version', 'Update available'])
             ->setRows($result);
 
-        $table->render($output);
+        $table->render();
     }
 }

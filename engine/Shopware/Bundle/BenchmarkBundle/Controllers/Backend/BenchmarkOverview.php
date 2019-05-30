@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\BenchmarkBundle\Service\TemplateCachingHandler;
 use Shopware\Models\Benchmark\BenchmarkConfig;
 use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
@@ -35,14 +36,16 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
      */
     public function getWhitelistedCSRFActions()
     {
-        return ['index', 'render', 'setIndustry'];
+        return ['index', 'render', 'saveIndustry', 'getShops'];
     }
 
     public function indexAction()
     {
+        $shopId = $this->getShopId();
+
         /** @var BenchmarkRepository $benchmarkRepository */
         $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
-        $config = $benchmarkRepository->getMainConfig();
+        $config = $benchmarkRepository->getConfigForShop($shopId);
 
         $this->handleSettings($config);
     }
@@ -54,27 +57,52 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
 
         /** @var BenchmarkRepository $benchmarkRepository */
         $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
-        $config = $benchmarkRepository->getMainConfig();
+        $config = $benchmarkRepository->getConfigForShop($this->getShopId());
+
+        if ($this->hasOutdatedStatistics($config->getLastReceived())) {
+            $this->redirect([
+                'controller' => 'BenchmarkOverview',
+                'action' => 'index',
+                'shopId' => $this->getShopId(),
+            ]);
+
+            return;
+        }
 
         echo $config->getCachedTemplate();
     }
 
-    public function setIndustryAction()
+    public function saveIndustryAction()
+    {
+        $config = $this->request->getParam('config');
+
+        /** @var BenchmarkRepository $benchmarkRepository */
+        $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
+        $benchmarkRepository->saveShopConfigs($config);
+
+        $this->enableMenu();
+        $this->View()->assign('success', true);
+    }
+
+    public function getShopsAction()
     {
         /** @var BenchmarkRepository $benchmarkRepository */
         $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
-        $config = $benchmarkRepository->getMainConfig();
-        $config->setActive(true);
-        $config->setIndustry((int) $this->request->getParam('industry'));
-        $benchmarkRepository->save($config);
 
-        $this->enableMenu();
+        $shops = $benchmarkRepository->getShopsWithValidTemplate();
+        $currentShop = $this->getShopId();
 
-        $this->redirect([
-            'controller' => $this->request->getParam('sTarget', 'BenchmarkOverview'),
-            'action' => $this->request->getParam('sTargetAction', 'index'),
-            'template' => 'statistics',
-            'lang' => $this->request->getParam('lang', 'de'),
+        $shops[$currentShop]['active'] = 1;
+
+        $widgetsAllowed = (int) $this->_isAllowed('swag-bi-base', 'widgets');
+
+        $this->View()->assign([
+            'shops' => $shops,
+            'shopSwitchUrl' => $this->Front()->Router()->assemble([
+                'controller' => 'BenchmarkOverview',
+                'action' => 'render',
+                'shopId' => 'replaceShopId',
+            ]) . '?widgetAllowed=' . $widgetsAllowed,
         ]);
     }
 
@@ -83,16 +111,17 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         $this->addAclPermission('index', 'read', 'Insufficient permissions');
         $this->addAclPermission('render', 'read', 'Insufficient permissions');
         $this->addAclPermission('setIndustry', 'manage', 'Insufficient permissions');
+        $this->addAclPermission('getShops', 'read', 'Insufficient permissions');
     }
 
-    /**
-     * @param BenchmarkConfig $settings
-     */
-    private function handleSettings(BenchmarkConfig $config)
+    private function handleSettings(BenchmarkConfig $config = null)
     {
         $backendLanguage = $this->get('auth')->getIdentity()->locale->getId() === 1 ? 'de' : 'en';
 
-        if ($config->getIndustry() === null) {
+        /** @var BenchmarkRepository $benchmarkRepository */
+        $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
+
+        if (!$config || $benchmarkRepository->getConfigsCount() === 0) {
             $this->redirect([
                 'controller' => 'BenchmarkLocalOverview',
                 'action' => 'render',
@@ -126,11 +155,9 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
     /**
      * Checks if "lastReceived" is younger than 24 hours.
      *
-     * @param \DateTime $lastReceived
-     *
      * @return bool
      */
-    private function hasFreshStatistics(\DateTime $lastReceived)
+    private function hasFreshStatistics(\DateTimeInterface $lastReceived)
     {
         $today = new \DateTime('now');
 
@@ -145,11 +172,9 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
     /**
      * Checks if "lastReceived" is older than 7 days.
      *
-     * @param \DateTime $lastReceived
-     *
      * @return bool
      */
-    private function hasOutdatedStatistics(\DateTime $lastReceived)
+    private function hasOutdatedStatistics(\DateTimeInterface $lastReceived)
     {
         $today = new \DateTime('now');
 
@@ -165,12 +190,18 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
     {
         /** @var TemplateCachingHandler $cachingHandler */
         $cachingHandler = $this->get('shopware.benchmark_bundle.components.template_caching_handler');
+        $shopId = $this->getShopId();
 
-        if ($cachingHandler->isTemplateCached()) {
-            $this->redirect([
+        if ($cachingHandler->isTemplateCached($shopId)) {
+            $link = $this->get('router')->assemble([
                 'controller' => 'BenchmarkOverview',
                 'action' => 'render',
+                'shopId' => $shopId,
             ]);
+
+            $widgetsAllowed = (int) $this->_isAllowed('swag-bi-base', 'widgets');
+
+            $this->redirect($link . '?widgetAllowed=' . $widgetsAllowed);
 
             return;
         }
@@ -188,12 +219,26 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         $em = $this->get('models');
         $repo = $em->getRepository(Menu::class);
 
-        /** @var Menu $menuEntry */
+        /** @var Menu|null $menuEntry */
         $menuEntry = $repo->findOneBy(['controller' => 'Benchmark', 'action' => 'Settings']);
         if ($menuEntry) {
             $menuEntry->setActive(true);
             $em->persist($menuEntry);
             $em->flush();
         }
+    }
+
+    /**
+     * @return int
+     */
+    private function getShopId()
+    {
+        $shopId = (int) $this->request->getParam('shopId');
+
+        if (!$shopId) {
+            $shopId = $this->get('models')->getRepository(\Shopware\Models\Shop\Shop::class)->getActiveDefault()->getId();
+        }
+
+        return $shopId;
     }
 }

@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Form;
+namespace Shopware\Models\Form;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
@@ -48,32 +48,33 @@ use Shopware\Components\Model\ModelEntity;
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_cms_support")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Form extends ModelEntity
 {
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Form\Field", mappedBy="form", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Form\Field>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Form\Field", mappedBy="form", orphanRemoval=true, cascade={"persist"})
      */
     protected $fields;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Form", mappedBy="form", orphanRemoval=true, cascade={"persist"})
-     *
      * @var \Shopware\Models\Attribute\Form
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Form", mappedBy="form", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -169,9 +170,6 @@ class Form extends ModelEntity
      */
     private $shopIds;
 
-    /**
-     * Constructor of Form
-     */
     public function __construct()
     {
         $this->fields = new \Doctrine\Common\Collections\ArrayCollection();
@@ -186,12 +184,12 @@ class Form extends ModelEntity
     {
         $clonedForm = clone $this;
 
-        /* @var $field \Shopware\Models\Form\Field */
+        /* @var \Shopware\Models\Form\Field $field */
         foreach ($this->getFields() as $field) {
             $clonedField = clone $field;
             $clonedForm->fields->add($clonedField);
 
-            // update owning side
+            // Update owning side
             $clonedField->setForm($clonedForm);
         }
 
@@ -199,7 +197,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Form\Field>
      */
     public function getFields()
     {
@@ -207,13 +205,13 @@ class Form extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $fields
+     * @param \Shopware\Models\Form\Field[]|null $fields
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Form
      */
     public function setFields($fields)
     {
-        return $this->setOneToMany($fields, '\Shopware\Models\Form\Field', 'fields', 'form');
+        return $this->setOneToMany($fields, \Shopware\Models\Form\Field::class, 'fields', 'form');
     }
 
     /**
@@ -227,7 +225,7 @@ class Form extends ModelEntity
     {
         $this->fields->add($field);
 
-        // update owning side
+        // Update owning side
         $field->setForm($this);
 
         return $this;
@@ -510,11 +508,11 @@ class Form extends ModelEntity
     /**
      * @param \Shopware\Models\Attribute\Form|array|null $attribute
      *
-     * @return \Shopware\Models\Form\Form
+     * @return Form
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Form', 'attribute', 'form');
+        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Form::class, 'attribute', 'form');
     }
 
     /**

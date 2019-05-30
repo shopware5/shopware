@@ -28,14 +28,19 @@
 class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Test_Plugin_TestCase
 {
     /**
+     * @var \Doctrine\DBAL\Connection
+     */
+    private $connection;
+
+    /**
      * Set up test case, fix demo data where needed
      */
     public function setUp()
     {
         parent::setUp();
 
-        $sql = "UPDATE `s_blog` SET `active` = '0' WHERE `id` =3;";
-        Shopware()->Db()->exec($sql);
+        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection->beginTransaction();
     }
 
     /**
@@ -44,79 +49,89 @@ class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Te
     public function tearDown()
     {
         parent::tearDown();
-
-        $sql = "UPDATE `s_blog` SET `active` = '1' WHERE `id` =3;";
-        Shopware()->Db()->exec($sql);
+        $this->connection->rollBack();
     }
 
     /**
      * Tests the behavior if the blog article is not activated
      *
      * @expectedException \Enlight_Exception
-     * @expectedExceptionCode \Enlight_Exception::PROPERTY_NOT_FOUND
+     * @expectedExceptionCode 404
      */
     public function testDispatchNoActiveBlogItem()
     {
+        $this->connection->exec('UPDATE `s_blog` SET `active` = 0 WHERE `id` = 3;');
+
         $this->dispatch('/blog/detail/?blogArticle=3');
-        $this->assertTrue($this->Response()->isRedirect());
+        static::assertTrue($this->Response()->isRedirect());
     }
 
     /**
      * Tests the behavior if the BlogItem does not exist anymore
      *
      * @expectedException \Enlight_Exception
-     * @expectedExceptionCode \Enlight_Exception::PROPERTY_NOT_FOUND
+     * @expectedExceptionCode 404
      */
     public function testDispatchNotExistingBlogItem()
     {
         $this->dispatch('/blog/detail/?blogArticle=2222');
-        $this->assertTrue($this->Response()->isRedirect());
+        static::assertTrue($this->Response()->isRedirect());
+    }
+
+    public function testDispatchInactiveCategory()
+    {
+        // Deactivate blog category
+        $this->connection->exec('UPDATE `s_categories` SET `active` = 0 WHERE `id` = 17');
+
+        // Should be redirected because blog category is inactive
+        $ex = null;
+        try {
+            $this->dispatch('/blog/?sCategory=17');
+        } catch (Exception $e) {
+            $ex = $e;
+        }
+        static::assertEquals(404, $ex->getCode());
+
+        // Should be redirected because blog category is inactive
+        try {
+            $this->dispatch('/blog/detail/?blogArticle=3');
+        } catch (Exception $e) {
+            $ex = $e;
+        }
+        static::assertEquals(404, $ex->getCode());
+    }
+
+    /**
+     * Test that requesting a non-blog category-id creates a redirect
+     *
+     * @expectedException \Enlight_Exception
+     * @expectedExceptionCode 404
+     */
+    public function testDispatchNonBlogCategory()
+    {
+        $this->dispatch('/blog/?sCategory=14');
     }
 
     /**
      * Test redirect when the blog category does not exist
+     *
+     * @dataProvider invalidCategoryUrlDataProvider
+     *
+     * @expectedException \Enlight_Exception
+     * @expectedExceptionCode 404
+     *
+     * @param string $url
      */
-    public function testDispatchNotExistingBlogCategory()
+    public function testDispatchNotExistingBlogCategory($url)
     {
-        try {
-            $this->dispatch('/blog/?sCategory=17');
-        } catch (Exception $e) {
-            $this->fail('Exception thrown. This should not occur.');
-        }
+        $this->dispatch($url);
+    }
 
-        $this->assertTrue(!$this->Response()->isRedirect());
-
-        try {
-            $this->dispatch('/blog/?sCategory=156165');
-        } catch (Exception $e) {
-            $this->fail('Exception thrown. This should not occur.');
-        }
-
-        $this->assertTrue($this->Response()->isRedirect());
-
-        //deactivate blog category
-        $sql = "UPDATE `s_categories` SET `active` = '0' WHERE `id` =17";
-        Shopware()->Db()->exec($sql);
-
-        //should be redirected because blog category is inactive
-        try {
-            $this->dispatch('/blog/?sCategory=17');
-        } catch (Exception $e) {
-            $this->fail('Exception thrown. This should not occur.');
-        }
-        $this->assertTrue($this->Response()->isRedirect());
-
-        //should be redirected because blog category is inactive
-        try {
-            $this->dispatch('/blog/detail/?blogArticle=3');
-        } catch (Exception $e) {
-            $this->fail('Exception thrown. This should not occur.');
-        }
-
-        $this->assertTrue($this->Response()->isRedirect());
-
-        //activate blog category
-        $sql = "UPDATE `s_categories` SET `active` = '1' WHERE `id` =17";
-        Shopware()->Db()->exec($sql);
+    public function invalidCategoryUrlDataProvider()
+    {
+        return [
+            ['/blog/?sCategory=14'], // Not a blog category
+            ['/blog/?sCategory=156165'], // Unknown blog category
+        ];
     }
 }

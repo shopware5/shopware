@@ -27,8 +27,16 @@
  */
 class Shopware_Controllers_Widgets_Compare extends Enlight_Controller_Action
 {
+    /**
+     * Pre dispatch method
+     */
+    public function preDispatch()
+    {
+        $this->Response()->setHeader('x-robots', 'noindex');
+    }
+
     public function indexAction()
     {
-        $this->View()->sComparisons = Shopware()->Modules()->Articles()->sGetComparisons();
+        $this->View()->assign('sComparisons', Shopware()->Modules()->Articles()->sGetComparisons());
     }
 }

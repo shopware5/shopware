@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -62,7 +62,6 @@ interface ShopContextInterface
      * Contains the current customer group for the store front.
      * If the customer isn't logged in, the current customer group
      * is equal to the fallback customer group of the shop.
-     *
      *
      * @return Group
      */
@@ -96,7 +95,7 @@ interface ShopContextInterface
      *
      * @param int $taxId
      *
-     * @return Tax
+     * @return Tax|null
      */
     public function getTaxRule($taxId);
 

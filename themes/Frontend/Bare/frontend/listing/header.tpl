@@ -5,12 +5,14 @@
 
 {block name='frontend_index_header_meta_tags_opengraph'}
 
-    {$description = "{s name='IndexMetaDescriptionStandard'}{/s}"}
+    {s name="IndexMetaDescriptionStandard" assign="description"}{/s}
     {if $sCategoryContent.cmstext}
-        {$description = "{$sCategoryContent.cmstext|trim|strip_tags|truncate:240|escapeHtml}"}
+        {$description = "{$sCategoryContent.cmstext|trim|strip_tags|escapeHtml}"}
     {elseif $sCategoryContent.metaDescription}
         {$description = "{$sCategoryContent.metaDescription|trim|strip_tags|escapeHtml}"}
     {/if}
+
+    {$description = $description|truncate:$SeoDescriptionMaxLength:'…'}
 
     <meta property="og:type" content="product" />
     <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />

@@ -36,17 +36,11 @@ class SimpleStruct extends BaseStruct
         $this->value = $value;
     }
 
-    /**
-     * @return mixed
-     */
     public function getValue()
     {
         return $this->value;
     }
 
-    /**
-     * @param mixed $value
-     */
     public function setValue($value)
     {
         $this->value = $value;
@@ -64,8 +58,8 @@ class CloneStructTest extends TestCase
         $clone = clone $simple;
         $simple->setValue('modified');
 
-        $this->assertInstanceOf(SimpleStruct::class, $clone->getValue());
-        $this->assertEquals('initial', $clone->getValue()->getValue());
+        static::assertInstanceOf(SimpleStruct::class, $clone->getValue());
+        static::assertEquals('initial', $clone->getValue()->getValue());
     }
 
     public function testNestedArrayCloning()
@@ -79,17 +73,17 @@ class CloneStructTest extends TestCase
 
         $clone = clone $simple;
 
-        /** @var $nested SimpleStruct[] */
+        /** @var SimpleStruct[] $nested */
         $nested = $simple->getValue();
         $nested[0]->setValue('struct 3');
 
         $nested = $clone->getValue();
-        $this->assertEquals('struct 1', $nested[0]->getValue());
-        $this->assertEquals('struct 2', $nested[1]->getValue());
+        static::assertEquals('struct 1', $nested[0]->getValue());
+        static::assertEquals('struct 2', $nested[1]->getValue());
 
         $simple->setValue('override');
-        $this->assertEquals('struct 1', $nested[0]->getValue());
-        $this->assertEquals('struct 2', $nested[1]->getValue());
+        static::assertEquals('struct 1', $nested[0]->getValue());
+        static::assertEquals('struct 2', $nested[1]->getValue());
     }
 
     public function testAssociatedArrayCloning()
@@ -104,13 +98,13 @@ class CloneStructTest extends TestCase
         $clone = clone $simple;
         $simple->setValue(null);
 
-        /** @var $nested SimpleStruct[] */
+        /** @var SimpleStruct[] $nested */
         $nested = $clone->getValue();
-        $this->assertArrayHasKey('struct1', $nested);
-        $this->assertArrayHasKey('struct2', $nested);
+        static::assertArrayHasKey('struct1', $nested);
+        static::assertArrayHasKey('struct2', $nested);
 
         $clone->setValue('test123');
-        $this->assertNull($simple->getValue());
+        static::assertNull($simple->getValue());
     }
 
     public function testRecursiveArrayCloning()
@@ -125,11 +119,11 @@ class CloneStructTest extends TestCase
         $clone = clone $simple;
         $simple->setValue(null);
 
-        /** @var $value SimpleStruct[][] */
+        /** @var SimpleStruct[][] $value */
         $value = $clone->getValue();
-        $this->assertCount(2, $value[0]);
-        $this->assertCount(2, $value[1]);
+        static::assertCount(2, $value[0]);
+        static::assertCount(2, $value[1]);
 
-        $this->assertEquals('struct 1', $value[0][0]->getValue());
+        static::assertEquals('struct 1', $value[0][0]->getValue());
     }
 }

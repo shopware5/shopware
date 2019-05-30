@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
@@ -54,7 +54,7 @@ class Attribute extends Struct implements \JsonSerializable
     /**
      * Checks if a storage key exists
      *
-     * @param $key
+     * @param string $key
      *
      * @return bool
      */
@@ -68,8 +68,7 @@ class Attribute extends Struct implements \JsonSerializable
      * The attribute storage allows only serializable
      * values which allows shopware to serialize the struct elements.
      *
-     * @param $name
-     * @param $value
+     * @param string $name
      *
      * @throws \Exception
      */
@@ -95,9 +94,7 @@ class Attribute extends Struct implements \JsonSerializable
     /**
      * Returns a single storage value.
      *
-     * @param $name
-     *
-     * @return mixed
+     * @param string $name
      */
     public function get($name)
     {
@@ -113,8 +110,6 @@ class Attribute extends Struct implements \JsonSerializable
     }
 
     /**
-     * @param mixed $value
-     *
      * @return bool
      */
     private function isValid($value)

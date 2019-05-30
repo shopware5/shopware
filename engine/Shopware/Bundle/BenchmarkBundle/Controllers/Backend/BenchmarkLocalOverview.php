@@ -22,6 +22,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use League\Flysystem;
 use Shopware\Models\Benchmark\Repository as BenchmarkRepository;
 
@@ -52,13 +53,19 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
         $this->View()->loadTemplate(sprintf('backend/benchmark/template/local/%s.tpl', $template));
 
         if ($template === 'waiting') {
-            $this->View()->assign('waitingSinceDays', $this->getWaitingTemplateId());
+            $waitingSinceHours = $this->getWaitingSinceHours();
+            $this->View()->assign('waitingSinceHours', $waitingSinceHours);
+        }
+
+        if ($template === 'industry_select') {
+            $this->View()->assign('shops', $this->getShops());
         }
 
         $this->View()->assign('benchmarkTranslations', json_encode(
             $this->get('shopware.benchmark_bundle.components.translation')->getAll(),
             JSON_HEX_APOS
         ));
+
         $this->View()->assign('benchmarkDefaultLanguage', $this->Request()->getParam('lang', 'de'));
     }
 
@@ -68,8 +75,6 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
     }
 
     /**
-     * @throws \LogicException in case of directory traversal
-     *
      * @return string
      */
     private function getTemplate()
@@ -91,9 +96,8 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
     {
         /** @var BenchmarkRepository $benchmarkRepository */
         $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
-        $benchmarkConfig = $benchmarkRepository->getMainConfig();
 
-        if ($benchmarkConfig->getIndustry() === null) {
+        if ($benchmarkRepository->getConfigsCount() === 0) {
             return 'start';
         }
 
@@ -101,16 +105,16 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
     }
 
     /**
-     * Returns the identifier of the snippets, templates etc. to be used
+     * Returns the amount of hours since first seeing the waiting screen.
      *
      * @return int
      */
-    private function getWaitingTemplateId()
+    private function getWaitingSinceHours()
     {
         $now = new DateTime('now');
         $diff = $now->diff($this->getWaitingSinceDate());
-        // We need to increment the raw difference in days by one, because we want to show the first screen on day #0
-        return $diff->days + 1;
+
+        return (int) ($diff->h + ($diff->days * 24));
     }
 
     /**
@@ -156,7 +160,7 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
      */
     private function getUserIdentity()
     {
-        /** @var $plugin Shopware_Plugins_Backend_Auth_Bootstrap */
+        /** @var Shopware_Plugins_Backend_Auth_Bootstrap $plugin */
         $plugin = $this->get('plugins')->get('Backend')->get('Auth');
 
         try {
@@ -164,5 +168,19 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
         } catch (Exception $e) {
             return null;
         }
+    }
+
+    /**
+     * @return array
+     */
+    private function getShops()
+    {
+        $queryBuilder = $this->get('dbal_connection')->createQueryBuilder();
+
+        return $queryBuilder->select('shop.id, shop.name')
+            ->from('s_core_shops', 'shop')
+            ->where('shop.main_id IS NULL')
+            ->execute()
+            ->fetchAll();
     }
 }

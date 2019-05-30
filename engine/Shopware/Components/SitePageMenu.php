@@ -27,7 +27,6 @@ namespace Shopware\Components;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Components\Routing\Router;
 use Shopware\Components\Routing\RouterInterface;
 
 /**
@@ -55,12 +54,6 @@ class SitePageMenu
      */
     private $shopContextService;
 
-    /**
-     * @param Connection              $connection
-     * @param RouterInterface         $router
-     * @param FieldHelper             $fieldHelper
-     * @param ContextServiceInterface $shopContextService
-     */
     public function __construct(Connection $connection, RouterInterface $router, FieldHelper $fieldHelper, ContextServiceInterface $shopContextService)
     {
         $this->connection = $connection;
@@ -72,8 +65,8 @@ class SitePageMenu
     /**
      * Returns a shop page tree for the provided shop id.
      *
-     * @param $shopId
-     * @param $activeId
+     * @param int $shopId
+     * @param int $activeId
      *
      * @return array
      */
@@ -81,7 +74,7 @@ class SitePageMenu
     {
         $query = $this->getQuery($shopId);
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -159,7 +152,6 @@ class SitePageMenu
             $menu[$key][] = $site;
         }
 
-        /** @var Router $router */
         $seoUrls = $this->router->generateList($links);
         $menu = $this->assignSeoUrls($menu, $seoUrls);
 
@@ -176,9 +168,9 @@ class SitePageMenu
      * Checks if the provided menu contains already an entry for the provided site.
      * If the provided site contains a mapping but the existing not, override the existing.
      *
-     * @param $menu
-     * @param $key
-     * @param $site
+     * @param array  $menu
+     * @param string $key
+     * @param array  $site
      *
      * @return bool
      */
@@ -188,9 +180,9 @@ class SitePageMenu
     }
 
     /**
-     * @param $parentId
-     * @param $sites
-     * @param $activeId
+     * @param int   $parentId
+     * @param array $sites
+     * @param int   $activeId
      *
      * @return array
      */

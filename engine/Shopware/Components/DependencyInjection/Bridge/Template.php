@@ -28,19 +28,13 @@ use Shopware\Components\Escaper\EscaperInterface;
 use Shopware\Components\Template\Security;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Template
 {
     /**
-     * @param \Enlight_Event_EventManager          $eventManager
-     * @param \Enlight_Components_Snippet_Resource $snippetResource
-     * @param EscaperInterface                     $escaper
-     * @param array                                $templateConfig
-     * @param array                                $securityConfig
-     *
      * @return \Enlight_Template_Manager
      */
     public function factory(
@@ -48,10 +42,11 @@ class Template
         \Enlight_Components_Snippet_Resource $snippetResource,
         EscaperInterface $escaper,
         array $templateConfig,
-        array $securityConfig
+        array $securityConfig,
+        array $backendOptions
     ) {
-        /** @var $template \Enlight_Template_Manager */
-        $template = \Enlight_Class::Instance('Enlight_Template_Manager');
+        /** @var \Enlight_Template_Manager $template */
+        $template = \Enlight_Class::Instance('Enlight_Template_Manager', [null, $backendOptions]);
 
         $template->enableSecurity(
             new Security($template, $securityConfig)

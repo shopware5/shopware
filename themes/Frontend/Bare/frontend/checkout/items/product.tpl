@@ -91,7 +91,15 @@
                     {/block}
 
                     {* Additional product information *}
-                    {block name='frontend_checkout_cart_item_details_inline'}{/block}
+                    {block name='frontend_checkout_cart_item_details_inline'}
+                        {block name='frontend_checkout_cart_item_details_essential_features'}
+                            {if {config name=alwaysShowMainFeatures}}
+                                <div class="product--essential-features">
+                                    {include file="string:{config name=mainfeatures}"}
+                                </div>
+                            {/if}
+                        {/block}
+                    {/block}
                 </div>
             {/block}
         </div>
@@ -163,8 +171,9 @@
         <div class="panel--td column--actions">
             <form action="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}"
                   method="post">
+                {s name="CartItemLinkDelete" assign="snippetCartItemLinkDelete"}{/s}
                 <button type="submit" class="btn is--small column--actions-link"
-                        title="{"{s name='CartItemLinkDelete'}{/s}"|escape}">
+                        title="{$snippetCartItemLinkDelete|escape}">
                     <i class="icon--cross"></i>
                 </button>
             </form>

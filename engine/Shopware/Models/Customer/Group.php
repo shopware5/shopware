@@ -26,6 +26,7 @@ namespace Shopware\Models\Customer;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\CustomerGroup;
 
 /**
  * Shopware customer group model represents a single customer group.
@@ -42,7 +43,7 @@ use Shopware\Components\Model\ModelEntity;
  *   - KEY `groupKey` (`groupKey`)
  * </code>
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="s_core_customergroups")
  */
 class Group extends ModelEntity
@@ -50,29 +51,30 @@ class Group extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\Discount", mappedBy="group", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Customer\Discount>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\Discount", mappedBy="group", orphanRemoval=true, cascade={"persist"})
      */
     protected $discounts;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerGroup", mappedBy="customerGroup", orphanRemoval=true, cascade={"persist"})
+     * @var CustomerGroup
      *
-     * @var \Shopware\Models\Attribute\CustomerGroup
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerGroup", mappedBy="customerGroup", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
 
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\Customer", mappedBy="group")
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Customer\Customer>
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\Customer", mappedBy="group")
      */
     protected $customers;
+
     /**
      * The id property is an identifier property which means
      * doctrine associations can be defined over this field.
@@ -80,7 +82,7 @@ class Group extends ModelEntity
      *
      * @var int
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -90,6 +92,7 @@ class Group extends ModelEntity
      * Contains a alphanumeric key for the group.
      *
      * @var string
+     *
      * @ORM\Column(name="groupkey", type="string", length=5, nullable=false)
      */
     private $key;
@@ -99,6 +102,7 @@ class Group extends ModelEntity
      * Column property for the database field description
      *
      * @var string
+     *
      * @ORM\Column(name="description", type="string", length=30, nullable=false)
      */
     private $name;
@@ -107,7 +111,8 @@ class Group extends ModelEntity
      * Contains the tax value for the customer group.
      * Column property for the database field tax
      *
-     * @var int
+     * @var bool
+     *
      * @ORM\Column(name="tax", type="boolean", nullable=false)
      */
     private $tax;
@@ -116,7 +121,8 @@ class Group extends ModelEntity
      * Contains the customer group tax input.
      * Column property for the database field taxinput
      *
-     * @var int
+     * @var bool
+     *
      * @ORM\Column(name="taxinput", type="boolean", nullable=false)
      */
     private $taxInput;
@@ -126,6 +132,7 @@ class Group extends ModelEntity
      * Column property for the database field mode
      *
      * @var bool
+     *
      * @ORM\Column(name="mode", type="boolean", nullable=false)
      */
     private $mode;
@@ -135,6 +142,7 @@ class Group extends ModelEntity
      * Column property for the database field discount
      *
      * @var float
+     *
      * @ORM\Column(name="discount", type="float", nullable=false)
      */
     private $discount = 0;
@@ -144,6 +152,7 @@ class Group extends ModelEntity
      * Column property for the database field minimumorder
      *
      * @var float
+     *
      * @ORM\Column(name="minimumorder", type="float", nullable=false)
      */
     private $minimumOrder = 0;
@@ -153,13 +162,11 @@ class Group extends ModelEntity
      * Column property for the database field minimumordersurcharge
      *
      * @var float
+     *
      * @ORM\Column(name="minimumordersurcharge", type="float", nullable=false)
      */
     private $minimumOrderSurcharge = 0;
 
-    /**
-     * Class constructor which initials the discounts association.
-     */
     public function __construct()
     {
         $this->discounts = new \Doctrine\Common\Collections\ArrayCollection();
@@ -286,7 +293,7 @@ class Group extends ModelEntity
      * Setter function for the mode property which is
      * a column property for the database field mode.
      *
-     * @param int $mode
+     * @param bool $mode
      *
      * @return Group
      */
@@ -301,7 +308,7 @@ class Group extends ModelEntity
      * Getter function for the mode property which is
      * a column property for the database field mode.
      *
-     * @return int
+     * @return bool
      */
     public function getMode()
     {
@@ -387,7 +394,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return Discount[]|\Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<Discount>
      */
     public function getDiscounts()
     {
@@ -395,9 +402,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param $discounts \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Customer\Discount[]
-     *
-     * @return Group
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Customer\Discount> $discounts
      */
     public function setDiscounts($discounts)
     {
@@ -405,7 +410,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\CustomerGroup
+     * @return CustomerGroup
      */
     public function getAttribute()
     {
@@ -413,13 +418,13 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\CustomerGroup|array|null $attribute
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Attribute\CustomerGroup>|null $attribute
      *
-     * @return \Shopware\Models\Attribute\CustomerGroup
+     * @return Group
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\CustomerGroup', 'attribute', 'customerGroup');
+        return $this->setOneToOne($attribute, CustomerGroup::class, 'attribute', 'customerGroup');
     }
 
     /**

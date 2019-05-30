@@ -218,8 +218,7 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
 
         return Ext.create('Ext.form.field.ComboBox', {
             name: 'orders.cleared',
-            pageSize: 7,
-            queryMode: 'remote',
+            queryMode: 'local',
             store: me.paymentStatusStore,
             valueField: 'id',
             displayField: 'description',
@@ -280,7 +279,8 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
         return Ext.create('Shopware.form.field.ArticleSearch', {
             name: 'details.articleNumber',
             fieldLabel: me.snippets.article,
-            store: Ext.create('Shopware.apps.Base.store.Variant')
+            store: Ext.create('Shopware.apps.Base.store.Variant'),
+            anchor: '99%'
         });
     },
 
@@ -339,10 +339,9 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
     },
 
     createDeliveryCountrySelection: function() {
-        var selectionFactory = Ext.create('Shopware.attribute.SelectionFactory', {});
         return Ext.create('Ext.form.field.ComboBox', {
             name: 'shipping.countryId',
-            store: selectionFactory.createEntitySearchStore("Shopware\\Models\\Country\\Country"),
+            store: this.getCountryStore(),
             valueField: 'id',
             queryMode: 'remote',
             displayField: 'name',
@@ -351,15 +350,31 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
     },
 
     createBillingCountrySelection: function() {
-        var selectionFactory = Ext.create('Shopware.attribute.SelectionFactory', {});
         return Ext.create('Ext.form.field.ComboBox', {
             name: 'billing.countryId',
-            store: selectionFactory.createEntitySearchStore("Shopware\\Models\\Country\\Country"),
+            store: this.getCountryStore(),
             valueField: 'id',
             queryMode: 'remote',
             displayField: 'name',
             fieldLabel: this.snippets.billing
         });
+    },
+
+    getCountryStore: function() {
+        var selectionFactory = Ext.create('Shopware.attribute.SelectionFactory', {});
+        var store = selectionFactory.createEntitySearchStore("Shopware\\Models\\Country\\Country");
+        store.pageSize = 999;
+
+        store.sort([{
+            property: 'active',
+            direction: 'DESC'
+        }, {
+            property: 'name',
+            direction: 'ASC'
+        }]);
+        store.remoteSort = true;
+
+        return store;
     },
 
 

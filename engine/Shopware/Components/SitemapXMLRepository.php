@@ -35,7 +35,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Category\Category;
 
 /**
- * @category  Shopware
+ * @category Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  *
@@ -74,11 +74,7 @@ class SitemapXMLRepository
     private $batchSize;
 
     /**
-     * @param ProductNumberSearchInterface       $productNumberSearch
-     * @param StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory
-     * @param ModelManager                       $em
-     * @param ContextServiceInterface            $contextService
-     * @param int                                $batchSize
+     * @param int $batchSize
      */
     public function __construct(
         ProductNumberSearchInterface $productNumberSearch,
@@ -123,8 +119,10 @@ class SitemapXMLRepository
      */
     private function readCategoryUrls($parentId)
     {
-        $categoryRepository = $this->em->getRepository(Category::class);
-        $categories = $categoryRepository->getActiveChildrenList($parentId, $this->contextService->getShopContext()->getFallbackCustomerGroup()->getId());
+        /** @var array<array<string, mixed>> $categories */
+        $categories = $this->em
+            ->getRepository(Category::class)
+            ->getActiveChildrenList($parentId, $this->contextService->getShopContext()->getFallbackCustomerGroup()->getId());
 
         foreach ($categories as &$category) {
             $category['show'] = empty($category['external']);
@@ -185,8 +183,6 @@ class SitemapXMLRepository
     /**
      * Reads all product urls recursive
      *
-     * @param Criteria $criteria
-     *
      * @return array
      */
     private function readProductUrlsRecursive(Criteria $criteria)
@@ -230,7 +226,7 @@ class SitemapXMLRepository
     {
         $blogs = [];
 
-        $categoryRepository = $this->em->getRepository('Shopware\Models\Category\Category');
+        $categoryRepository = $this->em->getRepository(\Shopware\Models\Category\Category::class);
         $query = $categoryRepository->getBlogCategoriesByParentQuery($parentId);
         $blogCategories = $query->getArrayResult();
 
@@ -324,7 +320,8 @@ class SitemapXMLRepository
         foreach ($keys as $key) {
             $current = $siteRepository->getSitesByNodeNameQueryBuilder($key, $shopId)
                 ->resetDQLPart('from')
-                ->from('Shopware\Models\Site\Site', 'sites', 'sites.id')
+                ->from(\Shopware\Models\Site\Site::class, 'sites', 'sites.id')
+                ->andWhere('sites.active = 1')
                 ->getQuery()
                 ->getArrayResult();
 
@@ -392,7 +389,7 @@ class SitemapXMLRepository
         $context = $this->contextService->getShopContext();
         $categoryId = $context->getShop()->getCategory()->getId();
 
-        /** @var $query QueryBuilder */
+        /** @var QueryBuilder $query */
         $query = $this->connection->createQueryBuilder();
         $query->select(['manufacturer.id', 'manufacturer.name']);
 
@@ -403,7 +400,7 @@ class SitemapXMLRepository
 
         $query->groupBy('manufacturer.id');
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -438,8 +435,8 @@ class SitemapXMLRepository
      * Helper function to filter emotion campaigns
      * Returns false, if the campaign starts later or is outdated
      *
-     * @param null $from
-     * @param null $to
+     * @param \DateTimeInterface|null $from
+     * @param \DateTimeInterface|null $to
      *
      * @return bool
      */

@@ -38,8 +38,7 @@ use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorOptionsGateway;
-use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorOptionsGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
@@ -47,23 +46,22 @@ use Shopware\Components\QueryAliasMapper;
 class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
     /**
-     * @var ConfiguratorServiceInterface
+     * @var ConfiguratorOptionsGatewayInterface
      */
     private $gateway;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $fieldName;
 
     /**
      * VariantFacetHandler constructor.
-     *
-     * @param ConfiguratorOptionsGateway $gateway
-     * @param QueryAliasMapper           $queryAliasMapper
      */
-    public function __construct(ConfiguratorOptionsGateway $gateway, QueryAliasMapper $queryAliasMapper)
-    {
+    public function __construct(
+        ConfiguratorOptionsGatewayInterface $gateway,
+        QueryAliasMapper $queryAliasMapper
+    ) {
         if (!$this->fieldName = $queryAliasMapper->getShortAlias('variants')) {
             $this->fieldName = 'var';
         }
@@ -74,8 +72,6 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
     /**
      * Validates if the criteria part can be handled by this handler
      *
-     * @param CriteriaPartInterface $criteriaPart
-     *
      * @return bool
      */
     public function supports(CriteriaPartInterface $criteriaPart)
@@ -85,11 +81,6 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
 
     /**
      * Handles the criteria part and extends the provided search.
-     *
-     * @param CriteriaPartInterface $criteriaPart
-     * @param Criteria              $criteria
-     * @param Search                $search
-     * @param ShopContextInterface  $context
      */
     public function handle(
         CriteriaPartInterface $criteriaPart,
@@ -106,11 +97,6 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
     /**
      * Hydrates the Elasticsearch result to extend the product number search result
      * with facets or attributes.
-     *
-     * @param array                     $elasticResult
-     * @param ProductNumberSearchResult $result
-     * @param Criteria                  $criteria
-     * @param ShopContextInterface      $context
      */
     public function hydrate(
         array $elasticResult,
@@ -152,9 +138,8 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
     }
 
     /**
-     * @param VariantFacet $facet
-     * @param Group[]      $groups
-     * @param int[]        $actives
+     * @param Group[] $groups
+     * @param int[]   $actives
      *
      * @return FacetResultGroup|FacetResultInterface
      */
@@ -210,8 +195,6 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
     }
 
     /**
-     * @param Criteria $criteria
-     *
      * @return array
      */
     private function getFilteredValues(Criteria $criteria)

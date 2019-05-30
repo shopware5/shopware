@@ -55,7 +55,9 @@ Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
         snippets = {
             title: '{s name=growl/update/title}A new version of Shopware is available{/s}',
             button: '{s name=growl/update/button}Display info{/s}',
-            messageSticky: '{s name=growl/update/message}Version [0] of Shopware is available.{/s}'
+            messageSticky: '{s name=growl/update/message}Version [0] of Shopware is available.{/s}',
+            errorTitle: '{s name=growl/update/error_title}Shopware Updater Error{/s}',
+            opensslMessage: '{s name=growl/update/openssl_message}Shopware needs OpenSSL to check for new versions{/s}'
         };
 
         /**
@@ -72,6 +74,13 @@ Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
                 var result = Ext.decode(response.responseText);
 
                 if (!result.success) {
+                    if (result.message && result.success === false) {
+                        Shopware.Notification.createStickyGrowlMessage({
+                            title: snippets.errorTitle,
+                            text: result.opensslMissing ? snippets.opensslMessage : result.message,
+                        });
+                    }
+
                     return;
                 }
 
@@ -107,7 +116,7 @@ Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
 
                     onCloseButton: function() {
                         /*{if {acl_is_allowed privilege=skipUpdate resource=swagupdate}}*/
-                        Ext.MessageBox.confirm('{s name="skip_update"}Aktualisierung überspingen{/s}', '{s name="skip_update_question"}Möchten Sie die Meldungen für diese Aktualisierung dauerhaft deaktivieren?{/s}', skipUpdate);
+                        Ext.MessageBox.confirm('{s name="skip_update"}Skip update{/s}', '{s name="skip_update_question"}Do you want to disable the notifications for this update permanently?{/s}', skipUpdate);
                         /*{/if}*/
                     }
                 });
@@ -122,7 +131,7 @@ Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
                             localStorage.setItem('skipVersion', version);
                         }
 
-                        Shopware.Notification.createGrowlMessage('{s name="popups_disabled"}Meldungen deaktiviert{/s}', Ext.String.format('{s name="no_more_popups"}Es werden keine weiteren Meldungen für die Shopware Version [0] angezeigt.{/s}', version));
+                        Shopware.Notification.createGrowlMessage('{s name="popups_disabled"}Popups disabled{/s}', Ext.String.format('{s name="no_more_popups"}No more popups will be shown for Shopware version [0].{/s}', version));
                     }
                 }
             }
