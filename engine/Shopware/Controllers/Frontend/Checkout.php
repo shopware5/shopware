@@ -1621,6 +1621,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $view = $this->View();
         $basket = $this->getBasket();
         $view->assign('sCountryList', $this->getCountryList());
+        $view->assign('sState', $this->getSelectedState());
         $view->assign('sPayments', $this->getPayments());
         $view->assign('sCountry', $this->getSelectedCountry());
         $view->assign('sPayment', $this->getSelectedPayment());
