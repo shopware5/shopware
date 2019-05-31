@@ -295,8 +295,11 @@
 
             $modal._$content.find('.address-editor--errors').removeClass('is--hidden');
 
-            $.each(errors, function(field) {
+            $.each(errors, function(field, feedback) {
                 $modal._$content.find('[name="' + fieldPrefix + '[' + field + ']"]').addClass('has--error');
+                if (feedback) {
+                    $modal._$content.find('.address-editor--errors .alert--content').append('<p>' + feedback + '</p>');
+                }
             });
         },
 
