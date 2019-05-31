@@ -112,7 +112,7 @@ class ContentType extends \Enlight_Controller_Action
                 'id' => $this->type->getInternalName(),
                 'name' => $this->type->getName(),
                 'blog' => false,
-                'link' => 'shopware.php?sViewport=' . $this->type->getControllerName(),
+                'link' => 'shopware.php?sViewport=' . $this->type->getControllerName() . '&sAction=index',
             ],
         ];
 
@@ -121,7 +121,7 @@ class ContentType extends \Enlight_Controller_Action
                 'id' => $this->type->getInternalName(),
                 'name' => $item[$this->type->getViewTitleFieldName()],
                 'blog' => false,
-                'link' => 'shopware.php?sViewport=' . $this->type->getControllerName() . '&id=' . $item['id'],
+                'link' => 'shopware.php?sViewport=' . $this->type->getControllerName() . '&sAction=detail&&id=' . $item['id'],
             ];
         }
 

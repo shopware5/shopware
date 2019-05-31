@@ -2,9 +2,9 @@
 
 {block name='frontend_index_content_left'}{/block}
 
-{block name='frontend_index_header_meta_description'}{$sItem[$sDescriptionKey]|strip_tags|truncate:$SeoDescriptionMaxLength:'…'}{/block}
-{block name='frontend_index_header_meta_description_og'}{$sItem[$sDescriptionKey]|strip_tags|truncate:$SeoDescriptionMaxLength:'…'}{/block}
-{block name='frontend_index_header_meta_description_twitter'}{$sItem[$sDescriptionKey]|strip_tags|truncate:$SeoDescriptionMaxLength:'…'}{/block}
+{block name='frontend_index_header'}
+    {include file='frontend/content_type/detail_header.tpl'}
+{/block}
 
 {* Main content *}
 {block name='frontend_index_content'}
