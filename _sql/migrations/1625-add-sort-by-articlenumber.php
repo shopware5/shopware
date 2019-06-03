@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration1457 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration1625 extends Shopware\Components\Migrations\AbstractMigration
 {
     const LANGUAGE_GERMAN = 'de';
     const LANGUAGE_ENGLISH = 'en';

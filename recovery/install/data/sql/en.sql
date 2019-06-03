@@ -1869,7 +1869,6 @@ UPDATE s_search_custom_sorting SET label = 'Lowest price' WHERE id = 3;
 UPDATE s_search_custom_sorting SET label = 'Highest price' WHERE id = 4;
 UPDATE s_search_custom_sorting SET label = 'Article description' WHERE id = 5;
 UPDATE s_search_custom_sorting SET label = 'Best results' WHERE id = 7;
-UPDATE s_search_custom_sorting SET label = 'Product number' WHERE label = 'Artikelnummer';
 
 -- s_search_custom_facet --
 UPDATE s_search_custom_facet SET `name` = 'Categories', `facet` = '{"Shopware\\\\Bundle\\\\SearchBundle\\\\Facet\\\\CategoryFacet":{"label":"Categories", "depth": "2"}}' WHERE id = 1;
