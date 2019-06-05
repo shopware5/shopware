@@ -80,7 +80,8 @@ class IndexPopulateCommand extends ShopwareCommand implements CompletionAwareInt
         $this
             ->setName('sw:es:index:populate')
             ->setDescription('Reindex all shops into a new index and switch the live-system alias after the index process.')
-            ->addOption('shopId', null, InputOption::VALUE_OPTIONAL)
+            ->addOption('shopId', null, InputOption::VALUE_OPTIONAL, 'The shop to populate')
+            ->addOption('index', null, InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'The index to populate')
             ->addOption('no-evaluation', null, InputOption::VALUE_NONE, 'Disable evaluation for each index')
             ->addOption('stop-on-error', null, InputOption::VALUE_NONE, 'Abort indexing if an error occurs')
         ;
@@ -110,7 +111,7 @@ class IndexPopulateCommand extends ShopwareCommand implements CompletionAwareInt
         /** @var Shop $shop */
         foreach ($shops as $shop) {
             $output->writeln("\n## Indexing shop " . $shop->getName() . ' ##');
-            $indexer->index($shop, $helper);
+            $indexer->index($shop, $helper, $input->getOption('index'));
         }
     }
 }
