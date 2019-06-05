@@ -69,7 +69,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             $articleModule = Shopware()->Modules()->Articles();
             $navigation = $articleModule->getProductNavigation($orderNumber, $categoryId, $this->Request());
 
-            $linkRewriter = function ($link) {
+            $linkRewriter = static function ($link) {
                 return Shopware()->Modules()->Core()->sRewriteLink($link);
             };
 
@@ -215,7 +215,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
 
-        $category = $this->container->get('shopware_storefront.category_gateway')->get([$categoryId], $context);
+        $category = $this->container->get('shopware_storefront.category_gateway')->get($categoryId, $context);
 
         $productStream = $category->getProductStream();
 
