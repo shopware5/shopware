@@ -126,6 +126,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed internal validation of `Shopware\Bundle\StoreFrontBundle\Struct\Attribute`
 * Changed the blog seo meta details to be saveable after being over the max length of the global max length
 * Changed shipping calculation in off canvas to work correctly with country states
+* Changed the input of filters in the backend to prevent grammar error 
 * Changed `Shopware\Bundle\ESIndexingBundle\ShopIndexerInterface::index`. Added optional `$indexNames` argument.
 
 ### Removals
