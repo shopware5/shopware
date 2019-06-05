@@ -480,7 +480,7 @@ class FieldHelper
             'download.articleID as __download_articleID',
             'download.description as __download_description',
             'download.filename as __download_filename',
-            'download.size as __download_size',
+            'media.file_size as __download_size',
         ];
 
         $fields = array_merge(

@@ -86,9 +86,13 @@ class Download extends ModelEntity
     /**
      * @var float
      *
+     * @deprecated since 5.5.9 and will be removed in 5.7. Use media_service to get size of file
+     *
+     * @todo remove in 5.7
+     *
      * @ORM\Column(name="size", type="float", nullable=false)
      */
-    private $size;
+    private $size = 0;
 
     /**
      * @return int
@@ -162,6 +166,10 @@ class Download extends ModelEntity
      * @param float $size
      *
      * @return Download
+     *
+     * @deprecated since 5.5.9 and will be removed in 5.7 without alternative
+     *
+     * @todo remove in 5.7
      */
     public function setSize($size)
     {
@@ -172,6 +180,10 @@ class Download extends ModelEntity
 
     /**
      * @return float
+     *
+     * @deprecated since 5.5.9 and will be removed in 5.7. Use media_service to get size of file
+     *
+     * @todo remove in 5.7
      */
     public function getSize()
     {

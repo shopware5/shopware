@@ -26,6 +26,7 @@ namespace Shopware\Bundle\SearchBundle;
 
 use Assert\Assertion;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
+use Shopware\Components\ReflectionAwareInterface;
 
 /**
  * The criteria object is used for the search gateway.
@@ -36,7 +37,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  * Each of this sorting, facet and condition classes are handled by their
  * own handler classes which implemented for each gateway engine.
  */
-class Criteria extends Extendable
+class Criteria extends Extendable implements ReflectionAwareInterface
 {
     /**
      * Offset for the limitation

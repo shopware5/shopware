@@ -48,14 +48,17 @@ class ReflectionHelperTest extends TestCase
         static::assertInstanceOf(Criteria::class, $criteria);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessageRegExp /out of scope/m
-     *
-     * @throws \ReflectionException
-     */
     public function testOutOfFolderCreation()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('/out of scope/m');
         $this->helper->createInstanceFromNamedArguments(NullLogger::class, []);
+    }
+
+    public function testCreationOfInvalidClass()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Class Shopware_Components_CsvIterator has to implement the interface Shopware\Components\ReflectionAwareInterface');
+        $this->helper->createInstanceFromNamedArguments(\Shopware_Components_CsvIterator::class, []);
     }
 }

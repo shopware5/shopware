@@ -45,8 +45,7 @@ Ext.define('Shopware.apps.Article.model.Download', {
         { name: 'id', type: 'int' },
         { name: 'articleId', type: 'int' },
         { name: 'name', type: 'string' },
-        { name: 'file', type: 'string' },
-        { name: 'size', type: 'float' }
+        { name: 'file', type: 'string' }
     ]
 });
 //{/block}

@@ -103,7 +103,7 @@
         .addPlugin('*[data-modalbox="true"]', 'swModalbox')
 
         // Change the active tab to the customer reviews
-        .addPlugin('.is--ctl-detail', 'swJumpToTab')
+        .addPlugin('.is--ctl-detail', 'swJumpToTab', ['m', 'l', 'xl'])
         .addPlugin('*[data-ajax-shipping-payment="true"]', 'swShippingPayment')
 
         // Jump to ToS-Checkbox on invalid

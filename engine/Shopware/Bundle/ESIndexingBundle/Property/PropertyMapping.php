@@ -33,6 +33,11 @@ class PropertyMapping implements MappingInterface
     const TYPE = 'property';
 
     /**
+     * @var bool
+     */
+    protected $isDebug;
+
+    /**
      * @var FieldMappingInterface
      */
     private $fieldMapping;
@@ -42,15 +47,14 @@ class PropertyMapping implements MappingInterface
      */
     private $isDynamic;
 
-    /**
-     * @param bool $isDynamic
-     */
     public function __construct(
         FieldMappingInterface $fieldMapping,
-        $isDynamic = true
+        bool $isDynamic = true,
+        bool $isDebug = false
     ) {
         $this->fieldMapping = $fieldMapping;
         $this->isDynamic = $isDynamic;
+        $this->isDebug = $isDebug;
     }
 
     /**
@@ -66,7 +70,7 @@ class PropertyMapping implements MappingInterface
      */
     public function get(Shop $shop)
     {
-        return [
+        $mapping = [
             'dynamic' => $this->isDynamic,
             'properties' => [
                 'id' => ['type' => 'long'],
@@ -80,5 +84,11 @@ class PropertyMapping implements MappingInterface
                 ],
             ],
         ];
+
+        if ($this->isDebug) {
+            unset($mapping['_source']);
+        }
+
+        return $mapping;
     }
 }

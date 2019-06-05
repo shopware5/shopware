@@ -93,7 +93,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
 
         me.attributeForm = Ext.create('Shopware.attribute.Form', {
             table: 's_cms_static_attributes',
-            allowTranslation: false
+            allowTranslation: true
         });
 
         return [
@@ -135,7 +135,6 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 name: 'parentId',
                 xtype: 'hidden'
             },
-
             {
                 fieldLabel: '{s name=formContentFieldDescriptionLabel}Description{/s}',
                 xtype: 'textfield',
@@ -319,7 +318,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
             helpText: '{s name=site/shop_selector/helper}If set, limits shop page visibility to the configured shops. If this shop page links to another page, that page might still be accessible.{/s}',
             allowSorting: false,
             height: 130,
-            anchor:'100%',
+            anchor:  '100%',
             labelWidth: 155,
             store: selectionFactory.createEntitySearchStore("Shopware\\Models\\Shop\\Shop"),
             searchStore: selectionFactory.createEntitySearchStore("Shopware\\Models\\Shop\\Shop")

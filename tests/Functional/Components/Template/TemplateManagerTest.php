@@ -25,12 +25,15 @@
 namespace Shopware\tests\Unit\Components\Template;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\DirectoryDeletionTrait;
 
 /**
  * Tests for the template manager
  */
 class TemplateManagerTest extends TestCase
 {
+    use DirectoryDeletionTrait;
+
     /**
      * Tests whether the directories added to a cloned TemplateManager are recognized as secure dirs by SmartySecurity
      */
@@ -73,5 +76,35 @@ class TemplateManagerTest extends TestCase
         $this->expectExceptionMessage('Unknown path');
 
         $templateManager->fetch('frontend/detail2/index.tpl');
+    }
+
+    public function testValidPermissionsAreSet()
+    {
+        $testDir = sys_get_temp_dir() . '/tpl-test';
+        $backendOptions = [
+            'hashed_directory_perm' => 0777 & ~umask(),
+            'cache_file_perm' => 0666 & ~umask(),
+        ];
+        /** @var \Enlight_Template_Manager $template */
+        $template = \Enlight_Class::Instance('Enlight_Template_Manager', [null, $backendOptions]);
+
+        mkdir($testDir);
+
+        $cacheDirectory = $testDir . '/compile-test';
+        $cacheFile = $cacheDirectory . '/8843d7f92416211de9ebb963ff4ce28125932878.string.php';
+
+        $template->setCompileDir($cacheDirectory);
+        $template->fetch('string:foobar');
+
+        $dirPermissions = (fileperms($cacheDirectory) & 0777);
+        $filePermissions = (fileperms($cacheFile) & 0666);
+
+        static::assertFileExists($cacheDirectory);
+        static::assertFileExists($cacheFile);
+
+        static::assertEquals($backendOptions['hashed_directory_perm'], $dirPermissions);
+        static::assertEquals($backendOptions['cache_file_perm'], $filePermissions);
+
+        $this->deleteDirectory($testDir);
     }
 }
