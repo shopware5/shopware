@@ -34,7 +34,7 @@ Ext.define('Shopware.attribute.SingleSelectionFieldHandler', {
     },
 
     supports: function(attribute) {
-        return (attribute.get('columnType') == 'single_selection');
+        return (attribute.get('columnType') === 'single_selection');
     },
 
     create: function(field, attribute) {

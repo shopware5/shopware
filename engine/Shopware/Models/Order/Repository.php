@@ -159,8 +159,6 @@ class Repository extends ModelRepository
      * @param int|null          $offset
      * @param int|null          $limit
      *
-     * @internal param $ids
-     *
      * @return \Doctrine\ORM\Query
      */
     public function getOrdersQuery($filters = null, $orderBy = null, $offset = null, $limit = null)
@@ -258,15 +256,13 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Returns an instance of the \Doctrine\ORM\Query object which .....
+     * Returns an instance of the \Doctrine\ORM\Query object which can be extended for customization
      *
      * @return \Doctrine\ORM\Query
      */
     public function getDetailStatusQuery()
     {
-        $builder = $this->getDetailStatusQueryBuilder();
-
-        return $builder->getQuery();
+        return $this->getDetailStatusQueryBuilder()->getQuery();
     }
 
     /**
@@ -339,15 +335,13 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Returns an instance of the \Doctrine\ORM\Query object which .....
+     * Returns an instance of the \Doctrine\ORM\Query object which can be extended for customization
      *
      * @return \Doctrine\ORM\Query
      */
     public function getDocumentTypesQuery()
     {
-        $builder = $this->getDocumentTypesQueryBuilder();
-
-        return $builder->getQuery();
+        return $this->getDocumentTypesQueryBuilder()->getQuery();
     }
 
     /**
@@ -458,9 +452,9 @@ class Repository extends ModelRepository
     /**
      * @param int[] $orderIds
      *
-     * @return array[]
+     * @return QueryBuilder
      */
-    public function getDocuments(array $orderIds)
+    public function getDocumentsQueryBuilder(array $orderIds)
     {
         $query = $this->getEntityManager()->createQueryBuilder();
         $query->select(['document', 'documentType']);
@@ -469,7 +463,34 @@ class Repository extends ModelRepository
         $query->where('IDENTITY(document.order) IN (:ids)');
         $query->setParameter(':ids', $orderIds, Connection::PARAM_INT_ARRAY);
 
-        return $query->getQuery()->getArrayResult();
+        return $query;
+    }
+
+    /**
+     * @param int[] $orderIds
+     *
+     * @return array[]
+     */
+    public function getDocuments(array $orderIds)
+    {
+        return $this->getDocumentsQueryBuilder($orderIds)->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @param int[] $orderIds
+     *
+     * @return QueryBuilder
+     */
+    public function getDetailsQueryBuilder(array $orderIds)
+    {
+        $query = $this->getEntityManager()->createQueryBuilder();
+        $query->select(['details', 'attribute']);
+        $query->from(\Shopware\Models\Order\Detail::class, 'details');
+        $query->leftJoin('details.attribute', 'attribute');
+        $query->where('IDENTITY(details.order) IN (:ids)');
+        $query->setParameter(':ids', $orderIds, Connection::PARAM_INT_ARRAY);
+
+        return $query;
     }
 
     /**
@@ -479,14 +500,23 @@ class Repository extends ModelRepository
      */
     public function getDetails(array $orderIds)
     {
+        return $this->getDetailsQueryBuilder($orderIds)->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @param int[] $orderIds
+     *
+     * @return QueryBuilder
+     */
+    public function getPaymentsQueryBuilder(array $orderIds)
+    {
         $query = $this->getEntityManager()->createQueryBuilder();
-        $query->select(['details', 'attribute']);
-        $query->from(\Shopware\Models\Order\Detail::class, 'details');
-        $query->leftJoin('details.attribute', 'attribute');
-        $query->where('IDENTITY(details.order) IN (:ids)');
+        $query->select(['payments']);
+        $query->from(\Shopware\Models\Payment\PaymentInstance::class, 'payments');
+        $query->where('IDENTITY(payments.order) IN (:ids)');
         $query->setParameter(':ids', $orderIds, Connection::PARAM_INT_ARRAY);
 
-        return $query->getQuery()->getArrayResult();
+        return $query;
     }
 
     /**
@@ -496,13 +526,7 @@ class Repository extends ModelRepository
      */
     public function getPayments(array $orderIds)
     {
-        $query = $this->getEntityManager()->createQueryBuilder();
-        $query->select(['payments']);
-        $query->from(\Shopware\Models\Payment\PaymentInstance::class, 'payments');
-        $query->where('IDENTITY(payments.order) IN (:ids)');
-        $query->setParameter(':ids', $orderIds, Connection::PARAM_INT_ARRAY);
-
-        return $query->getQuery()->getArrayResult();
+        return $this->getPaymentsQueryBuilder($orderIds)->getQuery()->getArrayResult();
     }
 
     /**
@@ -595,21 +619,25 @@ class Repository extends ModelRepository
                     $builder->andWhere('orders.id IN (?4)');
                     $builder->setParameter(4, $orderIds, Connection::PARAM_INT_ARRAY);
                     break;
+
                 case 'from':
                     $tmp = new \DateTime($filter['value']);
                     $builder->andWhere('orders.orderTime >= :orderTimeFrom');
                     $builder->setParameter('orderTimeFrom', $tmp->format('Ymd'));
                     break;
+
                 case 'to':
                     $tmp = new \DateTime($filter['value']);
                     $tmp->add(new \DateInterval('P1D'));
                     $builder->andWhere('orders.orderTime <= :orderTimeTo');
                     $builder->setParameter('orderTimeTo', $tmp->format('Ymd'));
                     break;
+
                 case 'details.articleNumber':
                     $builder->andWhere('details.articleNumber LIKE :articleNumber');
                     $builder->setParameter('articleNumber', $filter['value']);
                     break;
+
                 default:
                     $builder->addFilter([$filter]);
             }
@@ -631,35 +659,45 @@ class Repository extends ModelRepository
             case 'shipping':
                 $builder->leftJoin('orders.shipping', 'shipping');
                 break;
+
             case 'billing':
                 $builder->leftJoin('orders.billing', 'billing');
                 break;
+
             case 'details':
                 $builder->leftJoin('orders.details', 'details');
                 break;
+
             case 'payment':
                 $builder->leftJoin('orders.payment', 'payment');
                 break;
+
             case 'paymentStatus':
                 $builder->leftJoin('orders.paymentStatus', 'paymentStatus');
                 break;
+
             case 'orderStatus':
                 $builder->leftJoin('orders.orderStatus', 'orderStatus');
                 break;
+
             case 'customer':
                 $builder->leftJoin('orders.customer', 'customer');
                 break;
+
             case 'billingCountry':
                 $this->addAliasJoin($builder, 'billing');
                 $builder->leftJoin('billing.country', 'billingCountry');
                 break;
+
             case 'billingState':
                 $this->addAliasJoin($builder, 'billing');
                 $builder->leftJoin('billing.state', 'billingState');
                 break;
+
             case 'shop':
                 $builder->leftJoin('orders.shop', 'shop');
                 break;
+
             case 'dispatch':
                 $builder->leftJoin('orders.dispatch', 'dispatch');
                 break;

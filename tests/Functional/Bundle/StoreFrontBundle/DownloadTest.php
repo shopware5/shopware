@@ -46,7 +46,7 @@ class DownloadTest extends TestCase
         /** @var Download $download */
         foreach ($downloads as $download) {
             static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Download', $download);
-            static::assertContains($download->getFile(), ['/var/www/first.txt', '/var/www/second.txt']);
+            static::assertContains($download->getFile(), [$data['downloads'][0]['file'], $data['downloads'][1]['file']]);
             static::assertCount(1, $download->getAttributes());
             static::assertTrue($download->hasAttribute('core'));
         }
@@ -93,17 +93,19 @@ class DownloadTest extends TestCase
     ) {
         $product = parent::getProduct($number, $context, $category);
 
+        $mediaImgs = Shopware()->Db()->fetchCol('SELECT path FROM s_media LIMIT 2');
+
         $product['downloads'] = [
             [
                 'name' => 'first-download',
                 'size' => 100,
-                'file' => '/var/www/first.txt',
+                'file' => $mediaImgs[0],
                 'attribute' => ['id' => 20000],
             ],
             [
                 'name' => 'second-download',
                 'size' => 200,
-                'file' => '/var/www/second.txt',
+                'file' => $mediaImgs[0],
                 'attribute' => ['id' => 20000],
             ],
         ];

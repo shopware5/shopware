@@ -34,7 +34,7 @@ Ext.define('Shopware.attribute.MultiSelectionFieldHandler', {
     },
 
     supports: function(attribute) {
-        return (attribute.get('columnType') == 'multi_selection');
+        return (attribute.get('columnType') === 'multi_selection');
     },
 
     create: function(field, attribute) {

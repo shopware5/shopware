@@ -39,7 +39,6 @@ use Shopware\Models\Article\Image;
 use Shopware\Models\Article\Link;
 use Shopware\Models\Article\SeoCategory;
 use Shopware\Models\Article\Supplier;
-use Shopware\Models\Attribute\Article as ProductAttribute;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Media\Media as MediaModel;
 use Shopware\Models\Price\Group;
@@ -2428,31 +2427,12 @@ class Article extends Resource implements BatchInterface
      */
     private function getAttributeProperties()
     {
-        $metaData = $this->getManager()->getClassMetadata(ProductAttribute::class);
-        $properties = [];
-
-        /** @var \ReflectionProperty $property */
-        foreach ($metaData->getReflectionProperties() as $property) {
-            $propertyName = $property->getName();
-            if ($metaData->hasAssociation($propertyName)) {
-                continue;
-            }
-            $properties[$propertyName] = $propertyName;
-        }
-
-        foreach ($metaData->getAssociationMappings() as $propertyName => $mapping) {
-            $name = $metaData->getSingleAssociationJoinColumnName($propertyName);
-            $field = $metaData->getFieldForColumn($name);
-            unset($properties[$field]);
-        }
-
-        foreach ($metaData->getIdentifierFieldNames() as $identifierFieldName) {
-            unset($properties[$identifierFieldName]);
-        }
-
+        /** @var \Shopware\Bundle\AttributeBundle\Service\CrudService $crud */
+        $crud = $this->getContainer()->get('shopware_attribute.crud_service');
+        $attributeNames = $crud->getList('s_articles_attributes');
         $fields = [];
-        foreach ($properties as $property) {
-            $fields[] = '__attribute_' . $property;
+        foreach ($attributeNames as $property) {
+            $fields[] = '__attribute_' . $property->getColumnName();
         }
 
         return $fields;

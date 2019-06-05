@@ -22,16 +22,39 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle;
+namespace Shopware\Tests\Functional\Traits;
 
-use Shopware\Components\ReflectionAwareInterface;
-
-interface CriteriaPartInterface extends ReflectionAwareInterface
+trait DirectoryDeletionTrait
 {
     /**
-     * Defines the unique name for the facet for re identification.
+     * Deletes a directory recursively, no matter if it contains anything or not
      *
-     * @return string
+     * @param string $dir
      */
-    public function getName();
+    protected function deleteDirectory($dir)
+    {
+        if (!file_exists($dir)) {
+            return;
+        }
+
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        /** @var \SplFileInfo $path */
+        foreach ($iterator as $path) {
+            if ($path->getFilename() === '.gitkeep') {
+                continue;
+            }
+            if ($path->isDir()) {
+                rmdir((string) $path);
+            } else {
+                if (!$path->isFile()) {
+                    continue;
+                }
+                unlink((string) $path);
+            }
+        }
+    }
 }

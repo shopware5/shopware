@@ -211,7 +211,7 @@ class MediaService implements MediaServiceInterface
     {
         $files = [];
         foreach ($this->filesystem->listContents($directory, true) as $file) {
-            if ($file['type'] == 'dir' || strstr($file['path'], '/.') !== false) {
+            if ($file['type'] === 'dir' || strstr($file['path'], '/.') !== false) {
                 continue;
             }
 

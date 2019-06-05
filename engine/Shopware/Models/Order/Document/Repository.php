@@ -43,9 +43,11 @@ class Repository extends ModelRepository
      * To determine the total number of records, use the following syntax:
      * Shopware()->Models()->getQueryCount($query);
      *
-     * @param int      $orderId
-     * @param int|null $limit
-     * @param int|null $offset
+     * @param int        $orderId
+     * @param array|null $filter
+     * @param array|null $orderBy
+     * @param int|null   $limit
+     * @param int|null   $offset
      *
      * @return \Doctrine\ORM\Query
      */

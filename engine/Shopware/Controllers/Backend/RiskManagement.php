@@ -57,7 +57,8 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
             $builder->select(['payment', 'ruleSets'])
                     ->from('Shopware\Models\Payment\Payment', 'payment');
             $builder->leftJoin('payment.ruleSets', 'ruleSets');
-            $builder->where('payment.active=1');
+            $builder->orderBy('payment.active', 'desc');
+            $builder->addOrderBy('payment.id');
 
             $result = $builder->getQuery()->getArrayResult();
             $total = Shopware()->Models()->getQueryCount($builder->getQuery());

@@ -22,16 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle;
+namespace Shopware\Components;
 
-use Shopware\Components\ReflectionAwareInterface;
-
-interface CriteriaPartInterface extends ReflectionAwareInterface
+/**
+ * To use the ReflectionHelper, your class has to be implement this interface
+ */
+interface ReflectionAwareInterface
 {
-    /**
-     * Defines the unique name for the facet for re identification.
-     *
-     * @return string
-     */
-    public function getName();
 }

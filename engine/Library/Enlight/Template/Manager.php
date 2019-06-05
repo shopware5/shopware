@@ -1,20 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 require_once 'Smarty/Smarty.class.php';
@@ -25,9 +30,7 @@ require_once 'Smarty/Smarty.class.php';
  * With the Enlight_Template_Manager it is not only possible to overwrite template files,
  * it is also possible to overwrite all the individual blocks within the template.
  *
- * @category   Enlight
  *
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 class Enlight_Template_Manager extends Smarty
@@ -63,7 +66,7 @@ class Enlight_Template_Manager extends Smarty
      */
     public function __construct($options = null, $backendOptions = [])
     {
-        // self pointer needed by some other class methods
+        // Self pointer needed by some other class methods
         $this->smarty = $this;
 
         $this->start_time = microtime(true);
@@ -72,14 +75,22 @@ class Enlight_Template_Manager extends Smarty
             $backendOptions['cache_file_perm'] = 0666 & ~umask();
         }
 
+        if (is_string($backendOptions['cache_file_perm'])) {
+            $backendOptions['cache_file_perm'] = octdec($backendOptions['cache_file_perm']);
+        }
+
         if (!isset($backendOptions['hashed_directory_perm'])) {
             $backendOptions['hashed_directory_perm'] = 0777 & ~umask();
+        }
+
+        if (is_string($backendOptions['hashed_directory_perm'])) {
+            $backendOptions['hashed_directory_perm'] = octdec($backendOptions['hashed_directory_perm']);
         }
 
         $this->_file_perms = $backendOptions['cache_file_perm'];
         $this->_dir_perms = $backendOptions['hashed_directory_perm'];
 
-        // set default dirs
+        // Set default dirs
         $this->setTemplateDir('.' . DS . 'templates' . DS)
             ->setCompileDir('.' . DS . 'templates_c' . DS)
             ->setPluginsDir([dirname(__FILE__) . '/Plugins/', SMARTY_PLUGINS_DIR])
@@ -115,7 +126,7 @@ class Enlight_Template_Manager extends Smarty
     }
 
     /**
-     * @param $charset
+     * @param string $charset
      *
      * @return Enlight_Template_Manager
      */
@@ -170,16 +181,12 @@ class Enlight_Template_Manager extends Smarty
             }
         }
 
-        /**
-         * Filter all directories which includes the new shopware themes.
-         */
-        $themeDirectories = array_filter($template_dir, function ($themeDir) {
+        // Filter all directories which includes the new shopware themes
+        $themeDirectories = array_filter($template_dir, static function ($themeDir) {
             return stripos($themeDir, '/Themes/Frontend/');
         });
 
-        /*
-         * If no shopware theme assigned, we have to use the passed inheritance
-         */
+        // If no shopware theme assigned, we have to use the passed inheritance
         if (empty($themeDirectories)) {
             return parent::setTemplateDir($template_dir);
         }
@@ -200,9 +207,9 @@ class Enlight_Template_Manager extends Smarty
     /**
      * Add template directory(s)
      *
-     * @param string|array $template_dir directory(s) of template sources
-     * @param string       $key          of the array element to assign the template dir to
-     * @param null         $position
+     * @param string|string[] $template_dir directory(s) of template sources
+     * @param string          $key          of the array element to assign the template dir to
+     * @param string|null     $position
      *
      * @return Smarty current Smarty instance for chaining
      */
@@ -254,13 +261,12 @@ class Enlight_Template_Manager extends Smarty
     }
 
     /**
-     * @param $eventManager
+     * @param \Enlight_Event_EventManager $eventManager
      *
      * @return Enlight_Template_Manager
      */
     public function setEventManager($eventManager)
     {
-        //Enlight_Template_Manager_AddTemplateDir
         $this->eventManager = $eventManager;
 
         return $this;

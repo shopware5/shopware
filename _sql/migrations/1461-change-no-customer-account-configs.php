@@ -53,7 +53,7 @@ class Migrations_Migration1461 extends Shopware\Components\Migrations\AbstractMi
                     [
                         'snippet' => 'deactivate_no_customer_account_unselected',
                         'en_GB' => 'No: Option is not preselected',
-                        'de_DE' => 'Nein: Option ist nicht vorausgwählt.'
+                        'de_DE' => 'Nein: Option ist nicht vorausgewählt.'
                     ]
                 ]
             ]
