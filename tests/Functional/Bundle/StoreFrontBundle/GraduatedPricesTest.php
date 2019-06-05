@@ -48,6 +48,31 @@ class GraduatedPricesTest extends TestCase
         }
     }
 
+    public function testGraduationWithMinimumPurchase()
+    {
+        $number = __FUNCTION__;
+        $context = $this->getContext();
+        $data = $this->getProduct($number, $context);
+        $data['mainDetail']['minPurchase'] = 15;
+
+        $this->helper->createArticle($data);
+
+        $listProduct = $this->helper->getListProduct($number, $context);
+        $graduation = $listProduct->getPrices();
+
+        static::assertCount(2, $graduation);
+
+        /** @var Price $price */
+        $price = array_shift($graduation);
+        static::assertEquals(15, $price->getFrom());
+        static::assertEquals(75, $price->getCalculatedPrice());
+
+        /** @var Price $price */
+        $price = array_shift($graduation);
+        static::assertEquals(21, $price->getFrom());
+        static::assertEquals(50, $price->getCalculatedPrice());
+    }
+
     public function testFallbackGraduation()
     {
         $number = __FUNCTION__;
