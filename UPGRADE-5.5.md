@@ -4,11 +4,15 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 ## 5.5.10
 
-[View all changes from v5.5.8...v5.5.9](https://github.com/shopware/shopware/compare/v5.5.9...v5.5.10)
+[View all changes from v5.5.9...v5.5.10](https://github.com/shopware/shopware/compare/v5.5.9...v5.5.10)
+
+### Additions
+
+* Added support for environments using `open_basedir` for restricting access to the filesystem
 
 ### Changes
 
-- Changed `\Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CategoryGateway::get` to support `int` and `array` parameters
+* Changed `\Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CategoryGateway::get` to support `int` and `array` parameters
 
 ### Deprecations
 
