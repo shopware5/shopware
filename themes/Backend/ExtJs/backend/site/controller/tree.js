@@ -179,7 +179,11 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
         } else {
             //set button states
             /*{if {acl_is_allowed privilege=deleteGroup}}*/
-            deleteGroupButton.enable();
+            if (record.data.key === 'disabled') {
+                deleteGroupButton.disable();
+            } else {
+                deleteGroupButton.enable();
+            }
             /*{/if}*/
             /*{if {acl_is_allowed privilege=deleteSite}}*/
             deleteSiteButton.disable();
@@ -220,12 +224,9 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
                         //reload the stores and display a success message
                         me.getStore('Nodes').load();
                         me.getStore('Groups').load();
-
-                        Shopware.Notification.createGrowlMessage('','{s name=onDeleteGroupSuccess}The group has been deleted successfully.{/s}', '{s name=mainWindowTitle}{/s}');
                     },
                     success: function(){
-
-
+                        Shopware.Notification.createGrowlMessage('','{s name=onDeleteGroupSuccess}The group has been deleted successfully.{/s}', '{s name=mainWindowTitle}{/s}');
                     },
                     failure: function(response) {
                         //display an error message, followed by the actual error text
