@@ -228,7 +228,6 @@ class Requirements
             return [];
         }
 
-        $useCwdOption = $this->compare('opcache.use_cwd', ini_get('opcache.use_cwd'), '1');
         $opcacheRequirements = [[
             'name' => 'opcache.use_cwd',
             'group' => 'core',
@@ -240,18 +239,21 @@ class Requirements
             'error' => '',
         ]];
 
-        if (fileinode('/') > 2) {
-            $validateRootOption = $this->compare('opcache.validate_root', ini_get('opcache.validate_root'), '1');
-            $opcacheRequirements[] = [
-                'name' => 'opcache.validate_root',
-                'group' => 'core',
-                'required' => 1,
-                'version' => ini_get('opcache.validate_root'),
-                'result' => ini_get('opcache.validate_root'),
-                'notice' => '',
-                'check' => $this->compare('opcache.validate_root', ini_get('opcache.validate_root'), '1'),
-                'error' => '',
-            ];
+        try {
+            if (fileinode('/') > 2) {
+                $opcacheRequirements[] = [
+                    'name' => 'opcache.validate_root',
+                    'group' => 'core',
+                    'required' => 1,
+                    'version' => ini_get('opcache.validate_root'),
+                    'result' => ini_get('opcache.validate_root'),
+                    'notice' => '',
+                    'check' => $this->compare('opcache.validate_root', ini_get('opcache.validate_root'), '1'),
+                    'error' => '',
+                ];
+            }
+        } catch (\ErrorException $x) {
+            // Systems that have an 'open_basedir' defined might not allow an access of '/'
         }
 
         return $opcacheRequirements;

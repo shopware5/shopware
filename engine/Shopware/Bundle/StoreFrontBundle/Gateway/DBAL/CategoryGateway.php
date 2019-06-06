@@ -74,10 +74,21 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param int|array $id
+     *
+     * @return Struct\Category
      */
     public function get($id, Struct\ShopContextInterface $context)
     {
+        /*
+         * @deprecated since 5.5, will be removed in Shopware 5.6
+         *
+         * Allowing an array as a parameter is supported in 5.5.x for legacy reasons.
+         * The check below will be removed in Shopware 5.6
+         */
+        if (is_array($id)) {
+            $id = $id[0];
+        }
         $categories = $this->getList([$id], $context);
 
         return array_shift($categories);
