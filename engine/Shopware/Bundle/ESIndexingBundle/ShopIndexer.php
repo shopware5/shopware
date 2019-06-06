@@ -103,11 +103,15 @@ class ShopIndexer implements ShopIndexerInterface
      *
      * @throws \RuntimeException
      */
-    public function index(Shop $shop, ProgressHelperInterface $helper)
+    public function index(Shop $shop, ProgressHelperInterface $helper, array $indexNames = null)
     {
         $lastBacklogId = $this->backlogReader->getLastBacklogId();
 
         foreach ($this->mappings as $mapping) {
+            if ($indexNames !== null && !in_array($mapping->getType(), $indexNames)) {
+                continue;
+            }
+
             $configuration = $this->indexFactory->createIndexConfiguration($shop, $mapping->getType());
             $shopIndex = new ShopIndex($configuration->getName(), $shop, $mapping->getType());
 

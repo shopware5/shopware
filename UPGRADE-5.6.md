@@ -66,7 +66,10 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added ExtJs developer mode, to provide better warnings and errors to developers
 * Added `Enlight_Hook_Exception`. It will be thrown when the HookManger gets a class name which not implements `Enlight_Hook` in 5.8
 * Added additional information to the address verification. You can now give more feedback during the form validation.
-
+* Added `--index` option to `sw:es:index:populate`. It can be used to reindex single or multiple index. If it is not defined, every index will be reindexed.
+    `bin/console sw:es:index:populate --index property`
+    `bin/console sw:es:index:populate --index property --index product`
+    
 ### Changes
 
 * Changed minimum required PHP version to 7.2.0
@@ -123,6 +126,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed internal validation of `Shopware\Bundle\StoreFrontBundle\Struct\Attribute`
 * Changed the blog seo meta details to be saveable after being over the max length of the global max length
 * Changed shipping calculation in off canvas to work correctly with country states
+* Changed `Shopware\Bundle\ESIndexingBundle\ShopIndexerInterface::index`. Added optional `$indexNames` argument.
 
 ### Removals
 
