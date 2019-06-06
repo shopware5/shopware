@@ -69,7 +69,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added `--index` option to `sw:es:index:populate`. It can be used to reindex single or multiple index. If it is not defined, every index will be reindexed.
     `bin/console sw:es:index:populate --index property`
     `bin/console sw:es:index:populate --index property --index product`
-    
+* Added the Product Number as a new method to sort your results.
+
 ### Changes
 
 * Changed minimum required PHP version to 7.2.0
