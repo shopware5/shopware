@@ -103,48 +103,52 @@
                                     <span class="small--prices">{$sBasket.Amount|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}</span>
                                 </div>
                             {/block}
-                            {if !$sUserLoggedIn && !$sUserData.additional.user.id}
-                                {* Shipping costs & Shipping costs pre-calculation *}
-                                {if {config name=showShippingCostsOffCanvas} == 1}
-                                    {block name='frontend_checkout_shipping_costs_country_trigger'}
+                            {* Shipping costs & Shipping costs pre-calculation *}
+                            {if {config name=showShippingCostsOffCanvas} == 1}
+                                {block name='frontend_checkout_shipping_costs_country_trigger'}
+                                    {if !$sUserLoggedIn && !$sUserData.additional.user.id}
                                         <a href="#show-hide--shipping-costs" class="table--shipping-costs-trigger">
                                             {s name='CheckoutFooterEstimatedShippingCosts' namespace="frontend/checkout/cart_footer"}{/s}
                                             <i class="icon--arrow-right"></i>
                                         </a>
-                                        <span class="small--information">
-                                            <span class="small--prices"> {$sShippingcosts|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
-                                            </span>
+                                    {else}
+                                        <span>
+                                            {s name='CheckoutFooterEstimatedShippingCosts' namespace="frontend/checkout/cart_footer"}{/s}:
                                         </span>
-                                    {/block}
-                                    {block name='frontend_checkout_shipping_costs_country_include'}
-                                        {include file="frontend/checkout/shipping_costs.tpl" calculateShippingCosts=$showShippingCalculation}
-                                    {/block}
-                                {/if}
-                                {if {config name=showShippingCostsOffCanvas} == 2}
-                                    {block name='frontend_checkout_shipping_costs_country_include'}
-                                        <div class="small--information">
-                                            <span>{s name='CheckoutFooterEstimatedShippingCosts' namespace="frontend/checkout/cart_footer"}{/s}</span>
-                                            <span class="small--prices"> {$sShippingcosts|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
-                                            </span>
-                                        </div>
-                                        {include file="frontend/checkout/shipping_costs.tpl" calculateShippingCosts=true}
-                                    {/block}
-                                {/if}
-                                {* Total sum *}
-                                {block name='frontend_checkout_cart_footer_field_labels_total'}
-                                    <div class="prices--articles">
-                                        <span class="prices--articles-text">{s name="CartFooterLabelTotal" namespace="frontend/checkout/cart_footer"}{/s}</span>
-                                        <span class="prices--articles-amount">
-                                            {$sAmount|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
+                                    {/if}
+                                    <span class="small--information">
+                                        <span class="small--prices"> {$sShippingcosts|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
                                         </span>
-                                    </div>
+                                    </span>
                                 {/block}
-                                {block name='frontend_checkout_ajax_cart_prices_info'}
-                                    <p class="prices--tax">
-                                        {s name="Star" namespace="frontend/listing/box_article"}{/s}{s name="AjaxDetailDataPriceInfo"}{/s}
-                                    </p>
+                                {block name='frontend_checkout_shipping_costs_country_include'}
+                                    {include file="frontend/checkout/shipping_costs.tpl" calculateShippingCosts=$showShippingCalculation}
                                 {/block}
                             {/if}
+                            {if {config name=showShippingCostsOffCanvas} == 2}
+                                {block name='frontend_checkout_shipping_costs_country_include'}
+                                    <div class="small--information">
+                                        <span>{s name='CheckoutFooterEstimatedShippingCosts' namespace="frontend/checkout/cart_footer"}{/s}</span>
+                                        <span class="small--prices"> {$sShippingcosts|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
+                                        </span>
+                                    </div>
+                                    {include file="frontend/checkout/shipping_costs.tpl" calculateShippingCosts=true}
+                                {/block}
+                            {/if}
+                            {* Total sum *}
+                            {block name='frontend_checkout_cart_footer_field_labels_total'}
+                                <div class="prices--articles">
+                                    <span class="prices--articles-text">{s name="CartFooterLabelTotal" namespace="frontend/checkout/cart_footer"}{/s}</span>
+                                    <span class="prices--articles-amount">
+                                        {$sAmount|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
+                                    </span>
+                                </div>
+                            {/block}
+                            {block name='frontend_checkout_ajax_cart_prices_info'}
+                                <p class="prices--tax">
+                                    {s name="Star" namespace="frontend/listing/box_article"}{/s}{s name="AjaxDetailDataPriceInfo"}{/s}
+                                </p>
+                            {/block}
                         </div>
                     {/block}
                 {/if}
