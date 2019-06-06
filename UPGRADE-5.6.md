@@ -2,12 +2,6 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
-## [Unreleased]
-
-### Changes
-
-* Added improved accessibility in the Core Bare Template [@Patrik-Mueller](https://github.com/Patrik-Mueller)
-
 [View all changes from v5.5.8...v5.6.0](https://github.com/shopware/shopware/compare/v5.5.8...v5.6.0)
 
 ### Additions
@@ -135,6 +129,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed the blog seo meta details to be saveable after being over the max length of the global max length
 * Changed shipping calculation in off canvas to work correctly with country states
 * Changed `Shopware\Bundle\ESIndexingBundle\ShopIndexerInterface::index`. Added optional `$indexNames` argument.
+* Changed Bare Template to improve accessibility
 
 ### Removals
 
