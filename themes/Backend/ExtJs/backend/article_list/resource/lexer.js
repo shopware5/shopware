@@ -379,7 +379,7 @@ Ext.define('Lexer', {
         var me = this;
 
         // First token
-        if (token == 0) {
+        if (token == 0 && tokenType != 'values') {
             me.setSuggestion(Object.keys(me.grammar.attributes).concat(Object.keys(me.grammar.nullaryOperators)));
             return { rules: 'expression', message: '{s name=lexer/expressionOrAttribute}expression or attribute{/s}'}
         }
