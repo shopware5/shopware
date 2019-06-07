@@ -66,10 +66,18 @@
                                                     {$baseSource = $banner.source}
                                                 {/if}
 
+                                                {if $banner.altText}
+                                                    {$altText = $banner.altText}
+                                                {elseif $banner.title}
+                                                    {$altText = $banner.title}
+                                                {else}
+                                                    {$altText = $banner.link}
+                                                {/if}
+
                                                 <img src="{$baseSource}"
                                                      class="banner-slider--image"
                                                      {if $srcSet}sizes="{$itemSize}" srcset="{$srcSet}"{/if}
-                                                     {if $banner.altText}alt="{$banner.altText|escape}" {/if}/>
+                                                     alt="{$altText|escape}" />
                                             {/block}
                                         </div>
                                     {/block}

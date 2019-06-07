@@ -42,12 +42,18 @@
                         {$baseSource = $Data.source}
                     {/if}
 
+                    {if $Data.title}
+                        {$altText = $Data.title}
+                    {else}
+                        {$altText = $Data.file}
+                    {/if}
+
                     <picture class="banner--image">
                         <source sizes="{$itemSize}" srcset="{$retinaSrcSet}" media="(min-resolution: 192dpi), (-webkit-min-device-pixel-ratio: 2)">
                         <source sizes="{$itemSize}" srcset="{$srcSet}">
 
                         {* Fallback *}
-                        <img src="{$baseSource}" {if $retinaBaseSource}srcset="{$retinaBaseSource} 2x"{/if} class="banner--image-src"{if $Data.title} alt="{$Data.title|escape}"{/if} />
+                        <img src="{$baseSource}" {if $retinaBaseSource}srcset="{$retinaBaseSource} 2x"{/if} class="banner--image-src" alt="{$altText|escape}" />
                     </picture>
                 {/block}
 
@@ -58,6 +64,7 @@
                             {foreach $Data.bannerMapping as $mapping}
                                 <a href="{$mapping.link}"
                                    class="banner--mapping-link"
+                                   aria-label="{$mapping.title|escape}"
                                    style="width:{({$mapping.width} / ({$Data.fileInfo.width} / 100))|round:3}%;
                                           height:{({$mapping.height} / ({$Data.fileInfo.height} / 100))|round:3}%;
                                           left:{({$mapping.x} / ({$Data.fileInfo.width} / 100))|round:3}%;

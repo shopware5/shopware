@@ -21,25 +21,25 @@
 
         {* Review author name *}
         {block name='frontend_detail_comment_input_name'}
-            <input name="sVoteName" type="text" value="{$sFormData.sVoteName|escape}" class="review--field{if $sErrorFlag.sVoteName} has--error{/if}" placeholder="{s name="DetailCommentLabelName"}{/s}" />
+            <input name="sVoteName" type="text" value="{$sFormData.sVoteName|escape}" class="review--field{if $sErrorFlag.sVoteName} has--error{/if}" aria-label="{s name="DetailCommentLabelName"}{/s}" placeholder="{s name="DetailCommentLabelName"}{/s}" />
         {/block}
 
         {* Reviewer email address *}
         {block name='frontend_detail_comment_input_mail'}
             {if {config name=OptinVote} == true}
-                <input name="sVoteMail" type="email" value="{$sFormData.sVoteMail|escape}" class="review--field{if $sErrorFlag.sVoteMail} has--error{/if}" placeholder="{s name="DetailCommentLabelMail"}{/s}*" required="required" aria-required="true" />
+                <input name="sVoteMail" type="email" value="{$sFormData.sVoteMail|escape}" class="review--field{if $sErrorFlag.sVoteMail} has--error{/if}" aria-label="{s name="DetailCommentLabelMail"}{/s}" placeholder="{s name="DetailCommentLabelMail"}{/s}*" required="required" aria-required="true" />
             {/if}
         {/block}
 
         {* Review summary *}
         {block name='frontend_detail_comment_input_summary'}
-            <input name="sVoteSummary" type="text" value="{$sFormData.sVoteSummary|escape}" id="sVoteSummary" class="review--field{if $sErrorFlag.sVoteSummary} has--error{/if}" placeholder="{s name="DetailCommentLabelSummary"}{/s}*" required="required" aria-required="true" />
+            <input name="sVoteSummary" type="text" value="{$sFormData.sVoteSummary|escape}" id="sVoteSummary" class="review--field{if $sErrorFlag.sVoteSummary} has--error{/if}" aria-label="{s name="DetailCommentLabelSummary"}{/s}" placeholder="{s name="DetailCommentLabelSummary"}{/s}*" required="required" aria-required="true" />
         {/block}
 
         {* Review Rating *}
         {block name='frontend_detail_comment_input_rating'}
             <div class="field--select review--field select-field">
-                <select name="sVoteStars">
+                <select name="sVoteStars" aria-label="{s name="DetailLinkReview" namespace="frontend/detail/index"}{/s}">
                     <option value="10">{s name="Rate10"}{/s}</option>
                     <option value="9">{s name="Rate9"}{/s}</option>
                     <option value="8">{s name="Rate8"}{/s}</option>
@@ -56,7 +56,7 @@
 
         {* Review text *}
         {block name='frontend_detail_comment_input_text'}
-            <textarea name="sVoteComment" placeholder="{s name="DetailCommentPlaceholderText"}{/s}" cols="3" rows="2" class="review--field{if $sErrorFlag.sVoteComment} has--error{/if}">{$sFormData.sVoteComment|escape}</textarea>
+            <textarea name="sVoteComment" placeholder="{s name="DetailCommentPlaceholderText"}{/s}" cols="3" rows="2" class="review--field{if $sErrorFlag.sVoteComment} has--error{/if}" aria-label="{s name="DetailCommentPlaceholderText"}{/s}">{$sFormData.sVoteComment|escape}</textarea>
         {/block}
 
         {* Captcha *}

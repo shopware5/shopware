@@ -10,12 +10,12 @@
 
         {* Search field *}
         {block name='frontend_index_search_field'}
-            <input type="search" name="sSearch" class="main-search--field" autocomplete="off" autocapitalize="off" placeholder="{s name="IndexSearchFieldPlaceholder"}{/s}" maxlength="30"  />
+            <input type="search" name="sSearch" aria-label="{s name="IndexSearchFieldPlaceholder"}{/s}" class="main-search--field" autocomplete="off" autocapitalize="off" placeholder="{s name="IndexSearchFieldPlaceholder"}{/s}" maxlength="30"  />
         {/block}
 
         {* Search input *}
         {block name='frontend_index_search_field_submit'}
-            <button type="submit" class="main-search--button">
+            <button type="submit" aria-label="{s name="IndexSearchFieldSubmit"}{/s}" class="main-search--button">
 
                 {* Search icon *}
                 {block name='frontend_index_search_field_submit_icon'}
