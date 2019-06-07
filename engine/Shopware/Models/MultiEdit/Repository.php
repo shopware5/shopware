@@ -26,9 +26,6 @@ namespace Shopware\Models\MultiEdit;
 
 use Shopware\Components\Model\ModelRepository;
 
-/**
- * Shopware SwagAboCommerce Plugin - Repository
- */
 class Repository extends ModelRepository
 {
     /**
