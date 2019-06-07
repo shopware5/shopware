@@ -450,9 +450,20 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 statisticList.toDate.setValue(statisticList.toDate.initialConfig.value);
 
                 var propertiesTab = me.getPropertiesTab();
+                propertiesTab.article = article;
                 propertiesTab.setComboBox.setValue('');
                 propertiesTab.groupComboBox.setValue('');
                 propertiesTab.valueComboBox.setValue('');
+                propertiesTab.loadRecord(article);
+
+                var propertyStore = Ext.data.StoreManager.lookup('Property');
+                propertiesTab.propertyGrid.reconfigure(propertyStore);
+
+                if (article.get('filterGroupId')) {
+                    propertiesTab.propertySetStore.load({
+                        id: article.get('filterGroupId')
+                    });
+                }
 
                 /**
                  * Fire the event within the subApplication in order to prevent problems when

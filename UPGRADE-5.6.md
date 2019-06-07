@@ -131,6 +131,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed the input of filters in the backend to prevent grammar error 
 * Changed `Shopware\Bundle\ESIndexingBundle\ShopIndexerInterface::index`. Added optional `$indexNames` argument.
 * Changed Bare Template to improve accessibility
+* Changed product module split view mode to work correctly with properties
 
 ### Removals
 
