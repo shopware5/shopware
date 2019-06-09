@@ -36,14 +36,17 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
 
         $helper = Shopware();
 
-        $hostname = $helper->Shop()->getHost();
+        $shop = $helper->Shop();
+        $hostname = $shop->getHost();
         if (empty($hostname)) {
             static::markTestSkipped(
                 'Hostname is not available.'
             );
         }
 
-        $this->apiBaseUrl = 'http://' . $hostname . $helper->Shop()->getBasePath() . '/api';
+        $protocol = $shop->getSecure() ? 'https://' : 'http://';
+
+        $this->apiBaseUrl = $protocol . $hostname . $helper->Shop()->getBasePath() . '/api';
         Shopware()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', [sha1('demo')]);
     }
 
