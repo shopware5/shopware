@@ -155,6 +155,7 @@
             <argument id="dbal_connection" type="service"/>
             <argument id="customer_search.dbal.indexing.indexer" type="service"/>
             <argument id="shopware.customer_stream.stream_indexer" type="service"/>
+            <argument id="shopware.api.customer_stream" type="service"/>
             <tag name="shopware.event_subscriber"/>
         </service>
 

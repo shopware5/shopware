@@ -1,0 +1,112 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="shopware.api.resource" class="Shopware\Components\Api\Resource\Resource" shared="false"
+                 abstract="true"/>
+        <service id="shopware.api.address" class="Shopware\Components\Api\Resource\Address" shared="false">
+            <tag name="shopware.api_resource"/>
+        </service>
+
+        <service id="shopware.api.article" class="Shopware\Components\Api\Resource\Article" shared="false">
+            <argument type="service" id="translation"/>
+            <tag name="shopware.api_resource"/>
+        </service>
+
+        <service id="shopware.api.cache" class="Shopware\Components\Api\Resource\Cache" shared="false">
+            <tag name="shopware.api_resource"/>
+        </service>
+
+        <service id="shopware.api.category" class="Shopware\Components\Api\Resource\Category" shared="false">
+            <tag name="shopware.api_resource"/>
+        </service>
+
+        <service id="shopware.api.country" class="Shopware\Components\Api\Resource\Country" shared="false">
+            <tag name="shopware.api_resource"/>
+        </service>
+
+        <service id="shopware.api.customer" class="Shopware\Components\Api\Resource\Customer" shared="false">
+            <tag name="shopware.api_resource"/>
+        </service>
+
+        <service id="shopware.api.customer_group" class="Shopware\Components\Api\Resource\CustomerGroup"
+                 shared="false">
+            <tag name="shopware.api_resource"/>
+        </service>
+
+        <service id="shopware.api.manufacturer" class="Shopware\Components\Api\Resource\Manufacturer" shared="false">
+            <tag name="shopware.api_resource"/>
+        </service>
+
+        <service id="shopware.api.media" class="Shopware\Components\Api\Resource\Media" shared="false">
+            <tag name="shopware.api_resource"/>
+        </service>
+
+        <service id="shopware.api.order" class="Shopware\Components\Api\Resource\Order" shared="false">
+            <tag name="shopware.api_resource"/>
+        </service>
+
+        <service id="shopware.api.property_group" class="Shopware\Components\Api\Resource\PropertyGroup"
+                 shared="false">
+            <tag name="shopware.api_resource"/>
+        </service>
+
+        <service id="shopware.api.shop" class="Shopware\Components\Api\Resource\Shop" shared="false">
+            <tag name="shopware.api_resource"/>
+        </service>
+
+        <service id="shopware.api.translation" class="Shopware\Components\Api\Resource\Translation" shared="false">
+            <argument type="service" id="translation"/>
+            <tag name="shopware.api_resource"/>
+        </service>
+
+        <service id="shopware.api.variant" class="Shopware\Components\Api\Resource\Variant" shared="false">
+            <tag name="shopware.api_resource"/>
+        </service>
+
+        <service id="shopware.api.payment_methods" class="Shopware\Components\Api\Resource\PaymentMethods"
+                 shared="false">
+            <tag name="shopware.api_resource"/>
+        </service>
+
+        <service id="shopware.api.user" class="Shopware\Components\Api\Resource\User" shared="false">
+            <tag name="shopware.api_resource"/>
+        </service>
+
+        <service id="shopware.api.emotion_preset" class="Shopware\Components\Api\Resource\EmotionPreset" shared="false">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="models"/>
+            <argument type="service" id="shopware.slug"/>
+            <tag name="shopware.api_resource"/>
+        </service>
+
+        <service id="shopware.api.customer_stream" class="Shopware\Components\Api\Resource\CustomerStream">
+            <argument id="shopware.logaware_reflection_helper" type="service"/>
+            <argument id="customer_search.dbal.number_search" type="service"/>
+            <argument id="shopware.customer_stream.repository" type="service"/>
+            <argument id="models" type="service"/>
+            <argument id="dbal_connection" type="service"/>
+            <argument id="customer_search.dbal.indexing.indexer" type="service"/>
+            <argument id="shopware.customer_stream.stream_indexer" type="service"/>
+            <argument id="shopware.customer_stream.criteria_factory" type="service"/>
+            <tag name="shopware.api_resource"/>
+        </service>
+
+        <!-- Necessary because of implementation in \Shopware\Components\Api\Manager::getResource() -->
+        <service id="shopware.api.customerstream" alias="shopware.api.customer_stream">
+            <deprecated>use shopware.api.customer_stream instead</deprecated>
+        </service>
+        <service id="shopware.api.customergroup" alias="shopware.api.customer_group">
+            <deprecated>use shopware.api.customer_group instead</deprecated>
+        </service>
+        <service id="shopware.api.propertygroup" alias="shopware.api.property_group">
+            <deprecated>use shopware.api.property_group instead</deprecated>
+        </service>
+        <service id="shopware.api.emotionpreset" alias="shopware.api.emotion_preset">
+            <deprecated>use shopware.api.emotion_preset instead</deprecated>
+        </service>
+    </services>
+</container>

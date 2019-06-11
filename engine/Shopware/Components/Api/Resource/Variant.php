@@ -464,10 +464,7 @@ class Variant extends Resource implements BatchInterface
      */
     protected function getArticleResource()
     {
-        /** @var Article $return */
-        $return = $this->getResource('Article');
-
-        return $return;
+        return $this->getContainer()->get('shopware.api.article');
     }
 
     /**
@@ -475,10 +472,7 @@ class Variant extends Resource implements BatchInterface
      */
     protected function getMediaResource()
     {
-        /** @var Media $return */
-        $return = $this->getResource('Media');
-
-        return $return;
+        return $this->getContainer()->get('shopware.api.media');
     }
 
     /**

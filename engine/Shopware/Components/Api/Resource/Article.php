@@ -691,10 +691,7 @@ class Article extends Resource implements BatchInterface
      */
     protected function getVariantResource()
     {
-        /** @var Variant $return */
-        $return = $this->getResource('Variant');
-
-        return $return;
+        return $this->getContainer()->get('shopware.api.variant');
     }
 
     /**
@@ -702,10 +699,7 @@ class Article extends Resource implements BatchInterface
      */
     protected function getTranslationResource()
     {
-        /** @var Translation $return */
-        $return = $this->getResource('Translation');
-
-        return $return;
+        return $this->getContainer()->get('shopware.api.translation');
     }
 
     /**
@@ -713,10 +707,7 @@ class Article extends Resource implements BatchInterface
      */
     protected function getMediaResource()
     {
-        /** @var Media $return */
-        $return = $this->getResource('Media');
-
-        return $return;
+        return $this->getContainer()->get('shopware.api.media');
     }
 
     /**
@@ -1362,7 +1353,7 @@ class Article extends Resource implements BatchInterface
             if (!$category) {
                 if (!empty($categoryData['path'])) {
                     /** @var CategoryResource $categoryResource */
-                    $categoryResource = $this->getResource('Category');
+                    $categoryResource = $this->getContainer()->get('shopware.api.category');
                     $category = $categoryResource->findCategoryByPath($categoryData['path'], true);
 
                     if (!$category) {
@@ -1453,7 +1444,7 @@ class Article extends Resource implements BatchInterface
                 $seoCategory->setCategory($category);
             } elseif (isset($categoryData['categoryPath'])) {
                 /** @var CategoryResource $categoryResource */
-                $categoryResource = $this->getResource('Category');
+                $categoryResource = $this->getContainer()->get('shopware.api.category');
                 $category = $categoryResource->findCategoryByPath(
                     $categoryData['categoryPath'],
                     true

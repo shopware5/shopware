@@ -40,6 +40,7 @@ use Shopware\Components\DependencyInjection\Compiler\ConfigureApiResourcesPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
+use Shopware\Components\DependencyInjection\Compiler\LegacyApiResourcesPass;
 use Shopware\Components\DependencyInjection\Compiler\PluginLoggerCompilerPass;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\DependencyInjection\LegacyPhpDumper;
@@ -620,6 +621,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         $container->addCompilerPass(new StaticResourcesCompilerPass());
         $container->addCompilerPass(new AddConsoleCommandPass());
         $container->addCompilerPass(new MatcherCompilerPass());
+        $container->addCompilerPass(new LegacyApiResourcesPass());
         $container->addCompilerPass(new ConfigureApiResourcesPass());
         $container->addCompilerPass(new RegisterFieldsCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 500);
         $container->addCompilerPass(new RegisterDynamicController());

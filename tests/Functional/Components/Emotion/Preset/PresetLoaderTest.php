@@ -28,7 +28,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\ORMException;
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Components\Emotion\Preset\PresetLoader;
 
@@ -54,7 +53,7 @@ class PresetLoaderTest extends TestCase
         $this->connection->executeQuery('DELETE FROM s_emotion_presets');
 
         $this->presetLoader = Shopware()->Container()->get('shopware.emotion.preset_loader');
-        $this->presetResource = Manager::getResource('EmotionPreset');
+        $this->presetResource = Shopware()->Container()->get('shopware.api.emotion_preset');
     }
 
     protected function tearDown()
