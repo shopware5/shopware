@@ -326,10 +326,10 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
 
         $fields = array_filter(
             $metaData->getFieldNames(),
-            function ($field) use ($metaData) {
+            static function ($field) use ($metaData) {
                 $type = $metaData->getTypeOfField($field);
 
-                return in_array($type, ['string', 'text', 'date', 'datetime', 'decimal', 'float']);
+                return in_array($type, ['string', 'text', 'decimal', 'float']);
             }
         );
 
@@ -351,7 +351,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
 
         $builder = Shopware()->Container()->get('shopware.model.search_builder');
 
-        $fields = array_map(function ($field) {
+        $fields = array_map(static function ($field) {
             return 'entity.' . $field;
         }, $fields);
 
