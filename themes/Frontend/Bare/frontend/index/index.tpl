@@ -120,7 +120,7 @@
                         {block name='frontend_index_left_last_articles'}
                             {if $sLastArticlesShow && !$isEmotionLandingPage}
                                 {* Last seen products *}
-                                <div class="last-seen-products is--hidden" data-last-seen-products="true">
+                                <div class="last-seen-products is--hidden" data-last-seen-products="true" data-productLimit="{config name='LastArticles::lastarticlestoshow'}">
                                     <div class="last-seen-products--title">
                                         {s namespace="frontend/plugins/index/viewlast" name='WidgetsRecentlyViewedHeadline'}{/s}
                                     </div>
