@@ -731,7 +731,10 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                 data: [
                     { value: '25', name: '25 ' + productSnippet },
                     { value: '50', name: '50 ' + productSnippet },
-                    { value: '75', name: '75 ' + productSnippet }
+                    { value: '75', name: '75 ' + productSnippet },
+                    { value: '100', name: '100 ' + productSnippet },
+                    { value: '125', name: '125 ' + productSnippet },
+                    { value: '150', name: '150 ' + productSnippet }
                 ]
             }),
             displayField: 'name',

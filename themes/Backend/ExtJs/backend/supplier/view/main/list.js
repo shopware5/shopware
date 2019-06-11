@@ -60,32 +60,41 @@ Ext.define('Shopware.apps.Supplier.view.main.List', {
         me.columns = me.getGridColumns();
 
         // Adding a paging toolbar to the grid
-        me.dockedItems = [{
-            dock: 'bottom',
-            xtype: 'pagingtoolbar',
-            displayInfo: true,
-            store: this.supplierStore
-        }];
+        me.dockedItems = [this.createDockedItems()];
 
         me.dockedItems = Ext.clone(me.dockedItems);
         me.callParent(arguments);
     },
+
+    /**
+     * Returns all docked items
+     *
+     * @returns mixed
+     */
+    createDockedItems: function () {
+        return {
+            dock: 'bottom',
+            xtype: 'pagingtoolbar',
+            displayInfo: true,
+            store: this.supplierStore
+        };
+    },
+
     /**
      * Return the selection model for this grid.
      *
      * @return Ext.selection.CheckboxModel
      */
-    getSelModel : function()
-    {
+    getSelModel : function() {
         return Ext.create('Ext.selection.CheckboxModel');
     },
+
     /**
      * Return an array of objects (grid columns)
      *
      * @return array of grid columns
      */
-    getGridColumns : function()
-    {
+    getGridColumns : function() {
         var me = this;
         return [
             {
@@ -125,8 +134,7 @@ Ext.define('Shopware.apps.Supplier.view.main.List', {
      *
      * @return Array of buttons
      */
-    getActionColumn : function()
-    {
+    getActionColumn : function() {
         return [
             /*{if {acl_is_allowed privilege=delete}}*/
             {
@@ -144,6 +152,7 @@ Ext.define('Shopware.apps.Supplier.view.main.List', {
             /*{/if}*/
         ];
     },
+
     /**
      * Formats the email column
      *

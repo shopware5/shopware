@@ -229,7 +229,10 @@ Ext.define('Shopware.apps.Order.view.list.List', {
                     { value: '40' },
                     { value: '60' },
                     { value: '80' },
-                    { value: '100' }
+                    { value: '100' },
+                    { value: '150' },
+                    { value: '200' },
+                    { value: '250' },
                 ]
             }),
             displayField: 'value',
@@ -243,7 +246,7 @@ Ext.define('Shopware.apps.Order.view.list.List', {
             displayInfo:true
         });
 
-        pagingBar.insert(pagingBar.items.length - 2, [ { xtype: 'tbspacer', width: 6 }, pageSize ]);
+        pagingBar.insert(pagingBar.items.length, [ { xtype: 'tbspacer', width: 6 }, pageSize ]);
 
         return pagingBar;
 
