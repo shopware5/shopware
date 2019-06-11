@@ -135,6 +135,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed product search to work correctly on MySQL 8
 * Changed last seen products productLimit to work correctly
 * Changed product-feed export to refresh context while exporting multiple feeds
+* Changed `Shopware\Models\Shop\Shop::registerResources` to extract the code in a new service `shopware.components.shop_registration_service`
 
 ### Removals
 

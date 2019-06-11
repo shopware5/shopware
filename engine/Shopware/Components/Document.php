@@ -609,11 +609,13 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
         // "language" actually refers to a language-shop and not to a locale
         $shop = $repository->getById($this->_order->order->language);
+
         if (!empty($this->_order->order->currencyID)) {
             $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Currency::class);
             $shop->setCurrency($repository->find($this->_order->order->currencyID));
         }
-        $shop->registerResources();
+
+        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerResources($shop);
     }
 
     /**

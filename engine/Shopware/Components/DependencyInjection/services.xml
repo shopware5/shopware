@@ -948,5 +948,9 @@
             <argument type="service" id="shopware_elastic_search.backlog_processor"/>
             <argument type="expression">parameter('shopware.es.enabled') and parameter('shopware.es.write_backlog')</argument>
         </service>
+
+        <service id="shopware.components.shop_registration_service" class="Shopware\Components\ShopRegistrationService">
+            <argument type="service" id="service_container"/>
+        </service>
     </services>
 </container>
