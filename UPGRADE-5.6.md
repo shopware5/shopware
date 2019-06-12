@@ -71,6 +71,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
     `bin/console sw:es:index:populate --index property`
     `bin/console sw:es:index:populate --index property --index product`
 * Added the Product Number as a new method to sort your results.
+* Added a last password change date to customers
 
 ### Changes
 
