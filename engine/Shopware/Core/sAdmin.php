@@ -462,6 +462,9 @@ class sAdmin implements \Enlight_Hook
             ['subject' => $this]
         );
 
+        // Have all payments translated
+        $getPaymentMeans = $this->translationComponent->translatePaymentMethods($getPaymentMeans);
+
         return $getPaymentMeans;
     }
 

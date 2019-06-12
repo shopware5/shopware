@@ -142,6 +142,11 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             return $stateTranslator->translateState(StateTranslatorService::STATE_PAYMENT, $paymentStateItem);
         }, $paymentStatus);
 
+        // Translate payment and dispatch method names.
+        $translationComponent = $this->get('translation');
+        $payment = $translationComponent->translatePaymentMethods($payment);
+        $dispatch = $translationComponent->translateDispatchMethods($dispatch);
+
         $this->View()->assign([
             'success' => true,
             'data' => [

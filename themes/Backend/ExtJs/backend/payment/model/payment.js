@@ -57,6 +57,7 @@ Ext.define('Shopware.apps.Payment.model.Payment', {
         { name : 'id', type: 'int' },
         { name : 'name', type: 'string' },
         { name : 'description', type: 'string' },
+        { name : 'translatedDescription', type: 'string' },
         { name : 'template', type: 'string' },
         { name : 'class', type: 'string' },
         { name : 'table', type: 'string' },

@@ -35,15 +35,6 @@
 //{namespace name=backend/static/doc_type}
 //{block name="backend/base/model/type"}
 Ext.define('Shopware.apps.Base.model.DocType', {
-
-    snippets: {
-        //{block name="backend/base/model/type/snippets"}{/block}
-        type1: '{s name=invoice}Invoice{/s}',
-        type2: '{s name=delivery_note}Delivery note{/s}',
-        type3: '{s name=credit_note}Credit note{/s}',
-        type4: '{s name=reversal_invoice}Reversal invoice{/s}'
-    },
-
     /**
      * Extends the standard Ext Model
      * @string
@@ -56,24 +47,10 @@ Ext.define('Shopware.apps.Base.model.DocType', {
     fields:[
         //{block name="backend/order/model/type/fields"}{/block}
         { name: 'id', type: 'int' },
-        {
-            name:'name',
-            type: 'string',
-            convert: function(value, record) {
-                var snippet = value;
-                var internalId = 'type' + record.get('id');
-
-                if (record && record.snippets) {
-                    snippet = record.snippets[internalId];
-                }
-                if (Ext.isString(snippet) && snippet.length > 0) {
-                    return snippet;
-                } else {
-                    return value;
-                }
-            }
-        },
         { name: 'key', type: 'string' },
+        // No snippet matcher needed anymore. The document types are now translated by the server.
+        // This enables custom document types to be translated as well.
+        { name: 'name', type: 'string' },
         { name: 'template', type: 'string' },
         { name: 'numbers', type: 'string' },
         { name: 'left', type: 'int' },

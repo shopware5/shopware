@@ -56,7 +56,8 @@ Ext.define('Shopware.apps.Config.view.form.Document', {
         var me = this;
         return [{
             xtype: 'gridcolumn',
-            dataIndex: 'name',
+            // Show the translated name saved in description instead of the (probably German) name
+            dataIndex: 'description',
             text: '{s name=document/table/name_text}Name{/s}',
             flex: 1
         }, me.getActionColumn()];
