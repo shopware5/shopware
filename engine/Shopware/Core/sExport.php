@@ -289,6 +289,7 @@ class sExport implements \Enlight_Hook
         $currency = $repository->find($this->sCurrency['id']);
         $shop->setCurrency($currency);
         $shop->registerResources();
+        $this->contextService->initializeContext();
 
         $this->shop = $shop;
 

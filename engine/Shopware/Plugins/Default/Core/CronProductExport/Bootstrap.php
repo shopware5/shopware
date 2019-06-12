@@ -82,7 +82,7 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
         $activeFeeds = $productFeedRepository->getActiveListQuery()->getResult();
         foreach ($activeFeeds as $feedModel) {
             /** @var Shopware\Models\ProductFeed\ProductFeed $feedModel */
-            if ($feedModel->getInterval() == 0) {
+            if ($feedModel->getInterval() === 0) {
                 continue;
             }
 
