@@ -59,6 +59,7 @@ class RegisterDynamicController implements CompilerPassInterface
             $apiController->setArguments([
                 new Reference('shopware.bundle.content_type.' . $name),
                 new Reference('models'),
+                new Reference('shopware.components.shop_registration_service'),
             ]);
 
             $apiController->addTag(

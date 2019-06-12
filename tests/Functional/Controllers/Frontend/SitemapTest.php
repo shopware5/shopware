@@ -28,7 +28,7 @@ class Shopware_Tests_Controllers_Frontend_SitemapTest extends Enlight_Components
 {
     public static function tearDownAfterClass()
     {
-        Shopware()->Models()->getRepository(Shop::class)->getActiveDefault()->registerResources();
+        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerShop(Shopware()->Models()->getRepository(Shop::class)->getActiveDefault());
     }
 
     /**
@@ -38,7 +38,7 @@ class Shopware_Tests_Controllers_Frontend_SitemapTest extends Enlight_Components
      */
     public function testIndex($shopId, array $sitemapData)
     {
-        Shopware()->Models()->getRepository(Shop::class)->find($shopId)->registerResources();
+        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerShop(Shopware()->Models()->getRepository(Shop::class)->find($shopId));
 
         $controller = $this->getController();
         $controller->indexAction();

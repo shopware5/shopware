@@ -209,6 +209,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Deprecated `Enlight_Event_EventHandler`. It will be removed in 5.8, use `Enlight_Event_Handler_Default` or `SubscriberInterface::getSubscribedEvents` instead
 * Deprecated `Shopware\Components\Api\Manager::getResource`. It will be removed in 5.8, inject resources instead
 * Deprecated usage of `shopware.api` DI prefix without tag `shopware.api_resource`
+* Deprecated `Shopware\Models\Shop\Shop::registerResources`. It will be removed in 5.8, use `Shopware\Components\ShopRegistrationService` instead
 
 ### Improved ExtJS auto-loading
 

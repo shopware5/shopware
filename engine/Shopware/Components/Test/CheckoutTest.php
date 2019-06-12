@@ -252,7 +252,7 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
         $repository = Shopware()->Models()->getRepository(Shop::class);
         $shop = $repository->getActiveById($user['language']);
 
-        $shop->registerResources();
+        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerShop($shop);
 
         Shopware()->Session()->Admin = true;
         Shopware()->System()->_POST = [

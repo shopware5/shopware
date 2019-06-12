@@ -24,6 +24,7 @@
 
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Analytics\Repository;
+use Shopware\Models\Shop\Shop;
 
 class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
@@ -125,7 +126,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     public function getShopRepository()
     {
         if ($this->shopRepository === null) {
-            $this->shopRepository = $this->getManager()->getRepository(\Shopware\Models\Shop\Shop::class);
+            $this->shopRepository = $this->getManager()->getRepository(Shop::class);
         }
 
         return $this->shopRepository;
@@ -285,8 +286,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     public function getReferrerRevenueAction()
     {
-        $shop = $this->getManager()->getRepository(\Shopware\Models\Shop\Shop::class)->getActiveDefault();
-        $shop->registerResources();
+        $shop = $this->getManager()->getRepository(Shop::class)->getActiveDefault();
+        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
 
         $result = $this->getRepository()->getReferrerRevenue(
             $shop,

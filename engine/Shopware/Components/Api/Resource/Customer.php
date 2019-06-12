@@ -482,7 +482,7 @@ class Customer extends Resource
             $shop = $shopRepository->getActiveDefault();
         }
 
-        $shop->registerResources();
+        $this->getContainer()->get('shopware.components.shop_registration_service')->registerShop($shop);
     }
 
     /**

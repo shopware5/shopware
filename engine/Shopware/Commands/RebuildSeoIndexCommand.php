@@ -175,7 +175,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
                 throw new \RuntimeException('No valid shop id passed');
             }
 
-            $shop->registerResources();
+            $this->container->get('shopware.components.shop_registration_service')->registerShop($shop);
 
             $this->modules->Categories()->baseId = $shop->getCategory()->getId();
 

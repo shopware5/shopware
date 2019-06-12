@@ -102,7 +102,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
 
         $this->validateShop($shop);
-        $shop->registerResources();
+        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
     }
 
     /**
@@ -292,7 +292,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
 
         // Save upgrades
-        $shop->registerResources();
+        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
 
         if ($request->isSecure()) {
             $template = $this->get('Template');
@@ -514,7 +514,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
     private function refreshCart(Shop $shop): void
     {
-        $shop->registerResources();
+        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
 
         /** @var Shopware_Components_Modules $modules */
         $modules = $this->get('modules');

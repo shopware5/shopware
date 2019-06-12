@@ -146,7 +146,8 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
             if ($shop === null) {
                 throw new Exception('No valid shop id passed');
             }
-            $shop->registerResources();
+
+            $this->get('shopware.components.shop_registration_service')->registerShop($shop);
             Shopware()->Modules()->Categories()->baseId = $shop->getCategory()->getId();
 
             list($cachedTime, $elementId, $shopId) = $this->SeoIndex()->getCachedTime();

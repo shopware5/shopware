@@ -235,7 +235,7 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
         $shop = $repository->getActiveById($user['language']);
 
-        $shop->registerResources();
+        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerShop($shop);
 
         Shopware()->Session()->Admin = true;
         Shopware()->System()->_POST = [

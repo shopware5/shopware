@@ -2165,7 +2165,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             throw new Exception('Invalid shop provided.');
         }
 
-        $shop->registerResources();
+        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
 
         Shopware()->Session()->Admin = true;
 

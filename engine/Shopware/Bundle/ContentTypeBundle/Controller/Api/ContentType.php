@@ -28,6 +28,7 @@ use Shopware\Bundle\ContentTypeBundle\Services\RepositoryInterface;
 use Shopware\Bundle\ContentTypeBundle\Structs\Criteria;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Shop\Shop;
 
 class ContentType extends \Shopware_Controllers_Api_Rest
@@ -37,13 +38,13 @@ class ContentType extends \Shopware_Controllers_Api_Rest
      */
     protected $repository;
 
-    public function __construct(RepositoryInterface $repository, ModelManager $manager)
+    public function __construct(RepositoryInterface $repository, ModelManager $manager, ShopRegistrationServiceInterface $shopRegistrationService)
     {
         $this->repository = $repository;
 
         /** @var \Shopware\Models\Shop\Repository $shopRepository */
         $shopRepository = $manager->getRepository(Shop::class);
-        $shopRepository->getDefault()->registerResources();
+        $shopRegistrationService->registerShop($shopRepository->getDefault());
     }
 
     public function indexAction(

@@ -32,7 +32,7 @@ class ManualSorting extends \Shopware_Controllers_Backend_ExtJs
     public function preDispatch()
     {
         parent::preDispatch();
-        $this->getModelManager()->getRepository(Shop::class)->getActiveDefault()->registerResources();
+        $this->get('shopware.components.shop_registration_service')->registerShop($this->getModelManager()->getRepository(Shop::class)->getActiveDefault());
     }
 
     public function listAction(int $start = 0, int $limit = 25, int $categoryId = 3, int $sortingId = 1): void
