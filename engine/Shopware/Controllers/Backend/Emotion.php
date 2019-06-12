@@ -1563,7 +1563,8 @@ EOD;
         if ($shop->getFallback()) {
             $parent = $shop->getFallback();
         }
-        $parent->registerResources();
+
+        $this->get('shopware.components.shop_registration_service')->registerShop($parent);
 
         return $this->Front()->Router()->assemble([
             'controller' => 'campaign',

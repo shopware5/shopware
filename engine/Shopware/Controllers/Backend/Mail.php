@@ -322,7 +322,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $recipient = Shopware()->Config()->get('mail');
 
         $shop = Shopware()->Models()->getRepository(Shop::class)->getActiveDefault();
-        $shop->registerResources();
+        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
 
         try {
             $templateMail = Shopware()->TemplateMail()->createMail($mail, array_merge($this->getDefaultMailContext($shop), $mail->getContext()), $shop);
@@ -366,7 +366,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $compiler = new Shopware_Components_StringCompiler($this->View()->Engine());
 
         $shop = Shopware()->Models()->getRepository(Shop::class)->getActiveDefault();
-        $shop->registerResources();
+        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
 
         $compiler->setContext(array_merge($this->getDefaultMailContext($shop), $mail->getContext()));
 
@@ -656,7 +656,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         /** @var Shop $shop */
         $shop = Shopware()->Models()->getRepository(Shop::class)->getActiveDefault();
-        $shop->registerResources();
+        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
 
         $context = $mail->getContext();
         if (empty($context)) {

@@ -84,7 +84,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             /** @var Shopware\Models\Shop\Currency $repository */
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
             $shop->setCurrency($repository->find($order['currencyID']));
-            $shop->registerResources();
+            $this->get('shopware.components.shop_registration_service')->registerShop($shop);
 
             foreach ($orderPositions[$orderId] as &$position) {
                 $position['link'] = $this->get('router')->assemble([
@@ -116,6 +116,8 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 $position['image_small'] = isset($thumbnails[0]) ? $thumbnails[0]['source'] : $position['image_original'];
                 $position['image_large'] = isset($thumbnails[1]) ? $thumbnails[1]['source'] : $position['image_original'];
             }
+
+            unset($position);
 
             $context = [
                 'sOrder' => $order,

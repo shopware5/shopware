@@ -34,7 +34,7 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
         return true;
     }
 
-    public static function onRun(Shopware_Components_Cron_CronJob $job)
+    public function onRun(Shopware_Components_Cron_CronJob $job)
     {
         $birthdayVoucher = Shopware()->Config()->get('birthdayVoucher', 'birthday');
 
@@ -132,7 +132,7 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
             $shopId = is_numeric($user['language']) ? $user['language'] : $user['subshopID'];
             $shop = $repository->getActiveById($shopId);
-            $shop->registerResources();
+            $this->get('shopware.components.shop_registration_service')->registerShop($shop);
 
             //language subshopID
             $context = [

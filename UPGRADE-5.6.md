@@ -136,6 +136,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed product search to work correctly on MySQL 8
 * Changed last seen products productLimit to work correctly
 * Changed product-feed export to refresh context while exporting multiple feeds
+* Changed `Shopware\Models\Shop\Shop::registerResources` to extract the code in a new service `shopware.components.shop_registration_service`
 
 ### Removals
 
@@ -209,6 +210,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Deprecated `Enlight_Event_EventHandler`. It will be removed in 5.8, use `Enlight_Event_Handler_Default` or `SubscriberInterface::getSubscribedEvents` instead
 * Deprecated `Shopware\Components\Api\Manager::getResource`. It will be removed in 5.8, inject resources instead
 * Deprecated usage of `shopware.api` DI prefix without tag `shopware.api_resource`
+* Deprecated `Shopware\Models\Shop\Shop::registerResources`. It will be removed in 5.8, use `Shopware\Components\ShopRegistrationService` instead
 
 ### Improved ExtJS auto-loading
 

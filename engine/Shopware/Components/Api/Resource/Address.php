@@ -236,7 +236,7 @@ class Address extends Resource
             throw new \RuntimeException('A valid shopId is required.');
         }
 
-        $shop->registerResources();
+        $this->getContainer()->get('shopware.components.shop_registration_service')->registerShop($shop);
     }
 
     /**

@@ -359,7 +359,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 continue;
             }
 
-            $shop->registerResources();
+            $this->get('shopware.components.shop_registration_service')->registerShop($shop);
 
             $shopContext = Context::createFromShop($shop, $this->get('config'));
             $this->get('router')->setContext($shopContext);

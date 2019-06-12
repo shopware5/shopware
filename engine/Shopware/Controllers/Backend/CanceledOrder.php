@@ -374,7 +374,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         } else {
             $shop = $orderModel->getLanguageSubShop();
         }
-        $shop->registerResources();
+
+        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
 
         // Try to send the actual mail
         try {
