@@ -776,15 +776,9 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         var me = this,
             record = event.record,
             store = event.grid.store,
-            firstRecord = store.getAt(0),
-            firstPrice = firstRecord.get('price'),
             nextRecord = store.getAt(event.rowIdx + 1),
-            price = record.get('price'),
             row = Ext.get(event.row),
-            icon = Ext.get(row.query('.x-action-col-icon')),
-            percent,
-            pseudoPrice = record.get('pseudoPrice'),
-            percentPseudo = record.get('percentPseudo');
+            icon = Ext.get(row.query('.x-action-col-icon'));
 
         me.removeCloneFlag(store);
 
@@ -811,57 +805,132 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                 icon.addCls('sprite-minus-circle-frame');
             }
         } else if ( event.field === 'price') {
-            if (price && firstPrice > price) {
+           this.updatedPriceField(event);
+            //if the user has edit the percent column, we have to calculate the price
+        } else if (event.field === 'percent') {
+            this.updatedPercentField(event);
+        } else if (event.field === 'percentPseudo') {
+            this.updatedPseudoPercentField(event);
+        } else if (event.field === 'pseudoPrice') {
+            this.updatedPseudoPriceField(event);
+        }
+    },
+
+    /**
+     * Helper function to update related fields of percent
+     * @param event
+     */
+    updatedPercentField: function(event) {
+        var me = this,
+            record = event.record,
+            store = event.grid.store,
+            firstRecord = store.getAt(0),
+            firstPrice = firstRecord.get('price'),
+            price = record.get('price');
+
+        if (firstPrice === price) {
+            firstRecord.set('percent', null);
+        } else if(event.value > 0) {
+            price = firstPrice / 100 * (100 - event.value);
+            price = price.toFixed(2);
+            record.set('price', price);
+        }
+
+        //we need to trigger update on PriceField without copy&paste all that checks and updates
+        me.updatedPriceField(event);
+    },
+
+    /**
+     * Helper function to update related fields of price
+     * @param event
+     */
+    updatedPriceField: function(event) {
+        var me = this,
+            record = event.record,
+            store = event.grid.store,
+            firstRecord = store.getAt(0),
+            firstPrice = firstRecord.get('price'),
+            previousPrice = store.getAt(event.rowIdx -1),
+            price = record.get('price'),
+            percent,
+            pseudoPrice = record.get('pseudoPrice'),
+            percentPseudo = record.get('percentPseudo');
+
+        if(price && previousPrice && previousPrice.get('price') < price) {
+            record.set('price', previousPrice.get('price') - 0.01);
+            //we need to trigger update on PriceField without copy&paste all that checks and updates
+            me.updatedPriceField(event);
+        } else if(price && firstPrice > price) {
                 percent = (firstPrice - price) / firstPrice * 100;
                 percent = percent.toFixed(2);
                 record.set('percent', percent);
-            } else {
+        } else {
                 record.set('percent', null);
-            }
+        }
 
-            if(price && pseudoPrice > 0) {
-                percentPseudo = 100 - 100 / pseudoPrice * price;
-                percentPseudo = percentPseudo.toFixed(2);
-                record.set('percentPseudo', percentPseudo);
-            }
+        if(price && pseudoPrice > 0) {
+            percentPseudo = 100 - 100 / pseudoPrice * price;
+            percentPseudo = percentPseudo.toFixed(2);
+            record.set('percentPseudo', percentPseudo);
+        }
+    },
 
-            //if the user has edit the percent column, we have to calculate the price
-        } else if (event.field === 'percent') {
-            if (firstPrice === price) {
-                firstRecord.set('percent', null);
+    /**
+     * Helper function to update related fields of pseudoPercent
+     * @param event
+     */
+    updatedPseudoPercentField: function(event) {
+        var me = this,
+            record = event.record,
+            store = event.grid.store,
+            firstRecord = store.getAt(0),
+            firstPrice = firstRecord.get('price'),
+            price = record.get('price'),
+            pseudoPrice = record.get('pseudoPrice');
+
+        if(pseudoPrice > 0) {
+            //if the user enters 0 or nothing, the price has to be the pseudoPrice
+            if(!Ext.isNumeric(event.value) || event.value === 0) {
+                record.set('price', pseudoPrice);
             } else if(event.value > 0) {
-                price = firstPrice / 100 * (100 - event.value);
+                price = pseudoPrice * ((100 - event.value) / 100);
                 price = price.toFixed(2);
                 record.set('price', price);
             }
-        } else if (event.field === 'percentPseudo') {
-            if(pseudoPrice > 0) {
-                //if the user enters 0 or nothing, the price has to be the pseudoPrice
-                if(!Ext.isNumeric(event.value) || event.value === 0) {
-                    record.set('price', pseudoPrice);
-                } else if(event.value > 0) {
-                    price = pseudoPrice * ((100 - event.value) / 100);
-                    price = price.toFixed(2);
-                    record.set('price', price);
-                }
-            } else {
-                /**
-                 * if user enters value, when no pseudoPrice exists,
-                 * we have to discard it.
-                 * Cause we stricly calculate by pseudoPrice - not revers by price
-                 */
-                record.set('percentPseudo', 0);
-            }
-        } else if (event.field === 'pseudoPrice') {
-            //if the user enters 0 or nothing, the percentPseudo has to be 0
-            if(!Ext.isNumeric(event.value) || event.value === 0) {
-                record.set('percentPseudo', 0);
-            } else if(event.value > 0) {
-                percentPseudo = 100 - (100 / event.value * price);
-                percentPseudo = percentPseudo.toFixed(2);
-                record.set('percentPseudo', percentPseudo);
-            }
+
+            //we need to trigger update on PriceField without copy&paste all that checks and updates
+            me.updatedPriceField(event);
+        } else {
+            /**
+             * if user enters value, when no pseudoPrice exists,
+             * we have to discard it.
+             * Cause we stricly calculate by pseudoPrice - not revers by price
+             */
+            record.set('percentPseudo', 0);
         }
+    },
+
+    /**
+     * Helper function to update related fields of pseudoPrice
+     * @param event
+     */
+    updatedPseudoPriceField: function(event) {
+        var me = this,
+            record = event.record,
+            price = record.get('price'),
+            percentPseudo = record.get('percentPseudo');
+
+        //if the user enters 0 or nothing, the percentPseudo has to be 0
+        if(!Ext.isNumeric(event.value) || event.value === 0) {
+            record.set('percentPseudo', 0);
+        } else if(event.value > 0) {
+            percentPseudo = 100 - (100 / event.value * price);
+            percentPseudo = percentPseudo.toFixed(2);
+            record.set('percentPseudo', percentPseudo);
+        }
+
+        //we need to trigger update on PriceField without copy&paste all that checks and updates
+        me.updatedPriceField(event);
     },
 
     /**
