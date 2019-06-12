@@ -25,19 +25,17 @@
 namespace Shopware\Tests\Functional\Plugins\Core\MarketingAggregate\Components;
 
 use Shopware\Tests\Functional\Plugins\Core\MarketingAggregate\AbstractMarketing;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class AlsoBoughtTest extends AbstractMarketing
 {
-    protected $orderData;
+    use DatabaseTransactionBehaviour;
 
     public function setUp()
     {
         parent::setUp();
 
         $this->Db()->query('DELETE FROM s_articles_also_bought_ro ');
-
-        $this->orderData = $this->Db()->fetchAll('SELECT * FROM s_order_details');
-
         $this->Db()->query('DELETE FROM s_order_details');
 
         $this->Db()->query("
@@ -56,25 +54,14 @@ class AlsoBoughtTest extends AbstractMarketing
             (203, 57, '20002', 219, 'SW10185', 54.9, 1, 'Express Versand', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
             (204, 57, '20002', 197, 'SW10196', 34.99, 2, 'ESD Download Artikel', 0, 0, 0, '0000-00-00', 0, 1, 1, 19, ''),
             (205, 57, '20002', 0, 'sw-payment-absolute', 5, 1, 'Zuschlag für Zahlungsart', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, ''),
-            (255, 120, '20007', 178, 'SW10178', 19.95, 1, 'Strandtuch \"Ibiza\"', 0, 0, 0, '0000-00-00', 0, 0, 0, 19, ''),
-            (256, 120, '20007', 175, 'SW10175', 59.99, 1, 'Strandtuch Sunny', 0, 0, 0, '0000-00-00', 0, 0, 0, 19, ''),
-            (257, 120, '20007', 162, 'SW10162.1', 23.99, 1, 'Sommer-Sandale Pink 36', 0, 0, 0, '0000-00-00', 0, 0, 0, 19, ''),
-            (258, 120, '20007', 197, 'SW10196', 29.99, 3, 'ESD Download Artikel', 0, 0, 0, '0000-00-00', 0, 1, 0, 19, ''),
-            (259, 120, '20007', 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, '0000-00-00', 0, 0, 0, 19, '');
+            (255, 15, '20007', 178, 'SW10178', 19.95, 1, 'Strandtuch \"Ibiza\"', 0, 0, 0, '0000-00-00', 0, 0, 0, 19, ''),
+            (256, 15, '20007', 175, 'SW10175', 59.99, 1, 'Strandtuch Sunny', 0, 0, 0, '0000-00-00', 0, 0, 0, 19, ''),
+            (257, 15, '20007', 162, 'SW10162.1', 23.99, 1, 'Sommer-Sandale Pink 36', 0, 0, 0, '0000-00-00', 0, 0, 0, 19, ''),
+            (258, 15, '20007', 197, 'SW10196', 29.99, 3, 'ESD Download Artikel', 0, 0, 0, '0000-00-00', 0, 1, 0, 19, ''),
+            (259, 15, '20007', 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, '0000-00-00', 0, 0, 0, 19, '');
         ");
 
         $this->AlsoBought()->initAlsoBought();
-    }
-
-    protected function tearDown()
-    {
-        parent::tearDown();
-
-        $this->Db()->query('DELETE FROM s_order_details');
-
-        foreach ($this->orderData as $orderData) {
-            $this->Db()->insert('s_order_details', $orderData);
-        }
     }
 
     public function testInitAlsoBought()

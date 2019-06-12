@@ -48,11 +48,11 @@ class PrivacyService implements PrivacyServiceInterface
             ->format('Y-m-d H:i:s');
 
         $query = <<<'SQL'
-            DELETE u FROM s_user u
-            LEFT JOIN s_order o ON o.userID = u.id AND o.status <> -1
-            WHERE u.accountmode = 1 
-              AND u.firstlogin < :threshold 
-              AND o.id IS NULL
+            DELETE u FROM `s_user` u
+            LEFT JOIN `s_order` o ON o.`userID` = u.`id` AND o.`status` <> -1
+            WHERE u.`accountmode` = 1
+              AND u.`firstlogin` < :threshold
+              AND o.`id` IS NULL
 SQL;
         $this->connection->executeUpdate($query, ['threshold' => $threshold]);
     }
@@ -62,21 +62,20 @@ SQL;
      */
     public function cleanupCanceledOrders($months)
     {
-
         $threshold = (new \DateTime())
             ->modify(sprintf('-%d months', $months))
             ->format('Y-m-d H:i:s');
 
         $query = <<<'SQL'
-            DELETE FROM s_order o
-            WHERE o.status = -1 
-              AND o.ordertime < :threshold 
+            DELETE o FROM `s_order` o
+            WHERE o.`status` = -1 
+              AND o.`ordertime` < :threshold 
 SQL;
         $this->connection->executeUpdate($query, ['threshold' => $threshold]);
 
         $query = <<<'SQL'
-            DELETE FROM s_order_basket b
-            WHERE b.datum < :threshold 
+            DELETE b FROM `s_order_basket` b
+            WHERE b.`datum` < :threshold 
 SQL;
         $this->connection->executeUpdate($query, ['threshold' => $threshold]);
     }
