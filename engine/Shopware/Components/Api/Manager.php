@@ -36,9 +36,13 @@ class Manager
      * @param string $name
      *
      * @return Resource\Resource
+     *
+     * @deprecated with 5.6, will be removed with 5.8. Inject the resource instead
      */
     public static function getResource($name)
     {
+        trigger_error('Using Manager::getResource is deprecated since 5.6 and will be removed with 5.8. Inject the resource instead', E_USER_DEPRECATED);
+
         $container = Shopware()->Container();
         try {
             /** @var Resource\Resource $resource */

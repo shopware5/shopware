@@ -398,7 +398,7 @@ class Category extends Resource
 
         if (isset($data['media']['link'])) {
             /** @var Media $mediaResource */
-            $mediaResource = $this->getResource('media');
+            $mediaResource = $this->getContainer()->get('shopware.api.media');
             /** @var MediaModel $media */
             $media = $mediaResource->internalCreateMediaByFileLink($data['media']['link']);
         } elseif (!empty($data['media']['mediaId'])) {

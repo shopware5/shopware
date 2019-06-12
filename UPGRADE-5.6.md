@@ -206,6 +206,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Deprecated `Enlight_Controller_Response_ResponseHttp::outputBody`
 * Deprecated `Shopware_Controllers_Backend_Log::createLogAction`. It will be removed in 5.7, use `\Shopware\Controllers\Backend\Logger::createLogAction` instead
 * Deprecated `Enlight_Event_EventHandler`. It will be removed in 5.8, use `Enlight_Event_Handler_Default` or `SubscriberInterface::getSubscribedEvents` instead
+* Deprecated `Shopware\Components\Api\Manager::getResource`. It will be removed in 5.8, inject resources instead
+* Deprecated usage of `shopware.api` DI prefix without tag `shopware.api_resource`
 
 ### Improved ExtJS auto-loading
 

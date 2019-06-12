@@ -357,9 +357,13 @@ abstract class Resource implements ContainerAwareInterface
      * @param string $name
      *
      * @return \Shopware\Components\Api\Resource\Resource
+     *
+     * @deprecated with 5.6, will be removed with 5.8. Inject the resource instead
      */
     protected function getResource($name)
     {
+        trigger_error('Using Manager::getResource is deprecated since 5.6 and will be removed with 5.8. Inject the resource instead', E_USER_DEPRECATED);
+
         try {
             /** @var \Shopware\Components\Api\Resource\Resource $resource */
             $resource = $this->getContainer()->get('shopware.api.' . strtolower($name));

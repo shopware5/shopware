@@ -28,7 +28,6 @@ use Doctrine\DBAL\Connection;
 use Enlight\Event\SubscriberInterface;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
-use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\CustomerStream;
 use Shopware\Components\CustomerStream\StreamIndexerInterface;
 
@@ -48,12 +47,17 @@ class CronJobSubscriber implements SubscriberInterface
      * @var SearchIndexerInterface
      */
     private $searchIndexer;
+    /**
+     * @var CustomerStream
+     */
+    private $customerStream;
 
-    public function __construct(Connection $connection, SearchIndexerInterface $searchIndexer, StreamIndexerInterface $streamIndexer)
+    public function __construct(Connection $connection, SearchIndexerInterface $searchIndexer, StreamIndexerInterface $streamIndexer, CustomerStream $customerStream)
     {
         $this->connection = $connection;
         $this->streamIndexer = $streamIndexer;
         $this->searchIndexer = $searchIndexer;
+        $this->customerStream = $customerStream;
     }
 
     public static function getSubscribedEvents()
@@ -83,14 +87,11 @@ class CronJobSubscriber implements SubscriberInterface
             return true;
         }
 
-        /** @var CustomerStream $resource */
-        $resource = Manager::getResource('CustomerStream');
-
         foreach ($streams as $stream) {
             if ($stream['freeze_up']) {
                 $stream['freeze_up'] = new \DateTime($stream['freeze_up']);
             }
-            $result = $resource->updateFrozenState($stream['id'], $stream['freeze_up'], $stream['conditions']);
+            $result = $this->customerStream->updateFrozenState($stream['id'], $stream['freeze_up'], $stream['conditions']);
             if ($result) {
                 $stream['static'] = $result['static'];
             }

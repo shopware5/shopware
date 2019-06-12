@@ -26,7 +26,6 @@ namespace Shopware\Tests\Functional\Components\Emotion\Preset;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Components\Emotion\Preset\Exception\PresetAssetImportException;
 use Shopware\Components\Emotion\Preset\PresetDataSynchronizer;
@@ -57,7 +56,7 @@ class PresetDataSynchronizerTest extends TestCase
         $this->connection->executeQuery('DELETE FROM s_core_plugins');
 
         $this->synchronizerService = Shopware()->Container()->get('shopware.emotion.preset_data_synchronizer');
-        $this->presetResource = Manager::getResource('EmotionPreset');
+        $this->presetResource = Shopware()->Container()->get('shopware.api.emotion_preset');
 
         $this->imageData = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
     }

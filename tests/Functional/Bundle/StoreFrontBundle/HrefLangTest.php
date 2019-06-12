@@ -25,7 +25,6 @@
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
 use Shopware\Bundle\StoreFrontBundle\Service\HrefLangServiceInterface;
-use Shopware\Components\Api\Manager;
 use Shopware\Models\Shop\Shop;
 
 class HrefLangTest extends TestCase
@@ -127,7 +126,7 @@ class HrefLangTest extends TestCase
 
     private function createCategory()
     {
-        $category = Manager::getResource('Category');
+        $category = Shopware()->Container()->get('shopware.api.category');
         $category = $category->create([
             'parent' => 3,
             'name' => 'My fancy german category',
