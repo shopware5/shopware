@@ -134,6 +134,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed product module split view mode to work correctly with properties
 * Changed product search to work correctly on MySQL 8
 * Changed last seen products productLimit to work correctly
+* Changed product-feed export to refresh context while exporting multiple feeds
 
 ### Removals
 
