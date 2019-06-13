@@ -30,6 +30,7 @@ class HookManagerTestTarget implements \Enlight_Hook
     const RECURSIVE_TEST_METHOD_NAME = 'recursiveTestMethod';
     const PROTECTED_TEST_METHOD_NAME = 'protectedTestMethod';
     const VARIABLE_NAME_COLLISION_TEST_METHOD_NAME = 'variableNameCollisionTestMethod';
+    const VOID_TEST_METHOD_NAME = 'voidTestMethod';
 
     public $originalMethodCallCounter = 0;
     public $originalRecursiveMethodCallCounter = 0;
@@ -56,6 +57,11 @@ class HookManagerTestTarget implements \Enlight_Hook
     public function variableNameCollisionTestMethod($class, $method, $context, $hookManager)
     {
         return $class . $method . $context . $hookManager;
+    }
+
+    public function voidTestMethod(): void
+    {
+        ++$this->originalMethodCallCounter;
     }
 
     protected function protectedTestMethod($name, array $values = [])

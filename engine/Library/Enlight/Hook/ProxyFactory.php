@@ -367,13 +367,15 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
         // Create the method
         $methodGenerator = MethodGenerator::fromReflection($originalMethod);
         $methodGenerator->setDocblock('@inheritdoc');
-        $methodGenerator->setBody(
-            "return \$this->__getActiveHookManager(__FUNCTION__)->executeHooks(\n" .
+        $methodBody = "\$this->__getActiveHookManager(__FUNCTION__)->executeHooks(\n" .
             "    \$this,\n" .
             "    __FUNCTION__,\n" .
-            "    [" . implode(", ", $params) . "]\n" .
-            ");\n"
-        );
+            '    [' . implode(', ', $params) . "]\n" .
+            ");\n";
+        if (!$originalMethod->hasReturnType() || $originalMethod->getReturnType()->getName() !== 'void') {
+            $methodBody = 'return ' . $methodBody;
+        }
+        $methodGenerator->setBody($methodBody);
 
         return $methodGenerator;
     }

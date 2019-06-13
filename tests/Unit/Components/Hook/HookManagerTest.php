@@ -81,6 +81,7 @@ class HookManagerTest extends TestCase
             $this->addHookListener(HookManagerTestTarget::RECURSIVE_TEST_METHOD_NAME, HookHandler::TypeReplace);
             $this->addHookListener(HookManagerTestTarget::PROTECTED_TEST_METHOD_NAME, HookHandler::TypeReplace);
             $this->addHookListener(HookManagerTestTarget::VARIABLE_NAME_COLLISION_TEST_METHOD_NAME, HookHandler::TypeAfter);
+            $this->addHookListener(HookManagerTestTarget::VOID_TEST_METHOD_NAME, HookHandler::TypeAfter);
             $proxyClass = $this->hookManager->getProxy(HookManagerTestTarget::class);
             $proxy = new $proxyClass();
         }
