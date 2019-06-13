@@ -37,7 +37,15 @@
             me.content = me.createContent(imageURL);
 
             me.image.onload = function() {
-                size = me.getOptimizedSize(me.image.width, me.image.height);
+                var width = me.image.width;
+                var height = me.image.height;
+
+                if (imageURL.substring(imageURL.length - 4, imageURL.length) === '.svg') {
+                    width = width * 20;
+                    height = height * 20;
+                }
+
+                size = me.getOptimizedSize(width, height);
 
                 me.modal = $.modal.open(me.content, {
                     'width': size.width,
@@ -48,7 +56,7 @@
                     me.setSize(me.image.width, me.image.height);
                 });
 
-                $.subscribe(me.getEventName('plugin/swModal/onClose'), function() {
+                $.subscribe('plugin/swModal/onClose', function() {
                     $(window).off('resize.lightbox');
                 });
             };
