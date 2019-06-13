@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Emotion.view.components.ContentType', {
 
         me.selectionGrid = Ext.create('Shopware.form.field.Grid', {
             labelWidth: 170,
-            model: 'recipients',
+            model: me.getCurrentContentType(),
             hidden: parseInt(me.contentTypeModeSelection.getValue()) !== 2,
             fieldLabel: '{s name="selection"}{/s}'
         });
@@ -60,6 +60,22 @@ Ext.define('Shopware.apps.Emotion.view.components.ContentType', {
         me.contentTypeModeSelection.on('select', this.changeListener, this);
 
         me.elementFieldset.add(me.selectionGrid);
+    },
+
+    getCurrentContentType: function() {
+        var cur = null;
+
+        if (typeof this.settings.record.data.data !== 'object') {
+            return cur;
+        }
+
+        this.settings.record.data.data.forEach(function (item) {
+            if (item.key === 'content_type') {
+                cur = item.value;
+            }
+        });
+
+        return cur;
     },
 
     changeListener: function () {
