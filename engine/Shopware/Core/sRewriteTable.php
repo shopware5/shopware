@@ -24,6 +24,7 @@
 
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Bundle\ContentTypeBundle\Structs\Criteria;
+use Shopware\Bundle\ContentTypeBundle\Structs\Type;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ShopPageServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -692,11 +693,26 @@ class sRewriteTable implements \Enlight_Hook
         $this->insertStaticPageUrls($offset, $limit, $context);
     }
 
+    public function createSingleContentTypeUrl(Type $type): void
+    {
+        if (!$type->isShowInFrontend()) {
+            return;
+        }
+
+        $translator = Shopware()->Container()->get('shopware_bundle_content_type.services.frontend_type_translator');
+        $type = $translator->translate($type);
+
+        // insert controller, itself
+        $path = $type->getName() . '/';
+        $path = $this->sCleanupPath($path);
+        $this->sInsertUrl('sViewport=' . $type->getControllerName() . '&sAction=index', $path);
+    }
+
     public function createContentTypeUrls(ShopContextInterface $context): void
     {
         $translator = Shopware()->Container()->get('shopware_bundle_content_type.services.frontend_type_translator');
 
-        /** @var \Shopware\Bundle\ContentTypeBundle\Structs\Type $type */
+        /** @var Type $type */
         foreach (Shopware()->Container()->get('shopware.bundle.content_type.type_provider')->getTypes() as $type) {
             if (!$type->isShowInFrontend()) {
                 continue;

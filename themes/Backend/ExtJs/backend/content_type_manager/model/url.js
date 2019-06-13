@@ -21,30 +21,22 @@
  * our trademarks remain entirely with us.
  */
 
-// {block name="backend/content_type_manager/controller/detail"}
-Ext.define('Shopware.apps.ContentTypeManager.controller.Detail', {
-    extend: 'Shopware.detail.Controller',
+// {block name="backend/content_type_manager/model/url"}
+Ext.define('Shopware.apps.ContentTypeManager.model.Url', {
+    extend: 'Ext.data.Model',
 
-    refs: [
-        { ref: 'detailContainer', selector: 'content-type-manager-detail-container' }
+    /**
+     * @var array
+     */
+    fields: [
+        {
+            name: 'name',
+            type: 'string'
+        },
+        {
+            name: 'url',
+            type: 'string'
+        },
     ],
-
-    init: function() {
-        var me = this;
-
-        Shopware.app.Application.on('content-type-manager-save-successfully', function (controller, result, window, record, form, operation) {
-            var newRecord = record.getProxy().reader.read(operation.response).records[0];
-            me.getDetailContainer().seoUrlGrid.reconfigure(newRecord.getUrls());
-        });
-
-        this.callParent(arguments);
-    },
-
-    configure: function () {
-        return {
-            detailWindow: 'Shopware.apps.ContentTypeManager.view.detail.Window',
-            eventAlias: 'content-type-manager'
-        }
-    }
 });
 // {/block}

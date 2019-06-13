@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.ContentTypeManager.model.Field', {
         {
             name: 'required',
             type: 'boolean',
-            defaultValue: true
+            defaultValue: false
         },
         {
             name: 'showListing',

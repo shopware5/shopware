@@ -114,7 +114,7 @@ class ExtjsBuilder implements ExtjsBuilderInterface
 
     private function translateField(Type $type, Field $field): void
     {
-        $namespace = $this->snippets->getNamespace($type->getSnippetNamespace());
+        $namespace = $this->snippets->getNamespace($type->getSnippetNamespaceBackend());
 
         $field->setLabel($namespace->get(strtolower($field->getName()) . '_label', $field->getLabel(), true));
 

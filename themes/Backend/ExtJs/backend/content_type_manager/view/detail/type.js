@@ -128,6 +128,62 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
         });
     },
 
+    createItems: function() {
+        var me = this,
+            items = this.callParent(arguments);
+
+        this.seoUrlGrid = Ext.create('Ext.grid.Panel', {
+            plugins: [
+                Ext.create('Ext.grid.plugin.RowEditing', {
+                    clicksToMoveEditor: 1,
+                    autoCancel: true
+                })
+            ],
+            columns: [
+                {
+                    header: '{s name="type/seoUrls/shop"}{/s}',
+                    dataIndex: 'name',
+                    flex: 1
+                },
+                {
+                    header: '{s name="type/seoUrls/url"}{/s}',
+                    dataIndex: 'url',
+                    flex: 1,
+                    editor: {
+                        readOnly: true,
+                        selectOnFocus: true
+                    }
+                }
+            ],
+            store: this.record.getUrls()
+        });
+
+        var element = Ext.create('Ext.form.FieldContainer', {
+            fieldLabel: '{s name="type/seoUrls"}{/s}',
+            labelWidth: 150,
+            supportText: 'Foo',
+            items: [
+                this.seoUrlGrid
+            ]
+        });
+
+        if (this.record.getUrls().count() === 0) {
+            var store = Ext.create('Shopware.apps.Base.store.ShopLanguage');
+
+            store.load(function () {
+                store.each(function (record) {
+                    me.seoUrlGrid.store.add({
+                        name: record.get('name')
+                    });
+                });
+            });
+        }
+
+        items[0].items.items[0].add(element);
+
+        return items;
+    },
+
     getModelName: function () {
         return '{s name="type/title"}{/s}';
     },

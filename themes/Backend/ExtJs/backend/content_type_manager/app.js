@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.ContentTypeManager', {
         'field_handler.ComboboxHandler'
     ],
 
-    models: [ 'Type', 'Field' ],
+    models: [ 'Type', 'Field', 'Url' ],
     stores: [ 'Type', 'Fields' ],
 
     launch: function() {

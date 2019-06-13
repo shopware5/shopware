@@ -41,7 +41,7 @@ class FrontendTypeTranslator implements FrontendTypeTranslatorInterface
 
     public function translate(Type $type): Type
     {
-        $namespace = $this->snippetManager->getNamespace($type->getSnippetNamespace());
+        $namespace = $this->snippetManager->getNamespace($type->getSnippetNamespaceFrontend());
 
         $type->setName($namespace->get('name', $type->getName()));
 

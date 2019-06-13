@@ -140,9 +140,14 @@ class Type implements JsonSerializable
         return 's_custom_' . strtolower($this->internalName);
     }
 
-    public function getSnippetNamespace(): string
+    public function getSnippetNamespaceBackend(): string
     {
         return 'backend/' . strtolower($this->getControllerName()) . '/main';
+    }
+
+    public function getSnippetNamespaceFrontend(): string
+    {
+        return 'frontend/' . strtolower($this->getControllerName()) . '/main';
     }
 
     public function getInternalName(): string

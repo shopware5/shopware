@@ -107,6 +107,12 @@ Ext.define('Shopware.apps.ContentTypeManager.model.Type', {
             name: 'getFields',
             associationKey: 'fields'
         },
+        {
+            type: 'hasMany',
+            model: 'Shopware.apps.ContentTypeManager.model.Url',
+            name: 'getUrls',
+            associationKey: 'urls'
+        },
     ]
 });
 // {/block}
