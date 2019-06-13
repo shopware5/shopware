@@ -72,6 +72,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
     `bin/console sw:es:index:populate --index property --index product`
 * Added the Product Number as a new method to sort your results.
 * Added a last password change date to customers
+* Added new foreign key to `s_order_details`, `orderID` now references `s_order`.`id`
 
 ### Changes
 
@@ -130,7 +131,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed the blog seo meta details to be saveable after being over the max length of the global max length
 * Changed shipping calculation in off canvas to work correctly with country states
 * Changed the input of filters in the backend to prevent grammar error 
-* Changed `Shopware\Bundle\ESIndexingBundle\ShopIndexerInterface::index`. Added optional `$indexNames` argument.
+* Changed `Shopware\Bundle\ESIndexingBundle\ShopIndexerInterface::index`. Added optional `$indexNames` argument
 * Changed Bare Template to improve accessibility
 * Changed product module split view mode to work correctly with properties
 * Changed product search to work correctly on MySQL 8
@@ -138,6 +139,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed product-feed export to refresh context while exporting multiple feeds
 * Changed `Shopware\Models\Shop\Shop::registerResources` to extract the code in a new service `shopware.components.shop_registration_service`
 * Changed the offcanvas basket to now display shipping costs also when the user is logged in
+* Changed `\Shopware\Components\Privacy\PrivacyService` to run more efficiently
 
 ### Removals
 

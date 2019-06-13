@@ -43,37 +43,18 @@ class PrivacyService implements PrivacyServiceInterface
      */
     public function cleanupGuestUsers($months)
     {
-        $qb = $this->connection->createQueryBuilder();
+        $threshold = (new \DateTime())
+            ->modify(sprintf('-%d months', $months))
+            ->format('Y-m-d H:i:s');
 
-        $users = $qb->select([
-            'user.id',
-            '_order.status',
-            'TIMESTAMPDIFF(MONTH,user.firstlogin,NOW()) AS monthDiff',
-        ])
-        ->from('s_user', 'user')
-        ->leftJoin('user', 's_order', '_order', 'user.id = _order.userID')
-        ->where('user.accountmode = 1')
-        ->groupBy('user.id,_order.status')
-        ->having('monthDiff >= :months')
-        ->setParameter(':months', $months)
-        ->execute()
-        ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_COLUMN);
-
-        // filter customer with valid orders(order_status not null and not -1)
-        foreach ($users as $id => $stati) {
-            $validOrder = false;
-            foreach ($stati as $status) {
-                if ($status !== null && (int) $status !== -1) {
-                    $validOrder = true;
-                    break;
-                }
-            }
-            if ($validOrder) {
-                unset($users[$id]);
-            }
-        }
-
-        $this->deleteFromTable('s_user', array_keys($users));
+        $query = <<<'SQL'
+            DELETE u FROM `s_user` u
+            LEFT JOIN `s_order` o ON o.`userID` = u.`id` AND o.`status` <> -1
+            WHERE u.`accountmode` = 1
+              AND u.`firstlogin` < :threshold
+              AND o.`id` IS NULL
+SQL;
+        $this->connection->executeUpdate($query, ['threshold' => $threshold]);
     }
 
     /**
@@ -81,51 +62,21 @@ class PrivacyService implements PrivacyServiceInterface
      */
     public function cleanupCanceledOrders($months)
     {
-        // Select canceled orders
-        $qb = $this->connection->createQueryBuilder();
+        $threshold = (new \DateTime())
+            ->modify(sprintf('-%d months', $months))
+            ->format('Y-m-d H:i:s');
 
-        $canceledOrders = $qb->select([
-            '_order.id',
-            'TIMESTAMPDIFF(MONTH,ordertime,NOW()) AS monthDiff',
-        ])
-        ->from('s_order', '_order')
-        ->where('_order.status = -1')
-        ->having('monthDiff >= :months')
-        ->setParameter(':months', (int) $months, \PDO::PARAM_INT)
-        ->execute()
-        ->fetchAll(\PDO::FETCH_COLUMN);
+        $query = <<<'SQL'
+            DELETE o FROM `s_order` o
+            WHERE o.`status` = -1 
+              AND o.`ordertime` < :threshold 
+SQL;
+        $this->connection->executeUpdate($query, ['threshold' => $threshold]);
 
-        $this->deleteFromTable('s_order', $canceledOrders);
-
-        // Select canceled baskets
-        $qb = $this->connection->createQueryBuilder();
-
-        $canceledBaskets = $qb->select([
-            '_basket.id',
-            'TIMESTAMPDIFF(MONTH,datum,NOW()) AS monthDiff',
-        ])
-            ->from('s_order_basket', '_basket')
-            ->having('monthDiff >= :months')
-            ->setParameter(':months', (int) $months, \PDO::PARAM_INT)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
-
-        $this->deleteFromTable('s_order_basket', $canceledBaskets);
-    }
-
-    /**
-     * Deletes rows with the given $ids from $table
-     *
-     * @param string $table
-     * @param int[]  $ids
-     */
-    private function deleteFromTable($table, $ids)
-    {
-        $qb = $this->connection->createQueryBuilder();
-
-        $qb->delete($table)
-            ->where('id IN (:ids)')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
-            ->execute();
+        $query = <<<'SQL'
+            DELETE b FROM `s_order_basket` b
+            WHERE b.`datum` < :threshold 
+SQL;
+        $this->connection->executeUpdate($query, ['threshold' => $threshold]);
     }
 }

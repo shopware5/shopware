@@ -27,12 +27,15 @@ namespace Shopware\tests\Functional\Components\Privacy;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Privacy\PrivacyService;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 /**
  * @group EmotionPreset
  */
 class PrivacyServiceTest extends TestCase
 {
+    use DatabaseTransactionBehaviour;
+
     /** @var Connection */
     private $connection;
 
@@ -41,15 +44,11 @@ class PrivacyServiceTest extends TestCase
 
     protected function setUp()
     {
+        parent::setUp();
+
         $this->connection = Shopware()->Container()->get('dbal_connection');
-        $this->connection->beginTransaction();
 
         $this->privacyService = Shopware()->Container()->get('shopware.components.privacy.privacy_service');
-    }
-
-    protected function tearDown()
-    {
-        $this->connection->rollBack();
     }
 
     /**
