@@ -627,6 +627,14 @@ Ext.define('Shopware.form.field.Media', {
         if (Ext.isDefined(me.previewContainer.getEl())) {
             me.previewContainer.getEl().appendChild(globe);
         }
+    },
+
+    isValid: function() {
+        if (this.allowBlank) {
+            return true;
+        }
+
+        return typeof this.value === 'number' && this.value !== 0;
     }
 });
 //{/block}

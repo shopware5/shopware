@@ -34,7 +34,10 @@ use Shopware\Bundle\ContentTypeBundle\Services\TypeProvider;
 use Shopware\Bundle\ContentTypeBundle\Structs\Type;
 use Shopware\Components\CacheManager;
 use Shopware\Components\Slug\SlugInterface;
+use Shopware\Models\Shop\Shop;
+use Shopware_Components_SeoIndex;
 use Shopware_Components_Snippet_Manager as Snippets;
+use sRewriteTable;
 use Symfony\Component\HttpFoundation\Request;
 
 class ContentTypeManager extends \Shopware_Controllers_Backend_ExtJs
@@ -177,6 +180,7 @@ class ContentTypeManager extends \Shopware_Controllers_Backend_ExtJs
 
         $this->typeProvider->addType($type->getInternalName(), $type);
         $this->clearCacheAndSync();
+        $this->createUrls($type);
 
         $this->View()->assign(['success' => true, 'data' => $this->getDetail($type->getInternalName())]);
     }
@@ -215,15 +219,19 @@ class ContentTypeManager extends \Shopware_Controllers_Backend_ExtJs
 
     private function getDetail(string $name): array
     {
-        $type = json_decode(json_encode($this->typeProvider->getType($name)), true);
+        /** @var Type $typeObj */
+        $typeObj = $this->typeProvider->getType($name);
+
+        $type = json_decode(json_encode($typeObj), true);
         $type['id'] = $type['internalName'];
+        $type['urls'] = $this->getUrls($typeObj);
 
         return $type;
     }
 
     private function convertExtJsToStruct(array $data): Type
     {
-        unset($data['id'], $data['source']);
+        unset($data['id'], $data['source'], $data['urls']);
 
         if (empty($data['internalName'])) {
             $data['internalName'] = strtolower($this->slug->slugify($data['name'], '_'));
@@ -245,5 +253,47 @@ class ContentTypeManager extends \Shopware_Controllers_Backend_ExtJs
         $this->synchronizerService->sync(true);
         $this->cacheManager->clearConfigCache();
         $this->cacheManager->clearProxyCache();
+    }
+
+    private function createUrls(Type $type): void
+    {
+        $shops = $this->getModelManager()->getRepository(Shop::class)->getActiveShopsFixed();
+        /** @var Shopware_Components_SeoIndex $seoIndexer */
+        $seoIndexer = $this->get('SeoIndex');
+
+        /** @var sRewriteTable $rewriteTable */
+        $rewriteTable = $this->get('modules')->RewriteTable();
+
+        /** @var Shop $shop */
+        foreach ($shops as $shop) {
+            $seoIndexer->registerShop($shop->getId());
+
+            $rewriteTable->baseSetup();
+            $rewriteTable->createSingleContentTypeUrl($type);
+        }
+    }
+
+    private function getUrls(Type $type): array
+    {
+        $shops = $this->getModelManager()->getRepository(Shop::class)->getActiveShopsFixed();
+
+        $urls = [];
+
+        /** @var Shop $shop */
+        foreach ($shops as $shop) {
+            $shop->registerResources();
+
+            $urls[] = [
+                'name' => $shop->getName(),
+                'url' => $this->Front()->Router()->assemble([
+                    'controller' => $type->getControllerName(),
+                    'module' => 'frontend',
+                    'action' => 'index',
+                    'fullPath' => true,
+                ]),
+            ];
+        }
+
+        return $urls;
     }
 }

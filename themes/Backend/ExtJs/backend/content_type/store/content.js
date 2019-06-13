@@ -25,6 +25,13 @@
 Ext.define('Shopware.apps.{$controllerName}.store.Content', {
     extend:'Shopware.store.Listing',
 
+    sorters: [
+        {
+            property: 'id',
+            direction: 'DESC'
+        }
+    ],
+
     /**
      * configure the store
      * @returns { Object }

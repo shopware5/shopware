@@ -431,14 +431,14 @@ Ext.define('Shopware.detail.Controller', {
         //start save request of the { @link Shopware.data.Model }
         record.save({
             //success callback function.
-            success: function(result) {
+            success: function(result, operation) {
                 window.setLoading(false);
 
                 if (window instanceof Shopware.window.Detail) {
                     window.loadRecord(result);
                 }
 
-                Shopware.app.Application.fireEvent(me.getEventName('save-successfully'), me, result, window, record, form);
+                Shopware.app.Application.fireEvent(me.getEventName('save-successfully'), me, result, window, record, form, operation);
 
                 Shopware.Notification.createGrowlMessage(
                     me.saveSuccessTitle,
@@ -478,7 +478,7 @@ Ext.define('Shopware.detail.Controller', {
      */
     markFieldsAsInvalid: function(window, violations) {
         var me = this;
-        
+
         Ext.each(violations, function(violation) {
             var field = me.getFieldByName(window.formPanel.getForm().getFields().items, violation.property);
             if (field) {

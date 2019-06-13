@@ -27,7 +27,7 @@ Ext.define('Shopware.apps.{$controllerName}.view.list.Window', {
     alias: 'widget.{$controllerName}-list-window',
     height: 600,
     width: 1000,
-    title : '{$type->getName()|snippet:"name":$type->getSnippetNamespace()}',
+    title : '{$type->getName()|snippet:"name":$type->getSnippetNamespaceBackend()}',
 
     /**
      * configure the window
