@@ -2,13 +2,14 @@
 
 {block name="frontend_index_header_meta_keywords"}{/block}
 
-{block name='frontend_index_header_meta_robots'}{s name='IndexMetaRobots'}index,follow{/s}{/block}
+{block name='frontend_index_header_meta_robots'}{'index,follow'|snippet:'IndexMetaRobots':$sType->getSnippetNamespaceFrontend()}{/block}
 
 {block name='frontend_index_header_meta_tags_opengraph'}
     {s name="IndexMetaDescriptionStandard" namespace="frontend/index/header" assign="description"}{/s}
-    {s name="IndexMetaDescription" assign="contentTypeDescription"}{/s}
-    {s name="IndexMetaImage" assign="contentTypeImage"}{/s}
-    {s name="IndexMetaTitle" assign="contentTypeTitle"}{/s}
+
+    {$contentTypeDescription = ''|snippet:'IndexMetaDescription':$sType->getSnippetNamespaceFrontend()}
+    {$contentTypeImage = ''|snippet:'IndexMetaImage':$sType->getSnippetNamespaceFrontend()}
+    {$contentTypeTitle = ''|snippet:'IndexMetaTitle':$sType->getSnippetNamespaceFrontend()}
 
     {if $contentTypeDescription}
         {$description = $contentTypeDescription}
@@ -53,7 +54,7 @@
 {* Description *}
 {block name="frontend_index_header_meta_description"}{strip}
     {s name="IndexMetaDescriptionStandard" namespace="frontend/index/header" assign="description"}{/s}
-    {s name="IndexMetaDescription" assign="contentTypeDescription"}{/s}
+    {$contentTypeDescription = ''|snippet:'IndexMetaDescription':$sType->getSnippetNamespaceFrontend()}
 
     {if $contentTypeDescription}
         {$description = $contentTypeDescription}
@@ -65,7 +66,21 @@
 
 {* Canonical link *}
 {block name='frontend_index_header_canonical'}
-    <link rel="canonical" href="{url controller=$Controller action=index}"/>
+    {if $sPage === 1}
+        <link rel="canonical" href="{url controller=$Controller action=index}"/>
+    {/if}
+
+    {if {config name=seoIndexPaginationLinks}}
+        {* Previous rel tag *}
+        {if $sPage > 1}
+            <link rel="prev" href="{url controller=$Controller action=index p=$sPage-1}">
+        {/if}
+
+        {* Next rel tag *}
+        {if $pages >= $sPage + 1}
+            <link rel="next" href="{url controller=$Controller action=index p=$sPage+1}">
+        {/if}
+    {/if}
 {/block}
 
 {* RSS and Atom feeds *}

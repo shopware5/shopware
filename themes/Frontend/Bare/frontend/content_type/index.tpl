@@ -10,6 +10,8 @@
 {block name='frontend_index_content'}
     <h1>{$sType->getName()|escape}</h1>
 
+    {''|snippet:'IndexDescription':$sType->getSnippetNamespaceFrontend()}
+
     <div class="blog--content block-group">
         {foreach from=$sItems item=sItem}
             {include file="frontend/content_type/listing/item.tpl"}

@@ -1,14 +1,9 @@
 {extends file='frontend/index/header.tpl'}
 
 {block name="frontend_index_header_meta_keywords"}{/block}
-{block name='frontend_index_header_meta_robots'}{s name='DetailMetaRobots'}index,follow{/s}{/block}
+{block name='frontend_index_header_meta_robots'}{'index,follow'|snippet:'DetailMetaRobots':$sType->getSnippetNamespaceFrontend()}{/block}
 
 {block name='frontend_index_header_meta_tags_opengraph'}
-    {s name="IndexMetaDescriptionStandard" namespace="frontend/index/header" assign="description"}{/s}
-    {s name="IndexMetaDescription" assign="contentTypeDescription"}{/s}
-    {s name="IndexMetaImage" assign="contentTypeImage"}{/s}
-    {s name="IndexMetaTitle" assign="contentTypeTitle"}{/s}
-
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />
     <meta property="og:title" content="{$sItem[$sTitleKey]|escapeHtml}" />
@@ -31,9 +26,6 @@
 
 {* Description *}
 {block name="frontend_index_header_meta_description"}{strip}
-    {s name="IndexMetaDescriptionStandard" namespace="frontend/index/header" assign="description"}{/s}
-    {s name="IndexMetaDescription" assign="contentTypeDescription"}{/s}
-
     {$sItem[$sDescriptionKey]|strip_tags|trim|truncate:$SeoDescriptionMaxLength:'…'}
 {/strip}{/block}
 
