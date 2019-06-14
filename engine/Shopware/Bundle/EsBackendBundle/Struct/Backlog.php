@@ -37,7 +37,7 @@ class Backlog
     public $entity_id;
 
     /**
-     * @var int
+     * @var string
      */
     public $time;
 

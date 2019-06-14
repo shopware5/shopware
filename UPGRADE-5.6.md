@@ -146,6 +146,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed the offcanvas basket to now display shipping costs also when the user is logged in
 * Changed `\Shopware\Components\Privacy\PrivacyService` to run more efficiently
 * Changed the error message if a customer enters an invalid birthday in the registration
+* Changed article list in elasticsearch to consier show variants option
 
 ### Removals
 

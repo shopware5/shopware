@@ -76,9 +76,6 @@ class OrmBacklogSubscriber implements EventSubscriber
         }
     }
 
-    /**
-     * @return array|null
-     */
     private function getBacklog($entity): ?Backlog
     {
         switch (true) {

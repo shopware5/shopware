@@ -47,15 +47,6 @@ class BacklogService implements BacklogServiceInterface
             ->execute()
             ->fetchAll();
 
-        // Cleanup
-        if (!empty($result)) {
-            $this->connection->createQueryBuilder()
-                ->delete('s_es_backend_backlog', 'ba')
-                ->where('id IN(:ids)')
-                ->setParameter('ids', array_column($result, 'id'), Connection::PARAM_INT_ARRAY)
-                ->execute();
-        }
-
         return $result;
     }
 
