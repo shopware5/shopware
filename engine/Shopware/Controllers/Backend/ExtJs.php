@@ -44,6 +44,13 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
     protected $errorMessage;
 
     /**
+     * Holds optionally acl resource name. Defaults to lowercased controller name.
+     *
+     * @var string
+     */
+    private $aclResourceName;
+
+    /**
      * Enable script renderer and json request plugin
      * Do acl checks
      */
@@ -172,6 +179,16 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
     }
 
     /**
+     * Get controller resource name
+     *
+     * Defaults to the lowercased controller name, if not overwritten.
+     */
+    public function getAclResourceName(): string
+    {
+        return $this->aclResourceName ?: strtolower($this->controller_name);
+    }
+
+    /**
      * This method must be overwritten by any module which wants to use ACL.
      *
      * Method to define acl dependencies in backend controllers
@@ -203,6 +220,16 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
             'privilege' => $privilege,
             'errorMessage' => $errorMessage,
         ];
+    }
+
+    /**
+     * Overwrite default controller resource name
+     *
+     * @param string $resourceName
+     */
+    protected function setAclResourceName($resourceName)
+    {
+        $this->aclResourceName = $resourceName;
     }
 
     /**
