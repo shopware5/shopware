@@ -28,6 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Components\Cart\BasketHelperInterface;
 use Shopware\Components\Cart\Struct\CartItemStruct;
 use Shopware\Components\Cart\Struct\DiscountContext;
+use Shopware\Components\Events\Basket\AddVoucherStartEvent;
 use Shopware\Components\Random;
 use Symfony\Component\HttpFoundation\Cookie;
 
@@ -671,8 +672,12 @@ SQL;
     public function sAddVoucher($voucherCode, $basket = '')
     {
         if ($this->eventManager->notifyUntil(
-            'Shopware_Modules_Basket_AddVoucher_Start',
-            ['subject' => $this, 'code' => $voucherCode, 'basket' => $basket]
+            AddVoucherStartEvent::EVENT_NAME,
+            new AddVoucherStartEvent([
+                'subject' => $this,
+                'code' => $voucherCode,
+                'basket' => $basket,
+            ])
         )) {
             return false;
         }
