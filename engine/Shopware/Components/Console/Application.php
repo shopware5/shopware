@@ -39,6 +39,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Application extends BaseApplication
 {
+    private const IMPORTANT_COMMANDS = ['sw:migration:migrate', 'sw:cache:clear'];
+
     /**
      * @var \Shopware\Kernel
      */
@@ -95,7 +97,11 @@ class Application extends BaseApplication
 
         if (!$this->commandsRegistered) {
             $this->setCommandLoader($this->kernel->getContainer()->get('console.command_loader'));
-            $this->registerCommands($output);
+
+            if (!in_array($input->getFirstArgument(), self::IMPORTANT_COMMANDS, true)) {
+                $this->registerCommands($output);
+            }
+
             $this->commandsRegistered = true;
         }
 
