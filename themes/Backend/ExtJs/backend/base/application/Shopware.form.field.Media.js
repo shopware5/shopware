@@ -630,7 +630,7 @@ Ext.define('Shopware.form.field.Media', {
     },
 
     isValid: function() {
-        if (this.allowBlank) {
+        if (this.allowBlank || this.disabled || !Ext.isDefined(this.allowBlank)) {
             return true;
         }
 
