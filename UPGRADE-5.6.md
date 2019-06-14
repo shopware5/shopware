@@ -76,6 +76,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added new foreign key to `s_order_details`, `orderID` now references `s_order`.`id`
 * Added new config option to set batch size of backlog indexing for elasticsearch backend implementation
 * Added listener for new orders, to add them in the elasticsearch backend backlog
+* Added command `sw:es:backend:backlog:clear` to clear the backlog
+* Added alias command `sw:es:backend:backlog:sync` to `sw:es:backend:sync`
 
 ### Changes
 
