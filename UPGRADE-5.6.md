@@ -74,6 +74,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added the Product Number as a new method to sort your results.
 * Added a last password change date to customers
 * Added new foreign key to `s_order_details`, `orderID` now references `s_order`.`id`
+* Added new config option to set batch size of backlog indexing for elasticsearch backend implementation
+* Added listener for new orders, to add them in the elasticsearch backend backlog
 
 ### Changes
 

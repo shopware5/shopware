@@ -50,9 +50,19 @@
 
         <service class="Shopware\Bundle\EsBackendBundle\Subscriber\OrmBacklogSubscriber"
                  id="shopware_bundle.es_backend_subscriber.orm_backlog_subscriber">
-
-            <tag name="doctrine.event_subscriber"/>
             <argument type="service" id="service_container"/>
+            <tag name="doctrine.event_subscriber"/>
+        </service>
+
+        <service class="Shopware\Bundle\EsBackendBundle\Subscriber\DomainBacklogSubscriber" id="shopware_bundle_es_backend.subscriber.domain_backlog_subscriber">
+            <argument>%shopware.es.backend.write_backlog%</argument>
+            <argument id="shopware_bundle_es_backend.backlog_service" type="service"/>
+            <tag name="shopware.event_subscriber"/>
+        </service>
+
+
+        <service class="Shopware\Bundle\EsBackendBundle\BacklogService" id="shopware_bundle_es_backend.backlog_service">
+            <argument id="dbal_connection" type="service"/>
         </service>
 
         <!-- Commands -->
@@ -64,6 +74,7 @@
 
         <service class="Shopware\Bundle\EsBackendBundle\Commands\SyncBacklogCommand"
                  id="shopware_es_backend.commands.sync_backlog_command">
+            <argument>%shopware.es.backend.batch_size%</argument>
             <tag name="console.command" command="sw:es:backend:sync"/>
         </service>
 
