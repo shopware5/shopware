@@ -134,7 +134,11 @@
          * @return {void}
          */
         update: function() {
-            this.setPermissionHeight();
+            this.displayCookiePermission(function(display) {
+                if (display) {
+                    this.setPermissionHeight();
+                }
+            });
         },
 
         /**
