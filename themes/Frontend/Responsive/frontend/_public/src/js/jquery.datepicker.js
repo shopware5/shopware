@@ -363,6 +363,8 @@
                 me.$el.parents('form').submit();
             }
 
+            me.$el.parent().find('input.flatpickr-input').blur();
+
             $.publish('plugin/swDatePicker/onPickerClose', [ me ]);
         },
 

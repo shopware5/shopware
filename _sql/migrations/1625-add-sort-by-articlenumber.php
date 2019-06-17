@@ -24,15 +24,15 @@
 
 class Migrations_Migration1625 extends Shopware\Components\Migrations\AbstractMigration
 {
-    const LANGUAGE_GERMAN = 'de';
-    const LANGUAGE_ENGLISH = 'en';
+    private const LANGUAGE_GERMAN = 'de';
+    private const LANGUAGE_ENGLISH = 'en';
 
     /**
      * @param string $modus
      */
     public function up($modus)
     {
-        // make sorting available
+        // Make sorting available
         $statement = $this->getConnection()->prepare(
             'INSERT INTO `s_search_custom_sorting` (`label`, `active`, `display_in_categories`, `position`, `sortings`)
                 VALUES (:label, :active, :category, :position, :sortings)'
@@ -45,7 +45,7 @@ class Migrations_Migration1625 extends Shopware\Components\Migrations\AbstractMi
             'sortings' => json_encode([Shopware\Bundle\SearchBundle\Sorting\ProductNumberSorting::class => ['direction' => 'ASC']]),
         ];
 
-        // those definitely need to make use of the translation system in the future to prevent this conditions
+        // Those definitely need to make use of the translation system in the future to prevent this conditions
         if ($modus !== static::MODUS_INSTALL && $this->getDefaultLocale() !== static::LANGUAGE_GERMAN) {
             $data['label'] = 'Product number';
         }
