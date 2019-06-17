@@ -36,12 +36,22 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SyncBacklogCommand extends ShopwareCommand
 {
     /**
+     * @var int
+     */
+    private $batchSize;
+
+    public function __construct(int $batchSize = 100)
+    {
+        $this->batchSize = $batchSize;
+        parent::__construct();
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function configure()
     {
-        $this->setName('sw:es:backend:sync')
-            ->setDescription('Synchronize events from the backlog to the live index.');
+        $this->setDescription('Synchronize events from the backlog to the live index.');
     }
 
     /**
@@ -49,9 +59,8 @@ class SyncBacklogCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $connection = $this->container->get('dbal_connection');
-
-        $backlogs = $connection->fetchAll('SELECT * FROM s_es_backend_backlog ORDER BY id ASC LIMIT 20');
+        $backlogService = $this->container->get('shopware_bundle_es_backend.backlog_service');
+        $backlogs = $backlogService->read($this->batchSize);
 
         if (empty($backlogs)) {
             $output->writeln('Backlog empty');
@@ -84,11 +93,7 @@ class SyncBacklogCommand extends ShopwareCommand
 
         $ids = array_column($backlogs, 'id');
 
-        $connection->executeUpdate(
-            'DELETE FROM s_es_backend_backlog WHERE id IN (:ids)',
-            ['ids' => $ids],
-            ['ids' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY]
-        );
+        $backlogService->cleanup($ids);
     }
 
     private function indexArticle($id)

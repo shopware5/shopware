@@ -664,6 +664,13 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     {
         $criteria = $this->createCriteria($this->Request());
 
+        if ($this->Request()->getParam('showVariants', 'false') === 'false') {
+            $criteria->conditions[] = [
+                'property' => 'kind',
+                'value' => 1,
+            ];
+        }
+
         $repository = $this->container->get('shopware_attribute.product_repository');
 
         $result = $repository->search($criteria);

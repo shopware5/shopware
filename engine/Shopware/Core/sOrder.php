@@ -855,6 +855,13 @@ class sOrder implements \Enlight_Hook
             $this->getSession()->offsetSet('sOrderVariables', $variables);
         }
 
+        $this->eventManager->notify('Shopware_Modules_Order_SaveOrder_OrderCreated', [
+            'subject' => $this,
+            'details' => $this->sBasketData['content'],
+            'orderId' => $orderID,
+            'orderNumber' => $orderNumber,
+        ]);
+
         return $orderNumber;
     }
 

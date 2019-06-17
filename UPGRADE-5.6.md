@@ -74,6 +74,10 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added the Product Number as a new method to sort your results.
 * Added a last password change date to customers
 * Added new foreign key to `s_order_details`, `orderID` now references `s_order`.`id`
+* Added new config option to set batch size of backlog indexing for elasticsearch backend implementation
+* Added listener for new orders, to add them in the elasticsearch backend backlog
+* Added command `sw:es:backend:backlog:clear` to clear the backlog
+* Added alias command `sw:es:backend:backlog:sync` to `sw:es:backend:sync`
 
 ### Changes
 
@@ -142,6 +146,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed the offcanvas basket to now display shipping costs also when the user is logged in
 * Changed `\Shopware\Components\Privacy\PrivacyService` to run more efficiently
 * Changed the error message if a customer enters an invalid birthday in the registration
+* Changed article list in elasticsearch to consier show variants option
 
 ### Removals
 

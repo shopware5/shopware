@@ -157,6 +157,7 @@ return array_replace_recursive([
         'dynamic_mapping_enabled' => true,
         'batchsize' => 500,
         'backend' => [
+            'batch_size' => 500,
             'write_backlog' => false,
             'enabled' => false,
         ],
