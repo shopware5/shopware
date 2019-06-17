@@ -43,6 +43,10 @@ class MyBasicTestClass implements MyInterface
         return $bar . $foo;
     }
 
+    public function myVoid(): void
+    {
+    }
+
     protected function myProtected($bar)
     {
     }
@@ -94,7 +98,7 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends \Sh
      */
     public static function getHookMethods()
     {
-        return ['myPublic', 'myProtected'];
+        return ['myPublic', 'myVoid', 'myProtected'];
     }
 
     /**
@@ -173,6 +177,18 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends \Sh
             $this,
             __FUNCTION__,
             ['bar' => $bar, 'foo' => $foo, 'barBar' => $barBar, 'fooFoo' => $fooFoo]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function myVoid() : void
+    {
+        $this->__getActiveHookManager(__FUNCTION__)->executeHooks(
+            $this,
+            __FUNCTION__,
+            []
         );
     }
 
