@@ -99,6 +99,11 @@ Ext.define('Shopware.apps.MailLog.view.list.MailLog', {
         return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
     },
 
+    /**
+     * @param { String|Array } contacts
+     *
+     * @returns { String }
+     */
     contactColumnRenderer: function(contacts) {
         if (typeof contacts === 'string') {
             return '<a href="mailto:' + contacts + '">' + contacts + '</a>';

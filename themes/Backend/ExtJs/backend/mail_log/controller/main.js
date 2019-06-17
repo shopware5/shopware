@@ -38,13 +38,10 @@ Ext.define('Shopware.apps.MailLog.controller.Main', {
     },
 
     onResendMailDialog: function(record) {
-        var me = this,
-            tmp = record.copy();
-
-        tmp.set('recipients', []);
+        var me = this;
 
         me.getView('resend.Window').create({
-            record: tmp,
+            record: record.copy(),
         });
     },
 
@@ -59,6 +56,8 @@ Ext.define('Shopware.apps.MailLog.controller.Main', {
 
             return;
         }
+
+        window.resendButton.disable();
 
         Ext.Ajax.request({
             url: '{url controller=MailLog action=resendMail}',
@@ -77,6 +76,8 @@ Ext.define('Shopware.apps.MailLog.controller.Main', {
                 me.mainWindow.gridPanel.getStore().load();
             },
             failure: function (response, opts) {
+                window.resendButton.enable();
+
                 Shopware.Notification.createGrowlMessage(
                     '{s name=resend_mail_error_title}{/s}',
                     '{s name=resend_mail_error_text}{/s}'
