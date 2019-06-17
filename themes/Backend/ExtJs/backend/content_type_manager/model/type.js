@@ -83,6 +83,14 @@ Ext.define('Shopware.apps.ContentTypeManager.model.Type', {
             type: 'string',
         },
         {
+            name: 'viewMetaTitleFieldName',
+            type: 'string',
+        },
+        {
+            name: 'viewMetaDescriptionFieldName',
+            type: 'string',
+        },
+        {
             name: 'groupingState',
             type: 'int',
             convert: function (value, record) {

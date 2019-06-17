@@ -101,6 +101,24 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
                             labelWidth: 150,
                             forceSelection: true
                         },
+                        viewMetaTitleFieldName: {
+                            fieldLabel: '{s name="view/metaTitleField"}{/s}',
+                            xtype: 'combobox',
+                            valueField: 'name',
+                            displayField: 'label',
+                            queryMode: 'local',
+                            labelWidth: 150,
+                            forceSelection: true
+                        },
+                        viewMetaDescriptionFieldName: {
+                            fieldLabel: '{s name="view/metaDescriptionField"}{/s}',
+                            xtype: 'combobox',
+                            valueField: 'name',
+                            displayField: 'label',
+                            queryMode: 'local',
+                            labelWidth: 150,
+                            forceSelection: true
+                        },
                         seoUrlTemplate: {
                             fieldLabel: '{s name="type/seoUrlTemplate"}{/s}',
                             xtype: 'ace-editor',
@@ -121,6 +139,8 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
             this.down('[name="viewTitleFieldName"]'),
             this.down('[name="viewDescriptionFieldName"]'),
             this.down('[name="viewImageFieldName"]'),
+            this.down('[name="viewMetaTitleFieldName"]'),
+            this.down('[name="viewMetaDescriptionFieldName"]'),
         ];
 
         fields.forEach(function (field) {
@@ -193,6 +213,8 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
             this.down('[name="viewTitleFieldName"]'),
             this.down('[name="viewDescriptionFieldName"]'),
             this.down('[name="viewImageFieldName"]'),
+            this.down('[name="viewMetaTitleFieldName"]'),
+            this.down('[name="viewMetaDescriptionFieldName"]'),
         ];
 
         fields.forEach(function (field) {

@@ -66,8 +66,12 @@
 
 {* Canonical link *}
 {block name='frontend_index_header_canonical'}
-    {if $sPage === 1}
-        <link rel="canonical" href="{url controller=$Controller action=index}"/>
+    {if $SeoMetaRobots|strpos:'noindex' === false}
+        {if empty($smarty.get.p)}
+            <link rel="canonical" href="{url controller=$Controller action=index}"/>
+        {else}
+            <link rel="canonical" href="{url controller=$Controller action=index p=$sPage}"/>
+        {/if}
     {/if}
 
     {if {config name=seoIndexPaginationLinks}}
