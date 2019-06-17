@@ -79,6 +79,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added listener for new orders, to add them in the elasticsearch backend backlog
 * Added command `sw:es:backend:backlog:clear` to clear the backlog
 * Added alias command `sw:es:backend:backlog:sync` to `sw:es:backend:sync`
+* Added paging to more lists in the backend
 
 ### Changes
 

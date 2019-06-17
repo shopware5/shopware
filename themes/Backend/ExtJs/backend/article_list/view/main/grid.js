@@ -731,7 +731,10 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                 data: [
                     { value: '25', name: '25 ' + productSnippet },
                     { value: '50', name: '50 ' + productSnippet },
-                    { value: '75', name: '75 ' + productSnippet }
+                    { value: '75', name: '75 ' + productSnippet },
+                    { value: '100', name: '100 ' + productSnippet },
+                    { value: '125', name: '125 ' + productSnippet },
+                    { value: '150', name: '150 ' + productSnippet }
                 ]
             }),
             displayField: 'name',
@@ -743,10 +746,11 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             displayInfo: true
         });
 
-        pagingBar.insert(pagingBar.items.length - 2, [
+        pagingBar.insert(pagingBar.items.length, [
             { xtype: 'tbspacer', width: 6 },
             pageSize
         ]);
+
         return pagingBar;
     },
 
