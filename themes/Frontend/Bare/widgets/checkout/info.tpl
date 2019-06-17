@@ -2,7 +2,7 @@
 {block name="frontend_index_checkout_actions_notepad"}
     <li class="navigation--entry entry--notepad" role="menuitem">
         {s namespace="frontend/index/checkout_actions" name="IndexLinkNotepad" assign="snippetIndexLinkNotepad"}{/s}
-        <a href="{url controller='note'}" title="{$snippetIndexLinkNotepad|escape}" class="btn">
+        <a href="{url controller='note'}" title="{$snippetIndexLinkNotepad|escape}" aria-label="{$snippetIndexLinkNotepad|escape}" class="btn">
             <i class="icon--heart"></i>
             {if $sNotesQuantity > 0}
                 <span class="badge notes--quantity">
@@ -22,6 +22,7 @@
         {block name="frontend_index_checkout_actions_account"}
             <a href="{url controller='account'}"
                title="{"{if $userInfo}{s name="AccountGreetingBefore" namespace="frontend/account/sidebar"}{/s}{$userInfo['firstname']}{s name="AccountGreetingAfter" namespace="frontend/account/sidebar"}{/s} - {/if}{s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}"|escape}"
+               aria-label="{"{if $userInfo}{s name="AccountGreetingBefore" namespace="frontend/account/sidebar"}{/s}{$userInfo['firstname']}{s name="AccountGreetingAfter" namespace="frontend/account/sidebar"}{/s} - {/if}{s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}"|escape}"
                class="btn is--icon-left entry--link account--link{if $userInfo} account--user-loggedin{/if}">
                 <i class="icon--account"></i>
                 {if $userInfo}
@@ -50,7 +51,8 @@
                             <div class="entry--close-off-canvas">
                                 <a href="#close-account-menu"
                                    class="account--close-off-canvas"
-                                   title="{s namespace='frontend/index/menu_left' name="IndexActionCloseMenu"}{/s}">
+                                   title="{s namespace='frontend/index/menu_left' name="IndexActionCloseMenu"}{/s}"
+                                   aria-label="{s namespace='frontend/index/menu_left' name="IndexActionCloseMenu"}{/s}">
                                     {s namespace='frontend/index/menu_left' name="IndexActionCloseMenu"}{/s} <i class="icon--arrow-right"></i>
                                 </a>
                             </div>
@@ -70,7 +72,7 @@
 {block name="frontend_index_checkout_actions_cart"}
     <li class="navigation--entry entry--cart" role="menuitem">
         {s namespace="frontend/index/checkout_actions" name="IndexLinkCart" assign="snippetIndexLinkCart"}{/s}
-        <a class="btn is--icon-left cart--link" href="{url controller='checkout' action='cart'}" title="{$snippetIndexLinkCart|escape}">
+        <a class="btn is--icon-left cart--link" href="{url controller='checkout' action='cart'}" title="{$snippetIndexLinkCart|escape}" aria-label="{$snippetIndexLinkCart|escape}">
             <span class="cart--display">
                 {if $sUserLoggedIn}
                     {s name='IndexLinkCheckout' namespace='frontend/index/checkout_actions'}{/s}
