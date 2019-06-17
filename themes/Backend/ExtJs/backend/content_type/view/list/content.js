@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.{$controllerName}.view.list.Content', {
 
             detailWindow: 'Shopware.apps.{$controllerName}.view.detail.Window',
             columns: {$listColumns|json_encode}
-        };
+        }
     },
 });
 // {/block}

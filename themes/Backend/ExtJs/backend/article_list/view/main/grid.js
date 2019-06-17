@@ -746,10 +746,11 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             displayInfo: true
         });
 
-        pagingBar.insert(pagingBar.items.length - 2, [
+        pagingBar.insert(pagingBar.items.length, [
             { xtype: 'tbspacer', width: 6 },
             pageSize
         ]);
+
         return pagingBar;
     },
 
