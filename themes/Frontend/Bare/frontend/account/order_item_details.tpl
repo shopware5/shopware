@@ -108,7 +108,7 @@
                                 {/if}
                             {/block}
 
-                            {* availability warning*}
+                            {* Availability warning *}
                             {block name='frontend_account_order_item_availability'}
                                 {if $article.modus == 0 && ($article.active == 0 || !$article.article.isAvailable)}
                                     {* show warning if article is not active or not available *}

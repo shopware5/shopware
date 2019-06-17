@@ -289,6 +289,12 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $dispatches = $this->getDispatchRepository()->getDispatchesQuery()->getArrayResult();
         $documentTypes = $this->getRepository()->getDocumentTypesQuery()->getArrayResult();
 
+        // translate objects
+        $translationComponent = $this->get('translation');
+        $payments = $translationComponent->translatePaymentMethods($payments);
+        $documentTypes = $translationComponent->translateDocuments($documentTypes);
+        $dispatches = $translationComponent->translateDispatchMethods($dispatches);
+
         $this->View()->assign([
             'success' => true,
             'data' => [
@@ -327,6 +333,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         }
 
         $list = $this->getList($filter, $sort, $offset, $limit);
+
+        $translationComponent = $this->get('translation');
+        $list['data'] = $translationComponent->translateOrders($list['data']);
 
         $this->View()->assign($list);
     }
@@ -1127,6 +1136,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $orderId = $this->Request()->getParam('orderId');
         $documentType = $this->Request()->getParam('documentType');
 
+        // Needs to be called this early since $this->createDocument boots the
+        // shop, the order was made in, and thereby destroys the backend session
+        $translationComponent = $this->get('translation');
+
         if (!empty($orderId) && !empty($documentType)) {
             $this->createDocument($orderId, $documentType);
         }
@@ -1135,6 +1148,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         $paginator = $this->getModelManager()->createPaginator($query);
         $order = $paginator->getIterator()->getArrayCopy();
+
+        $order = $translationComponent->translateOrders($order);
 
         $this->View()->assign([
             'success' => true,

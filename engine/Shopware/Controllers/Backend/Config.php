@@ -311,6 +311,18 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             $data = $this->getSnippetsForLocales($data);
         }
 
+        if ($name === 'document') {
+            // Translate document type
+            // The standard $translationComponent->translateDocuments can not be used here since the
+            // name may not be overridden. The field is edible and if the translation is
+            // shown in the edit field, there is a high chance of a user saving the translation as name
+            $translator = $this->get('translation')->getObjectTranslator('documents');
+
+            $data = array_map(function ($document) use ($translator) {
+                return $translator->translateObjectProperty($document, 'name', 'description', $document['name']);
+            }, $data);
+        }
+
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 

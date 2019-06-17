@@ -138,7 +138,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $this->View()->assign('sNumberPages', $orderData['numberOfPages']);
         $this->View()->assign('sPages', $orderData['pages']);
 
-        //this has to be assigned here because the config method in smarty can't handle array structures
+        // This has to be assigned here because the config method in smarty can't handle array structures
         $this->View()->assign('sDownloadAvailablePaymentStatus', Shopware()->Config()->get('downloadAvailablePaymentStatus'));
     }
 

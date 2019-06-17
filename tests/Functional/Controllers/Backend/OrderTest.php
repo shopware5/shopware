@@ -193,6 +193,163 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
     }
 
     /**
+     * Test the list of orders the corresponding translations
+     */
+    public function testTranslationOfOrderList()
+    {
+        // Set up
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth(false);
+        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        Shopware()->Container()->reset('translation');
+
+        // Login
+        $this->Request()->setMethod('POST');
+        $this->Request()->setPost(
+            [
+                'username' => 'demo',
+                'password' => 'demo',
+            ]
+        );
+        $this->dispatch('backend/Login/login');
+
+        $getParams = [
+            '_dc' => '1234567890',
+            'page' => '1',
+            'start' => '0',
+            'limit' => '20',
+        ];
+
+        $this->reset();
+
+        // Check for English translations
+        $user = Shopware()->Container()->get('Auth')->getIdentity();
+        $user->locale = Shopware()->Models()->getRepository(
+            'Shopware\Models\Shop\Locale'
+        )->find(2);
+
+        $this->Request()->setMethod('GET');
+        $getString = http_build_query($getParams);
+        $response = $this->dispatch('backend/Order/getList?' . $getString);
+
+        // Remove 'new Date(...)' strings from json
+        $responseStr = preg_replace('/(new Date\([-0-9]+\))/', '"$1"', $response->getBody());
+
+        $responseJSON = json_decode($responseStr, true);
+        static::assertEquals(true, $responseJSON['success']);
+
+        foreach ($responseJSON['data'] as $dataElement) {
+            switch ($dataElement['payment']['id']) {
+                case 2:
+                    static::assertEquals(
+                        'Debit',
+                        $dataElement['payment']['description']
+                    );
+                    break;
+                case 3:
+                    static::assertEquals(
+                        'Cash on delivery',
+                        $dataElement['payment']['description']
+                    );
+                    break;
+                case 4:
+                    static::assertEquals(
+                        'Invoice',
+                        $dataElement['payment']['description']
+                    );
+                    break;
+                case 5:
+                    static::assertEquals(
+                        'Paid in advance',
+                        $dataElement['payment']['description']
+                    );
+                    break;
+                case 6:
+                    static::assertEquals(
+                        'SEPA',
+                        $dataElement['payment']['description']
+                    );
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Tests whether the order controller returns all data stores with their translations
+     */
+    public function testTranslationOfStores()
+    {
+        // set up
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth(false);
+        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+
+        // login
+        $this->Request()->setMethod('POST');
+        $this->Request()->setPost(
+            [
+                'username' => 'demo',
+                'password' => 'demo',
+            ]
+        );
+        $this->dispatch('backend/Login/login');
+
+        $getParams = [
+            '_dc' => '1234567890',
+            'orderId' => '1',
+        ];
+
+        $this->reset();
+
+        // Check for English translations
+        $user = Shopware()->Container()->get('Auth')->getIdentity();
+        $user->locale = Shopware()->Models()->getRepository(
+            'Shopware\Models\Shop\Locale'
+        )->find(2);
+
+        $this->Request()->setMethod('GET');
+        $getString = http_build_query($getParams);
+        $response = $this->dispatch('backend/Order/loadStores?' . $getString);
+
+        $responseJSON = json_decode($response->getBody(), true);
+        static::assertEquals(true, $responseJSON['success']);
+        $data = $responseJSON['data'];
+
+        // Test for fallback value
+        $this->assertElementWithKeyValuePairExists('SEPA', 'description', 6, $data['payments']);
+
+        // Test for translation
+        $this->assertElementWithKeyValuePairExists('Invoice', 'description', 4, $data['payments']);
+
+        $this->assertElementWithKeyValuePairExists('Standard delivery', 'name', 9, $data['dispatches']);
+        $this->assertElementWithKeyValuePairExists('Express Delivery', 'name', 14, $data['dispatches']);
+        $this->assertElementWithKeyValuePairExists('Standard international delivery', 'name', 16, $data['dispatches']);
+
+        $this->assertElementWithKeyValuePairExists('Invoice', 'name', 1, $data['documentTypes']);
+        $this->assertElementWithKeyValuePairExists('Credit', 'name', 3, $data['documentTypes']);
+    }
+
+    /**
+     * Tests a data array for an entry with a specified key value pair
+     *
+     * @param string $dataKey
+     * @param int    $id
+     * @param array  $data
+     *
+     * @throws Exception
+     */
+    private function assertElementWithKeyValuePairExists($expected, $dataKey, $id, $data)
+    {
+        foreach ($data as $entry) {
+            if ($entry['id'] === $id) {
+                static::assertEquals($expected, $entry[$dataKey]);
+
+                return;
+            }
+        }
+
+        throw new \Exception('Entry not found');
+    }
+
+    /**
      * Helper method to return the order amount
      *
      * @return string

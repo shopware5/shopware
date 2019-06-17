@@ -92,8 +92,8 @@
                             {s name="OrderItemInfoClarificationNeeded"}{/s}
                         {else}
                             {block name="frontend_account_order_item_status_value_custom"}
-                                    {$snippetName = {"OrderItemInfo"|cat:$offerPosition.stateName}}
-                                    {$offerPosition.stateName|snippet:$snippetName:'frontend/account/order_item'}
+                                {$snippetName = {"OrderItemInfo"|cat:$offerPosition.stateName}}
+                                {$offerPosition.stateName|snippet:$snippetName:'frontend/account/order_item'}
                             {/block}
                         {/if}
                     </div>

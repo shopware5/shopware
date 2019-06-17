@@ -37,14 +37,6 @@
 //{block name="backend/base/model/payment"}
 Ext.define('Shopware.apps.Base.model.Payment', {
 
-    snippets: {
-        //{block name="backend/payment/payment"}{/block}
-        debit: '{s name=debit}Debit{/s}',
-        cash: '{s name=on_delivery}On delivery{/s}',
-        invoice: '{s name=invoice}Invoice{/s}',
-        prepayment: '{s name=prepayment}Prepayment{/s}'
-    },
-
     /**
      * Defines an alternate name for this class.
      */
@@ -70,21 +62,10 @@ Ext.define('Shopware.apps.Base.model.Payment', {
         //{block name="backend/base/model/payment/fields"}{/block}
         { name:'id', type: 'int' },
         { name:'name', type: 'string' },
-        {
-            name:'description',
-            type: 'string',
-            convert: function(value, record) {
-                var snippet = value;
-                if (record && record.snippets) {
-                    snippet = record.snippets[record.get('name')];
-                }
-                if (Ext.isString(snippet) && snippet.length > 0) {
-                    return snippet;
-                } else {
-                    return value;
-                }
-            }
-        },
+        // No need for a snippet matcher anymore.
+        // All payments are translated on the server which thereby enabling custom
+        // payments methods to be translated as well.
+        { name:'description', type: 'string' },
         { name:'position', type: 'int' },
         { name:'active', type: 'boolean' }
     ]

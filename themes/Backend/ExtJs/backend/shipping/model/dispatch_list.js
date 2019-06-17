@@ -47,8 +47,10 @@ Ext.define('Shopware.apps.Shipping.model.DispatchList', {
         //{block name="backend/shipping/model/dispatch/fields"}{/block}
         { name : 'id' },
         { name : 'name' },
+        { name : 'translatedName', type : 'string' },
         { name : 'type' },
         { name : 'description' },
+        { name : 'translatedDescription', type : 'string' },
         { name : 'comment' },
         { name : 'active'},
         { name : 'position' },
