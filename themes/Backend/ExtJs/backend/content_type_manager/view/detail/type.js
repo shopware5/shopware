@@ -133,6 +133,7 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
             items = this.callParent(arguments);
 
         this.seoUrlGrid = Ext.create('Ext.grid.Panel', {
+            disabled: !me.record.get('showInFrontend'),
             plugins: [
                 Ext.create('Ext.grid.plugin.RowEditing', {
                     clicksToMoveEditor: 1,
@@ -152,6 +153,13 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
                     editor: {
                         readOnly: true,
                         selectOnFocus: true
+                    },
+                    renderer: function (value) {
+                        if (!me.record.get('showInFrontend')) {
+                            return '';
+                        }
+
+                        return value
                     }
                 }
             ],
@@ -161,7 +169,6 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
         var element = Ext.create('Ext.form.FieldContainer', {
             fieldLabel: '{s name="type/seoUrls"}{/s}',
             labelWidth: 150,
-            supportText: 'Foo',
             items: [
                 this.seoUrlGrid
             ]
@@ -179,7 +186,7 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
             });
         }
 
-        items[0].items.items[0].add(element);
+        items[1].items.items[0].insert(1, element);
 
         return items;
     },
@@ -199,14 +206,18 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
             field.allowBlank = !value;
             field.validate();
         });
+
+        this.seoUrlGrid[value ? 'enable' : 'disable']();
+        this.record.set('showInFrontend', value);
+        this.seoUrlGrid.getView().refresh();
     },
 
     labelSupportText: function (record) {
-        if (!record.get('showInFrontend') || !record.get('internalName')) {
+        if (!record.get('showInFrontend') || !record.get('controllerName')) {
             return '';
         }
 
-        return '{s name="link_to_frontend"}{/s}custom' + record.get('internalName');
+        return '{s name="link_to_frontend"}{/s}' + record.get('controllerName');
     }
 });
 // {/block}

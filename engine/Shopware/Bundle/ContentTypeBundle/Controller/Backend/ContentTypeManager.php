@@ -224,6 +224,7 @@ class ContentTypeManager extends \Shopware_Controllers_Backend_ExtJs
 
         $type = json_decode(json_encode($typeObj), true);
         $type['id'] = $type['internalName'];
+        $type['controllerName'] = $typeObj->getControllerName();
         $type['urls'] = $this->getUrls($typeObj);
 
         return $type;
@@ -231,7 +232,7 @@ class ContentTypeManager extends \Shopware_Controllers_Backend_ExtJs
 
     private function convertExtJsToStruct(array $data): Type
     {
-        unset($data['id'], $data['source'], $data['urls']);
+        unset($data['id'], $data['source'], $data['urls'], $data['controllerName']);
 
         if (empty($data['internalName'])) {
             $data['internalName'] = strtolower($this->slug->slugify($data['name'], '_'));

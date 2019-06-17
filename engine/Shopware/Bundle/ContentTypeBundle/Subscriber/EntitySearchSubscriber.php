@@ -130,7 +130,6 @@ class EntitySearchSubscriber implements SubscriberInterface
     private function filterTypes(string $ids, array $data): array
     {
         $ids = json_decode($ids, true);
-        $ids = array_map('intval', $ids);
 
         $data = array_filter($data, function ($item) use ($ids) {
             return \in_array($item['id'], $ids);
