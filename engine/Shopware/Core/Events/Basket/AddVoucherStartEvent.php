@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Shopware\Components\Events\Basket;
+namespace Shopware\Core\Events\Basket;
 
 use Enlight_Event_EventArgs;
 use sBasket;

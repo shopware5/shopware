@@ -28,8 +28,16 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Components\Cart\BasketHelperInterface;
 use Shopware\Components\Cart\Struct\CartItemStruct;
 use Shopware\Components\Cart\Struct\DiscountContext;
-use Shopware\Components\Events\Basket\AddVoucherStartEvent;
 use Shopware\Components\Random;
+use Shopware\Core\Events\Basket\AddArticleStartEvent;
+use Shopware\Core\Events\Basket\AddVoucherStartEvent;
+use Shopware\Core\Events\Basket\BeforeAddMinimumOrderSurchargeEvent;
+use Shopware\Core\Events\Basket\BeforeAddOrderDiscountEvent;
+use Shopware\Core\Events\Basket\BeforeAddOrderSurchargePercentEvent;
+use Shopware\Core\Events\Basket\DeleteArticleStartEvent;
+use Shopware\Core\Events\Basket\DeleteNoteStartEvent;
+use Shopware\Core\Events\Basket\GetBasketAllowEmptyBasketEvent;
+use Shopware\Core\Events\Basket\UpdateArticleStartEvent;
 use Symfony\Component\HttpFoundation\Cookie;
 
 /**
@@ -428,11 +436,11 @@ class sBasket implements \Enlight_Hook
         ];
 
         $notifyUntilBeforeAdd = $this->eventManager->notifyUntil(
-            'Shopware_Modules_Basket_BeforeAddOrderDiscount',
-            [
+            BeforeAddOrderDiscountEvent::EVENT_NAME,
+            new BeforeAddOrderDiscountEvent([
                 'subject' => $this,
                 'discount' => $params,
-            ]
+            ])
         );
 
         if ($notifyUntilBeforeAdd) {
@@ -1098,11 +1106,11 @@ SQL;
         ];
 
         $notifyUntilBeforeAdd = $this->eventManager->notifyUntil(
-            'Shopware_Modules_Basket_BeforeAddMinimumOrderSurcharge',
-            [
+            BeforeAddMinimumOrderSurchargeEvent::EVENT_NAME,
+            new BeforeAddMinimumOrderSurchargeEvent([
                 'subject' => $this,
                 'surcharge' => $params,
-            ]
+            ])
         );
 
         if ($notifyUntilBeforeAdd) {
@@ -1220,11 +1228,11 @@ SQL;
         ];
 
         $notifyUntilBeforeAdd = $this->eventManager->notifyUntil(
-            'Shopware_Modules_Basket_BeforeAddOrderSurchargePercent',
-            [
+            BeforeAddOrderSurchargePercentEvent::EVENT_NAME,
+            new BeforeAddOrderSurchargePercentEvent([
                 'subject' => $this,
                 'surcharge' => $params,
-            ]
+            ])
         );
 
         if ($notifyUntilBeforeAdd) {
@@ -1350,13 +1358,16 @@ SQL;
             ) = $this->getBasketProducts($getProducts);
 
         if (static::roundTotal($totalAmount) < 0 || empty($totalCount)) {
-            if (!$this->eventManager->notifyUntil('Shopware_Modules_Basket_sGetBasket_AllowEmptyBasket', [
-                'articles' => $getProducts,
-                'totalAmount' => $totalAmount,
-                'totalAmountWithTax' => $totalAmountWithTax,
-                'totalCount' => $totalCount,
-                'totalAmountNet' => $totalAmountNet,
-            ])) {
+            if (!$this->eventManager->notifyUntil(
+                GetBasketAllowEmptyBasketEvent::EVENT_NAME,
+                new GetBasketAllowEmptyBasketEvent([
+                    'articles' => $getProducts,
+                    'totalAmount' => $totalAmount,
+                    'totalAmountWithTax' => $totalAmountWithTax,
+                    'totalCount' => $totalCount,
+                    'totalAmountNet' => $totalAmountNet,
+                ])
+            )) {
                 return [];
             }
         }
@@ -1552,8 +1563,11 @@ SQL;
         }
 
         if ($this->eventManager->notifyUntil(
-            'Shopware_Modules_Basket_DeleteNote_Start',
-            ['subject' => $this, 'id' => $id]
+            DeleteNoteStartEvent::EVENT_NAME,
+            new DeleteNoteStartEvent([
+                'subject' => $this,
+                'id' => $id
+            ])
         )) {
             return false;
         }
@@ -1619,13 +1633,13 @@ SQL;
             $quantity = $cartItem->getQuantity();
 
             if ($this->eventManager->notifyUntil(
-                'Shopware_Modules_Basket_UpdateArticle_Start',
-                [
+                UpdateArticleStartEvent::EVENT_NAME,
+                new UpdateArticleStartEvent([
                     'subject' => $this,
                     'id' => $id,
                     'quantity' => $quantity,
                     'cartItem' => $cartItem,
-                ]
+                ])
             )
             ) {
                 $errors = true;
@@ -1798,8 +1812,11 @@ SQL;
     public function sDeleteArticle($id)
     {
         if ($this->eventManager->notifyUntil(
-            'Shopware_Modules_Basket_DeleteArticle_Start',
-            ['subject' => $this, 'id' => $id]
+            DeleteArticleStartEvent::EVENT_NAME,
+            new DeleteArticleStartEvent([
+                'subject' => $this,
+                'id' => $id,
+            ])
         )) {
             return false;
         }
@@ -1855,12 +1872,12 @@ SQL;
         }
 
         if ($this->eventManager->notifyUntil(
-            'Shopware_Modules_Basket_AddArticle_Start',
-            [
+            AddArticleStartEvent::EVENT_NAME,
+            new AddArticleStartEvent([
                 'subject' => $this,
                 'id' => $id,
                 'quantity' => $quantity,
-            ]
+            ])
         )) {
             return false;
         }
