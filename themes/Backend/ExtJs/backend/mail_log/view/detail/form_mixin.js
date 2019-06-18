@@ -6,6 +6,10 @@ Ext.define('Shopware.apps.MailLog.view.detail.FormMixin', {
         editableFields: false,
     },
 
+    /**
+     * @param { Object } config
+     * @returns { Array }
+     */
     createFieldSets: function(config) {
         var me = this;
 
@@ -19,6 +23,9 @@ Ext.define('Shopware.apps.MailLog.view.detail.FormMixin', {
         ];
     },
 
+    /**
+     * @returns { Object }
+     */
     createMetaDataFieldSet: function () {
         return {
             title: '{s name="fieldset_metadata_title"}{/s}',
@@ -38,6 +45,9 @@ Ext.define('Shopware.apps.MailLog.view.detail.FormMixin', {
         };
     },
 
+    /**
+     * @returns { Object }
+     */
     createContentFieldSet: function () {
         return {
             title: '{s name="fieldset_content_title"}{/s}',
@@ -48,7 +58,7 @@ Ext.define('Shopware.apps.MailLog.view.detail.FormMixin', {
                 contentHtml: this.createContentField
             },
             style: {
-                background: '#ffffff',
+                background: '#fff',
                 paddingRight: 0,
             },
         };
@@ -78,6 +88,11 @@ Ext.define('Shopware.apps.MailLog.view.detail.FormMixin', {
         return formField;
     },
 
+    /**
+     * @param { String } value
+     *
+     * @returns { Array }
+     */
     rawValueToArray: function (value) {
         if (!value) {
             return [];
@@ -88,6 +103,11 @@ Ext.define('Shopware.apps.MailLog.view.detail.FormMixin', {
         });
     },
 
+    /**
+     * @param { Array } value
+     *
+     * @returns { String }
+     */
     arrayValueToRaw: function (value) {
         if (!value) {
             return '';
@@ -134,6 +154,12 @@ Ext.define('Shopware.apps.MailLog.view.detail.FormMixin', {
         return formField;
     },
 
+    /**
+     * @param { String }  content
+     * @param { boolean } textOnly
+     *
+     * @returns { String }
+     */
     formFieldHtml: function (content, textOnly) {
         if (textOnly) {
             content = '<pre>' + content + '</pre>';
@@ -144,6 +170,5 @@ Ext.define('Shopware.apps.MailLog.view.detail.FormMixin', {
 
         return Ext.String.format(template, encodeURIComponent(content));
     },
-
 });
 // {/block}

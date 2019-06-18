@@ -17,7 +17,7 @@ Ext.define('Shopware.apps.MailLog.view.resend.Window', {
         var me = this,
             items = me.callParent(arguments);
 
-        var resendButton = Ext.create('Ext.button.Button', {
+        this.resendButton = Ext.create('Ext.button.Button', {
             cls: 'primary',
             name: 'resend-button',
             text: '{s name="window_button_resend"}{/s}',
@@ -26,7 +26,7 @@ Ext.define('Shopware.apps.MailLog.view.resend.Window', {
             },
         });
 
-        items.push(resendButton);
+        items.push(this.resendButton);
 
         return items;
     },
