@@ -662,7 +662,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
                 $this->basket->sInsertPremium();
             }
         }
-        $this->redirect($this->Request()->getParam('sTargetAction', 'index'));
+        $this->redirect([
+            'controller' => $this->Request()->getParam('sTarget', 'checkout'),
+            'action' => $this->Request()->getParam('sTargetAction', 'index'),
+        ]);
     }
 
     /**
