@@ -9,7 +9,7 @@
  * so the user wouldn't be interrupted in their workflow.
  */
 (function()
-/** @lends tinymce# */
+    /** @lends tinymce# */
 {
 
     // Create the tinymce plugin
@@ -84,7 +84,7 @@
                 }
 
                 if(me.ed.settings && me.ed.settings.fullscreen_is_enabled) {
-                   forceToFront = true;
+                    forceToFront = true;
                 }
 
                 // Opens the media selection and registers a callback method to process the incoming image(s)
@@ -150,10 +150,11 @@
             // Loop through the selection and add the images to the editor
             Ext.each(selected, function(record) {
                 var type = record.get('type');
+                var extension = record.get('extension').toLowerCase();
 
                 if(type === 'VIDEO') {
                     me._insertVideo(record);
-                } else if(type === 'IMAGE') {
+                } else if(type === 'IMAGE' || extension === 'svg') {
                     me._insertImage(record);
                 } else if(type === 'MUSIC') {
                     me._insertAudio(record);
@@ -285,3 +286,4 @@
     // Register the plugin
     tinymce.PluginManager.add('media_selection', tinymce.plugins.MediaSelectionPlugin);
 })();
+

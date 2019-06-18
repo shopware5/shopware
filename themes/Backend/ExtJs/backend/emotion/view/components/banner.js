@@ -75,15 +75,35 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
     },
 
     onSelectMedia: function(element, media) {
-        var me = this;
+        var me = this,
+            isSvg = false;
 
         me.selectedMedia = Ext.isArray(media) ? media[0] : media;
+
+        var selectedMedia = (Ext.isArray(media) ? media[0].get('path') : media).toLowerCase();
+        if (selectedMedia.substring(selectedMedia.length - 4, selectedMedia.length) === '.svg') {
+            isSvg = true;
+            if (me.bannerPositionField) {
+                me.bannerPositionField.setValue('');
+            }
+        }
 
         if(!me.previewFieldset) {
             me.previewFieldset = me.createPreviewImage(media);
             me.add(me.previewFieldset);
         } else {
+            me.previewFieldset.show();
             me.previewImage.update({ src: me.basePath + (Ext.isArray(media) ? media[0].get('path') : media) });
+        }
+
+        if (isSvg) {
+            me.mappingButton.hide();
+            me.previewImage.hide();
+            me.svgNotice.show();
+        } else {
+            me.mappingButton.show();
+            me.previewImage.show();
+            me.svgNotice.hide();
         }
     },
 
@@ -100,9 +120,16 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
             }
         });
 
+        me.mappingButton = me.createMappingButton();
+        me.svgNotice = Shopware.Notification.createBlockMessage('{s name="svgNotice"}{/s}', 'notice');
+
         return Ext.create('Ext.form.FieldSet', {
             title: '{s name=preview}Preview image{/s}',
-            items: [ me.createMappingButton(), me.previewImage ]
+            items: [
+                me.svgNotice,
+                me.mappingButton,
+                me.previewImage
+            ]
         });
     },
 
