@@ -153,6 +153,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     /**
      * Event listener function of the configurator checkbox in the detail tab.
      * Enables or disables the variant tab.
+     *
      * @param field
      * @param newValue
      */
@@ -208,7 +209,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
 
         form = mainWindow.detailForm;
 
-        //first, check if the detail form panel is valid, otherwise return.
+        // First, check if the detail form panel is valid, otherwise return.
         if ( !form.getForm().isValid() ) {
             if (options !== Ext.undefined && options !== null && Ext.isFunction(options.callback)) {
                 options.callback(null, false, 'no_valid_form');
@@ -218,7 +219,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
 
         priceStore = article.getPrice();
 
-        //update the article record with the form data.
+        // Update the article record with the form data.
         form.getForm().updateRecord(article);
         article = me.prepareAvoidCustomerGroups(article);
 
@@ -237,7 +238,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
 
         article.getConfiguratorSetStore = Ext.create('Ext.data.Store', { model: 'Shopware.apps.Article.model.ConfiguratorSet' });
 
-        //save last price store filter to filter again after the article saved.
+        // Save last price store filter to filter again after the article saved.
         lastFilter = priceStore.filters.items;
 
         priceStore.clearFilter();
@@ -258,7 +259,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             return false;
         }
 
-        //remove all prices with a clone flag.
+        // Remove all prices with a clone flag.
         me.removeClonedPrices(priceStore);
         article.setDirty();
         article.save({
@@ -328,7 +329,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         var firstCustomerGroup = me.subApplication.firstCustomerGroup;
 
         priceStore.each(function(price) {
-            if (price.get('customerGroupKey') == firstCustomerGroup.get('key') && price.get('price') > 0) {
+            if (price.get('customerGroupKey') === firstCustomerGroup.get('key') && price.get('price') > 0) {
                 priceExist = true;
                 return true;
             }
@@ -340,7 +341,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         var me = this,
             subApps = Shopware.app.Application.subApplications,
             articleList = subApps.findBy(function(item) {
-                if(item.$className == 'Shopware.apps.ArticleList') {
+                if(item.$className === 'Shopware.apps.ArticleList') {
                     return true;
                 }
             });
@@ -424,22 +425,22 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         });
         priceFieldSet.tabPanel.setActiveTab(0);
 
-        //reconfigure the article link listing
+        // Reconfigure the article link listing
         mainWindow.down('article-resources-links grid[name=link-listing]').reconfigure(article.getLink());
 
-        //reconfigure the article download listing
+        // Reconfigure the article download listing
         mainWindow.down('article-resources-downloads grid[name=download-listing]').reconfigure(article.getDownload());
 
-        //reconfigure the article accessory articles listing
+        // Reconfigure the article accessory articles listing
         mainWindow.down('article-crossselling-tab grid[name=accessory-listing]').reconfigure(article.getAccessory());
 
-        //reconfigure the article similar articles listing
+        // Reconfigure the article similar articles listing
         mainWindow.down('article-crossselling-tab grid[name=similar-listing]').reconfigure(article.getSimilar());
 
-        //reconfigure the category listing in the category tab
+        // Reconfigure the category listing in the category tab
         mainWindow.down('container[name=category-tab] article-category-list').reconfigure(article.getCategory());
 
-        // reconfigure the stream listing in the crossselling tab
+        // Reconfigure the stream listing in the crossselling tab
         mainWindow.down('article-crossselling-tab grid[name=streams-listing]').reconfigure(article.getStreams());
 
         //reconfigure the seo category listing and the selection store of the listing
@@ -449,7 +450,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
 
         seoListing.setCategoryStore(article.getCategory());
 
-        //reconfigure the image listing
+        // Reconfigure the image listing
         var imageListing = mainWindow.down('article-image-list dataview[name=image-listing]');
         var listingComponent = mainWindow.down('article-image-list');
         imageListing.bindStore(article.getMedia());
@@ -460,7 +461,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
 
     /**
      * Helper function to reload the article data
-     * @param articleId
+     *
+     * @param { Integer } articleId
      */
     reloadArticle: function(articleId) {
         var me = this, lastFilter = null;
@@ -468,15 +470,15 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         if (me.subApplication.article) {
             lastFilter = me.subApplication.article.getPrice().filters.items;
         }
-        //the batch store is responsible to load all required stores for the detail page in one request
+        // The batch store is responsible to load all required stores for the detail page in one request
         me.batchStore = me.getStore('Batch');
         me.batchStore.getProxy().extraParams.articleId = articleId;
         me.batchStore.load({
             callback: function(records, operation) {
                 var storeData = records[0];
-                //when store has been loaded use the first record as data array to create the required stores
+                // When store has been loaded use the first record as data array to create the required stores
                 if (operation.success === true) {
-                    //prepare the associated stores to use them in the detail page
+                    // Prepare the associated stores to use them in the detail page
                     var article = storeData.getArticle().first();
                     me.subApplication.article = article;
 
@@ -492,20 +494,17 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     },
 
     onCancel: function(win) {
-        var me = this;
         win.destroy();
     },
 
     /**
-     * Event listener function which fired when the user clicks the duplicate button
-     * in the side bar.
-     * @return void
+     * Event listener function which fired when the user clicks the duplicate button in the side bar.
      */
     onDuplicateArticle: function(article) {
         var me = this,
             detailRecord = me.getDetailForm().getRecord();
 
-        //use the detailRecord for the id because article in split view mode can be outdated
+        // Use the detailRecord for the id because article in split view mode can be outdated
         if (!detailRecord || !detailRecord.get('id')) {
             return;
         }
@@ -536,7 +535,6 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
 
     /**
      * Event listener function which fired when the user clicks the delete button.
-     * @param window
      * @param article
      */
     onDeleteArticle: function(article) {
@@ -544,7 +542,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             win = me.getMainWindow(),
             articleModel = me.getDetailForm().getRecord();
 
-        //use the model from the record because article in split view mode can be outdated
+        // Use the model from the record because article in split view mode can be outdated
         if (articleModel instanceof Ext.data.Model && articleModel.get('id') > 0) {
             Ext.MessageBox.confirm(me.snippets.growlMessage, me.snippets.removeArticle , function (response) {
                 if ( response !== 'yes' ) {
@@ -584,8 +582,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      * Event listener function of the resources component.
      * Fired when the user clicks the add link button.
      * @event
-     * @param [Ext.grid.Panel] The link grid
-     * @param [Ext.form.Panel] The form panel for the link
+     * @param { Ext.grid.Panel } grid The link grid
+     * @param { Object } form The link record
      */
     onAddLink: function(grid, form) {
         var me = this, model,
@@ -609,8 +607,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      * Event listener function of the resources component.
      * Fired when the user clicks the remove link action column.
      * @event
-     * @param [Ext.grid.Panel] The link grid
-     * @param [Ext.data.Model] The link record
+     * @param { Ext.grid.Panel } grid The link grid
+     * @param { Ext.data.Model } record The link record
      */
     onRemoveLink: function(grid, record) {
         var me = this,
@@ -626,8 +624,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      * Fired when the user clicks the add download button.
      *
      * @event
-     * @param [Ext.grid.Panel] The download grid
-     * @param [Ext.form.Panel] The download panel for the link
+     * @param { Ext.grid.Panel } grid The download grid
+     * @param { Ext.data.Model } record The download record
      */
     onAddDownload: function(grid, form) {
         var me = this, model,
@@ -652,8 +650,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      * Fired when the user clicks the remove download action column.
      *
      * @event
-     * @param [Ext.grid.Panel] The download grid
-     * @param [Ext.data.Model] The download record
+     * @param { Ext.grid.Panel } grid The download grid
+     * @param { Ext.data.Model } record The download record
      */
     onRemoveDownload: function(grid, record) {
         var me = this,
@@ -776,34 +774,28 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         var me = this,
             record = event.record,
             store = event.grid.store,
-            firstRecord = store.getAt(0),
-            firstPrice = firstRecord.get('price'),
             nextRecord = store.getAt(event.rowIdx + 1),
-            price = record.get('price'),
             row = Ext.get(event.row),
-            icon = Ext.get(row.query('.x-action-col-icon')),
-            percent,
-            pseudoPrice = record.get('pseudoPrice'),
-            percentPseudo = record.get('percentPseudo');
+            icon = Ext.get(row.query('.x-action-col-icon'));
 
         me.removeCloneFlag(store);
 
-        //user changed the "to" field?
+        // User changed the "to" field?
         if ( event.field === 'to') {
-            //check if the user insert a numeric to value
+            // Check if the user insert a numeric to value
             if (Ext.isNumeric(event.value)) {
                 icon.addCls('x-hidden');
 
-                //if this is the case we need to check if the current row is the last row.
+                // If this is the case we need to check if the current row is the last row.
                 if (!nextRecord) {
-                    //if the current row is the last row, we need to add a new row with "to any"
+                    // If the current row is the last row, we need to add a new row with "to any"
                     var newRecord = Ext.create('Shopware.apps.Article.model.Price', {
                         from: event.value + 1,
                         customerGroupKey: record.get('customerGroupKey', null)
                     });
                     store.add(newRecord);
                 } else {
-                    //if the current row is not the last row we have to increase the from value of the next row
+                    // If the current row is not the last row we have to increase the from value of the next row
                     nextRecord.set('from', event.value + 1);
                 }
             } else {
@@ -811,57 +803,134 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                 icon.addCls('sprite-minus-circle-frame');
             }
         } else if ( event.field === 'price') {
-            if (price && firstPrice > price) {
-                percent = (firstPrice - price) / firstPrice * 100;
-                percent = percent.toFixed(2);
-                record.set('percent', percent);
-            } else {
-                record.set('percent', null);
-            }
-
-            if(price && pseudoPrice > 0) {
-                percentPseudo = 100 - 100 / pseudoPrice * price;
-                percentPseudo = percentPseudo.toFixed(2);
-                record.set('percentPseudo', percentPseudo);
-            }
-
-            //if the user has edit the percent column, we have to calculate the price
+           this.updatedPriceField(event);
+            // If the user has edit the percent column, we have to calculate the price
         } else if (event.field === 'percent') {
-            if (firstPrice === price) {
-                firstRecord.set('percent', null);
-            } else if(event.value > 0) {
-                price = firstPrice / 100 * (100 - event.value);
-                price = price.toFixed(2);
-                record.set('price', price);
-            }
+            this.updatedPercentField(event);
         } else if (event.field === 'percentPseudo') {
-            if(pseudoPrice > 0) {
-                //if the user enters 0 or nothing, the price has to be the pseudoPrice
-                if(!Ext.isNumeric(event.value) || event.value === 0) {
-                    record.set('price', pseudoPrice);
-                } else if(event.value > 0) {
-                    price = pseudoPrice * ((100 - event.value) / 100);
-                    price = price.toFixed(2);
-                    record.set('price', price);
-                }
-            } else {
-                /**
-                 * if user enters value, when no pseudoPrice exists,
-                 * we have to discard it.
-                 * Cause we stricly calculate by pseudoPrice - not revers by price
-                 */
-                record.set('percentPseudo', 0);
-            }
+            this.updatedPseudoPercentField(event);
         } else if (event.field === 'pseudoPrice') {
-            //if the user enters 0 or nothing, the percentPseudo has to be 0
-            if(!Ext.isNumeric(event.value) || event.value === 0) {
-                record.set('percentPseudo', 0);
-            } else if(event.value > 0) {
-                percentPseudo = 100 - (100 / event.value * price);
-                percentPseudo = percentPseudo.toFixed(2);
-                record.set('percentPseudo', percentPseudo);
-            }
+            this.updatedPseudoPriceField(event);
         }
+    },
+
+    /**
+     * Helper function to update related fields of percent
+     * @param event
+     */
+    updatedPercentField: function(event) {
+        var me = this,
+            record = event.record,
+            store = event.grid.store,
+            firstRecord = store.getAt(0),
+            firstPrice = firstRecord.get('price'),
+            price = record.get('price');
+
+        if (firstPrice === price) {
+            firstRecord.set('percent', null);
+        } else if(event.value > 0) {
+            price = firstPrice / 100 * (100 - event.value);
+            price = price.toFixed(2);
+            record.set('price', price);
+        }
+
+        // We need to trigger update on PriceField without copy&paste all that checks and updates
+        me.updatedPriceField(event);
+    },
+
+    /**
+     * Helper function to update related fields of price
+     *
+     * @param event
+     */
+    updatedPriceField: function(event) {
+        var me = this,
+            record = event.record,
+            store = event.grid.store,
+            firstRecord = store.getAt(0),
+            firstPrice = firstRecord.get('price'),
+            previousPrice = store.getAt(event.rowIdx -1),
+            price = record.get('price'),
+            percent,
+            pseudoPrice = record.get('pseudoPrice'),
+            percentPseudo = record.get('percentPseudo');
+
+        if(price && previousPrice && previousPrice.get('price') < price) {
+            record.set('price', previousPrice.get('price') - 0.01);
+            // We need to trigger update on PriceField without copy&paste all that checks and updates
+            me.updatedPriceField(event);
+        } else if(price && firstPrice > price) {
+            percent = (firstPrice - price) / firstPrice * 100;
+            percent = percent.toFixed(2);
+            record.set('percent', percent);
+        } else {
+            record.set('percent', null);
+        }
+
+        if(price && pseudoPrice > 0) {
+            percentPseudo = 100 - 100 / pseudoPrice * price;
+            percentPseudo = percentPseudo.toFixed(2);
+            record.set('percentPseudo', percentPseudo);
+        }
+    },
+
+    /**
+     * Helper function to update related fields of pseudoPercent
+     *
+     * @param event
+     */
+    updatedPseudoPercentField: function(event) {
+        var me = this,
+            record = event.record,
+            store = event.grid.store,
+            firstRecord = store.getAt(0),
+            firstPrice = firstRecord.get('price'),
+            price = record.get('price'),
+            pseudoPrice = record.get('pseudoPrice');
+
+        if(pseudoPrice > 0) {
+            // If the user enters 0 or nothing, the price has to be the pseudoPrice
+            if(!Ext.isNumeric(event.value) || event.value === 0) {
+                record.set('pseudoPrice', null);
+            } else if(event.value > 0) {
+                pseudoPrice = (price / (100 - event.value)) * 100;
+                pseudoPrice = pseudoPrice.toFixed(2);
+                record.set('pseudoPrice', pseudoPrice);
+            }
+
+            // We need to trigger update on PriceField without copy&paste all that checks and updates
+            me.updatedPriceField(event);
+        } else {
+            /**
+             * If the user enters a value when no pseudoPrice exists, we have to discard it
+             * because we strictly calculate by pseudoPrice - not revers by price
+             */
+            record.set('percentPseudo', 0);
+        }
+    },
+
+    /**
+     * Helper function to update related fields of pseudoPrice
+     *
+     * @param event
+     */
+    updatedPseudoPriceField: function(event) {
+        var me = this,
+            record = event.record,
+            price = record.get('price'),
+            percentPseudo = record.get('percentPseudo');
+
+        // If the user enters 0 or nothing, the percentPseudo has to be 0
+        if(!Ext.isNumeric(event.value) || event.value === 0) {
+            record.set('percentPseudo', 0);
+        } else if(event.value > 0) {
+            percentPseudo = 100 - (100 / event.value * price);
+            percentPseudo = percentPseudo.toFixed(2);
+            record.set('percentPseudo', percentPseudo);
+        }
+
+        // We need to trigger update on PriceField without copy&paste all that checks and updates
+        me.updatedPriceField(event);
     },
 
     /**
@@ -881,21 +950,21 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             previousPrice = store.getAt(event.rowIdx -1),
             nextPrice = store.getAt(event.rowIdx + 1);
 
-        //check if the current row is the last row
-        if ( event.field === "to") {
-            //if the current row isn't the last row, we want to cancel the edit.
+        // Check if the current row is the last row
+        if ( event.field === 'to') {
+            // If the current row isn't the last row, we want to cancel the edit.
             if (nextPrice) {
                 return false;
             }
-            //check if the current row has a previous row.
+            // Check if the current row has a previous row.
             if (previousPrice) {
-                //if this is the case we have to set the min value for the "to" field
-                //+1 of the previous price
+                // If this is the case we have to set the min value for the "to" field
+                // +1 of the previous price
                 minValue = ~~(previousPrice.get('to') * 1) + 1;
             }
             editor.setMinValue(minValue);
         }
-        //check if the user want to edit the price field.
+        // Check if the user want to edit the price field.
         if ( event.field === "price" ) {
             if (previousPrice && previousPrice.get('price') > 0) {
                 maxValue = previousPrice.get('price') - 0.01;
@@ -906,11 +975,10 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
 
     /**
      * Removes the cloned prices of the article price store.
-     * @param article
+     * @param priceStore
      */
     removeClonedPrices: function(priceStore) {
-        var me = this,
-            toRemove = [];
+        var toRemove = [];
 
         priceStore.clearFilter();
         priceStore.each(function(price) {
@@ -926,10 +994,10 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      * Event will be fired when the user change the tab panel in the price field set.
      *
      * @event
-     * @param [object] The previous tab panel
-     * @param [object] The clicked tab panel
-     * @param [Ext.data.Store] The price store
-     * @param [array] The price data of the first customer group.
+     * @param { Object } oldTab The previous tab panel
+     * @param { Object } newTab The clicked tab panel
+     * @param { Ext.data.Store } priceStore The price store
+     * @param { Array } customerGroupStore The price data of the first customer group.
      */
     onPriceTabChanged: function(oldTab, newTab, priceStore, customerGroupStore) {
         var me = this,
@@ -941,33 +1009,33 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         customerGroup = newTab.customerGroup;
         priceStore.clearFilter();
 
-        //first we remove all prices which have a cloned flag and save the prices of the first group.
+        // First we remove all prices which have a cloned flag and save the prices of the first group.
         priceStore.each(function(item) {
             if (item instanceof Ext.data.Model && item.get('cloned')) {
                 toRemove.push(item);
             }
-            if (item.get('customerGroupKey') == firstGroup.get('key')) {
+            if (item.get('customerGroupKey') === firstGroup.get('key')) {
                 firstGroupPrices.push(item);
             }
         });
 
-        //we have to collect the records, because if we remove the items in the for each,
-        //the store can't iterate the records correctly.
+        // We have to collect the records, because if we remove the items in the for each,
+        // the store can't iterate the records correctly.
         priceStore.remove(toRemove);
 
-        //now we can filter the price store for the current customer group.
+        // Now we can filter the price store for the current customer group.
         priceStore.filter({
             filterFn: function(item) {
-                return item.get("customerGroupKey") == customerGroup.get('key');
+                return item.get('customerGroupKey') === customerGroup.get('key');
             }
         });
 
-        //if the current customer group is the first/main customer group, we can return now.
+        // If the current customer group is the first/main customer group, we can return now.
         if (customerGroup.get('id') === firstGroup.get('id')) {
             return false;
         }
 
-        //if no prices given for the current customer group, we have to copy the prices of the main customer group
+        // If no prices given for the current customer group, we have to copy the prices of the main customer group
         if (priceStore.data.length === 0) {
             priceStore.add(me.clonePrices(firstGroupPrices, customerGroup));
         }
@@ -976,6 +1044,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     /**
      * Clones the passed price array, sets the cloned flag for the cloned prices and
      * sets the customer group equals the key of the passed group.
+     *
      * @param firstGroupPrices
      * @param customerGroup
      */
