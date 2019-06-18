@@ -110,12 +110,20 @@ class ContentTypesReader extends XmlReaderBase
             $item['viewImageFieldName'] = $viewImageFieldName;
         }
 
+        if ($viewMetaTitleFieldName = self::getElementChildValueByName($element, 'viewMetaTitleFieldName')) {
+            $item['viewMetaTitleFieldName'] = $viewMetaTitleFieldName;
+        }
+
+        if ($viewMetaDescriptionFieldName = self::getElementChildValueByName($element, 'viewMetaDescriptionFieldName')) {
+            $item['viewMetaDescriptionFieldName'] = $viewMetaDescriptionFieldName;
+        }
+
         if ($seoUrlTemplate = self::getElementChildValueByName($element, 'seoUrlTemplate')) {
             $item['seoUrlTemplate'] = $seoUrlTemplate;
         }
 
-        if ($showInFrontend && (empty($viewDescriptionFieldName) || empty($viewImageFieldName) || empty($viewTitleFieldName))) {
-            throw new \InvalidArgumentException('Content-Type with enabled showInFrontend requires a viewTitleFieldName, viewDescriptionFieldName, viewImageFieldName');
+        if ($showInFrontend && (empty($viewDescriptionFieldName) || empty($viewImageFieldName) || empty($viewTitleFieldName) || empty($viewMetaTitleFieldName) || empty($viewMetaDescriptionFieldName))) {
+            throw new \InvalidArgumentException('Content-Type with enabled showInFrontend requires a viewTitleFieldName, viewDescriptionFieldName, viewImageFieldName, viewMetaTitleFieldName, viewMetaDescriptionFieldName');
         }
 
         $item['menuParent'] = 'Content';

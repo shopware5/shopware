@@ -90,6 +90,14 @@ class TypeBuilder
             $class->setViewImageFieldName($type['viewImageFieldName']);
         }
 
+        if (isset($type['viewMetaTitleFieldName'])) {
+            $class->setViewMetaTitleFieldName($type['viewMetaTitleFieldName']);
+        }
+
+        if (isset($type['viewMetaDescriptionFieldName'])) {
+            $class->setViewMetaDescriptionFieldName($type['viewMetaDescriptionFieldName']);
+        }
+
         if (isset($type['seoUrlTemplate'])) {
             $class->setSeoUrlTemplate($type['seoUrlTemplate']);
         }

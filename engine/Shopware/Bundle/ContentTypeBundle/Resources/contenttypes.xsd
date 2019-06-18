@@ -27,6 +27,8 @@
             <xsd:element name="viewTitleFieldName" type="xsd:string"  minOccurs="0"/>
             <xsd:element name="viewDescriptionFieldName" type="xsd:string"  minOccurs="0"/>
             <xsd:element name="viewImageFieldName" type="xsd:string"  minOccurs="0"/>
+            <xsd:element name="viewMetaTitleFieldName" type="xsd:string"  minOccurs="0"/>
+            <xsd:element name="viewMetaDescriptionFieldName" type="xsd:string"  minOccurs="0"/>
             <xsd:element name="seoUrlTemplate" type="xsd:string"  minOccurs="0"/>
             <xsd:element name="fieldSets" type="fieldSetType"/>
             <xsd:element name="custom" type="custom" minOccurs="0"/>

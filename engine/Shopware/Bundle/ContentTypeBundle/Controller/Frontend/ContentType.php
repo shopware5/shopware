@@ -97,7 +97,9 @@ class ContentType extends \Enlight_Controller_Action
         $this->View()->assign('sFields', $this->getFields());
         $this->View()->assign('sAction', $this->Request()->getActionName());
         $this->View()->assign('sTitleKey', $this->type->getViewTitleFieldName());
+        $this->View()->assign('sMetaTitleKey', $this->type->getViewMetaTitleFieldName());
         $this->View()->assign('sDescriptionKey', $this->type->getViewDescriptionFieldName());
+        $this->View()->assign('sMetaDescriptionKey', $this->type->getViewMetaDescriptionFieldName());
         $this->View()->assign('sImageKey', $this->type->getViewImageFieldName());
 
         if (!$this->View()->templateExists($this->View()->Template()->template_resource)) {
@@ -125,7 +127,7 @@ class ContentType extends \Enlight_Controller_Action
         if ($item) {
             $breadCrumb[] = [
                 'id' => $this->type->getInternalName(),
-                'name' => $item[$this->type->getViewTitleFieldName()],
+                'name' => $item[$this->type->getViewMetaTitleFieldName()],
                 'blog' => false,
                 'link' => 'shopware.php?sViewport=' . $this->type->getControllerName() . '&sAction=detail&&id=' . $item['id'],
             ];

@@ -96,6 +96,16 @@ class Type implements JsonSerializable
     /**
      * @var string
      */
+    protected $viewMetaTitleFieldName;
+
+    /**
+     * @var string
+     */
+    protected $viewMetaDescriptionFieldName;
+
+    /**
+     * @var string
+     */
     protected $seoUrlTemplate = '{$type.name}/{$item[$type.viewTitleFieldName]}/';
 
     public function getName(): string
@@ -281,6 +291,30 @@ class Type implements JsonSerializable
     public function setViewImageFieldName(string $viewImageFieldName): self
     {
         $this->viewImageFieldName = $viewImageFieldName;
+
+        return $this;
+    }
+
+    public function getViewMetaTitleFieldName(): string
+    {
+        return $this->viewMetaTitleFieldName;
+    }
+
+    public function setViewMetaTitleFieldName(string $viewMetaTitleFieldName): Type
+    {
+        $this->viewMetaTitleFieldName = $viewMetaTitleFieldName;
+
+        return $this;
+    }
+
+    public function getViewMetaDescriptionFieldName(): string
+    {
+        return $this->viewMetaDescriptionFieldName;
+    }
+
+    public function setViewMetaDescriptionFieldName(string $viewMetaDescriptionFieldName): Type
+    {
+        $this->viewMetaDescriptionFieldName = $viewMetaDescriptionFieldName;
 
         return $this;
     }
