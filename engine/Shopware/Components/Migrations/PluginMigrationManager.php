@@ -138,7 +138,12 @@ ENGINE=InnoDB
 
         foreach ($migrations as $migration) {
             $this->log(sprintf('Revert MigrationNumber: %s - %s', $migration->getVersion(), $migration->getLabel()));
-            $this->apply($migration, $modus, $keepUserData);
+            try {
+                $this->apply($migration, $modus, $keepUserData);
+            } catch (\Exception $e) {
+                $this->log($e->getMessage());
+                throw $e;
+            }
         }
     }
 
