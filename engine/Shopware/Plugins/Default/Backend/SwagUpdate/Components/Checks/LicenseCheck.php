@@ -159,7 +159,7 @@ class LicenseCheck implements CheckInterface
             ->from('s_core_licenses', 'license')
             ->where('license.active = 1')
             ->andWhere('license.module IN (:modules)')
-            ->setParameter(':modules', $licenseKeys, Connection::PARAM_INT_ARRAY);
+            ->setParameter(':modules', $licenseKeys, Connection::PARAM_STR_ARRAY);
 
         return $queryBuilder->execute()->fetchAll();
     }
