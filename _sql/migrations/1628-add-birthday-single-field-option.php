@@ -25,13 +25,25 @@ class Migrations_Migration1628 extends Shopware\Components\Migrations\AbstractMi
 {
     public function up($modus)
     {
-        $this->addSql('SET @parentId = (SELECT id FROM `s_core_config_forms` WHERE name = \'Frontend33\' LIMIT 1);
+        $this->addSql('UPDATE `s_core_config_elements` 
+SET `position` = `id`
+WHERE `form_id` = (
+    SELECT `id` FROM `s_core_config_forms` WHERE `name` = \'Frontend33\' LIMIT 1
+)');
+
+        $this->addSql('SET @parentId = (SELECT id FROM `s_core_config_forms` WHERE name = \'Frontend33\' LIMIT 1)');
         
-INSERT INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`)
-VALUES (@parentId, \'birthdaySingleField\', \'b:0;\', \'Display birthday as a date field\', \'If active, the birthdate will be displayed as a date field, rather than three single fields.\', \'boolean\', 1, 0, 0);
+        $this->addSql('INSERT INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`)
+VALUES (@parentId, \'birthdaySingleField\', \'b:0;\', \'Geburtstag als Datumsfeld anzeigen\', \'Wenn aktiv, wird das Geburtsdatum als einzelnes Datumsfeld dargestellt, statt drei einzelnen Feldern.\', \'boolean\', 1, 0, 0);
 ');
 
         $this->addSql('SET @configId = LAST_INSERT_ID();');
+        $this->addSql('SET @positionId = (SELECT id FROM `s_core_config_elements` WHERE name = \'requirebirthdayfield\' LIMIT 1);');
+
+        $this->addSql('UPDATE `s_core_config_elements` 
+SET position = @positionId
+WHERE `id` = @configId
+');
 
         $this->addSql('INSERT INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`, `description`)
 VALUES (@configId, 1, \'Geburtstag als Datumsfeld anzeigen\', \'Wenn aktiv, wird das Geburtsdatum als einzelnes Datumsfeld dargestellt, statt drei einzelnen Feldern\');
