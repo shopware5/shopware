@@ -57,7 +57,12 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
         [1209600, '{s name=detail_general/mode_combo_box/two_weeks}2 Weeks (1209600 Sec.){/s}'],
         [2419200, '{s name=detail_general/mode_combo_box/one_month}1 Month (2419200 Sec.){/s}'],
         [4838400, '{s name=detail_general/mode_combo_box/two_months}2 Months (4838400 Sec.){/s}'],
-        [7257600, '{s name=detail_general/mode_combo_box/three_months}3 Months (7257600 Sec.){/s}']
+        [7257600, '{s name=detail_general/mode_combo_box/three_months}3 Months (7257600 Sec.){/s}'],
+        [14515200, '{s name=detail_general/mode_combo_box/six_months}6 Months (14515200 Sec.){/s}'],
+        [29030400, '{s name=detail_general/mode_combo_box/one_year}1 Year (29030400 Sec.){/s}'],
+        [58060800, '{s name=detail_general/mode_combo_box/two_years}2 Years (58060800 Sec.){/s}'],
+        [232243200, '{s name=detail_general/mode_combo_box/four_years}4 Years (232243200 Sec.){/s}'],
+        [464486400, '{s name=detail_general/mode_combo_box/eight_years}8 Years (232243200 Sec.){/s}']
     ],
     /**
      * Initialize the Shopware.apps.Partner.view.partner.detail and defines the necessary
