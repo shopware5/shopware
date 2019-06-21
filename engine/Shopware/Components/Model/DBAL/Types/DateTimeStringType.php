@@ -52,7 +52,12 @@ class DateTimeStringType extends Type
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         if (!$value instanceof \DateTimeInterface && !empty($value)) {
-            $value = new \DateTime($value);
+            if (is_numeric($value)) {
+                $date = new \DateTime();
+                $value = $date->setTimestamp($value);
+            } else {
+                $value = new \DateTime($value);
+            }
         } elseif (empty($value)) {
             $value = null;
         }
