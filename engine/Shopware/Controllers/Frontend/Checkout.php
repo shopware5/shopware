@@ -1622,14 +1622,19 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     public function ajaxCartAction()
     {
         $view = $this->View();
+
+        // Necessary to call this first in order for 'sDispatch' session variable to be set
+        // The basket will need this session variable to properly calculate the shipping costs
+        $dispatch = $this->getSelectedDispatch();
         $basket = $this->getBasket();
+
         $view->assign('sCountryList', $this->getCountryList());
         $view->assign('sState', $this->getSelectedState());
         $view->assign('sPayments', $this->getPayments());
         $view->assign('sCountry', $this->getSelectedCountry());
         $view->assign('sPayment', $this->getSelectedPayment());
-        $view->assign('sDispatch', $this->getSelectedDispatch());
 
+        $view->assign('sDispatch', $dispatch);
         $view->assign('sBasket', $basket);
         $this->View()->assign('sInvalidCartItems', $this->getInvalidProducts($basket));
 
