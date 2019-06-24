@@ -31,7 +31,6 @@ use Shopware\Components\Routing\Context;
 use Shopware\Models\Shop\Shop;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -40,8 +39,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class WarmUpHttpCacheCommand extends ShopwareCommand implements CompletionAwareInterface
 {
-    private $errorMessage = false;
-
     /**
      * List of UrlProvider-names that Shopware provides itself
      *
@@ -165,10 +162,6 @@ class WarmUpHttpCacheCommand extends ShopwareCommand implements CompletionAwareI
         }
         $io->newLine();
 
-        $this->container->get('events')->addListener('Shopware_Components_CacheWarmer_ErrorOccured', function () {
-            $this->errorMessage = true;
-        });
-
         /** @var Shop $shop */
         foreach ($shops as $shop) {
             /** @var Context $context */
@@ -213,10 +206,6 @@ class WarmUpHttpCacheCommand extends ShopwareCommand implements CompletionAwareI
         }
         $io->newLine();
         $io->success('The HttpCache is now warmed up');
-        if ($this->errorMessage === true) {
-            $snippet = 'An error has occurred while warming up the cache, please look into the backend log under “Settings > Logfile > System-Log” or the logfile located at ”/var/log”, there you will find more detailed information.';
-            $io->warning($snippet);
-        }
     }
 
     /**
