@@ -69,7 +69,7 @@
             contentSelector: '#tab--product-comment'
         }, ['xs'])
         .addPlugin('.tab-menu--product', 'swTabMenu', ['s', 'm', 'l', 'xl'])
-        .addPlugin('.tab-menu--cross-selling', 'swTabMenu', ['m', 'l', 'xl'])
+        .addPlugin('.tab-menu--cross-selling', 'swTabMenu')
         .addPlugin('.tab-menu--product .tab--container', 'swOffcanvasButton', {
             titleSelector: '.tab--title',
             previewSelector: '.tab--preview',
