@@ -87,10 +87,11 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 * Changed minimum required PHP version to 7.2.0
 * Changed minimum required MySQL version to 5.7.0
+* Changed Symfony library to version 3.4.28
 * Changed doctrine/orm to 2.6.3
 * Changed mpdf/mpdf to 7.1.9
-* Changed elasticsearch/elasticsearch to 5.4.0
-* Changed ongr/elasticsearch-dsl to 5.0.6
+* Changed elasticsearch/elasticsearch to 6.7.1
+* Changed ongr/elasticsearch-dsl to 6.0.3
 * Changed jQuery to 3.4.1
 * Changed id of login password form in `frontend/account/login.tpl` from `passwort` to `password`
 * Changed the generation of the Robots.txt. See [Improved Robots.txt](###Improved Robots.txt) for more details
