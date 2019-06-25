@@ -82,6 +82,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added command `sw:es:backend:backlog:clear` to clear the backlog
 * Added alias command `sw:es:backend:backlog:sync` to `sw:es:backend:sync`
 * Added paging to more lists in the backend
+* Added a new configuration to a blog for limiting the blog to shops
 
 ### Changes
 

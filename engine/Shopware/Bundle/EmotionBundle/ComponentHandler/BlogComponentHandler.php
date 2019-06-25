@@ -86,18 +86,12 @@ class BlogComponentHandler implements ComponentHandlerInterface
      */
     private function getRandomBlogEntries($numberOfEntries, $categoryId, ShopContextInterface $context)
     {
-        $blogIds = $this->findBlogIds($numberOfEntries, $categoryId);
+        $blogIds = $this->findBlogIds($numberOfEntries, $categoryId, (int) $context->getShop()->getId());
 
         return $this->blogService->getList($blogIds, $context);
     }
 
-    /**
-     * @param int $numberOfEntries
-     * @param int $categoryId
-     *
-     * @return int[]
-     */
-    private function findBlogIds($numberOfEntries, $categoryId)
+    private function findBlogIds(int $numberOfEntries, int $categoryId, int $shopId)
     {
         $builder = $this->connection->createQueryBuilder();
         $builder->select('blog.id')
@@ -106,10 +100,12 @@ class BlogComponentHandler implements ComponentHandlerInterface
                 ->where('blog.active = 1')
                 ->andWhere('blog.display_date <= :displayDate')
                 ->andWhere('(category.path LIKE :path OR category.id = :categoryId)')
+                ->andWhere('(blog.shop_ids LIKE :shopId OR blog.shop_ids IS NULL)')
                 ->orderBy('blog.display_date', 'DESC')
                 ->setMaxResults($numberOfEntries)
                 ->setParameter('displayDate', date('Y-m-d H:i:s'))
                 ->setParameter('categoryId', $categoryId)
+                ->setParameter('shopId', '%|' . $shopId . '|%')
                 ->setParameter('path', '%|' . $categoryId . '|%');
 
         return $builder->execute()->fetchAll(\PDO::FETCH_COLUMN);

@@ -98,6 +98,7 @@ class BlogUrlProvider implements UrlProviderInterface
             ->innerJoin('blog', 's_categories', 'cat', 'cat.id = blog.category_id')
             ->andWhere('category_id IN (:ids)')
             ->andWhere('cat.shops IS NULL OR cat.shops LIKE :shopLike')
+            ->andWhere('blog.shop_ids IS NULL OR blog.shop_ids LIKE :shopLike')
             ->setParameter(':shopLike', '%|' . $shopId . '|%')
             ->setParameter('ids', $blogIds, Connection::PARAM_INT_ARRAY)
             ->execute();
