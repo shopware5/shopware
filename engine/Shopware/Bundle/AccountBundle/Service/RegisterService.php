@@ -189,17 +189,13 @@ class RegisterService implements RegisterServiceInterface
             $customer->setPaymentId($this->config->get('defaultPayment'));
         }
 
-        /** @var \Shopware\Models\Shop\Shop $shop */
-        $shop = $this->modelManager->find(\Shopware\Models\Shop\Shop::class, $shop->getParentId());
-        $customer->setShop($shop);
-
         /** @var \Shopware\Models\Shop\Shop $subShop */
         $subShop = $this->modelManager->find(\Shopware\Models\Shop\Shop::class, $shop->getId());
         $customer->setLanguageSubShop($subShop);
 
         if ($customer->getGroup() === null) {
             /** @var Group $customerGroup */
-            $customerGroup = $this->modelManager->find(\Shopware\Models\Customer\Group::class, $shop->getCustomerGroup()->getId());
+            $customerGroup = $this->modelManager->find(\Shopware\Models\Customer\Group::class, $subShop->getCustomerGroup()->getId());
             $customer->setGroup($customerGroup);
         }
 
