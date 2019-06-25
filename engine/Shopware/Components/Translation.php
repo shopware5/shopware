@@ -57,7 +57,7 @@ class Shopware_Components_Translation
         $locale = null;
 
         // Determine how to query the current language
-        if ($container->initialized('auth')) {
+        if ($container->initialized('auth') && $container->get('auth')->hasIdentity()) {
             $locale = $container->get('auth')->getIdentity()->locale;
         } elseif ($container->has('shop')) {
             $locale = $container->get('shop')->getLocale();
