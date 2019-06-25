@@ -23,6 +23,7 @@
             <argument type="tagged" tag="shopware_elastic_search.data_indexer"/>
             <argument type="tagged" tag="shopware_elastic_search.mapping"/>
             <argument type="tagged" tag="shopware_elastic_search.settings"/>
+            <argument>%shopware.es.version%</argument>
         </service>
 
         <service id="shopware_elastic_search.shop_indexer" class="Shopware\Bundle\ESIndexingBundle\ShopIndexer">

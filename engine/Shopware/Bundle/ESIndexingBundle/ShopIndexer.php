@@ -74,6 +74,11 @@ class ShopIndexer implements ShopIndexerInterface
     private $backlogProcessor;
 
     /**
+     * @var string
+     */
+    private $esVersion;
+
+    /**
      * @param DataIndexerInterface[] $indexer
      * @param MappingInterface[]     $mappings
      * @param SettingsInterface[]    $settings
@@ -86,7 +91,8 @@ class ShopIndexer implements ShopIndexerInterface
         EvaluationHelperInterface $evaluation,
         array $indexer,
         array $mappings,
-        array $settings
+        array $settings,
+        string $esVersion
     ) {
         $this->client = $client;
         $this->backlogReader = $backlogReader;
@@ -96,6 +102,7 @@ class ShopIndexer implements ShopIndexerInterface
         $this->mappings = $mappings;
         $this->settings = $settings;
         $this->evaluation = $evaluation;
+        $this->esVersion = $esVersion;
     }
 
     /**
@@ -182,11 +189,24 @@ class ShopIndexer implements ShopIndexerInterface
 
     private function updateMapping(ShopIndex $index, MappingInterface $mapping)
     {
-        $this->client->indices()->putMapping([
-                'index' => $index->getName(),
-                'type' => $mapping->getType(),
-                'body' => $mapping->get($index->getShop()),
-            ]);
+        $arguments = [
+            'index' => $index->getName(),
+            'type' => $mapping->getType(),
+            'body' => $mapping->get($index->getShop()),
+        ];
+
+        if (version_compare($this->esVersion, '7', '>=')) {
+            $arguments = array_merge(
+                $arguments,
+                [
+                    'include_type_name' => true,
+                ]
+            );
+        }
+
+        $this->client->indices()->putMapping(
+            $arguments
+        );
     }
 
     private function populate(ShopIndex $index, ProgressHelperInterface $progress)

@@ -32,6 +32,7 @@ use Shopware\Bundle\ContentTypeBundle\DependencyInjection\RegisterFieldsCompiler
 use Shopware\Bundle\ContentTypeBundle\DependencyInjection\RegisterTypeRepositories;
 use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\ControllerCompilerPass;
 use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\RegisterControllerCompilerPass;
+use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\VersionCompilerPass;
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\AddConstraintValidatorsPass;
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginInitializer;
@@ -628,6 +629,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         $container->addCompilerPass(new RegisterTypeRepositories());
         $container->addCompilerPass(new ControllerCompilerPass());
         $container->addCompilerPass(new RegisterControllerArgumentLocatorsPass('argument_resolver.service', 'shopware.controller'));
+        $container->addCompilerPass(new VersionCompilerPass());
 
         $container->setParameter('active_plugins', $this->activePlugins);
 

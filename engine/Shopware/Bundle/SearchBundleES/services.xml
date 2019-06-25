@@ -16,6 +16,7 @@
 
         <service id="shopware_search_es.product_number_search_factory" class="Shopware\Bundle\SearchBundleES\DependencyInjection\Factory\ProductNumberSearchFactory">
             <argument type="tagged" tag="shopware_search_es.search_handler" />
+            <argument>%shopware.es.version%</argument>
         </service>
 
         <service id="shopware_search_es.product_number_search" class="Shopware\Bundle\SearchBundleES\ProductNumberSearch">
@@ -136,6 +137,8 @@
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware_search_es.struct_hydrator" />
             <argument type="service" id="shopware_elastic_search.index_factory" />
+            <argument>%shopware.es.version%</argument>
+
             <tag name="shopware_search_es.search_handler" />
         </service>
 

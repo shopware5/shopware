@@ -11,6 +11,7 @@
             <argument id="shopware_elastic_search.client" type="service"/>
             <argument type="tagged" tag="shopware_es_backend.repository" />
             <argument type="service" id="shopware_elastic_search.console.console_evaluation_helper"/>
+            <argument>%shopware.es.version%</argument>
         </service>
 
         <service class="Shopware\Bundle\EsBackendBundle\SearchQueryBuilder" id="shopware_es_backend.search_query_builder" />
@@ -24,6 +25,7 @@
             <argument type="service" id="shopware_es_backend.search_query_builder"/>
             <argument>orders</argument>
             <argument>%shopware.es.backend.enabled%</argument>
+            <argument>%shopware.es.version%</argument>
         </service>
 
         <service class="Shopware\Bundle\EsBackendBundle\Searcher\ProductSearcher"
@@ -35,6 +37,7 @@
             <argument type="service" id="shopware_es_backend.search_query_builder"/>
             <argument>product</argument>
             <argument>%shopware.es.backend.enabled%</argument>
+            <argument>%shopware.es.version%</argument>
         </service>
 
         <service class="Shopware\Bundle\EsBackendBundle\Searcher\CustomerSearcher"
@@ -46,6 +49,7 @@
             <argument type="service" id="shopware_es_backend.search_query_builder"/>
             <argument>customer</argument>
             <argument>%shopware.es.backend.enabled%</argument>
+            <argument>%shopware.es.version%</argument>
         </service>
 
         <service class="Shopware\Bundle\EsBackendBundle\Subscriber\OrmBacklogSubscriber"
@@ -66,7 +70,6 @@
         </service>
 
         <!-- Commands -->
-
         <service class="Shopware\Bundle\EsBackendBundle\Commands\IndexPopulateCommand"
                  id="shopware_es_backend.commands.index_populate_command">
             <tag name="console.command" command="sw:es:backend:index:populate"/>

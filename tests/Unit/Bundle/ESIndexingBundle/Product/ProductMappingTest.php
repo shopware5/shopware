@@ -29,7 +29,7 @@ use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\ESIndexingBundle\FieldMapping;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\Product\ProductMapping;
-use Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES5;
+use Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES6;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 class ProductMappingTest extends TestCase
@@ -39,7 +39,7 @@ class ProductMappingTest extends TestCase
         $identifierSelector = $this->getIdentifierSelector();
 
         $fieldMapping = $this->getMockBuilder(FieldMapping::class)->disableOriginalConstructor()->getMock();
-        $textMapping = new TextMappingES5();
+        $textMapping = new TextMappingES6();
         $crudService = $this->getCrudService();
         $shop = $this->getMockBuilder(Shop::class)->disableOriginalConstructor()->getMock();
 
@@ -55,7 +55,7 @@ class ProductMappingTest extends TestCase
         $identifierSelector = $this->getIdentifierSelector();
 
         $fieldMapping = $this->getMockBuilder(FieldMapping::class)->disableOriginalConstructor()->getMock();
-        $textMapping = new TextMappingES5();
+        $textMapping = new TextMappingES6();
         $crudService = $this->getCrudService();
         $shop = $this->getMockBuilder(Shop::class)->disableOriginalConstructor()->getMock();
 
@@ -77,7 +77,7 @@ class ProductMappingTest extends TestCase
         $identifierSelector = $this->getIdentifierSelector();
 
         $fieldMapping = $this->getMockBuilder(FieldMapping::class)->disableOriginalConstructor()->getMock();
-        $textMapping = new TextMappingES5();
+        $textMapping = new TextMappingES6();
         $crudService = $this->getCrudService();
         $shop = $this->getMockBuilder(Shop::class)->disableOriginalConstructor()->getMock();
 

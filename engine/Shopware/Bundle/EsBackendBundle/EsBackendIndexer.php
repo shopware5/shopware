@@ -47,11 +47,21 @@ class EsBackendIndexer
      */
     private $evaluation;
 
-    public function __construct(Client $client, \IteratorAggregate $repositories, EvaluationHelperInterface $evaluation)
-    {
+    /**
+     * @var string
+     */
+    private $esVersion;
+
+    public function __construct(
+        Client $client,
+        \IteratorAggregate $repositories,
+        EvaluationHelperInterface $evaluation,
+        string $esVersion
+    ) {
         $this->client = $client;
         $this->repositories = $repositories;
         $this->evaluation = $evaluation;
+        $this->esVersion = $esVersion;
     }
 
     public function index(ProgressHelperInterface $helper)
@@ -241,10 +251,23 @@ class EsBackendIndexer
             $merged = array_replace_recursive($mapping, $own);
         }
 
-        $this->client->indices()->putMapping([
+        $arguments = [
             'index' => $index,
             'type' => $entity->getDomainName(),
             'body' => $merged,
-        ]);
+        ];
+
+        if (version_compare($this->esVersion, '7', '>=')) {
+            $arguments = array_merge(
+                $arguments,
+                [
+                    'include_type_name' => true,
+                ]
+            );
+        }
+
+        $this->client->indices()->putMapping(
+            $arguments
+        );
     }
 }
