@@ -22,11 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Model\Query\Mysql;
-
-/**
- * @deprecated in 5.6, will be removed with 5.7. Please use DoctrineExtensions\Query\Mysql\IfElse instead
- */
-class IfElse extends \DoctrineExtensions\Query\Mysql\IfElse
+class Migrations_Migration1630 extends Shopware\Components\Migrations\AbstractMigration
 {
+    public function up($modus)
+    {
+        $this->addSql("UPDATE s_core_config_elements set options = null where options = '';");
+    }
 }

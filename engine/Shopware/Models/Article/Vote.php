@@ -260,6 +260,10 @@ class Vote extends ModelEntity
      */
     public function setDatum($datum)
     {
+        if (!$datum instanceof \DateTimeInterface) {
+            $datum = new \DateTime($datum);
+        }
+
         $this->datum = $datum;
 
         return $this;
