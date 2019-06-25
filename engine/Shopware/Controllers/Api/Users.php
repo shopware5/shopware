@@ -140,13 +140,13 @@ class Shopware_Controllers_Api_Users extends Shopware_Controllers_Api_Rest
 
         $container = $this->container;
 
-        if (!$container->initialized('Auth')) {
+        if (!$container->initialized('auth')) {
             $this->View()->assign(['success' => false, 'errorMsg' => 'Auth not initialized.']);
 
             return;
         }
 
-        $currentUser = (int) $container->get('Auth')->getIdentity()->id;
+        $currentUser = (int) $container->get('auth')->getIdentity()->id;
 
         if ($currentUser === $id) {
             $this->View()->assign([

@@ -532,7 +532,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             return;
         }
 
-        $customer->setEncoderName($this->get('PasswordEncoder')->getDefaultPasswordEncoderName());
+        $customer->setEncoderName($this->get('passwordencoder')->getDefaultPasswordEncoderName());
 
         $this->customerService->update($customer);
 

@@ -260,7 +260,7 @@ class ContentTypeManager extends \Shopware_Controllers_Backend_ExtJs
     {
         $shops = $this->getModelManager()->getRepository(Shop::class)->getActiveShopsFixed();
         /** @var Shopware_Components_SeoIndex $seoIndexer */
-        $seoIndexer = $this->get('SeoIndex');
+        $seoIndexer = $this->get('seoindex');
 
         /** @var sRewriteTable $rewriteTable */
         $rewriteTable = $this->get('modules')->RewriteTable();

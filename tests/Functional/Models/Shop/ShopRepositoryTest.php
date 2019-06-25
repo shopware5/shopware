@@ -180,7 +180,7 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
      */
     public function testMultiShopLocation($host, $alias)
     {
-        Shopware()->Container()->reset('Template');
+        Shopware()->Container()->reset('template');
 
         // Create test shops
         $sql = "

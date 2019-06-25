@@ -36,7 +36,7 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
 
     public function preDispatch()
     {
-        if (($this->resource instanceof Resource\Resource) && $this->container->initialized('Auth')) {
+        if (($this->resource instanceof Resource\Resource) && $this->container->initialized('auth')) {
             $this->resource->setAcl($this->container->get('acl'));
             $this->resource->setRole($this->container->get('auth')->getIdentity()->role);
         }

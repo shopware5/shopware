@@ -33,16 +33,16 @@ class TemplateMail
      */
     public function factory(Container $container)
     {
-        $container->load('MailTransport');
+        $container->load('mailtransport');
 
         $stringCompiler = new \Shopware_Components_StringCompiler(
-            $container->get('Template')
+            $container->get('template')
         );
         $mailer = new \Shopware_Components_TemplateMail();
-        if ($container->initialized('Shop')) {
-            $mailer->setShop($container->get('Shop'));
+        if ($container->initialized('shop')) {
+            $mailer->setShop($container->get('shop'));
         }
-        $mailer->setModelManager($container->get('Models'));
+        $mailer->setModelManager($container->get('models'));
         $mailer->setStringCompiler($stringCompiler);
 
         return $mailer;

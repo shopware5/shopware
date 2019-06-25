@@ -48,16 +48,16 @@ class Front
         /** @var \Enlight_Controller_Front $front */
         $front = \Enlight_Class::Instance('Enlight_Controller_Front', [$eventManager]);
 
-        $front->setDispatcher($container->get('Dispatcher'));
+        $front->setDispatcher($container->get('dispatcher'));
 
-        $front->setRouter($container->get('Router'));
+        $front->setRouter($container->get('router'));
 
         $front->setParams($options);
 
         $front->setRequestStack($requestStack);
 
         /** @var \Enlight_Plugin_PluginManager $plugins */
-        $plugins = $container->get('Plugins');
+        $plugins = $container->get('plugins');
 
         $plugins->registerNamespace($front->Plugins());
 
@@ -66,9 +66,9 @@ class Front
         }
 
         try {
-            $container->load('Cache');
-            $container->load('Db');
-            $container->load('Plugins');
+            $container->load('cache');
+            $container->load('db');
+            $container->load('plugins');
         } catch (\Exception $e) {
             if ($front->throwExceptions()) {
                 throw $e;

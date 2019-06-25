@@ -33,7 +33,7 @@ class Mail
      */
     public function factory(Container $container, \Shopware_Components_Config $config, array $options)
     {
-        if (!$container->load('MailTransport')) {
+        if (!$container->load('mailtransport')) {
             return null;
         }
 

@@ -2198,7 +2198,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     private function getCurrentLocale()
     {
-        $user = $this->get('Auth')->getIdentity();
+        $user = $this->get('auth')->getIdentity();
 
         return $user->locale;
     }

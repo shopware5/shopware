@@ -48,7 +48,7 @@ class RefreshTopsellerCommand extends ShopwareCommand
     {
         $output->writeln('Refreshing the topseller index. This may take a while depending on the shop size.');
         /** @var \Shopware_Components_TopSeller $topseller */
-        $topseller = $this->container->get('TopSeller');
+        $topseller = $this->container->get('topseller');
         $topseller->updateElapsedTopSeller();
 
         $output->writeln('The topseller index was refreshed successfully.');

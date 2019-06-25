@@ -472,7 +472,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      */
     private function getThemeInfo(Template $template)
     {
-        $user = $this->get('Auth')->getIdentity();
+        $user = $this->get('auth')->getIdentity();
         /** @var Locale $locale */
         $locale = $user->locale;
         $localeCode = $locale->getLocale();

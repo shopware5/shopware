@@ -86,7 +86,7 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
 
         // Validate user auth
         if ($cronSecureByAccount) {
-            if (Shopware()->Container()->get('Auth')->hasIdentity() === true) {
+            if (Shopware()->Container()->get('auth')->hasIdentity() === true) {
                 return true;
             }
         }

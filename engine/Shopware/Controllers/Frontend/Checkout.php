@@ -2159,7 +2159,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $shopModel->setCurrency($currencyModel);
 
         /** @var \Zend_Currency $currency */
-        $currency = $this->get('Currency');
+        $currency = $this->get('currency');
         $currency->setFormat($currencyModel->toArray());
 
         $this->get('shopware_storefront.context_service')->initializeShopContext();

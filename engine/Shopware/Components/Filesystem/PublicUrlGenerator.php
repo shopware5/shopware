@@ -81,9 +81,9 @@ class PublicUrlGenerator implements PublicUrlGeneratorInterface
             return ($request->isSecure() ? 'https' : 'http') . '://' . $request->getHttpHost() . $request->getBasePath() . '/' . $this->createPublicPath();
         }
 
-        if ($this->container->initialized('Shop')) {
+        if ($this->container->initialized('shop')) {
             /** @var Shop $shop */
-            $shop = $this->container->get('Shop');
+            $shop = $this->container->get('shop');
         } else {
             /** @var Shop $shop */
             $shop = $this->container->get('models')->getRepository(Shop::class)->getActiveDefault();

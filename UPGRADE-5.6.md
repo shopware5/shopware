@@ -95,8 +95,9 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed jQuery to 3.4.1
 * Changed PHPStan to 0.11.8
 * Changed id of login password form in `frontend/account/login.tpl` from `passwort` to `password`
+* Changed plugin initialization to alphabetical order by default
+* Changed all DIC service ids to lowercase as a preparation for a switch to Symfony 4 in the future
 * Changed the generation of the Robots.txt. See [Improved Robots.txt](###Improved Robots.txt) for more details
-* Changed plugin initialization to alphabetical by default
 * Changed cookie `x-ua-device` to be `secure` if the shop runs on SSL
 * Changed the following cart actions to redirect the request to allow customers to press reload:
     `Shopware_Controllers_Frontend_Checkout::addArticleAction`
@@ -375,13 +376,13 @@ class Test extends \Enlight_Controller_Action
 
 The new controllers tagged with `shopware.controller` tag, can now have parameters in action methods. Possible parameters are
 
-* Services (e.g ListProductService $listProductService)
-* $request (e.g Request $request)
-* $requestParameters (e.g int $limit = 0  /action?limit=5)
+* Services (e.g `ListProductService $listProductService`)
+* $request (e.g `Request $request`)
+* $requestParameters (e.g `int $limit = 0`, `/action?limit=5`)
 
-### Enlight_Controller_Request_RequestHttp is now extending Symfony\Component\HttpFoundation\Request and Enlight_Controller_Response_ResponseHttp extends Symfony\Component\HttpFoundation\Response
+### The request and response instances in Shopware now extend from Symfony's Request / Response
 
-The request and response instances in Shopware now extend from Symfony Request / Response.
+`Enlight_Controller_Request_RequestHttp` is now extending `Symfony\Component\HttpFoundation\Request` and `Enlight_Controller_Response_ResponseHttp` extends `Symfony\Component\HttpFoundation\Response`. This is a first move to switch to Symfony Controllers and Request/Responses completely in a future release. 
 
 ### Custom validation of order numbers (SKU)
 
@@ -494,8 +495,10 @@ Example:
 
 There is a new logger service for each plugin.
 The service id is a combination of the plugin's service prefix (lower camel case plugin name) and `.logger`.
+
 For example: when a plugin's name is `SwagPlugin` the specific logger can be accessed via `swag_plugin.logger`.
 This logger will now write into the logs directory using a rotating file pattern like the other logger services.
+
 The settings for the logger can be configured using the DI parameters `swag_plugin.logger.level`(defaults to shopware default logging level) and `swag_plugin.logger.max_files` (defaults to 14 like other shopware loggers).
 In this case the logger would write into a file like `var/log/swag_plugin_production-2019-03-06.log`.
 
@@ -590,7 +593,7 @@ Each type gets its own
 * API controller for all CRUD operations (Custom**type_name** e.g. CustomStore)
 * backend menu icon
 * table with s_custom prefix
-* repository serivce with shopware.bundle.content_type.**type_name**
+* repository service with shopware.bundle.content_type.**type_name**
 
 They are also accessible in template using new smarty function `fetchContent`
 

@@ -355,7 +355,7 @@ class User extends Resource
         }
 
         /** @var \Shopware\Components\Password\Manager $passwordEncoderRegistry */
-        $passwordEncoderRegistry = $this->getContainer()->get('PasswordEncoder');
+        $passwordEncoderRegistry = $this->getContainer()->get('passwordencoder');
         $defaultEncoderName = $passwordEncoderRegistry->getDefaultPasswordEncoderName();
         $encoder = $passwordEncoderRegistry->getEncoderByName($defaultEncoderName);
 

@@ -35,7 +35,7 @@ class Shopware_Controllers_Backend_TopSeller extends Shopware_Controllers_Backen
     {
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.7.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
-        return Shopware()->Container()->get('TopSeller');
+        return Shopware()->Container()->get('topseller');
     }
 
     /**

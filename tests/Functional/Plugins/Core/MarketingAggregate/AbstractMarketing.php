@@ -41,7 +41,7 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
      */
     protected function SimilarShown()
     {
-        return Shopware()->Container()->get('SimilarShown');
+        return Shopware()->Container()->get('similarshown');
     }
 
     /**
@@ -49,7 +49,7 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
      */
     protected function TopSeller()
     {
-        return Shopware()->Container()->get('TopSeller');
+        return Shopware()->Container()->get('topseller');
     }
 
     /**
@@ -57,7 +57,7 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
      */
     protected function AlsoBought()
     {
-        return Shopware()->Container()->get('AlsoBought');
+        return Shopware()->Container()->get('alsobought');
     }
 
     /**

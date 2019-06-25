@@ -23,6 +23,7 @@
  */
 
 use Shopware\Models\Order\Order;
+use Shopware\Models\Shop\Locale;
 
 class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Test_Controller_TestCase
 {
@@ -50,7 +51,7 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
         static::assertEquals('126.82', $this->getInvoiceAmount());
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
 
-        //delete the order position
+        // Delete the order position
         $this->Request()
                 ->setMethod('POST')
                 ->setPost('id', '15315352')
@@ -222,9 +223,9 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
         $this->reset();
 
         // Check for English translations
-        $user = Shopware()->Container()->get('Auth')->getIdentity();
+        $user = Shopware()->Container()->get('auth')->getIdentity();
         $user->locale = Shopware()->Models()->getRepository(
-            'Shopware\Models\Shop\Locale'
+            Locale::class
         )->find(2);
 
         $this->Request()->setMethod('GET');
@@ -300,9 +301,9 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
         $this->reset();
 
         // Check for English translations
-        $user = Shopware()->Container()->get('Auth')->getIdentity();
+        $user = Shopware()->Container()->get('auth')->getIdentity();
         $user->locale = Shopware()->Models()->getRepository(
-            'Shopware\Models\Shop\Locale'
+            Locale::class
         )->find(2);
 
         $this->Request()->setMethod('GET');

@@ -157,7 +157,7 @@ class Shopware_Tests_Controllers_Backend_ConfigGetFormTest extends Enlight_Compo
 
         // Set password analogously to \Shopware\Commands\AdminCreateCommand::setPassword:
         /** @var \Shopware\Components\Password\Manager $passworEncoderRegistry */
-        $passworEncoderRegistry = Shopware()->Container()->get('PasswordEncoder');
+        $passworEncoderRegistry = Shopware()->Container()->get('passwordencoder');
         $defaultEncoderName = $passworEncoderRegistry->getDefaultPasswordEncoderName();
         $encoder = $passworEncoderRegistry->getEncoderByName($defaultEncoderName);
         $user->setPassword($encoder->encodePassword('testpassword'));

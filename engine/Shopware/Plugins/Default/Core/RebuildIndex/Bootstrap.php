@@ -23,6 +23,7 @@
  */
 
 use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexerInterface;
+use Shopware\Models\Shop\Shop;
 
 class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -102,7 +103,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
      */
     public function SeoIndex()
     {
-        return Shopware()->Container()->get('SeoIndex');
+        return Shopware()->Container()->get('seoindex');
     }
 
     /**
@@ -141,7 +142,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
 
         foreach ($shops as $shopId) {
             /** @var \Shopware\Models\Shop\Repository $repository */
-            $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+            $repository = Shopware()->Models()->getRepository(Shop::class);
             $shop = $repository->getActiveById($shopId);
             if ($shop === null) {
                 throw new Exception('No valid shop id passed');
@@ -218,11 +219,11 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
     {
         $request = $args->getRequest();
 
-        if ($request->getModuleName() != 'frontend') {
+        if ($request->getModuleName() !== 'frontend') {
             return;
         }
 
-        if (!Shopware()->Container()->initialized('Shop')) {
+        if (!Shopware()->Container()->initialized('shop')) {
             return;
         }
 

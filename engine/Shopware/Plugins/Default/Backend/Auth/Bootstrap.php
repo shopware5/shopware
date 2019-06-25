@@ -223,7 +223,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     public function checkAuth()
     {
         /** @var Shopware_Components_Auth $auth */
-        $auth = Shopware()->Container()->get('Auth');
+        $auth = Shopware()->Container()->get('auth');
         if ($auth->hasIdentity()) {
             $auth->refresh();
         }
@@ -275,7 +275,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     {
         $container = $this->Application()->Container();
         if ($this->acl === null) {
-            $this->acl = $container->get('Acl');
+            $this->acl = $container->get('acl');
         }
         if ($auth->hasIdentity()) {
             $identity = $auth->getIdentity();
@@ -283,7 +283,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         }
 
         /** @var Enlight_Template_Manager $engine */
-        $engine = $container->get('Template');
+        $engine = $container->get('template');
         $engine->unregisterPlugin(
             Smarty::PLUGIN_FUNCTION,
             'acl_is_allowed'
@@ -388,7 +388,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     public function onInitResourceAuth(Enlight_Event_EventArgs $args)
     {
-        Shopware()->Container()->load('BackendSession');
+        Shopware()->Container()->load('backendsession');
 
         $resource = Shopware_Components_Auth::getInstance();
         $adapter = new Shopware_Components_Auth_Adapter_Default();
@@ -424,9 +424,9 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         $container = $this->Application()->Container();
 
         $locale = $this->getCurrentLocale();
-        $container->get('Locale')->setLocale($locale->toString());
-        $container->get('Snippets')->setLocale($locale);
-        $template = $container->get('Template');
+        $container->get('locale')->setLocale($locale->toString());
+        $container->get('snippets')->setLocale($locale);
+        $template = $container->get('template');
         $baseHash = $this->request->getScheme() . '://'
                   . $this->request->getHttpHost()
                   . $this->request->getBaseUrl() . '?'
@@ -454,7 +454,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         Enlight_Components_Session::setOptions($options);
 
         if (Enlight_Components_Session::sessionExists()) {
-            $auth = $this->get('Auth');
+            $auth = $this->get('auth');
             if ($auth->hasIdentity()) {
                 $user = $auth->getIdentity();
 

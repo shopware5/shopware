@@ -79,7 +79,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             return;
         }
 
-        $user = Shopware()->Container()->get('Auth')->getIdentity();
+        $user = Shopware()->Container()->get('auth')->getIdentity();
         $userLang = $this->getUserLanguage($user);
         $languagePriorities = [
             $userLang,
@@ -110,7 +110,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             return;
         }
 
-        $user = Shopware()->Container()->get('Auth')->getIdentity();
+        $user = Shopware()->Container()->get('auth')->getIdentity();
         $userLang = $this->getUserLanguage($user);
 
         $namespace = $this->get('snippets')->getNamespace('backend/swag_update/main');
@@ -308,7 +308,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     {
         $clientIp = $this->Request()->getClientIp();
         $base = $this->Request()->getBaseUrl();
-        $user = Shopware()->Container()->get('Auth')->getIdentity();
+        $user = Shopware()->Container()->get('auth')->getIdentity();
 
         /** @var \Shopware\Models\Shop\Locale $locale */
         $locale = $user->locale;
@@ -543,7 +543,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         ];
 
         /** @var UpdateCheck $update */
-        $update = $this->get('SwagUpdateUpdateCheck');
+        $update = $this->get('swagupdateupdatecheck');
         $result = $update->checkUpdate($shopwareVersion, $params);
 
         /** @var \Zend_Cache_Core $cache */

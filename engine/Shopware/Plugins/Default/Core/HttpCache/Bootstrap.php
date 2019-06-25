@@ -784,11 +784,11 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             return $this->invalidateWithBANRequest($proxyUrl, $cacheId);
         }
 
-        if ($this->get('service_container')->has('httpCache')) {
+        if ($this->get('service_container')->has('httpcache')) {
             return $this->invalidateWithStore($cacheId);
         }
 
-        // if no explicit proxy was configured + no host is configured
+        // If no explicit proxy was configured + no host is configured
         $proxyUrl = $this->getProxyUrl($this->request);
         if ($proxyUrl !== null) {
             return $this->invalidateWithBANRequest($proxyUrl, $cacheId);
@@ -805,7 +805,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      */
     private function invalidateWithBANRequest($urls, $cacheId)
     {
-        // expand + trim proxies (comma separated)
+        // Expand + trim proxies (comma separated)
         $urls = array_map(
             'trim',
             explode(',', $urls)
@@ -847,7 +847,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     private function invalidateWithStore($cacheId = null)
     {
         /** @var HttpCache $httpCache */
-        $httpCache = $this->get('httpCache');
+        $httpCache = $this->get('httpcache');
 
         /** @var Store $store */
         $store = $httpCache->getStore();

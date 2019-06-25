@@ -691,8 +691,8 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         static::assertContains('Der Mindestumsatz für diesen Gutschein beträgt 10,00&nbsp;&euro;', $result['sErrorMessages']);
 
         // Check if a currency switch is reflected in the snippet correctly
-        $currencyDe = Shopware()->Container()->get('Currency');
-        Shopware()->Container()->set('Currency', new \Zend_Currency('GBP', new \Zend_Locale('en_GB')));
+        $currencyDe = Shopware()->Container()->get('currency');
+        Shopware()->Container()->set('currency', new \Zend_Currency('GBP', new \Zend_Locale('en_GB')));
 
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand(), true);
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
@@ -704,7 +704,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         static::assertContains('Der Mindestumsatz für diesen Gutschein beträgt &pound;10.00', $result['sErrorMessages']);
 
-        Shopware()->Container()->set('Currency', $currencyDe);
+        Shopware()->Container()->set('currency', $currencyDe);
 
         // Add one article to the basket with enough value to use discount
         $randomArticle = $this->db->fetchRow(

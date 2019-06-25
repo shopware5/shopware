@@ -58,6 +58,7 @@ class RobotsTxtGenerator implements RobotsTxtGeneratorInterface
      * @var Context[]
      */
     private $routerContext = [];
+
     /**
      * @var RouterInterface
      */

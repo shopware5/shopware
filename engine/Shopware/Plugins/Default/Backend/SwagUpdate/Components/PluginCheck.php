@@ -123,7 +123,7 @@ class PluginCheck
     private function getLocale()
     {
         try {
-            return $this->container->get('Auth')->getIdentity()->locale->getLocale();
+            return $this->container->get('auth')->getIdentity()->locale->getLocale();
         } catch (\Exception $e) {
             return null;
         }

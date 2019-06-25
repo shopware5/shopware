@@ -56,7 +56,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         if ($this->repository === null) {
-            $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+            $this->repository = Shopware()->Models()->getRepository(Category::class);
         }
 
         return $this->repository;
@@ -71,7 +71,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     {
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
-        return Shopware()->Container()->get('CategoryDenormalization');
+        return Shopware()->Container()->get('categorydenormalization');
     }
 
     /**

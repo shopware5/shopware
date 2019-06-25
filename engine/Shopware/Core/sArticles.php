@@ -393,8 +393,8 @@ class sArticles implements \Enlight_Hook
 
         $container = Shopware()->Container();
         $shopId = null;
-        if ($container->initialized('Shop')) {
-            $shopId = $container->get('Shop')->getId();
+        if ($container->initialized('shop')) {
+            $shopId = $container->get('shop')->getId();
         }
 
         $connection = $container->get('dbal_connection');

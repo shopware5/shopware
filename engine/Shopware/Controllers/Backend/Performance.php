@@ -410,7 +410,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $offset = (int) $this->Request()->getParam('offset', 0);
         $limit = (int) $this->Request()->getParam('limit');
 
-        $component = Shopware()->Container()->get('CategoryDenormalization');
+        $component = Shopware()->Container()->get('categorydenormalization');
 
         if ($offset === 0) {
             $component->rebuildCategoryPath();
@@ -427,7 +427,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     public function prepareTreeAction()
     {
-        $component = Shopware()->Container()->get('CategoryDenormalization');
+        $component = Shopware()->Container()->get('categorydenormalization');
 
         $component->removeOrphanedAssignments();
 

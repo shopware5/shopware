@@ -35,7 +35,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
     {
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.7.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
-        return Shopware()->Container()->get('SeoIndex');
+        return Shopware()->Container()->get('seoindex');
     }
 
     /**
