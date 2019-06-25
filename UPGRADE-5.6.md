@@ -142,7 +142,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed shipping calculation in off canvas to work correctly with country states
 * Changed the input of filters in the backend to prevent grammar error 
 * Changed `Shopware\Bundle\ESIndexingBundle\ShopIndexerInterface::index`. Added optional `$indexNames` argument
-* Changed Bare Template to improve accessibility
+* Changed Bare Template to improve accessibility by adding aria labels
 * Changed product module split view mode to work correctly with properties
 * Changed product search to work correctly on MySQL 8
 * Changed last seen products productLimit to work correctly
@@ -153,28 +153,36 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed the error message if a customer enters an invalid birthday in the registration
 * Changed article list in elasticsearch to consier show variants option
 * Changed Hook generation to work correctly with `void` return type
+* Changed column `s_order_documents.ID` to `s_order_documents.id` (if it wasn't already changed due to MySQL 8 being used)
 
 ### Removals
 
+* Removed the following classes without replacement
+    * `Shopware\Bundle\FormBundle\Extension\EnlightRequestExtension`
+    * `Shopware\Bundle\FormBundle\EnlightRequestHandler`
+    * `Shopware\Components\Compatibility\LegacyDocumentIdConverter`
+    * `Shopware\Components\Compatibility\MigrateMysql8Command`
+    * `Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\CompositeSynchronizerFactory`
+    * `Shopware\Bundle\ESIndexingBundle\CompositeSynchronizer`
+* Removed the following deprecated classes
+    * `Shopware_Controllers_Frontend_SitemapMobileXml`
+    * `Shopware\Components\SitemapXMLRepository`
+    * `Shopware_Components_Benchmark_Point`
+    * `Shopware_Components_Benchmark_Container`
+    * `Shopware_Controllers_Backend_Deprecated`
 * Removed `s_articles_attributes`.`articleID` which was not set for new article variants anymore since Shopware 5.2.0
-* Removed `Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\CompositeSynchronizerFactory`
-* Removed `Shopware\Bundle\ESIndexingBundle\CompositeSynchronizer`
 * Removed global `$Shopware` template variable
 * Removed following classes, use `Shopware\Components\Plugin\XmlReader\*` instead
     * `Shopware\Components\Plugin\XmlPluginInfoReader`
     * `Shopware\Components\Plugin\XmlConfigDefinitionReader`
     * `Shopware\Components\Plugin\XmlCronjobReader`
     * `Shopware\Components\Plugin\XmlMenuReader`
-* Removed `storeType` `php` from Plugin config.xml
+* Removed `storeType php` from Plugin config.xml
 * Removed the unspecific request params assignment to view in `Shopware_Controllers_Widgets_Listing::productsAction` and `Shopware_Controllers_Widgets_Listing::streamAction`. Use a *PostDispatchEvent to assign necessary variables in a plugin
 * Removed voucher field from additional feature
-* Removed following classes without replacement
-    * `Shopware\Bundle\FormBundle\Extension\EnlightRequestExtension`
-    * `Shopware\Bundle\FormBundle\EnlightRequestHandler`
 * Removed checkbox show in all categories on the category filter detail page
 * Removed category filter facet from filter listing in category settings 
 * Removed category filter from category page in frontend
-* Removed deprecated `Shopware_Controllers_Backend_Deprecated`
 * Removed deprecated `Shopware` constants
     * Removed `Shopware::VERSION` use the DIC-Parameter `shopware.release.version` instead
     * Removed `Shopware::VERSION_TEXT` use the DIC-Parameter `shopware.release.version_text` instead
@@ -183,14 +191,10 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * Removed `Kernel::VERSION` use the DIC-Parameter `shopware.release.version` instead
     * Removed `Kernel::VERSION_TEXT` use the DIC-Parameter `shopware.release.version_text` instead
     * Removed `Kernel::REVISION` use the DIC-Parameter `shopware.release.revision` instead
-* Removed deprecated `Shopware_Controllers_Frontend_SitemapMobileXml`
-* Removed deprecated `Shopware\Components\SitemapXMLRepository`
 * Removed deprecated `$legacyGroups` in `Shopware\Components\SitemapXMLRepository`
 * Removed deprecated older `Shopware\Models\Order\Document\Document`
 * Removed deprecations of `Shopware\Components\Api\Resource\Article`
 * Removed deprecations of `Shopware\Components\Api\Resource\Variant`
-* Removed deprecated `Shopware_Components_Benchmark_Point`
-* Removed deprecated `Shopware_Components_Benchmark_Container`
 * Removed unused `Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPassSearchHandlerCompilerPass` which was not used at all
 * Removed method `Enlight_Controller_Response_ResponseHttp::insert` 
 * Removed method `Shopware\Kernel::transformEnlightResponseToSymfonyResponse` 
