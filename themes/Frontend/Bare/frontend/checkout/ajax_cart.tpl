@@ -112,7 +112,7 @@
                                             <i class="icon--arrow-right"></i>
                                         </a>
                                     {else}
-                                        <span>
+                                        <span class="table--shipping-costs-trigger-no-action">
                                             {s name='CheckoutFooterEstimatedShippingCosts' namespace="frontend/checkout/cart_footer"}{/s}:
                                         </span>
                                     {/if}
