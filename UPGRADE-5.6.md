@@ -160,6 +160,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed Hook generation to work correctly with `void` return type
 * Changed column `s_order_documents.ID` to `s_order_documents.id` (if it wasn't already changed due to MySQL 8 being used)
 * Changed padding on hidden cookie-permission banner
+* Changed grunt configuration to also take the plugin directory `custom/project` into account
 
 ### Removals
 
