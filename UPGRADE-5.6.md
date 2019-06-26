@@ -89,6 +89,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 * Changed minimum required PHP version to 7.2.0
 * Changed minimum required MySQL version to 5.7.0
+* Changed minimum Elasticsearch version to 6.6.0
 * Changed Symfony library to version 3.4.29
 * Changed doctrine/orm to 2.6.3
 * Changed mpdf/mpdf to 7.1.9
@@ -141,7 +142,6 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `Ext.ClassManager` to show better error messages on missing alias or class
 * Changed `Shopware_Controllers_Backend_Application` to abstract
 * Changed `Shopware_Controllers_Backend_ExtJs` to abstract
-* Changed minimum Elasticsearch version to 6.0.0
 * Changed internal validation of `Shopware\Bundle\StoreFrontBundle\Struct\Attribute`
 * Changed the blog seo meta details to be saveable after being over the max length of the global max length
 * Changed shipping calculation in off canvas to work correctly with country states
@@ -157,10 +157,11 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `\Shopware\Components\Privacy\PrivacyService` to run more efficiently
 * Changed the logging to not have critical or error logging for CSRF-Tokens and 404-pages
 * Changed the error message if a customer enters an invalid birthday in the registration
-* Changed article list in elasticsearch to consier show variants option
+* Changed product list in Elasticsearch to consider show variants option
 * Changed Hook generation to work correctly with `void` return type
 * Changed column `s_order_documents.ID` to `s_order_documents.id` (if it wasn't already changed due to MySQL 8 being used)
 * Changed padding on hidden cookie-permission banner
+* Changed partner cookie durations slightly to make them more accurate. Added more available intervals
 * Changed grunt configuration to also take the plugin directory `custom/project` into account
 
 ### Removals

@@ -39,6 +39,7 @@ Ext.define('Shopware.apps.Partner.store.Detail', {
      * @string
      */
     extend:'Ext.data.Store',
+
     /**
      * Auto load the store after the component
      * is initialized
@@ -51,18 +52,21 @@ Ext.define('Shopware.apps.Partner.store.Detail', {
      * @boolean
      */
     batch: true,
+
     /**
      * sets remote sorting true
      * @boolean
      */
     remoteSort: true,
 
-    remoteFilter : true,
+    remoteFilter: true,
+
     /**
      * Amount of data loaded at once
      * @integer
      */
     pageSize:30,
+
     /**
      * Define the used model for this store
      * @string
