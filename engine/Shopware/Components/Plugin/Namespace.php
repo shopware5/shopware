@@ -552,6 +552,8 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             $plugins[$pluginName]['class'] = $this->buildClassName($this->name, $pluginName);
             $plugins[$pluginName]['path'] = $this->buildPath($this->name, $pluginName, $row['source']);
             $plugins[$pluginName]['config'] = [];
+            $plugins[$pluginName]['installationDate'] = new \DateTime($row['installationDate']);
+            $plugins[$pluginName]['updateDate'] = new \DateTime($row['updateDate']);
         }
 
         $listeners = $this->loadListeners($this->name);
