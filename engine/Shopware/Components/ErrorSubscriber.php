@@ -25,6 +25,7 @@
 namespace Shopware\Components;
 
 use Enlight\Event\SubscriberInterface;
+use Enlight_Event_EventManager as EnlightEventManager;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -52,9 +53,15 @@ class ErrorSubscriber implements SubscriberInterface
      */
     private $logger;
 
-    public function __construct(LoggerInterface $logger)
+    /**
+     * @var EnlightEventManager
+     */
+    private $eventManager;
+
+    public function __construct(LoggerInterface $logger, EnlightEventManager $eventManager)
     {
         $this->logger = $logger;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -92,6 +99,13 @@ class ErrorSubscriber implements SubscriberInterface
 
             if (is_array($exceptions)) {
                 $last = array_pop($exceptions);
+
+                if ($this->eventManager->notifyUntil('Shopware_Components_Error_Log', [
+                    'exception' => $last,
+                ])) {
+                    return false;
+                }
+
                 // Make sure this is an Exception and also no minor one
                 if ($last instanceof \Exception && !in_array($last->getCode(), [
                     \Enlight_Controller_Exception::ActionNotFound,
@@ -99,7 +113,11 @@ class ErrorSubscriber implements SubscriberInterface
                     \Enlight_Controller_Exception::Controller_Dispatcher_Controller_No_Route,
                     \Enlight_Controller_Exception::NO_ROUTE,
                     ], true)) {
-                    $this->logger->critical($last->getMessage());
+                    if ($last instanceof CSRFTokenValidationException) {
+                        $this->logger->warning($last->getMessage());
+                    } else {
+                        $this->logger->critical($last->getMessage());
+                    }
                 }
             }
 

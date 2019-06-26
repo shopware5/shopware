@@ -23,6 +23,7 @@
  */
 
 use Monolog\Handler\BufferHandler;
+use Shopware\Components\CSRFTokenValidationException;
 use Shopware\Components\Log\Formatter\HtmlFormatter;
 use Shopware\Components\Log\Handler\EnlightMailHandler;
 use Shopware\Components\Log\Processor\ShopwareEnvironmentProcessor;
@@ -274,6 +275,10 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
         /** @var Logger $logger */
         $logger = $this->get('corelogger');
         foreach ($exceptions as $exception) {
+            if ($exception instanceof CSRFTokenValidationException) {
+                $logger->warning((string) $exception);
+                continue;
+            }
             $logger->error((string) $exception);
         }
     }

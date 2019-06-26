@@ -152,6 +152,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `Shopware\Models\Shop\Shop::registerResources` to extract the code in a new service `shopware.components.shop_registration_service`
 * Changed the offcanvas basket to now display shipping costs also when the user is logged in
 * Changed `\Shopware\Components\Privacy\PrivacyService` to run more efficiently
+* Changed the logging to not have critical or error logging for CSRF-Tokens and 404-pages
 * Changed the error message if a customer enters an invalid birthday in the registration
 * Changed article list in elasticsearch to consier show variants option
 * Changed Hook generation to work correctly with `void` return type
