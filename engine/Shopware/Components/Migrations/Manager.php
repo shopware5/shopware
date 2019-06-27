@@ -239,7 +239,12 @@ class Manager
 
         foreach ($migrations as $migration) {
             $this->log(sprintf('Apply MigrationNumber: %s - %s', $migration->getVersion(), $migration->getLabel()));
-            $this->apply($migration, $modus);
+            try {
+                $this->apply($migration, $modus);
+            } catch (\Exception $e) {
+                $this->log($e->getMessage());
+                throw $e;
+            }
         }
     }
 
