@@ -204,7 +204,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
     private function getLocale()
     {
         /** @var Shopware_Components_Auth $auth */
-        if (!$auth = $this->container->get('Auth')) {
+        if (!$auth = $this->container->get('auth')) {
             return 'de_DE';
         }
         if (!$identity = $auth->getIdentity()) {

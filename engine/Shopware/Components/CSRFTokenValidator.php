@@ -91,7 +91,7 @@ class CSRFTokenValidator implements SubscriberInterface
             return;
         }
 
-        $expected = $this->container->get('BackendSession')->offsetGet($this->tokenName);
+        $expected = $this->container->get('backendsession')->offsetGet($this->tokenName);
         $token = $controller->Request()->getHeader($this->tokenName);
 
         if (empty($token)) {

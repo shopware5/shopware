@@ -64,7 +64,7 @@ class Manager
             $resource->setManager($container->get('models'));
         }
 
-        if ($container->initialized('Auth')) {
+        if ($container->initialized('auth')) {
             $resource->setAcl($container->get('acl'));
             $resource->setRole($container->get('auth')->getIdentity()->role);
         }

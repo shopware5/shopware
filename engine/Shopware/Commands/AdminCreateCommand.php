@@ -169,7 +169,7 @@ class AdminCreateCommand extends ShopwareCommand
     private function setPassword(User $user, $plainPassword)
     {
         /** @var \Shopware\Components\Password\Manager $passworEncoderRegistry */
-        $passworEncoderRegistry = $this->getContainer()->get('PasswordEncoder');
+        $passworEncoderRegistry = $this->getContainer()->get('passwordencoder');
         $defaultEncoderName = $passworEncoderRegistry->getDefaultPasswordEncoderName();
         $encoder = $passworEncoderRegistry->getEncoderByName($defaultEncoderName);
 

@@ -136,7 +136,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
         $this->database = $this->container->get('dbal_connection');
         $this->modules = $this->container->get('modules');
         $this->modelManager = $this->container->get('models');
-        $this->seoIndex = $this->container->get('SeoIndex');
+        $this->seoIndex = $this->container->get('seoindex');
         $this->rewriteTable = $this->modules->RewriteTable();
         $this->events = $this->container->get('events');
 

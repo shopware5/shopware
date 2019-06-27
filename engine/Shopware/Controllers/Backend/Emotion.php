@@ -1206,9 +1206,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $elements = $this->createElements($emotion, $data['elements']);
         }
 
-        if (Shopware()->Container()->get('Auth')->getIdentity()->id) {
+        if (Shopware()->Container()->get('auth')->getIdentity()->id) {
             /** @var \Shopware\Models\User\User $user */
-            $user = Shopware()->Models()->find(\Shopware\Models\User\User::class, Shopware()->Container()->get('Auth')->getIdentity()->id);
+            $user = Shopware()->Models()->find(\Shopware\Models\User\User::class, Shopware()->Container()->get('auth')->getIdentity()->id);
             $emotion->setUser($user);
         }
 
@@ -1520,7 +1520,7 @@ EOD;
     private function generateEmotionSeoUrls(Emotion $emotion)
     {
         /** @var Shopware_Components_SeoIndex $seoIndexer */
-        $seoIndexer = Shopware()->Container()->get('SeoIndex');
+        $seoIndexer = Shopware()->Container()->get('seoindex');
         $module = Shopware()->Modules()->RewriteTable();
         $shops = $emotion->getShops();
         $emotionData = [

@@ -24,7 +24,7 @@
     <services>
         <defaults public="true" />
         <service id="application"     synthetic="true" />
-        <service id="PasswordEncoder" synthetic="true" />
+        <service id="passwordencoder" synthetic="true" />
         <service id="db_connection"   synthetic="true" />
         <service id="modules"         synthetic="true" />
 
@@ -34,7 +34,7 @@
             <argument>%shopware.release.revision%</argument>
         </service>
 
-        <service class="Shopware\Components\Backend\GlobalSearch" id="shopware.backend.global_search">
+        <service id="shopware.backend.global_search" class="Shopware\Components\Backend\GlobalSearch">
             <argument type="service" id="shopware_attribute.product_repository"/>
             <argument type="service" id="shopware_attribute.customer_repository"/>
             <argument type="service" id="shopware_attribute.order_repository"/>
@@ -87,8 +87,8 @@
         </service>
 
         <service id="mailtransport_factory" class="Shopware\Components\DependencyInjection\Bridge\MailTransport" />
-        <service id="shopware.mail_transport" alias="MailTransport" />
-        <service id="MailTransport" class="Zend_Mail_Transport_Abstract">
+        <service id="shopware.mail_transport" alias="mailtransport" />
+        <service id="mailtransport" class="Zend_Mail_Transport_Abstract">
             <factory service="mailtransport_factory" method="factory" />
             <argument type="service" id="loader"/>
             <argument type="service" id="config"/>
@@ -214,7 +214,7 @@
             <argument type="service" id="service_container"/>
         </service>
 
-        <service id="shopware.hook_manager" alias="Hooks" />
+        <service id="shopware.hook_manager" alias="hooks" />
         <service id="hooks" class="Enlight_Hook_HookManager">
             <argument type="service" id="shopware.event_manager" />
             <argument type="service" id="shopware.loader" />
@@ -247,17 +247,17 @@
          </service>
 
         <service id="models_metadata_cache" class="Doctrine\Common\Cache\Cache">
-            <factory service="ModelConfig" method="getMetadataCacheImpl" />
+            <factory service="modelconfig" method="getMetadataCacheImpl" />
         </service>
 
         <service id="models.annotations_reader" class="\Doctrine\Common\Annotations\Reader">
-            <factory service="ModelConfig" method="getAnnotationsReader" />
+            <factory service="modelconfig" method="getAnnotationsReader" />
         </service>
 
         <service id="dbal_connection" class="Doctrine\DBAL\Connection">
             <factory class="Shopware\Components\DependencyInjection\Bridge\Db" method="createDbalConnection" />
             <argument>%shopware.db%</argument>
-            <argument type="service" id="ModelConfig"/>
+            <argument type="service" id="modelconfig"/>
             <argument type="service" id="model_event_manager"/>
             <argument type="service" id="db_connection"/>
         </service>
@@ -273,7 +273,7 @@
         <service id="model_event_manager" class="Doctrine\Common\EventManager"/>
 
         <service id="model_repository_factory" class="Shopware\Components\Model\ProxyAwareRepositoryFactory" public="false">
-            <argument type="service" id="Hooks" />
+            <argument type="service" id="hooks" />
         </service>
 
         <service id="eventsubscriber" class="Shopware\Components\Model\EventSubscriber">
@@ -292,7 +292,7 @@
 
         <service id="categoryduplicator" class="Shopware\Components\CategoryHandling\CategoryDuplicator">
             <argument type="service" id="db_connection" />
-            <argument type="service" id="CategoryDenormalization" />
+            <argument type="service" id="categorydenormalization" />
             <argument type="service" id="shopware_attribute.data_persister" />
         </service>
 

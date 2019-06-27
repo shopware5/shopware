@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Shop\Locale;
+
 class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
@@ -46,12 +48,12 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
         $sql = 'SELECT count(*) FROM  s_crontab';
         $totalCronJobCount = Shopware()->Db()->fetchOne($sql);
 
-        //test the search
+        // Test the search
         $this->checkGetTableListSearch('a', $totalCronJobCount, 'cronJob');
 
         $this->reset();
 
-        //test the search with a pagination
+        // Test the search with a pagination
         $this->checkGetTableListSearchWithPagination('a', 'cronJob');
     }
 
@@ -171,11 +173,11 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
      */
     public function testIfPDFDocumentsListIncludesTranslation()
     {
-        // set up
+        // Set up
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth(false);
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
 
-        // login
+        // Login
         $this->Request()->setMethod('POST');
         $this->Request()->setPost([
             'username' => 'demo',
@@ -209,9 +211,9 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
         Shopware()->Container()->reset('translation');
 
         // Check for English translations
-        $user = Shopware()->Container()->get('Auth')->getIdentity();
+        $user = Shopware()->Container()->get('auth')->getIdentity();
         $user->locale = Shopware()->Models()->getRepository(
-            'Shopware\Models\Shop\Locale'
+            Locale::class
         )->find(2);
 
         $this->Request()->setMethod('GET');

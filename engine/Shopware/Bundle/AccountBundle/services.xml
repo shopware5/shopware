@@ -32,7 +32,7 @@
         <service id="shopware_account.constraint.current_password_validator" class="Shopware\Bundle\AccountBundle\Constraint\CurrentPasswordValidator">
             <argument type="service" id="session" />
             <argument type="service" id="snippets" />
-            <argument type="service" id="PasswordEncoder" />
+            <argument type="service" id="passwordencoder" />
             <argument type="service" id="models" />
             <tag name="validator.constraint_validator" alias="CurrentPasswordValidator" />
         </service>
@@ -108,7 +108,7 @@
             <argument type="service" id="models"/>
             <argument type="service" id="shopware_account.customer_validator"/>
             <argument type="service" id="config"/>
-            <argument type="service" id="PasswordEncoder"/>
+            <argument type="service" id="passwordencoder"/>
             <argument type="service" id="shopware.number_range_incrementer"/>
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_account.address_service"/>

@@ -51,7 +51,7 @@ class ControllerCompilerPass implements CompilerPassInterface
 
             $arguments = $definition->getArguments();
             $definition->setArguments([
-                new Reference('Hooks'),
+                new Reference('hooks'),
                 $definition->getClass(),
                 $arguments,
             ]);

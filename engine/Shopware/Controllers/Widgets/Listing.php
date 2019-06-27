@@ -538,7 +538,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $inheritance = $this->container->get('theme_inheritance');
 
         /** @var \Shopware\Models\Shop\Shop $shop */
-        $shop = $this->container->get('Shop');
+        $shop = $this->container->get('shop');
 
         $config = $inheritance->buildConfig($shop->getTemplate(), $shop, false);
 

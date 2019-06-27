@@ -73,7 +73,7 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
      */
     public function indexAction()
     {
-        $identity = Shopware()->Container()->get('Auth')->getIdentity();
+        $identity = Shopware()->Container()->get('auth')->getIdentity();
         $this->View()->assign('user', $identity, true);
 
         if ($this->Request()->get('file') === 'bootstrap') {

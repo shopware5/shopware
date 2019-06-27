@@ -76,7 +76,7 @@ class Session
         }
 
         /** @var \Shopware\Models\Shop\Shop $shop */
-        $shop = $container->get('Shop');
+        $shop = $container->get('shop');
         $mainShop = $shop->getMain() ?: $shop;
 
         $name = 'session-' . $shop->getId();

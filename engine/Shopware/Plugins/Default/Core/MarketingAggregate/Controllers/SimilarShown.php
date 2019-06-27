@@ -35,7 +35,7 @@ class Shopware_Controllers_Backend_SimilarShown extends Shopware_Controllers_Bac
     {
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.7.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
-        return Shopware()->Container()->get('SimilarShown');
+        return Shopware()->Container()->get('similarshown');
     }
 
     /**

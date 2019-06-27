@@ -57,6 +57,6 @@ abstract class Enlight_Components_Test_Plugin_TestCase extends Enlight_Component
     {
         parent::setUp();
 
-        Shopware()->Container()->load('Plugins');
+        Shopware()->Container()->load('plugins');
     }
 }

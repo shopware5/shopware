@@ -318,7 +318,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     public function setFront(Enlight_Controller_Front $front = null)
     {
         if ($front === null) {
-            $front = Shopware()->Container()->get('Front');
+            $front = Shopware()->Container()->get('front');
         }
         $this->front = $front;
 
@@ -420,7 +420,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      */
     public function getModelManager()
     {
-        return $this->container->get('Models');
+        return $this->container->get('models');
     }
 
     /**

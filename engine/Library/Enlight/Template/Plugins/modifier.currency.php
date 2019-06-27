@@ -30,7 +30,7 @@
  */
 function smarty_modifier_currency($value, $config = null, $position = null)
 {
-    if (!Shopware()->Container()->has('Currency')) {
+    if (!Shopware()->Container()->has('currency')) {
         return $value;
     }
 
@@ -52,7 +52,7 @@ function smarty_modifier_currency($value, $config = null, $position = null)
         }
     }
 
-    $currency = Shopware()->Container()->get('Currency');
+    $currency = Shopware()->Container()->get('currency');
     $formattedValue = (float) str_replace(',', '.', $value);
     $formattedValue = $currency->toCurrency($formattedValue, $config);
     $formattedValue = mb_convert_encoding($formattedValue, 'HTML-ENTITIES', 'UTF-8');

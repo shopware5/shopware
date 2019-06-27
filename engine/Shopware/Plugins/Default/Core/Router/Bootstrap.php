@@ -113,9 +113,9 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         $request = $args->getRequest();
         $response = $args->getResponse();
 
-        if (Shopware()->Container()->initialized('Shop')) {
+        if (Shopware()->Container()->initialized('shop')) {
             /** @var DetachedShop $shop */
-            $shop = $this->get('Shop');
+            $shop = $this->get('shop');
 
             if ($request->getHttpHost() !== $shop->getHost()) {
                 if ($request->isSecure()) {
@@ -179,7 +179,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     protected function upgradeShop($request, $response)
     {
         /** @var DetachedShop $shop */
-        $shop = $this->get('Shop');
+        $shop = $this->get('shop');
 
         $cookieKey = null;
         $cookieValue = null;
@@ -280,7 +280,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $template = $session->template;
             $template = $repository->findOneBy(['template' => $template]);
 
-            $this->get('Template')->setTemplateDir([]);
+            $this->get('template')->setTemplateDir([]);
 
             if ($template !== null) {
                 $shop->setTemplate($template);
@@ -295,7 +295,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         $this->get('shopware.components.shop_registration_service')->registerShop($shop);
 
         if ($request->isSecure()) {
-            $template = $this->get('Template');
+            $template = $this->get('template');
             $template->setCompileId($template->getCompileId() . '_secure');
         }
     }
