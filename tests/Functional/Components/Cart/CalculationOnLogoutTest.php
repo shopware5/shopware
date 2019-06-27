@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Functional\Components\Cart;
 
 use Enlight_Controller_Request_RequestHttp;
-use Shopware\Components\Test\CheckoutTest;
+use Shopware\Tests\Functional\Components\CheckoutTest;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class CalculationOnLogoutTest extends CheckoutTest

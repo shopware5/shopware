@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 
 class WidthFacet implements FacetInterface
 {
+    private const NAME = 'width';
+
     /**
      * @var string
      */
@@ -81,6 +83,6 @@ class WidthFacet implements FacetInterface
 
     public function getName()
     {
-        return 'width';
+        return self::NAME;
     }
 }

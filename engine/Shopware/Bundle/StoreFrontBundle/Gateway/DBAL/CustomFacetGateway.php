@@ -89,6 +89,7 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
         if (empty($ids)) {
             return [];
         }
+
         $facets = $this->getList($ids, $context);
 
         $categoryFacets = [];

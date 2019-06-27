@@ -28,12 +28,16 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
     protected $campaignsRepository = null;
 
     /**
+     * @deprecated in 5.6, will be private in 5.8
+     *
      * Helper Method to get access to the campagins repository.
      *
      * @return Shopware\Models\Newsletter\Repository
      */
     public function getCampaignsRepository()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         if ($this->campaignsRepository === null) {
             $this->campaignsRepository = Shopware()->Models()->getRepository(\Shopware\Models\Newsletter\Newsletter::class);
         }
@@ -570,10 +574,14 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
     }
 
     /**
+     * @deprecated in 5.6, will be private in 5.8
+     *
      * Get all newsletters with status -1
      */
     public function getPreviewNewslettersQuery()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $builder = Shopware()->Models()->createQueryBuilder();
 
         $builder->select([

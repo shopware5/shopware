@@ -29,17 +29,21 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class SimilarProductCondition implements ConditionInterface, \JsonSerializable
 {
-    /** @var string $productName */
+    const NAME = 'similar_products';
+
+    /**
+     * @var string
+     */
     protected $productName;
 
-    /** @var int $productId */
+    /**
+     * @var int
+     */
     protected $productId;
 
     /**
      * @param int    $productId
      * @param string $productName
-     *
-     * @throws \Exception
      */
     public function __construct($productId, $productName)
     {
@@ -61,7 +65,7 @@ class SimilarProductCondition implements ConditionInterface, \JsonSerializable
      */
     public function getName()
     {
-        return 'similar_products';
+        return self::NAME;
     }
 
     /**

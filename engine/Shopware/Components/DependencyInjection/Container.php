@@ -30,11 +30,6 @@ use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceExce
 class Container extends BaseContainer
 {
     /**
-     * @var Container
-     */
-    protected $container;
-
-    /**
      * @return Container
      */
     public function setApplication(\Shopware $application)

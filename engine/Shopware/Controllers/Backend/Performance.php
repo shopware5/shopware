@@ -153,10 +153,14 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     }
 
     /**
+     * @deprecated in 5.6, will be private in 5.8
+     *
      * Iterates the given data array and persists all config variables
      */
     public function saveConfigData(array $data)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         foreach ($data as $values) {
             foreach ($values as $configKey => $value) {
                 $this->saveConfig($configKey, $value);
@@ -165,6 +169,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     }
 
     /**
+     * @deprecated in 5.6, will be private in 5.8
+     *
      * General helper method which triggers the prepare...ConfigForSaving methods
      *
      * @param array $data
@@ -173,6 +179,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function prepareDataForSaving($data)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $output = [];
         $output['httpCache'] = $this->prepareHttpCacheConfigForSaving($data['httpCache'][0]);
         $output['topSeller'] = $this->prepareForSavingDefault($data['topSeller'][0]);
@@ -188,24 +196,32 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     }
 
     /**
+     * @deprecated in 5.6, will be private in 5.8
+     *
      * Generic helper method which prepares a given array for saving
      *
      * @return array
      */
     public function prepareForSavingDefault(array $data)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         unset($data['id']);
 
         return $data;
     }
 
     /**
+     * @deprecated in 5.6, will be private in 5.8
+     *
      * Prepare seo array for saving
      *
      * @return array
      */
     public function prepareSeoConfigForSaving(array $data)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         unset($data['id']);
 
         $date = date_create($data['routerlastupdateDate'])->format('Y-m-d');
@@ -223,12 +239,16 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     }
 
     /**
+     * @deprecated in 5.6, will be private in 5.8
+     *
      * Prepare the http config array so that it can easily be saved
      *
      * @return array
      */
     public function prepareHttpCacheConfigForSaving(array $data)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $modelManager = $this->container->get('models');
         $repo = $modelManager->getRepository(Plugin::class);
 
@@ -271,12 +291,16 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     }
 
     /**
+     * @deprecated in 5.6, will be private in 5.8
+     *
      * Helper method to persist a given config value
      *
      * @param string $name
      */
     public function saveConfig($name, $value)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $modelManager = $this->container->get('models');
         /** @var ShopRepository $shopRepository */
         $shopRepository = $modelManager->getRepository(Shop::class);
@@ -327,6 +351,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     }
 
     /**
+     * @deprecated in 5.6, will be private in 5.8
+     *
      * Read a given config by name
      *
      * @param string $configName
@@ -336,6 +362,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function readConfig($configName, $defaultValue = '')
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         // If we have a simple config item, we can return it by using Shopware()->Config()
         if (strpos($configName, ':') === false) {
             return Shopware()->Config()->get($configName);

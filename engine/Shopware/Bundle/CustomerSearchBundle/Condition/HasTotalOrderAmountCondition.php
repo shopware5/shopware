@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class HasTotalOrderAmountCondition implements ConditionInterface
 {
+    private const NAME = 'HasTotalOrderAmountCondition';
+
     /**
      * @var float
      */
@@ -58,7 +60,7 @@ class HasTotalOrderAmountCondition implements ConditionInterface
 
     public function getName()
     {
-        return 'HasTotalOrderAmountCondition';
+        return self::NAME;
     }
 
     public function getOperator()

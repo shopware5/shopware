@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class HasOrderCountCondition implements ConditionInterface
 {
+    private const NAME = 'HasOrderCountCondition';
+
     /**
      * @var int
      */
@@ -50,7 +52,7 @@ class HasOrderCountCondition implements ConditionInterface
 
     public function getName()
     {
-        return 'HasOrderCountCondition';
+        return self::NAME;
     }
 
     /**

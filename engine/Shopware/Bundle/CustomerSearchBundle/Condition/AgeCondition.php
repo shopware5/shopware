@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class AgeCondition implements ConditionInterface
 {
+    private const NAME = 'AgeCondition';
+
     /**
      * @var string|array
      */
@@ -53,7 +55,7 @@ class AgeCondition implements ConditionInterface
      */
     public function getName()
     {
-        return 'AgeCondition';
+        return self::NAME;
     }
 
     /**

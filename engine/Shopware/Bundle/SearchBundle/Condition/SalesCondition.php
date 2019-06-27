@@ -29,6 +29,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class SalesCondition implements ConditionInterface, \JsonSerializable
 {
+    private const NAME = 'sales';
+
     /**
      * @var int
      */
@@ -48,7 +50,7 @@ class SalesCondition implements ConditionInterface, \JsonSerializable
      */
     public function getName()
     {
-        return 'sales';
+        return self::NAME;
     }
 
     /**

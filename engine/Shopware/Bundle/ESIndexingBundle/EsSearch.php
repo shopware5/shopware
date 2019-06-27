@@ -27,9 +27,15 @@ namespace Shopware\Bundle\ESIndexingBundle;
 use ONGR\ElasticsearchDSL\BuilderInterface;
 use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
 use ONGR\ElasticsearchDSL\Search;
+use ONGR\ElasticsearchDSL\Serializer\OrderedSerializer;
 
 class EsSearch extends Search implements EsSearchInterface
 {
+    /**
+     * @var OrderedSerializer
+     */
+    protected static $serializer;
+
     /**
      * {@inheritdoc}
      */

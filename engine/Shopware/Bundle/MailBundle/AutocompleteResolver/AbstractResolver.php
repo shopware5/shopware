@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\MailBundle\AutocompleteResolver;
 
-abstract class AbstractResolver implements Resolver
+abstract class AbstractResolver implements ResolverInterface
 {
     protected function getValueFromPath(array $context, string $name)
     {

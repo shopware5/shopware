@@ -28,11 +28,13 @@ use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
 
 class CustomerAttributeCondition extends ProductAttributeCondition
 {
+    private const NAME = 'CustomerAttribute';
+
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'CustomerAttribute_' . parent::getField();
+        return self::NAME . parent::getField();
     }
 }

@@ -315,7 +315,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        if (!($value = $this->Request()->getParam('value'))) {
+        if (!$this->Request()->getParam('value')) {
             $this->View()->assign(['success' => false, 'message' => 'Value not found']);
         }
 

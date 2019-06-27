@@ -32,6 +32,11 @@ use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
 class BacklogProcessor implements BacklogProcessorInterface
 {
     /**
+     * @var \Enlight_Event_EventManager
+     */
+    protected $eventManager;
+
+    /**
      * @var Connection
      */
     private $connection;
@@ -43,10 +48,14 @@ class BacklogProcessor implements BacklogProcessorInterface
 
     public function __construct(
         Connection $connection,
-        \IteratorAggregate $synchronizers
+        \IteratorAggregate $synchronizers,
+        \Enlight_Event_EventManager $eventManager
     ) {
         $this->connection = $connection;
         $this->synchronizers = iterator_to_array($synchronizers, true);
+        $this->eventManager = $eventManager;
+
+        $this->collectSynchronizer();
     }
 
     /**

@@ -29,6 +29,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class PriceCondition implements ConditionInterface, \JsonSerializable
 {
+    private const NAME = 'price';
+
     /**
      * @var float
      */
@@ -56,7 +58,7 @@ class PriceCondition implements ConditionInterface, \JsonSerializable
      */
     public function getName()
     {
-        return 'price';
+        return self::NAME;
     }
 
     /**

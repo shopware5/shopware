@@ -28,11 +28,13 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 
 class PropertyFacet implements FacetInterface
 {
+    private const NAME = 'property';
+
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'property';
+        return self::NAME;
     }
 }

@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class OrderedOnDeviceCondition implements ConditionInterface
 {
+    private const NAME = 'OrderedOnDeviceCondition';
+
     /**
      * @var string[]
      */
@@ -51,6 +53,6 @@ class OrderedOnDeviceCondition implements ConditionInterface
 
     public function getName()
     {
-        return 'OrderedOnDeviceCondition';
+        return self::NAME;
     }
 }

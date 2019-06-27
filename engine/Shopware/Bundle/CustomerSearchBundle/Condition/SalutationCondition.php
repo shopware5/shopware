@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class SalutationCondition implements ConditionInterface
 {
+    private const NAME = 'SalutationCondition';
+
     /**
      * @var string[]
      */
@@ -51,6 +53,6 @@ class SalutationCondition implements ConditionInterface
 
     public function getName()
     {
-        return 'SalutationCondition';
+        return self::NAME;
     }
 }

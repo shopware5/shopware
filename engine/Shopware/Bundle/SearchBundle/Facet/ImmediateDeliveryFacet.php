@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 
 class ImmediateDeliveryFacet implements FacetInterface
 {
+    private const NAME = 'immediate_delivery';
+
     /**
      * @var string|null
      */
@@ -54,6 +56,6 @@ class ImmediateDeliveryFacet implements FacetInterface
      */
     public function getName()
     {
-        return 'immediate_delivery';
+        return self::NAME;
     }
 }

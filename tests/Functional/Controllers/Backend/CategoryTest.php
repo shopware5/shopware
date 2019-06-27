@@ -55,7 +55,7 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
         parent::setUp();
 
         $this->manager = Shopware()->Models();
-        $this->repository = $repository = Shopware()->Models()->getRepository(Category::class);
+        $this->repository = Shopware()->Models()->getRepository(Category::class);
 
         // disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();

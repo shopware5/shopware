@@ -31,7 +31,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * Adds all services with the tags "form.type" and "form.type_guesser" as
  * arguments of the "form.extension" service.
  *
- *
  * @see    https://github.com/symfony/framework-bundle/blob/master/DependencyInjection/Compiler/FormPass.php
  *
  * @license https://opensource.org/licenses/MIT MIT License

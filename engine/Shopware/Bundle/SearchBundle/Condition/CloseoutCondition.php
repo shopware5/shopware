@@ -28,12 +28,14 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class CloseoutCondition implements ConditionInterface, \JsonSerializable
 {
+    private const NAME = 'closeout';
+
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'closeout';
+        return self::NAME;
     }
 
     /**

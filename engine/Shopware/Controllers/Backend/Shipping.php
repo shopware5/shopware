@@ -188,6 +188,8 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     }
 
     /**
+     * @deprecated in 5.6, will be private in 5.8
+     *
      * Removes all shipping costs for a given dispatch ID and returns the number of
      * deleted records.
      *
@@ -197,6 +199,8 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
      */
     public function deleteCostsMatrix($dispatchId)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $dispatchId = (int) $dispatchId;
         $purge = $this->getRepository()->getPurgeShippingCostsMatrixQuery($dispatchId);
 
@@ -251,10 +255,14 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     }
 
     /**
+     * @deprecated in 5.6, will be private in 5.8
+     *
      * Saves one entry of the shipping aka dispatch costs matrix
      */
     public function saveCostsMatrix()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $data = null;
         if (!$this->Request()->isPost()) {
             $this->View()->assign(['success' => false, 'errorMsg' => 'Empty Post Request']);

@@ -33,8 +33,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ReceiveStatisticsCommand extends ShopwareCommand
 {
-    const MAX_BATCH_SIZE = 3000;
-
     public function configure()
     {
         $this

@@ -31,6 +31,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 class RangeFacetResult extends Extendable implements FacetResultInterface, TemplateSwitchable
 {
+    private const TEMPLATE = 'frontend/listing/filter/facet-range.tpl';
+
     /**
      * @var string
      */
@@ -119,7 +121,7 @@ class RangeFacetResult extends Extendable implements FacetResultInterface, Templ
         $attributes = [],
         $suffix = null,
         $digits = 2,
-        $template = 'frontend/listing/filter/facet-range.tpl'
+        $template = self::TEMPLATE
     ) {
         $this->facetName = $facetName;
         $this->active = $active;

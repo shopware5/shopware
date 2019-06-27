@@ -47,16 +47,6 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     /**
      * @var array
      */
-    protected $_errorHandlerMap;
-
-    /**
-     * @var array
-     */
-    protected $_errorLevel = 0;
-
-    /**
-     * @var array
-     */
     protected $_errorLog = false;
 
     /**

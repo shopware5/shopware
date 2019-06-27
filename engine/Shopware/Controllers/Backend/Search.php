@@ -112,6 +112,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
      */
     public function getArticles($search)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.5.8 and will be removed in 5.7. Use the ProductRepository instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
         $query = $this->container->get('dbal_connection')->createQueryBuilder();
 
@@ -156,6 +158,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
      */
     public function getCustomers($search)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.5.8 and will be removed in 5.7. Use the CustomerRepository instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $search2 = Shopware()->Db()->quote("$search%");
         $search = Shopware()->Db()->quote("%$search%");
 
@@ -193,6 +197,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
      */
     public function getOrders($search)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.5.8 and will be removed in 5.7. Use the OrderRepository instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $search = Shopware()->Db()->quote("$search%");
 
         $sql = "

@@ -25,8 +25,8 @@
 namespace Shopware\Bundle\SearchBundleES;
 
 use Elasticsearch\Client;
-use ONGR\ElasticsearchDSL\Search;
 use ONGR\ElasticsearchDSL\Sort\FieldSort;
+use Shopware\Bundle\ESIndexingBundle\EsSearch;
 use Shopware\Bundle\ESIndexingBundle\IndexFactoryInterface;
 use Shopware\Bundle\ESIndexingBundle\Product\ProductMapping;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -135,11 +135,11 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     /**
      * @throws \Exception
      *
-     * @return Search
+     * @return EsSearch
      */
     private function buildSearch(Criteria $criteria, ShopContextInterface $context)
     {
-        $search = new Search();
+        $search = new EsSearch();
 
         $this->addConditions($criteria, $context, $search);
         $this->addCriteriaParts($criteria, $context, $search, $criteria->getSortings());
@@ -162,7 +162,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     private function addCriteriaParts(
         Criteria $criteria,
         ShopContextInterface $context,
-        Search $search,
+        EsSearch $search,
         array $criteriaParts
     ) {
         foreach ($criteriaParts as $criteriaPart) {
@@ -224,7 +224,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     private function addConditions(
         Criteria $criteria,
         ShopContextInterface $context,
-        Search $search
+        EsSearch $search
     ) {
         foreach ($criteria->getBaseConditions() as $condition) {
             $handler = $this->getHandler($condition);

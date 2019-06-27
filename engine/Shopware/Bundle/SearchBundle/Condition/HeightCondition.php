@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class HeightCondition implements ConditionInterface, \JsonSerializable
 {
+    private const NAME = 'height';
+
     /**
      * @var float|null
      */
@@ -50,7 +52,7 @@ class HeightCondition implements ConditionInterface, \JsonSerializable
 
     public function getName()
     {
-        return 'height';
+        return self::NAME;
     }
 
     /**

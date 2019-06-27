@@ -28,12 +28,14 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class HasPseudoPriceCondition implements ConditionInterface, \JsonSerializable
 {
+    private const NAME = 'has_pseudo_price_condition';
+
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'has_pseudo_price_condition';
+        return self::NAME;
     }
 
     /**

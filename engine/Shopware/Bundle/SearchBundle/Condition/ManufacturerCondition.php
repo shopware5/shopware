@@ -29,6 +29,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class ManufacturerCondition implements ConditionInterface, \JsonSerializable
 {
+    private const NAME = 'manufacturer';
+
     /**
      * @var int[]
      */
@@ -49,7 +51,7 @@ class ManufacturerCondition implements ConditionInterface, \JsonSerializable
      */
     public function getName()
     {
-        return 'manufacturer';
+        return self::NAME;
     }
 
     /**

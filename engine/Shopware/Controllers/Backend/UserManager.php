@@ -31,13 +31,6 @@ use Shopware\Models\User\User;
 class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * Entity Manager
-     *
-     * @var null
-     */
-    protected $manager = null;
-
-    /**
      * @var \Shopware\Models\User\Repository
      */
     protected $userRepository = null;

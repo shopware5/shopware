@@ -26,6 +26,9 @@ namespace Shopware\Bundle\EsBackendBundle;
 
 use Shopware\Bundle\AttributeBundle\Repository\RepositoryInterface;
 
+/**
+ * @deprecated in 5.6, will be removed in 5.7 without a replacement
+ */
 interface EsAwareSearcher extends RepositoryInterface
 {
 }

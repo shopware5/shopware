@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Functional\Components\Cart;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\Test\CheckoutTest;
+use Shopware\Tests\Functional\Components\CheckoutTest;
 
 class FloatTaxCalculationTest extends CheckoutTest
 {

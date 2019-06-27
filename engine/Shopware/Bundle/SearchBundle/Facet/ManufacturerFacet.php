@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 
 class ManufacturerFacet implements FacetInterface
 {
+    private const NAME = 'manufacturer';
+
     /**
      * @var string|null
      */
@@ -54,6 +56,6 @@ class ManufacturerFacet implements FacetInterface
      */
     public function getName()
     {
-        return 'manufacturer';
+        return self::NAME;
     }
 }

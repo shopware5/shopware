@@ -38,6 +38,7 @@ use Shopware\Bundle\AttributeBundle\Repository\Searcher\SearcherInterface;
 use Shopware\Bundle\AttributeBundle\Repository\Searcher\SearcherResult;
 use Shopware\Bundle\EsBackendBundle\EsBackendIndexer;
 use Shopware\Bundle\EsBackendBundle\SearchQueryBuilder;
+use Shopware\Bundle\ESIndexingBundle\EsSearch;
 
 class GenericSearcher implements SearcherInterface
 {
@@ -104,11 +105,11 @@ class GenericSearcher implements SearcherInterface
     }
 
     /**
-     * @return Search
+     * @return EsSearch
      */
     protected function buildSearchObject(SearchCriteria $criteria)
     {
-        $search = new Search();
+        $search = new EsSearch();
 
         if ($criteria->offset) {
             $search->setFrom($criteria->offset);

@@ -28,8 +28,10 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class HasNewsletterRegistrationCondition implements ConditionInterface
 {
+    private const NAME = 'HasNewsletterRegistrationCondition';
+
     public function getName()
     {
-        return 'HasNewsletterRegistrationCondition';
+        return self::NAME;
     }
 }

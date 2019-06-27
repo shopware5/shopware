@@ -849,6 +849,8 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
     }
 
     /**
+     * @deprecated since 5.6, will be removed in 5.7
+     *
      * Helper method to prefix properties
      *
      * @param array  $properties
@@ -858,6 +860,8 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
      */
     protected function prefixProperties($properties = [], $prefix = '')
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         foreach ($properties as $key => $property) {
             if (isset($property['property'])) {
                 $properties[$key]['property'] = $prefix . '.' . $property['property'];

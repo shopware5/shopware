@@ -784,36 +784,6 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     }
 
     /**
-     * Converts the serialized array to utf8 by unserializing it, iterating through each element and setting the encoding to utf8.
-     * It also reverts the arrays to objects
-     *
-     * @param array|\ArrayIterator $array
-     *
-     * @return array
-     */
-    private function convertToUtf8($array)
-    {
-        $testArray = [];
-        foreach ($array as $key => &$arrayElement) {
-            if (preg_match("/\{/", $arrayElement)) {
-                $arrayElement = unserialize($arrayElement);
-            }
-            if (!is_object($arrayElement)) {
-                if (is_array($arrayElement)) {
-                    $testArray[$key] = $this->convertToUtf8($arrayElement);
-                } else {
-                    $testArray[$key] = utf8_encode($arrayElement);
-                }
-            } else {
-                $arrayElement = $arrayElement->getArrayCopy();
-                $testArray[$key] = new ArrayObject($this->convertToUtf8($arrayElement), ArrayObject::ARRAY_AS_PROPS);
-            }
-        }
-
-        return $testArray;
-    }
-
-    /**
      * Helper function to Return the nearest tax rate of an approximate tax rate (used in processOrder())
      * Set $maxDiff to change how big the maximum difference between the approximate and defined tax rates can be
      *

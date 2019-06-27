@@ -55,11 +55,6 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
      */
     private $cacheManager;
 
-    /**
-     * @var array
-     */
-    private $configValues;
-
     public function setUp()
     {
         $this->connection = Shopware()->Container()->get('dbal_connection');

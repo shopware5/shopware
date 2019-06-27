@@ -177,10 +177,14 @@ class Cache extends Resource implements BatchInterface
     }
 
     /**
+     * @deprecated in 5.6, will be removed without a replacement
+     *
      * @return \Enlight_Controller_Request_Request
      */
     protected function getRequest()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->request;
     }
 

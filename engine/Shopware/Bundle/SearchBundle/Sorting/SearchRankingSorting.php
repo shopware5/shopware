@@ -26,11 +26,5 @@ namespace Shopware\Bundle\SearchBundle\Sorting;
 
 class SearchRankingSorting extends Sorting
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'search_ranking';
-    }
+    protected const NAME = 'search_ranking';
 }

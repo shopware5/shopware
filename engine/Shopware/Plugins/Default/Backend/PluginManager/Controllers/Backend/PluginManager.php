@@ -758,18 +758,6 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     }
 
     /**
-     * @param string $technicalName
-     *
-     * @return Plugin
-     */
-    private function getPluginModel($technicalName)
-    {
-        $repo = Shopware()->Models()->getRepository(Plugin::class);
-
-        return $repo->findOneBy(['name' => $technicalName]);
-    }
-
-    /**
      * @return mixed|string
      */
     private function getExceptionMessage(StoreException $exception)

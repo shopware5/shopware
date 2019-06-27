@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class IsInCustomerGroupCondition implements ConditionInterface
 {
+    private const NAME = 'IsInCustomerGroupCondition';
+
     /**
      * @var string[]
      */
@@ -51,6 +53,6 @@ class IsInCustomerGroupCondition implements ConditionInterface
 
     public function getName()
     {
-        return 'IsInCustomerGroupCondition';
+        return self::NAME;
     }
 }

@@ -72,7 +72,7 @@ class Enlight_Hook_HookExecutionContext
         $this->args = new Enlight_Hook_HookArgs($subject, $method, $args);
     }
 
-    /*+
+    /**
      * @return Enlight_Hook_HookManager
      */
     public function getHookManager()

@@ -29,7 +29,7 @@ use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Components\Slug\SlugInterface;
 use Shopware\Models\Emotion\Preset;
 
-class PresetInstaller
+class PresetInstaller implements PresetInstallerInterface
 {
     /**
      * @var EmotionPreset

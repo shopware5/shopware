@@ -27,6 +27,9 @@ namespace Shopware\Components\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
+/**
+ * @deprecated in 5.6, will be removed in 5.8 without replacement
+ */
 trait TagReplaceTrait
 {
     /**
@@ -39,6 +42,8 @@ trait TagReplaceTrait
      */
     private function replaceArgumentWithTaggedServices(ContainerBuilder $container, $serviceName, $tagName, $argumentIndex)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.8. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         if (!$container->hasDefinition($serviceName)) {
             return;
         }
@@ -69,6 +74,8 @@ trait TagReplaceTrait
      */
     private function findAndSortTaggedServices($tagName, ContainerBuilder $container)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.8. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $services = $container->findTaggedServiceIds($tagName);
 
         $queue = new \SplPriorityQueue();

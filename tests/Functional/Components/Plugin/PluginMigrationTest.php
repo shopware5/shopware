@@ -28,7 +28,7 @@ use Shopware\Bundle\PluginInstallerBundle\Service\PluginInitializer;
 use Shopware\Components\Migrations\AbstractPluginMigration;
 use Shopware\Components\Migrations\PluginMigrationManager;
 
-class PluginMigrationTest extends \Shopware\Components\Test\Plugin\TestCase
+class PluginMigrationTest extends TestCase
 {
     /**
      * @var array
@@ -138,10 +138,5 @@ class PluginMigrationTest extends \Shopware\Components\Test\Plugin\TestCase
     private function assertTableColumnExists(string $table, string $column)
     {
         static::assertTrue((bool) Shopware()->Db()->fetchOne(sprintf('show columns FROM %s WHERE `Field` = ?', $table), [$column]));
-    }
-
-    private function assertTableColumnNotExists(string $table, string $column)
-    {
-        static::assertFalse((bool) Shopware()->Db()->fetchOne(sprintf('show columns FROM %s WHERE `Field` = ?', $table), [$column]));
     }
 }

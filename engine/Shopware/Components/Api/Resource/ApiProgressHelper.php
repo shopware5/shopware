@@ -22,27 +22,27 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle\Condition;
+namespace Shopware\Components\Api\Resource;
 
-use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 
-class IsAvailableCondition implements ConditionInterface, \JsonSerializable
+/**
+ * @deprecated 5.7 never used
+ */
+class ApiProgressHelper implements ProgressHelperInterface
 {
-    private const NAME = 'is_available_condition';
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
+    public function start($count, $label = '')
     {
-        return self::NAME;
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
+    public function advance($step = 1)
     {
-        return get_object_vars($this);
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+    }
+
+    public function finish()
+    {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
     }
 }

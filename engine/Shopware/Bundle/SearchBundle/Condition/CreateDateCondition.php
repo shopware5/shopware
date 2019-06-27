@@ -29,6 +29,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class CreateDateCondition implements ConditionInterface, \JsonSerializable
 {
+    private const NAME = 'create_date_condition';
+
     /**
      * @var int
      */
@@ -48,7 +50,7 @@ class CreateDateCondition implements ConditionInterface, \JsonSerializable
      */
     public function getName()
     {
-        return 'create_date_condition';
+        return self::NAME;
     }
 
     /**

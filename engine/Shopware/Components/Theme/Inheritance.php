@@ -422,43 +422,6 @@ class Inheritance
     }
 
     /**
-     * Returns the query builder object to select the theme configuration for the
-     * current shop.
-     *
-     * @param \Shopware\Models\Shop\Template $template
-     * @param bool                           $lessCompatible
-     *
-     * @throws \Enlight_Event_Exception
-     *
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
-     */
-    private function getShopConfigQuery(Shop\Template $template, $lessCompatible)
-    {
-        $builder = $this->entityManager->createQueryBuilder();
-        $builder->select([
-            'element.name',
-            'values.value',
-            'element.defaultValue',
-            'element.type',
-        ]);
-
-        $builder->from(\Shopware\Models\Shop\TemplateConfig\Element::class, 'element')
-            ->leftJoin('element.values', 'values', 'WITH', 'values.shopId = :shopId')
-            ->where('element.templateId = :templateId');
-
-        if ($lessCompatible) {
-            $builder->andWhere('element.lessCompatible = 1');
-        }
-
-        $this->eventManager->notify('Theme_Inheritance_Shop_Query_Built', [
-            'builder' => $builder,
-            'template' => $template,
-        ]);
-
-        return $builder;
-    }
-
-    /**
      * @return array
      */
     private function fetchTemplates()

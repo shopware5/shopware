@@ -22,9 +22,21 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\MailBundle;
+namespace Shopware\Bundle\CustomerSearchBundleDBAL\Indexing;
 
-interface AutoCompleteResolverInterface
+use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
+
+class CronJobProgressHelper implements ProgressHelperInterface
 {
-    public function completer(array $context, string $smartyCode): array;
+    public function start($count, $label = '')
+    {
+    }
+
+    public function advance($step = 1)
+    {
+    }
+
+    public function finish()
+    {
+    }
 }

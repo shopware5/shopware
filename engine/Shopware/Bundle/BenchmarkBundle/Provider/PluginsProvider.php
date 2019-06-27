@@ -30,6 +30,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PluginsProvider implements BenchmarkProviderInterface
 {
+    private const NAME = 'plugins';
+
     /**
      * @var Connection
      */
@@ -42,7 +44,7 @@ class PluginsProvider implements BenchmarkProviderInterface
 
     public function getName()
     {
-        return 'plugins';
+        return self::NAME;
     }
 
     /**

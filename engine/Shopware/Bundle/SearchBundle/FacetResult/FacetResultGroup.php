@@ -31,6 +31,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 class FacetResultGroup extends Extendable implements FacetResultInterface, TemplateSwitchable
 {
+    private const TEMPLATE = 'frontend/listing/filter/facet-group.tpl';
+
     /**
      * @var FacetResultInterface[]
      */
@@ -63,7 +65,7 @@ class FacetResultGroup extends Extendable implements FacetResultInterface, Templ
         $headline,
         $facetName,
         $attributes = [],
-        $template = 'frontend/listing/filter/facet-group.tpl'
+        $template = self::TEMPLATE
     ) {
         $this->facetResults = $facetResults;
         $this->label = $headline;

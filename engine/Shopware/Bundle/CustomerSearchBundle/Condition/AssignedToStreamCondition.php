@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class AssignedToStreamCondition implements ConditionInterface
 {
+    private const NAME = 'AssignedToStreamCondition';
+
     /**
      * @var int
      */
@@ -43,7 +45,7 @@ class AssignedToStreamCondition implements ConditionInterface
 
     public function getName()
     {
-        return 'AssignedToStreamCondition';
+        return self::NAME;
     }
 
     /**

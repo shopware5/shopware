@@ -31,6 +31,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PaymentsProvider implements BenchmarkProviderInterface
 {
+    private const NAME = 'payments';
+
     /**
      * @var Connection
      */
@@ -59,7 +61,7 @@ class PaymentsProvider implements BenchmarkProviderInterface
 
     public function getName()
     {
-        return 'payments';
+        return self::NAME;
     }
 
     /**

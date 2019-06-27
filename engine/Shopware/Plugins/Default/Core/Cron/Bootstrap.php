@@ -24,8 +24,6 @@
 
 class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
-    protected $results = [];
-
     public function install()
     {
         $this->subscribeEvent(

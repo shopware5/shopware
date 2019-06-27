@@ -26,9 +26,11 @@ namespace Shopware\Bundle\BenchmarkBundle\Provider;
 
 class UpdatedOrdersProvider extends OrdersProvider
 {
+    private const NAME = 'updated_orders';
+
     public function getName()
     {
-        return 'updated_orders';
+        return self::NAME;
     }
 
     /**

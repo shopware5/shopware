@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 
 class ShippingFreeFacet implements FacetInterface
 {
+    private const NAME = 'shipping_free';
+
     /**
      * @var string|null
      */
@@ -54,6 +56,6 @@ class ShippingFreeFacet implements FacetInterface
      */
     public function getName()
     {
-        return 'shipping_free';
+        return self::NAME;
     }
 }

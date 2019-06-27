@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\SortingInterface;
 
 abstract class Sorting implements SortingInterface
 {
+    private const NAME = 'CHANGE ME';
+
     /**
      * @var string
      */
@@ -55,5 +57,10 @@ abstract class Sorting implements SortingInterface
     public function getDirection()
     {
         return $this->direction;
+    }
+
+    public function getName()
+    {
+        return static::NAME;
     }
 }

@@ -30,6 +30,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ManufacturerProvider implements BenchmarkProviderInterface
 {
+    private const NAME = 'manufacturers';
+
     /**
      * @var Connection
      */
@@ -47,7 +49,7 @@ class ManufacturerProvider implements BenchmarkProviderInterface
 
     public function getName()
     {
-        return 'manufacturers';
+        return self::NAME;
     }
 
     /**

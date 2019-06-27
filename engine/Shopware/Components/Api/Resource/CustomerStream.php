@@ -27,8 +27,7 @@ namespace Shopware\Components\Api\Resource;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CustomerSearchBundle\Condition\AssignedToStreamCondition;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchInterface;
-use Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\SearchIndexer;
-use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
+use Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\SearchIndexerInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Components\Api\Exception\CustomValidationException;
@@ -70,7 +69,7 @@ class CustomerStream extends Resource
     private $connection;
 
     /**
-     * @var SearchIndexer
+     * @var SearchIndexerInterface
      */
     private $searchIndexer;
 
@@ -90,7 +89,7 @@ class CustomerStream extends Resource
         CustomerStreamRepositoryInterface $streamRepository,
         ModelManager $manager,
         Connection $connection,
-        SearchIndexer $searchIndexer,
+        SearchIndexerInterface $searchIndexer,
         StreamIndexerInterface $streamIndexer,
         CustomerStreamCriteriaFactoryInterface $criteriaFactory
     ) {
@@ -476,20 +475,5 @@ class CustomerStream extends Resource
                 throw new CustomValidationException('A dynamic stream can not have a freezeUp time');
             }
         }
-    }
-}
-
-class ApiProgressHelper implements ProgressHelperInterface
-{
-    public function start($count, $label = '')
-    {
-    }
-
-    public function advance($step = 1)
-    {
-    }
-
-    public function finish()
-    {
     }
 }

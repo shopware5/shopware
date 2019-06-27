@@ -30,6 +30,7 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 class VoteAverageCondition implements ConditionInterface, \JsonSerializable
 {
     const STATE_INCLUDES_VOTE_TABLE = 'vote';
+    private const NAME = 'vote_average';
 
     /**
      * @var float
@@ -50,7 +51,7 @@ class VoteAverageCondition implements ConditionInterface, \JsonSerializable
      */
     public function getName()
     {
-        return 'vote_average';
+        return self::NAME;
     }
 
     /**

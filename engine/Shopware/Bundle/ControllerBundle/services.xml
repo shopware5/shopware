@@ -21,22 +21,22 @@
 
         <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
             <tag name="controller.argument_value_resolver" priority="0" />
-            <argument />
+            <argument type="collection" />
         </service>
 
         <service id="argument_resolver.request_parameter" class="Shopware\Bundle\ControllerBundle\ArgumentResolver\RequestParameterResolver">
             <tag name="controller.argument_value_resolver" priority="-20" />
-            <argument />
+            <argument type="collection" />
         </service>
 
         <service id="argument_resolver.request_value" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver">
             <tag name="controller.argument_value_resolver" priority="-40" />
-            <argument />
+            <argument type="collection" />
         </service>
 
         <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
             <tag name="controller.argument_value_resolver" priority="-100" />
-            <argument />
+            <argument type="collection" />
         </service>
     </services>
 </container>

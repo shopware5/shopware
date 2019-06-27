@@ -28,12 +28,14 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class MainVariantCondition implements ConditionInterface, \JsonSerializable
 {
+    private const NAME = 'isMain';
+
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'isMain';
+        return self::NAME;
     }
 
     /**

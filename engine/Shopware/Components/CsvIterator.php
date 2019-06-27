@@ -56,13 +56,6 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     private $_fieldmark = '"';
 
     /**
-     * The length
-     *
-     * @var int
-     */
-    private $_length = 60000;
-
-    /**
      * The row counter.
      *
      * @var int
@@ -124,6 +117,8 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     }
 
     /**
+     * @deprecated in 5.6, will be removed 5.7 without replacement
+     *
      * @param string $fieldmark
      */
     public function SetFieldmark($fieldmark)
@@ -238,7 +233,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
             return;
         }
         $count = 0;
-        $line = stream_get_line($this->_handler, $this->_length, $this->_newline);
+        $line = stream_get_line($this->_handler, self::DEFAULT_LENGTH, $this->_newline);
 
         // Remove possible utf8-bom
         if (substr($line, 0, 3) == pack('CCC', 0xef, 0xbb, 0xbf)) {
@@ -246,7 +241,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
         }
 
         while ((empty($this->_fieldmark) || ($count = substr_count($line, $this->_fieldmark)) % 2 != 0) && !feof($this->_handler)) {
-            $line .= $this->_newline . stream_get_line($this->_handler, $this->_length, $this->_newline);
+            $line .= $this->_newline . stream_get_line($this->_handler, self::DEFAULT_LENGTH, $this->_newline);
         }
         if (empty($line)) {
             $this->_current = false;

@@ -24,12 +24,12 @@
 
 namespace Shopware\Bundle\MailBundle;
 
-use Shopware\Bundle\MailBundle\AutocompleteResolver\Resolver;
+use Shopware\Bundle\MailBundle\AutocompleteResolver\ResolverInterface;
 
-class AutoCompleteResolver implements AutoCompleteResolverInterface
+class AutoCompleteResolver implements ResolverInterface
 {
     /**
-     * @var Resolver[]
+     * @var ResolverInterface[]
      */
     private $completer;
 

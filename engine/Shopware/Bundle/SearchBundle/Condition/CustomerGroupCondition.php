@@ -29,6 +29,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class CustomerGroupCondition implements ConditionInterface, \JsonSerializable
 {
+    private const NAME = 'customer_group';
+
     /**
      * @var int[]
      */
@@ -49,7 +51,7 @@ class CustomerGroupCondition implements ConditionInterface, \JsonSerializable
      */
     public function getName()
     {
-        return 'customer_group';
+        return self::NAME;
     }
 
     /**

@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
 
 /**
- * @deprecated since version 5.2, to be removed in 6.0 - Use ShopContext instead
+ * @deprecated since version 5.2, to be removed in 5.7 - Use ShopContext instead
  */
 class LocationContext extends Extendable implements LocationContextInterface
 {
@@ -49,6 +49,8 @@ class LocationContext extends Extendable implements LocationContextInterface
 
     public function __construct(Area $area = null, Country $country = null, State $state = null)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $this->area = $area;
         $this->country = $country;
         $this->state = $state;
@@ -59,6 +61,8 @@ class LocationContext extends Extendable implements LocationContextInterface
      */
     public function getArea()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->area;
     }
 
@@ -67,6 +71,8 @@ class LocationContext extends Extendable implements LocationContextInterface
      */
     public function getCountry()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->country;
     }
 
@@ -75,6 +81,8 @@ class LocationContext extends Extendable implements LocationContextInterface
      */
     public function getState()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return $this->state;
     }
 
@@ -83,6 +91,8 @@ class LocationContext extends Extendable implements LocationContextInterface
      */
     public function jsonSerialize()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         return get_object_vars($this);
     }
 }

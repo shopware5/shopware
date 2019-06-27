@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class OrderedWithPaymentCondition implements ConditionInterface
 {
+    private const NAME = 'OrderedWithPaymentCondition';
+
     /**
      * @var int[]
      */
@@ -51,6 +53,6 @@ class OrderedWithPaymentCondition implements ConditionInterface
 
     public function getName()
     {
-        return 'OrderedWithPaymentCondition';
+        return self::NAME;
     }
 }

@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class IsCustomerSinceCondition implements ConditionInterface
 {
+    private const NAME = 'IsCustomerSinceCondition';
+
     /**
      * @var \DateTime
      */
@@ -53,7 +55,7 @@ class IsCustomerSinceCondition implements ConditionInterface
 
     public function getName()
     {
-        return 'IsCustomerSinceCondition';
+        return self::NAME;
     }
 
     /**

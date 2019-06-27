@@ -1783,6 +1783,8 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
+     * @deprecated in 5.6, will be removed in 5.7 without a replacement
+     *
      * Checks if the passed product image is already created
      * as variant image.
      *
@@ -1790,6 +1792,8 @@ class Article extends Resource implements BatchInterface
      */
     protected function isVariantImageExist(Detail $variant, Image $image)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         /** @var Image $variantImage */
         foreach ($variant->getImages() as $variantImage) {
             if ((int) $variantImage->getParent()->getId() === (int) $image->getId()) {

@@ -34,13 +34,6 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
     protected $repository;
 
     /**
-     * Entity Manager
-     *
-     * @var \Shopware\Components\Model\ModelManager
-     */
-    protected $manager;
-
-    /**
      * @var \Shopware\Models\Country\Repository
      */
     protected $countryRepository;

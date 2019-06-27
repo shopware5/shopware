@@ -180,12 +180,16 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
     }
 
     /**
+     * @deprecated in 5.6, will removed in 5.7 without any replacement
+     *
      * Returns all known Suppliers from the database. there are ordered by there name
      *
      * @return array
      */
     public function getAllSupplier()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+
         $filter = $this->Request()->getParam('filter');
         $sort = $this->Request()->getParam('sort', [['property' => 'name']]);
         $limit = $this->Request()->getParam('limit', 20);

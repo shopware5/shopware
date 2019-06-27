@@ -89,7 +89,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
             );
         }
 
-        $onlyOneGroup = count($configurator->getGroups()) === 1;
+        $onlyOneGroup = count($configurator->getGroups()) === self::CONFIGURATOR_TYPE_SELECTION;
 
         foreach ($configurator->getGroups() as $group) {
             $group->setSelected(

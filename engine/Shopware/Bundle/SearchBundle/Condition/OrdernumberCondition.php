@@ -28,6 +28,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 class OrdernumberCondition implements ConditionInterface, \JsonSerializable
 {
+    private const NAME = 'ordernumber';
+
     /**
      * @var string[]
      */
@@ -46,7 +48,7 @@ class OrdernumberCondition implements ConditionInterface, \JsonSerializable
      */
     public function getName()
     {
-        return 'ordernumber';
+        return self::NAME;
     }
 
     /**

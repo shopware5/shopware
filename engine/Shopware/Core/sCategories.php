@@ -31,6 +31,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Category;
  */
 class sCategories implements \Enlight_Hook
 {
+    /**
+     * @deprecated in 5.6, will be removed in 5.7 without replacement
+     */
     public $sSYSTEM;
 
     /**
