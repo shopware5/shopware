@@ -21,7 +21,7 @@
             {/block}
 
             {block name="frontend_listing_product_box_button_buy_button"}
-                <button class="buybox--button block btn is--primary is--icon-right is--center is--large">
+                <button class="buybox--button block btn is--primary is--icon-right is--center is--large"  aria-label="{s namespace="frontend/listing/box_article" name="ListingBuyActionAdd"}{/s}">
                     {block name="frontend_listing_product_box_button_buy_button_text"}
                         {s namespace="frontend/listing/box_article" name="ListingBuyActionAdd"}{/s}<i class="icon--basket"></i> <i class="icon--arrow-right"></i>
                     {/block}
