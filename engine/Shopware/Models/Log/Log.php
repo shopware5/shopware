@@ -103,8 +103,6 @@ class Log extends ModelEntity
     private $value4;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -113,8 +111,6 @@ class Log extends ModelEntity
     }
 
     /**
-     * Set type
-     *
      * @param string $type
      *
      * @return Log
@@ -127,8 +123,6 @@ class Log extends ModelEntity
     }
 
     /**
-     * Get type
-     *
      * @return string
      */
     public function getType()
@@ -137,8 +131,6 @@ class Log extends ModelEntity
     }
 
     /**
-     * Set key
-     *
      * @param string $key
      *
      * @return Log
@@ -151,8 +143,6 @@ class Log extends ModelEntity
     }
 
     /**
-     * Get key
-     *
      * @return string
      */
     public function getKey()
@@ -161,8 +151,6 @@ class Log extends ModelEntity
     }
 
     /**
-     * Set text
-     *
      * @param string $text
      *
      * @return Log
@@ -175,8 +163,6 @@ class Log extends ModelEntity
     }
 
     /**
-     * Get text
-     *
      * @return string
      */
     public function getText()
@@ -185,8 +171,6 @@ class Log extends ModelEntity
     }
 
     /**
-     * Set date
-     *
      * @param \DateTimeInterface $date
      *
      * @return Log
@@ -199,8 +183,6 @@ class Log extends ModelEntity
     }
 
     /**
-     * Get date
-     *
      * @return \DateTimeInterface
      */
     public function getDate()
@@ -209,8 +191,6 @@ class Log extends ModelEntity
     }
 
     /**
-     * Set user
-     *
      * @param string $user
      *
      * @return Log
@@ -223,8 +203,6 @@ class Log extends ModelEntity
     }
 
     /**
-     * Get user
-     *
      * @return string
      */
     public function getUser()
@@ -233,8 +211,6 @@ class Log extends ModelEntity
     }
 
     /**
-     * Set ip_address
-     *
      * @param string $ipAddress
      *
      * @return Log
@@ -247,8 +223,6 @@ class Log extends ModelEntity
     }
 
     /**
-     * Get ipAddress
-     *
      * @return string
      */
     public function getIpAddress()
@@ -257,8 +231,6 @@ class Log extends ModelEntity
     }
 
     /**
-     * Set userAgent
-     *
      * @param string $userAgent
      *
      * @return Log
@@ -271,8 +243,6 @@ class Log extends ModelEntity
     }
 
     /**
-     * Get userAgent
-     *
      * @return string
      */
     public function getUserAgent()
@@ -281,8 +251,6 @@ class Log extends ModelEntity
     }
 
     /**
-     * Set value4
-     *
      * @param string $value4
      *
      * @return Log
@@ -295,8 +263,6 @@ class Log extends ModelEntity
     }
 
     /**
-     * Get value4
-     *
      * @return string
      */
     public function getValue4()

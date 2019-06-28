@@ -24,11 +24,6 @@
 
 namespace Shopware\Components\Check;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Requirements
 {
     /**
@@ -519,9 +514,6 @@ class Requirements
                 // no break
             case 'KB':
                 $val *= 1024;
-                // no break
-            case 'B':
-                $val = (float) $val;
         }
 
         return $val;

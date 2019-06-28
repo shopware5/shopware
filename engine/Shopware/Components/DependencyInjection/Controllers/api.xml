@@ -1,0 +1,106 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="shopware_controllers_api_addresses" class="Shopware_Controllers_Api_Addresses">
+            <argument type="service" id="shopware.api.address"/>
+            <tag name="shopware.controller" module="api" controller="addresses"/>
+        </service>
+
+        <service id="shopware_controllers_api_articles" class="Shopware_Controllers_Api_Articles">
+            <argument type="service" id="shopware.api.article"/>
+            <tag name="shopware.controller" module="api" controller="articles"/>
+        </service>
+
+        <service id="shopware_controllers_api_caches" class="Shopware_Controllers_Api_Caches">
+            <argument type="service" id="shopware.api.cache"/>
+            <tag name="shopware.controller" module="api" controller="caches"/>
+        </service>
+
+        <service id="shopware_controllers_api_categories" class="Shopware_Controllers_Api_Categories">
+            <argument type="service" id="shopware.api.category"/>
+            <tag name="shopware.controller" module="api" controller="categories"/>
+        </service>
+
+        <service id="shopware_controllers_api_countries" class="Shopware_Controllers_Api_Countries">
+            <argument type="service" id="shopware.api.country"/>
+            <tag name="shopware.controller" module="api" controller="countries"/>
+        </service>
+
+        <service id="shopware_controllers_api_customer_groups" class="Shopware_Controllers_Api_CustomerGroups">
+            <argument type="service" id="shopware.api.customergroup"/>
+            <tag name="shopware.controller" module="api" controller="CustomerGroups"/>
+        </service>
+
+        <service id="shopware_controllers_api_customers" class="Shopware_Controllers_Api_Customers">
+            <argument type="service" id="shopware.api.customer"/>
+            <tag name="shopware.controller" module="api" controller="Customers"/>
+        </service>
+
+        <service id="shopware_controllers_api_customer_streams" class="Shopware_Controllers_Api_CustomerStreams">
+            <argument type="service" id="shopware.api.customer_stream"/>
+            <tag name="shopware.controller" module="api" controller="CustomerStreams"/>
+        </service>
+
+        <service id="shopware_controllers_api_generate_article_images" class="Shopware_Controllers_Api_GenerateArticleImages">
+            <argument type="service" id="shopware.api.article"/>
+            <tag name="shopware.controller" module="api" controller="GenerateArticleImages"/>
+        </service>
+
+        <service id="shopware_controllers_api_manufacturers" class="Shopware_Controllers_Api_Manufacturers">
+            <argument type="service" id="shopware.api.manufacturer"/>
+            <tag name="shopware.controller" module="api" controller="Manufacturers"/>
+        </service>
+
+        <service id="shopware_controllers_api_media" class="Shopware_Controllers_Api_Media">
+            <argument type="service" id="shopware.api.media"/>
+            <tag name="shopware.controller" module="api" controller="Media"/>
+        </service>
+
+        <service id="shopware_controllers_api_orders" class="Shopware_Controllers_Api_Orders">
+            <argument type="service" id="shopware.api.order"/>
+            <tag name="shopware.controller" module="api" controller="Orders"/>
+        </service>
+
+        <service id="shopware_controllers_api_payment_methods" class="Shopware_Controllers_Api_PaymentMethods">
+            <argument type="service" id="shopware.api.payment_methods"/>
+            <tag name="shopware.controller" module="api" controller="PaymentMethods"/>
+        </service>
+
+        <service id="shopware_controllers_api_property_groups" class="Shopware_Controllers_Api_PropertyGroups">
+            <argument type="service" id="shopware.api.propertygroup"/>
+            <tag name="shopware.controller" module="api" controller="PropertyGroups"/>
+        </service>
+
+        <service id="shopware_controllers_api_shops" class="Shopware_Controllers_Api_Shops">
+            <argument type="service" id="shopware.api.shop"/>
+            <tag name="shopware.controller" module="api" controller="Shops"/>
+        </service>
+
+        <service id="shopware_controllers_api_translations" class="Shopware_Controllers_Api_Translations">
+            <argument type="service" id="shopware.api.translation"/>
+            <tag name="shopware.controller" module="api" controller="Translations"/>
+        </service>
+
+        <service id="shopware_controllers_api_users" class="Shopware_Controllers_Api_Users">
+            <argument type="service" id="shopware.api.user"/>
+            <tag name="shopware.controller" module="api" controller="Users"/>
+        </service>
+
+        <service id="shopware_controllers_api_variants" class="Shopware_Controllers_Api_Variants">
+            <argument type="service" id="shopware.api.variant"/>
+            <tag name="shopware.controller" module="api" controller="Variants"/>
+        </service>
+
+        <service id="shopware_controllers_api_version" class="Shopware_Controllers_Api_Version">
+            <tag name="shopware.controller" module="api" controller="Version"/>
+        </service>
+
+        <service id="shopware_controllers_api_error" class="Shopware_Controllers_Api_Error">
+            <tag name="shopware.controller" module="api" controller="error"/>
+        </service>
+    </services>
+</container>

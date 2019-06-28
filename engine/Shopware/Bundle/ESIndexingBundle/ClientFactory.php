@@ -25,21 +25,14 @@
 namespace Shopware\Bundle\ESIndexingBundle;
 
 use Elasticsearch\Client;
-use Elasticsearch\ClientBuilder;
+use Psr\Log\LoggerInterface;
+use Shopware\Bundle\ESIndexingBundle\Console\EvaluationHelperInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class ClientFactory
 {
-    /**
-     * @return Client
-     */
-    public static function createClient(array $config)
+    public static function createClient(array $config, LoggerInterface $eslogger, EvaluationHelperInterface $evaluationHelper): Client
     {
-        $clientBuilder = ClientBuilder::create();
+        $clientBuilder = EsClientBuilder::create();
 
         $clientBuilder->setHosts($config['hosts']);
         $clientBuilder->setConnectionParams(
@@ -54,6 +47,15 @@ class ClientFactory
             ]
         );
 
-        return $clientBuilder->build();
+        $clientBuilder->setLogger($eslogger);
+        $clientBuilder->setTracer($eslogger);
+
+        /** @var EsClientLogger $esClient */
+        $esClient = $clientBuilder->build();
+
+        $esClient->setLogger($eslogger);
+        $esClient->setEvaluation($evaluationHelper);
+
+        return $esClient;
     }
 }

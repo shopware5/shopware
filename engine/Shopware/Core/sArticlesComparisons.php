@@ -25,12 +25,7 @@
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\DependencyInjection\Container;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class sArticlesComparisons
+class sArticlesComparisons implements \Enlight_Hook
 {
     /**
      * @var sArticles

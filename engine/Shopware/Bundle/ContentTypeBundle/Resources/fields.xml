@@ -1,0 +1,63 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="Shopware\Bundle\ContentTypeBundle\Field\TextAreaField" class="Shopware\Bundle\ContentTypeBundle\Field\TextAreaField">
+            <tag name="shopware.bundle.content_type.field" fieldName="textarea"/>
+        </service>
+
+        <service id="Shopware\Bundle\ContentTypeBundle\Field\TextField" class="Shopware\Bundle\ContentTypeBundle\Field\TextField">
+            <tag name="shopware.bundle.content_type.field" fieldName="text"/>
+        </service>
+
+        <service id="Shopware\Bundle\ContentTypeBundle\Field\CodeMirrorField" class="Shopware\Bundle\ContentTypeBundle\Field\AceEditor">
+            <tag name="shopware.bundle.content_type.field" fieldName="aceeditor"/>
+        </service>
+
+        <service id="Shopware\Bundle\ContentTypeBundle\Field\IntegerField" class="Shopware\Bundle\ContentTypeBundle\Field\IntegerField">
+            <tag name="shopware.bundle.content_type.field" fieldName="integer"/>
+        </service>
+
+        <service id="Shopware\Bundle\ContentTypeBundle\Field\TinymceField" class="Shopware\Bundle\ContentTypeBundle\Field\TinymceField">
+            <tag name="shopware.bundle.content_type.field" fieldName="tinymce"/>
+        </service>
+
+        <service id="Shopware\Bundle\ContentTypeBundle\Field\MediaField" class="Shopware\Bundle\ContentTypeBundle\Field\MediaField">
+            <tag name="shopware.bundle.content_type.field" fieldName="media"/>
+        </service>
+
+        <service id="Shopware\Bundle\ContentTypeBundle\Field\ComboboxField" class="Shopware\Bundle\ContentTypeBundle\Field\ComboboxField">
+            <tag name="shopware.bundle.content_type.field" fieldName="combobox"/>
+        </service>
+
+        <service id="Shopware\Bundle\ContentTypeBundle\Field\CheckboxField" class="Shopware\Bundle\ContentTypeBundle\Field\CheckboxField">
+            <tag name="shopware.bundle.content_type.field" fieldName="checkbox"/>
+        </service>
+
+        <service id="Shopware\Bundle\ContentTypeBundle\Field\DateField" class="Shopware\Bundle\ContentTypeBundle\Field\DateField">
+            <tag name="shopware.bundle.content_type.field" fieldName="date"/>
+        </service>
+
+        <service id="Shopware\Bundle\ContentTypeBundle\Field\MediaGrid" class="Shopware\Bundle\ContentTypeBundle\Field\MediaGrid">
+            <tag name="shopware.bundle.content_type.field" fieldName="media-grid"/>
+        </service>
+
+        <service id="Shopware\Bundle\ContentTypeBundle\Field\Shopware\ProductField" class="Shopware\Bundle\ContentTypeBundle\Field\Shopware\ProductField">
+            <tag name="shopware.bundle.content_type.field" fieldName="product-field"/>
+        </service>
+
+        <service id="Shopware\Bundle\ContentTypeBundle\Field\Shopware\ProductGrid" class="Shopware\Bundle\ContentTypeBundle\Field\Shopware\ProductGrid">
+            <tag name="shopware.bundle.content_type.field" fieldName="product-grid"/>
+        </service>
+
+        <service id="Shopware\Bundle\ContentTypeBundle\Field\Shopware\ShopGrid" class="Shopware\Bundle\ContentTypeBundle\Field\Shopware\ShopGrid">
+            <tag name="shopware.bundle.content_type.field" fieldName="shop-grid"/>
+        </service>
+
+        <service id="Shopware\Bundle\ContentTypeBundle\Field\Shopware\ShopField" class="Shopware\Bundle\ContentTypeBundle\Field\Shopware\ShopField">
+            <tag name="shopware.bundle.content_type.field" fieldName="shop-field"/>
+        </service>
+    </services>
+</container>

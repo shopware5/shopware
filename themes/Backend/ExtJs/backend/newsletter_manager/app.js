@@ -30,6 +30,7 @@
  * Shopware Application - NewsletterManager.
  * Compose und send mails to customers
  */
+//{block name="backend/newsletter_manager/app"}
 //{block name="backend/newsletter_manager/application"}
 Ext.define('Shopware.apps.NewsletterManager', {
 
@@ -63,4 +64,5 @@ Ext.define('Shopware.apps.NewsletterManager', {
         return mainController.mainWindow;
     }
 });
+//{/block}
 //{/block}

@@ -382,7 +382,7 @@ class Zend_Auth_Adapter_Http implements Zend_Auth_Adapter_Interface
         // The server can issue multiple challenges, but the client should
         // answer with only the selected auth scheme.
         if (!in_array($clientScheme, $this->_supportedSchemes)) {
-            $this->_response->setHttpResponseCode(400);
+            $this->_response->setStatusCode(400);
             return new Zend_Auth_Result(
                 Zend_Auth_Result::FAILURE_UNCATEGORIZED,
                 array(),
@@ -431,14 +431,14 @@ class Zend_Auth_Adapter_Http implements Zend_Auth_Adapter_Interface
             $headerName = 'WWW-Authenticate';
         }
 
-        $this->_response->setHttpResponseCode($statusCode);
+        $this->_response->setStatusCode($statusCode);
 
         // Send a challenge in each acceptable authentication scheme
         if (in_array('basic', $this->_acceptSchemes)) {
-            $this->_response->setHeader($headerName, $this->_basicHeader());
+            $this->_response->headers->set($headerName, $this->_basicHeader());
         }
         if (in_array('digest', $this->_acceptSchemes)) {
-            $this->_response->setHeader($headerName, $this->_digestHeader());
+            $this->_response->headers->set($headerName, $this->_digestHeader());
         }
         return new Zend_Auth_Result(
             Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID,
@@ -558,7 +558,7 @@ class Zend_Auth_Adapter_Http implements Zend_Auth_Adapter_Interface
 
         $data = $this->_parseDigestAuth($header);
         if ($data === false) {
-            $this->_response->setHttpResponseCode(400);
+            $this->_response->setStatusCode(400);
             return new Zend_Auth_Result(
                 Zend_Auth_Result::FAILURE_UNCATEGORIZED,
                 array(),

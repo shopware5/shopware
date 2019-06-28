@@ -25,14 +25,14 @@
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
 use ONGR\ElasticsearchDSL\BuilderInterface;
-use ONGR\ElasticsearchDSL\Query\BoolQuery;
-use ONGR\ElasticsearchDSL\Query\ExistsQuery;
-use ONGR\ElasticsearchDSL\Query\MatchQuery;
-use ONGR\ElasticsearchDSL\Query\PrefixQuery;
-use ONGR\ElasticsearchDSL\Query\RangeQuery;
-use ONGR\ElasticsearchDSL\Query\TermQuery;
-use ONGR\ElasticsearchDSL\Query\TermsQuery;
-use ONGR\ElasticsearchDSL\Query\WildcardQuery;
+use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
+use ONGR\ElasticsearchDSL\Query\FullText\MatchQuery;
+use ONGR\ElasticsearchDSL\Query\TermLevel\ExistsQuery;
+use ONGR\ElasticsearchDSL\Query\TermLevel\PrefixQuery;
+use ONGR\ElasticsearchDSL\Query\TermLevel\RangeQuery;
+use ONGR\ElasticsearchDSL\Query\TermLevel\TermQuery;
+use ONGR\ElasticsearchDSL\Query\TermLevel\TermsQuery;
+use ONGR\ElasticsearchDSL\Query\TermLevel\WildcardQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
@@ -48,9 +48,6 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
      */
     private $attributeService;
 
-    /**
-     * ProductAttributeConditionHandler constructor.
-     */
     public function __construct(CrudService $attributeService)
     {
         $this->attributeService = $attributeService;
@@ -74,8 +71,9 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
         ShopContextInterface $context
     ) {
         /* @var ProductAttributeCondition $criteriaPart */
-        $search->addFilter(
-            $this->createQuery($criteriaPart)
+        $search->addQuery(
+            $this->createQuery($criteriaPart),
+            BoolQuery::FILTER
         );
     }
 

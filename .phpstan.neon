@@ -31,26 +31,18 @@ parameters:
         - %currentWorkingDirectory%/engine/Shopware/Components/DependencyInjection/LegacyPhpDumper.php
         - %currentWorkingDirectory%/engine/Shopware/Components/ContainerAwareEventManager.php
         - %currentWorkingDirectory%/engine/Shopware/Components/Install/Database.php
-        # The following are added because of the Hack in Document/Document
-        - %currentWorkingDirectory%/engine/Shopware/Models/Order/Document/Document.php
-        - %currentWorkingDirectory%/engine/Shopware/Components/Api/Resource/Order.php
-        - %currentWorkingDirectory%/engine/Shopware/Components/Document.php
-        - %currentWorkingDirectory%/engine/Shopware/Controllers/Api/Orders.php
-        - %currentWorkingDirectory%/engine/Shopware/Controllers/Backend/CanceledOrder.php
-        - %currentWorkingDirectory%/engine/Shopware/Controllers/Backend/Order.php
-        - %currentWorkingDirectory%/engine/Shopware/Models/Order/Detail.php
-        - %currentWorkingDirectory%/engine/Shopware/Models/Order/Order.php
-        - %currentWorkingDirectory%/engine/Shopware/Models/Order/OrderHistorySubscriber.php
-        - %currentWorkingDirectory%/engine/Shopware/Models/Order/Repository.php
-        - %currentWorkingDirectory%/engine/Shopware/Bundle/EsBackendBundle/Subscriber/OrmBacklogSubscriber.php
 
     ignoreErrors:
         - '#apcu_#'
         - '#ioncube_#'
         - '#opcache_#'
         - '#imagettftext#'
+        - '#easter_days#'
         - '#class Redis#'
 
+        # Ignore safety casts
+        - "#Casting to [a-zA-Z<>]+ something that's already [a-zA-Z<>]+#"
+        # Ignore direct view assigns
         - '#Call to an undefined method#'
         - '#Access to an undefined property#'
         - '#Method Symfony\\Component\\DependencyInjection\\LazyProxy\\PhpDumper\\DumperInterface\:\:getProxyFactoryCode\(\)#'
@@ -59,9 +51,16 @@ parameters:
         - '#Binary operation "|=" between string and string results in an error.#'
         - '#does not call parent constructor from Elasticsearch#'
         - '#does not call parent constructor from Enlight_Controller_Action#'
-        - '#does not accept Doctrine\\ORM\\EntityRepository#'
+        - '#does not accept Doctrine\\Common\\Persistence\\ObjectRepository#'
+        - '#does not call parent constructor from Enlight_Controller_Action#'
         # "getRepository"-Methods
         - '#should return [a-zA-Z\\_]+Repository but returns Doctrine\\ORM\\EntityRepository#'
+        - '#should return [a-zA-Z\\_]+Repository but returns Doctrine\\Common\\Persistence\\ObjectRepository#'
+        - '#Static property [a-zA-Z\\_\$\:]+ \(Shopware\\Models\\[a-zA-Z]+\\Repository\|null\) does not accept Doctrine\\ORM\\EntityRepository#'
+        - '#\([a-zA-Z\\_]+Repository\) does not accept Doctrine\\ORM\\EntityRepository#'
+        - '#\([a-zA-Z\\_]+Repository\) does not accept Doctrine\\Common\\Persistence\\ObjectRepository#'
+        - '#Array \(array<string, Shopware\\Components\\Model\\ModelRepository>\) does not accept Doctrine\\ORM\\EntityRepository#'
+        - '# should return Doctrine\\ORM\\EntityRepository|null but returns Doctrine\\Common\\Persistence\\ObjectRepository#'
         # Return values in Models
         - '# returns Shopware\\Components\\Model\\ModelEntity.#'
         - '#does not accept Shopware\\Components\\Api\\Resource\\Resource#'
@@ -71,6 +70,10 @@ parameters:
         # Models that are detached by cloning and nulling the id
         - '#\([a-z]+\) does not accept null\.#'
         - '#supplied for foreach, only iterables are supported#'
+        # Broken return value of Components/DependencyInjection/Container.php
+        - '#Return type \(bool\) of method Shopware\\Components\\DependencyInjection\\Container\:\:load\(\) should be compatible with return type \(object\) of method Symfony\\Component\\DependencyInjection\\Container\:\:load\(\)#'
+        # Broken return value of Components/Log/Handler/FirePHPHandler.php
+        - '#Return type \(array\) of method Shopware\\Components\\Log\\Handler\\FirePHPHandler\:\:createRecordHeader\(\) should be compatible with return type \(string\) of method Monolog\\Handler\\FirePHPHandler\:\:createRecordHeader\(\)#'
         # Interface / Implementation Switch
         - '#expects Shopware\\Bundle\\SearchBundle\\Facet\\[a-zA-Z]+Facet, Shopware\\Bundle\\SearchBundle\\[a-zA-Z]+Interface given#'
         - '#expects Shopware\\Bundle\\SearchBundle\\Condition\\[a-zA-Z]+Condition, Shopware\\Bundle\\SearchBundle\\[a-zA-Z]+Interface given#'
@@ -79,6 +82,7 @@ parameters:
         # Interfaces not being recognized
         - '#expects Shopware\\Components\\Form\\Container\\[a-zA-Z]+, Shopware\\Components\\Form\\Interfaces\\Container given#'
         - '#expects Doctrine\\ORM\\PersistentCollection, Doctrine\\Common\\Collections\\ArrayCollection&iterable<Shopware\\Models\\Shop\\TemplateConfig\\[a-zA-Z]+> given#'
+        - '#Parameter \#1 \$em of method Doctrine\\ORM\\EntityRepository::__construct\(\) expects Doctrine\\ORM\\EntityManager, Doctrine\\ORM\\EntityManagerInterface given#'
         - '#Parameter \#1 \$sort of method Doctrine\\ORM\\QueryBuilder::addOrderBy\(\) expects Doctrine\\ORM\\Query\\Expr\\OrderBy|string, array given#'
         - '#Parameter \#3 \$type of method Doctrine\\ORM\\QueryBuilder::setParameter\(\) expects string\|null, int given#'
         - '#Parameter \#3 \$type of method Doctrine\\DBAL\\Query\\QueryBuilder::setParameter\(\) expects string\|null, int given#'
@@ -91,5 +95,6 @@ parameters:
         - '#Parameter \#2 \$value of class ONGR\\ElasticsearchDSL\\Query\\TermLevel\\TermQuery constructor expects string#'
         - '#Parameter \#2 \$value of method ONGR\\ElasticsearchDSL\\Query\\Compound\\BoolQuery::addParameter\(\) expects array\|stdClass\|string#'
         - '#Parameter \#2 \$value of method ONGR\\ElasticsearchDSL\\Aggregation\\AbstractAggregation::addParameter\(\) expects array\|stdClass\|string#'
+        - '#should return Shopware\\Bundle\\ContentTypeBundle\\Services\\RepositoryInterface but returns object#'
 
     reportUnmatchedIgnoredErrors: false

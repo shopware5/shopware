@@ -28,11 +28,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware_Components_Config;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class PriceHelper implements PriceHelperInterface
 {
     const STATE_INCLUDES_CHEAPEST_PRICE = 'cheapest_price';

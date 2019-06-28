@@ -89,8 +89,6 @@ class Code extends ModelEntity
     private $customer;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -99,8 +97,6 @@ class Code extends ModelEntity
     }
 
     /**
-     * Set voucherId
-     *
      * @param int $voucherId
      *
      * @return Code
@@ -113,8 +109,6 @@ class Code extends ModelEntity
     }
 
     /**
-     * Get voucherId
-     *
      * @return int
      */
     public function getVoucherId()
@@ -123,8 +117,6 @@ class Code extends ModelEntity
     }
 
     /**
-     * Set customerId
-     *
      * @param int $customerId
      *
      * @return Code
@@ -137,8 +129,6 @@ class Code extends ModelEntity
     }
 
     /**
-     * Get customerId
-     *
      * @return int
      */
     public function getCustomerId()
@@ -147,8 +137,6 @@ class Code extends ModelEntity
     }
 
     /**
-     * Set code
-     *
      * @param string $code
      *
      * @return Code
@@ -161,8 +149,6 @@ class Code extends ModelEntity
     }
 
     /**
-     * Get code
-     *
      * @return string
      */
     public function getCode()
@@ -171,8 +157,6 @@ class Code extends ModelEntity
     }
 
     /**
-     * Set cashed
-     *
      * @param int $cashed
      *
      * @return Code
@@ -185,8 +169,6 @@ class Code extends ModelEntity
     }
 
     /**
-     * Get cashed
-     *
      * @return int
      */
     public function getCashed()
@@ -195,8 +177,6 @@ class Code extends ModelEntity
     }
 
     /**
-     * Get voucher
-     *
      * @return \Shopware\Models\Voucher\Voucher
      */
     public function getVoucher()
@@ -205,8 +185,6 @@ class Code extends ModelEntity
     }
 
     /**
-     * set voucher
-     *
      * @param \Shopware\Models\Voucher\Voucher $voucher
      */
     public function setVoucher($voucher)
@@ -215,8 +193,6 @@ class Code extends ModelEntity
     }
 
     /**
-     * get Customer
-     *
      * @return \Shopware\Models\Voucher\Voucher
      */
     public function getCustomer()
@@ -225,8 +201,6 @@ class Code extends ModelEntity
     }
 
     /**
-     * set Customer
-     *
      * @param \Shopware\Models\Voucher\Voucher $user
      */
     public function setCustomer($user)

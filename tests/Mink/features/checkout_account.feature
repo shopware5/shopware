@@ -28,7 +28,7 @@ Feature: Checkout articles (scenario origin is account without articles in baske
         Examples:
             | user                       | email             | sum     | shipping | total   | sumWithoutVat | tax    |
             | Max Mustermann             | test@example.com  | 38,47 € | 3,90 €   | 42,37 € | 35,61 €       | 6,76 € |
-            | Händler Kundengruppe-Netto | mustermann@b2b.de | 32,02 € | 3,28 €   | 42,00 € | 35,30 €       | 6,70 € |
+            | Händler Kundengruppe-Netto | mustermann@b2b.de | 32,02 € | 3,28 €   | 41,99 € | 35,30 €       | 6,69 € |
 
     @registration
     Scenario Outline: I can register, add articles to basket and finish my order

@@ -25,6 +25,9 @@
 namespace Shopware\Commands;
 
 use Shopware\Models\Category\Category;
+use Shopware\Models\Category\Repository;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -32,7 +35,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CloneCategoryTreeCommand extends ShopwareCommand
+class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwareInterface
 {
     /**
      * @var OutputInterface
@@ -48,6 +51,41 @@ class CloneCategoryTreeCommand extends ShopwareCommand
      * @var ProgressBar
      */
     protected $progressBar;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if (in_array($argumentName, ['category', 'target'])) {
+            /** @var Repository $categoryRepository */
+            $categoryRepository = $this->container->get('models')
+                ->getRepository(Category::class);
+
+            $columnOfChoice = is_numeric($context->getCurrentWord()) ? 'id' : 'name';
+            $aliasOfChoice = "category.$columnOfChoice";
+
+            $queryBuilder = $categoryRepository->createQueryBuilder('category');
+            $result = $queryBuilder->andWhere($queryBuilder->expr()->like($aliasOfChoice, ':search'))
+                    ->setParameter('search', addcslashes($context->getCurrentWord(), '_%') . '%')
+                    ->addOrderBy($queryBuilder->expr()->asc($aliasOfChoice))
+                    ->select([$aliasOfChoice])->distinct()
+                    ->getQuery()
+                    ->getArrayResult();
+
+            return array_column($result, $columnOfChoice);
+        }
+
+        return [];
+    }
 
     /**
      * {@inheritdoc}

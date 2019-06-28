@@ -81,8 +81,6 @@ class Privilege extends ModelEntity
     private $resource;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -117,8 +115,6 @@ class Privilege extends ModelEntity
     }
 
     /**
-     * Set resourceId
-     *
      * @param int|null $resourceId
      *
      * @return Privilege
@@ -136,8 +132,6 @@ class Privilege extends ModelEntity
     }
 
     /**
-     * Get resourceId
-     *
      * @return int
      */
     public function getResourceId()
@@ -146,8 +140,6 @@ class Privilege extends ModelEntity
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return Privilege
@@ -160,8 +152,6 @@ class Privilege extends ModelEntity
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()

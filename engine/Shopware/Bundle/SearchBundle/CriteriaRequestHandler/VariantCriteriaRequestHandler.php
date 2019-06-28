@@ -33,9 +33,6 @@ use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class VariantCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 {
     /**

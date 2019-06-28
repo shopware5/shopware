@@ -26,9 +26,9 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/plugin_manager/translation}
+// {namespace name=backend/plugin_manager/translation}
 
-//{block name="backend/plugin_manager/view/list/local_plugin_listing_page"}
+// {block name="backend/plugin_manager/view/list/local_plugin_listing_page"}
 Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
     extend: 'Shopware.grid.Panel',
     alias: 'widget.plugin-manager-local-plugin-listing',
@@ -130,7 +130,6 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
             handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
                 if (record.allowActivate()) {
                     me.activatePluginEvent(record);
-
                 } else if (record.allowDeactivate()) {
                     me.deactivatePluginEvent(record);
                 }
@@ -158,7 +157,6 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         };
     },
 
-
     searchEvent: function(field, value) {
         var me = this;
 
@@ -182,10 +180,10 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
             description = description.toLowerCase();
 
             return (
-                name.indexOf(value) > -1
-                || description.indexOf(value) > -1
-                || producer.indexOf(value) > -1
-                || technicalName.indexOf(value) > -1
+                name.indexOf(value) > -1 ||
+                description.indexOf(value) > -1 ||
+                producer.indexOf(value) > -1 ||
+                technicalName.indexOf(value) > -1
             );
         });
     },
@@ -199,7 +197,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
                 '{literal}{name:this.formatName} ({rows.length} Plugins){/literal}',
                 {
                     formatName: function(name) {
-                        switch(name) {
+                        switch (name) {
                             case 2:
                                 return '{s name="group_headline_installed"}Installed{/s}';
                             case 1:
@@ -239,7 +237,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
             return name;
         }
 
-        return '<div style="display: inline-block; position:relative; top: 2px; margin-right: 6px; width:16px; height:16px; background:url('+record.get('localIcon')+') no-repeat"></div>' + name;
+        return '<div style="display: inline-block; position:relative; top: 2px; margin-right: 6px; width:16px; height:16px; background:url(' + record.get('localIcon') + ') no-repeat"></div>' + name;
     },
 
     authorRenderer: function(value, metaData, record) {
@@ -255,7 +253,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         }
 
         if (website && website.length > 0) {
-            return '<a href="' + website + '" target="_blank">'+producer.get('name')+'</a>'
+            return '<a href="' + website + '" target="_blank">' + producer.get('name') + '</a>';
         } else {
             return producer.get('name');
         }
@@ -364,7 +362,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
 
                     me.store.load();
                     me.setLoading(false);
-                } else if(response.data.shopSecretMissing && !me.hasTriedLogin) {
+                } else if (response.data.shopSecretMissing && !me.hasTriedLogin) {
                     Shopware.app.Application.on('destroy-login', function (window, userPressed) {
                         if (userPressed) {
                             me.setLoading(false);
@@ -378,7 +376,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
                         }, 1000);
                     });
                     Shopware.Notification.createGrowlMessage('', '{s name="refresh_license_login"}{/s}');
-                } else if(response.data.shopSecretMissing) {
+                } else if (response.data.shopSecretMissing) {
                     Shopware.Notification.createGrowlMessage('', '{s name="refresh_license_no_token"}{/s}');
                     me.setLoading(false);
                 } else {
@@ -438,7 +436,6 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
             function (button) {
                 if (button == 'yes') {
                     me.toggleSafeMode();
-                    return;
                 } else {
                     me.safeModeCheckbox.setRawValue(false);
                     me.safeModeCheckbox.lastValue = false;
@@ -585,4 +582,4 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         return items;
     }
 });
-//{/block}
+// {/block}

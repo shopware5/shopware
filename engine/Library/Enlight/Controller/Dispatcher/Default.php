@@ -1,28 +1,24 @@
 <?php
 /**
- * Shopware 5
- * Copyright (c) shopware AG
+ * Enlight
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * LICENSE
  *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://enlight.de/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@shopware.de so we can send you a copy immediately.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * @category   Enlight
+ * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
+ * @license    http://enlight.de/license     New BSD License
  */
 
 use Shopware\Components\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 
 /**
  * Implements all methods to register single or multiple controllers and load them automatically.
@@ -38,12 +34,6 @@ use Shopware\Components\DependencyInjection\ContainerAwareInterface;
  */
 class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatcher
 {
-    /**
-     * @var string current directory of the controller.
-     *             Will be set in the getControllerClass method or in the getControllerPath method
-     */
-    protected $curDirectory;
-
     /**
      * @var string contains the current module.
      *             Will be set in the getControllerClass method or in the getControllerPath method.
@@ -84,15 +74,32 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     protected $frontController;
 
     /**
-     * @var array Contains all added controller directories. Used to get the controller
-     *            directory of a module
+     * Holds all valid modules
+     * @var array
      */
-    protected $controllerDirectory = [];
+    protected $modules = ['frontend', 'api', 'widgets', 'backend'];
 
     /**
      * @var \Shopware\Components\DispatchFormatHelper
      */
     protected $dispatchFormatHelper;
+
+    /**
+     * @var array
+     */
+    private $controllers;
+
+    /**
+     * @var Container
+     */
+    private $container;
+
+    public function __construct(array $controllers, Container $container)
+    {
+        $this->controllers = $controllers;
+        $this->container = $container;
+        parent::__construct();
+    }
 
     /**
      * @return \Shopware\Components\DispatchFormatHelper
@@ -104,128 +111,6 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         }
 
         return $this->dispatchFormatHelper;
-    }
-
-    /**
-     * Adds a controller directory. If no module is given, the default module will be used.
-     *
-     * @param      $path
-     * @param null $module
-     *
-     * @return Enlight_Controller_Dispatcher_Default
-     */
-    public function addControllerDirectory($path, $module = null)
-    {
-        if (empty($module)) {
-            $module = $this->defaultModule;
-        }
-
-        $module = $this->formatModuleName($module);
-        $path = realpath($path) . '/';
-
-        $this->controllerDirectory[$module] = $path;
-
-        return $this;
-    }
-
-    /**
-     * Sets the controller directory. The directory can be given as an array or a string.
-     *
-     * @param string|array $directory
-     * @param string|null  $module
-     *
-     * @return Enlight_Controller_Dispatcher_Default
-     */
-    public function setControllerDirectory($directory, $module = null)
-    {
-        $this->controllerDirectory = [];
-
-        if (is_string($directory)) {
-            $this->addControllerDirectory($directory, $module);
-        } else {
-            foreach ((array) $directory as $module => $path) {
-                $this->addControllerDirectory($path, $module);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Returns the controller directory.
-     * If more than one directory exists the function returns the controller directory of the given module.
-     * If no module name is passed, the function returns the whole controller directory array.
-     *
-     * @param null $module
-     *
-     * @return array|null
-     */
-    public function getControllerDirectory($module = null)
-    {
-        if ($module === null) {
-            return $this->controllerDirectory;
-        }
-        $module = $this->formatModuleName($module);
-        if (isset($this->controllerDirectory[$module])) {
-            return $this->controllerDirectory[$module];
-        }
-
-        return null;
-    }
-
-    /**
-     * Removes the controller directory for the given module.
-     *
-     * @param string $module
-     *
-     * @return bool
-     */
-    public function removeControllerDirectory($module)
-    {
-        $module = (string) $module;
-        if (isset($this->controllerDirectory[$module])) {
-            unset($this->controllerDirectory[$module]);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Adds the given path to the module directory
-     *
-     * @param string $path
-     *
-     * @throws Enlight_Controller_Exception
-     *
-     * @return Enlight_Controller_Dispatcher_Default
-     */
-    public function addModuleDirectory($path)
-    {
-        try {
-            $dir = new DirectoryIterator($path);
-        } catch (Exception $e) {
-            throw new Enlight_Controller_Exception("Directory $path not readable", 0, $e);
-        }
-
-        foreach ($dir as $file) {
-            if ($file->isDot() || !$file->isDir()) {
-                continue;
-            }
-
-            $module = $file->getFilename();
-
-            // Don't use SCCS directories as modules
-            if (preg_match('/^[^a-z]/i', $module) || ($module == 'CVS')) {
-                continue;
-            }
-
-            $moduleDir = $file->getPathname();
-            $this->addControllerDirectory($moduleDir, $module);
-        }
-
-        return $this;
     }
 
     /**
@@ -361,7 +246,6 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 
         $module = $request->getModuleName();
         $this->curModule = $module;
-        $this->curDirectory = $this->getControllerDirectory($module);
 
         $moduleName = $this->formatModuleName($module);
         $controllerName = $this->formatControllerName($request->getControllerName());
@@ -384,18 +268,23 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         $controllerName = $request->getControllerName();
         $controllerName = $this->formatControllerName($controllerName);
         $moduleName = $this->formatModuleName($this->curModule);
+        $controllerId = $this->getControllerServiceId($moduleName, $controllerName);
+        $request->unsetAttribute('controllerId');
 
         if ($event = Shopware()->Events()->notifyUntil(
                 'Enlight_Controller_Dispatcher_ControllerPath_' . $moduleName . '_' . $controllerName,
                 ['subject' => $this, 'request' => $request]
                 )
         ) {
-            $path = $event->getReturn();
-        } else {
-            $path = $this->curDirectory . $controllerName . '.php';
+            return $event->getReturn();
         }
 
-        return $path;
+        if ($controllerId) {
+            $request->setAttribute('controllerId', $controllerId);
+            return clone $this->container->get($controllerId);
+        }
+
+        return null;
     }
 
     /**
@@ -473,12 +362,22 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         if (!$className) {
             return false;
         }
+
+        if ($this->isForbiddenController($className)) {
+            return false;
+        }
+
         if (class_exists($className, false)) {
             return true;
         }
+
         $path = $this->getControllerPath($request);
 
-        return class_exists($path) || Enlight_Loader::isReadable($path);
+        if ($path === null) {
+            return false;
+        }
+
+        return is_object($path) || class_exists($path) || Enlight_Loader::isReadable($path);
     }
 
     /**
@@ -494,9 +393,17 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
             return false;
         }
 
-        $controllerDir = $this->getControllerDirectory($module);
+        return in_array(strtolower($module), $this->modules);
+    }
 
-        return !empty($controllerDir);
+    public function setModules(array $modules): void
+    {
+        $this->modules = $modules;
+    }
+
+    public function getModules(): array
+    {
+        return $this->modules;
     }
 
     /**
@@ -527,21 +434,29 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         $class = $this->getControllerClass($request);
         $path = $this->getControllerPath($request);
 
-        if (class_exists($path)) {
+        if (is_object($path) || class_exists($path)) {
             $class = $path;
             $path = null;
         }
 
-        try {
-            Shopware()->Loader()->loadClass($class, $path);
-        } catch (Exception $e) {
-            throw new Enlight_Exception('Controller "' . $class . '" can\'t load failure');
+        if (!is_object($class)) {
+            try {
+                Shopware()->Loader()->loadClass($class, $path);
+            } catch (Exception $e) {
+                throw new Enlight_Exception('Controller "' . $class . '" can\'t load failure');
+            }
+
+            $proxy = Shopware()->Hooks()->getProxy($class);
+
+            /** @var Enlight_Controller_Action $controller */
+            $controller = new $proxy();
+        } else {
+            /** @var Enlight_Controller_Action $controller */
+            $controller = $class;
         }
 
-        $proxy = Shopware()->Hooks()->getProxy($class);
+        $controller->initController($request, $response);
 
-        /** @var Enlight_Controller_Action $controller */
-        $controller = new $proxy($request, $response);
         $controller->setFront($this->Front());
 
         if ($controller instanceof ContainerAwareInterface) {
@@ -576,5 +491,17 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
             $content = ob_get_clean();
             $response->appendBody($content);
         }
+    }
+
+    private function getControllerServiceId(string $module, string $name): ?string
+    {
+        $controllerKey = strtolower(sprintf('%s_%s', $module, $name));
+
+        return isset($this->controllers[$controllerKey]) ? $this->controllers[$controllerKey] : null;
+    }
+
+    private function isForbiddenController(string $className): bool
+    {
+        return in_array($className, $this->container->getParameter('shopware.controller.blacklisted_controllers'), true);
     }
 }

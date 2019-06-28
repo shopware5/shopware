@@ -1,0 +1,80 @@
+.x-product-sort {
+  .product-box {
+    float: left;
+    position: relative;
+    width: 175px;
+    height: 205px;
+    border: 1px solid #c7c7c7;
+    margin: 10px;
+    padding: 5px;
+    text-align: center;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.35);
+
+    .image-container {
+      height: 130px;
+      position: relative;
+      img {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        display: inline-block;
+        vertical-align: middle;
+        z-index: 500;
+        max-width: 120px;
+        max-height: 100%;
+        height: auto;
+        border: 0;
+      }
+    }
+
+    .product-name {
+      margin-top: 5px;
+    }
+
+    .paging {
+      position: absolute;
+      top: 100px;
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+
+      &.prev-page {
+        left: 5px;
+      }
+      &.next-page {
+        right: 5px;
+      }
+    }
+
+    &.x-item-selected {
+      box-shadow: 0 0 5px #189eff;
+      border-color: #189eff;
+    }
+
+    &.drag-over:before {
+      position: absolute;
+      height: 205px;
+      left: -15px;
+      width: 8px;
+      top: -8px;
+      content: '';
+      background-image: url("data:image/gif;base64,R0lGODlhCAAHAMQfAEeTPUyaQonOfXDEZKTXmqLVmKbYnJ7TlHG2aJvRkYTJd2KsWHm/boXOfoDMeFmkTkaSPG7CY4LHeIHCd2W5WI7Pil+yU3+2eJ/UlZfPjojOgoXKeYjOfKrZoEaSPQAAACH5BAEAAB8ALAAAAAAIAAcAAAUk4CdGmmhKCteYCEN0gvNdz4QZ21CJS1JQpk8gc7AEAR4PRBQCADs="), url("data:image/gif;base64,R0lGODlhCAAHAMQfAEeTPUyaQonOfXDEZKTXmqLVmKbYnJ7TlHG2aJvRkYTJd2KsWHm/boXOfoDMeFmkTkaSPG7CY4LHeIHCd2W5WI7Pil+yU3+2eJ/UlZfPjojOgoXKeYjOfKrZoEaSPQAAACH5BAEAAB8ALAAAAAAIAAcAAAUl4PcBngeJYpAdFvotSUGJ1zNhxjZUH8IQHYEDJVFwGq5PRIMKAQA7"), url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAIAAAB7QOjdAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wFEw8kDadh29MAAAAdaVRYdENvbW1lbnQAAAAAAENyZWF0ZWQgd2l0aCBHSU1QZC5lBwAAAA9JREFUCNdjLN9TyMDAAAAISAGmeGPMqAAAAABJRU5ErkJggg==");
+      background-repeat: no-repeat, no-repeat, repeat-y;
+      background-position: left bottom, left top, 3px top;
+    }
+
+    .pin {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      z-index: 99999;
+    }
+  }
+}

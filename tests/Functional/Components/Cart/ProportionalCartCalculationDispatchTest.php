@@ -27,8 +27,6 @@ namespace Shopware\Tests\Functional\Components\Cart;
 use Shopware\Components\Test\CheckoutTest;
 
 /**
- * Class ProportionalCartCalculationDispatchTest
- *
  * @group Basket
  */
 class ProportionalCartCalculationDispatchTest extends CheckoutTest

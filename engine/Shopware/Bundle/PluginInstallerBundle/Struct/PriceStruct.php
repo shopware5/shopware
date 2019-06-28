@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-/**
- * Class PriceStruct
- */
 class PriceStruct implements \JsonSerializable
 {
     const TYPE_RENT = 'rent';

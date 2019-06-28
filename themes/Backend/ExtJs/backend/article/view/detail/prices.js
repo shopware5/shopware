@@ -246,7 +246,6 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
             {
                 header: me.snippets.grid.columns.from,
                 dataIndex: 'from',
-                flex: 1
             }, {
                 xtype: 'numbercolumn',
                 header: me.snippets.grid.columns.to,
@@ -335,9 +334,12 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
                         },
                         /**
                          * If the item has no leaf flag, hide the add button
+                         *
                          * @param value
                          * @param metadata
                          * @param record
+                         * @param rowIdx
+                         *
                          * @return string
                          */
                         getClass: function(value, metadata, record, rowIdx) {
@@ -359,6 +361,5 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
         me.priceStore = me.priceStore = me.article.getPrice();
         me.add(me.createElements());
     }
-
 });
 //{/block}

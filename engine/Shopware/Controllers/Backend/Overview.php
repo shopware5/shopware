@@ -22,9 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Shopware Backend Controller for the overview module
- */
 class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend_ExtJs
 {
     public function getOrderSummaryAction()

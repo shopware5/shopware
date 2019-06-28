@@ -66,4 +66,3 @@ Ext.define('Shopware.apps.Payment.model.Country', {
     }
 });
 //{/block}
-

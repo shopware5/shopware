@@ -28,9 +28,6 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Service\BaseProductFactoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 
-/**
- * Class BaseProductFactory
- */
 class BaseProductFactoryService implements BaseProductFactoryServiceInterface
 {
     /**

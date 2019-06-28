@@ -28,9 +28,6 @@ use Doctrine\DBAL\Connection;
 use Shopware\Components\Emotion\Exception\MappingRequiredException;
 use Shopware_Components_Translation;
 
-/**
- * Class EmotionTranslationImporter
- */
 class EmotionTranslationImporter
 {
     /**

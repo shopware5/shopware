@@ -55,4 +55,3 @@ Ext.define('Shopware.apps.Article.model.Similar', {
 
 });
 //{/block}
-

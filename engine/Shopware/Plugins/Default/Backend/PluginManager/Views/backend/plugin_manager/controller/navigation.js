@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{block name="backend/plugin_manager/controller/navigation"}
+// {block name="backend/plugin_manager/controller/navigation"}
 Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
     extend: 'Ext.app.Controller',
 
@@ -175,10 +175,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
             store = me.getStoreListing().store;
 
         Ext.each(store.filters.items, function(filter, index) {
-            if (Ext.isObject(filter)
-                && filter.hasOwnProperty('property')
-                && filter.property == name) {
-
+            if (Ext.isObject(filter) &&
+                filter.hasOwnProperty('property') &&
+                filter.property == name) {
                 store.filters.removeAt(index);
             }
         });
@@ -333,7 +332,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
             navigation = me.getNavigation();
 
         Shopware.app.Application.fireEvent('check-store-login', function() {
-
             page.getStore().getProxy().on('exception', function (proxy, response) {
                 var responseText = Ext.decode(response.responseText);
                 me.displayErrorMessage(responseText);
@@ -449,4 +447,4 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
         navigation.accountLicenceLink.removeCls('active');
     }
 });
-//{/block}
+// {/block}

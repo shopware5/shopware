@@ -1,5 +1,5 @@
 {literal}
-<script type="text/javascript">
+<script>
     /**
      * Wrap the replacement code into a function to call it from the outside to replace the method when necessary
      */

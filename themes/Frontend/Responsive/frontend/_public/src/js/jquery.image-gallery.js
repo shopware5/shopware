@@ -576,6 +576,10 @@
             minScale = plugin.getMinScale();
             maxScale = plugin.getMaxScale();
 
+            if (isNaN(maxScale)) {
+                maxScale = 1;
+            }
+
             me.$zoomResetBtn.toggleClass(disabledClass, scale === minScale);
             me.$zoomOutBtn.toggleClass(disabledClass, scale === minScale);
             me.$zoomInBtn.toggleClass(disabledClass, scale === maxScale);

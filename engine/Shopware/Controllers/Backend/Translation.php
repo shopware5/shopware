@@ -24,9 +24,6 @@
 
 use Shopware\Models\Shop\Shop;
 
-/**
- * Shopware Translation Controller
- */
 class Shopware_Controllers_Backend_Translation extends Shopware_Controllers_Backend_ExtJs
 {
     /**

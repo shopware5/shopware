@@ -921,7 +921,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
     /**
      * Converts an address to the array key structure of a legacy billing or shipping address
      *
-     * @param $address
+     * @param array $address
      *
      * @return array
      */

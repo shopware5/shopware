@@ -28,7 +28,7 @@
  *
  * Used by Frontend_Custom and Frontend_Content controllers
  */
-class sCms
+class sCms implements \Enlight_Hook
 {
     /**
      * Database connection which used for each database operation in this class.

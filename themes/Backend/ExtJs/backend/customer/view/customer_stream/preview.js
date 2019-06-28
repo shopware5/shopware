@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Preview', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
     */
-    alias: 'widget.customer-list',
+    alias: 'widget.customer-stream-preview-list',
 
     /**
      * Set css class

@@ -24,11 +24,6 @@
 
 use ShopwarePlugin\PaymentMethods\Components\SepaPaymentMethod;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlight_Components_Test_Plugin_TestCase
 {
     /**

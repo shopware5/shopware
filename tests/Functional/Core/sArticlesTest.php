@@ -22,13 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Shopware SwagAboCommerce Plugin - Bootstrap
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
 {
     public function testCanInstanciatesArticles()

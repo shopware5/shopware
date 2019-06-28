@@ -39,4 +39,3 @@ Ext.define('Shopware.apps.Theme.view.detail.fields.SelectField', {
 });
 
 //{/block}
-

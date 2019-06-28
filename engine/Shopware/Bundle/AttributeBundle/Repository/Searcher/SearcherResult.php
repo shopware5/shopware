@@ -24,11 +24,6 @@
 
 namespace Shopware\Bundle\AttributeBundle\Repository\Searcher;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class SearcherResult
 {
     /**

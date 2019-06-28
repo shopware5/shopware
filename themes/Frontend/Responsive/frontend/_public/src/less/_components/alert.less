@@ -74,6 +74,15 @@ Options: `is--success`, `is--info`, `is--warning`, `is--error`.
         }
     }
 
+    .alert--close {
+        position: absolute;
+        .unitize(top, 17);
+        .unitize(right, 20);
+        .unitize(font-size, 10);
+        color: @btn-default-text-color;
+        cursor: pointer;
+    }
+
 /*
 ######With an Icon inside of the box.</h6>
 ```
@@ -141,6 +150,22 @@ Options: `is--success`, `is--info`, `is--warning`, `is--error`.
 
     .list--entry {
         display: block;
+    }
+}
+
+.container--ajax-cart {
+    &:not(.off-canvas) {
+        .alert {
+            .unitize(margin, 10);
+        }
+    }
+    .alert {
+        .alert--close {
+            .unitize(right, 15);
+        }
+        .alert--content {
+            .unitize-padding(10, 20);
+        }
     }
 }
 

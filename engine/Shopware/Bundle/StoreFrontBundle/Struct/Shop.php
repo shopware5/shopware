@@ -27,11 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group as CustomerGroup;
 use Shopware\Models\Shop\Shop as ShopEntity;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shop extends Extendable
 {
     /**

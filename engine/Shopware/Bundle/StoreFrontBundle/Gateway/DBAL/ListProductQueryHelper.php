@@ -28,11 +28,6 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ListProductQueryHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class ListProductQueryHelper implements ListProductQueryHelperInterface
 {
     /**
@@ -89,6 +84,7 @@ class ListProductQueryHelper implements ListProductQueryHelperInterface
             ->addSelect('(' . $customerGroupQuery->getSQL() . ') as __product_blocked_customer_groups')
             ->addSelect('(' . $availableVariantQuery->getSQL() . ') as __product_has_available_variants')
             ->addSelect('(' . $fallbackPriceQuery->getSQL() . ') as __product_fallback_price_count')
+            ->addSelect('manufacturerMedia.id as __manufacturer_img_id')
         ;
         $query->setParameter(':fallback', $context->getFallbackCustomerGroup()->getKey());
         if ($context->getCurrentCustomerGroup()->getId() !== $context->getFallbackCustomerGroup()->getId()) {
@@ -107,6 +103,7 @@ class ListProductQueryHelper implements ListProductQueryHelperInterface
             ->leftJoin('product', 's_articles_top_seller_ro', 'topSeller', 'topSeller.article_id = product.id')
             ->leftJoin('variant', 's_articles_esd', 'esd', 'esd.articledetailsID = variant.id')
             ->leftJoin('esd', 's_articles_esd_attributes', 'esdAttribute', 'esdAttribute.esdID = esd.id')
+            ->leftJoin('manufacturer', 's_media', 'manufacturerMedia', 'manufacturerMedia.path = manufacturer.img')
             ->where('variant.ordernumber IN (:numbers)')
             ->andWhere('variant.active = 1')
             ->andWhere('product.active = 1')

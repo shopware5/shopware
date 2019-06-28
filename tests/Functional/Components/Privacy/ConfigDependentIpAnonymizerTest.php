@@ -46,6 +46,8 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
     {
         $this->setConfig('anonymizeIp', true);
         Shopware()->Container()->reset('shopware.components.privacy.ip_anonymizer');
+        // Reset the controller as well, since it already has the service injected
+        Shopware()->Container()->reset('shopware_controllers_backend_logger');
     }
 
     public function testConfigActiveWorking()
@@ -92,7 +94,7 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
             'user' => 'Demo user',
             'value4' => '',
         ]);
-        $this->dispatch('/backend/Log/createLog');
+        $this->dispatch('/backend/Logger/createLog');
         $data = $this->View()->getAssign('data');
 
         static::assertEquals('127.0.0.0', $data['ipAddress']);
@@ -114,7 +116,7 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
                 'user' => 'Demo user',
                 'value4' => '',
             ]);
-        $this->dispatch('/backend/Log/createLog');
+        $this->dispatch('/backend/Logger/createLog');
         $data = $this->View()->getAssign('data');
 
         static::assertEquals('2a00:1450:4001:::', $data['ipAddress']);
@@ -125,6 +127,8 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
         $this->setConfig('anonymizeIp', false);
 
         Shopware()->Container()->reset('shopware.components.privacy.ip_anonymizer');
+        // Reset the controller as well, since it already has the service injected
+        Shopware()->Container()->reset('shopware_controllers_backend_logger');
 
         $this->Request()
             ->setClientIp('127.0.0.1')
@@ -136,7 +140,7 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
                 'user' => 'Demo user',
                 'value4' => '',
             ]);
-        $this->dispatch('/backend/Log/createLog');
+        $this->dispatch('/backend/Logger/createLog');
         $data = $this->View()->getAssign('data');
 
         static::assertEquals('127.0.0.1', $data['ipAddress']);

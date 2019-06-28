@@ -28,9 +28,6 @@ use Enlight_Hook_HookExecutionContext as HookExecutionContext;
 use Enlight_Hook_HookHandler as HookHandler;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class HookManagerTest extends TestCase
 {
     const TEST_NAME_ARG = 'Test Name';
@@ -84,6 +81,7 @@ class HookManagerTest extends TestCase
             $this->addHookListener(HookManagerTestTarget::RECURSIVE_TEST_METHOD_NAME, HookHandler::TypeReplace);
             $this->addHookListener(HookManagerTestTarget::PROTECTED_TEST_METHOD_NAME, HookHandler::TypeReplace);
             $this->addHookListener(HookManagerTestTarget::VARIABLE_NAME_COLLISION_TEST_METHOD_NAME, HookHandler::TypeAfter);
+            $this->addHookListener(HookManagerTestTarget::VOID_TEST_METHOD_NAME, HookHandler::TypeAfter);
             $proxyClass = $this->hookManager->getProxy(HookManagerTestTarget::class);
             $proxy = new $proxyClass();
         }
@@ -943,6 +941,15 @@ class HookManagerTest extends TestCase
         );
         static::assertEquals($expectedReturnValue, $returnValue);
     }
+
+    /**
+     * Uncomment with 5.8
+     */
+    //public function testFalseClassThrowsException()
+    //{
+    //   self::expectException(\Enlight_Hook_Exception::class);
+    //    $this->hookManager->getProxy(HookManagerTestNoTarget::class);
+    //}
 
     /**
      * @param string $methodName

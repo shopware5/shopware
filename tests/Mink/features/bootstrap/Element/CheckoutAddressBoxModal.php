@@ -85,7 +85,7 @@ class CheckoutAddressBoxModal extends MultipleElement
     }
 
     /**
-     * @param $givenAddress
+     * @param array $givenAddress
      *
      * @return bool
      */

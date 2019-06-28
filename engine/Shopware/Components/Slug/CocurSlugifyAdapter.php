@@ -26,11 +26,6 @@ namespace Shopware\Components\Slug;
 
 use Cocur\Slugify\SlugifyInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class CocurSlugifyAdapter implements SlugInterface
 {
     /**

@@ -24,9 +24,6 @@
 
 use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
 
-/**
- * Shopware Captcha Controller
- */
 class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
 {
     /**
@@ -50,7 +47,7 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
         $body = '<img src="data:image/png;base64,' . $img . '" alt="Captcha" />';
         $body .= '<input type="hidden" name="sRand" value="' . $rand . '" />';
 
-        $this->Response()->setBody($body);
+        $this->Response()->setContent($body);
     }
 
     /**

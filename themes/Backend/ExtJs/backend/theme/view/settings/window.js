@@ -35,4 +35,3 @@ Ext.define('Shopware.apps.Theme.view.settings.Window', {
 });
 
 //{/block}
-

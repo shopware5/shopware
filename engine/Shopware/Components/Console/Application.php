@@ -37,13 +37,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Application extends BaseApplication
 {
+    private const IMPORTANT_COMMANDS = ['sw:migration:migrate', 'sw:cache:clear'];
+
     /**
      * @var \Shopware\Kernel
      */
@@ -63,7 +60,7 @@ class Application extends BaseApplication
     {
         $this->kernel = $kernel;
 
-        parent::__construct('Shopware', $kernel->getRelease()['version'] . ' - ' . '/' . $kernel->getEnvironment() . ($kernel->isDebug() ? '/debug' : ''));
+        parent::__construct('Shopware', $kernel->getRelease()['version'] . ' - /' . $kernel->getEnvironment() . ($kernel->isDebug() ? '/debug' : ''));
 
         $this->getDefinition()->addOption(new InputOption('--process-isolation', null, InputOption::VALUE_NONE, 'Launch commands from shell as a separate process.'));
         $this->getDefinition()->addOption(new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The Environment name.', $kernel->getEnvironment()));
@@ -100,7 +97,11 @@ class Application extends BaseApplication
 
         if (!$this->commandsRegistered) {
             $this->setCommandLoader($this->kernel->getContainer()->get('console.command_loader'));
-            $this->registerCommands($output);
+
+            if (!in_array($input->getFirstArgument(), self::IMPORTANT_COMMANDS, true)) {
+                $this->registerCommands($output);
+            }
+
             $this->commandsRegistered = true;
         }
 
@@ -116,10 +117,20 @@ class Application extends BaseApplication
             $command->setContainer($this->kernel->getContainer());
         }
 
-        $exitCode = parent::doRunCommand($command, $input, $output);
-
         /** @var \Enlight_Event_EventManager $eventManager */
         $eventManager = $this->kernel->getContainer()->get('events');
+
+        $event = $eventManager->notifyUntil('Shopware_Command_Before_Run', [
+            'command' => $command,
+            'input' => $input,
+            'output' => $output,
+        ]);
+
+        if ($event) {
+            return (int) $event->getReturn();
+        }
+
+        $exitCode = parent::doRunCommand($command, $input, $output);
 
         $eventManager->notify('Shopware_Command_After_Run', [
            'exitCode' => $exitCode,

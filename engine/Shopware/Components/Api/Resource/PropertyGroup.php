@@ -28,10 +28,6 @@ use Shopware\Components\Api\Exception as ApiException;
 
 /**
  * Property API Resource
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PropertyGroup extends Resource
 {

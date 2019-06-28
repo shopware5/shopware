@@ -38,16 +38,13 @@ use Shopware\Models\Article\EsdSerial;
 use Shopware\Models\Article\Image;
 use Shopware\Models\Article\Price;
 use Shopware\Models\Article\Unit;
+use Shopware\Models\Attribute\Article as ArticleAttributeModel;
 use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Media\Media as MediaModel;
 use Shopware\Models\Tax\Tax;
 
 /**
  * Variant API Resource
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Variant extends Resource implements BatchInterface
 {
@@ -467,10 +464,7 @@ class Variant extends Resource implements BatchInterface
      */
     protected function getArticleResource()
     {
-        /** @var Article $return */
-        $return = $this->getResource('Article');
-
-        return $return;
+        return $this->getContainer()->get('shopware.api.article');
     }
 
     /**
@@ -478,10 +472,7 @@ class Variant extends Resource implements BatchInterface
      */
     protected function getMediaResource()
     {
-        /** @var Media $return */
-        $return = $this->getResource('Media');
-
-        return $return;
+        return $this->getContainer()->get('shopware.api.media');
     }
 
     /**
@@ -506,17 +497,6 @@ class Variant extends Resource implements BatchInterface
 
         if (isset($data['purchasePrice']) && is_string($data['purchasePrice'])) {
             $data['purchasePrice'] = (float) str_replace(',', '.', $data['purchasePrice']);
-        }
-
-        /*
-         * @Deprecated Since 5.4, to be removed in 5.6
-         *
-         * Necessary for backward compatibility with <= 5.3, will be removed in 5.6
-         *
-         * If `lastStock` was only defined on the main product, apply it to all it's variants
-         */
-        if (!isset($data['lastStock'])) {
-            $data['lastStock'] = $article->getLastStock();
         }
 
         $data = $this->prepareAttributeAssociation($data, $article, $variant);
@@ -780,15 +760,10 @@ class Variant extends Resource implements BatchInterface
      */
     protected function prepareAttributeAssociation($data, ProductModel $article, Detail $variant)
     {
-        if (!$variant->getAttribute()) {
-            $data['attribute']['article'] = $article;
+        if (!isset($data['attribute']) && !$variant->getAttribute()) {
+            // Create empty attributes if none provided
+            $data['attribute'] = new ArticleAttributeModel();
         }
-
-        if (!isset($data['attribute'])) {
-            return $data;
-        }
-
-        $data['attribute']['article'] = $article;
 
         return $data;
     }
@@ -962,8 +937,8 @@ class Variant extends Resource implements BatchInterface
 
         /** @var Group $availableGroup */
         foreach ($availableGroups as $availableGroup) {
-            if (($groupData['id'] !== null && (int) $availableGroup->getId() === (int) $groupData['id']) ||
-                (mb_strtolower($availableGroup->getName()) === $groupName && $groupData['name'] !== null)) {
+            if (($groupData['id'] !== null && (int) $availableGroup->getId() === (int) $groupData['id'])
+                || (mb_strtolower($availableGroup->getName()) === $groupName && $groupData['name'] !== null)) {
                 return $availableGroup;
             }
         }

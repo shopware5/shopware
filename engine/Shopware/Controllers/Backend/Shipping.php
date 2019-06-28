@@ -29,13 +29,6 @@ use Shopware\Models\Dispatch\Holiday;
 use Shopware\Models\Dispatch\ShippingCost;
 use Shopware\Models\Payment\Payment;
 
-/**
- * Shopware Backend Shipping / Dispatch
- *
- * Controller to handle the ExtJS-Requests
- * Handles the adding, the deletion and the editing of shipping costs by
- * calling the repository-functions
- */
 class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend_ExtJs
 {
     /**
@@ -82,6 +75,17 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $totalResult = $paginator->count();
         $shippingCosts = $paginator->getIterator()->getArrayCopy();
         $shippingCosts = $this->convertShippingCostsDates($shippingCosts);
+
+        // Translate dispatch methods
+        // The standard $translationComponent->translateDispatches can not be used here since the
+        // name and the description may not be overridden. Both fields are edible and if the translation is
+        // shown in the edit field, there is a high chance of a user saving the translation as name.
+        $translator = $this->get('translation')->getObjectTranslator('config_dispatch');
+        $shippingCosts = array_map(function ($dispatchMethod) use ($translator) {
+            $translatedDispatchMethod = $translator->translateObjectProperty($dispatchMethod, 'dispatch_name', 'translatedName', $dispatchMethod['name']);
+
+            return $translator->translateObjectProperty($translatedDispatchMethod, 'dispatch_description', 'translatedDescription', $dispatchMethod['description']);
+        }, $shippingCosts);
 
         $this->View()->assign(['success' => true, 'data' => $shippingCosts, 'total' => $totalResult]);
     }

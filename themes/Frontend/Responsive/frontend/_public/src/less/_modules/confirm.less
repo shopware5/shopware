@@ -45,6 +45,10 @@ It is displayed as the third step of the checkout process of Shopware and shows 
                 background: transparent;
                 border-top: 1px solid @border-color;
             }
+            .table--aggregation{
+                margin-left: 0;
+                margin-right: 0;
+            }
         }
 
         .is--last-row {
@@ -111,10 +115,6 @@ It is displayed as the third step of the checkout process of Shopware and shows 
 
     .table-footer--country-notice {
         .unitize-margin(11, 0, 0, 0);
-    }
-
-    .table--aggregation {
-        display: none
     }
 
     .js--loading {
@@ -357,9 +357,9 @@ It is displayed as the third step of the checkout process of Shopware and shows 
 
         // Additional features
         .additional--features {
-            .feature--group {
+            .feature--add-product {
                 width: 40%;
-                margin: 0 2.5% 0 0;
+                margin: -1% 2.5% 0 0;
             }
 
             .feature--user-comment {

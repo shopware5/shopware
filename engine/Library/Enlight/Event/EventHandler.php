@@ -13,12 +13,8 @@
  * to license@shopware.de so we can send you a copy immediately.
  *
  * @category   Enlight
- * @package    Enlight_Event
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
@@ -26,7 +22,7 @@
  * @package    Enlight_Event
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
- * @deprecated 4.0.0 - 2012/02/01
+ * @deprecated in Shopware 5.6, will be removed in 5.8. Pleas use `Enlight_Event_Handler_Default` or `SubscriberInterface::getSubscribedEvents` instead.
  */
 class Enlight_Event_EventHandler extends Enlight_Event_Handler_Default
 {

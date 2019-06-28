@@ -43,6 +43,8 @@ class AccountContext extends SubContext
      */
     public function iLogInSuccessfulAsWithPassword($username, $email, $password)
     {
+        Shopware()->Container()->get('dbal_connection')->executeQuery('DELETE FROM s_order_basket');
+
         $this->getPage('Account')->login($email, $password);
         $this->getPage('Account')->verifyLogin($username);
     }
@@ -53,6 +55,14 @@ class AccountContext extends SubContext
     public function iLogMeOut()
     {
         $this->getPage('Account')->logout();
+    }
+
+    /**
+     * @When /^I click on login again$/
+     */
+    public function iClickOnLoginAgain()
+    {
+        $this->getPage('Account')->clickLoginAgain();
     }
 
     /**

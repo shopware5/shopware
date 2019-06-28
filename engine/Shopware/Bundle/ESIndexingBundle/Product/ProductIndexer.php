@@ -27,6 +27,7 @@ namespace Shopware\Bundle\ESIndexingBundle\Product;
 use Elasticsearch\Client;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\DataIndexerInterface;
+use Shopware\Bundle\ESIndexingBundle\ProviderInterface;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 
@@ -38,7 +39,7 @@ class ProductIndexer implements DataIndexerInterface
     private $client;
 
     /**
-     * @var ProductProviderInterface
+     * @var ProviderInterface
      */
     private $provider;
 
@@ -54,7 +55,7 @@ class ProductIndexer implements DataIndexerInterface
 
     public function __construct(
         Client $client,
-        ProductProviderInterface $provider,
+        ProviderInterface $provider,
         ProductQueryFactoryInterface $queryFactory,
         VariantHelperInterface $variantHelper
     ) {

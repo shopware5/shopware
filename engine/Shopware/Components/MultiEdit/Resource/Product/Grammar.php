@@ -26,8 +26,6 @@ namespace Shopware\Components\MultiEdit\Resource\Product;
 
 /**
  * Grammar product resource. Will generate the grammar understood by the frontend lexer with all the supported columns
- *
- * Class Grammar
  */
 class Grammar
 {

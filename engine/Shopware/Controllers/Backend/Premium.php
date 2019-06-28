@@ -26,13 +26,6 @@ use Shopware\Models\Article\Detail;
 use Shopware\Models\Premium\Premium;
 use Shopware\Models\Shop\Shop;
 
-/**
- * Shopware Premium Controller
- *
- * This controller handles all actions made by the user in the premium module.
- * It reads all premium-articles, creates new ones, edits and deletes them.
- * Additionally it also validates the form.
- */
 class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_ExtJs
 {
     /**

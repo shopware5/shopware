@@ -69,5 +69,3 @@ Ext.define('Shopware.apps.Base.model.Address', {
 
 });
 //{/block}
-
-

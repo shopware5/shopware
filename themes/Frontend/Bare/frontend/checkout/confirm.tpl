@@ -585,7 +585,7 @@
     {/block}
 
     {* Additional feature which can be enabled / disabled in the base configuration *}
-    {if {config name=commentvoucherarticle}||{config name=bonussystem} && {config name=bonus_system_active} && {config name=displaySlider}}
+    {if {config name=commentArticle}||{config name=bonussystem} && {config name=bonus_system_active} && {config name=displaySlider}}
         {block name="frontend_checkout_confirm_additional_features"}
             <div class="panel has--border additional--features">
                 {block name="frontend_checkout_confirm_additional_features_headline"}
@@ -597,35 +597,9 @@
                 {block name="frontend_checkout_confirm_additional_features_content"}
                     <div class="panel--body is--wide block-group">
 
-                        {* Additional feature - Add voucher *}
-                        {block name="frontend_checkout_confirm_additional_features_add_voucher"}
-                            <div class="feature--group block">
-                                <div class="feature--voucher">
-                                    <form method="post" action="{url action='addVoucher' sTargetAction=$sTargetAction}" class="table--add-voucher add-voucher--form">
-                                        {block name='frontend_checkout_table_footer_left_add_voucher_agb'}
-                                            {if !{config name='IgnoreAGB'}}
-                                                <input type="hidden" class="agb-checkbox" name="sAGB"
-                                                       value="{if $sAGBChecked}1{else}0{/if}"/>
-                                            {/if}
-                                        {/block}
-
-                                        {block name='frontend_checkout_confirm_add_voucher_field'}
-                                            {s name="CheckoutFooterAddVoucherLabelInline" namespace="frontend/checkout/cart_footer" assign="snippetCheckoutFooterAddVoucherLabelInline"}{/s}
-                                            <input type="text" class="add-voucher--field block" name="sVoucher" placeholder="{$snippetCheckoutFooterAddVoucherLabelInline|escape}" />
-                                        {/block}
-
-                                        {block name='frontend_checkout_confirm_add_voucher_button'}
-                                            <button type="submit" class="add-voucher--button btn is--primary is--small block">
-                                                <i class="icon--arrow-right"></i>
-                                            </button>
-                                        {/block}
-                                    </form>
-                                </div>
-
-
                                 {* Additional feature - Add product using the sku *}
                                 {block name="frontend_checkout_confirm_additional_features_add_product"}
-                                    <div class="feature--add-product">
+                                    <div class="feature--add-product block">
                                         <form method="post" action="{url action='addArticle' sTargetAction=$sTargetAction}" class="table--add-product add-product--form block-group">
 
                                             {block name='frontend_checkout_confirm_add_product_field'}
@@ -640,8 +614,6 @@
                                         </form>
                                     </div>
                                 {/block}
-                            </div>
-                        {/block}
 
                         {* Additional customer comment for the order *}
                         {block name='frontend_checkout_confirm_comment'}

@@ -29,8 +29,6 @@ use Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGeneratorInterface;
 use Shopware\Components\Random;
 
 /**
- * Class UniqueIdGenerator.
- *
  * A simple class for storing a generated unique Id in the database.
  */
 class UniqueIdGenerator implements UniqueIdGeneratorInterface

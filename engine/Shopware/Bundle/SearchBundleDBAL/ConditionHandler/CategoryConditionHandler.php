@@ -31,17 +31,9 @@ use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class CategoryConditionHandler implements ConditionHandlerInterface
 {
-    /**
-     * @var int
-     */
-    private $counter = 0;
+    public const STATE_NAME = 'productCategory';
 
     /**
      * {@inheritdoc}
@@ -59,23 +51,27 @@ class CategoryConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        if ($this->counter++ === 0) {
-            $suffix = '';
-        } else {
-            $suffix = $this->counter;
+        $joinName = self::STATE_NAME;
+        $counter = 1;
+
+        while ($query->hasState($joinName)) {
+            ++$counter;
+            $joinName = self::STATE_NAME . $counter;
         }
+
+        $query->addState($joinName);
 
         $query->innerJoin(
             'product',
             's_articles_categories_ro',
-            "productCategory{$suffix}",
-            "productCategory{$suffix}.articleID = product.id
-            AND productCategory{$suffix}.categoryID IN (:category{$suffix})"
+            $joinName,
+            $joinName . ".articleID = product.id
+            AND {$joinName}.categoryID IN (:{$joinName})"
         );
 
         /* @var CategoryCondition $condition */
         $query->setParameter(
-            ":category{$suffix}",
+            ':' . $joinName,
             $condition->getCategoryIds(),
             Connection::PARAM_INT_ARRAY
         );

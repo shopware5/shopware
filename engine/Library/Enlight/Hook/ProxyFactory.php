@@ -13,12 +13,8 @@
  * to license@shopware.de so we can send you a copy immediately.
  *
  * @category   Enlight
- * @package    Enlight_Hook
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 use ProxyManager\Generator\ClassGenerator;
@@ -93,8 +89,6 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
     /**
      * Returns the proxy of the given class. If the proxy is not already created
      * it is generated and written.
-     * If the proxy is already created it is drawn by the
-     * Shopware()->Hooks()->getHooks($class) method.
      *
      * @param  string    $class
      * @throws Exception
@@ -102,6 +96,11 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
      */
     public function getProxy($class)
     {
+        if (!in_array('Enlight_Hook', class_implements($class))) {
+            trigger_error(sprintf('The class "%s" does not implement the Enlight_Hook Interface. It will be thrown in 5.8.', $class), E_USER_WARNING);
+            //throw new Enlight_Hook_Exception('The class' . $class . ' does not implement Enlight_Hook interface.');
+        }
+
         $proxyFile = $this->getProxyFileName($class);
         $proxy = $this->getProxyClassName($class);
 
@@ -368,13 +367,15 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
         // Create the method
         $methodGenerator = MethodGenerator::fromReflection($originalMethod);
         $methodGenerator->setDocblock('@inheritdoc');
-        $methodGenerator->setBody(
-            "return \$this->__getActiveHookManager(__FUNCTION__)->executeHooks(\n" .
+        $methodBody = "\$this->__getActiveHookManager(__FUNCTION__)->executeHooks(\n" .
             "    \$this,\n" .
             "    __FUNCTION__,\n" .
-            "    [" . implode(", ", $params) . "]\n" .
-            ");\n"
-        );
+            '    [' . implode(', ', $params) . "]\n" .
+            ");\n";
+        if (!$originalMethod->hasReturnType() || $originalMethod->getReturnType()->getName() !== 'void') {
+            $methodBody = 'return ' . $methodBody;
+        }
+        $methodGenerator->setBody($methodBody);
 
         return $methodGenerator;
     }

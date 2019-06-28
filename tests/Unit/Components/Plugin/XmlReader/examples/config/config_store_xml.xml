@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../engine/Shopware/Components/Plugin/schema/config.xsd">
+    <elements>
+        <element type="select">
+            <name>xmlStore1</name>
+            <label>XML Store</label>
+            <store>
+                <option>
+                    <value>1</value>
+                    <label lang="de">DE 1</label>
+                    <label lang="en">EN 1</label>
+                </option>
+                <option>
+                    <value>TWO</value>s
+                    <label lang="de">DE 2</label>
+                    <label>EN 2</label>
+                </option>
+            </store>
+        </element>
+        <element type="select">
+            <name>xmlStore2</name>
+            <label>XML Store</label>
+            <store>
+            </store>
+        </element>
+    </elements>
+</config>

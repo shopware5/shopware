@@ -44,9 +44,6 @@ class PrepareDataCollection extends Extendable
      */
     private $mediaPathList = [];
 
-    /**
-     * PrepareDataCollection constructor.
-     */
     public function __construct()
     {
         $this->batchRequest = new BatchProductNumberSearchRequest();

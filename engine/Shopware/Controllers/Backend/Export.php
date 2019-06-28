@@ -23,10 +23,9 @@
  */
 
 use Shopware\Components\CSRFWhitelistAware;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Export controller
- *
  * This controller is used by the ProductFeed module.
  * The ProductFeed module will call this controller to export the chosen ProductFeed with all options.
  * The controller uses the base class sExport for all export relevant methods.
@@ -98,7 +97,7 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
         if (!file_exists($filePath)) {
             $this->Response()
                 ->clearHeaders()
-                ->setHttpResponseCode(204)
+                ->setStatusCode(Response::HTTP_NO_CONTENT)
                 ->appendBody('Empty feed found.');
 
             return;
@@ -154,7 +153,7 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
         $encoding = $this->getExportEncoding();
         $contentType = $this->getExportContentType();
 
-        $this->Response()->setHeader('Content-Type', $contentType . ';charset=' . $encoding);
+        $this->Response()->headers->set('content-type', $contentType . ';charset=' . $encoding);
         $this->Response()->sendHeaders();
     }
 

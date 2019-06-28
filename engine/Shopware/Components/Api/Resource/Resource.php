@@ -31,6 +31,7 @@ use Shopware\Components\Api\BatchInterface;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException;
 use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
@@ -39,12 +40,8 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
  * Abstract API Resource Class
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-abstract class Resource
+abstract class Resource implements ContainerAwareInterface
 {
     /* Hydration mode constants */
     /**
@@ -103,7 +100,7 @@ abstract class Resource
         return $this->container;
     }
 
-    public function setContainer(Container $container)
+    public function setContainer(Container $container = null)
     {
         $this->container = $container;
     }
@@ -360,9 +357,13 @@ abstract class Resource
      * @param string $name
      *
      * @return \Shopware\Components\Api\Resource\Resource
+     *
+     * @deprecated with 5.6, will be removed with 5.8. Inject the resource instead
      */
     protected function getResource($name)
     {
+        trigger_error('Using Manager::getResource is deprecated since 5.6 and will be removed with 5.8. Inject the resource instead', E_USER_DEPRECATED);
+
         try {
             /** @var \Shopware\Components\Api\Resource\Resource $resource */
             $resource = $this->getContainer()->get('shopware.api.' . strtolower($name));

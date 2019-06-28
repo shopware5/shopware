@@ -23,7 +23,6 @@
  */
 
 use Shopware\Components\Api\Exception as ApiException;
-use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Article as ArticleResource;
 use Shopware\Models\Article\Article;
 
@@ -34,9 +33,10 @@ class Shopware_Controllers_Api_GenerateArticleImages extends Shopware_Controller
      */
     protected $resource;
 
-    public function init()
+    public function __construct(ArticleResource $resource)
     {
-        $this->resource = Manager::getResource('article');
+        $this->resource = $resource;
+        parent::__construct();
     }
 
     /**
@@ -44,7 +44,7 @@ class Shopware_Controllers_Api_GenerateArticleImages extends Shopware_Controller
      *
      * PUT /api/generateArticleImages/{id}
      */
-    public function putAction()
+    public function putAction(): void
     {
         $request = $this->Request();
         $id = $request->getParam('id');

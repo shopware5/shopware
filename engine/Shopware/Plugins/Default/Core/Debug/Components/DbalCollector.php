@@ -28,11 +28,6 @@ use Doctrine\DBAL\Logging\DebugStack;
 use Shopware\Components\Logger;
 use Shopware\Components\Model\Configuration;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class DbalCollector implements CollectorInterface
 {
     /**
@@ -90,7 +85,6 @@ class DbalCollector implements CollectorInterface
             }
         }
 
-        //array_multisort($counts, SORT_NUMERIC, SORT_DESC, $rows);
         $rows = array_values($rows);
         $totalTime = round($totalTime, 5);
         $totalCount = count($queries);

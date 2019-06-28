@@ -25,11 +25,18 @@
 namespace Shopware\Commands;
 
 use Shopware\Components\ContainerAwareEventManager;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Shop\Repository;
+use Shopware\Models\Shop\Shop;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
-class RebuildSeoIndexCommand extends ShopwareCommand
+class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareInterface
 {
     /**
      * @var \Shopware_Components_SeoIndex
@@ -69,12 +76,52 @@ class RebuildSeoIndexCommand extends ShopwareCommand
     /**
      * {@inheritdoc}
      */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if ($argumentName === 'shopId') {
+            /** @var ModelManager $em */
+            $em = $this->getContainer()->get('models');
+            /** @var Repository $shopRepository */
+            $shopRepository = $em->getRepository(Shop::class);
+            $queryBuilder = $shopRepository->createQueryBuilder('shop');
+
+            if (is_numeric($context->getCurrentWord())) {
+                $queryBuilder->andWhere($queryBuilder->expr()->like('shop.id', ':id'))
+                    ->setParameter('id', addcslashes($context->getCurrentWord(), '%_') . '%');
+            }
+
+            $result = $queryBuilder->select(['shop.id'])
+                ->addOrderBy($queryBuilder->expr()->asc('shop.id'))
+                ->getQuery()
+                ->getArrayResult();
+
+            $alreadyTakenShopIds = array_filter($context->getWords(), 'is_numeric');
+
+            return array_diff(array_column($result, 'id'), $alreadyTakenShopIds);
+        }
+
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
         $this
             ->setName('sw:rebuild:seo:index')
             ->setDescription('Rebuild the SEO index')
-            ->addArgument('shopId', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The Id of the shop')
+            /* @deprecated since 5.6, to be removed in 6.0 */
+            ->addArgument('shopId', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The Id of the shop (deprecated)')
+            ->addOption('shopId', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'The Id of the shop (multiple Ids -> shopId={1,2})')
             ->setHelp('The <info>%command.name%</info> rebuilds the SEO index')
         ;
     }
@@ -93,7 +140,15 @@ class RebuildSeoIndexCommand extends ShopwareCommand
         $this->rewriteTable = $this->modules->RewriteTable();
         $this->events = $this->container->get('events');
 
-        $shops = $input->getArgument('shopId');
+        $shops = null;
+
+        if ($input->getArgument('shopId')) {
+            $io = new SymfonyStyle($input, $output);
+            $io->warning('Argument "shopId" will be replaced by option "--shopId" in the next major version');
+            $shops = $input->getArgument('shopId');
+        } elseif ($input->getOption('shopId')) {
+            $shops = $input->getOption('shopId');
+        }
 
         if (empty($shops)) {
             /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
@@ -120,7 +175,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand
                 throw new \RuntimeException('No valid shop id passed');
             }
 
-            $shop->registerResources();
+            $this->container->get('shopware.components.shop_registration_service')->registerShop($shop);
 
             $this->modules->Categories()->baseId = $shop->getCategory()->getId();
 
@@ -148,6 +203,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand
             $this->rewriteTable->sCreateRewriteTableBlog(null, null, $context);
             $this->rewriteTable->createManufacturerUrls($context);
             $this->rewriteTable->sCreateRewriteTableStatic();
+            $this->rewriteTable->createContentTypeUrls($context);
 
             $this->events->notify(
                 'Shopware_Command_RebuildSeoIndexCommand_CreateRewriteTable',

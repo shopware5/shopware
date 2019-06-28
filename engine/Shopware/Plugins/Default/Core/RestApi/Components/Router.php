@@ -24,14 +24,10 @@
 
 namespace ShopwarePlugins\RestApi\Components;
 
-use Enlight_Controller_Request_Request as Request;
-use Enlight_Controller_Response_Response as Response;
+use Enlight_Controller_Request_RequestHttp as Request;
+use Enlight_Controller_Response_ResponseHttp as Response;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Router
 {
     public function assembleRoute(Request $request, Response $response)
@@ -66,28 +62,26 @@ class Router
 
         if ($method === 'GET' && $id === false) {
             $action = 'index';
-            $response->setHttpResponseCode(200);
+            $response->setStatusCode(SymfonyResponse::HTTP_OK);
         } elseif ($method === 'GET') {
             $action = 'get';
-            $response->setHttpResponseCode(200);
+            $response->setStatusCode(SymfonyResponse::HTTP_OK);
         } elseif ($method === 'PUT' && $id === false) {
             $action = 'batch';
-            $response->setHttpResponseCode(200);
+            $response->setStatusCode(SymfonyResponse::HTTP_OK);
         } elseif ($method === 'PUT') {
             $action = 'put';
         } elseif ($method === 'POST') {
             $action = 'post';
-            // Set default http status code for successful request
-            $response->setHttpResponseCode(201);
         } elseif ($method === 'DELETE' && $id === false) {
             $action = 'batchDelete';
-            $response->setHttpResponseCode(200);
+            $response->setStatusCode(SymfonyResponse::HTTP_OK);
         } elseif ($method === 'DELETE') {
-            $response->setHttpResponseCode(200);
+            $response->setStatusCode(SymfonyResponse::HTTP_OK);
             $action = 'delete';
         }
 
-        if ($action == 'invalid') {
+        if ($action === 'invalid') {
             $request->setControllerName('index');
             $request->setActionName($action);
 
@@ -100,13 +94,13 @@ class Router
             return;
         }
 
-        if ($action == 'get' && $subId === false) {
+        if ($action === 'get' && $subId === false) {
             $subAction = $subType . 'Index';
         } else {
             $subAction = $subType;
         }
 
-        $action = $action . ucfirst($subAction);
+        $action .= ucfirst($subAction);
         $request->setActionName($action);
     }
 }

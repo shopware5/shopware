@@ -33,10 +33,6 @@ use Shopware\Models\Shop;
  * The Theme\Util class is a helper class
  * which contains different small functions
  * which used in all other Theme\* classes.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Util
 {
@@ -54,9 +50,6 @@ class Util
      */
     private $entityManager;
 
-    /**
-     * Class constructor which injects all dependencies.
-     */
     public function __construct(ModelManager $entityManager, PathResolver $pathResolver)
     {
         $this->entityManager = $entityManager;

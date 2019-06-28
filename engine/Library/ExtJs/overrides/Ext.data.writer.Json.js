@@ -2,11 +2,12 @@
  * Overwrite the json data writer to send the
  * associated data in the same request
  */
+//{block name="extjs/overrides/json"}
 Ext.define('Ext.data.writer.Json-Shopware', {
     override: 'Ext.data.writer.Json',
 
     getRecordData: function (record, operation) {
-        var me = this, data, associationData;
+        var me = this, data;
 
         data = me.getRecordFieldData(record, operation);
 
@@ -94,7 +95,7 @@ Ext.define('Ext.data.writer.Json-Shopware', {
      * @param record
      */
     setRecordAssociationData: function(record, data) {
-        var me = this, associationStores, associatedData;
+        var me = this, associatedData;
 
         //iterate all associations of the record to set the association data to the data object
         record.associations.each(function(association) {
@@ -132,3 +133,4 @@ Ext.define('Ext.data.writer.Json-Shopware', {
     }
 
 });
+//{/block}

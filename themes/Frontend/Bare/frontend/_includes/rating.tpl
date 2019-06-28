@@ -44,6 +44,11 @@
  *     Hide Label
  *     {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage type="aggregated" label=false}
  *  ```
+ *
+ *  ```
+ *     Hide Symbols
+ *     {include file="frontend/_includes/rating.tpl" points=$sArticle.sVoteAverage type="aggregated" symbols=false}
+ *  ```
 
 
 {* Type *}
@@ -82,12 +87,8 @@
     {/if}
 {/block}
 
-{* Label *}
-{block name='frontend_rating_label'}
-    {if isset($label)}
-        {$hasLabel=$label}
-    {/if}
-{/block}
+{* Label - moved to frontend_rating_label_parameter *}
+{block name='frontend_rating_label'}{/block}
 
 {* Label depending on type *}
 {block name='frontend_rating_label_type'}
@@ -95,6 +96,21 @@
         {$hasLabel=true}
     {else}
         {$hasLabel=false}
+    {/if}
+{/block}
+
+{* Override label by parameter *}
+{block name='frontend_rating_label_parameter'}
+    {if isset($label)}
+        {$hasLabel=$label}
+    {/if}
+{/block}
+
+{* Symbols *}
+{block name='frontend_rating_symbols'}
+    {$hasSymbols=true}
+    {if isset($symbols)}
+        {$hasSymbols=$symbols}
     {/if}
 {/block}
 
@@ -124,7 +140,7 @@
 
         {* Stars *}
         {block name='frontend_rating_content_stars'}
-            {if $points != 0}
+            {if $points != 0 && $hasSymbols}
                 {for $value=1 to 5}
                     {$cls = 'icon--star'}
 

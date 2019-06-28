@@ -75,7 +75,6 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
      * Tests that resetting POST data inside any core class is equivalent to resetting it in the
      * global $_POST
      *
-     * @param $getData
      *
      * @depends testSetPost
      */

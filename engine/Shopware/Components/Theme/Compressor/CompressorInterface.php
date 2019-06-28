@@ -24,13 +24,6 @@
 
 namespace Shopware\Components\Theme\Compressor;
 
-/**
- * Interface CompressorInterface
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 interface CompressorInterface
 {
     /**

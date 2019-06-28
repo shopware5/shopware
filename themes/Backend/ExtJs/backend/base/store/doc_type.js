@@ -49,4 +49,3 @@ Ext.define('Shopware.apps.Base.store.DocType', {
         }
     }
 }).create();
-

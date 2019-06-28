@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Struct;
 
-/**
- * Class Backlog
- */
 class Backlog
 {
     /**

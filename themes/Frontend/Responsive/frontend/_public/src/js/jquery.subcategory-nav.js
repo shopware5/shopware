@@ -366,8 +366,8 @@
 
             $.publish('plugin/swSubCategoryNav/onClickBackButton', [ me, event ]);
 
-            // decide if there is a parent group or main sidebar
-            if (!url || (parentId === me.opts.mainCategoryId) && (url.indexOf('getCategory') !== -1)) {
+            // Decide if there is a parent group or main sidebar
+            if (!url || (parentId === me.opts.mainCategoryId && url.indexOf('getCategory') !== -1)) {
                 me.slideToMainMenu();
                 return;
             }

@@ -26,18 +26,41 @@ namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Shop\Shop;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class PluginConfigListCommand extends ShopwareCommand
+class PluginConfigListCommand extends ShopwareCommand implements CompletionAwareInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        if ($optionName === 'shop') {
+            return $this->completeShopIds($context->getCurrentWord());
+        }
+
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if ($argumentName === 'plugin') {
+            return $this->queryPluginNames($context->getCurrentWord());
+        }
+
+        return [];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -46,8 +69,15 @@ class PluginConfigListCommand extends ShopwareCommand
         $this
             ->setName('sw:plugin:config:list')
             ->setDescription('Lists plugin configuration.')
+            /* @deprecated since 5.6, to be removed in 6.0 */
             ->addOption(
                 'shop',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Get configuration for shop id (deprecated)'
+            )
+            ->addOption(
+                'shopId',
                 null,
                 InputOption::VALUE_OPTIONAL,
                 'Get configuration for shop id'
@@ -82,18 +112,32 @@ EOF
         /** @var ModelManager $em */
         $em = $this->container->get('models');
 
+        /** @var Shop[] $shop */
+        $shops = null;
+        $shopId = null;
+
         if ($input->getOption('shop')) {
-            $shop = $em->getRepository('Shopware\Models\Shop\Shop')->find($input->getOption('shop'));
+            $io = new SymfonyStyle($input, $output);
+            $io->warning('Option "--shop" will be replaced by option "--shopId" in the next major version');
+            $shopId = $input->getOption('shop');
+        } elseif ($input->getOption('shopId')) {
+            $shopId = $input->getOption('shopId');
+        }
+
+        if ($shopId) {
+            /** @var Shop|null $shop */
+            $shop = $em->getRepository(Shop::class)->find($shopId);
             if (!$shop) {
-                $output->writeln(sprintf('Could not find shop with id %s.', $input->getOption('shop')));
+                $output->writeln(sprintf('Could not find shop with id %s.', $shopId));
 
                 return 1;
             }
             $shops = [$shop];
         } else {
-            $shops = $em->getRepository('Shopware\Models\Shop\Shop')->findAll();
+            $shops = $em->getRepository(Shop::class)->findAll();
         }
 
+        /** @var Shop $shop */
         foreach ($shops as $shop) {
             $config = $pluginManager->getPluginConfig($plugin, $shop);
 

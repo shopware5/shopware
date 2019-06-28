@@ -44,4 +44,3 @@ Ext.define('Shopware.apps.Theme.view.detail.fields.EmField', {
 });
 
 //{/block}
-

@@ -28,15 +28,16 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 
-/**
- * Class ProductQueryFactory
- */
 class ProductQueryFactory implements ProductQueryFactoryInterface
 {
     /**
      * @var Connection
      */
     private $connection;
+
+    /**
+     * @var VariantHelperInterface
+     */
     private $variantHelper;
 
     public function __construct(Connection $connection, VariantHelperInterface $variantHelper)

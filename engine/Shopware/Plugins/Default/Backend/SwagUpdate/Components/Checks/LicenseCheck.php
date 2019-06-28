@@ -29,11 +29,6 @@ use Enlight_Components_Snippet_Namespace as SnippetNamespace;
 use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 use ShopwarePlugins\SwagUpdate\Components\Validation;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class LicenseCheck implements CheckInterface
 {
     const CHECK_TYPE = 'licensecheck';
@@ -164,7 +159,7 @@ class LicenseCheck implements CheckInterface
             ->from('s_core_licenses', 'license')
             ->where('license.active = 1')
             ->andWhere('license.module IN (:modules)')
-            ->setParameter(':modules', $licenseKeys, Connection::PARAM_INT_ARRAY);
+            ->setParameter(':modules', $licenseKeys, Connection::PARAM_STR_ARRAY);
 
         return $queryBuilder->execute()->fetchAll();
     }

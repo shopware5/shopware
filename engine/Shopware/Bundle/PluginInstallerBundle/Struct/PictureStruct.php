@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-/**
- * Class PictureStruct
- */
 class PictureStruct implements \JsonSerializable
 {
     /**

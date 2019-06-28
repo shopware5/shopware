@@ -22,14 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Shopware ExtJs Controller
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
+abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
 {
     /**
      * @var Shopware_Plugins_Backend_Auth_Bootstrap
@@ -98,6 +91,8 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
         if ($this->Request()->get('file') === 'bootstrap') {
             $this->View()->assign('tinymceLang', $this->getTinyMceLang($identity), true);
         }
+
+        $this->enableBrowserCache();
     }
 
     /**
@@ -105,6 +100,7 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
      */
     public function loadAction()
     {
+        $this->enableBrowserCache();
     }
 
     public function extendsAction()
@@ -123,7 +119,7 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
             return;
         }
 
-        $this->Response()->setHeader('Content-Type', 'application/javascript; charset=utf-8', true);
+        $this->Response()->headers->set('content-type', 'application/javascript; charset=utf-8', true);
         $template = 'snippet:string:';
 
         $this->View()->Engine()->setCompileId($this->View()->Engine()->getCompileId() . '_' . $this->Request()->getControllerName());
@@ -275,5 +271,14 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
         $replacement = ['_\1', '_\1'];
 
         return preg_replace($pattern, $replacement, $input);
+    }
+
+    private function enableBrowserCache(): void
+    {
+        if ($this->container->getParameter('shopware.template.forceCompile')) {
+            return;
+        }
+
+        $this->Response()->headers->set('cache-control', 'max-age=2592000, public', true);
     }
 }

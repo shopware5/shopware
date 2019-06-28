@@ -26,11 +26,6 @@ use Shopware\Bundle\AttributeBundle\Service\ConfigurationStruct;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\AttributeBundle\Service\DataLoader;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Backend_ExtJs
 {
     public function loadDataAction()

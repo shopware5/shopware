@@ -27,10 +27,6 @@
  * top seller functions.
  * This components refresh and initials the top seller data
  * in the s_articles_top_seller
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_TopSeller extends Enlight_Class
 {

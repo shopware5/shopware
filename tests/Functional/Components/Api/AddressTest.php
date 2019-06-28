@@ -26,9 +26,6 @@ namespace Shopware\Tests\Functional\Components\Api;
 
 use Shopware\Components\Api\Resource\Address;
 
-/**
- * Class AddressTest
- */
 class AddressTest extends TestCase
 {
     /**

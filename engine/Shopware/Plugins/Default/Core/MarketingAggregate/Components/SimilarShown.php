@@ -27,10 +27,6 @@
  * similar shown articles functions.
  * This components refresh and initials the similar shown data
  * in the s_articles_similar_shown_ro
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_SimilarShown extends Enlight_Class
 {

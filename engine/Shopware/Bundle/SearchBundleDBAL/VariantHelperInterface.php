@@ -41,4 +41,6 @@ interface VariantHelperInterface
     public function joinVariantCondition(QueryBuilder $query, VariantCondition $condition);
 
     public function joinPrices(QueryBuilder $query, ShopContextInterface $context, Criteria $criteria);
+
+    public function joinVariants(QueryBuilder $query);
 }

@@ -25,14 +25,11 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
 {
     /**
@@ -63,11 +60,13 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\ManufacturerHydrator $manufacturerHydrator
+        Hydrator\ManufacturerHydrator $manufacturerHydrator,
+        MediaServiceInterface $mediaService
     ) {
         $this->connection = $connection;
         $this->manufacturerHydrator = $manufacturerHydrator;
         $this->fieldHelper = $fieldHelper;
+        $this->mediaService = $mediaService;
     }
 
     /**
@@ -88,9 +87,11 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
         $query = $this->connection->createQueryBuilder();
 
         $query->addSelect($this->fieldHelper->getManufacturerFields());
+        $query->addSelect('media.id as __manufacturer_img_id');
 
         $query->from('s_articles_supplier', 'manufacturer')
             ->leftJoin('manufacturer', 's_articles_supplier_attributes', 'manufacturerAttribute', 'manufacturerAttribute.supplierID = manufacturer.id')
+            ->leftJoin('manufacturer', 's_media', 'media', 'media.path = manufacturer.img')
             ->where('manufacturer.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
@@ -99,12 +100,17 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $medias = $this->mediaService->getList(array_column($data, '__manufacturer_img_id'), $context);
 
         $manufacturers = [];
         foreach ($data as $row) {
             $id = $row['__manufacturer_id'];
             $manufacturers[$id] = $this->manufacturerHydrator->hydrate($row);
+
+            if (!empty($row['__manufacturer_img']) && !empty($medias[$row['__manufacturer_img_id']])) {
+                $manufacturers[$id]->setCoverMedia($medias[$row['__manufacturer_img_id']]);
+            }
         }
 
         //sort elements by provided ids, sorting is defined by other queries like `best term match` or `max articles` or `sort alphanumeric`

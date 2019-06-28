@@ -27,9 +27,6 @@ namespace Shopware\Bundle\ESIndexingBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * Class FieldMapping
- */
 class FieldMapping implements FieldMappingInterface
 {
     /**
@@ -69,7 +66,7 @@ class FieldMapping implements FieldMappingInterface
         $analyzers = $this->shopAnalyzer->get($shop);
 
         $fields = [
-            'raw' => $this->textMapping->getNotAnalyzedField(),
+            'raw' => $this->textMapping->getKeywordField(),
         ];
 
         foreach ($analyzers as $analyzer) {

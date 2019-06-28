@@ -24,11 +24,6 @@
 
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class AccountTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
@@ -64,12 +59,9 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
 
         $this->dispatch('/account/download');
 
-        $header = $this->Response()->getHeaders();
-        static::assertEquals('Content-Disposition', $header[1]['name']);
-        static::assertEquals('attachment; filename="shopware_packshot_community_edition_72dpi_rgb.png"', $header[1]['value']);
-        static::assertEquals('Content-Length', $header[2]['name']);
-        static::assertGreaterThan(630, (int) $header[2]['value']);
-        static::assertEquals(strlen($this->Response()->getBody()), (int) $header[2]['value']);
+        static::assertEquals('attachment; filename="shopware_packshot_community_edition_72dpi_rgb.png"', $this->Response()->getHeader('Content-Disposition'));
+        static::assertGreaterThan(630, (int) $this->Response()->getHeader('Content-Length'));
+        static::assertEquals(strlen($this->Response()->getBody()), (int) $this->Response()->getHeader('Content-Length'));
 
         if ($deleteFolderOnTearDown) {
             $filesystem->delete($filePath);

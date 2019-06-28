@@ -82,4 +82,3 @@ Ext.define('Shopware.apps.Base.model.PositionStatus', {
     ]
 });
 //{/block}
-

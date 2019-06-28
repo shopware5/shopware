@@ -29,10 +29,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * Defines the search result of the search gateway.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductSearchResult extends ProductNumberSearchResult
 {

@@ -30,6 +30,7 @@ Thumbs.db
 
 # User installed themes
 /themes/Frontend/*
+!/themes/Frontend/.eslintrc.js
 !/themes/Frontend/Bare
 !/themes/Frontend/Responsive
 
@@ -82,6 +83,7 @@ phpstan.phar
 /dev-ops/docker/containers/app/Dockerfile
 /dev-ops/docker/containers/elasticsearch/Dockerfile
 /dev-ops/docker/containers/mysql/Dockerfile
+/dev-ops/docker/containers/mysql/dev.cnf
 /.psh.yaml.override
 /.psh.yml.override
 

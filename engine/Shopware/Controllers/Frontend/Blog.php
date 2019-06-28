@@ -27,15 +27,9 @@ use Shopware\Models\Blog\Blog;
 use Shopware\Models\Shop\Shop;
 
 /**
- * Shopware Frontend Controller for the Blog
- *
  * Frontend Controller for the blog article listing and the detail page.
  * Contains the logic for the listing of the blog articles and the detail page.
  * Furthermore it will manage the blog comment handling
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 {
@@ -232,7 +226,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         // RSS and ATOM Feed part
         if ($this->Request()->getParam('sRss') || $this->Request()->getParam('sAtom')) {
-            $this->Response()->setHeader('Content-Type', 'text/xml');
+            $this->Response()->headers->set('content-type', 'text/xml');
             $type = $this->Request()->getParam('sRss') ? 'rss' : 'atom';
             $this->View()->loadTemplate('frontend/blog/' . $type . '.tpl');
         }

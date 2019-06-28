@@ -85,5 +85,3 @@ Ext.define('Shopware.apps.ArticleList.store.Detail', {
         }
     }
 });
-
-

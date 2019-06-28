@@ -306,6 +306,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 settingForm.loadRecord(record);
 
                 window.customListing.loadCategory(me.detailRecord);
+                window.customSortingTab.loadCategory(me.detailRecord);
             }
         });
     },

@@ -32,7 +32,9 @@ use Shopware\Models\Emotion\Element;
 use Shopware\Models\Emotion\Emotion;
 use Shopware\Models\Emotion\Library\Field;
 use Shopware\Models\Shop\Shop;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
@@ -199,9 +201,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                         break;
                 }
 
-                if ($entry['name'] === 'file' ||
-                    $entry['name'] === 'image' ||
-                    $entry['name'] === 'fallback_picture'
+                if ($entry['name'] === 'file'
+                    || $entry['name'] === 'image'
+                    || $entry['name'] === 'fallback_picture'
                 ) {
                     $scheme = parse_url($value, PHP_URL_SCHEME);
 
@@ -281,14 +283,10 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
 
         @set_time_limit(0);
-        $this->Response()
-            ->setHeader('Content-type', 'application/zip')
-            ->setHeader('Content-Transfer-Encoding', 'binary')
-            ->setHeader('Content-disposition', 'attachment; filename="' . basename($exportFilePath) . '"')
-            ->sendHeaders();
 
-        readfile($exportFilePath);
-        $this->container->get('file_system')->remove($exportFilePath);
+        $binaryResponse = new BinaryFileResponse($exportFilePath, 200, [], true, ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+        $binaryResponse->deleteFileAfterSend(true);
+        $binaryResponse->send();
 
         exit;
     }
@@ -1164,8 +1162,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
 
         $validFrom = null;
-        if (!empty($data['validFrom']) &&
-            !empty($data['validFromTime'])) {
+        if (!empty($data['validFrom'])
+            && !empty($data['validFromTime'])) {
             $fromDate = new \DateTime($data['validFrom']);
             $fromTime = new \DateTime($data['validFromTime']);
 
@@ -1173,8 +1171,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
 
         $validTo = null;
-        if (!empty($data['validTo']) &&
-            !empty($data['validToTime'])) {
+        if (!empty($data['validTo'])
+            && !empty($data['validToTime'])) {
             $toDate = new \DateTime($data['validTo']);
             $toTime = new \DateTime($data['validToTime']);
 
@@ -1242,6 +1240,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $emotion->setPreviewSecret(array_key_exists('previewSecret', $data) ? $data['previewSecret'] : null);
         $emotion->setCustomerStreamIds($data['customerStreamIds'] ?: null);
         $emotion->setReplacement($data['replacement'] ?: null);
+        $emotion->setListingVisibility($data['listingVisibility']);
 
         Shopware()->Models()->persist($emotion);
         Shopware()->Models()->flush();
@@ -1564,7 +1563,8 @@ EOD;
         if ($shop->getFallback()) {
             $parent = $shop->getFallback();
         }
-        $parent->registerResources();
+
+        $this->get('shopware.components.shop_registration_service')->registerShop($parent);
 
         return $this->Front()->Router()->assemble([
             'controller' => 'campaign',

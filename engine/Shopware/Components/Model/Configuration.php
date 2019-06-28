@@ -37,11 +37,6 @@ use Doctrine\ORM\Configuration as BaseConfiguration;
 use Doctrine\ORM\Repository\RepositoryFactory;
 use Shopware\Components\ShopwareReleaseStruct;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Configuration extends BaseConfiguration
 {
     /**

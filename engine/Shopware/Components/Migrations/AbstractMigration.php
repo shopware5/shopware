@@ -24,15 +24,10 @@
 
 namespace Shopware\Components\Migrations;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 abstract class AbstractMigration
 {
-    const MODUS_UPDATE = 'update';
-    const MODUS_INSTALL = 'install';
+    public const MODUS_UPDATE = 'update';
+    public const MODUS_INSTALL = 'install';
 
     /**
      * @var \PDO
@@ -61,22 +56,16 @@ abstract class AbstractMigration
         return $this;
     }
 
-    /**
-     * @return \PDO
-     */
-    public function getConnection()
+    public function getConnection(): \PDO
     {
         return $this->connection;
     }
 
-    /**
-     * @return string
-     */
-    public function getLabel()
+    public function getLabel(): string
     {
         $result = [];
 
-        $regexPattern = '/[0-9]*-(.+)\.php$/i';
+        $regexPattern = '/[\d]*-(.+)\.php$/i';
 
         $rc = new \ReflectionClass(get_class($this));
         $fileName = basename($rc->getFileName());
@@ -86,13 +75,10 @@ abstract class AbstractMigration
         return $result[1];
     }
 
-    /**
-     * @return int
-     */
-    public function getVersion()
+    public function getVersion(): int
     {
         $result = [];
-        $regexPattern = '/[0-9]*$/';
+        $regexPattern = '/[\d]*$/';
 
         preg_match($regexPattern, get_class($this), $result);
 
@@ -106,10 +92,8 @@ abstract class AbstractMigration
 
     /**
      * @param string $sql
-     *
-     * @return AbstractMigration
      */
-    public function addSql($sql)
+    public function addSql($sql): AbstractMigration
     {
         // assure statement ends with semicolon
         $sql = rtrim($sql, ';');
@@ -119,10 +103,7 @@ abstract class AbstractMigration
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    public function getSql()
+    public function getSql(): array
     {
         return $this->sql;
     }

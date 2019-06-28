@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 interface ShopIndexerInterface
 {
-    public function index(Shop $shop, ProgressHelperInterface $helper);
+    public function index(Shop $shop, ProgressHelperInterface $helper, array $indexes = null);
 
     /**
      * Remove unused indices

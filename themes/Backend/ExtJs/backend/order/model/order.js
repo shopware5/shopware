@@ -197,4 +197,3 @@ Ext.define('Shopware.apps.Order.model.Order', {
 
 });
 //{/block}
-

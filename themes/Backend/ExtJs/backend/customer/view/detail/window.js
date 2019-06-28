@@ -607,11 +607,20 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
             '</tpl>{/literal}',
             {
                 getCountry: function(countryId) {
+                    // Race condition, XTemplate is rendered before setStores
+                    if (!Ext.isDefined(me.countryStore)) {
+                        return '';
+                    }
+
                     return me.countryStore.getById(countryId).get('name');
                 }
             },
             {
                 getCountryState: function(stateId) {
+                    if (!Ext.isDefined(me.countryStateStore)) {
+                        return '';
+                    }
+
                     if (stateId && me.countryStateStore.count() > 0) {
                         return me.countryStateStore.getById(stateId).get('name');
                     }

@@ -76,5 +76,3 @@ Ext.define('Shopware.data.reader.Application', {
         return records;
     }
 });
-
-

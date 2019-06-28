@@ -41,8 +41,9 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      * @string
      */
     extend:'Ext.app.Controller',
+
     /**
-     * all references to get the elements by the applicable selector
+     * All references to get the elements by the applicable selector
      */
     refs:[
         { ref:'grid', selector:'blog-blog-list' },
@@ -72,12 +73,10 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
         growlMessage: '{s name=growlMessage}Blog{/s}'
     },
 
-
     /**
      * saves the selected category record
      */
     selectedCategoryRecord: null,
-
 
     /**
      * Creates the necessary event listener for this
@@ -150,7 +149,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
         var me = this,
             model = Ext.create('Shopware.apps.Blog.model.Detail');
 
-        //reset the detail Record
+        // Reset the detail Record
         me.detailRecord = null;
 
         if(me.selectedCategoryRecord && me.selectedCategoryRecord.get("blog")) {
@@ -169,9 +168,8 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      * Opens the Ext.window.window which displays
      * the Ext.form.Panel to modify an existing blog article
      *
-     * @param [object]  view - The view. Is needed to get the right f
-     * @param [object]  item - The row which is affected
-     * @param [integer] rowIndex - The row number
+     * @param { object }  view - The view. Is needed to get the right
+     * @param { integer } rowIndex - The row number
      * @return void
      */
     onEditItem:function (view, rowIndex) {
@@ -211,8 +209,8 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      * Opens the Ext.window.window which displays
      * the Ext.form.Panel to duplicate an existing blog article
      *
-     * @param [object]  view - The view. Is needed to get the right f
-     * @param [integer] rowIndex - The row number
+     * @param { object }  view - The view. Is needed to get the right f
+     * @param { integer} rowIndex - The row number
      * @return void
      */
     onDuplicateBlogArticle:function (view, rowIndex) {
@@ -244,6 +242,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
             }
         });
     },
+
     /**
      * Filters the grid with the passed search value to find the right blog article
      *
@@ -264,8 +263,8 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      * Event listener which deletes a single blog based on the passed
      * grid (e.g. the grid store) and the row index
      *
-     * @param [object] grid - The grid on which the event has been fired
-     * @param [integer] rowIndex - Position of the event
+     * @param { object } grid - The grid on which the event has been fired
+     * @param { integer } rowIndex - Position of the event
      * @return void
      */
     onDeleteSingleBlogArticle:function (grid, rowIndex) {
@@ -327,7 +326,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
                         var rawData = batch.proxy.getReader().rawData;
                         if (rawData.success === true) {
                             store.load();
-                            Shopware.Notification.createGrowlMessage('',me.snippets.deleteMultipleBlogArticlesSuccess, me.snippets.growlMessage);
+                            Shopware.Notification.createGrowlMessage('', me.snippets.deleteMultipleBlogArticlesSuccess, me.snippets.growlMessage);
                         } else {
                             Shopware.Notification.createGrowlMessage('',me.snippets.deleteMultipleBlogArticlesError + rawData.errorMsg , me.snippets.growlMessage);
                         }
@@ -339,8 +338,6 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
 
     /**
      * Event will be fired when the user want to add a similar article
-     *
-     * @event
      */
     onAddAssignedArticle: function(form, grid, searchField) {
         var me = this,
@@ -369,8 +366,6 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
 
     /**
      * Event will be fired when the user want to remove an assigned similar article
-     *
-     * @event
      */
     onRemoveAssignedArticle: function(record, grid) {
         var me = this,
@@ -384,9 +379,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
     /**
      * open the specific article module page
      *
-     * @param field
-     * @param value
-     * @return void
+     * @param record
      */
     onOpenArticleModule:function (record) {
         var me = this;
@@ -401,8 +394,6 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
 
     /**
      * Event will be fired when the user changed the seo description
-     *
-     * @event
      */
     onMetaDescriptionChange: function(textField) {
         var me = this;
@@ -415,8 +406,8 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      * clicks the "save"-button in the edit-window.
      *
      * @event click
-     * @param [object] btn - pressed Ext.button.Button
-     * @return void
+     *
+     * @param { object } btn - pressed Ext.button.Button
      */
     onSaveBlogArticle: function (btn) {
         var me = this,
@@ -425,7 +416,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
             listStore = me.subApplication.listStore,
             record = form.getRecord();
 
-        //check if all required fields are valid
+        // Check if all required fields are valid
         if (!form.isValid()) {
             Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesNotValid, me.snippets.growlMessage);
             return;
@@ -435,7 +426,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
 
         form.updateRecord(record);
 
-        //just to save empty values
+        // Just to save empty values
         record.set('authorId', values.authorId);
 
         record.save({
@@ -451,10 +442,10 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
 
                     record.set('id', data.id);
 
-                    //enable the tabpanel
+                    // Enable the tabpanel
                     me.getCommentPanel().enable();
                     listStore.load();
-                    //to remove all red flags
+                    // To remove all red flags
                     Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
                 } else {
                     Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesError, me.snippets.growlMessage);

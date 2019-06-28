@@ -263,17 +263,12 @@ class Template extends ModelEntity
      */
     private $shippingTime;
 
-    /**
-     * Class constructor. Initials the array collections.
-     */
     public function __construct()
     {
         $this->prices = new ArrayCollection();
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -282,8 +277,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Set number
-     *
      * @param string $number
      *
      * @return Template
@@ -296,8 +289,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Get number
-     *
      * @return string
      */
     public function getNumber()
@@ -306,8 +297,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Set supplierNumber
-     *
      * @param string $supplierNumber
      *
      * @return Template
@@ -320,8 +309,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Get supplierNumber
-     *
      * @return string
      */
     public function getSupplierNumber()
@@ -342,8 +329,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Get additionalText
-     *
      * @return string
      */
     public function getAdditionalText()
@@ -352,8 +337,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Set active
-     *
      * @param int $active
      *
      * @return Template
@@ -366,8 +349,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Get active
-     *
      * @return int
      */
     public function getActive()
@@ -376,8 +357,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Set inStock
-     *
      * @param int $inStock
      *
      * @return Template
@@ -390,8 +369,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Get inStock
-     *
      * @return int
      */
     public function getInStock()
@@ -400,8 +377,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Set stockMin
-     *
      * @param int $stockMin
      *
      * @return Template
@@ -414,8 +389,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Get stockMin
-     *
      * @return int
      */
     public function getStockMin()
@@ -424,8 +397,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Set lastStock
-     *
      * @param int $lastStock
      */
     public function setLastStock($lastStock)
@@ -444,8 +415,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Set weight
-     *
      * @param float $weight
      *
      * @return Template
@@ -458,8 +427,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Get weight
-     *
      * @return float
      */
     public function getWeight()
@@ -468,8 +435,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Set position
-     *
      * @param int $position
      *
      * @return Template
@@ -482,8 +447,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Get position
-     *
      * @return int
      */
     public function getPosition()
@@ -660,8 +623,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Set shippingFree
-     *
      * @param bool $shippingFree
      *
      * @return Template
@@ -674,8 +635,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Get shippingFree
-     *
      * @return bool
      */
     public function getShippingFree()
@@ -684,8 +643,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Set releaseDate
-     *
      * @param \DateTimeInterface|string|null $releaseDate
      *
      * @return Template
@@ -702,8 +659,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Get releaseDate
-     *
      * @return \DateTimeInterface
      */
     public function getReleaseDate()
@@ -712,8 +667,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Set minPurchase
-     *
      * @param int $minPurchase
      *
      * @return Template
@@ -726,8 +679,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Get minPurchase
-     *
      * @return int
      */
     public function getMinPurchase()
@@ -736,8 +687,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Set purchaseSteps
-     *
      * @param int $purchaseSteps
      *
      * @return Template
@@ -750,8 +699,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Get purchaseSteps
-     *
      * @return int
      */
     public function getPurchaseSteps()
@@ -760,8 +707,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Set maxPurchase
-     *
      * @param int $maxPurchase
      *
      * @return Template
@@ -774,8 +719,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Get maxPurchase
-     *
      * @return int
      */
     public function getMaxPurchase()
@@ -784,8 +727,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Set purchaseUnit
-     *
      * @param float $purchaseUnit
      *
      * @return Template
@@ -798,8 +739,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Get purchaseUnit
-     *
      * @return float
      */
     public function getPurchaseUnit()
@@ -808,8 +747,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Set referenceUnit
-     *
      * @param float $referenceUnit
      *
      * @return Template
@@ -822,8 +759,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Get referenceUnit
-     *
      * @return float
      */
     public function getReferenceUnit()
@@ -832,8 +767,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Set packUnit
-     *
      * @param string $packUnit
      *
      * @return Template
@@ -846,8 +779,6 @@ class Template extends ModelEntity
     }
 
     /**
-     * Get packUnit
-     *
      * @return string
      */
     public function getPackUnit()

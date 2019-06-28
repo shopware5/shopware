@@ -22,22 +22,25 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Api\Resource\PaymentMethods;
+
 class Shopware_Controllers_Api_PaymentMethods extends Shopware_Controllers_Api_Rest
 {
     /**
-     * @var Shopware\Components\Api\Resource\PaymentMethods
+     * @var PaymentMethods
      */
-    protected $resource = null;
+    protected $resource;
 
-    public function init()
+    public function __construct(PaymentMethods $resource)
     {
-        $this->resource = \Shopware\Components\Api\Manager::getResource('PaymentMethods');
+        $this->resource = $resource;
+        parent::__construct();
     }
 
     /**
      * Returns the current version
      */
-    public function indexAction()
+    public function indexAction(): void
     {
         $limit = (int) $this->Request()->getParam('limit', 1000);
         $offset = (int) $this->Request()->getParam('start', 0);
@@ -55,7 +58,7 @@ class Shopware_Controllers_Api_PaymentMethods extends Shopware_Controllers_Api_R
      *
      * GET /api/payment/{id}
      */
-    public function getAction()
+    public function getAction(): void
     {
         $id = $this->Request()->getParam('id');
 
@@ -70,7 +73,7 @@ class Shopware_Controllers_Api_PaymentMethods extends Shopware_Controllers_Api_R
      *
      * POST /api/payment
      */
-    public function postAction()
+    public function postAction(): void
     {
         $params = $this->Request()->getPost();
 
@@ -83,7 +86,7 @@ class Shopware_Controllers_Api_PaymentMethods extends Shopware_Controllers_Api_R
         ];
 
         $this->View()->assign(['success' => true, 'data' => $data]);
-        $this->Response()->setHeader('Location', $location);
+        $this->Response()->headers->set('location', $location);
     }
 
     /**
@@ -91,7 +94,7 @@ class Shopware_Controllers_Api_PaymentMethods extends Shopware_Controllers_Api_R
      *
      * PUT /api/payment/{id}
      */
-    public function putAction()
+    public function putAction(): void
     {
         $id = $this->Request()->getParam('id');
         $params = $this->Request()->getPost();
@@ -112,7 +115,7 @@ class Shopware_Controllers_Api_PaymentMethods extends Shopware_Controllers_Api_R
      *
      * DELETE /api/payment/{id}
      */
-    public function deleteAction()
+    public function deleteAction(): void
     {
         $id = $this->Request()->getParam('id');
 

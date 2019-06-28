@@ -33,9 +33,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Property\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * Class PropertyProvider
- */
 class PropertyProvider implements PropertyProviderInterface
 {
     /**

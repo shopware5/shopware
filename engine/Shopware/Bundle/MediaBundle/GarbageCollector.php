@@ -27,9 +27,6 @@ namespace Shopware\Bundle\MediaBundle;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\MediaBundle\Struct\MediaPosition;
 
-/**
- * Class GarbageCollector
- */
 class GarbageCollector
 {
     /**

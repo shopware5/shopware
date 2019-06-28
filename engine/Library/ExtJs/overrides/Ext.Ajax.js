@@ -21,6 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
+//{block name="extjs/overrides/ajax"}
 Ext.CSRFService = (function() {
     var me = this;
 
@@ -159,3 +160,4 @@ Ext.CSRFService = (function() {
 
     return me;
 })();
+//{/block}

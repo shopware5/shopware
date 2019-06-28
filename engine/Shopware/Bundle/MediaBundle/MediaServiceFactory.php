@@ -31,9 +31,6 @@ use League\Flysystem\Filesystem;
 use Shopware\Bundle\MediaBundle\Adapters\AdapterFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * Class MediaServiceFactory
- */
 class MediaServiceFactory
 {
     /**

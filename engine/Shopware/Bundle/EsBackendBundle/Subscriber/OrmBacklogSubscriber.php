@@ -27,6 +27,7 @@ namespace Shopware\Bundle\EsBackendBundle\Subscriber;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
+use Shopware\Bundle\EsBackendBundle\Struct\Backlog;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail as Variant;
@@ -54,11 +55,8 @@ class OrmBacklogSubscriber implements EventSubscriber
     /**
      * {@inheritdoc}
      */
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
-        if (!$this->container->getParameter('shopware.es.backend.enabled')) {
-            return [];
-        }
         if (!$this->container->getParameter('shopware.es.backend.write_backlog')) {
             return [];
         }
@@ -78,43 +76,40 @@ class OrmBacklogSubscriber implements EventSubscriber
         }
     }
 
-    /**
-     * @return array|null
-     */
-    private function getBacklog($entity)
+    private function getBacklog($entity): ?Backlog
     {
         switch (true) {
             // Article changes
             case $entity instanceof Article:
-                return ['entity' => Article::class, 'entity_id' => $entity->getId()];
+                return new Backlog(Article::class, $entity->getId());
 
             // Variant changes
             case $entity instanceof Price:
-                return ['entity' => Variant::class, 'entity_id' => $entity->getDetail()->getNumber()];
+                return new Backlog(Variant::class, $entity->getDetail()->getNumber());
             case $entity instanceof Variant:
-                return ['entity' => Variant::class, 'entity_id' => $entity->getNumber()];
+                return new Backlog(Variant::class, $entity->getNumber());
 
             // Order changes
             case $entity instanceof Order:
-                return ['entity' => Order::class, 'entity_id' => $entity->getId()];
+                return new Backlog(Order::class, $entity->getId());
             case $entity instanceof Detail:
-                return ['entity' => Order::class, 'entity_id' => $entity->getOrder()->getId()];
+                return new Backlog(Order::class, $entity->getOrder()->getId());
             case $entity instanceof Billing:
-                return ['entity' => Order::class, 'entity_id' => $entity->getOrder()->getId()];
+                return new Backlog(Order::class, $entity->getOrder()->getId());
             case $entity instanceof Shipping:
-                return ['entity' => Order::class, 'entity_id' => $entity->getOrder()->getId()];
+                return new Backlog(Order::class, $entity->getOrder()->getId());
 
             // Customer changes
             case $entity instanceof Customer:
-                return ['entity' => Customer::class, 'entity_id' => $entity->getId()];
+                return new Backlog(Customer::class, $entity->getId());
             case $entity instanceof Address:
-                return ['entity' => Customer::class, 'entity_id' => $entity->getCustomer()->getId()];
+                return new Backlog(Customer::class, $entity->getCustomer()->getId());
         }
 
         return null;
     }
 
-    private function trace(OnFlushEventArgs $eventArgs)
+    private function trace(OnFlushEventArgs $eventArgs): void
     {
         /** @var ModelManager $em */
         $em = $eventArgs->getEntityManager();
@@ -148,10 +143,6 @@ class OrmBacklogSubscriber implements EventSubscriber
             $queue[] = $backlog;
         }
 
-        $time = (new \DateTime())->format('Y-m-d H:i:s');
-        foreach ($queue as $row) {
-            $row['time'] = $time;
-            $this->container->get('dbal_connection')->insert('s_es_backend_backlog', $row);
-        }
+        $this->container->get('shopware_bundle_es_backend.backlog_service')->write($queue);
     }
 }

@@ -33,9 +33,6 @@ class ProportionalCartMerger implements ProportionalCartMergerInterface
      */
     private $modules;
 
-    /**
-     * ProportionalCartMerger constructor.
-     */
     public function __construct(Shopware_Components_Modules $modules)
     {
         $this->modules = $modules;

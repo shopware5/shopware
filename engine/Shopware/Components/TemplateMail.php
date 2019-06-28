@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Mail\Mail;
 use Shopware\Models\Shop\Shop;
@@ -312,6 +313,10 @@ class Shopware_Components_TemplateMail
         }
 
         $mail->setTemplateName($mailModel->getName());
+
+        if ($this->getShop() !== null) {
+            $mail->setAssociation(LogEntryBuilder::SHOP_ID_ASSOCIATION, $this->getShop()->getId());
+        }
 
         return $mail;
     }

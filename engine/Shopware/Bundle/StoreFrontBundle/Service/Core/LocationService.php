@@ -42,9 +42,6 @@ class LocationService implements LocationServiceInterface
      */
     private $connection;
 
-    /**
-     * LocationService constructor.
-     */
     public function __construct(CountryGatewayInterface $gateway, Connection $connection)
     {
         $this->gateway = $gateway;

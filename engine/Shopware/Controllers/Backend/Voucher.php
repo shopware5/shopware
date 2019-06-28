@@ -29,9 +29,6 @@ use Shopware\Models\Tax\Tax;
 use Shopware\Models\Voucher\Code;
 use Shopware\Models\Voucher\Voucher;
 
-/**
- * Shopware Backend Controller for the Voucher Module
- */
 class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
@@ -241,8 +238,8 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $dataQuery = $this->getVoucherRepository()->getVoucherCodeListQuery($voucherId);
         $resultArray = $dataQuery->getArrayResult();
 
-        $this->Response()->setHeader('Content-Type', 'text/csv; charset=utf-8');
-        $this->Response()->setHeader('Content-Disposition', 'attachment;filename=voucherCodes.csv');
+        $this->Response()->headers->set('content-type', 'text/csv; charset=utf-8');
+        $this->Response()->headers->set('content-disposition', 'attachment;filename=voucherCodes.csv');
         //use this to set the BOM to show it in the right way for excel and stuff
         echo "\xEF\xBB\xBF";
         $fp = fopen('php://output', 'w');
@@ -253,10 +250,6 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         }
         fclose($fp);
     }
-
-    ///////////////////////////////////////////////////////////////////////////
-    //Data Validation Methods//////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Action for the Detail Voucher Form to load all needed data
@@ -337,10 +330,6 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
 
         $this->View()->assign(['success' => true, 'data' => $data]);
     }
-
-    ///////////////////////////////////////////////////////////////////////////
-    //Data Validation Methods//////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * checks if the entered vouchercode is already defined or not

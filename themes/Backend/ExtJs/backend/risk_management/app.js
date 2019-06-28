@@ -33,7 +33,7 @@
  * This is the main-file for the riskManagement-module.
  * It contains all controllers, stores, views and models.
  */
-    //{block name="backend/risk_management/app"}
+//{block name="backend/risk_management/app"}
 Ext.define('Shopware.apps.RiskManagement', {
     /**
      * Extends from our special controller, which handles the

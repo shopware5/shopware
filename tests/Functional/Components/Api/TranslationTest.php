@@ -1098,7 +1098,7 @@ class TranslationTest extends TestCase
 
     protected function getConfiguratorOptionName()
     {
-        return  Shopware()->Db()->fetchRow("
+        return Shopware()->Db()->fetchRow("
             SELECT co.id,
                    CONCAT(cg.name, '|', co.name) as name
 

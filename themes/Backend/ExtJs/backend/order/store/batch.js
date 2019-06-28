@@ -83,4 +83,3 @@ Ext.define('Shopware.apps.Order.store.Batch', {
     }
 });
 //{/block}
-

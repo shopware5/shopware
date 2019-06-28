@@ -91,10 +91,6 @@ class OptinService implements OptinServiceInterface
             return null;
         }
 
-        if (PHP_MAJOR_VERSION < 7) {
-            return unserialize($data);
-        }
-
         return unserialize($data, ['allowed_classes' => false]);
     }
 

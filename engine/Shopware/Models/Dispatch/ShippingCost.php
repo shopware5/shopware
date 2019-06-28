@@ -105,8 +105,6 @@ class ShippingCost extends ModelEntity
     private $dispatchId;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -115,8 +113,6 @@ class ShippingCost extends ModelEntity
     }
 
     /**
-     * Set from
-     *
      * @param float $from
      *
      * @return ShippingCost
@@ -129,8 +125,6 @@ class ShippingCost extends ModelEntity
     }
 
     /**
-     * Get from
-     *
      * @return float
      */
     public function getFrom()
@@ -139,8 +133,6 @@ class ShippingCost extends ModelEntity
     }
 
     /**
-     * Set value
-     *
      * @param float $value
      *
      * @return ShippingCost
@@ -153,8 +145,6 @@ class ShippingCost extends ModelEntity
     }
 
     /**
-     * Get value
-     *
      * @return float
      */
     public function getValue()
@@ -163,8 +153,6 @@ class ShippingCost extends ModelEntity
     }
 
     /**
-     * Set factor
-     *
      * @param float $factor
      *
      * @return ShippingCost
@@ -177,8 +165,6 @@ class ShippingCost extends ModelEntity
     }
 
     /**
-     * Get factor
-     *
      * @return float
      */
     public function getFactor()

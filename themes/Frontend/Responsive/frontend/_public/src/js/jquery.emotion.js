@@ -61,7 +61,19 @@
              * @property loadingOverlaySelector
              * @type {string}
              */
-            loadingOverlaySelector: '.emotion--overlay'
+            loadingOverlaySelector: '.emotion--overlay',
+
+            /**
+             * Should the emotion loaded with ajax
+             * @property ajax
+             * @type {boolean}
+             */
+            ajax: true,
+
+            /**
+             * The DOM selector for visible fullscreen emotions
+             */
+            visibleFullscreenSelector: '.emotion--wrapper:visible[data-fullscreen="true"]'
         },
 
         /**
@@ -152,37 +164,45 @@
                 return;
             }
 
-            /**
-             * Show the loading indicator and load the emotion world.
-             */
-            me.showEmotion();
+            if (me.opts.ajax) {
+                /**
+                 * Show the loading indicator and load the emotion world.
+                 */
+                me.showEmotion();
 
-            if (me.isLoading) {
-                return;
-            }
-
-            me.isLoading = true;
-            me.$overlay.insertBefore('.content-main');
-
-            $.ajax({
-                url: url,
-                method: 'GET',
-                success: function (response) {
-                    me.isLoading = false;
-                    me.$overlay.remove();
-
-                    $.publish('plugin/swEmotionLoader/onLoadEmotionLoaded', [ me ]);
-
-                    if (!response.length) {
-                        me.hideEmotion();
-                        return;
-                    }
-
-                    me.initEmotion(response);
-
-                    $.publish('plugin/swEmotionLoader/onLoadEmotionFinished', [ me ]);
+                if (me.isLoading) {
+                    return;
                 }
-            });
+
+                me.isLoading = true;
+                me.$overlay.insertBefore('.content-main');
+
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function (response) {
+                        me.isLoading = false;
+                        me.$overlay.remove();
+
+                        $.publish('plugin/swEmotionLoader/onLoadEmotionLoaded', [ me ]);
+
+                        if (!response.length) {
+                            me.hideEmotion();
+                            return;
+                        }
+
+                        me.initEmotion(response);
+
+                        $.publish('plugin/swEmotionLoader/onLoadEmotionFinished', [ me ]);
+                    }
+                });
+            } else {
+                me.$overlay.remove();
+
+                me.$el.html(me.$el.find('template').html());
+                me.showEmotion();
+                me.initEmotion();
+            }
 
             $.publish('plugin/swEmotionLoader/onLoadEmotion', [ me ]);
         },
@@ -191,17 +211,21 @@
          * Removes the content of the container by
          * the new emotion world markup and initializes it.
          *
-         * @param html
          */
         initEmotion: function(html) {
             var me = this;
 
-            me.$el.html(html);
+            if (html) {
+                me.$el.html(html);
+            }
+
             me.$emotion = me.$el.find('*[data-emotion="true"]');
 
             if (!me.$emotion.length) {
                 return;
             }
+
+            me.$emotion.attr('data-hasListing', me.opts.hasListing);
 
             me.$emotion.swEmotion();
 
@@ -339,6 +363,12 @@
              * @type {string}
              */
             wrapperSelector: '.emotion--wrapper',
+
+            /**
+             * flag to prevent `is--no-sidebar` for fullscreen emotions with listing below
+             * @type {boolean}
+             */
+            hasListing: false
         },
 
         /**
@@ -622,7 +652,7 @@
         onShow: function(event, emotion) {
             var me = this;
 
-            if (emotion.$el.is(me.$el)) {
+            if (emotion.$emotion && emotion.$emotion.is(me.$el)) {
                 me.initFullscreen();
             }
 
@@ -632,7 +662,7 @@
         onHide: function(event, emotion) {
             var me = this;
 
-            if (emotion.$el.is(me.$el)) {
+            if (emotion.$emotion && emotion.$emotion.is(me.$el)) {
                 me.removeFullscreen();
             }
 

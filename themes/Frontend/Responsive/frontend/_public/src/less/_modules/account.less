@@ -487,10 +487,15 @@ It allows the user to directly see and change the important information of their
     }
 
     .profile--birthdate {
-        .clearfix();
-
         .select-field {
             .unitize(margin-bottom, 15);
+            max-width: 100%;
+            float: left;
+        }
+
+        .datepicker {
+            .unitize(margin-bottom, 15);
+            width: 100%;
             max-width: 100%;
             float: left;
         }

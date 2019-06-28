@@ -27,6 +27,7 @@ namespace Shopware\Bundle\ESIndexingBundle\Product;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
+use Shopware\Bundle\ESIndexingBundle\ProviderInterface;
 use Shopware\Bundle\ESIndexingBundle\Struct\Product;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
@@ -42,11 +43,10 @@ use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class ProductProvider implements ProductProviderInterface
+class ProductProvider implements ProviderInterface, ProductProviderInterface
 {
     /**
      * @var ContextServiceInterface
@@ -123,6 +123,11 @@ class ProductProvider implements ProductProviderInterface
      */
     private $attributeConfigList;
 
+    /**
+     * @var ProductManualPositionLoaderInterface
+     */
+    private $manualPositionLoader;
+
     public function __construct(
         ListProductGatewayInterface $productGateway,
         CheapestPriceServiceInterface $cheapestPriceService,
@@ -137,7 +142,8 @@ class ProductProvider implements ProductProviderInterface
         VariantHelperInterface $variantHelper,
         ProductConfigurationLoader $configurationLoader,
         ProductListingVariationLoader $visibilityLoader,
-        CrudService $crudService
+        CrudService $crudService,
+        ProductManualPositionLoaderInterface $manualPositionLoader
     ) {
         $this->productGateway = $productGateway;
         $this->cheapestPriceService = $cheapestPriceService;
@@ -153,6 +159,7 @@ class ProductProvider implements ProductProviderInterface
         $this->configurationLoader = $configurationLoader;
         $this->listingVariationLoader = $visibilityLoader;
         $this->crudService = $crudService;
+        $this->manualPositionLoader = $manualPositionLoader;
     }
 
     /**
@@ -180,15 +187,15 @@ class ProductProvider implements ProductProviderInterface
 
         $variantFacet = $this->variantHelper->getVariantFacet();
 
+        $productIds = array_map(
+            static function (ListProduct $product) {
+                return $product->getId();
+            },
+            $products
+        );
+
         if ($variantFacet) {
             $variantConfiguration = $this->configuratorService->getProductsConfigurations($products, $context);
-
-            $productIds = array_map(
-                function (ListProduct $product) {
-                    return $product->getId();
-                },
-                $products
-            );
 
             $configurations = $this->configurationLoader->getConfigurations($productIds, $context);
 
@@ -198,6 +205,8 @@ class ProductProvider implements ProductProviderInterface
 
             $availability = $this->listingVariationLoader->getAvailability($products, $variantConfiguration, $variantFacet);
         }
+
+        $manualPositions = $this->manualPositionLoader->get($productIds);
 
         $result = [];
         foreach ($products as $listProduct) {
@@ -256,6 +265,10 @@ class ProductProvider implements ProductProviderInterface
             }
             if (isset($properties[$id])) {
                 $product->setProperties($properties[$id]);
+            }
+
+            if (isset($manualPositions[$id])) {
+                $product->setManualSorting($manualPositions[$id]);
             }
 
             $product->setFormattedCreatedAt(

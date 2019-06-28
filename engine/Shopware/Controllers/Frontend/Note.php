@@ -51,7 +51,8 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
         if (!empty($this->Request()->sDelete)) {
             Shopware()->Modules()->Basket()->sDeleteNote($this->Request()->sDelete);
         }
-        $this->forward('index');
+
+        $this->redirect(['action' => 'index']);
     }
 
     public function addAction()
@@ -62,7 +63,7 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
             $this->View()->assign('sArticleName', Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($orderNumber));
         }
 
-        $this->forward('index');
+        $this->redirect(['action' => 'index']);
     }
 
     public function ajaxAddAction()
@@ -70,7 +71,7 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
         $this->Request()->setHeader('Content-Type', 'application/json');
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
-        $this->Response()->setBody(json_encode(
+        $this->Response()->setContent(json_encode(
             [
                 'success' => $this->addNote($this->Request()->getParam('ordernumber')),
                 'notesCount' => (int) Shopware()->Modules()->Basket()->sCountNotes(),

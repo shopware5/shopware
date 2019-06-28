@@ -33,9 +33,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validator\ContextualValidatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-/**
- * Class AddressValidator
- */
 class AddressValidator implements AddressValidatorInterface
 {
     /**
@@ -58,9 +55,6 @@ class AddressValidator implements AddressValidatorInterface
      */
     private $validationContext;
 
-    /**
-     * AddressValidator constructor.
-     */
     public function __construct(
         ValidatorInterface $validator,
         ContextServiceInterface $context,
@@ -124,8 +118,9 @@ class AddressValidator implements AddressValidatorInterface
     }
 
     /**
-     * @param string       $property
-     * @param Constraint[] $constraints
+     * @param string        $property
+     * @param string|object $value
+     * @param Constraint[]  $constraints
      */
     private function validateField($property, $value, $constraints)
     {

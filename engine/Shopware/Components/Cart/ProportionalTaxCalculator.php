@@ -26,9 +26,6 @@ namespace Shopware\Components\Cart;
 
 use Shopware\Components\Cart\Struct\Price;
 
-/**
- * Class ProportionalTaxCalculator
- */
 class ProportionalTaxCalculator implements ProportionalTaxCalculatorInterface
 {
     /**

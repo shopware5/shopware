@@ -25,13 +25,35 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PluginReinstallCommand extends PluginCommand
+class PluginReinstallCommand extends PluginCommand implements CompletionAwareInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if ($argumentName === 'plugin') {
+            return $this->queryPluginNames($context->getCurrentWord());
+        }
+
+        return [];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -53,6 +75,12 @@ class PluginReinstallCommand extends PluginCommand
                 InputOption::VALUE_NONE,
                 'if supplied plugin data will be removed'
             )
+            ->addOption(
+                'no-refresh',
+                null,
+                InputOption::VALUE_NONE,
+                'Do not refresh plugin list.'
+            )
         ;
     }
 
@@ -63,6 +91,10 @@ class PluginReinstallCommand extends PluginCommand
     {
         /** @var InstallerService $pluginManager */
         $pluginManager = $this->container->get('shopware_plugininstaller.plugin_manager');
+        if (!$input->getOption('no-refresh')) {
+            $pluginManager->refreshPluginList();
+            $output->writeln('Successfully refreshed');
+        }
         $pluginName = $input->getArgument('plugin');
 
         try {

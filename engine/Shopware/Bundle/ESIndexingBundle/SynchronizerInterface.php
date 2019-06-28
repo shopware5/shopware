@@ -32,5 +32,7 @@ interface SynchronizerInterface
     /**
      * @param Backlog[] $backlogs
      */
-    public function synchronize(ShopIndex $shopIndex, $backlogs);
+    public function synchronize(ShopIndex $shopIndex, array $backlogs);
+
+    public function supports(): string;
 }

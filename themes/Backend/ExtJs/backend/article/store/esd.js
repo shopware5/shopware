@@ -50,4 +50,3 @@ Ext.define('Shopware.apps.Article.store.Esd', {
     model:'Shopware.apps.Article.model.Esd'
 });
 //{/block}
-

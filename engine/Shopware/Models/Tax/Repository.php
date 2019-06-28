@@ -24,7 +24,9 @@
 
 namespace Shopware\Models\Tax;
 
+use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * This class gathers all categories with there id, description, position, parent category id and the number
@@ -39,10 +41,6 @@ use Shopware\Components\Model\ModelRepository;
  * Affected tables
  *  - s_core_tax
  *  - s_core_tax_rules
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Repository extends ModelRepository
 {
@@ -90,5 +88,35 @@ class Repository extends ModelRepository
         }
 
         return $taxRate['tax'];
+    }
+
+    public function getTaxQuery(array $filters = null, array $orderBy = null, int $offset = null, int $limit = null): Query
+    {
+        return $this->getTaxQueryBuilder($filters, $orderBy, $offset, $limit)->getQuery();
+    }
+
+    public function getTaxQueryBuilder(array $filters = null, array $orderBy = null, int $offset = null, int $limit = null): QueryBuilder
+    {
+        /** @var QueryBuilder $builder */
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder
+            ->from(Tax::class, 'tax')
+            ->select('tax');
+
+        if ($limit !== null) {
+            $builder
+                ->setFirstResult($offset)
+                ->setMaxResults($limit);
+        }
+
+        if ($filters !== null) {
+            $builder->addFilter($filters);
+        }
+
+        if ($orderBy !== null) {
+            $builder->addOrderBy($orderBy);
+        }
+
+        return $builder;
     }
 }

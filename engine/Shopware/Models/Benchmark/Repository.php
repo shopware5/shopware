@@ -30,7 +30,7 @@ use Ramsey\Uuid\Uuid;
 /**
  * Repository
  */
-class Repository extends EntityRepository
+class Repository extends EntityRepository implements \Enlight_Hook
 {
     /**
      * @param int $shopId

@@ -22,14 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\MailBundle\Service\Filter\AdministrativeMailFilter;
 use Shopware\Models\Document\Document;
 use Shopware\Models\Mail\Attachment;
 use Shopware\Models\Mail\Mail;
 use Shopware\Models\Shop\Shop;
 
-/**
- * Backend Controller for the mail backend module
- */
 class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_ExtJs
 {
     /**
@@ -324,11 +322,12 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $recipient = Shopware()->Config()->get('mail');
 
         $shop = Shopware()->Models()->getRepository(Shop::class)->getActiveDefault();
-        $shop->registerResources();
+        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
 
         try {
             $templateMail = Shopware()->TemplateMail()->createMail($mail, array_merge($this->getDefaultMailContext($shop), $mail->getContext()), $shop);
             $templateMail->addTo($recipient);
+            $templateMail->setAssociation(AdministrativeMailFilter::ADMINISTRATIVE_MAIL, true);
             $templateMail->send();
         } catch (\Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
@@ -367,7 +366,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $compiler = new Shopware_Components_StringCompiler($this->View()->Engine());
 
         $shop = Shopware()->Models()->getRepository(Shop::class)->getActiveDefault();
-        $shop->registerResources();
+        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
 
         $compiler->setContext(array_merge($this->getDefaultMailContext($shop), $mail->getContext()));
 
@@ -589,6 +588,34 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $this->View()->assign(['success' => true, 'data' => $nodes]);
     }
 
+    public function getMailVariablesAction()
+    {
+        $prefix = ltrim($this->Request()->getParam('prefix'), '$');
+
+        /** @var Mail $mail */
+        $mail = $this->getRepository()->find((int) $this->Request()->getParam('mailId'));
+        $shop = $this->get('models')->getRepository(Shop::class)->getActiveDefault();
+        $shop->registerResources();
+
+        $context = array_merge($this->getDefaultMailContext($shop), $mail->getContext());
+
+        $completer = $this->container->get('shopware_mail.auto_complete_resolver');
+
+        $context = $completer->completer($context, $this->Request()->getParam('smartyCode'));
+        $context = $mail->arrayGetPath($context);
+
+        $result = [];
+
+        foreach ($context as $key => $value) {
+            if (strpos($key, $prefix) !== false || !$prefix) {
+                $result[] = ['word' => '$' . $key, 'value' => is_array($value) ? 'Array' : (string) $value];
+            }
+        }
+
+        $this->View()->assign('data', $result);
+        $this->View()->assign('success', true);
+    }
+
     /**
      * Method to define acl dependencies in backend controllers
      */
@@ -629,7 +656,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         /** @var Shop $shop */
         $shop = Shopware()->Models()->getRepository(Shop::class)->getActiveDefault();
-        $shop->registerResources();
+        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
 
         $context = $mail->getContext();
         if (empty($context)) {

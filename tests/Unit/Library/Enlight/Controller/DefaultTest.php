@@ -110,6 +110,11 @@ class DefaultTest extends TestCase
 
 class Enlight_Controller_Dispatcher_Default_TestMock extends \Enlight_Controller_Dispatcher_Default
 {
+    public function __construct()
+    {
+        parent::__construct([], new \Shopware\Components\DependencyInjection\Container());
+    }
+
     public function getDispatchFormatHelper()
     {
         return new DispatchFormatHelper();

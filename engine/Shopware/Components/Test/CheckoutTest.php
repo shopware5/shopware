@@ -94,7 +94,11 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
             ],
             'tax' => $taxRate,
             'supplierId' => 2,
-            'categories' => [10],
+            'categories' => [
+                [
+                    'id' => 10,
+                ],
+            ],
         ]);
 
         return $orderNumber;
@@ -236,18 +240,19 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * Login as a frontend user
      */
-    protected function loginFrontendUser()
+    protected function loginFrontendUser(string $group = 'EK')
     {
         Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
         $user = Shopware()->Db()->fetchRow(
-            'SELECT id, email, password, subshopID, language FROM s_user WHERE id = 1'
+            'SELECT id, email, password, subshopID, language FROM s_user WHERE customergroup = ? LIMIT 1',
+            $group
         );
 
         /** @var \Shopware\Models\Shop\Repository $repository */
         $repository = Shopware()->Models()->getRepository(Shop::class);
         $shop = $repository->getActiveById($user['language']);
 
-        $shop->registerResources();
+        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerShop($shop);
 
         Shopware()->Session()->Admin = true;
         Shopware()->System()->_POST = [

@@ -73,7 +73,6 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
             'voucher-code-list button[action=generateCodes]':{
                 click:me.onGenerateCodes
             },
-
             'voucher-code-list button[action=downloadCodes]':{
                 click:me.onDownloadCodes
             },
@@ -81,7 +80,6 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
                 change:me.onSearchVoucherCode
             },
             'voucher-voucher-window tabpanel':{
-                scope:me,
                 tabchange:me.onChangeTab
             },
             'voucher-code-list':{

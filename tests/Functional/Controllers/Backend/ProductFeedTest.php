@@ -24,11 +24,6 @@
 
 use Shopware\Models\ProductFeed\ProductFeed;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Components_Test_Controller_TestCase
 {
     /** @var ProductFeed $repository */
@@ -143,7 +138,7 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
      *
      * @depends testAddFeed
      *
-     * @param $id
+     * @param string $id
      *
      * @return the id to for the testUpdateFeed Method
      */
@@ -175,7 +170,7 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
      *
      * @depends testGetDetailFeed
      *
-     * @param $id
+     * @param string $id
      */
     public function testUpdateFeed($id)
     {
@@ -198,7 +193,7 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
      *
      * @depends testUpdateFeed
      *
-     * @param $id
+     * @param string $id
      */
     public function testDeleteFeed($id)
     {

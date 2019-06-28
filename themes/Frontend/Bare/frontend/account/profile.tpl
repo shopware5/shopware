@@ -109,50 +109,63 @@
                                                 <strong class="birthday--label">{s name='RegisterPlaceholderBirthday' namespace="frontend/register/personal_fieldset"}{/s}{if {config name=requireBirthdayField}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}</strong>
                                             {/block}
 
-                                            {block name="frontend_account_profile_profile_input_birthday_day"}
-                                                <div class="profile--birthday field--select select-field">
-                                                    <select name="profile[birthday][day]"
-                                                            {if {config name=requireBirthdayField}} required="required" aria-required="true"{/if}
-                                                            class="{if {config name=requireBirthdayField}}is--required{/if}{if $errorFlags.birthday && {config name=requireBirthdayField}} has--error{/if}">
+                                            {if {config name=birthdaySingleField}}
+                                                {block name="frontend_account_profile_profile_input_birthday_datepicker"}
+                                                    <input type="text" name="profile[birthday]"
+                                                        {if {config name=requireBirthdayField} && $form_data.birthday} disabled="disabled"{/if}
+                                                        data-datepicker="true"
+                                                        class="datepicker text {if {config name=requireBirthdayField}}is--required{/if}{if isset($error_flags.birthday) && {config name=requireBirthdayField}} has--error{/if}"
+                                                        data-minDate="{date('Y')-120}-1-1"
+                                                        data-maxDate="today"
+                                                        data-defaultDate="{$form_data.profile.birthday.year}-{$form_data.profile.birthday.month}-{$form_data.profile.birthday.day}"
+                                                        placeholder="{s name='RegisterBirthdayDatepickerFormat' namespace="frontend/register/personal_fieldset"}{/s}">
+                                                {/block}
+                                            {else}
+                                                {block name="frontend_account_profile_profile_input_birthday_day"}
+                                                    <div class="profile--birthday field--select select-field">
+                                                        <select name="profile[birthday][day]"
+                                                                {if {config name=requireBirthdayField}} required="required" aria-required="true"{/if}
+                                                                class="{if {config name=requireBirthdayField}}is--required{/if}{if $errorFlags.birthday && {config name=requireBirthdayField}} has--error{/if}">
 
-                                                        <option{if {config name=requireBirthdayField} && $form_data.profile.birthday.day} disabled="disabled"{/if} value="">{s name='RegisterBirthdaySelectDay' namespace="frontend/register/personal_fieldset"}{/s}</option>
+                                                            <option{if {config name=requireBirthdayField} && $form_data.profile.birthday.day} disabled="disabled"{/if} value="">{s name='RegisterBirthdaySelectDay' namespace="frontend/register/personal_fieldset"}{/s}</option>
 
-                                                        {for $day = 1 to 31}
-                                                            <option value="{$day}" {if $day == $form_data.profile.birthday.day}selected{/if}>{$day}</option>
-                                                        {/for}
-                                                    </select>
-                                                </div>
-                                            {/block}
+                                                            {for $day = 1 to 31}
+                                                                <option value="{$day}" {if $day == $form_data.profile.birthday.day}selected{/if}>{$day}</option>
+                                                            {/for}
+                                                        </select>
+                                                    </div>
+                                                {/block}
 
-                                            {block name="frontend_account_profile_profile_input_birthday_month"}
-                                                <div class="profile--birthmonth field--select select-field">
-                                                    <select name="profile[birthday][month]"
-                                                            {if {config name=requireBirthdayField}} required="required" aria-required="true"{/if}
-                                                            class="{if {config name=requireBirthdayField}}is--required{/if}{if $errorFlags.birthday && {config name=requireBirthdayField}} has--error{/if}">
+                                                {block name="frontend_account_profile_profile_input_birthday_month"}
+                                                    <div class="profile--birthmonth field--select select-field">
+                                                        <select name="profile[birthday][month]"
+                                                                {if {config name=requireBirthdayField}} required="required" aria-required="true"{/if}
+                                                                class="{if {config name=requireBirthdayField}}is--required{/if}{if $errorFlags.birthday && {config name=requireBirthdayField}} has--error{/if}">
 
-                                                        <option{if {config name=requireBirthdayField} && $form_data.profile.birthday.month} disabled="disabled"{/if} value="">{s name='RegisterBirthdaySelectMonth' namespace="frontend/register/personal_fieldset"}{/s}</option>
+                                                            <option{if {config name=requireBirthdayField} && $form_data.profile.birthday.month} disabled="disabled"{/if} value="">{s name='RegisterBirthdaySelectMonth' namespace="frontend/register/personal_fieldset"}{/s}</option>
 
-                                                        {for $month = 1 to 12}
-                                                            <option value="{$month}" {if $month == $form_data.profile.birthday.month}selected{/if}>{$month}</option>
-                                                        {/for}
-                                                    </select>
-                                                </div>
-                                            {/block}
+                                                            {for $month = 1 to 12}
+                                                                <option value="{$month}" {if $month == $form_data.profile.birthday.month}selected{/if}>{$month}</option>
+                                                            {/for}
+                                                        </select>
+                                                    </div>
+                                                {/block}
 
-                                            {block name="frontend_account_profile_profile_input_birthday_year"}
-                                                <div class="profile--birthyear field--select select-field">
-                                                    <select name="profile[birthday][year]"
-                                                            {if {config name=requireBirthdayField}} required="required" aria-required="true"{/if}
-                                                            class="{if {config name=requireBirthdayField}}is--required{/if}{if $errorFlags.birthday && {config name=requireBirthdayField}} has--error{/if}">
+                                                {block name="frontend_account_profile_profile_input_birthday_year"}
+                                                    <div class="profile--birthyear field--select select-field">
+                                                        <select name="profile[birthday][year]"
+                                                                {if {config name=requireBirthdayField}} required="required" aria-required="true"{/if}
+                                                                class="{if {config name=requireBirthdayField}}is--required{/if}{if $errorFlags.birthday && {config name=requireBirthdayField}} has--error{/if}">
 
-                                                        <option{if {config name=requireBirthdayField} && $form_data.profile.birthday.year} disabled="disabled"{/if} value="">{s name='RegisterBirthdaySelectYear' namespace="frontend/register/personal_fieldset"}{/s}</option>
+                                                            <option{if {config name=requireBirthdayField} && $form_data.profile.birthday.year} disabled="disabled"{/if} value="">{s name='RegisterBirthdaySelectYear' namespace="frontend/register/personal_fieldset"}{/s}</option>
 
-                                                        {for $year = date("Y") to date("Y")-120 step=-1}
-                                                            <option value="{$year}" {if $year == $form_data.profile.birthday.year}selected{/if}>{$year}</option>
-                                                        {/for}
-                                                    </select>
-                                                </div>
-                                            {/block}
+                                                            {for $year = date("Y") to date("Y")-120 step=-1}
+                                                                <option value="{$year}" {if $year == $form_data.profile.birthday.year}selected{/if}>{$year}</option>
+                                                            {/for}
+                                                        </select>
+                                                    </div>
+                                                {/block}
+                                            {/if}
                                         </div>
                                     {/if}
                                 {/block}

@@ -93,4 +93,3 @@ Ext.define('Shopware.apps.Article.model.Dependency', {
 
 });
 //{/block}
-

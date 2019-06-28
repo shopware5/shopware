@@ -50,4 +50,3 @@ Ext.define('Shopware.apps.Order.model.Payment', {
     belongsTo: 'Shopware.apps.Order.model.Order'
 });
 //{/block}
-

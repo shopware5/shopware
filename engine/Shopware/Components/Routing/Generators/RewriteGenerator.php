@@ -29,11 +29,6 @@ use Shopware\Components\QueryAliasMapper;
 use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\GeneratorListInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class RewriteGenerator implements GeneratorListInterface
 {
     /**
@@ -215,6 +210,10 @@ class RewriteGenerator implements GeneratorListInterface
             default:
                 if (isset($query['action'])) {
                     $orgQuery['sAction'] = $query['action'];
+                }
+
+                if (isset($query['id'])) {
+                    $orgQuery['id'] = $query['id'];
                 }
                 break;
         }

@@ -6,7 +6,7 @@
     {block name="frontend_index_breadcrumb_content"}
         {foreach $sBreadcrumb as $breadcrumb}
             {block name="frontend_index_breadcrumb_entry"}
-                <li class="breadcrumb--entry{if $breadcrumb@last} is--active{/if}" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                <li role="menuitem" class="breadcrumb--entry{if $breadcrumb@last} is--active{/if}" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
                     {if $breadcrumb.name}
                         {block name="frontend_index_breadcrumb_entry_inner"}
                             {if $breadcrumb.link}
@@ -24,7 +24,7 @@
                     {/if}
                 </li>
                 {if !$breadcrumb@last}
-                    <li class="breadcrumb--separator">
+                    <li role="none" class="breadcrumb--separator">
                         <i class="icon--arrow-right"></i>
                     </li>
                 {/if}

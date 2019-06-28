@@ -27,6 +27,7 @@
  * Override the default ext application
  * to add our sub application functionality
  */
+//{block name="extjs/overrides/controller"}
 Ext.override(Ext.app.Controller, {
 
     /**
@@ -221,3 +222,4 @@ Ext.override(Ext.app.Controller, {
         return returnRef;
     }
 });
+//{/block}

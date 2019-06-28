@@ -27,7 +27,6 @@ namespace Shopware\tests\Functional\Components\Emotion\Preset;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\NoResultException;
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformer;
 
@@ -54,7 +53,7 @@ class EmotionToPresetDataTransformerTest extends TestCase
         $this->connection->executeQuery('DELETE FROM s_core_plugins');
 
         $this->transformer = Shopware()->Container()->get('shopware.emotion.emotion_presetdata_transformer');
-        $this->presetResource = Manager::getResource('EmotionPreset');
+        $this->presetResource = Shopware()->Container()->get('shopware.api.emotion_preset');
     }
 
     protected function tearDown()

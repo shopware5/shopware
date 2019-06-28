@@ -25,6 +25,7 @@
  * Overrides the Ext.tree.Panel to disable for all browsers except Google
  * Chrome which performs well here.
  */
+//{block name="extjs/overrides/panel"}
 Ext.override(Ext.tree.Panel, {
     animate: Ext.isChrome,
 
@@ -42,3 +43,4 @@ Ext.override(Ext.tree.Panel, {
         me.callOverridden(arguments);
     }
 });
+//{/block}

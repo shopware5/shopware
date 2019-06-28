@@ -22,11 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_Test_Plugin_TestCase
 {
     /**
@@ -78,7 +73,7 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
         $request = $this->Request()
             ->setModuleName('frontend')
             ->setDispatched(true)
-            ->setRemoteAddress('192.168.33.10')
+            ->setClientIp('192.168.33.10')
             ->setRequestUri('/foobar');
 
         /* @var \Enlight_Controller_Request_RequestTestCase $request */

@@ -66,10 +66,13 @@
         {block name="frontend_listing_list_filter_supplier_content"}
             <div class="panel--body is--wide">
 
-                {if $manufacturer->getCoverFile()}
-                    <div class="vendor--image-wrapper">
-                        <img class="vendor--image" src="{$manufacturer->getCoverFile()}" alt="{$manufacturer->getName()|escape}">
-                    </div>
+                {if $manufacturer->getCoverMedia() !== null}
+                    {$thumbnail = $manufacturer->getCoverMedia()->getThumbnail(0)->getSource()}
+                    {if $thumbnail}
+                        <div class="vendor--image-wrapper">
+                            <img class="vendor--image" src="{$thumbnail}" alt="{$manufacturer->getName()|escape}">
+                        </div>
+                    {/if}
                 {/if}
 
                 {if $manufacturer->getDescription()}

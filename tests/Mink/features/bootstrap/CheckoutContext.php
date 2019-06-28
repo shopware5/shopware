@@ -475,7 +475,6 @@ class CheckoutContext extends SubContext
      *
      * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
      *
-     * @param $lambda
      * @param int $wait
      *
      * @throws \Exception

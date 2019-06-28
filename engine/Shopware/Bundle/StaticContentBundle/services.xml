@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!-- Services -->
+        <service class="Shopware\Bundle\StaticContentBundle\Service\Core\DownloadService"
+                 id="shopware_static_content.service.download_service">
+            <argument id="front" type="service"/>
+            <argument type="service" id="config"/>
+            <argument type="service" id="shopware.esd.public.url_generator"/>
+            <argument type="string">%shopware.filesystem.private.config.root%</argument>
+            <argument type="expression">container.hasParameter('shopware.session.unitTestEnabled') ? parameter('shopware.session.unitTestEnabled') : false</argument>
+        </service>
+        <service class="Shopware\Bundle\StaticContentBundle\Service\Core\EsdService"
+                 id="shopware_static_content.service.esd_service">
+            <argument id="config" type="service"/>
+            <argument id="shopware_static_content.gateway.dbal.esd_gateway" type="service"/>
+        </service>
+
+        <!-- Gateways -->
+        <service class="Shopware\Bundle\StaticContentBundle\Gateway\DBAL\EsdGateway"
+                 id="shopware_static_content.gateway.dbal.esd_gateway">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="shopware_storefront.esd_hydrator_dbal" type="service"/>
+            <argument id="shopware_storefront.field_helper_dbal" type="service"/>
+        </service>
+    </services>
+
+</container>

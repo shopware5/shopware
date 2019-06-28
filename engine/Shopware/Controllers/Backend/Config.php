@@ -26,9 +26,6 @@ use Shopware\Models\Config\Element;
 use Shopware\Models\Config\Value;
 use Shopware\Models\Shop\Shop;
 
-/**
- * Shopware Config Controller
- */
 class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_ExtJs
 {
     /**
@@ -312,6 +309,18 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
         if (!empty($data) && $name === 'locale') {
             $data = $this->getSnippetsForLocales($data);
+        }
+
+        if ($name === 'document') {
+            // Translate document type
+            // The standard $translationComponent->translateDocuments can not be used here since the
+            // name may not be overridden. The field is edible and if the translation is
+            // shown in the edit field, there is a high chance of a user saving the translation as name
+            $translator = $this->get('translation')->getObjectTranslator('documents');
+
+            $data = array_map(function ($document) use ($translator) {
+                return $translator->translateObjectProperty($document, 'name', 'description', $document['name']);
+            }, $data);
         }
 
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
@@ -691,8 +700,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 case 'document':
                     $exceptionMessage = $ex->getMessage();
                     if (strpos($exceptionMessage, '1062 Duplicate entry') !== false
-                        &&
-                        strpos($exceptionMessage, 'for key \'key\'') !== false
+                        && strpos($exceptionMessage, 'for key \'key\'') !== false
                     ) {
                         $this->View()->assign([
                             'success' => false,

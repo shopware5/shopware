@@ -27,9 +27,6 @@ use Shopware\Models\User\User;
 use Shopware\Models\Widget\View;
 use Shopware\Models\Widget\Widget;
 
-/**
- * Backend widget controller
- */
 class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_ExtJs
 {
     /**
@@ -523,6 +520,20 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             );
         }
         $this->View()->assign(['success' => true, 'message' => 'Successfully saved.']);
+    }
+
+    public function getUnverifiedRatingsAction(): void
+    {
+        $qb = $this->getModelManager()->getConnection()->createQueryBuilder();
+        $qb->from('s_articles_vote', 'vote')
+            ->addSelect('vote.*')
+            ->addSelect('product.name as productTitle')
+            ->innerJoin('vote', 's_articles', 'product', 'product.id = vote.articleID')
+            ->where('vote.active = 0')
+            ->orderBy('vote.datum', 'ASC')
+            ->setMaxResults(10);
+
+        $this->View()->assign(['success' => true, 'data' => $qb->execute()->fetchAll()]);
     }
 
     /**

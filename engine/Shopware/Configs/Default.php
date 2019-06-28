@@ -138,6 +138,12 @@ return array_replace_recursive([
         'host' => 'localhost',
         'charset' => 'utf8mb4',
         'adapter' => 'pdo_mysql',
+        'pdoOptions' => null,
+        'serverVersion' => null,
+        'defaultTableOptions' => [
+            'charset' => 'utf8',
+            'collate' => 'utf8_unicode_ci',
+        ],
     ],
     'es' => [
         'prefix' => 'sw_shop',
@@ -151,6 +157,7 @@ return array_replace_recursive([
         'dynamic_mapping_enabled' => true,
         'batchsize' => 500,
         'backend' => [
+            'batch_size' => 500,
             'write_backlog' => false,
             'enabled' => false,
         ],
@@ -386,15 +393,25 @@ return array_replace_recursive([
     'media' => [
         'whitelist' => [],
     ],
+    'product' => [
+        /*
+         * This regex is used to validate SKUs, aka ordernumbers.
+         * If you change this, please make sure the new format also works in URLs!
+         */
+        'orderNumberRegex' => '/^[a-zA-Z0-9-_.]+$/',
+    ],
     'backward_compatibility' => [
         /*
          * @deprecated since Shopware 5.5
          *
-         * Sorting of plugins will be active by default in 5.6 and this parameter will be removed with Shopware 5.7
+         * Sorting of plugins is active by default in 5.6 and this parameter will be removed with Shopware 5.7
          */
-        'predictable_plugin_order' => false,
+        'predictable_plugin_order' => true,
     ],
     'logger' => [
         'level' => $this->Environment() !== 'production' ? Logger::DEBUG : Logger::ERROR,
+    ],
+    'extjs' => [
+        'developer_mode' => false,
     ],
 ], $customConfig);

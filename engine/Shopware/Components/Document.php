@@ -26,10 +26,6 @@ use Shopware\Components\NumberRangeIncrementerInterface;
 
 /**
  * Shopware document generator
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 {
@@ -173,7 +169,9 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         /** @var Shopware_Components_Document $document */
         $document = Enlight_Class::Instance('Shopware_Components_Document');
 
-        $document->setOrder(Enlight_Class::Instance('Shopware_Models_Document_Order', [$orderID, $config]));
+        /** @var Shopware_Models_Document_Order $order */
+        $order = Enlight_Class::Instance('Shopware_Models_Document_Order', [$orderID, $config]);
+        $document->setOrder($order);
 
         $document->setConfig($config);
 
@@ -336,8 +334,6 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     }
 
     /**
-     * Set renderer
-     *
      * @param string $renderer
      */
     public function setRenderer($renderer)
@@ -565,7 +561,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 $containers[$key]['style'] = $translation[$id][$container['name'] . '_Style'];
             }
 
-            // parse smarty tags
+            // Parse smarty tags
             $containers[$key]['value'] = $this->_template->fetch('string:' . $containers[$key]['value']);
 
             $this->_document->containers->offsetSet($container['name'], $containers[$key]);
@@ -613,11 +609,13 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
         // "language" actually refers to a language-shop and not to a locale
         $shop = $repository->getById($this->_order->order->language);
+
         if (!empty($this->_order->order->currencyID)) {
             $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Currency::class);
             $shop->setCurrency($repository->find($this->_order->order->currencyID));
         }
-        $shop->registerResources();
+
+        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerResources($shop);
     }
 
     /**
@@ -706,7 +704,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         } else {
             // Create new document
 
-            $hash = md5(uniqid(rand()));
+            $hash = md5(uniqid((string) rand()));
 
             $amount = ($this->_order->order->taxfree ? true : $this->_config['netto']) ? round($this->_order->amountNetto, 2) : round($this->_order->amount, 2);
             if ($typID == 4) {

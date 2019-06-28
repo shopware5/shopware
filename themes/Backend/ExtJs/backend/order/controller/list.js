@@ -157,6 +157,7 @@ Ext.define('Shopware.apps.Order.controller.List', {
                         me.showOrderMail(mail, record)
                     }
 
+                    store.load();
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, me.snippets.changeStatus.failureMessage + '<br> ' + rawData.message, me.snippets.growlMessage);
 

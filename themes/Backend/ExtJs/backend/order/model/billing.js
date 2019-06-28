@@ -58,4 +58,3 @@ Ext.define('Shopware.apps.Order.model.Billing', {
     ]
 });
 //{/block}
-

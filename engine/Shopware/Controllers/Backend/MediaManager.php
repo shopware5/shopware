@@ -29,18 +29,7 @@ use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media;
 use Shopware\Models\Media\Settings;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\FileBag;
 
-/**
- * Shopware MediaManager Controller
- *
- * The media manager backend controller handles all actions around the media manager backend module
- * and the quick selection in other modules.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     public static $fileUploadBlacklist = [
@@ -75,17 +64,6 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         return [
             'download',
         ];
-    }
-
-    /**
-     * Enable json renderer for index / load action
-     * Check acl rules
-     */
-    public function preDispatch()
-    {
-        if ($this->Request()->getActionName() !== 'upload') {
-            parent::preDispatch();
-        }
     }
 
     /**
@@ -154,11 +132,11 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         @set_time_limit(0);
         $response = $this->Response();
-        $response->setHeader('Cache-Control', 'public');
-        $response->setHeader('Content-Description', 'File Transfer');
-        $response->setHeader('Content-disposition', 'attachment; filename=' . $tmpFileName);
-        $response->setHeader('Content-Transfer-Encoding', 'binary');
-        $response->setHeader('Content-Length', $mediaService->getSize($file));
+        $response->headers->set('cache-control', 'public', true);
+        $response->headers->set('content-description', 'File Transfer');
+        $response->headers->set('content-disposition', 'attachment; filename=' . $tmpFileName);
+        $response->headers->set('content-transfer-encoding', 'binary');
+        $response->headers->set('content-length', $mediaService->getSize($file));
         echo $mediaService->read($file);
     }
 
@@ -211,22 +189,26 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $media['path'] = $mediaService->getUrl($media['path']);
             $media['virtualPath'] = $mediaService->normalize($media['path']);
 
-            if ($media['type'] !== Media::TYPE_IMAGE) {
+            if (!in_array($media['type'], [Media::TYPE_VECTOR, Media::TYPE_IMAGE], true)) {
                 continue;
             }
 
-            $thumbnails = $this->getMediaThumbnailPaths($media);
-            $availableThumbs = [];
+            $media['thumbnail'] = $media['path'];
 
-            foreach ($thumbnails as $index => $thumbnail) {
-                if ($mediaService->has($thumbnail)) {
-                    $availableThumbs[$index] = $mediaService->getUrl($thumbnail);
+            if ($media['type'] === Media::TYPE_IMAGE) {
+                $thumbnails = $this->getMediaThumbnailPaths($media);
+                $availableThumbs = [];
+
+                foreach ($thumbnails as $index => $thumbnail) {
+                    if ($mediaService->has($thumbnail)) {
+                        $availableThumbs[$index] = $mediaService->getUrl($thumbnail);
+                    }
                 }
-            }
-            $media['thumbnails'] = $availableThumbs;
+                $media['thumbnails'] = $availableThumbs;
 
-            if (!empty($availableThumbs['140x140'])) {
-                $media['thumbnail'] = $availableThumbs['140x140'];
+                if (!empty($availableThumbs['140x140'])) {
+                    $media['thumbnail'] = $availableThumbs['140x140'];
+                }
             }
 
             $media['timestamp'] = time();
@@ -394,28 +376,24 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     {
         $params = $this->Request()->getParams();
 
+        if (!$this->Request()->files->has('fileId')) {
+            $this->View()->assign(['success' => false]);
+
+            return;
+        }
+
         // Try to get the transferred file
         try {
-            $file = $_FILES['fileId'];
+            /** @var UploadedFile $file */
+            $file = $this->Request()->files->get('fileId');
 
-            if (($file['size'] < 1 && $file['error'] === 1) || empty($_FILES)) {
+            if (!$file->isValid()) {
                 throw new Exception('The file exceeds the max file size.');
             }
-
-            $fileInfo = pathinfo($file['name']);
-            $fileExtension = strtolower($fileInfo['extension']);
-            $file['name'] = $fileInfo['filename'] . '.' . $fileExtension;
-            $_FILES['fileId']['name'] = $file['name'];
-
-            $fileBag = new FileBag($_FILES);
-
-            /** @var UploadedFile|null $file */
-            $file = $fileBag->get('fileId');
         } catch (Exception $e) {
-            die(json_encode(['success' => false, 'message' => $e->getMessage()]));
-        }
-        if ($file === null) {
-            die(json_encode(['success' => false]));
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+
+            return;
         }
 
         // Create a new model and set the properties
@@ -442,7 +420,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $media->setUserId(0);
         }
 
-        $this->Response()->setHeader('Content-Type', 'text/plain');
+        $this->Response()->headers->set('content-type', 'text/plain');
 
         try {
             // Set the upload file into the model. The model saves the file to the directory
@@ -453,8 +431,8 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             Shopware()->Models()->flush();
             $data = $this->getMedia($media->getId())->getQuery()->getArrayResult();
 
-            if ($media->getType() === Media::TYPE_IMAGE && // GD doesn't support the following image formats
-                !in_array($media->getExtension(), ['tif', 'tiff'], true)) {
+            if ($media->getType() === Media::TYPE_IMAGE // GD doesn't support the following image formats
+                && !in_array($media->getExtension(), ['tif', 'tiff'], true)) {
                 $manager = Shopware()->Container()->get('thumbnail_manager');
                 $manager->createMediaThumbnail($media, [], true);
             }
@@ -462,11 +440,11 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $mediaService = Shopware()->Container()->get('shopware_media.media_service');
             $data[0]['path'] = $mediaService->getUrl($data[0]['path']);
 
-            die(json_encode(['success' => true, 'data' => $data[0]]));
+            $this->View()->assign(['success' => true, 'data' => $data[0]]);
         } catch (\Exception $e) {
             unlink($file->getPathname());
 
-            die(json_encode(['success' => false, 'message' => $e->getMessage(), 'exception' => $this->parseExceptionForResponse($e)]));
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage(), 'exception' => $this->parseExceptionForResponse($e)]);
         }
     }
 
@@ -647,8 +625,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      */
     public function singleReplaceAction()
     {
-        $fileBag = new FileBag($_FILES);
-        $file = $fileBag->get('file');
+        $file = $this->Request()->files->get('file');
         $mediaId = $this->request->get('mediaId');
 
         $mediaReplaceService = $this->container->get('shopware_media.replace_service');

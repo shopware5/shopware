@@ -29,10 +29,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
 
 /**
  * @deprecated since version 5.2, to be removed in 6.0 - Use ShopContextInterface instead
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface LocationContextInterface
 {

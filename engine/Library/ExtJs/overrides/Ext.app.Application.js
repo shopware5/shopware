@@ -29,6 +29,7 @@
  * Override the default ext application
  * to add our sub application functionality
  */
+//{block name="extjs/overrides/application"}
 Ext.override(Ext.app.Application, {
 
     loadingMessage: '{s name=application/loading}Loading [0] ...{/s}',
@@ -145,3 +146,4 @@ Ext.override(Ext.app.Application, {
         return activeWindows;
     }
 });
+//{/block}

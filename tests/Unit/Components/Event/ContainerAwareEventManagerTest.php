@@ -29,11 +29,6 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Components\ContainerAwareEventManager;
 use Symfony\Component\DependencyInjection\Container;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class ContainerAwareEventManagerTest extends TestCase
 {
     /**
@@ -137,7 +132,6 @@ class ContainerAwareEventManagerTest extends TestCase
 
     public function testHasListenersOnLazyLoad()
     {
-        //        $eventArgs = new \Enlight_Event_EventArgs(['some' => 'args']);
         $service = $this->createMock(Service::class);
 
         $this->container->set('service.listener', $service);

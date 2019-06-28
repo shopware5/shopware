@@ -28,12 +28,8 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Components\Thumbnail\Manager;
+use Shopware\Models\Media\Media;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class MediaHydrator extends Hydrator
 {
     /**
@@ -114,8 +110,7 @@ class MediaHydrator extends Hydrator
             $media->setHeight((int) $data['__media_height']);
         }
 
-        if ($media->getType() == Struct\Media::TYPE_IMAGE
-            && $data['__mediaSettings_create_thumbnails']) {
+        if ($this->shouldAddThumbnails($media->getType(), $data)) {
             $media->setThumbnails(
                 $this->getMediaThumbnails($data)
             );
@@ -139,7 +134,7 @@ class MediaHydrator extends Hydrator
         $data = array_merge($data, $translation);
 
         $media->setName($data['__image_description']);
-        $media->setPreview((bool) ($data['__image_main'] == 1));
+        $media->setPreview($data['__image_main'] == 1);
 
         if (!empty($data['__imageAttribute_id'])) {
             $this->attributeHydrator->addAttribute($media, $data, 'imageAttribute', 'image', 'image');
@@ -148,12 +143,9 @@ class MediaHydrator extends Hydrator
         return $media;
     }
 
-    /**
-     * @return bool
-     */
-    private function isUpdateRequired(Struct\Media $media, array $data)
+    private function isUpdateRequired(Struct\Media $media, array $data): bool
     {
-        if ($media->getType() != Struct\Media::TYPE_IMAGE) {
+        if ($media->getType() !== Struct\Media::TYPE_IMAGE) {
             return false;
         }
         if (!array_key_exists('__media_width', $data)) {
@@ -171,10 +163,8 @@ class MediaHydrator extends Hydrator
 
     /**
      * @param array $data Contains the array data for the media
-     *
-     * @return array
      */
-    private function getMediaThumbnails(array $data)
+    private function getMediaThumbnails(array $data): array
     {
         $thumbnailData = $this->thumbnailManager->getMediaThumbnails(
             $data['__media_name'],
@@ -206,10 +196,7 @@ class MediaHydrator extends Hydrator
         return $thumbnails;
     }
 
-    /**
-     * @return array
-     */
-    private function updateMedia(array $data)
+    private function updateMedia(array $data): array
     {
         list($width, $height) = getimagesizefromstring($this->mediaService->read($data['__media_path']));
         $this->database->executeUpdate(
@@ -225,5 +212,18 @@ class MediaHydrator extends Hydrator
         $data['__media_height'] = $height;
 
         return $data;
+    }
+
+    private function shouldAddThumbnails(string $type, array $data): bool
+    {
+        if (!$data['__mediaSettings_create_thumbnails']) {
+            return false;
+        }
+
+        if ($type !== Media::TYPE_VECTOR && $type !== Media::TYPE_IMAGE) {
+            return false;
+        }
+
+        return true;
     }
 }

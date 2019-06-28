@@ -27,10 +27,8 @@ namespace Shopware\Components;
 use Enlight\Event\SubscriberInterface;
 use Enlight_Controller_ActionEventArgs as ActionEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
-/**
- * Class CSRFTokenValidator
- */
 class CSRFTokenValidator implements SubscriberInterface
 {
     /**
@@ -54,8 +52,6 @@ class CSRFTokenValidator implements SubscriberInterface
     private $isEnabledBackend;
 
     /**
-     * CSRFTokenValidator constructor.
-     *
      * @param bool $isEnabledFrontend
      * @param bool $isEnabledBackend
      */
@@ -153,11 +149,18 @@ class CSRFTokenValidator implements SubscriberInterface
      *
      * @return bool
      */
-    private function checkRequest(\Enlight_Controller_Request_Request $request)
+    private function checkRequest(Request $request)
     {
         $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
-        $token = $request->getCookie('__csrf_token-' . $context->getShop()->getId());
-        $requestToken = $request->getParam('__csrf_token') ?: $request->getHeader('X-CSRF-Token');
+        $name = '__csrf_token-' . $context->getShop()->getId();
+
+        if ($context->getShop()->getParentId() && $this->container->get('config')->get('shareSessionBetweenLanguageShops')) {
+            $name = '__csrf_token-' . $context->getShop()->getParentId();
+        }
+
+        $token = $request->cookies->get($name);
+
+        $requestToken = $request->get('__csrf_token', $request->headers->get('X-CSRF-Token'));
 
         return hash_equals($token, $requestToken);
     }

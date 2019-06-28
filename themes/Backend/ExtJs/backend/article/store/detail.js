@@ -72,4 +72,3 @@ Ext.define('Shopware.apps.Article.store.Detail', {
     }
 });
 //{/block}
-

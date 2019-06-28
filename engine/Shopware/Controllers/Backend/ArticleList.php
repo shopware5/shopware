@@ -101,11 +101,11 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
         // Sort out context params
         foreach ($params as $key => &$value) {
-            if (preg_match('/[0-9a-z]+_[0-9a-z]+/i', $key) != 1) {
+            if (preg_match('/[0-9a-z]+_[0-9a-z]+/i', $key) !== 1) {
                 unset($params[$key]);
                 continue;
             }
-            list($entity, $field) = explode('_', $key);
+            [$entity, $field] = explode('_', $key);
             $value = ['entity' => $entity, 'field' => $field, 'value' => $value];
         }
 
@@ -663,6 +663,13 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     private function filterByRepository()
     {
         $criteria = $this->createCriteria($this->Request());
+
+        if ($this->Request()->getParam('showVariants', 'false') === 'false') {
+            $criteria->conditions[] = [
+                'property' => 'kind',
+                'value' => 1,
+            ];
+        }
 
         $repository = $this->container->get('shopware_attribute.product_repository');
 

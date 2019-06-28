@@ -22,16 +22,19 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Api\Resource\Address;
+
 class Shopware_Controllers_Api_Addresses extends Shopware_Controllers_Api_Rest
 {
     /**
-     * @var Shopware\Components\Api\Resource\Address
+     * @var Address
      */
-    protected $resource = null;
+    protected $resource;
 
-    public function init()
+    public function __construct(Address $resource)
     {
-        $this->resource = \Shopware\Components\Api\Manager::getResource('address');
+        parent::__construct();
+        $this->resource = $resource;
     }
 
     /**
@@ -39,7 +42,7 @@ class Shopware_Controllers_Api_Addresses extends Shopware_Controllers_Api_Rest
      *
      * GET /api/addresses/
      */
-    public function indexAction()
+    public function indexAction(): void
     {
         $limit = (int) $this->Request()->getParam('limit', 1000);
         $offset = (int) $this->Request()->getParam('start', 0);
@@ -57,7 +60,7 @@ class Shopware_Controllers_Api_Addresses extends Shopware_Controllers_Api_Rest
      *
      * GET /api/addresses/{id}
      */
-    public function getAction()
+    public function getAction(): void
     {
         $id = $this->Request()->getParam('id');
 
@@ -72,7 +75,7 @@ class Shopware_Controllers_Api_Addresses extends Shopware_Controllers_Api_Rest
      *
      * POST /api/addresses
      */
-    public function postAction()
+    public function postAction(): void
     {
         $address = $this->resource->create($this->Request()->getPost());
 
@@ -83,7 +86,7 @@ class Shopware_Controllers_Api_Addresses extends Shopware_Controllers_Api_Rest
         ];
 
         $this->View()->assign(['success' => true, 'data' => $data]);
-        $this->Response()->setHeader('Location', $location);
+        $this->Response()->headers->set('location', $location);
     }
 
     /**
@@ -91,7 +94,7 @@ class Shopware_Controllers_Api_Addresses extends Shopware_Controllers_Api_Rest
      *
      * PUT /api/addresses/{id}
      */
-    public function putAction()
+    public function putAction(): void
     {
         $id = $this->Request()->getParam('id');
         $params = $this->Request()->getPost();
@@ -112,7 +115,7 @@ class Shopware_Controllers_Api_Addresses extends Shopware_Controllers_Api_Rest
      *
      * DELETE /api/addresses/{id}
      */
-    public function deleteAction()
+    public function deleteAction(): void
     {
         $id = $this->Request()->getParam('id');
         $this->resource->delete($id);

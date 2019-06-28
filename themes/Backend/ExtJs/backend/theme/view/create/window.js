@@ -42,4 +42,3 @@ Ext.define('Shopware.apps.Theme.view.create.Window', {
 });
 
 //{/block}
-

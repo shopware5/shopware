@@ -35,9 +35,6 @@ class ExistsValidator extends ConstraintValidator
      */
     private $connection;
 
-    /**
-     * ExistsValidator constructor.
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;

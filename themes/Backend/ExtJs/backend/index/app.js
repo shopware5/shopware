@@ -27,8 +27,8 @@
  * This file bootstrapps the complete backend structure.
  */
 
+//{block name="backend/index/app"}
 //{block name="backend/index/application"}
-
 Ext.define('Shopware.apps.Index', {
     /**
      * Extends from our special controller, which handles the
@@ -86,6 +86,7 @@ Ext.define('Shopware.apps.Index', {
         'widgets.Orders',
         'widgets.Notice',
         'widgets.Merchant',
+        'widgets.Rating',
         'widgets.News',
         'widgets.Base',
         'merchant.Window',
@@ -108,7 +109,8 @@ Ext.define('Shopware.apps.Index', {
         'News',
         'Merchant',
         'MerchantMail',
-        'ThemeCacheWarmUp'
+        'ThemeCacheWarmUp',
+        'Rating'
     ],
 
     /**
@@ -121,5 +123,5 @@ Ext.define('Shopware.apps.Index', {
         'ThemeCacheWarmUp'
     ]
 });
-
+//{/block}
 //{/block}

@@ -29,18 +29,18 @@
     },
     "homepage": "https://github.com/shopware/shopware#readme",
     "dependencies": {
-        "flatpickr": "2.4.7",
-        "jquery": "3.3.1",
+        "flatpickr": "2.6.3",
+        "jquery": "3.4.1",
         "jquery.event.move": "git+https://github.com/stephband/jquery.event.move.git",
         "jquery.event.swipe": "0.5.4",
         "jquery.transit": "0.9.12",
         "normalize.css.less": "3.0.3",
         "open-sans-fontface": "git+https://github.com/FontFaceKit/open-sans.git#gh-pages",
-        "picturefill": "3.0.2",
+        "picturefill": "3.0.3",
         "pocketgrid-less": "1.0.1"
     },
     "devDependencies": {
-        "grunt": "1.0.3",
+        "grunt": "^1.0.4",
         "grunt-contrib-clean": "1.1.0",
         "grunt-contrib-copy": "1.0.0"
     }

@@ -91,7 +91,7 @@
     {{compileLess timestamp={themeTimestamp} output="lessFiles"}}
     {foreach $lessFiles as $stylesheet}
         {block name="frontend_index_header_css_screen_stylesheet"}
-            <link href="{$stylesheet}" media="all" rel="stylesheet" type="text/css" />
+            <link href="{preload file={$stylesheet} as="style"}" media="all" rel="stylesheet" type="text/css" />
         {/block}
     {/foreach}
 
@@ -106,7 +106,7 @@
 {* Add Modernizr in the "<head>"-element to have all the classes before the page was rendered *}
 {block name="frontend_index_header_javascript_modernizr_lib"}
     {if !$theme.asyncJavascriptLoading}
-        <script src="{link file='frontend/_public/src/js/vendors/modernizr/modernizr.custom.35977.js'}"></script>
+        <script src="{preload file={link file='frontend/_public/src/js/vendors/modernizr/modernizr.custom.35977.js'} as="script"}"></script>
     {/if}
 {/block}
 

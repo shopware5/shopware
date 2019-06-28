@@ -20,6 +20,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+//{block name="extjs/overrides/rowEditor"}
 Ext.override(Ext.grid.RowEditor, {
     getFloatingButtons: function() {
        var me = this,
@@ -79,4 +81,5 @@ Ext.override(Ext.grid.RowEditor, {
        }
        return me.floatingButtons;
    }
-})
+});
+//{/block}

@@ -37,6 +37,8 @@
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
+
+//{block name="extjs/overrides/eventBus"}
 Ext.override(Ext.app.EventBus, {
 
     /**
@@ -144,3 +146,4 @@ Ext.override(Ext.app.EventBus, {
         });
     }
 });
+//{/block}

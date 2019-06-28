@@ -38,13 +38,13 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
      * Define that the base field set is an extension of the "Base" fieldSet
      * @string
      */
-    extend:'Shopware.apps.Performance.view.tabs.settings.fields.Base',
+    extend: 'Shopware.apps.Performance.view.tabs.settings.fields.Base',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.performance-tabs-settings-various',
+    alias: 'widget.performance-tabs-settings-various',
 
     /**
      * Description of the fieldSet
@@ -82,30 +82,46 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
                 defaults: me.defaults,
                 items: [
                     {
-                        fieldLabel: '{s name=fieldset/various/disableStats}Deactivates the statistics from Shopware{/s}',
-                        helpText: '{s name=fieldset/various/disableStats/help}Note that the last seen articles will not saved in the database, if this setting is disabled.{/s}',
+                        fieldLabel: '{s name=fieldset/various/disableStats}{/s}',
+                        helpText: '{s name=fieldset/various/disableStats/help}{/s}',
                         name: 'various[disableShopwareStatistics]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
-                        fieldLabel: '{s name=fieldset/various/lastArticles}Display previously viewed items{/s}',
+                        fieldLabel: '{s name=fieldset/various/lastArticles}{/s}',
                         name: 'various[LastArticles:lastarticles_show]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
                     },
                     {
-                        fieldLabel: '{s name=fieldset/various/numLastArticles}Number of last articles{/s}',
+                        fieldLabel: '{s name=fieldset/various/numLastArticles}{/s}',
                         name: 'various[LastArticles:lastarticlestoshow]',
                         xtype: 'numberfield',
                         minValue: 1
                     },
                     {
-                        fieldLabel: '{s name=fieldset/various/disableArticleNavigation}Disable article navigation of article detail page{/s}',
-                        helpText: '{s name=fieldset/various/disableArticleNavigation/help}Disables the left/right arrows on the articles detail page{/s}',
+                        fieldLabel: '{s name=fieldset/various/disableArticleNavigation}{/s}',
+                        helpText: '{s name=fieldset/various/disableArticleNavigation/help}{/s}',
                         name: 'various[disableArticleNavigation]',
+                        xtype: 'checkbox',
+                        uncheckedValue: false,
+                        inputValue: true
+                    },
+                    {
+                        fieldLabel: '{s name=fieldset/various/http2Push}{/s}',
+                        helpText: '{s name=fieldset/various/http2Push/help}{/s}',
+                        name: 'various[http2Push]',
+                        xtype: 'checkbox',
+                        uncheckedValue: false,
+                        inputValue: true
+                    },
+                    {
+                        fieldLabel: '{s name=fieldset/various/minifyHtml}{/s}',
+                        helpText: '{s name=fieldset/various/minifyHtml/help}{/s}',
+                        name: 'various[minifyHtml]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true

@@ -32,6 +32,7 @@
  *
  * todo@all: Documentation
  */
+//{block name="backend/config/app"}
 //{block name="backend/config/application"}
 Ext.define('Shopware.apps.Config', {
 
@@ -57,4 +58,4 @@ Ext.define('Shopware.apps.Config', {
     }
 });
 //{/block}
-
+//{/block}

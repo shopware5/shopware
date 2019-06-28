@@ -28,9 +28,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Form\Interfaces\Container as ContainerInterface;
 use Shopware\Components\Form\Interfaces\Element;
 
-/**
- * Class Container
- */
 class Container extends Base implements ContainerInterface
 {
     /**

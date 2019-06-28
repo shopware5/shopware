@@ -27,9 +27,6 @@ namespace Shopware\Components\Form;
 use Shopware\Components\Form\Interfaces\Field as FieldInterface;
 use Shopware\Components\Form\Interfaces\Validate;
 
-/**
- * Class Field
- */
 class Field extends Base implements FieldInterface, Validate
 {
     /**

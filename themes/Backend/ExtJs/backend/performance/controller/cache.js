@@ -36,47 +36,15 @@
 //{namespace name=backend/performance/main}
 //{block name="backend/performance/controller/cache"}
 Ext.define('Shopware.apps.Performance.controller.Cache', {
-
     extend: 'Enlight.app.Controller',
 
     refs: [
-        { ref: 'window', selector: 'cache-window' },
-        { ref: 'info', selector: 'performance-tabs-cache-info dataview' },
         { ref: 'form', selector: 'performance-tabs-cache-form' },
-
-        { ref: 'progressBar',    selector: 'performance-main-categories progressbar' },
-        { ref: 'progressWindow', selector: 'performance-main-categories' },
-        { ref: 'startButton',    selector: 'performance-main-categories button[action=start]' },
-        { ref: 'closeButton',    selector: 'performance-main-categories button[action=closeWindow]' },
-        { ref: 'cancelButton',   selector: 'performance-main-categories button[action=cancel]' }
     ],
 
     infoTitle: '{s name=form/message_title}Shop cache{/s}',
     infoMessageSuccess: '{s name=form/message}Shop cache has been cleared.{/s}',
 
-    /**
-     * Contains all snippets for the component
-     * @object
-     */
-    snippets: {
-        process: '{s name=controller/process}Category/Article connection [0] of [1]{/s}',
-        done: {
-            message: '{s name=controller/done_message}All categories have been fixed{/s}',
-            title: '{s name=controller/done_title}Successful{/s}'
-        }
-    },
-
-    /**
-     * Class property which holds the main application if it is created
-     *
-     * @default null
-     * @object
-     */
-    mainWindow: null,
-
-    /**
-     *
-     */
     init: function () {
         var me = this;
 
@@ -114,12 +82,6 @@ Ext.define('Shopware.apps.Performance.controller.Cache', {
                     });
                 }
             },
-
-            'performance-main-categories': {
-                startProcess:  me.onStartProcess,
-                cancelProcess: me.onCancelProcess,
-                closeWindow:   me.onCloseProcessWindow
-            }
         });
 
         me.callParent(arguments);

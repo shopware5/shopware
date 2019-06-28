@@ -24,11 +24,6 @@
 
 use Shopware\Models\Article\Article;
 
-/**
- * Shopware Backend Controller for the Notification Module
- *
- * Backend Controller for the notification backend module.
- */
 class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Backend_ExtJs
 {
     /**

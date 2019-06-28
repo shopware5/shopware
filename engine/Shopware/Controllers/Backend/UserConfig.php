@@ -22,9 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Basic class to allow changes to UserConfig-table from ExtJs Backends.
- */
 class Shopware_Controllers_Backend_UserConfig extends Shopware_Controllers_Backend_ExtJs
 {
     public function getAction()

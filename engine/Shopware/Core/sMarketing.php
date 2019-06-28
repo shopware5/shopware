@@ -27,12 +27,8 @@ use Shopware\Models\Banner\Banner;
 
 /**
  * Deprecated Shopware Class that handles marketing related functions
- *
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class sMarketing
+class sMarketing implements \Enlight_Hook
 {
     /**
      * Pointer to Shopware-Core-public functions
@@ -80,9 +76,6 @@ class sMarketing
      */
     private $db;
 
-    /**
-     * Class constructor.
-     */
     public function __construct(
         StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
         StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null

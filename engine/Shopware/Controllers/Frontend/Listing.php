@@ -30,21 +30,11 @@ use Shopware\Bundle\StoreFrontBundle\Service\CustomFacetServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomSorting;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Models\Emotion\Emotion;
 
-/**
- * Listing controller
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 {
-    /**
-     * Index action method
-     */
     public function indexAction()
     {
         $requestCategoryId = $this->Request()->getParam('sCategory');
@@ -78,7 +68,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $this->View()->assign($emotionConfiguration);
 
         // Only show the listing if an emotion viewport is empty or the showListing option is active
-        if (!$emotionConfiguration['showListing']) {
+        if (!$this->loadListing($emotionConfiguration)) {
             return;
         }
 
@@ -217,19 +207,13 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     protected function getEmotionConfiguration($categoryId, $withStreams = false, $streamId = null)
     {
-        if ($this->Request()->getParam('sPage')) {
-            return [
-                'hasEmotion' => false,
-                'showListing' => true,
-                'showListingDevices' => [],
-            ];
-        }
-        /** @var ShopContext $context */
         $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
 
         $service = $this->container->get('shopware_emotion.store_front_emotion_device_configuration');
 
         $emotions = $service->getCategoryConfiguration($categoryId, $context, $withStreams);
+
+        $emotions = $this->filterListingEmotions($emotions);
 
         $isHomePage = $context->getShop()->getCategory()->getId() === $categoryId;
 
@@ -241,7 +225,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         return [
             'emotions' => $emotions,
             'hasEmotion' => !empty($emotions),
-            'showListing' => $this->hasListing($emotions) && !$isHomePage,
+            'showListing' => $this->hasListing($emotions, $devicesWithListing),
             'showListingDevices' => $devicesWithListing,
             'isHomePage' => $isHomePage,
             'showListingButton' => $this->hasProducts($categoryId, $context, $streamId),
@@ -256,6 +240,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     private function hasProducts($categoryId, ShopContextInterface $context, $streamId)
     {
+        if ($this->Request()->getParam('sPage')) {
+            return false;
+        }
+
         if ($streamId) {
             $criteria = $this->createCategoryStreamCriteria($categoryId, $streamId);
         } else {
@@ -291,8 +279,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $checkRedirect = (
             ($hasEmotion && $this->Request()->getParam('sPage'))
-            ||
-            (!$hasEmotion)
+            || (!$hasEmotion)
         );
 
         if (!empty($categoryContent['external'])) {
@@ -378,7 +365,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         if (!array_key_exists($defaultShopCategoryId, $categoryPath)) {
             $this->Request()->setQuery('sCategory', $defaultShopCategoryId);
-            $this->Response()->setHttpResponseCode(404);
+            $this->Response()->setStatusCode(404);
 
             return false;
         }
@@ -407,11 +394,13 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
     /**
      * Determines if the product listing has to be loaded/shown at all
-     *
-     * @return bool
      */
-    private function hasListing(array $emotions)
+    private function hasListing(array $emotions, array $devicesWithEmotion): bool
     {
+        if ($this->Request()->getParam('sPage')) {
+            return true;
+        }
+
         if (empty($emotions)) {
             return true;
         }
@@ -421,9 +410,23 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             return true;
         }
 
-        $devices = $this->getDevicesWithListing($emotions);
+        // Enable the listing if there's a viewport with no emotion assigned
+        if (!$this->haveAllViewportsEmotions($emotions)) {
+            return true;
+        }
 
-        return !empty($devices);
+        if (empty($devicesWithEmotion)) {
+            return false;
+        }
+
+        $entryPageEmotions = array_filter($emotions, function ($emotion) {
+            return in_array($emotion['listing_visibility'], [
+                Emotion::LISTING_VISIBILITY_ONLY_START,
+                Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING,
+            ], true);
+        });
+
+        return empty($entryPageEmotions);
     }
 
     /**
@@ -431,8 +434,12 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      *
      * @return int[]
      */
-    private function getDevicesWithListing(array $emotions)
+    private function getDevicesWithListing(array $emotions): array
     {
+        if ($this->Request()->getParam('sPage')) {
+            return [];
+        }
+
         $visibleDevices = [0, 1, 2, 3, 4];
         $permanentVisibleDevices = [];
 
@@ -503,6 +510,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $facetFilter = $this->get('shopware_product_stream.facet_filter');
         $facetFilter->add($criteria);
 
+        $criteria->removeFacet('category');
+
         return $criteria;
     }
 
@@ -541,7 +550,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $viewData = $this->View()->getAssign();
 
         if ($this->Request()->getParam('sRss') || $this->Request()->getParam('sAtom')) {
-            $this->Response()->setHeader('Content-Type', 'text/xml');
+            $this->Response()->headers->set('content-type', 'text/xml');
             $type = $this->Request()->getParam('sRss') ? 'rss' : 'atom';
             $this->View()->loadTemplate('frontend/listing/' . $type . '.tpl');
         }
@@ -611,5 +620,42 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         }
 
         return $categoryContent;
+    }
+
+    private function loadListing(array $emotionConfiguration): bool
+    {
+        return $emotionConfiguration['showListing'] || $this->Request()->getParam('sPage');
+    }
+
+    private function filterListingEmotions(array $emotions): array
+    {
+        if ((int) $this->Request()->getParam('sPage') > 0) {
+            return array_filter($emotions, function ($emotion) {
+                return in_array($emotion['listing_visibility'], [
+                    Emotion::LISTING_VISIBILITY_ONLY_LISTING,
+                    Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING,
+                ], true);
+            });
+        }
+
+        return array_filter($emotions, function ($emotion) {
+            return in_array($emotion['listing_visibility'], [
+                Emotion::LISTING_VISIBILITY_ONLY_START,
+                Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING,
+            ], true);
+        });
+    }
+
+    private function haveAllViewportsEmotions(array $emotions): bool
+    {
+        $devices = [];
+
+        foreach ($emotions as $emotion) {
+            $devices = array_merge($devices, $emotion['devicesArray']);
+        }
+
+        $devices = array_unique($devices);
+
+        return count($devices) === 5;
     }
 }

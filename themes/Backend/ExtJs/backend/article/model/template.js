@@ -54,4 +54,3 @@ Ext.define('Shopware.apps.Article.model.Template', {
 
 });
 //{/block}
-

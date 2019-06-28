@@ -150,7 +150,7 @@ class Detail extends Page implements HelperSelectorInterface
     /**
      * Checks the evaluations of the current article
      *
-     * @param $average
+     * @param string $average
      *
      * @throws \Exception
      */
@@ -332,7 +332,7 @@ class Detail extends Page implements HelperSelectorInterface
     }
 
     /**
-     * @param $average
+     * @param string $average
      *
      * @throws \Exception
      */

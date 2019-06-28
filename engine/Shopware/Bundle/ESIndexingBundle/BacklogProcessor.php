@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\ESIndexingBundle;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\ESIndexingBundle\Struct\Backlog;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
@@ -36,16 +37,16 @@ class BacklogProcessor implements BacklogProcessorInterface
     private $connection;
 
     /**
-     * @var SynchronizerInterface
+     * @var SynchronizerInterface[]
      */
-    private $synchronizer;
+    private $synchronizers;
 
     public function __construct(
         Connection $connection,
-        SynchronizerInterface $synchronizer
+        \IteratorAggregate $synchronizers
     ) {
         $this->connection = $connection;
-        $this->synchronizer = $synchronizer;
+        $this->synchronizers = iterator_to_array($synchronizers, true);
     }
 
     /**
@@ -65,7 +66,25 @@ class BacklogProcessor implements BacklogProcessorInterface
      */
     public function process(ShopIndex $shopIndex, $backlogs)
     {
-        $this->synchronizer->synchronize($shopIndex, $backlogs);
+        foreach ($this->synchronizers as $synchronizer) {
+            if ($synchronizer->supports() === $shopIndex->getType()) {
+                $synchronizer->synchronize($shopIndex, $backlogs);
+            }
+        }
+    }
+
+    /**
+     * @return SynchronizerInterface[]
+     */
+    private function collectSynchronizer(): array
+    {
+        $collection = new ArrayCollection();
+        $this->eventManager->collect(
+            'Shopware_ESIndexingBundle_Collect_Synchronizer',
+            $collection
+        );
+
+        return array_merge($collection->toArray(), $this->synchronizers);
     }
 
     /**

@@ -71,4 +71,3 @@ Ext.define('Shopware.apps.Article.store.MediaMapping', {
     }
 });
 //{/block}
-

@@ -100,11 +100,9 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
                 duplicateColumn: me.onDuplicateVoucher
             },
             'voucher-voucher-base_configuration combobox[name=modus]': {
-                scope:me,
                 select:me.onSelectModus
             },
             'voucher-voucher-window':{
-                scope:me,
                 beforeclose:me.onBeforeCloseBaseConfigurationWindow
             },
             'voucher-voucher-base_configuration button[action=save]': {

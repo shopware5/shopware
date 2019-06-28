@@ -34,10 +34,6 @@ namespace Shopware\Recovery\Install;
  *     <file><name>config.php</name></file>
  *   </files>
  * </shopware>
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class RequirementsPath
 {

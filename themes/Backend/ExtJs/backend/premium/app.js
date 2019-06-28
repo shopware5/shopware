@@ -27,10 +27,7 @@
  * @author shopware AG
  */
 
-/**
- * todo@all: Documentation
- */
-    //{block name="backend/premium/app"}
+//{block name="backend/premium/app"}
 Ext.define('Shopware.apps.Premium', {
     /**
      * Extends from our special controller, which handles the

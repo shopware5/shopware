@@ -27,9 +27,6 @@ namespace Shopware\Bundle\ESIndexingBundle\Property;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 
-/**
- * Class PropertyQueryFactory
- */
 class PropertyQueryFactory
 {
     /**

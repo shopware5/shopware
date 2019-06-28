@@ -84,8 +84,6 @@ class Relation extends ModelEntity
     private $position;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()

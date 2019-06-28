@@ -35,9 +35,7 @@ use Shopware\Components\Model\ModelEntity;
  * A grid element may extend over several cells. The grid elements can be filled with components
  * from the component library, such as banners, items or text elements.
  *
- * @category   Shopware
  *
- * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_emotion")
@@ -45,6 +43,10 @@ use Shopware\Components\Model\ModelEntity;
  */
 class Emotion extends ModelEntity
 {
+    const LISTING_VISIBILITY_ONLY_START = 'only_start';
+    const LISTING_VISIBILITY_ONLY_START_AND_LISTING = 'start_and_listing';
+    const LISTING_VISIBILITY_ONLY_LISTING = 'only_listing';
+
     /**
      * Contains the assigned \Shopware\Models\Category\Category
      * which can be configured in the backend emotion module.
@@ -326,6 +328,16 @@ class Emotion extends ModelEntity
      * @ORM\Column(name="preview_secret", type="string", nullable=true)
      */
     private $previewSecret;
+
+    /**
+     * only_start => displayed only on category page
+     * start_and_listing => display in listing (?p=1) and category page
+     * only_listing => only displayed in category listing page
+     *
+     * @var string
+     * @ORM\Column(name="listing_visibility", type="string", nullable=false)
+     */
+    private $listingVisibility = self::LISTING_VISIBILITY_ONLY_START;
 
     /**
      * @var string
@@ -921,6 +933,22 @@ class Emotion extends ModelEntity
     public function setPreviewSecret($previewSecret)
     {
         $this->previewSecret = $previewSecret;
+    }
+
+    /**
+     * @return string
+     */
+    public function getListingVisibility()
+    {
+        return $this->listingVisibility;
+    }
+
+    /**
+     * @param string $listingVisibility
+     */
+    public function setListingVisibility($listingVisibility)
+    {
+        $this->listingVisibility = $listingVisibility;
     }
 
     /**

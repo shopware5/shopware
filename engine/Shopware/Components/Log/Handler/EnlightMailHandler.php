@@ -26,12 +26,8 @@ namespace Shopware\Components\Log\Handler;
 
 use Monolog\Handler\MailHandler;
 use Monolog\Logger;
+use Shopware\Bundle\MailBundle\Service\Filter\AdministrativeMailFilter;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class EnlightMailHandler extends MailHandler
 {
     /**
@@ -60,6 +56,7 @@ class EnlightMailHandler extends MailHandler
         try {
             $mailer->setBodyHtml($content);
             $mailer->setBodyText($content);
+            $mailer->setAssociation(AdministrativeMailFilter::ADMINISTRATIVE_MAIL, true);
             $mailer->send();
         } catch (\Exception $e) {
             // empty catch intended to prevent recursion

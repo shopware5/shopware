@@ -73,9 +73,6 @@ class Mapping extends ModelEntity
      */
     private $imageId;
 
-    /**
-     * Class constructor which initials the array collections.
-     */
     public function __construct()
     {
         $this->rules = new ArrayCollection();

@@ -31,11 +31,6 @@ use Shopware\Tests\Unit\Components\DependencyInjection\Compiler\RegisterControll
 use Shopware\Tests\Unit\Components\DependencyInjection\Compiler\RegisterControllerExamplePlugins\NoneController\NoneController;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class RegisterControllerCompilerPassTest extends TestCase
 {
     public function testWithNoneActivePlugins()

@@ -24,11 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class QueryBuilder extends \Doctrine\DBAL\Query\QueryBuilder
 {
     /**

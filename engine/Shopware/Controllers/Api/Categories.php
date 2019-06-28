@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Components\Api\Manager;
 use Shopware\Components\Api\Resource\Category;
 
 class Shopware_Controllers_Api_Categories extends Shopware_Controllers_Api_Rest
@@ -32,9 +31,10 @@ class Shopware_Controllers_Api_Categories extends Shopware_Controllers_Api_Rest
      */
     protected $resource;
 
-    public function init()
+    public function __construct(Category $category)
     {
-        $this->resource = Manager::getResource('category');
+        $this->resource = $category;
+        parent::__construct();
     }
 
     /**
@@ -42,7 +42,7 @@ class Shopware_Controllers_Api_Categories extends Shopware_Controllers_Api_Rest
      *
      * GET /api/categories/
      */
-    public function indexAction()
+    public function indexAction(): void
     {
         $request = $this->Request();
         $limit = (int) $request->getParam('limit', 1000);
@@ -62,7 +62,7 @@ class Shopware_Controllers_Api_Categories extends Shopware_Controllers_Api_Rest
      *
      * GET /api/categories/{id}
      */
-    public function getAction()
+    public function getAction(): void
     {
         $id = $this->Request()->getParam('id');
 
@@ -78,7 +78,7 @@ class Shopware_Controllers_Api_Categories extends Shopware_Controllers_Api_Rest
      *
      * POST /api/categories
      */
-    public function postAction()
+    public function postAction(): void
     {
         $category = $this->resource->create($this->Request()->getPost());
 
@@ -89,7 +89,7 @@ class Shopware_Controllers_Api_Categories extends Shopware_Controllers_Api_Rest
         ];
 
         $this->View()->assign(['success' => true, 'data' => $data]);
-        $this->Response()->setHeader('Location', $location);
+        $this->Response()->headers->set('location', $location);
     }
 
     /**
@@ -97,7 +97,7 @@ class Shopware_Controllers_Api_Categories extends Shopware_Controllers_Api_Rest
      *
      * PUT /api/categories/{id}
      */
-    public function putAction()
+    public function putAction(): void
     {
         $request = $this->Request();
         $id = $request->getParam('id');
@@ -119,7 +119,7 @@ class Shopware_Controllers_Api_Categories extends Shopware_Controllers_Api_Rest
      *
      * DELETE /api/categories/{id}
      */
-    public function deleteAction()
+    public function deleteAction(): void
     {
         $id = $this->Request()->getParam('id');
 

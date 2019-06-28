@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\MediaBundle\Strategy;
 
-/**
- * Interface StrategyInterface
- */
 interface StrategyInterface
 {
     /**

@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.Category', {
      * Required stores for sub-application
      * @array
      */
-    stores:[ 'Detail', 'Tree', 'Template', 'CustomerGroups', 'AvailableProducts', 'AssignedProducts', 'CategoryPath' ],
+    stores:[ 'Detail', 'Tree', 'Template', 'CustomerGroups', 'AvailableProducts', 'AssignedProducts', 'CategoryPath', 'ManualSorting' ],
     /**
      * Required views for this sub-application
      * @array
@@ -80,6 +80,9 @@ Ext.define('Shopware.apps.Category', {
         'category.tabs.ArticleMapping',
         'category.tabs.restriction',
         'category.tabs.CustomListing',
+        'sorting.Tab',
+        'sorting.Table',
+        'sorting.Grid',
         'fields.ShopGrid'
     ],
 
@@ -87,7 +90,7 @@ Ext.define('Shopware.apps.Category', {
      * Required models for sub-application
      * @array
      */
-    models:[ 'Detail','Tree', 'Template', 'Emotion', 'ProductAssignment' ],
+    models:[ 'Detail','Tree', 'Template', 'Emotion', 'ProductAssignment', 'ManualSorting' ],
 
     /**
      * Required controllers for sub-application
@@ -99,7 +102,8 @@ Ext.define('Shopware.apps.Category', {
         'Settings',
         'ArticleMapping',
         'MultiRequest',
-        'DuplicateTasks'
+        'DuplicateTasks',
+        'ManualSorting'
     ],
 
     /**

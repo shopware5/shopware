@@ -29,11 +29,6 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use Shopware\Components\DependencyInjection\Container;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class MediaSubscriber implements EventSubscriber
 {
     /**
@@ -101,8 +96,8 @@ class MediaSubscriber implements EventSubscriber
 
                 case Media::TYPE_VECTOR:
                     if (
-                        $media->getExtension() === 'svg' &&
-                        $xml = simplexml_load_string($mediaService->read($media->getPath()))
+                        $media->getExtension() === 'svg'
+                        && $xml = simplexml_load_string($mediaService->read($media->getPath()))
                     ) {
                         /** @var \SimpleXMLElement|null $attr */
                         $attr = $xml->attributes();

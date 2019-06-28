@@ -1,6 +1,6 @@
 {block name="widgets_index_statistic_include"}
     <iframe id="refresh-statistics" width="0" height="0" style="display:none;"></iframe>
-    <script type="text/javascript">
+    <script>
         (function(window, document) {
             var par = document.location.search.match(/sPartner=([^&])+/g),
                 pid = (par && par[0]) ? par[0].substring(9) : null,

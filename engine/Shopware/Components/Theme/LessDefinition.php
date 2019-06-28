@@ -27,8 +27,6 @@ namespace Shopware\Components\Theme;
 use Shopware\Components\Theme;
 
 /**
- * Class LessDefinition.
- *
  * This class is used to implement own less files via plugin.
  * To add plugin less files you can listen to the event
  * `Theme_Compiler_Collect_Plugin_Less` which is thrown by
@@ -59,10 +57,6 @@ use Shopware\Components\Theme;
  *          return new ArrayCollection(array($less));
  *      }
  * </code>
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class LessDefinition
 {

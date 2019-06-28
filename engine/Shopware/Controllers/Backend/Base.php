@@ -28,6 +28,7 @@ use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\StateTranslatorService;
 use Shopware\Models\Document\Document;
 use Shopware\Models\Shop\Locale;
+use Shopware\Models\Tax\Tax;
 
 /**
  * Backend Controller for the Shopware global configured stores.
@@ -99,14 +100,14 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getTaxesAction()
     {
-        /** @var Shopware\Components\Model\ModelRepository $repository */
-        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Tax\Tax::class);
+        /** @var \Shopware\Models\Tax\Repository $repository */
+        $repository = Shopware()->Models()->getRepository(Tax::class);
 
-        $query = $repository->queryBy(
+        $query = $repository->getTaxQuery(
             $this->Request()->getParam('filter', []),
             $this->Request()->getParam('sort', []),
-            $this->Request()->getParam('limit'),
-            $this->Request()->getParam('start')
+            $this->Request()->getParam('start'),
+            $this->Request()->getParam('limit')
         );
 
         // Get total result of the query
@@ -137,10 +138,10 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Payment\Payment::class);
 
         $query = $repository->getActivePaymentsQuery(
-            $filter = $this->Request()->getParam('filter', []),
-            $order = $this->Request()->getParam('sort', []),
-            $offset = $this->Request()->getParam('start'),
-            $limit = $this->Request()->getParam('limit')
+            $this->Request()->getParam('filter', []),
+            $this->Request()->getParam('sort', []),
+            $this->Request()->getParam('start'),
+            $this->Request()->getParam('limit')
         );
 
         // Get total result of the query
@@ -148,6 +149,11 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         // Select all shop as array
         $data = $query->getArrayResult();
+
+        // Translate payments
+        /** @var \Shopware_Components_Translation $translationComponent */
+        $translationComponent = $this->get('translation');
+        $data = $translationComponent->translatePaymentMethods($data);
 
         // Return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
@@ -260,6 +266,11 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         // Select all shop as array
         $data = $query->getArrayResult();
 
+        // Translate dispatch methods
+        /** @var \Shopware_Components_Translation $translationComponent */
+        $translationComponent = $this->get('translation');
+        $data = $translationComponent->translateDispatchMethods($data);
+
         // Return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
@@ -329,10 +340,10 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Order\Order::class);
 
         $query = $repository->getPaymentStatusQuery(
-            $filter = $this->Request()->getParam('filter'),
-            $order = $this->Request()->getParam('sort'),
-            $offset = $this->Request()->getParam('start'),
-            $limit = $this->Request()->getParam('limit')
+            $this->Request()->getParam('filter'),
+            $this->Request()->getParam('sort'),
+            $this->Request()->getParam('start'),
+            $this->Request()->getParam('limit')
         );
 
         // Get total result of the query
@@ -366,10 +377,10 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         // Load shop repository
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Order\Order::class);
         $query = $repository->getOrderStatusQuery(
-            $filter = $this->Request()->getParam('filter', []),
-            $order = $this->Request()->getParam('sort', []),
-            $offset = $this->Request()->getParam('start'),
-            $limit = $this->Request()->getParam('limit')
+            $this->Request()->getParam('filter', []),
+            $this->Request()->getParam('sort', []),
+            $this->Request()->getParam('start'),
+            $this->Request()->getParam('limit')
         );
 
         // Get total result of the query
@@ -406,10 +417,10 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         // Load shop repository
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Country\Country::class);
         $query = $repository->getCountriesQuery(
-            $filter = $this->Request()->getParam('filter', []),
-            $order = $this->Request()->getParam('sort', []),
-            $offset = $this->Request()->getParam('start'),
-            $limit = $this->Request()->getParam('limit')
+            $this->Request()->getParam('filter', []),
+            $this->Request()->getParam('sort', []),
+            $this->Request()->getParam('start'),
+            $this->Request()->getParam('limit')
         );
 
         // Get total result of the query
@@ -968,9 +979,9 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         /** @var \Shopware\Components\Validator\EmailValidatorInterface $emailValidator */
         $emailValidator = $this->container->get('validator.email');
         if ($emailValidator->isValid($email)) {
-            $this->Response()->setBody(1);
+            $this->Response()->setContent(1);
         } else {
-            $this->Response()->setBody('');
+            $this->Response()->setContent('');
         }
     }
 
@@ -1032,6 +1043,11 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $query = $builder->getQuery();
         $total = $modelManager->getQueryCount($query);
         $data = $query->getArrayResult();
+
+        // translate the document names
+        /** @var \Shopware_Components_Translation $translationComponent */
+        $translationComponent = $this->get('translation');
+        $data = $translationComponent->translateDocuments($data);
 
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }

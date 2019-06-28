@@ -33,9 +33,6 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\ListingResultStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
 
-/**
- * Class PluginLocalService
- */
 class PluginLocalService
 {
     /**

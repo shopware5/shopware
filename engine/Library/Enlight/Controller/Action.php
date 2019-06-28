@@ -1,25 +1,20 @@
 <?php
 /**
- * Shopware 5
- * Copyright (c) shopware AG
+ * Enlight
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * LICENSE
  *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://enlight.de/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@shopware.de so we can send you a copy immediately.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * @category   Enlight
+ * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
+ * @license    http://enlight.de/license     New BSD License
  */
 
 use Shopware\Components\DependencyInjection\Container;
@@ -62,7 +57,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * Will be set in the class constructor. Passed to the class init and controller init function.
      * Required for the forward, dispatch and redirect functions.
      *
-     * @var Enlight_Controller_Response_Response
+     * @var Enlight_Controller_Response_ResponseHttp
      */
     protected $response;
 
@@ -77,19 +72,22 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     protected $controller_name;
 
     /**
-     * The Enlight_Controller_Action class constructor expects an instance of the
-     * Enlight_Controller_Request_Request and an instance of the Enlight_Controller_Response_Response.
-     * The response and request instance will be passed to the init events of the class and the controller.
-     *
-     * @param Enlight_Controller_Request_Request   $request
-     * @param Enlight_Controller_Response_Response $response
+     * Override default Enlight constructor
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * @param Enlight_Controller_Request_RequestHttp   $request
+     * @param Enlight_Controller_Response_ResponseHttp $response
      *
      * @throws \Exception
      * @throws \Enlight_Exception
      * @throws \Enlight_Event_Exception
      */
-    public function __construct(Enlight_Controller_Request_Request $request,
-                                Enlight_Controller_Response_Response $response
+    public function initController(Enlight_Controller_Request_RequestHttp $request,
+                                Enlight_Controller_Response_ResponseHttp $response
     ) {
         $this->setRequest($request)->setResponse($response);
 
@@ -104,7 +102,9 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
             ['subject' => $this, 'request' => $this->Request(), 'response' => $this->Response()]
         );
 
-        parent::__construct();
+        if (method_exists($this, 'init')) {
+            $this->init();
+        }
     }
 
     /**
@@ -120,9 +120,9 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      */
     public function __call($name, $value = null)
     {
-        if ('Action' === substr($name, -6)) {
+        if (substr($name, -6) === 'Action') {
             throw new Enlight_Controller_Exception(
-                'Action "' . $this->controller_name . '_' . $name . '" not found failure for request url ' . $this->request->getScheme() . "://" . $this->request->getHttpHost() . $this->request->getRequestUri(),
+                'Action "' . $this->controller_name . '_' . $name . '" not found failure for request url ' . $this->request->getScheme() . '://' . $this->request->getHttpHost() . $this->request->getRequestUri(),
                 Enlight_Controller_Exception::ActionNotFound
             );
         }
@@ -189,7 +189,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
                 ['subject' => $this]
             )
             ) {
-                $this->$action();
+                $this->$action(...$this->getActionArguments($action));
             }
             $this->postDispatch();
         }
@@ -328,11 +328,11 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     /**
      * Set request instance
      *
-     * @param Enlight_Controller_Request_Request $request
+     * @param Enlight_Controller_Request_RequestHttp $request
      *
      * @return Enlight_Controller_Action
      */
-    public function setRequest(Enlight_Controller_Request_Request $request)
+    public function setRequest(Enlight_Controller_Request_RequestHttp $request)
     {
         $this->request = $request;
 
@@ -342,11 +342,11 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     /**
      * Set response instance
      *
-     * @param Enlight_Controller_Response_Response $response
+     * @param Enlight_Controller_Response_ResponseHttp $response
      *
      * @return Enlight_Controller_Action
      */
-    public function setResponse(Enlight_Controller_Response_Response $response)
+    public function setResponse(Enlight_Controller_Response_ResponseHttp $response)
     {
         $this->response = $response;
 
@@ -437,5 +437,26 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     protected function createForm($type, $data = null, array $options = [])
     {
         return $this->container->get('shopware.form.factory')->create($type, $data, $options);
+    }
+
+    protected function getActionArguments(string $actionMethodName): array
+    {
+        if (!$this->Request()->attributes->has('controllerId')) {
+            return [];
+        }
+
+        $controllerArray = [
+            $this,
+            $actionMethodName,
+        ];
+
+        $this->Request()->setAttribute('_controller', $this->Request()->getAttribute('controllerId') . ':' . $actionMethodName);
+
+        try {
+            return $this->container->get('argument_resolver')->getArguments($this->Request(), $controllerArray);
+        } catch (\ReflectionException $e) {
+            // Invalid action called
+            return [];
+        }
     }
 }

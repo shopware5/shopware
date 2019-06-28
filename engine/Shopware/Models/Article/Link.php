@@ -97,8 +97,6 @@ class Link extends ModelEntity
     private $target = '_blank';
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -107,8 +105,6 @@ class Link extends ModelEntity
     }
 
     /**
-     * Set article
-     *
      * @param Article $article
      *
      * @return Link
@@ -131,8 +127,6 @@ class Link extends ModelEntity
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return Link
@@ -145,8 +139,6 @@ class Link extends ModelEntity
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()
@@ -155,8 +147,6 @@ class Link extends ModelEntity
     }
 
     /**
-     * Set link
-     *
      * @param string $link
      *
      * @return Link
@@ -169,8 +159,6 @@ class Link extends ModelEntity
     }
 
     /**
-     * Get link
-     *
      * @return string
      */
     public function getLink()
@@ -179,8 +167,6 @@ class Link extends ModelEntity
     }
 
     /**
-     * Set target
-     *
      * @param string $target
      *
      * @return Link
@@ -193,8 +179,6 @@ class Link extends ModelEntity
     }
 
     /**
-     * Get target
-     *
      * @return string
      */
     public function getTarget()

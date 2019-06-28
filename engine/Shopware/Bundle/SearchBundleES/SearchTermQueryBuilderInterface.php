@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES;
 
-use ONGR\ElasticsearchDSL\Query\BoolQuery;
+use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface SearchTermQueryBuilderInterface

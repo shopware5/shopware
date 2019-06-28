@@ -38,10 +38,6 @@ use Shopware\Models\Shop\Shop as ShopModel;
 
 /**
  * Customer API Resource
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Customer extends Resource
 {
@@ -486,7 +482,7 @@ class Customer extends Resource
             $shop = $shopRepository->getActiveDefault();
         }
 
-        $shop->registerResources();
+        $this->getContainer()->get('shopware.components.shop_registration_service')->registerShop($shop);
     }
 
     /**

@@ -25,7 +25,6 @@
 namespace ShopwarePlugin\PaymentMethods\Components;
 
 /**
- * Class GenericPaymentMethod
  * Used for all payment methods that require no specific logic
  */
 class GenericPaymentMethod extends BasePaymentMethod

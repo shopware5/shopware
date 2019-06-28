@@ -41,10 +41,6 @@ use Shopware_Components_Config as Config;
  * Shopware Application
  *
  * Warm up the cache with direct http calls using the SEO URLs
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CacheWarmer
 {
@@ -85,9 +81,6 @@ class CacheWarmer
      */
     private $eventManager;
 
-    /**
-     * standard constructor
-     */
     public function __construct(LoggerInterface $logger, GuzzleFactory $guzzleFactory, Config $config, ModelManager $modelManager, ContainerAwareEventManager $eventManager)
     {
         $this->connection = $modelManager->getConnection();

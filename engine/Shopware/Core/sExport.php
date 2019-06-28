@@ -24,19 +24,18 @@
 
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\Thumbnail\Manager;
+use Shopware\Models\Media\Media;
 use Shopware\Models\Shop\Currency;
 
 /**
  * Shopware Class to provide product export feeds
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class sExport
+class sExport implements \Enlight_Hook
 {
     public $sFeedID;
     public $sHash;
@@ -289,7 +288,8 @@ class sExport
         /** @var Currency $currency */
         $currency = $repository->find($this->sCurrency['id']);
         $shop->setCurrency($currency);
-        $shop->registerResources();
+        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerShop($shop);
+        $this->contextService->initializeContext();
 
         $this->shop = $shop;
 
@@ -503,35 +503,46 @@ class sExport
             return '';
         }
 
+        /** @var MediaService $mediaService */
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
-        // Get the image directory
-        $imageDir = 'media/image/';
+        /** @var Manager $thumbnailManager */
+        $thumbnailManager = Shopware()->Container()->get('thumbnail_manager');
 
         // If no imageSize was set, return the full image
         if ($imageSize === null) {
-            return $this->fixShopHost($mediaService->getUrl($imageDir . $hash), $mediaService->getAdapterType());
+            return $this->fixShopHost($mediaService->getUrl($hash), $mediaService->getAdapterType());
         }
 
         // Get filename and extension in order to insert thumbnail size later
         $extension = pathinfo($hash, PATHINFO_EXTENSION);
         $fileName = pathinfo($hash, PATHINFO_FILENAME);
-        $thumbDir = $imageDir . 'thumbnail/';
 
         // Get thumbnail sizes
         $sizes = $this->articleMediaAlbum
             ->getSettings()
             ->getThumbnailSize();
 
-        foreach ($sizes as $key => &$size) {
-            if (strpos($size, 'x') === 0) {
-                $size = $size . 'x' . $size;
-            }
-        }
+        $sizes = array_map(function ($size) {
+            $parts = explode('x', $size);
+
+            return [
+                'width' => $parts[0],
+                'height' => $parts[1],
+            ];
+        }, $sizes);
 
         if (isset($sizes[$imageSize])) {
+            $type = $this->getTypeOfImage($hash);
+
+            $thumbnails = $thumbnailManager->getMediaThumbnails($fileName, $type, $extension, [$sizes[$imageSize]]);
+
+            if (empty($thumbnails)) {
+                return '';
+            }
+
             return $this->fixShopHost(
-                $mediaService->getUrl($thumbDir . $fileName . '_' . $sizes[(int) $imageSize] . '.' . $extension),
+                $mediaService->getUrl($thumbnails[0]['source']),
                 $mediaService->getAdapterType()
             );
         }
@@ -739,6 +750,11 @@ class sExport
             ';
         }
 
+        $sql_add_join[] = '
+            LEFT JOIN s_media as m
+            ON m.id = i.media_id
+        ';
+
         if (!empty($this->sCustomergroup['groupkey'])
             && empty($this->sCustomergroup['mode'])
             && $this->sCustomergroup['groupkey'] !== 'EK'
@@ -895,7 +911,7 @@ class sExport
                 u.unit,
                 u.description as unit_description,
                 t.tax,
-                CONCAT(i.img, '.', i.extension) as image,
+                m.path as image,
 
                 a.configurator_set_id as configurator,
 
@@ -1160,10 +1176,11 @@ class sExport
      * @param int      $articleID
      * @param string   $separator
      * @param int|null $categoryID
+     * @param string   $field
      *
      * @return string
      */
-    public function sGetArticleCategoryPath($articleID, $separator = ' > ', $categoryID = null)
+    public function sGetArticleCategoryPath($articleID, $separator = ' > ', $categoryID = null, $field = 'name')
     {
         if (empty($categoryID)) {
             $categoryID = $this->sSettings['categoryID'];
@@ -1174,7 +1191,7 @@ class sExport
         $breadcrumbs = [];
 
         foreach ($breadcrumb as $breadcrumbObj) {
-            $breadcrumbs[] = $breadcrumbObj['name'];
+            $breadcrumbs[] = $field === 'link' ? Shopware()->Modules()->Core()->sRewriteLink($breadcrumbObj[$field]) : $breadcrumbObj[$field];
         }
 
         return htmlspecialchars_decode(implode($separator, $breadcrumbs));
@@ -1836,7 +1853,7 @@ class sExport
     private function getMediaRepository()
     {
         if ($this->mediaRepository === null) {
-            $this->mediaRepository = Shopware()->Models()->getRepository(\Shopware\Models\Media\Media::class);
+            $this->mediaRepository = Shopware()->Models()->getRepository(Media::class);
         }
 
         return $this->mediaRepository;
@@ -1863,5 +1880,30 @@ class sExport
         }
 
         return $url;
+    }
+
+    /**
+     * @return string
+     */
+    private function getTypeOfImage(string $hash)
+    {
+        $types = [
+            Media::TYPE_IMAGE,
+            Media::TYPE_VECTOR,
+            Media::TYPE_ARCHIVE,
+            Media::TYPE_MODEL,
+            Media::TYPE_MUSIC,
+            Media::TYPE_PDF,
+            Media::TYPE_UNKNOWN,
+            Media::TYPE_VIDEO,
+        ];
+
+        foreach ($types as $type) {
+            if (stripos($hash, '/' . $type . '/') !== false) {
+                return $type;
+            }
+        }
+
+        return Media::TYPE_IMAGE;
     }
 }

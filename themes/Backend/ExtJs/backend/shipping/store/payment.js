@@ -86,4 +86,3 @@ Ext.define('Shopware.apps.Shipping.store.Payment', {
     }
 });
 //{/block}
-

@@ -30,9 +30,6 @@ use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Factory;
 use Shopware\Tests\Mink\Helper;
 
-/**
- * Class MultipleElement
- */
 abstract class MultipleElement extends Element implements \Countable, \Iterator, \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /** @var string */
@@ -41,9 +38,6 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     /** @var NodeElement[] array */
     private $siblings;
 
-    /**
-     * Constructor
-     */
     public function __construct(Session $session, Factory $factory)
     {
         parent::__construct($session, $factory);

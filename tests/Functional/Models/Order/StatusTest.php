@@ -22,11 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Tests_Models_Order_StatusTest extends Enlight_Components_Test_TestCase
 {
     public function testStatusIsPersistableViaOrm()
@@ -45,5 +40,7 @@ class Shopware_Tests_Models_Order_StatusTest extends Enlight_Components_Test_Tes
         Shopware()->Models()->remove($order);
         Shopware()->Models()->flush($order);
         Shopware()->Models()->clear();
+
+        static::assertNull(Shopware()->Models()->find(\Shopware\Models\Order\Status::class, $order->getId()));
     }
 }

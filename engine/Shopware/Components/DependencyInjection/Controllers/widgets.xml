@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="shopware_controllers_widgets_campaign" class="Shopware_Controllers_Widgets_Campaign">
+            <tag name="shopware.controller" module="widgets" controller="campaign"/>
+        </service>
+
+        <service id="shopware_controllers_widgets_captcha" class="Shopware_Controllers_Widgets_Captcha">
+            <tag name="shopware.controller" module="widgets" controller="captcha"/>
+        </service>
+
+        <service id="shopware_controllers_widgets_checkout" class="Shopware_Controllers_Widgets_Checkout">
+            <tag name="shopware.controller" module="widgets" controller="checkout"/>
+        </service>
+
+        <service id="shopware_controllers_widgets_compare" class="Shopware_Controllers_Widgets_Compare">
+            <tag name="shopware.controller" module="widgets" controller="compare"/>
+        </service>
+
+        <service id="shopware_controllers_widgets_emotion" class="Shopware_Controllers_Widgets_Emotion">
+            <tag name="shopware.controller" module="widgets" controller="emotion"/>
+        </service>
+
+        <service id="shopware_controllers_widgets_error" class="Shopware_Controllers_Widgets_Error">
+            <tag name="shopware.controller" module="widgets" controller="error"/>
+        </service>
+
+        <service id="shopware_controllers_widgets_index" class="Shopware_Controllers_Widgets_Index">
+            <tag name="shopware.controller" module="widgets" controller="index"/>
+        </service>
+
+        <service id="shopware_controllers_widgets_listing" class="Shopware_Controllers_Widgets_Listing">
+            <tag name="shopware.controller" module="widgets" controller="listing"/>
+        </service>
+
+        <service id="shopware_controllers_widgets_recommendation" class="Shopware_Controllers_Widgets_Recommendation">
+            <tag name="shopware.controller" module="widgets" controller="recommendation"/>
+        </service>
+    </services>
+</container>

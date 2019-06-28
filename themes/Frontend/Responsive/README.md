@@ -10,8 +10,8 @@ Additionally third-party web components can be easily added using `npm`.
 * Smarty 3 with a block and inheritance system
 * Theme specific Smarty plugins
 * Snippets can be bundled with the theme
-* Completely customimazible inheritance system
-* HTML5 with it' structual elements
+* Completely customizable inheritance system
+* HTML5 with structural elements
 * Rich data snippets based on [schema.org](http://http://schema.org)
 * jQuery 2.x included with a state manager and plugin factory
 * LESS support using the built-in preprocessor LESS compiler in Shopware 5
@@ -55,10 +55,8 @@ protected $css = [
 ];
 ```
 
-
 ## Bug reporting
 If you find any bugs in the theme, please use our public tracker at [https://issues.shopware.com](https://issues.shopware.com) to report them.
-
 
 ## License
 The theme is licensed under the MIT license. Please see the included license file for more information.

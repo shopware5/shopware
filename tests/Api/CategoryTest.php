@@ -378,4 +378,80 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
         $data = $result['data'];
         static::assertInternalType('array', $data);
     }
+
+    public function testUpdateCategoriesWithSortingWithInvalidArray()
+    {
+        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/categories/3');
+
+        $requestData = json_encode([
+            'name' => 'Deutsch',
+            'manualSorting' => [
+                'id' => 1,
+            ],
+        ]);
+
+        $client->setRawData($requestData, 'application/json; charset=UTF-8');
+        $response = $client->request('PUT');
+
+        $result = json_decode($response->getBody(), true);
+
+        static::assertArrayHasKey('success', $result);
+        static::assertArrayHasKey('message', $result);
+        static::assertEquals('Field product_id is missing in manualSorting array', $result['message']);
+    }
+
+    public function testUpdateCategoriesWithSortingWithValidArray()
+    {
+        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/categories/3');
+
+        $requestData = json_encode([
+            'name' => 'Deutsch',
+            'manualSorting' => [
+                [
+                    'product_id' => 3,
+                    'position' => 1,
+                ],
+            ],
+        ]);
+
+        $client->setRawData($requestData, 'application/json; charset=UTF-8');
+        $response = $client->request('PUT');
+
+        $result = json_decode($response->getBody(), true);
+
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
+        static::assertEquals(3, $result['data']['id']);
+    }
+
+    /**
+     * @depends testUpdateCategoriesWithSortingWithValidArray
+     */
+    public function testUpdateCategoriesWithSortingRead()
+    {
+        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/categories/3');
+
+        $response = $client->request('GET');
+        $result = json_decode($response->getBody(), true);
+
+        static::assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('manualSorting', $result['data']);
+        static::assertNotEmpty($result['data']['manualSorting']);
+
+        $requestData = json_encode([
+            'name' => 'Deutsch',
+            'manualSorting' => [],
+        ]);
+
+        $client->setRawData($requestData, 'application/json; charset=UTF-8');
+        $client->request('PUT');
+
+        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/categories/3');
+        $response = $client->request('GET');
+        $result = json_decode($response->getBody(), true);
+
+        static::assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('manualSorting', $result['data']);
+        static::assertEmpty($result['data']['manualSorting']);
+    }
 }

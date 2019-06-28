@@ -27,9 +27,6 @@ namespace Shopware\Components\Auth\Validator;
 use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Models\User\User;
 
-/**
- * Interface UserValidatorInterface
- */
 interface UserValidatorInterface
 {
     /**

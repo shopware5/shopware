@@ -26,6 +26,7 @@ namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Enlight_Event_EventManager;
+use Psr\Log\LoggerInterface;
 use Shopware\Bundle\PluginInstallerBundle\Events\PluginEvent;
 use Shopware\Bundle\PluginInstallerBundle\Events\PostPluginActivateEvent;
 use Shopware\Bundle\PluginInstallerBundle\Events\PostPluginDeactivateEvent;
@@ -37,8 +38,11 @@ use Shopware\Bundle\PluginInstallerBundle\Events\PrePluginDeactivateEvent;
 use Shopware\Bundle\PluginInstallerBundle\Events\PrePluginInstallEvent;
 use Shopware\Bundle\PluginInstallerBundle\Events\PrePluginUninstallEvent;
 use Shopware\Bundle\PluginInstallerBundle\Events\PrePluginUpdateEvent;
+use Shopware\Components\Migrations\AbstractPluginMigration;
+use Shopware\Components\Migrations\PluginMigrationManager;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin as PluginBootstrap;
+use Shopware\Components\Plugin as PluginComponent;
 use Shopware\Components\Plugin\Context\ActivateContext;
 use Shopware\Components\Plugin\Context\DeactivateContext;
 use Shopware\Components\Plugin\Context\InstallContext;
@@ -48,10 +52,10 @@ use Shopware\Components\Plugin\CronjobSynchronizer;
 use Shopware\Components\Plugin\FormSynchronizer;
 use Shopware\Components\Plugin\MenuSynchronizer;
 use Shopware\Components\Plugin\RequirementValidator;
-use Shopware\Components\Plugin\XmlConfigDefinitionReader;
-use Shopware\Components\Plugin\XmlCronjobReader;
-use Shopware\Components\Plugin\XmlMenuReader;
-use Shopware\Components\Plugin\XmlPluginInfoReader;
+use Shopware\Components\Plugin\XmlReader\XmlConfigReader;
+use Shopware\Components\Plugin\XmlReader\XmlCronjobReader;
+use Shopware\Components\Plugin\XmlReader\XmlMenuReader;
+use Shopware\Components\Plugin\XmlReader\XmlPluginReader;
 use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Kernel;
@@ -100,6 +104,11 @@ class PluginInstaller
     private $events;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param string|string[] $pluginDirectories
      */
     public function __construct(
@@ -109,7 +118,8 @@ class PluginInstaller
         \PDO $pdo,
         Enlight_Event_EventManager $events,
         $pluginDirectories,
-        ShopwareReleaseStruct $release
+        ShopwareReleaseStruct $release,
+        LoggerInterface $logger
     ) {
         $this->em = $em;
         $this->connection = $this->em->getConnection();
@@ -119,6 +129,7 @@ class PluginInstaller
         $this->events = $events;
         $this->pluginDirectories = (array) $pluginDirectories;
         $this->release = $release;
+        $this->logger = $logger;
     }
 
     /**
@@ -145,6 +156,8 @@ class PluginInstaller
             }
 
             $this->em->flush($plugin);
+
+            $this->applyMigrations($pluginBootstrap, AbstractPluginMigration::MODUS_INSTALL);
 
             $pluginBootstrap->install($context);
 
@@ -176,6 +189,8 @@ class PluginInstaller
         $this->events->notify(PluginEvent::PRE_DEACTIVATE, new PrePluginDeactivateEvent($context, $bootstrap));
         $this->events->notify(PluginEvent::PRE_UNINSTALL, new PrePluginUninstallEvent($context, $bootstrap));
 
+        $this->applyMigrations($bootstrap, AbstractPluginMigration::MODUS_UNINSTALL, !$removeData);
+
         $bootstrap->uninstall($context);
 
         $plugin->setInstalled(null);
@@ -195,6 +210,7 @@ class PluginInstaller
         $this->removeEmotionComponents($pluginId);
 
         $this->removeSnippets($bootstrap, $removeData);
+
         if ($removeData) {
             $this->removeFormsAndElements($pluginId);
         }
@@ -223,6 +239,8 @@ class PluginInstaller
             $this->events->notify(PluginEvent::PRE_UPDATE, new PrePluginUpdateEvent($context, $pluginBootstrap));
 
             $this->installResources($pluginBootstrap, $plugin);
+
+            $this->applyMigrations($pluginBootstrap, AbstractPluginMigration::MODUS_UPDATE);
 
             $pluginBootstrap->update($context);
 
@@ -303,7 +321,7 @@ class PluginInstaller
         foreach ($plugins as $plugin) {
             $pluginInfoPath = $plugin->getPath() . '/plugin.xml';
             if (is_file($pluginInfoPath)) {
-                $xmlConfigReader = new XmlPluginInfoReader();
+                $xmlConfigReader = new XmlPluginReader();
                 $info = $xmlConfigReader->read($pluginInfoPath);
             } else {
                 $info = [];
@@ -430,7 +448,7 @@ class PluginInstaller
      */
     private function installForm(Plugin $plugin, $file)
     {
-        $xmlConfigReader = new XmlConfigDefinitionReader();
+        $xmlConfigReader = new XmlConfigReader();
         $config = $xmlConfigReader->read($file);
 
         $formSynchronizer = new FormSynchronizer($this->em);
@@ -584,5 +602,14 @@ SQL;
     {
         $sql = 'DELETE FROM s_core_subscribes WHERE pluginID = :pluginId';
         $this->connection->executeUpdate($sql, [':pluginId' => $pluginId]);
+    }
+
+    private function applyMigrations(PluginComponent $plugin, string $mode, bool $keepUserData = false): void
+    {
+        $manager = new PluginMigrationManager($this->pdo, $plugin, $this->logger);
+        if (!is_dir($manager->getMigrationPath())) {
+            return;
+        }
+        $manager->run($mode, $keepUserData);
     }
 }

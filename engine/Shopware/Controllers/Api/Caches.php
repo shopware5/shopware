@@ -22,16 +22,19 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Api\Resource\Cache;
+
 class Shopware_Controllers_Api_Caches extends Shopware_Controllers_Api_Rest
 {
     /**
      * @var Shopware\Components\Api\Resource\Cache
      */
-    protected $resource = null;
+    protected $resource;
 
-    public function init()
+    public function __construct(Cache $cache)
     {
-        $this->resource = \Shopware\Components\Api\Manager::getResource('cache');
+        $this->resource = $cache;
+        parent::__construct();
     }
 
     /**
@@ -39,7 +42,7 @@ class Shopware_Controllers_Api_Caches extends Shopware_Controllers_Api_Rest
      *
      * GET /api/caches/
      */
-    public function indexAction()
+    public function indexAction(): void
     {
         $result = $this->resource->getList();
 
@@ -52,7 +55,7 @@ class Shopware_Controllers_Api_Caches extends Shopware_Controllers_Api_Rest
      *
      * GET /api/caches/{id}
      */
-    public function getAction()
+    public function getAction(): void
     {
         $id = $this->Request()->getParam('id');
 
@@ -67,7 +70,7 @@ class Shopware_Controllers_Api_Caches extends Shopware_Controllers_Api_Rest
      *
      * @throws RuntimeException
      */
-    public function postAction()
+    public function postAction(): void
     {
         throw new \RuntimeException('Building caches is not possible, yet. You can build the cache by calling the category/product manually.');
     }
@@ -77,7 +80,7 @@ class Shopware_Controllers_Api_Caches extends Shopware_Controllers_Api_Rest
      *
      * @throws RuntimeException
      */
-    public function putAction()
+    public function putAction(): void
     {
         throw new \RuntimeException('Updating caches is not possible, yet. After updating a product or category the cache will be invalidated automatically, if configured in the HTTP-Cache settings..');
     }
@@ -87,7 +90,7 @@ class Shopware_Controllers_Api_Caches extends Shopware_Controllers_Api_Rest
      *
      * DELETE /api/caches/{id}
      */
-    public function deleteAction()
+    public function deleteAction(): void
     {
         $id = $this->Request()->getParam('id');
 

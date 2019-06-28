@@ -1,0 +1,108 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="shopware_controllers_frontend_account" class="Shopware_Controllers_Frontend_Account">
+            <tag name="shopware.controller" module="frontend" controller="account"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_address" class="Shopware_Controllers_Frontend_Address">
+            <tag name="shopware.controller" module="frontend" controller="address"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_ajaxsearch" class="Shopware_Controllers_Frontend_AjaxSearch">
+            <tag name="shopware.controller" module="frontend" controller="ajaxsearch"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_blog" class="Shopware_Controllers_Frontend_Blog">
+            <tag name="shopware.controller" module="frontend" controller="blog"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_campaign" class="Shopware_Controllers_Frontend_Campaign">
+            <tag name="shopware.controller" module="frontend" controller="campaign"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_checkout" class="Shopware_Controllers_Frontend_Checkout">
+            <tag name="shopware.controller" module="frontend" controller="checkout"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_compare" class="Shopware_Controllers_Frontend_Compare">
+            <tag name="shopware.controller" module="frontend" controller="compare"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_csrftoken" class="Shopware_Controllers_Frontend_Csrftoken">
+            <tag name="shopware.controller" module="frontend" controller="csrftoken"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_custom" class="Shopware_Controllers_Frontend_Custom">
+            <tag name="shopware.controller" module="frontend" controller="custom"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_detail" class="Shopware_Controllers_Frontend_Detail">
+            <tag name="shopware.controller" module="frontend" controller="detail"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_error" class="Shopware_Controllers_Frontend_Error">
+            <tag name="shopware.controller" module="frontend" controller="error"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_forms" class="Shopware_Controllers_Frontend_Forms">
+            <tag name="shopware.controller" module="frontend" controller="forms"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_index" class="Shopware_Controllers_Frontend_Index">
+            <tag name="shopware.controller" module="frontend" controller="index"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_listing" class="Shopware_Controllers_Frontend_Listing">
+            <tag name="shopware.controller" module="frontend" controller="listing"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_media" class="Shopware_Controllers_Frontend_Media">
+            <tag name="shopware.controller" module="frontend" controller="media"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_newsletter" class="Shopware_Controllers_Frontend_Newsletter">
+            <tag name="shopware.controller" module="frontend" controller="newsletter"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_note" class="Shopware_Controllers_Frontend_Note">
+            <tag name="shopware.controller" module="frontend" controller="note"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_payment" class="Shopware_Controllers_Frontend_Payment">
+            <tag name="shopware.controller" module="frontend" controller="payment"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_register" class="Shopware_Controllers_Frontend_Register">
+            <tag name="shopware.controller" module="frontend" controller="register"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_robotstxt" class="Shopware_Controllers_Frontend_RobotsTxt">
+            <tag name="shopware.controller" module="frontend" controller="robotstxt"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_search" class="Shopware_Controllers_Frontend_Search">
+            <tag name="shopware.controller" module="frontend" controller="search"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_sitemap" class="Shopware_Controllers_Frontend_Sitemap">
+            <tag name="shopware.controller" module="frontend" controller="sitemap"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_sitemapxml" class="Shopware_Controllers_Frontend_SitemapXml">
+            <tag name="shopware.controller" module="frontend" controller="sitemapxml"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_tellafriend" class="Shopware_Controllers_Frontend_Tellafriend">
+            <tag name="shopware.controller" module="frontend" controller="tellafriend"/>
+        </service>
+
+        <service id="shopware_controllers_frontend_tracking" class="Shopware_Controllers_Frontend_Tracking">
+            <tag name="shopware.controller" module="frontend" controller="tracking"/>
+        </service>
+    </services>
+</container>

@@ -13,12 +13,8 @@
  * to license@shopware.de so we can send you a copy immediately.
  *
  * @category   Enlight
- * @package    Enlight_Snippet
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
@@ -27,7 +23,7 @@
  * The Enlight_Components_Snippet_Namespace represents a single snippet namespace with all according snippets.
  *
  * @category   Enlight
- * @package    Enlight_Snippet
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -36,7 +32,7 @@ class Enlight_Components_Snippet_Namespace extends Enlight_Config
     /**
      * Whether in-memory modifications to configuration data are allowed
      *
-     * @var boolean
+     * @var bool
      */
     protected $_allowModifications = true;
 
@@ -44,6 +40,17 @@ class Enlight_Components_Snippet_Namespace extends Enlight_Config
      * @var Enlight_Components_Snippet_Namespace
      */
     protected $fallback;
+
+    /**
+     * @param array|bool $options
+     */
+    public function __construct($options = null)
+    {
+        $name = $options['name'] !== null ? $options['name'] : '';
+        unset($options['name']);
+        parent::__construct($name, $options);
+        $this->read();
+    }
 
     /**
      * @return Enlight_Components_Snippet_Namespace|null
@@ -62,25 +69,13 @@ class Enlight_Components_Snippet_Namespace extends Enlight_Config
     }
 
     /**
-     * Constructor method
-     *
-     * @param array|bool $options
-     */
-    public function __construct($options = null)
-    {
-        $name = $options['name'] !== null ? $options['name'] : '';
-        unset($options['name']);
-        parent::__construct($name, $options);
-        $this->read();
-    }
-
-    /**
      * Retrieves a value and returns $default if there is no element set.
      *
-     * @param   string $name
-     * @param   mixed $default
-     * @param   bool $save
-     * @return  mixed
+     * @param string $name
+     * @param mixed  $default
+     * @param bool   $save
+     *
+     * @return mixed
      */
     public function get($name, $default = null, $save = false)
     {
@@ -97,6 +92,7 @@ class Enlight_Components_Snippet_Namespace extends Enlight_Config
             $this->set($name, $default);
             $this->write();
         }
+
         return $default;
     }
 }

@@ -26,11 +26,6 @@ namespace Shopware\Tests\Functional\Components;
 
 use Shopware\Components\Captcha\DefaultCaptcha;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class DefaultCaptchaTest extends \PHPUnit\Framework\TestCase
 {
     /**

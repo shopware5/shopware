@@ -29,9 +29,6 @@ use Shopware\Models\Customer\AddressRepository;
 use Shopware\Models\Customer\Customer;
 use Symfony\Component\Form\FormInterface;
 
-/**
- * Address controller
- */
 class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
 {
     /**
@@ -369,8 +366,8 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
 
         $response['success'] = empty($response['errors']);
 
-        $this->Response()->setHeader('Content-type', 'application/json', true);
-        $this->Response()->setBody(json_encode($response));
+        $this->Response()->headers->set('content-type', 'application/json', true);
+        $this->Response()->setContent(json_encode($response));
     }
 
     /**
@@ -513,8 +510,8 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $extraData = $this->Request()->getParam('extraData', []);
         $keys = array_filter(explode(';', $extraData['sessionKey']));
 
-        return $extraData['setDefaultShippingAddress'] === '1' ||
-            in_array('checkoutShippingAddressId', $keys, true);
+        return $extraData['setDefaultShippingAddress'] === '1'
+            || in_array('checkoutShippingAddressId', $keys, true);
     }
 
     /**

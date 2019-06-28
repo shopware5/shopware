@@ -34,10 +34,6 @@ namespace Shopware\Components\Routing;
  * @see http://api.symfony.com/2.0/Symfony/Component/Routing/RouterInterface.html
  * @see \Enlight_Controller_Router
  * @see http://framework.zend.com/manual/1.12/de/zend.controller.router.html#zend.controller.router.subclassing
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface RouterInterface
 {

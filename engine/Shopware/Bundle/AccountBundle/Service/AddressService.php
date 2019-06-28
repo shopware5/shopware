@@ -41,9 +41,6 @@ class AddressService implements AddressServiceInterface
      */
     private $validator;
 
-    /**
-     * AddressService constructor.
-     */
     public function __construct(ModelManager $modelManager, AddressValidatorInterface $validator)
     {
         $this->modelManager = $modelManager;

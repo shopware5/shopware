@@ -26,10 +26,9 @@
     {foreach $landingPage.emotions as $emotion}
 
         <div class="content--emotions">
-            <div class="emotion--wrapper"
-                 data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
-                 data-availableDevices="{$emotion.devices}">
-            </div>
+            {block name='frontend_home_index_promotions_emotion'}
+                {include file="frontend/_includes/emotion.tpl"}
+            {/block}
         </div>
     {/foreach}
 {/block}

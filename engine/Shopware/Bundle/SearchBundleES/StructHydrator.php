@@ -30,9 +30,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Property\Group as PropertyGroup;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Option as PropertyOption;
 use Shopware\Bundle\StoreFrontBundle\Struct\Thumbnail;
 
-/**
- * Class StructHydrator
- */
 class StructHydrator
 {
     /**

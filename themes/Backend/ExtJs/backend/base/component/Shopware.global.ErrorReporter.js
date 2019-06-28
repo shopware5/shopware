@@ -112,6 +112,11 @@ Ext.define('Shopware.global.ErrorReporter', {
             plugins: '{s name=browser/plugins}Browser plugins{/s}',
             plugin_name: '{s name=browser/plugin_name}Plugin name{/s}',
             plugin_path: '{s name=browser/plugin_path}Plugin path{/s}'
+        },
+
+        response: {
+            name: '{s name=response/name}{/s}',
+            errorOverview: '{s name=response/errorOverview}{/s}'
         }
     },
 
@@ -123,7 +128,7 @@ Ext.define('Shopware.global.ErrorReporter', {
      * @param { Shopware.app.Application } cmp - Application which fires the event
      * @returns { Void }
      */
-    bindEvents: function(cmp) {
+    bindEvents: function (cmp) {
         var me = this;
         cmp.on('Ext.Loader:xhrFailed', me.onXhrErrorOccurs, me);
         cmp.on('Ext.Loader:evalFailed', me.onEvalErrorOccurs, me);
@@ -140,34 +145,40 @@ Ext.define('Shopware.global.ErrorReporter', {
      * @param { String } requestType
      * @returns { Void }
      */
-    onXhrErrorOccurs: function(xhr, namespace, requestType) {
+    onXhrErrorOccurs: function (xhr, namespace, requestType) {
         var me = this;
 
         me.mainWindow = Ext.create('Ext.window.Window', {
             width: 800,
             height: 600,
             modal: true,
+            resizable: false,
             title: me.snippets.general.title,
-            dockedItems: [ me.createActionToolbar(namespace, true) ] ,
+            dockedItems: [me.createActionToolbar(namespace, true)],
             renderTo: Ext.getBody(),
             items: [{
                 xtype: 'tabpanel',
-                defaults: { bodyPadding: 15 },
-                items: [{
-                    title: me.snippets.general.error_title,
-                    items: [
-                        me.createErrorInformation(xhr, namespace, requestType),
-                        me.createErrorDescription(xhr),
-                        me.createErrorFilesList(namespace)
-                    ]
-                }, {
-                    title: me.snippets.general.browser_title,
-                    items: [
-                        me.createBrowserInformation(),
-                        me.createUserAgentInformation(),
-                        me.createBrowserPluginList()
-                    ]
-                }]
+                defaults: {
+                    bodyPadding: 15
+                },
+                items: [
+                    {
+                        title: me.snippets.general.error_title,
+                        items: [
+                            me.createErrorInformation(xhr, namespace, requestType),
+                            me.createErrorDescription(xhr),
+                            me.createErrorFilesList(namespace)
+                        ]
+                    }, {
+                        title: me.snippets.general.browser_title,
+                        items: [
+                            me.createBrowserInformation(),
+                            me.createUserAgentInformation(),
+                            me.createBrowserPluginList()
+                        ]
+                    },
+                    me.createServerResponseTab(me, xhr)
+                ]
             }]
         }).show();
     },
@@ -183,19 +194,22 @@ Ext.define('Shopware.global.ErrorReporter', {
      * @param { Object } namespace
      * @param { String } requestType
      */
-    onEvalErrorOccurs: function(err, xhr, namespace, requestType) {
+    onEvalErrorOccurs: function (err, xhr, namespace, requestType) {
         var me = this;
 
         me.mainWindow = Ext.create('Ext.window.Window', {
             width: 800,
             height: 600,
             modal: true,
+            resizable: false,
             title: me.snippets.general.title,
-            dockedItems: [ me.createActionToolbar(namespace, false) ] ,
+            dockedItems: [me.createActionToolbar(namespace, false)],
             renderTo: Ext.getBody(),
             items: [{
                 xtype: 'tabpanel',
-                defaults: { bodyPadding: 15 },
+                defaults: {
+                    bodyPadding: 15
+                },
                 items: [{
                     title: me.snippets.general.error_title,
                     items: [
@@ -210,7 +224,7 @@ Ext.define('Shopware.global.ErrorReporter', {
                         me.createUserAgentInformation(),
                         me.createBrowserPluginList()
                     ]
-                }]
+                }, me.createServerResponseTab(me, xhr)]
             }]
         }).show();
     },
@@ -223,16 +237,25 @@ Ext.define('Shopware.global.ErrorReporter', {
      * @param { String } requestType
      * @returns { Object } fieldset configuration object
      */
-    createErrorInformation: function(xhr, namespace, requestType) {
+    createErrorInformation: function (xhr, namespace, requestType) {
         var me = this;
 
         return {
             xtype: 'fieldset',
             title: me.snippets.general.error_title,
             layout: 'column',
-            defaults: { xtype: 'container', columnWidth: 0.5, layout: 'anchor', defaults: {
-                anchor: '100%', readOnly: true, xtype: 'displayfield', labelWidth: 155, labelStyle: 'margin-top: 0'
-            } },
+            defaults: {
+                xtype: 'container',
+                columnWidth: 0.5,
+                layout: 'anchor',
+                defaults: {
+                    anchor: '100%',
+                    readOnly: true,
+                    xtype: 'displayfield',
+                    labelWidth: 155,
+                    labelStyle: 'margin-top: 0'
+                }
+            },
             items: [{
                 items: [{
                     fieldLabel: me.snippets.xhr.module,
@@ -260,7 +283,7 @@ Ext.define('Shopware.global.ErrorReporter', {
      * @param { XMLHttpRequest } xhr
      * @returns { Object } fieldset configuration object
      */
-    createErrorDescription: function(xhr) {
+    createErrorDescription: function (xhr) {
         var me = this;
 
         return {
@@ -284,14 +307,14 @@ Ext.define('Shopware.global.ErrorReporter', {
      * @param { Object } namespace
      * @returns { Object } Grid panel configuration
      */
-    createErrorFilesList: function(namespace) {
+    createErrorFilesList: function (namespace) {
         var data = [], me = this, store;
 
-        var getFileType = function(path) {
+        var getFileType = function (path) {
             var regEx = /^([a-zA-Z]+)\//,
                 result = regEx.exec(path);
 
-            if(!result) {
+            if (!result) {
                 return me.snippets.xhr.unknown_type;
             }
 
@@ -299,7 +322,7 @@ Ext.define('Shopware.global.ErrorReporter', {
             return result.charAt(0).toUpperCase() + result.slice(1);
         };
 
-        Ext.each(namespace.classNames, function(cls, i) {
+        Ext.each(namespace.classNames, function (cls, i) {
             data.push({
                 id: i + 1,
                 name: cls,
@@ -309,7 +332,7 @@ Ext.define('Shopware.global.ErrorReporter', {
         });
 
         store = Ext.create('Ext.data.Store', {
-            fields: [ 'id', 'name', 'path', 'type' ],
+            fields: ['id', 'name', 'path', 'type'],
             groupField: 'type',
             data: data
         });
@@ -320,7 +343,7 @@ Ext.define('Shopware.global.ErrorReporter', {
             title: me.snippets.xhr.module_files,
             height: 175,
             features: [{
-                ftype:'grouping',
+                ftype: 'grouping',
                 groupHeaderTpl: '{literal}{name} ({rows.length}){/literal}'
             }],
             columns: [{
@@ -331,7 +354,7 @@ Ext.define('Shopware.global.ErrorReporter', {
                 dataIndex: 'name',
                 header: me.snippets.xhr.class_name,
                 flex: 1,
-                renderer: function(val) {
+                renderer: function (val) {
                     return '<strong>' + val + '</strong>';
                 }
             }, {
@@ -353,13 +376,13 @@ Ext.define('Shopware.global.ErrorReporter', {
      * @param { Object } namespace
      * @returns { Ext.toolbar.Toolbar } Instance of the Ext.toolbar.Toolbar
      */
-    createActionToolbar: function(namespace, showReload) {
+    createActionToolbar: function (namespace, showReload) {
         var me = this, reloadButton, toolbar;
 
         reloadButton = Ext.create('Ext.button.Button', {
             text: me.snippets.xhr.reload_module,
             cls: 'primary',
-            handler: function() {
+            handler: function () {
                 Ext.require(namespace.classNames);
                 me.mainWindow.destroy();
             }
@@ -368,24 +391,24 @@ Ext.define('Shopware.global.ErrorReporter', {
         toolbar = Ext.create('Ext.toolbar.Toolbar', {
             dock: 'bottom',
             padding: 5,
-            items: [ '->', {
+            items: ['->', {
                 xtype: 'button',
                 text: me.snippets.general.cancel,
                 cls: 'secondary',
-                handler: function() {
+                handler: function () {
                     me.mainWindow.destroy();
                 }
             }]
         });
 
-        if(showReload) {
+        if (showReload) {
             toolbar.add(reloadButton);
         } else {
             toolbar.add({
                 xtype: 'button',
                 text: me.snippets.eval.reload_admin,
                 cls: 'primary',
-                handler: function() {
+                handler: function () {
                     window.location.reload();
                 }
             });
@@ -402,16 +425,25 @@ Ext.define('Shopware.global.ErrorReporter', {
      * @param { Object } namespace
      * @returns { Object } fieldset configuration object
      */
-    createEvalErrorInformation: function(err, xhr, namespace) {
+    createEvalErrorInformation: function (err, xhr, namespace) {
         var me = this;
 
         return {
             xtype: 'fieldset',
             title: me.snippets.general.error_title,
             layout: 'column',
-            defaults: { xtype: 'container', columnWidth: 0.5, layout: 'anchor', defaults: {
-                anchor: '100%', readOnly: true, xtype: 'displayfield', labelWidth: 155, labelStyle: 'margin-top: 0'
-            } },
+            defaults: {
+                xtype: 'container',
+                columnWidth: 0.5,
+                layout: 'anchor',
+                defaults: {
+                    anchor: '100%',
+                    readOnly: true,
+                    xtype: 'displayfield',
+                    labelWidth: 155,
+                    labelStyle: 'margin-top: 0'
+                }
+            },
             items: [{
                 items: [{
                     fieldLabel: me.snippets.xhr.module,
@@ -439,7 +471,7 @@ Ext.define('Shopware.global.ErrorReporter', {
      * @param { Error } err
      * @returns { Object } Fieldset configuration
      */
-    createEvalErrorDescription: function(err) {
+    createEvalErrorDescription: function (err) {
         return {
             xtype: 'fieldset',
             title: 'Stack-Trace',
@@ -459,7 +491,7 @@ Ext.define('Shopware.global.ErrorReporter', {
      *
      * @returns { Object } Fieldset configuration
      */
-    createUserAgentInformation: function() {
+    createUserAgentInformation: function () {
         return {
             xtype: 'fieldset',
             title: 'User-Agent',
@@ -479,16 +511,25 @@ Ext.define('Shopware.global.ErrorReporter', {
      *
      * @returns { Object } Fieldset configuration
      */
-    createBrowserInformation: function() {
+    createBrowserInformation: function () {
         var me = this, uaParser = new UAParser(), uaResult = uaParser.getResult();
 
         return {
             xtype: 'fieldset',
             title: me.snippets.general.browser_title,
             layout: 'column',
-            defaults: { xtype: 'container', columnWidth: 0.5, layout: 'anchor', defaults: {
-                anchor: '100%', readOnly: true, xtype: 'displayfield', labelWidth: 155, labelStyle: 'margin-top: 0'
-            } },
+            defaults: {
+                xtype: 'container',
+                columnWidth: 0.5,
+                layout: 'anchor',
+                defaults: {
+                    anchor: '100%',
+                    readOnly: true,
+                    xtype: 'displayfield',
+                    labelWidth: 155,
+                    labelStyle: 'margin-top: 0'
+                }
+            },
             items: [{
                 items: [{
                     fieldLabel: 'Browser',
@@ -531,10 +572,10 @@ Ext.define('Shopware.global.ErrorReporter', {
      *
      * @returns { Object } Grid panel configuration
      */
-    createBrowserPluginList: function() {
+    createBrowserPluginList: function () {
         var me = this, data = [], store;
 
-        Ext.each(navigator.plugins, function(plugin, i) {
+        Ext.each(navigator.plugins, function (plugin, i) {
             data.push({
                 id: i + 1,
                 name: plugin.description || plugin.name,
@@ -543,7 +584,7 @@ Ext.define('Shopware.global.ErrorReporter', {
         });
 
         store = Ext.create('Ext.data.Store', {
-            fields: [ 'id', 'name', 'path' ],
+            fields: ['id', 'name', 'path'],
             data: data
         });
 
@@ -560,7 +601,7 @@ Ext.define('Shopware.global.ErrorReporter', {
                 dataIndex: 'name',
                 header: me.snippets.browser.plugin_name,
                 flex: 1,
-                renderer: function(val) {
+                renderer: function (val) {
                     return '<strong>' + val + '</strong>';
                 }
             }, {
@@ -568,6 +609,113 @@ Ext.define('Shopware.global.ErrorReporter', {
                 header: me.snippets.browser.plugin_path,
                 flex: 1
             }]
+        };
+    },
+
+    createServerResponseTab: function (me, xhr) {
+        var store = Ext.create('Ext.data.Store', {
+            fields: ['type', 'text', 'line']
+        });
+
+        return {
+            xtype: 'container',
+            title: me.snippets.response.name,
+            layout : {
+                type  : 'vbox',
+                align : 'stretch'
+            },
+            items: [
+                {
+                    xtype: 'ace-editor',
+                    value: xhr.responseText,
+                    mode: 'javascript',
+                    readOnly: true,
+                    height: 320,
+                    useWorker: false,
+                    listeners: {
+                        setAceEditorMode: function () {
+                            me.editor = this.editor;
+                            var session = this.editor.session;
+                            var WorkerClient = require('ace/worker/worker_client').WorkerClient;
+                            var worker = new WorkerClient(['ace'], 'ace/mode/javascript_worker', 'JavaScriptWorker');
+
+                            worker.send('setOptions', [{
+                                esnext: false,
+                                moz: false,
+                                devel: true,
+                                browser: true,
+                                node: false,
+                                laxcomma: false,
+                                laxbreak: false,
+                                lastsemic: false,
+                                onevar: false,
+                                passfail: false,
+                                maxerr: 300,
+                                expr: false,
+                                multistr: false,
+                                globalstrict: false
+                            }]);
+
+                            worker.attachToDocument(session.getDocument());
+
+                            worker.on('annotate', function(results) {
+                                results.data.forEach(function (item) {
+                                    if (item.type !== 'error') {
+                                        return;
+                                    }
+
+                                    store.add({
+                                        type: item.type,
+                                        line: item.row,
+                                        text: item.text
+                                    });
+                                });
+
+                                var item = store.getAt(0);
+
+                                if (item) {
+                                    me.editor.gotoLine(item.get('line'), 0, true);
+                                }
+
+                                session.setAnnotations(results.data);
+                            });
+
+                            worker.on('terminate', function() {
+                                session.clearAnnotations();
+                            });
+                        }
+                    }
+                },
+                {
+                    xtype: 'grid',
+                    store: store,
+                    height: 160,
+                    title: me.snippets.response.errorOverview,
+                    flex: 1,
+                    columns: [
+                        {
+                            header: 'Type',
+                            dataIndex: 'type',
+                            flex: 0.5
+                        },
+                        {
+                            header: 'Line',
+                            dataIndex: 'line',
+                            flex: 0.5
+                        },
+                        {
+                            header: 'Text',
+                            dataIndex: 'text',
+                            flex: 1
+                        },
+                    ],
+                    listeners: {
+                        itemclick: function (grid, record) {
+                            me.editor.gotoLine(record.get('line'), 0, true);
+                        }
+                    }
+                },
+            ]
         };
     }
 });

@@ -26,10 +26,6 @@
  * tests the base price calculation
  *
  * @ticket SW-7204
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Modules_Articles_TestBasePriceCalculation extends Enlight_Components_Test_Plugin_TestCase
 {
@@ -54,7 +50,7 @@ class Shopware_Tests_Modules_Articles_TestBasePriceCalculation extends Enlight_C
     {
         parent::tearDown();
 
-//        // Restore old main detail
+        // Restore old main detail
         $sql = "UPDATE `s_articles_details` SET `kind` = '2' WHERE `ordernumber` = 'SW10002.1'";
         Shopware()->Db()->query($sql);
 

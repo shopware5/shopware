@@ -43,6 +43,10 @@ class MyBasicTestClass implements MyInterface
         return $bar . $foo;
     }
 
+    public function myVoid(): void
+    {
+    }
+
     protected function myProtected($bar)
     {
     }
@@ -84,7 +88,7 @@ class EnlightHookProxyFactoryTest extends TestCase
         $generatedClass = $this->invokeMethod($this->proxyFactory, 'generateProxyClass', [MyBasicTestClass::class]);
         $expectedClass = <<<'EOT'
 <?php
-class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends \Shopware\Tests\Unit\Components\MyBasicTestClass implements \Enlight_Hook_Proxy
+class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends \Shopware\Tests\Unit\Components\MyBasicTestClass implements Enlight_Hook_Proxy
 {
 
     private $__hookProxyExecutionContexts = null;
@@ -94,13 +98,13 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends \Sh
      */
     public static function getHookMethods()
     {
-        return ['myPublic', 'myProtected'];
+        return ['myPublic', 'myVoid', 'myProtected'];
     }
 
     /**
      * @inheritdoc
      */
-    public function __pushHookExecutionContext($method, Enlight_Hook_HookExecutionContext $context)
+    public function __pushHookExecutionContext($method, \Enlight_Hook_HookExecutionContext $context)
     {
         $this->__hookProxyExecutionContexts[$method][] = $context;
     }
@@ -144,7 +148,7 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends \Sh
     /**
      * @inheritdoc
      */
-    public function executeParent($method, array $args = array())
+    public function executeParent($method, array $args = [])
     {
         $context = $this->__getCurrentHookProxyExecutionContext($method);
         if (!$context) {
@@ -159,7 +163,7 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends \Sh
     /**
      * @inheritdoc
      */
-    public function __executeOriginalMethod($method, array $args = array())
+    public function __executeOriginalMethod($method, array $args = [])
     {
         return parent::{$method}(...$args);
     }
@@ -167,12 +171,24 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends \Sh
     /**
      * @inheritdoc
      */
-    public function myPublic($bar, $foo = 'bar', array $barBar = array(), \Shopware\Tests\Unit\Components\MyInterface $fooFoo = null)
+    public function myPublic($bar, $foo = 'bar', array $barBar = [], ?\Shopware\Tests\Unit\Components\MyInterface $fooFoo = null)
     {
         return $this->__getActiveHookManager(__FUNCTION__)->executeHooks(
             $this,
             __FUNCTION__,
             ['bar' => $bar, 'foo' => $foo, 'barBar' => $barBar, 'fooFoo' => $fooFoo]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function myVoid() : void
+    {
+        $this->__getActiveHookManager(__FUNCTION__)->executeHooks(
+            $this,
+            __FUNCTION__,
+            []
         );
     }
 
@@ -200,7 +216,7 @@ EOT;
         $generatedClass = $this->invokeMethod($this->proxyFactory, 'generateProxyClass', [MyReferenceTestClass::class]);
         $expectedClass = <<<'EOT'
 <?php
-class ShopwareTests_ShopwareTestsUnitComponentsMyReferenceTestClassProxy extends \Shopware\Tests\Unit\Components\MyReferenceTestClass implements \Enlight_Hook_Proxy
+class ShopwareTests_ShopwareTestsUnitComponentsMyReferenceTestClassProxy extends \Shopware\Tests\Unit\Components\MyReferenceTestClass implements Enlight_Hook_Proxy
 {
 
     private $__hookProxyExecutionContexts = null;
@@ -216,7 +232,7 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyReferenceTestClassProxy extends
     /**
      * @inheritdoc
      */
-    public function __pushHookExecutionContext($method, Enlight_Hook_HookExecutionContext $context)
+    public function __pushHookExecutionContext($method, \Enlight_Hook_HookExecutionContext $context)
     {
         $this->__hookProxyExecutionContexts[$method][] = $context;
     }
@@ -260,7 +276,7 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyReferenceTestClassProxy extends
     /**
      * @inheritdoc
      */
-    public function executeParent($method, array $args = array())
+    public function executeParent($method, array $args = [])
     {
         $context = $this->__getCurrentHookProxyExecutionContext($method);
         if (!$context) {
@@ -275,7 +291,7 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyReferenceTestClassProxy extends
     /**
      * @inheritdoc
      */
-    public function __executeOriginalMethod($method, array $args = array())
+    public function __executeOriginalMethod($method, array $args = [])
     {
         return parent::{$method}(...$args);
     }

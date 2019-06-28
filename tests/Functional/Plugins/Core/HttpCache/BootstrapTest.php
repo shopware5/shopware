@@ -100,7 +100,7 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
         $response = $this->dispatch('/');
 
         static::assertSame(
-            'public, max-age=100, s-maxage=100',
+            'max-age=100, public, s-maxage=100',
             $this->getHeader('Cache-Control', $response)
         );
     }
@@ -117,7 +117,8 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
 
         $headers = array_column($response->getHeaders(), 'name');
 
-        static::assertNotContains('Cache-Control', $headers);
+        static::assertContains('Cache-Control', $headers);
+        static::assertEquals('no-cache, private', $response->getHeader('cache-control'));
         static::assertNotContains('X-Shopware-Cache-Id', $headers);
     }
 
@@ -134,7 +135,8 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
 
         $headers = array_column($response->getHeaders(), 'name');
 
-        static::assertNotContains('Cache-Control', $headers);
+        static::assertContains('Cache-Control', $headers);
+        static::assertEquals('no-cache, private', $response->getHeader('cache-control'));
         static::assertNotContains('X-Shopware-Cache-Id', $headers);
         Shopware()->Container()->get('session')->Admin = false;
     }
@@ -152,7 +154,7 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
         $response = $this->dispatch('/');
 
         static::assertSame(
-            'private, no-cache',
+            'no-cache, private',
             $this->getHeader('Cache-Control', $response)
         );
     }
@@ -170,7 +172,7 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
         $response = $this->dispatch('/');
 
         static::assertSame(
-            'public, max-age=100, s-maxage=100',
+            'max-age=100, public, s-maxage=100',
             $this->getHeader('Cache-Control', $response)
         );
     }

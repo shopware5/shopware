@@ -58,4 +58,3 @@ Ext.define('Shopware.apps.Article.model.PropertyOption', {
 
 });
 //{/block}
-

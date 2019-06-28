@@ -61,8 +61,16 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             activeLabel: '{s name="settings/active"}{/s}',
             landingPageLabel: '{s name="settings/landingpage_checkbox"}{/s}',
             categoryPlaceholder: '{s name="settings/select_categories_field"}{/s}',
+
             productsListingLabel: '{s name="settings/productListingLabel"}{/s}',
             productsListingBoxLabel: '{s name="settings/productListingBoxLabel"}{/s}',
+            productsListingHelpTitle: '{s name="settings/productListingHelpTitle"}{/s}',
+            productsListingHelpText: '{s name="settings/productListingHelpText"}{/s}',
+
+            displayInListingLabel: '{s name="settings/displayInListingLabel"}{/s}',
+            displayInListingHelpTitle: '{s name="settings/displayInListingHelpTitle"}{/s}',
+            displayInListingHelpText: '{s name="settings/displayInListingHelpText"}{/s}',
+
             positionLabel: '{s name="settings/fieldset/position_number"}{/s}',
             positionHelpText: '{s name="settings/fieldset/position_number_help"}{/s}',
             landingPageTitleLabel: '{s name=settings/seo_title}{/s}',
@@ -206,10 +214,35 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         me.listingCheckbox = Ext.create('Ext.form.field.Checkbox', {
             fieldLabel: me.snippets.fields.productsListingLabel,
             boxLabel: me.snippets.fields.productsListingBoxLabel,
+            helpTitle: me.snippets.fields.productsListingHelpTitle,
+            helpText: me.snippets.fields.productsListingHelpText,
             name: 'showListing',
             inputValue: true,
             uncheckedValue: false,
             labelWidth: me.defaults.labelWidth
+        });
+
+        me.displayInListingSelection = Ext.create('Ext.form.field.ComboBox', {
+            store: Ext.create('Shopware.apps.Emotion.store.Visibility'),
+            editable: false,
+            forceSelection: true,
+            allowBlank: false,
+            fieldLabel: me.snippets.fields.displayInListingLabel,
+            name: 'listingVisibility',
+            helpTitle: me.snippets.fields.displayInListingHelpTitle,
+            helpText: me.snippets.fields.displayInListingHelpText,
+            labelWidth: me.defaults.labelWidth,
+            displayField: 'label',
+            valueField: 'key',
+            listeners: {
+                    change: function (element, value) {
+                        if (value === 'only_listing') {
+                            me.listingCheckbox.disable();
+                        } else {
+                            me.listingCheckbox.enable();
+                        }
+                    }
+            }
         });
 
         store = me.emotion.getShops();
@@ -227,8 +260,9 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             defaults: me.defaults,
             items: [
                 me.categories,
+                me.shopGrid,
                 me.listingCheckbox,
-                me.shopGrid
+                me.displayInListingSelection
             ]
         });
     },
@@ -246,7 +280,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             });
             me.emotion['getShopsStore'] = store;
         }
-        
+
         me.landingPageFields.shopGrid = me.createShopSelectionGrid(store, true);
 
         me.landingPageFields.seoTitle = Ext.create('Ext.form.field.Text', {

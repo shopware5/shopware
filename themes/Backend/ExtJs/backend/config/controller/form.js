@@ -83,10 +83,12 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         'custom_search.sorting.classes.SortingInterface',
         'custom_search.sorting.classes.PriceSorting',
         'custom_search.sorting.classes.ProductNameSorting',
+        'custom_search.sorting.classes.ProductNumberSorting',
         'custom_search.sorting.classes.PopularitySorting',
         'custom_search.sorting.classes.ReleaseDateSorting',
         'custom_search.sorting.classes.SearchRankingSorting',
         'custom_search.sorting.classes.ProductAttributeSorting',
+        'custom_search.sorting.classes.ManualSorting',
         'custom_search.sorting.includes.CreateWindow',
         'custom_search.sorting.includes.DirectionCombo',
 

@@ -33,6 +33,7 @@
  * Contains the configuration for the blog backend module.
  * This component defines which controllers belong to the application or whether the bulk loading is activated.
  */
+//{block name="backend/blog/app"}
 //{block name="backend/blog/view/blog/app"}
 Ext.define('Shopware.apps.Blog', {
     /**
@@ -112,4 +113,5 @@ Ext.define('Shopware.apps.Blog', {
         return mainController.mainWindow;
     }
 });
+//{/block}
 //{/block}

@@ -27,11 +27,6 @@ namespace Shopware\Components;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Theme\PathResolver;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class CacheManager
 {
     const CACHE_TAG_TEMPLATE = 'template';

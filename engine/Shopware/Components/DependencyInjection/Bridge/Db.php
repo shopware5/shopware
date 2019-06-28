@@ -29,11 +29,6 @@ use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Db
 {
     /**
@@ -54,7 +49,8 @@ class Db
             $conn = new \PDO(
                 'mysql:' . $connectionString,
                 $dbConfig['username'],
-                $password
+                $password,
+                $dbConfig['pdoOptions']
             );
 
             $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);

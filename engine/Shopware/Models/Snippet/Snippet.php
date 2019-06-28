@@ -108,8 +108,6 @@ class Snippet extends ModelEntity
     private $updated;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -118,8 +116,6 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * Set namespace
-     *
      * @param string $namespace
      *
      * @return \Shopware\Models\Snippet\Snippet
@@ -132,8 +128,6 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * Get namespace
-     *
      * @return string
      */
     public function getNamespace()
@@ -142,8 +136,6 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * Set shopId
-     *
      * @param int $shopid
      *
      * @return \Shopware\Models\Snippet\Snippet
@@ -156,8 +148,6 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * Get shopId
-     *
      * @return int
      */
     public function getShopId()
@@ -166,8 +156,6 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * Set localeId
-     *
      * @param int $localeid
      *
      * @return \Shopware\Models\Snippet\Snippet
@@ -180,8 +168,6 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * Get localeId
-     *
      * @return int
      */
     public function getLocaleId()
@@ -190,8 +176,6 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return \Shopware\Models\Snippet\Snippet
@@ -204,8 +188,6 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()
@@ -214,8 +196,6 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * Set value
-     *
      * @param string $value
      *
      * @return \Shopware\Models\Snippet\Snippet
@@ -228,8 +208,6 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * Get value
-     *
      * @return string
      */
     public function getValue()
@@ -238,8 +216,6 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * Set created
-     *
      * @param \DateTimeInterface|string $created
      *
      * @return \Shopware\Models\Snippet\Snippet
@@ -256,8 +232,6 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * Get created
-     *
      * @return \DateTimeInterface
      */
     public function getCreated()
@@ -266,8 +240,6 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * Set updated
-     *
      * @param \DateTimeInterface|string $updated
      *
      * @return \Shopware\Models\Snippet\Snippet
@@ -284,8 +256,6 @@ class Snippet extends ModelEntity
     }
 
     /**
-     * Get updated
-     *
      * @return \DateTimeInterface
      */
     public function getUpdated()

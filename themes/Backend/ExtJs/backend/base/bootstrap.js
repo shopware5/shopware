@@ -178,7 +178,7 @@
 {include file='backend/base/component/Shopware.grid.HeaderToolTip.js'}
 {include file='backend/base/component/Shopware.Notification.js'}
 {include file='backend/base/component/Shopware.form.PasswordStrengthMeter.js'}
-{include file='backend/base/component/Shopware.form.field.CodeMirror.js'}
+{include file='backend/base/component/Shopware.form.field.AceEditor.js'}
 {include file='backend/base/component/Shopware.form.field.ArticleSearch.js'}
 {include file='backend/base/component/Shopware.form.field.PagingComboBox.js'}
 {include file='backend/base/component/Shopware.container.Viewport.js'}
@@ -289,6 +289,7 @@
 {include file='backend/base/attribute/field/Shopware.form.field.CustomFacetGrid.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.AttributeSingleSelection.js'}
 {include file='backend/base/component/Shopware.form.field.ProductStreamSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.ContentTypeSelection.js'}
 
 {include file='backend/base/attribute/field_handler/Shopware.attribute.AbstractEntityFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.CategoryFieldHandler.js'}

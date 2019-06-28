@@ -26,11 +26,6 @@ namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 
 use Shopware\Models\Property\Value;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class PropertyOptionReader extends GenericReader
 {
     protected function createListQuery()

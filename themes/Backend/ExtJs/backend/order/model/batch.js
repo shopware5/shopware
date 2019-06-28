@@ -47,4 +47,3 @@ Ext.define('Shopware.apps.Order.model.Batch', {
     ],
 });
 //{/block}
-

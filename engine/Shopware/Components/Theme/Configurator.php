@@ -40,10 +40,6 @@ use Shopware\Models\Shop\TemplateConfig\Set;
  *
  * Additionally this class is used to build the configuration
  * inheritance for the backend module.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Configurator
 {

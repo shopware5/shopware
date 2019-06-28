@@ -138,6 +138,9 @@ class VariantHelper implements VariantHelperInterface
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function joinVariants(QueryBuilder $query)
     {
         if ($query->hasState(self::VARIANTS_JOINED)) {

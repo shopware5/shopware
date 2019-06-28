@@ -28,9 +28,6 @@ use Shopware\Bundle\ESIndexingBundle\Struct\IndexConfiguration;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
-/**
- * Class IndexFactory
- */
 interface IndexFactoryInterface
 {
     /**

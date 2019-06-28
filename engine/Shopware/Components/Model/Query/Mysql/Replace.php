@@ -31,8 +31,6 @@ use Doctrine\ORM\Query\SqlWalker;
 
 /**
  * Custom query extension to allow Replace() in DQL
- *
- * Class Replace
  */
 class Replace extends FunctionNode
 {

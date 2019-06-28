@@ -34,10 +34,8 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationStruct;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Models\Shop\Shop;
+use Symfony\Component\HttpFoundation\Cookie;
 
-/**
- * Class SubscriptionService
- */
 class SubscriptionService
 {
     /**
@@ -138,7 +136,7 @@ class SubscriptionService
         }
 
         try {
-            $response->setCookie('lastCheckSubscriptionDate', date('dmY'), time() + 60 * 60 * 24);
+            $response->headers->setCookie(new Cookie('lastCheckSubscriptionDate', date('dmY'), time() + 60 * 60 * 24));
 
             return $this->getPluginInformationFromApi();
         } catch (ShopSecretException $e) {

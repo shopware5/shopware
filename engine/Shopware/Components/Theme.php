@@ -30,10 +30,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Base class for the shopware themes.
  * Used as meta information container for a theme.
  * Contains the inheritance and config definition of a theme.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Theme
 {

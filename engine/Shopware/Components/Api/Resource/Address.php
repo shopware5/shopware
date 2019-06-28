@@ -34,10 +34,6 @@ use Shopware\Models\Shop\Shop as ShopModel;
 
 /**
  * Address API Resource
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Address extends Resource
 {
@@ -240,7 +236,7 @@ class Address extends Resource
             throw new \RuntimeException('A valid shopId is required.');
         }
 
-        $shop->registerResources();
+        $this->getContainer()->get('shopware.components.shop_registration_service')->registerShop($shop);
     }
 
     /**

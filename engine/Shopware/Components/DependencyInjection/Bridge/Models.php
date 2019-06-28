@@ -37,10 +37,6 @@ use Shopware\Components\Model\QueryOperatorValidator;
  * The factory function creates the new instance of the entity manager.
  * The class constructor injects all required components and services
  * which required for the entity manager.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Models
 {

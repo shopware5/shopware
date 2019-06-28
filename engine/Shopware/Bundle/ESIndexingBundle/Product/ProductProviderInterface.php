@@ -24,15 +24,11 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
-use Shopware\Bundle\ESIndexingBundle\Struct\Product;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\ESIndexingBundle\ProviderInterface;
 
-interface ProductProviderInterface
+/**
+ * @deprecated 5.7 Use ProviderInterface
+ */
+interface ProductProviderInterface extends ProviderInterface
 {
-    /**
-     * @param string[] $numbers
-     *
-     * @return Product[]
-     */
-    public function get(Shop $shop, $numbers);
 }

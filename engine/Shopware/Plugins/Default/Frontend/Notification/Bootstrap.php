@@ -339,10 +339,10 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
             $product = $queryBuilder->execute()->fetch(\PDO::FETCH_ASSOC);
 
             if (
-                empty($product) ||   // No product associated with the specified order number (empty result set)
-                empty($product['articleID']) || // or empty articleID
-                empty($product['notification']) || // or notification disabled on product
-                empty($product['active']) // or product is not active
+                empty($product)   // No product associated with the specified order number (empty result set)
+                || empty($product['articleID']) // or empty articleID
+                || empty($product['notification']) // or notification disabled on product
+                || empty($product['active']) // or product is not active
             ) {
                 continue;
             }
@@ -359,7 +359,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 continue;
             }
 
-            $shop->registerResources();
+            $this->get('shopware.components.shop_registration_service')->registerShop($shop);
 
             $shopContext = Context::createFromShop($shop, $this->get('config'));
             $this->get('router')->setContext($shopContext);

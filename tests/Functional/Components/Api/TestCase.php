@@ -28,10 +28,6 @@ use Shopware\Components\Api\Resource\Resource as APIResource;
 
 /**
  * Abstract TestCase for Resource-Tests
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class TestCase extends \Enlight_Components_Test_TestCase
 {

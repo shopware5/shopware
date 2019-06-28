@@ -22,12 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class Shopware_Tests_Models_Album_SettingsTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class Shopware_Tests_Models_Album_SettingsTest extends TestCase
 {
     public function testGetThumbnailSizeReturnValue()
     {

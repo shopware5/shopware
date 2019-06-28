@@ -494,11 +494,21 @@ class Customer extends LazyFetchModelEntity
      */
     private $customerType;
 
+    /**
+     * Contains the date on which the customer account last changed the password
+     *
+     * @var \DateTimeInterface
+     *
+     * @ORM\Column(name="password_change_date", type="datetime", nullable=false)
+     */
+    private $passwordChangeDate;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
         $this->firstLogin = new \DateTime();
         $this->lastLogin = new \DateTime();
+        $this->passwordChangeDate = new \DateTime();
         $this->notifications = new ArrayCollection();
         $this->paymentInstances = new ArrayCollection();
         $this->paymentData = new ArrayCollection();
@@ -991,6 +1001,14 @@ class Customer extends LazyFetchModelEntity
             $this->encoderName = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
             $this->hashPassword = Shopware()->PasswordEncoder()->encodePassword($this->password, $this->encoderName);
         }
+
+        $changeSet = Shopware()->Models()->getUnitOfWork()->getEntityChangeSet($this);
+
+        $passwordChanged = isset($changeSet['hashPassword']) && $changeSet['hashPassword'][0] !== $changeSet['hashPassword'][1];
+
+        if ($passwordChanged) {
+            $this->passwordChangeDate = new \DateTime();
+        }
     }
 
     /**
@@ -1442,6 +1460,11 @@ class Customer extends LazyFetchModelEntity
     public function setDoubleOptinConfirmDate($doubleOptinConfirmDate)
     {
         $this->doubleOptinConfirmDate = $doubleOptinConfirmDate;
+    }
+
+    public function getPasswordChangeDate(): \DateTimeInterface
+    {
+        return $this->passwordChangeDate;
     }
 
     /**

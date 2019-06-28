@@ -31,11 +31,6 @@ use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 use Symfony\Component\DomCrawler\Crawler;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class AddressTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
@@ -254,15 +249,9 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
 
         // Crawl original data
         $crawler = $this->doRequest('GET', '/account');
-        $originalText = trim($crawler->filter('.account--billing .panel--body p')->last()->text());
         $addressId = (int) $crawler->filter('.account--billing .panel--actions a:contains("oder andere Adresse wählen")')->attr('data-id');
 
         static::assertGreaterThan(0, $addressId);
-
-        // Edit the entry
-        $expectedText = 'Herr
-Shop ManMusterstr. 5555555 Musterhausen
-Nordrhein-WestfalenDeutschland';
 
         $this->doRequest(
             'POST',
@@ -284,10 +273,15 @@ Nordrhein-WestfalenDeutschland';
 
         // verify the changes
         $crawler = $this->doRequest('GET', '/account');
-        $currentText = trim($crawler->filter('.account--billing .panel--body p')->last()->text());
+        $panelBody = $crawler->filter('.account--billing .panel--body');
 
-        static::assertNotEquals($originalText, $currentText);
-        static::assertEquals($expectedText, $currentText);
+        static::assertEquals('Muster GmbH', trim($panelBody->filter('.address--company')->text()));
+        static::assertEquals('Herr', trim($panelBody->filter('.address--salutation')->text()));
+        static::assertEquals('Shop', trim($panelBody->filter('.address--firstname')->text()));
+        static::assertEquals('Man', trim($panelBody->filter('.address--lastname')->text()));
+        static::assertEquals('Musterstr. 55', trim($panelBody->filter('.address--street')->text()));
+        static::assertEquals('Nordrhein-Westfalen', trim($panelBody->filter('.address--statename')->text()));
+        static::assertEquals('Deutschland', trim($panelBody->filter('.address--countryname')->text()));
     }
 
     /**
@@ -309,7 +303,15 @@ Nordrhein-WestfalenDeutschland';
         $this->dispatch($url);
 
         if ($this->Response()->isRedirect()) {
-            $parts = parse_url($this->Response()->getHeaders()[0]['value']);
+            $location = null;
+
+            foreach ($this->Response()->getHeaders() as $header) {
+                if ($header['name'] === 'location') {
+                    $location = $header['value'];
+                }
+            }
+
+            $parts = parse_url($location);
             $followUrl = $parts['path'];
 
             if (isset($parts['query'])) {

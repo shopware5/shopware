@@ -31,10 +31,6 @@ use Doctrine\ORM\QueryBuilder as BaseQueryBuilder;
 
 /**
  * The Shopware QueryBuilder is an extension of the standard Doctrine QueryBuilder.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class QueryBuilder extends BaseQueryBuilder
 {
@@ -274,9 +270,9 @@ class QueryBuilder extends BaseQueryBuilder
                     continue;
                 }
 
-                if (isset($select[0], $this->alias) &&
-                    $select[0]->count() === 1 &&
-                    strpos($order['property'], '.') === false) {
+                if (isset($select[0], $this->alias)
+                    && $select[0]->count() === 1
+                    && strpos($order['property'], '.') === false) {
                     $order['property'] = $this->alias . '.' . $order['property'];
                 }
 

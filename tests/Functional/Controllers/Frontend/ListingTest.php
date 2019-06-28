@@ -22,11 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Tests_Controllers_Frontend_ListingTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
@@ -112,5 +107,31 @@ class Shopware_Tests_Controllers_Frontend_ListingTest extends Enlight_Components
         $this->dispatch('/cat/index/sCategory/' . $mainCategory);
 
         static::assertEquals(301, $this->Response()->getHttpResponseCode());
+    }
+
+    public function testManufacturerPage()
+    {
+        $this->dispatch('/das-blaue-haus/');
+
+        $source = $this->Response()->getBody();
+
+        static::assertContains('blaueshaus_200x200.png', $source);
+    }
+
+    public function testWithoutImageManufacturerPage()
+    {
+        $sql = <<<'SQL'
+        UPDATE s_articles_supplier
+        SET img = ''
+        WHERE img = 'media/image/blaueshaus.png';
+SQL;
+
+        Shopware()->Db()->executeUpdate($sql);
+
+        $this->dispatch('/das-blaue-haus/');
+
+        $source = $this->Response()->getBody();
+
+        static::assertNotContains('blaueshaus_200x200.png', $source);
     }
 }

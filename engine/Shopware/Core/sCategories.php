@@ -28,12 +28,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 
 /**
  * Shopware Class that handles categories
- *
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class sCategories
+class sCategories implements \Enlight_Hook
 {
     public $sSYSTEM;
 

@@ -29,11 +29,6 @@ use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Attribute\Emotion as EmotionAttribute;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Repository extends ModelRepository
 {
     /**
@@ -87,6 +82,7 @@ class Repository extends ModelRepository
             'emotions.is_landingpage as isLandingPage',
             'emotions.parent_id as parentId',
             'emotions.modified',
+            'emotions.listing_visibility as listingVisibility',
             'GROUP_CONCAT(categories.description ORDER BY categories.description ASC) AS categoriesNames',
         ]);
 

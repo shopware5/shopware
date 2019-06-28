@@ -217,18 +217,22 @@ Ext.define('Shopware.Notification', {
                 me.growlDisplayBottom = false;
                 me.growlDisplayLeft = false;
                 break;
+
             case 'bottom-right':
                 me.growlDisplayBottom = true;
                 me.growlDisplayLeft = false;
                 break;
+
             case 'top-left':
                 me.growlDisplayBottom = false;
                 me.growlDisplayLeft = true;
                 break;
+
             case 'bottom-left':
                 me.growlDisplayBottom = true;
                 me.growlDisplayLeft = true;
                 break;
+
             default:
                 me.growlDisplayBottom = false;
                 me.growlDisplayLeft = false;
@@ -239,8 +243,9 @@ Ext.define('Shopware.Notification', {
     /**
      * Sets the default type of the alert and block message.
      *
-     * @param [string] type
-     * @return [boolean]
+     * @param { string } type
+     *
+     * @return { boolean }
      */
     setBaseMsgType: function(type) {
         if (!this.validBaseMsgType(type)) {
@@ -254,7 +259,7 @@ Ext.define('Shopware.Notification', {
     /**
      * Returns the default type of the alert and block message
      *
-     * @return [string]
+     * @return { string }
      */
     getBaseMsgType: function() {
         return this.baseMsgType;
@@ -263,8 +268,9 @@ Ext.define('Shopware.Notification', {
     /**
      * Checks if the passed message type is allowed
      *
-     * @param [string] type
-     * @return [null|string]
+     * @param { string } type
+     *
+     * @return { null|string }
      */
     validBaseMsgType: function(type) {
         return type.match(this._validTypes);
@@ -273,7 +279,7 @@ Ext.define('Shopware.Notification', {
     /**
      * Sets the CSS class which is used by the alert message
      *
-     * @param [string] cls - CSS class which is used by the alert messages
+     * @param { string } cls - CSS class which is used by the alert messages
      */
     setAlertMsgCls: function(cls) {
         this.alertMsgCls = cls;
@@ -282,7 +288,7 @@ Ext.define('Shopware.Notification', {
     /**
      * Returns the CSS class of the alert message
      *
-     * @return [string]
+     * @return { string }
      */
     getAlertMsgCls: function() {
         return this.alertMsgCls;
@@ -291,7 +297,7 @@ Ext.define('Shopware.Notification', {
     /**
      * Sets the CSS class which is used by the block message
      *
-     * @param [string] cls - CSS class which is used by the block messages
+     * @param { string } cls - CSS class which is used by the block messages
      */
     setBlockMsgCls: function(cls) {
         this.blockMsgCls = cls;
@@ -300,7 +306,7 @@ Ext.define('Shopware.Notification', {
     /**
      * Returns the CSS class of the block message
      *
-     * @return [string]
+     * @return { string }
      */
     getBlockMsgCls: function() {
         return this.blockMsgCls;
@@ -309,7 +315,7 @@ Ext.define('Shopware.Notification', {
     /**
      * Sets the CSS class which is used by the growl message
      *
-     * @param [string] cls - CSS class which is used by the growl like messages
+     * @param { string } cls - CSS class which is used by the growl like messages
      */
     setGrowlMsgCls: function(cls) {
         this.growlMsgCls = cls;
@@ -318,7 +324,7 @@ Ext.define('Shopware.Notification', {
     /**
      * Returns the CSS class of the growl message
      *
-     * @return [string]
+     * @return { string }
      */
     getGrowlMsgCls: function() {
         return this.growlMsgCls;
@@ -328,11 +334,12 @@ Ext.define('Shopware.Notification', {
      * Creates an alert message based on the passed parameter's
      * and returns it
      *
-     * @param [string] title - title of the message
-     * @param [string] text - text of the message (HTML allowed)
-     * @param [string] type - type of the message (see baseMsgType)
-     * @param [boolean] closeBtn - show or hide close button<
-     * @return [object] - Instance of the alert message
+     * @param { string } title - title of the message
+     * @param { string } text - text of the message (HTML allowed)
+     * @param { string } type - type of the message (see baseMsgType)
+     * @param { boolean } closeBtn - show or hide close button
+     *
+     * @return { object } - Instance of the alert message
      */
     createMessage: function(title, text, type, closeBtn) {
         var me = this, alertMsg, msgData;
@@ -389,9 +396,9 @@ Ext.define('Shopware.Notification', {
     /**
      * Creates an error message
      *
-     * @param [string] title - title of the message
-     * @param [string] text - text of the message (HTML allowed)
-     * @param [boolean] closeBtn - show or hide close button
+     * @param { string } title - title of the message
+     * @param { string } text - text of the message (HTML allowed)
+     * @param { boolean } closeBtn - show or hide close button
      */
     createErrorMessage: function(title, text, closeBtn) {
         closeBtn = closeBtn || false;
@@ -402,9 +409,9 @@ Ext.define('Shopware.Notification', {
     /**
      * Creates a success message
      *
-     * @param [string] title - title of the message
-     * @param [string] text - text of the message (HTML allowed)
-     * @param [boolean] closeBtn - show or hide close button
+     * @param { string } title - title of the message
+     * @param { string } text - text of the message (HTML allowed)
+     * @param { boolean } closeBtn - show or hide close button
      */
     createSuccessMessage: function(title, text, closeBtn) {
         closeBtn = closeBtn || false;
@@ -415,9 +422,9 @@ Ext.define('Shopware.Notification', {
     /**
      * Creates a notice message
      *
-     * @param [string] title - title of the message
-     * @param [string] text - text of the message (HTML allowed)
-     * @param [boolean] closeBtn - show or hide close button
+     * @param { string } title - title of the message
+     * @param { string } text - text of the message (HTML allowed)
+     * @param { boolean } closeBtn - show or hide close button
      */
     createNoticeMessage: function(title, text, closeBtn) {
         closeBtn = closeBtn || false;
@@ -428,9 +435,9 @@ Ext.define('Shopware.Notification', {
     /**
      * Creates an info message
      *
-     * @param [string] title - title of the message
-     * @param [string] text - text of the message (HTML allowed)
-     * @param [boolean] closeBtn - show or hide close button
+     * @param { string } title - title of the message
+     * @param { string } text - text of the message (HTML allowed)
+     * @param { boolean}  closeBtn - show or hide close button
      */
     createInfoMessage: function(title, text, closeBtn) {
         closeBtn = closeBtn || false;
@@ -442,10 +449,11 @@ Ext.define('Shopware.Notification', {
      * Fades out the passed alert message and removes it from the DOM if the animation
      * is complete.
      *
-     * @param [object] alertMsg - Instance of the alert message
-     * @param [object] scope - Shopware.app.Notification
-     * @param [object] task - Ext.util.DelayedTask
-     * @return [boolean]
+     * @param { object } alertMsg - Instance of the alert message
+     * @param { object } scope - Shopware.app.Notification
+     * @param { object } task - Ext.util.DelayedTask
+     *
+     * @return { boolean }
      */
     closeAlertMessage: function(alertMsg, scope, task) {
         if (task && Ext.isObject(task)) {
@@ -464,11 +472,10 @@ Ext.define('Shopware.Notification', {
      * Creates a block message based on the passed parameter's
      * and returns it
      *
-     * @param [string] title - Title of the message
-     * @param [string] text - Text of the message (HTML allowed)
-     * @param [string] type - Type of the message (default: notice, possible values: info = blue, notice = yellow, success = green, error = red)
-     * @param [boolean] closeBtn - show or hide the close button
-     * @return [object] - Instance of the block message
+     * @param { string } text - Text of the message (HTML allowed)
+     * @param { string } type - Type of the message (default: notice, possible values: info = blue, notice = yellow, success = green, error = red)
+     *
+     * @return { object } - Instance of the block message
      */
     createBlockMessage: function(text, type) {
         var me = this, pnl, msgData, innerPnl;
@@ -505,10 +512,11 @@ Ext.define('Shopware.Notification', {
     /**
      * Calculate the growl message position and returns the needed style for the message.
      *
-     * @param messageWidth
-     * @param messageHeight
-     * @param componentTop
-     * @returns object style
+     * @param { integer } messageWidth
+     * @param { integer } messageHeight
+     * @param { integer } componentTop
+     *
+     * @returns { object } style
      */
     createGrowlStyle: function(messageWidth, messageHeight, componentTop) {
         var me = this;
@@ -535,11 +543,11 @@ Ext.define('Shopware.Notification', {
      * Creates a growl like message based on the passed parameter's
      * and returns it
      *
-     * @param [string] title - Title of the message
-     * @param [string] text - Text of the message
-     * @param [string] caller - The module, which called this function
-     * @param [string] iconCls - Used icon class (default growl)
-     * @param [boolean] log - If the growlMessage should be logged
+     * @param { string } title - Title of the message
+     * @param { string } text - Text of the message
+     * @param { string } caller - The module, which called this function
+     * @param { string } iconCls - Used icon class (default growl)
+     * @param { boolean } log - If the growlMessage should be logged
      */
     createGrowlMessage: function(title, text, caller, iconCls, log) {
         var me = this,
@@ -557,7 +565,7 @@ Ext.define('Shopware.Notification', {
 
         if (log != false) {
             Ext.Ajax.request({
-                url: '{url controller="Log" action="createLog"}',
+                url: '{url controller="Logger" action="createLog"}',
                 params: {
                     type: 'backend',
                     key: caller,
@@ -663,7 +671,7 @@ Ext.define('Shopware.Notification', {
 
         if (log !== false || opts.log !== false) {
             Ext.Ajax.request({
-                url: '{url controller="Log" action="createLog"}',
+                url: '{url controller="Logger" action="createLog"}',
                 params: {
                     type: 'backend',
                     key: caller,
@@ -777,10 +785,10 @@ Ext.define('Shopware.Notification', {
      * Fades out the passed growl like message and removes
      * it from the DOM
      *
-     * @param [object] msg - Instance of the growl message
-     * @param [object] scope - Instance of Shopware.app.Notification
-     * @param [object] task - Instance of Ext.util.DelayedTask
-     * @return [boolean]
+     * @param { object } msg - Instance of the growl message
+     * @param { object } scope - Instance of Shopware.app.Notification
+     * @param { object } task - Instance of Ext.util.DelayedTask
+     * @return { boolean }
      */
     closeGrowlMessage: function(msg, scope, task) {
         var pos = -1;

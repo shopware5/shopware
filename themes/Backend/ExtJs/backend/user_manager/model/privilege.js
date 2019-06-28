@@ -85,4 +85,3 @@ Ext.define('Shopware.apps.UserManager.model.Privilege', {
     }
 });
 //{/block}
-

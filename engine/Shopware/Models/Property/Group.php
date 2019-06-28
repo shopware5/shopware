@@ -118,8 +118,6 @@ class Group extends ModelEntity
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -128,8 +126,6 @@ class Group extends ModelEntity
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return Group
@@ -142,8 +138,6 @@ class Group extends ModelEntity
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()
@@ -152,8 +146,6 @@ class Group extends ModelEntity
     }
 
     /**
-     * Set position
-     *
      * @param int $position
      *
      * @return Group
@@ -166,8 +158,6 @@ class Group extends ModelEntity
     }
 
     /**
-     * Get position
-     *
      * @return int
      */
     public function getPosition()
@@ -176,8 +166,6 @@ class Group extends ModelEntity
     }
 
     /**
-     * Set comparable
-     *
      * @param int $comparable
      *
      * @return Group
@@ -190,8 +178,6 @@ class Group extends ModelEntity
     }
 
     /**
-     * Get comparable
-     *
      * @return int
      */
     public function getComparable()
@@ -214,8 +200,6 @@ class Group extends ModelEntity
     }
 
     /**
-     * Get sortMode
-     *
      * @return int
      */
     public function getSortMode()

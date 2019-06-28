@@ -26,9 +26,6 @@ namespace Shopware\Components\Cart;
 
 use Shopware\Components\Cart\Struct\DiscountContext;
 
-/**
- * Interface BasketHelperInterface
- */
 interface BasketHelperInterface
 {
     const DISCOUNT_ABSOLUTE = 1;

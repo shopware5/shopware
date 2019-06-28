@@ -86,7 +86,8 @@ Ext.define('Shopware.apps.Config.view.customerGroup.Detail', {
         },{
             name: 'key',
             fieldLabel: me.snippets.items.key,
-            allowBlank: false
+            allowBlank: false,
+            maxLength: 15
         },{
             xtype: 'config-element-boolean',
             name: 'taxInput',

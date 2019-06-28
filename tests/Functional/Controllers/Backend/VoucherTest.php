@@ -22,11 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_Test_Controller_TestCase
 {
     /** @var \Shopware\Models\Voucher\Voucher $repository */
@@ -128,7 +123,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
      *
      * @depends testAddVoucher
      *
-     * @param $id
+     * @param string $id
      *
      * @return the id to for the testUpdateVoucher Method
      */
@@ -187,7 +182,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
      *
      * @depends testAddVoucher
      *
-     * @param $id
+     * @param string $id
      */
     public function testValidateOrderCode($id)
     {
@@ -218,7 +213,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
      *
      * @depends testGetVoucherDetail
      *
-     * @param $id
+     * @param string $id
      */
     public function testUpdateVoucher($id)
     {
@@ -239,7 +234,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
      *
      * @depends testUpdateVoucher
      *
-     * @param $id
+     * @param string $id
      */
     public function testGenerateVoucherCodes($id)
     {
@@ -259,7 +254,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
      *
      * @depends testGenerateVoucherCodes
      *
-     * @param $id
+     * @param string $id
      */
     public function testGetVoucherCodes($id)
     {
@@ -275,7 +270,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
      *
      * @depends testGetVoucherCodes
      *
-     * @param $id
+     * @param string $id
      */
     public function testExportVoucherCode($id)
     {
@@ -298,7 +293,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
      *
      * @depends testExportVoucherCode
      *
-     * @param $id
+     * @param string $id
      */
     public function testDeleteVoucher($id)
     {

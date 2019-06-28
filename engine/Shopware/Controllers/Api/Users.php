@@ -23,18 +23,20 @@
  */
 
 use Shopware\Components\Api\Exception\CustomValidationException;
+use Shopware\Components\Api\Resource\User;
 use Shopware\Components\Random;
 
 class Shopware_Controllers_Api_Users extends Shopware_Controllers_Api_Rest
 {
     /**
-     * @var \Shopware\Components\Api\Resource\User
+     * @var User
      */
-    protected $resource = null;
+    protected $resource;
 
-    public function init()
+    public function __construct(User $user)
     {
-        $this->resource = \Shopware\Components\Api\Manager::getResource('user');
+        $this->resource = $user;
+        parent::__construct();
     }
 
     /**
@@ -42,7 +44,7 @@ class Shopware_Controllers_Api_Users extends Shopware_Controllers_Api_Rest
      *
      * GET /api/users/
      */
-    public function indexAction()
+    public function indexAction(): void
     {
         $limit = (int) $this->Request()->getParam('limit', 1000);
         $offset = (int) $this->Request()->getParam('start', 0);
@@ -60,7 +62,7 @@ class Shopware_Controllers_Api_Users extends Shopware_Controllers_Api_Rest
      *
      * GET /api/users/{id}
      */
-    public function getAction()
+    public function getAction(): void
     {
         $id = (int) $this->Request()->getParam('id');
 
@@ -75,7 +77,7 @@ class Shopware_Controllers_Api_Users extends Shopware_Controllers_Api_Rest
      *
      * POST /api/users
      */
-    public function postAction()
+    public function postAction(): void
     {
         if (!$this->Request()->getParam('password')) {
             $passwordPlain = Random::generatePassword();
@@ -98,7 +100,7 @@ class Shopware_Controllers_Api_Users extends Shopware_Controllers_Api_Rest
         }
 
         $this->View()->assign(['success' => true, 'data' => $data]);
-        $this->Response()->setHeader('Location', $location);
+        $this->Response()->headers->set('location', $location);
     }
 
     /**
@@ -106,7 +108,7 @@ class Shopware_Controllers_Api_Users extends Shopware_Controllers_Api_Rest
      *
      * PUT /api/users/{id}
      */
-    public function putAction()
+    public function putAction(): void
     {
         $id = (int) $this->Request()->getParam('id');
 
@@ -132,23 +134,27 @@ class Shopware_Controllers_Api_Users extends Shopware_Controllers_Api_Rest
      *
      * DELETE /api/users/{id}
      */
-    public function deleteAction()
+    public function deleteAction(): void
     {
         $id = (int) $this->Request()->getParam('id');
 
         $container = $this->container;
 
         if (!$container->initialized('Auth')) {
-            return $this->View()->assign(['success' => false, 'errorMsg' => 'Auth not initialized.']);
+            $this->View()->assign(['success' => false, 'errorMsg' => 'Auth not initialized.']);
+
+            return;
         }
 
         $currentUser = (int) $container->get('Auth')->getIdentity()->id;
 
         if ($currentUser === $id) {
-            return $this->View()->assign([
+            $this->View()->assign([
                 'success' => false,
                 'errorMsg' => 'For safety reasons, it is prohibited for a user to delete itself.',
             ]);
+
+            return;
         }
 
         $this->resource->delete($id);

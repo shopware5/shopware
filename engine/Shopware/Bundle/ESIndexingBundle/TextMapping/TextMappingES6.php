@@ -41,7 +41,7 @@ class TextMappingES6 implements TextMappingInterface
      */
     public function getNotAnalyzedField()
     {
-        return ['type' => 'keyword', 'index' => 'false'];
+        return $this->getKeywordField();
     }
 
     /**
@@ -50,5 +50,13 @@ class TextMappingES6 implements TextMappingInterface
     public function getKeywordField()
     {
         return ['type' => 'keyword'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttributeRawField(): array
+    {
+        return $this->getKeywordField();
     }
 }

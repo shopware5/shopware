@@ -170,13 +170,20 @@
                 me.$el.removeClass('is--hidden');
             }
 
-            $.each(products, function(i, product) {
+            for (var i = 0; i < len; i++) {
+                if (typeof products[i] === 'undefined') {
+                    break;
+                }
+
+                var product = products[i];
+
                 if (product.articleId === opts.currentArticle.articleId) {
-                    return;
+                    len++;
+                    continue;
                 }
 
                 me.$container.append(me.createTemplate(product));
-            });
+            }
 
             me.productSlider.initSlider();
 

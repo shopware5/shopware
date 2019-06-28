@@ -26,9 +26,6 @@ namespace Shopware\Components\Form\Container;
 
 use Shopware\Components\Form\Container as BaseContainer;
 
-/**
- * Class Tab
- */
 class Tab extends BaseContainer
 {
     /**

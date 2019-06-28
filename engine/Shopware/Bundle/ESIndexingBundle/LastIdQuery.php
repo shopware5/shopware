@@ -26,9 +26,6 @@ namespace Shopware\Bundle\ESIndexingBundle;
 
 use Doctrine\DBAL\Query\QueryBuilder;
 
-/**
- * Class LastIdQuery
- */
 class LastIdQuery
 {
     /**

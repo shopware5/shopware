@@ -257,8 +257,8 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * Returns a category by the category id
      *
-     * @param $allCategories
-     * @param $categoryId
+     * @param array $allCategories
+     * @param int   $categoryId
      *
      * @return category
      */

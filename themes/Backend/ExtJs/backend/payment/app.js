@@ -27,9 +27,6 @@
  * @author shopware AG
  */
 
-/**
- * todo@all: Documentation
- */
 //{block name="backend/payment/app"}
 Ext.define('Shopware.apps.Payment', {
     /**

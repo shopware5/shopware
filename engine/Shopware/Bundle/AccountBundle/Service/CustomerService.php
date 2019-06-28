@@ -29,9 +29,6 @@ use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Customer;
 
-/**
- * Class CustomerService
- */
 class CustomerService implements CustomerServiceInterface
 {
     /**

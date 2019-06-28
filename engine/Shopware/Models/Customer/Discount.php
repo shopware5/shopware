@@ -69,8 +69,6 @@ class Discount extends ModelEntity
     private $value = 0;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -79,8 +77,6 @@ class Discount extends ModelEntity
     }
 
     /**
-     * Set group
-     *
      * @return Discount
      */
     public function setGroup(Group $group)
@@ -91,8 +87,6 @@ class Discount extends ModelEntity
     }
 
     /**
-     * Get group
-     *
      * @return Group
      */
     public function getGroup()
@@ -101,8 +95,6 @@ class Discount extends ModelEntity
     }
 
     /**
-     * Set discount
-     *
      * @param float $discount
      *
      * @return Discount
@@ -115,8 +107,6 @@ class Discount extends ModelEntity
     }
 
     /**
-     * Get discount
-     *
      * @return float
      */
     public function getDiscount()
@@ -125,8 +115,6 @@ class Discount extends ModelEntity
     }
 
     /**
-     * Set value
-     *
      * @param float $value
      *
      * @return Discount
@@ -139,8 +127,6 @@ class Discount extends ModelEntity
     }
 
     /**
-     * Get value
-     *
      * @return float
      */
     public function getValue()

@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-$lockFile = __DIR__ . '/data/' . 'install.lock';
+$lockFile = __DIR__ . '/data/install.lock';
 if (is_file($lockFile)) {
     header('Content-type: text/html; charset=utf-8', true, 503);
     echo '<br /><h4>Der Installer wurde bereits ausgeführt.</h4>Wenn Sie den Installationsvorgang erneut ausführen möchten, löschen Sie die Datei recovery/install/data/install.lock!<br /><br /><br />';
@@ -31,12 +31,12 @@ if (is_file($lockFile)) {
 }
 
 // Check the minimum required php version
-if (version_compare(PHP_VERSION, '5.6.4', '<')) {
+if (PHP_VERSION_ID < 70200) {
     header('Content-type: text/html; charset=utf-8', true, 503);
     echo '<h2>Fehler</h2>';
-    echo 'Auf Ihrem Server läuft PHP version ' . PHP_VERSION . ', Shopware 5 benötigt mindestens PHP 5.6.4.';
+    echo 'Auf Ihrem Server läuft PHP version ' . PHP_VERSION . ', Shopware 5 benötigt mindestens PHP 7.2.0.';
     echo '<h2>Error</h2>';
-    echo 'Your server is running PHP version ' . PHP_VERSION . ' but Shopware 5 requires at least PHP 5.6.4.';
+    echo 'Your server is running PHP version ' . PHP_VERSION . ' but Shopware 5 requires at least PHP 7.2.0.';
     exit;
 }
 

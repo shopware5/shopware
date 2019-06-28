@@ -26,12 +26,8 @@ namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Media\Media;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class MediaReader extends GenericReader
 {
     /**
@@ -40,8 +36,6 @@ class MediaReader extends GenericReader
     private $mediaService;
 
     /**
-     * MediaReader constructor.
-     *
      * @param string $entity
      */
     public function __construct(
@@ -83,9 +77,11 @@ class MediaReader extends GenericReader
      */
     private function getMediaThumbnail($media)
     {
-        $path = str_replace($media['name'], $media['name'] . '_140x140', $media['path']);
-        $path = str_replace('media/image/', 'media/image/thumbnail/', $path);
+        if ($media['type'] === Media::TYPE_IMAGE) {
+            $media['path'] = str_replace($media['name'], $media['name'] . '_140x140', $media['path']);
+            $media['path'] = str_replace('media/image/', 'media/image/thumbnail/', $media['path']);
+        }
 
-        return $this->mediaService->getUrl($path);
+        return $this->mediaService->getUrl($media['path']);
     }
 }

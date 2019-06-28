@@ -24,16 +24,11 @@
 
 namespace Shopware\Components\Api;
 
-use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 
 /**
  * API Manger
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Manager
 {
@@ -41,9 +36,13 @@ class Manager
      * @param string $name
      *
      * @return Resource\Resource
+     *
+     * @deprecated with 5.6, will be removed with 5.8. Inject the resource instead
      */
     public static function getResource($name)
     {
+        trigger_error('Using Manager::getResource is deprecated since 5.6 and will be removed with 5.8. Inject the resource instead', E_USER_DEPRECATED);
+
         $container = Shopware()->Container();
         try {
             /** @var Resource\Resource $resource */
@@ -60,13 +59,10 @@ class Manager
 
             /** @var Resource\Resource $resource */
             $resource = new $class();
-        }
 
-        if ($resource instanceof ContainerAwareInterface) {
             $resource->setContainer($container);
+            $resource->setManager($container->get('models'));
         }
-
-        $resource->setManager($container->get('models'));
 
         if ($container->initialized('Auth')) {
             $resource->setAcl($container->get('acl'));

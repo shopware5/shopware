@@ -23,11 +23,13 @@
  */
 
 use Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionIsBlacklistedException;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Configurator\Dependency;
 use Shopware\Models\Article\Configurator\Group;
@@ -51,12 +53,8 @@ use Shopware\Models\Property\Group as PropertyGroup;
 use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Tax\Tax;
+use Symfony\Component\HttpFoundation\Cookie;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
@@ -918,14 +916,17 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getArticleImages($articleId)
     {
+        /** @var MediaServiceInterface $mediaService */
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+
+        /** @var Manager $thumbnailManager */
+        $thumbnailManager = Shopware()->Container()->get('thumbnail_manager');
+
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(['images', 'imageMapping', 'mappingRule', 'ruleOption'])
+        $builder->select(['images', 'media'])
                 ->from(Image::class, 'images')
                 ->leftJoin('images.article', 'article')
-                ->leftJoin('images.mappings', 'imageMapping')
-                ->leftJoin('imageMapping.rules', 'mappingRule')
-                ->leftJoin('mappingRule.option', 'ruleOption')
+                ->leftJoin('images.media', 'media')
                 ->where('article.id = :articleId')
                 ->andWhere('images.parentId IS NULL')
                 ->orderBy('images.position')
@@ -934,8 +935,25 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $result = $builder->getQuery()->getArrayResult();
 
         foreach ($result as &$item) {
-            $item['original'] = $mediaService->getUrl('media/image/' . $item['path'] . '.' . $item['extension']);
-            $item['thumbnail'] = $mediaService->getUrl('media/image/thumbnail/' . $item['path'] . '_140x140.' . $item['extension']);
+            $thumbnails = $thumbnailManager->getMediaThumbnails(
+                $item['media']['name'],
+                $item['media']['type'],
+                $item['media']['extension'],
+                [
+                    [
+                        'width' => 140,
+                        'height' => 140,
+                    ],
+                ]
+            );
+
+            $item['original'] = $mediaService->getUrl($item['media']['path']);
+
+            if (!empty($thumbnails)) {
+                $item['thumbnail'] = $mediaService->getUrl($thumbnails[0]['source']);
+            } else {
+                $item['thumbnail'] = $mediaService->getUrl($item['media']['path']);
+            }
         }
 
         return $result;
@@ -1336,7 +1354,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
         $this->removePrices($product->getId());
         $this->removeArticleEsd($product->getId());
-        $this->removeAttributes($product->getId());
         $this->removeArticleDetails($product);
         $this->removeArticleTranslations($product);
 
@@ -1854,9 +1871,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function uploadEsdFileAction()
     {
-        $fileBag = new \Symfony\Component\HttpFoundation\FileBag($_FILES);
-        /** @var Symfony\Component\HttpFoundation\File\UploadedFile|null $file */
-        $file = $fileBag->get('fileId');
+        $overwriteMode = $this->Request()->query->get('uploadMode');
+        $file = $this->Request()->files->get('fileId');
 
         if ($file === null) {
             $this->View()->assign(['success' => false]);
@@ -1892,11 +1908,38 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $filesystem = $this->container->get('shopware.filesystem.private');
         $destinationPath = $this->container->get('config')->offsetGet('esdKey') . '/' . ltrim($file->getClientOriginalName(), '.');
 
+        if ($overwriteMode === 'rename') {
+            $counter = 1;
+            do {
+                $newFilename = pathinfo(ltrim($file->getClientOriginalName()), PATHINFO_FILENAME) . '-' . $counter . '.' . pathinfo($destinationPath, PATHINFO_EXTENSION);
+                $destinationPath = $this->container->get('config')->offsetGet('esdKey') . '/' . ltrim($newFilename, '.');
+                ++$counter;
+            } while ($filesystem->has($destinationPath));
+
+            $this->View()->assign('newName', pathinfo($destinationPath, PATHINFO_BASENAME));
+        }
+
+        if ($filesystem->has($destinationPath)) {
+            if ($overwriteMode === 'overwrite') {
+                $filesystem->delete($destinationPath);
+            } else {
+                $this->View()->assign(['fileExists' => true]);
+
+                return;
+            }
+        }
+
         $upstream = fopen($file->getRealPath(), 'rb');
         $filesystem->writeStream($destinationPath, $upstream);
         fclose($upstream);
 
         $this->View()->assign(['success' => true]);
+    }
+
+    public function loadAction()
+    {
+        parent::loadAction();
+        $this->view->assign('orderNumberRegex', $this->container->getParameter('shopware.product.orderNumberRegex'));
     }
 
     /**
@@ -1923,10 +1966,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
         $response = $this->Response();
-        $response->setHeader('Content-Type', $mimeType);
-        $response->setHeader('Content-Disposition', sprintf('attachment; filename="%s"', basename($path)));
-        $response->setHeader('Content-Length', $meta['size']);
-        $response->setHeader('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('content-type', $mimeType);
+        $response->headers->set('content-disposition', sprintf('attachment; filename="%s"', basename($path)));
+        $response->headers->set('content-length', $meta['size']);
+        $response->headers->set('content-transfer-encoding', 'binary');
         $response->sendHeaders();
         $response->sendResponse();
 
@@ -2122,7 +2165,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             throw new Exception('Invalid shop provided.');
         }
 
-        $shop->registerResources();
+        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
 
         Shopware()->Session()->Admin = true;
 
@@ -2135,7 +2178,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         );
 
         /* @var Shop $shop */
-        $this->Response()->setCookie('shop', (string) $shopId, 0, $shop->getBasePath());
+        $this->Response()->headers->setCookie(new Cookie('shop', (string) $shopId, 0, $shop->getBasePath()));
         $this->redirect($url);
     }
 
@@ -2391,12 +2434,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     ->setMaxResults(1)
                     ->getQuery()
                     ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
-            unset($mainData['attribute']['id']);
-            unset($mainData['attribute']['articleId']);
-            unset($mainData['attribute']['articleDetailId']);
-            unset($mainData['attribute']['articleDetail']);
-            $mainData['attribute']['article'] = $mainDetail->getArticle();
         }
         if ($mapping['prices']) {
             $builder = Shopware()->Models()->createQueryBuilder();
@@ -2776,10 +2813,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 $data['unit'] = Shopware()->Models()->find(Unit::class, $data['unitId']);
             } else {
                 $data['unit'] = null;
-            }
-
-            if (!empty($data['attribute'])) {
-                $data['attribute']['article'] = $product;
             }
 
             $data['article'] = $product;
@@ -4072,11 +4105,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * Internal helper function to remove the product attributes quickly.
      *
-     * @param int $articleId
+     * @param int $articleDetailId
      */
-    protected function removeAttributes($articleId)
+    protected function removeAttributes($articleDetailId)
     {
-        $query = $this->getRepository()->getRemoveAttributesQuery($articleId);
+        $query = $this->getRepository()->getRemoveAttributesQuery($articleDetailId);
         $query->execute();
     }
 
@@ -4100,6 +4133,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $details = Shopware()->Db()->fetchAll($sql, [$article->getId()]);
 
         foreach ($details as $detail) {
+            $this->removeAttributes($detail['id']);
+
             $query = $this->getRepository()->getRemoveImageQuery($detail['id']);
             $query->execute();
 

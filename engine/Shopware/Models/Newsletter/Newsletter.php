@@ -175,7 +175,7 @@ class Newsletter extends ModelEntity
      *
      * @var string
      *
-     * @ORM\Column(name="customergroup", type="string", length=255, nullable=false)
+     * @ORM\Column(name="customergroup", type="string", length=15, nullable=false)
      */
     private $customerGroup = '';
 

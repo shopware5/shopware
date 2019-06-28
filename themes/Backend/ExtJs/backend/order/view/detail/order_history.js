@@ -255,4 +255,3 @@ Ext.define('Shopware.apps.Order.view.detail.OrderHistory', {
 
 });
 //{/block}
-

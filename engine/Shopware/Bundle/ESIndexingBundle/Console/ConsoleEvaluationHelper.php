@@ -66,7 +66,7 @@ class ConsoleEvaluationHelper implements EvaluationHelperInterface
     }
 
     /**
-     * @param bool $active
+     * {@inheritdoc}
      */
     public function setActive($active)
     {
@@ -76,7 +76,7 @@ class ConsoleEvaluationHelper implements EvaluationHelperInterface
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function getActive()
     {
@@ -84,7 +84,7 @@ class ConsoleEvaluationHelper implements EvaluationHelperInterface
     }
 
     /**
-     * @param bool $stopOnError
+     * {@inheritdoc}
      */
     public function setStopOnError($stopOnError)
     {
@@ -94,13 +94,16 @@ class ConsoleEvaluationHelper implements EvaluationHelperInterface
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function getStopOnError()
     {
         return $this->stopOnError;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function addResult(array $data)
     {
         if (!$this->getActive() && !$this->getStopOnError()) {

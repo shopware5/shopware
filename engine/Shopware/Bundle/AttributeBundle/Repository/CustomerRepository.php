@@ -80,7 +80,7 @@ class CustomerRepository extends GenericRepository implements EsAwareRepository
                 'email' => $this->getTextFieldWithRawData(),
                 'active' => ['type' => 'boolean'],
                 'title' => $this->getTextFieldWithRawData(),
-                'salutation' => $this->textMapping->getNotAnalyzedField(),
+                'salutation' => $this->textMapping->getKeywordField(),
                 'firstname' => $this->getTextFieldWithRawData(),
                 'lastname' => $this->getTextFieldWithRawData(),
                 'lastLogin' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
@@ -98,9 +98,9 @@ class CustomerRepository extends GenericRepository implements EsAwareRepository
                 'city' => $this->getTextFieldWithRawData(),
                 'phone' => $this->getTextFieldWithRawData(),
                 'countryId' => ['type' => 'long'],
-                'countryName' => $this->textMapping->getNotAnalyzedField(),
+                'countryName' => $this->textMapping->getKeywordField(),
                 'customerGroupId' => ['type' => 'long'],
-                'customerGroupName' => $this->textMapping->getNotAnalyzedField(),
+                'customerGroupName' => $this->textMapping->getKeywordField(),
 
                 'swag_all' => $this->textMapping->getTextField(),
             ],
@@ -121,7 +121,7 @@ class CustomerRepository extends GenericRepository implements EsAwareRepository
             $this->textMapping->getTextField(),
             [
                 'fields' => [
-                    'raw' => $this->textMapping->getNotAnalyzedField(),
+                    'raw' => $this->textMapping->getKeywordField(),
                 ],
                 'copy_to' => 'swag_all',
             ]

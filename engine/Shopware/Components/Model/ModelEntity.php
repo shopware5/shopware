@@ -28,10 +28,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Abstract class for shopware standard models.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class ModelEntity
 {

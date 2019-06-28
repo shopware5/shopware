@@ -39,7 +39,7 @@ use Shopware\Models\Customer\Customer;
  * Shopware Class that handles several
  * functions around customer / order related things
  */
-class sAdmin
+class sAdmin implements \Enlight_Hook
 {
     /**
      * Check if current active shop has own registration
@@ -402,7 +402,7 @@ class sAdmin
             ORDER BY position, name
         ';
 
-        $getPaymentMeans = $this->db->fetchAll(
+        $paymentMeans = $this->db->fetchAll(
             $sql,
             [
                 $subShopID,
@@ -410,29 +410,28 @@ class sAdmin
             ]
         );
 
-        if ($getPaymentMeans === false) {
-            $getPaymentMeans = $this->db->fetchAll(
+        if ($paymentMeans === false) {
+            $paymentMeans = $this->db->fetchAll(
                 'SELECT id, active, esdactive, mobile_inactive FROM s_core_paymentmeans ORDER BY position, name'
             );
         }
 
-        foreach ($getPaymentMeans as $payKey => $payValue) {
+        foreach ($paymentMeans as $payKey => $payValue) {
             // Hide payment means which are not active
             if (empty($payValue['active']) && $payValue['id'] != $user['additional']['user']['paymentpreset']) {
-                unset($getPaymentMeans[$payKey]);
+                unset($paymentMeans[$payKey]);
                 continue;
             }
 
-            // If esd order, hide payment mean, which
-            // are not accessible for esd
+            // If this is an esd order, hide payment means which are not accessible for esd
             if (empty($payValue['esdactive']) && $sEsd) {
-                unset($getPaymentMeans[$payKey]);
+                unset($paymentMeans[$payKey]);
                 continue;
             }
 
             // Handle blocking for smartphones
             if (!empty($payValue['mobile_inactive']) && $isMobile) {
-                unset($getPaymentMeans[$payKey]);
+                unset($paymentMeans[$payKey]);
                 continue;
             }
 
@@ -440,29 +439,29 @@ class sAdmin
             if ($this->sManageRisks($payValue['id'], null, $user)
                 && $payValue['id'] != $user['additional']['user']['paymentpreset']
             ) {
-                unset($getPaymentMeans[$payKey]);
+                unset($paymentMeans[$payKey]);
                 continue;
             }
         }
 
         // If no payment is left use always the fallback payment no matter if it has any restrictions too
-        if (!count($getPaymentMeans)) {
-            $getPaymentMeans[] = ['id' => $this->config->offsetGet('paymentdefault')];
+        if (!count($paymentMeans)) {
+            $paymentMeans[] = ['id' => $this->config->offsetGet('paymentdefault')];
         }
 
-        $getPaymentMeans = Shopware()->Container()->get('shopware_storefront.payment_gateway')->getList(array_column($getPaymentMeans, 'id'), $this->contextService->getShopContext());
+        $paymentMeans = Shopware()->Container()->get('shopware_storefront.payment_gateway')->getList(array_column($paymentMeans, 'id'), $this->contextService->getShopContext());
 
-        $getPaymentMeans = array_map(function ($payment) {
+        $paymentMeans = array_map(static function ($payment) {
             return Shopware()->Container()->get('legacy_struct_converter')->convertPaymentStruct($payment);
-        }, $getPaymentMeans);
+        }, $paymentMeans);
 
-        $getPaymentMeans = $this->eventManager->filter(
+        $paymentMeans = $this->eventManager->filter(
             'Shopware_Modules_Admin_GetPaymentMeans_DataFilter',
-            $getPaymentMeans,
+            $paymentMeans,
             ['subject' => $this]
         );
 
-        return $getPaymentMeans;
+        return $paymentMeans;
     }
 
     /**
@@ -472,8 +471,7 @@ class sAdmin
      *
      * @throws Enlight_Exception If no payment classes were loaded
      *
-     * @return ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod
-     *                                                                    The payment mean handling class instance
+     * @return ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod The payment mean handling class instance
      */
     public function sInitiatePaymentClass($paymentData)
     {
@@ -674,11 +672,32 @@ class sAdmin
 
     public function logout()
     {
-        $this->moduleManager->Basket()->sDeleteBasket();
+        if ($this->config->get('clearBasketAfterLogout')) {
+            $this->moduleManager->Basket()->sDeleteBasket();
+        }
 
-        Shopware()->Session()->unsetAll();
+        $this->session->unsetAll();
         $this->regenerateSessionId();
+
+        $shop = Shopware()->Shop();
+
+        $this->sSYSTEM->sUSERGROUP = $shop->getCustomerGroup()->getKey();
+        $this->sSYSTEM->sUSERGROUPDATA = $shop->getCustomerGroup()->toArray();
+        $this->sSYSTEM->sCurrency = $shop->getCurrency()->toArray();
+
         $this->contextService->initializeContext();
+
+        if (!$this->config->get('clearBasketAfterLogout')) {
+            $this->moduleManager->Basket()->sRefreshBasket();
+
+            $countries = $this->sGetCountryList();
+            $country = reset($countries);
+
+            $this->moduleManager->Admin()->sGetPremiumShippingcosts($country);
+
+            $amount = $this->moduleManager->Basket()->sGetAmount();
+            $this->session->offsetSet('sBasketAmount', empty($amount) ? 0 : array_shift($amount));
+        }
 
         $this->eventManager->notify('Shopware_Modules_Admin_Logout_Successful');
     }
@@ -1328,8 +1347,8 @@ class sAdmin
             ORDER BY ordertime DESC
             LIMIT $limitStart, $limitEnd
         ";
-        /** @var array $getOrders */
-        $getOrders = $this->db->fetchAll(
+        /** @var array $orders */
+        $orders = $this->db->fetchAll(
             $sql,
             [
                 $this->session->offsetGet('sUserId'),
@@ -1338,21 +1357,21 @@ class sAdmin
         );
         $foundOrdersCount = (int) Shopware()->Db()->fetchOne('SELECT FOUND_ROWS()');
 
-        foreach ($getOrders as $orderKey => $orderValue) {
-            $getOrders[$orderKey]['invoice_amount'] = $this->moduleManager->Articles()
+        foreach ($orders as $orderKey => $orderValue) {
+            $orders[$orderKey]['invoice_amount'] = $this->moduleManager->Articles()
                 ->sFormatPrice($orderValue['invoice_amount']);
-            $getOrders[$orderKey]['invoice_amount_net'] = $this->moduleManager->Articles()
+            $orders[$orderKey]['invoice_amount_net'] = $this->moduleManager->Articles()
                 ->sFormatPrice($orderValue['invoice_amount_net']);
-            $getOrders[$orderKey]['invoice_shipping'] = $this->moduleManager->Articles()
+            $orders[$orderKey]['invoice_shipping'] = $this->moduleManager->Articles()
                 ->sFormatPrice($orderValue['invoice_shipping']);
 
-            $getOrders = $this->processOpenOrderDetails($orderValue, $getOrders, $orderKey);
-            $getOrders[$orderKey]['dispatch'] = $this->sGetPremiumDispatch($orderValue['dispatchID']);
+            $orders = $this->processOpenOrderDetails($orderValue, $orders, $orderKey);
+            $orders[$orderKey]['dispatch'] = $this->sGetPremiumDispatch($orderValue['dispatchID']);
         }
 
-        $getOrders = $this->eventManager->filter(
+        $orders = $this->eventManager->filter(
             'Shopware_Modules_Admin_GetOpenOrderData_FilterResult',
-            $getOrders,
+            $orders,
             [
                 'subject' => $this,
                 'id' => $this->session->offsetGet('sUserId'),
@@ -1360,16 +1379,16 @@ class sAdmin
             ]
         );
 
-        $orderData['orderData'] = $getOrders;
+        $orderData = [];
+        $orderData['orderData'] = $orders;
+        $numberOfPages = 0;
 
         if ($limitEnd != 0) {
             // Make Array with page structure to render in template
             $numberOfPages = ceil($foundOrdersCount / $limitEnd);
-        } else {
-            $numberOfPages = 0;
         }
-        $orderData['numberOfPages'] = $numberOfPages;
 
+        $orderData['numberOfPages'] = $numberOfPages;
         $orderData['pages'] = $this->getPagerStructure($destinationPage, $numberOfPages);
 
         return $orderData;
@@ -2174,8 +2193,7 @@ class sAdmin
     {
         // Compare street and zipcode.
         // Return true if any of them doesn't match.
-        return
-            (
+        return (
                 strtolower(
                     trim($user['shippingaddress']['street'])
                 ) != strtolower(
@@ -2214,8 +2232,7 @@ class sAdmin
     {
         $value = strtolower($value);
 
-        return
-            preg_match("/$value/", strtolower($user['shippingaddress']['lastname']))
+        return preg_match("/$value/", strtolower($user['shippingaddress']['lastname']))
             || preg_match("/$value/", strtolower($user['billingaddress']['lastname']));
     }
 
@@ -3238,7 +3255,13 @@ class sAdmin
         $this->session->offsetSet('sUserPassword', $hash);
         $this->session->offsetSet('sUserId', $getUser['id']);
 
-        $this->sCheckUser();
+        if (!$this->sCheckUser()) {
+            return;
+        }
+
+        if ($this->config->get('migrateCartAfterLogin')) {
+            Shopware()->Container()->get('shopware.components.cart.cart_migration')->migrate();
+        }
     }
 
     /**
@@ -3651,28 +3674,26 @@ SQL;
     /**
      * Helper method for sAdmin::sGetOpenOrderData()
      *
-     * @param array  $orderValue
-     * @param array  $getOrders
      * @param string $orderKey
      *
      * @return array
      */
-    private function processOpenOrderDetails($orderValue, $getOrders, $orderKey)
+    private function processOpenOrderDetails(array $orderValue, array $orders, $orderKey)
     {
-        /** @var array $getOrderDetails */
-        $getOrderDetails = $this->db->fetchAll(
+        /** @var array $orderDetails */
+        $orderDetails = $this->db->fetchAll(
             'SELECT * FROM s_order_details WHERE orderID = ? ORDER BY id ASC',
             [$orderValue['id']]
         );
 
-        if (!count($getOrderDetails)) {
-            unset($getOrders[$orderKey]);
+        if (!count($orderDetails)) {
+            unset($orders[$orderKey]);
 
-            return $getOrders;
+            return $orders;
         }
 
         $context = $this->contextService->getShopContext();
-        $orderProductOrderNumbers = array_column($getOrderDetails, 'articleordernumber');
+        $orderProductOrderNumbers = array_column($orderDetails, 'articleordernumber');
         $listProducts = Shopware()->Container()->get('shopware_storefront.list_product_service')
             ->getList($orderProductOrderNumbers, $context);
         $listProducts = Shopware()->Container()->get('legacy_struct_converter')
@@ -3682,14 +3703,14 @@ SQL;
             $listProduct = array_merge($listProduct, $listProduct['prices'][0]);
         }
 
-        foreach ($getOrderDetails as $orderDetailsKey => $orderDetailsValue) {
-            $getOrderDetails[$orderDetailsKey]['amountNumeric'] = round($orderDetailsValue['price'] * $orderDetailsValue['quantity'], 2);
-            $getOrderDetails[$orderDetailsKey]['priceNumeric'] = $orderDetailsValue['price'];
-            $getOrderDetails[$orderDetailsKey]['amount'] = $this->moduleManager->Articles()
-                ->sFormatPrice($getOrderDetails[$orderDetailsKey]['amountNumeric']);
-            $getOrderDetails[$orderDetailsKey]['price'] = $this->moduleManager->Articles()
+        foreach ($orderDetails as $orderDetailsKey => $orderDetailsValue) {
+            $orderDetails[$orderDetailsKey]['amountNumeric'] = round($orderDetailsValue['price'] * $orderDetailsValue['quantity'], 2);
+            $orderDetails[$orderDetailsKey]['priceNumeric'] = $orderDetailsValue['price'];
+            $orderDetails[$orderDetailsKey]['amount'] = $this->moduleManager->Articles()
+                ->sFormatPrice($orderDetails[$orderDetailsKey]['amountNumeric']);
+            $orderDetails[$orderDetailsKey]['price'] = $this->moduleManager->Articles()
                 ->sFormatPrice($orderDetailsValue['price']);
-            $getOrderDetails[$orderDetailsKey]['active'] = 0;
+            $orderDetails[$orderDetailsKey]['active'] = 0;
 
             $tmpProduct = null;
             if (!empty($listProducts[$orderDetailsValue['articleordernumber']])) {
@@ -3698,37 +3719,37 @@ SQL;
 
             if (!empty($tmpProduct) && is_array($tmpProduct)) {
                 // Set product in activate state
-                $getOrderDetails[$orderDetailsKey]['active'] = 1;
-                $getOrderDetails[$orderDetailsKey]['article'] = $tmpProduct;
+                $orderDetails[$orderDetailsKey]['active'] = 1;
+                $orderDetails[$orderDetailsKey]['article'] = $tmpProduct;
                 if (!empty($tmpProduct['purchaseunit'])) {
-                    $getOrderDetails[$orderDetailsKey]['purchaseunit'] = $tmpProduct['purchaseunit'];
+                    $orderDetails[$orderDetailsKey]['purchaseunit'] = $tmpProduct['purchaseunit'];
                 }
 
                 if (!empty($tmpProduct['referenceunit'])) {
-                    $getOrderDetails[$orderDetailsKey]['referenceunit'] = $tmpProduct['referenceunit'];
+                    $orderDetails[$orderDetailsKey]['referenceunit'] = $tmpProduct['referenceunit'];
                 }
 
                 if (!empty($tmpProduct['referenceprice'])) {
-                    $getOrderDetails[$orderDetailsKey]['referenceprice'] = $tmpProduct['referenceprice'];
+                    $orderDetails[$orderDetailsKey]['referenceprice'] = $tmpProduct['referenceprice'];
                 }
 
                 if (!empty($tmpProduct['sUnit']) && is_array($tmpProduct['sUnit'])) {
-                    $getOrderDetails[$orderDetailsKey]['sUnit'] = $tmpProduct['sUnit'];
+                    $orderDetails[$orderDetailsKey]['sUnit'] = $tmpProduct['sUnit'];
                 }
 
                 if (!empty($tmpProduct['price'])) {
-                    $getOrderDetails[$orderDetailsKey]['currentPrice'] = $tmpProduct['price'];
+                    $orderDetails[$orderDetailsKey]['currentPrice'] = $tmpProduct['price'];
                 }
 
                 if (!empty($tmpProduct['pseudoprice'])) {
-                    $getOrderDetails[$orderDetailsKey]['currentPseudoprice'] = $tmpProduct['pseudoprice'];
+                    $orderDetails[$orderDetailsKey]['currentPseudoprice'] = $tmpProduct['pseudoprice'];
                 }
 
-                $getOrderDetails[$orderDetailsKey]['currentHas_pseudoprice'] = $tmpProduct['has_pseudoprice'];
+                $orderDetails[$orderDetailsKey]['currentHas_pseudoprice'] = $tmpProduct['has_pseudoprice'];
             }
 
             // Check for serial
-            if ($getOrderDetails[$orderDetailsKey]['esdarticle']) {
+            if ($orderDetails[$orderDetailsKey]['esdarticle']) {
                 $numbers = [];
                 $getSerial = $this->db->fetchAll(
                     'SELECT serialnumber
@@ -3746,16 +3767,16 @@ SQL;
                 foreach ($getSerial as $serial) {
                     $numbers[] = $serial['serialnumber'];
                 }
-                $getOrderDetails[$orderDetailsKey]['serial'] = implode(',', $numbers);
-                $getOrderDetails[$orderDetailsKey]['esdLink'] = $this->config->get('sBASEFILE')
+                $orderDetails[$orderDetailsKey]['serial'] = implode(',', $numbers);
+                $orderDetails[$orderDetailsKey]['esdLink'] = $this->config->get('sBASEFILE')
                     . '?sViewport=account&sAction=download&esdID='
                     . $orderDetailsValue['id'];
             }
         }
-        $getOrders[$orderKey]['activeBuyButton'] = 1;
-        $getOrders[$orderKey]['details'] = $getOrderDetails;
+        $orders[$orderKey]['activeBuyButton'] = 1;
+        $orders[$orderKey]['details'] = $orderDetails;
 
-        return $getOrders;
+        return $orders;
     }
 
     /**
@@ -4376,8 +4397,8 @@ SQL;
      */
     private function shouldVerifyCaptcha($config)
     {
-        return $config->get('newsletterCaptcha') !== 'nocaptcha' &&
-            !($config->get('noCaptchaAfterLogin') && Shopware()->Modules()->Admin()->sCheckUser());
+        return $config->get('newsletterCaptcha') !== 'nocaptcha'
+            && !($config->get('noCaptchaAfterLogin') && Shopware()->Modules()->Admin()->sCheckUser());
     }
 
     /**

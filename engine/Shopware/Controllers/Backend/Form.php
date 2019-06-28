@@ -25,9 +25,6 @@
 use Shopware\Models\Form\Field;
 use Shopware\Models\Form\Form;
 
-/**
- * Shopware Backend Controller for the form module
- */
 class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_ExtJs
 {
     /**
@@ -132,8 +129,6 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     }
 
     /**
-     * Removes form
-     *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      */
@@ -283,8 +278,6 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     }
 
     /**
-     * Removes field
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException

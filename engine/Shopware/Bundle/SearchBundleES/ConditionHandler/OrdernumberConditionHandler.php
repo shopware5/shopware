@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Query\TermsQuery;
+use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
+use ONGR\ElasticsearchDSL\Query\TermLevel\TermsQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\OrdernumberCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -32,11 +33,6 @@ use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class OrdernumberConditionHandler implements PartialConditionHandlerInterface
 {
     /**
@@ -57,8 +53,9 @@ class OrdernumberConditionHandler implements PartialConditionHandlerInterface
         ShopContextInterface $context
     ) {
         /* @var OrdernumberCondition $criteriaPart */
-        $search->addFilter(
-            new TermsQuery('number', $criteriaPart->getOrdernumbers())
+        $search->addQuery(
+            new TermsQuery('number', $criteriaPart->getOrdernumbers()),
+            BoolQuery::FILTER
         );
     }
 

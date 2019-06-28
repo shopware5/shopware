@@ -8,6 +8,7 @@ Feature: Security
     Then   I the language should be "en"
     And    I log in with email "test@example.com" and password "shopware"
     Then   I log me out
+    Then   I click on login again
     And    I select "Deutsch" from "__shop"
     Then   I the language should be "de"
     And    I log in successful as "Max Mustermann" with email "test@example.com" and password "shopware"

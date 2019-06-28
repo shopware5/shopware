@@ -47,13 +47,10 @@ class PropertyMapping implements MappingInterface
      */
     private $isDynamic;
 
-    /**
-     * @param bool $isDynamic
-     */
     public function __construct(
         FieldMappingInterface $fieldMapping,
-        $isDynamic = true,
-        $isDebug = false
+        bool $isDynamic = true,
+        bool $isDebug = false
     ) {
         $this->fieldMapping = $fieldMapping;
         $this->isDynamic = $isDynamic;

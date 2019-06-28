@@ -26,8 +26,6 @@ namespace Shopware\Components\MultiEdit\Resource\Product;
 
 /**
  * The backup class creates and loads backups
- *
- * Class Backup
  */
 class Backup
 {

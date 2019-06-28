@@ -33,9 +33,6 @@ use Shopware\Models\Customer\Customer;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 
-/**
- * Register controller
- */
 class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 {
     /**
@@ -144,10 +141,10 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         }
 
         $errors['occurred'] = (
-            !empty($errors['personal']) ||
-            !empty($errors['shipping']) ||
-            !empty($errors['billing']) ||
-            !empty($errors['captcha'])
+            !empty($errors['personal'])
+            || !empty($errors['shipping'])
+            || !empty($errors['billing'])
+            || !empty($errors['captcha'])
         );
 
         if ($errors['occurred']) {
@@ -305,8 +302,8 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             'emailConfirmation' => $errors['emailConfirmation'] ?: false,
         ];
 
-        $this->Response()->setHeader('Content-type', 'application/json', true);
-        $this->Response()->setBody(json_encode($errors));
+        $this->Response()->headers->set('content-type', 'application/json', true);
+        $this->Response()->setContent(json_encode($errors));
     }
 
     public function ajaxValidatePasswordAction()
@@ -322,8 +319,8 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             'passwordConfirmation' => $errors['passwordConfirmation'] ?: false,
         ];
 
-        $this->Response()->setHeader('Content-type', 'application/json', true);
-        $this->Response()->setBody(json_encode($errors));
+        $this->Response()->headers->set('content-type', 'application/json', true);
+        $this->Response()->setContent(json_encode($errors));
     }
 
     /**

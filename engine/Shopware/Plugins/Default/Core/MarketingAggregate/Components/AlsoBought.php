@@ -27,10 +27,6 @@
  * Also bought functions.
  * This components refresh and initials the Also bought data
  * in the s_articles_also_bought_ro
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_AlsoBought extends Enlight_Class
 {

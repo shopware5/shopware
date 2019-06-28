@@ -30,6 +30,7 @@
 /**
  * todo@all: Documentation
  */
+//{block name="backend/voucher/app"}
 //{block name="backend/voucher/view/voucher/app"}
 Ext.define('Shopware.apps.Voucher', {
     /**
@@ -98,4 +99,5 @@ Ext.define('Shopware.apps.Voucher', {
         return mainController.mainWindow;
     }
 });
+//{/block}
 //{/block}

@@ -24,11 +24,6 @@
 
 use Shopware\Models\Analytics\Repository;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Components_Test_Controller_TestCase
 {
     /** @var Shopware\Models\Analytics\Repository */
@@ -158,7 +153,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createOrders();
 
         $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
-        $shop->registerResources();
+        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerShop($shop);
 
         $result = $this->repository->getReferrerRevenue(
             $shop,

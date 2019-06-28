@@ -21,8 +21,8 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/swag_update/main}
-//{block name="backend/index/view/menu" append}
+// {namespace name=backend/swag_update/main}
+// {block name="backend/index/view/menu" append}
 Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
     override: 'Shopware.apps.Index.view.Menu',
 
@@ -32,13 +32,13 @@ Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
     initComponent: function() {
         var me = this, result;
 
-        /*{if {acl_is_allowed privilege=read resource=swagupdate}}*/
+        /* {if {acl_is_allowed privilege=notification resource=swagupdate}} */
         me.on('menu-created', function(items) {
             window.setTimeout(function() {
                 me.performVersionCheck();
             }, 500);
         });
-        /*{/if}*/
+        /* {/if} */
 
         result = me.callParent(arguments);
 
@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
      */
     performVersionCheck: function() {
         var me = this,
-                snippets;
+            snippets;
 
         snippets = {
             title: '{s name=growl/update/title}A new version of Shopware is available{/s}',
@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
                     if (result.message && result.success === false) {
                         Shopware.Notification.createStickyGrowlMessage({
                             title: snippets.errorTitle,
-                            text: result.opensslMissing ? snippets.opensslMessage : result.message,
+                            text: result.opensslMissing ? snippets.opensslMessage : result.message
                         });
                     }
 
@@ -115,9 +115,9 @@ Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
                     },
 
                     onCloseButton: function() {
-                        /*{if {acl_is_allowed privilege=skipUpdate resource=swagupdate}}*/
+                        /* {if {acl_is_allowed privilege=skipUpdate resource=swagupdate}} */
                         Ext.MessageBox.confirm('{s name="skip_update"}Skip update{/s}', '{s name="skip_update_question"}Do you want to disable the notifications for this update permanently?{/s}', skipUpdate);
-                        /*{/if}*/
+                        /* {/if} */
                     }
                 });
 
@@ -127,7 +127,7 @@ Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
                             skipVersion = localStorage.getItem('skipVersion');
 
                         // No version skipped before or an old version
-                        if(!skipVersion || skipVersion != version) {
+                        if (!skipVersion || skipVersion != version) {
                             localStorage.setItem('skipVersion', version);
                         }
 
@@ -138,4 +138,4 @@ Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
         });
     }
 });
-//{/block}
+// {/block}

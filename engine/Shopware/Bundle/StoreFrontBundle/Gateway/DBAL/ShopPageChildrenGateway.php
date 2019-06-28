@@ -29,11 +29,6 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\ShopPageChildrenGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ShopPageGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class ShopPageChildrenGateway implements ShopPageChildrenGatewayInterface
 {
     /**

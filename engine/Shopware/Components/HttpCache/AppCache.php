@@ -38,10 +38,6 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  * $httpCacheApp = new Shopware\Components\HttpCache\AppCache($kernel);
  * $httpCacheApp->invalidate($request);
  * </code>
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class AppCache extends HttpCache
 {
@@ -61,8 +57,6 @@ class AppCache extends HttpCache
     protected $options = [];
 
     /**
-     * Constructor.
-     *
      * @param HttpKernelInterface $kernel  An HttpKernelInterface instance
      * @param array               $options
      */
@@ -118,6 +112,8 @@ class AppCache extends HttpCache
         $response->headers->remove('cache-control');
         $response->headers->addCacheControlDirective('no-cache');
 
+        $this->filterHttp2ServerPushHeader($request, $response);
+
         return $response;
     }
 
@@ -158,15 +154,15 @@ class AppCache extends HttpCache
             }
 
             if ($result) {
-                $response->setStatusCode(200, 'Banned');
+                $response->setStatusCode(Response::HTTP_OK, 'Banned');
             } else {
-                $response->setStatusCode(200, 'Not Banned');
+                $response->setStatusCode(Response::HTTP_OK, 'Not Banned');
             }
         } elseif ($request->getMethod() === 'PURGE') {
             if ($this->getStore()->purge($request->getUri())) {
-                $response->setStatusCode(200, 'Purged');
+                $response->setStatusCode(Response::HTTP_OK, 'Purged');
             } else {
-                $response->setStatusCode(200, 'Not purged');
+                $response->setStatusCode(Response::HTTP_OK, 'Not purged');
             }
         }
 
@@ -341,5 +337,18 @@ class AppCache extends HttpCache
 
         $noCache[] = 'slt';
         $request->cookies->set('nocache', implode(', ', $noCache));
+    }
+
+    private function filterHttp2ServerPushHeader(Request $request, Response $response)
+    {
+        /* We do not want to push the assets with every request, only for new visitors. We therefore check
+           for an existing session-cookie, which would indicate that this isn't the first client request. */
+        foreach ($request->cookies->keys() as $cookieName) {
+            if (strpos($cookieName, 'session-') === 0) {
+                $response->headers->remove('link');
+
+                return;
+            }
+        }
     }
 }

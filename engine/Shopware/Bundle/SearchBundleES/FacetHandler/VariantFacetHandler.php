@@ -55,9 +55,6 @@ class VariantFacetHandler implements HandlerInterface, ResultHydratorInterface
      */
     private $fieldName;
 
-    /**
-     * VariantFacetHandler constructor.
-     */
     public function __construct(
         ConfiguratorOptionsGatewayInterface $gateway,
         QueryAliasMapper $queryAliasMapper

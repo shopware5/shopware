@@ -22,16 +22,19 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Api\Resource\Translation;
+
 class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Rest
 {
     /**
-     * @var \Shopware\Components\Api\Resource\Translation
+     * @var Translation
      */
-    protected $resource = null;
+    protected $resource;
 
-    public function init()
+    public function __construct(Translation $translation)
     {
-        $this->resource = \Shopware\Components\Api\Manager::getResource('translation');
+        $this->resource = $translation;
+        parent::__construct();
     }
 
     public function preDispatch()
@@ -89,7 +92,7 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
         ];
 
         $this->View()->assign(['success' => true, 'data' => $data]);
-        $this->Response()->setHeader('Location', $location);
+        $this->Response()->headers->set('location', $location);
     }
 
     /**

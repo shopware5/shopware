@@ -22,20 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Api\Resource\Media;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\FileBag;
 
 class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
 {
     /**
      * @var Shopware\Components\Api\Resource\Media
      */
-    protected $resource = null;
+    protected $resource;
 
-    public function init()
+    public function __construct(Media $media)
     {
-        $this->resource = \Shopware\Components\Api\Manager::getResource('media');
+        $this->resource = $media;
+        parent::__construct();
     }
 
     /**
@@ -43,7 +43,7 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
      *
      * GET /api/media/
      */
-    public function indexAction()
+    public function indexAction(): void
     {
         $limit = (int) $this->Request()->getParam('limit', 1000);
         $offset = (int) $this->Request()->getParam('start', 0);
@@ -61,7 +61,7 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
      *
      * GET /api/media/{id}
      */
-    public function getAction()
+    public function getAction(): void
     {
         $id = $this->Request()->getParam('id');
 
@@ -76,7 +76,7 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
      *
      * POST /api/media
      */
-    public function postAction()
+    public function postAction(): void
     {
         $params = $this->Request()->getPost();
         $params = $this->prepareUploadedFile($params);
@@ -91,7 +91,7 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
         ];
 
         $this->View()->assign(['success' => true, 'data' => $data]);
-        $this->Response()->setHeader('Location', $location);
+        $this->Response()->headers->set('location', $location);
     }
 
     /**
@@ -99,7 +99,7 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
      *
      * PUT /api/media/{id}
      */
-    public function putAction()
+    public function putAction(): void
     {
         $id = $this->Request()->getParam('id');
         $params = $this->Request()->getPost();
@@ -120,7 +120,7 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
      *
      * DELETE /api/media/{id}
      */
-    public function deleteAction()
+    public function deleteAction(): void
     {
         $id = $this->Request()->getParam('id');
 
@@ -130,19 +130,13 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
     }
 
     /**
-     * @throws ApiException\CustomValidationException
      * @throws Exception
-     *
-     * @return array
      */
-    private function prepareUploadedFile(array $params)
+    private function prepareUploadedFile(array $params): array
     {
-        $fileBag = new FileBag($_FILES);
-
         // Check for a POSTed file
-        if ($fileBag->has('file')) {
-            /** @var UploadedFile $file */
-            $file = $fileBag->get('file');
+        if ($this->Request()->files->has('file')) {
+            $file = $this->Request()->files->get('file');
             $fileExtension = $file->getClientOriginalExtension();
             $fileName = $file->getClientOriginalName();
 
@@ -172,10 +166,8 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
 
     /**
      * Use the ID of the authenticated user as a fallback 'userId'
-     *
-     * @return array
      */
-    private function prepareFallbackUser(array $params)
+    private function prepareFallbackUser(array $params): array
     {
         if (empty($params['userId'])) {
             $params['userId'] = $this->get('auth')->getIdentity()->id;

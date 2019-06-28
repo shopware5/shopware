@@ -31,6 +31,7 @@
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
+// {block name="extjs/overrides/field"}
 Ext.define('Enlight.form.Field',
     {
         override: 'Ext.form.Field',
@@ -45,3 +46,4 @@ Ext.define('Enlight.form.Field',
     {
         Ext.form.Field.mixin('helpSupportElems', Enlight.form.mixin.HelpSupportElements);
 });
+// {/block}

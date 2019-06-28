@@ -46,4 +46,3 @@ Ext.define('Shopware.apps.UserManager.store.Rules', {
     model : 'Shopware.apps.UserManager.model.Rules'
 });
 //{/block}
-

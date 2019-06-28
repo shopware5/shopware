@@ -108,7 +108,6 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
                 click:me.onUpdate
             },
             'product_feed-feed-window':{
-                scope:me,
                 beforeclose:me.onBeforeCloseWindow
             }
         });

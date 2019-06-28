@@ -52,4 +52,3 @@ Ext.define('Shopware.apps.Order.model.Debit', {
     ]
 });
 //{/block}
-

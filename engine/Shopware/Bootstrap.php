@@ -26,10 +26,6 @@ use Shopware\Components\DependencyInjection\Container;
 
 /**
  * @deprecated since 5.2 will be removed in 6.0
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Bootstrap
 {

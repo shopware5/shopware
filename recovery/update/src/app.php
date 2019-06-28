@@ -74,7 +74,7 @@ $app->hook('slim.before.dispatch', function () use ($app, $container) {
 
     $ipCheckEnabled = (bool) $app->config('check.ip');
     if ($ipCheckEnabled && !Utils::isAllowed($clientIp)) {
-        $app->view()->setData('filePath', UPDATE_PATH . '/' . 'allowed_ip.txt');
+        $app->view()->setData('filePath', UPDATE_PATH . '/allowed_ip.txt');
 
         $app->render('noaccess.php');
         $app->response()->status(403);
@@ -109,7 +109,7 @@ $app->error(function (Exception $e) use ($app) {
 });
 
 $app->map('/noaccess', function () use ($app) {
-    $app->view()->setData('filePath', UPDATE_PATH . '/' . 'allowed_ip.txt');
+    $app->view()->setData('filePath', UPDATE_PATH . '/allowed_ip.txt');
 
     $app->render('noaccess.php');
     $app->response()->status(403);

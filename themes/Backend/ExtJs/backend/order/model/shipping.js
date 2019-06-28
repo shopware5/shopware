@@ -59,4 +59,3 @@ Ext.define('Shopware.apps.Order.model.Shipping', {
 
 });
 //{/block}
-

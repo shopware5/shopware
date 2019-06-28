@@ -23,6 +23,8 @@
  */
 
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
+use Shopware\Bundle\ContentTypeBundle\Structs\Criteria;
+use Shopware\Bundle\ContentTypeBundle\Structs\Type;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ShopPageServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -34,12 +36,8 @@ use Shopware\Models\Shop\Shop;
 
 /**
  * Deprecated Shopware Class that handles url rewrites
- *
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class sRewriteTable
+class sRewriteTable implements \Enlight_Hook
 {
     /**
      * @var \sSystem
@@ -251,6 +249,7 @@ class sRewriteTable
         $lastUpdate = $this->sCreateRewriteTableArticles($lastUpdate);
         $this->sCreateRewriteTableContent(null, null, $context);
         $this->createManufacturerUrls($context);
+        $this->createContentTypeUrls($context);
 
         return $lastUpdate;
     }
@@ -694,6 +693,58 @@ class sRewriteTable
         $this->insertStaticPageUrls($offset, $limit, $context);
     }
 
+    public function createSingleContentTypeUrl(Type $type): void
+    {
+        if (!$type->isShowInFrontend()) {
+            return;
+        }
+
+        $translator = Shopware()->Container()->get('shopware_bundle_content_type.services.frontend_type_translator');
+        $type = $translator->translate($type);
+
+        // insert controller, itself
+        $path = $type->getName() . '/';
+        $path = $this->sCleanupPath($path);
+        $this->sInsertUrl('sViewport=' . $type->getControllerName() . '&sAction=index', $path);
+    }
+
+    public function createContentTypeUrls(ShopContextInterface $context): void
+    {
+        $translator = Shopware()->Container()->get('shopware_bundle_content_type.services.frontend_type_translator');
+
+        /** @var Type $type */
+        foreach (Shopware()->Container()->get('shopware.bundle.content_type.type_provider')->getTypes() as $type) {
+            if (!$type->isShowInFrontend()) {
+                continue;
+            }
+
+            $type = $translator->translate($type);
+
+            // insert controller, itself
+            $path = $type->getName() . '/';
+            $path = $this->sCleanupPath($path);
+            $this->sInsertUrl('sViewport=' . $type->getControllerName() . '&sAction=index', $path);
+
+            $typeArray = json_decode(json_encode($type), true);
+
+            /** @var \Shopware\Bundle\ContentTypeBundle\Services\RepositoryInterface $repository */
+            $repository = Shopware()->Container()->get('shopware.bundle.content_type.' . $type->getInternalName());
+
+            $criteria = new Criteria();
+            $criteria->loadAssociations = true;
+            $criteria->loadTranslations = true;
+            $criteria->limit = null;
+
+            foreach ($repository->findAll($criteria)->items as $item) {
+                $path = $this->template->fetch('string:' . $type->getSeoUrlTemplate(), ['type' => $typeArray, 'item' => $item, 'context' => $context]);
+                $path = $this->sCleanupPath($path);
+
+                $org_path = sprintf('sViewport=%s&sAction=detail&id=%d', $type->getControllerName(), $item['id']);
+                $this->sInsertUrl($org_path, $path);
+            }
+        }
+    }
+
     /**
      * Updates / create a single rewrite URL
      *
@@ -961,8 +1012,8 @@ class sRewriteTable
             $hasSpecificSubShopPath = $this->hasSpecificShopPath($org_path, $path, $shopId);
 
             // If our current form is specific for this subshop OR if we are for all shops and no other form is specific, write URL
-            if (!empty($form['shopIds']) ||
-                (empty($form['shopIds']) && !$hasSpecificSubShopPath)) {
+            if (!empty($form['shopIds'])
+                || (empty($form['shopIds']) && !$hasSpecificSubShopPath)) {
                 $this->sInsertUrl($org_path, $path);
             }
         }
@@ -1002,8 +1053,8 @@ class sRewriteTable
             $hasSpecificSubShopPath = $this->hasSpecificShopPath($org_path, $path, $shopId);
 
             // If our current site is specific for this subshop OR if we are for all shops and no other site is specific, write URL
-            if (!empty($form['shopIds']) ||
-                (empty($form['shopIds']) && !$hasSpecificSubShopPath)) {
+            if (!empty($form['shopIds'])
+                || (empty($form['shopIds']) && !$hasSpecificSubShopPath)) {
                 $this->sInsertUrl($org_path, $path);
             }
         }

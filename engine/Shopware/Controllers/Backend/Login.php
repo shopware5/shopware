@@ -23,10 +23,9 @@
  */
 
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Models\Shop\Locale;
+use Shopware\Models\User\Role;
 
-/**
- * Shopware Login Controller
- */
 class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
@@ -72,24 +71,24 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
         $user = $auth->getIdentity();
         if (!empty($user->roleID)) {
             $user->role = Shopware()->Models()->find(
-                'Shopware\Models\User\Role',
+                Role::class,
                 $user->roleID
             );
         }
         if ($user && ($locale = $this->Request()->get('locale')) !== null) {
             $user->locale = Shopware()->Models()->getRepository(
-                'Shopware\Models\Shop\Locale'
+                Locale::class
             )->find($locale);
         }
         if (!isset($user->locale) && !empty($user->localeID)) {
             $user->locale = Shopware()->Models()->find(
-                'Shopware\Models\Shop\Locale',
+                Locale::class,
                 $user->localeID
             );
         }
         if ($user && !isset($user->locale)) {
             $user->locale = Shopware()->Models()->getRepository(
-                'Shopware\Models\Shop\Locale'
+                Locale::class
             )->find($this->getPlugin()->getDefaultLocale());
         }
 

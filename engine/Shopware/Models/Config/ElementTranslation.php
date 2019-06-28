@@ -89,8 +89,6 @@ class ElementTranslation extends ModelEntity
     private $localeId;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -99,8 +97,6 @@ class ElementTranslation extends ModelEntity
     }
 
     /**
-     * Set description
-     *
      * @param string $description
      *
      * @return ElementTranslation
@@ -113,8 +109,6 @@ class ElementTranslation extends ModelEntity
     }
 
     /**
-     * Get description
-     *
      * @return string
      */
     public function getDescription()
@@ -123,8 +117,6 @@ class ElementTranslation extends ModelEntity
     }
 
     /**
-     * Set label
-     *
      * @param string $label
      *
      * @return ElementTranslation
@@ -137,8 +129,6 @@ class ElementTranslation extends ModelEntity
     }
 
     /**
-     * Get label
-     *
      * @return string
      */
     public function getLabel()
@@ -155,8 +145,6 @@ class ElementTranslation extends ModelEntity
     }
 
     /**
-     * Set element
-     *
      * @param \Shopware\Models\Config\Element $element
      *
      * @return ElementTranslation

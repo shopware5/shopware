@@ -22,11 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Components_SeoIndex extends Enlight_Class
 {
     /**
@@ -127,7 +122,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
         $shop = $repository->getById($shopId);
 
-        $shop->registerResources();
+        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerShop($shop);
 
         return $shop;
     }
@@ -343,5 +338,10 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         $numResults = $repository->getFriendlyUrlSuppliersCountQueryBuilder()->getQuery()->getSingleScalarResult();
 
         return (int) $numResults;
+    }
+
+    public function countContentTypes(): int
+    {
+        return (int) count(Shopware()->Container()->get('shopware.bundle.content_type.type_provider')->getTypes());
     }
 }

@@ -27,9 +27,6 @@ namespace Shopware\Bundle\AccountBundle\Service\Validator;
 use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Models\Customer\Address;
 
-/**
- * Interface AddressValidatorInterface
- */
 interface AddressValidatorInterface
 {
     /**

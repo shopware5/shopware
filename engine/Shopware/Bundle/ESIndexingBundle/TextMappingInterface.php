@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\ESIndexingBundle;
 
-/**
- * Class TextMapping
- */
 interface TextMappingInterface
 {
     /**
@@ -35,6 +32,8 @@ interface TextMappingInterface
     public function getTextField();
 
     /**
+     * @deprecated Will be removed with Shopware 5.7
+     *
      * @return array
      */
     public function getNotAnalyzedField();
@@ -43,4 +42,9 @@ interface TextMappingInterface
      * @return array
      */
     public function getKeywordField();
+
+    /**
+     * @deprecated Will be removed with Shopware 5.7
+     */
+    public function getAttributeRawField(): array;
 }

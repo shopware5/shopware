@@ -30,9 +30,6 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\BasketStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
 
-/**
- * Class StoreOrderService
- */
 class StoreOrderService
 {
     /**

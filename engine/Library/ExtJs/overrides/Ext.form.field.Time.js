@@ -27,6 +27,7 @@
  * Extends the default safeParse function to allow
  * parsing partial times using the alternative formats
  */
+//{block name="extjs/overrides/time"}
 Ext.override(Ext.form.field.Time,
 /** @lends Ext.form.field.Time */
 {
@@ -65,3 +66,4 @@ Ext.override(Ext.form.field.Time,
         return result;
     }
 });
+//{/block}

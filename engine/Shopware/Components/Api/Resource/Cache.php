@@ -28,19 +28,14 @@ use Shopware\Components\Api\BatchInterface;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\CacheManager;
 use Shopware\Components\DependencyInjection\Container;
-use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Cache API Resource
  *
  * This resource provides access to all shopware caches.
  * It is used internally by the Cache/Performance backend module
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Cache extends Resource implements ContainerAwareInterface, BatchInterface
+class Cache extends Resource implements BatchInterface
 {
     /**
      * @var \Enlight_Controller_Request_Request
@@ -63,6 +58,7 @@ class Cache extends Resource implements ContainerAwareInterface, BatchInterface
             $this->request = $container->get('front')->Request();
             $this->cacheManager = $container->get('shopware.cache_manager');
         }
+        parent::setContainer($container);
     }
 
     /**

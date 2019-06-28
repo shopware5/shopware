@@ -32,9 +32,6 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Template;
 use Shopware\Models\Shop\TemplateConfig;
 
-/**
- * Class Base
- */
 class Theme implements Form\Interfaces\Persister
 {
     /**

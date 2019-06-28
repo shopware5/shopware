@@ -66,8 +66,6 @@ class Locale extends ModelEntity
     private $territory;
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -76,8 +74,6 @@ class Locale extends ModelEntity
     }
 
     /**
-     * Set locale
-     *
      * @param string $locale
      *
      * @return Locale
@@ -90,8 +86,6 @@ class Locale extends ModelEntity
     }
 
     /**
-     * Get locale
-     *
      * @return string
      */
     public function getLocale()
@@ -100,8 +94,6 @@ class Locale extends ModelEntity
     }
 
     /**
-     * Set language
-     *
      * @param string $language
      *
      * @return Locale
@@ -114,8 +106,6 @@ class Locale extends ModelEntity
     }
 
     /**
-     * Get language
-     *
      * @return string
      */
     public function getLanguage()
@@ -124,8 +114,6 @@ class Locale extends ModelEntity
     }
 
     /**
-     * Set territory
-     *
      * @param string $territory
      *
      * @return Locale
@@ -138,8 +126,6 @@ class Locale extends ModelEntity
     }
 
     /**
-     * Get territory
-     *
      * @return string
      */
     public function getTerritory()

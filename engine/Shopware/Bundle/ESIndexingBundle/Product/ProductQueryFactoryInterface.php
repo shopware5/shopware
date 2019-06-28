@@ -26,9 +26,6 @@ namespace Shopware\Bundle\ESIndexingBundle\Product;
 
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 
-/**
- * Class ProductQueryFactoryInterface
- */
 interface ProductQueryFactoryInterface
 {
     /**

@@ -45,11 +45,6 @@ use ShopwarePlugins\SwagUpdate\Components\UpdateCheck;
 use ShopwarePlugins\SwagUpdate\Components\Validation;
 use Symfony\Component\Filesystem\Filesystem;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
@@ -356,7 +351,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             $result = $downloadStep->run($offset);
             $this->view->assign($this->mapResult($result));
         } catch (Exception $e) {
-            $this->Response()->setHttpResponseCode(500);
+            $this->Response()->setStatusCode(500);
             $this->View()->assign('message', $e->getMessage());
             $this->View()->assign('success', false);
         }

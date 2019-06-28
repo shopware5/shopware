@@ -84,8 +84,6 @@ class Media extends ModelEntity
     private $preview;
 
     /**
-     * Get Id
-     *
      * @return int
      */
     public function getId()
@@ -94,8 +92,6 @@ class Media extends ModelEntity
     }
 
     /**
-     * Get Preview
-     *
      * @return int
      */
     public function getPreview()
@@ -104,8 +100,6 @@ class Media extends ModelEntity
     }
 
     /**
-     * Set Preview
-     *
      * @param int $preview
      */
     public function setPreview($preview)
@@ -114,8 +108,6 @@ class Media extends ModelEntity
     }
 
     /**
-     * Get Blog
-     *
      * @return \Shopware\Models\Blog\Blog
      */
     public function getBlog()
@@ -124,8 +116,6 @@ class Media extends ModelEntity
     }
 
     /**
-     * Set Blog
-     *
      * @param \Shopware\Models\Blog\Blog $blog
      */
     public function setBlog($blog)

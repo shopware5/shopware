@@ -52,4 +52,3 @@ Ext.define('Shopware.apps.Base.store.PageNotFoundDestinationOptions', {
     }
 }).create();
 //{/block}
-

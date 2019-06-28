@@ -277,7 +277,8 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
      * @param [object] record - current record
      */
     nameColumn : function (value, metaData, record) {
-        return Ext.String.format('{literal}<strong style="font-weight: 700">{0}</strong>{/literal}', record.get('name'));
+        // Show the translated name in the list
+        return Ext.String.format('{literal}<strong style="font-weight: 700">{0}</strong>{/literal}', record.get('translatedName'));
     },
 
     /**
@@ -288,7 +289,8 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
      * @param [object] record - current record
      */
     commentColumn : function (value, metaData, record) {
-        return record.get('comment');
+        // Show the translated description in the overview
+        return record.get('translatedDescription');
     },
     /**
      * Formats the action column

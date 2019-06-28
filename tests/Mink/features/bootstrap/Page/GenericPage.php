@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace  Shopware\Tests\Mink\Page;
+namespace Shopware\Tests\Mink\Page;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Helper;
@@ -101,7 +101,7 @@ class GenericPage extends Page implements HelperSelectorInterface
     /**
      * Checks if the robots meta exists and matches the expected content
      *
-     * @param $content
+     * @param array $content
      */
     public function checkRobots($content = [])
     {

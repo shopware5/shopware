@@ -26,10 +26,6 @@ namespace Shopware\Components\Validator;
 
 /**
  * The Validator\EmailValidator class is used to validate emails addresses consistently across the system
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class EmailValidator implements EmailValidatorInterface
 {

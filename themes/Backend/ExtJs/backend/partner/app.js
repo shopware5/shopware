@@ -33,6 +33,7 @@
  * Contains the configuration for the partner list backend module.
  * This component defines which controllers belong to the application or whether the bulk loading is activated.
  */
+//{block name="backend/partner/app"}
 //{block name="backend/partner/view/partner/app"}
 Ext.define('Shopware.apps.Partner', {
     /**
@@ -107,4 +108,5 @@ Ext.define('Shopware.apps.Partner', {
         return mainController.mainWindow;
     }
 });
+//{/block}
 //{/block}

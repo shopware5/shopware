@@ -27,8 +27,6 @@ use Shopware\Models\Blog\Media;
 use Shopware\Models\Blog\Tag;
 
 /**
- * Shopware Backend Controller for the Blog Module
- *
  * Backend Controller for the blog backend module.
  * Displays all data in an Ext.grid.Panel and allows to delete,
  * add and edit items. On the detail page the blog data are displayed and can be edited

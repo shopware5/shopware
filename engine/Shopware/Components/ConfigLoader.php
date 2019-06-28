@@ -25,17 +25,12 @@
 namespace Shopware\Components;
 
 /**
- * Class Config
  * This class is responsible to load and parse the shopware configuration
  * files.
  * The Config class is used from the ShopwareKernel to load the shopware
  * configuration before shopware initialed.
  * The ShopwareKernel injects the loaded configuration and the Symfony DI-Container
  * into the Shopware_Application.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ConfigLoader
 {

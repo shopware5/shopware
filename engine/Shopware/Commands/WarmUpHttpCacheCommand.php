@@ -29,13 +29,16 @@ use Shopware\Components\HttpCache\UrlProvider\UrlProviderInterface;
 use Shopware\Components\HttpCache\UrlProviderFactoryInterface;
 use Shopware\Components\Routing\Context;
 use Shopware\Models\Shop\Shop;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class WarmUpHttpCacheCommand extends ShopwareCommand
+class WarmUpHttpCacheCommand extends ShopwareCommand implements CompletionAwareInterface
 {
     private $errorMessage = false;
 
@@ -49,12 +52,34 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
     /**
      * {@inheritdoc}
      */
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        if ($argumentName === 'shopId') {
+            return $this->completeShopIds($context->getCurrentWord());
+        }
+
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
         $this
             ->setName('sw:warm:http:cache')
             ->setDescription('Warm up http cache (everything by default)')
-            ->addArgument('shopId', InputArgument::OPTIONAL, 'The Id of the shop')
+            /* @deprecated since 5.6, to be removed in 6.0 */
+            ->addArgument('shopId', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The Id of the shop (deprecated)')
+            ->addOption('shopId', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'The Id of the shop (multiple Ids -> shopId={1,2})')
             ->addOption('clear-cache', 'c', InputOption::VALUE_NONE, 'Clear complete httpcache before warmup')
             ->addOption('concurrent-requests', 'b', InputOption::VALUE_OPTIONAL, 'Integer representing the maximum number of requests that are allowed to be sent concurrently. To many URLs at a time may cause script timeouts, memory issues or block your HTTP server', 1)
             ->addOption('category', 'k', InputOption::VALUE_NONE, 'Warm up categories')
@@ -82,18 +107,30 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
         /** @var UrlProviderFactoryInterface $urlProviderFactory */
         $urlProviderFactory = $this->container->get('shopware_cache_warmer.url_provider_factory');
 
-        // Get every shop to warm
-        $shopId = $input->getArgument('shopId');
+        $shopIds = null;
+
+        if ($input->getArgument('shopId')) {
+            $io = new SymfonyStyle($input, $output);
+            $io->warning('Argument "shopId" will be replaced by option "--shopId" in the next major Version');
+            $shopIds = $input->getArgument('shopId');
+        } elseif ($input->getOption('shopId')) {
+            $shopIds = $input->getOption('shopId');
+        }
+
+        /** @var \Shopware\Models\Shop\Repository $shopRepository */
         $shopRepository = $this->container->get('models')->getRepository(Shop::class);
+        $shops = null;
 
-        if (!empty($shopId)) {
-            $shop = $shopRepository->getById($shopId);
+        if (!empty($shopIds)) {
+            foreach ($shopIds as $shopId) {
+                $shop = $shopRepository->getById($shopId);
 
-            if (!$shop) {
-                throw new \RuntimeException(sprintf('Shop with id %d not found', $shopId));
+                if (!$shop) {
+                    throw new \RuntimeException(sprintf('Shop with id %d not found', $shopId));
+                }
+
+                $shops[] = $shop;
             }
-
-            $shops = [$shop];
         } else {
             $shops = $shopRepository->getActiveShopsFixed();
         }

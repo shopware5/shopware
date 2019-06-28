@@ -22,11 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_Test_Controller_TestCase
 {
     private $testDataCreate = [
@@ -114,7 +109,7 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
     /**
      * Function to test updating a payment
      *
-     * @param $data Contains the data of the created payment
+     * @param array $data Contains the data of the created payment
      * @depends testCreatePayments
      */
     public function testUpdatePayments($data)
@@ -134,7 +129,7 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
     /**
      * Function to test deleting a payment
      *
-     * @param $data Contains the data of the created payment
+     * @param array $data Contains the data of the created payment
      * @depends testCreatePayments
      */
     public function testDeletePayment($data)

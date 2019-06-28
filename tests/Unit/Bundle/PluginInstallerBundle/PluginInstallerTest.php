@@ -29,15 +29,13 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Statement;
 use PDO;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\RequirementValidator;
 use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Kernel;
 
-/**
- * Class PluginInstallerTest
- */
 class PluginInstallerTest extends TestCase
 {
     public function testRefreshPluginList()
@@ -91,7 +89,8 @@ class PluginInstallerTest extends TestCase
             $pdo,
             new \Enlight_Event_EventManager(),
             ['ShopwarePlugins' => __DIR__ . '/Fixtures'],
-            new ShopwareReleaseStruct($releaseArray['version'], $releaseArray['version_text'], $releaseArray['revision'])
+            new ShopwareReleaseStruct($releaseArray['version'], $releaseArray['version_text'], $releaseArray['revision']),
+            new NullLogger()
         );
 
         $pluginInstaller->refreshPluginList($dateTime);

@@ -28,8 +28,6 @@ use Shopware\Components\Api\Resource\CustomerGroup;
 
 /**
  * @CustomerGroup  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CustomerGroupTest extends TestCase
 {

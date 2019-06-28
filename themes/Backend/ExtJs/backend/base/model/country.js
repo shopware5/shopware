@@ -71,5 +71,3 @@ Ext.define('Shopware.apps.Base.model.Country', {
 
 });
 //{/block}
-
-

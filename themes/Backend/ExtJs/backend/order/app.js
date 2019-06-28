@@ -33,6 +33,7 @@
  * Contains the configuration for the order backend module.
  * This component defines which controllers belong to the application or whether the bulk loading is activated.
  */
+//{block name="backend/order/app"}
 //{block name="backend/order/application"}
 Ext.define('Shopware.apps.Order', {
 
@@ -170,4 +171,4 @@ Ext.define('Shopware.apps.Order', {
     }
 });
 //{/block}
-
+//{/block}

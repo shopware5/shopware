@@ -30,9 +30,6 @@ use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Customer;
 
-/**
- * Class AddressServiceTest
- */
 class CustomerServiceTest extends \Enlight_Components_Test_TestCase
 {
     /**

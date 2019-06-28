@@ -16,9 +16,9 @@
 
 {block name="frontend_index_header_javascript_jquery_lib"}
     {$smarty.block.parent}
-    <script type="text/javascript" src="{link file='frontend/_public/src/js/vendors/raphael/raphael.js'}"></script>
-    <script type="text/javascript" src="{link file='frontend/_public/src/js/vendors/raphael/popup.js'}"></script>
-    <script type="text/javascript" src="{link file='frontend/_public/src/js/vendors/raphael/analytics.js'}"></script>
+    <script src="{link file='frontend/_public/src/js/vendors/raphael/raphael.js'}"></script>
+    <script src="{link file='frontend/_public/src/js/vendors/raphael/popup.js'}"></script>
+    <script src="{link file='frontend/_public/src/js/vendors/raphael/analytics.js'}"></script>
 {/block}
 
 {* Breadcrumb *}

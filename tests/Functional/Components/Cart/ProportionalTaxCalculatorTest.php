@@ -28,8 +28,6 @@ use Shopware\Components\Cart\ProportionalTaxCalculatorInterface;
 use Shopware\Components\Cart\Struct\Price;
 
 /**
- * Class ProportionalTaxCalculatorTest
- *
  * @group Basket
  */
 class ProportionalTaxCalculatorTest extends \Enlight_Components_Test_TestCase

@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
-use Elasticsearch\Client;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\ESIndexingBundle\FieldMappingInterface;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
@@ -62,32 +61,22 @@ class ProductMapping implements MappingInterface
     private $crudService;
 
     /**
-     * @var Client
-     */
-    private $client;
-
-    /**
      * @var bool
      */
     private $isDynamic;
 
-    /**
-     * @param bool $isDynamic
-     */
     public function __construct(
         IdentifierSelector $identifierSelector,
         FieldMappingInterface $fieldMapping,
         TextMappingInterface $textMapping,
         CrudService $crudService,
-        Client $client,
-        $isDynamic = true,
-        $isDebug = false
+        bool $isDynamic = true,
+        bool $isDebug = false
     ) {
         $this->identifierSelector = $identifierSelector;
         $this->fieldMapping = $fieldMapping;
         $this->textMapping = $textMapping;
         $this->crudService = $crudService;
-        $this->client = $client;
         $this->isDynamic = $isDynamic;
         $this->isDebug = $isDebug;
     }
@@ -118,7 +107,7 @@ class ProductMapping implements MappingInterface
 
                 // Number fields
                 'number' => array_merge($this->textMapping->getTextField(), ['analyzer' => 'standard']),
-                'ean' => $this->textMapping->getNotAnalyzedField(),
+                'ean' => $this->textMapping->getKeywordField(),
                 'manufacturerNumber' => $this->fieldMapping->getLanguageField($shop),
 
                 // Language fields
@@ -177,6 +166,7 @@ class ProductMapping implements MappingInterface
                 'configuration' => $this->getVariantOptionsMapping($shop),
 
                 'voteAverage' => $this->getVoteAverageMapping(),
+                'manualSorting' => $this->getManualMapping(),
             ],
         ];
 
@@ -344,13 +334,13 @@ class ProductMapping implements MappingInterface
             switch ($type['type']) {
                 case 'keyword':
                     $type = $this->textMapping->getKeywordField();
-                    $type['fields']['raw'] = $this->getAttributeRawField();
+                    $type['fields']['raw'] = $this->textMapping->getKeywordField();
                     break;
 
                 case 'string':
                 case 'text':
                     $type = $this->textMapping->getTextField();
-                    $type['fields']['raw'] = $this->getAttributeRawField();
+                    $type['fields']['raw'] = $this->textMapping->getKeywordField();
                     break;
             }
 
@@ -364,20 +354,6 @@ class ProductMapping implements MappingInterface
                 ],
             ],
         ];
-    }
-
-    private function getAttributeRawField()
-    {
-        $rawField = $this->textMapping->getNotAnalyzedField();
-        try {
-            $info = $this->client->info([]);
-            if (version_compare($info['version']['number'], '6', '>=')) {
-                $rawField = $this->textMapping->getKeywordField();
-            }
-        } catch (\Exception $e) {
-        }
-
-        return $rawField;
     }
 
     /**
@@ -397,6 +373,17 @@ class ProductMapping implements MappingInterface
                         'description' => $this->fieldMapping->getLanguageField($shop),
                     ],
                 ],
+            ],
+        ];
+    }
+
+    private function getManualMapping(): array
+    {
+        return [
+            'type' => 'nested',
+            'properties' => [
+                'category_id' => ['type' => 'long'],
+                'position' => ['type' => 'long'],
             ],
         ];
     }

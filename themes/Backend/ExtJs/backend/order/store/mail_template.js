@@ -50,4 +50,3 @@ Ext.define('Shopware.apps.Order.store.MailTemplate', {
     }
 });
 //{/block}
-

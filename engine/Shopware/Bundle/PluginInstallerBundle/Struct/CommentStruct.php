@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-/**
- * Class CommentStruct
- */
 class CommentStruct implements \JsonSerializable
 {
     /**

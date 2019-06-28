@@ -35,6 +35,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Option;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware_Components_Config;
 
 class ProductListingVariationLoader
 {
@@ -59,7 +60,7 @@ class ProductListingVariationLoader
     private $listingPriceHelper;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
@@ -68,7 +69,7 @@ class ProductListingVariationLoader
         IdentifierSelector $identifierSelector,
         ContextServiceInterface $contextService,
         ListingPriceHelper $listingPriceHelper,
-        \Shopware_Components_Config $config
+        Shopware_Components_Config $config
     ) {
         $this->connection = $connection;
         $this->identifierSelector = $identifierSelector;

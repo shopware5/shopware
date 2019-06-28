@@ -103,4 +103,3 @@ Ext.define('Ext.chart.theme.Widget', {
         }, config)]);
     }
 });
-

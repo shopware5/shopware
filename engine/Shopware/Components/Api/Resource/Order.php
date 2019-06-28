@@ -42,10 +42,6 @@ use Shopware\Models\Tax\Tax;
 
 /**
  * Order API Resource
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Order extends Resource
 {
@@ -73,7 +69,7 @@ class Order extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var OrderModel $orderModel */
+        /** @var OrderModel|null $orderModel */
         $orderModel = $this->getRepository()->findOneBy(['number' => $number]);
 
         if (!$orderModel) {
@@ -116,7 +112,7 @@ class Order extends Resource
 
         $filters = [['property' => 'orders.id', 'expression' => '=', 'value' => $id]];
         $builder = $this->getRepository()->getOrdersQueryBuilder($filters);
-        /** @var OrderModel $order */
+        /** @var OrderModel|array|null $order */
         $order = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
 
         if (!$order) {
@@ -126,8 +122,7 @@ class Order extends Resource
         if (is_array($order)) {
             $order['paymentStatusId'] = $order['cleared'];
             $order['orderStatusId'] = $order['status'];
-            unset($order['cleared']);
-            unset($order['status']);
+            unset($order['cleared'], $order['status']);
         }
 
         return $order;
@@ -264,7 +259,7 @@ class Order extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var OrderModel $order */
+        /** @var OrderModel|null $order */
         $order = $this->getRepository()->find($id);
 
         if (!$order) {
@@ -475,15 +470,15 @@ class Order extends Resource
             }
 
             // If no order number was specified for the details we use the one from the order if there is one
-            if ((!array_key_exists('number', $detail) || $detail['number'] !== $params['number']) &&
-                !empty($params['number'])) {
+            if ((!array_key_exists('number', $detail) || $detail['number'] !== $params['number'])
+                && !empty($params['number'])) {
                 $detail['number'] = $params['number'];
             }
 
             $detailModel = new Detail();
             $detailModel->fromArray($detail);
 
-            /** @var DetailStatus $status */
+            /** @var DetailStatus|null $status */
             $status = $this->getContainer()->get('models')->find(DetailStatus::class, $detail['statusId']);
             if (!$status) {
                 throw new ApiException\NotFoundException(sprintf('DetailStatus by id %s not found', $detail['statusId']));
@@ -613,7 +608,7 @@ class Order extends Resource
             }
 
             // Check order detail model
-            /** @var Detail $detailModel */
+            /** @var Detail|null $detailModel */
             $detailModel = Shopware()->Models()->find(Detail::class, $detail['id']);
             if (!$detailModel) {
                 throw new ApiException\NotFoundException(sprintf(
@@ -623,7 +618,7 @@ class Order extends Resource
             }
 
             if (isset($detail['status'])) {
-                /** @var DetailStatus $status */
+                /** @var DetailStatus|null $status */
                 $status = Shopware()->Models()->find(DetailStatus::class, $detail['status']);
 
                 if (!$status) {

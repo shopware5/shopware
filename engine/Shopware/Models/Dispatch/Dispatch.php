@@ -412,8 +412,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -422,8 +420,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set name
-     *
      * @param string $name
      *
      * @return Dispatch
@@ -436,8 +432,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()
@@ -446,8 +440,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set type
-     *
      * @param int $type
      *
      * @return Dispatch
@@ -460,8 +452,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get type
-     *
      * @return int
      */
     public function getType()
@@ -470,8 +460,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set description
-     *
      * @param string $description
      *
      * @return Dispatch
@@ -484,8 +472,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get description
-     *
      * @return string
      */
     public function getDescription()
@@ -494,8 +480,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set comment
-     *
      * @param string $comment
      *
      * @return Dispatch
@@ -508,8 +492,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get comment
-     *
      * @return string
      */
     public function getComment()
@@ -518,8 +500,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set active
-     *
      * @param bool $active
      *
      * @return Dispatch
@@ -532,8 +512,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get active
-     *
      * @return bool
      */
     public function getActive()
@@ -542,8 +520,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set position
-     *
      * @param int $position
      *
      * @return Dispatch
@@ -556,8 +532,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get position
-     *
      * @return int
      */
     public function getPosition()
@@ -566,8 +540,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set calculation
-     *
      * @param int $calculation
      *
      * @return Dispatch
@@ -580,8 +552,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get calculation
-     *
      * @return int
      */
     public function getCalculation()
@@ -590,8 +560,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set surchargeCalculation
-     *
      * @param int $surchargeCalculation
      *
      * @return Dispatch
@@ -604,8 +572,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get surchargeCalculation
-     *
      * @return int
      */
     public function getSurchargeCalculation()
@@ -614,8 +580,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set taxCalculation
-     *
      * @param int $taxCalculation
      *
      * @return Dispatch
@@ -628,8 +592,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get taxCalculation
-     *
      * @return int
      */
     public function getTaxCalculation()
@@ -638,8 +600,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set shippingFree
-     *
      * @param float $shippingFree
      *
      * @return Dispatch
@@ -652,8 +612,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get shippingFree
-     *
      * @return float
      */
     public function getShippingFree()
@@ -662,8 +620,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set multiShopId
-     *
      * @param int $multiShopId
      *
      * @return Dispatch
@@ -676,8 +632,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get multiShopId
-     *
      * @return int
      */
     public function getMultiShopId()
@@ -686,8 +640,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set customerGroupId
-     *
      * @param int $customerGroupId
      *
      * @return Dispatch
@@ -700,8 +652,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get customerGroupId
-     *
      * @return int
      */
     public function getCustomerGroupId()
@@ -710,8 +660,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set bindShippingFree
-     *
      * @param int $bindShippingFree
      *
      * @return Dispatch
@@ -724,8 +672,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get bindShippingFree
-     *
      * @return int
      */
     public function getBindShippingFree()
@@ -734,8 +680,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set bindTimeFrom
-     *
      * @param int $bindTimeFrom
      *
      * @return Dispatch
@@ -748,8 +692,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get bindTimeFrom
-     *
      * @return int
      */
     public function getBindTimeFrom()
@@ -758,8 +700,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set bindTimeTo
-     *
      * @param int $bindTimeTo
      *
      * @return Dispatch
@@ -772,8 +712,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get bindTimeTo
-     *
      * @return int
      */
     public function getBindTimeTo()
@@ -782,8 +720,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set bindInStock
-     *
      * @param int $bindInStock
      *
      * @return Dispatch
@@ -796,8 +732,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get bindInStock
-     *
      * @return int
      */
     public function getBindInStock()
@@ -806,8 +740,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set bindLastStock
-     *
      * @param int $bindLastStock
      *
      * @return Dispatch
@@ -820,8 +752,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get bindLastStock
-     *
      * @return int
      */
     public function getBindLastStock()
@@ -830,8 +760,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set bindWeekdayFrom
-     *
      * @param int $bindWeekdayFrom
      *
      * @return Dispatch
@@ -844,8 +772,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get bindWeekdayFrom
-     *
      * @return int
      */
     public function getBindWeekdayFrom()
@@ -854,8 +780,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set bindWeekdayTo
-     *
      * @param int $bindWeekdayTo
      *
      * @return Dispatch
@@ -868,8 +792,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get bindWeekdayTo
-     *
      * @return int
      */
     public function getBindWeekdayTo()
@@ -878,8 +800,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set bindWeightFrom
-     *
      * @param float $bindWeightFrom
      *
      * @return Dispatch
@@ -892,8 +812,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get bindWeightFrom
-     *
      * @return float
      */
     public function getBindWeightFrom()
@@ -902,8 +820,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set bindWeightTo
-     *
      * @param float $bindWeightTo
      *
      * @return Dispatch
@@ -916,8 +832,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get bindWeightTo
-     *
      * @return float
      */
     public function getBindWeightTo()
@@ -926,8 +840,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set bindPriceFrom
-     *
      * @param float $bindPriceFrom
      *
      * @return Dispatch
@@ -940,8 +852,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get bindPriceFrom
-     *
      * @return float
      */
     public function getBindPriceFrom()
@@ -950,8 +860,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set bindPriceTo
-     *
      * @param float $bindPriceTo
      *
      * @return Dispatch
@@ -964,8 +872,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get bindPriceTo
-     *
      * @return float
      */
     public function getBindPriceTo()
@@ -974,8 +880,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set bindSql
-     *
      * @param string $bindSql
      *
      * @return Dispatch
@@ -988,8 +892,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get bindSql
-     *
      * @return string
      */
     public function getBindSql()
@@ -998,8 +900,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set statusLink
-     *
      * @param string $statusLink
      *
      * @return Dispatch
@@ -1012,8 +912,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get statusLink
-     *
      * @return string
      */
     public function getStatusLink()
@@ -1022,8 +920,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Set calculationSql
-     *
      * @param string $calculationSql
      *
      * @return Dispatch
@@ -1036,8 +932,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get calculationSql
-     *
      * @return string
      */
     public function getCalculationSql()

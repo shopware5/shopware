@@ -156,7 +156,9 @@ class PersonalFormType extends AbstractType
         ]);
 
         $builder->add('birthday', BirthdayType::class, [
+            'widget' => $this->config->get('birthdaySingleField') ? 'single_text' : 'choice',
             'constraints' => $this->getBirthdayConstraints(),
+            'invalid_message' => $this->getSnippet(self::SNIPPET_BIRTHDAY),
         ]);
 
         $builder->add('accountmode', TextType::class, [

@@ -18,7 +18,7 @@
             <tag name="form.type_extension" extended-type="Symfony\Component\Form\Extension\Core\Type\FormType" />
         </service>
 
-        <service id="shopware.form.extension.enlight" class="Shopware\Bundle\FormBundle\Extension\EnlightRequestExtension">
+        <service id="shopware.form.extension.enlight" class="Symfony\Component\Form\Extension\HttpFoundation\Type\FormTypeHttpFoundationExtension">
             <tag name="form.type_extension" extended-type="Symfony\Component\Form\Extension\Core\Type\FormType" />
         </service>
 

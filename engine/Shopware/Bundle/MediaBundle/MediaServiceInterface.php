@@ -26,9 +26,6 @@ namespace Shopware\Bundle\MediaBundle;
 
 use League\Flysystem\FilesystemInterface;
 
-/**
- * Interface MediaServiceInterface
- */
 interface MediaServiceInterface
 {
     /**

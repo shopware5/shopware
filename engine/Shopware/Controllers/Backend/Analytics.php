@@ -24,14 +24,8 @@
 
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Analytics\Repository;
+use Shopware\Models\Shop\Shop;
 
-/**
- * Statistics controller
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     protected $dateFields = [
@@ -132,7 +126,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     public function getShopRepository()
     {
         if ($this->shopRepository === null) {
-            $this->shopRepository = $this->getManager()->getRepository(\Shopware\Models\Shop\Shop::class);
+            $this->shopRepository = $this->getManager()->getRepository(Shop::class);
         }
 
         return $this->shopRepository;
@@ -292,8 +286,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     public function getReferrerRevenueAction()
     {
-        $shop = $this->getManager()->getRepository(\Shopware\Models\Shop\Shop::class)->getActiveDefault();
-        $shop->registerResources();
+        $shop = $this->getManager()->getRepository(Shop::class)->getActiveDefault();
+        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
 
         $result = $this->getRepository()->getReferrerRevenue(
             $shop,
@@ -880,8 +874,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     protected function exportCSV($data)
     {
         $this->Front()->Plugins()->Json()->setRenderer(false);
-        $this->Response()->setHeader('Content-Type', 'text/csv; charset=utf-8');
-        $this->Response()->setHeader('Content-Disposition', 'attachment;filename=' . $this->getCsvFileName());
+        $this->Response()->headers->set('content-type', 'text/csv; charset=utf-8');
+        $this->Response()->headers->set('content-disposition', 'attachment;filename=' . $this->getCsvFileName());
 
         echo "\xEF\xBB\xBF";
         $fp = fopen('php://output', 'w');

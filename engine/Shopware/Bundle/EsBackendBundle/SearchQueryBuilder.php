@@ -30,6 +30,11 @@ use ONGR\ElasticsearchDSL\Query\TermLevel\WildcardQuery;
 
 class SearchQueryBuilder
 {
+    /**
+     * @param string $term
+     *
+     * @return BoolQuery
+     */
     public function buildQuery(array $fields, $term)
     {
         $tokens = $this->tokenize($term);
@@ -54,6 +59,11 @@ class SearchQueryBuilder
         return $bool;
     }
 
+    /**
+     * @param string $term
+     *
+     * @return string[]
+     */
     private function tokenize($term)
     {
         $string = mb_strtolower(html_entity_decode($term), 'UTF-8');
@@ -77,6 +87,11 @@ class SearchQueryBuilder
         return $tokens;
     }
 
+    /**
+     * @param string[] $items
+     *
+     * @return string[]
+     */
     private function combine($items)
     {
         $result = [];

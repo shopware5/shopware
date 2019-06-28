@@ -26,9 +26,6 @@ namespace Shopware\Components\Form;
 
 use Shopware\Components\Form\Interfaces\Element;
 
-/**
- * Class Base
- */
 class Base implements Element
 {
     /**

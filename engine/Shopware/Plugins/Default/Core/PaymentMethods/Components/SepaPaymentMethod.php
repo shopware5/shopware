@@ -25,9 +25,9 @@
 namespace ShopwarePlugin\PaymentMethods\Components;
 
 use Doctrine\ORM\AbstractQuery;
+use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
 
 /**
- * Class SepaPaymentMethod
  * Used to handle SEPA payment
  */
 class SepaPaymentMethod extends GenericPaymentMethod
@@ -283,6 +283,8 @@ class SepaPaymentMethod extends GenericPaymentMethod
             \Zend_Mime::ENCODING_BASE64,
             $attachmentName . '.pdf'
         );
+
+        $mail->setAssociation(LogEntryBuilder::ORDER_NUMBER_ASSOCIATION, $orderNumber);
 
         try {
             $mail->send();

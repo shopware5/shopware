@@ -34,13 +34,10 @@ use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop;
 
-/**
- * Shopware Performance Controller
- */
 class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Backend_ExtJs
 {
-    const PHP_RECOMMENDED_VERSION = '7.1.0';
-    const PHP_MINIMUM_VERSION = '5.6.4';
+    const PHP_RECOMMENDED_VERSION = '7.3.0';
+    const PHP_MINIMUM_VERSION = '7.2.0';
 
     const PERFORMANCE_VALID = 1;
     const PERFORMANCE_WARNING = 2;
@@ -347,8 +344,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         // The colon separates formName and elementName
         list($scope, $config) = explode(':', $configName, 2);
 
-        $elementRepository = $this->container->get('models')->getRepository('Shopware\Models\Config\Element');
-        $formRepository = $this->container->get('models')->getRepository('Shopware\Models\Config\Form');
+        $elementRepository = $this->container->get('models')->getRepository(\Shopware\Models\Config\Element::class);
+        $formRepository = $this->container->get('models')->getRepository(\Shopware\Models\Config\Form::class);
 
         $form = $formRepository->findOneBy(['name' => $scope]);
 
@@ -382,12 +379,12 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function fixCategoriesAction()
     {
-        $offset = $this->Request()->getParam('offset', 0);
-        $limit = $this->Request()->getParam('limit');
+        $offset = (int) $this->Request()->getParam('offset', 0);
+        $limit = (int) $this->Request()->getParam('limit');
 
         $component = Shopware()->Container()->get('CategoryDenormalization');
 
-        if ($offset == 0) {
+        if ($offset === 0) {
             $component->rebuildCategoryPath();
             $component->removeAllAssignments();
         }
@@ -427,8 +424,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             $this->container->get('config')
         );
 
-        $urlProviderFactory = $this->get('shopware_cache_warmer.url_provider_factory');
-        $providers = $urlProviderFactory->getAllProviders();
+        $providers = $this->get('shopware_cache_warmer.url_provider_factory')->getAllProviders();
 
         // Count for each provider, if enabled
         $config = json_decode($this->Request()->getParam('config', '{}'), true);
@@ -544,6 +540,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                 'LastArticles:lastarticles_show',
                 'LastArticles:lastarticlestoshow',
                 'disableArticleNavigation',
+                'http2Push',
+                'minifyHtml',
             ]),
             'customer' => $this->genericConfigLoader([
                 'alsoBoughtShow',

@@ -26,11 +26,6 @@ namespace ShopwarePlugins\SwagUpdate\Components\Archive\Entry;
 
 use ZipArchive;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Zip
 {
     /**

@@ -24,8 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundleES;
 
-use ONGR\ElasticsearchDSL\Query\BoolQuery;
-use ONGR\ElasticsearchDSL\Query\MultiMatchQuery;
+use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
+use ONGR\ElasticsearchDSL\Query\FullText\MultiMatchQuery;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface

@@ -30,11 +30,6 @@ use Shopware\Components\Random;
 use Shopware\Models\Article\Image;
 use Shopware\Models\Category\Category;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class ArticleTest extends TestCase
 {
     /**
@@ -189,6 +184,8 @@ class ArticleTest extends TestCase
         static::assertEquals($article->getMetaTitle(), $testData['metaTitle']);
 
         static::assertEquals($article->getDescriptionLong(), $testData['descriptionLong']);
+
+        // Check attributes of main variant
         static::assertEquals(
             $article->getMainDetail()->getAttribute()->getAttr1(),
             $testData['mainDetail']['attribute']['attr1']
@@ -196,6 +193,19 @@ class ArticleTest extends TestCase
         static::assertEquals(
             $article->getMainDetail()->getAttribute()->getAttr2(),
             $testData['mainDetail']['attribute']['attr2']
+        );
+
+        // Check attributes of non-main variant
+        $variant = $article->getDetails()->matching(\Doctrine\Common\Collections\Criteria::create()->where(
+            \Doctrine\Common\Collections\Criteria::expr()->eq('number', $testData['variants'][0]['number'])
+        ));
+        static::assertEquals(
+            $variant->first()->getAttribute()->getAttr3(),
+            $testData['variants'][0]['attribute']['attr3']
+        );
+        static::assertEquals(
+            $variant->first()->getAttribute()->getAttr4(),
+            $testData['variants'][0]['attribute']['attr4']
         );
 
         $propertyValues = $article->getPropertyValues()->getValues();
@@ -280,6 +290,56 @@ class ArticleTest extends TestCase
         return $article->getId();
     }
 
+    /*
+     * Test that empty article attributes are created
+     */
+    public function testCreateWithoutAttributes()
+    {
+        $configurator = $this->getSimpleConfiguratorSet(2, 5);
+
+        $testData = [
+            'name' => 'Testartikel',
+            'description' => 'Test description',
+            'descriptionLong' => 'Test descriptionLong',
+            'active' => true,
+            'taxId' => 1,
+            'supplierId' => 1,
+            'mainDetail' => [
+                'number' => 'swAttr1' . uniqid(rand()),
+                'inStock' => 15,
+                'unitId' => 1,
+                'prices' => [
+                    ['customerGroupKey' => 'EK', 'from' => 1, 'to' => '-', 'price' => 400],
+                ],
+                'configuratorOptions' => $this->getVariantOptionsOfSet($configurator),
+            ],
+            'variants' => [
+                [
+                    'number' => 'swAttr2' . uniqid(rand()),
+                    'inStock' => 15,
+                    'unitId' => 1,
+                    'prices' => [
+                        ['customerGroupKey' => 'EK', 'from' => 1, 'to' => '-', 'price' => 400],
+                    ],
+                    'configuratorOptions' => $this->getVariantOptionsOfSet($configurator),
+                ],
+            ],
+            'configuratorSet' => $configurator,
+        ];
+
+        $article = $this->resource->create($testData);
+
+        // Load actual database model
+        $this->resource->setResultMode(Article::HYDRATE_OBJECT);
+        $data = $this->resource->getOne($article->getId());
+
+        static::assertEquals(2, $data->getDetails()->count());
+        foreach ($data->getDetails() as $variant) {
+            static::assertNotNull($variant->getAttribute());
+            static::assertNull($variant->getAttribute()->getAttr1());
+        }
+    }
+
     /**
      * Test that creating an article with images generates thumbnails
      *
@@ -311,7 +371,7 @@ class ArticleTest extends TestCase
                     'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg',
                 ],
                 [
-                    'link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php'),
+                    'link' => 'data:image/png;base64,' . require (__DIR__ . '/fixtures/base64image.php'),
                 ],
                 [
                     'link' => 'file://' . __DIR__ . '/fixtures/variant-image.png',
@@ -444,7 +504,7 @@ class ArticleTest extends TestCase
     public function testFlipArticleMainVariantShouldBeSuccessful($id)
     {
         $originalArticle = $this->resource->getOne($id);
-        $mainVariantNumber = $originalArticle['mainDetailId'];
+        $mainVariantNumber = (string) $originalArticle['mainDetailId'];
 
         $testData = [
             'mainDetail' => [
@@ -1977,7 +2037,7 @@ class ArticleTest extends TestCase
 
         $data['images'] = [
             [
-                'link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php'),
+                'link' => 'data:image/png;base64,' . require (__DIR__ . '/fixtures/base64image.php'),
             ],
         ];
 
@@ -2490,7 +2550,7 @@ class ArticleTest extends TestCase
         $data = $this->getSimpleTestData();
 
         $data['downloads'] = [
-            ['link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php')],
+            ['link' => 'data:image/png;base64,' . require (__DIR__ . '/fixtures/base64image.php')],
         ];
 
         $article = $this->resource->create($data);
@@ -2932,36 +2992,127 @@ class ArticleTest extends TestCase
             static::assertEquals($val, $temp->getMainDetail()->getLastStock());
         }
 
-        /*
-         * @Deprecated
-         * "lastStock" on products (s_articles) is deprecated and will be removed in Shopware 5.6
-         *
-         * This ensures compatibility with Shopware versions < 5.3 - the value given for the product should be
-         * applied to its mainDetail automatically.
-         *
-         * This can be removed with version 5.6 aswell
-         */
-        foreach ($cases as $val) {
-            $temp = $this->resource->update($id, ['lastStock' => $val]);
-
-            static::assertEquals($val, $temp->getLastStock() && $temp->getMainDetail()->getLastStock());
-        }
-
-        /*
-         * @Deprecated
-         * "lastStock" on products (s_articles) is deprecated and will be removed in Shopware 5.6
-         *
-         * This ensures that the lastStock value is still set for the mainDetail, even when other data is provided
-         *
-         * This can be removed with version 5.6 aswell
-         */
-        foreach ($cases as $val) {
-            $temp = $this->resource->update($id, ['lastStock' => $val, 'mainDetail' => ['inStock' => 15]]);
-
-            static::assertEquals($val, $temp->getLastStock() && $temp->getMainDetail()->getLastStock());
-        }
-
         $this->resource->delete($id);
+    }
+
+    public function testDeletingAnArticleAlsoDeletesDetailsAndAttributes()
+    {
+        /** @var Shopware\Components\Model\ModelManager $entityManager */
+        $entityManager = Shopware()->Models();
+        $articleRepository = $entityManager->getRepository(\Shopware\Models\Article\Article::class);
+        $detailRepository = $entityManager->getRepository(\Shopware\Models\Article\Detail::class);
+        $attributeRepository = $entityManager->getRepository(\Shopware\Models\Attribute\Article::class);
+
+        // Test preparation
+
+        /* Create an article with one main detail and two additional details
+         * (variants). */
+        $testData = $this->getSimpleTestData();
+        $configurator = $this->getSimpleConfiguratorSet(1, 2);
+        $variants = array_map(
+            // Add attribute values to each variant.
+            /* While the values are not relevant to the test, and attributes
+             * would still be created without them, this test should still work
+             * should the logic around when to create attributes change. */
+            function ($variant) {
+                $variant['attribute'] = [
+                    'attr1' => 'Free form text 1',
+                    'attr2' => 'Free form text 2',
+                ];
+
+                return $variant;
+            },
+            // Automatically generate variants:
+            $this->createConfiguratorVariants($configurator['groups'])
+        );
+        $testData['configuratorSet'] = $configurator;
+        $testData['variants'] = $variants;
+
+        /* Save the article, so that we can later test its removal and the
+         * removal of its details and attributes. */
+        $createdArticleId = $this->resource->create($testData)->getId();
+
+        // Retrieve identifiers from the database which we need for this test.
+        try {
+            $createdArticle = $articleRepository->find($createdArticleId);
+            static::assertNotNull($createdArticle);
+            $createdDetails = array_merge(
+                $createdArticle->getDetails()->toArray(),
+                [$createdArticle->getMainDetail()]
+            );
+
+            /* The identifiers of the details the removal of which we will
+             * later verify. */
+            $createdDetailIds = array_unique(array_map(
+                function ($createdDetail) {
+                    return $createdDetail->getId();
+                },
+                $createdDetails
+            ));
+
+            $createdAttributes = array_map(
+                function ($createdDetail) { return $createdDetail->getAttribute(); },
+                $createdDetails
+            );
+            // Verify we did not break our test setup.
+            static::assertCount(3, $createdDetailIds);
+
+            /* The identifiers of the attributes the removal of which we will
+             * later verify. */
+            $createdAttributeIds = array_unique(array_map(
+                function ($createdAttribute) { return $createdAttribute->getId(); },
+                $createdAttributes
+            ));
+            static::assertCount(3, $createdAttributeIds);
+
+            // Verify created article's details match test setup assumptions.
+            static::assertCount(count($createdDetailIds), $detailRepository->findBy([
+                'id' => $createdDetailIds,
+            ]));
+            // Verify created article's attributes match test setup assumptions.
+            static::assertCount(count($createdAttributeIds), $attributeRepository->findBy([
+                'id' => $createdAttributeIds,
+            ]));
+        } finally {
+            // Even if the test setup fails, delete the test's created article.
+
+            // Tested action:
+            $this->resource->delete($createdArticleId);
+        }
+
+        static::assertNull(
+            $articleRepository->find($createdArticleId),
+            sprintf(
+                'Deletion of the article (id = %s) itself failed.',
+                $createdArticleId
+            )
+        );
+
+        // Test assertions
+        static::assertCount(
+            0,
+            $detailRepository->findBy([
+                'id' => $createdDetailIds,
+            ]),
+            sprintf(
+                'Deletion of the article\'s (id = %s) details (%s) failed.',
+                $createdArticleId,
+                implode(', ', $createdDetailIds)
+            )
+        );
+        static::assertCount(
+            0,
+            $attributeRepository->findBy([
+                'id' => $createdAttributeIds,
+            ]),
+            sprintf(
+                'Deletion of the article\'s (id = %s) details\' (%s) '
+                . 'attributes (%s) failed.',
+                $createdArticleId,
+                implode(', ', $createdDetailIds),
+                implode(', ', $createdAttributeIds)
+            )
+        );
     }
 
     /**
@@ -2990,17 +3141,17 @@ class ArticleTest extends TestCase
      * Combinations merge the result of dimensional arrays not perfectly
      * so we have to clean up the first array level.
      *
-     * @param $combinations
+     *
+     * @return array
      */
-    protected function cleanUpCombinations($combinations)
+    protected function cleanUpCombinations(array $combinations)
     {
         foreach ($combinations as &$combination) {
             $combination[] = [
                 'option' => $combination['option'],
                 'groupId' => $combination['groupId'],
             ];
-            unset($combination['groupId']);
-            unset($combination['option']);
+            unset($combination['groupId'], $combination['option']);
         }
 
         return $combinations;
@@ -3010,8 +3161,8 @@ class ArticleTest extends TestCase
      * Helper function which combines all array elements
      * of the passed arrays.
      *
-     * @param $arrays
-     * @param int $i
+     * @param array $arrays
+     * @param int   $i
      *
      * @return array
      */
@@ -3041,15 +3192,15 @@ class ArticleTest extends TestCase
 
     protected function internalTestReplaceMode($entity, $arrayKey, $replace = true)
     {
-        //create keys for getter function and the __options parameter in the update and create
-        //example => "__options_categories"  /  "getCategories"
+        // Create keys for getter function and the __options parameter in the update and create
+        // Example => "__options_categories"  /  "getCategories"
         $replaceKey = '__options_' . $arrayKey;
         $getter = 'get' . ucfirst($arrayKey);
 
-        //returns a simple article data set to create an article with a simple main detail
+        // Returns a simple article data set to create an article with a simple main detail
         $data = $this->getSimpleTestData();
 
-        //get an offset of 10 entities for the current entity type, like 10x categories
+        // Get an offset of 10 entities for the current entity type, like 10x categories
         $createdEntities = $this->getEntityOffset($entity);
         $data[$arrayKey] = $createdEntities;
 
@@ -3096,7 +3247,7 @@ class ArticleTest extends TestCase
      * Helper function which creates all variants for
      * the passed groups with options.
      *
-     * @param $groups
+     * @param array $groups
      * @param array $groupMapping
      * @param array $optionMapping
      *

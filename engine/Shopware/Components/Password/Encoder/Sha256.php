@@ -28,10 +28,6 @@ use Shopware\Components\Random;
 
 /**
  * Provides a salted + streched sha256
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Sha256 implements PasswordEncoderInterface
 {

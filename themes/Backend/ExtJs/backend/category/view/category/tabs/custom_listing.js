@@ -157,9 +157,22 @@ Ext.define('Shopware.apps.Category.view.category.tabs.CustomListing', {
     },
 
     createFacetSelection: function() {
-        var me = this, store;
+        var me = this, store, searchStore;
 
         store = me.createEntitySearchStore("Shopware\\Models\\Search\\CustomFacet");
+        searchStore = me.createEntitySearchStore("Shopware\\Models\\Search\\CustomFacet");
+        searchStore.remoteFilter = true;
+        searchStore.filter(new Ext.util.Filter({
+            property: 'uniqueKey',
+            expression: '!=',
+            value: 'CategoryFacet'
+        }));
+        store.remoteFilter = true;
+        store.filter(new Ext.util.Filter({
+            property: 'uniqueKey',
+            expression: '!=',
+            value: 'CategoryFacet'
+        }));
         store.pageSize = 200;
 
         me.facetSelection = Ext.create('Shopware.form.field.CustomFacetGrid', {
@@ -167,7 +180,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.CustomListing', {
             disabled: true,
             ignoreDisabled: false,
             store: store,
-            searchStore: me.createEntitySearchStore("Shopware\\Models\\Search\\CustomFacet"),
+            searchStore: searchStore,
             fieldLabel: '{s name="category/facet_selection"}{/s}',
             name: 'facetIds'
         });

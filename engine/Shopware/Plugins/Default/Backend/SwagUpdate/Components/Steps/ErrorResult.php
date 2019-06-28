@@ -24,11 +24,6 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components\Steps;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class ErrorResult
 {
     /**

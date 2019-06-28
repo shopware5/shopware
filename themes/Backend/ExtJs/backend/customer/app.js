@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer/view/main}
+//{namespace name=backend/customer/view/main}
 
 /**
  * Shopware Application - Customer list backend module
@@ -35,7 +35,8 @@
  * Contains the configuration for the customer list backend module.
  * This component defines which controllers belong to the application or whether the bulk loading is activated.
  */
-// {block name="backend/customer/application"}
+//{block name="backend/customer/app"}
+//{block name="backend/customer/application"}
 Ext.define('Shopware.apps.Customer', {
 
     /**
@@ -103,6 +104,7 @@ Ext.define('Shopware.apps.Customer', {
         'customer_stream.ConditionPanel',
         'customer_stream.Assignment',
         'customer_stream.ConditionField',
+        'customer_stream.conditions.AccountModeCondition',
         'customer_stream.conditions.AgeCondition',
         'customer_stream.conditions.HasAddressWithCountryCondition',
         'customer_stream.conditions.HasCanceledOrdersCondition',
@@ -165,4 +167,5 @@ Ext.define('Shopware.apps.Customer', {
         return mainController.mainWindow;
     }
 });
-// {/block}
+//{/block}
+//{/block}

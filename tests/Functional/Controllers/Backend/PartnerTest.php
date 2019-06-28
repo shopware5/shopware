@@ -22,11 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_Test_Controller_TestCase
 {
     /** @var \Shopware\Models\Partner\Partner $repository */
@@ -120,7 +115,7 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
     /**
      * test savePartner controller action
      *
-     * @return the id of the new dummy partner
+     * @return string the id of the new dummy partner
      */
     public function testSavePartner()
     {
@@ -148,7 +143,7 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
      *
      * @depends testSavePartner
      *
-     * @param $id
+     * @param string $id
      *
      * @return the id to for the testGetDetail Method
      */
@@ -188,7 +183,7 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
      *
      * @depends testSavePartner
      *
-     * @param $id
+     * @param string $id
      *
      * @return $id | dummy id
      */
@@ -250,7 +245,7 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
      *
      * @depends testSavePartner
      *
-     * @param $id
+     * @param string $id
      */
     public function testDeletePartner($id)
     {

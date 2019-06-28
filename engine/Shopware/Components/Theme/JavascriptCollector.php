@@ -27,11 +27,6 @@ namespace Shopware\Components\Theme;
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Models\Shop;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
 class JavascriptCollector
 {
     /**

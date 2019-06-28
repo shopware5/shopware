@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Plugin\RequirementValidator;
-use Shopware\Components\Plugin\XmlPluginInfoReader;
+use Shopware\Components\Plugin\XmlReader\XmlPluginReader;
 use Shopware\Models\Plugin\Plugin;
 
 class RequirementValidatorTest extends TestCase
@@ -206,7 +206,7 @@ class RequirementValidatorTest extends TestCase
     }
 
     /**
-     * @param $args
+     * @param array $args
      *
      * @return Plugin|null
      */
@@ -245,9 +245,12 @@ class RequirementValidatorTest extends TestCase
 
         $em = $this->createConfiguredMock(ModelManager::class, ['getRepository' => $repo]);
 
-        return new RequirementValidator($em, new XmlPluginInfoReader(), $this->createSnippetManager());
+        return new RequirementValidator($em, new XmlPluginReader(), $this->createSnippetManager());
     }
 
+    /**
+     * @return \Enlight_Components_Snippet_Manager
+     */
     private function createSnippetManager()
     {
         $snippetNamespace = $this->createMock(\Enlight_Components_Snippet_Namespace::class);
@@ -260,7 +263,7 @@ class RequirementValidatorTest extends TestCase
                     case 'plugin_min_shopware_version':
                         return 'Plugin requires at least Shopware version %s';
                     case 'plugin_max_shopware_version':
-                        return'Plugin is only compatible with Shopware version <= %s';
+                        return 'Plugin is only compatible with Shopware version <= %s';
                     case 'shopware_version_blacklisted':
                         return 'Shopware version %s is blacklisted by the plugin';
                     case 'required_plugin_not_found':

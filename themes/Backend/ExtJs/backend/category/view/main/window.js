@@ -183,6 +183,10 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
             disabled: true
         });
 
+        me.customSortingTab = Ext.create('Shopware.apps.Category.view.sorting.Tab', {
+            disabled: true
+        });
+
         return [
             {
                 xtype:'category-category-tabs-settings',
@@ -190,7 +194,8 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
             },
             me.articleMappingContainer,
             me.categoryRestrictionContainer,
-            me.customListing
+            me.customListing,
+            me.customSortingTab
         ];
     },
 

@@ -64,4 +64,3 @@ Ext.define('Shopware.apps.Order.model.PaymentInstance', {
     ]
 });
 //{/block}
-

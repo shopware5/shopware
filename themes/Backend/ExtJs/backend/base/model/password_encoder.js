@@ -57,5 +57,3 @@ Ext.define('Shopware.apps.Base.model.PasswordEncoder', {
 
 });
 //{/block}
-
-

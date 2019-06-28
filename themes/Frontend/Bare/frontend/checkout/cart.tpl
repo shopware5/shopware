@@ -52,7 +52,7 @@
                                 {block name="frontend_checkout_actions_confirm"}
 
                                     {* Forward to the checkout *}
-                                    {if !$sMinimumSurcharge && !($sDispatchNoOrder && !$sDispatches)}
+                                    {if !$sMinimumSurcharge && !($sDispatchNoOrder && !$sDispatches) && !$sInvalidCartItems}
                                         {block name="frontend_checkout_actions_checkout"}
                                             {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions" assign="snippetCheckoutActionsLinkProceedShort"}{/s}
                                             <a href="{if {config name=always_select_payment}}{url controller='checkout' action='shippingPayment'}{else}{url controller='checkout' action='confirm'}{/if}"
@@ -123,7 +123,7 @@
                                     {block name="frontend_checkout_actions_link_last_bottom"}{/block}
 
                                     {* Forward to the checkout *}
-                                    {if !$sMinimumSurcharge && !($sDispatchNoOrder && !$sDispatches)}
+                                    {if !$sMinimumSurcharge && !($sDispatchNoOrder && !$sDispatches) && !$sInvalidCartItems}
                                         {block name="frontend_checkout_actions_confirm_bottom_checkout"}
                                             {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions" assign="snippetCheckoutActionsLinkProceedShort"}{/s}
                                             <a href="{if {config name=always_select_payment}}{url controller='checkout' action='shippingPayment'}{else}{url controller='checkout' action='confirm'}{/if}"
@@ -170,6 +170,16 @@
         {else}
             {* Empty basket *}
             {block name='frontend_basket_basket_is_empty'}
+                {* Product with invalid category got removed *}
+                {block name="frontend_basket_basket_is_empty_product_with_invalid_category"}
+                    <div class="basket--info-messages">
+                        {if $removedProductWithInvalidCategory}
+                            {s name="InvalidCategoryMessage" assign="snippetInvalidCategory" namespace="frontend/checkout/error_messages"}{/s}
+                            {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetInvalidCategory}
+                        {/if}
+                    </div>
+                {/block}
+
                 <div class="basket--info-messages">
                     {s name="CartInfoEmpty" assign="snippetCartInfoEmpty"}{/s}
                     {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetCartInfoEmpty}

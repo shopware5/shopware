@@ -32,7 +32,7 @@
         {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetConfirmInfoNoDispatch}
     {/if}
 {/block}
-    
+
 {* Minimum sum not reached *}
 {block name='frontend_checkout_error_messages_minimum_not_reached'}
     {if $sMinimumSurcharge}
@@ -56,3 +56,20 @@
         {include file="frontend/_includes/messages.tpl" type="error" content=$snippetEsdErrorMessage}
     {/if}
 {/block}
+
+{* Product with invalid category *}
+{block name="frontend_checkout_error_messages_product_with_invalid_category"}
+    {if $sInvalidCartItems}
+        {s name="InvalidCategoryMessage" assign="snippetInvalidCategory"}{/s}
+        {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetInvalidCategory}
+    {/if}
+{/block}
+
+{block name="frontend_checkout_error_messages_voucher_got_removed"}
+    {if $sBasketVoucherRemovedInCart}
+        {s name="InvalidVoucherGotRemoved" assign="snippetInvalidVoucherGotRemoved"}{/s}
+        {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetInvalidVoucherGotRemoved remoteMessageLink={url removeMessage="voucher"}}
+    {/if}
+{/block}
+
+

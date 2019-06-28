@@ -36,7 +36,17 @@
                                             <a href="{$supplier.link}" title="{$supplier.name|escape}" class="manufacturer--link">
                                                 {if $supplier.image}
                                                     {block name="frontend_widgets_manufacturer_slider_item_image"}
-                                                        <img class="manufacturer--image" src="{$supplier.image}" alt="{$supplier.name|escape}" />
+                                                        {$imgSrc = $supplier.image}
+                                                        {$imgSrcSet = ''}
+
+                                                        {if $supplier.media.thumbnails[0]}
+                                                            {$imgSrc = $supplier.media.thumbnails[0].source}
+                                                            {if $supplier.media.thumbnails[0].retinaSource}
+                                                                {$retinaSource = $supplier.media.thumbnails[0].retinaSource}
+                                                                {$imgSrcSet = "$imgSrc, $retinaSource 2x"}
+                                                            {/if}
+                                                        {/if}
+                                                        <img class="manufacturer--image" src="{$imgSrc}" {if !empty($imgSrcSet)}srcset="{$imgSrcSet}" {/if}alt="{$supplier.name|escape}" />
                                                     {/block}
                                                 {else}
                                                     {block name="frontend_widgets_manufacturer_slider_item_text"}

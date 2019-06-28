@@ -33,10 +33,10 @@ trait AttributeCleanerTrait
      *
      * NOTE: This method works for strings
      *
-     * @param string   $var      Value to be cleaned
-     * @param callable $callback Function that we will used to perform the cleaning on the attributes
+     * @param string|object $var      Value to be cleaned
+     * @param callable      $callback Function that we will used to perform the cleaning on the attributes
      *
-     * @return string The filtered string
+     * @return string|object The filtered string
      */
     protected function cleanup($var, callable $callback = null)
     {

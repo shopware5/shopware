@@ -27,10 +27,6 @@ namespace Shopware\Components\Log\Processor;
 
 /**
  * ShopwareEnvironmentProcessor.
- *
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ShopwareEnvironmentProcessor
 {

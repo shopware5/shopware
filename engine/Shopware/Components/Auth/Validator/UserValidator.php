@@ -33,9 +33,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validator\ContextualValidatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-/**
- * Class UserValidator
- */
 class UserValidator implements UserValidatorInterface
 {
     /**
@@ -48,9 +45,6 @@ class UserValidator implements UserValidatorInterface
      */
     private $validationContext;
 
-    /**
-     * CustomerValidator constructor.
-     */
     public function __construct(ValidatorInterface $validator)
     {
         $this->validator = $validator;

@@ -27,11 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-/**
- * @category Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class ManufacturerHydrator extends Hydrator
 {
     /**
@@ -109,6 +104,10 @@ class ManufacturerHydrator extends Hydrator
                     $data['__manufacturer_img']
                 )
             );
+        }
+
+        if (isset($data['__manufacturer_img_id'])) {
+            $manufacturer->setCoverId($data['__manufacturer_img_id']);
         }
 
         if (isset($data['__manufacturerAttribute_id'])) {

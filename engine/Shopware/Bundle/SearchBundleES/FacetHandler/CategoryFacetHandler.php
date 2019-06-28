@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 
-use ONGR\ElasticsearchDSL\Aggregation\TermsAggregation;
+use ONGR\ElasticsearchDSL\Aggregation\Bucketing\TermsAggregation;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -54,11 +54,6 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
     private $categoryDepthService;
 
     /**
-     * @var \Shopware_Components_Config
-     */
-    private $config;
-
-    /**
      * @var CategoryTreeFacetResultBuilder
      */
     private $categoryTreeFacetResultBuilder;
@@ -66,12 +61,10 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
     public function __construct(
         CategoryServiceInterface $categoryService,
         CategoryDepthService $categoryDepthService,
-        \Shopware_Components_Config $config,
         CategoryTreeFacetResultBuilder $categoryTreeFacetResultBuilder
     ) {
         $this->categoryService = $categoryService;
         $this->categoryDepthService = $categoryDepthService;
-        $this->config = $config;
         $this->categoryTreeFacetResultBuilder = $categoryTreeFacetResultBuilder;
     }
 

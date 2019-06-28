@@ -48,7 +48,8 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.Listing', {
                 },
                 displayInCategories: {
                     header: '{s name="display_in_categories"}{/s}',
-                    sortable: false
+                    sortable: false,
+                    renderer: this.displayInAllCategoriesRenderer
                 }
             }
         };
@@ -136,6 +137,14 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.Listing', {
             return;
         }
         me.facetForm.loadFacet(selection[0]);
+    },
+
+    displayInAllCategoriesRenderer: function (value, element, record) {
+        if (record.get('facet').indexOf('CategoryFacet') !== -1) {
+            value = false;
+        }
+
+        return this.booleanColumnRenderer(value);
     }
 });
 
