@@ -23,7 +23,7 @@
         </service>
 
         <service id="shopware_search.sorting_criteria_request_handler" class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\SortingCriteriaRequestHandler">
-            <argument type="service" id="shopware_storefront.custom_sorting_service" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface" />
             <tag name="criteria_request_handler" />
         </service>
 

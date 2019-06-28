@@ -40,8 +40,8 @@ class RegisterDynamicController implements CompilerPassInterface
         foreach ($types as $name => $type) {
             $backendController = new Definition(ContentType::class);
             $backendController->setArguments([
-                new Reference('shopware_bundle_content_type.services.extjs_builder'),
-                new Expression('service("shopware.bundle.content_type.type_provider").getType("' . $name . '")'),
+                new Reference(\Shopware\Bundle\ContentTypeBundle\Services\ExtjsBuilderInterface::class),
+                new Expression('service("Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Services\\\\TypeProvider").getType("' . $name . '")'),
                 new Reference('shopware.bundle.content_type.' . $name),
             ]);
 
@@ -76,7 +76,7 @@ class RegisterDynamicController implements CompilerPassInterface
                 $apiController = new Definition(\Shopware\Bundle\ContentTypeBundle\Controller\Frontend\ContentType::class);
                 $apiController->setArguments([
                     new Reference('shopware.bundle.content_type.' . $name),
-                    new Expression('service("shopware_bundle_content_type.services.frontend_type_translator").translate(service("shopware.bundle.content_type.type_provider").getType("' . $name . '"))'),
+                    new Expression('service("Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Services\\\\FrontendTypeTranslatorInterface").translate(service("Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Services\\\\TypeProvider").getType("' . $name . '"))'),
                 ]);
 
                 $apiController->addTag(

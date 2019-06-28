@@ -37,7 +37,7 @@ class PaymentTokenServiceTest extends \Enlight_Components_Test_Controller_TestCa
     public function setUp(): void
     {
         Shopware()->Container()->get('dbal_connection')->beginTransaction();
-        $this->service = Shopware()->Container()->get('shopware.components.cart.payment_token');
+        $this->service = Shopware()->Container()->get(\Shopware\Components\Cart\PaymentTokenService::class);
     }
 
     protected function tearDown(): void

@@ -7,74 +7,67 @@
     <services>
         <defaults public="true"/>
 
-        <service id="shopware_mail.autocomplete_resolver.short_foreach_resolver"
-                 class="Shopware\Bundle\MailBundle\AutocompleteResolver\ShortForeachResolver">
+        <service id="Shopware\Bundle\MailBundle\AutocompleteResolver\ShortForeachResolver">
             <tag name="shopware_mail.completer"/>
         </service>
 
-        <service id="shopware_mail.autocomplete_resolver.foreach_resolver"
-                 class="Shopware\Bundle\MailBundle\AutocompleteResolver\ForeachResolver">
+        <service id="Shopware\Bundle\MailBundle\AutocompleteResolver\ForeachResolver">
             <tag name="shopware_mail.completer"/>
         </service>
 
-        <service id="shopware_mail.auto_complete_resolver"
-                 class="Shopware\Bundle\MailBundle\AutoCompleteResolver">
+        <service id="Shopware\Bundle\MailBundle\AutoCompleteResolver">
             <argument type="tagged" tag="shopware_mail.completer"/>
         </service>
 
-        <service id="shopware_mail.filter.administrative_mail_filter"
-                 class="Shopware\Bundle\MailBundle\Service\Filter\AdministrativeMailFilter">
+        <service id="Shopware\Bundle\MailBundle\Service\Filter\AdministrativeMailFilter">
             <argument type="expression">'AdministrativeMailFilter' in service('config').offsetGet('mailLogActiveFilters')</argument>
             <tag name="shopware_mail.filter"/>
         </service>
 
-        <service id="shopware_mail.filter.newsletter_mail_filter"
+        <service id="Shopware\Bundle\MailBundle\Service\Filter\NewsletterMailFilter"
                  class="Shopware\Bundle\MailBundle\Service\Filter\NewsletterMailFilter">
             <argument type="expression">'NewsletterMailFilter' in service('config').offsetGet('mailLogActiveFilters')</argument>
             <tag name="shopware_mail.filter"/>
         </service>
 
-        <service id="shopware_mail.log_entry_builder"
-                 class="Shopware\Bundle\MailBundle\Service\LogEntryBuilder">
+        <service id="Shopware\Bundle\MailBundle\Service\LogEntryBuilderInterface"
+                  class="Shopware\Bundle\MailBundle\Service\LogEntryBuilder">
             <argument type="service" id="models"/>
         </service>
 
-        <service id="shopware_mail.log_entry_mail_builder"
+        <service id="Shopware\Bundle\MailBundle\Service\LogEntryMailBuilder"
                  class="Shopware\Bundle\MailBundle\Service\LogEntryMailBuilder">
             <argument type="service" id="shopware.filesystem.private" />
             <argument type="service" id="shopware_media.media_service" />
         </service>
 
-        <service id="shopware_mail.log_service"
+        <service id="Shopware\Bundle\MailBundle\Service\LogServiceInterface"
                  class="Shopware\Bundle\MailBundle\Service\LogService">
             <argument type="service" id="models"/>
-            <argument type="service" id="shopware_mail.log_entry_builder"/>
+            <argument type="service" id="Shopware\Bundle\MailBundle\Service\LogEntryBuilderInterface"/>
             <argument type="tagged" tag="shopware_mail.filter"/>
         </service>
 
-        <service id="shopware_mail.mail_subscriber"
-                 class="Shopware\Bundle\MailBundle\DependencyInjection\EventListener\MailSubscriber">
-            <argument type="service" id="shopware_mail.log_service"/>
+        <service id="Shopware\Bundle\MailBundle\DependencyInjection\EventListener\MailSubscriber">
+            <argument type="service" id="Shopware\Bundle\MailBundle\Service\LogServiceInterface"/>
             <argument type="expression">service('config').offsetGet('mailLogActive')</argument>
             <tag name="shopware.event_subscriber"/>
         </service>
 
-        <service id="shopware_mail.termination_subscriber"
-                 class="Shopware\Bundle\MailBundle\DependencyInjection\EventListener\TerminationSubscriber">
-            <argument type="service" id="shopware_mail.log_service"/>
+        <service id="Shopware\Bundle\MailBundle\DependencyInjection\EventListener\TerminationSubscriber">
+            <argument type="service" id="Shopware\Bundle\MailBundle\Service\LogServiceInterface"/>
             <argument type="expression">service('config').offsetGet('mailLogActive')</argument>
             <tag name="shopware.event_subscriber"/>
         </service>
 
-        <service id="shopware_mail.mail_log_cleanup_cron_subscriber"
-                 class="Shopware\Bundle\MailBundle\DependencyInjection\EventListener\MailLogCleanupCronSubscriber">
+        <service id="Shopware\Bundle\MailBundle\DependencyInjection\EventListener\MailLogCleanupCronSubscriber">
             <argument type="service" id="models"/>
             <argument type="expression">service('config').offsetGet('mailLogCleanupMaximumAgeInDays')</argument>
             <tag name="shopware.event_subscriber"/>
         </service>
 
-        <service id="shopware_mail.backend_controllers_mail_log" class="Shopware\Bundle\MailBundle\Controllers\Backend\MailLog">
-            <argument type="service" id="shopware_mail.log_entry_mail_builder"/>
+        <service id="Shopware\Bundle\MailBundle\Controllers\Backend\MailLog">
+            <argument type="service" id="Shopware\Bundle\MailBundle\Service\LogEntryMailBuilder"/>
             <argument type="service" id="config"/>
             <argument type="service" id="config_writer"/>
             <argument type="service" id="shopware.cache_manager"/>
@@ -84,7 +77,7 @@
             <tag name="shopware.controller" module="backend" controller="MailLog"/>
         </service>
 
-        <service id="shopware_mail.backend_controllers_mail_log_contact" class="Shopware\Bundle\MailBundle\Controllers\Backend\MailLogContact">
+        <service id="Shopware\Bundle\MailBundle\Controllers\Backend\MailLogContact">
             <tag name="shopware.controller" module="backend" controller="MailLogContact"/>
         </service>
     </services>

@@ -134,7 +134,7 @@ class Shopware_Tests_Models_Order_DetailTest extends Enlight_Components_Test_Tes
      */
     private function internalTestChangingOrderNumberRegexIsWorking(string $regex, string $number): void
     {
-        $validator = Shopware()->Container()->get('shopware.components.order_number_validator');
+        $validator = Shopware()->Container()->get(\Shopware\Components\OrderNumberValidator\OrderNumberValidatorInterface::class);
 
         $property = (new ReflectionClass(get_class($validator)))->getProperty('pattern');
         $property->setAccessible(true);

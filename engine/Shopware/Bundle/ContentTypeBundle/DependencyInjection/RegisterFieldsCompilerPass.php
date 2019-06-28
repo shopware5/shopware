@@ -40,7 +40,8 @@ class RegisterFieldsCompilerPass implements CompilerPassInterface
                 throw new \RuntimeException(sprintf('Service with id "%s" need the tag attribute fieldName to identify the short name', $id));
             }
 
-            $mapping[$options[0]['fieldName']] = $def->getClass();
+            // To support FQCN ids without class attribute
+            $mapping[$options[0]['fieldName']] = $def->getClass() ?: $id;
         }
 
         $container->setParameter('shopware.bundle.content_type.field_alias', $mapping);

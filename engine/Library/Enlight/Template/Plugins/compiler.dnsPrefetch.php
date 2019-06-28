@@ -58,6 +58,6 @@ class Smarty_Compiler_DnsPrefetch extends Smarty_Internal_CompileBase
         unset($options['uri']);
 
         return '<?php '
-             . 'echo Shopware()->Container()->get(\'web_link_manager\')->dnsPrefetch(' . $_attr['uri'] . ', ' . var_export($options, true) . ') ?>';
+             . 'echo Shopware()->Container()->get(\Shopware\Components\WebLinkManager::class)->dnsPrefetch(' . $_attr['uri'] . ', ' . var_export($options, true) . ') ?>';
     }
 }

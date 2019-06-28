@@ -55,6 +55,6 @@ class Smarty_Compiler_Preload extends Smarty_Internal_CompileBase
         unset($options['file']);
 
         return '<?php '
-             . 'echo Shopware()->Container()->get(\'web_link_manager\')->preload(' . $_attr['file'] . ', ' . var_export($options, true) . ') ?>';
+             . 'echo Shopware()->Container()->get(\Shopware\Components\WebLinkManager::class)->preload(' . $_attr['file'] . ', ' . var_export($options, true) . ') ?>';
     }
 }
