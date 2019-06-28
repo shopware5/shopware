@@ -203,7 +203,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     {
         $params = $this->Request()->getParams();
 
-        $id = $this->Request()->id;
+        $id = (int) $this->Request()->getParam('id');
 
         if (!empty($id)) {
             // Edit Data
@@ -217,6 +217,10 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         }
         // Setting the date in this way cause ext js got no datetime field
         $params['displayDate'] = $params['displayDate'] . ' ' . $params['displayTime'];
+
+        if (!$params['shopIds']) {
+            $params['shopIds'] = null;
+        }
 
         $this->prepareTagAssociatedData($params, $blogModel);
         $params = $this->prepareAssignedArticlesAssociatedData($params);

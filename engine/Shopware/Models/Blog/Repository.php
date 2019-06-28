@@ -26,6 +26,7 @@ namespace Shopware\Models\Blog;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 
@@ -87,13 +88,18 @@ class Repository extends ModelRepository
         ])
         ->leftJoin('blog.tags', 'tags')
         ->leftJoin('blog.author', 'author')
-        ->leftJoin('blog.media', 'mappingMedia', \Doctrine\ORM\Query\Expr\Join::WITH, 'mappingMedia.preview = 1')
+        ->leftJoin('blog.media', 'mappingMedia', Join::WITH, 'mappingMedia.preview = 1')
         ->leftJoin('mappingMedia.media', 'media')
         ->leftJoin('blog.attribute', 'attribute')
         ->where('blog.active = 1')
         ->andWhere('blog.displayDate < :now')
         ->setParameter('now', new \DateTime())
         ->orderBy('blog.displayDate', 'DESC');
+
+        if ($shopId !== null) {
+            $builder->andWhere('(blog.shopIds LIKE :shopId OR blog.shopIds IS NULL)')
+                ->setParameter('shopId', '%|' . $shopId . '|%');
+        }
 
         if (!empty($blogCategoryIds)) {
             $builder->andWhere('blog.categoryId IN (:categoryIds)')
@@ -102,10 +108,10 @@ class Repository extends ModelRepository
 
         if ($shopId && Shopware()->Config()->get('displayOnlySubShopBlogComments')) {
             $builder
-                ->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active = 1 AND (comments.shopId IS NULL OR comments.shopId = :shopId)')
+                ->leftJoin('blog.comments', 'comments', Join::WITH, 'comments.active = 1 AND (comments.shopId IS NULL OR comments.shopId = :shopId)')
                 ->setParameter('shopId', $shopId);
         } else {
-            $builder->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active = 1');
+            $builder->leftJoin('blog.comments', 'comments', Join::WITH, 'comments.active = 1');
         }
 
         if (!empty($filter)) {
@@ -195,14 +201,15 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog date filter
      *
-     * @param int[] $categoryIds
-     * @param array $filter
+     * @param int[]    $categoryIds
+     * @param array    $filter
+     * @param int|null $shopId
      *
      * @return \Doctrine\ORM\Query
      */
-    public function getDisplayDateFilterQuery($categoryIds, $filter)
+    public function getDisplayDateFilterQuery($categoryIds, $filter, $shopId = null)
     {
-        $builder = $this->getDisplayDateFilterQueryBuilder($categoryIds, $filter);
+        $builder = $this->getDisplayDateFilterQueryBuilder($categoryIds, $filter, $shopId);
 
         return $builder->getQuery();
     }
@@ -211,14 +218,15 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDisplayDateFilterQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param int[] $categoryIds
-     * @param array $filter
+     * @param int[]    $categoryIds
+     * @param array    $filter
+     * @param int|null $shopId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getDisplayDateFilterQueryBuilder($categoryIds, $filter)
+    public function getDisplayDateFilterQueryBuilder($categoryIds, $filter, $shopId = null)
     {
-        $builder = $this->getFilterQueryBuilder($categoryIds, $filter);
+        $builder = $this->getFilterQueryBuilder($categoryIds, $filter, $shopId);
         $builder->select([
             'DATE_FORMAT(blog.displayDate,\'%Y-%m\') as dateFormatDate',
             'COUNT(DISTINCT blog.id) as dateCount',
@@ -231,14 +239,15 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog author filter
      *
-     * @param int[] $categoryIds
-     * @param array $filter
+     * @param int[]    $categoryIds
+     * @param array    $filter
+     * @param int|null $shopId
      *
      * @return \Doctrine\ORM\Query
      */
-    public function getAuthorFilterQuery($categoryIds, $filter)
+    public function getAuthorFilterQuery($categoryIds, $filter, $shopId = null)
     {
-        $builder = $this->getAuthorFilterQueryBuilder($categoryIds, $filter);
+        $builder = $this->getAuthorFilterQueryBuilder($categoryIds, $filter, $shopId);
 
         return $builder->getQuery();
     }
@@ -247,14 +256,15 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getAuthorFilterQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param int[] $categoryIds
-     * @param array $filter
+     * @param int[]    $categoryIds
+     * @param array    $filter
+     * @param int|null $shopId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getAuthorFilterQueryBuilder($categoryIds, $filter)
+    public function getAuthorFilterQueryBuilder($categoryIds, $filter, $shopId = null)
     {
-        $builder = $this->getFilterQueryBuilder($categoryIds, $filter);
+        $builder = $this->getFilterQueryBuilder($categoryIds, $filter, $shopId);
         $builder->select([
             'author.name',
             'Count(DISTINCT blog.id) as authorCount',
@@ -268,14 +278,15 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog tags filter
      *
-     * @param int[] $categoryIds
-     * @param array $filter
+     * @param int[]    $categoryIds
+     * @param array    $filter
+     * @param int|null $shopId
      *
      * @return \Doctrine\ORM\Query
      */
-    public function getTagsFilterQuery($categoryIds, $filter)
+    public function getTagsFilterQuery($categoryIds, $filter, $shopId = null)
     {
-        $builder = $this->getTagsFilterQueryBuilder($categoryIds, $filter);
+        $builder = $this->getTagsFilterQueryBuilder($categoryIds, $filter, $shopId);
 
         return $builder->getQuery();
     }
@@ -284,14 +295,15 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getTagsFilterQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param int[] $categoryIds
-     * @param array $filter
+     * @param int[]    $categoryIds
+     * @param array    $filter
+     * @param int|null $shopId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getTagsFilterQueryBuilder($categoryIds, $filter)
+    public function getTagsFilterQueryBuilder($categoryIds, $filter, $shopId = null)
     {
-        $builder = $this->getFilterQueryBuilder($categoryIds, $filter);
+        $builder = $this->getFilterQueryBuilder($categoryIds, $filter, $shopId);
         $builder->select([
             'tags.name',
             'Count(DISTINCT blog.id) as tagsCount',
@@ -306,20 +318,26 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getDisplayDateFilterQueryBuilder, getAuthorFilterQueryBuilder, getTagsFilterQueryBuilder" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param int[] $categoryIds
-     * @param array $filter
+     * @param int[]    $categoryIds
+     * @param array    $filter
+     * @param int|null $shopId
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getFilterQueryBuilder($categoryIds, $filter)
+    public function getFilterQueryBuilder($categoryIds, $filter, $shopId = null)
     {
         $builder = $this->createQueryBuilder('blog');
         $builder->leftJoin('blog.tags', 'tags')
-                ->leftJoin('blog.author', 'author')
-                ->where('blog.active = 1')
-                ->andWhere('blog.displayDate < :now')
-                ->setParameter('now', new \DateTime())
-                ->orderBy('blog.displayDate', 'DESC');
+            ->leftJoin('blog.author', 'author')
+            ->where('blog.active = 1')
+            ->andWhere('blog.displayDate < :now')
+            ->setParameter('now', new \DateTime())
+            ->orderBy('blog.displayDate', 'DESC');
+
+        if ($shopId !== null) {
+            $builder->andWhere('(blog.shopIds LIKE :shopId OR blog.shopIds IS NULL)')
+                ->setParameter('shopId', '%|' . $shopId . '|%');
+        }
 
         if (!empty($categoryIds)) {
             $builder->andWhere('blog.categoryId IN (:categoryIds)')
@@ -379,7 +397,7 @@ class Repository extends ModelRepository
                 'COUNT(comments) as numberOfComments',
             ])
             ->from($this->getEntityName(), 'blog')
-            ->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active != 1')
+            ->leftJoin('blog.comments', 'comments', Join::WITH, 'comments.active != 1')
             ->groupBy('blog.id');
 
         if (!empty($blogCategoryIds)) {
@@ -437,14 +455,20 @@ class Repository extends ModelRepository
                 ->leftJoin('mappingMedia.media', 'media')
                 ->where('blog.id = :blogArticleId')
                 ->addOrderBy('comments.creationDate', 'ASC')
+                ->setParameter('shopId', '%|' . $shopId . '|%')
                 ->setParameter('blogArticleId', $blogArticleId);
+
+        if ($shopId !== null) {
+            $builder->andWhere('(blog.shopIds LIKE :shopId OR blog.shopIds IS NULL)')
+                ->setParameter('shopId', '%|' . $shopId . '|%');
+        }
 
         if ($shopId && Shopware()->Config()->get('displayOnlySubShopBlogComments')) {
             $builder
-                ->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active = 1 AND (comments.shopId IS NULL OR comments.shopId = :shopId)')
+                ->leftJoin('blog.comments', 'comments', Join::WITH, 'comments.active = 1 AND (comments.shopId IS NULL OR comments.shopId = :shopId)')
                 ->setParameter('shopId', $shopId);
         } else {
-            $builder->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active = 1');
+            $builder->leftJoin('blog.comments', 'comments', Join::WITH, 'comments.active = 1');
         }
 
         return $builder;

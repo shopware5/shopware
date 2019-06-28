@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\ORM\AbstractQuery;
+use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 use Shopware\Components\Random;
 use Shopware\Models\Blog\Blog;
 use Shopware\Models\Shop\Shop;
@@ -138,12 +140,12 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $categoryId = (int) $this->Request()->getQuery('sCategory');
         $page = (int) $this->request->getParam('sPage', 1);
         $page = $page >= 1 ? $page : 1;
-        $filterDate = urldecode($this->Request()->sFilterDate);
-        $filterAuthor = urldecode($this->Request()->sFilterAuthor);
-        $filterTags = urldecode($this->Request()->sFilterTags);
+        $filterDate = urldecode($this->Request()->getParam('sFilterDate'));
+        $filterAuthor = urldecode($this->Request()->getParam('sFilterAuthor'));
+        $filterTags = urldecode($this->Request()->getParam('sFilterTags'));
 
         // Redirect if blog's category is not a child of the current shop's category
-        $shopCategory = Shopware()->Shop()->getCategory();
+        $shopCategory = $this->get('shop')->getCategory();
         $category = $this->getCategoryRepository()->findOneBy(['id' => $categoryId, 'active' => true]);
         $isChild = ($shopCategory && $category) ? $category->isChildOf($shopCategory) : false;
         if (!$isChild) {
@@ -153,13 +155,16 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             );
         }
 
+        $session = $this->get('session');
+
         // PerPage
-        if (!empty($this->Request()->sPerPage)) {
-            Shopware()->Session()->sPerPage = (int) $this->Request()->sPerPage;
+        if (!empty($this->Request()->getParam('sPerPage'))) {
+            $session->offsetSet('sPerPage', (int) $this->Request()->getParam('sPerPage'));
         }
-        $perPage = (int) Shopware()->Session()->sPerPage;
+
+        $perPage = (int) $session->offsetGet('sPerPage');
         if (empty($perPage)) {
-            $perPage = (int) Shopware()->Config()->get('sARTICLESPERPAGE');
+            $perPage = (int) $this->get('config')->get('sARTICLESPERPAGE');
         }
 
         $filter = $this->createFilter($filterDate, $filterAuthor, $filterTags);
@@ -172,10 +177,11 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $query = $this->getCategoryRepository()->getBlogCategoriesByParentQuery($categoryId);
         $blogCategoryIds = array_column($query->getArrayResult(), 'id');
         $blogCategoryIds[] = $categoryId;
-        $blogArticlesQuery = $this->getRepository()->getListQuery($blogCategoryIds, $limitStart, $limitEnd, $filter, $this->get('shop')->getId());
-        $blogArticlesQuery->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $shopId = (int) $this->get('shop')->getId();
+        $blogArticlesQuery = $this->getRepository()->getListQuery($blogCategoryIds, $limitStart, $limitEnd, $filter, $shopId);
+        $blogArticlesQuery->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = Shopware()->Models()->createPaginator($blogArticlesQuery);
+        $paginator = $this->get('models')->createPaginator($blogArticlesQuery);
 
         // Returns the total count of the query
         $totalResult = $paginator->count();
@@ -203,8 +209,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $blogArticles[$key]['tags'] = $this->addLinksToFilter($tagsData, 'sFilterTags', 'name', false);
 
             // Adding average vote data to the blog article
-            $avgVoteQuery = $this->repository->getAverageVoteQuery($blogArticle['id'], $this->get('shop')->getId());
-            $blogArticles[$key]['sVoteAverage'] = $avgVoteQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SINGLE_SCALAR);
+            $avgVoteQuery = $this->repository->getAverageVoteQuery($blogArticle['id'], $shopId);
+            $blogArticles[$key]['sVoteAverage'] = $avgVoteQuery->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
 
             // Adding thumbnails to the blog article
             if (empty($blogArticle['media'][0]['mediaId'])) {
@@ -217,7 +223,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                 continue;
             }
 
-            /** @var \Shopware\Bundle\StoreFrontBundle\Struct\Media $media */
+            /** @var Media $media */
             $media = $medias[$mediaId];
             $media = $this->get('legacy_struct_converter')->convertMediaStruct($media);
 
@@ -231,7 +237,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $this->View()->loadTemplate('frontend/blog/' . $type . '.tpl');
         }
 
-        $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
+        $categoryContent = $this->get('modules')->Categories()->sGetCategoryContent($categoryId);
 
         // Make sure the category exists and is a blog category
         if (empty($categoryContent) || !$categoryContent['blog']) {
@@ -243,15 +249,15 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         }
 
         $assigningData = [
-            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
+            'sBanner' => $this->get('modules')->Marketing()->sBanner($categoryId),
             'sBreadcrumb' => $this->getCategoryBreadcrumb($categoryId),
             'sCategoryContent' => $categoryContent,
             'sNumberArticles' => $totalResult,
             'sPage' => $page,
             'sPerPage' => $perPage,
-            'sFilterDate' => $this->getDateFilterData($blogCategoryIds, $filter),
-            'sFilterAuthor' => $this->getAuthorFilterData($blogCategoryIds, $filter),
-            'sFilterTags' => $this->getTagsFilterData($blogCategoryIds, $filter),
+            'sFilterDate' => $this->getDateFilterData($blogCategoryIds, $filter, $shopId),
+            'sFilterAuthor' => $this->getAuthorFilterData($blogCategoryIds, $filter, $shopId),
+            'sFilterTags' => $this->getTagsFilterData($blogCategoryIds, $filter, $shopId),
             'sCategoryInfo' => $categoryContent,
             'sBlogArticles' => $blogArticles,
         ];
@@ -285,7 +291,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $shop = $this->get('shop');
 
         $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId, $shop->getId());
-        $blogArticleData = $blogArticleQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $blogArticleData = $blogArticleQuery->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         $translation = $this->get('translation')->readWithFallback($shop->getId(), $shop->getFallback() ? $shop->getFallback()->getId() : null, 'blog', $blogArticleId);
         $blogArticleData = array_merge($blogArticleData, $translation);
@@ -355,7 +361,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         // Adding average vote data to the blog article
         $avgVoteQuery = $this->repository->getAverageVoteQuery($blogArticleId, $shop->getId());
-        $blogArticleData['sVoteAverage'] = $avgVoteQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SINGLE_SCALAR);
+        $blogArticleData['sVoteAverage'] = $avgVoteQuery->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
 
         // Count the views of this blog item
         $visitedBlogItems = Shopware()->Session()->visitedBlogItems;
@@ -397,7 +403,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         if (!empty($blogArticleId)) {
             $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId);
-            $blogArticleData = $blogArticleQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            $blogArticleData = $blogArticleQuery->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
             $this->View()->assign('sAction', $this->Request()->getActionName());
 
@@ -489,18 +495,19 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      *
      * Returns all data needed to display the date filter
      *
-     * @param int[] $blogCategoryIds
-     * @param array $selectedFilters
+     * @param int[]    $blogCategoryIds
+     * @param array    $selectedFilters
+     * @param int|null $shopId
      *
      * @return array
      */
-    public function getDateFilterData($blogCategoryIds, $selectedFilters)
+    public function getDateFilterData($blogCategoryIds, $selectedFilters, $shopId = null)
     {
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         // Date filter query
         $dateFilterData = $this->repository
-            ->getDisplayDateFilterQuery($blogCategoryIds, $selectedFilters)
+            ->getDisplayDateFilterQuery($blogCategoryIds, $selectedFilters, $shopId)
             ->getArrayResult();
 
         return $this->addLinksToFilter($dateFilterData, 'sFilterDate', 'dateFormatDate');
@@ -511,18 +518,19 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      *
      * Returns all data needed to display the author filter
      *
-     * @param int[] $blogCategoryIds
-     * @param array $filter          selected filters
+     * @param int[]    $blogCategoryIds
+     * @param array    $filter          selected filters
+     * @param int|null $shopId
      *
      * @return array
      */
-    public function getAuthorFilterData($blogCategoryIds, $filter)
+    public function getAuthorFilterData($blogCategoryIds, $filter, $shopId = null)
     {
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         // Date filter query
         $filterData = $this->repository
-            ->getAuthorFilterQuery($blogCategoryIds, $filter)
+            ->getAuthorFilterQuery($blogCategoryIds, $filter, $shopId)
             ->getArrayResult();
 
         return $this->addLinksToFilter($filterData, 'sFilterAuthor', 'name');
@@ -533,18 +541,19 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      *
      * Returns all data needed to display the tags filter
      *
-     * @param int[] $blogCategoryIds
-     * @param array $filter          | selected filters
+     * @param int[]    $blogCategoryIds
+     * @param array    $filter          | selected filters
+     * @param int|null $shopId
      *
      * @return array
      */
-    public function getTagsFilterData($blogCategoryIds, $filter)
+    public function getTagsFilterData($blogCategoryIds, $filter, $shopId = null)
     {
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         // Date filter query
         $filterData = $this->repository
-            ->getTagsFilterQuery($blogCategoryIds, $filter)
+            ->getTagsFilterQuery($blogCategoryIds, $filter, $shopId)
             ->getArrayResult();
 
         return $this->addLinksToFilter($filterData, 'sFilterTags', 'name');
@@ -712,11 +721,12 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         return $filter;
     }
 
-    /**
-     * @return array
-     */
-    private function translateBlogArticles(array $blogArticles)
+    private function translateBlogArticles(array $blogArticles): array
     {
+        if (!$blogArticles) {
+            return [];
+        }
+
         $ids = array_column($blogArticles, 'id');
         $shop = $this->get('shop');
         $data = [];
@@ -728,13 +738,6 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $translations = $this->get('translation')->readBatchWithFallback($shop->getId(), $shop->getFallback() ? $shop->getFallback()->getId() : null, 'blog', $ids, false);
 
         foreach ($translations as $translation) {
-            $active = (bool) $translation['objectdata']['active'];
-            if (!$active) {
-                unset($data[$translation['objectkey']]);
-                continue;
-            }
-
-            $translation['objectdata']['active'] = $active;
             $data[$translation['objectkey']] = array_merge($data[$translation['objectkey']], $translation['objectdata']);
         }
 

@@ -187,6 +187,13 @@ class Blog extends ModelEntity
     private $metaTitle;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="shop_ids", type="string", nullable=false)
+     */
+    private $shopIds;
+
+    /**
      * INVERSE SIDE
      *
      * @var \Shopware\Models\User\User
@@ -531,5 +538,23 @@ class Blog extends ModelEntity
     public function getMetaTitle()
     {
         return $this->metaTitle;
+    }
+
+    /**
+     * Returns the unexploded shop ids string (ex: |1|2|)
+     */
+    public function getShopIds(): string
+    {
+        return $this->shopIds;
+    }
+
+    /**
+     * Set the unexploded shop ids string (ex: |1|2|)
+     */
+    public function setShopIds(string $shopIds = null): Blog
+    {
+        $this->shopIds = $shopIds;
+
+        return $this;
     }
 }

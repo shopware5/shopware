@@ -59,7 +59,8 @@ Ext.define('Shopware.apps.Blog.model.Detail', {
         { name : 'metaKeyWords', type : 'string' },
         { name : 'metaDescription', type : 'string' },
         { name : 'displayDate', type: 'date', dateFormat: 'd.m.Y' },
-        { name : 'displayTime', type: 'date', dateFormat: 'H:i' }
+        { name : 'displayTime', type: 'date', dateFormat: 'H:i' },
+        { name : 'shopIds', type: 'string' },
     ],
 
     /**
