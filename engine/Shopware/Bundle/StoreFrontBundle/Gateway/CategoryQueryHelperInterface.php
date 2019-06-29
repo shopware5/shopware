@@ -24,36 +24,20 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-interface CategoryGatewayInterface
+interface CategoryQueryHelperInterface
 {
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGatewayInterface::get()
-     *
-     * @return Struct\Category[] Indexed by the category id
+     * @return QueryBuilder
      */
-    public function getList(array $ids, Struct\ShopContextInterface $context);
+    public function getQuery(array $numbers, Struct\ShopContextInterface $context);
 
     /**
-     * The \Shopware\Bundle\StoreFrontBundle\Struct\Category requires the following data:
-     * - Category base data
-     * - Core attribute
-     * - Assigned media object
-     * - Core attribute of the media object
+     * @param int[] $ids
      *
-     *
-     * @return Struct\Category
+     * @return QueryBuilder
      */
-    public function get($id, Struct\ShopContextInterface $context);
-
-    /**
-     * @param Struct\BaseProduct[] $products
-     *
-     * @return array Indexed by product number, contains all categories of a product
-     */
-    public function getProductsCategories(array $products, Struct\ShopContextInterface $context);
+    public function getMapping(array $ids);
 }
