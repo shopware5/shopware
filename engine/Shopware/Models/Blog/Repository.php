@@ -455,7 +455,6 @@ class Repository extends ModelRepository
                 ->leftJoin('mappingMedia.media', 'media')
                 ->where('blog.id = :blogArticleId')
                 ->addOrderBy('comments.creationDate', 'ASC')
-                ->setParameter('shopId', '%|' . $shopId . '|%')
                 ->setParameter('blogArticleId', $blogArticleId);
 
         if ($shopId !== null) {
