@@ -75,6 +75,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
         buttons: {
             back: '{s name=window/buttons/back}Back{/s}',
             next: '{s name=window/buttons/next}Next{/s}',
+            skip: '{s name=window/buttons/skip}Skip{/s}',
             finish: '{s name=window/buttons/finish}Finish{/s}'
         }
     },
@@ -84,9 +85,10 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
     navigationIndex: {
         localization: 0,
         demo_data: 1,
-        recommendation: 2,
-        config: 3,
-        finish: 4
+        paypal: 2,
+        recommendation: 3,
+        config: 4,
+        finish: 5
     },
 
     initComponent: function() {
@@ -171,18 +173,11 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
         items.push(
             Ext.create('Shopware.apps.FirstRunWizard.view.main.Localization', {
                 connectionResult: me.isConnected
-            })
-        );
-        items.push(
-            Ext.create('Shopware.apps.FirstRunWizard.view.main.DemoData')
-        );
-        items.push(
-            Ext.create('Shopware.apps.FirstRunWizard.view.main.Recommendation')
-        );
-        items.push(
-            Ext.create('Shopware.apps.FirstRunWizard.view.main.Config')
-        );
-        items.push(
+            }),
+            Ext.create('Shopware.apps.FirstRunWizard.view.main.DemoData'),
+            Ext.create('Shopware.apps.FirstRunWizard.view.main.PayPal'),
+            Ext.create('Shopware.apps.FirstRunWizard.view.main.Recommendation'),
+            Ext.create('Shopware.apps.FirstRunWizard.view.main.Config'),
             Ext.create('Shopware.apps.FirstRunWizard.view.main.Finish')
         );
 
@@ -190,36 +185,36 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
     },
 
     createNavigation: function() {
-        var me = this;
-
-        me.navigationStore = Ext.create('Ext.data.Store', {
-            fields: ['name', 'disabled', 'needsConnection'],
+        this.navigationStore = Ext.create('Ext.data.Store', {
+            fields: ['name', 'needsConnection'],
             data: [
-                { id: me.navigationIndex.localization, name: '{s name=localization/content/title}Localization{/s}', disabled: false, needsConnection: false },
-                { id: me.navigationIndex.demo_data, name: '{s name=demo_data/content/title}Demo Data{/s}', disabled: true, needsConnection: true },
-                { id: me.navigationIndex.recommendation, name: '{s name=recommendation/content/title}Recommendations{/s}', disabled: true, needsConnection: true },
-                { id: me.navigationIndex.config, name: '{s name=config/content/title}Configuration{/s}', disabled: false, needsConnection: false },
-                { id: me.navigationIndex.finish, name: '{s name=finish/content/title}Finished{/s}', disabled: false, needsConnection: false }
+                { id: this.navigationIndex.localization, name: '{s name=localization/content/title}Localization{/s}', needsConnection: false },
+                { id: this.navigationIndex.demo_data, name: '{s name=demo_data/content/title}Demo Data{/s}', needsConnection: true },
+                { id: this.navigationIndex.paypal, name: '{s name=pay_pal/content/title}PayPal{/s}', needsConnection: true },
+                { id: this.navigationIndex.recommendation, name: '{s name=recommendation/content/title}Recommendations{/s}', needsConnection: true },
+                { id: this.navigationIndex.config, name: '{s name=config/content/title}Configuration{/s}', needsConnection: false },
+                { id: this.navigationIndex.finish, name: '{s name=finish/content/title}Finished{/s}', needsConnection: false }
             ]
         });
 
-        me.updateNavigation();
+        this.updateNavigation();
 
-        me.navigation = Ext.create('Ext.view.View', {
-            tpl: me.createNavigationTemplate(),
+        this.navigation = Ext.create('Ext.view.View', {
+            tpl: this.createNavigationTemplate(),
             width: 200,
             name: 'navigation',
-            store: me.navigationStore,
+            store: this.navigationStore,
             region: 'west',
             itemSelector: '.item',
             cls: 'wizard-navigation'
         });
 
-        return me.navigation;
+        return this.navigation;
     },
 
     updateNavigation: function() {
         var me = this;
+
         me.navigationStore.each(
             function(elem) {
                 elem.set('disabled', (elem.get('needsConnection') === true && me.isConnected !== true));
@@ -262,7 +257,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
             name: 'previous-button',
             width: 180,
             handler: function() {
-                var currentContainer = me.cardContainer.layout.getActiveItem(),
+                var currentContainer = me.cardContainer.getLayout().getActiveItem(),
                     name = currentContainer.name;
 
                 if (!Ext.isEmpty(name) && currentContainer.hasListener('navigate-back-' + name)) {
@@ -275,13 +270,33 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
             }
         });
 
+        me.skipButton = Ext.create('Ext.button.Button', {
+            text: me.snippets.buttons.skip,
+            cls: 'secondary',
+            name: 'skip-button',
+            hidden: true,
+            width: 180,
+            handler: function() {
+                var currentContainer = me.cardContainer.getLayout().getActiveItem(),
+                    name = currentContainer.name;
+
+                if (!Ext.isEmpty(name) && currentContainer.hasListener('navigate-skip-' + name)) {
+                    me.fireEvent('navigate-skip-' + name, me, function() {
+                        me.fireEvent('navigate-skip', me);
+                    });
+                } else {
+                    me.fireEvent('navigate-skip', me);
+                }
+            }
+        });
+
         me.nextButton = Ext.create('Ext.button.Button', {
             text: me.snippets.buttons.next,
             cls: 'primary',
             name: 'next-button',
             width: 180,
             handler: function() {
-                var currentContainer = me.cardContainer.layout.getActiveItem(),
+                var currentContainer = me.cardContainer.getLayout().getActiveItem(),
                     name = currentContainer.name;
 
                 if (!Ext.isEmpty(name) && currentContainer.hasListener('navigate-next-' + name)) {
@@ -296,6 +311,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
 
         items.push(me.previousButton);
         items.push('->');
+        items.push(me.skipButton);
         items.push(me.nextButton);
 
         me.toolbar = Ext.create('Ext.toolbar.Toolbar', {

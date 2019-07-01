@@ -145,8 +145,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     },
 
     saveConfiguration: function(plugin, form) {
-        var me = this;
-
         form.onSaveForm(form, false, function() {
 
         });
@@ -177,9 +175,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     },
 
     updateDummyPlugin: function(plugin, callback) {
-        var me = this;
-
-        me.startPluginDownload(plugin, callback);
+        this.startPluginDownload(plugin, callback);
     },
 
     startPluginDownload: function(plugin, callback, isUpdate) {

@@ -98,5 +98,8 @@ parameters:
         - '#should return Shopware\\Bundle\\ContentTypeBundle\\Services\\RepositoryInterface but returns object#'
         # Missing array key
         - "#Offset 'mediatype' does not exist on array#"
+        # We manually check if the class exists before instantiating / using it
+        - '#Instantiated class SwagPaymentPayPalUnified\\Setup\\FirstRunWizardInstaller not found#'
+        - '#Call to method saveConfiguration\(\) on an unknown class SwagPaymentPayPalUnified\\Setup\\FirstRunWizardInstaller#'
 
     reportUnmatchedIgnoredErrors: false
