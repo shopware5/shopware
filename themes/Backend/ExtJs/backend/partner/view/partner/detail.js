@@ -34,8 +34,8 @@
  */
 //{block name="backend/partner/view/partner/detail"}
 Ext.define('Shopware.apps.Partner.view.partner.Detail', {
-    extend:'Ext.container.Container',
-    alias:'widget.partner-partner-detail',
+    extend: 'Ext.container.Container',
+    alias: 'widget.partner-partner-detail',
     border: 0,
     title: '{s name=partner/configuration/title}Partner configuration{/s}',
     partnerId:0,
@@ -55,10 +55,16 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
         [259200, '{s name=detail_general/mode_combo_box/three_days}3 Days (259200 Sec.){/s}'],
         [604800, '{s name=detail_general/mode_combo_box/one_week}1 Week (604800 Sec.){/s}'],
         [1209600, '{s name=detail_general/mode_combo_box/two_weeks}2 Weeks (1209600 Sec.){/s}'],
-        [2419200, '{s name=detail_general/mode_combo_box/one_month}1 Month (2419200 Sec.){/s}'],
-        [4838400, '{s name=detail_general/mode_combo_box/two_months}2 Months (4838400 Sec.){/s}'],
-        [7257600, '{s name=detail_general/mode_combo_box/three_months}3 Months (7257600 Sec.){/s}']
+        [2592000, '{s name=detail_general/mode_combo_box/one_month}1 Month (2592000 Sec.){/s}'],
+        [5184000, '{s name=detail_general/mode_combo_box/two_months}2 Months (5184000 Sec.){/s}'],
+        [7776000, '{s name=detail_general/mode_combo_box/three_months}3 Months (7776000 Sec.){/s}'],
+        [14515200, '{s name=detail_general/mode_combo_box/six_months}6 Months (15768000 Sec.){/s}'],
+        [31536000, '{s name=detail_general/mode_combo_box/one_year}1 Year (31536000 Sec.){/s}'],
+        [63072000, '{s name=detail_general/mode_combo_box/two_years}2 Years (63072000 Sec.){/s}'],
+        [126144000, '{s name=detail_general/mode_combo_box/four_years}4 Years (126144000 Sec.){/s}'],
+        [252288000, '{s name=detail_general/mode_combo_box/eight_years}8 Years (252288000 Sec.){/s}']
     ],
+
     /**
      * Initialize the Shopware.apps.Partner.view.partner.detail and defines the necessary
      * default configuration
@@ -73,7 +79,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
         }
 
         me.generalFieldset = Ext.create('Ext.form.FieldSet', {
-            title:'{s name=detail_general/field_set/configuration}General configuration{/s}',
+            title: '{s name=detail_general/field_set/configuration}General configuration{/s}',
             bodyPadding: 10,
             layout: 'column',
             defaults: {
@@ -83,7 +89,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
         });
 
         me.partnerFieldset = Ext.create('Ext.form.FieldSet', {
-            title:'{s name=detail_general/field_set/partner_information}Partner information{/s}',
+            title: '{s name=detail_general/field_set/partner_information}Partner information{/s}',
             bodyPadding: 10,
             layout: 'column',
             defaults: {
@@ -143,8 +149,8 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
                 labelWidth:180,
                 minWidth:250,
                 width: 400,
-                labelStyle:'font-weight: 700;',
-                xtype:'textfield'
+                labelStyle: 'font-weight: 700;',
+                xtype: 'textfield'
             },
             items:me.createGeneralFormLeft()
         });
@@ -154,8 +160,8 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
                 labelWidth:180,
                 minWidth:250,
                 width: 400,
-                labelStyle:'font-weight: 700;',
-                xtype:'textfield'
+                labelStyle: 'font-weight: 700;',
+                xtype: 'textfield'
             },
             items:me.createGeneralFormRight()
         });
@@ -164,33 +170,33 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
     },
 
     /**
-     * creates the general form and layout
+     * Creates the general form and layout
      *
      * @return [Array] computed form
      */
-    createPartnerForm:function () {
+    createPartnerForm: function () {
         var leftContainer, rightContainer, me = this;
 
         leftContainer = Ext.create('Ext.container.Container', {
             defaults:{
-                labelWidth:180,
-                minWidth:250,
+                labelWidth: 180,
+                minWidth: 250,
                 width: 400,
-                labelStyle:'font-weight: 700;',
-                xtype:'textfield'
+                labelStyle: 'font-weight: 700;',
+                xtype: 'textfield'
             },
-            items:me.createPartnerFormLeft()
+            items: me.createPartnerFormLeft()
         });
 
         rightContainer = Ext.create('Ext.container.Container', {
             defaults:{
-                labelWidth:180,
-                minWidth:250,
+                labelWidth: 180,
+                minWidth: 250,
                 width: 400,
-                labelStyle:'font-weight: 700;',
-                xtype:'textfield'
+                labelStyle: 'font-weight: 700;',
+                xtype: 'textfield'
             },
-            items:me.createPartnerFormRight()
+            items: me.createPartnerFormRight()
         });
 
         return [ leftContainer, rightContainer ];
@@ -198,20 +204,20 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
 
 
     /**
-     * creates all fields for the general form on the left side
+     * Creates all fields for the general form on the left side
      */
     createGeneralFormLeft:function () {
         var me = this;
         me.customerMapping = Ext.create('Ext.form.field.Text',{
-            fieldLabel:'{s name=detail_general/field/customer_account}Customer account{/s}',
-            name:'customerId',
-            checkChangeBuffer:800,
-            labelWidth:180,
-            minWidth:250,
+            fieldLabel: '{s name=detail_general/field/customer_account}Customer account{/s}',
+            name: 'customerId',
+            checkChangeBuffer: 800,
+            labelWidth: 180,
+            minWidth: 250,
             width: 400,
-            labelStyle:'font-weight: 700;',
+            labelStyle: ' font-weight: 700;',
             supportText: "{s name=detail_general/supportText/noCustomerMapped}No customer account has been linked{/s}",
-            helpText:'{s name=detail_general/field/customerMapping/help}Link a customer account to enable a partner to have a look at the frontend statistics in the account section. You can link an account by entering a customer email or a customer number.{/s}',
+            helpText: '{s name=detail_general/field/customerMapping/help}Link a customer account to enable a partner to have a look at the frontend statistics in the account section. You can link an account by entering a customer email or a customer number.{/s}',
             listeners: {
                 change: function(field, newValue, oldValue, eOpts) {
                     me.fireEvent('mapCustomerAccount', field, newValue, oldValue, eOpts)
@@ -220,123 +226,121 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
         });
         return [
             {
-                fieldLabel:'{s name=detail_general/field/tracking_code}Tracking code{/s}',
-                name:'idCode',
-                allowBlank:false,
-                required:true,
-                enableKeyEvents:true,
-                checkChangeBuffer:500,
-                helpText:'{s name=detail_general/field/tracking_code/help}This is the individual tracking code for each partner that will be appended to the URL.{/s}',
-                vtype:'remote',
-                validationUrl:'{url controller="partner" action="validateTrackingCode"}',
-                validationRequestParam:me.partnerId,
-                validationErrorMsg:'{s name=detail_general/error_message/used_tracking_code}The tracking code is already in use{/s}',
-                validateOnChange:true,
-                validateOnBlur:false
+                fieldLabel: '{s name=detail_general/field/tracking_code}Tracking code{/s}',
+                name: 'idCode',
+                allowBlank: false,
+                required: true,
+                enableKeyEvents: true,
+                checkChangeBuffer: 500,
+                helpText: '{s name=detail_general/field/tracking_code/help}This is the individual tracking code for each partner that will be appended to the URL.{/s}',
+                vtype: 'remote',
+                validationUrl: '{url controller="partner" action="validateTrackingCode"}',
+                validationRequestParam: me.partnerId,
+                validationErrorMsg: '{s name=detail_general/error_message/used_tracking_code}The tracking code is already in use{/s}',
+                validateOnChange: true,
+                validateOnBlur: false
             },
             me.customerMapping,
             {
-                xtype:'checkbox',
-                fieldLabel:'{s name=detail_general/field/active}Active{/s}',
-                inputValue:1,
-                uncheckedValue:0,
-                name:'active'
+                xtype: 'checkbox',
+                fieldLabel: '{s name=detail_general/field/active}Active{/s}',
+                inputValue: 1,
+                uncheckedValue: 0,
+                name: 'active'
             }
         ];
     },
 
     /**
-     * creates all fields for the general form on the left side
+     * Creates all fields for the general form on the left side
      */
     createGeneralFormRight:function () {
         var me = this;
 
         return [
             {
-                fieldLabel:'{s name=detail_general/field/commission}Commission in %{/s}',
-                xtype:'numberfield',
-                name:'percent',
+                fieldLabel: '{s name=detail_general/field/commission}Commission in %{/s}',
+                xtype: 'numberfield',
+                name: 'percent',
                 decimalPrecision: 2,
-                maxValue:100,
-                minValue:0,
-                allowBlank:false,
-                hideTrigger:true,
-                keyNavEnabled:false,
-                mouseWheelEnabled:false,
-                required:true,
+                maxValue: 100,
+                minValue: 0,
+                allowBlank: false,
+                hideTrigger: true,
+                keyNavEnabled: false,
+                mouseWheelEnabled: false,
+                required: true,
                 allowDecimals: true
             },
             {
-                xtype:'combobox',
-                name:'cookieLifeTime',
-                fieldLabel:'{s name=detail_general/field/cookieLifeTime}Cookie lifetime(Sec.){/s}',
-                store:new Ext.data.SimpleStore({
-                    fields:['id', 'text'], data:me.cookieLifeTimeGrading
+                xtype: 'combobox',
+                name: 'cookieLifeTime',
+                fieldLabel: '{s name=detail_general/field/cookieLifeTime}Cookie lifetime(Sec.){/s}',
+                store: new Ext.data.SimpleStore({
+                    fields: ['id', 'text'], data:me.cookieLifeTimeGrading
                 }),
-                valueField:'id',
-                displayField:'text',
-                mode:'local'
+                valueField: 'id',
+                displayField: 'text',
+                mode: 'local'
             }
         ]
     },
 
     /**
-     * creates all fields for the general form on the right side
+     * Creates all fields for the general form on the right side
      */
     createPartnerFormLeft:function () {
-        var me = this;
         return [
             {
-                fieldLabel:'{s name=detail_general/field/company}Company{/s}',
-                allowBlank:false,
-                required:true,
-                name:'company'
+                fieldLabel: '{s name=detail_general/field/company}Company{/s}',
+                allowBlank: false,
+                required: true,
+                name: 'company'
             },
             {
-                fieldLabel:'{s name=detail_general/field/street}Street{/s}',
-                name:'street'
+                fieldLabel: '{s name=detail_general/field/street}Street{/s}',
+                name: 'street'
             },
             {
-                fieldLabel:'{s name=detail_general/field/zip_code}Zip code{/s}',
-                name:'zipCode'
+                fieldLabel: '{s name=detail_general/field/zip_code}Zip code{/s}',
+                name: 'zipCode'
             },
             {
-                fieldLabel:'{s name=detail_general/field/city}City{/s}',
-                name:'city'
+                fieldLabel: '{s name=detail_general/field/city}City{/s}',
+                name: 'city'
             },
             {
-                fieldLabel:'{s name=detail_general/field/country}Country{/s}',
-                name:'countryName'
+                fieldLabel: '{s name=detail_general/field/country}Country{/s}',
+                name: 'countryName'
             }
 
         ]
     },
 
     /**
-     * creates all fields for the general form on the right side
+     * Creates all fields for the general form on the right side
      */
     createPartnerFormRight:function () {
-        var me = this;
         return [
             {
-                fieldLabel:'{s name=detail_general/field/phone}Phone{/s}',
-                name:'phone'
+                fieldLabel: '{s name=detail_general/field/phone}Phone{/s}',
+                name: 'phone'
             },
             {
-                fieldLabel:'{s name=detail_general/field/fax}Fax{/s}',
-                name:'fax'
+                fieldLabel: '{s name=detail_general/field/fax}Fax{/s}',
+                name: 'fax'
             },
             {
-                fieldLabel:'{s name=detail_general/field/email}Email{/s}',
-                name:'email'
+                fieldLabel: '{s name=detail_general/field/email}Email{/s}',
+                name: 'email'
             },
             {
-                fieldLabel:'{s name=detail_general/field/web}Web{/s}',
-                name:'web'
+                fieldLabel: '{s name=detail_general/field/web}Web{/s}',
+                name: 'web'
             },
             {
-                fieldLabel:'{s name=detail_general/field/profile}Profile{/s}',
-                name:'profile'
+                fieldLabel: '{s name=detail_general/field/profile}Profile{/s}',
+                name: 'profile'
             }
         ]
     }
