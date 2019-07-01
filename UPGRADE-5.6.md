@@ -45,11 +45,11 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `\Shopware\Models\Mail\Contact`
     * `\Shopware\Models\Mail\LogRepository`
 * Added the following new services to enable e-mail logging
-    * `shopware_mail.log_entry_builder`
-    * `shopware_mail.log_entry_mail_builder`
-    * `shopware_mail.log_service`
-    * `shopware_mail.filter.administrative_mail_filter`
-    * `shopware_mail.filter.newsletter_mail_filter`
+    * `Shopware\Bundle\MailBundle\Service\LogEntryBuilder`
+    * `Shopware\Bundle\MailBundle\Service\LogEntryMailBuilder`
+    * `Shopware\Bundle\MailBundle\Service\LogService`
+    * `Shopware\Bundle\MailBundle\Service\Filter\AdministrativeMailFilter`
+    * `Shopware\Bundle\MailBundle\Service\Filter\NewsletterMailFilter`
 * Added the `MailLogCleanup` cron job which clears old entries from the e-mail log
 * Added new basic settings in the mailer section
     * `mailLogActive`
@@ -445,7 +445,7 @@ class MyPaymentController extends Controller {
     public function gatewayAction()
     {
         // Do some payment things
-        $token = $this->get('shopware.components.cart.payment_token')->generate();
+        $token = $this->get(\Shopware\Components\Cart\PaymentTokenService::class)->generate();
         
         $returnParamters = [
             'controller' => 'payment_paypal',
@@ -557,7 +557,6 @@ ExtJs developer mode loads a developer-version file of ExtJs to provide code doc
 
 Content Types are something similar to attributes, but you can create your own simple entity with defined fields using using xml or the backend.
 
-
 Example XML:
 
 ```xml
@@ -595,7 +594,7 @@ Each type gets its own
 * frontend controller, if enabled
 * API controller for all CRUD operations (Custom**type_name** e.g. CustomStore)
 * backend menu icon
-* table with s_custom prefix
+* table with `s_custom_` prefix
 * repository service with shopware.bundle.content_type.**type_name**
 
 They are also accessible in template using new smarty function `fetchContent`
@@ -610,3 +609,18 @@ Example
 ```
 
 The backend fields and titles can be translated using snippet namespace ``backend/customYOURTYPE/main``.
+
+You can find more information and details (e.g. regarding available field types) in the [Developer Docs](https://developers.shopware.com/developers-guide/content-types/).
+
+### FQCN as DIC ids
+
+Starting with Shopware 5.6, new services will have their Fully Qualified Class Names (FQCN) as their service id in the DIC.
+
+Classes that implement an interface will normally use that interface as their FQCN, though exemptions may occur if an
+interface is implemented multiple times (e.g. the `SubscriberInterface`).
+
+For the moment, all existing legacy service ids will be converted to lowercase and should be used in lowercase in plugins
+as well. Since the Shopware DIC is case-insensitive, this is no problem in existing plugins or older Shopware installations.
+
+This change is being made as a first arrangement for a future switch to Symfony 4, where the DIC is case sensitive and
+FQCNs are the default.

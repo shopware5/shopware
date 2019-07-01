@@ -39,14 +39,14 @@ class ManualSorting extends \Shopware_Controllers_Backend_ExtJs
     {
         $sorting = $this->getSorting($categoryId, $sortingId);
 
-        $products = $this->get('shopware.components.manual_sorting.product_loader')->load($categoryId, $start, $limit, $sorting);
+        $products = $this->get(\Shopware\Components\ManualSorting\ProductLoaderInterface::class)->load($categoryId, $start, $limit, $sorting);
 
         $this->View()->assign($products);
     }
 
     public function assignPositionAction(int $categoryId = 3, int $sortingId = 1, array $data = []): void
     {
-        $this->get('shopware.components.manual_sorting.position_service')
+        $this->get(\Shopware\Components\ManualSorting\PositionServiceInterface::class)
             ->assign($categoryId, $sortingId, $data);
     }
 
@@ -83,7 +83,7 @@ class ManualSorting extends \Shopware_Controllers_Backend_ExtJs
     {
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
-        return current($this->get('shopware_storefront.custom_sorting_service')->getSortingsOfCategories([$categoryId], $context));
+        return current($this->get(\Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface::class)->getSortingsOfCategories([$categoryId], $context));
     }
 
     private function getSorting(int $categoryId, int $sortingId): ?CustomSorting

@@ -342,6 +342,6 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
     public function countContentTypes(): int
     {
-        return (int) count(Shopware()->Container()->get('shopware.bundle.content_type.type_provider')->getTypes());
+        return (int) count(Shopware()->Container()->get(\Shopware\Bundle\ContentTypeBundle\Services\TypeProvider::class)->getTypes());
     }
 }

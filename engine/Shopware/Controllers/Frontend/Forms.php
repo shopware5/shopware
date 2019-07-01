@@ -194,7 +194,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                     $orderNumber = $this->Request()->getParam('sOrdernumber');
 
                     try {
-                        $this->get('shopware.components.order_number_validator')
+                        $this->get(\Shopware\Components\OrderNumberValidator\OrderNumberValidatorInterface::class)
                             ->validate($orderNumber);
 
                         $product = Shopware()->Modules()

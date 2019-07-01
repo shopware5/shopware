@@ -36,7 +36,7 @@ class Shopware_Controllers_Frontend_RobotsTxt extends Enlight_Controller_Action
             return $context->getBaseUrl();
         }, $routerContexts);
 
-        $robotsTxtGenerator = $this->get('shopware.components.robots_txt_generator');
+        $robotsTxtGenerator = $this->get(\Shopware\Components\RobotsTxtGeneratorInterface::class);
         $baseUrls = array_unique($baseUrls);
 
         $robotsTxtGenerator->setRouterContext($routerContexts);

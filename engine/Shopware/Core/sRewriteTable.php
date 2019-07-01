@@ -699,7 +699,7 @@ class sRewriteTable implements \Enlight_Hook
             return;
         }
 
-        $translator = Shopware()->Container()->get('shopware_bundle_content_type.services.frontend_type_translator');
+        $translator = Shopware()->Container()->get(\Shopware\Bundle\ContentTypeBundle\Services\FrontendTypeTranslatorInterface::class);
         $type = $translator->translate($type);
 
         // insert controller, itself
@@ -710,10 +710,10 @@ class sRewriteTable implements \Enlight_Hook
 
     public function createContentTypeUrls(ShopContextInterface $context): void
     {
-        $translator = Shopware()->Container()->get('shopware_bundle_content_type.services.frontend_type_translator');
+        $translator = Shopware()->Container()->get(\Shopware\Bundle\ContentTypeBundle\Services\FrontendTypeTranslatorInterface::class);
 
         /** @var Type $type */
-        foreach (Shopware()->Container()->get('shopware.bundle.content_type.type_provider')->getTypes() as $type) {
+        foreach (Shopware()->Container()->get(\Shopware\Bundle\ContentTypeBundle\Services\TypeProvider::class)->getTypes() as $type) {
             if (!$type->isShowInFrontend()) {
                 continue;
             }

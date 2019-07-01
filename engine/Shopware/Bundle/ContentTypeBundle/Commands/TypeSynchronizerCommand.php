@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\ContentTypeBundle\Commands;
 
+use Shopware\Bundle\ContentTypeBundle\Services\DatabaseContentTypeSynchronizerInterface;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -43,7 +44,7 @@ class TypeSynchronizerCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $sync = $this->container->get('shopware_bundle_content_type.services.database_content_type_synchronizer');
+        $sync = $this->container->get(DatabaseContentTypeSynchronizerInterface::class);
 
         $types = $sync->sync(array_keys($this->container->getParameter('active_plugins')), $input->getOption('destructive'));
         $io = new SymfonyStyle($input, $output);

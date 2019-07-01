@@ -42,7 +42,7 @@
             <tag name="shopware.controller" module="backend" controller="blog"/>
         </service>
 
-        <service id="shopware_controllers_backend_logger" class="\Shopware\Controllers\Backend\Logger">
+        <service id="shopware_controllers_backend_logger" class="Shopware\Controllers\Backend\Logger">
             <argument type="service" id="models"/>
             <argument type="service" id="shopware.components.privacy.ip_anonymizer"/>
             <tag name="shopware.controller" module="backend" controller="logger"/>

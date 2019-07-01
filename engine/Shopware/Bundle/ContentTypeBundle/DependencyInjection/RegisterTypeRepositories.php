@@ -41,7 +41,7 @@ class RegisterTypeRepositories implements CompilerPassInterface
 
             $def->setArguments([
                 new Reference('dbal_connection'),
-                new Expression('service("shopware.bundle.content_type.type_provider").getType("' . $name . '")'),
+                new Expression('service("Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Services\\\\TypeProvider").getType("' . $name . '")'),
                 new Reference('translation'),
                 new Reference('shopware_storefront.context_service'),
                 new Reference(TypeFieldResolver::class),

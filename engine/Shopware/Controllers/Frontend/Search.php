@@ -84,7 +84,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         /** @var \Shopware\Components\QueryAliasMapper $mapper */
         $mapper = $this->get('query_alias_mapper');
 
-        $service = Shopware()->Container()->get('shopware_storefront.custom_sorting_service');
+        $service = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface::class);
 
         $sortingIds = $this->container->get('config')->get('searchSortings');
         $sortingIds = array_filter(explode('|', $sortingIds));

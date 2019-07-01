@@ -471,12 +471,12 @@
             <argument type="service">
                 <service class="\Symfony\Component\WebLink\HttpHeaderSerializer" />
             </argument>
-            <argument type="service" id="web_link_manager" />
+            <argument type="service" id="Shopware\Components\WebLinkManager" />
             <argument type="expression">service('config').get('http2Push', false)</argument>
             <tag name="shopware.event_subscriber" />
-        </service>
+    </service>
 
-        <service id="web_link_manager" class="Shopware\Components\WebLinkManager">
+        <service id="Shopware\Components\WebLinkManager">
             <argument type="service">
                 <service class="\Fig\Link\GenericLinkProvider" />
             </argument>
@@ -892,14 +892,14 @@
         <service id="shopware.components.template.html_minifier"
                  class="Shopware\Components\Template\HtmlMinCompressor"/>
 
-        <service id="shopware.components.order_number_validator"
+        <service id="Shopware\Components\OrderNumberValidator\OrderNumberValidatorInterface"
                  class="Shopware\Components\OrderNumberValidator\RegexOrderNumberValidator">
             <argument type="string">%shopware.product.orderNumberRegex%</argument>
         </service>
 
         <service id="shopware.components.validator.order_number_constraint_validator"
                  class="Shopware\Components\Model\DBAL\Validator\OrderNumberValidator">
-            <argument type="service" id="shopware.components.order_number_validator"/>
+            <argument type="service" id="Shopware\Components\OrderNumberValidator\OrderNumberValidatorInterface"/>
 
             <tag name="validator.constraint_validator" alias="order_number_constraint_validator" />
         </service>
@@ -908,18 +908,18 @@
             <argument type="service" id="dbal_connection"/>
         </service>
 
-        <service id="shopware.components.cart.payment_token" class="Shopware\Components\Cart\PaymentTokenService">
+        <service id="Shopware\Components\Cart\PaymentTokenService" class="Shopware\Components\Cart\PaymentTokenService">
             <argument type="service" id="shopware.components.optin_service"/>
             <argument type="service" id="session"/>
         </service>
 
-        <service id="shopware.components.cart.payment_token_subscriber" class="Shopware\Components\Cart\PaymentTokenSubscriber">
-            <argument type="service" id="shopware.components.cart.payment_token"/>
+        <service id="Shopware\Components\Cart\PaymentTokenService_subscriber" class="Shopware\Components\Cart\PaymentTokenSubscriber">
+            <argument type="service" id="Shopware\Components\Cart\PaymentTokenService"/>
             <argument type="service" id="session" on-invalid="null"/>
             <tag name="shopware.event_subscriber"/>
         </service>
 
-        <service id="shopware.components.robots_txt_generator" class="Shopware\Components\RobotsTxtGenerator">
+        <service id="Shopware\Components\RobotsTxtGeneratorInterface" class="Shopware\Components\RobotsTxtGenerator">
             <argument type="service" id="router"/>
         </service>
 
@@ -927,17 +927,17 @@
             <tag name="console.command"/>
         </service>
 
-        <service id="shopware.components.manual_sorting.product_loader" class="Shopware\Components\ManualSorting\ProductLoader">
+        <service id="Shopware\Components\ManualSorting\ProductLoaderInterface" class="Shopware\Components\ManualSorting\ProductLoader">
             <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory"/>
             <argument type="service" id="shopware_storefront.context_service"/>
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_media.media_service"/>
         </service>
 
-        <service id="shopware.components.manual_sorting.position_service" class="Shopware\Components\ManualSorting\PositionService">
+        <service id="Shopware\Components\ManualSorting\PositionServiceInterface" class="Shopware\Components\ManualSorting\PositionService">
             <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware.components.manual_sorting.product_loader"/>
-            <argument type="service" id="shopware_storefront.custom_sorting_service"/>
+            <argument type="service" id="Shopware\Components\ManualSorting\ProductLoaderInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface"/>
             <argument type="service" id="shopware_storefront.context_service"/>
             <argument type="service" id="shopware_elastic_search.backlog_processor"/>
             <argument type="expression">parameter('shopware.es.enabled') and parameter('shopware.es.write_backlog')</argument>
