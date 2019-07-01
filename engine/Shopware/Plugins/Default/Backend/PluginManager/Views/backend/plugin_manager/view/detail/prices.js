@@ -240,7 +240,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
         if (price.get('discount') > 0) {
             priceString = Ext.String.format('<span class="reduced">[0]</span> <span class="original">[1]</small>',
                 priceString,
-                me.formatPrice(price.get('price') / price.get('discount') * 100)
+                me.formatPrice((price.get('price') / (100 - price.get('discount')) * 100))
             );
         }
 
