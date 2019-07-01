@@ -402,7 +402,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $sErrorFlag = null;
 
         if (!empty($blogArticleId)) {
-            $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId);
+            $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId, $this->get('shop')->getId());
             $blogArticleData = $blogArticleQuery->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
             $this->View()->assign('sAction', $this->Request()->getActionName());
