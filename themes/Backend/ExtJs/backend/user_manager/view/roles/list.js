@@ -41,16 +41,7 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
     region: 'center',
     autoScroll: true,
     height: '100%',
-    selType: 'rowmodel',
-
-    createDockedToolBar: function () {
-        return [{
-            dock: 'bottom',
-            xtype: 'pagingtoolbar',
-            displayInfo: true,
-            store: this.roleStore
-        }];
-    },
+    selType: 'checkboxmodel',
 
     /**
      * Initialize the view components
@@ -59,21 +50,21 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
      */
     initComponent: function() {
         var me = this;
-        me.store = this.roleStore;
-        me.dockedItems = this.createDockedToolBar();
+
+        me.dockedItems = me.createDockedToolBar();
         me.plugins = Ext.create('Ext.grid.plugin.RowEditing', {
-            clicksToEdit: 1,
+            clicksToEdit: 2,
             listeners: {
-                canceledit: function (editor, opts) {
-                    if (typeof opts.record.get('id') == 'undefined') {
-                        opts.store.remove(opts.record);
+                canceledit: function (editor, e) {
+                    if (!Ext.isDefined(e.record.get('id'))) {
+                        e.store.remove(e.record);
                     }
                 },
                 beforeedit: function (editor, e) {
-                    var fields = me.getFieldsToLockForAdmin();
-                    var form   = editor.getEditor().form;
+                    var fields = me.getFieldsToLockForAdmin(),
+                        form = editor.getEditor().form;
 
-                    if (e.record.get('name') == 'local_admins') {
+                    if (e.record.get('name') === 'local_admins') {
                         Ext.each(fields, function (field) {
                             form.findField(field).disable();
                         });
@@ -90,25 +81,34 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
 
         me.on('edit', me.onEditRow, me);
 
+        me.on('activate', function() {
+            me.getStore().load();
+        });
+
         // Define the columns and renderers
-        this.columns = [
-        {
-            header: '{s name=roleslist/colname}Name{/s}',
+        me.columns = [{
+            header: '{s name=roleslist/colname}{/s}',
             dataIndex: 'name',
             flex: 1,
-            field: 'textfield'
+            editor: {
+                xtype: 'textfield',
+                emptyText: '{s name=roles_list/enterName}{/s}'
+            }
         }, {
-            header: '{s name=roleslist/coldescription}Description{/s}',
+            header: '{s name=roleslist/coldescription}{/s}',
             dataIndex: 'description',
             flex: 1,
-            field: 'textfield'
+            editor: {
+                xtype: 'textfield',
+                emptyText: '{s name=roles_list/enterDescription}{/s}'
+            }
         }, {
-            header: '{s name=roleslist/colsource}Source{/s}',
+            header: '{s name=roleslist/colsource}{/s}',
             dataIndex: 'source',
             flex: 1
         }, {
             xtype: 'booleancolumn',
-            header: '{s name=roleslist/colactive}Enabled{/s}',
+            header: '{s name=roleslist/colactive}{/s}',
             dataIndex: 'enabled',
             flex: 1,
             editor: {
@@ -116,10 +116,9 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
                 inputValue: 'true',
                 uncheckedValue: 'false'
             }
-        },
-        {
+        }, {
             xtype: 'booleancolumn',
-            header: '{s name=roleslist/coladmin}Admin{/s}',
+            header: '{s name=roleslist/coladmin}{/s}',
             dataIndex: 'admin',
             flex: 1,
             editor: {
@@ -127,15 +126,15 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
                 inputValue: 'true',
                 uncheckedValue: 'false'
             }
-        },
+        }
         /* {if {acl_is_allowed privilege=delete}} */
-        {
+        ,{
             xtype: 'actioncolumn',
             width: 50,
             items: [{
                 iconCls: 'sprite-minus-circle',
                 cls: 'delete',
-                tooltip: '{s name=roleslist/colactiondelete}Delete this role{/s}',
+                tooltip: '{s name=roleslist/colactiondelete}{/s}',
                 handler:function (view, rowIndex, colIndex, item) {
                     me.fireEvent('deleteRole', view, rowIndex, colIndex, item);
                 },
@@ -150,24 +149,44 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
 
 
         // Toolbar
-        this.toolbar = Ext.create('Ext.toolbar.Toolbar', {
+        me.toolbar = Ext.create('Ext.toolbar.Toolbar', {
             dock: 'top',
             ui: 'shopware-ui',
+            items: [
         /* {if {acl_is_allowed privilege=create}} */
-            items: [{
+            {
                 iconCls: 'sprite-plus-circle',
-                text: '{s name=roleslist/addrole}Add role{/s}',
+                text: '{s name=roleslist/addrole}{/s}',
                 action: 'addRole'
             }
-            ]
         /* {/if} */
+            /* {if {acl_is_allowed privilege=delete}} */
+            ,{
+                iconCls: 'sprite-minus-circle',
+                text: '{s name=roleslist/deleterole}{/s}',
+                disabled: true,
+                action: 'deleteRole'
+            }
+            /* {/if} */
+            ]
         });
 
 
-        this.dockedItems = Ext.clone(this.dockedItems);
-        this.dockedItems.push(this.toolbar);
+        me.dockedItems = Ext.clone(me.dockedItems);
+        me.dockedItems.push(me.toolbar);
 
-        this.callParent();
+        me.callParent(arguments);
+    },
+
+    createDockedToolBar: function () {
+        var me = this;
+
+        return [{
+            dock: 'bottom',
+            xtype: 'pagingtoolbar',
+            displayInfo: true,
+            store: me.store
+        }];
     },
 
     getFieldsToLockForAdmin: function() {
@@ -182,22 +201,25 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
      * Saves the edited record to the store.
      *
      * @event edit
-     * @param [object] editor
+     * @param { object } editor
+     * @param { object } event
      * @return void
      */
     onEditRow: function(editor, event) {
         var store = event.store;
 
         Shopware.app.Application.fireEvent('Shopware.ValidatePassword', function() {
-
             editor.grid.setLoading(true);
             store.sync({
                 callback: function () {
                     editor.grid.setLoading(false);
                 }
             });
-            Shopware.Notification.createGrowlMessage('{s name=user/Success}Successful{/s}', '{s name=roles_list/updatedSuccesfully}Role has been updated{/s}', '{s name="user/userManager"}User Manager{/s}');
-
+            Shopware.Notification.createGrowlMessage(
+                '{s name=user/Success}{/s}',
+                '{s name=roles_list/updatedSuccesfully}{/s}',
+                '{s name="user/userManager"}{/s}'
+            );
         }, function() {
             event.record.reject();
         });

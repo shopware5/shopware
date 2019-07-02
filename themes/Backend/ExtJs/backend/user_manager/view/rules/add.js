@@ -112,7 +112,8 @@ Ext.define('Shopware.apps.UserManager.view.rules.Add', {
             emptyText: empty,
             labelWidth: 155,
             name: 'name',
-            allowBlank: false
+            allowBlank: false,
+            anchor: '100%'
         });
 
         me.formPanel = Ext.create('Ext.form.Panel', {
@@ -166,6 +167,7 @@ Ext.define('Shopware.apps.UserManager.view.rules.Add', {
         var me = this;
 
         this.closeBtn = Ext.create('Ext.button.Button', {
+            cls: 'secondary',
             text: me.snippets.cancel,
             handler: function() {
                 me.destroy();

@@ -1,4 +1,3 @@
-<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -20,30 +19,29 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    UserManager
+ * @subpackage View
+ * @version    $Id$
+ * @author shopware AG
  */
 
-use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+//{namespace name=backend/user_manager/view/main}
+/**
+ * Shopware Backend - View for role-form
+ *
+ */
+//{block name="backend/user_manager/view/roles/form"}
+Ext.define('Shopware.apps.UserManager.view.roles.Form', {
+    extend: 'Enlight.app.Window',
 
-class RemoveAndCreateResourceTest extends Enlight_Components_Test_TestCase
-{
-    use DatabaseTransactionBehaviour;
+    title: '',
 
-    public function testRemoveAndCreateAresource()
-    {
-        $em = Shopware()->Container()->get('models');
+    initComponent: function() {
+        var me = this;
 
-        $acl = new Shopware_Components_Acl($em);
-
-        $name = 'test' . mt_rand(0, 5000000);
-
-        $acl->createResource($name, ['read', 'write']);
-        static::assertTrue($acl->hasResourceInDatabase($name));
-        static::assertTrue($acl->deleteResource($name));
-        $this->assertfalse($acl->hasResourceInDatabase($name));
-
-        $acl->createResource($name, ['read', 'write']);
-        static::assertTrue($acl->hasResourceInDatabase($name));
-        static::assertTrue($acl->deleteResource($name));
-        $this->assertfalse($acl->hasResourceInDatabase($name));
+        me.callParent(arguments);
     }
-}
+});
+//{/block}

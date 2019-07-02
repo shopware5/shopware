@@ -61,8 +61,8 @@ Ext.define('Shopware.component.ValidatePassword', {
                 Shopware.app.Application.fireEvent('Shopware.ValidatePassword', successCallback, abortCallback, true);
             };
 
-        successCallback = typeof successCallback !== 'function' ? Ext.emptyFn : successCallback;
-        abortCallback = typeof abortCallback !== 'function' ? Ext.emptyFn : abortCallback;
+        successCallback = !Ext.isFunction(successCallback) ? Ext.emptyFn : successCallback;
+        abortCallback = !Ext.isFunction(abortCallback) ? Ext.emptyFn : abortCallback;
 
         if (isRetryAttempt === true) {
             displayText = '{s name=window/passwordInvalid}Your password is invalid.{/s} <br/><br/>' + displayText;

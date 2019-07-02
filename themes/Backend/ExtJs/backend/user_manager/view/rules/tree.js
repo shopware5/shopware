@@ -77,12 +77,16 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
         },
         addResource: '{s name=rules/add_resource}Add resource{/s}',
         addPrivilege: '{s name=rules/add_privilege}Add privilege{/s}',
-        saveRole: '{s name=rules/save_role}Assign the checked privileges to the selected role{/s}',
+        saveRole: '{s name=rules/save_role}Save{/s}',
         search: '{s name=rules/search}Search...{/s}',
         notSelectedTitle: '{s name=rules/not_selected_title}Error{/s}',
         notSelectedMessage: '{s name=rules/not_selected_message}No resource selected!{/s}',
 
         growlMessage: '{s name=growlMessage}User Management{/s}'
+    },
+
+    viewConfig: {
+        animate: false
     },
 
     /**
@@ -102,10 +106,54 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
         me.selModel = me.createSelectionModel();
         me.tbar = me.createToolbar();
         me.registerEvents();
-        me.ruleStore.getProxy().extraParams = {};
-        me.store = me.ruleStore.load();
+        me.store = Ext.create('Shopware.apps.UserManager.store.Rules');
+        me.store.getProxy().extraParams = {};
+
+        me.on('activate', function() {
+            me.getStore().load();
+        });
+
+        me.on('checkchange', function (node, checked) {
+            me.suspendLayouts();
+            if (checked) {
+                if(!Ext.isEmpty(node.get('requirements'))) {
+                    me.checkRequiredNodes(node, true);
+                }
+
+                Ext.each(node.childNodes, function(childNode) {
+                    if(!Ext.isEmpty(childNode.get('requirements'))) {
+                        me.checkRequiredNodes(childNode, true);
+                    }
+                    childNode.set('checked', true);
+                });
+                node.expand();
+            } else if (node.isLeaf()) {
+                node.parentNode.set('checked', false);
+            } else {
+                Ext.each(node.childNodes, function(childNode) {
+                    childNode.set('checked', false);
+                });
+            }
+            me.resumeLayouts(true);
+        });
 
         me.callParent(arguments);
+    },
+
+    checkRequiredNodes: function(node, check) {
+        var me = this;
+
+        Ext.each(node.get('requirements'), function(nodeId) {
+            var requiredNode = me.getStore().getRootNode().findChild('helperId', nodeId, true);
+
+            if (requiredNode) {
+                if(!Ext.isEmpty(requiredNode.get('requirements'))) {
+                    me.checkRequiredNodes(requiredNode, true);
+                }
+                requiredNode.set('checked', true);
+                requiredNode.parentNode.expand();
+            }
+        });
     },
 
     /**
@@ -131,7 +179,8 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
      */
     onNodeSelect: function(selModel, record) {
         var me = this;
-        me.addPrivilegeButton.setDisabled(record.get('type')!=='resource');
+
+        me.addPrivilegeButton.setDisabled(record.get('type') !== 'resource');
     },
 
     /**
@@ -228,7 +277,6 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
             valueField: 'id',
             displayField: 'name',
             forceSelection: true,
-            disableLoadingSelectedName: true,
             allowBlank:false,
             labelWidth: 50,
             emptyText: me.snippets.role.empty,
@@ -294,22 +342,9 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
         });
         /* {/if} */
 
-        me.searchField = Ext.create('Ext.form.field.Text', {
-            name:'searchfield',
-            cls:'searchfield',
-            width:170,
-            emptyText: me.snippets.search,
-            enableKeyEvents:true,
-            checkChangeBuffer:500,
-            listeners: {
-                change: function(field, value) {
-                    me.fireEvent('searchResource', me.store, value);
-                }
-            }
-        });
-
         return Ext.create('Ext.toolbar.Toolbar', {
             dock:'top',
+            ui: 'shopware-ui',
             items: [
                 me.roleCombo,
         /* {if {acl_is_allowed privilege=update}} */
@@ -317,13 +352,9 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
                 me.saveRoleButton,
         /* {/if} */
         /* {if {acl_is_allowed privilege=create}} */
-                { xtype:'tbspacer', width:6 },
                 me.addResourceButton,
-                { xtype:'tbspacer', width:6 },
                 me.addPrivilegeButton,
         /* {/if} */
-                '->',
-                me.searchField
             ]
         });
     },
@@ -336,10 +367,10 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
     createColumns: function() {
         var me = this;
 
-        var columns = [{
+        return [{
             xtype: 'treecolumn',
             text: me.snippets.columns.name ,
-            flex: 2,
+            flex: 1,
             sortable: true,
             dataIndex: 'name'
         },
@@ -351,7 +382,7 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
             items: [{
                 iconCls:'sprite-minus-circle-frame',
                 action:'deleteNode',
-                tooltip: me.snippets.columns.delete,
+                tooltip: '{s name=rules/column/action_delete}{/s}',
                 /**
                  * Remove button handler to fire the deletePrivilege or deleteResource event which is handled
                  * in the rules controller.
@@ -366,8 +397,6 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
             }]
         }
         /* {/if} */];
-
-        return columns;
     }
 
 

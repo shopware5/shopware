@@ -106,8 +106,8 @@ Ext.define('Shopware.apps.UserManager.controller.Roles', {
         grid.rowEditing.cancelEdit();
 
         newRole = me.getModel('Roles').create({
-            name: '{s name=roles_list/enterName}Enter name...{/s}',
-            description: '{s name=roles_list/enterDescription}Enter description...{/s}',
+            name: '',
+            description: '',
             source: 'custom',
             enabled: true,
             admin: false,

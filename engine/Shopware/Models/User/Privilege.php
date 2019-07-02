@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\User;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -79,6 +80,22 @@ class Privilege extends ModelEntity
      * @ORM\JoinColumn(name="resourceID", referencedColumnName="id")
      */
     private $resource;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\User\Privilege")
+     * @ORM\JoinTable(name="s_core_acl_privilege_requirements",
+     *     joinColumns={@ORM\JoinColumn(name="privilege_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="required_privilege_id", referencedColumnName="id")}
+     * )
+     *
+     * @var ArrayCollection
+     */
+    private $requirements;
+
+    public function __construct()
+    {
+        $this->requirements = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -157,6 +174,19 @@ class Privilege extends ModelEntity
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getRequirements()
+    {
+        return $this->requirements;
+    }
+
+    public function setRequirements(ArrayCollection $requirements)
+    {
+        $this->requirements = $requirements;
     }
 
     /**

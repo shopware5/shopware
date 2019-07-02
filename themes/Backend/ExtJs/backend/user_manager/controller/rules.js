@@ -97,7 +97,6 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
             'user-manager-rules-tree': {
                 deleteResource: me.onDeleteResource,
                 deletePrivilege: me.onDeletePrivilege,
-                searchResource: me.onSearchResource,
                 addResource: me.onAddResource,
                 addPrivilege: me.onAddPrivilege,
                 saveRolePrivileges: me.onSaveRolePrivileges,
@@ -368,35 +367,6 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
                 });
             });
         });
-    },
-
-    /**
-     * Event will be fired when the user insert a value into the search text field which
-     * is displayed on top of the rules tree.
-     * @param [Ext.data.Store] store - The component store.
-     * @param [Ext.String] value - The search value which inserted in the search text field.
-     * @return boolean
-     */
-    onSearchResource: function(store, value) {
-        var me = this,
-            searchString = Ext.String.trim(value);
-
-        //scroll the store to first page
-        store.currentPage = 1;
-
-        //If the search-value is empty, reset the filter
-        if ( searchString.length === 0 ) {
-            store.getProxy().extraParams = {
-                role: store.getProxy().extraParams.role
-            };
-        } else {
-            store.getProxy().extraParams = {
-                search: searchString,
-                role: store.getProxy().extraParams.role
-            };
-        }
-        store.load();
-        return true;
     },
 
     /**

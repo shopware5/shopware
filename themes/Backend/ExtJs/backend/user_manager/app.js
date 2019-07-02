@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.UserManager', {
 
     stores: [ 'User', 'UserDetail', 'Detail', 'Roles', 'Locale', 'Rules' ],
 
-    views: [ 'main.Window', 'main.Navigation', 'user.List', 'user.Create', 'roles.List', 'rules.Tree', 'rules.Add' ],
+    views: [ 'main.Window', 'user.List', 'user.Create', 'roles.List', 'rules.Tree', 'rules.Add' ],
 
     models: [ 'User', 'UserDetail', 'Roles', 'Detail', 'Privilege', 'Resource', 'Locale', 'Rules' ],
 

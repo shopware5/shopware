@@ -35,7 +35,6 @@
 //{block name="backend/user_manager/store/roles"}
 Ext.define('Shopware.apps.UserManager.store.Roles', {
     extend: 'Ext.data.Store',
-    autoLoad: true,
     pageSize: 30,
     model : 'Shopware.apps.UserManager.model.Roles'
 });

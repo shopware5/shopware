@@ -224,9 +224,11 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
 
-        $builder->select(['resources', 'privileges'])
-                ->from(Resource::class, 'resources')
-                ->leftJoin('resources.privileges', 'privileges');
+        $builder->select(['resources', 'privileges', 'requirements'])
+                ->from('Shopware\Models\User\Resource', 'resources')
+                ->leftJoin('resources.privileges', 'privileges')
+                ->leftJoin('privileges.requirements', 'requirements')
+                ->orderBy('resources.name');
 
         if (!empty($filter)) {
             $builder->where('resources.name LIKE ?1')

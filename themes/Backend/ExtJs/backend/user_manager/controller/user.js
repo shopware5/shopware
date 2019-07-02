@@ -44,14 +44,6 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
     extend: 'Enlight.app.Controller',
 
     /**
-     * Holder property which saves the instance of the application
-     * window for later usage
-     *
-     * @null
-     */
-    appContent: null,
-
-    /**
      * Contains all snippets for the controller
      * @object
      */
@@ -72,7 +64,8 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
     refs: [
         { ref: 'userCreateWindow', selector: 'usermanager-user-create' },
         { ref: 'userCreateForm', selector: 'usermanager-user-create form[name=main-form]' },
-        { ref: 'attributeForm', selector: 'usermanager-user-create shopware-attribute-form' }
+        { ref: 'attributeForm', selector: 'usermanager-user-create shopware-attribute-form' },
+        { ref: 'userListGrid', selector: 'usermanager-user-list' }
     ],
 
     /**
@@ -99,7 +92,7 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
                 deleteUsers: me.onDeleteUsers
             },
             'usermanager-user-list textfield[action=searchUser]':{
-                change:me.onSearchUser
+                change: me.onSearchUser
             }
         });
     },
@@ -142,7 +135,7 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
                     }else if(f.name){
                         missingField = f.name;
                     }
-                    Shopware.Notification.createGrowlMessage(me.snippets.form.errorTitle, Ext.String.format(me.snippets.form.errorMessage, missingField), me.snippets.growlMessage);
+                    Shopware.Notification.createGrowlMessage('{s name=message/password/form/error_title}{/s}', Ext.String.format('{s name=message/password/form/error_message}{/s}', missingField), '{s name=message/growlMessage}{/s}');
                     return false;
                  }
 
@@ -298,11 +291,10 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
      * @param view
      * @param rowIndex
      */
-    onEditUser: function (view,rowIndex){
+    onEditUser: function (view, rowIndex){
         var me = this,
-
-        userStore = me.getStore('User'),
-        record = userStore.getAt(rowIndex);
+            store = view.getStore(),
+            record = store.getAt(rowIndex);
 
         me.getStore('UserDetail').load({
             id: record.data.id,
@@ -327,13 +319,13 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
 
         record.destroy({
             callback: function () {
-                if (records.length == 0) {
+                if (records.length === 0) {
                     callback();
                 } else {
                     me.deleteMultipleRecords(records, callback);
                 }
             }
         })
-    },
+    }
 });
 //{/block}

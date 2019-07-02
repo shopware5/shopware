@@ -61,23 +61,27 @@ Ext.define('Shopware.apps.UserManager.view.user.List', {
      * @return void
      */
     initComponent: function() {
-        var me = this;
-        me.registerEvents();
-        me.store = me.userStore;
+        var me = this,
+            buttons = [],
+            tbButtons = [];
 
-        this.selModel = Ext.create('Ext.selection.CheckboxModel', {
+        me.registerEvents();
+
+        me.on('activate', function() {
+            me.getStore().load();
+        });
+
+        me.selModel = Ext.create('Ext.selection.CheckboxModel', {
             listeners: {
                 // Unlocks the save button if the user has checked at least one checkbox
                 selectionchange: function(sm, selections) {
                     var owner = this.view.ownerCt,
                         btn = owner.down('button[action=deleteUsers]');
 
-                    btn.setDisabled(selections.length == 0);
+                    btn.setDisabled(selections.length === 0);
                 }
             }
         });
-
-        var buttons = [];
 
         /* {if {acl_is_allowed privilege=delete}} */
         buttons.push({
@@ -102,15 +106,14 @@ Ext.define('Shopware.apps.UserManager.view.user.List', {
         }});
         /* {/if} */
 
-        me.dockedItems = this.createDockedToolBar();
+        me.dockedItems = me.createDockedToolBar();
 
         // Define the columns and renderers
-        this.columns = [
-        {
+        me.columns = [{
             header: '{s name="list_users/username"}Username{/s}',
             dataIndex: 'username',
             width: 100,
-            renderer: this.nameColumn
+            renderer: me.nameColumn
         }, {
             header: '{s name="list_users/realname"}Name{/s}',
             dataIndex: 'name',
@@ -126,15 +129,13 @@ Ext.define('Shopware.apps.UserManager.view.user.List', {
             header: '{s name="list_users/email"}Email Address{/s}',
             dataIndex: 'email',
             flex: 1,
-            renderer: this.emailColumn
+            renderer: me.emailColumn
         }, {
             xtype: 'actioncolumn',
             header: '{s name="list_users/options"}Options{/s}',
             flex: 1,
             items: buttons
         }];
-
-        var tbButtons = [];
 
         /* {if {acl_is_allowed privilege=create}} */
         tbButtons.push({
@@ -156,8 +157,7 @@ Ext.define('Shopware.apps.UserManager.view.user.List', {
         });
         /* {/if} */
 
-        tbButtons.push('->',
-        {
+        tbButtons.push('->', {
             xtype:'textfield',
             name:'searchfield',
             action:'searchUser',
@@ -165,30 +165,33 @@ Ext.define('Shopware.apps.UserManager.view.user.List', {
             cls: 'searchfield',
             enableKeyEvents:true,
             checkChangeBuffer: 500,
-            emptyText:'{s name=list_users/field/search}Search...{/s}'
+            emptyText:'{s name=list_users/field/search}{/s}'
         });
 
         // Row grouping
-        this.groupingFeature = Ext.create('Ext.grid.feature.Grouping', {
+        me.groupingFeature = Ext.create('Ext.grid.feature.Grouping', {
             groupHeaderTpl: '{s name="list_users/group"}Gruppe{/s}{literal}: {name} ({rows.length}){/literal}'
         });
-        this.features = [ this.groupingFeature ];
+
+        me.features = [ this.groupingFeature ];
 
         // Toolbar
-        this.toolbar = Ext.create('Ext.toolbar.Toolbar', {
+        me.toolbar = Ext.create('Ext.toolbar.Toolbar', {
             dock: 'top',
             ui: 'shopware-ui',
             items: tbButtons
         });
 
-        me.dockedItems = Ext.clone(this.dockedItems);
-        me.dockedItems.push(this.toolbar);
+        me.dockedItems = Ext.clone(me.dockedItems);
+        me.dockedItems.push(me.toolbar);
 
-        this.callParent();
+        me.callParent();
     },
-    registerEvents:function () {
-            this.addEvents(
 
+    registerEvents:function () {
+        var me = this;
+
+            me.addEvents(
                     /**
                      * Event will be fired when the user clicks the delete icon in the
                      * action column
@@ -216,39 +219,50 @@ Ext.define('Shopware.apps.UserManager.view.user.List', {
 
             return true;
     },
+
     /**
      * Create paging toolbar for grid view
      * @return [Array]
      */
-    createDockedToolBar: function(){
-      return  [{
+    createDockedToolBar: function() {
+        var me = this;
+
+        return  [{
             dock: 'bottom',
             xtype: 'pagingtoolbar',
             displayInfo: true,
-            store: this.userStore
-      }];
+            store: me.store
+        }];
     },
+
     /**
      * Formats the name column
      *
-     * @param [string] value
-     * @return [string]
+     * @param { string } value
+     * @param { Object } metaData
+     * @param { Ext.data.Model } record
+     * @return { string }
      */
-    nameColumn: function(value,x,row) {
-        if (!row.data.active){
+    nameColumn: function(value, metaData, record) {
+        if (!record.get('active')) {
             return Ext.String.format('{literal}<strong style="font-weight: 700;color:#F00;text-decoration: line-through">{0}</strong>{/literal}', value);
         }
+
         return Ext.String.format('{literal}<strong style="font-weight: 700">{0}</strong>{/literal}', value);
     },
 
     /**
      * Formats the email column
      *
-     * @param [string] value
-     * @return [string]
+     * @param { string } value
+     * @return { string }
      */
     emailColumn: function(value) {
-        return Ext.String.format('{literal}<a href="mailto:{0}">{1}</a>{/literal}', value, value);
+        return Ext.String.format(
+            '{literal}<a href="mailto:{0}">{1}</a>{/literal}',
+            value,
+            value
+        );
     }
 });
 //{/block}
