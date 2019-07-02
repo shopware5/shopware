@@ -82,7 +82,5 @@ Ext.define('Shopware.apps.UserManager.model.Resource', {
             root: 'data'
         }
     }
-
-
 });
 //{/block}

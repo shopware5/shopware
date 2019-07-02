@@ -88,7 +88,7 @@ class Privilege extends ModelEntity
      *     inverseJoinColumns={@ORM\JoinColumn(name="required_privilege_id", referencedColumnName="id")}
      * )
      *
-     * @var ArrayCollection
+     * @var ArrayCollection<Privilege>
      */
     private $requirements;
 
@@ -177,7 +177,7 @@ class Privilege extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection<Privilege>
      */
     public function getRequirements()
     {

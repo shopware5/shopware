@@ -94,7 +94,7 @@ Ext.define('Shopware.apps.UserManager.model.Detail', {
      * @array
      */
     associations:[
-        { type:'hasMany', model:'Shopware.apps.UserManager.model.Privilege',  name:'getPrivilege', associationKey:'privileges' }
+        { type: 'hasMany', model: 'Shopware.apps.UserManager.model.Privilege',  name: 'getPrivilege', associationKey: 'privileges' }
     ]
 });
 //{/block}
