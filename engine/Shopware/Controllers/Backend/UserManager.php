@@ -384,7 +384,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
         $resources = $this->getUserRepository()
             ->getResourcesQuery($search)
-            ->getArrayResult();
+            ->getResult(AbstractQuery::HYDRATE_OBJECT);
 
         $data = [];
         $role = $this->Request()->getParam('role');
@@ -818,7 +818,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         if (count($privilege->getRequirements()) > 0) {
             $requirements = [];
             foreach ($privilege->getRequirements() as $requirement) {
-                $requirements[] = $requirement['id'];
+                $requirements[] = $requirement->getId();
             }
             $privilegeNode['requirements'] = $requirements;
         }
@@ -826,7 +826,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         if ($role) {
             if ($role->getPrivileges()->contains($privilege) || $role->getAdmin() === 1) {
                 $privilegeNode['checked'] = true;
-                $resourceNode['checked'] = true;
+                $resourceNode['expanded'] = true;
             }
         }
 
