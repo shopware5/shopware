@@ -146,12 +146,12 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
         Ext.each(node.get('requirements'), function(nodeId) {
             var requiredNode = me.getStore().getRootNode().findChild('helperId', nodeId, true);
 
-            if (requiredNode) {
+            if (requiredNode && requiredNode.get('checked') !== check) {
+                requiredNode.set('checked', true);
+                requiredNode.parentNode.expand();
                 if(!Ext.isEmpty(requiredNode.get('requirements'))) {
                     me.checkRequiredNodes(requiredNode, true);
                 }
-                requiredNode.set('checked', true);
-                requiredNode.parentNode.expand();
             }
         });
     },

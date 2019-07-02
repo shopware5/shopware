@@ -72,10 +72,394 @@ SQL;
     private function getRequirementMatrix()
     {
         $matrix = [
+            'analytics_read' => [
+                'overview_read'
+            ],
             'article_read' => [
                 'category_read',
                 'mediamanager_read',
+                'emotion_read',
+                'articlelist_read'
             ],
+            'article_delete' => [
+                'article_read',
+            ],
+            'article_save' => [
+                'article_read'
+            ],
+            'articlelist_read' => [
+                'article_read'
+            ],
+            'articlelist_createFilters' => [
+                'articlelist_read',
+            ],
+            'articlelist_editFilters' => [
+                'articlelist_read',
+            ],
+            'articlelist_deleteFilters' => [
+                'articlelist_read',
+            ],
+            'articlelist_editSingleArticle' => [
+                'articlelist_read',
+                'article_save'
+            ],
+            'articlelist_doMultiEdit' => [
+                'articlelist_read',
+                'article_save',
+                'articlelist_doBackup'
+            ],
+            'articlelist_doBackup' => [
+                'articlelist_read',
+                'articlelist_doMultiEdit',
+                'articlelist_editSingleArticle',
+            ],
+            'attributes_update' => [
+                'attributes_read'
+            ],
+            'banner_create' => [
+                'category_read',
+                'mediamanager_read',
+                'mediamanager_create',
+                'mediamanager_upload',
+            ],
+            'banner_read' => [
+                'category_read',
+                'mediamanager_read',
+                'mediamanager_create',
+                'mediamanager_upload',
+            ],
+            'banner_update' => [
+                'banner_read'
+            ],
+            'banner_delete' => [
+                'banner_read'
+            ],
+            'category_create' => [
+                'article_read',
+                'article_save',
+                'mediamanager_read',
+                'mediamanager_upload',
+                'mediamanager_update',
+                'mediamanager_create'
+            ],
+            'category_read' => [
+                'article_read',
+                'mediamanager_read'
+            ],
+            'category_update' => [
+                'category_read',
+                'mediamanager_update',
+            ],
+            'category_delete' => [
+                'category_read'
+            ],
+            'config_update' => [
+                'config_read'
+            ],
+            'config_delete' => [
+                'config_read'
+            ],
+            'contenttypemanager_edit' => [
+                'contenttypemanager_read'
+            ],
+            'contenttypemanager_delete' => [
+                'contenttypemanager_read'
+            ],
+            'customer_read' => [
+                'mediamanager_read',
+                'emotion_read',
+                'customerstream_read',
+                'customerstream_charts'
+            ],
+            'customer_update' => [
+                'customer_read'
+            ],
+            'customer_delete' => [
+                'customer_read'
+            ],
+            'customer_detail' => [
+                'customer_read'
+            ],
+            'customerstream_read' => [
+                'customer_read'
+            ],
+            'customerstream_save' => [
+                'customerstream_read'
+            ],
+            'customerstream_delete' => [
+                'customerstream_read'
+            ],
+            'customerstream_charts' => [
+                'customerstream_read'
+            ],
+            'emotion_read' => [
+                'article_read',
+                'blog_read',
+                'category_read',
+                'mediamanager_read',
+                'supplier_read'
+            ],
+            'emotion_create' => [
+                'emotion_read',
+                'mediamanager_create',
+                'mediamanager_update',
+                'mediamanager_upload',
+            ],
+            'emotion_update' => [
+                'emotion_read',
+            ],
+            'emotion_delete' => [
+                'emotion_read',
+            ],
+            'form_createupdate' => [
+                'form_read'
+            ],
+            'form_delete' => [
+                'form_read'
+            ],
+            'log_delete' => [
+                'log_read'
+            ],
+            'log_system' => [
+                'log_read'
+            ],
+            'mail_update' => [
+                'mail_read'
+            ],
+            'mail_delete' => [
+                'mail_read'
+            ],
+            'mediamanager_delete' => [
+                'mediamanager_read'
+            ],
+            'mediamanager_upload' => [
+                'mediamanager_read'
+            ],
+            'mediamanager_update' => [
+                'mediamanager_read'
+            ],
+            'newslettermanager_delete' => [
+                'newslettermanager_read'
+            ],
+            'newslettermanager_read' => [
+                'customer_read',
+                'mediamanager_read',
+                'category_read'
+            ],
+            'newslettermanager_write' => [
+                'newslettermanager_read'
+            ],
+            'notification_read' => [
+                'customer_read'
+            ],
+            'order_read' => [
+                'customer_read',
+            ],
+            'order_update' => [
+                'order_read'
+            ],
+            'order_delete' => [
+                'order_read'
+            ],
+            'partner_create' => [
+                'customer_read'
+            ],
+            'partner_read' => [
+                'customer_read'
+            ],
+            'partner_update' => [
+                'partner_read'
+            ],
+            'partner_delete' => [
+                'partner_read'
+            ],
+            'payment_create' => [
+                'payment_read'
+            ],
+            'payment_update' => [
+                'payment_read'
+            ],
+            'payment_delete' => [
+                'payment_read'
+            ],
+            'performance_update' => [
+                'performance_read'
+            ],
+            'performance_clear' => [
+                'performance_read'
+            ],
+            'pluginmanager_upload' => [
+                'pluginmanager_read'
+            ],
+            'pluginmanager_download' => [
+                'pluginmanager_read'
+            ],
+            'pluginmanager_install' => [
+                'pluginmanager_read'
+            ],
+            'pluginmanager_update' => [
+                'pluginmanager_read'
+            ],
+            'pluginmanager_notification' => [
+                'pluginmanager_read'
+            ],
+            'premium_update' => [
+                'premium_read',
+            ],
+            'premium_delete' => [
+                'premium_read'
+            ],
+            'productfeed_create' => [
+                'article_read'
+            ],
+            'productfeed_read' => [
+                'article_read'
+            ],
+            'productfeed_update' => [
+                'productfeed_read'
+            ],
+            'productfeed_delete' => [
+                'productfeed_read'
+            ],
+            'productfeed_generate' => [
+                'productfeed_read'
+            ],
+            'productfeed_sqli' => [
+                'productfeed_read'
+            ],
+            'riskmanagement_read' => [
+                'premium_read',
+                'config_read'
+            ],
+            'riskmanagement_save' => [
+                'riskmanagement_read',
+            ],
+            'riskmanagement_delete' => [
+                'riskmanagement_read',
+            ],
+            'shipping_create' => [
+                'category_read',
+                'payment_read',
+            ],
+            'shipping_read' => [
+                'category_read',
+                'payment_read',
+            ],
+            'shipping_update' => [
+                'shipping_read',
+            ],
+            'shipping_delete' => [
+                'shipping_read',
+            ],
+            'site_createGroup' => [
+                'mediamanager_read'
+            ],
+            'site_read' => [
+                'mediamanager_read'
+            ],
+            'site_createSite' => [
+                'site_read'
+            ],
+            'site_updateSite' => [
+                'site_read'
+            ],
+            'site_deleteSite' => [
+                'site_read'
+            ],
+            'site_deleteGroup' => [
+                'site_read'
+            ],
+            'snippet_update' => [
+                'snippet_read'
+            ],
+            'snippet_delete' => [
+                'snippet_read'
+            ],
+            'supplier_update' => [
+                'supplier_read'
+            ],
+            'supplier_delete' => [
+                'supplier_read'
+            ],
+            'swagupdate_update' => [
+                'swagupdate_read',
+                'swagupdate_notification',
+            ],
+            'swagupdate_notification' => [
+                'swagupdate_read',
+            ],
+            'swagupdate_skipUpdate' => [
+                'swagupdate_read',
+                'swagupdate_notification',
+            ],
+            'theme_preview' => [
+                'theme_read'
+            ],
+            'theme_changeTheme' => [
+                'theme_read'
+            ],
+            'theme_createTheme' => [
+                'theme_read'
+            ],
+            'theme_uploadTheme' => [
+                'theme_read'
+            ],
+            'theme_configureTheme' => [
+                'theme_read'
+            ],
+            'theme_configureSystem' => [
+                'theme_read'
+            ],
+            'usermanager_update' => [
+                'usermanager_read'
+            ],
+            'usermanager_delete' => [
+                'usermanager_read'
+            ],
+            'vote_read' => [
+                'article_read',
+                'customer_read',
+                'mediamanager_read',
+            ],
+            'vote_accept' => [
+                'vote_read',
+            ],
+            'vote_comment' => [
+                'vote_read',
+            ],
+            'vote_delete' => [
+                'vote_read',
+            ],
+            'voucher_create' => [
+                'config_read',
+                'supplier_read',
+                'article_read',
+                'customerstream_read',
+                'customer_read'
+            ],
+            'voucher_read' => [
+                'config_read',
+                'supplier_read',
+                'article_read',
+                'customerstream_read',
+                'customer_read'
+            ],
+            'voucher_update' => [
+                'voucher_read'
+            ],
+            'voucher_delete' => [
+                'voucher_read'
+            ],
+            'voucher_export' => [
+                'voucher_read'
+            ],
+            'voucher_generate' => [
+                'voucher_read'
+            ],
+            'widgets_swag-upload-widget' => [
+                'mediamanager_upload',
+                'widgets_read'
+            ]
         ];
 
         return $matrix;
