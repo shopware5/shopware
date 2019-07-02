@@ -758,7 +758,7 @@ class sAdmin implements \Enlight_Hook
             $this->session->offsetUnset('sUserId');
         }
 
-        if (count($sErrorMessages)) {
+        if ($sErrorMessages) {
             list($sErrorMessages, $sErrorFlag) = $this->eventManager->filter(
                 'Shopware_Modules_Admin_Login_FilterResult',
                 [$sErrorMessages, $sErrorFlag],
@@ -944,6 +944,10 @@ class sAdmin implements \Enlight_Hook
 
         if (!$country) {
             return $translationData;
+        }
+
+        if (!isset($translationData[$country['id']])) {
+            return $country;
         }
 
         // Pass (possible) translation to country

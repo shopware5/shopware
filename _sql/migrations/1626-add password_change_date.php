@@ -31,7 +31,7 @@ class Migrations_Migration1626 extends Shopware\Components\Migrations\AbstractMi
             return;
         }
 
-        $this->addSql('ALTER TABLE `s_user` ADD `password_change_date` datetime NOT NULL;');
+        $this->addSql('ALTER TABLE `s_user` ADD `password_change_date` datetime NOT NULL DEFAULT NOW();');
         $this->addSql('UPDATE s_user SET `password_change_date` = `firstlogin`');
     }
 }
