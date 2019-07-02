@@ -53,12 +53,12 @@ SQL;
 
     private function getPrivilegeMapping()
     {
-        $resources = $this->connection->query('SELECT r.name as resource, p.id as privilegeId, p.name as privilege from s_core_acl_resources r LEFT JOIN s_core_acl_privileges p ON r.id = p.resourceID')->fetchAll(PDO::FETCH_ASSOC | PDO::FETCH_GROUP);
+        $resources = $this->connection->query('SELECT r.name as `resource`, p.id as `privilegeId`, p.name as `privilege` from `s_core_acl_resources` r LEFT JOIN `s_core_acl_privileges` p ON r.id = p.resourceID')->fetchAll(PDO::FETCH_ASSOC | PDO::FETCH_GROUP);
 
         $mapping = [];
 
         foreach ($resources as $key => $privileges) {
-            if (!$mapping[$key]) {
+            if (!array_key_exists($key, $mapping)) {
                 $mapping[$key] = [];
             }
             foreach ($privileges as $privilege) {

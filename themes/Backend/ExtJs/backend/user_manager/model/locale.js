@@ -27,11 +27,6 @@
  * @author shopware AG
  */
 
-/**
- * Shopware Backend - ErrorReporter Main Model
- *
- * todo@all: Documentation
- */
 Ext.define('Shopware.apps.UserManager.model.Locale', {
     extend: 'Ext.data.Model',
     fields: [ 'id', 'name' ]

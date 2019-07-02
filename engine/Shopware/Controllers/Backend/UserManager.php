@@ -384,7 +384,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
         $resources = $this->getUserRepository()
             ->getResourcesQuery($search)
-            ->getArrayResult();
+            ->getResult();
 
         $data = [];
         $role = $this->Request()->getParam('role');
@@ -404,7 +404,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
             $resourceAdmins = $this->getResourceAdminRules($role->getId());
 
-            //the admin property is temporary used to flag the passed role as admin role
+            // The admin property is temporary used to flag the passed role as admin role
             if ($adminRole instanceof Rule && $adminRole->getRoleId()) {
                 $role->setAdmin(1);
             } else {
@@ -590,7 +590,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
             return;
         }
 
-        //check if role exist
+        // Check if role exist
         /** @var \Shopware\Models\User\Role|null $role */
         $role = $this->get('models')->find(Role::class, $id);
 
@@ -603,7 +603,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
             return;
         }
-        //get new role rules
+        // Get new role rules
         $newRules = $this->Request()->getParam('privileges', null);
         $manager = $this->get('models');
 
@@ -709,25 +709,12 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     }
 
     /**
-     * Internal helper function to get access to the entity manager.
-     */
-    private function getManager()
-    {
-        if ($this->manager === null) {
-            $this->manager = $this->get('models');
-        }
-
-        return $this->manager;
-    }
-
-    /**
      * Returns all resource ids for the passed role where a rule with privilege NULL exists.
      *
-     * @param int $roleId
      *
      * @return array
      */
-    private function getResourceAdminRules($roleId)
+    private function getResourceAdminRules(int $roleId)
     {
         $resources = $this->getUserRepository()
             ->getResourcesWithAdminRuleQuery($roleId)
@@ -745,12 +732,9 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
      * Internal helper function which converts a resource shopware model
      * to an tree panel node with checkboxes.
      *
-     * @param \Shopware\Models\User\Resource|null $resource
-     * @param \Shopware\Models\User\Role|null     $role
-     *
      * @return array
      */
-    private function getResourceNode($resource, $role, array $resourceAdmins)
+    private function getResourceNode(?Resource $resource, ?Role $role, array $resourceAdmins)
     {
         if (!$resource) {
             return [];
@@ -793,16 +777,14 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
      * Internal helper function which converts a privilege shopware model
      * to an tree panel node with checkboxes.
      *
-     * @param \Shopware\Models\User\Privilege|null $privilege
-     * @param \Shopware\Models\User\Role|null      $role
-     *
      * @return array
      */
-    private function getPrivilegeNode(&$resourceNode, $privilege, $role)
+    private function getPrivilegeNode(array &$resourceNode, ?Privilege $privilege, ?Role $role)
     {
         if (!$privilege) {
             return [];
         }
+
         $privilegeNode = [
             'id' => $privilege->getResourceId() . '_' . $privilege->getId(),
             'helperId' => $privilege->getId(),
@@ -818,7 +800,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         if (count($privilege->getRequirements()) > 0) {
             $requirements = [];
             foreach ($privilege->getRequirements() as $requirement) {
-                $requirements[] = $requirement['id'];
+                $requirements[] = $requirement->getId();
             }
             $privilegeNode['requirements'] = $requirements;
         }
@@ -826,7 +808,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         if ($role) {
             if ($role->getPrivileges()->contains($privilege) || $role->getAdmin() === 1) {
                 $privilegeNode['checked'] = true;
-                $resourceNode['checked'] = true;
+                $resourceNode['expanded'] = true;
             }
         }
 
