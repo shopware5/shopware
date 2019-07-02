@@ -139,7 +139,7 @@ class RobotsTxtGenerator implements RobotsTxtGeneratorInterface
         $finalDisallow = [];
         foreach ($this->baseUrls as $url) {
             foreach ($this->disallows as $disallow) {
-                $finalDisallow[] = 'Disallow: ' . $url . $disallow;
+                $finalDisallow[] = 'Disallow: ' . $url . $disallow . '/';
             }
         }
 
