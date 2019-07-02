@@ -59,25 +59,9 @@ Ext.define('Shopware.apps.Supplier.view.main.List', {
         // Define the columns and renders
         me.columns = me.getGridColumns();
 
-        // Adding a paging toolbar to the grid
-        me.dockedItems = [this.createDockedItems()];
+        me.bbar = me.getPagingbar();
 
-        me.dockedItems = Ext.clone(me.dockedItems);
         me.callParent(arguments);
-    },
-
-    /**
-     * Returns all docked items
-     *
-     * @returns mixed
-     */
-    createDockedItems: function () {
-        return {
-            dock: 'bottom',
-            xtype: 'pagingtoolbar',
-            displayInfo: true,
-            store: this.supplierStore
-        };
     },
 
     /**
@@ -151,6 +135,68 @@ Ext.define('Shopware.apps.Supplier.view.main.List', {
             }
             /*{/if}*/
         ];
+    },
+
+    getPagingbar: function () {
+        var me = this,
+            manufacturerSnippet = '{s name=paging_term}supplier{/s}';
+
+        var pageSize = Ext.create('Ext.form.field.ComboBox', {
+            labelWidth: 120,
+            cls: Ext.baseCSSPrefix + 'page-size',
+            queryMode: 'local',
+            width: 180,
+            editable: false,
+            listeners: {
+                scope: me,
+                select: me.onPageSizeChange
+            },
+            store: Ext.create('Ext.data.Store', {
+                fields: [ 'value', 'name' ],
+                data: [
+                    { value: '25', name: '25 ' + manufacturerSnippet },
+                    { value: '50', name: '50 ' + manufacturerSnippet },
+                    { value: '75', name: '75 ' + manufacturerSnippet },
+                    { value: '100', name: '100 ' + manufacturerSnippet },
+                    { value: '125', name: '125 ' + manufacturerSnippet },
+                    { value: '150', name: '150 ' + manufacturerSnippet }
+                ]
+            }),
+            displayField: 'name',
+            valueField: 'value',
+            value: '25'
+        });
+
+        var pagingBar = Ext.create('Ext.toolbar.Paging', {
+            dock: 'bottom',
+            displayInfo: true,
+            store: me.store
+        });
+
+        pagingBar.insert(pagingBar.items.length, [
+            { xtype: 'tbspacer', width: 6 },
+            pageSize
+        ]);
+
+        return pagingBar;
+    },
+
+    /**
+     * Event listener method which fires when the user selects
+     * a entry in the "number of orders"-combo box.
+     *
+     * @event select
+     * @param { object } combo - Ext.form.field.ComboBox
+     * @param { array } records - Array of selected entries
+     * @return void
+     */
+    onPageSizeChange: function (combo, records) {
+        var record = records[0],
+            me = this;
+
+        me.store.pageSize = record.get('value');
+
+        me.store.loadPage(1);
     },
 
     /**
