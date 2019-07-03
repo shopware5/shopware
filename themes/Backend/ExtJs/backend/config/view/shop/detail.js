@@ -228,7 +228,11 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
             name: 'localeId',
             allowBlank: false,
             fieldLabel: '{s name=shop/detail/locale_label}Locale{/s}',
-            store: 'base.Locale'
+            store: Ext.create('Shopware.apps.Base.store.Locale', {
+                remoteFilter: false
+            }),
+            queryMode: 'local',
+            forceSelection: true
         },
         me.categorySelect,
         {

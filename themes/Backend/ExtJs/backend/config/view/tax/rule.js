@@ -62,7 +62,11 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
                 store: Ext.data.StoreManager.lookup('base.CountryArea').load(),
                 displayField: 'name',
                 valueField: 'id',
-                emptyText: '{s name=tax/rules/select_empty_text}All{/s}'
+                emptyText: '{s name=tax/rules/select_empty_text}All{/s}',
+                matchFieldWidth: false,
+                listConfig: {
+                    width: 250
+                }
             },
             renderer: me.onComboRenderer
         },{
@@ -76,7 +80,11 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
                 store: Ext.data.StoreManager.lookup('base.Country').load(),
                 displayField:'name',
                 valueField:'id',
-                emptyText: '{s name=tax/rules/select_empty_text}All{/s}'
+                emptyText: '{s name=tax/rules/select_empty_text}All{/s}',
+                matchFieldWidth: false,
+                listConfig: {
+                    width: 250
+                }
             },
             renderer: me.onComboRenderer
         },{
@@ -90,7 +98,11 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
                 store:Ext.data.StoreManager.lookup('base.CountryState').load(),
                 displayField:'name',
                 valueField:'id',
-                emptyText: '{s name=tax/rules/select_empty_text}All{/s}'
+                emptyText: '{s name=tax/rules/select_empty_text}All{/s}',
+                matchFieldWidth: false,
+                listConfig: {
+                    width: 250
+                }
             },
             renderer: me.onComboRenderer
         },{
