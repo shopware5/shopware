@@ -211,6 +211,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 ### Deprecations
 
+* Deprecated the implicit conversion of strings to `DateTime` objects in Doctrine entities, it will be removed in Shopware 5.7. Relying on this conversion will throw a deprecation warning till then, please only insert `DateTime` objects
 * Deprecated `Shopware\Bundle\ESIndexingBundle\TextMappingInterface::getNotAnalyzedField`. It will be removed in 5.7, use the getKeywordField instead
 * Deprecated `Shopware\Bundle\ESIndexingBundle\TextMappingInterface::getAttributeRawField`. It will be removed in 5.7, use the getKeywordField instead
 * Deprecated `Shopware\Bundle\ESIndexingBundle\Product\ProductProviderInterface`. It will be removed in 5.7, use the `Shopware\Bundle\ESIndexingBundle\ProviderInterface` instead
