@@ -32,6 +32,7 @@ use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\Common\Cache\RedisCache;
 use Doctrine\Common\Cache\XcacheCache;
 use Doctrine\Common\Proxy\AbstractProxyFactory;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration as BaseConfiguration;
 use Doctrine\ORM\Repository\RepositoryFactory;
 use DoctrineExtensions\Query\Mysql\DateFormat;
@@ -81,6 +82,9 @@ class Configuration extends BaseConfiguration
         $this->setAutoGenerateProxyClasses(AbstractProxyFactory::AUTOGENERATE_FILE_NOT_EXISTS);
 
         $this->setAttributeDir($options['attributeDir']);
+
+        Type::overrideType('datetime', \Shopware\Components\Model\DBAL\Types\DateTimeStringType::class);
+        Type::overrideType('date', \Shopware\Components\Model\DBAL\Types\DateStringType::class);
 
         $this->addCustomStringFunction('DATE_FORMAT', DateFormat::class);
         $this->addCustomStringFunction('IFNULL', IfNull::class);
