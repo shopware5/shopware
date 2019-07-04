@@ -32,6 +32,12 @@ class VersionCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
+        if (!$container->getParameter('shopware.es.enabled')) {
+            $container->setParameter('shopware.es.version', '6');
+
+            return;
+        }
+
         $client = $container->get('shopware_elastic_search.client');
 
         $version = null;
