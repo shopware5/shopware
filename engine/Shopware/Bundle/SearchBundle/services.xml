@@ -7,7 +7,7 @@
     <services>
         <defaults public="true" />
 
-        <!--shopware_search.-->
+        <!-- Shopware Search -->
         <service id="shopware_search.product_search" class="Shopware\Bundle\SearchBundle\ProductSearch">
             <argument type="service" id="shopware_storefront.list_product_service"/>
             <argument type="service" id="shopware_search.product_number_search"/>
@@ -23,7 +23,7 @@
         </service>
 
         <service id="shopware_search.sorting_criteria_request_handler" class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\SortingCriteriaRequestHandler">
-            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface" />
+            <argument type="service" id="shopware_storefront.custom_sorting_service" />
             <tag name="criteria_request_handler" />
         </service>
 
@@ -50,7 +50,7 @@
             <argument type="service" id="config" />
             <argument type="service" id="events" />
 
-            <!--criteria request handlers-->
+            <!--Criteria request handlers -->
             <argument type="tagged" tag="criteria_request_handler" />
         </service>
 
@@ -77,7 +77,6 @@
             <argument id="shopware_storefront.variant_listing_price_service" type="service"/>
             <argument type="service" id="shopware_storefront.configurator_service"/>
         </service>
-
 
     </services>
 </container>

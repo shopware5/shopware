@@ -83,7 +83,7 @@ class ManualSorting extends \Shopware_Controllers_Backend_ExtJs
     {
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
-        return current($this->get(\Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface::class)->getSortingsOfCategories([$categoryId], $context));
+        return current($this->get('shopware_storefront.custom_sorting_service')->getSortingsOfCategories([$categoryId], $context));
     }
 
     private function getSorting(int $categoryId, int $sortingId): ?CustomSorting

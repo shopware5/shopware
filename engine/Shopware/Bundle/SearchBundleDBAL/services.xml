@@ -329,7 +329,7 @@
         <service id="shopware_searchdbal.facet_handlers" class="Doctrine\Common\Collections\ArrayCollection" synthetic="true" />
         <service id="shopware_searchdbal.variant_helper" class="Shopware\Bundle\SearchBundleDBAL\VariantHelper" >
             <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomListingHydrator"/>
+            <argument type="service" id="shopware_storefront.custom_listing_hydrator"/>
             <argument type="service" id="shopware_storefront.field_helper_dbal"/>
             <argument type="service" id="config"/>
             <argument type="service" id="shopware_searchdbal.listing_price_helper"/>
