@@ -22,22 +22,44 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Core\Events\Basket;
+namespace Shopware\Core\Events\Admin;
 
 use Enlight_Event_EventArgs;
-use sBasket;
+use sAdmin;
 
-class BeforeAddOrderDiscountEvent extends Enlight_Event_EventArgs
+class ExecuteRiskRuleEvent extends Enlight_Event_EventArgs
 {
-    public const EVENT_NAME = 'Shopware_Modules_Basket_BeforeAddOrderDiscount';
+    public const EVENT_NAME = 'Shopware_Modules_Admin_Execute_Risk_Rule_';
 
-    public function getSubject(): sBasket
+    public function getSubject(): sAdmin
     {
         return $this->get('subject');
     }
 
-    public function getDiscount(): array
+    public function getRule(): string
     {
-        return $this->get('discount');
+        return $this->get('rule');
+    }
+
+    public function getUser(): array
+    {
+        return $this->get('user');
+    }
+
+    public function getBasket(): array
+    {
+        return $this->get('basket');
+    }
+
+    public function getValue(): string
+    {
+        return $this->get('value');
+    }
+
+    public function getPaymentId(): ?int
+    {
+        $paymentId = $this->get('paymentID');
+
+        return $paymentId !== null ? (int) $paymentId : null;
     }
 }

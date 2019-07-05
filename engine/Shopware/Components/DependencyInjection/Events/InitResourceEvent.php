@@ -22,22 +22,27 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Core\Events\Basket;
+namespace Shopware\Components\DependencyInjection\Events;
 
 use Enlight_Event_EventArgs;
-use sBasket;
+use Shopware\Components\DependencyInjection\Container;
 
-class BeforeAddOrderDiscountEvent extends Enlight_Event_EventArgs
+class InitResourceEvent extends Enlight_Event_EventArgs
 {
-    public const EVENT_NAME = 'Shopware_Modules_Basket_BeforeAddOrderDiscount';
+    public const EVENT_NAME = 'Enlight_Bootstrap_InitResource_';
 
-    public function getSubject(): sBasket
+    public function getSubject(): Container
     {
         return $this->get('subject');
     }
 
-    public function getDiscount(): array
+    public function getResourceId(): string
     {
-        return $this->get('discount');
+        return $this->get('resourceId');
+    }
+
+    public function isFallback(): bool
+    {
+        return $this->get('isFallback');
     }
 }

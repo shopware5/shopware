@@ -365,7 +365,7 @@ class sBasket implements \Enlight_Hook
               GROUP BY sessionID';
         $params = [$this->session->get('sessionId')];
 
-        $sql = Shopware()->Events()->filter(
+        $sql = $this->eventManager->filter(
             'Shopware_Modules_Basket_InsertDiscount_FilterSql_BasketAmount',
             $sql,
             ['subject' => $this, 'params' => $params]
@@ -1566,7 +1566,7 @@ SQL;
             DeleteNoteStartEvent::EVENT_NAME,
             new DeleteNoteStartEvent([
                 'subject' => $this,
-                'id' => $id
+                'id' => $id,
             ])
         )) {
             return false;
@@ -1876,6 +1876,7 @@ SQL;
             new AddArticleStartEvent([
                 'subject' => $this,
                 'id' => $id,
+                'ordernumber' => $id,
                 'quantity' => $quantity,
             ])
         )) {

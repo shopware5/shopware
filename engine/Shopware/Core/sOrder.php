@@ -24,6 +24,8 @@
 
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\NumberRangeIncrementerInterface;
+use Shopware\Core\Events\Order\SendMailCreateEvent;
+use Shopware\Core\Events\Order\SendMailSendEvent;
 use Shopware\Models\Customer\Customer;
 
 /**
@@ -931,12 +933,12 @@ class sOrder implements \Enlight_Hook
 
         $mail = null;
         if ($event = $this->eventManager->notifyUntil(
-            'Shopware_Modules_Order_SendMail_Create',
-            [
+            SendMailCreateEvent::EVENT_NAME,
+            new SendMailCreateEvent([
                 'subject' => $this,
                 'context' => $context,
                 'variables' => $variables,
-            ]
+            ])
         )) {
             $mail = $event->getReturn();
         }
@@ -972,13 +974,13 @@ class sOrder implements \Enlight_Hook
         );
 
         $shouldSendMail = !(bool) $this->eventManager->notifyUntil(
-            'Shopware_Modules_Order_SendMail_Send',
-            [
+            SendMailSendEvent::EVENT_NAME,
+            new SendMailSendEvent([
                 'subject' => $this,
                 'mail' => $mail,
                 'context' => $context,
                 'variables' => $variables,
-            ]
+            ])
         );
 
         if ($shouldSendMail && $this->config->get('sendOrderMail')) {

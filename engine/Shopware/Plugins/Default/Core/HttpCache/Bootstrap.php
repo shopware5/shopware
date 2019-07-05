@@ -29,6 +29,7 @@ use Shopware\Components\HttpCache\Store;
 use Shopware\Components\Model\ModelManager;
 use ShopwarePlugins\HttpCache\CacheControl;
 use ShopwarePlugins\HttpCache\CacheIdCollector;
+use ShopwarePlugins\HttpCache\Events\ShouldNotInvalidateCacheEvent;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\HttpCache\HttpCache;
 
@@ -180,7 +181,9 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
     public function afterInit()
     {
-        $this->get('loader')->registerNamespace('ShopwarePlugins\\HttpCache', __DIR__);
+        /** @var Enlight_Loader $loader */
+        $loader = $this->get('loader');
+        $loader->registerNamespace('ShopwarePlugins\\HttpCache', __DIR__);
         parent::afterInit();
     }
 
@@ -661,11 +664,12 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         }
 
         if (Shopware()->Events()->notifyUntil(
-            'Shopware_Plugins_HttpCache_ShouldNotInvalidateCache',
-            [
+            // TODO ShouldNotInvalidateCacheEvent is not loaded, but I don't know why
+            ShouldNotInvalidateCacheEvent::EVENT_NAME,
+            new ShouldNotInvalidateCacheEvent([
                 'entity' => $entity,
                 'entityName' => $entityName,
-            ]
+            ])
         )) {
             return;
         }

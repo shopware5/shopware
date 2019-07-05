@@ -28,6 +28,7 @@ use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
+use Shopware\Controllers\Frontend\Events\CustomerGroupRegisterEvent;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 use Symfony\Component\Form\Form;
@@ -480,8 +481,12 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         }
 
         $event = Shopware()->Events()->notifyUntil(
-            'Shopware_Controllers_Frontend_Register_CustomerGroupRegister',
-            ['subject' => $this, 'sValidation' => $customerGroupId]
+            CustomerGroupRegisterEvent::EVENT_NAME,
+            new CustomerGroupRegisterEvent([
+                'subject' => $this,
+                'sValidation' => $customerGroupId,
+                'customerGroupId' => $customerGroupId,
+            ])
         );
 
         if ($event) {

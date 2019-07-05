@@ -22,22 +22,30 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Core\Events\Basket;
+namespace Shopware\Core\Events\Articles;
 
 use Enlight_Event_EventArgs;
-use sBasket;
+use sArticles;
 
-class BeforeAddOrderDiscountEvent extends Enlight_Event_EventArgs
+class GetProductByOrdernumberStartEvent extends Enlight_Event_EventArgs
 {
-    public const EVENT_NAME = 'Shopware_Modules_Basket_BeforeAddOrderDiscount';
+    public const EVENT_NAME = 'Shopware_Modules_Articles_sGetProductByOrdernumber_Start';
 
-    public function getSubject(): sBasket
+    public function getSubject(): sArticles
     {
         return $this->get('subject');
     }
 
-    public function getDiscount(): array
+    /**
+     * @deprecated use @see \Shopware\Core\Events\Articles\GetProductByOrdernumberStart::getOrdernumber
+     */
+    public function getValue(): string
     {
-        return $this->get('discount');
+        return $this->get('value');
+    }
+
+    public function getOrdernumber(): string
+    {
+        return $this->get('ordernumber');
     }
 }

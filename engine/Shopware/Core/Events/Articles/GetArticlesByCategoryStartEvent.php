@@ -22,22 +22,34 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Core\Events\Basket;
+namespace Shopware\Core\Events\Articles;
 
 use Enlight_Event_EventArgs;
-use sBasket;
+use sArticles;
 
-class BeforeAddOrderDiscountEvent extends Enlight_Event_EventArgs
+class GetArticlesByCategoryStartEvent extends Enlight_Event_EventArgs
 {
-    public const EVENT_NAME = 'Shopware_Modules_Basket_BeforeAddOrderDiscount';
+    public const EVENT_NAME = 'Shopware_Modules_Articles_sGetArticlesByCategory_Start';
 
-    public function getSubject(): sBasket
+    public function getSubject(): sArticles
     {
         return $this->get('subject');
     }
 
-    public function getDiscount(): array
+    /**
+     * @return int|string|null
+     *
+     * @deprecated use @see \Shopware\Core\Events\Articles\GetArticlesByCategoryStart::getCategoryId
+     */
+    public function getId()
     {
-        return $this->get('discount');
+        return $this->get('id');
+    }
+
+    public function getCategoryId(): ?int
+    {
+        $categoryId = $this->get('categoryId');
+
+        return $categoryId !== null ? (int) $categoryId : null;
     }
 }

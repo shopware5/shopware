@@ -27,6 +27,7 @@ namespace Shopware\Components\Routing\Matchers;
 use Enlight_Controller_Request_RequestHttp as EnlightRequest;
 use Enlight_Event_EventManager as EnlightEventManager;
 use Shopware\Components\Routing\Context;
+use Shopware\Components\Routing\Events\RouterRouteEvent;
 use Shopware\Components\Routing\MatcherInterface;
 
 class EventMatcher implements MatcherInterface
@@ -57,10 +58,13 @@ class EventMatcher implements MatcherInterface
         $request->setBaseUrl($context->getBaseUrl());
         $request->setPathInfo($pathInfo);
 
-        $event = $this->eventManager->notifyUntil('Enlight_Controller_Router_Route', [
-            'request' => $request,
-            'context' => $context,
-        ]);
+        $event = $this->eventManager->notifyUntil(
+            RouterRouteEvent::EVENT_NAME,
+            new RouterRouteEvent([
+                'request' => $request,
+                'context' => $context,
+            ])
+        );
 
         return $event !== null ? $event->getReturn() : false;
     }

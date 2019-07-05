@@ -28,6 +28,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Doctrine\ORM\Tools\Console\ConsoleRunner as DoctrineConsoleRunner;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
+use Shopware\Components\Console\Events\BeforeRunEvent;
 use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Shopware\Kernel;
 use Symfony\Component\Console\Application as BaseApplication;
@@ -114,11 +115,14 @@ class Application extends BaseApplication
         /** @var \Enlight_Event_EventManager $eventManager */
         $eventManager = $this->kernel->getContainer()->get('events');
 
-        $event = $eventManager->notifyUntil('Shopware_Command_Before_Run', [
-            'command' => $command,
-            'input' => $input,
-            'output' => $output,
-        ]);
+        $event = $eventManager->notifyUntil(
+            BeforeRunEvent::EVENT_NAME,
+            new BeforeRunEvent([
+                'command' => $command,
+                'input' => $input,
+                'output' => $output,
+            ])
+        );
 
         if ($event) {
             return (int) $event->getReturn();

@@ -22,22 +22,17 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Core\Events\Basket;
+namespace Shopware\Core\Events\Admin;
 
 use Enlight_Event_EventArgs;
-use sBasket;
+use sAdmin;
 
-class BeforeAddOrderDiscountEvent extends Enlight_Event_EventArgs
+class CheckUserStartEvent extends Enlight_Event_EventArgs
 {
-    public const EVENT_NAME = 'Shopware_Modules_Basket_BeforeAddOrderDiscount';
+    public const EVENT_NAME = 'Shopware_Modules_Admin_CheckUser_Start';
 
-    public function getSubject(): sBasket
+    public function getSubject(): sAdmin
     {
         return $this->get('subject');
-    }
-
-    public function getDiscount(): array
-    {
-        return $this->get('discount');
     }
 }

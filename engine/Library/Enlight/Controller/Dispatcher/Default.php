@@ -1,20 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 use Shopware\Components\DependencyInjection\ContainerAwareInterface;
@@ -27,9 +32,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface as Container;
  * to dispatch the request object on the controller. Implements all methods to
  * register single or multiple controllers and load them automatically
  *
- * @category   Enlight
  *
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatcher
@@ -75,6 +78,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 
     /**
      * Holds all valid modules
+     *
      * @var array
      */
     protected $modules = ['frontend', 'api', 'widgets', 'backend'];
@@ -117,8 +121,6 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      * Returns the formatted controller name. Removes all '_' .
      *
      * @param string $unFormatted
-     *
-     * @return mixed
      */
     public function formatControllerName($unFormatted)
     {
@@ -131,8 +133,6 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      * Returns the formatted action name. Removes all '_' .
      *
      * @param string $unFormatted
-     *
-     * @return mixed
      */
     public function formatActionName($unFormatted)
     {
@@ -230,7 +230,6 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     /**
      * Returns the controller class of the given request class. The class name is imploded by '_'
      *
-     * @param Enlight_Controller_Request_Request $request
      *
      * @return array|string
      */
@@ -259,7 +258,6 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     /**
      * Returns the controller path of the given request class.
      *
-     * @param Enlight_Controller_Request_Request $request
      *
      * @return string
      */
@@ -271,6 +269,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         $controllerId = $this->getControllerServiceId($moduleName, $controllerName);
         $request->unsetAttribute('controllerId');
 
+        // TODO add controllerpath event? Not sure because it's in the Enlight Library
         if ($event = Shopware()->Events()->notifyUntil(
                 'Enlight_Controller_Dispatcher_ControllerPath_' . $moduleName . '_' . $controllerName,
                 ['subject' => $this, 'request' => $request]
@@ -281,6 +280,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
 
         if ($controllerId) {
             $request->setAttribute('controllerId', $controllerId);
+
             return clone $this->container->get($controllerId);
         }
 
@@ -291,7 +291,6 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      * Returns the action method of the given request class.
      * If no action name is set in the request class, the default action is used.
      *
-     * @param Enlight_Controller_Request_Request $request
      *
      * @return string
      */
@@ -313,7 +312,6 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      * To generate the full controller path the module and controller name must be set in the given request object.
      * The module and controller path is imploded by '_'
      *
-     * @param Enlight_Controller_Request_Request $request
      *
      * @return string
      */
@@ -332,7 +330,6 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      * To generate the full action path the module, controller and action name must be set in the given request object.
      * The module, controller and action path is imploded by '_'.
      *
-     * @param Enlight_Controller_Request_Request $request
      *
      * @return string
      */
@@ -352,7 +349,6 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      * Checks first if the controller class of the request object exists.
      * If the controller class exists, the enlight loader class checks if the controller path is readable.
      *
-     * @param Enlight_Controller_Request_Request $request
      *
      * @return bool|string
      */
@@ -414,8 +410,6 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      * After that, run the dispatch on the controller.
      * At the ending the body is added to the response object.
      *
-     * @param Enlight_Controller_Request_Request   $request
-     * @param Enlight_Controller_Response_Response $response
      *
      * @throws Enlight_Controller_Exception|Enlight_Exception|Exception
      */

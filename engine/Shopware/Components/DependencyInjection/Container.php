@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\DependencyInjection;
 
+use Shopware\Components\DependencyInjection\Events\InitResourceEvent;
 use Symfony\Component\DependencyInjection\Container as BaseContainer;
 use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
 
@@ -200,13 +201,22 @@ class Container extends BaseContainer
 
         /** @var \Enlight_Event_EventArgs|null $event */
         $event = $eventManager->notifyUntil(
-            'Enlight_Bootstrap_InitResource_' . $id,
-            ['subject' => $this]
+            InitResourceEvent::EVENT_NAME . $id,
+            new InitResourceEvent([
+                'subject' => $this,
+                'resourceId' => $id,
+                'isFallback' => false,
+            ])
         );
 
         if ($fallbackName !== null && !$event && $fallbackName !== $id) {
             $event = $eventManager->notifyUntil(
-                'Enlight_Bootstrap_InitResource_' . $fallbackName, ['subject' => $this]
+                InitResourceEvent::EVENT_NAME . $fallbackName,
+                new InitResourceEvent([
+                    'subject' => $this,
+                    'resourceId' => $fallbackName,
+                    'isFallback' => true,
+                ])
             );
         }
 

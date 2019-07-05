@@ -22,22 +22,29 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Core\Events\Basket;
+namespace Shopware\Components\Console\Events;
 
 use Enlight_Event_EventArgs;
-use sBasket;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class BeforeAddOrderDiscountEvent extends Enlight_Event_EventArgs
+class BeforeRunEvent extends Enlight_Event_EventArgs
 {
-    public const EVENT_NAME = 'Shopware_Modules_Basket_BeforeAddOrderDiscount';
+    public const EVENT_NAME = 'Shopware_Command_Before_Run';
 
-    public function getSubject(): sBasket
+    public function getCommand(): Command
     {
-        return $this->get('subject');
+        return $this->get('command');
     }
 
-    public function getDiscount(): array
+    public function getInput(): InputInterface
     {
-        return $this->get('discount');
+        return $this->get('input');
+    }
+
+    public function getOutput(): OutputInterface
+    {
+        return $this->get('output');
     }
 }

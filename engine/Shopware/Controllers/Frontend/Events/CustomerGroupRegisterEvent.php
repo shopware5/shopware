@@ -22,22 +22,30 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Core\Events\Basket;
+namespace Shopware\Controllers\Frontend\Events;
 
 use Enlight_Event_EventArgs;
-use sBasket;
+use Shopware_Controllers_Frontend_Register;
 
-class BeforeAddOrderDiscountEvent extends Enlight_Event_EventArgs
+class CustomerGroupRegisterEvent extends Enlight_Event_EventArgs
 {
-    public const EVENT_NAME = 'Shopware_Modules_Basket_BeforeAddOrderDiscount';
+    public const EVENT_NAME = 'Shopware_Controllers_Frontend_Register_CustomerGroupRegister';
 
-    public function getSubject(): sBasket
+    public function getSubject(): Shopware_Controllers_Frontend_Register
     {
         return $this->get('subject');
     }
 
-    public function getDiscount(): array
+    /**
+     * @deprecated use @see \Shopware\Controllers\Frontend\Events\CustomerGroupRegister::getCustomerGroupId
+     */
+    public function getValidation(): string
     {
-        return $this->get('discount');
+        return $this->get('sValidation');
+    }
+
+    public function getCustomerGroupId(): int
+    {
+        return (int) $this->get('customerGroupId');
     }
 }

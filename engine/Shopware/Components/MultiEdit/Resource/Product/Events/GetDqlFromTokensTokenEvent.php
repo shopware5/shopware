@@ -22,22 +22,32 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Core\Events\Basket;
+namespace Shopware\Components\MultiEdit\Resource\Product\Events;
 
 use Enlight_Event_EventArgs;
-use sBasket;
+use Shopware\Components\MultiEdit\Resource\Product\DqlHelper;
 
-class BeforeAddOrderDiscountEvent extends Enlight_Event_EventArgs
+class GetDqlFromTokensTokenEvent extends Enlight_Event_EventArgs
 {
-    public const EVENT_NAME = 'Shopware_Modules_Basket_BeforeAddOrderDiscount';
+    public const EVENT_NAME = 'SwagMultiEdit_Product_DqlHelper_getDqlFromTokens_Token_';
 
-    public function getSubject(): sBasket
+    public function getSubject(): DqlHelper
     {
         return $this->get('subject');
     }
 
-    public function getDiscount(): array
+    public function getCurrentToken(): array
     {
-        return $this->get('discount');
+        return $this->get('token');
+    }
+
+    public function getAllTokens(): array
+    {
+        return $this->get('alltokens');
+    }
+
+    public function getProcessedTokens(): array
+    {
+        return $this->get('processedTokens');
     }
 }

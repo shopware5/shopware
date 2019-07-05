@@ -22,22 +22,22 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Core\Events\Basket;
+namespace ShopwarePlugins\HttpCache\Events;
 
 use Enlight_Event_EventArgs;
-use sBasket;
+use Shopware\Components\Model\ModelEntity;
 
-class BeforeAddOrderDiscountEvent extends Enlight_Event_EventArgs
+class ShouldNotInvalidateCacheEvent extends Enlight_Event_EventArgs
 {
-    public const EVENT_NAME = 'Shopware_Modules_Basket_BeforeAddOrderDiscount';
+    public const EVENT_NAME = 'Shopware_Plugins_HttpCache_ShouldNotInvalidateCache';
 
-    public function getSubject(): sBasket
+    public function getEntity(): ModelEntity
     {
-        return $this->get('subject');
+        return $this->get('entity');
     }
 
-    public function getDiscount(): array
+    public function getEntityName(): string
     {
-        return $this->get('discount');
+        return $this->get('entityName');
     }
 }

@@ -26,6 +26,7 @@ namespace Shopware\Components\MultiEdit\Resource\Product;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\MultiEdit\Resource\Product\Events\GetDqlFromTokensTokenEvent;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Configurator\Group as ConfiguratorGroup;
 use Shopware\Models\Article\Configurator\Option as ConfiguratorOption;
@@ -652,13 +653,13 @@ class DqlHelper
             // Allow anyone to subscribe to any token and replace it with his own logic
             // Also allows you to add own tokens
             if ($event = $this->getEventManager()->notifyUntil(
-                'SwagMultiEdit_Product_DqlHelper_getDqlFromTokens_Token_' . ucfirst(strtolower($token['type'])),
-                [
+                GetDqlFromTokensTokenEvent::EVENT_NAME . ucfirst(strtolower($token['type'])),
+                new GetDqlFromTokensTokenEvent([
                     'subject' => $this,
                     'currentToken' => $token,
                     'alltokens' => $tokens,
                     'processedTokens' => $newTokens,
-                ]
+                ])
             )
             ) {
                 $return = $event->getReturn();

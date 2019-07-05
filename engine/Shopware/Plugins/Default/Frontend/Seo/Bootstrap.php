@@ -208,7 +208,8 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
         /** @var Enlight_Event_EventManager $events */
         $events = $this->get('events');
 
-        if ($event = $events->notifyUntil(__CLASS__ . '_canBeMinified', [
+        // TODO add event class and register namespace!
+        if ($event = $events->notifyUntil('Shopware_Plugins_Frontend_Seo_Bootstrap_canBeMinified', [
             'controller' => $controller,
             'subject' => $this,
         ])) {

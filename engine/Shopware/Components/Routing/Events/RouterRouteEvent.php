@@ -22,22 +22,23 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Core\Events\Basket;
+namespace Shopware\Components\Routing\Events;
 
+use Enlight_Controller_Request_RequestHttp;
 use Enlight_Event_EventArgs;
-use sBasket;
+use Shopware\Components\Routing\Context;
 
-class BeforeAddOrderDiscountEvent extends Enlight_Event_EventArgs
+class RouterRouteEvent extends Enlight_Event_EventArgs
 {
-    public const EVENT_NAME = 'Shopware_Modules_Basket_BeforeAddOrderDiscount';
+    public const EVENT_NAME = 'Enlight_Controller_Router_Route';
 
-    public function getSubject(): sBasket
+    public function getRequest(): Enlight_Controller_Request_RequestHttp
     {
-        return $this->get('subject');
+        return $this->get('request');
     }
 
-    public function getDiscount(): array
+    public function getContext(): Context
     {
-        return $this->get('discount');
+        return $this->get('context');
     }
 }

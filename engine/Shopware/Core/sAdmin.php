@@ -32,6 +32,12 @@ use Shopware\Components\Cart\Struct\DiscountContext;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Random;
 use Shopware\Components\Validator\EmailValidatorInterface;
+use Shopware\Core\Events\Admin\CheckUserStartEvent;
+use Shopware\Core\Events\Admin\ExecuteRiskRuleEvent;
+use Shopware\Core\Events\Admin\GetUserDataStartEvent;
+use Shopware\Core\Events\Admin\LoginStartEvent;
+use Shopware\Core\Events\Admin\RegenerateSessionIdStartEvent;
+use Shopware\Core\Events\Admin\SaveRegisterSendConfirmationStartEvent;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 
@@ -720,12 +726,12 @@ class sAdmin implements \Enlight_Hook
     public function sLogin($ignoreAccountMode = false)
     {
         if ($this->eventManager->notifyUntil(
-            'Shopware_Modules_Admin_Login_Start',
-            [
+            LoginStartEvent::EVENT_NAME,
+            new LoginStartEvent([
                 'subject' => $this,
                 'ignoreAccountMode' => $ignoreAccountMode,
                 'post' => $this->front->Request()->getPost(),
-            ]
+            ])
         )) {
             return false;
         }
@@ -847,8 +853,10 @@ class sAdmin implements \Enlight_Hook
     public function sCheckUser()
     {
         if ($this->eventManager->notifyUntil(
-            'Shopware_Modules_Admin_CheckUser_Start',
-            ['subject' => $this]
+            CheckUserStartEvent::EVENT_NAME,
+            new CheckUserStartEvent([
+                'subject' => $this,
+            ])
         )) {
             return false;
         }
@@ -1149,8 +1157,11 @@ class sAdmin implements \Enlight_Hook
     public function sSaveRegisterSendConfirmation($email)
     {
         if ($this->eventManager->notifyUntil(
-            'Shopware_Modules_Admin_SaveRegisterSendConfirmation_Start',
-            ['subject' => $this, 'email' => $email]
+            SaveRegisterSendConfirmationStartEvent::EVENT_NAME,
+            new SaveRegisterSendConfirmationStartEvent([
+                'subject' => $this,
+                'email' => $email,
+            ])
         )) {
             return false;
         }
@@ -1494,8 +1505,10 @@ class sAdmin implements \Enlight_Hook
     public function sGetUserData()
     {
         if ($this->eventManager->notifyUntil(
-            'Shopware_Modules_Admin_GetUserData_Start',
-            ['subject' => $this]
+            GetUserDataStartEvent::EVENT_NAME,
+            new GetUserDataStartEvent([
+                'subject' => $this,
+            ])
         )) {
             return false;
         }
@@ -1629,14 +1642,14 @@ class sAdmin implements \Enlight_Hook
     public function executeRiskRule($rule, $user, $basket, $value, $paymentID = null)
     {
         if ($event = $this->eventManager->notifyUntil(
-            'Shopware_Modules_Admin_Execute_Risk_Rule_' . $rule,
-            [
+            ExecuteRiskRuleEvent::EVENT_NAME . $rule,
+            new ExecuteRiskRuleEvent([
                 'rule' => $rule,
                 'user' => $user,
                 'basket' => $basket,
                 'value' => $value,
                 'paymentID' => $paymentID,
-            ]
+            ])
         )) {
             return $event->getReturn();
         }
@@ -3306,8 +3319,11 @@ class sAdmin implements \Enlight_Hook
         $oldSessionId = session_id();
 
         if ($this->eventManager->notifyUntil(
-            'Shopware_Modules_Admin_regenerateSessionId_Start',
-            ['subject' => $this, 'sessionId' => $oldSessionId]
+            RegenerateSessionIdStartEvent::EVENT_NAME,
+            new RegenerateSessionIdStartEvent([
+                'subject' => $this,
+                'sessionId' => $oldSessionId,
+            ])
         )) {
             return;
         }

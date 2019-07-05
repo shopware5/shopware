@@ -22,22 +22,33 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Core\Events\Basket;
+namespace Shopware\Core\Events\Order;
 
 use Enlight_Event_EventArgs;
 use sBasket;
+use Zend_Mail;
 
-class BeforeAddOrderDiscountEvent extends Enlight_Event_EventArgs
+class SendMailSendEvent extends Enlight_Event_EventArgs
 {
-    public const EVENT_NAME = 'Shopware_Modules_Basket_BeforeAddOrderDiscount';
+    public const EVENT_NAME = 'Shopware_Modules_Order_SendMail_Send';
 
     public function getSubject(): sBasket
     {
         return $this->get('subject');
     }
 
-    public function getDiscount(): array
+    public function getMail(): Zend_Mail
     {
-        return $this->get('discount');
+        return $this->get('mail');
+    }
+
+    public function getContext(): array
+    {
+        return $this->get('context');
+    }
+
+    public function getVariables(): array
+    {
+        return $this->get('variables');
     }
 }

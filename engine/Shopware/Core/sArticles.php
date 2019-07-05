@@ -48,6 +48,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Compatibility\LegacyEventManager;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Components\QueryAliasMapper;
+use Shopware\Core\Events\Articles\GetArticlesByCategoryStartEvent;
+use Shopware\Core\Events\Articles\GetProductByOrdernumberStartEvent;
+use Shopware\Core\Events\Articles\GetPromotionByIdStartEvent;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Repository as ArticleRepository;
 use Shopware\Models\Article\Supplier;
@@ -462,10 +465,14 @@ class sArticles implements \Enlight_Hook
      */
     public function sGetArticlesByCategory($categoryId = null, Criteria $criteria = null)
     {
-        if (Shopware()->Events()->notifyUntil('Shopware_Modules_Articles_sGetArticlesByCategory_Start', [
-            'subject' => $this,
-            'id' => $categoryId,
-        ])) {
+        if ($this->eventManager->notifyUntil(
+            GetArticlesByCategoryStartEvent::EVENT_NAME,
+            new GetArticlesByCategoryStartEvent([
+                'subject' => $this,
+                'id' => $categoryId,
+                'categoryId' => $categoryId,
+            ])
+        )) {
             return false;
         }
 
@@ -676,7 +683,7 @@ class sArticles implements \Enlight_Hook
         $result = $this->searchService->search($criteria, $context);
         $products = $this->legacyStructConverter->convertListProductStructList($result->getProducts());
 
-        Shopware()->Events()->notify(
+        $this->eventManager->notify(
             'Shopware_Modules_Articles_GetArticleCharts',
             ['subject' => $this, 'category' => $category, 'articles' => $products]
         );
@@ -1222,16 +1229,20 @@ class sArticles implements \Enlight_Hook
      */
     public function sGetProductByOrdernumber($ordernumber)
     {
-        if (Shopware()->Events()->notifyUntil(
-            'Shopware_Modules_Articles_sGetProductByOrdernumber_Start',
-            ['subject' => $this, 'value' => $ordernumber]
+        if ($this->eventManager->notifyUntil(
+            GetProductByOrdernumberStartEvent::EVENT_NAME,
+            new GetProductByOrdernumberStartEvent([
+                'subject' => $this,
+                'value' => $ordernumber,
+                'ordernumber' => $ordernumber,
+            ])
         )) {
             return false;
         }
 
         $getPromotionResult = $this->getPromotion(null, $ordernumber);
 
-        $getPromotionResult = Shopware()->Events()->filter(
+        $getPromotionResult = $this->eventManager->filter(
             'Shopware_Modules_Articles_sGetProductByOrdernumber_FilterResult',
             $getPromotionResult,
             ['subject' => $this, 'value' => $ordernumber]
@@ -1253,13 +1264,15 @@ class sArticles implements \Enlight_Hook
     public function sGetPromotionById($mode, $category = 0, $value = 0, $withImage = false)
     {
         $notifyUntil = $this->eventManager->notifyUntil(
-            'Shopware_Modules_Articles_GetPromotionById_Start',
-            [
+            GetPromotionByIdStartEvent::EVENT_NAME,
+            new GetPromotionByIdStartEvent([
                 'subject' => $this,
                 'mode' => $mode,
                 'category' => $category,
+                'categoryId' => $category,
                 'value' => $value,
-            ]
+                'product' => $value,
+            ])
         );
 
         if ($notifyUntil) {
@@ -1409,7 +1422,7 @@ class sArticles implements \Enlight_Hook
         // First we convert the passed product id into an integer to prevent sql injections
         $productId = (int) $sArticleID;
 
-        Shopware()->Events()->notify(
+        $this->eventManager->notify(
             'Shopware_Modules_Articles_GetArticlePictures_Start',
             ['subject' => $this, 'id' => $productId]
         );
@@ -1422,7 +1435,7 @@ class sArticles implements \Enlight_Hook
         }
 
         if ($onlyCover) {
-            $cover = Shopware()->Events()->filter(
+            $cover = $this->eventManager->filter(
                 'Shopware_Modules_Articles_GetArticlePictures_FilterResult',
                 $cover,
                 ['subject' => $this, 'id' => $productId]
@@ -1475,7 +1488,7 @@ class sArticles implements \Enlight_Hook
             }
         }
 
-        $images = Shopware()->Events()->filter(
+        $images = $this->eventManager->filter(
             'Shopware_Modules_Articles_GetArticlePictures_FilterResult',
             $images,
             ['subject' => $this, 'id' => $productId]

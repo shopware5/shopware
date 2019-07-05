@@ -22,27 +22,57 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Core\Events\Basket;
+namespace Shopware\Core\Events\Articles;
 
 use Enlight_Event_EventArgs;
-use sBasket;
+use sArticles;
 
-class AddVoucherStartEvent extends Enlight_Event_EventArgs
+class GetPromotionByIdStartEvent extends Enlight_Event_EventArgs
 {
-    public const EVENT_NAME = 'Shopware_Modules_Basket_AddVoucher_Start';
+    public const EVENT_NAME = 'Shopware_Modules_Articles_GetPromotionById_Start';
 
-    public function getSubject(): sBasket
+    public function getSubject(): sArticles
     {
         return $this->get('subject');
     }
 
-    public function getCode(): string
+    public function getMode(): string
     {
-        return $this->get('code');
+        return $this->get('mode');
     }
 
-    public function getBasket(): string
+    /**
+     * @deprecated use @see \Shopware\Core\Events\Articles\GetPromotionByIdStart::getCategoryId
+     */
+    public function getCategory(): int
     {
-        return $this->get('basket');
+        return $this->get('category');
+    }
+
+    public function getCategoryId(): int
+    {
+        return $this->get('categoryId');
+    }
+
+    /**
+     * returns the product id or product number
+     *
+     * @return int|string
+     *
+     * @deprecated use @see \Shopware\Core\Events\Articles\GetPromotionByIdStart::getProduct
+     */
+    public function getValue()
+    {
+        return $this->get('value');
+    }
+
+    /**
+     * returns the product id or product number
+     *
+     * @return int|string
+     */
+    public function getProduct()
+    {
+        return $this->get('product');
     }
 }
