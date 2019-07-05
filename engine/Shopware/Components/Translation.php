@@ -476,6 +476,10 @@ class Shopware_Components_Translation
 
         $translatedDispatchMethods = array_map(
             static function ($dispatchMethod) use ($translator) {
+                if (!$dispatchMethod) {
+                    return [];
+                }
+
                 return $translator->translateObjectProperty($dispatchMethod, 'dispatch_name', 'name');
             }, $dispatchMethods);
 
