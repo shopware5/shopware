@@ -32,12 +32,26 @@ use Shopware\Components\Cart\Struct\DiscountContext;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Random;
 use Shopware\Components\Validator\EmailValidatorInterface;
+use Shopware\Core\Events\Admin\CheckUserFailureEvent;
 use Shopware\Core\Events\Admin\CheckUserStartEvent;
+use Shopware\Core\Events\Admin\CheckUserSuccessfulEvent;
 use Shopware\Core\Events\Admin\ExecuteRiskRuleEvent;
+use Shopware\Core\Events\Admin\GetDispatchBasketCalculationQueryBuilderEvent;
+use Shopware\Core\Events\Admin\GetDispatchBasketQueryBuilderEvent;
+use Shopware\Core\Events\Admin\GetPremiumDispatchesQueryBuilderEvent;
 use Shopware\Core\Events\Admin\GetUserDataStartEvent;
+use Shopware\Core\Events\Admin\LoginFailureEvent;
 use Shopware\Core\Events\Admin\LoginStartEvent;
+use Shopware\Core\Events\Admin\LoginSuccessfulEvent;
+use Shopware\Core\Events\Admin\LogoutSuccessfulEvent;
+use Shopware\Core\Events\Admin\NewsletterRegistrationSuccessEvent;
+use Shopware\Core\Events\Admin\NewsletterUnsubscribeEvent;
+use Shopware\Core\Events\Admin\PaymentFallbackEvent;
+use Shopware\Core\Events\Admin\RegenerateSessionIdEvent;
 use Shopware\Core\Events\Admin\RegenerateSessionIdStartEvent;
+use Shopware\Core\Events\Admin\SaveRegisterSendConfirmationBeforeSendEvent;
 use Shopware\Core\Events\Admin\SaveRegisterSendConfirmationStartEvent;
+use Shopware\Core\Events\Admin\UpdateNewsletterSubscribeEvent;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 
@@ -325,8 +339,8 @@ class sAdmin implements \Enlight_Hook
 
         if ($resetPayment && $user['additional']['user']['id']) {
             $this->eventManager->notify(
-                'Shopware_Modules_Admin_Payment_Fallback',
-                $data
+                PaymentFallbackEvent::EVENT_NAME,
+                new PaymentFallbackEvent($data)
             );
 
             $this->db->update(
@@ -567,8 +581,10 @@ class sAdmin implements \Enlight_Hook
                 ['email = ?' => $email]
             );
             $this->eventManager->notify(
-                'Shopware_Modules_Admin_Newsletter_Unsubscribe',
-                ['email' => $email]
+                NewsletterUnsubscribeEvent::EVENT_NAME,
+                new NewsletterUnsubscribeEvent([
+                    'email' => $email,
+                ])
             );
         } else {
             // Check if mail address is already subscribed, return
@@ -625,8 +641,10 @@ class sAdmin implements \Enlight_Hook
             }
 
             $this->eventManager->notify(
-                'Shopware_Modules_Admin_sUpdateNewsletter_Subscribe',
-                ['email' => $email]
+                UpdateNewsletterSubscribeEvent::EVENT_NAME,
+                new UpdateNewsletterSubscribeEvent([
+                    'email' => $email,
+                ])
             );
         }
 
@@ -707,7 +725,10 @@ class sAdmin implements \Enlight_Hook
             $this->session->offsetSet('sBasketAmount', empty($amount) ? 0 : array_shift($amount));
         }
 
-        $this->eventManager->notify('Shopware_Modules_Admin_Logout_Successful');
+        $this->eventManager->notify(
+            LogoutSuccessfulEvent::EVENT_NAME,
+            new LogoutSuccessfulEvent()
+        );
     }
 
     /**
@@ -916,8 +937,12 @@ class sAdmin implements \Enlight_Hook
                 [$this->session->offsetGet('sessionId'), $getUser['id']]
             );
             $this->eventManager->notify(
-                'Shopware_Modules_Admin_CheckUser_Successful',
-                ['subject' => $this, 'session' => $this->session, 'user' => $getUser]
+                CheckUserSuccessfulEvent::EVENT_NAME,
+                new CheckUserSuccessfulEvent([
+                    'subject' => $this,
+                    'session' => $this->session,
+                    'user' => $getUser,
+                ])
             );
 
             return true;
@@ -926,8 +951,12 @@ class sAdmin implements \Enlight_Hook
         $this->session->offsetUnset('sUserPassword');
         $this->session->offsetUnset('sUserId');
         $this->eventManager->notify(
-            'Shopware_Modules_Admin_CheckUser_Failure',
-            ['subject' => $this, 'session' => $this->session, 'user' => $getUser]
+            CheckUserFailureEvent::EVENT_NAME,
+            new CheckUserFailureEvent([
+                'subject' => $this,
+                'session' => $this->session,
+                'user' => $getUser,
+            ])
         );
 
         return false;
@@ -1213,8 +1242,12 @@ class sAdmin implements \Enlight_Hook
         }
 
         $this->eventManager->notify(
-            'Shopware_Modules_Admin_SaveRegisterSendConfirmation_BeforeSend',
-            ['subject' => $this, 'mail' => $mail]
+            SaveRegisterSendConfirmationBeforeSendEvent::EVENT_NAME,
+            new SaveRegisterSendConfirmationBeforeSendEvent([
+                'subject' => $this,
+                'mail' => $mail,
+                'email' => $mail,
+            ])
         );
 
         $mail->send();
@@ -2456,8 +2489,10 @@ class sAdmin implements \Enlight_Hook
         } elseif (!empty($unsubscribe)) {
             $this->connection->delete('s_campaigns_maildata', ['email' => $email, 'groupID' => $groupID]);
             $this->eventManager->notify(
-                'Shopware_Modules_Admin_Newsletter_Unsubscribe',
-                ['email' => $email]
+                NewsletterUnsubscribeEvent::EVENT_NAME,
+                new NewsletterUnsubscribeEvent([
+                    'email' => $email,
+                ])
             );
         }
 
@@ -2583,10 +2618,10 @@ class sAdmin implements \Enlight_Hook
             ->andWhere('calculation = 3');
 
         $this->eventManager->notify(
-            'Shopware_Modules_Admin_GetDispatchBasket_Calculation_QueryBuilder',
-            [
+            GetDispatchBasketCalculationQueryBuilderEvent::EVENT_NAME,
+            new GetDispatchBasketCalculationQueryBuilderEvent([
                 'queryBuilder' => $calculationQueryBuilder,
-            ]
+            ])
         );
 
         $calculations = $calculationQueryBuilder->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
@@ -2625,12 +2660,12 @@ class sAdmin implements \Enlight_Hook
         }
 
         $this->eventManager->notify(
-            'Shopware_Modules_Admin_GetDispatchBasket_QueryBuilder',
-            [
+            GetDispatchBasketQueryBuilderEvent::EVENT_NAME,
+            new GetDispatchBasketQueryBuilderEvent([
                 'queryBuilder' => $queryBuilder,
                 'amount' => $amount,
                 'amount_net' => $amount_net,
-            ]
+            ])
         );
 
         $basket = $queryBuilder->execute()->fetch(\PDO::FETCH_ASSOC);
@@ -2824,10 +2859,10 @@ class sAdmin implements \Enlight_Hook
         $queryBuilder->setParameter('shippingAddressId', $this->getShippingAddressId());
 
         $this->eventManager->notify(
-            'Shopware_Modules_Admin_GetPremiumDispatches_QueryBuilder',
-            [
+            GetPremiumDispatchesQueryBuilderEvent::EVENT_NAME,
+            new GetPremiumDispatchesQueryBuilderEvent([
                 'queryBuilder' => $queryBuilder,
-            ]
+            ])
         );
 
         $dispatches = $queryBuilder->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
@@ -3235,8 +3270,13 @@ class sAdmin implements \Enlight_Hook
         );
 
         $this->eventManager->notify(
-            'Shopware_Modules_Admin_Login_Successful',
-            ['subject' => $this, 'email' => $email, 'password' => $password, 'user' => $getUser]
+            LoginSuccessfulEvent::EVENT_NAME,
+            new LoginSuccessfulEvent([
+                'subject' => $this,
+                'email' => $email,
+                'password' => $password,
+                'user' => $getUser,
+            ])
         );
 
         $newHash = '';
@@ -3341,12 +3381,12 @@ class sAdmin implements \Enlight_Hook
         Shopware()->Container()->set('SessionId', $newSessionId);
 
         $this->eventManager->notify(
-            'Shopware_Modules_Admin_Regenerate_Session_Id',
-            [
+            RegenerateSessionIdEvent::EVENT_NAME,
+            new RegenerateSessionIdEvent([
                 'subject' => $this,
                 'oldSessionId' => $oldSessionId,
                 'newSessionId' => $newSessionId,
-            ]
+            ])
         );
 
         $sessions = [
@@ -3590,8 +3630,13 @@ SQL;
         }
 
         $this->eventManager->notify(
-            'Shopware_Modules_Admin_Login_Failure',
-            ['subject' => $this, 'email' => $email, 'password' => $password, 'error' => $sErrorMessages]
+            LoginFailureEvent::EVENT_NAME,
+            new LoginFailureEvent([
+                'subject' => $this,
+                'email' => $email,
+                'password' => $password,
+                'error' => $sErrorMessages,
+            ])
         );
 
         $this->session->offsetUnset('sUserMail');
@@ -3975,12 +4020,12 @@ SQL;
         }
 
         $this->eventManager->notify(
-            'Shopware_Modules_Admin_Newsletter_Registration_Success',
-            [
+            NewsletterRegistrationSuccessEvent::EVENT_NAME,
+            new NewsletterRegistrationSuccessEvent([
                 'subject' => $this,
                 'email' => $email,
                 'groupID' => $groupID,
-            ]
+            ])
         );
 
         $result = [

@@ -48,6 +48,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Compatibility\LegacyEventManager;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Components\QueryAliasMapper;
+use Shopware\Core\Events\Articles\GetArticleChartsEvent;
+use Shopware\Core\Events\Articles\GetArticlePicturesStartEvent;
 use Shopware\Core\Events\Articles\GetArticlesByCategoryStartEvent;
 use Shopware\Core\Events\Articles\GetProductByOrdernumberStartEvent;
 use Shopware\Core\Events\Articles\GetPromotionByIdStartEvent;
@@ -684,8 +686,14 @@ class sArticles implements \Enlight_Hook
         $products = $this->legacyStructConverter->convertListProductStructList($result->getProducts());
 
         $this->eventManager->notify(
-            'Shopware_Modules_Articles_GetArticleCharts',
-            ['subject' => $this, 'category' => $category, 'articles' => $products]
+            GetArticleChartsEvent::EVENT_NAME,
+            new GetArticleChartsEvent([
+                'subject' => $this,
+                'category' => $category,
+                'categoryId' => $category,
+                'articles' => $products,
+                'products' => $products,
+            ])
         );
 
         return $products;
@@ -1423,8 +1431,12 @@ class sArticles implements \Enlight_Hook
         $productId = (int) $sArticleID;
 
         $this->eventManager->notify(
-            'Shopware_Modules_Articles_GetArticlePictures_Start',
-            ['subject' => $this, 'id' => $productId]
+            GetArticlePicturesStartEvent::EVENT_NAME,
+            new GetArticlePicturesStartEvent([
+                'subject' => $this,
+                'productId' => $productId,
+                'id' => $productId,
+            ])
         );
 
         // First we get the product cover

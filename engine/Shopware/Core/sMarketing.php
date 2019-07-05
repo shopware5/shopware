@@ -23,6 +23,8 @@
  */
 
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Core\Events\Marketing\AlsoBoughtArticlesEvent;
+use Shopware\Core\Events\Marketing\GetSimilarShownArticlesEvent;
 use Shopware\Models\Banner\Banner;
 
 /**
@@ -153,10 +155,14 @@ class sMarketing implements \Enlight_Hook
             'customerGroupId' => (int) $this->customerGroupId,
         ]);
 
-        Shopware()->Events()->notify('Shopware_Modules_Marketing_GetSimilarShownArticles', [
-            'subject' => $this,
-            'articles' => $similarShownProducts,
-        ]);
+        Shopware()->Events()->notify(
+            GetSimilarShownArticlesEvent::EVENT_NAME,
+            new GetSimilarShownArticlesEvent([
+                'subject' => $this,
+                'products' => $similarShownProducts,
+                'articles' => $similarShownProducts,
+            ])
+        );
 
         return $similarShownProducts;
     }
@@ -215,10 +221,14 @@ class sMarketing implements \Enlight_Hook
             'customerGroupId' => (int) $this->customerGroupId,
         ]);
 
-        Shopware()->Events()->notify('Shopware_Modules_Marketing_AlsoBoughtArticles', [
-            'subject' => $this,
-            'articles' => $alsoBought,
-        ]);
+        Shopware()->Events()->notify(
+            AlsoBoughtArticlesEvent::EVENT_NAME,
+            new AlsoBoughtArticlesEvent([
+                'subject' => $this,
+                'products' => $alsoBought,
+                'articles' => $alsoBought,
+            ])
+        );
 
         return $alsoBought;
     }

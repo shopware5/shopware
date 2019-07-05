@@ -29,15 +29,22 @@ use Shopware\Components\Cart\BasketHelperInterface;
 use Shopware\Components\Cart\Struct\CartItemStruct;
 use Shopware\Components\Cart\Struct\DiscountContext;
 use Shopware\Components\Random;
+use Shopware\Core\Events\Basket\AddArticleAddedEvent;
+use Shopware\Core\Events\Basket\AddArticleCheckBasketForArticleEvent;
 use Shopware\Core\Events\Basket\AddArticleStartEvent;
 use Shopware\Core\Events\Basket\AddVoucherStartEvent;
+use Shopware\Core\Events\Basket\BasketClearedEvent;
 use Shopware\Core\Events\Basket\BeforeAddMinimumOrderSurchargeEvent;
 use Shopware\Core\Events\Basket\BeforeAddOrderDiscountEvent;
 use Shopware\Core\Events\Basket\BeforeAddOrderSurchargePercentEvent;
 use Shopware\Core\Events\Basket\DeleteArticleStartEvent;
+use Shopware\Core\Events\Basket\DeletedArticleEvent;
 use Shopware\Core\Events\Basket\DeleteNoteStartEvent;
+use Shopware\Core\Events\Basket\GetAmountArticlesQueryBuilderEvent;
 use Shopware\Core\Events\Basket\GetBasketAllowEmptyBasketEvent;
+use Shopware\Core\Events\Basket\GetPricesForItemUpdatesQueryBuilderEvent;
 use Shopware\Core\Events\Basket\UpdateArticleStartEvent;
+use Shopware\Core\Events\Basket\UpdateCartItemsUpdatedEvent;
 use Symfony\Component\HttpFoundation\Cookie;
 
 /**
@@ -213,10 +220,10 @@ class sBasket implements \Enlight_Hook
             ->setParameter('sessionId', $this->session->get('sessionId'));
 
         $this->eventManager->notify(
-            'Shopware_Modules_Basket_GetAmountArticles_QueryBuilder',
-            [
+            GetAmountArticlesQueryBuilderEvent::EVENT_NAME,
+            new GetAmountArticlesQueryBuilderEvent([
                 'queryBuilder' => $queryBuilder,
-            ]
+            ])
         );
 
         $result = $queryBuilder->execute()->fetch(\PDO::FETCH_ASSOC);
@@ -1745,11 +1752,14 @@ SQL;
             }
         }
 
-        $this->eventManager->notify('Shopware_Modules_Basket_UpdateCartItems_Updated', [
-            'subject' => $this,
-            'items' => $cartItems,
-            'updateableItems' => $updateableItems,
-        ]);
+        $this->eventManager->notify(
+            UpdateCartItemsUpdatedEvent::EVENT_NAME,
+            new UpdateCartItemsUpdatedEvent([
+                'subject' => $this,
+                'items' => $cartItems,
+                'updateableItems' => $updateableItems,
+            ])
+        );
 
         if ($errors) {
             return false;
@@ -1795,10 +1805,13 @@ SQL;
             ['sessionID = ?' => $sessionId]
         );
 
-        $this->eventManager->notify('Shopware_Modules_Basket_BasketCleared', [
-            'subject' => $this,
-            'sessionId' => $this->session->get('sessionId'),
-        ]);
+        $this->eventManager->notify(
+            BasketClearedEvent::EVENT_NAME,
+            new BasketClearedEvent([
+                'subject' => $this,
+                'sessionId' => $this->session->get('sessionId'),
+            ])
+        );
     }
 
     /**
@@ -1839,10 +1852,14 @@ SQL;
             );
         }
 
-        $this->eventManager->notify('Shopware_Modules_Basket_DeletedArticle', [
-            'subject' => $this,
-            'id' => $id,
-        ]);
+        $this->eventManager->notify(
+            DeletedArticleEvent::EVENT_NAME,
+            new DeletedArticleEvent([
+                'subject' => $this,
+                'id' => $id,
+                'basketItemId' => $id,
+            ])
+        );
     }
 
     /**
@@ -1984,7 +2001,13 @@ SQL;
             ]
         );
 
-        $this->eventManager->notify('Shopware_Modules_Basket_AddArticle_Added', ['id' => $insertId]);
+        $this->eventManager->notify(
+            AddArticleAddedEvent::EVENT_NAME,
+            new AddArticleAddedEvent([
+                'id' => $insertId,
+                'basketItemId' => $insertId,
+            ])
+        );
 
         $this->sUpdateArticle($insertId, $quantity);
 
@@ -2218,11 +2241,11 @@ SQL;
             ->setParameter('ordernumber', $orderNumber);
 
         $this->eventManager->notify(
-            'Shopware_Modules_Basket_AddArticle_CheckBasketForArticle',
-            [
+            AddArticleCheckBasketForArticleEvent::EVENT_NAME,
+            new AddArticleCheckBasketForArticleEvent([
                 'queryBuilder' => $builder,
                 'subject' => $this,
-            ]
+            ])
         );
 
         /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
@@ -2980,11 +3003,11 @@ SQL;
             ->setParameter('defaultPriceGroup', $defaultPriceGroup);
 
         $this->eventManager->notify(
-            'Shopware_Modules_Basket_getPricesForItemUpdates_QueryBuilder',
-            [
+            GetPricesForItemUpdatesQueryBuilderEvent::EVENT_NAME,
+            new GetPricesForItemUpdatesQueryBuilderEvent([
                 'subject' => $this,
                 'queryBuilder' => $queryBuilder,
-            ]
+            ])
         );
 
         $itemPrices = $queryBuilder->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_ASSOC);

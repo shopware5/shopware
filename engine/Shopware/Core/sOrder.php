@@ -24,6 +24,11 @@
 
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\NumberRangeIncrementerInterface;
+use Shopware\Core\Events\Order\OrderStateNotifyEvent;
+use Shopware\Core\Events\Order\OrderStateSendBeforeSendEvent;
+use Shopware\Core\Events\Order\ProductStockWasChangedEvent;
+use Shopware\Core\Events\Order\SaveOrderProcessDetailsEvent;
+use Shopware\Core\Events\Order\SendMailBeforeSendEvent;
 use Shopware\Core\Events\Order\SendMailCreateEvent;
 use Shopware\Core\Events\Order\SendMailSendEvent;
 use Shopware\Models\Customer\Customer;
@@ -788,11 +793,14 @@ class sOrder implements \Enlight_Hook
             }
         } // For every product in basket
 
-        $this->eventManager->notify('Shopware_Modules_Order_SaveOrder_ProcessDetails', [
-            'subject' => $this,
-            'details' => $this->sBasketData['content'],
-            'orderId' => $orderID,
-        ]);
+        $this->eventManager->notify(
+            SaveOrderProcessDetailsEvent::EVENT_NAME,
+            new SaveOrderProcessDetailsEvent([
+                'subject' => $this,
+                'details' => $this->sBasketData['content'],
+                'orderId' => $orderID,
+            ])
+        );
 
         // Save Billing and Shipping-Address to retrace in future
         $this->sSaveBillingAddress($this->sUserData['billingaddress'], $orderID);
@@ -964,13 +972,13 @@ class sOrder implements \Enlight_Hook
         }
 
         $this->eventManager->notify(
-            'Shopware_Modules_Order_SendMail_BeforeSend',
-            [
+            SendMailBeforeSendEvent::EVENT_NAME,
+            new SendMailBeforeSendEvent([
                 'subject' => $this,
                 'mail' => $mail,
                 'context' => $context,
                 'variables' => $variables,
-            ]
+            ])
         );
 
         $shouldSendMail = !(bool) $this->eventManager->notifyUntil(
@@ -1251,10 +1259,13 @@ class sOrder implements \Enlight_Hook
      */
     public function sendStatusMail(Enlight_Components_Mail $mail)
     {
-        $this->eventManager->notify('Shopware_Controllers_Backend_OrderState_Send_BeforeSend', [
-            'subject' => Shopware()->Front(),
-            'mail' => $mail,
-        ]);
+        $this->eventManager->notify(
+            OrderStateSendBeforeSendEvent::EVENT_NAME,
+            new OrderStateSendBeforeSendEvent([
+                'subject' => Shopware()->Front(),
+                'mail' => $mail,
+            ])
+        );
 
         if (!empty($this->config->OrderStateMailAck)) {
             $mail->addBcc($this->config->OrderStateMailAck);
@@ -1346,12 +1357,17 @@ class sOrder implements \Enlight_Hook
             $context['sDispatch'] = $dispatch;
         }
 
-        $result = $this->eventManager->notify('Shopware_Controllers_Backend_OrderState_Notify', [
-            'subject' => Shopware()->Front(),
-            'id' => $orderId,
-            'status' => $statusId,
-            'mailname' => $templateName,
-        ]);
+        $result = $this->eventManager->notify(
+            OrderStateNotifyEvent::EVENT_NAME,
+            new OrderStateNotifyEvent([
+                'subject' => Shopware()->Front(),
+                'id' => $orderId,
+                'orderId' => $orderId,
+                'status' => $statusId,
+                'statusId' => $statusId,
+                'mailname' => $templateName,
+            ])
+        );
 
         if (!empty($result)) {
             $context['EventResult'] = $result->getValues();
@@ -1876,8 +1892,11 @@ EOT;
         );
 
         $this->eventManager->notify(
-            'product_stock_was_changed',
-            ['number' => $orderNumber, 'quantity' => $quantity]
+            ProductStockWasChangedEvent::EVENT_NAME,
+            new ProductStockWasChangedEvent([
+                'number' => $orderNumber,
+                'quantity' => $quantity,
+            ])
         );
     }
 
