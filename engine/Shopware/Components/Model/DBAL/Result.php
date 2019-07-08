@@ -41,7 +41,7 @@ class Result
     /**
      * Contains the executed pdo statement of the passed query builder.
      *
-     * @var \PDOStatement
+     * @var \Doctrine\DBAL\Driver\ResultStatement
      */
     protected $statement;
 
