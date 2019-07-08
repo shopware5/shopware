@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  *
  * @category   Shopware
- * @package    UserManager
+ * @package    Emotion
  * @subpackage View
  * @version    $Id$
  * @author shopware AG
@@ -89,28 +89,48 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
         }
 
         if(!me.previewFieldset) {
-            me.previewFieldset = me.createPreviewImage(media);
+            me.previewFieldset = me.createPreviewImageWithMapping(media);
             me.add(me.previewFieldset);
         } else {
             me.previewFieldset.show();
+            me.previewImageWithMapping.update({ src: me.basePath + (Ext.isArray(media) ? media[0].get('path') : media) });
             me.previewImage.update({ src: me.basePath + (Ext.isArray(media) ? media[0].get('path') : media) });
         }
 
         if (isSvg) {
             me.mappingButton.hide();
-            me.previewImage.hide();
+            me.previewImageWithMapping.hide();
             me.svgNotice.show();
+            me.previewImage.show();
         } else {
             me.mappingButton.show();
-            me.previewImage.show();
+            me.previewImageWithMapping.show();
             me.svgNotice.hide();
+            me.previewImage.hide();
         }
     },
 
     createPreviewImage: function(media) {
+        var me = this,
+            tpl = new Ext.Template(
+            '<div>',
+                '<img class="preview-image--media" src="[src]" alt="Preview Banner">',
+            '</div>'
+        );
+
+        return me.previewImage = Ext.create('Ext.container.Container', {
+            tpl: tpl,
+            hidden: true,
+            data: {
+                src: me.basePath + (Ext.isArray(media) ? media[0].get('path') : media)
+            }
+        });
+    },
+
+    createPreviewImageWithMapping: function(media) {
         var me = this;
 
-        me.previewImage = Ext.create('Ext.container.Container', {
+        me.previewImageWithMapping = Ext.create('Ext.container.Container', {
             tpl: me.getPreviewImageTemplate(),
             data: {
                 src: me.basePath + (Ext.isArray(media) ? media[0].get('path') : media)
@@ -128,14 +148,15 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
             items: [
                 me.svgNotice,
                 me.mappingButton,
-                me.previewImage
+                me.previewImageWithMapping,
+                me.createPreviewImage(media)
             ]
         });
     },
 
     registerPreviewPositionEvents: function() {
         var me = this,
-            el = me.previewImage.getEl();
+            el = me.previewImageWithMapping.getEl();
 
         el.on('click', function(event, target) {
             var $target = Ext.get(target),
@@ -156,7 +177,11 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
                 this.classList.remove('is--active');
             });
 
-            el.dom.querySelector('.preview-image--col[data-position="' + val + '"]').classList.add('is--active');
+            var pos = el.dom.querySelector('.preview-image--col[data-position="' + val + '"]');
+
+            if (pos) {
+                pos.classList.add('is--active');
+            }
         }
     },
 
@@ -195,7 +220,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Banner', {
                iconCls: 'sprite-layer-select',
                cls: 'small secondary',
                handler: function() {
-                    me.fireEvent('openMappingWindow', me, me.selectedMedia, me.previewImage, me.getSettings('record'));
+                    me.fireEvent('openMappingWindow', me, me.selectedMedia, me.previewImageWithMapping, me.getSettings('record'));
                }
            });
 

@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.elements.Banner', {
             style;
 
         if (Ext.isDefined(image)) {
-            style = Ext.String.format('background-image: url([0]); background-position: [1];', image, position);
+            style = Ext.String.format('background-image: url([0]); background-position: [1]; background-size: contain', image, position);
 
             preview = Ext.String.format('<div class="x-emotion-banner-element-preview" style="[0]"></div>', style);
         }
