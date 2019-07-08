@@ -998,9 +998,11 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         } else {
             $mail->setBodyText($this->Request()->getParam('content', ''));
         }
+        $fromMail = $this->Request()->getParam('fromMail');
+        $fromName = $this->Request()->getParam('fromName');
 
-        $mail->setFrom($this->Request()->getParam('fromMail', ''), $this->Request()->getParam('fromName', ''));
-        $mail->addTo($this->Request()->getParam('to', ''));
+        $mail->setFrom($fromMail ?: null, $fromName ?: null);
+        $mail->addTo($this->Request()->getParam('to'));
 
         $mail->setAssociation(LogEntryBuilder::ORDER_ID_ASSOCIATION, $orderId);
 
