@@ -28,15 +28,9 @@
  */
 
 //{namespace name=backend/user_manager/view/main}
-/**
- * Shopware Backend - View for role-form
- *
- */
 //{block name="backend/user_manager/view/roles/form"}
 Ext.define('Shopware.apps.UserManager.view.roles.Form', {
     extend: 'Enlight.app.Window',
-
-    title: '',
 
     initComponent: function() {
         var me = this;
