@@ -504,6 +504,20 @@
     }
 }
 
+.notification-tooltip .#{$prefix}tip-body {
+    overflow: visible;
+
+    .arrow {
+        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAFCAYAAAB8ZH1oAAAAK0lEQVR42o3KUQoAAAREQUd38yWF0gb1fGwjfvoKwInD+Is2lLDiqCHFczcAj0rFAI4TQgAAAABJRU5ErkJggg==") no-repeat;
+        width: 10px;
+        height: 5px;
+        position: absolute;
+        bottom: -7px;
+        left: 10px;
+    }
+
+}
+
 .#{$prefix}window > .#{$prefix}toolbar-shopware-ui-docked-bottom, .shopware-toolbar {
     padding: 5px 8px 6px 8px;
 

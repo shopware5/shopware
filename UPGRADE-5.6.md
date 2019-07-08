@@ -84,6 +84,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added alias command `sw:es:backend:backlog:sync` to `sw:es:backend:sync`
 * Added paging to more lists in the backend
 * Added a new configuration to a blog for limiting the blog to shops
+* Added browser notifications in the backend, which are shown when a growl message is created and the current tab is inactive
+* Added new block `frontend_listing_box_article_badges_inner` to `themes/Frontend/Bare/frontend/listing/product-box/product-badges.tpl`
 
 ### Changes
 

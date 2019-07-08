@@ -142,6 +142,9 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         me.taskBarBtn = Ext.getCmp('widgetTaskBarBtn');
         me.taskBarBtn.on('click', me.toggleMinimizeWindow.bind(me));
 
+        me.notificationBtn = Ext.getCmp('notificationTaskBarBtn');
+        me.notificationBtn.on('click', me.askForNotificationPermission.bind(me));
+
         me.control({
             'widget-sidebar-window': {
                 minimizeWindow: me.onMinimizeWindow,
@@ -330,12 +333,12 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
             horizontalHandle = 'e',
             handles = [];
 
-        if (align.indexOf('b') != -1) {
+        if (align.indexOf('b') !== -1) {
             y = desktopEl.getHeight() - win.getHeight() - yOffset;
             verticalHandle = 'n';
         }
 
-        if (align.indexOf('r') != -1) {
+        if (align.indexOf('r') !== -1) {
             x = desktopEl.getWidth() - win.getWidth() - xOffset;
             horizontalHandle = 'w';
         }
@@ -529,8 +532,8 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
      *
      * @public
      * @event click
-     * @param [string] mode - Allow or decline
-     * @param [object] record - Shopware.apps.Index.model.Merchant
+     * @param { string } mode - Allow or decline
+     * @param { object } record - Shopware.apps.Index.model.Merchant
      * @return void
      */
     onOpenMerchantDetail: function (mode, record) {
@@ -568,7 +571,56 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
                 }
             }
         });
+    },
+
+    askForNotificationPermission: function () {
+        if (!'Notification' in window) {
+            return;
+        }
+
+        var me = this,
+            tip,
+            position;
+
+        if (Notification.permission === 'default') {
+            Ext.MessageBox.confirm(
+                '{s name="footer/notification/modal_title" namespace="backend/index/view/detail"}Show notifications on desktop?{/s}',
+                '{s name="footer/notification/modal_content" namespace="backend/index/view/detail"}To show growl notifications, {/s}', function (response) {
+                if (response !== 'yes') {
+                    return false;
+                }
+
+                Notification.requestPermission().then( function (result) {
+                    if (result === 'denied' ){
+                        Ext.MessageBox.alert('{s name="footer/notification/denied_title" namespace="backend/index/view/detail"}Denied{/s}',
+                            '{s name="footer/notification/denied_content" namespace="backend/index/view/detail"}If you change your mind later, please go to your browser settings for this site.{/s}');
+                    }
+
+                    me.notificationBtn.addCls('btn-over');
+                });
+            });
+
+            return;
+        }
+
+        var tooltipText = '<span>{s name="footer/notification/granted_denied_tooltip" namespace="backend/index/view/detail"}Permission was already granted or denied{/s}</span><div class="x-clear"></div><div class="arrow"></div>';
+        if (document.location.protocol !== 'https:') {
+            tooltipText = '<span>{s name="footer/notification/missing_https_content_tooltip" namespace="backend/index/view/detail"}To be able to use desktop notifications, please make sure you\'re using an SSL encrypted connection.{/s}</span><div class="x-clear"></div><div class="arrow"></div>'
+        }
+
+        // Create tooltip
+        tip = Ext.create('Ext.tip.ToolTip', {
+            target: me.notificationBtn,
+            shadow: false,
+            ui: 'shopware-ui',
+            cls: 'notification-tooltip',
+            html: tooltipText
+        });
+
+        position = me.notificationBtn.getPosition();
+
+        position[1] = position[1] - 40;
+        tip.showAt(position);
     }
 });
-
 //{/block}

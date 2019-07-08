@@ -557,10 +557,6 @@ Ext.define('Shopware.Notification', {
             compTop = me.offsetTop,
             style;
 
-        if (me.growlDisplayBottom) {
-            compTop = me.offsetBottom;
-        }
-
         text = text || '';
 
         if (log != false) {
@@ -575,6 +571,16 @@ Ext.define('Shopware.Notification', {
                 },
                 scope: this
             });
+        }
+
+        if (me.displayBrowserNotification()) {
+            new Notification(title, this.getNotificationOptions(text));
+
+            return;
+        }
+
+        if (me.growlDisplayBottom) {
+            compTop = me.offsetBottom;
         }
 
         // Collect message data
@@ -616,6 +622,16 @@ Ext.define('Shopware.Notification', {
     },
 
     /**
+     * @param { String } text
+     */
+    getNotificationOptions: function (text) {
+        return {
+            icon: '{link file="themes/Frontend/Responsive/frontend/_public/src/img/favicon.ico" fullPath}',
+            body: text
+        };
+    },
+
+    /**
      * Creates a sticky growl like message. The note must be closed by the user. The messages
      * will be displayed among each other.
      *
@@ -647,7 +663,7 @@ Ext.define('Shopware.Notification', {
      *              { Function } opts.btnDetail.callback - Callback method which should be called after the user
      *                           links on the detail link (default: Ext.emptyFn)
      *              { Object }   opts.btnDetail.scope - Scope in which the callback will be fired (default: this)
-*                { Function } opts.onCloseButton - Handler method which called after the user clicked on close button
+     *              { Function } opts.onCloseButton - Handler method which called after the user clicked on close button
      *        { Function } caller - Function which calls this method. Only necessary for the logging.
      *        { String }   iconCls - CSS class for the icon which should be displayed. This options is disabled.
      *        { Boolean }  log - Compability parameter. Please use `opts.log` instead of the parameter `log`
@@ -826,5 +842,15 @@ Ext.define('Shopware.Notification', {
         });
 
         return true;
+    },
+
+    /**
+     * @returns { boolean }
+     */
+    displayBrowserNotification: function () {
+        return !(window.document.hasFocus()
+            || !('Notification' in window)
+            || Notification.permission === 'denied'
+            || document.location.protocol !== 'https:');
     }
 });

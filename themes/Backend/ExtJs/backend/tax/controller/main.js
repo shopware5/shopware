@@ -84,8 +84,10 @@ Ext.define('Shopware.apps.Tax.controller.Main', {
     },
     onCreateGroup: function(){
         var me = this;
-        Ext.MessageBox.prompt('Name', 'Name for new group:', function(result,value){
-           if (result !== "ok") return;
+        Ext.MessageBox.prompt('Name', 'Name for new group:', function(result, value){
+           if (result !== 'ok') {
+               return;
+           }
            Ext.Ajax.request({
                url: '{url controller="Tax" action="updateGroup"}',
                params: {
@@ -101,7 +103,7 @@ Ext.define('Shopware.apps.Tax.controller.Main', {
                },
                scope:this
            });
-       }, this,false,null);
+       }, this, false, null);
     },
     onDeleteGroup: function(){
         var me = this;
@@ -156,8 +158,10 @@ Ext.define('Shopware.apps.Tax.controller.Main', {
         grid.rowEditing.startEdit(0, 0);
     },
     onItemDblClick: function(tree,record){
-        Ext.MessageBox.prompt('Name', 'Change name:', function(result,value){
-            if (result !== "ok") return;
+        Ext.MessageBox.prompt('Name', 'Change name:', function(result, value){
+            if (result !== 'ok') {
+                return;
+            }
             Ext.Ajax.request({
                 url: '{url controller="Tax" action="updateGroup"}',
                 params: {
