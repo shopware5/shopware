@@ -28,7 +28,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\DBAL\Constraints as ShopwareAssert;
 use Shopware\Components\Model\ModelEntity;
-use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Attribute\Article as ProductAttribute;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -322,6 +321,8 @@ class Detail extends ModelEntity
         $this->images = new ArrayCollection();
         $this->configuratorOptions = new ArrayCollection();
         $this->notifications = new ArrayCollection();
+        $this->attribute = new \Shopware\Models\Attribute\Article();
+        $this->attribute->setArticleDetail($this);
     }
 
     /**

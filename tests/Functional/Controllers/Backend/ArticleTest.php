@@ -24,6 +24,7 @@
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Article;
+use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Repository;
 
 class Shopware_Tests_Controllers_Backend_ArticleTest extends Enlight_Components_Test_Controller_TestCase
@@ -37,6 +38,21 @@ class Shopware_Tests_Controllers_Backend_ArticleTest extends Enlight_Components_
      * @var Repository
      */
     private $repository;
+
+    /**
+     * @var ReflectionMethod
+     */
+    private $prepareNumberSyntaxMethod;
+
+    /**
+     * @var ReflectionMethod
+     */
+    private $interpretNumberSyntaxMethod;
+
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject
+     */
+    private $controller;
 
     /**
      * Standard set up for every test - just disable auth
@@ -53,6 +69,16 @@ class Shopware_Tests_Controllers_Backend_ArticleTest extends Enlight_Components_
         // disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+
+        $this->controller = $this->createPartialMock(\Shopware_Controllers_Backend_Article::class, []);
+
+        $class = new \ReflectionClass($this->controller);
+
+        $this->prepareNumberSyntaxMethod = $class->getMethod('prepareNumberSyntax');
+        $this->prepareNumberSyntaxMethod->setAccessible(true);
+
+        $this->interpretNumberSyntaxMethod = $class->getMethod('interpretNumberSyntax');
+        $this->interpretNumberSyntaxMethod->setAccessible(true);
     }
 
     public function tearDown()
@@ -116,5 +142,25 @@ class Shopware_Tests_Controllers_Backend_ArticleTest extends Enlight_Components_
 
         $this->dispatch('backend/Article/save');
         static::assertFalse($this->View()->success);
+    }
+
+    public function testinterpretNumberSyntax()
+    {
+        $article = new Article();
+
+        $detail = new Detail();
+        $detail->setNumber('SW500');
+        $article->setMainDetail($detail);
+
+        $commands = $this->prepareNumberSyntaxMethod->invokeArgs($this->controller, ['{mainDetail.number}.{n}']);
+
+        $result = $this->interpretNumberSyntaxMethod->invokeArgs($this->controller, [
+            $article,
+            $detail,
+            $commands,
+            2,
+        ]);
+
+        static::assertSame('SW500.2', $result);
     }
 }
