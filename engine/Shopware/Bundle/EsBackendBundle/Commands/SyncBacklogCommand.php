@@ -26,7 +26,7 @@ namespace Shopware\Bundle\EsBackendBundle\Commands;
 
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Bundle\EsBackendBundle\EsAwareRepository;
-use Shopware\Bundle\EsBackendBundle\EsBackendIndexer;
+use Shopware\Bundle\EsBackendBundle\IndexNameBuilderInterface;
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Models\Article\Article;
@@ -40,10 +40,16 @@ class SyncBacklogCommand extends ShopwareCommand
      */
     private $batchSize;
 
-    public function __construct(int $batchSize = 100)
+    /**
+     * @var IndexNameBuilderInterface
+     */
+    private $indexNameBuilder;
+
+    public function __construct(int $batchSize, IndexNameBuilderInterface $indexNameBuilder)
     {
         $this->batchSize = $batchSize;
         parent::__construct();
+        $this->indexNameBuilder = $indexNameBuilder;
     }
 
     /**
@@ -126,9 +132,7 @@ class SyncBacklogCommand extends ShopwareCommand
     {
         $client = $this->container->get('shopware_elastic_search.client');
 
-        $alias = EsBackendIndexer::buildAlias($domainName);
-
-        $exist = $client->indices()->getAlias(['name' => $alias]);
+        $exist = $client->indices()->getAlias(['name' => $this->indexNameBuilder->getAlias($domainName)]);
 
         $index = array_keys($exist);
 

@@ -175,6 +175,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed method name `Shopware\Components\Plugin::getNamespace` to `Shopware\Components\Plugin::getPluginNamespace` to support `getNamespace` method from Symfony bundles.
 * Changed `Shopware\Components\Plugin` class to extend from `Symfony\Component\HttpKernel\Bundle\Bundle`
 * Changed `Shopware\Components\Plugin::registerCommands` parameter typehint from `Shopware\Components\Console\Application` to `Symfony\Component\Console\Application`
+* Changed elastic search backend implementation to use a index prefix
 
 ### Removals
 

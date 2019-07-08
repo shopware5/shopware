@@ -30,12 +30,10 @@ use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 
 class EsBackendIndexer
 {
-    const INDEX_NAME = 'backend_index';
-
     /**
-     * @var string
+     * @deprecated Use IndexNameBuilderInterface instead
      */
-    private $prefix;
+    const INDEX_NAME = 'backend_index';
 
     /**
      * @var Client
@@ -57,26 +55,30 @@ class EsBackendIndexer
      */
     private $esVersion;
 
+    /**
+     * @var IndexNameBuilderInterface
+     */
+    private $indexNameBuilder;
+
     public function __construct(
-        string $prefix,
         Client $client,
         \IteratorAggregate $repositories,
         EvaluationHelperInterface $evaluation,
-        string $esVersion
+        string $esVersion,
+        IndexNameBuilderInterface $indexNameBuilder
     ) {
-        $this->prefix = $prefix;
         $this->client = $client;
         $this->repositories = $repositories;
         $this->evaluation = $evaluation;
         $this->esVersion = $esVersion;
+        $this->indexNameBuilder = $indexNameBuilder;
     }
 
     public function index(ProgressHelperInterface $helper)
     {
         foreach ($this->repositories as $repository) {
-            $index = $this->prefix . '_' . self::INDEX_NAME . '_' . $repository->getDomainName() . '_' . (new \DateTime())->format('YmdHis');
-
-            $alias = $this->prefix . '_' . self::buildAlias($repository->getDomainName());
+            $index = $this->indexNameBuilder->getName($repository->getDomainName());
+            $alias = $this->indexNameBuilder->getAlias($repository->getDomainName());
 
             $this->createIndex($index);
             $this->createMapping($repository, $index);
@@ -86,13 +88,17 @@ class EsBackendIndexer
     }
 
     /**
+     * @deprecated Use IndexNameBuilder service instead
+     *
      * @param string $domainName
      *
      * @return string
      */
     public static function buildAlias($domainName)
     {
-        return self::INDEX_NAME . '_' . $domainName;
+        trigger_error(sprintf('%s:%s is deprecated since 5.6 and will be removed with 5.7, use IndexNameBuilderInterface instead', __CLASS__, __FUNCTION__), E_USER_DEPRECATED);
+
+        return Shopware()->Container()->get(IndexNameBuilderInterface::class)->getAlias($domainName);
     }
 
     /**
@@ -128,6 +134,7 @@ class EsBackendIndexer
                     $value = mb_strtolower($value);
                 }
             }
+            unset($value);
 
             $documents[] = json_encode($row, JSON_PRESERVE_ZERO_FRACTION);
         }
@@ -150,7 +157,7 @@ class EsBackendIndexer
      */
     public function cleanupIndices()
     {
-        $prefix = $this->prefix . '_' . self::INDEX_NAME;
+        $prefix = $this->indexNameBuilder->getPrefix();
         $aliases = $this->client->indices()->getAliases();
         foreach ($aliases as $index => $indexAliases) {
             if (strpos($index, $prefix) !== 0) {

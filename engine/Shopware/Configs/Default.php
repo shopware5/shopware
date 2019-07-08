@@ -168,6 +168,7 @@ return array_replace_recursive([
         'dynamic_mapping_enabled' => true,
         'batchsize' => 500,
         'backend' => [
+            'prefix' => '%shopware.es.prefix%_backend_index_',
             'batch_size' => 500,
             'write_backlog' => false,
             'enabled' => false,

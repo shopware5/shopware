@@ -63,7 +63,7 @@ class BacklogService implements BacklogServiceInterface
     public function cleanup(array $ids): void
     {
         $this->connection->createQueryBuilder()
-            ->delete('s_es_backend_backlog', 'ba')
+            ->delete('s_es_backend_backlog')
             ->where('id IN(:ids)')
             ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY)
             ->execute();
