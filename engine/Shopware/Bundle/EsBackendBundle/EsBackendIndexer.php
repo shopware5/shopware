@@ -33,6 +33,11 @@ class EsBackendIndexer
     const INDEX_NAME = 'backend_index';
 
     /**
+     * @var string
+     */
+    private $prefix;
+
+    /**
      * @var Client
      */
     private $client;
@@ -53,11 +58,13 @@ class EsBackendIndexer
     private $esVersion;
 
     public function __construct(
+        string $prefix,
         Client $client,
         \IteratorAggregate $repositories,
         EvaluationHelperInterface $evaluation,
         string $esVersion
     ) {
+        $this->prefix = $prefix;
         $this->client = $client;
         $this->repositories = $repositories;
         $this->evaluation = $evaluation;
@@ -67,9 +74,9 @@ class EsBackendIndexer
     public function index(ProgressHelperInterface $helper)
     {
         foreach ($this->repositories as $repository) {
-            $index = self::INDEX_NAME . '_' . $repository->getDomainName() . '_' . (new \DateTime())->format('YmdHis');
+            $index = $this->prefix . '_' . self::INDEX_NAME . '_' . $repository->getDomainName() . '_' . (new \DateTime())->format('YmdHis');
 
-            $alias = self::buildAlias($repository->getDomainName());
+            $alias = $this->prefix . '_' . self::buildAlias($repository->getDomainName());
 
             $this->createIndex($index);
             $this->createMapping($repository, $index);
@@ -143,7 +150,7 @@ class EsBackendIndexer
      */
     public function cleanupIndices()
     {
-        $prefix = self::INDEX_NAME;
+        $prefix = $this->prefix . '_' . self::INDEX_NAME;
         $aliases = $this->client->indices()->getAliases();
         foreach ($aliases as $index => $indexAliases) {
             if (strpos($index, $prefix) !== 0) {
