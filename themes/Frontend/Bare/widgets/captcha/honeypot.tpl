@@ -7,6 +7,6 @@
     {/block}
 
     {block name='frontend_widgets_captcha_input_code'}
-        <input type="text" name="first_name_confirmation" value="" class="c-firstname-confirmation" aria-label="{s name="DetailCommentLabelName" namespace="frontend/detail/comment "}{/s}" autocomplete="off"/>
+        <input type="text" name="first_name_confirmation" value="" class="c-firstname-confirmation" aria-label="{s name="DetailCommentLabelName" namespace="frontend/detail/comment "}{/s}" autocomplete="captcha-no-autofill"/>
     {/block}
 {/block}
