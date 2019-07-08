@@ -262,6 +262,7 @@ class Shopware_Components_Config implements ArrayAccess
      */
     protected function readData()
     {
+        // use order by on fetch query to prefer core configs over config values from plugins with the same name
         $sql = "
             SELECT
               LOWER(REPLACE(e.name, '_', '')) as name,
@@ -287,6 +288,8 @@ class Shopware_Components_Config implements ArrayAccess
 
             LEFT JOIN s_core_config_forms forms
               ON forms.id = e.form_id
+            
+            ORDER BY forms.plugin_id DESC
         ";
 
         $data = $this->_db->fetchAll($sql, [
