@@ -1165,7 +1165,7 @@ class Order extends ModelEntity
      */
     public function setPartner($partner)
     {
-        $this->partner = $this->cleanup($partner);
+        $this->partner = $partner;
     }
 
     /**

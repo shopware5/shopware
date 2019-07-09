@@ -90,11 +90,13 @@ parameters:
         - '#Parameter \#1 \$request of method Shopware\\Bundle\\SearchBundle\\CriteriaRequestHandlerInterface::handleRequest\(\) expects Enlight_Controller_Request_RequestHttp, Enlight_Controller_Request_Request given#'
         # Container Issues
         - '#Parameter \#2 \$service of method Symfony\\Component\\DependencyInjection\\ContainerInterface::set\(\) expects object, array<Shopware\\Bundle\\SearchBundleDBAL\\[a-zA-Z]+Interface> given#'
-        # Wrong type in ElasticsearchDSL, can be removed in 5.6
+        # Wrong type in ElasticsearchDSL
         - '#Parameter \#2 \$value of class ONGR\\ElasticsearchDSL\\Query\\TermQuery constructor expects string#'
         - '#Parameter \#2 \$value of class ONGR\\ElasticsearchDSL\\Query\\TermLevel\\TermQuery constructor expects string#'
         - '#Parameter \#2 \$value of method ONGR\\ElasticsearchDSL\\Query\\Compound\\BoolQuery::addParameter\(\) expects array\|stdClass\|string#'
         - '#Parameter \#2 \$value of method ONGR\\ElasticsearchDSL\\Aggregation\\AbstractAggregation::addParameter\(\) expects array\|stdClass\|string#'
         - '#should return Shopware\\Bundle\\ContentTypeBundle\\Services\\RepositoryInterface but returns object#'
+        # Missing array key
+        - "#Offset 'mediatype' does not exist on array#"
 
     reportUnmatchedIgnoredErrors: false

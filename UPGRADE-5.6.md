@@ -96,7 +96,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed elasticsearch/elasticsearch to 6.7.1
 * Changed ongr/elasticsearch-dsl to 6.0.3
 * Changed jQuery to 3.4.1
-* Changed PHPStan to 0.11.8
+* Changed PHPStan to 0.11.12
 * Changed id of login password form in `frontend/account/login.tpl` from `passwort` to `password`
 * Changed plugin initialization to alphabetical order by default
 * Changed all DIC service ids to lowercase as a preparation for a switch to Symfony 4 in the future
