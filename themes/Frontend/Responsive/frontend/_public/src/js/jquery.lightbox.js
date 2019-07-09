@@ -47,6 +47,11 @@
 
                 size = me.getOptimizedSize(width, height);
 
+                me.content
+                    .find('img')
+                    .attr('width', size.width)
+                    .attr('height', size.height);
+
                 me.modal = $.modal.open(me.content, {
                     'width': size.width,
                     'height': size.height
