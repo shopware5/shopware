@@ -2,7 +2,7 @@
 
 {block name="frontend_index_header_meta_keywords"}{/block}
 
-{block name='frontend_index_header_meta_robots'}{'index,follow'|snippet:'IndexMetaRobots':$sType->getSnippetNamespaceFrontend()}{/block}
+{block name='frontend_index_header_meta_robots'}{$sType->getSeoRobots()}{/block}
 
 {block name='frontend_index_header_meta_tags_opengraph'}
     {s name="IndexMetaDescriptionStandard" namespace="frontend/index/header" assign="description"}{/s}

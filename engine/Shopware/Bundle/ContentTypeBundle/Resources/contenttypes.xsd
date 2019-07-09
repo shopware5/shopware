@@ -30,6 +30,7 @@
             <xsd:element name="viewMetaTitleFieldName" type="xsd:string"  minOccurs="0"/>
             <xsd:element name="viewMetaDescriptionFieldName" type="xsd:string"  minOccurs="0"/>
             <xsd:element name="seoUrlTemplate" type="xsd:string"  minOccurs="0"/>
+            <xsd:element name="seoRobots" type="xsd:string"  minOccurs="0"/>
             <xsd:element name="fieldSets" type="fieldSetType"/>
             <xsd:element name="custom" type="custom" minOccurs="0"/>
         </xsd:sequence>

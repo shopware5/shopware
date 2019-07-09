@@ -108,6 +108,11 @@ class Type implements JsonSerializable
      */
     protected $seoUrlTemplate = '{$type.name}/{$item[$type.viewTitleFieldName]}/';
 
+    /**
+     * @var string
+     */
+    protected $seoRobots = 'index,follow';
+
     public function getName(): string
     {
         return $this->name;
@@ -297,6 +302,10 @@ class Type implements JsonSerializable
 
     public function getViewMetaTitleFieldName(): string
     {
+        if (empty($this->viewMetaTitleFieldName)) {
+            return $this->viewTitleFieldName;
+        }
+
         return $this->viewMetaTitleFieldName;
     }
 
@@ -309,6 +318,10 @@ class Type implements JsonSerializable
 
     public function getViewMetaDescriptionFieldName(): string
     {
+        if (empty($this->viewMetaDescriptionFieldName)) {
+            return $this->viewDescriptionFieldName;
+        }
+
         return $this->viewMetaDescriptionFieldName;
     }
 
@@ -327,6 +340,18 @@ class Type implements JsonSerializable
     public function setSeoUrlTemplate(string $seoUrlTemplate): Type
     {
         $this->seoUrlTemplate = $seoUrlTemplate;
+
+        return $this;
+    }
+
+    public function getSeoRobots(): string
+    {
+        return $this->seoRobots;
+    }
+
+    public function setSeoRobots(string $seoRobots): self
+    {
+        $this->seoRobots = $seoRobots;
 
         return $this;
     }
