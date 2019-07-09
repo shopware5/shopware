@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="{encoding}" ?>
-{s name='IndexXmlLang' namespace='frontend/index/index' assign='rssChannelLanguage'}{/s}
+{s name='IndexXmlLocale' namespace='frontend/index/index' assign='rssChannelLanguage'}{/s}
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <atom:link href="{$sCategoryContent.rssFeed}" rel="self" type="application/rss+xml"/>
