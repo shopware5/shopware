@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
             successMessage:'{s name=message/privilege/save_success_title}Privilege has been saved{/s}'
         },
         roleSave: {
-            successMessage:'{s name=message/role/save_success_title}Role rules have been saved{/s}'
+            successMessage:'{s name=message/role/save_success_title}Role privileges have been saved{/s}'
         },
 
         growlMessage: '{s name=growlMessage}User Management{/s}'
