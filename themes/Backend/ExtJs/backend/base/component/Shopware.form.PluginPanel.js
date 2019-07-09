@@ -367,6 +367,10 @@ Ext.define('Shopware.form.PluginPanel',
             fieldName, fieldValue, valueStore,
             win = formPanel.up('window');
 
+        if (!basicForm.isValid()) {
+            return;
+        }
+
         closeWindow = closeWindow || false;
 
         form.getElements().each(function(element) {
