@@ -91,13 +91,16 @@ Ext.define('Shopware.apps.Index.view.Footer', {
         me.logoutBtn = me.createLogoutBtn();
         me.windowBtn = me.createWindowManagementMenu();
         me.widgetBtn = me.createWidgetBtn();
+        me.notificationBtn = me.createNotificationMenuButton();
 
         this.items = [
             me.logoutBtn,
             { xtype: 'tbseparator', cls: 'separator-first' },
             me.windowBtn,
             { xtype: 'tbseparator', cls: 'separator-second' },
-            me.widgetBtn
+            me.widgetBtn,
+            { xtype: 'tbseparator', cls: 'separator-third' },
+            me.notificationBtn
         ];
 
     },
@@ -196,6 +199,24 @@ Ext.define('Shopware.apps.Index.view.Footer', {
         });
 
         return windowBtn;
+    },
+
+    createNotificationMenuButton: function () {
+        if (!'Notification' in window) {
+            return;
+        }
+
+        var notificationBtnActive = Notification.permission !== 'default',
+            btn = Ext.create('Ext.button.Button', {
+                iconCls: 'backend-notification',
+                id: 'notificationTaskBarBtn'
+            });
+
+        if (notificationBtnActive) {
+            btn.cls = 'btn-over';
+        }
+
+        return btn;
     }
 });
 //{/block}

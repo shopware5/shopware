@@ -15,6 +15,16 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
 
 {block name="backend/base/header/javascript" append}
 <script type="text/javascript">
+
+    var currentTabState = 'active';
+    window.addEventListener('blur', function () {
+        currentTabState = 'inactive';
+    });
+
+    window.addEventListener('focus', function () {
+        currentTabState = 'active';
+    });
+
     var userName = '{$user->name}',
         maxParameterLength = '{$maxParameterLength}';
 
