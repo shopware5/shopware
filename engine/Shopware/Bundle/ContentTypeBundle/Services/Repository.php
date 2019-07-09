@@ -154,6 +154,7 @@ class Repository implements RepositoryInterface
             }
         }
 
+        $idSearch = null;
         if (!empty($filters)) {
             foreach ($filters as $item) {
                 if ($item['property'] === 'search') {
@@ -169,6 +170,10 @@ class Repository implements RepositoryInterface
                 } else {
                     $where = $item['value'];
                     $expression = null;
+
+                    if ($item['property'] === 'id') {
+                        $idSearch = is_array($where) ? $where : [$where];
+                    }
 
                     if (isset($item['expression'])) {
                         $expression = $item['expression'];
@@ -213,6 +218,15 @@ class Repository implements RepositoryInterface
                     }
                 }
             }
+        }
+
+        // Sorting result by given ids
+        if ($idSearch && count($filters) === 1) {
+            $idSearch = array_map('intval', $idSearch);
+
+            $orderBy = sprintf('FIELD(id, %s)', implode(',', $idSearch));
+
+            $query->addOrderBy($orderBy);
         }
 
         return $query;

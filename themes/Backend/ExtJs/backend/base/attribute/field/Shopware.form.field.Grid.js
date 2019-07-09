@@ -137,6 +137,11 @@ Ext.define('Shopware.form.field.Grid', {
                 plugins: {
                     ptype: 'gridviewdragdrop',
                     ddGroup: 'shopware-form-field-grid' + this.id
+                },
+                listeners: {
+                    drop: function () {
+                        me.fireEvent('change', me, me.getValue());
+                    }
                 }
             };
         }
