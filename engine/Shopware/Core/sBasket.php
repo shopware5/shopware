@@ -2868,6 +2868,10 @@ SQL;
             array_column($additionalInformation, 'ordernumber'),
             $this->contextService->getShopContext()
         );
+        $this->additionalTextService->buildAdditionalTextLists(
+            $products,
+            $this->contextService->getShopContext()
+        );
 
         foreach ($cartItems as $cartItem) {
             $additionalInfo = [];
