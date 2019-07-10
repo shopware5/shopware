@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\DependencyInjection;
 
+use Shopware\Components\DependencyInjection\Events\AfterInitResourceEvent;
+use Shopware\Components\DependencyInjection\Events\AfterRegisterResourceEvent;
 use Shopware\Components\DependencyInjection\Events\InitResourceEvent;
 use Symfony\Component\DependencyInjection\Container as BaseContainer;
 use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
@@ -61,10 +63,12 @@ class Container extends BaseContainer
         parent::set($name, $resource);
 
         parent::get('events')->notify(
-            'Enlight_Bootstrap_AfterRegisterResource_' . $name, [
+            AfterRegisterResourceEvent::EVENT_NAME . $name,
+            new AfterRegisterResourceEvent([
                 'subject' => $this,
+                'resourceName' => $name,
                 'resource' => $resource,
-            ]
+            ])
         );
 
         return $this;
@@ -234,12 +238,22 @@ class Container extends BaseContainer
         } finally {
             if ($circularReference === false) {
                 $eventManager->notify(
-                    'Enlight_Bootstrap_AfterInitResource_' . $id, ['subject' => $this]
+                    AfterInitResourceEvent::EVENT_NAME . $id,
+                    new AfterInitResourceEvent([
+                        'subject' => $this,
+                        'resourceId' => $id,
+                        'isFallback' => false,
+                    ])
                 );
 
                 if ($fallbackName !== null && $fallbackName !== $id) {
                     $eventManager->notify(
-                        'Enlight_Bootstrap_AfterInitResource_' . $fallbackName, ['subject' => $this]
+                        AfterInitResourceEvent::EVENT_NAME . $fallbackName,
+                        new AfterInitResourceEvent([
+                            'subject' => $this,
+                            'resourceId' => $fallbackName,
+                            'isFallback' => true,
+                        ])
                     );
                 }
             }

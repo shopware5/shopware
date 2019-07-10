@@ -27,6 +27,7 @@ namespace Shopware\Components\MultiEdit\Resource\Product;
 use Doctrine\ORM\Query\Expr\Literal;
 use Shopware\Components\MultiEdit\Resource\Product;
 use Shopware\Models\MultiEdit\Queue;
+use ShopwarePlugins\HttpCache\Events\InvalidateCacheIdEvent;
 
 /**
  * The batch process resource handles the batch processes for updating products
@@ -292,8 +293,11 @@ class BatchProcess
         // Notify event - you might want register for this in order to clear the cache?
         foreach ($this->getDqlHelper()->getIdForForeignEntity('article', $detailIds) as $productId) {
             $this->getDqlHelper()->getEventManager()->notify(
-                'Shopware_Plugins_HttpCache_InvalidateCacheId',
-                ['subject' => $this, 'cacheId' => 'a' . $productId]
+                InvalidateCacheIdEvent::EVENT_NAME,
+                new InvalidateCacheIdEvent([
+                    'subject' => $this,
+                    'cacheId' => 'a' . $productId,
+                ])
             );
         }
     }

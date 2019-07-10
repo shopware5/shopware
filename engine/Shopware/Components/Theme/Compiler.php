@@ -29,6 +29,7 @@ use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Components\Theme\Compressor\CompressorInterface;
 use Shopware\Components\Theme\Compressor\Js;
+use Shopware\Components\Theme\Events\CompileLessEvent;
 use Shopware\Models\Shop;
 
 /**
@@ -360,10 +361,11 @@ class Compiler
         }
 
         $this->eventManager->notify(
-            'Theme_Compiler_Compile_Less', [
+            CompileLessEvent::EVENT_NAME,
+            new CompileLessEvent([
                 'shop' => $shop,
                 'less' => $definition,
-            ]
+            ])
         );
 
         // Need to iterate files, to generate source map if configured.

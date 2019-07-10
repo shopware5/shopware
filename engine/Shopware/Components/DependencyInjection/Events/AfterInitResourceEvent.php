@@ -22,29 +22,27 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Console\Events;
+namespace Shopware\Components\DependencyInjection\Events;
 
 use Enlight_Event_EventArgs;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Shopware\Components\DependencyInjection\Container;
 
-class BeforeRunEvent extends Enlight_Event_EventArgs
+class AfterInitResourceEvent extends Enlight_Event_EventArgs
 {
-    public const EVENT_NAME = 'Shopware_Command_Before_Run';
+    public const EVENT_NAME = 'Enlight_Bootstrap_AfterInitResource_';
 
-    public function getCommand(): Command
+    public function getSubject(): Container
     {
-        return $this->get('command');
+        return $this->get('subject');
     }
 
-    public function getInput(): InputInterface
+    public function getResourceId(): string
     {
-        return $this->get('input');
+        return $this->get('resourceId');
     }
 
-    public function getOutput(): OutputInterface
+    public function isFallback(): bool
     {
-        return $this->get('output');
+        return $this->get('isFallback');
     }
 }

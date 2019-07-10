@@ -29,6 +29,12 @@ use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Form;
 use Shopware\Components\Model;
 use Shopware\Components\Theme;
+use Shopware\Components\Theme\Events\ContainerInjectedEvent;
+use Shopware\Components\Theme\Events\ThemeConfigCreatedEvent;
+use Shopware\Components\Theme\Events\ThemeConfigSavedEvent;
+use Shopware\Components\Theme\Events\ThemeConfigSetsSynchronizedEvent;
+use Shopware\Components\Theme\Events\ThemeConfigSetUpdatedEvent;
+use Shopware\Components\Theme\Events\ThemeConfigSynchronizedEvent;
 use Shopware\Models\Shop;
 use Shopware\Models\Shop\TemplateConfig\Set;
 
@@ -102,30 +108,39 @@ class Configurator
         //inject the inheritance config container.
         $this->injectConfig($theme, $container);
 
-        $this->eventManager->notify('Theme_Configurator_Container_Injected', [
-            'theme' => $theme,
-            'template' => $template,
-            'container' => $container,
-        ]);
+        $this->eventManager->notify(
+            ContainerInjectedEvent::EVENT_NAME,
+            new ContainerInjectedEvent([
+                'theme' => $theme,
+                'template' => $template,
+                'container' => $container,
+            ])
+        );
 
         $theme->createConfig($container);
 
         $this->validateConfig($container);
 
-        $this->eventManager->notify('Theme_Configurator_Theme_Config_Created', [
-            'theme' => $theme,
-            'template' => $template,
-            'container' => $container,
-        ]);
+        $this->eventManager->notify(
+            ThemeConfigCreatedEvent::EVENT_NAME,
+            new ThemeConfigCreatedEvent([
+                'theme' => $theme,
+                'template' => $template,
+                'container' => $container,
+            ])
+        );
 
         //use the theme persister class to write the Shopware\Components\Form elements into the database
         $this->persister->save($container, $template);
 
-        $this->eventManager->notify('Theme_Configurator_Theme_Config_Saved', [
-            'theme' => $theme,
-            'template' => $template,
-            'container' => $container,
-        ]);
+        $this->eventManager->notify(
+            ThemeConfigSavedEvent::EVENT_NAME,
+            new ThemeConfigSavedEvent([
+                'theme' => $theme,
+                'template' => $template,
+                'container' => $container,
+            ])
+        );
 
         $this->removeUnused(
             $this->getLayout($template),
@@ -135,11 +150,14 @@ class Configurator
 
         $this->synchronizeSets($theme, $template);
 
-        $this->eventManager->notify('Theme_Configurator_Theme_Config_Synchronized', [
-            'theme' => $theme,
-            'template' => $template,
-            'container' => $container,
-        ]);
+        $this->eventManager->notify(
+            ThemeConfigSynchronizedEvent::EVENT_NAME,
+            new ThemeConfigSynchronizedEvent([
+                'theme' => $theme,
+                'template' => $template,
+                'container' => $container,
+            ])
+        );
     }
 
     /**
@@ -208,12 +226,15 @@ class Configurator
             $existing->setDescription($item->getDescription());
             $existing->setValues($item->getValues());
 
-            $this->eventManager->notify('Theme_Configurator_Theme_ConfigSet_Updated', [
-                'theme' => $theme,
-                'template' => $template,
-                'existing' => $existing,
-                'defined' => $item,
-            ]);
+            $this->eventManager->notify(
+                ThemeConfigSetUpdatedEvent::EVENT_NAME,
+                new ThemeConfigSetUpdatedEvent([
+                    'theme' => $theme,
+                    'template' => $template,
+                    'existing' => $existing,
+                    'defined' => $item,
+                ])
+            );
 
             $synchronized[] = $existing;
         }
@@ -236,10 +257,13 @@ class Configurator
 
         $this->entityManager->flush();
 
-        $this->eventManager->notify('Theme_Configurator_Theme_ConfigSets_Synchronized', [
-            'theme' => $theme,
-            'template' => $template,
-        ]);
+        $this->eventManager->notify(
+            ThemeConfigSetsSynchronizedEvent::EVENT_NAME,
+            new ThemeConfigSetsSynchronizedEvent([
+                'theme' => $theme,
+                'template' => $template,
+            ])
+        );
     }
 
     /**

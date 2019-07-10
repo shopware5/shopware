@@ -30,6 +30,7 @@ use GuzzleHttp\Event\ErrorEvent;
 use GuzzleHttp\Pool;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\ContainerAwareEventManager;
+use Shopware\Components\HttpCache\Events\CacheWarmerErrorOccuredEvent;
 use Shopware\Components\HttpClient\GuzzleFactory;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing\Context;
@@ -119,7 +120,10 @@ class CacheWarmer
             [
                 'pool_size' => $concurrentRequests,
                 'error' => function (ErrorEvent $e) use ($shopId, $events) {
-                    $events->notify('Shopware_Components_CacheWarmer_ErrorOccured');
+                    $events->notify(
+                        CacheWarmerErrorOccuredEvent::EVENT_NAME,
+                        new CacheWarmerErrorOccuredEvent()
+                    );
                     if ($e->getResponse() !== null && $e->getResponse()->getStatusCode() === 404) {
                         $this->logger->error(
                             'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getException()->getMessage()

@@ -26,6 +26,7 @@ namespace Shopware\Components;
 
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Theme\PathResolver;
+use ShopwarePlugins\HttpCache\Events\ClearCacheEvent;
 
 class CacheManager
 {
@@ -110,7 +111,10 @@ class CacheManager
         }
 
         // Fire event to let Plugin-Implementation clear cache
-        $this->events->notify('Shopware_Plugins_HttpCache_ClearCache');
+        $this->events->notify(
+            ClearCacheEvent::EVENT_NAME,
+            new ClearCacheEvent()
+        );
     }
 
     /**

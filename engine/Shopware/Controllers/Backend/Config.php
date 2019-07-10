@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Controllers\Backend\Events\AfterSaveConfigElementEvent;
 use Shopware\Models\Config\Element;
 use Shopware\Models\Config\Value;
 use Shopware\Models\Shop\Shop;
@@ -1399,10 +1400,13 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
         Shopware()->Models()->flush($element);
 
-        Shopware()->Events()->notify('Shopware_Controllers_Backend_Config_After_Save_Config_Element', [
-            'subject' => $this,
-            'element' => $element,
-        ]);
+        Shopware()->Events()->notify(
+            AfterSaveConfigElementEvent::EVENT_NAME,
+            new AfterSaveConfigElementEvent([
+                'subject' => $this,
+                'element' => $element,
+            ])
+        );
     }
 
     /**

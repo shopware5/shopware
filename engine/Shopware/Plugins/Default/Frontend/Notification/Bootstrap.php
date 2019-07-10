@@ -23,6 +23,8 @@
  */
 
 use Shopware\Components\Routing\Context;
+use ShopwarePlugins\Notification\Events\NotificationProductQueryBuilderEvent;
+use ShopwarePlugins\Notification\Events\NotificationSavedEvent;
 
 /**
  * Shopware Notification Plugin
@@ -267,11 +269,15 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                     $params
                 );
 
-                $eventManager->notify('Shopware_Notification_Notification_Saved', [
-                    'subject' => $this,
-                    'id' => $insertId,
-                    'data' => $json_data,
-                ]);
+                $eventManager->notify(
+                    NotificationSavedEvent::EVENT_NAME,
+                    new NotificationSavedEvent([
+                        'subject' => $this,
+                        'notificationId' => $insertId,
+                        'id' => $insertId,
+                        'data' => $json_data,
+                    ])
+                );
 
                 $action->View()->NotifyValid = true;
                 $this->get('session')->sNotifcationArticleWaitingForOptInApprovement[$json_data['notifyOrdernumber']] = false;
@@ -330,10 +336,10 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 ->setParameter('number', $notify['ordernumber']);
 
             $this->get('events')->notify(
-                'Shopware_CronJob_Notification_Product_QueryBuilder',
-                [
+                NotificationProductQueryBuilderEvent::EVENT_NAME,
+                new NotificationProductQueryBuilderEvent([
                     'queryBuilder' => $queryBuilder,
-                ]
+                ])
             );
 
             $product = $queryBuilder->execute()->fetch(\PDO::FETCH_ASSOC);

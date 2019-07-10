@@ -23,6 +23,7 @@
  */
 
 use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexerInterface;
+use ShopwarePlugins\RebuildIndex\Events\CreateRewriteTableEvent;
 
 class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -176,12 +177,13 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
             $this->RewriteTable()->sCreateRewriteTableStatic();
             $this->RewriteTable()->createContentTypeUrls($context);
 
+            // TODO fix event autoloading
             Shopware()->Events()->notify(
-                'Shopware_CronJob_RefreshSeoIndex_CreateRewriteTable',
-                [
+                CreateRewriteTableEvent::EVENT_NAME,
+                new CreateRewriteTableEvent([
                     'shopContext' => $context,
                     'cachedTime' => $currentTime,
-                ]
+                ])
             );
         }
 

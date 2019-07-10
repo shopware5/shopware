@@ -28,7 +28,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Doctrine\ORM\Tools\Console\ConsoleRunner as DoctrineConsoleRunner;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
-use Shopware\Components\Console\Events\BeforeRunEvent;
+use Shopware\Components\Console\Events\CommandAfterRunEvent;
+use Shopware\Components\Console\Events\CommandBeforeRunEvent;
 use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Shopware\Kernel;
 use Symfony\Component\Console\Application as BaseApplication;
@@ -116,8 +117,8 @@ class Application extends BaseApplication
         $eventManager = $this->kernel->getContainer()->get('events');
 
         $event = $eventManager->notifyUntil(
-            BeforeRunEvent::EVENT_NAME,
-            new BeforeRunEvent([
+            CommandBeforeRunEvent::EVENT_NAME,
+            new CommandBeforeRunEvent([
                 'command' => $command,
                 'input' => $input,
                 'output' => $output,
@@ -130,12 +131,15 @@ class Application extends BaseApplication
 
         $exitCode = parent::doRunCommand($command, $input, $output);
 
-        $eventManager->notify('Shopware_Command_After_Run', [
-           'exitCode' => $exitCode,
-           'command' => $command,
-           'input' => $input,
-           'output' => $output,
-       ]);
+        $eventManager->notify(
+            CommandAfterRunEvent::EVENT_NAME,
+            new CommandAfterRunEvent([
+                'exitCode' => $exitCode,
+                'command' => $command,
+                'input' => $input,
+                'output' => $output,
+            ])
+        );
 
         return $exitCode;
     }

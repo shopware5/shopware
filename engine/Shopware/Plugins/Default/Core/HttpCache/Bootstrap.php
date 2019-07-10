@@ -29,6 +29,8 @@ use Shopware\Components\HttpCache\Store;
 use Shopware\Components\Model\ModelManager;
 use ShopwarePlugins\HttpCache\CacheControl;
 use ShopwarePlugins\HttpCache\CacheIdCollector;
+use ShopwarePlugins\HttpCache\Events\ClearCacheEvent;
+use ShopwarePlugins\HttpCache\Events\InvalidateCacheIdEvent;
 use ShopwarePlugins\HttpCache\Events\ShouldNotInvalidateCacheEvent;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\HttpCache\HttpCache;
@@ -95,12 +97,13 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         );
 
         $this->subscribeEvent(
-            'Shopware_Plugins_HttpCache_InvalidateCacheId',
+            InvalidateCacheIdEvent::EVENT_NAME,
             'onInvalidateCacheId'
         );
 
+        // TODO fix event autoloading
         $this->subscribeEvent(
-            'Shopware_Plugins_HttpCache_ClearCache',
+            ClearCacheEvent::EVENT_NAME,
             'onClearCache'
         );
 
@@ -412,7 +415,10 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      * to check if the http-cache-plugin is installed and enabled.
      *
      * <code>
-     * Shopware()->Events()->notify('Shopware_Plugins_HttpCache_ClearCache');
+     * Shopware()->Events()->notify(
+     *     \ShopwarePlugins\HttpCache\Events\ClearCacheEvent::EVENT_NAME',
+     *     new \ShopwarePlugins\HttpCache\Events\ClearCacheEvent()
+     * );
      * </code>
      */
     public function onClearCache(\Enlight_Event_EventArgs $args)
@@ -430,14 +436,20 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      *
      * <code>
      * Shopware()->Events()->notify(
-     *     'Shopware_Plugins_HttpCache_InvalidateCacheId',
-     *     array('cacheId' => 'a123')
+     *     \ShopwarePlugins\HttpCache\Events\InvalidateCacheIdEvent:EVENT_NAME,
+     *     new \ShopwarePlugins\HttpCache\Events\InvalidateCacheIdEvent(['cacheId' => 'a123'])
      * );
      * </code>
      */
     public function onInvalidateCacheId(\Enlight_Event_EventArgs $args)
     {
-        $cacheId = $args->get('cacheId');
+        // TODO fix event autoloading
+        if ($args instanceof InvalidateCacheIdEvent) {
+            $cacheId = $args->getCacheId();
+        } else {
+            $cacheId = $args->get('cacheId');
+        }
+
         if (!$cacheId) {
             $args->setReturn(false);
 
