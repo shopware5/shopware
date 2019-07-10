@@ -24,19 +24,22 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\ShopwareReleaseStruct;
+use Shopware_Components_Config;
+use Zend_Cache_Core;
 
 class Config
 {
     /**
-     * @param \Enlight_Components_Db_Adapter_Pdo_Mysql $db
-     * @param array                                    $config
+     * @param Connection $db
+     * @param array      $config
      *
-     * @return \Shopware_Components_Config|null
+     * @return Shopware_Components_Config|null
      */
     public function factory(
-        \Zend_Cache_Core $cache,
-        \Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
+        Zend_Cache_Core $cache,
+        Connection $db = null,
         $config = [],
         ShopwareReleaseStruct $release
     ) {
@@ -50,6 +53,6 @@ class Config
         $config['db'] = $db;
         $config['release'] = $release;
 
-        return new \Shopware_Components_Config($config);
+        return new Shopware_Components_Config($config);
     }
 }
