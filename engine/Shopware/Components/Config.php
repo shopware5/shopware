@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\ShopwareReleaseStruct;
 
 /**
@@ -55,7 +56,7 @@ class Shopware_Components_Config implements ArrayAccess
     protected $_data;
 
     /**
-     * @var \Zend_Db_Adapter_Abstract
+     * @var Connection
      */
     protected $_db;
 
@@ -73,7 +74,7 @@ class Shopware_Components_Config implements ArrayAccess
             $this->_cache = $config['cache'];
         }
         if (isset($config['db'])
-            && $config['db'] instanceof Zend_Db_Adapter_Abstract) {
+            && $config['db'] instanceof Connection) {
             $this->_db = $config['db'];
         }
         if (isset($config['shop'])) {
@@ -129,7 +130,7 @@ class Shopware_Components_Config implements ArrayAccess
     /**
      * @param Shopware\Models\Shop\Shop $shop
      *
-     * @return \Shopware_Components_Config
+     * @return Shopware_Components_Config
      */
     public function setShop($shop)
     {
@@ -262,38 +263,32 @@ class Shopware_Components_Config implements ArrayAccess
      */
     protected function readData()
     {
-        $sql = "
-            SELECT
-              LOWER(REPLACE(e.name, '_', '')) as name,
-              COALESCE(currentShop.value, parentShop.value, fallbackShop.value, e.value) as value,
-              LOWER(REPLACE(forms.name, '_', '')) as form,
-              currentShop.value as currentShopval,
-              parentShop.value as parentShopval,
-              fallbackShop.value as fallbackShopval
+        $builder = $this->_db->createQueryBuilder();
+        $builder
+            ->select([
+                'LOWER(REPLACE(e.name, "_", "")) as name',
+                'COALESCE(currentShop.value, parentShop.value, fallbackShop.value, e.value) as value',
+                'LOWER(REPLACE(forms.name, "_", "")) as form',
+                'currentShop.value as currentShopval',
+                'parentShop.value as parentShopval',
+                'fallbackShop.value as fallbackShopval',
+            ])
+            ->from('s_core_config_elements', 'e')
+            ->leftJoin('e', 's_core_config_values', 'currentShop',
+                'currentShop.element_id = e.id AND currentShop.shop_id = :currentShopId')
+            ->leftJoin('e', 's_core_config_values', 'parentShop',
+                'parentShop.element_id = e.id AND parentShop.shop_id = :parentShopId')
+            ->leftJoin('e', 's_core_config_values', 'fallbackShop',
+                'fallbackShop.element_id = e.id AND fallbackShop.shop_id = :fallbackShopId')
+            ->leftJoin('e', 's_core_config_forms', 'forms', 'forms.id = e.form_id');
 
-            FROM s_core_config_elements e
-
-            LEFT JOIN s_core_config_values currentShop
-              ON currentShop.element_id = e.id
-              AND currentShop.shop_id = :currentShopId
-
-            LEFT JOIN s_core_config_values parentShop
-              ON parentShop.element_id = e.id
-              AND parentShop.shop_id = :parentShopId
-
-            LEFT JOIN s_core_config_values fallbackShop
-              ON fallbackShop.element_id = e.id
-              AND fallbackShop.shop_id = :fallbackShopId
-
-            LEFT JOIN s_core_config_forms forms
-              ON forms.id = e.form_id
-        ";
-
-        $data = $this->_db->fetchAll($sql, [
+        $builder->setParameters([
             'fallbackShopId' => 1, // Shop parent id
             'parentShopId' => isset($this->_shop) && $this->_shop->getMain() !== null ? $this->_shop->getMain()->getId() : 1,
             'currentShopId' => isset($this->_shop) ? $this->_shop->getId() : null,
         ]);
+
+        $data = $builder->execute()->fetchAll();
 
         $result = [];
         foreach ($data as $row) {

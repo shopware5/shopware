@@ -199,7 +199,7 @@
         <service id="config" class="Shopware_Components_Config">
             <factory service="config_factory" method="factory" />
             <argument type="service" id="cache" />
-            <argument type="service" id="db" on-invalid="ignore"/>
+            <argument type="service" id="dbal_connection" on-invalid="ignore"/>
             <argument>%shopware.config%</argument>
             <argument type="service" id="shopware.release" />
          </service>
