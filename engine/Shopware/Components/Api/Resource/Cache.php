@@ -74,7 +74,7 @@ class Cache extends Resource implements BatchInterface
         $this->checkPrivilege('read');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         return $this->getCacheInfo($id);
@@ -112,7 +112,7 @@ class Cache extends Resource implements BatchInterface
         $this->checkPrivilege('delete');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         $this->clearCache($id);

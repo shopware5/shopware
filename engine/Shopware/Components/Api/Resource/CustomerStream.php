@@ -246,7 +246,7 @@ class CustomerStream extends Resource
         $this->checkPrivilege('save');
 
         if (empty($id)) {
-            throw new ParameterMissingException();
+            throw new ParameterMissingException('id');
         }
 
         /** @var \Shopware\Models\CustomerStream\CustomerStream|null $stream */

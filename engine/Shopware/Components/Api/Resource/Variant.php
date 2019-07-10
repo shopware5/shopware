@@ -81,7 +81,7 @@ class Variant extends Resource implements BatchInterface
         $this->checkPrivilege('read');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         $builder = $this->getRepository()->getVariantDetailQuery();
@@ -169,7 +169,7 @@ class Variant extends Resource implements BatchInterface
     public function getIdFromNumber($number)
     {
         if (empty($number)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         /** @var Detail|null $productVariant */
@@ -210,7 +210,7 @@ class Variant extends Resource implements BatchInterface
         $this->checkPrivilege('delete');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         /** @var Detail|null $productVariant */
@@ -258,7 +258,7 @@ class Variant extends Resource implements BatchInterface
     public function update($id, array $params)
     {
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         /** @var Detail|null $variant */
@@ -335,7 +335,7 @@ class Variant extends Resource implements BatchInterface
     public function internalUpdate($id, array $data, ProductModel $article)
     {
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         /** @var Detail|null $variant */
@@ -510,7 +510,7 @@ class Variant extends Resource implements BatchInterface
         if (isset($data['esd'])) {
             $data = $this->prepareEsdAssociation($data, $variant);
         }
-
+        throw new ApiException\CustomValidationException('foo');
         if (!empty($data['number']) && $data['number'] !== $variant->getNumber()) {
             $connection = Shopware()->Container()->get('dbal_connection');
 

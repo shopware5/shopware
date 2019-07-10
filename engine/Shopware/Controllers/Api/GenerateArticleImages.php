@@ -50,7 +50,7 @@ class Shopware_Controllers_Api_GenerateArticleImages extends Shopware_Controller
         $id = $request->getParam('id');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         $useNumberAsId = (bool) $request->getParam('useNumberAsId', 0);

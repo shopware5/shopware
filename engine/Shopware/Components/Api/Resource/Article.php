@@ -93,7 +93,7 @@ class Article extends Resource implements BatchInterface
     public function getIdFromNumber($number)
     {
         if (empty($number)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         /** @var Detail|null $productVariant */
@@ -135,7 +135,7 @@ class Article extends Resource implements BatchInterface
         $this->checkPrivilege('read');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         $builder = $this->getManager()->createQueryBuilder();
@@ -365,7 +365,7 @@ class Article extends Resource implements BatchInterface
         $this->checkPrivilege('update');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         $builder = $this->getManager()->createQueryBuilder();
@@ -441,7 +441,7 @@ class Article extends Resource implements BatchInterface
         $this->checkPrivilege('delete');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         /** @var ProductModel|null $product */

@@ -59,7 +59,7 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
             $this->Response()->setStatusCode(SymfonyResponse::HTTP_CREATED);
         }
 
-        array_walk_recursive($data, function (&$value) {
+        array_walk_recursive($data, static function (&$value) {
             // Convert DateTime instances to ISO-8601 Strings
             if ($value instanceof DateTime) {
                 $value = $value->format(DateTime::ISO8601);
