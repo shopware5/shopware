@@ -22,7 +22,7 @@
     "dependencies": {
         "chromedriver": "2.46.0",
         "cross-spawn": "6.0.5",
-        "nightwatch": "1.0.18",
+        "nightwatch": "1.1.13",
         "phantomjs-prebuilt": "2.1.16",
         "selenium-server": "3.141.59"
     },
