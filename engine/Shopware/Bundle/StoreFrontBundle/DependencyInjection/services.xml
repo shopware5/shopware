@@ -7,7 +7,7 @@
     <services>
         <defaults public="true" />
 
-        <service id="shopware_storefront.shop_context_factory" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ShopContextFactory">
+        <service id="Shopware\Bundle\StoreFrontBundle\Service\Core\ShopContextFactoryInterface" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ShopContextFactory">
             <argument type="service" id="shopware_storefront.customer_group_gateway"/>
             <argument type="service" id="shopware_storefront.tax_gateway"/>
             <argument type="service" id="shopware_storefront.country_gateway"/>
@@ -19,7 +19,7 @@
         <!-- Shopware services definition. This classes contains the business logic-->
         <service id="shopware_storefront.context_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService">
             <argument type="service" id="service_container"/>
-            <argument type="service" id="shopware_storefront.shop_context_factory" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\Core\ShopContextFactoryInterface" />
         </service>
 
         <service id="shopware_storefront.product_number_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ProductNumberService">

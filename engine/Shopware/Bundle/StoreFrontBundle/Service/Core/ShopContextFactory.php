@@ -31,6 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\PriceGroupDiscountGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\TaxGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ShopContextFactory implements ShopContextFactoryInterface
 {
@@ -86,15 +87,15 @@ class ShopContextFactory implements ShopContextFactoryInterface
      * {@inheritdoc}
      */
     public function create(
-        $baseUrl,
-        $shopId,
-        $currencyId = null,
-        $currentCustomerGroupKey = null,
-        $areaId = null,
-        $countryId = null,
-        $stateId = null,
-        $streamIds = []
-    ) {
+        string $baseUrl,
+        int $shopId,
+        ?int $currencyId = null,
+        ?string $currentCustomerGroupKey = null,
+        ?int $areaId = null,
+        ?int $countryId = null,
+        ?int $stateId = null,
+        array $streamIds = []
+    ): ShopContextInterface {
         $shop = $this->shopGateway->get($shopId);
         $fallbackCustomerGroupKey = self::FALLBACK_CUSTOMER_GROUP;
 
