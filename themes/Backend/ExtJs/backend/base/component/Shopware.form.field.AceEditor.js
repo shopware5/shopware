@@ -265,6 +265,30 @@ Ext.define('Shopware.form.field.AceEditor', {
     },
 
     /**
+     * Enables the ace-editor
+     * @returns void
+     */
+    enable: function() {
+        if (this.editor) {
+            this.editor.setReadOnly(false);
+        }
+
+        return this.callParent(arguments);
+    },
+
+    /**
+     * Disables the ace-editor
+     * @returns void
+     */
+    disable: function() {
+        if (this.editor) {
+            this.editor.setReadOnly(true);
+        }
+
+        return this.callParent(arguments);
+    },
+
+    /**
      * Returns Ace editor session
      *
      * @return object
