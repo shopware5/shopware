@@ -101,29 +101,44 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
                             labelWidth: 150,
                             forceSelection: true
                         },
+                    }
+                },
+                {
+                    title: '{s name="detail/seo"}{/s}',
+                    fields: {
                         viewMetaTitleFieldName: {
-                            fieldLabel: '{s name="view/metaTitleField"}{/s}',
+                            fieldLabel: '{s name="seo/metaTitleField"}{/s}',
                             xtype: 'combobox',
                             valueField: 'name',
                             displayField: 'label',
                             queryMode: 'local',
                             labelWidth: 150,
-                            forceSelection: true
+                            forceSelection: true,
+                            supportText: '{s name="seo/metaTitleFieldHelpText"}{/s}'
                         },
                         viewMetaDescriptionFieldName: {
-                            fieldLabel: '{s name="view/metaDescriptionField"}{/s}',
+                            fieldLabel: '{s name="seo/metaDescriptionField"}{/s}',
                             xtype: 'combobox',
                             valueField: 'name',
                             displayField: 'label',
                             queryMode: 'local',
                             labelWidth: 150,
-                            forceSelection: true
+                            forceSelection: true,
+                            supportText: '{s name="seo/metaDescriptionFieldHelpText"}{/s}'
                         },
                         seoUrlTemplate: {
-                            fieldLabel: '{s name="type/seoUrlTemplate"}{/s}',
+                            fieldLabel: '{s name="seo/seoUrlTemplate"}{/s}',
                             xtype: 'ace-editor',
                             labelWidth: 150,
                             height: 20
+                        },
+                        seoRobots: {
+                            fieldLabel: '{s name="seo/seoRobots"}{/s}',
+                            xtype: 'combobox',
+                            displayField: 'name',
+                            valueField: 'value',
+                            labelWidth: 150,
+                            store: Ext.create('Shopware.apps.ContentTypeManager.store.Robots')
                         }
                     }
                 }
@@ -206,7 +221,7 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
             });
         }
 
-        items[1].items.items[0].insert(1, element);
+        items[2].items.items[0].insert(0, element);
 
         return items;
     },
@@ -219,9 +234,7 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
         var fields = [
             this.down('[name="viewTitleFieldName"]'),
             this.down('[name="viewDescriptionFieldName"]'),
-            this.down('[name="viewImageFieldName"]'),
-            this.down('[name="viewMetaTitleFieldName"]'),
-            this.down('[name="viewMetaDescriptionFieldName"]'),
+            this.down('[name="viewImageFieldName"]')
         ];
 
         fields.forEach(function (field) {

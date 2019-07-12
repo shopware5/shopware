@@ -107,6 +107,11 @@ Ext.define('Shopware.apps.ContentTypeManager.model.Type', {
             defaultValue: '{literal}{$type.name}/{$item[$type.viewTitleFieldName]}/{/literal}'
         },
         {
+            name: 'seoRobots',
+            type: 'string',
+            defaultValue: 'index,follow'
+        },
+        {
             name: 'controllerName',
             type: 'string'
         }

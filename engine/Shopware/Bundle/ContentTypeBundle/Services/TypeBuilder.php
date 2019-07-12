@@ -102,6 +102,10 @@ class TypeBuilder
             $class->setSeoUrlTemplate($type['seoUrlTemplate']);
         }
 
+        if (isset($type['seoRobots'])) {
+            $class->setSeoRobots($type['seoRobots']);
+        }
+
         $fieldSets = [];
         $fields = [];
         foreach ($type['fieldSets'] as $fieldSet) {

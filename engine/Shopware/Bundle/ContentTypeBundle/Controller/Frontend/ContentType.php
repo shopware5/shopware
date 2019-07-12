@@ -127,7 +127,7 @@ class ContentType extends \Enlight_Controller_Action
         if ($item) {
             $breadCrumb[] = [
                 'id' => $this->type->getInternalName(),
-                'name' => $item[$this->type->getViewMetaTitleFieldName()],
+                'name' => $item[$this->type->getViewMetaTitleFieldName()] ?? $item[$this->type->getViewTitleFieldName()],
                 'blog' => false,
                 'link' => 'shopware.php?sViewport=' . $this->type->getControllerName() . '&sAction=detail&&id=' . $item['id'],
             ];

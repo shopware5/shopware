@@ -122,6 +122,10 @@ class ContentTypesReader extends XmlReaderBase
             $item['seoUrlTemplate'] = $seoUrlTemplate;
         }
 
+        if ($seoRobots = self::getElementChildValueByName($element, 'seoRobots')) {
+            $item['seoRobots'] = $seoRobots;
+        }
+
         if ($showInFrontend && (empty($viewDescriptionFieldName) || empty($viewImageFieldName) || empty($viewTitleFieldName) || empty($viewMetaTitleFieldName) || empty($viewMetaDescriptionFieldName))) {
             throw new \InvalidArgumentException('Content-Type with enabled showInFrontend requires a viewTitleFieldName, viewDescriptionFieldName, viewImageFieldName, viewMetaTitleFieldName, viewMetaDescriptionFieldName');
         }
