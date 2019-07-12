@@ -79,13 +79,15 @@ SQL;
                 'category_read',
                 'mediamanager_read',
                 'emotion_read',
+                'mediamanager_upload',
                 'articlelist_read'
             ],
             'article_delete' => [
                 'article_read',
             ],
             'article_save' => [
-                'article_read'
+                'article_read',
+                'mediamanager_upload',
             ],
             'articlelist_read' => [
                 'article_read'
@@ -100,8 +102,9 @@ SQL;
                 'articlelist_read',
             ],
             'articlelist_editSingleArticle' => [
+                'article_save',
+                'article_delete',
                 'articlelist_read',
-                'article_save'
             ],
             'articlelist_doMultiEdit' => [
                 'articlelist_read',
@@ -127,12 +130,23 @@ SQL;
                 'mediamanager_read',
                 'mediamanager_create',
                 'mediamanager_upload',
+                'banner_read'
             ],
             'banner_update' => [
                 'banner_read'
             ],
             'banner_delete' => [
                 'banner_read'
+            ],
+            'blog_read' => [
+                'mediamanager_read',
+                'category_read',
+            ],
+            'blog_delete' => [
+                'blog_read'
+            ],
+            'blog_update' => [
+                'blog_read',
             ],
             'category_create' => [
                 'article_read',
