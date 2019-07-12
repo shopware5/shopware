@@ -34,6 +34,11 @@ class Category extends Extendable
     protected $id;
 
     /**
+     * @var bool
+     */
+    protected $active = true;
+
+    /**
      * @var int|null
      */
     protected $parentId;
@@ -172,6 +177,22 @@ class Category extends Extendable
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param bool $active
+     */
+    public function setActive(bool $active): void
+    {
+        $this->active = $active;
     }
 
     /**

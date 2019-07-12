@@ -258,6 +258,7 @@ class FieldHelper
     {
         $fields = [
             'category.id as __category_id',
+            'category.active as __category_active',
             'category.parent as __category_parent_id',
             'category.position as __category_position',
             'category.path as __category_path',

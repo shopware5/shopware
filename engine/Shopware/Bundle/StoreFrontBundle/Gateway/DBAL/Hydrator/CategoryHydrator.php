@@ -106,6 +106,10 @@ class CategoryHydrator extends Hydrator
             $category->setName($data['__category_description']);
         }
 
+        if (isset($data['__category_active'])) {
+            $category->setActive($data['__category_active'] === "1");
+        }
+
         $category->setParentId((int) $data['__category_parent_id']);
 
         $category->setPosition((int) $data['__category_position']);

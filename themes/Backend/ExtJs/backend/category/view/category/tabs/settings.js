@@ -423,7 +423,9 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                     {
                         boxLabel:me.snippets.defaultSettingsActiveLabel,
                         name:'active',
-                        dataIndex:'active'
+                        dataIndex:'active',
+                        translatable: true,
+                        translationName: 'active',
                     },
                     {
                         boxLabel:me.snippets.defaultSettingsBlogLabel,
