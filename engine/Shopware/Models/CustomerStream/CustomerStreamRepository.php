@@ -251,13 +251,17 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
 
             $chart[$format] = array_merge(['yearMonth' => $format], $default);
 
+            if (array_key_exists($format, $amount)) {
+                $chart[$format]['unassigned'] = (float) $amount[$format];
+            }
+
+            if (!isset($streamAmount[$format])) {
+                continue;
+            }
+
             foreach ($streamAmount[$format] as $row) {
                 $stream = 'stream_' . $row['stream'];
                 $chart[$format][$stream] += (float) $row['invoice_amount_sum'];
-            }
-
-            if (array_key_exists($format, $amount)) {
-                $chart[$format]['unassigned'] = (float) $amount[$format];
             }
         }
 
