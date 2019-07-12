@@ -139,7 +139,7 @@ Ext.define('Shopware.apps.Supplier.view.main.List', {
 
     getPagingbar: function () {
         var me = this,
-            manufacturerSnippet = '{s name=paging_term}supplier{/s}';
+            manufacturerSnippet = '{s name=paging_term}manufacturer{/s}';
 
         var pageSize = Ext.create('Ext.form.field.ComboBox', {
             labelWidth: 120,

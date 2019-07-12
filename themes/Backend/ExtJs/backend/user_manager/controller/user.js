@@ -129,13 +129,13 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
             // check which field is not valid in order to tell the user, why the customer cannot be saved
             // SW-4322
             formPnl.getForm().getFields().each(function(f){
-                 if(!f.validate()){
-                    if(f.fieldLabel){
+                 if (!f.validate()){
+                    if (f.fieldLabel){
                         missingField = f.fieldLabel;
-                    }else if(f.name){
+                    } else if (f.name){
                         missingField = f.name;
                     }
-                    Shopware.Notification.createGrowlMessage('{s name=message/password/form/error_title}{/s}', Ext.String.format('{s name=message/password/form/error_message}{/s}', missingField), '{s name=message/growlMessage}{/s}');
+                    Shopware.Notification.createGrowlMessage(me.snippets.form.errorTitle, Ext.String.format(me.snippets.form.errorMessage, missingField), me.snippets.growlMessage)
                     return false;
                  }
 

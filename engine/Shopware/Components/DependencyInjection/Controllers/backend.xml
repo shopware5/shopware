@@ -248,6 +248,10 @@
         </service>
 
         <service id="shopware_controllers_backend_usermanager" class="Shopware_Controllers_Backend_UserManager">
+            <argument type="service" id="models"/>
+            <argument type="service" id="passwordencoder"/>
+            <argument type="service" id="snippets"/>
+
             <tag name="shopware.controller" module="backend" controller="usermanager"/>
         </service>
 

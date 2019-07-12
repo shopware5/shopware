@@ -47,6 +47,13 @@ Ext.define('Shopware.apps.UserManager.view.main.Window', {
     width: '85%',
     stateful: true,
     stateId: 'user-manager-main-window',
+    snippets:{
+        navigation: {
+            userList: '{s name=navigation/navigation_usermanager}{/s}',
+            roleList: '{s name=navigation/navigation_rolemanager}{/s}',
+            rulesTree: '{s name=navigation/navigation_rights_assignment}{/s}'
+        }
+    },
 
 
     /**
@@ -61,15 +68,15 @@ Ext.define('Shopware.apps.UserManager.view.main.Window', {
             xtype: 'tabpanel',
             items: [{
                 xtype: 'usermanager-user-list',
-                title: '{s name=navigation/navigation_usermanager}{/s}',
+                title: me.snippets.navigation.userList,
                 store: me.userStore
             }, {
                 xtype: 'usermanager-roles-list',
-                title: '{s name=navigation/navigation_rolemanager}{/s}',
+                title: me.snippets.navigation.roleList,
                 store: me.roleStore
             }, {
                 xtype: 'user-manager-rules-tree',
-                title: '{s name=navigation/navigation_rights_assignment}{/s}'
+                title: me.snippets.navigation.rulesTree,
             }]
         }];
 

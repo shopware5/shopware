@@ -43,8 +43,8 @@ class Migrations_Migration1632 extends AbstractMigration
     {
         $sql = <<<'SQL'
 CREATE TABLE IF NOT EXISTS `s_core_acl_privilege_requirements` (
-  `privilege_id` int(11) unsigned NOT NULL,
-  `required_privilege_id` int(11) unsigned NOT NULL,
+  `privilege_id` int(11) UNSIGNED NOT NULL,
+  `required_privilege_id` int(11) UNSIGNED NOT NULL,
   PRIMARY KEY (`privilege_id`,`required_privilege_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 SQL;
