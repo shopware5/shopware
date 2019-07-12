@@ -28,7 +28,7 @@ use PHPUnit\Framework\Constraint\IsType;
 
 class OrdersProviderTest extends ProviderTestCase
 {
-    const SERVICE_ID = 'shopware.benchmark_bundle.providers.orders';
+    const SERVICE_ID = \Shopware\Bundle\BenchmarkBundle\Provider\OrdersProvider::class;
     const EXPECTED_KEYS_COUNT = 1;
     const EXPECTED_TYPES = [
         'list' => IsType::TYPE_ARRAY,
@@ -36,7 +36,7 @@ class OrdersProviderTest extends ProviderTestCase
 
     public function testGetArrayKeysFit()
     {
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $basicContent = $this->openDemoDataFile('basic_setup');
         $dbalConnection->exec($basicContent);
 
@@ -45,7 +45,7 @@ class OrdersProviderTest extends ProviderTestCase
 
     public function testGetValidateTypes()
     {
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $basicContent = $this->openDemoDataFile('basic_setup');
         $dbalConnection->exec($basicContent);
 

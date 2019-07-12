@@ -72,12 +72,12 @@ class Router
         /** @var Container $container */
         $container = $args->getSubject();
         /** @var RouterInterface $router */
-        $router = $container->get('router');
+        $router = $container->get(\Shopware\Components\Routing\RouterInterface::class);
         /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $container->get('shop');
         /** @var \Shopware_Components_Config $config */
-        $config = $container->get('config');
-        // Register the shop (we're to soon)
+        $config = $container->get(\Shopware_Components_Config::class);
+        // Register the shop (we're too soon)
         $config->setShop($shop);
 
         $context = $router->getContext();

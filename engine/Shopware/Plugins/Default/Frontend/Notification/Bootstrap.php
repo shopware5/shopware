@@ -73,7 +73,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
         $request = $args->getSubject()->Request();
         $response = $args->getSubject()->Response();
 
-        if (!$request->isDispatched() || $response->isException() || $request->getModuleName() != 'frontend') {
+        if (!$request->isDispatched() || $response->isException() || $request->getModuleName() !== 'frontend') {
             return;
         }
 
@@ -126,7 +126,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
         $action->View()->NotifyEmailError = false;
         $notifyOrderNumber = $action->Request()->notifyOrdernumber;
         if (!empty($notifyOrderNumber)) {
-            $validator = $this->get('validator.email');
+            $validator = $this->get(\Shopware\Components\Validator\EmailValidator::class);
             if (empty($email) || !$validator->isValid($email)) {
                 $sError = true;
                 $action->View()->NotifyEmailError = true;
@@ -292,9 +292,9 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
      */
     public function onRunCronJob(Shopware_Components_Cron_CronJob $job)
     {
-        $modelManager = $this->get('models');
+        $modelManager = $this->get(\Shopware\Components\Model\ModelManager::class);
 
-        $conn = $this->get('dbal_connection');
+        $conn = $this->get(\Doctrine\DBAL\Connection::class);
 
         $notifications = $conn->createQueryBuilder()
             ->select(
@@ -348,7 +348,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
             }
 
             /** @var Shopware\Bundle\AttributeBundle\Service\DataLoader $attributeLoader */
-            $attributeLoader = $this->get('shopware_attribute.data_loader');
+            $attributeLoader = $this->get(\Shopware\Bundle\AttributeBundle\Service\DataLoader::class);
             $notify['attribute'] = $attributeLoader->load('s_articles_notification_attributes', $notify['id']);
 
             /* @var \Shopware\Models\Shop\Shop $shop */
@@ -359,13 +359,13 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 continue;
             }
 
-            $this->get('shopware.components.shop_registration_service')->registerShop($shop);
+            $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
-            $shopContext = Context::createFromShop($shop, $this->get('config'));
-            $this->get('router')->setContext($shopContext);
-            $sContext = $this->get('shopware_storefront.context_service')->createShopContext($notify['language']);
+            $shopContext = Context::createFromShop($shop, $this->get(\Shopware_Components_Config::class));
+            $this->get(\Shopware\Components\Routing\RouterInterface::class)->setContext($shopContext);
+            $sContext = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext($notify['language']);
 
-            $productInformation = $this->get('shopware_storefront.list_product_service')->get($notify['ordernumber'], $sContext);
+            $productInformation = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)->get($notify['ordernumber'], $sContext);
 
             if (empty($productInformation)) {
                 continue;

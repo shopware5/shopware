@@ -226,7 +226,7 @@ class PaymentMethods extends Resource
 
         if (isset($params['countries'])) {
             foreach ($params['countries'] as &$country) {
-                $countryModel = $this->getContainer()->get('models')->find(CountryModel::class, $country['countryId']);
+                $countryModel = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(CountryModel::class, $country['countryId']);
                 if (!$countryModel) {
                     throw new ApiException\NotFoundException(sprintf(
                         'Country by id %d not found',
@@ -242,7 +242,7 @@ class PaymentMethods extends Resource
 
         if (isset($params['shops'])) {
             foreach ($params['shops'] as &$shop) {
-                $shopModel = $this->getContainer()->get('models')->find(\Shopware\Models\Shop\Shop::class, $shop['shopId']);
+                $shopModel = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(\Shopware\Models\Shop\Shop::class, $shop['shopId']);
                 if (!$shopModel) {
                     throw new ApiException\NotFoundException(sprintf(
                         'Shop by id %d not found',
@@ -257,7 +257,7 @@ class PaymentMethods extends Resource
         }
 
         if (isset($params['pluginId'])) {
-            $params['plugin'] = $this->getContainer()->get('models')->find(Plugin::class, $params['pluginId']);
+            $params['plugin'] = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(Plugin::class, $params['pluginId']);
             if (empty($params['plugin'])) {
                 throw new ApiException\NotFoundException(sprintf(
                     'plugin by id %s not found',

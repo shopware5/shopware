@@ -209,7 +209,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         INSERT INTO s_statistics_currentusers (remoteaddr, page, `time`, userID, deviceType)
         VALUES (?, ?, NOW(), ?, ?)';
 
-        $ip = $this->get('shopware.components.privacy.ip_anonymizer')->anonymize($request->getClientIp());
+        $ip = $this->get(\Shopware\Components\Privacy\IpAnonymizerInterface::class)->anonymize($request->getClientIp());
 
         Shopware()->Db()->query($sql, [
             $ip,

@@ -30,7 +30,7 @@ class RemoveAndCreateResourceTest extends Enlight_Components_Test_TestCase
 
     public function testRemoveAndCreateAresource()
     {
-        $em = Shopware()->Container()->get('models');
+        $em = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
 
         $acl = new Shopware_Components_Acl($em);
 

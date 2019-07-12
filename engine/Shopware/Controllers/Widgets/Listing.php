@@ -58,7 +58,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             }
 
             if (!$this->Request()->has('sSort')) {
-                $default = $this->get('config')->get('defaultListingSorting');
+                $default = $this->get(\Shopware_Components_Config::class)->get('defaultListingSorting');
                 $this->Request()->setParam('sSort', $default);
             }
 
@@ -126,11 +126,11 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             return;
         }
 
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
 
-        $products = $this->container->get('shopware_storefront.list_product_service')->getList($numbers, $context);
+        $products = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)->getList($numbers, $context);
 
-        $convertedProducts = $this->container->get('legacy_struct_converter')->convertListProductStructList($products);
+        $convertedProducts = $this->container->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertListProductStructList($products);
 
         $this->View()->assign(['sArticles' => $convertedProducts, 'articles' => $convertedProducts]);
     }
@@ -149,16 +149,16 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             return;
         }
 
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
 
-        $criteria = $this->container->get('shopware_product_stream.criteria_factory')
+        $criteria = $this->container->get(\Shopware\Components\ProductStream\CriteriaFactoryInterface::class)
             ->createCriteria($this->Request(), $context);
 
-        $this->container->get('shopware_product_stream.repository')->prepareCriteria($criteria, $streamId);
+        $this->container->get(\Shopware\Components\ProductStream\Repository::class)->prepareCriteria($criteria, $streamId);
 
-        $products = $this->container->get('shopware_search.product_search')->search($criteria, $context);
+        $products = $this->container->get(\Shopware\Bundle\SearchBundle\ProductSearchInterface::class)->search($criteria, $context);
 
-        $convertedProducts = $this->container->get('legacy_struct_converter')
+        $convertedProducts = $this->container->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)
             ->convertListProductStructList($products->getProducts());
 
         $this->View()->assign(['sArticles' => $convertedProducts, 'articles' => $convertedProducts]);
@@ -199,9 +199,9 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         $categoryId = (int) $this->Request()->getParam('sCategory');
 
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
 
-        $category = $this->container->get('shopware_storefront.category_gateway')->get($categoryId, $context);
+        $category = $this->container->get('\Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CategoryGateway::class')->get($categoryId, $context);
 
         $productStream = $category->getProductStream();
 
@@ -236,10 +236,10 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $shopPageGateway = $this->container->get('shopware_storefront.shop_page_service');
         $list = $shopPageGateway->getList(
             [(int) $this->Request()->getParam('pageId', 0)],
-            $this->container->get('shopware_storefront.context_service')->getShopContext()
+            $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()
         );
 
-        $list = $this->container->get('legacy_struct_converter')->convertShopPageStructList($list);
+        $list = $this->container->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertShopPageStructList($list);
         $page = current($list);
 
         $this->View()->assign('customPage', [
@@ -260,12 +260,12 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $childrenIds = $this->getCategoryChildrenIds($categoryId);
         $childrenIds[] = $categoryId;
 
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
-        $categories = $this->container->get('shopware_storefront.category_service')->getList($childrenIds, $context);
+        $context = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
+        $categories = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface::class)->getList($childrenIds, $context);
 
         $converted = [];
         foreach ($categories as $category) {
-            $temp = $this->container->get('legacy_struct_converter')->convertCategoryStruct($category);
+            $temp = $this->container->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertCategoryStruct($category);
             $childrenIds = $this->getCategoryChildrenIds($category->getId());
             $temp['childrenCount'] = count($childrenIds);
             $converted[$category->getId()] = $temp;
@@ -288,7 +288,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     private function getCategoryChildrenIds($categoryId)
     {
-        $query = $this->container->get('dbal_connection')->createQueryBuilder();
+        $query = $this->container->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
         $query->select('category.id')
             ->from('s_categories', 'category')
             ->where('category.parent = :parentId')
@@ -326,19 +326,19 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     private function fetchStreamListing($categoryId, $productStreamId)
     {
         /** @var ContextServiceInterface $contextService */
-        $contextService = $this->get('shopware_storefront.context_service');
+        $contextService = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
         $context = $contextService->getShopContext();
 
         /** @var \Shopware\Components\ProductStream\CriteriaFactoryInterface $factory */
-        $factory = $this->get('shopware_product_stream.criteria_factory');
+        $factory = $this->get(\Shopware\Components\ProductStream\CriteriaFactoryInterface::class);
         $criteria = $factory->createCriteria($this->Request(), $context);
 
         /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
-        $streamRepository = $this->get('shopware_product_stream.repository');
+        $streamRepository = $this->get(\Shopware\Components\ProductStream\Repository::class);
         $streamRepository->prepareCriteria($criteria, $productStreamId);
 
         /** @var \Shopware\Bundle\StoreFrontBundle\Service\CustomFacetServiceInterface $facetService */
-        $facetService = $this->get('shopware_storefront.custom_facet_service');
+        $facetService = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\CustomFacetServiceInterface::class);
         $facets = $facetService->getFacetsOfCategories([$categoryId], $context);
 
         /** @var CustomFacet[] $facets */
@@ -352,7 +352,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $facetFilter->add($criteria);
 
         $criteria->setGeneratePartialFacets(
-            $this->container->get('config')->get('listingMode') === 'filter_ajax_reload'
+            $this->container->get(\Shopware_Components_Config::class)->get('listingMode') === 'filter_ajax_reload'
         );
 
         if (!$this->Request()->get('loadFacets')) {
@@ -360,7 +360,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         }
 
         /** @var ProductSearchInterface $search */
-        $search = $this->get('shopware_search.product_search');
+        $search = $this->get(\Shopware\Bundle\SearchBundle\ProductSearchInterface::class);
 
         if (!$this->Request()->getParam('loadProducts')) {
             $criteria->limit(1);
@@ -387,15 +387,15 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     private function fetchCategoryListing()
     {
         /** @var ContextServiceInterface $contextService */
-        $contextService = $this->get('shopware_storefront.context_service');
+        $contextService = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
         $context = $contextService->getShopContext();
 
         /** @var \Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface $factory */
-        $factory = $this->get('shopware_search.store_front_criteria_factory');
+        $factory = $this->get(\Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface::class);
         $criteria = $factory->createListingCriteria($this->Request(), $context);
 
         $criteria->setGeneratePartialFacets(
-            $this->container->get('config')->get('listingMode') === 'filter_ajax_reload'
+            $this->container->get(\Shopware_Components_Config::class)->get('listingMode') === 'filter_ajax_reload'
         );
 
         if (!$this->Request()->get('loadFacets')) {
@@ -403,7 +403,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         }
 
         /** @var ProductSearchInterface $search */
-        $search = $this->get('shopware_search.product_search');
+        $search = $this->get(\Shopware\Bundle\SearchBundle\ProductSearchInterface::class);
 
         if (!$this->Request()->getParam('loadProducts')) {
             $criteria->limit(1);
@@ -418,15 +418,15 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     private function fetchSearchListing()
     {
         /** @var ContextServiceInterface $contextService */
-        $contextService = $this->get('shopware_storefront.context_service');
+        $contextService = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
         $context = $contextService->getShopContext();
 
         /** @var \Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface $factory */
-        $factory = $this->get('shopware_search.store_front_criteria_factory');
+        $factory = $this->get(\Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface::class);
         $criteria = $factory->createSearchCriteria($this->Request(), $context);
 
         $criteria->setGeneratePartialFacets(
-            $this->container->get('config')->get('listingMode') === 'filter_ajax_reload'
+            $this->container->get(\Shopware_Components_Config::class)->get('listingMode') === 'filter_ajax_reload'
         );
 
         if (!$this->Request()->get('loadFacets')) {
@@ -434,7 +434,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         }
 
         /** @var ProductSearchInterface $search */
-        $search = $this->get('shopware_search.product_search');
+        $search = $this->get(\Shopware\Bundle\SearchBundle\ProductSearchInterface::class);
 
         if (!$this->Request()->getParam('loadProducts')) {
             $criteria->limit(1);
@@ -453,7 +453,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         if ($this->Request()->has('productBoxLayout')) {
             $boxLayout = $this->Request()->get('productBoxLayout');
         } else {
-            $boxLayout = $this->get('config')->get('searchProductBoxLayout');
+            $boxLayout = $this->get(\Shopware_Components_Config::class)->get('searchProductBoxLayout');
             if ($categoryId) {
                 $boxLayout = Shopware()->Modules()->Categories()->getProductBoxLayout($categoryId);
             }
@@ -496,8 +496,8 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             'sPage' => (int) $this->Request()->getParam('sPage'),
             'pages' => ceil($result->getTotalCount() / $sPerPage),
             'baseUrl' => $this->Request()->getBaseUrl() . $this->Request()->getPathInfo(),
-            'pageSizes' => explode('|', $this->container->get('config')->get('numberArticlesToShow')),
-            'shortParameters' => $this->container->get('query_alias_mapper')->getQueryAliases(),
+            'pageSizes' => explode('|', $this->container->get(\Shopware_Components_Config::class)->get('numberArticlesToShow')),
+            'shortParameters' => $this->container->get(\Shopware\Components\QueryAliasMapper::class)->getQueryAliases(),
             'limit' => $sPerPage,
         ]);
 
@@ -517,7 +517,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     private function convertProductsResult(ProductSearchResult $result, $categoryId)
     {
         /** @var LegacyStructConverter $converter */
-        $converter = $this->get('legacy_struct_converter');
+        $converter = $this->get(\Shopware\Components\Compatibility\LegacyStructConverter::class);
 
         $products = $converter->convertListProductStructList($result->getProducts());
 
@@ -525,7 +525,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             return $products;
         }
 
-        return $this->get('shopware_storefront.listing_link_rewrite_service')->rewriteLinks(
+        return $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ListingLinkRewriteServiceInterface::class)->rewriteLinks(
             $result->getCriteria(),
             $products,
             $result->getContext(),

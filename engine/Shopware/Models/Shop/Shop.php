@@ -617,7 +617,7 @@ class Shop extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Shop', 'attribute', 'shop');
+        return $this->setOneToOne($attribute, Shop::class, 'attribute', 'shop');
     }
 
     /**
@@ -657,7 +657,7 @@ class Shop extends ModelEntity
         trigger_error('Shop::registerResources is deprecated since 5.6 and will be removed with 5.8. Use service ShopRegistrationService instead', E_USER_DEPRECATED);
 
         /** @var ShopRegistrationServiceInterface $service */
-        $service = Shopware()->Container()->get('shopware.components.shop_registration_service');
+        $service = Shopware()->Container()->get(\Shopware\Components\ShopRegistrationServiceInterface::class);
 
         $service->registerShop($this);
 

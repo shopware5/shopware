@@ -56,7 +56,7 @@ class Cache extends Resource implements BatchInterface
     {
         if ($container) {
             $this->request = $container->get('front')->Request();
-            $this->cacheManager = $container->get('shopware.cache_manager');
+            $this->cacheManager = $container->get(\Shopware\Components\CacheManager::class);
         }
         parent::setContainer($container);
     }

@@ -43,7 +43,7 @@ class StreamIndexPopulateCommand extends ShopwareCommand implements CompletionAw
     {
         if ($optionName === 'streamId') {
             /** @var ModelRepository $customerStreamRepository */
-            $customerStreamRepository = $this->getContainer()->get('models')->getRepository(CustomerStream::class);
+            $customerStreamRepository = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(CustomerStream::class);
             $queryBuilder = $customerStreamRepository->createQueryBuilder('stream');
 
             if (is_numeric($context->getCurrentWord())) {
@@ -94,7 +94,7 @@ class StreamIndexPopulateCommand extends ShopwareCommand implements CompletionAw
 
         foreach ($streams as $stream) {
             $output->writeln("\n## Indexing Customer Stream: " . $stream->getName() . ' ##');
-            $this->container->get('shopware.api.customer_stream')->indexStream($stream);
+            $this->container->get(\Shopware\Components\Api\Resource\CustomerStream::class)->indexStream($stream);
         }
     }
 
@@ -105,7 +105,7 @@ class StreamIndexPopulateCommand extends ShopwareCommand implements CompletionAw
      */
     private function getStreams($ids = [])
     {
-        $query = $this->container->get('models')->createQueryBuilder();
+        $query = $this->container->get(\Shopware\Components\Model\ModelManager::class)->createQueryBuilder();
         $query->select(['stream']);
         $query->from(CustomerStream::class, 'stream');
 

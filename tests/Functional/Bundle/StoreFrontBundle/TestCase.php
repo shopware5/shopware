@@ -86,7 +86,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     public function getEkCustomerGroup()
     {
         return $this->converter->convertCustomerGroup(
-            Shopware()->Container()->get('models')->find(\Shopware\Models\Customer\Group::class, 1)
+            Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->find(\Shopware\Models\Customer\Group::class, 1)
         );
     }
 
@@ -120,7 +120,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
             $category = $this->helper->createCategory();
         }
 
-        $config = Shopware()->Container()->get('config');
+        $config = Shopware()->Container()->get(\Shopware_Components_Config::class);
         $originals = [];
         foreach ($configs as $key => $value) {
             $originals[$key] = $config->get($key);
@@ -144,9 +144,9 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
         $criteria->offset(0)->limit(4000);
 
         if ($variantSearch) {
-            $search = Shopware()->Container()->get('shopware_search.variant_search');
+            $search = Shopware()->Container()->get(\Shopware\Bundle\SearchBundle\VariantSearch::class);
         } else {
-            $search = Shopware()->Container()->get('shopware_search.product_number_search');
+            $search = Shopware()->Container()->get(\Shopware\Bundle\SearchBundle\ProductNumberSearchInterface::class);
         }
 
         $result = $search->search($criteria, $context);
@@ -334,8 +334,8 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
      */
     protected function setConfig($name, $value)
     {
-        Shopware()->Container()->get('config_writer')->save($name, $value);
-        Shopware()->Container()->get('cache')->clean();
-        Shopware()->Container()->get('config')->setShop(Shopware()->Shop());
+        Shopware()->Container()->get(\Shopware\Components\ConfigWriter::class)->save($name, $value);
+        Shopware()->Container()->get(\Zend_Cache_Core::class)->clean();
+        Shopware()->Container()->get(\Shopware_Components_Config::class)->setShop(Shopware()->Shop());
     }
 }

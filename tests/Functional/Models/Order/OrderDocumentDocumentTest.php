@@ -101,7 +101,7 @@ class Shopware_Tests_Models_Order_Document_DocumentTest extends Enlight_Componen
         );
         $document2->render();
 
-        $documents = Shopware()->Container()->get('models')->getRepository(\Shopware\Models\Order\Document\Document::class)
+        $documents = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(\Shopware\Models\Order\Document\Document::class)
             ->findBy([
                 'typeId' => 1,
                 'orderId' => 15,
@@ -110,9 +110,9 @@ class Shopware_Tests_Models_Order_Document_DocumentTest extends Enlight_Componen
 
         // Revert changes of this test
         foreach ($documents as $document) {
-            Shopware()->Container()->get('models')->remove($document);
+            Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->remove($document);
         }
-        Shopware()->Container()->get('models')->flush();
+        Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->flush();
     }
 
     /**
@@ -143,7 +143,7 @@ class Shopware_Tests_Models_Order_Document_DocumentTest extends Enlight_Componen
         );
         $document2->render();
 
-        $documents = Shopware()->Container()->get('models')->getRepository(\Shopware\Models\Order\Document\Document::class)
+        $documents = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(\Shopware\Models\Order\Document\Document::class)
             ->findBy([
                 'typeId' => 1,
                 'orderId' => 15,
@@ -152,8 +152,8 @@ class Shopware_Tests_Models_Order_Document_DocumentTest extends Enlight_Componen
 
         // Revert changes of this test
         foreach ($documents as $document) {
-            Shopware()->Container()->get('models')->remove($document);
+            Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->remove($document);
         }
-        Shopware()->Container()->get('models')->flush();
+        Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->flush();
     }
 }

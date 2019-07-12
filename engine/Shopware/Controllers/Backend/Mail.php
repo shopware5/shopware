@@ -322,7 +322,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $recipient = Shopware()->Config()->get('mail');
 
         $shop = Shopware()->Models()->getRepository(Shop::class)->getActiveDefault();
-        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
+        $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         try {
             $templateMail = Shopware()->TemplateMail()->createMail($mail, array_merge($this->getDefaultMailContext($shop), $mail->getContext()), $shop);
@@ -366,7 +366,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $compiler = new Shopware_Components_StringCompiler($this->View()->Engine());
 
         $shop = Shopware()->Models()->getRepository(Shop::class)->getActiveDefault();
-        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
+        $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         $compiler->setContext(array_merge($this->getDefaultMailContext($shop), $mail->getContext()));
 
@@ -594,7 +594,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         /** @var Mail $mail */
         $mail = $this->getRepository()->find((int) $this->Request()->getParam('mailId'));
-        $shop = $this->get('models')->getRepository(Shop::class)->getActiveDefault();
+        $shop = $this->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class)->getActiveDefault();
         $shop->registerResources();
 
         $context = array_merge($this->getDefaultMailContext($shop), $mail->getContext());
@@ -656,7 +656,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         /** @var Shop $shop */
         $shop = Shopware()->Models()->getRepository(Shop::class)->getActiveDefault();
-        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
+        $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         $context = $mail->getContext();
         if (empty($context)) {
@@ -724,9 +724,9 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     private function getDefaultMailContext(Shop $shop)
     {
         return [
-            'sShop' => $this->container->get('config')->get('ShopName'),
+            'sShop' => $this->container->get(\Shopware_Components_Config::class)->get('ShopName'),
             'sShopURL' => ($shop->getSecure() ? 'https://' : 'http://') . $shop->getHost() . $shop->getBaseUrl(),
-            'sConfig' => $this->container->get('config'),
+            'sConfig' => $this->container->get(\Shopware_Components_Config::class),
         ];
     }
 

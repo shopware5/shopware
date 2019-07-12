@@ -36,14 +36,14 @@ class FormTest extends Enlight_Components_Test_Plugin_TestCase
     {
         parent::setUp();
 
-        Shopware()->Container()->get('dbal_connection')->beginTransaction();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
     }
 
     public function tearDown()
     {
         parent::tearDown();
 
-        Shopware()->Container()->get('dbal_connection')->rollBack();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollBack();
     }
 
     /**
@@ -68,7 +68,7 @@ class FormTest extends Enlight_Components_Test_Plugin_TestCase
     {
         $this->Request()->setCookie('shop', 2);
 
-        Shopware()->Container()->get('translation')->write(2, 'forms', 8, [
+        Shopware()->Container()->get(\Shopware_Components_Translation::class)->write(2, 'forms', 8, [
             'name' => self::ENGLISH_NAME,
         ]);
 

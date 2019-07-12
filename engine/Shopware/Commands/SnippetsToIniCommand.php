@@ -99,7 +99,7 @@ class SnippetsToIniCommand extends ShopwareCommand implements CompletionAwareInt
         }
 
         /** @var \Shopware\Components\Snippet\DatabaseHandler $databaseLoader */
-        $databaseLoader = $this->container->get('shopware.snippet_database_handler');
+        $databaseLoader = $this->container->get(\Shopware\Components\Snippet\DatabaseHandler::class);
         $databaseLoader->setOutput($output);
         $databaseLoader->dumpFromDatabase($input->getOption('target'), $input->getArgument('locale'));
     }

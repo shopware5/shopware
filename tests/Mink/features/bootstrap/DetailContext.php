@@ -142,7 +142,7 @@ class DetailContext extends SubContext
     public function theNotificationPluginIsActivated()
     {
         /** @var \Shopware\Bundle\PluginInstallerBundle\Service\InstallerService $pluginManager */
-        $pluginManager = $this->getService('shopware_plugininstaller.plugin_manager');
+        $pluginManager = $this->getService(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
         $plugin = $pluginManager->getPluginByName('Notification');
         $pluginManager->activatePlugin($plugin);
     }
@@ -153,7 +153,7 @@ class DetailContext extends SubContext
     public function theNotificationPluginIsDeactivated()
     {
         /** @var \Shopware\Bundle\PluginInstallerBundle\Service\InstallerService $pluginManager */
-        $pluginManager = $this->getService('shopware_plugininstaller.plugin_manager');
+        $pluginManager = $this->getService(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
         $plugin = $pluginManager->getPluginByName('Notification');
         $pluginManager->deactivatePlugin($plugin);
     }

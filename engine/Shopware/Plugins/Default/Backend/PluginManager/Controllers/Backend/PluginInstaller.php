@@ -40,7 +40,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
     {
         parent::preDispatch();
 
-        $this->pluginManager = $this->get('shopware_plugininstaller.plugin_manager');
+        $this->pluginManager = $this->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
     }
 
     public function installPluginAction()
@@ -82,7 +82,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
         //disable plugin and save state
         $active = $plugin->getActive();
         $plugin->setActive(false);
-        $this->get('models')->flush();
+        $this->get(\Shopware\Components\Model\ModelManager::class)->flush();
 
         try {
             if ($plugin->getInstalled()) {
@@ -102,7 +102,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
         $plugin = $this->getPluginModel($technicalName);
 
         $plugin->setActive($active);
-        $this->get('models')->flush();
+        $this->get(\Shopware\Components\Model\ModelManager::class)->flush();
 
         $this->View()->assign(['success' => true, 'result' => $result]);
     }
@@ -142,7 +142,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
     {
         $pluginName = $this->Request()->getParam('technicalName');
 
-        $this->container->get('dbal_connection')->delete('s_core_licenses', [
+        $this->container->get(\Doctrine\DBAL\Connection::class)->delete('s_core_licenses', [
             'module' => $pluginName,
         ]);
 
@@ -162,8 +162,8 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
                 } catch (Exception $e) {
                     return $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
                 } finally {
-                    $this->get('models')->remove($plugin);
-                    $this->get('models')->flush();
+                    $this->get(\Shopware\Components\Model\ModelManager::class)->remove($plugin);
+                    $this->get(\Shopware\Components\Model\ModelManager::class)->flush();
                 }
         }
 
@@ -262,7 +262,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
      */
     private function getRepository()
     {
-        return $this->get('models')->getRepository(Plugin::class);
+        return $this->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Plugin::class);
     }
 
     /**

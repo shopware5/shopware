@@ -240,7 +240,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         }
 
         // Strip full qualified url
-        $mediaService = $this->get('shopware_media.media_service');
+        $mediaService = $this->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         $bannerModel->setImage($mediaService->normalize($bannerModel->getImage()));
 
         // Write model to db
@@ -307,7 +307,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
     {
         $cnt = 0;
         $nodes = null;
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         foreach ($banners as $banner) {
             // We have to split the datetime to date and time

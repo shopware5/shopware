@@ -77,7 +77,7 @@ class StoreListUpdatesCommand extends StoreCommand implements CompletionAwareInt
             $version = $this->container->getParameter('shopware.release.version');
         }
 
-        $plugins = $this->container->get('shopware_plugininstaller.plugin_service_local')->getPluginsForUpdateCheck();
+        $plugins = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\PluginLocalService::class)->getPluginsForUpdateCheck();
         $domain = $this->container->get('shopware_plugininstaller.account_manager_service')->getDomain();
         $service = $this->container->get('shopware_plugininstaller.plugin_service_view');
         $request = new UpdateListingRequest('', $version, $domain, $plugins);

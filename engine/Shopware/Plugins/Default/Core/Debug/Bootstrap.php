@@ -131,7 +131,7 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
      */
     public function registerCollectors()
     {
-        $this->get('loader')->registerNamespace('Shopware\Plugin\Debug', __DIR__ . '/');
+        $this->get(\Enlight_Loader::class)->registerNamespace('Shopware\Plugin\Debug', __DIR__ . '/');
 
         $eventManager = $this->get('events');
         $utils = new Utils();
@@ -154,7 +154,7 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
         }
 
         if ($this->Config()->get('logModel')) {
-            $this->pushCollector(new DbalCollector($this->get('modelconfig')));
+            $this->pushCollector(new DbalCollector($this->get(\Shopware\Components\Model\Configuration::class)));
         }
 
         if ($this->Config()->get('logTemplate')) {

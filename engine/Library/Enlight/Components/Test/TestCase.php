@@ -25,9 +25,7 @@ use PHPUnit\DbUnit\DataSet\XmlDataSet;
  * The Enlight_Components_Test_TestCase is the basic class for all specified test cases.
  * The enlight test case basic class extends PHPUnit\Framework\TestCase and sets the database link automatically.
  *
- * @category   Enlight
  *
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
 abstract class Enlight_Components_Test_TestCase extends PHPUnit\Framework\TestCase
@@ -122,12 +120,11 @@ abstract class Enlight_Components_Test_TestCase extends PHPUnit\Framework\TestCa
      * Allows to set a shopware config
      *
      * @param string $name
-     * @param mixed  $value
      */
     protected function setConfig($name, $value)
     {
         Shopware()->Container()->get('config_writer')->save($name, $value);
-        Shopware()->Container()->get('cache')->clean();
-        Shopware()->Container()->get('config')->setShop(Shopware()->Shop());
+        Shopware()->Container()->get(\Zend_Cache_Core::class)->clean();
+        Shopware()->Container()->get(\Shopware_Components_Config::class)->setShop(Shopware()->Shop());
     }
 }

@@ -42,7 +42,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     /**
      * @var \Shopware\Models\Customer\Repository
      */
-    protected $customerRepository = null;
+    protected $customerRepository;
 
     /**
      * @deprecated in 5.6, will be private in 5.8
@@ -316,7 +316,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         ];
 
         /** @var QueryBuilder $builder */
-        $builder = $this->get('dbal_connection')->createQueryBuilder();
+        $builder = $this->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
         $builder->select([
             'SQL_CALC_FOUND_ROWS articles.id as articleId',
             'articles.name',
@@ -339,7 +339,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $builder->setParameters($params);
         $result = $builder->execute()->fetchAll();
 
-        $count = $this->get('dbal_connection')->fetchColumn('SELECT FOUND_ROWS()');
+        $count = $this->get(\Doctrine\DBAL\Connection::class)->fetchColumn('SELECT FOUND_ROWS()');
 
         $this->View()->assign([
             'success' => true,
@@ -469,7 +469,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             if ($item->isLeaf() || !$batchModeEnabled) {
                 $needsRebuild = false;
             } else {
-                Shopware()->Container()->get('categorysubscriber')->disableForNextFlush();
+                Shopware()->Container()->get(Shopware\Components\Model\CategorySubscriber::class)->disableForNextFlush();
                 $needsRebuild = true;
             }
 
@@ -709,7 +709,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     public function duplicateCategoryAction()
     {
         /** @var \Shopware\Components\CategoryHandling\CategoryDuplicator $categoryDuplicator */
-        $categoryDuplicator = $this->get('CategoryDuplicator');
+        $categoryDuplicator = $this->get(\Shopware\Components\CategoryHandling\CategoryDuplicator::class);
 
         $copyProductAssociations = $this->Request()->getParam('reassignArticleAssociations');
         $categoryIds = $this->Request()->getParam('children');
@@ -864,7 +864,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     protected function prepareMediaAssociatedData($data)
     {
         if (!empty($data['imagePath'])) {
-            $data['media'] = $this->get('models')->find(Media::class, $data['imagePath']);
+            $data['media'] = $this->get(\Shopware\Components\Model\ModelManager::class)->find(Media::class, $data['imagePath']);
         } else {
             $data['media'] = null;
         }

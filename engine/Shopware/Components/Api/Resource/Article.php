@@ -61,7 +61,7 @@ class Article extends Resource implements BatchInterface
 
     public function __construct(Shopware_Components_Translation $translationComponent = null)
     {
-        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
+        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get(\Shopware_Components_Translation::class);
     }
 
     /**
@@ -516,10 +516,10 @@ class Article extends Resource implements BatchInterface
     public function generateMainThumbnails(ProductModel $article, $force = false)
     {
         /** @var \Shopware\Components\Thumbnail\Manager $generator */
-        $generator = $this->getContainer()->get('thumbnail_manager');
+        $generator = $this->getContainer()->get(\Shopware\Components\Thumbnail\Manager::class);
 
         /** @var \Shopware\Bundle\MediaBundle\MediaService $mediaService */
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         /** @var Image $image */
         foreach ($article->getImages() as $image) {
@@ -691,7 +691,7 @@ class Article extends Resource implements BatchInterface
      */
     protected function getVariantResource()
     {
-        return $this->getContainer()->get('shopware.api.variant');
+        return $this->getContainer()->get(\Shopware\Components\Api\Resource\Variant::class);
     }
 
     /**
@@ -699,7 +699,7 @@ class Article extends Resource implements BatchInterface
      */
     protected function getTranslationResource()
     {
-        return $this->getContainer()->get('shopware.api.translation');
+        return $this->getContainer()->get(\Shopware\Components\Api\Resource\Translation::class);
     }
 
     /**
@@ -707,7 +707,7 @@ class Article extends Resource implements BatchInterface
      */
     protected function getMediaResource()
     {
-        return $this->getContainer()->get('shopware.api.media');
+        return $this->getContainer()->get(\Shopware\Components\Api\Resource\Media::class);
     }
 
     /**
@@ -1349,7 +1349,7 @@ class Article extends Resource implements BatchInterface
             if (!$category) {
                 if (!empty($categoryData['path'])) {
                     /** @var CategoryResource $categoryResource */
-                    $categoryResource = $this->getContainer()->get('shopware.api.category');
+                    $categoryResource = $this->getContainer()->get(\Shopware\Components\Api\Resource\Category::class);
                     $category = $categoryResource->findCategoryByPath($categoryData['path'], true);
 
                     if (!$category) {
@@ -1440,7 +1440,7 @@ class Article extends Resource implements BatchInterface
                 $seoCategory->setCategory($category);
             } elseif (isset($categoryData['categoryPath'])) {
                 /** @var CategoryResource $categoryResource */
-                $categoryResource = $this->getContainer()->get('shopware.api.category');
+                $categoryResource = $this->getContainer()->get(\Shopware\Components\Api\Resource\Category::class);
                 $category = $categoryResource->findCategoryByPath(
                     $categoryData['categoryPath'],
                     true
@@ -2419,7 +2419,7 @@ class Article extends Resource implements BatchInterface
     private function getAttributeProperties()
     {
         /** @var \Shopware\Bundle\AttributeBundle\Service\CrudService $crud */
-        $crud = $this->getContainer()->get('shopware_attribute.crud_service');
+        $crud = $this->getContainer()->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class);
         $attributeNames = $crud->getList('s_articles_attributes');
         $fields = [];
         foreach ($attributeNames as $property) {

@@ -26,14 +26,14 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework
 {
     public function testManagerInstance()
     {
-        $manager = Shopware()->Container()->get('thumbnail_manager');
+        $manager = Shopware()->Container()->get(\Shopware\Components\Thumbnail\Manager::class);
         static::assertInstanceOf('\Shopware\Components\Thumbnail\Manager', $manager);
     }
 
     public function testThumbnailGeneration()
     {
-        $manager = Shopware()->Container()->get('thumbnail_manager');
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $manager = Shopware()->Container()->get(\Shopware\Components\Thumbnail\Manager::class);
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         $media = $this->getMediaModel();
 
@@ -62,7 +62,7 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework
 
     public function testGenerationWithoutPassedSizes()
     {
-        $manager = Shopware()->Container()->get('thumbnail_manager');
+        $manager = Shopware()->Container()->get(\Shopware\Components\Thumbnail\Manager::class);
 
         $media = $this->getMediaModel();
 
@@ -77,7 +77,7 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework
         $manager->createMediaThumbnail($media);
 
         $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media->getType()) . '_thumbnail');
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         $path = $thumbnailDir . $media->getName();
 
@@ -89,7 +89,7 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework
 
     public function testGenerationWithoutPassedSizesButProportion()
     {
-        $manager = Shopware()->Container()->get('thumbnail_manager');
+        $manager = Shopware()->Container()->get(\Shopware\Components\Thumbnail\Manager::class);
 
         $media = $this->getMediaModel();
 
@@ -110,7 +110,7 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework
         $manager->createMediaThumbnail($media, [], true);
 
         $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media->getType()) . '_thumbnail');
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         $path = $thumbnailDir . $media->getName();
 
@@ -146,7 +146,7 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework
 
         @unlink($file->getRealPath());
 
-        $manager = Shopware()->Container()->get('thumbnail_manager');
+        $manager = Shopware()->Container()->get(\Shopware\Components\Thumbnail\Manager::class);
         $manager->createMediaThumbnail($media);
     }
 
@@ -158,7 +158,7 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework
     {
         $media = new \Shopware\Models\Media\Media();
 
-        $manager = Shopware()->Container()->get('thumbnail_manager');
+        $manager = Shopware()->Container()->get(\Shopware\Components\Thumbnail\Manager::class);
         $manager->createMediaThumbnail($media);
     }
 
@@ -170,11 +170,11 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework
         $defaultSize = $defaultSizes[0];
         $defaultSize = $defaultSize[0] . 'x' . $defaultSize[1];
 
-        $manager = Shopware()->Container()->get('thumbnail_manager');
+        $manager = Shopware()->Container()->get(\Shopware\Components\Thumbnail\Manager::class);
         $manager->createMediaThumbnail($media, [$defaultSize]);
 
         $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media->getType()) . '_thumbnail');
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         $path = $thumbnailDir . $media->getName();
 
         static::assertTrue($mediaService->has($path . '_' . $defaultSize . '.' . $media->getExtension()));
@@ -190,7 +190,7 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework
 
     private function getMediaModel()
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         $media = new \Shopware\Models\Media\Media();
 
         $sourcePath = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'sw_icon.png';

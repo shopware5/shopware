@@ -166,7 +166,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $shop = $this->SeoIndex()->registerShop($shopId);
 
         $this->RewriteTable()->baseSetup();
-        $context = $this->get('shopware_storefront.context_service')->createShopContext($shopId);
+        $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext($shopId);
         $this->RewriteTable()->sCreateRewriteTableBlog($offset, $limit, $context);
 
         $this->View()->assign([
@@ -267,7 +267,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
 
         // Create shop
         $this->SeoIndex()->registerShop($shopId);
-        $context = $this->get('shopware_storefront.context_service')->createShopContext($shopId);
+        $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext($shopId);
 
         // Make sure a template is available
         $this->RewriteTable()->baseSetup();
@@ -285,7 +285,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
 
         // Create shop
         $this->SeoIndex()->registerShop($shopId);
-        $context = $this->get('shopware_storefront.context_service')->createShopContext($shopId);
+        $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext($shopId);
 
         // Make sure a template is available
         $this->RewriteTable()->baseSetup();

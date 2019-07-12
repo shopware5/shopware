@@ -91,7 +91,7 @@ class MediaOptimizeCommand extends ShopwareCommand implements CompletionAwareInt
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $optimizerService = $this->getContainer()->get('shopware_media.cdn_optimizer_service');
-        $mediaService = $this->getContainer()->get('shopware_media.media_service');
+        $mediaService = $this->getContainer()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         if ($this->hasRunnableOptimizer() === false) {
             $output->writeln('<error>No runnable optimizer found. Consider installing one of the following optimizers.</error>');
@@ -218,7 +218,7 @@ This can take a very long time, depending on the number of files that need to be
      */
     private function hasRunnableOptimizer()
     {
-        $optimizerService = $this->getContainer()->get('shopware_media.optimizer_service');
+        $optimizerService = $this->getContainer()->get(\Shopware\Bundle\MediaBundle\OptimizerService::class);
 
         foreach ($optimizerService->getOptimizers() as $optimizer) {
             if ($optimizer->isRunnable()) {

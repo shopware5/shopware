@@ -46,7 +46,7 @@ class ThemeSynchronizeCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var \Shopware\Components\Theme\Installer $themeService */
-        $themeService = $this->container->get('theme_installer');
+        $themeService = $this->container->get(\Shopware\Components\Theme\Installer::class);
         $themeService->synchronize();
 
         $output->writeln('Themes synchronized');

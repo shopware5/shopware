@@ -388,7 +388,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     public function createCronJob($name, $action, $interval = 86400, $active = 1, $disableOnError = true)
     {
         /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = $this->get('dbal_connection');
+        $connection = $this->get(\Doctrine\DBAL\Connection::class);
         $connection->insert(
             's_crontab',
             [
@@ -747,9 +747,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     public function removeSnippets($removeDirty = false)
     {
-        $this->get('shopware.snippet_database_handler')->removeFromDatabase($this->Path() . 'Snippets/', $removeDirty);
-        $this->get('shopware.snippet_database_handler')->removeFromDatabase($this->Path() . 'snippets/', $removeDirty);
-        $this->get('shopware.snippet_database_handler')->removeFromDatabase($this->Path() . 'Resources/snippet/', $removeDirty);
+        $this->get(\Shopware\Components\Snippet\DatabaseHandler::class)->removeFromDatabase($this->Path() . 'Snippets/', $removeDirty);
+        $this->get(\Shopware\Components\Snippet\DatabaseHandler::class)->removeFromDatabase($this->Path() . 'snippets/', $removeDirty);
+        $this->get(\Shopware\Components\Snippet\DatabaseHandler::class)->removeFromDatabase($this->Path() . 'Resources/snippet/', $removeDirty);
     }
 
     /**
@@ -889,7 +889,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     {
         foreach ($plugins as $plugin) {
             $sql = 'SELECT 1 FROM s_core_plugins WHERE name = ? AND active = 1';
-            $test = $this->get('dbal_connection')->fetchColumn($sql, [$plugin]);
+            $test = $this->get(\Doctrine\DBAL\Connection::class)->fetchColumn($sql, [$plugin]);
             if (!$test) {
                 return false;
             }

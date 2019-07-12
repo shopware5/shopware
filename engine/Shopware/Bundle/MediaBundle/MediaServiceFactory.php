@@ -76,7 +76,7 @@ class MediaServiceFactory
         $filesystem = new Filesystem($adapter, ['visibility' => AdapterInterface::VISIBILITY_PUBLIC]);
 
         // Strategy
-        $strategyFactory = $this->container->get('shopware_media.strategy_factory');
+        $strategyFactory = $this->container->get(\Shopware\Bundle\MediaBundle\Strategy\StrategyFactory::class);
         $strategyName = isset($config['strategy']) ? $config['strategy'] : $this->cdnConfig['strategy'];
         $strategy = $strategyFactory->factory($strategyName);
 

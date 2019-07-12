@@ -375,7 +375,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             $shop = $orderModel->getLanguageSubShop();
         }
 
-        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
+        $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         // Try to send the actual mail
         try {
@@ -458,7 +458,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $paymentMethods = Shopware()->Db()->fetchAll($sql, $params);
 
         // Translate payment method names.
-        $translator = $this->get('translation')->getObjectTranslator('config_payment');
+        $translator = $this->get(\Shopware_Components_Translation::class)->getObjectTranslator('config_payment');
         foreach ($paymentMethods as &$paymentMethod) {
             $paymentMethod = $translator->translateObjectProperty($paymentMethod, 'description', 'paymentName');
         }
@@ -660,7 +660,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $orders = $paginator->getIterator()->getArrayCopy();
 
         // Translate payment and dispatch method names.
-        $translationComponent = $this->get('translation');
+        $translationComponent = $this->get(\Shopware_Components_Translation::class);
         $orders = $translationComponent->translateOrders($orders);
 
         $this->View()->assign([
@@ -809,7 +809,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     private function getProductsOfOrder(Order $order)
     {
         /** @var \Shopware\Components\Model\ModelRepository $repository */
-        $repository = $this->get('models')->getRepository(Shopware\Models\Article\Detail::class);
+        $repository = $this->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shopware\Models\Article\Detail::class);
 
         $products = [];
         foreach ($order->getDetails() as $detail) {
@@ -834,7 +834,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     private function convertCancelledOrderInStock(Shopware\Models\Order\Order $orderModel)
     {
         /** @var \Shopware\Components\Model\ModelManager $entityManager */
-        $entityManager = $this->get('models');
+        $entityManager = $this->get(\Shopware\Components\Model\ModelManager::class);
 
         $products = $this->getProductsOfOrder($orderModel);
 

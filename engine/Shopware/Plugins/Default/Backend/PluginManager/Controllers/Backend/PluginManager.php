@@ -148,7 +148,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $service->extractPluginZip($filePath, $metaStruct->getTechnicalName());
 
             /** @var InstallerService $pluginManager */
-            $pluginManager = $this->get('shopware_plugininstaller.plugin_manager');
+            $pluginManager = $this->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
             $pluginManager->refreshPluginList();
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
@@ -190,7 +190,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
      */
     public function checkSecretAction()
     {
-        $subscriptionService = $this->container->get('shopware_plugininstaller.subscription_service');
+        $subscriptionService = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\SubscriptionService::class);
         $secret = $subscriptionService->getShopSecret();
 
         if (empty($secret)) {
@@ -209,8 +209,8 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
      */
     public function getPluginInformationAction()
     {
-        $subscriptionService = $this->container->get('shopware_plugininstaller.subscription_service');
-        $pluginLicenseService = $this->container->get('shopware_plugininstaller.plugin_licence_service');
+        $subscriptionService = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\SubscriptionService::class);
+        $pluginLicenseService = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService::class);
         $pluginInformation = $subscriptionService->getPluginInformation($this->Response(), $this->Request());
 
         if ($pluginInformation === false) {
@@ -300,7 +300,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     public function refreshPluginListAction()
     {
         /** @var InstallerService $pluginManager */
-        $pluginManager = $this->get('shopware_plugininstaller.plugin_manager');
+        $pluginManager = $this->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
         $pluginManager->refreshPluginList();
         $this->View()->assign([
             'success' => true,
@@ -314,7 +314,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $error = null;
         try {
             /** @var InstallerService $pluginManager */
-            $pluginManager = $this->get('shopware_plugininstaller.plugin_manager');
+            $pluginManager = $this->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
             $pluginManager->refreshPluginList();
         } catch (Exception $e) {
             $error = $e->getMessage();
@@ -335,7 +335,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $plugins = $pluginViewService->getLocalListing($context);
         } else {
             /** @var PluginLocalService $localService */
-            $localService = $this->get('shopware_plugininstaller.plugin_service_local');
+            $localService = $this->get(\Shopware\Bundle\PluginInstallerBundle\Service\PluginLocalService::class);
             $plugins = $localService->getListing($context)->getPlugins();
         }
 
@@ -355,7 +355,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
         $pluginsInSafeMode = $this->getPluginsInSafeMode($plugins);
 
-        $installer = $this->container->get('shopware_plugininstaller.plugin_manager');
+        $installer = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
 
         if ($pluginsInSafeMode) {
             foreach ($pluginsInSafeMode as $plugin) {
@@ -365,7 +365,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                     $installer->activatePlugin($plugin);
                 }
             }
-            $this->container->get('models')->flush();
+            $this->container->get(\Shopware\Components\Model\ModelManager::class)->flush();
             $this->View()->assign(['success' => true, 'inSafeMode' => false]);
 
             return;
@@ -378,7 +378,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $plugin->setInSafeMode(true);
             $installer->deactivatePlugin($plugin);
         }
-        $this->container->get('models')->flush();
+        $this->container->get(\Shopware\Components\Model\ModelManager::class)->flush();
 
         $this->View()->assign(['success' => true, 'inSafeMode' => true]);
     }
@@ -425,7 +425,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         );
 
         /** @var PluginLocalService $localService */
-        $localService = $this->get('shopware_plugininstaller.plugin_service_local');
+        $localService = $this->get(\Shopware\Bundle\PluginInstallerBundle\Service\PluginLocalService::class);
         $plugin = $localService->getPlugin($context);
 
         $this->View()->assign(['success' => true, 'data' => $plugin]);
@@ -442,7 +442,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
         try {
             /** @var PluginStoreService $pluginStoreService */
-            $pluginStoreService = $this->get('shopware_plugininstaller.plugin_service_store_production');
+            $pluginStoreService = $this->get(\Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService::class);
             $licences = $pluginStoreService->getLicences($context);
         } catch (Exception $e) {
             $this->handleException($e);
@@ -463,11 +463,11 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
             return;
         }
-        $subscriptionService = $this->container->get('shopware_plugininstaller.subscription_service');
+        $subscriptionService = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\SubscriptionService::class);
         $secret = $subscriptionService->getShopSecret();
 
         /** @var PluginLocalService $localService */
-        $localService = $this->get('shopware_plugininstaller.plugin_service_local');
+        $localService = $this->get(\Shopware\Bundle\PluginInstallerBundle\Service\PluginLocalService::class);
         $plugins = $localService->getPluginsForUpdateCheck();
 
         $context = new UpdateListingRequest(
@@ -496,7 +496,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     public function expiredListingAction()
     {
-        $pluginLicenseService = $this->container->get('shopware_plugininstaller.plugin_licence_service');
+        $pluginLicenseService = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService::class);
         /** @var PluginInformationStruct[] $pluginInformationStructs */
         $pluginInformationStructs = $pluginLicenseService->getExpiredLicenses();
         $expiredPlugins = [];
@@ -504,7 +504,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $expiredPlugins[] = $pluginInformationStruct->getTechnicalName();
         }
 
-        $qb = $this->get('dbal_connection')->createQueryBuilder();
+        $qb = $this->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
         $installDates = $qb->from('s_core_plugins', 'plugins')
             ->addSelect('plugins.name, plugins.installation_date, plugins.capability_secure_uninstall')
             ->andWhere('name IN (:names)')
@@ -520,7 +520,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
         try {
             /** @var PluginStoreService $pluginStoreService */
-            $pluginStoreService = $this->get('shopware_plugininstaller.plugin_service_store_production');
+            $pluginStoreService = $this->get(\Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService::class);
             $plugins = $pluginStoreService->getPlugins($context);
 
             foreach ($plugins as $plugin) {
@@ -638,7 +638,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
         try {
             /** @var StoreClient $storeClient */
-            $storeClient = $this->get('shopware_plugininstaller.store_client');
+            $storeClient = $this->get(\Shopware\Bundle\PluginInstallerBundle\StoreClient::class);
             $token = $storeClient->getAccessToken($shopwareId, $password);
         } catch (StoreException $e) {
             $this->handleException($e);
@@ -654,7 +654,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     public function disableConnectMenuAction()
     {
-        $em = $this->container->get('models');
+        $em = $this->container->get(\Shopware\Components\Model\ModelManager::class);
         $repo = $em->getRepository(Menu::class);
 
         /** @var Menu $menuEntry */
@@ -675,7 +675,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
      */
     protected function getThirdPartyPluginsQuery()
     {
-        $query = $this->container->get('models')->createQueryBuilder();
+        $query = $this->container->get(\Shopware\Components\Model\ModelManager::class)->createQueryBuilder();
         $query->select(['plugin']);
         $query->from(Plugin::class, 'plugin');
         $query->where('plugin.source != :source');
@@ -824,9 +824,9 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     private function getCategoryService()
     {
         return new PluginCategoryService(
-            $this->get('shopware_plugininstaller.plugin_service_store'),
-            $this->get('dbal_connection'),
-            $this->get('shopware_plugininstaller.plugin_installer_struct_hydrator')
+            $this->get(\Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService::class),
+            $this->get(\Doctrine\DBAL\Connection::class),
+            $this->get(\Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator::class)
         );
     }
 
@@ -839,7 +839,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         );
 
         /** @var PluginStoreService $pluginStoreService */
-        $pluginStoreService = $this->get('shopware_plugininstaller.plugin_service_store_production');
+        $pluginStoreService = $this->get(\Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService::class);
         $plugins = $pluginStoreService->getPlugins($context);
 
         foreach ($basket->getPositions() as $position) {

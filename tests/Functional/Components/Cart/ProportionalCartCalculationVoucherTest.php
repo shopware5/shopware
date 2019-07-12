@@ -34,13 +34,13 @@ class ProportionalCartCalculationVoucherTest extends CheckoutTest
     public function setUp()
     {
         parent::setUp();
-        Shopware()->Container()->get('dbal_connection')->beginTransaction();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
         $this->setConfig('proportionalTaxCalculation', true);
 
         $this->setPaymentSurcharge(0);
         $this->setCustomerGroupSurcharge(0, 0);
 
-        Shopware()->Container()->get('dbal_connection')->executeQuery('UPDATE s_premium_dispatch SET active = 0 WHERE id = 12');
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->executeQuery('UPDATE s_premium_dispatch SET active = 0 WHERE id = 12');
     }
 
     protected function tearDown()
@@ -50,7 +50,7 @@ class ProportionalCartCalculationVoucherTest extends CheckoutTest
         $this->clearCustomerGroupDiscount('EK');
         $this->setConfig('proportionalTaxCalculation', false);
 
-        Shopware()->Container()->get('dbal_connection')->rollBack();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollBack();
     }
 
     public function testAbsoluteVoucher()

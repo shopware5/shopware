@@ -66,10 +66,10 @@ class SimilarProductsTest extends TestCase
         }
         $this->linkSimilarProduct($article->getId(), $similarProducts);
 
-        $product = Shopware()->Container()->get('shopware_storefront.list_product_service')
+        $product = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)
             ->get($number, $context);
 
-        $similarProducts = Shopware()->Container()->get('shopware_storefront.similar_products_service')
+        $similarProducts = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\SimilarProductsServiceInterface::class)
             ->get($product, $context);
 
         static::assertCount(4, $similarProducts);
@@ -103,10 +103,10 @@ class SimilarProductsTest extends TestCase
         $this->linkSimilarProduct($article->getId(), $similarProducts);
         $this->linkSimilarProduct($article2->getId(), $similarProducts);
 
-        $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
+        $products = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)
             ->getList([$number, $number2], $context);
 
-        $similarProductList = Shopware()->Container()->get('shopware_storefront.similar_products_service')
+        $similarProductList = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\SimilarProductsServiceInterface::class)
             ->getList($products, $context);
 
         static::assertCount(2, $similarProductList);
@@ -119,7 +119,7 @@ class SimilarProductsTest extends TestCase
 
             /** @var ListProduct $similarProduct */
             foreach ($similarProducts as $similarProduct) {
-                static::assertInstanceOf('\Shopware\Bundle\StoreFrontBundle\Struct\ListProduct', $similarProduct);
+                static::assertInstanceOf(ListProduct::class, $similarProduct);
                 static::assertContains($similarProduct->getNumber(), $similarNumbers);
             }
         }
@@ -149,17 +149,17 @@ class SimilarProductsTest extends TestCase
             $convertedShop
         );
 
-        $product = Shopware()->Container()->get('shopware_storefront.list_product_service')
+        $product = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)
             ->get($number, $context);
 
-        $similar = Shopware()->Container()->get('shopware_storefront.similar_products_service')
+        $similar = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\SimilarProductsServiceInterface::class)
             ->get($product, $context);
 
         static::assertCount(3, $similar);
 
         foreach ($similar as $similarProduct) {
             static::assertInstanceOf(
-                'Shopware\Bundle\StoreFrontBundle\Struct\ListProduct',
+                ListProduct::class,
                 $similarProduct
             );
         }

@@ -52,7 +52,7 @@ class Zend_Session_Namespace extends Zend_Session_Abstract implements IteratorAg
      *
      * @var string
      */
-    protected $_namespace = "Default";
+    protected $_namespace = 'Default';
 
     /**
      * Namespace locking mechanism

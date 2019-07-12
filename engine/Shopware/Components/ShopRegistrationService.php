@@ -50,27 +50,27 @@ class ShopRegistrationService implements ShopRegistrationServiceInterface
 
     public function registerResources(Shop $shop): void
     {
-        $this->container->set('Shop', $shop);
+        $this->container->set('shop', $shop);
 
         /** @var \Zend_Locale $locale */
-        $locale = $this->container->get('locale');
+        $locale = $this->container->get(\Zend_Locale::class);
         $locale->setLocale($shop->getLocale()->toString());
 
         /** @var \Zend_Currency $currency */
-        $currency = $this->container->get('currency');
+        $currency = $this->container->get(\Zend_Currency::class);
         $currency->setLocale($locale);
         $currency->setFormat($shop->getCurrency()->toArray());
 
         /** @var \Shopware_Components_Config $config */
-        $config = $this->container->get('config');
+        $config = $this->container->get(\Shopware_Components_Config::class);
         $config->setShop($shop);
 
         /** @var \Shopware_Components_Snippet_Manager $snippets */
-        $snippets = $this->container->get('snippets');
+        $snippets = $this->container->get(\Shopware_Components_Snippet_Manager::class);
         $snippets->setShop($shop);
 
         /** @var \Enlight_Plugin_PluginManager $plugins */
-        $plugins = $this->container->get('plugins');
+        $plugins = $this->container->get(\Enlight_Plugin_PluginManager::class);
 
         /** @var \Shopware_Components_Plugin_Namespace $pluginNamespace */
         foreach ($plugins as $pluginNamespace) {
@@ -83,7 +83,7 @@ class ShopRegistrationService implements ShopRegistrationServiceInterface
         $this->container->get('session');
 
         /** @var \Shopware_Components_TemplateMail $templateMail */
-        $templateMail = $this->container->get('templatemail');
+        $templateMail = $this->container->get(\Shopware_Components_TemplateMail::class);
         $templateMail->setShop($shop);
     }
 
@@ -94,7 +94,7 @@ class ShopRegistrationService implements ShopRegistrationServiceInterface
         }
 
         /** @var \Enlight_Template_Manager $templateManager */
-        $templateManager = $this->container->get('template');
+        $templateManager = $this->container->get(\Enlight_Template_Manager::class);
         $template = $shop->getTemplate();
         $localeName = $shop->getLocale()->toString();
 
@@ -119,10 +119,10 @@ class ShopRegistrationService implements ShopRegistrationServiceInterface
     private function registerTheme(Template $template): void
     {
         /** @var \Enlight_Template_Manager $templateManager */
-        $templateManager = $this->container->get('template');
+        $templateManager = $this->container->get(\Enlight_Template_Manager::class);
 
         /** @var Inheritance $inheritance */
-        $inheritance = $this->container->get('theme_inheritance');
+        $inheritance = $this->container->get(\Shopware\Components\Theme\Inheritance::class);
 
         $path = $inheritance->getTemplateDirectories($template);
         $templateManager->setTemplateDir($path);

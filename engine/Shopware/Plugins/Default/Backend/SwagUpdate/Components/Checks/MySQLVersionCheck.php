@@ -62,7 +62,7 @@ class MySQLVersionCheck implements CheckInterface
      */
     public function check($requirement)
     {
-        $conn = Shopware()->Container()->get('dbal_connection');
+        $conn = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $version = $conn->fetchColumn('SELECT VERSION()');
 
         $minMySQLVersion = $requirement['value'];

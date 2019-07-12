@@ -235,7 +235,7 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
         $shop = $repository->getActiveById($user['language']);
 
-        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerShop($shop);
+        Shopware()->Container()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         Shopware()->Session()->Admin = true;
         Shopware()->System()->_POST = [
@@ -262,6 +262,6 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
         $this->Request()->setParam('sAdd', self::ARTICLE_NUMBER);
         $this->dispatch('/checkout/addArticle', true);
 
-        return Shopware()->Container()->get('SessionID');
+        return Shopware()->Container()->get('sessionid');
     }
 }

@@ -38,7 +38,7 @@ class ContainerTest extends TestCase
      */
     private $container;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->container = new ProjectServiceContainer();
         $service = $this->createMock(\Enlight_Event_EventManager::class);
@@ -46,7 +46,7 @@ class ContainerTest extends TestCase
         $this->container->set('events', $service);
     }
 
-    public function testSet()
+    public function testSet(): void
     {
         $object = new \stdClass();
 
@@ -55,7 +55,7 @@ class ContainerTest extends TestCase
         static::assertSame($object, $this->container->get('somekey'));
     }
 
-    public function testHas()
+    public function testHas(): void
     {
         static::assertTrue($this->container->has('bar'));
         static::assertTrue($this->container->has('BAR'));
@@ -65,34 +65,34 @@ class ContainerTest extends TestCase
         static::assertFalse($this->container->has('some'));
     }
 
-    public function testGetOnNonExistentWithDefaultBehaviour()
+    public function testGetOnNonExistentWithDefaultBehaviour(): void
     {
         $this->expectException(\Exception::class);
 
         $this->container->get('foo');
     }
 
-    public function testGetOnNonExistentWithExceptionBehaviour()
+    public function testGetOnNonExistentWithExceptionBehaviour(): void
     {
         $this->expectException(\Exception::class);
         $this->container->get('foo', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE);
     }
 
-    public function testGetOnNonExistentWithNullBehaviour()
+    public function testGetOnNonExistentWithNullBehaviour(): void
     {
         static::assertNull(
             $this->container->get('foo', ContainerInterface::NULL_ON_INVALID_REFERENCE)
         );
     }
 
-    public function testGetOnNonExistentWithIgnoreBehaviour()
+    public function testGetOnNonExistentWithIgnoreBehaviour(): void
     {
         static::assertNull(
             $this->container->get('foo', ContainerInterface::IGNORE_ON_INVALID_REFERENCE)
         );
     }
 
-    public function testEventsAreEmitedDuringServiceInitialisation()
+    public function testEventsAreEmitedDuringServiceInitialisation(): void
     {
         $service = $this->prophesize(\Enlight_Event_EventManager::class);
 
@@ -103,10 +103,10 @@ class ContainerTest extends TestCase
         $service = $service->reveal();
         $this->container->set('events', $service);
 
-        static::assertInstanceOf('stdClass', $this->container->get('Bar'));
+        static::assertInstanceOf('stdClass', $this->container->get('bar'));
     }
 
-    public function testEventsAreEmitedDuringServiceInitialisationWhenUsingAlias()
+    public function testEventsAreEmitedDuringServiceInitialisationWhenUsingAlias(): void
     {
         $service = $this->prophesize(\Enlight_Event_EventManager::class);
 
@@ -122,7 +122,7 @@ class ContainerTest extends TestCase
         static::assertInstanceOf('stdClass', $this->container->get('alias'));
     }
 
-    public function testEventsAreEmitedDuringServiceInitialisationWhenUsingUnknownServices()
+    public function testEventsAreEmitedDuringServiceInitialisationWhenUsingUnknownServices(): void
     {
         $service = $this->prophesize(\Enlight_Event_EventManager::class);
 
@@ -135,10 +135,10 @@ class ContainerTest extends TestCase
 
         $this->expectException(\Exception::class);
 
-        $this->container->get('Foo');
+        $this->container->get('foo');
     }
 
-    public function testAfterInitEventDecorator()
+    public function testAfterInitEventDecorator(): void
     {
         $this->container = new ProjectServiceContainer();
         $eventManager = new ContainerAwareEventManager($this->container);
@@ -159,7 +159,7 @@ class ContainerTest extends TestCase
         static::assertSame($class, $this->container->get('bar'));
     }
 
-    public function testAfterInitEventDecoratorService()
+    public function testAfterInitEventDecoratorService(): void
     {
         $this->container = new ProjectServiceContainer();
         $eventManager = new ContainerAwareEventManager($this->container);
@@ -178,7 +178,7 @@ class ContainerTest extends TestCase
         static::assertSame($class, $this->container->get('bar'));
     }
 
-    public function testServiceCircularReferenceExceptionException()
+    public function testServiceCircularReferenceExceptionException(): void
     {
         $this->container = new ProjectServiceContainer();
         $eventManager = new ContainerAwareEventManager($this->container);
@@ -214,59 +214,5 @@ class ContainerTest extends TestCase
         $this->expectException(ServiceCircularReferenceException::class);
 
         $this->container->get('parent');
-    }
-}
-
-class Service
-{
-    private $class;
-
-    public function __construct($class)
-    {
-        $this->class = $class;
-    }
-
-    public function onEvent(\Enlight_Event_EventArgs $e)
-    {
-        /** @var ProjectServiceContainer $container */
-        $container = $e->getSubject();
-        $container->set('bar', $this->class);
-    }
-}
-
-class ProjectServiceContainer extends Container
-{
-    public $__bar;
-
-    public $__parent;
-
-    public $__child;
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->__bar = new \stdClass();
-        $this->aliases = ['alias' => 'bar'];
-
-        $this->__parent = new \stdClass();
-        $this->__child = new \stdClass();
-    }
-
-    protected function getBarService()
-    {
-        return $this->__bar;
-    }
-
-    protected function getParentService()
-    {
-        $this->__parent->child = $this->get('child');
-
-        return $this->__parent;
-    }
-
-    protected function getChildService()
-    {
-        return $this->__child;
     }
 }

@@ -36,13 +36,13 @@ class TemplateMail
         $container->load('mailtransport');
 
         $stringCompiler = new \Shopware_Components_StringCompiler(
-            $container->get('template')
+            $container->get(\Enlight_Template_Manager::class)
         );
         $mailer = new \Shopware_Components_TemplateMail();
         if ($container->initialized('shop')) {
             $mailer->setShop($container->get('shop'));
         }
-        $mailer->setModelManager($container->get('models'));
+        $mailer->setModelManager($container->get(\Shopware\Components\Model\ModelManager::class));
         $mailer->setStringCompiler($stringCompiler);
 
         return $mailer;

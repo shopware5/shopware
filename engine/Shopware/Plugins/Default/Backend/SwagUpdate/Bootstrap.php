@@ -82,7 +82,7 @@ class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_
     public function afterInit()
     {
         /** @var Enlight_Loader $loader */
-        $loader = $this->get('loader');
+        $loader = $this->get(\Enlight_Loader::class);
         $loader->registerNamespace(
             'ShopwarePlugins\\SwagUpdate',
             __DIR__ . '/'
@@ -116,7 +116,7 @@ class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_
      */
     public function onGetSwagUpdateControllerPath(Enlight_Event_EventArgs $args)
     {
-        $this->get('template')->addTemplateDir(
+        $this->get(\Enlight_Template_Manager::class)->addTemplateDir(
             __DIR__ . '/Views/', 'swag_update'
         );
 
@@ -132,7 +132,7 @@ class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_
             $this->Config()->get('update-api-endpoint'),
             $this->Config()->get('update-channel'),
             $this->Config()->get('update-verify-signature'),
-            Shopware()->Container()->get('shopware.openssl_verificator'),
+            Shopware()->Container()->get(\Shopware\Components\OpenSSLVerifier::class),
             Shopware()->Container()->get('shopware.release')
         );
     }

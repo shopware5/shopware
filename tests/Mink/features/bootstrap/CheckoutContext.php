@@ -203,7 +203,7 @@ class CheckoutContext extends SubContext
     public function theArticleIsAssignedToThePriceGroup($articleNumber, $priceGroupName)
     {
         /** @var ModelManager $modelManager */
-        $modelManager = $this->getService('models');
+        $modelManager = $this->getService(\Shopware\Components\Model\ModelManager::class);
 
         $priceGroup = $modelManager->getRepository('Shopware\Models\Price\Group')->findOneBy(['name' => $priceGroupName]);
         $articleDetail = $modelManager->getRepository('Shopware\Models\Article\Detail')->findOneBy(['number' => $articleNumber]);
@@ -225,7 +225,7 @@ class CheckoutContext extends SubContext
     public function aPriceGroupNamedThatGrantsDiscount($priceGroupName, $grantedDiscount)
     {
         /** @var ModelManager $modelManager */
-        $modelManager = $this->getService('models');
+        $modelManager = $this->getService(\Shopware\Components\Model\ModelManager::class);
 
         $priceGroup = $modelManager->getRepository('Shopware\Models\Price\Group')->findOneBy(['name' => $priceGroupName]);
         if (!$priceGroup) {
@@ -264,7 +264,7 @@ class CheckoutContext extends SubContext
         $categories = $table->getHash();
 
         $categoryResource = new \Shopware\Components\Api\Resource\Category();
-        $categoryResource->setManager($this->getService('models'));
+        $categoryResource->setManager($this->getService(\Shopware\Components\Model\ModelManager::class));
 
         foreach ($categories as $row) {
             $category = $categoryResource->getList(0, 1, [['property' => 'name', 'value' => $row['name']]]);
@@ -291,13 +291,13 @@ class CheckoutContext extends SubContext
         $products = $table->getHash();
 
         $resource = new \Shopware\Components\Api\Resource\Article();
-        $resource->setManager($this->getService('models'));
+        $resource->setManager($this->getService(\Shopware\Components\Model\ModelManager::class));
 
         $categoryResource = new \Shopware\Components\Api\Resource\Category();
-        $categoryResource->setManager($this->getService('models'));
+        $categoryResource->setManager($this->getService(\Shopware\Components\Model\ModelManager::class));
 
         $manufacturerResource = new \Shopware\Components\Api\Resource\Manufacturer();
-        $manufacturerResource->setManager($this->getService('models'));
+        $manufacturerResource->setManager($this->getService(\Shopware\Components\Model\ModelManager::class));
 
         foreach ($products as $row) {
             $category = $categoryResource->getList(0, 1, [['property' => 'c.name', 'value' => $row['category']]])['data'][0];
@@ -342,7 +342,7 @@ class CheckoutContext extends SubContext
         $manufactures = $table->getHash();
 
         $manufacturerResource = new \Shopware\Components\Api\Resource\Manufacturer();
-        $manufacturerResource->setManager($this->getService('models'));
+        $manufacturerResource->setManager($this->getService(\Shopware\Components\Model\ModelManager::class));
 
         foreach ($manufactures as $row) {
             $manufacturer = $manufacturerResource->getList(0, 1, [['property' => 'supplier.name', 'value' => $row['name']]]);
@@ -365,7 +365,7 @@ class CheckoutContext extends SubContext
         $groups = $table->getHash();
 
         $groupResource = new \Shopware\Components\Api\Resource\CustomerGroup();
-        $groupResource->setManager($this->getService('models'));
+        $groupResource->setManager($this->getService(\Shopware\Components\Model\ModelManager::class));
 
         foreach ($groups as $row) {
             $group = $groupResource->getList(0, 1, [['property' => 'key', 'value' => $row['key']]]);
@@ -388,7 +388,7 @@ class CheckoutContext extends SubContext
     public function theArticleHasNoActivePriceGroup($articleNumber)
     {
         /** @var ModelManager $modelManager */
-        $modelManager = $this->getService('models');
+        $modelManager = $this->getService(\Shopware\Components\Model\ModelManager::class);
 
         $articleDetail = $modelManager->getRepository('Shopware\Models\Article\Detail')->findOneBy(['number' => $articleNumber]);
 
@@ -705,7 +705,7 @@ class CheckoutContext extends SubContext
     public function addCustomTaxation()
     {
         /** @var Connection $dbal */
-        $dbal = $this->getService('dbal_connection');
+        $dbal = $this->getService(Connection::class);
         $sql = <<<'EOD'
             INSERT INTO s_core_tax_rules (areaID, countryID, stateID, groupID, customer_groupID, tax, name, active)
             VALUES (3, 23, null, 1, 1, 33, 'Austria', 1)
@@ -719,7 +719,7 @@ EOD;
     public function removeCustomTaxation()
     {
         /** @var Connection $dbal */
-        $dbal = $this->getService('dbal_connection');
+        $dbal = $this->getService(Connection::class);
         $sql = <<<'EOD'
             DELETE FROM s_core_tax_rules
             WHERE name = 'Austria'
@@ -733,7 +733,7 @@ EOD;
     public function addCustomDispatchSurcharge()
     {
         /** @var Connection $dbal */
-        $dbal = $this->getService('dbal_connection');
+        $dbal = $this->getService(Connection::class);
         $sql = <<<"EOD"
             INSERT INTO `s_premium_dispatch` (`id`, `name`, `type`, `description`, `comment`, `active`, `position`, `calculation`, `surcharge_calculation`, `tax_calculation`, `shippingfree`, `multishopID`, `customergroupID`, `bind_shippingfree`, `bind_time_from`, `bind_time_to`, `bind_instock`, `bind_laststock`, `bind_weekday_from`, `bind_weekday_to`, `bind_weight_from`, `bind_weight_to`, `bind_price_from`, `bind_price_to`, `bind_sql`, `status_link`, `calculation_sql`)
             VALUES
@@ -768,7 +768,7 @@ EOD;
     public function removeCustomDispatchSurcharge()
     {
         /** @var Connection $dbal */
-        $dbal = $this->getService('dbal_connection');
+        $dbal = $this->getService(Connection::class);
         $sql = <<<'EOD'
             SET @dispatchId = (SELECT id FROM `s_premium_dispatch` WHERE `name` = 'Sonderaufschlag');
             
@@ -796,7 +796,7 @@ EOD;
     public static function createUserForCheckoutAddressManagementTest()
     {
         /** @var Connection $dbal */
-        $dbal = Shopware()->Container()->get('dbal_connection');
+        $dbal = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $sql = <<<'EOD'
 INSERT INTO `s_user`
 (`password`, `encoder`, `email`, `active`, `accountmode`, `confirmationkey`, `paymentID`, `firstlogin`, `lastlogin`, `sessionID`, `newsletter`, `validation`, `affiliate`, `customergroup`, `paymentpreset`, `language`, `subshopID`, `referer`, `pricegroupID`, `internalcomment`, `failedlogins`, `lockeduntil`, `default_billing_address_id`, `default_shipping_address_id`, `title`, `salutation`, `firstname`, `lastname`, `birthday`, `customernumber`)
@@ -847,7 +847,7 @@ EOD;
     public function addCustomPaymentSurcharge()
     {
         /** @var Connection $dbal */
-        $dbal = $this->getService('dbal_connection');
+        $dbal = $this->getService(Connection::class);
         $sql = <<<'EOD'
             UPDATE s_core_paymentmeans SET debit_percent = 10 WHERE id = 5;
 EOD;
@@ -860,7 +860,7 @@ EOD;
     public function removeCustomPaymentSurcharge()
     {
         /** @var Connection $dbal */
-        $dbal = $this->getService('dbal_connection');
+        $dbal = $this->getService(Connection::class);
         $sql = <<<'EOD'
             UPDATE s_core_paymentmeans SET debit_percent = 0 WHERE id = 5;
 EOD;

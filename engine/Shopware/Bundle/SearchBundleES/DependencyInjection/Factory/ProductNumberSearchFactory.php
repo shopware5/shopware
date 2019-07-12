@@ -58,9 +58,9 @@ class ProductNumberSearchFactory
     public function factory(ContainerInterface $container)
     {
         /** @var Client $searchClient */
-        $searchClient = $container->get('shopware_elastic_search.client');
+        $searchClient = $container->get(\Elasticsearch\Client::class);
         /** @var IndexFactory $indexFactory */
-        $indexFactory = $container->get('shopware_elastic_search.index_factory');
+        $indexFactory = $container->get(\Shopware\Bundle\ESIndexingBundle\IndexFactory::class);
 
         return new ProductNumberSearch(
             $searchClient,

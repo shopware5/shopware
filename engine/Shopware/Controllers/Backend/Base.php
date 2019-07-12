@@ -152,7 +152,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         // Translate payments
         /** @var \Shopware_Components_Translation $translationComponent */
-        $translationComponent = $this->get('translation');
+        $translationComponent = $this->get(\Shopware_Components_Translation::class);
         $data = $translationComponent->translatePaymentMethods($data);
 
         // Return the data and total count
@@ -268,7 +268,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         // Translate dispatch methods
         /** @var \Shopware_Components_Translation $translationComponent */
-        $translationComponent = $this->get('translation');
+        $translationComponent = $this->get(\Shopware_Components_Translation::class);
         $data = $translationComponent->translateDispatchMethods($data);
 
         // Return the data and total count
@@ -553,7 +553,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getVariantsAction()
     {
-        $builder = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $builder = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
 
         $fields = [
             'details.id',
@@ -738,7 +738,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
                 'template' => $template->getTemplate(),
             ];
 
-            $data = $this->get('theme_service')->translateTheme(
+            $data = $this->get(\Shopware\Components\Theme\Service::class)->translateTheme(
                 $template,
                 $data
             );
@@ -781,7 +781,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
     public function getLocalesAction()
     {
-        $repository = $this->get('models')->getRepository(Locale::class);
+        $repository = $this->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Locale::class);
 
         $builder = $repository->createQueryBuilder('l');
         $builder->select([
@@ -805,7 +805,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         $query = $builder->getQuery();
 
-        $total = $this->get('models')->getQueryCount($query);
+        $total = $this->get(\Shopware\Components\Model\ModelManager::class)->getQueryCount($query);
         $data = $query->getArrayResult();
 
         $data = $this->getSnippetsForLocales($data);
@@ -977,7 +977,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $email = $this->Request()->getParam('value');
 
         /** @var \Shopware\Components\Validator\EmailValidatorInterface $emailValidator */
-        $emailValidator = $this->container->get('validator.email');
+        $emailValidator = $this->container->get(\Shopware\Components\Validator\EmailValidator::class);
         if ($emailValidator->isValid($email)) {
             $this->Response()->setContent(1);
         } else {
@@ -1028,7 +1028,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getDocTypesAction()
     {
-        $modelManager = $this->container->get('models');
+        $modelManager = $this->container->get(\Shopware\Components\Model\ModelManager::class);
         $repository = $modelManager
             ->getRepository(Document::class);
 
@@ -1046,7 +1046,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         // translate the document names
         /** @var \Shopware_Components_Translation $translationComponent */
-        $translationComponent = $this->get('translation');
+        $translationComponent = $this->get(\Shopware_Components_Translation::class);
         $data = $translationComponent->translateDocuments($data);
 
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
@@ -1127,7 +1127,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             return $data;
         }
 
-        $builder = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $builder = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
 
         $builder->select([
             'details.id',
@@ -1185,7 +1185,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     private function getAvailableSalutationKeys()
     {
-        $builder = Shopware()->Container()->get('models')->createQueryBuilder();
+        $builder = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->createQueryBuilder();
         $builder->select(['element', 'values'])
             ->from(\Shopware\Models\Config\Element::class, 'element')
             ->leftJoin('element.values', 'values')

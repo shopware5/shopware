@@ -47,7 +47,7 @@ class ThemeDumpConfigurationCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $repository = $this->container->get('models')->getRepository('Shopware\Models\Shop\Shop');
+        $repository = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
         $shops = $repository->getShopsWithThemes()->getResult();
         $compiler = $this->container->get('theme_compiler');
         $rootDir = $this->container->getParameter('shopware.app.rootdir');
@@ -68,7 +68,7 @@ class ThemeDumpConfigurationCommand extends ShopwareCommand
      */
     private function dumpConfiguration(Shop $shop, Configuration $configuration)
     {
-        $pathResolver = $this->container->get('theme_path_resolver');
+        $pathResolver = $this->container->get(\Shopware\Components\Theme\PathResolver::class);
         $file = $pathResolver->getCacheDirectory() . '/config_' . $shop->getId() . '.json';
 
         file_put_contents($file, json_encode($configuration, JSON_PRETTY_PRINT));

@@ -33,7 +33,7 @@ class Shopware_Controllers_Frontend_Custom extends Enlight_Controller_Action
             $this->View()->loadTemplate('frontend/custom/ajax.tpl');
         }
 
-        $shopId = $this->container->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
+        $shopId = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()->getShop()->getId();
 
         $staticPage = Shopware()->Modules()->Cms()->sGetStaticPage(
             $this->Request()->sCustom,

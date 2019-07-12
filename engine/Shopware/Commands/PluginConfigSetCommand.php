@@ -59,7 +59,7 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
     {
         if ($argumentName === 'plugin') {
             /** @var ModelRepository $repository */
-            $repository = $this->getContainer()->get('models')->getRepository(Plugin::class);
+            $repository = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Plugin::class);
             $queryBuilder = $repository->createQueryBuilder('plugin');
             $result = $queryBuilder->andWhere($queryBuilder->expr()->eq('plugin.capabilityEnable', 'true'))
                 ->select(['plugin.name'])
@@ -70,7 +70,7 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
         } elseif ($argumentName === 'key') {
             $pluginName = $context->getWordAtIndex($context->getWordIndex() - 1);
             /** @var InstallerService $pluginManager */
-            $pluginManager = $this->container->get('shopware_plugininstaller.plugin_manager');
+            $pluginManager = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
             try {
                 $plugin = $pluginManager->getPluginByName($pluginName);
             } catch (\Exception $e) {
@@ -78,7 +78,7 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
             }
 
             /** @var Repository $shopRepository */
-            $shopRepository = $this->getContainer()->get('models')->getRepository(Shop::class);
+            $shopRepository = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
 
             $shops = $shopRepository->findAll();
 
@@ -163,7 +163,7 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var InstallerService $pluginManager */
-        $pluginManager = $this->container->get('shopware_plugininstaller.plugin_manager');
+        $pluginManager = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
         $pluginName = $input->getArgument('plugin');
 
         try {
@@ -175,7 +175,7 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
         }
 
         /** @var ModelManager $em */
-        $em = $this->container->get('models');
+        $em = $this->container->get(\Shopware\Components\Model\ModelManager::class);
 
         $shopId = null;
 

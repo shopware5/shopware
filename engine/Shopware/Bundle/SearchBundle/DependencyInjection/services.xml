@@ -9,73 +9,74 @@
 
         <!-- Shopware Search -->
         <service id="shopware_search.product_search" class="Shopware\Bundle\SearchBundle\ProductSearch">
-            <argument type="service" id="shopware_storefront.list_product_service"/>
-            <argument type="service" id="shopware_search.product_number_search"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface"/>
+            <argument type="service" id="Shopware\Bundle\SearchBundle\ProductNumberSearchInterface"/>
         </service>
 
         <service id="shopware_search.search_term_pre_processor" class="Shopware\Bundle\SearchBundle\SearchTermPreProcessor" />
 
         <service id="shopware_search.core_criteria_request_handler" class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\CoreCriteriaRequestHandler">
-            <argument type="service" id="config" />
-            <argument type="service" id="shopware_search.search_term_pre_processor" />
+            <argument type="service" id="Shopware_Components_Config" />
+            <argument type="service" id="Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface" />
 
             <tag name="criteria_request_handler"/>
         </service>
 
         <service id="shopware_search.sorting_criteria_request_handler" class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\SortingCriteriaRequestHandler">
-            <argument type="service" id="shopware_storefront.custom_sorting_service" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface" />
+
             <tag name="criteria_request_handler" />
         </service>
 
         <service id="shopware_search.custom_facet_criteria_request_handler" class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\FacetCriteriaRequestHandler">
-            <argument type="service" id="config" />
-            <argument type="service" id="shopware_storefront.custom_facet_service" />
-            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="Shopware_Components_Config" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\CustomFacetServiceInterface" />
+            <argument type="service" id="Doctrine\DBAL\Connection" />
+
             <tag name="criteria_request_handler" />
         </service>
 
         <service id="shopware_search.property_criteria_request_handler" class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\PropertyCriteriaRequestHandler">
-            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="Doctrine\DBAL\Connection" />
 
             <tag name="criteria_request_handler"/>
         </service>
 
         <service class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\VariantCriteriaRequestHandler" id="shopware_bundle_search.criteria_request_handler.variant_criteria_request_handler">
-            <argument id="dbal_connection" type="service"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface"/>
+
             <tag name="criteria_request_handler"/>
-            <argument type="service" id="shopware_searchdbal.variant_helper"/>
         </service>
 
         <service id="shopware_search.store_front_criteria_factory" class="Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactory" >
-            <argument type="service" id="config" />
-            <argument type="service" id="events" />
-
-            <!--Criteria request handlers -->
-            <argument type="tagged" tag="criteria_request_handler" />
+            <argument type="service" id="Shopware_Components_Config" />
+            <argument type="service" id="Shopware\Components\ContainerAwareEventManager" />
+            <argument type="tagged" tag="criteria_request_handler" /><!--Criteria request handlers -->
         </service>
 
         <service id="shopware_search.batch_product_number_search" class="Shopware\Bundle\SearchBundle\BatchProductNumberSearch">
-            <argument type="service" id="shopware_search.product_number_search" />
+            <argument type="service" id="Shopware\Bundle\SearchBundle\ProductNumberSearchInterface" />
             <argument type="service" id="shopware_storefront.base_product_factory" />
         </service>
 
         <service id="shopware_search.batch_product_search" class="Shopware\Bundle\SearchBundle\BatchProductSearch">
             <argument type="service" id="shopware_search.batch_product_number_search" />
-            <argument type="service" id="shopware_storefront.list_product_service" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface" />
         </service>
 
         <service id="shopware_search.category_tree_facet_result_builder" class="Shopware\Bundle\SearchBundle\FacetResult\CategoryTreeFacetResultBuilder">
-            <argument type="service" id="snippets" />
-            <argument type="service" id="query_alias_mapper" />
+            <argument type="service" id="Shopware_Components_Snippet_Manager" />
+            <argument type="service" id="Shopware\Components\QueryAliasMapper" />
         </service>
 
         <service class="Shopware\Bundle\SearchBundle\VariantSearch"
                  id="shopware_search.variant_search"
-                 decorates="shopware_search.product_search">
+                 decorates="Shopware\Bundle\SearchBundle\ProductSearchInterface">
 
-            <argument id="shopware_search.variant_search.inner" type="service"/>
-            <argument id="shopware_storefront.variant_listing_price_service" type="service"/>
-            <argument type="service" id="shopware_storefront.configurator_service"/>
+            <argument type="service" id="shopware_search.variant_search.inner"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\VariantListingPriceServiceInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface"/>
         </service>
 
     </services>

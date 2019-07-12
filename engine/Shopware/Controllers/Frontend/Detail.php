@@ -23,6 +23,7 @@
  */
 
 use Shopware\Components\Random;
+use Shopware\Components\Validator\EmailValidator;
 
 class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
 {
@@ -43,7 +44,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
      */
     public function errorAction()
     {
-        $config = $this->container->get('config');
+        $config = $this->container->get(\Shopware_Components_Config::class);
         if (!$config->get('RelatedArticlesOnArticleNotFound')) {
             throw new Enlight_Controller_Exception('Product not found', 404);
         }
@@ -211,7 +212,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             }
         }
 
-        $validator = $this->container->get('validator.email');
+        $validator = $this->container->get(EmailValidator::class);
         if (!empty(Shopware()->Config()->sOPTINVOTE)
             && (empty(Shopware()->System()->_POST['sVoteMail'])
                 || !$validator->isValid(Shopware()->System()->_POST['sVoteMail']))

@@ -260,7 +260,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
     protected function filterUrls($source)
     {
         /** @var \Shopware\Components\Routing\RouterInterface $router */
-        $router = $this->get('router');
+        $router = $this->get(\Shopware\Components\Routing\RouterInterface::class);
         $baseFile = preg_quote($router->getContext()->getBaseFile(), '#');
         $regex = '#<(a|form|iframe|link|img)[^<>]*(href|src|action)="(' . $baseFile . '[^"]*)".*>#Umsi';
         if (preg_match_all($regex, $source, $matches) > 0) {
@@ -304,7 +304,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
             $shop = $shop->getMain();
         }
 
-        $shopHosts = $this->get('dbal_connection')->fetchAssoc(
+        $shopHosts = $this->get(\Doctrine\DBAL\Connection::class)->fetchAssoc(
             'SELECT host, hosts FROM s_core_shops WHERE id = :id',
             [':id' => $shop->getId()]
         );

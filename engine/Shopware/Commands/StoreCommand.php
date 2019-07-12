@@ -152,7 +152,7 @@ abstract class StoreCommand extends ShopwareCommand
 
         $output->writeln(sprintf('Connect to Store with username: %s...', $username));
 
-        return $this->container->get('shopware_plugininstaller.store_client')->getAccessToken(
+        return $this->container->get(\Shopware\Bundle\PluginInstallerBundle\StoreClient::class)->getAccessToken(
             $username,
             $password
         );

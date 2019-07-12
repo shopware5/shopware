@@ -42,17 +42,17 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
     public function setUp()
     {
         parent::setUp();
-        Shopware()->Container()->get('dbal_connection')->beginTransaction();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
         $this->deleteCustomer(self::TEST_MAIL);
-        Shopware()->Container()->get('models')->clear();
+        Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->clear();
     }
 
     protected function tearDown()
     {
         parent::tearDown();
-        Shopware()->Container()->get('dbal_connection')->rollback();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollback();
         $this->deleteCustomer(self::TEST_MAIL);
-        Shopware()->Container()->get('models')->clear();
+        Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->clear();
     }
 
     public function testSimpleRegistration()
@@ -238,7 +238,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
         $session = Shopware()->Container()->get('session');
         static::assertNotEmpty($session->offsetGet('sUserId'));
 
-        $customer = Shopware()->Container()->get('dbal_connection')->fetchAssoc(
+        $customer = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->fetchAssoc(
             'SELECT * FROM s_user WHERE email = :mail AND active = 1 AND doubleOptinEmailSentDate IS NULL LIMIT 1',
             [':mail' => $email]
         );
@@ -266,7 +266,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
         $this->dispatch(self::SAVE_URL);
 
         /** @var Connection $connection */
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
 
         $customer = $connection->fetchAssoc(
             'SELECT id, doubleOptinEmailSentDate FROM s_user WHERE email = :mail AND active = 0 AND doubleOptinEmailSentDate IS NOT NULL LIMIT 1',
@@ -292,7 +292,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
     private function sendRequestAndAssertDOIConfirmation($email, $hash)
     {
         /** @var Connection $connection */
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
 
         // Create broken data
         $connection->executeQuery('
@@ -328,7 +328,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
 
     private function deleteCustomer($email)
     {
-        Shopware()->Container()->get('dbal_connection')->executeQuery(
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->executeQuery(
             'DELETE FROM s_user WHERE email = :mail',
             [':mail' => $email]
         );
@@ -390,7 +390,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
             $column = 'default_shipping_address_id';
         }
 
-        $address = Shopware()->Container()->get('dbal_connection')->fetchAssoc(
+        $address = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->fetchAssoc(
             'SELECT address.* FROM s_user_addresses address, s_user user WHERE user.' . $column . ' = address.id AND user.email = :mail',
             [':mail' => $email]
         );
@@ -410,7 +410,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
     {
         $headers = $response->getHeaders();
         foreach ($headers as $header) {
-            if ($header['name'] == 'Location') {
+            if ($header['name'] === 'Location') {
                 return $header['value'];
             }
         }
@@ -423,8 +423,8 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
      */
     private function doubleOptinSet($switch)
     {
-        Shopware()->Container()->get('config_writer')->save('optinregister', $switch, null, Shopware()->Shop()->getId());
-        Shopware()->Container()->get('config')->setShop(Shopware()->Shop());
-        Shopware()->Container()->get('cache')->clean();
+        Shopware()->Container()->get(\Shopware\Components\ConfigWriter::class)->save('optinregister', $switch, null, Shopware()->Shop()->getId());
+        Shopware()->Container()->get(\Shopware_Components_Config::class)->setShop(Shopware()->Shop());
+        Shopware()->Container()->get(\Zend_Cache_Core::class)->clean();
     }
 }

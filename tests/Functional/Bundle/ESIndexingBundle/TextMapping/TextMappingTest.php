@@ -42,7 +42,7 @@ class TextMappingTest extends TestCase
 
     protected function setUp()
     {
-        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $this->connection->beginTransaction();
 
         parent::setUp();
@@ -67,8 +67,8 @@ class TextMappingTest extends TestCase
             ],
         ]);
 
-        $client = Shopware()->Container()->get('shopware_elastic_search.client');
-        $indexFactory = Shopware()->Container()->get('shopware_elastic_search.index_factory');
+        $client = Shopware()->Container()->get(\Elasticsearch\Client::class);
+        $indexFactory = Shopware()->Container()->get(\Shopware\Bundle\ESIndexingBundle\IndexFactory::class);
 
         $this->helper->refreshSearchIndexes($context->getShop());
 

@@ -63,7 +63,7 @@ class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Contro
             $data = $this->implodePriceVariation($data);
 
             $priceVariation->fromArray($data);
-            $modelManager = $this->get('models');
+            $modelManager = $this->get(\Shopware\Components\Model\ModelManager::class);
             /** @var Set|null $configuratorSet */
             $configuratorSet = $modelManager
                     ->getRepository(Set::class)

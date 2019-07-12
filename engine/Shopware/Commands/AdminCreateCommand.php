@@ -133,7 +133,7 @@ class AdminCreateCommand extends ShopwareCommand
     private function getAdminRole()
     {
         /** @var ModelManager $em */
-        $em = $this->container->get('models');
+        $em = $this->container->get(\Shopware\Components\Model\ModelManager::class);
 
         /** @var Role $return */
         $return = $em->getRepository(\Shopware\Models\User\Role::class)
@@ -183,7 +183,7 @@ class AdminCreateCommand extends ShopwareCommand
     private function persistUser(User $user)
     {
         /** @var ModelManager $em */
-        $em = $this->container->get('models');
+        $em = $this->container->get(\Shopware\Components\Model\ModelManager::class);
         $em->persist($user);
         $em->flush($user);
     }

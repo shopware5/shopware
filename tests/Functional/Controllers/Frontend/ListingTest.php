@@ -36,7 +36,7 @@ class Shopware_Tests_Controllers_Frontend_ListingTest extends Enlight_Components
     {
         parent::setUp();
 
-        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $this->connection->beginTransaction();
     }
 

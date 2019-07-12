@@ -46,7 +46,7 @@ class PrivacyServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
 
         $this->privacyService = Shopware()->Container()->get('shopware.components.privacy.privacy_service');
     }

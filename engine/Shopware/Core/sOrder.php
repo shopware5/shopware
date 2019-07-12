@@ -232,11 +232,11 @@ class sOrder implements \Enlight_Hook
         $this->db = Shopware()->Db();
         $this->eventManager = Shopware()->Events();
         $this->config = Shopware()->Config();
-        $this->numberRangeIncrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
+        $this->numberRangeIncrementer = Shopware()->Container()->get(\Shopware\Components\NumberRangeIncrementerInterface::class);
 
-        $this->contextService = $contextService ?: Shopware()->Container()->get('shopware_storefront.context_service');
-        $this->attributeLoader = Shopware()->Container()->get('shopware_attribute.data_loader');
-        $this->attributePersister = Shopware()->Container()->get('shopware_attribute.data_persister');
+        $this->contextService = $contextService ?: Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
+        $this->attributeLoader = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataLoader::class);
+        $this->attributePersister = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataPersister::class);
     }
 
     /**
@@ -576,7 +576,7 @@ class sOrder implements \Enlight_Hook
             $this->sUserData['additional']['user']['affiliate']
         );
 
-        $ip = Shopware()->Container()->get('shopware.components.privacy.ip_anonymizer')
+        $ip = Shopware()->Container()->get(\Shopware\Components\Privacy\IpAnonymizerInterface::class)
             ->anonymize((string) $_SERVER['REMOTE_ADDR']);
 
         $orderParams = [
@@ -1001,7 +1001,7 @@ class sOrder implements \Enlight_Hook
     public function sSaveBillingAddress($address, $id)
     {
         /** @var Customer $customer */
-        $customer = Shopware()->Container()->get('models')->find(Customer::class, $address['userID']);
+        $customer = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->find(Customer::class, $address['userID']);
 
         $sql = '
         INSERT INTO s_order_billingaddress
@@ -1309,7 +1309,7 @@ class sOrder implements \Enlight_Hook
         $shopId = is_numeric($order['language']) ? $order['language'] : $order['subshopID'];
         // The (sub-)shop might be inactive by now, so that's why we use `getById` instead of `getActiveById`
         $shop = $repository->getById($shopId);
-        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerShop($shop);
+        Shopware()->Container()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         $dispatch = Shopware()->Modules()->Admin()->sGetDispatchTranslation($dispatch);
         $payment = Shopware()->Modules()->Admin()->sGetPaymentTranslation(['id' => $order['paymentID']]);

@@ -209,7 +209,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     {
         $codeId = (int) $this->Request()->getParam('id');
         /** @var Code|null $code */
-        $code = $this->get('models')->getRepository(Code::class)->find($codeId);
+        $code = $this->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Code::class)->find($codeId);
 
         if (!$code) {
             $this->View()->assign(['success' => false]);
@@ -221,8 +221,8 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $code->setCode($this->Request()->getParam('code'));
         $code->setCustomerId($this->Request()->getParam('customerId'));
 
-        $this->get('models')->persist($code);
-        $this->get('models')->flush($code);
+        $this->get(\Shopware\Components\Model\ModelManager::class)->persist($code);
+        $this->get(\Shopware\Components\Model\ModelManager::class)->flush($code);
 
         $this->View()->assign(['success' => true]);
     }

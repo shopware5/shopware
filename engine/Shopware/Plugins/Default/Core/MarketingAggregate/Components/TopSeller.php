@@ -125,7 +125,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
             GROUP BY articles.id ';
 
         if ($limit !== null) {
-            $sql = Shopware()->Db()->limit($sql, $limit);
+            $sql = Shopware()->Db()->limit($sql, (int) $limit);
         }
 
         $articles = Shopware()->Db()->fetchAll($sql, [
@@ -192,10 +192,10 @@ class Shopware_Components_TopSeller extends Enlight_Class
      */
     protected function getTopSellerOrderTime()
     {
-        //get top seller order time interval
+        // Get top seller order time interval
         $interval = Shopware()->Config()->get('chartInterval', 10);
 
-        //create a new date time object to create the current date subtract the configured date interval.
+        // Create a new date time object to create the current date subtract the configured date interval.
         $orderTime = new DateTime();
         $orderTime->sub(new DateInterval('P' . $interval . 'D'));
 
@@ -211,10 +211,10 @@ class Shopware_Components_TopSeller extends Enlight_Class
      */
     protected function getTopSellerValidationTime()
     {
-        //get top seller order time interval
+        // Get top seller order time interval
         $interval = Shopware()->Config()->get('topSellerValidationTime', 10);
 
-        //create a new date time object to create the current date subtract the configured date interval.
+        // Create a new date time object to create the current date subtract the configured date interval.
         $orderTime = new DateTime();
         $orderTime->sub(new DateInterval('P' . $interval . 'D'));
 
@@ -231,11 +231,11 @@ class Shopware_Components_TopSeller extends Enlight_Class
      */
     protected function getTopSellerSelect()
     {
-        //check the pseudo sales configuration value
+        // Check the pseudo sales configuration value
         $usePseudoSales = Shopware()->Config()->get('topSellerPseudoSales', true);
         $sumSelect = ' SUM(IF(s_order.id, IFNULL(details.quantity, 0), 0))  ';
         if ($usePseudoSales) {
-            //if this value is set to true, the articles.pseudosales column has to be added to the sales value.
+            // If this value is set to true, the articles.pseudosales column has to be added to the sales value.
             $sumSelect = $sumSelect . ' + articles.pseudosales ';
         }
         $sumSelect = $sumSelect . ' as sales ';

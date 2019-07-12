@@ -73,7 +73,6 @@
             <call method="pushHandler">
                 <argument type="service" id="monolog.handler.rotating_file.es" />
             </call>
-
         </service>
 
         <!-- ChromePHP handler-->

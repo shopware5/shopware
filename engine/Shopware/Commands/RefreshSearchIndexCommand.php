@@ -58,13 +58,13 @@ class RefreshSearchIndexCommand extends ShopwareCommand
             $output->writeln('Deleting the search index...');
 
             /** @var \Doctrine\DBAL\Connection $connection */
-            $connection = $this->container->get('dbal_connection');
+            $connection = $this->container->get(\Doctrine\DBAL\Connection::class);
             $connection->delete('s_search_index', ['*']);
             $connection->delete('s_search_keywords', ['*']);
         }
         $output->writeln('Creating the search index. This may take a while depending on the shop size.');
         /* @var \Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexerInterface; $indexer */
-        $indexer = $this->container->get('shopware_searchdbal.search_indexer');
+        $indexer = $this->container->get(\Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexer::class);
         $indexer->build();
 
         $output->writeln('The search index was created successfully.');

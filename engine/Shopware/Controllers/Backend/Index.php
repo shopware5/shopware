@@ -137,7 +137,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $this->View()->assign('installationSurvey', $this->checkForInstallationSurveyNecessity($identity), true);
 
         /** @var Shopware_Components_Config $config */
-        $config = $this->get('config');
+        $config = $this->get(\Shopware_Components_Config::class);
 
         /** @var \Shopware\Components\ShopwareReleaseStruct $shopwareRelease */
         $shopwareRelease = $this->container->get('shopware.release');
@@ -173,7 +173,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
             return;
         }
 
-        $localeRepository = $this->container->get('models')
+        $localeRepository = $this->container->get(\Shopware\Components\Model\ModelManager::class)
             ->getRepository(Shopware\Models\Shop\Locale::class);
 
         $locale = $localeRepository->find($localeId);
@@ -267,7 +267,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
     {
         // Only admins can see the wizard
         if ($identity->role->getAdmin()) {
-            return $this->container->get('config')->get('firstRunWizardEnabled', false);
+            return $this->container->get(\Shopware_Components_Config::class)->get('firstRunWizardEnabled', false);
         }
 
         return false;
@@ -314,8 +314,8 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         if ($this->checkIsFeedbackRequired() || !$identity->role->getAdmin()) {
             return false;
         }
-        $installationSurvey = $this->container->get('config')->get('installationSurvey', false);
-        $installationDate = \DateTime::createFromFormat('Y-m-d H:i', $this->container->get('config')->get('installationDate'));
+        $installationSurvey = $this->container->get(\Shopware_Components_Config::class)->get('installationSurvey', false);
+        $installationDate = \DateTime::createFromFormat('Y-m-d H:i', $this->container->get(\Shopware_Components_Config::class)->get('installationDate'));
         if (!$installationSurvey || !$installationDate) {
             return false;
         }
@@ -329,7 +329,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
      */
     private function isBIOverviewEnabled()
     {
-        if (!$this->get('config')->get('benchmarkTeaser')) {
+        if (!$this->get(\Shopware_Components_Config::class)->get('benchmarkTeaser')) {
             return false;
         }
 
@@ -339,7 +339,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $shopwareVersionText = $this->container->getParameter('shopware.release.version_text');
 
         $waitingOver = true;
-        $installationDate = \DateTime::createFromFormat('Y-m-d H:i', $this->container->get('config')->get('installationDate'));
+        $installationDate = \DateTime::createFromFormat('Y-m-d H:i', $this->container->get(\Shopware_Components_Config::class)->get('installationDate'));
         if ($installationDate) {
             $interval = $installationDate->diff(new \DateTime());
 

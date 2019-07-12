@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,6 +25,7 @@
 
 require __DIR__ . '/../../autoload.php';
 
+use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 
 class TestKernel extends \Shopware\Kernel
@@ -39,11 +41,11 @@ class TestKernel extends \Shopware\Kernel
         $container = $kernel->getContainer();
         $container->get('plugins')->Core()->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
 
-        /** @var \Shopware\Models\Shop\Repository $repository */
-        $repository = $container->get('models')->getRepository(Shop::class);
+        /** @var Repository $repository */
+        $repository = $container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
 
         $shop = $repository->getActiveDefault();
-        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerShop($shop);
+        Shopware()->Container()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         $_SERVER['HTTP_HOST'] = $shop->getHost();
     }

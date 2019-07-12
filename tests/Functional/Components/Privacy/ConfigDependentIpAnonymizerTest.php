@@ -45,7 +45,7 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
     public function tearDown()
     {
         $this->setConfig('anonymizeIp', true);
-        Shopware()->Container()->reset('shopware.components.privacy.ip_anonymizer');
+        Shopware()->Container()->reset(\Shopware\Components\Privacy\IpAnonymizerInterface::class);
         // Reset the controller as well, since it already has the service injected
         Shopware()->Container()->reset('shopware_controllers_backend_logger');
     }
@@ -82,7 +82,7 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
     {
         $this->setConfig('anonymizeIp', true);
 
-        Shopware()->Container()->reset('shopware.components.privacy.ip_anonymizer');
+        Shopware()->Container()->reset(\Shopware\Components\Privacy\IpAnonymizerInterface::class);
 
         $this->Request()
             ->setClientIp('127.0.0.1')
@@ -104,7 +104,7 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
     {
         $this->setConfig('anonymizeIp', true);
 
-        Shopware()->Container()->reset('shopware.components.privacy.ip_anonymizer');
+        Shopware()->Container()->reset(\Shopware\Components\Privacy\IpAnonymizerInterface::class);
 
         $this->Request()
             ->setClientIp('2a00:1450:4001:816::200e')
@@ -126,7 +126,7 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
     {
         $this->setConfig('anonymizeIp', false);
 
-        Shopware()->Container()->reset('shopware.components.privacy.ip_anonymizer');
+        Shopware()->Container()->reset(\Shopware\Components\Privacy\IpAnonymizerInterface::class);
         // Reset the controller as well, since it already has the service injected
         Shopware()->Container()->reset('shopware_controllers_backend_logger');
 

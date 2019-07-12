@@ -29,13 +29,13 @@ function smarty_function_compileLess($params, $template)
     $output = $params['output'];
 
     /** @var \Shopware\Components\Theme\PathResolver $pathResolver */
-    $pathResolver = Shopware()->Container()->get('theme_path_resolver');
+    $pathResolver = Shopware()->Container()->get(\Shopware\Components\Theme\PathResolver::class);
 
     /** @var \Shopware\Models\Shop\Shop $shop */
     $shop = Shopware()->Container()->get('shop');
 
     /** @var \Shopware\Models\Theme\Settings $settings */
-    $settings = Shopware()->Container()->get('theme_service')->getSystemConfiguration(
+    $settings = Shopware()->Container()->get(\Shopware\Components\Theme\Service::class)->getSystemConfiguration(
         \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT
     );
 

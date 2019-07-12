@@ -30,6 +30,6 @@ trait FixtureBehaviour
     {
         $sql = file_get_contents($name);
 
-        Shopware()->Container()->get('dbal_connection')->exec($sql);
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->exec($sql);
     }
 }

@@ -55,7 +55,7 @@ class Router extends EnlightRouter implements RouterInterface
     protected $postFilters;
 
     /**
-     * The DI constructor of shopware router
+     * The DI constructor of Shopware router
      *
      * @param MatcherInterface[]    $matchers
      * @param PreFilterInterface[]  $preFilters
@@ -288,7 +288,6 @@ class Router extends EnlightRouter implements RouterInterface
      *
      * @see \Shopware_Controllers_Backend_Newsletter::initMailing
      * @see \Enlight_Controller_Router::setGlobalParam
-     * @deprecated Use the context
      *
      * @param string $name
      * @param string $value

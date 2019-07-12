@@ -134,11 +134,11 @@ class sExport implements \Enlight_Hook
     ) {
         $container = Shopware()->Container();
 
-        $this->contextService = $contextService ?: $container->get('shopware_storefront.context_service');
-        $this->additionalTextService = $container->get('shopware_storefront.additional_text_service');
+        $this->contextService = $contextService ?: $container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
+        $this->additionalTextService = $container->get(\Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface::class);
         $this->db = $db ?: $container->get('db');
-        $this->config = $config ?: $container->get('config');
-        $this->configuratorService = $configuratorService ?: $container->get('shopware_storefront.configurator_service');
+        $this->config = $config ?: $container->get(\Shopware_Components_Config::class);
+        $this->configuratorService = $configuratorService ?: $container->get(\Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface::class);
         $this->cdnConfig = $container->getParameter('shopware.cdn');
     }
 
@@ -307,7 +307,7 @@ class sExport implements \Enlight_Hook
         /** @var Currency $currency */
         $currency = $repository->find($this->sCurrency['id']);
         $shop->setCurrency($currency);
-        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerShop($shop);
+        Shopware()->Container()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
         $this->contextService->initializeContext();
 
         $this->shop = $shop;
@@ -523,10 +523,10 @@ class sExport implements \Enlight_Hook
         }
 
         /** @var MediaService $mediaService */
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         /** @var Manager $thumbnailManager */
-        $thumbnailManager = Shopware()->Container()->get('thumbnail_manager');
+        $thumbnailManager = Shopware()->Container()->get(\Shopware\Components\Thumbnail\Manager::class);
 
         // If no imageSize was set, return the full image
         if ($imageSize === null) {
@@ -636,7 +636,7 @@ class sExport implements \Enlight_Hook
                     'txtzusatztxt' => 'additionaltext',
                 ];
 
-                $attributes = Shopware()->Container()->get('shopware_attribute.crud_service')->getList('s_articles_attributes');
+                $attributes = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class)->getList('s_articles_attributes');
                 foreach ($attributes as $attribute) {
                     if ($attribute->isIdentifier()) {
                         continue;

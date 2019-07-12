@@ -29,6 +29,7 @@ use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop;
+use Shopware\Models\Shop\Template;
 use Shopware\Models\Theme\Settings;
 
 /**
@@ -136,7 +137,7 @@ class Service
         $namespace = $this->getConfigSnippetNamespace($template);
         $namespace->read();
 
-        //theme configurations contains only one main container on the first level.
+        // Theme configurations contains only one main container on the first level.
         $layout[0] = $this->translateContainer($layout[0], $template, $namespace);
 
         return $layout;
@@ -237,14 +238,14 @@ class Service
     public function assignShopTemplate($shopId, $templateId)
     {
         /** @var Shop\Shop $shop */
-        $shop = $this->entityManager->find('Shopware\Models\Shop\Shop', $shopId);
+        $shop = $this->entityManager->find(\Shopware\Models\Shop\Shop::class, $shopId);
 
         if (!$shop instanceof Shop\Shop) {
             throw new \Exception();
         }
 
         /** @var Shop\Template $template */
-        $template = $this->entityManager->find('Shopware\Models\Shop\Template', $templateId);
+        $template = $this->entityManager->find(Template::class, $templateId);
 
         if (!$template instanceof Shop\Template) {
             throw new \Exception();
@@ -266,7 +267,7 @@ class Service
     public function saveConfig(Shop\Template $template, array $values)
     {
         foreach ($values as $data) {
-            //get the element over the name
+            // Get the element using the name
             $element = $this->getElementByName(
                 $template->getElements(),
                 $data['elementName']
@@ -283,7 +284,7 @@ class Service
 
             /** @var Shop\Shop $shop */
             $shop = $this->entityManager->getReference(
-                'Shopware\Models\Shop\Shop',
+                \Shopware\Models\Shop\Shop::class,
                 $data['shopId']
             );
 
@@ -424,7 +425,8 @@ class Service
      * If a shop instance passed, the function selects additionally the
      * element values of the passed shop.
      *
-     * @param Shop\Shop $shop
+     * @param Template $template
+     * @param int|null $parentId
      *
      * @return array
      */
@@ -450,7 +452,7 @@ class Service
                 ->setParameter('shopId', $shop->getId());
         }
 
-        if ($parentId == null) {
+        if ($parentId === null) {
             $builder->andWhere('layout.parentId IS NULL');
         } else {
             $builder->andWhere('layout.parentId = :parentId')
@@ -506,10 +508,8 @@ class Service
     /**
      * Helper function to check, convert and load the translation for
      * the passed value.
-     *
-     * @param string $snippet
      */
-    private function convertSnippet($snippet, \Enlight_Components_Snippet_Namespace $namespace)
+    private function convertSnippet(string $snippet, \Enlight_Components_Snippet_Namespace $namespace): string
     {
         if (!$this->isSnippet($snippet)) {
             return $snippet;
@@ -522,42 +522,31 @@ class Service
     }
 
     /**
-     * Checks if the passed value match the snippet pattern.
-     *
-     * @param string $value
-     *
-     * @return bool
+     * Checks if the passed value match the snippet pattern
      */
-    private function isSnippet($value)
+    private function isSnippet(string $value): bool
     {
         return (bool) (substr($value, -2) === '__'
-            && substr($value, 0, 2) === '__');
+            && strpos($value, '__') === 0);
     }
 
     /**
      * Helper function to remove the snippet pattern
-     * of the passed snippet name.
-     *
-     * @param string $name
-     *
-     * @return string
      */
-    private function getSnippetName($name)
+    private function getSnippetName(string $name): string
     {
         $name = substr($name, 2);
 
-        return substr($name, 0, strlen($name) - 2);
+        return substr($name, 0, -2);
     }
 
     /**
      * Helper function which checks if the element name is already exists in the
      * passed collection of config elements.
      *
-     * @param string $name
-     *
      * @return Shop\TemplateConfig\Element|null
      */
-    private function getElementByName(Collection $collection, $name)
+    private function getElementByName(Collection $collection, string $name)
     {
         /** @var Shop\TemplateConfig\Element $element */
         foreach ($collection as $element) {

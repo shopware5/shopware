@@ -109,8 +109,8 @@ class SchemaOperatorTest extends \PHPUnit\Framework\TestCase
      */
     private function iterateTypeArray($types)
     {
-        $service = Shopware()->Container()->get('shopware_attribute.crud_service');
-        $tableMapping = Shopware()->Container()->get('shopware_attribute.table_mapping');
+        $service = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class);
+        $tableMapping = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\TableMapping::class);
         $table = 's_articles_attributes';
 
         foreach ($types as $type => $default) {

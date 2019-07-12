@@ -72,7 +72,7 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
      */
     public function afterInit()
     {
-        $this->get('loader')->registerNamespace(
+        $this->get(\Enlight_Loader::class)->registerNamespace(
             'ShopwarePlugins\\RestApi\\Components',
             __DIR__ . '/Components/'
         );
@@ -132,7 +132,7 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
 
         $user = $db->query($select)->fetchObject();
         if (!empty($user->roleID)) {
-            $user->role = $this->get('models')->find(
+            $user->role = $this->get(\Shopware\Components\Model\ModelManager::class)->find(
                 'Shopware\Models\User\Role',
                 $user->roleID
             );
@@ -182,13 +182,13 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
 
         $adapter->setBasicResolver(
             new BasicAuthResolver(
-                $this->get('models')
+                $this->get(\Shopware\Components\Model\ModelManager::class)
             )
         );
 
         $adapter->setDigestResolver(
             new StaticResolver(
-                $this->get('models')
+                $this->get(\Shopware\Components\Model\ModelManager::class)
             )
         );
 

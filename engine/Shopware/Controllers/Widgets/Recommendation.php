@@ -99,10 +99,10 @@ class Shopware_Controllers_Widgets_Recommendation extends Enlight_Controller_Act
             return [];
         }
 
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
-        $products = $this->get('shopware_storefront.list_product_service')
+        $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
+        $products = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)
             ->getList($numbers, $context);
 
-        return $this->get('legacy_struct_converter')->convertListProductStructList($products);
+        return $this->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertListProductStructList($products);
     }
 }

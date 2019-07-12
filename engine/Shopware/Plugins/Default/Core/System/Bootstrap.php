@@ -153,7 +153,7 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
     public static function onInitResourceModules(Enlight_Event_EventArgs $args)
     {
         $modules = new Shopware_Components_Modules();
-        Shopware()->Container()->set('Modules', $modules);
+        Shopware()->Container()->set('modules', $modules);
         $modules->setSystem(Shopware()->System());
 
         return $modules;

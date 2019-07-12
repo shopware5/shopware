@@ -74,7 +74,7 @@ class Media extends Resource
             throw new ApiException\NotFoundException(sprintf('Media by id %d not found', $id));
         }
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         if (is_array($media)) {
             $media['path'] = $mediaService->getUrl($media['path']);
         } else {
@@ -105,7 +105,7 @@ class Media extends Resource
         // Returns the category data
         $media = $paginator->getIterator()->getArrayCopy();
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         array_walk($media, function (&$item) use ($mediaService) {
             $item['path'] = $mediaService->getUrl($item['path']);
         });
@@ -141,7 +141,7 @@ class Media extends Resource
 
         if ($media->getType() === MediaModel::TYPE_IMAGE) {
             /** @var Manager $manager */
-            $manager = $this->getContainer()->get('thumbnail_manager');
+            $manager = $this->getContainer()->get(\Shopware\Components\Thumbnail\Manager::class);
 
             $manager->createMediaThumbnail($media, [], true);
         }
@@ -178,7 +178,7 @@ class Media extends Resource
             $file = new UploadedFile($path, $params['file']);
 
             try {
-                $this->getContainer()->get('shopware_media.replace_service')->replace($id, $file);
+                $this->getContainer()->get(\Shopware\Bundle\MediaBundle\MediaReplaceServiceInterface::class)->replace($id, $file);
                 @unlink($path);
             } catch (\Exception $exception) {
                 @unlink($path);
@@ -273,7 +273,7 @@ class Media extends Resource
 
         if ($media->getType() === MediaModel::TYPE_IMAGE) {
             /** @var Manager $manager */
-            $manager = Shopware()->Container()->get('thumbnail_manager');
+            $manager = Shopware()->Container()->get(\Shopware\Components\Thumbnail\Manager::class);
 
             $manager->createMediaThumbnail($media, [], true);
         }
@@ -340,7 +340,7 @@ class Media extends Resource
             $baseFileName = basename($baseFileName);
         }
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         if ($baseFileName !== null && !$mediaService->has("$destPath/$baseFileName")) {
             return substr($baseFileName, 0, self::FILENAME_LENGTH);
         }

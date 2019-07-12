@@ -12,10 +12,10 @@
         <service id="Shopware\Bundle\ContentTypeBundle\Controller\Backend\ContentTypeManager">
             <argument>%shopware.bundle.content_type.field_alias%</argument>
             <argument type="service" id="Shopware\Bundle\ContentTypeBundle\Services\TypeProvider"/>
-            <argument type="service" id="snippets"/>
+            <argument type="service" id="Shopware_Components_Snippet_Manager"/>
             <argument type="service" id="shopware.slug"/>
             <argument type="service" id="Shopware\Bundle\ContentTypeBundle\Services\TypeBuilder"/>
-            <argument type="service" id="shopware.cache_manager"/>
+            <argument type="service" id="Shopware\Components\CacheManager"/>
             <argument type="service" id="Shopware\Bundle\ContentTypeBundle\Services\SynchronizerService"/>
             <argument type="service" id="Shopware\Bundle\ContentTypeBundle\Services\ContentTypeCleanupServiceInterface"/>
             <tag name="shopware.controller" module="Backend" controller="ContentTypeManager"/>
@@ -24,7 +24,7 @@
         <service id="Shopware\Bundle\ContentTypeBundle\Subscriber\SyncSubscriber">
             <argument type="service" id="Shopware\Bundle\ContentTypeBundle\Services\DatabaseContentTypeSynchronizerInterface"/>
             <argument type="service" id="service_container"/>
-            <argument type="service" id="shopware.cache_manager"/>
+            <argument type="service" id="Shopware\Components\CacheManager"/>
             <tag name="shopware.event_subscriber"/>
         </service>
 
@@ -34,7 +34,7 @@
         </service>
 
         <service id="Shopware\Bundle\ContentTypeBundle\Services\SynchronizerService">
-            <argument type="service" id="models"/>
+            <argument type="service" id="Shopware\Components\Model\ModelManager"/>
             <argument type="service" id="Shopware\Bundle\ContentTypeBundle\Services\TypeProvider"/>
             <argument type="service" id="Shopware\Bundle\ContentTypeBundle\Services\MenuSynchronizerInterface"/>
             <argument type="service" id="Shopware\Bundle\ContentTypeBundle\Services\AclSynchronizerInterface"/>
@@ -47,7 +47,7 @@
                 <argument type="string" key="ProjectPlugins">%shopware.plugin_directories.ProjectPlugins%</argument>
             </argument>
             <argument type="service" id="Shopware\Bundle\ContentTypeBundle\Services\TypeBuilder"/>
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
             <argument type="service" id="Shopware\Bundle\ContentTypeBundle\Services\SynchronizerService"/>
             <argument type="service" id="Shopware\Bundle\ContentTypeBundle\Services\ContentTypeCleanupServiceInterface"/>
         </service>
@@ -67,24 +67,24 @@
         </service>
 
         <service id="Shopware\Bundle\ContentTypeBundle\Services\ExtjsBuilderInterface" class="Shopware\Bundle\ContentTypeBundle\Services\ExtjsBuilder">
-            <argument type="service" id="snippets"/>
+            <argument type="service" id="Shopware_Components_Snippet_Manager"/>
         </service>
 
         <service id="Shopware\Bundle\ContentTypeBundle\Services\MenuSynchronizerInterface" class="Shopware\Bundle\ContentTypeBundle\Services\MenuSynchronizer">
-            <argument type="service" id="models"/>
+            <argument type="service" id="Shopware\Components\Model\ModelManager"/>
         </service>
 
         <service id="Shopware\Bundle\ContentTypeBundle\Services\AclSynchronizerInterface" class="Shopware\Bundle\ContentTypeBundle\Services\AclSynchronizer">
-            <argument type="service" id="models"/>
+            <argument type="service" id="Shopware\Components\Model\ModelManager"/>
         </service>
 
         <service id="Shopware\Bundle\ContentTypeBundle\Services\ContentTypeCleanupServiceInterface" class="Shopware\Bundle\ContentTypeBundle\Services\ContentTypeCleanupService">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
             <argument type="service" id="Shopware\Bundle\ContentTypeBundle\Services\AclSynchronizerInterface"/>
         </service>
 
         <service id="Shopware\Bundle\ContentTypeBundle\Services\FrontendTypeTranslatorInterface" class="Shopware\Bundle\ContentTypeBundle\Services\FrontendTypeTranslator">
-            <argument type="service" id="snippets"/>
+            <argument type="service" id="Shopware_Components_Snippet_Manager"/>
         </service>
     </services>
 </container>

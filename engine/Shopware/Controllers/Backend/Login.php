@@ -201,9 +201,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
             $this->container->get('backendsession')->offsetUnset('passwordVerified');
         }
 
-        /*
-         * Set a flag in the backend session indicating that the password has been successfully verified
-         */
+        // Set a flag in the backend session indicating that the password has been verified successfully
         if ($result) {
             $this->container->get('backendsession')->offsetSet('passwordVerified', true);
         }

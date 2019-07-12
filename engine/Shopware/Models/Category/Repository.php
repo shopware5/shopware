@@ -661,7 +661,7 @@ class Repository extends ModelRepository
         );
 
         if (Shopware()->Container()->initialized('shop')) {
-            $translationComponent = Shopware()->Container()->get('translation');
+            $translationComponent = Shopware()->Container()->get(\Shopware_Components_Translation::class);
             $shopId = Shopware()->Shop()->getId();
             $fallbackId = null;
             if (Shopware()->Shop()->getFallback()) {

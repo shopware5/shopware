@@ -153,7 +153,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createOrders();
 
         $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
-        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerShop($shop);
+        Shopware()->Container()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         $result = $this->repository->getReferrerRevenue(
             $shop,

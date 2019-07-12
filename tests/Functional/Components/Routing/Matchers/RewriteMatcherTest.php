@@ -35,7 +35,7 @@ class RewriteMatcherTest extends \Enlight_Components_Test_TestCase
     protected $connection;
 
     /**
-     * @var Shopware\Components\Routing\Matchers\RewriteMatcher
+     * @var \Shopware\Components\Routing\Matchers\RewriteMatcher
      */
     protected $matcher;
 
@@ -46,7 +46,7 @@ class RewriteMatcherTest extends \Enlight_Components_Test_TestCase
     protected function setUp()
     {
         $c = Shopware()->Container();
-        $this->connection = $c->get('dbal_connection');
+        $this->connection = $c->get(\Doctrine\DBAL\Connection::class);
         $this->matcher = $c->get('shopware.routing.matchers.rewrite_matcher');
 
         Shopware()->Models()->clear();

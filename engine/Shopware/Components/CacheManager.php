@@ -82,12 +82,12 @@ class CacheManager
     {
         $this->container = $container;
 
-        $this->cache = $container->get('cache');
-        $this->emConfig = $container->get('shopware.model_config');
+        $this->cache = $container->get(\Zend_Cache_Core::class);
+        $this->emConfig = $container->get(\Shopware\Components\Model\Configuration::class);
         $this->db = $container->get('db');
-        $this->config = $container->get('config');
-        $this->events = $container->get('events');
-        $this->themePathResolver = $container->get('theme_path_resolver');
+        $this->config = $container->get(\Shopware_Components_Config::class);
+        $this->events = $container->get(\Shopware\Components\ContainerAwareEventManager::class);
+        $this->themePathResolver = $container->get(\Shopware\Components\Theme\PathResolver::class);
     }
 
     /**
@@ -330,7 +330,7 @@ class CacheManager
      */
     public function getThemeCacheInfo()
     {
-        $dir = $this->container->get('theme_path_resolver')->getCacheDirectory();
+        $dir = $this->container->get(\Shopware\Components\Theme\PathResolver::class)->getCacheDirectory();
         $info = $this->getDirectoryInfo($dir);
         $info['name'] = 'Shopware theme';
 

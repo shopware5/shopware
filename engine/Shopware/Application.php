@@ -246,7 +246,7 @@ class Shopware extends Enlight_Application
      */
     public function Models()
     {
-        return $this->container->get('models');
+        return $this->container->get(\Shopware\Components\Model\ModelManager::class);
     }
 
     /**

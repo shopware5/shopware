@@ -51,11 +51,11 @@ class ProportionalCartCalculationSurchargeTest extends CheckoutTest
 
         $this->setConfig('proportionalTaxCalculation', true);
         $this->setPaymentSurcharge(0);
-        Shopware()->Container()->get('dbal_connection')->beginTransaction();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
 
         $this->setCustomerGroupSurcharge(0, 0);
 
-        Shopware()->Container()->get('dbal_connection')->executeQuery('UPDATE s_premium_dispatch SET active = 0 WHERE id = 12');
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->executeQuery('UPDATE s_premium_dispatch SET active = 0 WHERE id = 12');
 
         $this->tax7 = $this->createArticle(10, 7.00);
         $this->tax19 = $this->createArticle(10, 19.00);
@@ -65,7 +65,7 @@ class ProportionalCartCalculationSurchargeTest extends CheckoutTest
     {
         parent::tearDown();
 
-        Shopware()->Container()->get('dbal_connection')->rollBack();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollBack();
 
         $this->setConfig('proportionalTaxCalculation', false);
         $this->setPaymentSurcharge(0);

@@ -61,7 +61,7 @@ class Manager
             $resource = new $class();
 
             $resource->setContainer($container);
-            $resource->setManager($container->get('models'));
+            $resource->setManager($container->get(\Shopware\Components\Model\ModelManager::class));
         }
 
         if ($container->initialized('auth')) {

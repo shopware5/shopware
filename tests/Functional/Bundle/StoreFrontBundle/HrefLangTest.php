@@ -38,20 +38,20 @@ class HrefLangTest extends TestCase
     {
         parent::setUp();
 
-        Shopware()->Container()->get('dbal_connection')->beginTransaction();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
 
         // Easier to see english link
         Shopware()->Db()->executeQuery('UPDATE s_core_shops SET base_url = "/en", category_id = 3 WHERE id != 1');
 
         Shopware()->Container()->reset('shopware_storefront.href_lang_service');
 
-        $this->service = Shopware()->Container()->get('shopware_storefront.href_lang_service');
+        $this->service = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\Core\HrefLangService::class);
     }
 
     public function tearDown()
     {
         parent::tearDown();
-        Shopware()->Container()->get('dbal_connection')->rollBack();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollBack();
     }
 
     public function testHrefLinksNotGenerated()
@@ -126,13 +126,13 @@ class HrefLangTest extends TestCase
 
     private function createCategory()
     {
-        $category = Shopware()->Container()->get('shopware.api.category');
+        $category = Shopware()->Container()->get(\Shopware\Components\Api\Resource\Category::class);
         $category = $category->create([
             'parent' => 3,
             'name' => 'My fancy german category',
         ]);
 
-        Shopware()->Container()->get('translation')->write(2, 'category', $category->getId(), [
+        Shopware()->Container()->get(\Shopware_Components_Translation::class)->write(2, 'category', $category->getId(), [
             'description' => 'My fancy english category',
         ]);
 

@@ -39,7 +39,7 @@ class Shopware_Plugins_Backend_PluginManager_Bootstrap extends Shopware_Componen
     public function afterInit()
     {
         /** @var Enlight_Loader $loader */
-        $loader = $this->get('loader');
+        $loader = $this->get(\Enlight_Loader::class);
 
         $loader->registerNamespace(
             'ShopwarePlugins\\PluginManager',

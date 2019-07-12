@@ -150,7 +150,7 @@ class Application extends BaseApplication
             // Wrap database related logic in a try-catch
             // so that non-db commands can still execute
             try {
-                $em = $this->kernel->getContainer()->get('models');
+                $em = $this->kernel->getContainer()->get(\Shopware\Components\Model\ModelManager::class);
 
                 // Setup doctrine commands
                 $helperSet = $this->getHelperSet();

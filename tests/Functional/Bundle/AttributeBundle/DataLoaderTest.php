@@ -47,11 +47,11 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $this->connection->beginTransaction();
 
-        $this->attributePersister = Shopware()->Container()->get('shopware_attribute.data_persister');
-        $this->attributeLoader = Shopware()->Container()->get('shopware_attribute.data_loader');
+        $this->attributePersister = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataPersister::class);
+        $this->attributeLoader = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataLoader::class);
 
         parent::setUp();
     }

@@ -3499,7 +3499,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
 
     public function testArticles()
     {
-        Shopware()->Container()->get('shopware_storefront.context_service')->initializeShopContext();
+        Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->initializeShopContext();
         $this->dispatch('/');
 
         foreach ($this->articles as $id => $expected) {
@@ -3528,7 +3528,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
 
     private function assertArticleData($expected, $data)
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         foreach ($this->articleProperties as $property) {
             if ($property === 'supplierImg') {
                 $expected[$property] = $mediaService->getUrl($expected[$property]);
@@ -3554,7 +3554,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
     private function assertRelated($expected, $data)
     {
         static::assertCount(count($expected['sRelatedArticles']), $data['sRelatedArticles']);
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         for ($i = 0; $i < count($expected['sRelatedArticles']); ++$i) {
             $expectedArticle = $expected['sRelatedArticles'][$i];

@@ -111,16 +111,16 @@ class sCategories implements \Enlight_Hook
     public function __construct()
     {
         $this->db = Shopware()->Container()->get('db');
-        $this->config = Shopware()->Container()->get('config');
-        $this->manager = Shopware()->Container()->get('models');
-        $this->repository = $this->manager->getRepository('Shopware\Models\Category\Category');
+        $this->config = Shopware()->Container()->get(\Shopware_Components_Config::class);
+        $this->manager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
+        $this->repository = $this->manager->getRepository(\Shopware\Models\Category\Category::class);
         $this->baseUrl = $this->config->get('baseFile') . '?sViewport=cat&sCategory=';
         $this->blogBaseUrl = $this->config->get('baseFile') . '?sViewport=blog&sCategory=';
         $this->baseId = (int) Shopware()->Shop()->get('parentID');
         $this->customerGroupId = (int) Shopware()->Modules()->System()->sUSERGROUPDATA['id'];
-        $this->connection = Shopware()->Container()->get('dbal_connection');
-        $this->categoryService = Shopware()->Container()->get('shopware_storefront.category_service');
-        $this->contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $this->categoryService = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface::class);
+        $this->contextService = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
         $this->frontController = Shopware()->Container()->get('front');
     }
 
@@ -343,12 +343,12 @@ class sCategories implements \Enlight_Hook
         }
 
         $context = $this->contextService->getShopContext();
-        $category = Shopware()->Container()->get('shopware_storefront.category_service')->get($id, $context);
+        $category = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface::class)->get($id, $context);
         if (empty($category)) {
             return null;
         }
 
-        return Shopware()->Container()->get('legacy_struct_converter')->convertCategoryStruct($category);
+        return Shopware()->Container()->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertCategoryStruct($category);
     }
 
     /**

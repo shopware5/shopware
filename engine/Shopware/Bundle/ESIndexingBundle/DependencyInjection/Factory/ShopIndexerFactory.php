@@ -84,15 +84,15 @@ class ShopIndexerFactory
         $mappings = $this->collectMappings();
         $settings = $this->collectSettings();
         /** @var \Elasticsearch\Client $client */
-        $client = $this->container->get('shopware_elastic_search.client');
+        $client = $this->container->get(\Elasticsearch\Client::class);
         /** @var \Shopware\Bundle\ESIndexingBundle\BacklogReaderInterface $backlogReader */
-        $backlogReader = $this->container->get('shopware_elastic_search.backlog_reader');
+        $backlogReader = $this->container->get(\Shopware\Bundle\ESIndexingBundle\BacklogReader::class);
         /** @var \Shopware\Bundle\ESIndexingBundle\BacklogProcessorInterface $backlogProcessor */
-        $backlogProcessor = $this->container->get('shopware_elastic_search.backlog_processor');
+        $backlogProcessor = $this->container->get(\Shopware\Bundle\ESIndexingBundle\BacklogProcessorInterface::class);
         /** @var \Shopware\Bundle\ESIndexingBundle\IndexFactoryInterface $indexFactory */
-        $indexFactory = $this->container->get('shopware_elastic_search.index_factory');
+        $indexFactory = $this->container->get(\Shopware\Bundle\ESIndexingBundle\IndexFactory::class);
         /** @var \Shopware\Bundle\ESIndexingBundle\Console\EvaluationHelperInterface $consoleHelper */
-        $consoleHelper = $this->container->get('shopware_elastic_search.console.console_evaluation_helper');
+        $consoleHelper = $this->container->get(\Shopware\Bundle\ESIndexingBundle\Console\EvaluationHelperInterface::class);
 
         return new ShopIndexer(
             $client,

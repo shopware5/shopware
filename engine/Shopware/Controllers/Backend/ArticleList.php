@@ -509,7 +509,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
             ]);
         } else {
             $articleResource = new ArticleResource();
-            $articleResource->setManager($this->get('models'));
+            $articleResource->setManager($this->get(\Shopware\Components\Model\ModelManager::class));
 
             if ($variant->getKind() == 1) {
                 $articleResource->delete($variant->getArticle()->getId());
@@ -640,16 +640,16 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     private function getAdditionalTexts($products)
     {
         /** @var \Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface $service */
-        $service = $this->get('shopware_storefront.additional_text_service');
+        $service = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface::class);
 
         /** @var \Shopware\Models\Shop\Repository $shopRepo */
-        $shopRepo = $this->get('models')->getRepository(\Shopware\Models\Shop\Shop::class);
+        $shopRepo = $this->get(\Shopware\Components\Model\ModelManager::class)->getRepository(\Shopware\Models\Shop\Shop::class);
 
         /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $shopRepo->getActiveDefault();
 
         /** @var \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface $contextService */
-        $contextService = $this->get('shopware_storefront.context_service');
+        $contextService = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
 
         $context = $contextService->createShopContext(
             $shop->getId(),
@@ -671,7 +671,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
             ];
         }
 
-        $repository = $this->container->get('shopware_attribute.product_repository');
+        $repository = $this->container->get(\Shopware\Bundle\AttributeBundle\Repository\ProductRepository::class);
 
         $result = $repository->search($criteria);
 

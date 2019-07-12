@@ -212,16 +212,16 @@ class sAdmin implements \Enlight_Hook
         $mainShop = Shopware()->Shop()->getMain() !== null ? Shopware()->Shop()->getMain() : Shopware()->Shop();
         $this->scopedRegistration = $mainShop->getCustomerScope();
 
-        $this->contextService = $contextService ?: Shopware()->Container()->get('shopware_storefront.context_service');
-        $this->emailValidator = $emailValidator ?: Shopware()->Container()->get('validator.email');
+        $this->contextService = $contextService ?: Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
+        $this->emailValidator = $emailValidator ?: Shopware()->Container()->get(\Shopware\Components\Validator\EmailValidator::class);
         $this->subshopId = $this->contextService->getShopContext()->getShop()->getParentId();
-        $this->addressService = $addressService ?: Shopware()->Container()->get('shopware_account.address_service');
-        $this->attributeLoader = Shopware()->Container()->get('shopware_attribute.data_loader');
-        $this->attributePersister = Shopware()->Container()->get('shopware_attribute.data_persister');
-        $this->numberRangeIncrementer = $numberRangeIncrementer ?: Shopware()->Container()->get('shopware.number_range_incrementer');
-        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
-        $this->connection = $connection ?: Shopware()->Container()->get('dbal_connection');
-        $this->basketHelper = Shopware()->Container()->get('shopware.cart.basket_helper');
+        $this->addressService = $addressService ?: Shopware()->Container()->get(\Shopware\Bundle\AccountBundle\Service\AddressServiceInterface::class);
+        $this->attributeLoader = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataLoader::class);
+        $this->attributePersister = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataPersister::class);
+        $this->numberRangeIncrementer = $numberRangeIncrementer ?: Shopware()->Container()->get(\Shopware\Components\NumberRangeIncrementerInterface::class);
+        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get(\Shopware_Components_Translation::class);
+        $this->connection = $connection ?: Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $this->basketHelper = Shopware()->Container()->get(\Shopware\Components\Cart\BasketHelperInterface::class);
     }
 
     /**
@@ -332,10 +332,10 @@ class sAdmin implements \Enlight_Hook
         }
 
         if (isset($data['id'])) {
-            $data = Shopware()->Container()->get('shopware_storefront.payment_gateway')->getList([$data['id']], $this->contextService->getShopContext());
+            $data = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Gateway\PaymentGatewayInterface::class)->getList([$data['id']], $this->contextService->getShopContext());
 
             if (!empty($data)) {
-                $data = Shopware()->Container()->get('legacy_struct_converter')->convertPaymentStruct(current($data));
+                $data = Shopware()->Container()->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertPaymentStruct(current($data));
             }
         }
 
@@ -449,10 +449,10 @@ class sAdmin implements \Enlight_Hook
             $paymentMeans[] = ['id' => $this->config->offsetGet('paymentdefault')];
         }
 
-        $paymentMeans = Shopware()->Container()->get('shopware_storefront.payment_gateway')->getList(array_column($paymentMeans, 'id'), $this->contextService->getShopContext());
+        $paymentMeans = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Gateway\PaymentGatewayInterface::class)->getList(array_column($paymentMeans, 'id'), $this->contextService->getShopContext());
 
         $paymentMeans = array_map(static function ($payment) {
-            return Shopware()->Container()->get('legacy_struct_converter')->convertPaymentStruct($payment);
+            return Shopware()->Container()->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertPaymentStruct($payment);
         }, $paymentMeans);
 
         $paymentMeans = $this->eventManager->filter(
@@ -2310,7 +2310,7 @@ class sAdmin implements \Enlight_Hook
     {
         if (empty($unsubscribe)) {
             $errorFlag = [];
-            $config = Shopware()->Container()->get('config');
+            $config = Shopware()->Container()->get(\Shopware_Components_Config::class);
 
             if ($this->shouldVerifyCaptcha($config)
                 && (bool) $this->front->Request()->getParam('voteConfirmed', false) === false
@@ -2860,7 +2860,7 @@ class sAdmin implements \Enlight_Hook
                 $dispatch['description'] = $object[$dispatch['id']]['dispatch_description'];
             }
 
-            $dispatch['attribute'] = Shopware()->Container()->get('shopware_attribute.data_loader')
+            $dispatch['attribute'] = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataLoader::class)
                 ->load('s_premium_dispatch_attributes', $dispatch['id']);
 
             if (!empty($dispatch['attribute'])) {
@@ -3112,7 +3112,7 @@ class sAdmin implements \Enlight_Hook
                 $tax = (float) $basket['max_tax'];
 
                 if (!empty($dispatch['tax_calculation'])) {
-                    $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+                    $context = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
                     $taxRule = $context->getTaxRule($dispatch['tax_calculation']);
                     $tax = $taxRule->getTax();
                 }
@@ -3323,8 +3323,8 @@ class sAdmin implements \Enlight_Hook
 
         $this->sSYSTEM->sSESSION_ID = $newSessionId;
         $this->session->offsetSet('sessionId', $newSessionId);
-        Shopware()->Container()->reset('SessionId');
-        Shopware()->Container()->set('SessionId', $newSessionId);
+        Shopware()->Container()->reset('sessionid');
+        Shopware()->Container()->set('sessionid', $newSessionId);
 
         $this->eventManager->notify(
             'Shopware_Modules_Admin_Regenerate_Session_Id',
@@ -3470,11 +3470,11 @@ SQL;
         $countryKey = $isShippingAddress ? 'countryShipping' : 'country';
         $stateKey = $isShippingAddress ? 'stateShipping' : 'state';
 
-        $userData['additional'][$countryKey] = Shopware()->Container()->get('dbal_connection')
+        $userData['additional'][$countryKey] = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)
             ->executeQuery($sql, [$userData[$addressKey]['countryID']])
             ->fetch(\PDO::FETCH_ASSOC);
 
-        $userData['additional'][$stateKey] = Shopware()->Container()->get('dbal_connection')
+        $userData['additional'][$stateKey] = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)
             ->executeQuery(
                 'SELECT *, name AS statename FROM s_core_countries_states WHERE id = ?',
                 [$userData[$addressKey]['stateID']]
@@ -3649,7 +3649,7 @@ SQL;
      */
     private function resendConfirmationMail(array $userInfo, $hash)
     {
-        $link = Shopware()->Container()->get('router')->assemble([
+        $link = Shopware()->Container()->get(\Shopware\Components\Routing\RouterInterface::class)->assemble([
             'sViewport' => 'register',
             'action' => 'confirmValidation',
             'sConfirmation' => $hash,
@@ -3670,7 +3670,7 @@ SQL;
             ]
         );
 
-        $mail = Shopware()->Container()->get('templatemail')->createMail('sOPTINREGISTER', $context);
+        $mail = Shopware()->Container()->get(\Shopware_Components_TemplateMail::class)->createMail('sOPTINREGISTER', $context);
         $mail->addTo($userInfo['mail']);
         $mail->send();
     }
@@ -3698,9 +3698,9 @@ SQL;
 
         $context = $this->contextService->getShopContext();
         $orderProductOrderNumbers = array_column($orderDetails, 'articleordernumber');
-        $listProducts = Shopware()->Container()->get('shopware_storefront.list_product_service')
+        $listProducts = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)
             ->getList($orderProductOrderNumbers, $context);
-        $listProducts = Shopware()->Container()->get('legacy_struct_converter')
+        $listProducts = Shopware()->Container()->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)
             ->convertListProductStructList($listProducts);
 
         foreach ($listProducts as &$listProduct) {
@@ -3836,7 +3836,7 @@ SQL;
      */
     private function getUserShippingData($userId, $userData, $countryQuery)
     {
-        $entityManager = Shopware()->Container()->get('models');
+        $entityManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
         $customer = $entityManager->find(Shopware\Models\Customer\Customer::class, $userId);
         $shipping = $this->convertToLegacyAddressArray($customer->getDefaultShippingAddress());
         $shipping['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $shipping['id']);
@@ -3889,7 +3889,7 @@ SQL;
      */
     private function getUserBillingData($userId, $userData)
     {
-        $entityManager = Shopware()->Container()->get('models');
+        $entityManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
         $customer = $entityManager->find(Customer::class, $userId);
         $billing = $this->convertToLegacyAddressArray($customer->getDefaultBillingAddress());
         $billing['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $billing['id']);
@@ -4363,7 +4363,7 @@ SQL;
         if (!$this->session->offsetGet('sUserId')) {
             return 0;
         }
-        $dbal = Shopware()->Container()->get('dbal_connection');
+        $dbal = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
 
         return (int) $dbal->fetchColumn('
             SELECT default_billing_address_id 
@@ -4384,7 +4384,7 @@ SQL;
         if (!$this->session->offsetGet('sUserId')) {
             return 0;
         }
-        $dbal = Shopware()->Container()->get('dbal_connection');
+        $dbal = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
 
         return (int) $dbal->fetchColumn('
             SELECT default_shipping_address_id 

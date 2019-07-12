@@ -691,7 +691,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         static::assertContains('Der Mindestumsatz für diesen Gutschein beträgt 10,00&nbsp;&euro;', $result['sErrorMessages']);
 
         // Check if a currency switch is reflected in the snippet correctly
-        $currencyDe = Shopware()->Container()->get('currency');
+        $currencyDe = Shopware()->Container()->get(Zend_Currency::class);
         Shopware()->Container()->set('currency', new \Zend_Currency('GBP', new \Zend_Locale('en_GB')));
 
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand(), true);
@@ -947,7 +947,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         // Change current subshop id, test and expect success
-        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(3);
+        Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()->getShop()->setId(3);
 
         $previousAmount = $this->module->sGetAmount();
         // Test with one-time code, success
@@ -1051,7 +1051,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         // Change current subshop, test and expect success
-        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(3);
+        Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()->getShop()->setId(3);
 
         $previousAmount = $this->module->sGetAmount();
         // Test with one-time code, success

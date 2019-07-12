@@ -99,7 +99,7 @@ class AnalyzeCommand extends ShopwareCommand implements CompletionAwareInterface
     {
         if ($argumentName === 'shopId') {
             /** @var Repository $shopRepository */
-            $shopRepository = $this->getContainer()->get('models')->getRepository(Shop::class);
+            $shopRepository = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
             $queryBuilder = $shopRepository->createQueryBuilder('shop');
 
             if (is_numeric($context->getCurrentWord())) {
@@ -117,7 +117,7 @@ class AnalyzeCommand extends ShopwareCommand implements CompletionAwareInterface
 
         if ($argumentName === 'analyzer') {
             /** @var Client $client */
-            $client = $this->container->get('shopware_elastic_search.client');
+            $client = $this->container->get(\Elasticsearch\Client::class);
 
             $recursive = new RecursiveIteratorIterator(
                 new RecursiveArrayIterator($client->indices()->getMapping()),
@@ -162,9 +162,9 @@ class AnalyzeCommand extends ShopwareCommand implements CompletionAwareInterface
         $query = $input->getArgument('query');
         $analyzer = $input->getArgument('analyzer');
 
-        $shop = $this->container->get('shopware_storefront.shop_gateway_dbal')->get($shopId);
-        $client = $this->container->get('shopware_elastic_search.client');
-        $index = $this->container->get('shopware_elastic_search.index_factory')->createShopIndex($shop, $type);
+        $shop = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface::class)->get($shopId);
+        $client = $this->container->get(\Elasticsearch\Client::class);
+        $index = $this->container->get(\Shopware\Bundle\ESIndexingBundle\IndexFactory::class)->createShopIndex($shop, $type);
 
         $analyzed = $client->indices()->analyze([
             'index' => $index->getName(),

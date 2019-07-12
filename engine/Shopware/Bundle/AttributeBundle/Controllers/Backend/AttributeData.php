@@ -31,7 +31,7 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
     public function loadDataAction()
     {
         /** @var DataLoader $dataLoader */
-        $dataLoader = $this->get('shopware_attribute.data_loader');
+        $dataLoader = $this->get(\Shopware\Bundle\AttributeBundle\Service\DataLoader::class);
 
         try {
             $data = $dataLoader->load(
@@ -60,7 +60,7 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
     public function saveDataAction()
     {
         /** @var \Shopware\Bundle\AttributeBundle\Service\DataPersister $dataPersister */
-        $dataPersister = $this->get('shopware_attribute.data_persister');
+        $dataPersister = $this->get(\Shopware\Bundle\AttributeBundle\Service\DataPersister::class);
 
         $data = [];
         foreach ($this->Request()->getParams() as $key => $value) {
@@ -85,7 +85,7 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
     public function listAction()
     {
         /** @var CrudService $crudService */
-        $crudService = $this->get('shopware_attribute.crud_service');
+        $crudService = $this->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class);
         $columns = $crudService->getList(
             $this->Request()->getParam('table')
         );

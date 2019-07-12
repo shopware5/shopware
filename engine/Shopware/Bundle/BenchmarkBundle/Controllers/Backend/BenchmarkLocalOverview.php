@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -127,7 +126,7 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
     {
         $identity = $this->getUserIdentity()->id;
         $date = new DateTime('now');
-        $db = $this->get('dbal_connection');
+        $db = $this->get(\Doctrine\DBAL\Connection::class);
 
         $value = $db->fetchColumn(
             'SELECT `config` FROM `s_core_auth_config` WHERE `user_id` = :id AND `name` = :name',
@@ -175,7 +174,7 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
      */
     private function getShops()
     {
-        $queryBuilder = $this->get('dbal_connection')->createQueryBuilder();
+        $queryBuilder = $this->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
 
         return $queryBuilder->select('shop.id, shop.name')
             ->from('s_core_shops', 'shop')

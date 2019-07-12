@@ -132,7 +132,7 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
             $shopId = is_numeric($user['language']) ? $user['language'] : $user['subshopID'];
             $shop = $repository->getActiveById($shopId);
-            $this->get('shopware.components.shop_registration_service')->registerShop($shop);
+            $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
             //language subshopID
             $context = [

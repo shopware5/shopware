@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Shop\Currency;
 use Shopware\Models\Shop\Shop;
 
 /**
@@ -76,23 +77,23 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             }
 
             /** @var Shopware\Models\Shop\Repository $repository */
-            $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+            $repository = Shopware()->Models()->getRepository(Shop::class);
 
             $shopId = is_numeric($order['language']) ? $order['language'] : $order['subshopID'];
             $shop = $repository->getActiveById($shopId);
 
             /** @var Shopware\Models\Shop\Currency $repository */
-            $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
+            $repository = Shopware()->Models()->getRepository(Currency::class);
             $shop->setCurrency($repository->find($order['currencyID']));
-            $this->get('shopware.components.shop_registration_service')->registerShop($shop);
+            $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
             foreach ($orderPositions[$orderId] as &$position) {
-                $position['link'] = $this->get('router')->assemble([
+                $position['link'] = $this->get(\Shopware\Components\Routing\RouterInterface::class)->assemble([
                     'module' => 'frontend', 'sViewport' => 'detail',
                     'sArticle' => $position['articleID'],
                 ]);
 
-                $position['link_rating_tab'] = $this->get('router')->assemble([
+                $position['link_rating_tab'] = $this->get(\Shopware\Components\Routing\RouterInterface::class)->assemble([
                     'module' => 'frontend', 'sViewport' => 'detail',
                     'sArticle' => $position['articleID'],
                     'jumpTab' => 'rating',
@@ -148,16 +149,16 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
         $shopPositionImages = [];
 
         foreach ($shopPositions as $shopId => $positions) {
-            $context = $this->get('shopware_storefront.context_service')->createShopContext($shopId);
+            $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext($shopId);
 
-            $shopPositionImages[$shopId] = $this->get('shopware_storefront.media_service')->getCovers(
+            $shopPositionImages[$shopId] = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface::class)->getCovers(
                 $positions,
                 $context
             );
 
             $shopPositionImages[$shopId] = array_map(
                 function ($mediaStruct) {
-                    return $this->get('legacy_struct_converter')->convertMediaStruct($mediaStruct);
+                    return $this->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertMediaStruct($mediaStruct);
                 },
                 $shopPositionImages[$shopId]
             );

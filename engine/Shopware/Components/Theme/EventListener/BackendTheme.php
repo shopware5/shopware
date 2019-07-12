@@ -50,7 +50,7 @@ class BackendTheme
             return;
         }
 
-        $directory = $this->container->get('theme_path_resolver')->getExtJsThemeDirectory();
+        $directory = $this->container->get(\Shopware\Components\Theme\PathResolver::class)->getExtJsThemeDirectory();
 
         $this->container->get('template')->setTemplateDir([
             'backend' => $directory,

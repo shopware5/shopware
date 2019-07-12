@@ -33,18 +33,20 @@ class GarbageCollectorFactoryTest extends TestCase
 {
     public function testTextAttributesAreCollected()
     {
-        $factory = new GarbageCollectorFactory(new \Enlight_Event_EventManager(), Shopware()->Container()->get('dbal_connection'), Shopware()->Container()->get('shopware_media.media_service'));
+        $factory = new GarbageCollectorFactory(new \Enlight_Event_EventManager(), Shopware()->Container()->get(
+            \Doctrine\DBAL\Connection::class
+        ), Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class));
         $collector = $factory->factory();
 
         $currentCount = count($this->getMediaPositionsFromGarbageCollector($collector));
 
-        Shopware()->Container()->get('shopware_attribute.crud_service')->update('s_articles_attributes', 'foo', TypeMapping::TYPE_HTML);
+        Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class)->update('s_articles_attributes', 'foo', TypeMapping::TYPE_HTML);
 
         $collector = $factory->factory();
 
         static::assertNotEquals($currentCount, count($this->getMediaPositionsFromGarbageCollector($collector)));
 
-        Shopware()->Container()->get('shopware_attribute.crud_service')->delete('s_articles_attributes', 'foo');
+        Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class)->delete('s_articles_attributes', 'foo');
     }
 
     /**
@@ -52,7 +54,7 @@ class GarbageCollectorFactoryTest extends TestCase
      */
     private function getMediaPositionsFromGarbageCollector(GarbageCollector $collector)
     {
-        $getMediaPositions = function (GarbageCollector $collector) {
+        $getMediaPositions = static function (GarbageCollector $collector) {
             return $collector->mediaPositions;
         };
         $getMediaPositions = \Closure::bind($getMediaPositions, null, $collector);

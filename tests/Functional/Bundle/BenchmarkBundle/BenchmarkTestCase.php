@@ -24,19 +24,17 @@
 
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle;
 
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+
 abstract class BenchmarkTestCase extends \PHPUnit\Framework\TestCase
 {
+    use DatabaseTransactionBehaviour;
+
     public function setUp()
     {
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $dbalConnection->beginTransaction();
-        Shopware()->Container()->get('models')->clear();
-    }
+        parent::setUp();
 
-    public function tearDown()
-    {
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
-        $dbalConnection->rollBack();
+        Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->clear();
     }
 
     /**
@@ -44,7 +42,7 @@ abstract class BenchmarkTestCase extends \PHPUnit\Framework\TestCase
      */
     protected function installDemoData($dataName)
     {
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
 
         $fileContent = $this->openDemoDataFile($dataName);
         $dbalConnection->exec($fileContent);

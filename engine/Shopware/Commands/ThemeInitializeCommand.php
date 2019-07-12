@@ -51,10 +51,10 @@ class ThemeInitializeCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var Installer $themeInstaller */
-        $themeInstaller = $this->container->get('theme_installer');
+        $themeInstaller = $this->container->get(\Shopware\Components\Theme\Installer::class);
         $themeInstaller->synchronize();
 
-        $this->conn = $this->container->get('dbal_connection');
+        $this->conn = $this->container->get(\Doctrine\DBAL\Connection::class);
 
         $templateId = $this->getResponsiveTemplateId();
         $this->updateDefaultTemplateId($templateId);

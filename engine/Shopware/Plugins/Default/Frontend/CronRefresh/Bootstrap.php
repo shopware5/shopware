@@ -54,10 +54,10 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
     public function onCronJobClearing(Shopware_Components_Cron_CronJob $job)
     {
         /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = $this->get('dbal_connection');
+        $connection = $this->get(\Doctrine\DBAL\Connection::class);
 
         // Delete all entries from lastarticles older than 30 days
-        $lastArticleTime = $this->get('config')->get('lastarticles_time', 30);
+        $lastArticleTime = $this->get(\Shopware_Components_Config::class)->get('lastarticles_time', 30);
 
         $sql = "DELETE FROM s_emarketing_lastarticles WHERE `time` < date_add(current_date, INTERVAL -{$lastArticleTime} DAY)";
 
@@ -78,8 +78,8 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
         $result = $connection->executeQuery($sql);
         $data['log']['rows'] = $result->rowCount();
 
-        $data['referrer']['rows'] = $this->deleteOldReferrerData($this->get('config')->get('maximumReferrerAge'));
-        $data['article_impression']['rows'] = $this->deleteOldArticleImpressionData($this->get('config')->get('maximumImpressionAge'));
+        $data['referrer']['rows'] = $this->deleteOldReferrerData($this->get(\Shopware_Components_Config::class)->get('maximumReferrerAge'));
+        $data['article_impression']['rows'] = $this->deleteOldArticleImpressionData($this->get(\Shopware_Components_Config::class)->get('maximumImpressionAge'));
 
         // Delete all entries from s_order_notes, which are older than a year and have no userID set
         $sql = 'DELETE FROM s_order_notes WHERE datum < DATE_SUB(NOW(), INTERVAL 1 YEAR) AND userID = 0';
@@ -95,7 +95,7 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
     public function onCronJobSearch(Shopware_Components_Cron_CronJob $job)
     {
         /* @var SearchIndexerInterface $indexer */
-        $indexer = $this->get('shopware_searchdbal.search_indexer');
+        $indexer = $this->get(\Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexer::class);
         $indexer->build();
     }
 
@@ -118,7 +118,7 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
         $sql = '
             DELETE FROM s_statistics_referer WHERE `datum` < date_add(current_date, INTERVAL ' . $maximumReferrerAge . ' DAY)
         ';
-        $result = $this->get('dbal_connection')->executeQuery($sql);
+        $result = $this->get(\Doctrine\DBAL\Connection::class)->executeQuery($sql);
 
         return $result->rowCount();
     }
@@ -142,7 +142,7 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
         $sql = '
             DELETE FROM  s_statistics_article_impression WHERE `date` < date_add(current_date, INTERVAL ' . $maximumAge . ' DAY)
         ';
-        $result = $this->get('dbal_connection')->executeQuery($sql);
+        $result = $this->get(\Doctrine\DBAL\Connection::class)->executeQuery($sql);
 
         return $result->rowCount();
     }

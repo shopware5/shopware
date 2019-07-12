@@ -47,13 +47,13 @@ class PresetLoaderTest extends TestCase
 
     protected function setUp()
     {
-        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $this->connection->beginTransaction();
 
         $this->connection->executeQuery('DELETE FROM s_emotion_presets');
 
-        $this->presetLoader = Shopware()->Container()->get('shopware.emotion.preset_loader');
-        $this->presetResource = Shopware()->Container()->get('shopware.api.emotion_preset');
+        $this->presetLoader = Shopware()->Container()->get(\Shopware\Components\Emotion\Preset\PresetLoader::class);
+        $this->presetResource = Shopware()->Container()->get(\Shopware\Components\Api\Resource\EmotionPreset::class);
     }
 
     protected function tearDown()

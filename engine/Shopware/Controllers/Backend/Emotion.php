@@ -43,7 +43,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      *
      * @var \Shopware\Models\Emotion\Repository
      */
-    public static $repository = null;
+    public static $repository;
 
     /**
      * Entity Manager
@@ -146,7 +146,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $repository = $this->getRepository();
 
         $query = $repository->getEmotionDetailQuery($id);
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         $emotion = $query->getArrayResult();
         $emotion = $emotion[0];
@@ -703,7 +703,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         if (!empty($new->getId())) {
             $this->copyEmotionTranslations($emotion->getId(), $new->getId());
             $this->copyElementTranslations($emotion, $new);
-            $persister = Shopware()->Container()->get('shopware_attribute.data_persister');
+            $persister = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataPersister::class);
             $persister->cloneAttribute('s_emotion_attributes', $emotion->getId(), $new->getId());
         }
 
@@ -1101,7 +1101,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     private function getTranslation()
     {
         if ($this->translation === null) {
-            $this->translation = $this->container->get('translation');
+            $this->translation = $this->container->get(\Shopware_Components_Translation::class);
         }
 
         return $this->translation;
@@ -1114,7 +1114,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     private function findPreviewEmotion($emotionId)
     {
-        $builder = $this->container->get('models')->createQueryBuilder();
+        $builder = $this->container->get(\Shopware\Components\Model\ModelManager::class)->createQueryBuilder();
         $emotion = $builder->select('emotion')
                 ->from(Emotion::class, 'emotion')
                 ->where('emotion.previewId = :previewId')
@@ -1329,7 +1329,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $valueType = strtolower($field->getValueType());
         $xType = $field->getXType();
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         $mediaFields = $this->getMediaXTypes();
 
         if ($valueType === 'json') {
@@ -1399,7 +1399,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
 
         /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
-        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $query = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
 
         $languageIds = $query->select('id')
             ->from('s_core_shops', 'shops')
@@ -1428,7 +1428,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
 
         /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
-        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $query = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
 
         $languageIds = $query->select('id')
             ->from('s_core_shops', 'shops')
@@ -1553,7 +1553,7 @@ EOD;
      */
     private function getSeoUrlFromRouter($emotionId, $shopId)
     {
-        $repository = Shopware()->Container()->get('models')->getRepository(Shop::class);
+        $repository = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
         /** @var Shop|null $shop */
         $shop = $repository->getActiveById($shopId);
         if (empty($shop)) {
@@ -1564,7 +1564,7 @@ EOD;
             $parent = $shop->getFallback();
         }
 
-        $this->get('shopware.components.shop_registration_service')->registerShop($parent);
+        $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($parent);
 
         return $this->Front()->Router()->assemble([
             'controller' => 'campaign',

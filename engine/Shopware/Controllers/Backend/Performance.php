@@ -107,7 +107,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     public function getConfigAction()
     {
-        Shopware()->Container()->get('cache')->remove(CacheManager::ITEM_TAG_CONFIG);
+        Shopware()->Container()->get(\Zend_Cache_Core::class)->remove(CacheManager::ITEM_TAG_CONFIG);
         $this->View()->assign([
             'success' => true,
             'data' => $this->prepareConfigData(),
@@ -120,7 +120,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     public function getActiveShopsAction()
     {
         /** @var ShopRepository $shopRepo */
-        $shopRepo = $this->container->get('models')->getRepository(Shop::class);
+        $shopRepo = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
         $shops = $shopRepo->getActiveShops(AbstractQuery::HYDRATE_ARRAY);
         $this->View()->assign([
             'success' => true,
@@ -141,7 +141,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $data = $this->prepareDataForSaving($data);
         $this->saveConfigData($data);
 
-        Shopware()->Container()->get('cache')->remove(CacheManager::ITEM_TAG_CONFIG);
+        Shopware()->Container()->get(\Zend_Cache_Core::class)->remove(CacheManager::ITEM_TAG_CONFIG);
 
         // Reload config, so that the actual config from the
         // db is returned
@@ -250,7 +250,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     {
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
-        $modelManager = $this->container->get('models');
+        $modelManager = $this->container->get(\Shopware\Components\Model\ModelManager::class);
         $repo = $modelManager->getRepository(Plugin::class);
 
         /** @var Plugin $plugin */
@@ -302,7 +302,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     {
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
-        $modelManager = $this->container->get('models');
+        $modelManager = $this->container->get(\Shopware\Components\Model\ModelManager::class);
         /** @var ShopRepository $shopRepository */
         $shopRepository = $modelManager->getRepository(Shop::class);
         $elementRepository = $modelManager->getRepository(Element::class);
@@ -373,8 +373,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         // The colon separates formName and elementName
         list($scope, $config) = explode(':', $configName, 2);
 
-        $elementRepository = $this->container->get('models')->getRepository(\Shopware\Models\Config\Element::class);
-        $formRepository = $this->container->get('models')->getRepository(\Shopware\Models\Config\Form::class);
+        $elementRepository = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(\Shopware\Models\Config\Element::class);
+        $formRepository = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(\Shopware\Models\Config\Form::class);
 
         $form = $formRepository->findOneBy(['name' => $scope]);
 
@@ -449,8 +449,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
         /** @var Context $context */
         $context = Context::createFromShop(
-            $this->container->get('models')->getRepository(Shop::class)->getById($shopId),
-            $this->container->get('config')
+            $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class)->getById($shopId),
+            $this->container->get(\Shopware_Components_Config::class)
         );
 
         $providers = $this->get('shopware_cache_warmer.url_provider_factory')->getAllProviders();
@@ -528,7 +528,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $shops = $this->getModelManager()->getRepository(Shop::class)->getActiveShopsFixed();
 
         foreach ($shops as $shop) {
-            $this->container->get('shopware_bundle_sitemap.service.sitemap_exporter')->generate($shop);
+            $this->container->get(\Shopware\Bundle\SitemapBundle\Service\SitemapExporter::class)->generate($shop);
         }
 
         $this->View()->assign('success', true);
@@ -699,7 +699,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             }
         }
 
-        $repo = $this->container->get('models')->getRepository(Plugin::class);
+        $repo = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Plugin::class);
 
         /** @var Plugin $plugin */
         $plugin = $repo->findOneBy(['name' => 'HttpCache']);
@@ -758,7 +758,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     private function getPluginByName($name)
     {
         /** @var Plugin|null $return */
-        $return = $this->get('models')
+        $return = $this->get(\Shopware\Components\Model\ModelManager::class)
             ->getRepository(\Shopware\Models\Plugin\Plugin::class)
             ->findOneBy(['name' => $name]);
 

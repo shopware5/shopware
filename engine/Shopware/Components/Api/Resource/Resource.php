@@ -25,6 +25,7 @@
 namespace Shopware\Components\Api\Resource;
 
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Connection;
 use Exception;
 use RuntimeException;
 use Shopware\Components\Api\BatchInterface;
@@ -590,12 +591,12 @@ abstract class Resource implements ContainerAwareInterface
      */
     protected function resetEntityManager()
     {
-        $this->getContainer()->reset('models')
-            ->reset('dbal_connection')
+        $this->getContainer()->reset(ModelManager::class)
+            ->reset(Connection::class)
             ->load('models');
 
         $this->getContainer()->load('dbal_connection');
 
-        $this->setManager($this->container->get('models'));
+        $this->setManager($this->container->get(ModelManager::class));
     }
 }

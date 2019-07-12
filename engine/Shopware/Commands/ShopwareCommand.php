@@ -179,7 +179,7 @@ abstract class ShopwareCommand extends Command implements ContainerAwareInterfac
 
         /* @var ModelManager $em */
         try {
-            $em = $this->getContainer()->get('models');
+            $em = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class);
         } catch (\Exception $e) {
             return [];
         }

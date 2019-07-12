@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="originalservice"
+                 class="Shopware\Tests\Functional\Components\DependencyInjection\OriginalService"/>
+
+        <service id="decoratingservice"
+                 class="Shopware\Tests\Functional\Components\DependencyInjection\DecoratingService"
+                 decorates="originalservice">
+
+            <argument type="service" id="decoratingservice.inner"/>
+        </service>
+
+        <service id="originalservice.2"
+                 class="Shopware\Tests\Functional\Components\DependencyInjection\OriginalService"/>
+
+        <service id="decoratingalias"
+                 class="Shopware\Tests\Functional\Components\DependencyInjection\DecoratingService"
+                 decorates="Shopware\Tests\Functional\Components\DependencyInjection\OriginalService">
+            <argument type="service" id="decoratingalias.inner"/>
+        </service>
+
+        <service id="Shopware\Tests\Functional\Components\DependencyInjection\OriginalService" alias="originalservice.2"/>
+        <service id="Shopware\Tests\Functional\Components\DependencyInjection\DecoratingService" alias="decoratingservice"/>
+    </services>
+</container>

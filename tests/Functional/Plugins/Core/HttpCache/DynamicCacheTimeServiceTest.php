@@ -57,7 +57,7 @@ class DynamicCacheTimeServiceTest extends TestCase
      */
     public static function setUpBeforeClass()
     {
-        $pluginManager = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager');
+        $pluginManager = Shopware()->Container()->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
 
         /** @var Plugin $plugin */
         $plugin = $pluginManager->getPluginByName('HttpCache');
@@ -80,7 +80,7 @@ class DynamicCacheTimeServiceTest extends TestCase
      */
     public function setUp()
     {
-        $this->cacheTimeService = Shopware()->Container()->get('shopware.http_cache.cache_time_service');
+        $this->cacheTimeService = Shopware()->Container()->get(\Shopware\Components\HttpCache\CacheTimeServiceInterface::class);
 
         $this->defaultTime = 3600;
         $this->defaultBlogTime = 14400;

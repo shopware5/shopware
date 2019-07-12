@@ -86,7 +86,7 @@ class MediaSubscriber implements EventSubscriber
             return;
         }
 
-        $mediaService = $this->container->get('shopware_media.media_service');
+        $mediaService = $this->container->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         if ((!$media->getHeight() || !$media->getWidth()) && $mediaService->has($media->getPath())) {
             switch ($media->getType()) {

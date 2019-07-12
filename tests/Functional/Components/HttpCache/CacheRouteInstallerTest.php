@@ -51,9 +51,9 @@ class CacheRouteInstallerTest extends TestCase
      */
     public function startTransaction()
     {
-        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $this->cacheRouteInstaller = Shopware()->Container()->get('shopware.http_cache.route_installer');
-        $this->configWriter = Shopware()->Container()->get('config_writer');
+        $this->configWriter = Shopware()->Container()->get(ConfigWriter::class);
 
         $this->connection->beginTransaction();
     }

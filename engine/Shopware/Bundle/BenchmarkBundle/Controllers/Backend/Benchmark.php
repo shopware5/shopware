@@ -97,7 +97,7 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
 
     public function disableBenchmarkTeaserAction()
     {
-        $conn = $this->container->get('dbal_connection');
+        $conn = $this->container->get(\Doctrine\DBAL\Connection::class);
         $elementId = $conn->fetchColumn('SELECT id FROM s_core_config_elements WHERE name LIKE "benchmarkTeaser"');
         $valueId = $conn->fetchColumn('SELECT id FROM s_core_config_values WHERE element_id = :elementId',
             ['elementId' => $elementId]);
@@ -118,7 +118,7 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
             $conn->insert('s_core_config_values', $data);
         }
         /** @var CacheManager */
-        $cacheManager = $this->get('shopware.cache_manager');
+        $cacheManager = $this->get(\Shopware\Components\CacheManager::class);
         $cacheManager->clearConfigCache();
     }
 

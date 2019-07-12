@@ -683,7 +683,7 @@ class Media extends ModelEntity
 
         // Name changed? Then rename the file and set the new path
         if ($isNameChanged) {
-            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
             $newName = $this->getFileName();
             $newPath = $this->getUploadDir() . $newName;
 
@@ -714,7 +714,7 @@ class Media extends ModelEntity
      */
     public function onRemove()
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         //check if file exist and remove it
         if ($mediaService->has($this->path)) {
             $mediaService->delete($this->path);
@@ -794,7 +794,7 @@ class Media extends ModelEntity
             return;
         }
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         foreach ($thumbnailSizes as $size) {
             if (strpos($size, 'x') === false) {
@@ -845,7 +845,7 @@ class Media extends ModelEntity
     public function loadThumbnails($highDpi = false)
     {
         $thumbnails = $this->getThumbnailFilePaths($highDpi);
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         if (!$mediaService->has($this->getPath())) {
             return $thumbnails;
@@ -1046,7 +1046,7 @@ class Media extends ModelEntity
      */
     private function uploadFile()
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         $projectDir = Shopware()->Container()->getParameter('shopware.app.rootdir');
 
         // Move the file to the upload directory
@@ -1086,7 +1086,7 @@ class Media extends ModelEntity
         }
 
         /** @var \Shopware\Components\Thumbnail\Manager $generator */
-        $generator = Shopware()->Container()->get('thumbnail_manager');
+        $generator = Shopware()->Container()->get(\Shopware\Components\Thumbnail\Manager::class);
 
         $generator->createMediaThumbnail($this, $this->defaultThumbnails, true);
     }
@@ -1103,7 +1103,7 @@ class Media extends ModelEntity
             return;
         }
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         foreach ($this->defaultThumbnails as $size) {
             if (count($size) === 1) {
@@ -1151,7 +1151,7 @@ class Media extends ModelEntity
      */
     private function getThumbnailDir()
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         $path = $this->getUploadDir() . 'thumbnail' . DIRECTORY_SEPARATOR;
         $path = $mediaService->normalize($path);
 
@@ -1172,7 +1172,7 @@ class Media extends ModelEntity
         }
 
         /** @var \Shopware\Components\Thumbnail\Manager $manager */
-        $manager = Shopware()->Container()->get('thumbnail_manager');
+        $manager = Shopware()->Container()->get(\Shopware\Components\Thumbnail\Manager::class);
 
         $newSize = [
             'width' => $width,
@@ -1232,7 +1232,7 @@ class Media extends ModelEntity
 
         // Validate extension
         // #1 - whitelist
-        $mappingService = Shopware()->Container()->get('shopware_media.extension_mapping');
+        $mappingService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaExtensionMappingServiceInterface::class);
         if (!$mappingService->isAllowed($extension)) {
             throw new MediaFileExtensionNotAllowedException($extension);
         }
@@ -1287,7 +1287,7 @@ class Media extends ModelEntity
     private function getAllThumbnailSizes()
     {
         /** @var Connection $connection */
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $joinedSizes = $connection
             ->query('SELECT DISTINCT thumbnail_size FROM s_media_album_settings WHERE thumbnail_size != ""')
             ->fetchAll(\PDO::FETCH_COLUMN);

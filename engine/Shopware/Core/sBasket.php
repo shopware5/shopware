@@ -151,18 +151,18 @@ class sBasket implements \Enlight_Hook
 
         $this->contextService = $contextService;
         $this->additionalTextService = $additionalTextService;
-        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
 
         if ($this->contextService === null) {
-            $this->contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+            $this->contextService = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
         }
 
         if ($this->additionalTextService === null) {
-            $this->additionalTextService = Shopware()->Container()->get('shopware_storefront.additional_text_service');
+            $this->additionalTextService = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface::class);
         }
 
         if ($this->basketHelper === null) {
-            $this->basketHelper = Shopware()->Container()->get('shopware.cart.basket_helper');
+            $this->basketHelper = Shopware()->Container()->get(\Shopware\Components\Cart\BasketHelperInterface::class);
         }
 
         $this->proportionalTaxCalculation = $this->config->get('proportionalTaxCalculation');
@@ -832,7 +832,7 @@ SQL;
                 'VoucherFailureMinimumCharge',
                 'The minimum charge for this voucher is {$sMinimumCharge|currency}'
             );
-            $smarty = Shopware()->Container()->get('template');
+            $smarty = Shopware()->Container()->get(\Enlight_Template_Manager::class);
             $template = $smarty->createTemplate(sprintf('string:%s', $snippet));
             $template->assign('sMinimumCharge', $voucherDetails['minimumcharge']);
 
@@ -1475,12 +1475,12 @@ SQL;
 
         $numbers = array_column($notes, 'ordernumber');
 
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $context = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
 
-        $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
+        $products = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)
             ->getList($numbers, $context);
 
-        $products = Shopware()->Container()->get('shopware_storefront.additional_text_service')
+        $products = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface::class)
             ->buildAdditionalTextLists($products, $context);
 
         $promotions = [];
@@ -2130,7 +2130,7 @@ SQL;
      */
     private function convertListProductToNote(ListProduct $product, array $note)
     {
-        $structConverter = Shopware()->Container()->get('legacy_struct_converter');
+        $structConverter = Shopware()->Container()->get(\Shopware\Components\Compatibility\LegacyStructConverter::class);
         $promotion = $structConverter->convertListProductStruct($product);
 
         $promotion['id'] = $note['id'];
@@ -2460,18 +2460,18 @@ SQL;
     {
         $container = Shopware()->Container();
         /** @var \Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface $listProduct */
-        $listProduct = $container->get('shopware_storefront.list_product_service');
+        $listProduct = $container->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class);
         /** @var \Shopware\Bundle\StoreFrontBundle\Service\PropertyServiceInterface $propertyService */
-        $propertyService = $container->get('shopware_storefront.property_service');
+        $propertyService = $container->get(\Shopware\Bundle\StoreFrontBundle\Service\PropertyServiceInterface::class);
         /** @var \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface $context */
-        $context = $container->get('shopware_storefront.context_service');
+        $context = $container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
         /** @var \Shopware\Components\Compatibility\LegacyStructConverter $legacyStructConverter */
-        $legacyStructConverter = $container->get('legacy_struct_converter');
+        $legacyStructConverter = $container->get(\Shopware\Components\Compatibility\LegacyStructConverter::class);
 
         $products = $listProduct->getList($numbers, $context->getShopContext());
         $propertySets = $propertyService->getList($products, $context->getShopContext());
 
-        $covers = $container->get('shopware_storefront.variant_cover_service')
+        $covers = $container->get(\Shopware\Bundle\StoreFrontBundle\Service\VariantCoverServiceInterface::class)
             ->getList($products, $context->getShopContext());
 
         $details = [];
@@ -2864,7 +2864,7 @@ SQL;
         );
 
         $additionalInformation = $stmt->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
-        $products = Shopware()->Container()->get('shopware_storefront.list_product_gateway')->getList(
+        $products = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Gateway\ListProductGatewayInterface::class)->getList(
             array_column($additionalInformation, 'ordernumber'),
             $this->contextService->getShopContext()
         );
@@ -3225,7 +3225,7 @@ SQL;
 
         if ($product['configurator_set_id'] > 0) {
             $context = $this->contextService->getShopContext();
-            $productStruct = Shopware()->Container()->get('shopware_storefront.list_product_service')
+            $productStruct = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)
                 ->get($product['ordernumber'], $context);
             if ($productStruct === null) {
                 return false;

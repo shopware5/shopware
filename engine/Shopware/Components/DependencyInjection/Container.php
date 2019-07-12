@@ -111,11 +111,11 @@ class Container extends BaseContainer
      */
     public function getNormalizedId($id)
     {
-        $id = $this->getFormattedId($id);
-
         if (isset($this->aliases[$id])) {
             $id = $this->aliases[$id];
         }
+
+        $id = $this->getFormattedId($id);
 
         return $id;
     }
@@ -160,8 +160,7 @@ class Container extends BaseContainer
     }
 
     /**
-     * If the given resource is set, the resource and the resource status are removed from the
-     * list properties.
+     * If the given resource is set, the resource and the resource status are removed from the list properties.
      *
      * @param string $name
      *

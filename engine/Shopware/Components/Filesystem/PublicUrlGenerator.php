@@ -86,7 +86,7 @@ class PublicUrlGenerator implements PublicUrlGeneratorInterface
             $shop = $this->container->get('shop');
         } else {
             /** @var Shop $shop */
-            $shop = $this->container->get('models')->getRepository(Shop::class)->getActiveDefault();
+            $shop = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class)->getActiveDefault();
         }
 
         if ($shop->getMain()) {

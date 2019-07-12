@@ -61,8 +61,8 @@ class CategoryConditionTest extends TestCase
 
     public function testConditionCounter(): void
     {
-        $queryFactory = Shopware()->Container()->get('shopware_searchdbal.dbal_query_builder_factory');
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $queryFactory = Shopware()->Container()->get(\Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory::class);
+        $context = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
 
         $criteria = new Criteria();
         $criteria->addBaseCondition(new CategoryCondition([1]));

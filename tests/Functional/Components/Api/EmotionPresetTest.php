@@ -45,11 +45,11 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $this->connection->beginTransaction();
         $this->connection->executeQuery('DELETE FROM s_emotion_presets');
         $this->connection->executeQuery('DELETE FROM s_core_plugins');
-        $this->resource = Shopware()->Container()->get('shopware.api.emotionpreset');
+        $this->resource = Shopware()->Container()->get(\Shopware\Components\Api\Resource\EmotionPreset::class);
         parent::setUp();
     }
 

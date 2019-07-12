@@ -44,7 +44,7 @@ class Address extends Resource
 
     public function __construct()
     {
-        $this->addressService = $this->getContainer()->get('shopware_account.address_service');
+        $this->addressService = $this->getContainer()->get(\Shopware\Bundle\AccountBundle\Service\AddressServiceInterface::class);
     }
 
     /**
@@ -120,7 +120,7 @@ class Address extends Resource
         $customerId = !empty($params['customer']) ? (int) $params['customer'] : 0;
         unset($params['customer']);
 
-        $customer = $this->getContainer()->get('models')->find(CustomerModel::class, $customerId);
+        $customer = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(CustomerModel::class, $customerId);
         if (!$customer) {
             throw new ApiException\NotFoundException(sprintf('Customer by id %s not found', $customerId));
         }
@@ -229,14 +229,14 @@ class Address extends Resource
     private function setupContext($shopId)
     {
         /** @var Repository $shopRepository */
-        $shopRepository = $this->getContainer()->get('models')->getRepository(ShopModel::class);
+        $shopRepository = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(ShopModel::class);
 
         $shop = $shopRepository->getActiveById($shopId);
         if (!$shop) {
             throw new \RuntimeException('A valid shopId is required.');
         }
 
-        $this->getContainer()->get('shopware.components.shop_registration_service')->registerShop($shop);
+        $this->getContainer()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
     }
 
     /**
@@ -271,8 +271,8 @@ class Address extends Resource
             unset($data['customer']);
         }
 
-        $data['country'] = !empty($data['country']) ? $this->getContainer()->get('models')->find(Country::class, (int) $data['country']) : null;
-        $data['state'] = !empty($data['state']) ? $this->getContainer()->get('models')->find(State::class, $data['state']) : null;
+        $data['country'] = !empty($data['country']) ? $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(Country::class, (int) $data['country']) : null;
+        $data['state'] = !empty($data['state']) ? $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(State::class, $data['state']) : null;
 
         return $filter ? array_filter($data) : $data;
     }

@@ -27,6 +27,7 @@ use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\Compatibility\LegacyStructConverter;
 
 /**
  * Search controller for suggest search
@@ -41,7 +42,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
         $this->View()->loadTemplate('frontend/search/ajax.tpl');
 
         /** @var SearchTermPreProcessorInterface $processor */
-        $processor = $this->get('shopware_search.search_term_pre_processor');
+        $processor = $this->get(\Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface::class);
         $term = $processor->process($this->Request()->getParam('sSearch'));
 
         if (!$term || strlen($term) < Shopware()->Config()->get('MinSearchLenght')) {
@@ -51,9 +52,9 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
         $this->setDefaultSorting();
 
         /** @var ShopContextInterface $context */
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
 
-        $criteria = $this->get('shopware_search.store_front_criteria_factory')
+        $criteria = $this->get(\Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface::class)
             ->createAjaxSearchCriteria($this->Request(), $context);
 
         $result = $this->search($term, $criteria, $context);
@@ -76,7 +77,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
     {
         $products = [];
         foreach ($result->getProducts() as $product) {
-            $productArray = $this->get('legacy_struct_converter')->convertListProductStruct($product);
+            $productArray = $this->get(LegacyStructConverter::class)->convertListProductStruct($product);
 
             $productArray['link'] = $this->Front()->Router()->assemble([
                 'controller' => 'detail',
@@ -97,7 +98,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
             return;
         }
 
-        $sortings = $this->container->get('config')->get('searchSortings');
+        $sortings = $this->container->get(\Shopware_Components_Config::class)->get('searchSortings');
         $sortings = array_filter(explode('|', $sortings));
         $this->Request()->setParam('sSort', array_shift($sortings));
     }
@@ -112,10 +113,10 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
         $result = null;
 
         // If the search for product numbers is active, do that first
-        if ((int) $this->get('config')->get('activateNumberSearch') === 1) {
+        if ((int) $this->get(\Shopware_Components_Config::class)->get('activateNumberSearch') === 1) {
             // Check if search-term is a valid product-number
             /** @var ListProduct|null $directHit */
-            $directHit = $this->get('shopware_storefront.list_product_service')
+            $directHit = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)
                 ->get($term, $context);
 
             if ($directHit) {
@@ -126,7 +127,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
 
         // If number search is inactive or didn't find anything, do a regular search
         if (!$result || $result->getTotalCount() === 0) {
-            $result = $this->get('shopware_search.product_search')->search($criteria, $context);
+            $result = $this->get(\Shopware\Bundle\SearchBundle\ProductSearchInterface::class)->search($criteria, $context);
         }
 
         return $result;

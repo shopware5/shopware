@@ -7,12 +7,14 @@
     <services>
         <service id="shopware.api.resource" class="Shopware\Components\Api\Resource\Resource" shared="false"
                  abstract="true"/>
+
         <service id="shopware.api.address" class="Shopware\Components\Api\Resource\Address" shared="false">
             <tag name="shopware.api_resource"/>
         </service>
 
         <service id="shopware.api.article" class="Shopware\Components\Api\Resource\Article" shared="false">
-            <argument type="service" id="translation"/>
+            <argument type="service" id="Shopware_Components_Translation"/>
+
             <tag name="shopware.api_resource"/>
         </service>
 
@@ -59,7 +61,7 @@
         </service>
 
         <service id="shopware.api.translation" class="Shopware\Components\Api\Resource\Translation" shared="false">
-            <argument type="service" id="translation"/>
+            <argument type="service" id="Shopware_Components_Translation"/>
             <tag name="shopware.api_resource"/>
         </service>
 
@@ -77,21 +79,23 @@
         </service>
 
         <service id="shopware.api.emotion_preset" class="Shopware\Components\Api\Resource\EmotionPreset" shared="false">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="models"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Components\Model\ModelManager"/>
             <argument type="service" id="shopware.slug"/>
+
             <tag name="shopware.api_resource"/>
         </service>
 
         <service id="shopware.api.customer_stream" class="Shopware\Components\Api\Resource\CustomerStream">
-            <argument id="shopware.logaware_reflection_helper" type="service"/>
-            <argument id="customer_search.dbal.number_search" type="service"/>
-            <argument id="shopware.customer_stream.repository" type="service"/>
-            <argument id="models" type="service"/>
-            <argument id="dbal_connection" type="service"/>
-            <argument id="customer_search.dbal.indexing.indexer" type="service"/>
-            <argument id="shopware.customer_stream.stream_indexer" type="service"/>
-            <argument id="shopware.customer_stream.criteria_factory" type="service"/>
+            <argument type="service" id="shopware.logaware_reflection_helper"/>
+            <argument type="service" id="Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchInterface"/>
+            <argument type="service" id="Shopware\Models\CustomerStream\CustomerStreamRepositoryInterface"/>
+            <argument type="service" id="Shopware\Components\Model\ModelManager"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\SearchIndexerInterface"/>
+            <argument type="service" id="Shopware\Components\CustomerStream\StreamIndexerInterface"/>
+            <argument type="service" id="Shopware\Components\CustomerStream\CustomerStreamCriteriaFactoryInterface"/>
+
             <tag name="shopware.api_resource"/>
         </service>
 

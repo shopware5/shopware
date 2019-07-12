@@ -50,7 +50,7 @@ class PluginDeactivateCommand extends PluginCommand implements CompletionAwareIn
     {
         if ($argumentName === 'plugin') {
             /** @var ModelRepository $repository */
-            $repository = $this->getContainer()->get('models')->getRepository(Plugin::class);
+            $repository = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Plugin::class);
             $queryBuilder = $repository->createQueryBuilder('plugin');
             $result = $queryBuilder->andWhere($queryBuilder->expr()->eq('plugin.capabilityEnable', 'true'))
                 ->andWhere($queryBuilder->expr()->eq('plugin.active', 'true'))
@@ -92,7 +92,7 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var InstallerService $pluginManager */
-        $pluginManager = $this->container->get('shopware_plugininstaller.plugin_manager');
+        $pluginManager = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
         $pluginName = $input->getArgument('plugin');
 
         try {

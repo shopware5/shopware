@@ -300,7 +300,7 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
     public function testEditRole($randomRoleName)
     {
         $randomRole = Shopware()->Container()
-            ->get('dbal_connection')
+            ->get(\Doctrine\DBAL\Connection::class)
             ->createQueryBuilder()
             ->select('r.id')
             ->from('s_core_auth_roles r')
@@ -368,7 +368,7 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
      */
     private function getBaseUserQuery()
     {
-        $dbal = Shopware()->Container()->get('dbal_connection');
+        $dbal = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
 
         return $dbal->createQueryBuilder()
             ->select('a.id, a.name, a.username')
@@ -399,7 +399,7 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
     {
         //Delete the admin user if it exists before attempting to create it (else we will have a duplicate user error)
         Shopware()->Container()
-            ->get('dbal_connection')
+            ->get(\Doctrine\DBAL\Connection::class)
             ->executeQuery(
                 'DELETE FROM s_core_auth WHERE username=:username',
                 ['username' => $name]

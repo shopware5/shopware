@@ -283,7 +283,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         }
 
         /** @var Enlight_Template_Manager $engine */
-        $engine = $container->get('template');
+        $engine = $container->get(\Enlight_Template_Manager::class);
         $engine->unregisterPlugin(
             Smarty::PLUGIN_FUNCTION,
             'acl_is_allowed'
@@ -426,7 +426,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         $locale = $this->getCurrentLocale();
         $container->get('locale')->setLocale($locale->toString());
         $container->get('snippets')->setLocale($locale);
-        $template = $container->get('template');
+        $template = $container->get(\Enlight_Template_Manager::class);
         $baseHash = $this->request->getScheme() . '://'
                   . $this->request->getHttpHost()
                   . $this->request->getBaseUrl() . '?'
@@ -449,7 +449,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     protected function getCurrentLocale()
     {
         $options = $this->getSessionOptions();
-        $modelManager = $this->get('models');
+        $modelManager = $this->get(\Shopware\Components\Model\ModelManager::class);
 
         Enlight_Components_Session::setOptions($options);
 

@@ -58,7 +58,7 @@ class GenerateProductFeedCommand extends ShopwareCommand implements CompletionAw
     {
         if ($optionName === 'feed-id') {
             /** @var Repository $productFeedRepository */
-            $productFeedRepository = $this->container->get('models')->getRepository(ProductFeed::class);
+            $productFeedRepository = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(ProductFeed::class);
             $queryBuilder = $productFeedRepository->createQueryBuilder('feed');
 
             if (!empty($context->getCurrentWord())) {
@@ -125,13 +125,13 @@ class GenerateProductFeedCommand extends ShopwareCommand implements CompletionAw
 
         $export->sSYSTEM = $this->container->get('system');
 
-        $this->sSmarty = $this->container->get('template');
+        $this->sSmarty = $this->container->get(\Enlight_Template_Manager::class);
 
         // Prevent notices to clutter generated files
         $this->registerErrorHandler($output);
 
         /** @var Repository $productFeedRepository */
-        $productFeedRepository = $this->container->get('models')->getRepository(ProductFeed::class);
+        $productFeedRepository = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(ProductFeed::class);
         if (empty($feedId)) {
             $activeFeeds = $productFeedRepository->getActiveListQuery()->getResult();
 

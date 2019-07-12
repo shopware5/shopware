@@ -53,7 +53,7 @@ class StatisticsClientTest extends BenchmarkTestCase
             $httpClient,
             Shopware()->Container()->get('shopware.benchmark_bundle.hydrator.statistics_response_hydrator'),
             new NullLogger(),
-            Shopware()->Container()->get('dbal_connection')
+            Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)
         );
 
         $config = new BenchmarkConfig(Uuid::uuid4()->toString());

@@ -43,8 +43,9 @@
         </service>
 
         <service id="shopware_controllers_backend_logger" class="Shopware\Controllers\Backend\Logger">
-            <argument type="service" id="models"/>
-            <argument type="service" id="shopware.components.privacy.ip_anonymizer"/>
+            <argument type="service" id="Shopware\Components\Model\ModelManager"/>
+            <argument type="service" id="Shopware\Components\Privacy\IpAnonymizerInterface"/>
+
             <tag name="shopware.controller" module="backend" controller="logger"/>
         </service>
 

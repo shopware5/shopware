@@ -36,14 +36,14 @@ class InheritanceTest extends Base
     protected function setUp()
     {
         /** @var Connection $connection */
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $connection->beginTransaction();
     }
 
     protected function tearDown()
     {
         /** @var Connection $connection */
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $connection->rollBack();
     }
 
@@ -70,11 +70,11 @@ class InheritanceTest extends Base
             ->will(static::returnCallback([$this, 'getTheme']));
 
         $inheritance = new \Shopware\Components\Theme\Inheritance(
-            Shopware()->Container()->get('models'),
+            Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class),
             $util,
-            Shopware()->Container()->get('theme_path_resolver'),
+            Shopware()->Container()->get(\Shopware\Components\Theme\PathResolver::class),
             Shopware()->Container()->get('events'),
-            Shopware()->Container()->get('shopware_media.media_service')
+            Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class)
         );
 
         $hierarchy = $inheritance->buildInheritances($custom);
@@ -148,7 +148,7 @@ class InheritanceTest extends Base
             $util,
             $pathResolver,
             $this->getEventManager(),
-            Shopware()->Container()->get('shopware_media.media_service')
+            Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class)
         );
 
         $files = $inheritance->getTemplateJavascriptFiles($template);
@@ -172,15 +172,15 @@ class InheritanceTest extends Base
     public function testConfigInheritanceForLanguageShop()
     {
         /** @var Connection $connection */
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $connection->beginTransaction();
 
         /** @var Installer $service */
-        $service = Shopware()->Container()->get('theme_installer');
+        $service = Shopware()->Container()->get(\Shopware\Components\Theme\Installer::class);
         $service->synchronize();
 
         /** @var ModelManager $em */
-        $em = Shopware()->Container()->get('models');
+        $em = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
 
         $shop = new Shop();
         $shop->setName('Main shop');
@@ -223,8 +223,8 @@ class InheritanceTest extends Base
         $master->setTemplate('TestBare');
         $master->setVersion(3);
 
-        Shopware()->Container()->get('models')->persist($master);
-        Shopware()->Container()->get('models')->flush();
+        Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->persist($master);
+        Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->flush();
 
         $slave = new \Shopware\Models\Shop\Template();
         $slave->setName('TestResponsive');
@@ -232,8 +232,8 @@ class InheritanceTest extends Base
         $slave->setParent($master);
         $slave->setVersion(3);
 
-        Shopware()->Container()->get('models')->persist($slave);
-        Shopware()->Container()->get('models')->flush();
+        Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->persist($slave);
+        Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->flush();
 
         return $slave;
     }

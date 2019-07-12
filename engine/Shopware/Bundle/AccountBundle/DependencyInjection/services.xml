@@ -8,76 +8,84 @@
         <defaults public="true" />
 
         <service id="shopware_account.address_service" class="Shopware\Bundle\AccountBundle\Service\AddressService">
-            <argument type="service" id="models" />
-            <argument type="service" id="shopware_account.address_validator" />
+            <argument type="service" id="Shopware\Components\Model\ModelManager" />
+            <argument type="service" id="Shopware\Bundle\AccountBundle\Service\Validator\AddressValidatorInterface" />
         </service>
 
         <service id="shopware_account.address_validator" class="Shopware\Bundle\AccountBundle\Service\Validator\AddressValidator">
             <argument type="service" id="validator" />
-            <argument type="service" id="shopware_storefront.context_service" />
-            <argument type="service" id="config" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface" />
+            <argument type="service" id="Shopware_Components_Config" />
         </service>
 
         <service id="shopware_account.customer_service" class="Shopware\Bundle\AccountBundle\Service\CustomerService">
-            <argument type="service" id="models" />
-            <argument type="service" id="shopware_account.customer_validator" />
+            <argument type="service" id="Shopware\Components\Model\ModelManager" />
+            <argument type="service" id="Shopware\Bundle\AccountBundle\Service\Validator\CustomerValidatorInterface" />
         </service>
 
         <service id="shopware_account.customer_validator" class="Shopware\Bundle\AccountBundle\Service\Validator\CustomerValidator">
             <argument type="service" id="validator" />
-            <argument type="service" id="shopware_storefront.context_service" />
-            <argument type="service" id="config" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface" />
+            <argument type="service" id="Shopware_Components_Config" />
         </service>
 
         <service id="shopware_account.constraint.current_password_validator" class="Shopware\Bundle\AccountBundle\Constraint\CurrentPasswordValidator">
-            <argument type="service" id="session" />
-            <argument type="service" id="snippets" />
+            <argument type="service" id="Zend_Session_Namespace" />
+            <argument type="service" id="Shopware_Components_Snippet_Manager" />
             <argument type="service" id="passwordencoder" />
-            <argument type="service" id="models" />
+            <argument type="service" id="Shopware\Components\Model\ModelManager" />
+
             <tag name="validator.constraint_validator" alias="CurrentPasswordValidator" />
         </service>
 
         <service id="shopware_account.type.salutation_type" class="Shopware\Bundle\AccountBundle\Type\SalutationType">
-            <argument type="service" id="config" />
+            <argument type="service" id="Shopware_Components_Config" />
+
             <tag name="form.type" />
         </service>
 
         <service id="shopware_account.form.addressform" class="Shopware\Bundle\AccountBundle\Form\Account\AddressFormType">
-            <argument type="service" id="config" />
-            <argument type="service" id="models" />
+            <argument type="service" id="Shopware_Components_Config" />
+            <argument type="service" id="Shopware\Components\Model\ModelManager" />
+
             <tag name="form.type" />
         </service>
 
         <service id="shopware_account.form.attributeform" class="Shopware\Bundle\AccountBundle\Form\Account\AttributeFormType">
-            <argument type="service" id="models" />
-            <argument type="service" id="shopware_attribute.crud_service" />
+            <argument type="service" id="Shopware\Components\Model\ModelManager" />
+            <argument type="service" id="Shopware\Bundle\AttributeBundle\Service\CrudService" />
             <argument type="service" id="corelogger" />
+
             <tag name="form.type" />
         </service>
 
         <service id="shopware_account.form.profile_update_form" class="Shopware\Bundle\AccountBundle\Form\Account\ProfileUpdateFormType">
-            <argument type="service" id="snippets" />
-            <argument type="service" id="config" />
-            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="Shopware_Components_Snippet_Manager" />
+            <argument type="service" id="Shopware_Components_Config" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface" />
+
             <tag name="form.type" />
         </service>
 
         <service id="shopware_account.form.personalform" class="Shopware\Bundle\AccountBundle\Form\Account\PersonalFormType">
-            <argument type="service" id="snippets" />
-            <argument type="service" id="config" />
-            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="Shopware_Components_Snippet_Manager" />
+            <argument type="service" id="Shopware_Components_Config" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface" />
+
             <tag name="form.type" />
         </service>
 
         <service id="shopware_account.form.emailupdateform" class="Shopware\Bundle\AccountBundle\Form\Account\EmailUpdateFormType">
-            <argument type="service" id="snippets" />
-            <argument type="service" id="config" />
-            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="Shopware_Components_Snippet_Manager" />
+            <argument type="service" id="Shopware_Components_Config" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface" />
+
             <tag name="form.type" />
         </service>
 
         <service id="shopware_account.form.passwordupdateform" class="Shopware\Bundle\AccountBundle\Form\Account\PasswordUpdateFormType">
-            <argument type="service" id="config" />
+            <argument type="service" id="Shopware_Components_Config" />
+
             <tag name="form.type" />
         </service>
 
@@ -86,43 +94,46 @@
         </service>
 
         <service id="shopware_account.constraint.password_validator" class="Shopware\Bundle\AccountBundle\Constraint\PasswordValidator">
-            <argument type="service" id="snippets" />
-            <argument type="service" id="config" />
+            <argument type="service" id="Shopware_Components_Snippet_Manager" />
+            <argument type="service" id="Shopware_Components_Config" />
+
             <tag name="validator.constraint_validator" alias="PasswordValidator" />
         </service>
 
         <service id="shopware_account.constraint.form_email_validator" class="Shopware\Bundle\AccountBundle\Constraint\FormEmailValidator">
-            <argument type="service" id="snippets" />
-            <argument type="service" id="shopware_account.constraint.customer_email_validator" />
+            <argument type="service" id="Shopware_Components_Snippet_Manager" />
+            <argument type="service" id="Shopware\Bundle\AccountBundle\Constraint\CustomerEmailValidator" />
+
             <tag name="validator.constraint_validator" alias="FormEmailValidator" />
         </service>
 
         <service id="shopware_account.constraint.customer_email_validator" class="Shopware\Bundle\AccountBundle\Constraint\CustomerEmailValidator">
-            <argument type="service" id="snippets" />
-            <argument type="service" id="dbal_connection" />
-            <argument type="service" id="validator.email" />
+            <argument type="service" id="Shopware_Components_Snippet_Manager" />
+            <argument type="service" id="Doctrine\DBAL\Connection" />
+            <argument type="service" id="Shopware\Components\Validator\EmailValidator" />
+
             <tag name="validator.constraint_validator" alias="CustomerEmailValidator" />
         </service>
 
         <service id="shopware_account.register_service" class="Shopware\Bundle\AccountBundle\Service\RegisterService">
-            <argument type="service" id="models"/>
-            <argument type="service" id="shopware_account.customer_validator"/>
-            <argument type="service" id="config"/>
+            <argument type="service" id="Shopware\Components\Model\ModelManager"/>
+            <argument type="service" id="Shopware\Bundle\AccountBundle\Service\Validator\CustomerValidatorInterface"/>
+            <argument type="service" id="Shopware_Components_Config"/>
             <argument type="service" id="passwordencoder"/>
-            <argument type="service" id="shopware.number_range_incrementer"/>
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_account.address_service"/>
+            <argument type="service" id="Shopware\Components\NumberRangeIncrementerInterface"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\AccountBundle\Service\AddressServiceInterface"/>
             <argument type="service" id="front"/>
         </service>
 
         <service id="shopware_account.store_front_greeting_service" class="Shopware\Bundle\AccountBundle\Service\StoreFrontCustomerGreetingService" >
-            <argument id="session" type="service"/>
-            <argument id="dbal_connection" type="service"/>
-            <argument id="config" type="service"/>
+            <argument type="service" id="Zend_Session_Namespace"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware_Components_Config"/>
         </service>
 
         <service id="shopware_account.customer_unlock_service" class="Shopware\Bundle\AccountBundle\Service\CustomerUnlockService">
-            <argument id="dbal_connection" type="service"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
         </service>
     </services>
 </container>

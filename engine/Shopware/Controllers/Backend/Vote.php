@@ -128,7 +128,7 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_App
             return [];
         }
 
-        $query = $this->container->get('dbal_connection')->createQueryBuilder();
+        $query = $this->container->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
         $query->select('*');
         $query->from('s_core_shops', 'shops');
         $query->where('shops.id IN (:ids)');

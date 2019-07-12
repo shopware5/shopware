@@ -151,7 +151,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     public function changeConfigValue($configName, $value)
     {
         /** @var Connection $dbal */
-        $dbal = $this->getService('dbal_connection');
+        $dbal = $this->getService(Connection::class);
         $configId = $dbal->fetchColumn(
             'SELECT `id` FROM `s_core_config_elements` WHERE `name` = ?',
             [$configName]
@@ -165,12 +165,12 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
         $this->dirtyConfigElements[] = $configId;
 
         /** @var \Shopware\Components\ConfigWriter $configWriter */
-        $configWriter = $this->getService('config_writer');
+        $configWriter = $this->getService(\Shopware\Components\ConfigWriter::class);
 
         $configWriter->save($configName, $value, null, 1);
         $configWriter->save($configName, $value, null, 2);
 
-        $config = $this->getService('config');
+        $config = $this->getService(\Shopware_Components_Config::class);
         $config->offsetSet($configName, $value);
 
         $this->clearCache();
@@ -202,7 +202,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     public function clearCache(ScenarioScope $scope = null)
     {
         /** @var CacheManager $cacheManager */
-        $cacheManager = $this->getService('shopware.cache_manager');
+        $cacheManager = $this->getService(\Shopware\Components\CacheManager::class);
         $cacheManager->clearConfigCache();
         $cacheManager->clearTemplateCache();
     }
@@ -247,7 +247,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     public static function deactivateInfiniteScrolling()
     {
         /** @var Connection $dbal */
-        $dbal = Shopware()->Container()->get('dbal_connection');
+        $dbal = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
 
         $sql = "SET @elementId = (SELECT id FROM `s_core_templates_config_elements` WHERE `name` = 'infiniteScrolling');
                 INSERT INTO `s_core_templates_config_values` (`element_id`, `shop_id`, `value`)
@@ -265,7 +265,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     public static function activateInfiniteScrolling()
     {
         /** @var Connection $dbal */
-        $dbal = Shopware()->Container()->get('dbal_connection');
+        $dbal = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
 
         $sql = "SET @elementId = (SELECT id FROM `s_core_templates_config_elements` WHERE `name` = 'infiniteScrolling');
                 INSERT INTO `s_core_templates_config_values` (`element_id`, `shop_id`, `value`)
@@ -279,12 +279,12 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
 
     private function prepare()
     {
-        $em = $this->getService('models');
+        $em = $this->getService(\Shopware\Components\Model\ModelManager::class);
         $em->generateAttributeModels();
 
         //refresh s_core_templates
         $this->registerErrorHandler();
-        $this->getService('theme_installer')->synchronize();
+        $this->getService(\Shopware\Components\Theme\Installer::class)->synchronize();
         restore_error_handler();
 
         //get the template id
@@ -310,7 +310,7 @@ EOD;
         Helper::setCurrentLanguage('de');
 
         /** @var \Shopware\Bundle\PluginInstallerBundle\Service\InstallerService $pluginManager */
-        $pluginManager = $this->getService('shopware_plugininstaller.plugin_manager');
+        $pluginManager = $this->getService(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
 
         // hack to prevent behat error handler kicking in.
         $this->registerErrorHandler();
@@ -430,7 +430,7 @@ EOD;
     private static function clearTemplateCache()
     {
         /** @var CacheManager $cacheManager */
-        $cacheManager = Shopware()->Container()->get('shopware.cache_manager');
+        $cacheManager = Shopware()->Container()->get(\Shopware\Components\CacheManager::class);
         $cacheManager->clearConfigCache();
         $cacheManager->clearTemplateCache();
         $cacheManager->clearThemeCache();

@@ -86,7 +86,7 @@ class LogRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         parent::setUp();
 
-        $this->entityManager = Shopware()->Container()->get('models');
+        $this->entityManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
         $this->builder = new LogEntryBuilder($this->entityManager);
         $this->repository = $this->entityManager->getRepository(Log::class);
 

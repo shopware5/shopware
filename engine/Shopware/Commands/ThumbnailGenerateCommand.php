@@ -74,7 +74,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
     {
         if ($optionName === 'albumid') {
             /** @var ModelRepository $albumRepository */
-            $albumRepository = $this->getContainer()->get('models')->getRepository(Album::class);
+            $albumRepository = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Album::class);
 
             $queryBuilder = $albumRepository->createQueryBuilder('alb')
                 ->innerJoin('alb.settings', 'settings', Join::WITH, 'settings.createThumbnails = 1');
@@ -133,7 +133,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
         $this->output = $output;
         $this->force = (bool) $input->getOption('force');
         $this->errors = [];
-        $this->generator = $this->getContainer()->get('thumbnail_manager');
+        $this->generator = $this->getContainer()->get(\Shopware\Components\Thumbnail\Manager::class);
 
         $albumId = (int) $input->getOption('albumid');
 
@@ -152,7 +152,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
     protected function getMediaAlbums($albumId)
     {
         /** @var ModelManager $em */
-        $em = $this->getContainer()->get('models');
+        $em = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class);
 
         $builder = $em->createQueryBuilder();
         $builder
@@ -192,7 +192,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
         $this->output->writeln("Generating Thumbnails for Album {$album->getName()} (ID: {$album->getId()})");
 
         /** @var ModelManager */
-        $em = $this->getContainer()->get('models');
+        $em = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class);
 
         /** @var Repository */
         $repository = $em->getRepository(Media::class);
@@ -253,7 +253,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
      */
     private function thumbnailExists($thumbnailPath)
     {
-        $mediaService = $this->container->get('shopware_media.media_service');
+        $mediaService = $this->container->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         $projectDir = $this->container->getParameter('shopware.app.rootdir');
 
         return $mediaService->has($projectDir . $thumbnailPath);
@@ -266,7 +266,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
      */
     private function imageExists(Media $media)
     {
-        $mediaService = $this->container->get('shopware_media.media_service');
+        $mediaService = $this->container->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         $projectDir = $this->container->getParameter('shopware.app.rootdir');
 
         return $mediaService->has($projectDir . $media->getPath());

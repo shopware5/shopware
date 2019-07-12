@@ -51,7 +51,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->cs = Shopware()->Container()->get('shopware_attribute.crud_service');
+        $this->cs = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class);
         $this->em = Shopware()->Models();
         $this->generator = new Generator(
             $this->em->getConnection()->getSchemaManager(),

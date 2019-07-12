@@ -45,9 +45,9 @@ class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->resource = Shopware()->Container()->get('shopware.api.emotionpreset');
+        $this->resource = Shopware()->Container()->get(\Shopware\Components\Api\Resource\EmotionPreset::class);
         $this->resource->setManager(Shopware()->Models());
-        Shopware()->Container()->get('dbal_connection')->beginTransaction();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
 
@@ -57,7 +57,7 @@ class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
     protected function tearDown()
     {
         parent::tearDown();
-        Shopware()->Container()->get('dbal_connection')->rollback();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollback();
     }
 
     public function testListAction()

@@ -47,10 +47,10 @@ class LogEntryMailBuilderTest extends \PHPUnit\Framework\TestCase
     {
         parent::setUp();
 
-        $this->entryBuilder = new LogEntryBuilder(Shopware()->Container()->get('models'));
+        $this->entryBuilder = new LogEntryBuilder(Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class));
         $this->mailBuilder = new LogEntryMailBuilder(
             Shopware()->Container()->get('shopware.filesystem.private'),
-            Shopware()->Container()->get('shopware_media.media_service')
+            Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class)
         );
     }
 

@@ -44,7 +44,7 @@ class LandingPageViewLoader
         Shopware_Components_Translation $translationComponent = null
     ) {
         $this->deviceConfiguration = $deviceConfiguration;
-        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
+        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get(\Shopware_Components_Translation::class);
     }
 
     /**

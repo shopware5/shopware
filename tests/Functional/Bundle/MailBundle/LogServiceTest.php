@@ -48,7 +48,7 @@ class LogServiceTest extends \PHPUnit\Framework\TestCase
     {
         parent::setUp();
 
-        $entityManager = Shopware()->Container()->get('models');
+        $entityManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
 
         $this->entityManager = $entityManager;
         $this->logService = new LogService(

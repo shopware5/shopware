@@ -167,7 +167,7 @@ class VoteAverageFacetTest extends TestCase
      */
     private function createCategory(Shop $shop)
     {
-        $em = Shopware()->Container()->get('models');
+        $em = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
         $category = $em->find(Category::class, $shop->getCategory()->getId());
 
         return $this->helper->createCategory(['parent' => $category]);

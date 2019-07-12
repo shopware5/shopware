@@ -76,7 +76,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $shop->setHost($request->getHttpHost());
         }
         if (!$shop->getBaseUrl()) {
-            $preferBasePath = $this->get('config')->preferBasePath;
+            $preferBasePath = $this->get(\Shopware_Components_Config::class)->preferBasePath;
             $shop->setBaseUrl($preferBasePath ? $request->getBasePath() : $request->getBaseUrl());
         }
         if (!$shop->getBasePath()) {
@@ -102,7 +102,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
 
         $this->validateShop($shop);
-        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
+        $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
     }
 
     /**
@@ -126,7 +126,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             }
 
             // Strip /shopware.php/ from string and perform a redirect
-            $preferBasePath = $this->get('config')->preferBasePath;
+            $preferBasePath = $this->get(\Shopware_Components_Config::class)->preferBasePath;
             if ($preferBasePath && strpos($request->getPathInfo(), '/shopware.php/') === 0) {
                 $removePath = $request->getBasePath() . '/shopware.php';
                 $newPath = str_replace($removePath, $request->getBasePath(), $request->getRequestUri());
@@ -141,7 +141,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
                 $this->initServiceMode($request);
             }
 
-            $this->get('shopware_storefront.context_service')->initializeShopContext();
+            $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->initializeShopContext();
         }
     }
 
@@ -209,7 +209,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
         if ($cookieKey === 'shop' && $this->shouldRedirect($request, $shop)) {
             /** @var Shopware\Models\Shop\Repository $repository */
-            $repository = $this->get('models')->getRepository(Shop::class);
+            $repository = $this->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
 
             $newShop = $repository->getActiveById($cookieValue);
 
@@ -276,11 +276,11 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
         // Upgrade template
         if (isset($session->template) && !empty($session->Admin)) {
-            $repository = $this->get('models')->getRepository(Template::class);
+            $repository = $this->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Template::class);
             $template = $session->template;
             $template = $repository->findOneBy(['template' => $template]);
 
-            $this->get('template')->setTemplateDir([]);
+            $this->get(\Enlight_Template_Manager::class)->setTemplateDir([]);
 
             if ($template !== null) {
                 $shop->setTemplate($template);
@@ -292,10 +292,10 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
 
         // Save upgrades
-        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
+        $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         if ($request->isSecure()) {
-            $template = $this->get('template');
+            $template = $this->get(\Enlight_Template_Manager::class);
             $template->setCompileId($template->getCompileId() . '_secure');
         }
     }
@@ -306,7 +306,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     protected function getShopByRequest(Request $request)
     {
         /** @var Repository $repository */
-        $repository = $this->get('models')->getRepository(Shop::class);
+        $repository = $this->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
 
         $shop = null;
         if ($request->getPost('__shop') !== null) {
@@ -346,7 +346,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         $url = $request->getRequestUri();
 
         /** @var Repository $repository */
-        $repository = $this->get('models')->getRepository(Shop::class);
+        $repository = $this->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
         $requestShop = $repository->getActiveShopByRequestAsArray($request);
         if ($requestShop && strpos($url, $requestShop['base_url']) === 0) {
             $url = substr($url, strlen($requestShop['base_url']));
@@ -430,7 +430,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
 
         /** @var Shopware\Models\Shop\Repository $repository */
-        $repository = $this->get('models')->getRepository(Shop::class);
+        $repository = $this->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
         $requestShop = $repository->getActiveShopByRequestAsArray($request);
 
         if ($requestShop && $requestShop['id'] !== $shop->getId()) {
@@ -514,7 +514,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
     private function refreshCart(Shop $shop): void
     {
-        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
+        $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         /** @var Shopware_Components_Modules $modules */
         $modules = $this->get('modules');
@@ -525,10 +525,10 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $modules->System()->sCurrency = $shop->getCurrency()->toArray();
         }
 
-        $this->get('shopware_storefront.context_service')->initializeContext();
+        $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->initializeContext();
 
         /** @var \Shopware\Bundle\StoreFrontBundle\Struct\ShopContext $shopContext */
-        $shopContext = $this->get('shopware_storefront.context_service')->getShopContext();
+        $shopContext = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
 
         $modules->Basket()->sRefreshBasket();
         $modules->Admin()->sGetPremiumShippingcosts($shopContext->getCountry() ? $shopContext->getCountry()->jsonSerialize() : null);
