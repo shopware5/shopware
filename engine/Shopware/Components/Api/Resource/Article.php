@@ -981,10 +981,6 @@ class Article extends Resource implements BatchInterface
         // and if non of the following variants has the mainDetail's number
         $oldMainDetail = $article->getMainDetail();
 
-        if (isset($data['__options_variants']) && $data['__options_variants']['replace']) {
-            $this->removeArticleDetails($article);
-        }
-
         if ($oldMainDetail) {
             $mainDetailGetsConfigurator = false;
             foreach ($data['variants'] as $variantData) {
