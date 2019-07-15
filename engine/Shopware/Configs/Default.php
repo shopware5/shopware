@@ -167,11 +167,22 @@ return array_replace_recursive([
         'wait_for_status' => 'green',
         'dynamic_mapping_enabled' => true,
         'batchsize' => 500,
+        'index_settings' => [
+            'number_of_shards' => '%shopware.es.number_of_shards%',
+            'number_of_replicas' => '%shopware.es.number_of_replicas%',
+            'max_result_window' => '%shopware.es.max_result_window%',
+            'mapping' => [
+                'total_fields' => [
+                    'limit' => '%shopware.es.total_fields_limit%',
+                ],
+            ],
+        ],
         'backend' => [
             'prefix' => '%shopware.es.prefix%_backend_index_',
             'batch_size' => 500,
             'write_backlog' => false,
             'enabled' => false,
+            'index_settings' => '%shopware.es.index_settings%',
         ],
         'client' => [
             'hosts' => [

@@ -24,11 +24,11 @@
 
 namespace Shopware\Bundle\EsBackendBundle;
 
-interface IndexNameBuilderInterface
+use Shopware\Bundle\ESIndexingBundle\Struct\IndexConfiguration;
+
+interface IndexFactoryInterface
 {
     public function getPrefix(): string;
 
-    public function getName(string $name): string;
-
-    public function getAlias(string $name): string;
+    public function createIndexConfiguration(string $name): IndexConfiguration;
 }

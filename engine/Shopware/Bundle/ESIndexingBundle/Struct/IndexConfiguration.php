@@ -37,24 +37,9 @@ class IndexConfiguration
     private $alias;
 
     /**
-     * @var int|null
+     * @var array
      */
-    private $numberOfShards;
-
-    /**
-     * @var int|null
-     */
-    private $numberOfReplicas;
-
-    /**
-     * @var int|null
-     */
-    private $totalFieldsLimit;
-
-    /**
-     * @var int|null
-     */
-    private $maxResultWindow;
+    private $config;
 
     /**
      * @param string   $name
@@ -70,14 +55,28 @@ class IndexConfiguration
         $numberOfShards = null,
         $numberOfReplicas = null,
         $totalFieldsLimit = null,
-        $maxResultWindow = null)
-    {
+        $maxResultWindow = null,
+        ?array $indexConfiguration = []
+    ) {
         $this->name = $name;
         $this->alias = $alias;
-        $this->numberOfShards = $numberOfShards;
-        $this->numberOfReplicas = $numberOfReplicas;
-        $this->totalFieldsLimit = $totalFieldsLimit;
-        $this->maxResultWindow = $maxResultWindow;
+        $this->config = $indexConfiguration;
+
+        if ($numberOfShards) {
+            $this->config['numberOfShards'] = $numberOfShards;
+        }
+
+        if ($numberOfReplicas) {
+            $this->config['numberOfReplicas'] = $numberOfReplicas;
+        }
+
+        if ($totalFieldsLimit) {
+            $this->config['totalFieldsLimit'] = $totalFieldsLimit;
+        }
+
+        if ($maxResultWindow) {
+            $this->config['maxResultWindow'] = $maxResultWindow;
+        }
     }
 
     /**
@@ -97,66 +96,92 @@ class IndexConfiguration
     }
 
     /**
+     * @deprecated Use toArray instead, will be removed with 5.7
+     *
      * @return int|null
      */
     public function getNumberOfShards()
     {
-        return $this->numberOfShards;
+        return $this->config['numberOfShards'] ?? null;
     }
 
     /**
+     * @deprecated Use setConfig instead, will be removed with 5.7
+     *
      * @param int|null $numberOfShards
      */
     public function setNumberOfShards($numberOfShards)
     {
-        $this->numberOfShards = $numberOfShards;
+        $this->config['numberOfShards'] = $numberOfShards;
     }
 
     /**
+     * @deprecated Use toArray instead, will be removed with 5.7
+     *
      * @return int|null
      */
     public function getNumberOfReplicas()
     {
-        return $this->numberOfReplicas;
+        return $this->config['numberOfReplicas'] ?? null;
     }
 
     /**
+     * @deprecated Use setConfig instead, will be removed with 5.7
+     *
      * @param int|null $numberOfReplicas
      */
     public function setNumberOfReplicas($numberOfReplicas)
     {
-        $this->numberOfReplicas = $numberOfReplicas;
+        $this->config['numberOfReplicas'] = $numberOfReplicas;
     }
 
     /**
+     * @deprecated Use toArray instead, will be removed with 5.7
+     *
      * @return int|null
      */
     public function getTotalFieldsLimit()
     {
-        return $this->totalFieldsLimit;
+        return $this->config['totalFieldsLimit'] ?? null;
     }
 
     /**
+     * @deprecated Use setConfig instead, will be removed with 5.7
+     *
      * @param int|null $totalFieldsLimit
      */
     public function setTotalFieldsLimit($totalFieldsLimit)
     {
-        $this->totalFieldsLimit = $totalFieldsLimit;
+        $this->config['totalFieldsLimit'] = $totalFieldsLimit;
     }
 
     /**
+     * @deprecated Use toArray instead, will be removed with 5.7
+     *
      * @return int|null
      */
     public function getMaxResultWindow()
     {
-        return $this->maxResultWindow;
+        return $this->config['maxResultWindow'] ?? null;
     }
 
     /**
+     * @deprecated Use setConfig instead, will be removed with 5.7
+     *
      * @param int|null $maxResultWindow
      */
     public function setMaxResultWindow($maxResultWindow)
     {
-        $this->maxResultWindow = $maxResultWindow;
+        $this->config['maxResultWindow'] = $maxResultWindow;
+    }
+
+    public function toArray(): array
+    {
+        return $this->config;
+    }
+
+    public function setConfig(array $config): void
+    {
+        $this->config = $config;
     }
 }

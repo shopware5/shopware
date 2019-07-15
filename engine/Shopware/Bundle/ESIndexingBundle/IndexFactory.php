@@ -36,39 +36,17 @@ class IndexFactory implements IndexFactoryInterface
     private $prefix;
 
     /**
-     * @var int|null
+     * @var array
      */
-    private $numberOfShards;
+    private $indexConfig;
 
     /**
-     * @var int|null
+     * @param string $prefix
      */
-    private $numberOfReplicas;
-
-    /**
-     * @var int|null
-     */
-    private $totalFieldsLimit;
-
-    /**
-     * @var int|null
-     */
-    private $maxResultWindow;
-
-    /**
-     * @param string   $prefix
-     * @param int|null $numberOfShards
-     * @param int|null $numberOfReplicas
-     * @param int|null $totalFieldsLimit
-     * @param int|null $maxResultWindow
-     */
-    public function __construct($prefix, $numberOfShards = null, $numberOfReplicas = null, $totalFieldsLimit = null, $maxResultWindow = null)
+    public function __construct($prefix, array $indexConfig)
     {
         $this->prefix = $prefix;
-        $this->numberOfShards = $numberOfShards;
-        $this->numberOfReplicas = $numberOfReplicas;
-        $this->totalFieldsLimit = $totalFieldsLimit;
-        $this->maxResultWindow = $maxResultWindow;
+        $this->indexConfig = $indexConfig;
     }
 
     /**
@@ -81,10 +59,11 @@ class IndexFactory implements IndexFactoryInterface
         return new IndexConfiguration(
             $this->getIndexName($shop, $mappingType) . '_' . $this->getTimestamp(),
             $this->getIndexName($shop, $mappingType),
-            $this->numberOfShards,
-            $this->numberOfReplicas,
-            $this->totalFieldsLimit,
-            $this->maxResultWindow
+            null,
+            null,
+            null,
+            null,
+            $this->indexConfig
         );
     }
 

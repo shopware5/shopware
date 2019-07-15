@@ -24,16 +24,37 @@
 
 namespace Shopware\Bundle\EsBackendBundle;
 
-class IndexNameBuilder implements IndexNameBuilderInterface
+use Shopware\Bundle\ESIndexingBundle\Struct\IndexConfiguration;
+
+class IndexFactory implements IndexFactoryInterface
 {
     /**
      * @var string
      */
     private $prefix;
 
-    public function __construct(string $prefix)
+    /**
+     * @var array
+     */
+    private $indexConfig;
+
+    public function __construct(string $prefix, array $indexConfig)
     {
         $this->prefix = $prefix;
+        $this->indexConfig = $indexConfig;
+    }
+
+    public function createIndexConfiguration(string $name): IndexConfiguration
+    {
+        return new IndexConfiguration(
+            $this->getIndexName($name),
+            $this->getAlias($name),
+            null,
+            null,
+            null,
+            null,
+            $this->indexConfig
+        );
     }
 
     public function getPrefix(): string
@@ -41,12 +62,12 @@ class IndexNameBuilder implements IndexNameBuilderInterface
         return $this->prefix;
     }
 
-    public function getName(string $name): string
+    private function getIndexName(string $name): string
     {
         return $this->getAlias($name) . '_' . (new \DateTime())->format('YmdHis');
     }
 
-    public function getAlias(string $name): string
+    private function getAlias(string $name): string
     {
         return $this->prefix . $name;
     }
