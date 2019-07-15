@@ -162,9 +162,7 @@ class ProductService implements ProductServiceInterface
         $configuration = $this->configuratorService->getProductsConfigurations($listProducts, $context);
 
         $products = [];
-        foreach ($listProducts as $listProduct) {
-            $number = $listProduct->getNumber();
-
+        foreach ($listProducts as $number => $listProduct) {
             $product = Product::createFromListProduct($listProduct);
 
             if (isset($relatedProducts[$number])) {
