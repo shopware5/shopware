@@ -24,6 +24,8 @@
 
 require __DIR__ . '/../../autoload.php';
 
+use Shopware\Models\Shop\Shop;
+
 class TestKernel extends \Shopware\Kernel
 {
     /**
@@ -38,7 +40,7 @@ class TestKernel extends \Shopware\Kernel
         $container->get('plugins')->Core()->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
 
         /** @var \Shopware\Models\Shop\Repository $repository */
-        $repository = $container->get('models')->getRepository('Shopware\Models\Shop\Shop');
+        $repository = $container->get('models')->getRepository(Shop::class);
 
         $shop = $repository->getActiveDefault();
         Shopware()->Container()->get('shopware.components.shop_registration_service')->registerShop($shop);

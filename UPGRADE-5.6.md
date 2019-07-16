@@ -9,7 +9,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added support for Shopping Worlds without AJAX requests, configurable in theme settings
 * Added configuration to define the format of a valid order number. See [Custom validation of order numbers (SKU)](###Custom validation of order numbers (SKU)) for more details
 * Added controller registration by DI-tag. See Controller See [Controller Registration using DI-Tag](###Controller Registration using DI-Tag) for more details
-* Added autowiring of controller action parameters. See [Autowire of controller actions parameters](###Autowire of controller actions parameters) for more details* Added better ExtJS file auto-loading. See [Improved ExtJS auto-loading](###Improved ExtJS auto-loading) for more details
+* Added autowiring of controller action parameters. See [Autowire of controller actions parameters](###Autowire of controller actions parameters) for more details
+* Added better ExtJS file auto-loading. See [Improved ExtJS auto-loading](###Improved ExtJS auto-loading) for more details
 * Added new `Shopware\Components\Cart\PaymentTokenService` to improve handling of payment callbacks. See [Payment Token](###Payment Token) for more details
 * Added specific logger service for each plugin. See [Plugin specific logger](###Plugin specific logger) for more details
 * Added support for HTTP2 server push. See [HTTP2 Server Push Support](###HTTP2 Server Push Support) for more details
@@ -88,6 +89,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added new block `frontend_listing_box_article_badges_inner` to `themes/Frontend/Bare/frontend/listing/product-box/product-badges.tpl`
 * Added event `Shopware_Models_Order_Document_Filter_Config` to modify config settings for document creation
 * Added `_config` property to class `Shopware_Models_Document_Order` to make it usable while model creation
+* Added new parameter to prevent certain exceptions from cluttering your logs. See [Disable logging of specific exceptions](###Disable logging of specific exceptions) for more details
 
 ### Changes
 
@@ -631,3 +633,31 @@ as well. Since the Shopware DIC is case-insensitive, this is no problem in exist
 
 This change is being made as a first arrangement for a future switch to Symfony 4, where the DIC is case sensitive and
 FQCNs are the default.
+
+### Disable logging of specific exceptions
+
+Sometimes you are aware that exceptions occur, but you're not interested in them being logged since there is nothing you
+can do about them and their occurring isn't harmful to the system or your business. One example might be a
+`CSRFTokenValidationException` being thrown by visiting bots.
+
+To prevent those exceptions from cluttering up your log, you are now able to disable logging of those exceptions. To do so,
+add the class name of the exceptions your want to exempt from being logged to your `config.php`:
+
+```php
+'errorHandler' => [
+    'ignoredExceptionClasses' => [
+        \Shopware\Components\CSRFTokenValidationException::class,
+        \Shopware\Components\Api\Exception\CustomValidationException::class
+    ]
+]
+```
+By default, these exceptions are now longer being logged:
+```php
+\Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException::class,
+\Shopware\Components\Api\Exception\CustomValidationException::class,
+\Shopware\Components\Api\Exception\NotFoundException::class,
+\Shopware\Components\Api\Exception\OrmException::class,
+\Shopware\Components\Api\Exception\ParameterMissingException::class,
+\Shopware\Components\Api\Exception\PrivilegeException::class,
+\Shopware\Components\Api\Exception\ValidationException::class,
+```

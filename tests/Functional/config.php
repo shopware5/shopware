@@ -22,13 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
-return array_merge($this->loadConfig($this->AppPath() . 'Configs/Default.php'), [
+return array_replace_recursive($this->loadConfig($this->AppPath() . 'Configs/Default.php'), [
      'front' => [
         'throwExceptions' => true,
         'disableOutputBuffering' => false,
         'showException' => true,
     ],
-    'errorHandler' => [
+    'errorhandler' => [
         'throwOnRecoverableError' => true,
     ],
     'session' => [
@@ -44,13 +44,13 @@ return array_merge($this->loadConfig($this->AppPath() . 'Configs/Default.php'), 
         'type' => 'file',
         'path' => $this->getCacheDir(),
     ],
-    'phpSettings' => [
+    'phpsettings' => [
         'error_reporting' => E_ALL,
         'display_errors' => 1,
         'date.timezone' => 'Europe/Berlin',
         'max_execution_time' => 0,
     ],
-    'csrfProtection' => [
+    'csrfprotection' => [
         'frontend' => false,
         'backend' => false,
     ],

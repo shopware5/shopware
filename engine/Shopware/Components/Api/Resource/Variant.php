@@ -510,12 +510,12 @@ class Variant extends Resource implements BatchInterface
         if (isset($data['esd'])) {
             $data = $this->prepareEsdAssociation($data, $variant);
         }
-        throw new ApiException\CustomValidationException('foo');
-        if (!empty($data['number']) && $data['number'] !== $variant->getNumber()) {
-            $connection = Shopware()->Container()->get('dbal_connection');
 
+        if (!empty($data['number']) && $data['number'] !== $variant->getNumber()) {
             // Number changed, hence make sure it does not already exist in another variant
-            $exists = $connection->fetchColumn('SELECT id FROM s_articles_details WHERE ordernumber = ?', [$data['number']]);
+            $exists = $this->getContainer()
+                ->get('dbal_connection')
+                ->fetchColumn('SELECT id FROM s_articles_details WHERE ordernumber = ?', [$data['number']]);
             if ($exists) {
                 throw new ApiException\CustomValidationException(sprintf('A variant with the given order number "%s" already exists.', $data['number']));
             }

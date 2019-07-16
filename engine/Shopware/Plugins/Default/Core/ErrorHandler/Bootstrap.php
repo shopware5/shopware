@@ -82,6 +82,11 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     private $throwOnRecoverableError = false;
 
     /**
+     * @var string[]
+     */
+    private $ignoredExceptionClasses;
+
+    /**
      * Returns plugin capabilities
      */
     public function getCapabilities()
@@ -113,7 +118,10 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
      */
     public function onStartDispatch($args)
     {
-        $this->throwOnRecoverableError = Shopware()->Container()->getParameter('shopware.errorhandler.throwOnRecoverableError');
+        $parameters = $this->get('service_container')->getParameter('shopware.errorHandler');
+
+        $this->throwOnRecoverableError = $parameters['throwOnRecoverableError'];
+        $this->ignoredExceptionClasses = $parameters['ignoredExceptionClasses'];
 
         // Register ErrorHandler for all errors, including strict
         $this->registerErrorHandler(E_ALL | E_STRICT);
@@ -265,6 +273,11 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
         /** @var Logger $logger */
         $logger = $this->get('corelogger');
         foreach ($exceptions as $exception) {
+            // Check the exception having been catched with the list of exceptions to ignore
+            if (in_array(get_class($exception), $this->ignoredExceptionClasses, true)) {
+                continue;
+            }
+
             if ($exception instanceof CSRFTokenValidationException) {
                 $logger->warning((string) $exception);
                 continue;
