@@ -212,6 +212,7 @@
         <service id="shopware.event_manager" alias="events" public="true"/>
         <service id="events" class="Shopware\Components\ContainerAwareEventManager" public="true">
             <argument type="service" id="service_container"/>
+            <argument>%shopware.events.legacy_priority%</argument>
         </service>
 
         <service id="shopware.hook_manager" alias="hooks" />

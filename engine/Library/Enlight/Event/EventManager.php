@@ -41,15 +41,31 @@ use Enlight\Event\SubscriberInterface;
 class Enlight_Event_EventManager extends Enlight_Class
 {
     /**
-     * @var Enlight_Event_Handler[] Contains all registered event listeners. A listener can be registered by the
+     * @var bool
+     */
+    private $legacyPriority;
+
+    /**
+     * @var array Contains all registered event listeners. A listener can be registered by the
      *                              registerListener(Enlight_Event_Handler $handler) function.
      */
     protected $listeners = [];
 
     /**
+     * @param bool $legacyPriority
+     */
+    public function __construct($legacyPriority = false)
+    {
+        $this->legacyPriority = $legacyPriority;
+        parent::__construct();
+    }
+
+    /**
      * Returns all event listeners of the Enlight_Event_EventManager
-     *
-     * @return Enlight_Event_Handler[]
+     * 
+     * @deprecated Return value will change in 5.7
+     * 
+     * @return array
      */
     public function getAllListeners()
     {
@@ -101,15 +117,19 @@ class Enlight_Event_EventManager extends Enlight_Class
 
         $list = &$this->listeners[$eventName];
 
-        if ($handler->getPosition()) {
-            $position = (int) $handler->getPosition();
+        if ($this->legacyPriority) {
+            if ($handler->getPosition()) {
+                $position = (int) $handler->getPosition();
+            } else {
+                $position = count($list);
+            }
+            while (isset($list[$position])) {
+                ++$position;
+            }
+            $list[$position] = $handler;
         } else {
-            $position = count($list);
+            $list[(int)$handler->getPosition() ?: 0][] = $handler;
         }
-        while (isset($list[$position])) {
-            ++$position;
-        }
-        $list[$position] = $handler;
 
         ksort($list);
 
@@ -131,10 +151,22 @@ class Enlight_Event_EventManager extends Enlight_Class
             return $this;
         }
 
-        $listenerToRemove = $handler->getListener();
-        foreach ($this->listeners[$eventName] as $i => $handler) {
-            if ($listenerToRemove === $handler->getListener()) {
-                unset($this->listeners[$eventName][$i]);
+        $listenerToRemove = $handler instanceof Enlight_Event_Handler_Plugin ? $handler : $handler->getListener();
+        /**
+         * @var int $position
+         * @var Enlight_Event_Handler|array $listener
+         */
+        foreach ($this->listeners[$eventName] as $position => $listener) {
+            if ($this->legacyPriority) {
+                if ($listenerToRemove === ($listener instanceof Enlight_Event_Handler_Plugin ? $listener : $listener->getListener())) {
+                    unset($this->listeners[$eventName][$position]);
+                }
+            } else {
+                foreach ($listener as $i => $handler) {
+                    if ($listenerToRemove === ($handler instanceof Enlight_Event_Handler_Plugin ? $handler : $handler->getListener())) {
+                        unset($this->listeners[$eventName][$position][$i]);
+                    }
+                }
             }
         }
 
@@ -152,7 +184,11 @@ class Enlight_Event_EventManager extends Enlight_Class
     {
         $event = strtolower($event);
 
-        return isset($this->listeners[$event]) && count($this->listeners[$event]);
+        if ($this->legacyPriority) {
+            return isset($this->listeners[$event]) && count($this->listeners[$event]);
+        } else {
+            return isset($this->listeners[$event]) && array_sum(array_map('count', $this->listeners[$event]));
+        }
     }
 
     /**
@@ -160,14 +196,18 @@ class Enlight_Event_EventManager extends Enlight_Class
      *
      * @param $event
      *
-     * @return Enlight_Event_Handler[]
+     * @return callable[]
      */
     public function getListeners($event)
     {
         $event = strtolower($event);
 
         if (isset($this->listeners[$event])) {
-            return $this->listeners[$event];
+            if ($this->legacyPriority) {
+                return $this->listeners[$event];
+            } else {
+                return array_merge(...$this->listeners[$event]);
+            }
         }
 
         return [];
@@ -211,7 +251,7 @@ class Enlight_Event_EventManager extends Enlight_Class
         $eventArgs->setProcessed(false);
 
         foreach ($this->getListeners($event) as $listener) {
-            $listener->execute($eventArgs);
+            $listener($eventArgs);
         }
         $eventArgs->setProcessed(true);
 
@@ -248,7 +288,7 @@ class Enlight_Event_EventManager extends Enlight_Class
         $eventArgs->setProcessed(false);
 
         foreach ($this->getListeners($event) as $listener) {
-            if (($return = $listener->execute($eventArgs)) !== null
+            if (($return = $listener($eventArgs)) !== null
                 || $eventArgs->isProcessed()
             ) {
                 $eventArgs->setProcessed(true);
@@ -293,7 +333,7 @@ class Enlight_Event_EventManager extends Enlight_Class
         $eventArgs->setProcessed(false);
 
         foreach ($this->getListeners($event) as $listener) {
-            if (($return = $listener->execute($eventArgs)) !== null) {
+            if (($return = $listener($eventArgs)) !== null) {
                 $eventArgs->setReturn($return);
             }
         }
@@ -325,7 +365,7 @@ class Enlight_Event_EventManager extends Enlight_Class
         $eventArgs->setProcessed(false);
 
         foreach ($this->getListeners($event) as $listener) {
-            $listenerCollection = $listener->execute($eventArgs);
+            $listenerCollection = $listener($eventArgs);
             if ($listenerCollection instanceof ArrayCollection) {
                 foreach ($listenerCollection->getValues() as $value) {
                     $collection->add($value);

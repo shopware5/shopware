@@ -145,6 +145,12 @@ return array_replace_recursive([
             'collate' => 'utf8_unicode_ci',
         ],
     ],
+    'events' => [
+        /*
+         * @deprecated since Shopware 5.6
+         */
+        'legacy_priority' => true, // Default false in shopware 5.7
+    ],
     'es' => [
         'prefix' => 'sw_shop',
         'enabled' => false,

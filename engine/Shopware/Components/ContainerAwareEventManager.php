@@ -46,9 +46,13 @@ class ContainerAwareEventManager extends \Enlight_Event_EventManager
      */
     private $listenerIds = [];
 
-    public function __construct(ContainerInterface $container)
+    /**
+     * @param bool $legacyPriority
+     */
+    public function __construct(ContainerInterface $container, $legacyPriority = false)
     {
         $this->container = $container;
+        parent::__construct($legacyPriority);
     }
 
     /**

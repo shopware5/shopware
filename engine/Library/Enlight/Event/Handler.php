@@ -97,4 +97,9 @@ abstract class Enlight_Event_Handler
      * @return  mixed
      */
     abstract public function execute(Enlight_Event_EventArgs $args);
+    
+    public function __invoke(Enlight_Event_EventArgs $args)
+    {
+        return $this->execute($args);
+    }
 }
