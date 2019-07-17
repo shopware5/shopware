@@ -30,6 +30,7 @@ use PHPUnit\Framework\TestCase;
 
 class EventManagerTest extends TestCase
 {
+    /** @var \Enlight_Event_EventManager */
     private $eventManager;
 
     public function setUp()
@@ -300,8 +301,23 @@ class EventManagerTest extends TestCase
         static::assertCount(3, $this->eventManager->getListeners('eventName3'));
 
         $listeners = $this->eventManager->getListeners('eventName3');
-        $listener = $listeners[5];
-        static::assertEquals(5, $listener->getPosition());
+        $listener = array_pop($listeners);
+
+        static::assertEquals($eventSubscriber, $listener[0]);
+        static::assertEquals('callback3_0', $listener[1]);
+    }
+
+    public function testPriority()
+    {
+        $eventSubscriber = new EventPriorityTest();
+        $this->eventManager->addSubscriber($eventSubscriber);
+
+        $listeners = $this->eventManager->getListeners('eventName');
+        static::assertCount(7, $listeners);
+
+        $listener = array_pop($listeners);
+        static::assertEquals($eventSubscriber, $listener[0]);
+        static::assertEquals('callback4_0', $listener[1]);
     }
 
     public function testRemoveSubscriber()
@@ -348,6 +364,24 @@ class EventSubsciberTest implements SubscriberInterface
                 ['callback3_0', 5],
                 ['callback3_1'],
                 ['callback3_2'],
+            ],
+        ];
+    }
+}
+
+class EventPriorityTest implements SubscriberInterface
+{
+    public static function getSubscribedEvents()
+    {
+        return [
+            'eventName' => [
+                ['callback3_0'],
+                ['callback3_1'],
+                ['callback3_2'],
+                ['callback3_3'],
+                ['callback3_4'],
+                ['callback4_0', 5],
+                ['callback3_5'],
             ],
         ];
     }

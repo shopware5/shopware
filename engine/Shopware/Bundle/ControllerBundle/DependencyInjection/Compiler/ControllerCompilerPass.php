@@ -38,11 +38,12 @@ class ControllerCompilerPass implements CompilerPassInterface
             $options = $options[0];
 
             if (!isset($options['module'])) {
-                throw new \RuntimeException(sprintf('Attribute "module" is required for "shopware.controller" tagged service with id "%s"', $id));
+                // It's maybe a symfony controller
+                continue;
             }
 
             if (!isset($options['controller'])) {
-                throw new \RuntimeException(sprintf('Attribute "module" is required for "shopware.controller" tagged service with id "%s"', $id));
+                throw new \RuntimeException(sprintf('Attribute "controller" is required for "shopware.controller" tagged service with id "%s"', $id));
             }
 
             $controllers[strtolower(sprintf('%s_%s', $options['module'], $options['controller']))] = $id;

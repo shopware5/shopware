@@ -191,6 +191,9 @@ class Container extends BaseContainer
      */
     private function doLoad($id, $fallbackName = null, $invalidBehavior = self::NULL_ON_INVALID_REFERENCE)
     {
+        if (!$this->initialized('events')) {
+            return parent::get($id, $invalidBehavior);
+        }
         $eventManager = parent::get('events');
 
         /** @var \Enlight_Event_EventArgs|null $event */

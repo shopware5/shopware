@@ -31,11 +31,6 @@
 class Enlight_Event_Handler_Plugin extends Enlight_Event_Handler
 {
     /**
-     * @var string Contains the event listener.
-     */
-    protected $listener;
-
-    /**
      * @var Enlight_Plugin_Namespace Contains an instance of the Enlight_Plugin_Namespace.
      */
     protected $namespace;
@@ -47,6 +42,11 @@ class Enlight_Event_Handler_Plugin extends Enlight_Event_Handler
     protected $plugin;
 
     /**
+     * @var string
+     */
+    protected $method;
+
+    /**
      * The Enlight_Event_Handler_Plugin class constructor expects the event name.
      * All parameters are set in the internal properties.
      *
@@ -54,10 +54,10 @@ class Enlight_Event_Handler_Plugin extends Enlight_Event_Handler
      * @param   string                   $event
      * @param   Enlight_Plugin_Namespace $namespace
      * @param   Enlight_Plugin_Bootstrap $plugin
-     * @param   string                   $listener
+     * @param   string                   $method
      * @param   integer                  $position
      */
-    public function __construct($event, $namespace = null, $plugin = null, $listener = null, $position = null)
+    public function __construct($event, $namespace = null, $plugin = null, $method = null, $position = null)
     {
         if ($namespace !== null) {
             $this->setNamespace($namespace);
@@ -65,8 +65,8 @@ class Enlight_Event_Handler_Plugin extends Enlight_Event_Handler
         if ($plugin !== null) {
             $this->setPlugin($plugin);
         }
-        if ($listener !== null) {
-            $this->setListener($listener);
+        if ($method !== null) {
+            $this->setMethod($method);
         }
         parent::__construct($event);
         $this->setPosition($position);
@@ -98,22 +98,11 @@ class Enlight_Event_Handler_Plugin extends Enlight_Event_Handler
     }
 
     /**
-     * Setter method for the internal listener property.
-     * @param   string $listener
-     * @return  Enlight_Event_Handler_Plugin
+     * @return callable
      */
-    public function setListener($listener)
+    public function getListener(): callable
     {
-        $this->listener = $listener;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getListener()
-    {
-        return $this->listener;
+        return [$this, 'execute'];
     }
 
     /**
@@ -136,13 +125,13 @@ class Enlight_Event_Handler_Plugin extends Enlight_Event_Handler
     public function execute(Enlight_Event_EventArgs $args)
     {
         $plugin = $this->Plugin();
-        if (!method_exists($plugin, $this->listener)) {
+        if (!method_exists($plugin, $this->method)) {
             $name = $this->plugin instanceof Enlight_Plugin_Bootstrap ? $this->plugin->getName() : $this->plugin;
-            trigger_error('Listener "' . $this->listener . '" in "' . $name . '" is not callable.', E_USER_ERROR);
+            trigger_error('Listener "' . $this->method . '" in "' . $name . '" is not callable.', E_USER_ERROR);
             //throw new Enlight_Exception('Listener "' . $this->listener . '" in "' . $name . '" is not callable.');
             return;
         }
-        return $this->Plugin()->{$this->listener}($args);
+        return $this->Plugin()->{$this->method}($args);
     }
 
     /**
@@ -155,7 +144,25 @@ class Enlight_Event_Handler_Plugin extends Enlight_Event_Handler
             'name' => $this->name,
             'position' => $this->position,
             'plugin' => $this->plugin instanceof Enlight_Plugin_Bootstrap ? $this->plugin->getName() : $this->plugin,
-            'listener' => $this->listener
+            'method' => $this->method
         );
+    }
+
+    /**
+     * @param string $method
+     * @return $this
+     */
+    public function setMethod(string $method)
+    {
+        $this->method = $method;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMethod(): string
+    {
+        return $this->method;
     }
 }

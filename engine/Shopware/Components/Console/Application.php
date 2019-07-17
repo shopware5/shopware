@@ -88,6 +88,7 @@ class Application extends BaseApplication
     {
         try {
             $this->kernel->boot();
+            $this->setDispatcher($this->kernel->getContainer()->get('event_dispatcher'));
         } catch (\Exception $e) {
             $this->kernel->boot(true);
             $formatter = $this->getHelperSet()->get('formatter');

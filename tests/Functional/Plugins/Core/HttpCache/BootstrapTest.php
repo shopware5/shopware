@@ -63,10 +63,9 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
 
         $this->cacheManager = Shopware()->Container()->get('shopware.cache_manager');
 
-        $plugin = $this->pluginManager->getPluginByName('HttpCache');
+        $this->installPlugin('HttpCache');
 
-        $this->pluginManager->installPlugin($plugin);
-        $this->pluginManager->activatePlugin($plugin);
+        $plugin = $this->pluginManager->getPluginByName('HttpCache');
 
         $this->previousConfig = $this->pluginManager->getPluginConfig($plugin);
 

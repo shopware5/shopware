@@ -19,7 +19,7 @@
             <argument type="tagged" tag="controller.argument_value_resolver"/>
         </service>
 
-        <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
+        <service id="argument_resolver.service" class="Shopware\Components\Controller\ServiceValueResolver">
             <tag name="controller.argument_value_resolver" priority="0" />
             <argument type="collection" />
         </service>

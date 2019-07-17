@@ -19,6 +19,8 @@
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Enlight\Event\SubscriberInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * The Enlight_Event_EventManager stores all event listeners.
@@ -41,43 +43,37 @@ use Enlight\Event\SubscriberInterface;
 class Enlight_Event_EventManager extends Enlight_Class
 {
     /**
-     * @var Enlight_Event_Handler[] Contains all registered event listeners. A listener can be registered by the
-     *                              registerListener(Enlight_Event_Handler $handler) function.
+     * @var EventDispatcherInterface 
      */
-    protected $listeners = [];
+    private $eventDispatcher;
+
+    public function __construct(EventDispatcherInterface $eventDispatcher = null)
+    {
+        $this->eventDispatcher = $eventDispatcher ?: new EventDispatcher();
+    }
 
     /**
      * Returns all event listeners of the Enlight_Event_EventManager
      *
-     * @return Enlight_Event_Handler[]
+     * @return array
      */
     public function getAllListeners()
     {
-        return $this->listeners;
+        return $this->eventDispatcher->getListeners();
     }
 
     /**
      * $eventManager->addListener('foo.action', array($listener, 'onFooAction'));
      *
-     * @param string   $eventName
+     * @param string $eventName
      * @param callback|array<int, object|string> $listener
-     * @param int      $priority
+     * @param int $priority
      *
      * @return Enlight_Event_EventManager
      */
     public function addListener($eventName, $listener, $priority = 0)
     {
-        if ($priority === 0) {
-            $priority = null;
-        }
-
-        $handler = new \Enlight_Event_Handler_Default(
-            $eventName,
-            $listener,
-            $priority
-        );
-
-        $this->registerListener($handler);
+        $this->eventDispatcher->addListener(strtolower($eventName), $listener, $priority * -1);
 
         return $this;
     }
@@ -94,24 +90,7 @@ class Enlight_Event_EventManager extends Enlight_Class
     public function registerListener(Enlight_Event_Handler $handler)
     {
         $eventName = strtolower($handler->getName());
-
-        if (!isset($this->listeners[$eventName])) {
-            $this->listeners[$eventName] = [];
-        }
-
-        $list = &$this->listeners[$eventName];
-
-        if ($handler->getPosition()) {
-            $position = (int) $handler->getPosition();
-        } else {
-            $position = count($list);
-        }
-        while (isset($list[$position])) {
-            ++$position;
-        }
-        $list[$position] = $handler;
-
-        ksort($list);
+        $this->eventDispatcher->addListener($eventName, $handler->getListener(), $handler->getPosition() * -1);
 
         return $this;
     }
@@ -126,18 +105,8 @@ class Enlight_Event_EventManager extends Enlight_Class
     public function removeListener(Enlight_Event_Handler $handler)
     {
         $eventName = strtolower($handler->getName());
-
-        if (!isset($this->listeners[$eventName])) {
-            return $this;
-        }
-
-        $listenerToRemove = $handler->getListener();
-        foreach ($this->listeners[$eventName] as $i => $handler) {
-            if ($listenerToRemove === $handler->getListener()) {
-                unset($this->listeners[$eventName][$i]);
-            }
-        }
-
+        $this->eventDispatcher->removeListener($eventName, $handler->getListener());
+        
         return $this;
     }
 
@@ -150,9 +119,7 @@ class Enlight_Event_EventManager extends Enlight_Class
      */
     public function hasListeners($event)
     {
-        $event = strtolower($event);
-
-        return isset($this->listeners[$event]) && count($this->listeners[$event]);
+        return $this->eventDispatcher->hasListeners(strtolower($event));
     }
 
     /**
@@ -160,17 +127,11 @@ class Enlight_Event_EventManager extends Enlight_Class
      *
      * @param $event
      *
-     * @return Enlight_Event_Handler[]
+     * @return callable[]
      */
     public function getListeners($event)
     {
-        $event = strtolower($event);
-
-        if (isset($this->listeners[$event])) {
-            return $this->listeners[$event];
-        }
-
-        return [];
+        return $this->eventDispatcher->getListeners(strtolower($event));
     }
 
     /**
@@ -180,7 +141,7 @@ class Enlight_Event_EventManager extends Enlight_Class
      */
     public function getEvents()
     {
-        return array_keys($this->listeners);
+        return array_keys($this->eventDispatcher->getListeners());
     }
 
     /**
@@ -192,12 +153,12 @@ class Enlight_Event_EventManager extends Enlight_Class
      * Before the listener will be executed the the flag "processed" will be set to false in the event arguments.
      * After all event listeners has been executed the "processed" flag will be set to true.
      *
-     * @param string                             $event
+     * @param string $event
      * @param Enlight_Event_EventArgs|array|null $eventArgs
      *
+     * @return Enlight_Event_EventArgs|null
      * @throws Enlight_Event_Exception
      *
-     * @return Enlight_Event_EventArgs|null
      */
     public function notify($event, $eventArgs = null)
     {
@@ -211,7 +172,7 @@ class Enlight_Event_EventManager extends Enlight_Class
         $eventArgs->setProcessed(false);
 
         foreach ($this->getListeners($event) as $listener) {
-            $listener->execute($eventArgs);
+            $listener($eventArgs);
         }
         $eventArgs->setProcessed(true);
 
@@ -229,12 +190,12 @@ class Enlight_Event_EventManager extends Enlight_Class
      *
      * The event listeners will be executed until one of the listeners return not null.
      *
-     * @param string                             $event
+     * @param string $event
      * @param Enlight_Event_EventArgs|array|null $eventArgs
      *
+     * @return Enlight_Event_EventArgs|null
      * @throws Enlight_Exception
      *
-     * @return Enlight_Event_EventArgs|null
      */
     public function notifyUntil($event, $eventArgs = null)
     {
@@ -248,7 +209,7 @@ class Enlight_Event_EventManager extends Enlight_Class
         $eventArgs->setProcessed(false);
 
         foreach ($this->getListeners($event) as $listener) {
-            if (($return = $listener->execute($eventArgs)) !== null
+            if (($return = $listener($eventArgs)) !== null
                 || $eventArgs->isProcessed()
             ) {
                 $eventArgs->setProcessed(true);
@@ -273,13 +234,13 @@ class Enlight_Event_EventManager extends Enlight_Class
      *
      * The return value of the execute method will be set in the event arguments return value.
      *
-     * @param string                             $event
-     * @param mixed                              $value
+     * @param string $event
+     * @param mixed $value
      * @param Enlight_Event_EventArgs|array|null $eventArgs
      *
+     * @return mixed
      * @throws Enlight_Event_Exception
      *
-     * @return mixed
      */
     public function filter($event, $value, $eventArgs = null)
     {
@@ -293,7 +254,7 @@ class Enlight_Event_EventManager extends Enlight_Class
         $eventArgs->setProcessed(false);
 
         foreach ($this->getListeners($event) as $listener) {
-            if (($return = $listener->execute($eventArgs)) !== null) {
+            if (($return = $listener($eventArgs)) !== null) {
                 $eventArgs->setReturn($return);
             }
         }
@@ -306,13 +267,13 @@ class Enlight_Event_EventManager extends Enlight_Class
      * Event which is fired to collect plugin parameters
      * to register additionally application components or configurations.
      *
-     * @param string          $event
+     * @param string $event
      * @param ArrayCollection $collection
-     * @param array|null      $eventArgs
-     *
-     * @throws Enlight_Event_Exception
+     * @param array|null $eventArgs
      *
      * @return ArrayCollection|null
+     * @throws Enlight_Event_Exception
+     *
      */
     public function collect($event, ArrayCollection $collection, $eventArgs = null)
     {
@@ -325,7 +286,7 @@ class Enlight_Event_EventManager extends Enlight_Class
         $eventArgs->setProcessed(false);
 
         foreach ($this->getListeners($event) as $listener) {
-            $listenerCollection = $listener->execute($eventArgs);
+            $listenerCollection = $listener($eventArgs);
             if ($listenerCollection instanceof ArrayCollection) {
                 foreach ($listenerCollection->getValues() as $value) {
                     $collection->add($value);
@@ -372,13 +333,30 @@ class Enlight_Event_EventManager extends Enlight_Class
     }
 
     /**
+     * Removes all listeners of the given Enlight_Event_Subscriber.
+     *
+     */
+    public function removeSubscriber(Enlight_Event_Subscriber $subscriber)
+    {
+        $listeners = $subscriber->getListeners();
+
+        foreach ($listeners as $listener) {
+            $this->removeListener($listener);
+        }
+    }
+
+    /**
      * Resets the event listeners.
      *
      * @return Enlight_Event_EventManager
      */
     public function reset()
     {
-        $this->listeners = [];
+        foreach ($this->eventDispatcher->getListeners() as $event => $listeners) {
+            foreach ($listeners as $listener) {
+                $this->eventDispatcher->removeListener($event, $listener);
+            }
+        }
 
         return $this;
     }
@@ -386,9 +364,9 @@ class Enlight_Event_EventManager extends Enlight_Class
     /**
      * @param Enlight_Event_EventArgs|array|null $eventArgs
      *
+     * @return Enlight_Event_EventArgs
      * @throws Enlight_Event_Exception
      *
-     * @return Enlight_Event_EventArgs
      */
     private function buildEventArgs($eventArgs = null)
     {

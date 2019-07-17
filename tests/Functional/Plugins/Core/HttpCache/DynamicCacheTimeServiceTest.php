@@ -36,7 +36,6 @@ use Shopware\Models\Article\Article;
 use Shopware\Models\Blog\Blog;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Emotion\Emotion;
-use Shopware\Models\Plugin\Plugin;
 
 class DynamicCacheTimeServiceTest extends TestCase
 {
@@ -57,13 +56,7 @@ class DynamicCacheTimeServiceTest extends TestCase
      */
     public static function setUpBeforeClass()
     {
-        $pluginManager = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager');
-
-        /** @var Plugin $plugin */
-        $plugin = $pluginManager->getPluginByName('HttpCache');
-
-        $pluginManager->installPlugin($plugin);
-        $pluginManager->activatePlugin($plugin);
+        \Enlight_Components_Test_Controller_TestCase::installPlugin('HttpCache');
     }
 
     /**

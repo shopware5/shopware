@@ -25,6 +25,7 @@
 namespace Shopware\Components;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ContainerAwareEventManager extends \Enlight_Event_EventManager
 {
@@ -46,9 +47,10 @@ class ContainerAwareEventManager extends \Enlight_Event_EventManager
      */
     private $listenerIds = [];
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, EventDispatcherInterface $eventDispatcher = null)
     {
         $this->container = $container;
+        parent::__construct($eventDispatcher);
     }
 
     /**

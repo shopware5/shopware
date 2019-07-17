@@ -24,7 +24,6 @@
 
 namespace Shopware;
 
-use Enlight_Controller_Request_RequestHttp as EnlightRequest;
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\StaticResourcesCompilerPass;
 use Shopware\Bundle\BenchmarkBundle\DependencyInjection\Compiler\MatcherCompilerPass;
 use Shopware\Bundle\ContentTypeBundle\DependencyInjection\RegisterDynamicController;
@@ -54,13 +53,13 @@ use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\DependencyInjection\RegisterControllerArgumentLocatorsPass;
-use Symfony\Component\HttpKernel\Event\PostResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Kernel as SymfonyKernel;
-use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\TerminableInterface;
 
 /**
@@ -182,40 +181,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
             $this->boot();
         }
 
-        /** @var \Enlight_Controller_Front $front */
-        $front = $this->container->get('front');
-
-        $enlightRequest = $this->transformSymfonyRequestToEnlightRequest($request);
-
-        if ($front->Request() === null) {
-            $front->setRequest($enlightRequest);
-            $response = $front->dispatch();
-        } else {
-            $dispatcher = clone $front->Dispatcher();
-            $response = clone $front->Response();
-
-            $response->clearHeaders()
-                ->clearBody();
-
-            $response->setStatusCode(SymfonyResponse::HTTP_OK);
-            $enlightRequest->setDispatched();
-            $dispatcher->dispatch($enlightRequest, $response);
-        }
-
-        $response->prepare($request);
-
-        return $response;
-    }
-
-    /**
-     * @return EnlightRequest
-     */
-    public function transformSymfonyRequestToEnlightRequest(SymfonyRequest $request)
-    {
-        // Overwrite superglobals with state of the SymfonyRequest
-        $request->overrideGlobals();
-
-        return EnlightRequest::createFromGlobals();
+        return $this->getHttpKernel()->handle($request, $type, $catch);
     }
 
     /**
@@ -409,12 +375,21 @@ class Kernel implements HttpKernelInterface, TerminableInterface
      */
     public function terminate(SymfonyRequest $request, SymfonyResponse $response)
     {
-        if ($this->container && $this->container->initialized('events')) {
-            $this->container->get('events')->notify(KernelEvents::TERMINATE, [
-                'postResponseEvent' => new PostResponseEvent($this, $request, $response),
-                'container' => $this->container,
-            ]);
+        if ($this->container) {
+            if ($this->getHttpKernel() instanceof TerminableInterface) {
+                $this->getHttpKernel()->terminate($request, $response);
+            }
         }
+    }
+
+    /**
+     * Gets a HTTP kernel from the container.
+     *
+     * @return HttpKernel
+     */
+    protected function getHttpKernel()
+    {
+        return $this->container->get('http_kernel');
     }
 
     protected function initializePlugins()
@@ -630,6 +605,7 @@ class Kernel implements HttpKernelInterface, TerminableInterface
         $container->addCompilerPass(new ControllerCompilerPass());
         $container->addCompilerPass(new RegisterControllerArgumentLocatorsPass('argument_resolver.service', 'shopware.controller'));
         $container->addCompilerPass(new VersionCompilerPass());
+        $container->addCompilerPass(new RegisterListenersPass());
 
         $container->setParameter('active_plugins', $this->activePlugins);
 

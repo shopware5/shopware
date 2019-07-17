@@ -17,6 +17,7 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
+use Shopware\Components\ContainerAwareEventManager;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -162,30 +163,19 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
         $this->_template = null;
         $this->_front = null;
 
-        $app->Plugins()->reset();
-        $app->Events()->reset();
-
         $container = Shopware()->Container();
 
         $container->get('models')->clear();
 
         $container
-                ->reset('plugins')
-                ->reset('front')
                 ->reset('router')
                 ->reset('system')
                 ->reset('modules')
         ;
 
-        $container->load('front');
-        $container->load('plugins');
-
-        foreach ($container->get('kernel')->getPlugins() as $plugin) {
-            if (!$plugin->isActive()) {
-                continue;
-            }
-            $container->get('events')->addSubscriber($plugin);
-        }
+        /** @var Enlight_Controller_Front $front */
+        $front = $container->get('front');
+        $front->setRouter($container->get('router'));
     }
 
     /**
@@ -294,5 +284,24 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
         Shopware()->Container()->get('config_writer')->save($name, $value);
         Shopware()->Container()->get('cache')->clean();
         Shopware()->Container()->get('config')->setShop(Shopware()->Shop());
+    }
+
+    public static function installPlugin(string $plugin)
+    {
+        $pluginManager = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager');
+
+        $plugin = $pluginManager->getPluginByName($plugin);
+
+        $pluginManager->installPlugin($plugin);
+        $pluginManager->activatePlugin($plugin);
+
+        /** @var ContainerAwareEventManager $events */
+        $events = Shopware()->Container()->get('events');
+        /** @var \Enlight_Plugin_Namespace_Config $namespace */
+        $namespace = Shopware()->Container()->get('plugins')->get($plugin->getNamespace());
+
+        $events->removeSubscriber($namespace->Subscriber());
+        $namespace->resetSubscriber()->reloadStorage();
+        $events->registerSubscriber($namespace->Subscriber());
     }
 }

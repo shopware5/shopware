@@ -33,7 +33,7 @@ class Enlight_Event_EventArgs extends Enlight_Collection_ArrayCollection
     /**
      * @var bool Flag whether the listener has finished running.
      */
-    protected $_processed;
+    protected $_processed = false;
 
     /**
      * @var string Contains the name of the event.
@@ -44,18 +44,7 @@ class Enlight_Event_EventArgs extends Enlight_Collection_ArrayCollection
      * @var mixed Contains the return value, which can be set by the setReturn method.
      */
     protected $_return;
-
-    /**
-     * The Enlight_Event_EventArgs class constructor expects the name of the event.
-     *
-     * @param              $name
-     * @param   array|null $args
-     */
-    public function __construct(array $args = array())
-    {
-        parent::__construct($args);
-    }
-
+    
     /**
      * Stops the execution of the listener and sets the processed flag to true.
      *

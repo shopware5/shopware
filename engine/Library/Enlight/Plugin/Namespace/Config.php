@@ -218,4 +218,10 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
     protected function initStorage()
     {
     }
+
+    public function resetSubscriber(): self
+    {
+        $this->subscriber = null;
+        return $this;
+    }
 }

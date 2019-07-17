@@ -72,7 +72,7 @@ class Enlight_Event_Handler_Default extends Enlight_Event_Handler
      * Getter method for the listener property.
      * @return  callback
      */
-    public function getListener()
+    public function getListener(): callable
     {
         return $this->listener;
     }

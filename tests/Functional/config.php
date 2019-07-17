@@ -27,6 +27,7 @@ return array_replace_recursive($this->loadConfig($this->AppPath() . 'Configs/Def
         'throwExceptions' => true,
         'disableOutputBuffering' => false,
         'showException' => true,
+        'charset' => 'utf-8',
     ],
     'errorhandler' => [
         'throwOnRecoverableError' => true,
