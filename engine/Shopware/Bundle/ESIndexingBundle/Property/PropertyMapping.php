@@ -80,6 +80,7 @@ class PropertyMapping implements MappingInterface
                     'properties' => [
                         'id' => ['type' => 'long'],
                         'name' => $this->fieldMapping->getLanguageField($shop),
+                        'position' => ['type' => 'long'],
                     ],
                 ],
             ],
