@@ -321,7 +321,7 @@ class Translation extends Resource implements BatchInterface
         $this->checkPrivilege('delete');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         $this->checkRequirements($data, false);

@@ -52,7 +52,7 @@ class PropertyGroup extends Resource
         $this->checkPrivilege('read');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         $filters = [['property' => 'groups.id', 'expression' => '=', 'value' => $id]];
@@ -132,7 +132,7 @@ class PropertyGroup extends Resource
         $this->checkPrivilege('update');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         /** @var \Shopware\Models\Property\Group|null $propertyGroup */
@@ -168,7 +168,7 @@ class PropertyGroup extends Resource
         $this->checkPrivilege('delete');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         /** @var \Shopware\Models\Property\Group|null $propertyGroup */

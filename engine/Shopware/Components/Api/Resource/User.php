@@ -66,7 +66,7 @@ class User extends Resource
         $this->checkPrivilege('read', 'usermanager');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         $builder = $this->getRepository()->createQueryBuilder('user');
@@ -174,7 +174,7 @@ class User extends Resource
         $this->checkPrivilege('update', 'usermanager');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         $builder = $this->getManager()->createQueryBuilder();
@@ -222,7 +222,7 @@ class User extends Resource
         $this->checkPrivilege('delete', 'usermanager');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         /** @var UserModel|null $user */

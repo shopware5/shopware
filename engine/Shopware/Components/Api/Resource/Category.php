@@ -69,7 +69,7 @@ class Category extends Resource
         $this->checkPrivilege('read');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         $query = $this->getRepository()->getDetailQueryWithoutArticles($id);
@@ -191,7 +191,7 @@ class Category extends Resource
         $this->checkPrivilege('update');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         /** @var CategoryModel|null $category */
@@ -233,7 +233,7 @@ class Category extends Resource
         $this->checkPrivilege('delete');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         /** @var CategoryModel|null $category */

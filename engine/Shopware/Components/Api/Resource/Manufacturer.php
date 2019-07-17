@@ -55,7 +55,7 @@ class Manufacturer extends Resource
         $this->checkPrivilege('read');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         $query = $this->getRepository()->getDetailQuery($id);
@@ -141,7 +141,7 @@ class Manufacturer extends Resource
         $this->checkPrivilege('update');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         /** @var \Shopware\Models\Article\Supplier|null $manufacturer */
@@ -178,7 +178,7 @@ class Manufacturer extends Resource
         $this->checkPrivilege('delete');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         /** @var \Shopware\Models\Article\Supplier|null $manufacturer */

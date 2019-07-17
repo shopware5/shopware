@@ -58,10 +58,16 @@ class ErrorSubscriber implements SubscriberInterface
      */
     private $eventManager;
 
-    public function __construct(LoggerInterface $logger, EnlightEventManager $eventManager)
+    /**
+     * @var string[]
+     */
+    private $ignoredExceptionClasses;
+
+    public function __construct(LoggerInterface $logger, EnlightEventManager $eventManager, array $ignoredExceptionClasses = [])
     {
         $this->logger = $logger;
         $this->eventManager = $eventManager;
+        $this->ignoredExceptionClasses = $ignoredExceptionClasses;
     }
 
     /**
@@ -107,12 +113,15 @@ class ErrorSubscriber implements SubscriberInterface
                 }
 
                 // Make sure this is an Exception and also no minor one
-                if ($last instanceof \Exception && !in_array($last->getCode(), [
+                if ($last instanceof \Exception
+                    && !in_array($last->getCode(), [
                     \Enlight_Controller_Exception::ActionNotFound,
                     \Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found,
                     \Enlight_Controller_Exception::Controller_Dispatcher_Controller_No_Route,
                     \Enlight_Controller_Exception::NO_ROUTE,
-                    ], true)) {
+                    ], true)
+                    && !in_array(get_class($last), $this->ignoredExceptionClasses, true) // Check for exceptions to be ignored
+                ) {
                     if ($last instanceof CSRFTokenValidationException) {
                         $this->logger->warning($last->getMessage());
                     } else {

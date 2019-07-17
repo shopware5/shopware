@@ -62,7 +62,7 @@ class Customer extends Resource
     public function getIdFromNumber($number)
     {
         if (empty($number)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -108,7 +108,7 @@ class Customer extends Resource
         $this->checkPrivilege('read');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         $builder = $this->getRepository()->createQueryBuilder('customer');
@@ -252,7 +252,7 @@ class Customer extends Resource
         $this->checkPrivilege('update');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         /** @var \Shopware\Models\Customer\Customer|null $customer */
@@ -314,7 +314,7 @@ class Customer extends Resource
         $this->checkPrivilege('delete');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException();
+            throw new ApiException\ParameterMissingException('id');
         }
 
         /** @var \Shopware\Models\Customer\Customer|null $customer */
