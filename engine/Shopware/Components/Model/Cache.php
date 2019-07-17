@@ -95,6 +95,10 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
      */
     protected function doSave($id, $data, $lifeTime = false)
     {
+        if ($lifeTime === 0) {
+            $lifeTime = null;
+        }
+
         return $this->cache->save($data, $this->prefix . md5($id), $this->tags, $lifeTime);
     }
 
