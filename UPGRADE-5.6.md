@@ -169,6 +169,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed padding on hidden cookie-permission banner
 * Changed partner cookie durations slightly to make them more accurate. Added more available intervals
 * Changed grunt configuration to also take the plugin directory `custom/project` into account
+* Changed advanced menu javascript to throw less events
 * Changed the ShopContext to be elegantly decoratable
 
 ### Removals
