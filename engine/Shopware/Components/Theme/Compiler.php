@@ -222,7 +222,7 @@ class Compiler
             $shop = $shop->getMain();
         }
 
-        $file = $this->pathResolver->getCssFilePath($shop, $timestamp);
+        $file = $this->pathResolver->getTmpCssFilePath($shop, $timestamp);
 
         $dir = dirname($file);
         if (!is_dir($dir)) {
@@ -233,11 +233,10 @@ class Compiler
             throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'web', $dir));
         }
 
-        $file = new \SplFileObject($file, 'a');
-        if (!$file->flock(LOCK_EX)) {
+        $file = new \SplFileObject($file, 'w');
+        if (!$file->flock(LOCK_EX | LOCK_NB)) {
             return;
         }
-        $file->ftruncate(0);
 
         $this->compiler->setConfiguration(
             $this->getCompilerConfiguration($shop)
@@ -259,6 +258,8 @@ class Compiler
             throw new \RuntimeException('Could not write to ' . $file->getPath());
         }
         $file->flock(LOCK_UN);   // release the lock
+
+        rename($this->pathResolver->getTmpCssFilePath($shop, $timestamp), $this->pathResolver->getCssFilePath($shop, $timestamp));
     }
 
     /**
@@ -274,12 +275,11 @@ class Compiler
             $shop = $shop->getMain();
         }
 
-        $file = $this->pathResolver->getJsFilePath($shop, $timestamp);
-        $file = new \SplFileObject($file, 'a');
-        if (!$file->flock(LOCK_EX)) {
+        $file = $this->pathResolver->getTmpJsFilePath($shop, $timestamp);
+        $file = new \SplFileObject($file, 'w');
+        if (!$file->flock(LOCK_EX | LOCK_NB)) {
             return;
         }
-        $file->ftruncate(0);
 
         $settings = $this->service->getSystemConfiguration(
             AbstractQuery::HYDRATE_OBJECT
@@ -297,6 +297,8 @@ class Compiler
 
         $file->fwrite($content);
         $file->flock(LOCK_UN);   // release the lock
+
+        rename($this->pathResolver->getTmpJsFilePath($shop, $timestamp), $this->pathResolver->getJsFilePath($shop, $timestamp));
     }
 
     /**
