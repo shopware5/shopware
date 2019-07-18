@@ -245,6 +245,7 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
                break;
             case 2: // surcharge
             case 3: // discount
+            case 4: // surcharge
                 form.findField('statusLink').hide();
                 form.findField('comment').hide();
                 form.findField('surchargeCalculation').hide();

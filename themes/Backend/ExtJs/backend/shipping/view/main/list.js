@@ -226,6 +226,7 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
             case 3:
                 return '{s name=grid_dispatch_type_discount}Discount rule{/s}';
             case 2:
+            case 4:
                 return '{s name=grid_dispatch_type_surcharge}Surcharge rule{/s}';
             case 1:
                 return '{s name=grid_dispatch_type_alternative}Alternate shipping type{/s}';
