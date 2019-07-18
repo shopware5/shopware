@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Components\DepencencyInjection;
+namespace Shopware\Tests\Functional\Components\DependencyInjection\Bridge;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\DependencyInjection\Bridge\Cache;
