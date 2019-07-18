@@ -351,7 +351,7 @@ class PluginInstaller
             $info['link'] = isset($info['link']) ? $info['link'] : null;
 
             $data = [
-                'namespace' => $plugin->getNamespace(),
+                'namespace' => $plugin->getPluginNamespace(),
                 'version' => $info['version'],
                 'author' => $info['author'],
                 'name' => $plugin->getName(),

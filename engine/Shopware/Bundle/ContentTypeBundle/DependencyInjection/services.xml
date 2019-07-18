@@ -5,8 +5,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <imports>
-        <import resource="Resources/fields.xml"/>
-        <import resource="Resources/resolvers.xml"/>
+        <import resource="fields.xml"/>
+        <import resource="resolvers.xml"/>
     </imports>
     <services>
         <service id="Shopware\Bundle\ContentTypeBundle\Controller\Backend\ContentTypeManager">

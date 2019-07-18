@@ -46,6 +46,11 @@ class PluginInitializer
     private $activePlugins = [];
 
     /**
+     * @var callable|null
+     */
+    private $originalErrorHandler;
+
+    /**
      * @param string|string[] $pluginDirectories
      */
     public function __construct(PDO $connection, $pluginDirectories)
@@ -61,11 +66,13 @@ class PluginInitializer
      */
     public function initializePlugins()
     {
+        $this->originalErrorHandler = set_error_handler([$this, 'errorHandler'], E_WARNING);
+
         $plugins = [];
         $shopwarePlugins = [];
         $pluginsAvailable = [];
 
-        // @todo: Replace me in Shopware 5.6
+        // @todo: Replace me in Shopware 5.7
         $classLoader = new Psr4ClassLoader();
         $classLoader->register(true);
 
@@ -122,6 +129,8 @@ class PluginInitializer
             $plugins[$plugin->getName()] = $plugin;
         }
 
+        restore_error_handler();
+
         return $plugins;
     }
 
@@ -131,5 +140,23 @@ class PluginInitializer
     public function getActivePlugins()
     {
         return $this->activePlugins;
+    }
+
+    /**
+     * This early error handler help us to avoid plugin warnings, which still use old registerCommands method in Plugin.
+     *
+     * @deprecated Remove with Shopware 5.7
+     *
+     * @return mixed|void
+     */
+    public function errorHandler(int $errno, string $errstr, string $errfile, int $errline, array $errcontext)
+    {
+        if (stripos($errstr, 'should be compatible with Shopware\Components\Plugin::registerCommands(Symfony\Component\Console\Application $application)') !== false) {
+            return;
+        }
+
+        if ($this->originalErrorHandler) {
+            return call_user_func($this->originalErrorHandler, $errno, $errstr, $errfile, $errline, $errcontext);
+        }
     }
 }

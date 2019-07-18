@@ -90,6 +90,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added event `Shopware_Models_Order_Document_Filter_Config` to modify config settings for document creation
 * Added `_config` property to class `Shopware_Models_Document_Order` to make it usable while model creation
 * Added new parameter to prevent certain exceptions from cluttering your logs. See [Disable logging of specific exceptions](###Disable logging of specific exceptions) for more details
+* Added a `Symfony\Component\HttpKernel\Bundle\Bundle` class to all Shopware bundles and moved all service.xml files to a corresponding `DependencyInjection` directory
 
 ### Changes
 
@@ -170,6 +171,9 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed partner cookie durations slightly to make them more accurate. Added more available intervals
 * Changed grunt configuration to also take the plugin directory `custom/project` into account
 * Changed the ShopContext to be elegantly decoratable
+* Changed method name `Shopware\Components\Plugin::getNamespace` to `Shopware\Components\Plugin::getPluginNamespace` to support `getNamespace` method from Symfony bundles.
+* Changed `Shopware\Components\Plugin` class to extend from `Symfony\Component\HttpKernel\Bundle\Bundle`
+* Changed `Shopware\Components\Plugin::registerCommands` parameter typehint from `Shopware\Components\Console\Application` to `Symfony\Component\Console\Application`
 
 ### Removals
 
