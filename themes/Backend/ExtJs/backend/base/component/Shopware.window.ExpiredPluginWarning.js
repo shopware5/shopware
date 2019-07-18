@@ -59,7 +59,7 @@ Ext.define('Shopware.window.ExpiredPluginWarning', {
     createContentPage: function () {
         return {
             xtype: 'container',
-            html: '{literal}<style>.plugin-window { color: #475C6A; } .plugin-window h2 { color: #495B67;font-weight: bold;font-size: 24px;margin-bottom: 20px } .plugin-window p { margin-bottom: 20px;line-height: 140%;} .plugin-window img { width: calc(100% - 100px);padding: 50px;margin-top: 40px;position: absolute;top: 50%;left: 50%;transform: translateX(-50%); } .plugin-window .bar { width: 50%;float: left;position: relative; } .plugin-window .bar:last-child { margin-left: 50%; } .plugin-window strong { font-weight: bold; }</style>{/literal}<div class="plugin-window"><div class="bar"><img src="' + this.getImage() + '"></div><div class="bar"><div style="margin-top: 50px;margin-right: 30px;">' + this.getText() + '</div></div></div>'
+            html: '{literal}<style>.plugin-window { color: #475C6A; } .plugin-window h2 { color: #495B67; font-weight: bold; font-size: 24px; margin-bottom: 12px } .plugin-window p { margin-bottom: 10px; line-height: 140%;} .plugin-window img { width: calc(100% - 100px); padding: 50px; margin: 40px 0 0 -30px; position: absolute; top: 50%; left: 50%; transform: translateX(-50%); } .plugin-window .bar { width: 50%; float: left; position: relative; } .plugin-window .bar:last-child { margin-left: 50%; } .plugin-window strong { font-weight: bold; } .plugin-window ul li { list-style: inherit; margin: 3px 0}</style>{/literal}<div class="plugin-window"><div class="bar"><img src="' + this.getImage() + '"></div><div class="bar"><div style="margin: 30px 0 0 -40px;">' + this.getText() + '</div></div></div>'
         }
     },
 
