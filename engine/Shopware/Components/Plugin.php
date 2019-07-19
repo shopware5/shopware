@@ -25,7 +25,6 @@
 namespace Shopware\Components;
 
 use Enlight\Event\SubscriberInterface;
-use Shopware\Components\Console\Application;
 use Shopware\Components\Filesystem\PrefixFilesystem;
 use Shopware\Components\Plugin\Context\ActivateContext;
 use Shopware\Components\Plugin\Context\DeactivateContext;
@@ -33,39 +32,25 @@ use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\Console\Application;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
+abstract class Plugin extends Bundle implements SubscriberInterface
 {
     /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
      * @var string
      */
-    private $name;
-
-    /**
-     * @var string
-     */
-    private $path;
+    protected $pluginNamespace;
 
     /**
      * @var bool
      */
     private $isActive;
-
-    /**
-     * @var string
-     */
-    private $namespace;
 
     /**
      * @param bool   $isActive
@@ -74,15 +59,15 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
     final public function __construct($isActive, $namespace)
     {
         $this->isActive = (bool) $isActive;
-        $this->namespace = $namespace;
+        $this->pluginNamespace = $namespace;
     }
 
     /**
-     * @return string
+     * @internal Only to use in core for plugin namespace identification
      */
-    final public function getNamespace()
+    final public function getPluginNamespace(): string
     {
-        return $this->namespace;
+        return $this->pluginNamespace;
     }
 
     /**
@@ -105,8 +90,6 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
      * Registers Commands.
      *
      * @param Application $application An Application instance
-     *
-     * @deprecated since version 5.5, to be removed in 5.7 - Use console.command tag instead
      */
     public function registerCommands(Application $application)
     {
@@ -180,43 +163,11 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
     }
 
     /**
-     * Returns the Plugin name (the class short name).
-     *
-     * @return string The Plugin name
-     */
-    final public function getName()
-    {
-        if ($this->name !== null) {
-            return $this->name;
-        }
-
-        $name = get_class($this);
-        $pos = strrpos($name, '\\');
-
-        return $this->name = $pos === false ? $name : substr($name, $pos + 1);
-    }
-
-    /**
      * @return string
      */
     public function getContainerPrefix()
     {
         return $this->camelCaseToUnderscore($this->getName());
-    }
-
-    /**
-     * Gets the Plugin directory path.
-     *
-     * @return string The Plugin absolute path
-     */
-    final public function getPath()
-    {
-        if ($this->path === null) {
-            $reflected = new \ReflectionObject($this);
-            $this->path = dirname($reflected->getFileName());
-        }
-
-        return $this->path;
     }
 
     final protected function loadFiles(ContainerBuilder $container)
