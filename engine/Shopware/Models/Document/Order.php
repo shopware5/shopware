@@ -417,14 +417,26 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         ORDER BY od.id ASC
         ', [$this->_id]), ArrayObject::ARRAY_AS_PROPS);
 
-        foreach ($this->_positions as $key => $dummy) {
-            $position = $this->_positions->offsetGet($key);
+        $translation = Shopware()->Container()->get('translation');
 
-            $position['attributes'] = Shopware()->Db()->fetchRow('
-            SELECT * FROM s_order_details_attributes WHERE detailID = ?
-            ', [$position['id']]);
+        foreach ($this->_positions as $arrayKey => &$oldPosition) {
+            if ($oldPosition['modus'] > 1 || $oldPosition['modus'] < 0) {
+                continue;
+            }
 
-            $this->_positions->offsetSet($key, $position);
+            $position = $translation->read(
+                $this->_order->offsetGet('language'),
+                'article',
+                $oldPosition['articleID']
+            );
+
+            foreach ($position as $key => $value) {
+                if (strpos($key, '__attribute_') === 0) {
+                    $key = str_replace('__attribute_', '', $key);
+                    $oldPosition[$key] = $value;
+                }
+                $this->_positions[$arrayKey] = $oldPosition;
+            }
         }
     }
 
