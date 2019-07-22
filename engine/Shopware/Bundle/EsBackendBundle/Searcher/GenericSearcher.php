@@ -36,7 +36,7 @@ use ONGR\ElasticsearchDSL\Sort\FieldSort;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Bundle\AttributeBundle\Repository\Searcher\SearcherInterface;
 use Shopware\Bundle\AttributeBundle\Repository\Searcher\SearcherResult;
-use Shopware\Bundle\EsBackendBundle\EsBackendIndexer;
+use Shopware\Bundle\EsBackendBundle\IndexFactoryInterface;
 use Shopware\Bundle\EsBackendBundle\SearchQueryBuilder;
 use Shopware\Bundle\ESIndexingBundle\EsSearch;
 
@@ -72,13 +72,19 @@ class GenericSearcher implements SearcherInterface
      */
     private $esVersion;
 
+    /**
+     * @var IndexFactoryInterface
+     */
+    private $indexFactory;
+
     public function __construct(
         Client $client,
         SearcherInterface $decorated,
         SearchQueryBuilder $searchQueryBuilder,
         string $domainName,
         bool $enabled,
-        string $esVersion
+        string $esVersion,
+        IndexFactoryInterface $indexFactory
     ) {
         $this->decorated = $decorated;
         $this->client = $client;
@@ -86,6 +92,7 @@ class GenericSearcher implements SearcherInterface
         $this->domainName = $domainName;
         $this->enabled = $enabled;
         $this->esVersion = $esVersion;
+        $this->indexFactory = $indexFactory;
     }
 
     /**
@@ -135,7 +142,7 @@ class GenericSearcher implements SearcherInterface
     protected function fetch(Search $search)
     {
         $arguments = [
-            'index' => EsBackendIndexer::buildAlias($this->domainName),
+            'index' => $this->indexFactory->createIndexConfiguration($this->domainName)->getAlias(),
             'type' => $this->domainName,
             'body' => $search->toArray(),
         ];

@@ -27,9 +27,13 @@ namespace Shopware\Bundle\EsBackendBundle;
 use Elasticsearch\Client;
 use Shopware\Bundle\ESIndexingBundle\Console\EvaluationHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
+use Shopware\Bundle\ESIndexingBundle\Struct\IndexConfiguration;
 
 class EsBackendIndexer
 {
+    /**
+     * @deprecated Use IndexNameBuilderInterface instead
+     */
     const INDEX_NAME = 'backend_index';
 
     /**
@@ -52,40 +56,49 @@ class EsBackendIndexer
      */
     private $esVersion;
 
+    /**
+     * @var IndexFactoryInterface
+     */
+    private $indexFactory;
+
     public function __construct(
         Client $client,
         \IteratorAggregate $repositories,
         EvaluationHelperInterface $evaluation,
-        string $esVersion
+        string $esVersion,
+        IndexFactoryInterface $indexFactory
     ) {
         $this->client = $client;
         $this->repositories = $repositories;
         $this->evaluation = $evaluation;
         $this->esVersion = $esVersion;
+        $this->indexFactory = $indexFactory;
     }
 
     public function index(ProgressHelperInterface $helper)
     {
         foreach ($this->repositories as $repository) {
-            $index = self::INDEX_NAME . '_' . $repository->getDomainName() . '_' . (new \DateTime())->format('YmdHis');
-
-            $alias = self::buildAlias($repository->getDomainName());
+            $index = $this->indexFactory->createIndexConfiguration($repository->getDomainName());
 
             $this->createIndex($index);
-            $this->createMapping($repository, $index);
-            $this->populateEntity($index, $repository, $helper);
-            $this->createAlias($index, $alias);
+            $this->createMapping($repository, $index->getName());
+            $this->populateEntity($index->getName(), $repository, $helper);
+            $this->createAlias($index->getName(), $index->getAlias());
         }
     }
 
     /**
+     * @deprecated since 5.6, will be removed with 5.7. Use IndexFactory service instead
+     *
      * @param string $domainName
      *
      * @return string
      */
     public static function buildAlias($domainName)
     {
-        return self::INDEX_NAME . '_' . $domainName;
+        trigger_error(sprintf('%s:%s is deprecated since 5.6 and will be removed with 5.7, use IndexNameBuilderInterface instead', __CLASS__, __FUNCTION__), E_USER_DEPRECATED);
+
+        return Shopware()->Container()->get(IndexFactoryInterface::class)->createIndexConfiguration($domainName)->getAlias();
     }
 
     /**
@@ -121,6 +134,7 @@ class EsBackendIndexer
                     $value = mb_strtolower($value);
                 }
             }
+            unset($value);
 
             $documents[] = json_encode($row, JSON_PRESERVE_ZERO_FRACTION);
         }
@@ -143,7 +157,7 @@ class EsBackendIndexer
      */
     public function cleanupIndices()
     {
-        $prefix = self::INDEX_NAME;
+        $prefix = $this->indexFactory->getPrefix();
         $aliases = $this->client->indices()->getAliases();
         foreach ($aliases as $index => $indexAliases) {
             if (strpos($index, $prefix) !== 0) {
@@ -156,33 +170,25 @@ class EsBackendIndexer
         }
     }
 
-    /**
-     * @param string $index
-     */
-    private function createIndex($index)
+    private function createIndex(IndexConfiguration $indexConfiguration): void
     {
-        $exist = $this->client->indices()->exists(['index' => $index]);
+        $indexName = $indexConfiguration->getName();
+        $exist = $this->client->indices()->exists(['index' => $indexName]);
         if ($exist) {
-            $this->client->indices()->delete(['index' => $index]);
+            $this->client->indices()->delete(['index' => $indexName]);
         }
 
         $settings = [
-            'settings' => [
-                'number_of_shards' => null,
-                'number_of_replicas' => null,
-            ],
+            'settings' => $indexConfiguration->toArray(),
         ];
 
         $this->client->indices()->create([
-            'index' => $index,
+            'index' => $indexName,
             'body' => $settings,
         ]);
     }
 
-    /**
-     * @param string $index
-     */
-    private function populateEntity($index, EsAwareRepository $repository, ProgressHelperInterface $progress)
+    private function populateEntity(string $index, EsAwareRepository $repository, ProgressHelperInterface $progress): void
     {
         $iterator = $repository->getIterator();
 
@@ -198,7 +204,7 @@ class EsBackendIndexer
         $this->evaluation->finish();
     }
 
-    private function createAlias($index, $alias)
+    private function createAlias(string $index, string $alias): void
     {
         $exist = $this->client->indices()->existsAlias(['name' => $alias]);
 
@@ -214,11 +220,7 @@ class EsBackendIndexer
         ]);
     }
 
-    /**
-     * @param string $index
-     * @param string $alias
-     */
-    private function switchAlias($index, $alias)
+    private function switchAlias(string $index, string $alias): void
     {
         $actions = [
             ['add' => ['index' => $index, 'alias' => $alias]],
@@ -233,10 +235,7 @@ class EsBackendIndexer
         $this->client->indices()->updateAliases(['body' => ['actions' => $actions]]);
     }
 
-    /**
-     * @param string $index
-     */
-    private function createMapping(EsAwareRepository $entity, $index)
+    private function createMapping(EsAwareRepository $entity, string $index): void
     {
         $mapping = [
             'properties' => [

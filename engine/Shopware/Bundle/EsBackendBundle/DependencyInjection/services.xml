@@ -12,6 +12,12 @@
             <argument type="tagged" tag="shopware_es_backend.repository" />
             <argument type="service" id="shopware_elastic_search.console.console_evaluation_helper"/>
             <argument>%shopware.es.version%</argument>
+            <argument type="service" id="Shopware\Bundle\EsBackendBundle\IndexFactoryInterface"/>
+        </service>
+
+        <service id="Shopware\Bundle\EsBackendBundle\IndexFactoryInterface" class="Shopware\Bundle\EsBackendBundle\IndexFactory">
+            <argument>%shopware.es.backend.prefix%</argument>
+            <argument>%shopware.es.index_settings%</argument>
         </service>
 
         <service class="Shopware\Bundle\EsBackendBundle\SearchQueryBuilder" id="shopware_es_backend.search_query_builder" />
@@ -26,6 +32,7 @@
             <argument>orders</argument>
             <argument>%shopware.es.backend.enabled%</argument>
             <argument>%shopware.es.version%</argument>
+            <argument type="service" id="Shopware\Bundle\EsBackendBundle\IndexFactoryInterface"/>
         </service>
 
         <service class="Shopware\Bundle\EsBackendBundle\Searcher\ProductSearcher"
@@ -38,6 +45,7 @@
             <argument>product</argument>
             <argument>%shopware.es.backend.enabled%</argument>
             <argument>%shopware.es.version%</argument>
+            <argument type="service" id="Shopware\Bundle\EsBackendBundle\IndexFactoryInterface"/>
         </service>
 
         <service class="Shopware\Bundle\EsBackendBundle\Searcher\CustomerSearcher"
@@ -50,6 +58,7 @@
             <argument>customer</argument>
             <argument>%shopware.es.backend.enabled%</argument>
             <argument>%shopware.es.version%</argument>
+            <argument type="service" id="Shopware\Bundle\EsBackendBundle\IndexFactoryInterface"/>
         </service>
 
         <service class="Shopware\Bundle\EsBackendBundle\Subscriber\OrmBacklogSubscriber"
@@ -78,6 +87,7 @@
         <service class="Shopware\Bundle\EsBackendBundle\Commands\SyncBacklogCommand"
                  id="shopware_es_backend.commands.sync_backlog_command">
             <argument>%shopware.es.backend.batch_size%</argument>
+            <argument type="service" id="Shopware\Bundle\EsBackendBundle\IndexFactoryInterface"/>
             <tag name="console.command" command="sw:es:backend:backlog:sync"/>
             <tag name="console.command" command="sw:es:backend:sync"/>
         </service>

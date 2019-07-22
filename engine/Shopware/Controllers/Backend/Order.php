@@ -2115,6 +2115,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $criteria->sortings = $request->getParam('sort', []);
         $conditions = $request->getParam('filter', []);
 
+        if ($orderId = $this->Request()->getParam('orderID')) {
+            $criteria->ids[] = (int) $orderId;
+        }
+
         $mapped = [];
         foreach ($conditions as $condition) {
             if ($condition['property'] === 'free') {

@@ -159,16 +159,7 @@ class ShopIndexer implements ShopIndexerInterface
         }
 
         $mergedSettings = [
-            'settings' => [
-                'number_of_shards' => $configuration->getNumberOfShards(),
-                'number_of_replicas' => $configuration->getNumberOfReplicas(),
-                'mapping' => [
-                    'total_fields' => [
-                        'limit' => $configuration->getTotalFieldsLimit(),
-                    ],
-                ],
-                'max_result_window' => $configuration->getMaxResultWindow(),
-            ],
+            'settings' => $configuration->toArray(),
         ];
 
         // Merge default settings with those set by plugins

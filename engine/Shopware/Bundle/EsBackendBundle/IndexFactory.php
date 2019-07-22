@@ -22,11 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\ESIndexingBundle;
+namespace Shopware\Bundle\EsBackendBundle;
 
 use Shopware\Bundle\ESIndexingBundle\Struct\IndexConfiguration;
-use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 class IndexFactory implements IndexFactoryInterface
 {
@@ -40,25 +38,17 @@ class IndexFactory implements IndexFactoryInterface
      */
     private $indexConfig;
 
-    /**
-     * @param string $prefix
-     */
-    public function __construct($prefix, array $indexConfig)
+    public function __construct(string $prefix, array $indexConfig)
     {
         $this->prefix = $prefix;
         $this->indexConfig = $indexConfig;
     }
 
-    /**
-     * @param string $mappingType
-     *
-     * @return IndexConfiguration
-     */
-    public function createIndexConfiguration(Shop $shop, $mappingType)
+    public function createIndexConfiguration(string $name): IndexConfiguration
     {
         return new IndexConfiguration(
-            $this->getIndexName($shop, $mappingType) . '_' . $this->getTimestamp(),
-            $this->getIndexName($shop, $mappingType),
+            $this->getIndexName($name),
+            $this->getAlias($name),
             null,
             null,
             null,
@@ -67,41 +57,18 @@ class IndexFactory implements IndexFactoryInterface
         );
     }
 
-    /**
-     * @param string $mappingType
-     *
-     * @return ShopIndex
-     */
-    public function createShopIndex(Shop $shop, $mappingType)
-    {
-        return new ShopIndex($this->getIndexName($shop, $mappingType), $shop, $mappingType);
-    }
-
-    /**
-     * @return string
-     */
-    public function getPrefix()
+    public function getPrefix(): string
     {
         return $this->prefix;
     }
 
-    /**
-     * @return string
-     */
-    private function getTimestamp()
+    private function getIndexName(string $name): string
     {
-        $date = new \DateTime();
-
-        return $date->format('YmdHis');
+        return $this->getAlias($name) . '_' . (new \DateTime())->format('YmdHis');
     }
 
-    /**
-     * @param string $mappingType
-     *
-     * @return string
-     */
-    private function getIndexName(Shop $shop, $mappingType)
+    private function getAlias(string $name): string
     {
-        return $this->getPrefix() . $shop->getId() . '_' . $mappingType;
+        return $this->prefix . $name;
     }
 }

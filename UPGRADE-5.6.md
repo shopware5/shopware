@@ -91,6 +91,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added `_config` property to class `Shopware_Models_Document_Order` to make it usable while model creation
 * Added new parameter to prevent certain exceptions from cluttering your logs. See [Disable logging of specific exceptions](###Disable logging of specific exceptions) for more details
 * Added a `Symfony\Component\HttpKernel\Bundle\Bundle` class to all Shopware bundles and moved all service.xml files to a corresponding `DependencyInjection` directory
+* Added `es.index_configuration` and `es.backend.index_configuration` section to `config.php` to allow custom elasticsearch settings
 
 ### Changes
 
@@ -175,6 +176,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed method name `Shopware\Components\Plugin::getNamespace` to `Shopware\Components\Plugin::getPluginNamespace` to support `getNamespace` method from Symfony bundles.
 * Changed `Shopware\Components\Plugin` class to extend from `Symfony\Component\HttpKernel\Bundle\Bundle`
 * Changed `Shopware\Components\Plugin::registerCommands` parameter typehint from `Shopware\Components\Console\Application` to `Symfony\Component\Console\Application`
+* Changed elastic search backend implementation to use a index prefix
 
 ### Removals
 
