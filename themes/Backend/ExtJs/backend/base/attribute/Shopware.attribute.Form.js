@@ -275,9 +275,9 @@ Ext.define('Shopware.attribute.Form', {
         if (fields.length <= 0) {
 
             /*{if !{acl_is_allowed resource=attributes privilege=read}}*/
-                hidden = true;
+            hidden = true;
 
-                me.fireEvent('hide-attribute-field-set');
+            me.fireEvent('hide-attribute-field-set');
 
             /*{/if}*/
 
@@ -387,6 +387,7 @@ Ext.define('Shopware.attribute.Form', {
             Ext.create('Shopware.attribute.FormFieldHandler'),
             Ext.create('Shopware.attribute.PartnerFieldHandler'),
             Ext.create('Shopware.attribute.NewsletterFieldHandler'),
+            Ext.create('Shopware.attribute.OrderDetailFieldHandler'),
             Ext.create('Shopware.attribute.ProductFeedFieldHandler'),
             Ext.create('Shopware.attribute.VoucherFieldHandler'),
             Ext.create('Shopware.attribute.PropertyOptionFieldHandler'),
