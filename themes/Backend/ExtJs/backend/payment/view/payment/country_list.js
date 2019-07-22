@@ -87,7 +87,10 @@ Ext.define('Shopware.apps.Payment.view.payment.CountryList', {
         var columns = [{
             header: '{s name=column_countrySelection_name}Name{/s}',
             flex: 2,
-            dataIndex: 'name'
+            dataIndex: 'name',
+            getSortParam: function () {
+                return 'countries.name';
+            }
         }];
         return columns;
     },

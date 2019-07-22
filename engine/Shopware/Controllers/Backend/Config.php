@@ -22,8 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Models\Config\Element;
 use Shopware\Models\Config\Value;
+use Shopware\Models\Document\Element as DocumentElement;
 use Shopware\Models\Shop\Shop;
 
 class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_ExtJs
@@ -680,15 +682,20 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 break;
             case 'document':
                 if ($data['id']) {
-                    $elements = new \Doctrine\Common\Collections\ArrayCollection();
+                    $elements = new ArrayCollection();
                     foreach ($data['elements'] as $element) {
-                        /**
-                         * @var Shopware\Models\Document\Element
-                         */
-                        $elementRepository = $this->getRepository('documentElement');
+                        $elementRepository = $this->getRepository(DocumentElement::class);
+
+                        /** @var DocumentElement|null $elementModel */
                         $elementModel = $elementRepository->find($element['id']);
+
+                        if (!$elementModel) {
+                            $elementModel = new DocumentElement();
+                            $elementModel->setDocument($model);
+                        }
+
                         $elementModel->fromArray($element);
-                        $elements[] = $elementModel;
+                        $elements->add($elementModel);
                     }
                     $data['elements'] = $elements;
                 } else {
@@ -1082,7 +1089,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
     private function createDocumentElements($model)
     {
-        $elementCollection = new \Doctrine\Common\Collections\ArrayCollection();
+        $elementCollection = new ArrayCollection();
 
         /**
          * @var Shopware\Models\Document\Document

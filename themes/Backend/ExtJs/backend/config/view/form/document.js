@@ -59,7 +59,10 @@ Ext.define('Shopware.apps.Config.view.form.Document', {
             // Show the translated name saved in description instead of the (probably German) name
             dataIndex: 'description',
             text: '{s name=document/table/name_text}Name{/s}',
-            flex: 1
+            flex: 1,
+            getSortParam: function () {
+                return 'name';
+            }
         }, me.getActionColumn()];
     },
 
