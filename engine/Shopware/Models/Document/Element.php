@@ -32,7 +32,6 @@ use Shopware\Components\Model\ModelEntity;
  *
  * @ORM\Entity()
  * @ORM\Table(name="s_core_documents_box")
- * @ORM\HasLifecycleCallbacks()
  */
 class Element extends ModelEntity
 {
