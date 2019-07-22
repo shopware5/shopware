@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\DependencyInjection\Compiler;
+namespace Shopware\Tests\Functional\Components\DependencyInjection\Compiler;
 
 use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Components\Api\Resource\Resource;
