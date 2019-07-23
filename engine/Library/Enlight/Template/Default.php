@@ -17,8 +17,6 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
-require_once 'Smarty/Smarty.class.php';
-
 /**
  * The Enlight_Template_Default class is an extension of Smarty_Internal_Template to extend the
  * template via smarty blocks.

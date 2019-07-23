@@ -17,8 +17,6 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
-require_once 'Smarty/Smarty.class.php';
-
 /**
  * Enlight resource to compile snippets.
  *

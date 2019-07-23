@@ -22,8 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-require_once 'Smarty/Smarty.class.php';
-
 /**
  * The Enlight_Template_Manager is an extension of smarty to manually set the config in the class constructor.
  *
