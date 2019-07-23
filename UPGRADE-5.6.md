@@ -328,7 +328,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Deprecated `Shopware\Components\Model\DBAL\Types\DateTimeStringType` in 5.6, will be removed with 5.7. Please use `Doctrine\DBAL\Types\DateTimeType` instead.
 * Deprecated `Shopware\Components\Api\Manager::getResource`. It will be removed in 5.8, inject resources instead
 * Deprecated usage of `shopware.api` DI prefix without tag `shopware.api_resource`
-* Deprecated `Shopware\Models\Shop\Shop::registerResources`. It will be removed in 5.8, use `Shopware\Components\ShopRegistrationService` instead
+* Deprecated `Shopware\Models\Shop\Shop::registerResources`. It will be removed in 5.8, use `Shopware\Components\ShopRegistrationService` instead.
+* Deprecated `Shopware\Components\DependencyInjection\Compiler\LegacyApiResourcesPass`. It will be removed in 5.8, use the tag `shopware.api_resource` instead.
 
 ### Improved ExtJS auto-loading
 
