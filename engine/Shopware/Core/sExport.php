@@ -110,8 +110,15 @@ class sExport implements \Enlight_Hook
      */
     private $config;
 
-    /** @var StoreFrontBundle\Service\ConfiguratorServiceInterface */
+    /**
+     * @var StoreFrontBundle\Service\ConfiguratorServiceInterface
+     */
     private $configuratorService;
+
+    /**
+     * @var array
+     */
+    private $cdnConfig;
 
     /**
      * @param ContextServiceInterface                               $contextService
@@ -132,6 +139,7 @@ class sExport implements \Enlight_Hook
         $this->db = $db ?: $container->get('db');
         $this->config = $config ?: $container->get('config');
         $this->configuratorService = $configuratorService ?: $container->get('shopware_storefront.configurator_service');
+        $this->cdnConfig = $container->getParameter('shopware.cdn');
     }
 
     /**
@@ -1884,7 +1892,7 @@ class sExport implements \Enlight_Hook
      */
     private function fixShopHost($url, $adapterType)
     {
-        if ($adapterType !== 'local') {
+        if ($adapterType !== 'local' || $this->hasMediaUrl()) {
             return $url;
         }
 
@@ -1920,5 +1928,22 @@ class sExport implements \Enlight_Hook
         }
 
         return Media::TYPE_IMAGE;
+    }
+
+    private function hasMediaUrl(): bool
+    {
+        $backendName = $this->cdnConfig['backend'];
+
+        if (!isset($this->cdnConfig['adapters'][$backendName])) {
+            return false;
+        }
+
+        $cdnAdapter = $this->cdnConfig['adapters'][$backendName];
+
+        if ($cdnAdapter['mediaUrl']) {
+            return true;
+        }
+
+        return false;
     }
 }
