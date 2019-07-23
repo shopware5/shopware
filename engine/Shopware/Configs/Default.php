@@ -117,7 +117,7 @@ return array_replace_recursive([
             ],
         ],
     ],
-    'csrfProtection' => [
+    'csrfprotection' => [
         'frontend' => true,
         'backend' => true,
     ],
@@ -128,7 +128,7 @@ return array_replace_recursive([
         'writeToIni' => false,
         'showSnippetPlaceholder' => false,
     ],
-    'errorHandler' => [
+    'errorhandler' => [
         'throwOnRecoverableError' => false,
         'ignoredExceptionClasses' => [
              // Disable logging for defined exceptions by class, eg. to disable any logging for CSRF exceptions add this:
