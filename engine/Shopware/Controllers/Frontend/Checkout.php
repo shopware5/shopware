@@ -1608,6 +1608,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $accessories = explode(';', $accessories);
         }
 
+        if (is_string($quantities)) {
+            $quantities = explode(';', $quantities);
+        }
+
         if (empty($accessories) || !is_array($accessories)) {
             return;
         }
