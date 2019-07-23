@@ -179,6 +179,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed Elasticsearch backend implementation to use an index prefix
 * Changed `sBasket::getAdditionalInfoForUpdateProduct` to add additional text fields for variants as well
 * Changed the emotion detail window to be resizable
+* Changed the generation of `.tmp` files for compiled theme cache
 
 ### Removals
 
