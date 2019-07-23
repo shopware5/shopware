@@ -27,23 +27,14 @@ namespace Shopware;
 use Enlight_Controller_Request_RequestHttp as EnlightRequest;
 use Shopware\Bundle\AccountBundle\AccountBundle;
 use Shopware\Bundle\AttributeBundle\AttributeBundle;
-use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\StaticResourcesCompilerPass;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkBundle;
-use Shopware\Bundle\BenchmarkBundle\DependencyInjection\Compiler\MatcherCompilerPass;
 use Shopware\Bundle\ContentTypeBundle\ContentTypeBundle;
-use Shopware\Bundle\ContentTypeBundle\DependencyInjection\RegisterDynamicController;
-use Shopware\Bundle\ContentTypeBundle\DependencyInjection\RegisterFieldsCompilerPass;
-use Shopware\Bundle\ContentTypeBundle\DependencyInjection\RegisterTypeRepositories;
 use Shopware\Bundle\ControllerBundle\ControllerBundle;
-use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\ControllerCompilerPass;
 use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\RegisterControllerCompilerPass;
 use Shopware\Bundle\CustomerSearchBundleDBAL\CustomerSearchBundleDBALBundle;
 use Shopware\Bundle\EmotionBundle\EmotionBundle;
 use Shopware\Bundle\EsBackendBundle\EsBackendBundle;
-use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\VersionCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\ESIndexingBundle;
-use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\AddConstraintValidatorsPass;
-use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
 use Shopware\Bundle\FormBundle\FormBundle;
 use Shopware\Bundle\MailBundle\MailBundle;
 use Shopware\Bundle\MediaBundle\MediaBundle;
@@ -78,7 +69,6 @@ use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\MergeExtensionConfigurationPass;
-use Symfony\Component\HttpKernel\DependencyInjection\RegisterControllerArgumentLocatorsPass;
 use Symfony\Component\HttpKernel\Event\PostResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Kernel as SymfonyKernel;
@@ -236,7 +226,7 @@ class Kernel extends SymfonyKernel
         foreach ($this->getBundles() as $bundle) {
             $bundle->setContainer($this->container);
 
-            if ((!$bundle instanceof Plugin) || $bundle->isActive()) {
+            if (!$bundle instanceof Plugin || $bundle->isActive()) {
                 $bundle->boot();
             }
 
@@ -446,7 +436,7 @@ class Kernel extends SymfonyKernel
             new AccountBundle(),
             new AttributeBundle(),
             new BenchmarkBundle(),
-            new ContentTypeBundle(),
+            new ContentTypeBundle($this->connection),
             new ControllerBundle(),
             new CustomerSearchBundleDBALBundle(),
             new EmotionBundle(),
@@ -650,23 +640,16 @@ class Kernel extends SymfonyKernel
         $container->addCompilerPass(new EventListenerCompilerPass(), PassConfig::TYPE_BEFORE_REMOVING);
         $container->addCompilerPass(new EventSubscriberCompilerPass(), PassConfig::TYPE_BEFORE_REMOVING);
         $container->addCompilerPass(new DoctrineEventSubscriberCompilerPass());
-        $container->addCompilerPass(new FormPass());
-        $container->addCompilerPass(new AddConstraintValidatorsPass());
-        $container->addCompilerPass(new StaticResourcesCompilerPass());
         $container->addCompilerPass(new AddConsoleCommandPass());
-        $container->addCompilerPass(new MatcherCompilerPass());
         $container->addCompilerPass(new LegacyApiResourcesPass());
         $container->addCompilerPass(new ConfigureApiResourcesPass(), PassConfig::TYPE_OPTIMIZE, -500);
-        $container->addCompilerPass(new RegisterFieldsCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 500);
-        $container->addCompilerPass(new RegisterDynamicController());
-        $container->addCompilerPass(new RegisterTypeRepositories());
-        $container->addCompilerPass(new ControllerCompilerPass());
-        $container->addCompilerPass(new RegisterControllerArgumentLocatorsPass('argument_resolver.service', 'shopware.controller'));
-        $container->addCompilerPass(new VersionCompilerPass());
+        $container->addCompilerPass(new RegisterControllerCompilerPass());
+        $container->addCompilerPass(new PluginLoggerCompilerPass());
 
         $container->setParameter('active_plugins', $this->activePlugins);
+        $container->setParameter('active_plugin_instances', $this->getActivePlugins());
 
-        $this->loadPlugins($container);
+        $this->loadBundles($container);
     }
 
     /**
@@ -736,7 +719,6 @@ class Kernel extends SymfonyKernel
             'shopware.release.version_text' => $this->release['version_text'],
             'shopware.release.revision' => $this->release['revision'],
             'kernel.default_error_level' => $this->config['logger']['level'],
-            'shopware.bundle.content_type.types' => $this->loadContentTypes(),
         ];
     }
 
@@ -748,6 +730,13 @@ class Kernel extends SymfonyKernel
     protected function getContainerClass()
     {
         return $this->name . ucfirst($this->environment) . $this->pluginHash . ($this->debug ? 'Debug' : '') . 'ProjectContainer';
+    }
+
+    private function getActivePlugins(): array
+    {
+        return array_filter($this->bundles, function (BundleInterface $bundle) {
+            return $bundle instanceof Plugin && $bundle->isActive();
+        });
     }
 
     /**
@@ -765,13 +754,12 @@ class Kernel extends SymfonyKernel
         return sha1($string);
     }
 
-    private function loadPlugins(ContainerBuilder $container): void
+    private function loadBundles(ContainerBuilder $container): void
     {
         if (count($this->bundles) === 0) {
             return;
         }
 
-        $activePlugins = [];
         foreach ($this->getBundles() as $bundle) {
             if ($bundle instanceof Plugin && !$bundle->isActive()) {
                 continue;
@@ -783,14 +771,7 @@ class Kernel extends SymfonyKernel
 
             $container->addObjectResource($bundle);
             $bundle->build($container);
-
-            if ($bundle instanceof Plugin) {
-                $activePlugins[] = $bundle;
-            }
         }
-
-        $container->addCompilerPass(new RegisterControllerCompilerPass($activePlugins));
-        $container->addCompilerPass(new PluginLoggerCompilerPass($activePlugins));
 
         $extensions = [];
 
@@ -799,29 +780,5 @@ class Kernel extends SymfonyKernel
         }
         // ensure these extensions are implicitly loaded
         $container->getCompilerPassConfig()->setMergePass(new MergeExtensionConfigurationPass($extensions));
-    }
-
-    private function loadContentTypes(): array
-    {
-        if ($this->connection === null) {
-            return [];
-        }
-
-        try {
-            $contentTypes = $this->connection->query('SELECT internalName, config FROM s_content_types');
-        } catch (\Exception $e) {
-            return [];
-        }
-
-        $result = [];
-
-        try {
-            foreach ($contentTypes->fetchAll(\PDO::FETCH_KEY_PAIR) as $key => $type) {
-                $result[$key] = json_decode($type, true);
-            }
-        } catch (\Exception $e) {
-        }
-
-        return $result;
     }
 }
