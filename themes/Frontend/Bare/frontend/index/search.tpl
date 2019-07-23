@@ -15,7 +15,7 @@
 
         {* Search input *}
         {block name='frontend_index_search_field_submit'}
-            <button type="submit" aria-label="{s name="IndexSearchFieldSubmit"}{/s}" class="main-search--button" aria-label="{s name="IndexSearchFieldSubmit"}{/s}">
+            <button type="submit" class="main-search--button" aria-label="{s name="IndexSearchFieldSubmit"}{/s}">
 
                 {* Search icon *}
                 {block name='frontend_index_search_field_submit_icon'}
