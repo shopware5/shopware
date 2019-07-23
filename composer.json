@@ -115,7 +115,8 @@
             "JSMin": "engine/Library/minify/"
         },
         "classmap": [
-            "engine/Shopware/Core/"
+            "engine/Shopware/Core/",
+            "engine/Library/Smarty/"
         ],
         "files": ["engine/Shopware/Application.php"],
         "exclude-from-classmap": [
