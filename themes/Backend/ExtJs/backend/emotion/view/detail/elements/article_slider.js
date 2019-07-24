@@ -58,7 +58,14 @@ Ext.define('Shopware.apps.Emotion.view.detail.elements.ArticleSlider', {
             content += Ext.String.format('<div class="x-emotion-preview-title">[0]:</div>', me.getLabel());
 
             if (type === 'selected_article' || type === 'selected_variant') {
-                var products = me.getConfigValue(type + 's').split('|');
+                var configValue = me.getConfigValue(type + 's'),
+                    products;
+
+                if (!configValue) {
+                    return;
+                }
+
+                products = configValue.split('|');
 
                 if (products.length > 0) {
                     Ext.each(products, function(product) {
