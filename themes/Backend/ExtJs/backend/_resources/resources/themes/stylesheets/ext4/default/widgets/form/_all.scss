@@ -3,11 +3,11 @@
     .#{$prefix}webkit {
         * {
             &:focus {
-                outline:none !important;
+                outline: none !important;
             }
         }
     }
-    
+
     // form items
     .#{$prefix}form-item {
         vertical-align: top;
@@ -48,6 +48,7 @@
             border-collapse: collapse;
             border-spacing: 0;
         }
+
         .#{$prefix}form-form-item {
             td {
                 border-top-width: 0;
@@ -59,17 +60,17 @@
             height: 5px;
         }
     }
-    
+
     // No padding when inside an Editor
     .#{$prefix}editor .#{$prefix}form-item-body {
         padding-bottom: 0;
     }
-    
+
     .#{$prefix}form-item-label {
         display: block;
         padding: 3px 0 0;
         font-size: $form-label-font-size;
-		text-shadow: 0 1px 0 #fff;
+        text-shadow: 0 1px 0 #fff;
         @include no-select;
     }
 
@@ -109,9 +110,11 @@
         background: no-repeat 2px 3px;
         background-image: theme-background-image($theme-name, $form-exclamation-icon);
         overflow: hidden;
+
         ul {
             display: block;
             width: $form-error-icon-width;
+
             li {
                 /* prevent inner elements from interfering with QuickTip hovering */
                 display: none;
