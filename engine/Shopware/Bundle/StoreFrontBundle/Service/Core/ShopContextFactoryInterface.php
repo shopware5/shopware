@@ -29,25 +29,16 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface ShopContextFactoryInterface
 {
     /**
-     * @param string      $baseUrl
-     * @param int         $shopId
-     * @param int|null    $currencyId
-     * @param string|null $currentCustomerGroupKey
-     * @param int|null    $areaId
-     * @param int|null    $countryId
-     * @param int|null    $stateId
-     * @param int[]       $streamIds
-     *
-     * @return ShopContextInterface
+     * @param int[] $streamIds
      */
     public function create(
-        $baseUrl,
-        $shopId,
-        $currencyId = null,
-        $currentCustomerGroupKey = null,
-        $areaId = null,
-        $countryId = null,
-        $stateId = null,
-        $streamIds = []
-    );
+        string $baseUrl,
+        int $shopId,
+        ?int $currencyId = null,
+        ?string $currentCustomerGroupKey = null,
+        ?int $areaId = null,
+        ?int $countryId = null,
+        ?int $stateId = null,
+        array $streamIds = []
+    ): ShopContextInterface;
 }
