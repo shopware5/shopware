@@ -178,6 +178,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `Shopware\Components\Plugin::registerCommands` parameter typehint from `Shopware\Components\Console\Application` to `Symfony\Component\Console\Application`
 * Changed Elasticsearch backend implementation to use an index prefix
 * Changed `sBasket::getAdditionalInfoForUpdateProduct` to add additional text fields for variants as well
+* Changed the emotion detail window to be resizable
 
 ### Removals
 
