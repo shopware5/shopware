@@ -80,15 +80,15 @@ You can also start testing with lower permissions due to security reasons (644 f
 
 Go to the root directory of your shopware system and download the test images:
 
-	wget -O test_images.zip http://releases.s3.shopware.com/test_images_since_5.1.zip
+    wget -O test_images.zip http://releases.s3.shopware.com/test_images_since_5.1.zip
 
 For older Shopware versions < 5.1
 
-	wget -O test_images.zip http://releases.s3.shopware.com/test_images.zip
+    wget -O test_images.zip http://releases.s3.shopware.com/test_images.zip
 
 Unzip the files inside the root directory:
 
-	unzip test_images.zip
+    unzip test_images.zip
 
 You can now access your shop
 

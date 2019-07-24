@@ -737,7 +737,7 @@ EOD;
         $sql = <<<"EOD"
             INSERT INTO `s_premium_dispatch` (`id`, `name`, `type`, `description`, `comment`, `active`, `position`, `calculation`, `surcharge_calculation`, `tax_calculation`, `shippingfree`, `multishopID`, `customergroupID`, `bind_shippingfree`, `bind_time_from`, `bind_time_to`, `bind_instock`, `bind_laststock`, `bind_weekday_from`, `bind_weekday_to`, `bind_weight_from`, `bind_weight_to`, `bind_price_from`, `bind_price_to`, `bind_sql`, `status_link`, `calculation_sql`)
             VALUES
-	        (NULL, 'Sonderaufschlag', 2, '', '', 1, 0, 1, 0, 0, NULL, NULL, NULL, 0, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'IFNULL(us.zipcode,ub.zipcode) = \'48624\'', '', NULL);
+            (NULL, 'Sonderaufschlag', 2, '', '', 1, 0, 1, 0, 0, NULL, NULL, NULL, 0, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'IFNULL(us.zipcode,ub.zipcode) = \'48624\'', '', NULL);
 EOD;
         $dbal->query($sql);
 

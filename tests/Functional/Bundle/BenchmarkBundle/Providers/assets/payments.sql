@@ -16,7 +16,7 @@ INSERT INTO `s_core_paymentmeans` (`id`, `name`, `description`, `debit_percent`,
     (11, 'example11', 'Example 11', 9, 10, '', 'example.tpl', '', '', 0, '', 4, 1, 0, '', 0, '', NULL, NULL, 0);
 
 INSERT INTO `s_core_paymentmeans_subshops` (`paymentID`, `subshopID`) VALUES
-    (4,	1),
+    (4, 1),
     (10, 2),
     (11, 2);
 

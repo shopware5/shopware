@@ -45,12 +45,12 @@ class Migrations_Migration1618 extends Shopware\Components\Migrations\AbstractMi
 
 
         $this->addSql('CREATE TABLE `s_categories_manual_sorting` (
-	`id` INT(11) NOT NULL AUTO_INCREMENT,
-	`category_id` INT(11) NOT NULL,
-	`product_id` INT(11) NOT NULL,
-	`position` INT(11) NOT NULL,
-	PRIMARY KEY (`id`),
-	UNIQUE INDEX `category_id_product_id` (`category_id`, `product_id`)
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `category_id` INT(11) NOT NULL,
+    `product_id` INT(11) NOT NULL,
+    `position` INT(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `category_id_product_id` (`category_id`, `product_id`)
 )
 COLLATE=\'utf8_unicode_ci\'
 ENGINE=InnoDB

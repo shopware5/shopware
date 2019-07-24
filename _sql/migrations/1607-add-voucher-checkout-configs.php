@@ -61,17 +61,17 @@ class Migrations_Migration1607 extends Shopware\Components\Migrations\AbstractMi
 
         $sql = <<<'SQL'
         SET @parent = (SELECT id FROM s_core_config_forms WHERE name = 'Checkout' LIMIT 1);
-
+    
         INSERT IGNORE INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `options`) VALUES
         (NULL, @parent, 'showVoucherModeForCheckout', 'i:2;', 'Gutscheinfeld im Bestellabschluss anzeigen', NULL, 'select', 0, 0, 0, '%s');
-
+    
         SET @voucherModeElementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'showVoucherModeForCheckout' LIMIT 1);
         INSERT IGNORE INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`)
         VALUES (@voucherModeElementId, '2', 'Display voucher field on checkout page');
         
         SET @commentArticleElementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'commentVoucherArticle'); 
-		UPDATE `s_core_config_elements` SET `description` = 'Artikel hinzuf&uuml;gen, Kommentarfunktion', name = 'commentArticle' WHERE id = @commentArticleElementId;
-		UPDATE `s_core_config_element_translations` SET description = 'Add product, comment function' WHERE element_id = @commentArticleElementId;
+        UPDATE `s_core_config_elements` SET `description` = 'Artikel hinzuf&uuml;gen, Kommentarfunktion', name = 'commentArticle' WHERE id = @commentArticleElementId;
+        UPDATE `s_core_config_element_translations` SET description = 'Add product, comment function' WHERE element_id = @commentArticleElementId;
 SQL;
         $this->addSql(sprintf($sql, serialize($options)));
 
