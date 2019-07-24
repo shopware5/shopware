@@ -169,10 +169,6 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         /** @var Shopware_Components_Document $document */
         $document = Enlight_Class::Instance('Shopware_Components_Document');
 
-        /** @var Shopware_Models_Document_Order $order */
-        $order = Enlight_Class::Instance('Shopware_Models_Document_Order', [$orderID, $config]);
-        $document->setOrder($order);
-
         $config = Shopware()->Container()->get('events')->filter(
             'Shopware_Models_Order_Document_Filter_Config',
             $config,
@@ -183,9 +179,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             ]
         );
 
-        /**
-         * @var Shopware_Models_Document_Order
-         */
+        /** @var Shopware_Models_Document_Order $documentOrder */
         $documentOrder = Enlight_Class::Instance('Shopware_Models_Document_Order', [$orderID, $config]);
 
         $document->setOrder($documentOrder);
