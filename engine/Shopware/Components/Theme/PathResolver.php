@@ -288,7 +288,7 @@ class PathResolver
     }
 
     /**
-     * Helper function which build the directory path to the passed
+     * Helper function which builds the directory path to the passed
      * css file.
      * This function is used for the less smarty function.
      * The smarty function checks if this file is
@@ -305,6 +305,18 @@ class PathResolver
     }
 
     /**
+     * Helper function which builds the directory path to the tmp
+     * passed css file.
+     * This function is used for generating a .css.tmp file
+     * while writing the theme cache.
+     * The tmp file prevents serving a zero content css file.
+     */
+    public function getTmpCssFilePath(Shop\Shop $shop, string $timestamp): string
+    {
+        return $this->getCacheDirectory() . '/' . $this->buildTimestampName($timestamp, $shop, 'css.tmp');
+    }
+
+    /**
      * Builds the path to the passed javascript file.
      * This function is used for the javascript smarty function.
      * The smarty function checks if this file is
@@ -318,6 +330,18 @@ class PathResolver
     public function getJsFilePath(Shop\Shop $shop, $timestamp)
     {
         return $this->getCacheDirectory() . '/' . $this->buildTimestampName($timestamp, $shop, 'js');
+    }
+
+    /**
+     * Helper function which builds the directory path to the tmp
+     * passed js file.
+     * This function is used for generating a .js.tmp file
+     * while writing the theme cache.
+     * The tmp file prevents serving a zero content js file.
+     */
+    public function getTmpJsFilePath(Shop\Shop $shop, string $timestamp): string
+    {
+        return $this->getCacheDirectory() . '/' . $this->buildTimestampName($timestamp, $shop, 'js.tmp');
     }
 
     /**
