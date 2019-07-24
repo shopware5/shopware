@@ -68,10 +68,10 @@ class Migrations_Migration1607 extends Shopware\Components\Migrations\AbstractMi
         SET @voucherModeElementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'showVoucherModeForCheckout' LIMIT 1);
         INSERT IGNORE INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`)
         VALUES (@voucherModeElementId, '2', 'Display voucher field on checkout page');
-        
+
         SET @commentArticleElementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'commentVoucherArticle'); 
-		UPDATE `s_core_config_elements` SET `description` = 'Artikel hinzuf&uuml;gen, Kommentarfunktion', name = 'commentArticle' WHERE id = @commentArticleElementId;
-		UPDATE `s_core_config_element_translations` SET description = 'Add product, comment function' WHERE element_id = @commentArticleElementId;
+        UPDATE `s_core_config_elements` SET `description` = 'Artikel hinzuf&uuml;gen, Kommentarfunktion', name = 'commentArticle' WHERE id = @commentArticleElementId;
+        UPDATE `s_core_config_element_translations` SET description = 'Add product, comment function' WHERE element_id = @commentArticleElementId;
 SQL;
         $this->addSql(sprintf($sql, serialize($options)));
 

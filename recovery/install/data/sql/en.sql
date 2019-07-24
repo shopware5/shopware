@@ -489,7 +489,7 @@ Hello,
     <p>
         Hello,<br/>
         <br/>
-		{$sName} has found an interesting product for you on {$sShop} that you should have a look at:<br/>
+        {$sName} has found an interesting product for you on {$sShop} that you should have a look at:<br/>
         <br/>
         <strong><a href="{$sLink}">{$sArticle}</a></strong><br/>
     </p>
@@ -596,7 +596,7 @@ In case of further questions please do not hesitate to contact us via telephone,
     <br/><br/>
     <p>
         Hello,<br/>
-		<br/>
+        <br/>
         thank you for your interest in our trade prices. Unfortunately, we do not have a trading license yet so that we cannot accept you as a merchant.<br/>
         In case of further questions please do not hesitate to contact us via telephone, fax or email.
     </p>
@@ -1572,9 +1572,9 @@ Your personal birthday code is: {$sVoucher.code}
 {include file="string:{config name=emailfooterplain}"}',`contentHTML` = '<div style="font-family:arial; font-size:12px;">
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
-	<p>Dear {$sUser.salutation|salutation} {$sUser.lastname},</p>
-	<p><strong>we wish you all the best for your birthday.</strong> For your personal anniversary we thought of something special and send you your own birthday code over {if $sVoucher.value}{$sVoucher.value|currency|unescape:"htmlall"}{else}{$sVoucher.percental} %{/if} you can easily redeem in your next order in our <a href="{$sShopURL}" title="{$sShop}">online shop</a>.</p>
-	<p><strong>Your personal birthday code is: <span style="text-decoration:underline;">{$sVoucher.code}</span></strong><br/>
+    <p>Dear {$sUser.salutation|salutation} {$sUser.lastname},</p>
+    <p><strong>we wish you all the best for your birthday.</strong> For your personal anniversary we thought of something special and send you your own birthday code over {if $sVoucher.value}{$sVoucher.value|currency|unescape:"htmlall"}{else}{$sVoucher.percental} %{/if} you can easily redeem in your next order in our <a href="{$sShopURL}" title="{$sShop}">online shop</a>.</p>
+    <p><strong>Your personal birthday code is: <span style="text-decoration:underline;">{$sVoucher.code}</span></strong><br/>
   {if $sVoucher.valid_from && $sVoucher.valid_to}This code is valid from {$sVoucher.valid_from|date_format:"%d/%m/%Y"} to {$sVoucher.valid_to|date_format:"%d/%m/%Y"}.{/if}
   {if $sVoucher.valid_from && !$sVoucher.valid_to}This code is valid from {$sVoucher.valid_from|date_format:"%d/%m/%Y"}.{/if}
   {if !$sVoucher.valid_from && $sVoucher.valid_to}This code is valid to {$sVoucher.valid_to|date_format:"%d/%m/%Y"}.{/if}

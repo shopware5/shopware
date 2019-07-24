@@ -303,7 +303,7 @@ Hallo,
     <p>
         Hallo,<br/>
         <br/>
-		{$sName} hat für Sie bei {$sShop} ein interessantes Produkt gefunden, das Sie sich anschauen sollten:<br/>
+        {$sName} hat für Sie bei {$sShop} ein interessantes Produkt gefunden, das Sie sich anschauen sollten:<br/>
         <br/>
         <strong><a href="{$sLink}">{$sArticle}</a></strong><br/>
     </p>
@@ -406,7 +406,7 @@ Bei Rückfragen aller Art können Sie uns gerne telefonisch, per Fax oder per Ma
     <br/><br/>
     <p>
         Hallo,<br/>
-		<br/>
+        <br/>
         vielen Dank für Ihr Interesse an unseren Fachhandelspreisen. Leider liegt uns aber noch kein Gewerbenachweis vor bzw. leider können wir Sie nicht als Fachhändler anerkennen.<br/>
         Bei Rückfragen aller Art können Sie uns gerne telefonisch, per Fax oder per Mail diesbezüglich erreichen.
     </p>
@@ -916,9 +916,9 @@ im Anhang finden Sie ein Lastschriftmandat zu Ihrer Bestellung {$paymentInstance
     {include file="string:{config name=emailheaderhtml}"}
     <br/><br/>
     <p>
-    	Hallo {$paymentInstance.firstName} {$paymentInstance.lastName},<br/>
-    	<br/>
-    	im Anhang finden Sie ein Lastschriftmandat zu Ihrer Bestellung {$paymentInstance.orderNumber}. Bitte senden Sie uns das komplett ausgefüllte Dokument per Fax oder Email zurück.
+        Hallo {$paymentInstance.firstName} {$paymentInstance.lastName},<br/>
+        <br/>
+        im Anhang finden Sie ein Lastschriftmandat zu Ihrer Bestellung {$paymentInstance.orderNumber}. Bitte senden Sie uns das komplett ausgefüllte Dokument per Fax oder Email zurück.
     </p>
     {include file="string:{config name=emailfooterhtml}"}
 </div>',`ishtml` = 1,`attachment` = '',`mailtype` = 1,`context` = 'a:1:{s:15:"paymentInstance";a:3:{s:9:"firstName";s:3:"Max";s:8:"lastName";s:10:"Mustermann";s:11:"orderNumber";s:5:"20003";}}' WHERE `s_core_config_mails`.`name` = 'sORDERSEPAAUTHORIZATION' AND `s_core_config_mails`.`dirty` = 0 AND `content` LIKE '%im Anhang finden Sie ein Lastschriftmandat%';

@@ -71,23 +71,23 @@ INSERT INTO `s_user` (`id`, `customernumber`, `default_billing_address_id`, `def
     (6, '20006', 8, 8, 'mrs', 'example_password123', 'md5', 'test6@example.com', 1, 1, '', 5, '2011-11-23', '2012-01-04 14:12:05', '', 0, '', 0, 'EK', 0, '1', 1, '', NULL, '', 0, NULL, NULL, 'Max', 'Mustermann', '1993-06-01', NULL);
 
 INSERT INTO `s_order_billingaddress` (`id`, `userID`, `orderID`, `company`, `department`, `salutation`, `customernumber`, `firstname`, `lastname`, `street`, `zipcode`, `city`, `phone`, `countryID`, `stateID`, `ustid`, `additional_address_line1`, `additional_address_line2`, `title`) VALUES
-    (1, 1,	1,	'',	'',	'mr',	NULL,	'Foo 1',	'Bar 1',	'Example street 1',	'00000',	'Example city 1',	'012345 / 6789',	2,	3,	'',	NULL,	NULL,	NULL),
-    (2, 2,	2,	'',	'',	'mr',	NULL,	'Foo 2',	'Bar 2',	'Example street 2',	'00000',	'Example city 2',	'012345 / 6789',	3,	3,	'',	NULL,	NULL,	NULL),
-    (3, 3,	3,	'',	'',	'mr',	NULL,	'Foo 3',	'Bar 3',	'Example street 3',	'00000',	'Example city 3',	'012345 / 6789',	4,	3,	'',	NULL,	NULL,	NULL),
-    (4, 3,	4,	'',	'',	'mr',	NULL,	'Foo 4',	'Bar 4',	'Example street 4',	'00000',	'Example city 4',	'012345 / 6789',	4,	3,	'',	NULL,	NULL,	NULL),
-    (5, 4,	5,	'',	'',	'mr',	NULL,	'Foo 5',	'Bar 5',	'Example street 5',	'00000',	'Example city 5',	'012345 / 6789',	5,	3,	'',	NULL,	NULL,	NULL),
-    (6, 2,	6,	'',	'',	'mr',	NULL,	'Foo 6',	'Bar 6',	'Example street 6',	'00000',	'Example city 6',	'012345 / 6789',	3,	3,	'',	NULL,	NULL,	NULL),
-    (7, 5,	7,	'',	'',	'mr',	NULL,	'Foo 7',	'Bar 7',	'Example street 7',	'00000',	'Example city 7',	'012345 / 6789',	6,	3,	'',	NULL,	NULL,	NULL),
-    (8, 6,	8,	'',	'',	'mr',	NULL,	'Foo 8',	'Bar 8',	'Example street 8',	'00000',	'Example city 8',	'012345 / 6789',	7,	3,	'',	NULL,	NULL,	NULL);
+    (1, 1, 1, '', '', 'mr', NULL, 'Foo 1', 'Bar 1', 'Example street 1', '00000', 'Example city 1', '012345 / 6789', 2, 3, '', NULL, NULL, NULL),
+    (2, 2, 2, '', '', 'mr', NULL, 'Foo 2', 'Bar 2', 'Example street 2', '00000', 'Example city 2', '012345 / 6789', 3, 3, '', NULL, NULL, NULL),
+    (3, 3, 3, '', '', 'mr', NULL, 'Foo 3', 'Bar 3', 'Example street 3', '00000', 'Example city 3', '012345 / 6789', 4, 3, '', NULL, NULL, NULL),
+    (4, 3, 4, '', '', 'mr', NULL, 'Foo 4', 'Bar 4', 'Example street 4', '00000', 'Example city 4', '012345 / 6789', 4, 3, '', NULL, NULL, NULL),
+    (5, 4, 5, '', '', 'mr', NULL, 'Foo 5', 'Bar 5', 'Example street 5', '00000', 'Example city 5', '012345 / 6789', 5, 3, '', NULL, NULL, NULL),
+    (6, 2, 6, '', '', 'mr', NULL, 'Foo 6', 'Bar 6', 'Example street 6', '00000', 'Example city 6', '012345 / 6789', 3, 3, '', NULL, NULL, NULL),
+    (7, 5, 7, '', '', 'mr', NULL, 'Foo 7', 'Bar 7', 'Example street 7', '00000', 'Example city 7', '012345 / 6789', 6, 3, '', NULL, NULL, NULL),
+    (8, 6, 8, '', '', 'mr', NULL, 'Foo 8', 'Bar 8', 'Example street 8', '00000', 'Example city 8', '012345 / 6789', 7, 3, '', NULL, NULL, NULL);
 
 INSERT INTO `s_order_shippingaddress` (`id`, `userID`, `orderID`, `company`, `department`, `salutation`, `firstname`, `lastname`, `street`, `zipcode`, `city`, `phone`, `countryID`, `stateID`, `additional_address_line1`, `additional_address_line2`, `title`) VALUES
-    (1, 1,	1,	'',	'',	'mr', 'Foo 1',	'Bar 1',	'Example street 1',	'00000',	'Example city 1',	'012345 / 6789',	10,	3, NULL,	NULL,	NULL),
-    (2, 2,	2,	'',	'',	'mr', 'Foo 2',	'Bar 2',	'Example street 2',	'00000',	'Example city 2',	'012345 / 6789',	3,	3, NULL,	NULL,	NULL),
-    (3, 3,	3,	'',	'',	'mr', 'Foo 3',	'Bar 3',	'Example street 3',	'00000',	'Example city 3',	'012345 / 6789',	4,	3, NULL,	NULL,	NULL),
-    (4, 3,	4,	'',	'',	'mr', 'Foo 4',	'Bar 4',	'Example street 4',	'00000',	'Example city 4',	'012345 / 6789',	4,	3, NULL,	NULL,	NULL),
-    (5, 4,	5,	'',	'',	'mr', 'Foo 5',	'Bar 5',	'Example street 5',	'00000',	'Example city 5',	'012345 / 6789',	5,	3, NULL,	NULL,	NULL),
-    (6, 2,	6,	'',	'',	'mr', 'Foo 6',	'Bar 6',	'Example street 6',	'00000',	'Example city 6',	'012345 / 6789',	3,	3, NULL,	NULL,	NULL),
-    (7, 5,	7,	'',	'',	'mr', 'Foo 7',	'Bar 7',	'Example street 7',	'00000',	'Example city 7',	'012345 / 6789',	6,	3, NULL,	NULL,	NULL),
-    (8, 6,	8,	'',	'',	'mr', 'Foo 8',	'Bar 8',	'Example street 8',	'00000',	'Example city 8',	'012345 / 6789',	7,	3, NULL,	NULL,	NULL);
+    (1, 1, 1, '', '', 'mr', 'Foo 1', 'Bar 1', 'Example street 1', '00000', 'Example city 1', '012345 / 6789', 10, 3, NULL, NULL, NULL),
+    (2, 2, 2, '', '', 'mr', 'Foo 2', 'Bar 2', 'Example street 2', '00000', 'Example city 2', '012345 / 6789', 3, 3, NULL, NULL, NULL),
+    (3, 3, 3, '', '', 'mr', 'Foo 3', 'Bar 3', 'Example street 3', '00000', 'Example city 3', '012345 / 6789', 4, 3, NULL, NULL, NULL),
+    (4, 3, 4, '', '', 'mr', 'Foo 4', 'Bar 4', 'Example street 4', '00000', 'Example city 4', '012345 / 6789', 4, 3, NULL, NULL, NULL),
+    (5, 4, 5, '', '', 'mr', 'Foo 5', 'Bar 5', 'Example street 5', '00000', 'Example city 5', '012345 / 6789', 5, 3, NULL, NULL, NULL),
+    (6, 2, 6, '', '', 'mr', 'Foo 6', 'Bar 6', 'Example street 6', '00000', 'Example city 6', '012345 / 6789', 3, 3, NULL, NULL, NULL),
+    (7, 5, 7, '', '', 'mr', 'Foo 7', 'Bar 7', 'Example street 7', '00000', 'Example city 7', '012345 / 6789', 6, 3, NULL, NULL, NULL),
+    (8, 6, 8, '', '', 'mr', 'Foo 8', 'Bar 8', 'Example street 8', '00000', 'Example city 8', '012345 / 6789', 7, 3, NULL, NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS=1;
