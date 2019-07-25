@@ -57,9 +57,9 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
 
         // At least one of the security policies is enabled.
         // If at least one of them validates, cron tasks will be executed
-        $cronSecureAllowedKey = Shopware()->Config()->get('cronSecureAllowedKey');
-        $cronSecureAllowedIp = Shopware()->Config()->get('cronSecureAllowedIp');
-        $cronSecureByAccount = Shopware()->Config()->get('cronSecureByAccount');
+        $cronSecureAllowedKey = $this->Config()->get('cronSecureAllowedKey');
+        $cronSecureAllowedIp = $this->Config()->get('cronSecureAllowedIp');
+        $cronSecureByAccount = $this->Config()->get('cronSecureByAccount');
 
         // No security policy specified, accept all requests
         if (empty($cronSecureAllowedKey) && empty($cronSecureAllowedIp) && !$cronSecureByAccount) {
