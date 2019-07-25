@@ -100,7 +100,7 @@ class Form extends ModelEntity
     /**
      * @var int|null
      *
-     * @ORM\Column(name="plugin_id", type="integer")
+     * @ORM\Column(name="plugin_id", type="integer", nullable=true)
      */
     private $pluginId;
 
@@ -394,9 +394,6 @@ class Form extends ModelEntity
         return $this->plugin;
     }
 
-    /**
-     * @return static
-     */
     public function setPlugin(?Plugin $plugin): self
     {
         $this->plugin = $plugin;
