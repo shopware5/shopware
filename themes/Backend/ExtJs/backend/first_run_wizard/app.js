@@ -11,7 +11,8 @@ Ext.define('Shopware.apps.FirstRunWizard', {
         'main.LocalizationInstaller',
         'main.Config',
         'main.DemoData',
-        'main.Recommendation'
+        'main.Recommendation',
+        'main.PayPal'
     ],
 
     stores: [
@@ -33,10 +34,11 @@ Ext.define('Shopware.apps.FirstRunWizard', {
     ],
 
     controllers: [
+        'PayPal', // Do not change order!
         'Main',
         'Config',
         'Localization',
-        'Recommendation'
+        'Recommendation',
     ],
 
     launch: function() {

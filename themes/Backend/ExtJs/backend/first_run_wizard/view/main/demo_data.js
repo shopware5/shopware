@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.DemoData', {
     /**
      * Name attribute used to generate event names
      */
-    name:'demo-data',
+    name: 'demo-data',
 
     overflowY: 'auto',
 

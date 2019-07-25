@@ -41,6 +41,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
         { ref: 'wizardWindow', selector: 'first-run-wizard' },
         { ref: 'cardContainer', selector: 'first-run-wizard container[name=card-container]' },
         { ref: 'nextButton', selector: 'first-run-wizard button[name=next-button]' },
+        { ref: 'skipButton', selector: 'first-run-wizard button[name=skip-button]' },
         { ref: 'previousButton', selector: 'first-run-wizard button[name=previous-button]' },
         { ref: 'buttonToolbar', selector: 'first-run-wizard toolbar[name=button-toolbar]' },
         { ref: 'navigation', selector: 'first-run-wizard dataview[name=navigation]' }
@@ -65,7 +66,8 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
             'first-run-wizard': {
                 'update-step': me.updateServerStep,
                 'navigate-next': me.navigateNext,
-                'navigate-back': me.navigateBack
+                'navigate-back': me.navigateBack,
+                'navigate-skip': me.navigateSkip,
             }
         });
 
@@ -97,6 +99,12 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
         }
 
         me.navigateTo(calculatedStep);
+    },
+
+    navigateSkip: function() {
+        this.getSkipButton().hide();
+
+        this.navigateNext();
     },
 
     navigateBack: function() {

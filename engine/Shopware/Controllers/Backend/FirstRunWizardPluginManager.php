@@ -45,10 +45,7 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
 
         try {
             /** @var PluginStruct[] $plugins */
-            $plugins = $firstRunWizardPluginStore->getIntegratedPlugins(
-                $isoCode,
-                $this->getVersion()
-            );
+            $plugins = $firstRunWizardPluginStore->getIntegratedPlugins($isoCode, $this->getVersion());
         } catch (Exception $e) {
             $this->View()->assign([
                 'success' => true,
@@ -74,10 +71,7 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
 
         try {
             /** @var PluginStruct[] $plugins */
-            $plugins = $firstRunWizardPluginStore->getRecommendedPlugins(
-                $this->getCurrentLocale(),
-                $this->getVersion()
-            );
+            $plugins = $firstRunWizardPluginStore->getRecommendedPlugins($this->getCurrentLocale(), $this->getVersion());
         } catch (Exception $e) {
             $this->View()->assign([
                 'success' => true,
@@ -103,10 +97,7 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
 
         try {
             /** @var PluginStruct[] $plugins */
-            $plugins = $firstRunWizardPluginStore->getDemoDataPlugins(
-                $this->getCurrentLocale(),
-                $this->getVersion()
-            );
+            $plugins = $firstRunWizardPluginStore->getDemoDataPlugins($this->getCurrentLocale(), $this->getVersion());
         } catch (Exception $e) {
             $this->View()->assign([
                 'success' => true,
@@ -134,11 +125,7 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
 
         try {
             /** @var PluginStruct[] $plugins */
-            $plugins = $firstRunWizardPluginStore->getLocalizationPlugins(
-                $localization,
-                $this->getCurrentLocale(),
-                $this->getVersion()
-            );
+            $plugins = $firstRunWizardPluginStore->getLocalizationPlugins($localization, $this->getCurrentLocale(), $this->getVersion());
         } catch (Exception $e) {
             $this->View()->assign([
                 'success' => true,
@@ -164,10 +151,7 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
 
         try {
             /** @var LocaleStruct[] $localizations */
-            $localizations = $firstRunWizardPluginStore->getLocalizations(
-                $this->getCurrentLocale(),
-                $this->getVersion()
-            );
+            $localizations = $firstRunWizardPluginStore->getLocalizations($this->getCurrentLocale(), $this->getVersion());
         } catch (Exception $e) {
             $this->View()->assign([
                 'success' => true,
@@ -218,10 +202,7 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
 
         try {
             /** @var LocaleStruct[] $localizations */
-            $localizations = $firstRunWizardPluginStore->getAvailableLocalizations(
-                $this->getCurrentLocale(),
-                $this->getVersion()
-            );
+            $localizations = $firstRunWizardPluginStore->getAvailableLocalizations($this->getCurrentLocale(), $this->getVersion());
         } catch (Exception $e) {
             $this->View()->assign([
                 'success' => true,
@@ -238,6 +219,31 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
         $this->View()->assign([
             'success' => true,
             'data' => array_values($localizations),
+        ]);
+    }
+
+    public function saveConfigurationAction(): void
+    {
+        $clientId = $this->Request()->getParam('clientId');
+        $clientSecret = $this->Request()->getParam('clientSecret');
+        $sandbox = (bool) $this->Request()->getParam('sandbox');
+        $payPalPlusEnabled = (bool) $this->Request()->getParam('payPalPlus');
+
+        if (!class_exists('\SwagPaymentPayPalUnified\Setup\FirstRunWizardInstaller')) {
+            throw new \Exception(sprintf('Class %s does not exist.', '\SwagPaymentPayPalUnified\Setup\FirstRunWizardInstaller'));
+        }
+
+        /** @var \SwagPaymentPayPalUnified\Setup\FirstRunWizardInstaller $payPalInstaller */
+        $payPalInstaller = new \SwagPaymentPayPalUnified\Setup\FirstRunWizardInstaller();
+        $payPalInstaller->saveConfiguration($this->get('dbal_connection'), [
+            'clientId' => $clientId,
+            'clientSecret' => $clientSecret,
+            'sandbox' => $sandbox,
+            'payPalPlusEnabled' => $payPalPlusEnabled,
+        ]);
+
+        $this->View()->assign([
+            'success' => true,
         ]);
     }
 

@@ -27,8 +27,18 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
 use Shopware\Models\Document\Element;
 
-class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_Backend_ExtJs implements \Shopware\Components\CSRFWhitelistAware
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getWhitelistedCSRFActions(): array
+    {
+        return [
+            'payPalStartView',
+        ];
+    }
+
     /**
      * Saves the current wizard status (enabled/disabled) to the database
      */
@@ -523,6 +533,27 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             'success' => true,
             'message' => 'domainRegistered',
         ]);
+    }
+
+    /**
+     * The payPalStartViewAction renders the start screen of the PayPal integration in the
+     * First-Run-Wizard.
+     */
+    public function payPalStartViewAction(): void
+    {
+        $this->renderPayPalView('start');
+    }
+
+    /**
+     * renderPayPalView is a helper-method to remder templates for the PayPal integration in
+     * the First-Run-Wizard.
+     */
+    private function renderPayPalView(string $view): void
+    {
+        $this->get('plugins')->Controller()->ViewRenderer()->setNoRender(false);
+        $this->Front()->Plugins()->Json()->setRenderer(false);
+
+        $this->View()->loadTemplate(sprintf('backend/first_run_wizard/template/%s.tpl', $view));
     }
 
     /**
