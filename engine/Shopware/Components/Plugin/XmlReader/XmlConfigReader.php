@@ -28,6 +28,7 @@ use DOMDocument;
 use DOMElement;
 use DOMNodeList;
 use InvalidArgumentException;
+use Symfony\Component\Config\Util\XmlUtils;
 
 class XmlConfigReader extends XmlReaderBase
 {
@@ -98,8 +99,8 @@ class XmlConfigReader extends XmlReaderBase
                 $element['name'] = $name->nodeValue;
             }
 
-            if ($value = $item->getElementsByTagName('value')->item(0)) {
-                $element['value'] = $value->nodeValue;
+            if ($item->getElementsByTagName('value')->length) {
+                $element['value'] = XmlUtils::phpize($item->getElementsByTagName('value')->item(0)->nodeValue);
             }
 
             $element['label'] = self::parseTranslatableElement($item, 'label');

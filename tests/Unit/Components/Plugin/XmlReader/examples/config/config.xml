@@ -35,5 +35,23 @@
                 </option>
             </store>
         </element>
+        <element required="true" type="boolean" scope="shop">
+            <name>test</name>
+            <label lang="de">...</label>
+            <label lang="en">...</label>
+            <value>false</value>
+        </element>
+        <element required="true" type="boolean" scope="shop">
+            <name>test2</name>
+            <label lang="de">...</label>
+            <label lang="en">...</label>
+            <value>true</value>
+        </element>
+        <element required="true" type="boolean" scope="shop">
+            <name>test2</name>
+            <label lang="de">...</label>
+            <label lang="en">...</label>
+            <value>testText</value>
+        </element>
     </elements>
 </config>
