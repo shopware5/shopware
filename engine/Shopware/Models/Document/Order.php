@@ -292,7 +292,23 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      */
     public function processOrder()
     {
-        $shippingName = Shopware()->Snippets()->getNamespace('documents/index')->get('ShippingCosts', 'Shipping costs', true);
+        $snippetManager = Shopware()->Snippets();
+        $modelManager = Shopware()->Models();
+        $orderLocale = null;
+
+        if ($modelManager !== null) {
+            $orderLocale = $modelManager->find(
+                \Shopware\Models\Shop\Locale::class,
+                $this->_order['language']
+            );
+        }
+
+        if ($orderLocale !== null) {
+            $snippetManager->setLocale($orderLocale);
+        }
+
+        $namespace = $snippetManager->getNamespace('documents/index');
+        $shippingName = $namespace->get('ShippingCosts', 'Shipping costs', true);
 
         if ($this->_order['invoice_shipping_tax_rate'] === null) {
             if ($this->_order['invoice_shipping_net'] != 0) {
