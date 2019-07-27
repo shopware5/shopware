@@ -151,7 +151,8 @@ class SitePageMenuTest extends TestCase
             $router->getContext()->getHost(),
             $router->getContext()->getBaseUrl(),
         ]);
+        $protocol = $router->getContext()->isSecure() ? 'https' : 'http';
 
-        return rtrim('http://' . $path, '/');
+        return rtrim($protocol . '://' . $path, '/');
     }
 }
