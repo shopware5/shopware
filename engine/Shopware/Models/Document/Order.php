@@ -297,6 +297,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         $orderLocale = null;
 
         if ($modelManager !== null) {
+            /** @var \Shopware\Models\Shop\Locale $orderLocale */
             $orderLocale = $modelManager->find(
                 \Shopware\Models\Shop\Locale::class,
                 $this->_order['language']
