@@ -106,7 +106,7 @@ class Type implements JsonSerializable
     /**
      * @var string
      */
-    protected $seoUrlTemplate = '{$type.name}/{$item[$type.viewTitleFieldName]}/';
+    protected $seoUrlTemplate = '{$type.name}/{$item[$type.viewTitleFieldName]}';
 
     /**
      * @var string

@@ -113,8 +113,10 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
                             displayField: 'label',
                             queryMode: 'local',
                             labelWidth: 150,
-                            forceSelection: true,
-                            supportText: '{s name="seo/metaTitleFieldHelpText"}{/s}'
+                            supportText: '{s name="seo/metaTitleFieldHelpText"}{/s}',
+                            listeners: {
+                                change: this.comboboxResetListener
+                            }
                         },
                         viewMetaDescriptionFieldName: {
                             fieldLabel: '{s name="seo/metaDescriptionField"}{/s}',
@@ -123,8 +125,10 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
                             displayField: 'label',
                             queryMode: 'local',
                             labelWidth: 150,
-                            forceSelection: true,
-                            supportText: '{s name="seo/metaDescriptionFieldHelpText"}{/s}'
+                            supportText: '{s name="seo/metaDescriptionFieldHelpText"}{/s}',
+                            listeners: {
+                                change: this.comboboxResetListener
+                            }
                         },
                         seoUrlTemplate: {
                             fieldLabel: '{s name="seo/seoUrlTemplate"}{/s}',
@@ -253,6 +257,12 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
         }
 
         return '{s name="link_to_frontend"}{/s}' + record.get('controllerName');
+    },
+
+    comboboxResetListener: function () {
+        if (!this.getValue() || this.getValue().length === 0) {
+            this.setValue('');
+        }
     }
 });
 // {/block}

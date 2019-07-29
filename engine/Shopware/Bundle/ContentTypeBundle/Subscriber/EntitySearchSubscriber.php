@@ -81,7 +81,7 @@ class EntitySearchSubscriber implements SubscriberInterface
         $criteria = new Criteria();
         $criteria->offset = (int) $request->getParam('start', 0);
         $criteria->limit = (int) $request->getParam('limit', 0);
-        $criteria->sort = $request->getParam('sorts', []);
+        $criteria->sort = $request->getParam('sort', []);
         $criteria->filter = $request->getParam('filter', []);
         $criteria->loadTranslations = false;
         $criteria->loadAssociations = false;
