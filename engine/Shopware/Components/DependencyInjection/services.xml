@@ -784,8 +784,24 @@
             <tag name="router.matcher" priority="30"/>
         </service>
 
+        <service id="Shopware\Components\Routing\RewriteGenerator\QueryBuilderHelperInterface"
+                 class="Shopware\Components\Routing\RewriteGenerator\QueryBuilderHelper">
+            <argument id="dbal_connection" type="service"/>
+        </service>
+
+        <service id="Shopware\Components\Routing\RewriteGenerator\RepositoryInterface"
+                 class="Shopware\Components\Routing\RewriteGenerator\Repository">
+            <argument id="Shopware\Components\Routing\RewriteGenerator\QueryBuilderHelperInterface" type="service"/>
+        </service>
+
+        <service id="Shopware\Components\Routing\RewriteGenerator\CachedRepository"
+                 decorates="Shopware\Components\Routing\RewriteGenerator\RepositoryInterface">
+            <argument id="Shopware\Components\Routing\RewriteGenerator\CachedRepository.inner" type="service"/>
+            <argument id="cache" type="service"/>
+        </service>
+
         <service id="shopware.routing.generators.rewrite_generator" class="Shopware\Components\Routing\Generators\RewriteGenerator">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Shopware\Components\Routing\RewriteGenerator\RepositoryInterface"/>
             <argument type="service" id="query_alias_mapper"/>
             <argument type="service" id="events"/>
 

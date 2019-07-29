@@ -24,17 +24,18 @@
 
 namespace Shopware\Components\Routing\Generators;
 
-use Doctrine\DBAL\Connection;
+use Enlight_Event_EventManager as EventManager;
 use Shopware\Components\QueryAliasMapper;
 use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\GeneratorListInterface;
+use Shopware\Components\Routing\RewriteGenerator\RepositoryInterface;
 
 class RewriteGenerator implements GeneratorListInterface
 {
     /**
-     * @var Connection
+     * @var RepositoryInterface
      */
-    protected $connection;
+    protected $repository;
 
     /**
      * @var QueryAliasMapper
@@ -42,16 +43,16 @@ class RewriteGenerator implements GeneratorListInterface
     private $queryAliasMapper;
 
     /**
-     * @var \Enlight_Event_EventManager
+     * @var EventManager
      */
     private $eventManager;
 
     public function __construct(
-        Connection $connection,
+        RepositoryInterface $repository,
         QueryAliasMapper $queryAliasMapper,
-        \Enlight_Event_EventManager $eventManager
+        EventManager $eventManager
     ) {
-        $this->connection = $connection;
+        $this->repository = $repository;
         $this->queryAliasMapper = $queryAliasMapper;
         $this->eventManager = $eventManager;
     }
@@ -61,8 +62,12 @@ class RewriteGenerator implements GeneratorListInterface
      */
     public function generate(array $params, Context $context)
     {
+        if ($context->getShopId() === null) {
+            return false;
+        }
+
         if (array_key_exists('_seo', $params) && !$params['_seo']) {
-            return $params;
+            return false;
         }
 
         if (array_key_exists('_seo', $params)) {
@@ -76,7 +81,7 @@ class RewriteGenerator implements GeneratorListInterface
         }
 
         $orgPath = http_build_query($orgQuery, '', '&');
-        list($url) = $this->rewriteList([$orgPath], $context);
+        list($url) = $this->repository->rewriteList([$orgPath], $context->getShopId());
 
         if ($url === false) {
             return false;
@@ -117,7 +122,7 @@ class RewriteGenerator implements GeneratorListInterface
             return http_build_query($orgQuery, '', '&');
         }, $orgQueryList);
 
-        $urls = $this->rewriteList($orgPathList, $context);
+        $urls = $this->repository->rewriteList($orgPathList, $context->getShopId());
         if (max($urls) === false) {
             return $list;
         }
@@ -140,14 +145,6 @@ class RewriteGenerator implements GeneratorListInterface
         });
 
         return $urls;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getAssembleQuery()
-    {
-        return 'SELECT org_path, path FROM s_core_rewrite_urls WHERE subshopID=:shopId AND org_path IN (:orgPath) AND main=1 ORDER BY id DESC';
     }
 
     /**
@@ -236,10 +233,6 @@ class RewriteGenerator implements GeneratorListInterface
             return false;
         }
 
-        if ($context->getShopId() === null) {
-            return false;
-        }
-
         if (!isset($params['controller'])) {
             return false;
         }
@@ -247,43 +240,7 @@ class RewriteGenerator implements GeneratorListInterface
         return $this->getOrgQueryArray($params);
     }
 
-    /**
-     * @throws \Doctrine\DBAL\DBALException
-     *
-     * @return array
-     */
-    private function rewriteList(array $list, Context $context)
-    {
-        $query = $this->getAssembleQuery();
-        $statement = $this->connection->executeQuery(
-            $query,
-            [
-                ':shopId' => $context->getShopId(),
-                ':orgPath' => $list,
-            ],
-            [
-                ':shopId' => \PDO::PARAM_INT,
-                ':orgPath' => Connection::PARAM_STR_ARRAY,
-            ]
-        );
-
-        $rows = $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
-
-        foreach ($list as $key => $orgPath) {
-            if (isset($rows[$orgPath])) {
-                $list[$key] = $rows[$orgPath];
-            } else {
-                $list[$key] = false;
-            }
-        }
-
-        return $list;
-    }
-
-    /**
-     * @return string
-     */
-    private function rewriteQuery(array $query)
+    private function rewriteQuery(array $query): string
     {
         $tmp = $this->queryAliasMapper->replaceLongParams($query);
 

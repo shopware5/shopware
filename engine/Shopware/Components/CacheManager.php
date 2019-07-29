@@ -25,6 +25,7 @@
 namespace Shopware\Components;
 
 use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\Routing\RewriteGenerator\RepositoryInterface;
 use Shopware\Components\Theme\PathResolver;
 
 class CacheManager
@@ -164,6 +165,18 @@ class CacheManager
                 WHERE shop_id=? AND element_id=?
             ';
             $this->db->query($sql, [$value, $shopId, $elementId]);
+        }
+
+        $capabilities = $this->cache->getBackend()->getCapabilities();
+        if (!empty($capabilities['tags'])) {
+            $this->cache->clean(
+                \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+                [
+                    str_replace('\\', '_', RepositoryInterface::class),
+                ]
+            );
+        } else {
+            $this->cache->clean();
         }
     }
 
