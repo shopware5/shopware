@@ -253,7 +253,7 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
                                     rawData = record.getProxy().getReader().rawData;
 
                             if (operation.success === true) {
-                                Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.roleSave.successMessage, me.snippets.growlMessage);
+                                Shopware.Notification.createGrowlMessage(me.snippets.successTitle, Ext.String.format(me.snippets.roleSave.successMessage, rawData.data.name), me.snippets.growlMessage);
                             } else {
                                 Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.errorMessage + ' ' + rawData.message, me.snippets.growlMessage);
                             }
