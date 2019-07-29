@@ -31,7 +31,7 @@
                     <div class="content-type--body panel--table has--border is--rounded">
 
                         {foreach $sFields as $field}
-                            {if $field.name === $titleFieldName || $field.name === $descriptionFieldName || $field.name === $imageFieldName}
+                            {if $field.name === $titleFieldName || $field.name === $descriptionFieldName || $field.name === $imageFieldName || $field.name === $sMetaTitleKey || $field.name === $sMetaDescriptionKey}
                                 {continue}
                             {/if}
 

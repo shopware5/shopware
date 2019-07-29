@@ -92,6 +92,11 @@ Ext.define('Shopware.apps.Emotion.view.components.ContentType', {
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
         this.selectionGrid.store = factory.createEntitySearchStore(model);
         this.selectionGrid.searchStore = factory.createEntitySearchStore(model);
+        this.selectionGrid.searchStore.sort([{
+            property: 'id',
+            direction: 'DESC'
+        }]);
+        this.selectionGrid.searchStore.remoteSort = true;
         this.selectionGrid.searchStore.load();
 
         this.selectionGrid.grid.reconfigure(this.selectionGrid.store);
