@@ -27,6 +27,7 @@ namespace Shopware\Models\Config;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Plugin\Plugin;
 
 /**
  * @ORM\Table(name="s_core_config_forms")
@@ -35,7 +36,7 @@ use Shopware\Components\Model\ModelEntity;
 class Form extends ModelEntity
 {
     /**
-     * @var \Shopware\Models\Plugin\Plugin
+     * @var Plugin|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="configForms")
      * @ORM\JoinColumn(name="plugin_id", referencedColumnName="id")
@@ -97,9 +98,9 @@ class Form extends ModelEntity
     private $description;
 
     /**
-     * @var int
+     * @var int|null
      *
-     * @ORM\Column(name="plugin_id", type="integer", nullable=false)
+     * @ORM\Column(name="plugin_id", type="integer", nullable=true)
      */
     private $pluginId;
 
@@ -312,7 +313,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @param int $pluginId
+     * @param int|null $pluginId
      */
     public function setPluginId($pluginId)
     {
@@ -320,7 +321,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getPluginId()
     {
@@ -386,5 +387,17 @@ class Form extends ModelEntity
     public function hasTranslations()
     {
         return $this->translations->count() > 0;
+    }
+
+    public function getPlugin(): ?Plugin
+    {
+        return $this->plugin;
+    }
+
+    public function setPlugin(?Plugin $plugin): self
+    {
+        $this->plugin = $plugin;
+
+        return $this;
     }
 }
