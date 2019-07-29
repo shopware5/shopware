@@ -92,6 +92,18 @@ class XmlConfigReaderTest extends TestCase
         static::assertEquals('Meine Feld Beschreibung', $element2['description']['de']);
 
         static::assertArrayHasKey('store', $element2);
+
+        // third element
+        $element3 = $result['elements'][2];
+        static::assertFalse($element3['value']);
+
+        // fourth element
+        $element4 = $result['elements'][3];
+        static::assertTrue($element4['value']);
+
+        // five element
+        $element5 = $result['elements'][4];
+        static::assertSame('testText', $element5['value']);
     }
 
     public function testConfigReadingFromXml(): void
