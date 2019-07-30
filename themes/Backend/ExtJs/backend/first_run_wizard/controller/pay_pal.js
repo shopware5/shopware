@@ -44,6 +44,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.PayPal', {
         { ref: 'payPalCard', selector: 'first-run-wizard-pay-pal' },
         { ref: 'firstRunWizard', selector: 'first-run-wizard' },
         { ref: 'configurationForm', selector: 'first-run-wizard-pay-pal form[name=pay-pal-configuration-form]' },
+        { ref: 'saveButton', selector: 'first-run-wizard-pay-pal form[name=pay-pal-configuration-form] button' }
     ],
 
     snippets: {
@@ -109,12 +110,15 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.PayPal', {
     saveConfiguration: function () {
         var me = this,
             values = this.getConfigurationForm().getValues(),
-            valid = this.getConfigurationForm().getForm().isValid();
+            valid = this.getConfigurationForm().getForm().isValid(),
+            saveButton = this.getSaveButton();
 
         if (!valid) {
             Shopware.Notification.createGrowlMessage(null, me.snippets.formInvalid);
             return;
         }
+
+        saveButton.disable();
 
         me.initAjaxRequest(
             '{url controller=FirstRunWizardPluginManager action=saveConfiguration}',
@@ -142,6 +146,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.PayPal', {
                 Shopware.app.Application.fireEvent('shopware-theme-cache-warm-up-request');
                 me.getFirstRunWizard().fireEvent('navigate-next');
                 me.getNextButton().enable();
+                me.getSaveButton().enable();
             }
         );
     },
