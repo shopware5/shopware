@@ -545,7 +545,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
     }
 
     /**
-     * renderPayPalView is a helper-method to remder templates for the PayPal integration in
+     * renderPayPalView is a helper-method to render templates for the PayPal integration in
      * the First-Run-Wizard.
      */
     private function renderPayPalView(string $view): void
