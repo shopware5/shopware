@@ -463,6 +463,7 @@ class StructHydrator
         $domains = [];
         foreach ($data as $row) {
             $domains[] = new DomainStruct(
+                $row['id'],
                 $row['domain'],
                 $row['balance'],
                 $row['dispo'],
