@@ -14,14 +14,14 @@ INSERT INTO `s_emotion` (`id`, `active`, `name`, `cols`, `cell_spacing`, `cell_h
     (6, 1, 'Example 6 Shop 1', 4, 10, 185, 2, 20, NULL, '2018-03-07 05:00:00', 1, 0, 0, '', '', '', '2017-11-07 09:57:28', '2018-03-06 15:53:29', 1, '0,2,3,4', 0, 'fluid', 1, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO `s_emotion_shops` (`emotion_id`, `shop_id`) VALUES
-    (2,	1),
-    (3,	1),
-    (4,	2);
+    (2, 1),
+    (3, 1),
+    (4, 2);
 
 INSERT INTO `s_emotion_categories` (`emotion_id`, `category_id`) VALUES
-    (1,	2),
-    (5,	3),
-    (6,	4);
+    (1, 2),
+    (5, 3),
+    (6, 4);
 
 INSERT INTO `s_categories` (`id`, `parent`, `path`, `description`, `position`, `left`, `right`, `level`, `added`, `changed`, `metakeywords`, `metadescription`, `cmsheadline`, `cmstext`, `template`, `active`, `blog`, `external`, `hidefilter`, `hidetop`, `mediaID`, `product_box_layout`, `meta_title`, `stream_id`, `hide_sortings`, `sorting_ids`, `facet_ids`, `external_target`) VALUES
     (4, 2, '|2|', 'Example 2', NULL, 0, 0, 0, '2017-10-05 14:56:02', '2017-10-05 14:56:02', NULL, '', '', '', NULL, 1, 0, '', 0, 0, NULL, NULL, '', 1, 0, NULL, NULL, '');

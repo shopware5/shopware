@@ -2,15 +2,15 @@
     .#{$prefix}form-trigger-wrap {
         vertical-align: top;
     }
-    
+
     .#{$prefix}form-trigger {
         background-image: theme-background-image($theme-name, 'form/trigger.gif');
-		background-position: 0 0;
-		
-		width: $form-trigger-width;
-		height: $form-trigger-height - $form-trigger-border-bottom-width;
+        background-position: 0 0;
 
-		border-bottom: $form-trigger-border-bottom;
+        width: $form-trigger-width;
+        height: $form-trigger-height - $form-trigger-border-bottom-width;
+
+        border-bottom: $form-trigger-border-bottom;
 
         cursor: pointer;
         cursor: hand;
@@ -29,62 +29,62 @@
         height: $form-toolbar-trigger-height;
     }
 
-    
+
     .#{$prefix}form-trigger-over {
-		background-position: -$form-trigger-width 0;
+        background-position: -$form-trigger-width 0;
 
-		border-bottom-color: $form-trigger-border-bottom-color-over;
+        border-bottom-color: $form-trigger-border-bottom-color-over;
     }
-    
+
     .#{$prefix}form-trigger-wrap-focus .#{$prefix}form-trigger {
-		background-position: -($form-trigger-width * 3) 0;
+        background-position: -($form-trigger-width * 3) 0;
 
-		border-bottom-color: $form-trigger-border-bottom-color-focus;
+        border-bottom-color: $form-trigger-border-bottom-color-focus;
     }
-    
+
     .#{$prefix}form-trigger-wrap-focus .#{$prefix}form-trigger-over {
         background-position: -($form-trigger-width * 4) 0;
-        
+
         @if $form-trigger-border-bottom-color-focus-over {
             border-bottom-color: $form-trigger-border-bottom-color-focus-over;
         }
     }
-    
+
     .#{$prefix}form-trigger-click,
     .#{$prefix}form-trigger-wrap-focus .#{$prefix}form-trigger-click {
-		background-position: -($form-trigger-width * 2) 0;
-		
-		@if $form-trigger-border-bottom-color-pressed {
-    		border-bottom-color: $form-trigger-border-bottom-color-pressed;
-    	}
+        background-position: -($form-trigger-width * 2) 0;
+
+        @if $form-trigger-border-bottom-color-pressed {
+            border-bottom-color: $form-trigger-border-bottom-color-pressed;
+        }
     }
 
     .#{$prefix}form-trigger-icon {
         height: $form-trigger-width - $form-trigger-border-bottom-width;
-        
+
         background-repeat: no-repeat;
         background-position: $form-trigger-icon-background-position;
     }
-    
+
     .#{$prefix}pickerfield-open {
         .#{$prefix}form-field {
             @include border-bottom-radius(0);
         }
     }
-    
+
     .#{$prefix}pickerfield-open-above {
         .#{$prefix}form-field {
             @include border-bottom-left-radius(3px);
             @include border-top-radius(0);
         }
     }
-    
+
     .#{$prefix}form-arrow-trigger {
         .#{$prefix}form-trigger-icon {
             background-image: theme-background-image($theme-name, 'boundlist/trigger-arrow.png');
         }
     }
-    
+
     .#{$prefix}form-date-trigger {
         background-image: theme-background-image($theme-name, 'form/date-trigger.gif');
     }
@@ -102,6 +102,7 @@
 
             border-bottom: 0;
         }
+
         .#{$prefix}form-spinner-down {
             background-position: 0 (-$spinner-btn-height);
         }
@@ -122,25 +123,31 @@
 
     .#{$prefix}field-default-toolbar {
         $spinner-btn-height: $form-toolbar-trigger-height / 2;
+
         .#{$prefix}form-trigger-wrap {
             .#{$prefix}form-spinner-up,
             .#{$prefix}form-spinner-down {
-               background-image: theme-background-image($theme-name, 'form/spinner-small.gif');
+                background-image: theme-background-image($theme-name, 'form/spinner-small.gif');
                 height: $spinner-btn-height !important;
             }
+
             .#{$prefix}form-spinner-down {
                 background-position: 0 (-$spinner-btn-height);
             }
         }
+
         .#{$prefix}form-trigger-wrap-focus .#{$prefix}form-spinner-down {
             background-position: -($form-trigger-width * 3) (-$spinner-btn-height);
         }
+
         .#{$prefix}form-trigger-wrap .#{$prefix}form-spinner-down-over {
             background-position: (-$form-trigger-width) (-$spinner-btn-height);
         }
+
         .#{$prefix}form-trigger-wrap-focus .#{$prefix}form-spinner-down-over {
             background-position: -($form-trigger-width * 4) (-$spinner-btn-height);
         }
+
         .#{$prefix}form-trigger-wrap .#{$prefix}form-spinner-down-click {
             background-position: -($form-trigger-width * 2) (-$spinner-btn-height);
         }
@@ -151,10 +158,10 @@
         cursor: pointer;
         cursor: hand;
     }
-    
+
     .#{$prefix}item-disabled {
         .#{$prefix}trigger-noedit, .#{$prefix}form-trigger {
-          cursor: auto;
+            cursor: auto;
         }
     }
 
@@ -170,10 +177,11 @@
         // in IE6 quirks, the table cell enclosing the trigger field's input element does not shrink to fit,
         // so it is necessary to set the height of the table cell.
         .#{$prefix}quirks .#{prefix}ie6 {
-            .#{$prefix}form-trigger-input-cell { 
+            .#{$prefix}form-trigger-input-cell {
                 height: $form-field-height;
             }
-            .#{$prefix}field-default-toolbar .#{$prefix}form-trigger-input-cell { 
+
+            .#{$prefix}field-default-toolbar .#{$prefix}form-trigger-input-cell {
                 height: $form-toolbar-field-height;
             }
         }

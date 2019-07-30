@@ -3,7 +3,7 @@ class Migrations_Migration354 Extends Shopware\Components\Migrations\AbstractMig
 {
     public function up($modus)
     {
-	    $sql = <<<'EOD'
+        $sql = <<<'EOD'
 INSERT INTO `s_library_component` (`name`, `x_type`, `convert_function`, `description`, `template`, `cls`, `pluginID`) VALUES
 ('HTML5 Video-Element', '', NULL, '', 'component_video', 'emotion--element-video', NULL);
 SET @parent = (SELECT id FROM `s_library_component` WHERE `cls`='emotion--element-video' LIMIT 1);

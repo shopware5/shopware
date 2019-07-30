@@ -31,6 +31,6 @@ INSERT INTO `s_order` (`id`, `ordernumber`, `userID`, `invoice_amount`, `invoice
     (6, '20006', 4, 120.00, 90.00, 4, 6, 0, 0, '2012-08-30 15:35:00', 0, 0, '', '', '', '', 0, 0, '', '', '', NULL, '', '1', 'EUR', 1, 1, '', NULL);
 
 INSERT INTO `s_premium_dispatch_categories` (`dispatchID`, `categoryID`) VALUES
-    (6,	2);
+    (6, 2);
 
 SET FOREIGN_KEY_CHECKS=1;

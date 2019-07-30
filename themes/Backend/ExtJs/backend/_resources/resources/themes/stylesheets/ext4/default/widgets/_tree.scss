@@ -4,7 +4,7 @@
     // They must not shrink wrap the width and only be as wide as their widest node's content.
     .#{$prefix}autowidth-table table.#{$prefix}grid-table {
         table-layout: auto;
-        width: auto!important;
+        width: auto !important;
     }
 
     .#{$prefix}tree-no-lines .#{$prefix}tree-elbow {
@@ -18,12 +18,12 @@
     .#{$prefix}tree-no-lines .#{$prefix}tree-elbow-line {
         background-color: transparent;
     }
-    
+
     //arrows
     .#{$prefix}tree-arrows .#{$prefix}tree-elbow-plus {
         background: transparent no-repeat 0 0;
     }
-    
+
     .#{$prefix}tree-arrows .#{$prefix}tree-elbow-end-plus {
         background: transparent no-repeat 0 0;
     }
@@ -35,19 +35,19 @@
     .#{$prefix}tree-arrows .#{$prefix}tree-elbow-minus {
         background: transparent no-repeat -16px 0;
     }
-    
+
     .#{$prefix}tree-arrows .#{$prefix}tree-elbow {
         background-color: transparent !important;
     }
-    
+
     .#{$prefix}tree-arrows .#{$prefix}tree-elbow-end {
         background-color: transparent !important;
     }
-    
+
     .#{$prefix}tree-arrows .#{$prefix}tree-elbow-line {
         background-color: transparent !important;
     }
-    
+
     //elbows
     .#{$prefix}tree-arrows .#{$prefix}tree-expander-over .#{$prefix}tree-elbow-plus,
     .#{$prefix}tree-arrows .#{$prefix}tree-expander-over .#{$prefix}tree-elbow-end-plus {
@@ -58,12 +58,12 @@
     .#{$prefix}tree-arrows .#{$prefix}tree-expander-over .#{$prefix}tree-elbow-end-minus {
         background-position: -48px 0;
     }
-    
+
     .#{$prefix}tree-arrows .#{$prefix}grid-tree-node-expanded .#{$prefix}tree-elbow-plus,
     .#{$prefix}tree-arrows .#{$prefix}grid-tree-node-expanded .#{$prefix}tree-elbow-end-plus {
         background-position: -16px 0;
     }
-    
+
     .#{$prefix}tree-arrows .#{$prefix}grid-tree-node-expanded .#{$prefix}tree-expander-over .#{$prefix}tree-elbow-plus,
     .#{$prefix}tree-arrows .#{$prefix}grid-tree-node-expanded .#{$prefix}tree-expander-over .#{$prefix}tree-elbow-end-plus {
         background-position: -48px 0;
@@ -72,16 +72,16 @@
     .#{$prefix}tree-elbow-plus,
     .#{$prefix}tree-elbow-minus,
     .#{$prefix}tree-elbow-end-plus,
-    .#{$prefix}tree-elbow-end-minus{
+    .#{$prefix}tree-elbow-end-minus {
         cursor: pointer;
     }
-    
+
     //elbows
     .#{$prefix}tree-lines {
         .#{$prefix}tree-elbow {
             background-image: theme-background-image($theme-name, 'tree/elbow.gif');
         }
-        
+
         .#{$prefix}tree-elbow-end {
             background-image: theme-background-image($theme-name, 'tree/elbow-end.gif');
         }
@@ -101,16 +101,16 @@
         .#{$prefix}grid-tree-node-expanded .#{$prefix}tree-elbow-end-plus {
             background-image: theme-background-image($theme-name, 'tree/elbow-end-minus.gif');
         }
-        
+
         .#{$prefix}tree-elbow-line {
             background-image: theme-background-image($theme-name, 'tree/elbow-line.gif');
         }
     }
-    
+
     .#{$prefix}tree-no-lines {
         .#{$prefix}tree-elbow-plus,
         .#{$prefix}tree-elbow-end-plus {
-        	background-image: theme-background-image($theme-name, 'tree/elbow-plus-nl.gif');
+            background-image: theme-background-image($theme-name, 'tree/elbow-plus-nl.gif');
         }
 
         .#{$prefix}grid-tree-node-expanded .#{$prefix}tree-elbow-plus,
@@ -118,7 +118,7 @@
             background-image: theme-background-image($theme-name, 'tree/elbow-end-minus-nl.gif');
         }
     }
-    
+
     .#{$prefix}tree-arrows {
         .#{$prefix}tree-elbow-plus,
         .#{$prefix}tree-elbow-minus,
@@ -127,7 +127,7 @@
             background-image: theme-background-image($theme-name, 'tree/arrows.gif');
         }
     }
-    
+
     .#{$prefix}tree-icon {
         margin: $tree-icon-margin-top $tree-icon-margin-right 0 0;
     }
@@ -157,7 +157,7 @@
             background-position: 0 -1px;
         }
     }
- 
+
     .#{$prefix}tree-icon-leaf {
         width: $tree-elbow-width;
         background-image: theme-background-image($theme-name, 'tree/leaf.gif');
@@ -167,15 +167,15 @@
         width: $tree-elbow-width;
         background-image: theme-background-image($theme-name, 'tree/folder.gif');
     }
-    
+
     .#{$prefix}grid-tree-node-expanded .#{$prefix}tree-icon-parent {
         background-image: theme-background-image($theme-name, 'tree/folder-open.gif');
     }
-    
+
     .#{$prefix}grid-rowbody {
         padding: 0;
     }
-    
+
     .#{$prefix}grid-cell-treecolumn .#{$prefix}grid-cell-inner {
         padding: 0;
         line-height: $tree-elbow-height - 1;
@@ -187,6 +187,7 @@
 
     .#{$prefix}tree-panel .#{$prefix}grid-cell-inner {
         cursor: pointer;
+
         img {
             display: inline-block;
             vertical-align: top;
@@ -226,7 +227,7 @@
             padding-right: $grid-cell-treecolumn-editor-field-padding-horizontal + 1px;
         }
     }
-    
+
     .#{$prefix}tree-checkbox {
         margin: $tree-checkbox-margin-top $tree-checkbox-margin-right 0 0;
         display: inline-block;
@@ -240,6 +241,7 @@
         overflow: hidden;
         padding: 0;
         border: 0;
+
         &::-moz-focus-inner {
             padding: 0;
             border: 0;
@@ -269,7 +271,7 @@
     .#{$prefix}tree-drop-ok-between .#{$prefix}dd-drop-icon {
         background-image: theme-background-image($theme-name, 'tree/drop-between.gif');
     }
-    
+
     .#{$prefix}grid-tree-loading .#{$prefix}tree-icon {
         background-image: theme-background-image($theme-name, 'tree/loading.gif');
     }
@@ -280,12 +282,12 @@
         border-style: dotted;
         border-color: green;
     }
-        
+
     .#{$prefix}grid-tree-loading span {
-    	 font-style: italic;
-    	 color: #444444;
+        font-style: italic;
+        color: #444444;
     }
-    
+
     .#{$prefix}tree-animator-wrap {
         overflow: hidden;
     }

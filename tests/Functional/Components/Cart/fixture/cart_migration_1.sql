@@ -1,3 +1,3 @@
 INSERT INTO `s_order_basket` (`id`, `sessionID`, `userID`, `articlename`, `articleID`, `ordernumber`, `shippingfree`, `quantity`, `price`, `netprice`, `tax_rate`, `datum`, `modus`, `esdarticle`, `partnerID`, `lastviewport`, `useragent`, `config`, `currencyFactor`) VALUES
-(NULL,	'52f0cf0e9f3737fd42f8371ec79fbd5a',	1,	'Münsterländer Aperitif 16%',	3,	'SW10003',	0,	1,	14.95,	12.563025210084,	19,	'2019-04-05 09:09:54',	0,	0,	'',	'account',	'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36',	'',	1),
-(NULL,	'52f0cf0e9f3737fd42f8371ec79fbd5a',	0,	'Warenkorbrabatt',	0,	'SHIPPINGDISCOUNT',	0,	1,	-2,	-1.68,	19,	'2019-04-05 09:10:30',	4,	0,	'',	'',	'',	'',	1);
+(NULL, '52f0cf0e9f3737fd42f8371ec79fbd5a', 1, 'Münsterländer Aperitif 16%', 3, 'SW10003', 0, 1, 14.95, 12.563025210084, 19, '2019-04-05 09:09:54', 0, 0, '', 'account', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36', '', 1),
+(NULL, '52f0cf0e9f3737fd42f8371ec79fbd5a', 0, 'Warenkorbrabatt', 0, 'SHIPPINGDISCOUNT', 0, 1, -2, -1.68, 19, '2019-04-05 09:10:30', 4, 0, '', '', '', '', 1);
