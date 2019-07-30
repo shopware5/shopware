@@ -360,6 +360,11 @@
         onSubmit: function (event) {
             var me = this;
 
+            //we need to abort previous request
+            if (me.lastSearchAjax) {
+                me.lastSearchAjax.abort();
+            }
+
             if (me._isSubmitting) {
                 event.preventDefault();
                 return;
@@ -386,6 +391,11 @@
 
             if (me.lastSearchAjax) {
                 me.lastSearchAjax.abort();
+            }
+
+            //we don't need this, cause submitting is in process
+            if (me._isSubmitting) {
+                return;
             }
 
             me.lastSearchAjax = $.ajax({
