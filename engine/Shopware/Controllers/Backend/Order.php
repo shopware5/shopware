@@ -989,18 +989,42 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         }
 
         $mail = clone $this->container->get('mail');
-        $mail = $this->addAttachments($mail, $orderId, $attachments);
         $mail->clearRecipients();
-        $mail->setSubject($this->Request()->getParam('subject', ''));
 
-        if ($this->Request()->getParam('isHtml')) {
-            $mail->setBodyHtml($this->Request()->getParam('contentHtml', ''));
+        $mailData = [
+            'attachments' => $attachments,
+            'subject' => $this->Request()->getParam('subject', ''),
+            'fromMail' => $this->Request()->getParam('fromMail'),
+            'fromName' => $this->Request()->getParam('fromName'),
+            'to' => [$this->Request()->getParam('to')],
+            'isHtml' => $this->Request()->getParam('isHtml'),
+            'bodyHtml' => $this->Request()->getParam('contentHtml', ''),
+            'bodyText' => $this->Request()->getParam('content', ''),
+        ];
+
+        /** @var Enlight_Event_EventManager $events */
+        $events = $this->get('events');
+        $mailData = $events->filter(
+            'Shopware_Controllers_Order_SendMail_Prepare',
+            $mailData,
+            [
+                'subject' => $this,
+                'orderId' => $orderId,
+                'mail' => $mail,
+            ]
+        );
+
+        $mail->setSubject($mailData['subject']);
+
+        $mail->setFrom($mailData['fromMail'], $mailData['fromName']);
+        $mail->addTo($mailData['to']);
+
+        if ($mailData['isHtml']) {
+            $mail->setBodyHtml($mailData['bodyHtml']);
         } else {
-            $mail->setBodyText($this->Request()->getParam('content', ''));
+            $mail->setBodyText($mailData['bodyText']);
         }
-
-        $mail->setFrom($this->Request()->getParam('fromMail', ''), $this->Request()->getParam('fromName', ''));
-        $mail->addTo($this->Request()->getParam('to', ''));
+        $mail = $this->addAttachments($mail, $orderId, $mailData['attachments']);
 
         $mail->setAssociation(LogEntryBuilder::ORDER_ID_ASSOCIATION, $orderId);
 
