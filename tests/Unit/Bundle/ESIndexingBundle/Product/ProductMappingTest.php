@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\Bundle\ESIndexingBundle\Property;
+namespace Shopware\Tests\Unit\Bundle\ESIndexingBundle\Product;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
@@ -30,11 +30,13 @@ use Shopware\Bundle\ESIndexingBundle\FieldMapping;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\Product\ProductMapping;
 use Shopware\Bundle\ESIndexingBundle\TextMapping\TextMappingES6;
+use Shopware\Bundle\SearchBundle\Facet\VariantFacet;
+use Shopware\Bundle\SearchBundleDBAL\VariantHelper;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 class ProductMappingTest extends TestCase
 {
-    public function testDynamicIsTrueInDefault()
+    public function testDynamicIsTrueInDefault(): void
     {
         $identifierSelector = $this->getIdentifierSelector();
 
@@ -43,14 +45,14 @@ class ProductMappingTest extends TestCase
         $crudService = $this->getCrudService();
         $shop = $this->getMockBuilder(Shop::class)->disableOriginalConstructor()->getMock();
 
-        $productMapping = new ProductMapping($identifierSelector, $fieldMapping, $textMapping, $crudService);
+        $productMapping = new ProductMapping($identifierSelector, $fieldMapping, $textMapping, $crudService, $this->getVariantHelper());
 
         $mapping = $productMapping->get($shop);
 
         static::assertTrue($mapping['dynamic']);
     }
 
-    public function testDynamicIsFalseWhenFalseIsPassed()
+    public function testDynamicIsFalseWhenFalseIsPassed(): void
     {
         $identifierSelector = $this->getIdentifierSelector();
 
@@ -64,6 +66,7 @@ class ProductMappingTest extends TestCase
             $fieldMapping,
             $textMapping,
             $crudService,
+            $this->getVariantHelper(),
             false
         );
 
@@ -72,7 +75,7 @@ class ProductMappingTest extends TestCase
         static::assertFalse($mapping['dynamic']);
     }
 
-    public function testDynamicIsTrueWhenTrueIsPassed()
+    public function testDynamicIsTrueWhenTrueIsPassed(): void
     {
         $identifierSelector = $this->getIdentifierSelector();
 
@@ -86,6 +89,7 @@ class ProductMappingTest extends TestCase
             $fieldMapping,
             $textMapping,
             $crudService,
+            $this->getVariantHelper(),
             true
         );
 
@@ -94,10 +98,83 @@ class ProductMappingTest extends TestCase
         static::assertTrue($mapping['dynamic']);
     }
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    public function getIdentifierSelector()
+    public function testVariantMappingWithOneOption(): void
+    {
+        $identifierSelector = $this->getIdentifierSelector();
+
+        $fieldMapping = $this->getMockBuilder(FieldMapping::class)->disableOriginalConstructor()->getMock();
+        $textMapping = new TextMappingES6();
+        $crudService = $this->getCrudService();
+        $shop = $this->getMockBuilder(Shop::class)->disableOriginalConstructor()->getMock();
+
+        $productMapping = new ProductMapping(
+            $identifierSelector,
+            $fieldMapping,
+            $textMapping,
+            $crudService,
+            $this->getVariantHelper([1]),
+            true
+        );
+
+        $mapping = $productMapping->get($shop);
+
+        static::assertArrayHasKey('g1', $mapping['properties']['visibility']['properties']);
+    }
+
+    public function testVariantMappingWithTwoOptions(): void
+    {
+        $identifierSelector = $this->getIdentifierSelector();
+
+        $fieldMapping = $this->getMockBuilder(FieldMapping::class)->disableOriginalConstructor()->getMock();
+        $textMapping = new TextMappingES6();
+        $crudService = $this->getCrudService();
+        $shop = $this->getMockBuilder(Shop::class)->disableOriginalConstructor()->getMock();
+
+        $productMapping = new ProductMapping(
+            $identifierSelector,
+            $fieldMapping,
+            $textMapping,
+            $crudService,
+            $this->getVariantHelper([1, 2]),
+            true
+        );
+
+        $mapping = $productMapping->get($shop);
+
+        static::assertArrayHasKey('g1', $mapping['properties']['visibility']['properties']);
+        static::assertArrayHasKey('g2', $mapping['properties']['visibility']['properties']);
+        static::assertArrayHasKey('g1-2', $mapping['properties']['visibility']['properties']);
+    }
+
+    public function testVariantMappingWithThreeOptions(): void
+    {
+        $identifierSelector = $this->getIdentifierSelector();
+
+        $fieldMapping = $this->getMockBuilder(FieldMapping::class)->disableOriginalConstructor()->getMock();
+        $textMapping = new TextMappingES6();
+        $crudService = $this->getCrudService();
+        $shop = $this->getMockBuilder(Shop::class)->disableOriginalConstructor()->getMock();
+
+        $productMapping = new ProductMapping(
+            $identifierSelector,
+            $fieldMapping,
+            $textMapping,
+            $crudService,
+            $this->getVariantHelper([1, 2, 3]),
+            true
+        );
+
+        $mapping = $productMapping->get($shop);
+
+        static::assertArrayHasKey('g1', $mapping['properties']['visibility']['properties']);
+        static::assertArrayHasKey('g2', $mapping['properties']['visibility']['properties']);
+        static::assertArrayHasKey('g3', $mapping['properties']['visibility']['properties']);
+        static::assertArrayHasKey('g1-2', $mapping['properties']['visibility']['properties']);
+        static::assertArrayHasKey('g1-3', $mapping['properties']['visibility']['properties']);
+        static::assertArrayHasKey('g2-3', $mapping['properties']['visibility']['properties']);
+    }
+
+    public function getIdentifierSelector(): IdentifierSelector
     {
         $identifierSelector = $this->createMock(IdentifierSelector::class);
 
@@ -107,15 +184,20 @@ class ProductMappingTest extends TestCase
         return $identifierSelector;
     }
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    public function getCrudService()
+    public function getCrudService(): CrudService
     {
         $crudService = $this->createMock(CrudService::class);
 
         $crudService->method('getList')->willReturn([]);
 
         return $crudService;
+    }
+
+    public function getVariantHelper(array $options = []): VariantHelper
+    {
+        $variantHelper = $this->createMock(VariantHelper::class);
+        $variantHelper->method('getVariantFacet')->willReturn(new VariantFacet($options));
+
+        return $variantHelper;
     }
 }

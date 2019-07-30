@@ -29,6 +29,7 @@ use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\ProviderInterface;
 use Shopware\Bundle\ESIndexingBundle\Struct\Product;
+use Shopware\Bundle\SearchBundle\Facet\VariantFacet;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PropertyHydrator;
@@ -42,7 +43,6 @@ use Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -215,39 +215,7 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
             $id = $product->getId();
 
             if ($variantFacet) {
-                if (array_key_exists($number, $variantConfiguration)) {
-                    $product->setConfiguration($variantConfiguration[$number]);
-                }
-                if (array_key_exists($id, $configurations)) {
-                    $product->setFullConfiguration($configurations[$id]);
-                }
-                if (array_key_exists($id, $combinations)) {
-                    $product->setAvailableCombinations($combinations[$id]);
-                }
-
-                if ($product->getConfiguration()) {
-                    $product->setVisibility(
-                        $this->listingVariationLoader->getVisibility($product, $variantFacet)
-                    );
-
-                    $product->setFilterConfiguration(
-                        $this->buildFilterConfiguration(
-                            $variantFacet->getExpandGroupIds(),
-                            $product->getConfiguration(),
-                            $product->getFullConfiguration()
-                        )
-                    );
-
-                    if (array_key_exists($product->getNumber(), $listingPrices)) {
-                        $product->setListingVariationPrices(
-                            $listingPrices[$product->getNumber()]
-                        );
-                    }
-
-                    if (array_key_exists($number, $availability)) {
-                        $product->setAvailability($availability[$number]);
-                    }
-                }
+                $this->addVariantSearchDetails($product, $configurations, $variantFacet, $variantConfiguration, $combinations, $listingPrices, $availability);
             } elseif (!$product->isMainVariant()) {
                 continue;
             } elseif ($listProduct->getStock() < $listProduct->getUnit()->getMinPurchase()) {
@@ -286,12 +254,15 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
 
             $product->setCreatedAt(null);
             $product->setUpdatedAt(null);
+
             $product->setReleaseDate(null);
             $product->setPrices(null);
             $product->setPriceRules(null);
             $product->setCheapestPriceRule(null);
             $product->setCheapestPrice(null);
             $product->setCheapestUnitPrice(null);
+            $product->setAvailableCombinations(null);
+            $product->setFullConfiguration(null);
             $product->resetStates();
 
             if (!$this->isValid($shop, $product)) {
@@ -303,10 +274,65 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
         return $result;
     }
 
-    /**
-     * @return string|null
-     */
-    private function formatDate(\DateTimeInterface $date = null)
+    protected function addVariantSearchDetails(
+        Product $product,
+        array $configurations,
+        VariantFacet $variantFacet,
+        array $variantConfiguration,
+        array $combinations,
+        array $listingPrices,
+        array $availability
+    ) {
+        $id = $product->getId();
+        $number = $product->getNumber();
+
+        if (!array_key_exists($id, $configurations)) {
+            return;
+        }
+
+        $groupIds = array_map(function (Group $group) {
+            return $group->getId();
+        }, $configurations[$id]);
+
+        if (!$this->neededToIndex($groupIds, $variantFacet)) {
+            return;
+        }
+
+        $product->setFullConfiguration($configurations[$id]);
+
+        if (array_key_exists($number, $variantConfiguration)) {
+            $product->setConfiguration($variantConfiguration[$number]);
+        }
+        if (array_key_exists($id, $combinations)) {
+            $product->setAvailableCombinations($combinations[$id]);
+        }
+
+        if ($product->getConfiguration()) {
+            $product->setVisibility(
+                $this->listingVariationLoader->getVisibility($product, $variantFacet)
+            );
+
+            $product->setFilterConfiguration(
+                $this->buildFilterConfiguration(
+                    $variantFacet->getExpandGroupIds(),
+                    $product->getConfiguration(),
+                    $product->getFullConfiguration()
+                )
+            );
+
+            if (array_key_exists($product->getNumber(), $listingPrices)) {
+                $product->setListingVariationPrices(
+                    $listingPrices[$product->getNumber()]
+                );
+            }
+
+            if (array_key_exists($number, $availability)) {
+                $product->setAvailability($availability[$number]);
+            }
+        }
+    }
+
+    private function formatDate(\DateTimeInterface $date = null): ?string
     {
         return !$date ? null : $date->format('Y-m-d');
     }
@@ -316,7 +342,7 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
      *
      * @return array[]
      */
-    private function getCategories($products)
+    private function getCategories($products): array
     {
         $ids = array_map(function (BaseProduct $product) {
             return (int) $product->getId();
@@ -351,10 +377,8 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
 
     /**
      * @param ListProduct[] $products
-     *
-     * @return array[]
      */
-    private function getProperties($products, ShopContextInterface $context)
+    private function getProperties(array $products, ShopContextInterface $context): array
     {
         $ids = array_map(function (ListProduct $product) {
             return $product->getId();
@@ -389,7 +413,7 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
 
         $hydrator = $this->propertyHydrator;
         foreach ($data as $productId => $values) {
-            $options = array_map(function ($row) use ($hydrator) {
+            $options = array_map(static function ($row) use ($hydrator) {
                 return $hydrator->hydrateOption($row);
             }, $values);
             $properties[$productId] = $options;
@@ -400,11 +424,8 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
 
     /**
      * @param ListProduct[] $products
-     * @param int           $shopId
-     *
-     * @return array[]
      */
-    private function getCheapestPrices($products, $shopId)
+    private function getCheapestPrices(array $products, int $shopId): array
     {
         $keys = $this->identifierSelector->getCustomerGroupKeys();
         $prices = [];
@@ -420,13 +441,9 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
     }
 
     /**
-     * @param Shop          $shop
      * @param ListProduct[] $products
-     * @param array         $priceRules
-     *
-     * @return array
      */
-    private function getCalculatedPrices($shop, $products, $priceRules)
+    private function getCalculatedPrices(Shop $shop, array $products, array $priceRules): array
     {
         $contexts = $this->getPriceContexts($shop);
 
@@ -454,6 +471,8 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
                 $this->priceCalculationService->calculateProduct($product, $context);
 
                 if ($product->getCheapestPrice()) {
+                    $product->getCheapestPrice()->setRule(null);
+
                     $prices[$number][$key] = $product->getCheapestPrice();
                 }
             }
@@ -463,13 +482,10 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
     }
 
     /**
-     * @param int      $shopId
      * @param string[] $customerGroups
      * @param int[]    $currencies
-     *
-     * @return array
      */
-    private function getContexts($shopId, $customerGroups, $currencies)
+    private function getContexts(int $shopId, array $customerGroups, array $currencies): array
     {
         $contexts = [];
         foreach ($customerGroups as $customerGroup) {
@@ -481,12 +497,7 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
         return $contexts;
     }
 
-    /**
-     * @param Product $product
-     *
-     * @return bool
-     */
-    private function isValid(Shop $shop, $product)
+    private function isValid(Shop $shop, $product): bool
     {
         $valid = in_array($shop->getCategory()->getId(), $product->getCategoryIds());
         if (!$valid) {
@@ -496,10 +507,7 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
         return true;
     }
 
-    /**
-     * @return array
-     */
-    private function getPriceContexts(Shop $shop)
+    private function getPriceContexts(Shop $shop): array
     {
         $currencies = $this->identifierSelector->getShopCurrencyIds($shop->getId());
         if (!$shop->isMain()) {
@@ -515,10 +523,8 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
      * @param int[]   $expandGroupIds
      * @param Group[] $configurations
      * @param Group[] $fullConfiguration
-     *
-     * @return array
      */
-    private function buildFilterConfiguration(array $expandGroupIds, array $configurations, array $fullConfiguration)
+    private function buildFilterConfiguration(array $expandGroupIds, array $configurations, array $fullConfiguration): array
     {
         $merged = [];
         foreach ($configurations as $config) {
@@ -533,12 +539,9 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
     }
 
     /**
-     * @param int     $id
      * @param Group[] $groups
-     *
-     * @return Group|null
      */
-    private function getFullConfigurationGroup($id, $groups)
+    private function getFullConfigurationGroup(int $id, array $groups): ?Group
     {
         foreach ($groups as $group) {
             if ($group->getId() === $id) {
@@ -549,10 +552,7 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
         return null;
     }
 
-    /**
-     * @return array
-     */
-    private function parseAttributes(array $attributes)
+    private function parseAttributes(array $attributes): array
     {
         if (!isset($attributes['core'])) {
             return $attributes;
@@ -568,7 +568,7 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
                 $value = $attributes['core']->get($columnName);
 
                 if ($attributeConfig->getColumnType() === 'boolean') {
-                    $value = $value === '1' ? true : false;
+                    $value = $value === '1';
                 }
 
                 $attributes['core']->set($columnName, $value);
@@ -576,5 +576,16 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
         }
 
         return $attributes;
+    }
+
+    private function neededToIndex(array $groups, VariantFacet $variantFacet): bool
+    {
+        foreach ($groups as $group) {
+            if (in_array($group, $variantFacet->getGroupIds(), true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
