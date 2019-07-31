@@ -449,19 +449,25 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 statisticList.fromDate.setValue(statisticList.fromDate.initialConfig.value);
                 statisticList.toDate.setValue(statisticList.toDate.initialConfig.value);
 
+                var originalFilterGroupId = article.get('filterGroupId');
+
                 var propertiesTab = me.getPropertiesTab();
                 propertiesTab.article = article;
                 propertiesTab.setComboBox.setValue('');
                 propertiesTab.groupComboBox.setValue('');
                 propertiesTab.valueComboBox.setValue('');
-                propertiesTab.loadRecord(article);
 
                 var propertyStore = Ext.data.StoreManager.lookup('Property');
                 propertiesTab.propertyGrid.reconfigure(propertyStore);
 
-                if (article.get('filterGroupId')) {
+                if (originalFilterGroupId) {
                     propertiesTab.propertySetStore.load({
-                        id: article.get('filterGroupId')
+                        id: originalFilterGroupId,
+                        callback: function () {
+                            article.set('filterGroupId', originalFilterGroupId);
+
+                            propertiesTab.loadRecord(article);
+                        }
                     });
                 }
 

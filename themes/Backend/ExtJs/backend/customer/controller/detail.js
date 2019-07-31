@@ -113,6 +113,9 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                 create: me.onCreateCustomer,
                 itemdblclick: me.onGridDblClick
             },
+            'customer-stream-preview-list': {
+                edit: me.onEditCustomer,
+            },
             'customer-detail-window button[action=save-customer]': {
                 click: me.onSaveCustomer
             },
