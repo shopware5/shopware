@@ -104,7 +104,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.PayPal', {
                 {
                     xtype: 'container',
                     html: me.renderTemplate('{url controller=FirstRunWizard action=payPalStartView}'),
-                    height: '315px',
+                    height: '325px',
                     style: {
                         margin: 0,
                     },
