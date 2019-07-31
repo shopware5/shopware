@@ -1,29 +1,29 @@
 {
-  "private": true,
-  "scripts": {
-    "lint": "eslint Frontend/Responsive/frontend/_public/src/js",
-    "lintBackend": "eslint Backend/ExtJs/backend",
-    "fix": "eslint --fix Frontend/Responsive/frontend/_public/src/js",
-    "fixBackend": "eslint --fix Backend/ExtJs/backend",
-    "configFrontend": "eslint --print-config .",
-    "configBackend": "eslint --print-config Backend/ExtJs/backend"
-  },
-  "devDependencies": {
-    "eslint": "^5.16.0",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-node": "^4.2.2",
-    "grunt": "^1.0.1",
-    "grunt-chokidar": "^1.0.0",
-    "grunt-contrib-less": "^1.4.1",
-    "grunt-contrib-uglify": "^2.3.0",
-    "grunt-file-exists": "^0.1.4",
-    "gruntify-eslint": "^3.1.0",
-    "grunt-subgrunt": "^1.2.0",
-    "grunt-contrib-eslint": "0.0.5",
-    "load-grunt-config": "^0.19.2",
-    "jit-grunt": "^0.10.0"
-  }
+    "private": true,
+    "scripts": {
+        "lint": "eslint Frontend/Responsive/frontend/_public/src/js",
+        "lintBackend": "eslint Backend/ExtJs/backend",
+        "fix": "eslint --fix Frontend/Responsive/frontend/_public/src/js",
+        "fixBackend": "eslint --fix Backend/ExtJs/backend",
+        "configFrontend": "eslint --print-config .",
+        "configBackend": "eslint --print-config Backend/ExtJs/backend"
+    },
+    "devDependencies": {
+        "eslint": "5.16.0",
+        "eslint-config-standard": "13.0.1",
+        "eslint-plugin-promise": "4.2.1",
+        "eslint-plugin-standard": "4.0.0",
+        "eslint-plugin-import": "2.18.2",
+        "eslint-plugin-node": "9.1.0",
+        "grunt": "1.0.4",
+        "grunt-chokidar": "1.0.1",
+        "grunt-contrib-less": "2.0.0",
+        "grunt-contrib-uglify": "4.0.1",
+        "grunt-file-exists": "0.1.4",
+        "gruntify-eslint": "5.0.0",
+        "grunt-subgrunt": "1.3.0",
+        "grunt-contrib-eslint": "0.0.5",
+        "load-grunt-config": "2.0.1",
+        "jit-grunt": "0.10.0"
+    }
 }
