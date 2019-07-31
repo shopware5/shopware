@@ -369,13 +369,13 @@ class Document extends ModelEntity
     /**
      * Sets the form-elements.
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Document\Element> $elements
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Document\Element>|Element[] $elements
      *
      * @return Document
      */
     public function setElements($elements)
     {
-        $this->elements = $elements;
+        $this->setOneToMany($elements, \Shopware\Models\Document\Element::class, 'elements', 'document');
 
         return $this;
     }
