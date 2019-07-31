@@ -183,6 +183,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed the emotion detail window to be resizable
 * Changed the generation of `.tmp` files for compiled theme cache
 * Changed the `Shopware_Components_Config` to use Doctrine DBAL instead of Zend_Db
+* Changed ajax-search to cancel ajax request, when submit button is pressed
 
 ### Removals
 
