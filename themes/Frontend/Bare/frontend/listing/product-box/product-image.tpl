@@ -20,6 +20,7 @@
                         {block name='frontend_listing_box_article_image_picture_element'}
                             <img srcset="{$sArticle.image.thumbnails[0].sourceSet}"
                                  alt="{$desc}"
+                                 data-extension="{$sArticle.image.extension}"
                                  title="{$desc|truncate:160}" />
                         {/block}
                     {else}

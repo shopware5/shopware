@@ -13,6 +13,9 @@
             <div class="blog--detail-images block">
                 <a href="{$sArticle.preview.source}"
                    data-lightbox="true"
+                   {if $sArticle.preview.extension === 'svg'}
+                   data-is-svg='true'
+                   {/if}
                    title="{$alt}"
                    class="link--blog-image">
 

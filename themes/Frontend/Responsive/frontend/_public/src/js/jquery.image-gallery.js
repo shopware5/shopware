@@ -449,14 +449,17 @@
             var me = this,
                 $template,
                 $el,
+                $mediaEl,
                 img;
 
             me._$imageContainerClone.find('span[data-img-original]').each(function (i, el) {
                 $el = $(el);
+                $mediaEl = $el.find('.image--media');
 
                 img = $('<img>', {
                     'class': 'image--element',
-                    'src': $el.attr('data-img-original')
+                    'src': $el.attr('data-img-original'),
+                    'data-extension': $mediaEl.hasClass('image--svg') ? 'svg' : ''
                 });
 
                 $el.replaceWith(img);
