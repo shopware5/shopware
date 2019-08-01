@@ -217,32 +217,26 @@ class Cache extends Resource implements BatchInterface
                 $this->cacheManager->clearHttpCache();
                 break;
             case 'config':
-                $tags[] = 'Shopware_Config';
-                $tags[] = 'Shopware_Plugin';
+                $tags[] = CacheManager::ITEM_TAG_CONFIG;
+                $tags[] = CacheManager::ITEM_TAG_PLUGIN;
                 $this->cacheManager->clearConfigCache();
                 break;
             case 'template':
                 $this->cacheManager->clearTemplateCache();
                 break;
             case 'backend':
-                $tags[] = 'Shopware_Config';
-                $tags[] = 'Shopware_Plugin';
+                $tags[] = CacheManager::ITEM_TAG_CONFIG;
+                $tags[] = CacheManager::ITEM_TAG_PLUGIN;
                 $this->cacheManager->clearTemplateCache();
                 break;
             case 'proxy':
-                $tags[] = 'Shopware_Models';
-                $this->cacheManager->clearProxyCache();
-                break;
             case 'doctrine-proxy':
-                $tags[] = 'Shopware_Models';
-                $this->cacheManager->clearProxyCache();
-                break;
             case 'doctrine-file':
-                $tags[] = 'Shopware_Models';
+                $tags[] = CacheManager::ITEM_TAG_MODELS;
                 $this->cacheManager->clearProxyCache();
                 break;
             case 'search':
-                $tags[] = 'Shopware_Modules_Search';
+                $tags[] = CacheManager::ITEM_TAG_SEARCH;
                 $this->cacheManager->clearSearchCache();
                 break;
             case 'rewrite':

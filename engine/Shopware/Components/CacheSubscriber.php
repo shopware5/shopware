@@ -72,12 +72,12 @@ class CacheSubscriber implements SubscriberInterface
 
     private function addTagsConfigValue(Value $value): void
     {
-        if (!$value->getElement()->getForm() || !$value->getElement()->getForm()->getPlugin()) {
+        if (!$value->getElement()->getFormId() || !$value->getElement()->getForm()->getPlugin()) {
             return;
         }
 
         $name = strtolower($value->getElement()->getForm()->getPlugin()->getName());
 
-        $this->clearTags['Shopware_Plugin_Config_' . $name] = true;
+        $this->clearTags[CacheManager::ITEM_TAG_PLUGIN_CONFIG . $name] = true;
     }
 }

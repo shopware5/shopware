@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Plugin;
 
+use Shopware\Components\CacheManager;
 use Shopware\Models\Shop\Shop;
 use Zend_Cache_Core as Cache;
 
@@ -62,7 +63,7 @@ class CachedConfigReader implements ConfigReader
 
         $config = $this->reader->getByPluginName($pluginName, $shop);
 
-        $this->cache->save($config, $cacheKey, ['Shopware_Config', 'Shopware_Plugin_Config_' . strtolower($pluginName)], 86400);
+        $this->cache->save($config, $cacheKey, [CacheManager::ITEM_TAG_CONFIG, CacheManager::ITEM_TAG_PLUGIN_CONFIG . strtolower($pluginName)], 86400);
 
         return $config;
     }

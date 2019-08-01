@@ -29,19 +29,19 @@ use Shopware\Components\Theme\PathResolver;
 
 class CacheManager
 {
-    const CACHE_TAG_TEMPLATE = 'template';
+    public const CACHE_TAG_TEMPLATE = 'template';
+    public const CACHE_TAG_CONFIG = 'config';
+    public const CACHE_TAG_ROUTER = 'router';
+    public const CACHE_TAG_PROXY = 'proxy';
+    public const CACHE_TAG_THEME = 'theme';
+    public const CACHE_TAG_HTTP = 'http';
+    public const CACHE_TAG_SEARCH = 'search';
 
-    const CACHE_TAG_CONFIG = 'config';
-
-    const CACHE_TAG_ROUTER = 'router';
-
-    const CACHE_TAG_PROXY = 'proxy';
-
-    const CACHE_TAG_THEME = 'theme';
-
-    const CACHE_TAG_HTTP = 'http';
-
-    const CACHE_TAG_SEARCH = 'search';
+    public const ITEM_TAG_CONFIG = 'Shopware_Config';
+    public const ITEM_TAG_PLUGIN = 'Shopware_Plugin';
+    public const ITEM_TAG_MODELS = 'Shopware_Models';
+    public const ITEM_TAG_SEARCH = 'Shopware_Modules_Search';
+    public const ITEM_TAG_PLUGIN_CONFIG = 'Shopware_Plugin_Config_';
 
     /**
      * @var Container
@@ -189,8 +189,8 @@ class CacheManager
             $this->cache->clean(
                 \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
                 [
-                    'Shopware_Config',
-                    'Shopware_Plugin',
+                    self::ITEM_TAG_CONFIG,
+                    self::ITEM_TAG_PLUGIN,
                 ]
             );
         } else {

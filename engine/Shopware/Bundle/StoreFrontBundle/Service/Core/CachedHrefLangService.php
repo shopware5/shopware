@@ -26,6 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Shopware\Bundle\StoreFrontBundle\Service\HrefLangServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\CacheManager;
 use Zend_Cache_Core as Cache;
 
 class CachedHrefLangService implements HrefLangServiceInterface
@@ -60,7 +61,7 @@ class CachedHrefLangService implements HrefLangServiceInterface
 
         $urls = $this->hrefLangService->getUrls($parameters, $contextService);
 
-        $this->cache->save($urls, $cacheKey, ['Shopware_Config'], 86400);
+        $this->cache->save($urls, $cacheKey, [CacheManager::ITEM_TAG_CONFIG], 86400);
 
         return $urls;
     }

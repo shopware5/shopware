@@ -25,6 +25,7 @@
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
+use Shopware\Components\CacheManager;
 use Shopware\Components\HttpCache\CacheWarmer;
 use Shopware\Components\HttpCache\UrlProviderFactoryInterface;
 use Shopware\Components\Routing\Context;
@@ -106,7 +107,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     public function getConfigAction()
     {
-        Shopware()->Container()->get('cache')->remove('Shopware_Config');
+        Shopware()->Container()->get('cache')->remove(CacheManager::ITEM_TAG_CONFIG);
         $this->View()->assign([
             'success' => true,
             'data' => $this->prepareConfigData(),
@@ -140,7 +141,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $data = $this->prepareDataForSaving($data);
         $this->saveConfigData($data);
 
-        Shopware()->Container()->get('cache')->remove('Shopware_Config');
+        Shopware()->Container()->get('cache')->remove(CacheManager::ITEM_TAG_CONFIG);
 
         // Reload config, so that the actual config from the
         // db is returned
