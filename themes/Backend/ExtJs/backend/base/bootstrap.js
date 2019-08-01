@@ -167,6 +167,7 @@
 {include file='backend/base/store/corner_position.js'}
 {include file='backend/base/store/cookie_mode.js'}
 
+
 {* Include shopware related components *}
 {include file='backend/base/component/Shopware.button.HoverButton.js'}
 {include file='backend/base/component/Shopware.MediaManager.MediaSelection.js'}
@@ -288,6 +289,8 @@
 {include file='backend/base/attribute/field/Shopware.form.field.CustomSortingGrid.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.CustomFacetGrid.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.AttributeSingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.OrderDetailGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.OrderDetailSingleSelection.js'}
 {include file='backend/base/component/Shopware.form.field.ProductStreamSelection.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.ContentTypeSelection.js'}
 
@@ -313,6 +316,7 @@
 {include file='backend/base/attribute/field_handler/Shopware.attribute.ProductStreamFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.ShopFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.ComboBoxFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.OrderDetailFieldHandler.js'}
 
 {include file='backend/base/attribute/Shopware.attribute.Form.js'}
 {include file='backend/base/attribute/Shopware.attribute.Window.js'}
