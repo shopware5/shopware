@@ -188,8 +188,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
             $store = $values['options']['store'];
 
-            // Replace the store, which may contain multiple translations, with
-            // a store with translated messages:
+            // Replace the store, which may contain multiple translations, with a store with translated messages:
             if ($values['options']['translateUsingSnippets']) {
                 $values['options']['store'] = $this->translateStoreUsingSnippets($store, $values['options']['namespace']);
             } else {
@@ -269,6 +268,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 $builder->addOrderBy('shop.host', 'DESC');
                 $builder->addOrderBy('name');
                 break;
+
             case 'pageGroup':
                 $builder->leftJoin('pageGroup.mapping', 'mapping');
                 $builder->addSelect([
@@ -276,10 +276,12 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 ]);
                 $builder->orderBy('pageGroup.mapping');
                 break;
+
             case 'country':
                 $builder->leftJoin('country.area', 'area')
                     ->addSelect('area');
                 break;
+
             case 'widgetView':
                 $builder->leftJoin('widgetView.auth', 'auth')
                     ->leftJoin('widgetView.widget', 'widget')
@@ -291,6 +293,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     ->orderBy('widgetView.column')
                     ->addOrderBy('widgetView.position');
                 break;
+
             default:
                 break;
         }
@@ -320,7 +323,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             // shown in the edit field, there is a high chance of a user saving the translation as name
             $translator = $this->get('translation')->getObjectTranslator('documents');
 
-            $data = array_map(function ($document) use ($translator) {
+            $data = array_map(static function ($document) use ($translator) {
                 return $translator->translateObjectProperty($document, 'name', 'description', $document['name']);
             }, $data);
         }
@@ -339,7 +342,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $table = $this->getTable($name);
         $filter = $this->Request()->get('filter');
         $data = [];
-        if (isset($filter[0]['property']) && $filter[0]['property'] == 'name') {
+        if (isset($filter[0]['property']) && $filter[0]['property'] === 'name') {
             $search = $filter[0]['value'];
         }
         switch ($name) {
@@ -386,6 +389,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 $totalCount = Shopware()->Db()->fetchOne($select);
 
                 break;
+
             case 'searchTable':
                 $select = Shopware()->Db()->select();
                 $select->from(['t' => $table], [
@@ -401,6 +405,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 }
                 $data = Shopware()->Db()->fetchAll($select);
                 break;
+
             case 'searchField':
                 $sqlParams = [];
                 $sql = 'SELECT SQL_CALC_FOUND_ROWS f.id, f.name, f.relevance, f.field, f.tableId as tableId, t.table, f.do_not_split
@@ -420,11 +425,12 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
                 $data = Shopware()->Db()->fetchAll($sql, $sqlParams);
 
-                //get the total count
+                // Get the total count
                 $sql = 'SELECT FOUND_ROWS()';
                 $totalCount = Shopware()->Db()->fetchOne($sql);
 
                 break;
+
             default:
                 break;
         }
@@ -474,25 +480,30 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     ->orderBy('shop.default', 'DESC')
                     ->addOrderBy('shop.name');
                 break;
+
             case 'customerGroup':
                 $builder->leftJoin('customerGroup.discounts', 'discounts')
                     ->addSelect('discounts');
                 break;
+
             case 'tax':
                 $builder->leftJoin('tax.rules', 'rules')
                     ->addSelect('rules');
                 break;
+
             case 'country':
                 $builder->leftJoin('country.area', 'area')
                     ->leftJoin('country.states', 'states')
                     ->addSelect('area', 'states');
                 break;
+
             case 'priceGroup':
                 $builder->leftJoin('priceGroup.discounts', 'discounts')
                     ->addSelect('discounts')
                     ->leftJoin('discounts.customerGroup', 'customerGroup')
                     ->addSelect('PARTIAL customerGroup.{id,name}');
                 break;
+
             case 'document':
                 $builder->leftJoin('document.elements', 'elements')->addSelect('elements');
                 break;
@@ -543,6 +554,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 $this->saveTaxRules($data, $model);
 
                 return;
+
             case 'customerGroup':
                 if (isset($data['discounts'])) {
                     $model->getDiscounts()->clear();
@@ -562,6 +574,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     $data['discount'] = 0;
                 }
                 break;
+
             case 'shop':
                 if (isset($data['currencies'])) {
                     $mappingRepository = $this->getRepository('currency');
@@ -610,6 +623,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     unset($data[$field]);
                 }
                 break;
+
             case 'country':
                 unset($data['area']);
                 if (isset($data['areaId'])) {
@@ -618,6 +632,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     unset($data['areaId']);
                 }
                 break;
+
             case 'widgetView':
                 if (isset($data['widgetId'])) {
                     $mappingRepository = $this->getRepository('widget');
@@ -630,6 +645,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     $data['auth'] = $mappingRepository->find($authId);
                 }
                 break;
+
             case 'pageGroup':
                 if (isset($data['mappingId'])) {
                     $mappingRepository = $this->getRepository('pageGroup');
@@ -680,11 +696,12 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     );
                 }
                 break;
+
             case 'document':
                 if ($data['id']) {
                     $elements = new ArrayCollection();
                     foreach ($data['elements'] as $element) {
-                        $elementRepository = $this->getRepository(DocumentElement::class);
+                        $elementRepository = $this->getRepository('documentElement');
 
                         /** @var DocumentElement|null $elementModel */
                         $elementModel = $elementRepository->find($element['id']);
@@ -701,8 +718,8 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 } else {
                     $data['elements'] = $this->createDocumentElements($model);
                 }
-
                 break;
+
             default:
                 break;
         }
