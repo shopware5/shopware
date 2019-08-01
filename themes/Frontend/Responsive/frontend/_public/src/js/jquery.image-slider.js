@@ -1535,6 +1535,12 @@
             }
 
             me._maxZoom = Math.max(image.naturalWidth, image.naturalHeight) / Math.max($currentImage.width(), $currentImage.height());
+            me._maxZoom = Math.max(me._maxZoom, me._minZoom);
+
+            // Always allow zoom for SVG images
+            if (image.getAttribute('data-extension') === 'svg') {
+                me._maxZoom = 5;
+            }
 
             $.publish('plugin/swImageSlider/onUpdateMaxZoomValue', [ me, me._maxZoom ]);
         },

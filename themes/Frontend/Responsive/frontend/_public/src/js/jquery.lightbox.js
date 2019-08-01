@@ -28,10 +28,13 @@
          * Opens the image from the given image url
          * in a lightbox window.
          *
-         * @param imageURL
+         * @param { string } imageURL
+         * @param { bool } imageURL
          */
-        open: function(imageURL) {
+        open: function(imageURL, isSvg) {
             var me = this, size;
+
+            isSvg = isSvg || false;
 
             me.image = new Image();
             me.content = me.createContent(imageURL);
@@ -40,7 +43,7 @@
                 var width = me.image.width;
                 var height = me.image.height;
 
-                if (imageURL.substring(imageURL.length - 4, imageURL.length) === '.svg') {
+                if (isSvg) {
                     width = width * 20;
                     height = height * 20;
                 }
@@ -58,7 +61,15 @@
                 });
 
                 $(window).on('resize.lightbox', function() {
-                    me.setSize(me.image.width, me.image.height);
+                    width = me.image.width;
+                    height = me.image.height;
+
+                    if (isSvg) {
+                        width = width * 20;
+                        height = height * 20;
+                    }
+
+                    me.setSize(width, height);
                 });
 
                 $.subscribe('plugin/swModal/onClose', function() {
