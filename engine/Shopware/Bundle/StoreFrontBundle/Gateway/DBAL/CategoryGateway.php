@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
-use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\ResultStatement;
+use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
@@ -32,29 +33,14 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class CategoryGateway implements Gateway\CategoryGatewayInterface
 {
     /**
+     * @var Gateway\CategoryQueryHelperInterface
+     */
+    private $queryHelper;
+
+    /**
      * @var Hydrator\CategoryHydrator
      */
     private $categoryHydrator;
-
-    /**
-     * The FieldHelper class is used for the
-     * different table column definitions.
-     *
-     * This class helps to select each time all required
-     * table data for the store front.
-     *
-     * Additionally the field helper reduce the work, to
-     * select in a second step the different required
-     * attribute tables for a parent table.
-     *
-     * @var FieldHelper
-     */
-    private $fieldHelper;
-
-    /**
-     * @var Connection
-     */
-    private $connection;
 
     /**
      * @var MediaServiceInterface
@@ -62,20 +48,16 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     private $mediaService;
 
     public function __construct(
-        Connection $connection,
-        FieldHelper $fieldHelper,
+        Gateway\CategoryQueryHelperInterface $queryHelper,
         Hydrator\CategoryHydrator $categoryHydrator,
         MediaServiceInterface $mediaService
     ) {
-        $this->connection = $connection;
+        $this->queryHelper = $queryHelper;
         $this->categoryHydrator = $categoryHydrator;
-        $this->fieldHelper = $fieldHelper;
         $this->mediaService = $mediaService;
     }
 
     /**
-     * @param int|array $id
-     *
      * @return Struct\Category
      */
     public function get($id, Struct\ShopContextInterface $context)
@@ -138,38 +120,12 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
      */
     public function getList(array $ids, Struct\ShopContextInterface $context)
     {
-        $query = $this->connection->createQueryBuilder();
+        $query = $this->getQuery($ids, $context);
 
-        $query->select($this->fieldHelper->getCategoryFields())
-            ->addSelect($this->fieldHelper->getMediaFields())
-            ->addSelect($this->fieldHelper->getRelatedProductStreamFields())
-            ->addSelect('GROUP_CONCAT(customerGroups.customergroupID) as __category_customer_groups')
-        ;
-
-        $query->from('s_categories', 'category')
-            ->leftJoin('category', 's_categories_attributes', 'categoryAttribute', 'categoryAttribute.categoryID = category.id')
-            ->leftJoin('category', 's_categories_avoid_customergroups', 'customerGroups', 'customerGroups.categoryID = category.id')
-            ->leftJoin('category', 's_media', 'media', 'media.id = category.mediaID')
-            ->leftJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')
-            ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id')
-            ->leftJoin('category', 's_product_streams', 'stream', 'category.stream_id = stream.id')
-            ->leftJoin('stream', 's_product_streams_attributes', 'productStreamAttribute', 'stream.id = productStreamAttribute.streamId')
-            ->where('category.id IN (:categories)')
-            ->andWhere('category.active = 1')
-            ->andWhere('category.shops IS NULL OR category.shops LIKE :shopId')
-            ->addGroupBy('category.id')
-            ->setParameter(':categories', $ids, Connection::PARAM_INT_ARRAY)
-            ->setParameter(':shopId', '%|' . $context->getShop()->getId() . '|%');
-
-        $this->fieldHelper->addCategoryTranslation($query, $context);
-        $this->fieldHelper->addMediaTranslation($query, $context);
-        $this->fieldHelper->addProductStreamTranslation($query, $context);
-        $this->fieldHelper->addCategoryMainDataTranslation($query, $context);
-
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
+        /** @var ResultStatement $statement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         //use php usort instead of running mysql order by to prevent file-sort and temporary table statement
         usort($data, function ($a, $b) {
@@ -189,23 +145,19 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         return $categories;
     }
 
+    protected function getQuery(array $numbers, Struct\ShopContextInterface $context)
+    {
+        return $this->queryHelper->getQuery($numbers, $context);
+    }
+
     /**
      * @param int[] $ids
      *
      * @return array<int, string> indexed by product id
      */
-    private function getMapping(array $ids)
+    protected function getMapping(array $ids)
     {
-        $query = $this->connection->createQueryBuilder();
-
-        $query->select(['mapping.articleID', 'GROUP_CONCAT(DISTINCT mapping.categoryID)']);
-
-        $query->from('s_articles_categories_ro', 'mapping')
-            ->where('mapping.articleID IN (:ids)')
-            ->setParameter(':ids', array_values($ids), Connection::PARAM_INT_ARRAY)
-            ->groupBy('mapping.articleID');
-
-        return $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
+        return $this->queryHelper->getMapping($ids)->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 
     /**

@@ -318,10 +318,14 @@
         </service>
 
         <service id="shopware_storefront.category_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CategoryGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\CategoryQueryHelperInterface"/>
             <argument type="service" id="shopware_storefront.category_hydrator_dbal"/>
             <argument type="service" id="shopware_storefront.media_service"/>
+        </service>
+
+        <service id="Shopware\Bundle\StoreFrontBundle\Gateway\CategoryQueryHelperInterface" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CategoryQueryHelper">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
         </service>
 
         <service id="shopware_storefront.payment_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\PaymentGateway">
