@@ -76,7 +76,7 @@ class OrmBacklogSubscriber implements EventSubscriber
         }
     }
 
-    private function getBacklog($entity): ?Backlog
+    private function getBacklog(object $entity): ?Backlog
     {
         switch (true) {
             // Article changes
@@ -85,9 +85,9 @@ class OrmBacklogSubscriber implements EventSubscriber
 
             // Variant changes
             case $entity instanceof Price:
-                return new Backlog(Variant::class, $entity->getDetail()->getNumber());
+                return new Backlog(Article::class, $entity->getDetail()->getArticleId());
             case $entity instanceof Variant:
-                return new Backlog(Variant::class, $entity->getNumber());
+                return new Backlog(Article::class, $entity->getArticleId());
 
             // Order changes
             case $entity instanceof Order:
@@ -109,6 +109,11 @@ class OrmBacklogSubscriber implements EventSubscriber
         return null;
     }
 
+    private function getBacklogKey(Backlog $backlog): string
+    {
+        return $backlog->entity . '_' . $backlog->entity_id;
+    }
+
     private function trace(OnFlushEventArgs $eventArgs): void
     {
         /** @var ModelManager $em */
@@ -122,7 +127,7 @@ class OrmBacklogSubscriber implements EventSubscriber
             if (!$backlog) {
                 continue;
             }
-            $queue[] = $backlog;
+            $queue[$this->getBacklogKey($backlog)] = $backlog;
         }
 
         // Entity Insertions
@@ -131,7 +136,7 @@ class OrmBacklogSubscriber implements EventSubscriber
             if (!$backlog) {
                 continue;
             }
-            $queue[] = $backlog;
+            $queue[$this->getBacklogKey($backlog)] = $backlog;
         }
 
         // Entity updates
@@ -140,9 +145,9 @@ class OrmBacklogSubscriber implements EventSubscriber
             if (!$backlog) {
                 continue;
             }
-            $queue[] = $backlog;
+            $queue[$this->getBacklogKey($backlog)] = $backlog;
         }
 
-        $this->container->get('shopware_bundle_es_backend.backlog_service')->write($queue);
+        $this->container->get('shopware_bundle_es_backend.backlog_service')->write(array_values($queue));
     }
 }
