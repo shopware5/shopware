@@ -62,7 +62,7 @@ class CachedConfigReader implements ConfigReader
 
         $config = $this->reader->getByPluginName($pluginName, $shop);
 
-        $this->cache->save($config, $cacheKey, ['Shopware_Config'], 86400);
+        $this->cache->save($config, $cacheKey, ['Shopware_Config', 'Shopware_Plugin_Config_' . strtolower($pluginName)], 86400);
 
         return $config;
     }
