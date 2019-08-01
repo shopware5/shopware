@@ -32,14 +32,11 @@ use Shopware\Models\Order\Order;
 
 class OrderRecalculationSubscriber implements SubscriberInterface
 {
-    /** @var CalculationServiceInterface */
+    /**
+     * @var CalculationServiceInterface
+     */
     protected $calculationService;
 
-    /**
-     * OrderRecalculationSubscriber constructor.
-     *
-     * @param CalculationServiceInterface $calculationService
-     */
     public function __construct(
         CalculationServiceInterface $calculationService
     ) {
@@ -60,8 +57,6 @@ class OrderRecalculationSubscriber implements SubscriberInterface
 
     /**
      * If a product position get updated, the order totals must be recalculated
-     *
-     * @param \Enlight_Event_EventArgs $arguments
      */
     public function preUpdate(\Enlight_Event_EventArgs $arguments)
     {
@@ -78,7 +73,7 @@ class OrderRecalculationSubscriber implements SubscriberInterface
         $priceChanged = ($changeSet['price'][0] !== $changeSet['price'][1]);
         $taxChanged = ($changeSet['taxRate'][0] !== $changeSet['taxRate'][1]);
 
-        // if anything in the order position has been changed, we must recalculate the totals of the order
+        // If anything in the order position has been changed, we must recalculate the totals of the order
         if ($quantityChange || $productChange || $priceChanged || $taxChanged) {
             $this->calculationService->recalculateOrderTotals($orderDetail->getOrder());
         }
@@ -86,8 +81,6 @@ class OrderRecalculationSubscriber implements SubscriberInterface
 
     /**
      * If a product position got added to the order, the order totals must be recalculated
-     *
-     * @param \Enlight_Event_EventArgs $arguments
      */
     public function postPersist(\Enlight_Event_EventArgs $arguments)
     {
@@ -102,8 +95,6 @@ class OrderRecalculationSubscriber implements SubscriberInterface
 
     /**
      * If a product position get removed from the order, the order totals must be recalculated
-     *
-     * @param \Enlight_Event_EventArgs $arguments
      */
     public function preRemove(\Enlight_Event_EventArgs $arguments)
     {

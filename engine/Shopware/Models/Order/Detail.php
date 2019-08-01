@@ -45,7 +45,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="s_order_details")
  * @ORM\Entity()
- * @ORM\HasLifecycleCallbacks()
  */
 class Detail extends ModelEntity
 {

@@ -47,6 +47,7 @@ use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
 use Shopware\Bundle\FormBundle\FormBundle;
 use Shopware\Bundle\MailBundle\MailBundle;
 use Shopware\Bundle\MediaBundle\MediaBundle;
+use Shopware\Bundle\OrderBundle\OrderBundle;
 use Shopware\Bundle\PluginInstallerBundle\PluginInstallerBundle;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginInitializer;
 use Shopware\Bundle\SearchBundle\SearchBundle;
@@ -450,6 +451,7 @@ class Kernel extends SymfonyKernel
             new SitemapBundle(),
             new StaticContentBundle(),
             new StoreFrontBundle(),
+            new OrderBundle(),
         ];
     }
 

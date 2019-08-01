@@ -30,6 +30,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Security\AttributeCleanerTrait;
+use Shopware\Models\Order\Document\Document;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -1095,12 +1096,17 @@ class Order extends ModelEntity
      * The calculateInvoiceAmount function recalculated the net and gross amount based on the
      * order positions.
      *
-     * @deprecated will be removed in version 5.7 - Please use the service `shopware_bundle_order.service.calculation_service`.
+     * @deprecated since 5.7 will be removed in version 5.8 - Please use the service \Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface::class.
      */
     public function calculateInvoiceAmount()
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.7 and will be removed with 5.8. Please use the service with id `%s` instead',
+            __CLASS__,
+            __METHOD__,
+            \Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface::class), E_USER_DEPRECATED);
+
         /** @var CalculationServiceInterface $service */
-        $service = Shopware()->Container()->get('shopware_bundle_order.service.calculation_service');
+        $service = Shopware()->Container()->get(\Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface::class);
         $service->recalculateOrderTotals($this);
     }
 
@@ -1153,7 +1159,7 @@ class Order extends ModelEntity
      */
     public function setDocuments($documents)
     {
-        return $this->setOneToMany($documents, '\Shopware\Models\Order\Document\Document', 'documents', 'order');
+        return $this->setOneToMany($documents, Document::class, 'documents', 'order');
     }
 
     /**

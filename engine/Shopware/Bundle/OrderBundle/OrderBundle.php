@@ -22,24 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\OrderBundle\Service;
+namespace Shopware\Bundle\OrderBundle;
 
-use Shopware\Models\Order\Detail;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-interface StockServiceInterface
+class OrderBundle extends Bundle
 {
-    /**
-     * Decrease the stock size of the product position
-     */
-    public function addProductDetail(Detail $detail): void;
+    public function build(ContainerBuilder $container): void
+    {
+        parent::build($container);
 
-    /**
-     * Update the product stock size of the old product position and the new product position
-     */
-    public function updateProductDetail(Detail $detail, ?string $oldProductNumber = null, ?int $oldQuantity = null, ?string $newProductNumber = null, ?int $newQuantity = null): void;
-
-    /**
-     * Increase the stock size of the product
-     */
-    public function removeProductDetail(Detail $detail): void;
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/DependencyInjection'));
+        $loader->load('services.xml');
+    }
 }

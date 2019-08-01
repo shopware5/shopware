@@ -6,24 +6,27 @@
     <services>
 
         <!-- Subscriber to update the totals of the order when a order detail will be added, updated, removed. -->
-        <service id="shopware_bundle_order.service.calculation_service" class="Shopware\Bundle\OrderBundle\Service\CalculationService" >
-            <argument id="models" type="service" />
+        <service id="Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface" class="Shopware\Bundle\OrderBundle\Service\CalculationService" >
+            <argument type="service" id="shopware.cart.net_rounding"/>
         </service>
+
         <!-- Subscriber to update the product stock size when a order detail will be added, updated, removed. -->
-        <service id="shopware_bundle_order.service.stock_service" class="Shopware\Bundle\OrderBundle\Service\StockService" >
-            <argument id="models" type="service" />
+        <service id="Shopware\Bundle\OrderBundle\Service\StockServiceInterface" class="Shopware\Bundle\OrderBundle\Service\StockService" >
+            <argument type="service" id="models" />
         </service>
 
 
         <!-- Subscriber to update the totals of the order when a order detail will be added, updated, removed. (calls a service) -->
-        <service class="Shopware\Bundle\OrderBundle\Subscriber\OrderRecalculationSubscriber" id="shopware_bundle_order.subscriber.order_recalculation_subscriber">
-            <argument id="shopware_bundle_order.service.calculation_service" type="service"/>
+        <service id="Shopware\Bundle\OrderBundle\Subscriber\OrderRecalculationSubscriber">
+            <argument type="service" id="Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface"/>
+
             <tag name="shopware.event_subscriber"/>
         </service>
 
         <!-- Subscriber to update the product stock size when a order detail will be added, updated, removed.  (calls a service) -->
-        <service class="Shopware\Bundle\OrderBundle\Subscriber\ProductStockSubscriber" id="shopware_bundle_order.subscriber.product_stock_subscriber">
-            <argument id="shopware_bundle_order.service.stock_service" type="service"/>
+        <service id="Shopware\Bundle\OrderBundle\Subscriber\ProductStockSubscriber">
+            <argument type="service" id="Shopware\Bundle\OrderBundle\Service\StockServiceInterface"/>
+
             <tag name="shopware.event_subscriber"/>
         </service>
 

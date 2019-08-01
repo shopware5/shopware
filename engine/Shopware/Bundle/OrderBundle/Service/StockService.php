@@ -25,7 +25,8 @@
 namespace Shopware\Bundle\OrderBundle\Service;
 
 use Shopware\Components\Model\ModelManager;
-use Shopware\Models\Order\Detail;
+use Shopware\Models\Article\Detail as ProductDetail;
+use Shopware\Models\Order\Detail as OrderDetail;
 
 class StockService implements StockServiceInterface
 {
@@ -37,7 +38,7 @@ class StockService implements StockServiceInterface
         $this->entityManager = $entityManager;
     }
 
-    public function addProductDetail(Detail $detail)
+    public function addProductDetail(OrderDetail $detail): void
     {
         $product = $this->getProductFromDetail($detail);
         if ($product) {
@@ -47,25 +48,24 @@ class StockService implements StockServiceInterface
         }
     }
 
-    public function updateProductDetail(Detail $detail, $oldProductNumber = null, $oldQuantity = null, $newProductNumber = null, $newQuantity = null)
+    public function updateProductDetail(OrderDetail $detail, ?string $oldProductNumber = null, ?int $oldQuantity = null, ?string $newProductNumber = null, ?int $newQuantity = null): void
     {
         $oldQuantity = $oldQuantity === 0 || $oldQuantity > 0 ? $oldQuantity : $detail->getQuantity();
         $newQuantity = $newQuantity === 0 || $newQuantity > 0 ? $newQuantity : $detail->getQuantity();
 
         // If the position product has been changed, the old product stock must be increased based on the (old) ordering quantity.
         // The stock of the new product will be reduced by the (new) ordered quantity.
-        if ($newProductNumber != $oldProductNumber) {
-            //if the old product is a product in the stock, we must increase the stock to the original stock size
-
+        if ($newProductNumber !== $oldProductNumber) {
+            // If the old product is a product in the stock, we must increase the stock to the original stock size
             $this->updateProductInStock($oldProductNumber, $oldQuantity);
             $this->updateProductInStock($newProductNumber, -$newQuantity);
-        } elseif ($oldQuantity != $newQuantity) {
+        } elseif ($oldQuantity !== $newQuantity) {
             $product = $this->getProductFromDetail($detail);
             if (!$product) {
                 return;
             }
 
-            //if the product is a product in the stock, we must change the stock size to the new ordered quantity
+            // If the product is a product in the stock, we must change the stock size to the new ordered quantity
             $quantityDiff = $oldQuantity - $newQuantity;
 
             $product->setInStock($product->getInStock() + $quantityDiff);
@@ -73,7 +73,7 @@ class StockService implements StockServiceInterface
         }
     }
 
-    public function removeProductDetail(Detail $detail)
+    public function removeProductDetail(OrderDetail $detail): void
     {
         // Do not increase instock for canceled orders
         if ($detail->getOrder() && $detail->getOrder()->getOrderStatus()->getId() === -1) {
@@ -88,16 +88,12 @@ class StockService implements StockServiceInterface
     }
 
     /**
-     * returns the product of the product position
-     *
-     * @param Detail $detail
-     *
-     * @return \Shopware\Models\Article\Detail|null
+     * Returns the product of the product position
      */
-    protected function getProductFromDetail(Detail $detail)
+    protected function getProductFromDetail(OrderDetail $detail): ?ProductDetail
     {
         if (in_array($detail->getMode(), [0, 1], true)) {
-            if ($detail->getArticleDetail() && $detail->getArticleDetail()->getId()) { // after the detail got removed, the association to the product detail does not exist anymore.
+            if ($detail->getArticleDetail() && $detail->getArticleDetail()->getId()) { // After the detail got removed, the association to the product detail does not exist anymore.
                 return $detail->getArticleDetail();
             } elseif ($detail->getArticleNumber()) {
                 return $this->getProductByNumber($detail->getArticleNumber());
@@ -108,13 +104,9 @@ class StockService implements StockServiceInterface
     }
 
     /**
-     * returns a product by the ordernumber
-     *
-     * @param $number
-     *
-     * @return \Shopware\Models\Article\Detail|null
+     * Returns a product by the ordernumber
      */
-    protected function getProductByNumber($number)
+    protected function getProductByNumber(string $number): ?ProductDetail
     {
         $product = $this->entityManager->getRepository(\Shopware\Models\Article\Detail::class)->findOneBy(['number' => $number]);
 
@@ -125,16 +117,14 @@ class StockService implements StockServiceInterface
         return null;
     }
 
-    /**
-     * @param string $productNumber
-     * @param int    $quantity
-     */
-    protected function updateProductInStock($productNumber, $quantity)
+    protected function updateProductInStock(string $productNumber, int $quantity): void
     {
         $product = $this->getProductByNumber($productNumber);
-        if ($product) {
-            $product->setInStock($product->getInStock() + $quantity);
-            $this->entityManager->persist($product);
+        if (!$product) {
+            return;
         }
+
+        $product->setInStock($product->getInStock() + $quantity);
+        $this->entityManager->persist($product);
     }
 }

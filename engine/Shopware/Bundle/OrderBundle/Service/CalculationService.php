@@ -24,12 +24,23 @@
 
 namespace Shopware\Bundle\OrderBundle\Service;
 
+use Shopware\Components\Cart\NetRounding\RoundingInterface;
 use Shopware\Models\Order\Detail;
 use Shopware\Models\Order\Order;
 
 class CalculationService implements CalculationServiceInterface
 {
-    public function recalculateOrderTotals(Order $order)
+    /**
+     * @var RoundingInterface
+     */
+    private $rounding;
+
+    public function __construct(RoundingInterface $rounding)
+    {
+        $this->rounding = $rounding;
+    }
+
+    public function recalculateOrderTotals(Order $order): void
     {
         $invoiceAmount = 0;
         $invoiceAmountNet = 0;
@@ -45,13 +56,13 @@ class CalculationService implements CalculationServiceInterface
 
             $taxValue = $detail->getTaxRate();
 
-            // additional tax checks required for sw-2238, sw-2903 and sw-3164
+            // Additional tax checks required for sw-2238, sw-2903 and sw-3164
             if ($tax && $tax->getId() !== 0 && $tax->getId() !== null && $tax->getTax() !== null) {
                 $taxValue = $tax->getTax();
             }
 
             if ($order->getNet()) {
-                $invoiceAmountNet += round(($price * $detail->getQuantity()) / 100 * (100 + $taxValue), 2);
+                $invoiceAmountNet += $this->rounding->round($price, $taxValue, $detail->getQuantity());
             } else {
                 $invoiceAmountNet += round(($price * $detail->getQuantity()) / (100 + $taxValue) * 100, 2);
             }

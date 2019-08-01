@@ -519,7 +519,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         if ($invoiceShippingChanged || $invoiceShippingNetChanged) {
             // Recalculate the new invoice amount
             /** @var \Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface $calculationService */
-            $calculationService = $this->container->get('shopware_bundle_order.service.calculation_service');
+            $calculationService = $this->container->get(\Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface::class);
             $calculationService->recalculateOrderTotals($order);
         }
 
@@ -790,7 +790,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         Shopware()->Models()->flush();
 
         /** @var \Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface $calculationService */
-        $calculationService = $this->container->get('shopware_bundle_order.service.calculation_service');
+        $calculationService = $this->container->get(\Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface::class);
         $calculationService->recalculateOrderTotals($order);
 
         Shopware()->Models()->flush();

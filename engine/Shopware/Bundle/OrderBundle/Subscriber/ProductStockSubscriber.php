@@ -31,14 +31,11 @@ use Shopware\Models\Order\Detail;
 
 class ProductStockSubscriber implements SubscriberInterface
 {
-    /** @var StockServiceInterface */
+    /**
+     * @var StockServiceInterface
+     */
     protected $stockService;
 
-    /**
-     * ProductStockSubscriber constructor.
-     *
-     * @param StockServiceInterface $stockService
-     */
     public function __construct(
         StockServiceInterface $stockService
     ) {
@@ -60,8 +57,6 @@ class ProductStockSubscriber implements SubscriberInterface
     /**
      * If the position product has been changed, the old product stock must be increased based on the (old) ordering quantity.
      * The stock of the new product will be reduced by the (new) ordered quantity.
-     *
-     * @param \Enlight_Event_EventArgs $arguments
      */
     public function preUpdate(\Enlight_Event_EventArgs $arguments)
     {
@@ -85,8 +80,6 @@ class ProductStockSubscriber implements SubscriberInterface
 
     /**
      * If an position is added, the stock of the product will be reduced by the ordered quantity.
-     *
-     * @param \Enlight_Event_EventArgs $arguments
      */
     public function postPersist(\Enlight_Event_EventArgs $arguments)
     {
@@ -98,8 +91,6 @@ class ProductStockSubscriber implements SubscriberInterface
 
     /**
      * If the position is deleted, the product stock must be increased based on the ordering quantity.
-     *
-     * @param \Enlight_Event_EventArgs $arguments
      */
     public function preRemove(\Enlight_Event_EventArgs $arguments)
     {

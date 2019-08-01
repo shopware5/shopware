@@ -187,7 +187,7 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
 
         // Simulate backend order save
         /** @var \Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface $calculationService */
-        $calculationService = Shopware()->Container()->get('shopware_bundle_order.service.calculation_service');
+        $calculationService = Shopware()->Container()->get(\Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface::class);
         $calculationService->recalculateOrderTotals($order);
 
         // Assert messages

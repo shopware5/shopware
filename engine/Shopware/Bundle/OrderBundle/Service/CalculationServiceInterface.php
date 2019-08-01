@@ -29,9 +29,9 @@ use Shopware\Models\Order\Order;
 interface CalculationServiceInterface
 {
     /**
-     * recalculated the net and gross amount based on the order positions.
+     * Recalculated the net and gross amount based on the order positions.
      *
-     * @param Order $order the order which should be recalculated
+     * @param Order $order The order which should be recalculated
      */
-    public function recalculateOrderTotals(Order $order);
+    public function recalculateOrderTotals(Order $order): void;
 }
