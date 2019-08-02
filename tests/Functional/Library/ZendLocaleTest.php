@@ -77,7 +77,7 @@ class ZendLocaleTest extends TestCase
      */
     public function getLocales()
     {
-        $con = Shopware()->Container()->get('dbal_connection');
+        $con = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
 
         return $con->fetchAll('SELECT locale FROM s_core_locales WHERE locale NOT IN(?)', [self::KNOWN_FAILURE], [Connection::PARAM_STR_ARRAY]);
     }

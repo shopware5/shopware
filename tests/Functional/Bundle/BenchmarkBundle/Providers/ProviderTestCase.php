@@ -71,7 +71,7 @@ abstract class ProviderTestCase extends BenchmarkTestCase
      */
     protected function installDemoData($dataName)
     {
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $basicContent = $this->openDemoDataFile('basic_setup');
         $dbalConnection->exec($basicContent);
 
@@ -83,7 +83,7 @@ abstract class ProviderTestCase extends BenchmarkTestCase
      */
     protected function getBenchmarkData()
     {
-        return $this->getProvider()->getBenchmarkData(Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1));
+        return $this->getProvider()->getBenchmarkData(Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext(1));
     }
 
     /**
@@ -138,13 +138,13 @@ abstract class ProviderTestCase extends BenchmarkTestCase
      */
     protected function getShopContextByShopId($shopId)
     {
-        return Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext($shopId);
+        return Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext($shopId);
     }
 
     protected function resetConfig()
     {
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
 
         $dbalConnection->update('s_benchmark_config', [
             'last_order_id' => '0',
@@ -164,14 +164,14 @@ abstract class ProviderTestCase extends BenchmarkTestCase
             ->method('sendStatistics')->willReturn($response);
 
         $service = new StatisticsService(
-            Shopware()->Container()->get('shopware.benchmark_bundle.collector'),
+            Shopware()->Container()->get(\Shopware\Bundle\BenchmarkBundle\BenchmarkCollector::class),
             $client,
-            Shopware()->Container()->get('shopware.benchmark_bundle.repository.config'),
-            Shopware()->Container()->get('shopware_storefront.context_service'),
-            Shopware()->Container()->get('dbal_connection')
+            Shopware()->Container()->get(\Shopware\Models\Benchmark\Repository::class),
+            Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class),
+            Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)
         );
 
-        $config = Shopware()->Container()->get('shopware.benchmark_bundle.repository.config')->findOneBy(['shopId' => 1]);
+        $config = Shopware()->Container()->get(\Shopware\Models\Benchmark\Repository::class)->findOneBy(['shopId' => 1]);
 
         $service->transmit($config, $config->getBatchSize());
     }

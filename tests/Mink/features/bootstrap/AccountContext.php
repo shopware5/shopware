@@ -43,7 +43,7 @@ class AccountContext extends SubContext
      */
     public function iLogInSuccessfulAsWithPassword($username, $email, $password)
     {
-        Shopware()->Container()->get('dbal_connection')->executeQuery('DELETE FROM s_order_basket');
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->executeQuery('DELETE FROM s_order_basket');
 
         $this->getPage('Account')->login($email, $password);
         $this->getPage('Account')->verifyLogin($username);

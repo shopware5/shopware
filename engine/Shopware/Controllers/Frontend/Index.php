@@ -41,17 +41,17 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
         }
 
         /** @var ShopContextInterface $context */
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $context = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
         $categoryId = $context->getShop()->getCategory()->getId();
 
         /** @var StoreFrontEmotionDeviceConfiguration $service */
-        $service = $this->get('shopware_emotion.store_front_emotion_device_configuration');
+        $service = $this->get(\Shopware\Bundle\EmotionBundle\Service\StoreFrontEmotionDeviceConfigurationInterface::class);
         $emotions = $service->getCategoryConfiguration($categoryId, $context);
 
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
 
         $this->View()->assign([
-            'hasCustomerStreamEmotion' => $this->container->get('shopware.customer_stream.repository')->hasCustomerStreamEmotions($categoryId),
+            'hasCustomerStreamEmotion' => $this->container->get(\Shopware\Models\CustomerStream\CustomerStreamRepositoryInterface::class)->hasCustomerStreamEmotions($categoryId),
             'emotions' => $emotions,
             'hasEmotion' => !empty($emotions),
             'sCategoryContent' => $categoryContent,
@@ -72,7 +72,7 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
             return false;
         }
 
-        $optinService = $this->container->get('shopware.components.optin_service');
+        $optinService = $this->container->get(\Shopware\Components\OptinServiceInterface::class);
 
         $data = $optinService->get(OptinServiceInterface::TYPE_THEME_PREVIEW, $hash);
 

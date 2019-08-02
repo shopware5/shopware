@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -59,7 +58,7 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
      */
     public function testCreateLog()
     {
-        Shopware()->Container()->get('dbal_connection')->beginTransaction();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
 
         $this->Request()->setClientIp('10.0.0.3', false);
         $this->Request()->setMethod('POST')->setPost(
@@ -103,7 +102,7 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
         static::assertArrayHasKey('success', $jsonBody);
         static::assertArrayHasKey('data', $jsonBody);
 
-        Shopware()->Container()->get('dbal_connection')->rollBack();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollBack();
     }
 
     /**
@@ -112,7 +111,7 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
      */
     public function testCreateDeprecatedLog()
     {
-        Shopware()->Container()->get('dbal_connection')->beginTransaction();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
 
         $this->Request()->setClientIp('10.0.0.3', false);
         $this->Request()->setMethod('POST')->setPost(
@@ -135,6 +134,6 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
         static::assertArrayHasKey('success', $jsonBody);
         static::assertArrayHasKey('id', $jsonBody['data']);
 
-        Shopware()->Container()->get('dbal_connection')->rollBack();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollBack();
     }
 }

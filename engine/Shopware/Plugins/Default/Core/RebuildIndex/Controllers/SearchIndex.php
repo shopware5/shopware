@@ -34,7 +34,7 @@ class Shopware_Controllers_Backend_SearchIndex extends Shopware_Controllers_Back
         @set_time_limit(1200);
 
         /* @var SearchIndexerInterface $indexer */
-        $indexer = $this->get('shopware_searchdbal.search_indexer');
+        $indexer = $this->get(\Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexer::class);
         $indexer->build();
 
         $this->View()->assign(['success' => true]);

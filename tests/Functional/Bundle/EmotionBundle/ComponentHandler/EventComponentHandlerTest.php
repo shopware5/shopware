@@ -43,12 +43,12 @@ class EventComponentHandlerTest extends \Enlight_Components_Test_TestCase
 
         $emotionElementService = new EmotionElementService(
             new \ArrayObject(),
-            Shopware()->Container()->get('shopware_emotion.emotion_element_gateway'),
+            Shopware()->Container()->get(\Shopware\Bundle\EmotionBundle\Service\Gateway\EmotionElementGateway::class),
             $eventComponentHandlerMock,
-            Shopware()->Container()->get('shopware_emotion.data_collection_resolver'),
+            Shopware()->Container()->get(\Shopware\Bundle\EmotionBundle\Service\DataCollectionResolverInterface::class),
             Shopware()->Container()->get('events'));
 
-        $contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+        $contextService = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
 
         $emotionElementService->getList($emotionElementIds, $contextService->createShopContext(1));
     }

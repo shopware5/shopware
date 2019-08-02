@@ -45,6 +45,7 @@ class AddConstraintValidatorsPass implements CompilerPassInterface
                 $validators[$attributes[0]['alias']] = $id;
             }
         }
+
         $container->getDefinition('validator.validator_factory')->replaceArgument(1, $validators);
     }
 }

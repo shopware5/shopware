@@ -91,7 +91,7 @@ class SnippetsToDbCommand extends ShopwareCommand implements CompletionAwareInte
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var DatabaseHandler $databaseLoader */
-        $databaseLoader = $this->container->get('shopware.snippet_database_handler');
+        $databaseLoader = $this->container->get(\Shopware\Components\Snippet\DatabaseHandler::class);
         $force = $input->getOption('force');
 
         $sourceDir = $this->container->getParameter('kernel.root_dir') . '/' . $input->getOption('source') . '/';

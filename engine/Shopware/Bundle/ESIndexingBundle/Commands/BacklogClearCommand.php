@@ -46,8 +46,8 @@ class BacklogClearCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $lastId = $this->container->get('shopware_elastic_search.backlog_reader')->getLastBacklogId();
+        $lastId = $this->container->get(\Shopware\Bundle\ESIndexingBundle\BacklogReader::class)->getLastBacklogId();
 
-        $this->container->get('dbal_connection')->executeUpdate('DELETE FROM s_es_backlog WHERE id <= :id', [':id' => $lastId]);
+        $this->container->get(\Doctrine\DBAL\Connection::class)->executeUpdate('DELETE FROM s_es_backlog WHERE id <= :id', [':id' => $lastId]);
     }
 }

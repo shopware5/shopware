@@ -178,7 +178,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             'refresh_date' => $refreshDate,
         ];
 
-        $connection = $this->Application()->Container()->get('dbal_connection');
+        $connection = $this->Application()->Container()->get(\Doctrine\DBAL\Connection::class);
         if (empty($id)) {
             $data['added'] = $refreshDate;
             $connection->insert(
@@ -256,9 +256,9 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
 
             $em->flush();
 
-            $this->Application()->Container()->get('shopware.snippet_database_handler')->loadToDatabase($bootstrap->Path() . 'Snippets/');
-            $this->Application()->Container()->get('shopware.snippet_database_handler')->loadToDatabase($bootstrap->Path() . 'snippets/');
-            $this->Application()->Container()->get('shopware.snippet_database_handler')->loadToDatabase($bootstrap->Path() . 'Resources/snippet/');
+            $this->Application()->Container()->get(\Shopware\Components\Snippet\DatabaseHandler::class)->loadToDatabase($bootstrap->Path() . 'Snippets/');
+            $this->Application()->Container()->get(\Shopware\Components\Snippet\DatabaseHandler::class)->loadToDatabase($bootstrap->Path() . 'snippets/');
+            $this->Application()->Container()->get(\Shopware\Components\Snippet\DatabaseHandler::class)->loadToDatabase($bootstrap->Path() . 'Resources/snippet/');
 
             // Clear proxy cache
             $this->Application()->Hooks()->getProxyFactory()->clearCache();
@@ -466,9 +466,9 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             }
             $this->Application()->Models()->flush();
 
-            $this->Application()->Container()->get('shopware.snippet_database_handler')->loadToDatabase($plugin->Path() . 'Snippets/');
-            $this->Application()->Container()->get('shopware.snippet_database_handler')->loadToDatabase($plugin->Path() . 'snippets/');
-            $this->Application()->Container()->get('shopware.snippet_database_handler')->loadToDatabase($plugin->Path() . 'Resources/snippet/');
+            $this->Application()->Container()->get(\Shopware\Components\Snippet\DatabaseHandler::class)->loadToDatabase($plugin->Path() . 'Snippets/');
+            $this->Application()->Container()->get(\Shopware\Components\Snippet\DatabaseHandler::class)->loadToDatabase($plugin->Path() . 'snippets/');
+            $this->Application()->Container()->get(\Shopware\Components\Snippet\DatabaseHandler::class)->loadToDatabase($plugin->Path() . 'Resources/snippet/');
 
             // Clear proxy cache
             $this->Application()->Hooks()->getProxyFactory()->clearCache();
@@ -542,7 +542,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             WHERE namespace=?
         ';
 
-        $connection = $this->Application()->Container()->get('dbal_connection');
+        $connection = $this->Application()->Container()->get(\Doctrine\DBAL\Connection::class);
         $rows = $connection->fetchAll($sql, [$this->name]);
 
         $plugins = [];
@@ -657,7 +657,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     private function removePluginWidgets($pluginId)
     {
         /** @var Connection $connection */
-        $connection = $this->Application()->Container()->get('dbal_connection');
+        $connection = $this->Application()->Container()->get(\Doctrine\DBAL\Connection::class);
 
         $sql = "
             DELETE widgets, views, priv

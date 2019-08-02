@@ -50,7 +50,7 @@ class Front
 
         $front->setDispatcher($container->get('dispatcher'));
 
-        $front->setRouter($container->get('router'));
+        $front->setRouter($container->get(\Shopware\Components\Routing\RouterInterface::class));
 
         $front->setParams($options);
 

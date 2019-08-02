@@ -141,7 +141,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         if (!$this->repository) {
             $this->repository = new Repository(
-                $this->get('models')->getConnection(),
+                $this->get(\Shopware\Components\Model\ModelManager::class)->getConnection(),
                 $this->get('events')
             );
         }
@@ -289,7 +289,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     public function getReferrerRevenueAction()
     {
         $shop = $this->getManager()->getRepository(Shop::class)->getActiveDefault();
-        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
+        $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         $result = $this->getRepository()->getReferrerRevenue(
             $shop,

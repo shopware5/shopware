@@ -75,8 +75,8 @@ class CombinedConditionHandler implements ConditionHandlerInterface
      */
     private function getConditionHandler(ConditionInterface $condition)
     {
-        //initialize the condition handler collection service
-        $this->container->get('shopware_searchdbal.dbal_query_builder_factory');
+        // Initialize the condition handler collection service
+        $this->container->get(\Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory::class);
 
         $handlers = $this->container->get('shopware_searchdbal.condition_handlers');
 

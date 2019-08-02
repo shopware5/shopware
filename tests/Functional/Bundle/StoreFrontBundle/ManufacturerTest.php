@@ -63,7 +63,7 @@ class ManufacturerTest extends TestCase
         ]);
         $ids[] = $manufacturer->getId();
 
-        $manufacturers = Shopware()->Container()->get('shopware_storefront.manufacturer_service')
+        $manufacturers = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface::class)
             ->getList($ids, $context);
 
         /** @var Manufacturer $manufacturer */

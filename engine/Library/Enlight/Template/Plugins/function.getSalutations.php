@@ -19,7 +19,7 @@
 
 function smarty_function_getSalutations($params, $smarty)
 {
-    $config = Shopware()->Container()->get('config');
+    $config = Shopware()->Container()->get(\Shopware_Components_Config::class);
     $salutations = $config->get('shopsalutations');
     $salutations = explode(',', $salutations);
 

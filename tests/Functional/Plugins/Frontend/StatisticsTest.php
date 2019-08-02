@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -82,7 +83,7 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
         $this->Plugin()->refreshCurrentUsers($request);
 
         $sql = 'SELECT * FROM `s_statistics_currentusers` ORDER BY `id` DESC LIMIT 1';
-        $result = Shopware()->Container()->get('dbal_connection')->fetchAssoc($sql);
+        $result = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->fetchAssoc($sql);
 
         static::assertSame('192.168.0.0', $result['remoteaddr']); // IP should have been anonymized
         static::assertSame('/foobar', $result['page']);

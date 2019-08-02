@@ -8,9 +8,9 @@
         <defaults public="true" />
 
         <service class="Shopware\Bundle\EsBackendBundle\EsBackendIndexer" id="shopware_es_backend.indexer">
-            <argument id="shopware_elastic_search.client" type="service"/>
+            <argument id="Elasticsearch\Client" type="service"/>
             <argument type="tagged" tag="shopware_es_backend.repository" />
-            <argument type="service" id="shopware_elastic_search.console.console_evaluation_helper"/>
+            <argument type="service" id="Shopware\Bundle\ESIndexingBundle\Console\EvaluationHelperInterface"/>
             <argument>%shopware.es.version%</argument>
             <argument type="service" id="Shopware\Bundle\EsBackendBundle\IndexFactoryInterface"/>
         </service>
@@ -26,7 +26,7 @@
                  id="shopware_es_backend.order_searcher"
                  decorates="shopware_attribute.order_searcher">
 
-            <argument id="shopware_elastic_search.client" type="service"/>
+            <argument id="Elasticsearch\Client" type="service"/>
             <argument id="shopware_es_backend.order_searcher.inner" type="service"/>
             <argument type="service" id="shopware_es_backend.search_query_builder"/>
             <argument>orders</argument>
@@ -39,8 +39,8 @@
                  id="shopware_es_backend.product_searcher"
                  decorates="shopware_attribute.product_searcher">
 
-            <argument id="shopware_elastic_search.client" type="service"/>
-            <argument id="shopware_es_backend.product_searcher.inner" type="service"/>
+            <argument type="service" id="Elasticsearch\Client"/>
+            <argument type="service" id="shopware_es_backend.product_searcher.inner"/>
             <argument type="service" id="shopware_es_backend.search_query_builder"/>
             <argument>product</argument>
             <argument>%shopware.es.backend.enabled%</argument>
@@ -52,8 +52,8 @@
                  id="shopware_es_backend.customer_searcher"
                  decorates="shopware_attribute.customer_searcher">
 
-            <argument id="shopware_elastic_search.client" type="service"/>
-            <argument id="shopware_es_backend.customer_searcher.inner" type="service"/>
+            <argument type="service" id="Elasticsearch\Client"/>
+            <argument type="service" id="shopware_es_backend.customer_searcher.inner"/>
             <argument type="service" id="shopware_es_backend.search_query_builder"/>
             <argument>customer</argument>
             <argument>%shopware.es.backend.enabled%</argument>
@@ -64,18 +64,19 @@
         <service class="Shopware\Bundle\EsBackendBundle\Subscriber\OrmBacklogSubscriber"
                  id="shopware_bundle.es_backend_subscriber.orm_backlog_subscriber">
             <argument type="service" id="service_container"/>
+
             <tag name="doctrine.event_subscriber"/>
         </service>
 
         <service class="Shopware\Bundle\EsBackendBundle\Subscriber\DomainBacklogSubscriber" id="shopware_bundle_es_backend.subscriber.domain_backlog_subscriber">
             <argument>%shopware.es.backend.write_backlog%</argument>
             <argument id="shopware_bundle_es_backend.backlog_service" type="service"/>
+
             <tag name="shopware.event_subscriber"/>
         </service>
 
-
         <service class="Shopware\Bundle\EsBackendBundle\BacklogService" id="shopware_bundle_es_backend.backlog_service">
-            <argument id="dbal_connection" type="service"/>
+            <argument id="Doctrine\DBAL\Connection" type="service"/>
         </service>
 
         <!-- Commands -->
@@ -88,6 +89,7 @@
                  id="shopware_es_backend.commands.sync_backlog_command">
             <argument>%shopware.es.backend.batch_size%</argument>
             <argument type="service" id="Shopware\Bundle\EsBackendBundle\IndexFactoryInterface"/>
+
             <tag name="console.command" command="sw:es:backend:backlog:sync"/>
             <tag name="console.command" command="sw:es:backend:sync"/>
         </service>

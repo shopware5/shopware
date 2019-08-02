@@ -316,7 +316,7 @@ EOD;
         try {
             /** @var Enlight_Components_Mail $mail */
             $mail = $this->get('mail');
-            $mail->addTo($this->get('config')->get('mail'));
+            $mail->addTo($this->get(\Shopware_Components_Config::class)->get('mail'));
             $mail->setSubject('An invalid basket signature occured');
             $mail->setBodyHtml($content);
             $mail->setAssociation(LogEntryBuilder::ORDER_NUMBER_ASSOCIATION, $orderNumber);

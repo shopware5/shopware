@@ -207,7 +207,7 @@ class PluginLocalService
     {
         $rootDir = Shopware()->Container()->getParameter('shopware.app.rootdir');
 
-        $path = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager')->getPluginPath($name);
+        $path = Shopware()->Container()->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class)->getPluginPath($name);
         $path .= '/plugin.png';
 
         $relativePath = str_replace($rootDir, '', $path);

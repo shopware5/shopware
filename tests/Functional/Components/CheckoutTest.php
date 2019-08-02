@@ -57,7 +57,7 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
         parent::reset();
 
         if ($this->clearBasketOnReset) {
-            Shopware()->Container()->get('dbal_connection')->executeQuery('DELETE FROM s_order_basket');
+            Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->executeQuery('DELETE FROM s_order_basket');
         }
 
         $this->Request()->setHeader('User-Agent', self::USER_AGENT);
@@ -131,7 +131,7 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
     protected function createVoucher($value, $taxId, $percent = 1)
     {
         $code = Random::getAlphanumericString(12);
-        Shopware()->Container()->get('dbal_connection')
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)
             ->insert('s_emarketing_vouchers', [
                 'description' => 'test voucher',
                 'value' => $value,
@@ -182,7 +182,7 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
      */
     protected function setPaymentSurcharge($surchargeAbsolute, $surchargePercent = 0, $surchargeCountry = '')
     {
-        Shopware()->Container()->get('dbal_connection')->executeQuery('UPDATE s_core_paymentmeans SET surcharge = ?, debit_percent = ?, surchargestring = ?', [
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->executeQuery('UPDATE s_core_paymentmeans SET surcharge = ?, debit_percent = ?, surchargestring = ?', [
             $surchargeAbsolute,
             $surchargePercent,
             $surchargeCountry,
@@ -195,7 +195,7 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
      */
     protected function setCustomerGroupSurcharge($minOrderValue, $surcharge)
     {
-        Shopware()->Container()->get('dbal_connection')->executeQuery('UPDATE s_core_customergroups SET minimumorder = ?, minimumordersurcharge = ?', [
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->executeQuery('UPDATE s_core_customergroups SET minimumorder = ?, minimumordersurcharge = ?', [
             $minOrderValue,
             $surcharge,
         ]);
@@ -209,7 +209,7 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
     protected function addCustomerGroupDiscount($customerGroupKey, $discountStart, $discountValuePercent)
     {
         $this->clearCustomerGroupDiscount($customerGroupKey);
-        Shopware()->Container()->get('dbal_connection')->executeQuery('INSERT INTO s_core_customergroups_discounts VALUES (null, (SELECT id FROM s_core_customergroups WHERE groupkey = ?), ?, ?)', [
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->executeQuery('INSERT INTO s_core_customergroups_discounts VALUES (null, (SELECT id FROM s_core_customergroups WHERE groupkey = ?), ?, ?)', [
             $customerGroupKey,
             $discountValuePercent,
             $discountStart,
@@ -221,7 +221,7 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
      */
     protected function clearCustomerGroupDiscount($customerGroupKey)
     {
-        Shopware()->Container()->get('dbal_connection')->executeQuery('DELETE FROM s_core_customergroups_discounts WHERE groupID = (SELECT id FROM s_core_customergroups WHERE groupkey = ?)', [$customerGroupKey]);
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->executeQuery('DELETE FROM s_core_customergroups_discounts WHERE groupID = (SELECT id FROM s_core_customergroups WHERE groupkey = ?)', [$customerGroupKey]);
     }
 
     /**
@@ -230,7 +230,7 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
      */
     protected function setVoucherTax($orderCode, $taxConfig)
     {
-        Shopware()->Container()->get('dbal_connection')->update('s_emarketing_vouchers', [
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->update('s_emarketing_vouchers', [
             'taxconfig' => $taxConfig,
         ], [
             'ordercode' => $orderCode,
@@ -252,7 +252,7 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
         $repository = Shopware()->Models()->getRepository(Shop::class);
         $shop = $repository->getActiveById($user['language']);
 
-        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerShop($shop);
+        Shopware()->Container()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         Shopware()->Session()->Admin = true;
         Shopware()->System()->_POST = [

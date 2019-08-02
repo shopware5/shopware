@@ -63,9 +63,9 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
     public static function setUpBeforeClass()
     {
         self::$customerService = Shopware()->Container()->get('shopware_account.customer_service');
-        self::$modelManager = Shopware()->Container()->get('models');
-        self::$connection = Shopware()->Container()->get('dbal_connection');
-        self::$contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+        self::$modelManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
+        self::$connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        self::$contextService = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
 
         self::$modelManager->clear();
     }
@@ -100,7 +100,7 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
 
         static::assertEquals($newMail, $customer->getEmail());
 
-        // reset back to default demo mail
+        // Reset back to default demo mail
         $customer->setEmail('mustermann@b2b.de');
         self::$customerService->update($customer);
     }

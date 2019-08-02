@@ -55,7 +55,7 @@ class IndexPopulateCommand extends ShopwareCommand
         $indexer = $this->container->get('shopware_es_backend.indexer');
 
         $helper = new ConsoleProgressHelper($output);
-        $evaluation = $this->container->get('shopware_elastic_search.console.console_evaluation_helper');
+        $evaluation = $this->container->get(\Shopware\Bundle\ESIndexingBundle\Console\EvaluationHelperInterface::class);
         $evaluation->setOutput($output)
             ->setActive(!$input->getOption('no-evaluation'))
             ->setStopOnError($input->getOption('stop-on-error'));

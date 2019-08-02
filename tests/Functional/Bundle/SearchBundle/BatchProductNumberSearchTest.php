@@ -24,7 +24,6 @@
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle;
 
-use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\BatchProductNumberSearch;
 use Shopware\Bundle\SearchBundle\BatchProductNumberSearchRequest;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
@@ -52,7 +51,7 @@ class BatchProductNumberSearchTest extends TestCase
 
     protected function setUp()
     {
-        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $this->connection->beginTransaction();
         $this->batchSearch = Shopware()->Container()->get('shopware_search.batch_product_number_search');
 

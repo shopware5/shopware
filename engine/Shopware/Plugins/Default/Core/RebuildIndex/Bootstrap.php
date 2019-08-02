@@ -148,7 +148,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
                 throw new Exception('No valid shop id passed');
             }
 
-            $this->get('shopware.components.shop_registration_service')->registerShop($shop);
+            $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
             Shopware()->Modules()->Categories()->baseId = $shop->getCategory()->getId();
 
             list($cachedTime, $elementId, $shopId) = $this->SeoIndex()->getCachedTime();
@@ -167,7 +167,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
 
             $this->SeoIndex()->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);
 
-            $context = $this->get('shopware_storefront.context_service')->createShopContext($shopId);
+            $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext($shopId);
 
             $this->RewriteTable()->sCreateRewriteTableCategories();
             $this->RewriteTable()->sCreateRewriteTableCampaigns();
@@ -203,7 +203,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
         }
 
         /* @var SearchIndexerInterface $indexer */
-        $indexer = $this->get('shopware_searchdbal.search_indexer');
+        $indexer = $this->get(\Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexer::class);
         $indexer->build();
 
         return true;

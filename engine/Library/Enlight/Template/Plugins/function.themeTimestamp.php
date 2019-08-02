@@ -23,7 +23,7 @@
  */
 function smarty_function_themeTimestamp($params, $template)
 {
-    $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+    $context = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
     $shopId = $context->getShop()->getParentId();
 
     return Shopware()->Container()->get('theme_timestamp_persistor')->getCurrentTimestamp($shopId);

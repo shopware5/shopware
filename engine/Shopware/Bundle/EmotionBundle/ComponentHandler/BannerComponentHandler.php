@@ -150,7 +150,7 @@ class BannerComponentHandler implements ComponentHandlerInterface
                     continue;
                 }
 
-                $mapping['link'] = Shopware()->Container()->get('config')->get('baseFile') . '?sViewport=detail&sArticle=' . $product->getId() . '&number=' . $product->getNumber();
+                $mapping['link'] = Shopware()->Container()->get(\Shopware_Components_Config::class)->get('baseFile') . '?sViewport=detail&sArticle=' . $product->getId() . '&number=' . $product->getNumber();
             }
 
             $mappings[$key] = $mapping;

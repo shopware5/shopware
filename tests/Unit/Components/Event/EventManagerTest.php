@@ -291,7 +291,7 @@ class EventManagerTest extends TestCase
 
     public function testAddSubscriber()
     {
-        $eventSubscriber = new EventSubsciberTest();
+        $eventSubscriber = new EventSubscriberTest();
         $this->eventManager->addSubscriber($eventSubscriber);
 
         static::assertCount(1, $this->eventManager->getListeners('eventName0'));
@@ -336,7 +336,7 @@ class EventManagerTest extends TestCase
     }
 }
 
-class EventSubsciberTest implements SubscriberInterface
+class EventSubscriberTest implements SubscriberInterface
 {
     public static function getSubscribedEvents()
     {

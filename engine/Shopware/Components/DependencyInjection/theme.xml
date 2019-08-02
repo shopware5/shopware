@@ -17,10 +17,10 @@
         <service id="js_compressor" class="Shopware\Components\Theme\Compressor\Js" />
 
         <service id="theme_service" class="Shopware\Components\Theme\Service">
-            <argument type="service" id="models" />
-            <argument type="service" id="snippets" />
-            <argument type="service" id="theme_util" />
-            <argument type="service" id="shopware_media.media_service" />
+            <argument type="service" id="Shopware\Components\Model\ModelManager" />
+            <argument type="service" id="Shopware_Components_Snippet_Manager" />
+            <argument type="service" id="Shopware\Components\Theme\Util" />
+            <argument type="service" id="Shopware\Bundle\MediaBundle\MediaServiceInterface" />
         </service>
 
         <service id="theme_config_loader" class="Shopware\Components\Theme\EventListener\ConfigLoader">
@@ -37,59 +37,59 @@
         </service>
 
         <service id="theme_generator" class="Shopware\Components\Theme\Generator">
-            <argument type="service" id="theme_path_resolver" />
+            <argument type="service" id="Shopware\Components\Theme\PathResolver" />
             <argument type="service" id="file_system" />
-            <argument type="service" id="events" />
+            <argument type="service" id="Shopware\Components\ContainerAwareEventManager" />
         </service>
 
         <service id="theme_config_persister" class="Shopware\Components\Form\Persister\Theme">
-            <argument type="service" id="models" />
+            <argument type="service" id="Shopware\Components\Model\ModelManager" />
         </service>
 
         <service id="theme_configurator" class="Shopware\Components\Theme\Configurator">
-            <argument type="service" id="models" />
-            <argument type="service" id="theme_util" />
+            <argument type="service" id="Shopware\Components\Model\ModelManager" />
+            <argument type="service" id="Shopware\Components\Theme\Util" />
             <argument type="service" id="theme_config_persister" />
-            <argument type="service" id="events" />
+            <argument type="service" id="Shopware\Components\ContainerAwareEventManager" />
         </service>
 
         <service id="theme_inheritance" class="Shopware\Components\Theme\Inheritance">
-            <argument type="service" id="models" />
-            <argument type="service" id="theme_util" />
-            <argument type="service" id="theme_path_resolver" />
-            <argument type="service" id="events" />
-            <argument type="service" id="shopware_media.media_service" />
+            <argument type="service" id="Shopware\Components\Model\ModelManager" />
+            <argument type="service" id="Shopware\Components\Theme\Util" />
+            <argument type="service" id="Shopware\Components\Theme\PathResolver" />
+            <argument type="service" id="Shopware\Components\ContainerAwareEventManager" />
+            <argument type="service" id="Shopware\Bundle\MediaBundle\MediaServiceInterface" />
         </service>
 
         <service id="theme_util" class="Shopware\Components\Theme\Util">
-            <argument type="service" id="models" />
-            <argument type="service" id="theme_path_resolver" />
+            <argument type="service" id="Shopware\Components\Model\ModelManager" />
+            <argument type="service" id="Shopware\Components\Theme\PathResolver" />
         </service>
 
         <service id="theme_installer" class="Shopware\Components\Theme\Installer">
-            <argument type="service" id="models" />
-            <argument type="service" id="theme_configurator" />
-            <argument type="service" id="theme_path_resolver" />
-            <argument type="service" id="theme_util" />
-            <argument type="service" id="shopware.snippet_database_handler" />
-            <argument type="service" id="theme_service" />
+            <argument type="service" id="Shopware\Components\Model\ModelManager" />
+            <argument type="service" id="Shopware\Components\Theme\Configurator" />
+            <argument type="service" id="Shopware\Components\Theme\PathResolver" />
+            <argument type="service" id="Shopware\Components\Theme\Util" />
+            <argument type="service" id="Shopware\Components\Snippet\DatabaseHandler" />
+            <argument type="service" id="Shopware\Components\Theme\Service" />
             <argument>%shopware.snippet%</argument>
         </service>
 
         <service id="theme_compiler" class="Shopware\Components\Theme\Compiler">
             <argument>%shopware.app.rootdir%</argument>
             <argument type="service" id="less_compiler" />
-            <argument type="service" id="theme_path_resolver" />
+            <argument type="service" id="Shopware\Components\Theme\PathResolver" />
             <argument type="service" id="theme_inheritance" />
-            <argument type="service" id="theme_service" />
+            <argument type="service" id="Shopware\Components\Theme\Service" />
             <argument type="service" id="js_compressor" />
-            <argument type="service" id="events" />
+            <argument type="service" id="Shopware\Components\ContainerAwareEventManager" />
             <argument type="service" id="theme_timestamp_persistor" />
             <argument type="service" id="shopware.release" />
         </service>
 
         <service id="theme_timestamp_persistor" class="Shopware\Components\Theme\DBALTimestampPersistor">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
         </service>
 
         <service id="theme_backend_registration" class="Shopware\Components\Theme\EventListener\BackendTheme">

@@ -53,7 +53,7 @@ class LastArticlesSubscriber implements SubscriberInterface
 
     public function refreshSessionId(\Enlight_Event_EventArgs $args)
     {
-        $this->container->get('dbal_connection')->executeUpdate(
+        $this->container->get(\Doctrine\DBAL\Connection::class)->executeUpdate(
             'UPDATE s_emarketing_lastarticles SET sessionID = :newId WHERE sessionID = :oldId',
             ['oldId' => $args->get('oldSessionId'), 'newId' => $args->get('newSessionId')]
         );
@@ -79,7 +79,7 @@ class LastArticlesSubscriber implements SubscriberInterface
     public function onPostDispatch(\Enlight_Controller_ActionEventArgs $args)
     {
         $this->cleanupLastProducts();
-        $config = $this->container->get('config');
+        $config = $this->container->get(\Shopware_Components_Config::class);
 
         if (empty($config->offsetGet('lastarticles_show'))) {
             return;
@@ -101,10 +101,10 @@ class LastArticlesSubscriber implements SubscriberInterface
     private function cleanupLastProducts()
     {
         if (Random::getInteger(0, 100) === 0) {
-            $time = (int) $this->container->get('config')->get('lastarticles_time', 15);
+            $time = (int) $this->container->get(\Shopware_Components_Config::class)->get('lastarticles_time', 15);
 
             $sql = 'DELETE FROM s_emarketing_lastarticles WHERE `time` < DATE_SUB(CONCAT_WS(" ", CURDATE(), ?), INTERVAL ? DAY)';
-            $this->container->get('dbal_connection')->executeQuery($sql, ['00:00:00', $time]);
+            $this->container->get(\Doctrine\DBAL\Connection::class)->executeQuery($sql, ['00:00:00', $time]);
 
             $this->container->get('events')->notify('Shopware_Plugins_LastArticles_ResetLastArticles', ['subject' => $this]);
         }
@@ -132,7 +132,7 @@ class LastArticlesSubscriber implements SubscriberInterface
             VALUES (:articleId, :sessionId, NOW(), :userId, :shopId)
             ON DUPLICATE KEY UPDATE `time` = NOW(), `userID` = VALUES(userID)';
 
-        $this->container->get('dbal_connection')->executeUpdate(
+        $this->container->get(\Doctrine\DBAL\Connection::class)->executeUpdate(
             $insertSql,
             [
                 'articleId' => $productId,

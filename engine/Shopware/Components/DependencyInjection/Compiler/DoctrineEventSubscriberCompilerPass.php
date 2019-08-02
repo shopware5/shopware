@@ -36,9 +36,7 @@ class DoctrineEventSubscriberCompilerPass implements CompilerPassInterface
             return;
         }
 
-        $definition = $container->getDefinition(
-            'model_event_manager'
-        );
+        $definition = $container->getDefinition('model_event_manager');
 
         $taggedServices = $container->findTaggedServiceIds(
             'doctrine.event_subscriber'

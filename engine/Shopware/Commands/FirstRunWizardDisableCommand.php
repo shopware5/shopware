@@ -45,7 +45,7 @@ class FirstRunWizardDisableCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $conn = $this->container->get('dbal_connection');
+        $conn = $this->container->get(\Doctrine\DBAL\Connection::class);
         $elementId = $conn->fetchColumn('SELECT id FROM s_core_config_elements WHERE name LIKE "firstRunWizardEnabled"');
         $valueid = $conn->fetchColumn('SELECT id FROM s_core_config_values WHERE element_id = :elementId', ['elementId' => $elementId]);
 
@@ -66,7 +66,7 @@ class FirstRunWizardDisableCommand extends ShopwareCommand
         }
 
         /** @var \Shopware\Components\CacheManager $cacheManager */
-        $cacheManager = $this->container->get('shopware.cache_manager');
+        $cacheManager = $this->container->get(\Shopware\Components\CacheManager::class);
         $cacheManager->clearConfigCache();
 
         $output->writeln('<info>First Run Wizard disabled</info>');

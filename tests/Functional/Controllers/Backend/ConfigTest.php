@@ -341,7 +341,7 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
     {
         // synthetic services
         $kernel = Shopware()->Container()->get('kernel');
-        $connection = Shopware()->Container()->get('db_connection');
+        $connection = Shopware()->Container()->get(\PDO::class);
         $application = Shopware()->Container()->get('application');
 
         Shopware()->Container()->reset();

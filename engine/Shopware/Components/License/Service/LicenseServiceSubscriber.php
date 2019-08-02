@@ -30,6 +30,7 @@ use Enlight_View_Default;
 use Shopware\Components\License\Struct\LicenseInformation;
 use Shopware\Components\License\Struct\LicenseUnpackRequest;
 use Shopware\Components\License\Struct\ShopwareEdition;
+use Shopware\Models\Shop\Shop;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LicenseServiceSubscriber implements SubscriberInterface
@@ -62,7 +63,7 @@ class LicenseServiceSubscriber implements SubscriberInterface
 
         $sql = 'SELECT license FROM s_core_licenses WHERE active=1 AND module = "SwagCommercial"';
         $license = $this->container
-            ->get('dbal_connection')
+            ->get(\Doctrine\DBAL\Connection::class)
             ->query($sql)
             ->fetchColumn()
         ;
@@ -70,8 +71,8 @@ class LicenseServiceSubscriber implements SubscriberInterface
             return;
         }
 
-        $repository = $this->container->get('models')
-            ->getRepository('Shopware\Models\Shop\Shop')
+        $repository = $this->container->get(\Shopware\Components\Model\ModelManager::class)
+            ->getRepository(Shop::class)
         ;
         $host = $repository->getActiveDefault()->getHost();
         $request = new LicenseUnpackRequest($license, $host);
@@ -79,7 +80,7 @@ class LicenseServiceSubscriber implements SubscriberInterface
         try {
             /** @var LicenseInformation $licenseInformation */
             $licenseInformation = $this->container
-                ->get('shopware_core.local_license_unpack_service')
+                ->get(\Shopware\Components\License\Service\LocalLicenseUnpackService::class)
                 ->evaluateLicense($request)
             ;
         } catch (\RuntimeException $e) {

@@ -24,7 +24,6 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
-use Shopware\Components\Api\Resource\Address;
 use Shopware\Components\Api\Resource\Customer;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Random;
@@ -40,7 +39,7 @@ class CustomerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        Shopware()->Container()->get('dbal_connection')->exec('UPDATE s_core_countries SET allow_shipping = 0 WHERE id = 25');
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->exec('UPDATE s_core_countries SET allow_shipping = 0 WHERE id = 25');
     }
 
     /**
@@ -606,7 +605,7 @@ class CustomerTest extends TestCase
 
     public function testCreateCustomerWithDefaultShopCustomerGroup()
     {
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1);
+        $context = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext(1);
         $data = [
             'shopId' => 1,
             'password' => 'fooobar',

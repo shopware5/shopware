@@ -28,7 +28,7 @@ use PHPUnit\Framework\Constraint\IsType;
 
 class ProductsProviderTest extends ProviderTestCase
 {
-    const SERVICE_ID = 'shopware.benchmark_bundle.providers.products';
+    const SERVICE_ID = \Shopware\Bundle\BenchmarkBundle\Provider\ProductsProvider::class;
     const EXPECTED_KEYS_COUNT = 1;
     const EXPECTED_TYPES = [
         'list' => IsType::TYPE_ARRAY,
@@ -102,12 +102,12 @@ class ProductsProviderTest extends ProviderTestCase
         $this->installDemoData('second_config');
 
         $provider = $this->getProvider();
-        $benchmarkData = $provider->getBenchmarkData(Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1));
+        $benchmarkData = $provider->getBenchmarkData(Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext(1));
         $productsList = $benchmarkData['list'];
 
         static::assertCount(5, $productsList);
 
-        $benchmarkData = $provider->getBenchmarkData(Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(2));
+        $benchmarkData = $provider->getBenchmarkData(Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext(2));
         $productsList = $benchmarkData['list'];
 
         static::assertCount(1, $productsList);

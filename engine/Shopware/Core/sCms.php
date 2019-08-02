@@ -77,7 +77,7 @@ class sCms implements \Enlight_Hook
         $this->config = $config ?: Shopware()->Config();
         $this->front = $front ?: Shopware()->Front();
         $this->moduleManager = $moduleManager ?: Shopware()->Modules();
-        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
+        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get(\Shopware_Components_Translation::class);
     }
 
     /**
@@ -124,7 +124,7 @@ class sCms implements \Enlight_Hook
         }
 
         // load attributes
-        $staticPage['attribute'] = Shopware()->Container()->get('shopware_attribute.data_loader')->load('s_cms_static_attributes', $staticId);
+        $staticPage['attribute'] = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataLoader::class)->load('s_cms_static_attributes', $staticId);
 
         if ($translations) {
             foreach ($translations as $property => $translation) {

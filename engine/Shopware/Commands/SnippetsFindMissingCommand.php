@@ -44,7 +44,7 @@ class SnippetsFindMissingCommand extends ShopwareCommand implements CompletionAw
             return $this->completeDirectoriesInDirectory();
         } elseif ($optionName === 'fallback') {
             /** @var ModelRepository $localeRepository */
-            $localeRepository = $this->getContainer()->get('models')->getRepository(Locale::class);
+            $localeRepository = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Locale::class);
             $queryBuilder = $localeRepository->createQueryBuilder('locale');
 
             if (strlen($context->getCurrentWord())) {
@@ -109,15 +109,15 @@ class SnippetsFindMissingCommand extends ShopwareCommand implements CompletionAw
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $locale = $this->container->get('models')->getRepository('Shopware\Models\Shop\Locale')->findOneByLocale($input->getArgument('locale'));
+        $locale = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Locale::class)->findOneByLocale($input->getArgument('locale'));
         if (!$locale) {
             $output->writeln('<error>Provided locale not found</error>');
 
             return null;
         }
 
-        $filteredQueryBuilder = $this->container->get('models')->getDBALQueryBuilder();
-        $localeQueryBuilder = $this->container->get('models')->getDBALQueryBuilder();
+        $filteredQueryBuilder = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getDBALQueryBuilder();
+        $localeQueryBuilder = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getDBALQueryBuilder();
 
         $statement = $localeQueryBuilder
             ->select('DISTINCT CONCAT(s.namespace, s.name) as hash')
@@ -140,13 +140,13 @@ class SnippetsFindMissingCommand extends ShopwareCommand implements CompletionAw
                     }, $localeSnippets)
                 )
             )
-            ->setParameter('snippets', array_map(function ($item) {
+            ->setParameter('snippets', array_map(static function ($item) {
                 return $item['hash'];
             }, $localeSnippets))
         ;
 
         if ($input->getOption('fallback')) {
-            $targetLocale = $this->container->get('models')->getRepository('Shopware\Models\Shop\Locale')->findOneByLocale($input->getOption('fallback'));
+            $targetLocale = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Locale::class)->findOneByLocale($input->getOption('fallback'));
             if (!$targetLocale) {
                 $output->writeln('<error>Provided fallback locale not found</error>');
 

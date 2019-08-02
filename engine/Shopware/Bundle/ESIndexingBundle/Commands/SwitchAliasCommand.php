@@ -53,7 +53,7 @@ class SwitchAliasCommand extends ShopwareCommand implements CompletionAwareInter
     {
         if ($argumentName === 'shopId') {
             /** @var Repository $shopRepository */
-            $shopRepository = $this->getContainer()->get('models')->getRepository(ShopModel::class);
+            $shopRepository = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(ShopModel::class);
             $queryBuilder = $shopRepository->createQueryBuilder('shop');
 
             if (is_numeric($context->getCurrentWord())) {
@@ -71,7 +71,7 @@ class SwitchAliasCommand extends ShopwareCommand implements CompletionAwareInter
 
         if ($argumentName === 'index') {
             /** @var Client $client */
-            $client = $this->container->get('shopware_elastic_search.client');
+            $client = $this->container->get(\Elasticsearch\Client::class);
 
             return array_keys($client->indices()->getAliases());
         }
@@ -101,14 +101,14 @@ class SwitchAliasCommand extends ShopwareCommand implements CompletionAwareInter
         $indexName = $input->getArgument('index');
 
         /** @var Shop $shop */
-        $shop = $this->container->get('shopware_storefront.shop_gateway_dbal')->get($shopId);
+        $shop = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface::class)->get($shopId);
 
         /** @var ShopIndex $index */
-        $index = $this->container->get('shopware_elastic_search.index_factory')
+        $index = $this->container->get(\Shopware\Bundle\ESIndexingBundle\IndexFactory::class)
             ->createShopIndex($shop, $type);
 
         /** @var Client $client */
-        $client = $this->container->get('shopware_elastic_search.client');
+        $client = $this->container->get(\Elasticsearch\Client::class);
 
         $exist = $client->indices()->exists(['index' => $indexName]);
         if (!$exist) {

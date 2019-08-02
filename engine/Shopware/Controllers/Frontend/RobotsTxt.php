@@ -53,10 +53,10 @@ class Shopware_Controllers_Frontend_RobotsTxt extends Enlight_Controller_Action
      */
     private function getRouterContext(Shop $mainShop): array
     {
-        $config = $this->container->get('config');
+        $config = $this->container->get(\Shopware_Components_Config::class);
 
         /** @var \Shopware\Models\Shop\Repository $shopRepository */
-        $shopRepository = $this->container->get('models')->getRepository(Shop::class);
+        $shopRepository = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
         $context = [];
         $allShops = $mainShop->getChildren();
         $allShops[] = $mainShop;

@@ -86,7 +86,7 @@ class MediaCleanupCommand extends ShopwareCommand
     private function handleCleanup(SymfonyStyle $io)
     {
         /** @var \Shopware\Components\Model\ModelManager $em */
-        $em = $this->getContainer()->get('models');
+        $em = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class);
 
         /** @var \Shopware\Models\Media\Repository $repository */
         $repository = $em->getRepository(Media::class);

@@ -81,12 +81,12 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
      */
     public function delete($id)
     {
-        $this->get('dbal_connection')->executeQuery(
+        $this->get(\Doctrine\DBAL\Connection::class)->executeQuery(
             'DELETE FROM s_customer_streams_mapping WHERE customer_id = :id',
             [':id' => $id]
         );
 
-        $this->get('dbal_connection')->executeQuery(
+        $this->get(\Doctrine\DBAL\Connection::class)->executeQuery(
             'DELETE FROM s_customer_search_index WHERE id = :id',
             [':id' => $id]
         );
@@ -99,7 +99,7 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
      */
     protected function getListQuery()
     {
-        $query = $this->container->get('models')->createQueryBuilder();
+        $query = $this->container->get(\Shopware\Components\Model\ModelManager::class)->createQueryBuilder();
 
         $query->select([
             'customer.id',
@@ -219,7 +219,7 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
      */
     private function fetchAttributes(array $ids)
     {
-        $query = $this->container->get('models')->createQueryBuilder();
+        $query = $this->container->get(\Shopware\Components\Model\ModelManager::class)->createQueryBuilder();
         $query->select(['attribute']);
         $query->from(CustomerAttribute::class, 'attribute', 'attribute.customerId');
         $query->where('attribute.customerId IN (:ids)');
@@ -279,7 +279,7 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
             }
         }
 
-        $repository = $this->container->get('shopware_attribute.customer_repository');
+        $repository = $this->container->get(\Shopware\Bundle\AttributeBundle\Repository\CustomerRepository::class);
 
         $result = $repository->search($criteria);
 

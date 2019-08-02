@@ -63,9 +63,9 @@ class sArticlesComparisons implements \Enlight_Hook
         $this->systemModule = $articleModule->sSYSTEM;
 
         $this->db = $container->get('db');
-        $this->config = $container->get('config');
+        $this->config = $container->get(\Shopware_Components_Config::class);
         $this->session = $container->get('session');
-        $this->contextService = $container->get('shopware_storefront.context_service');
+        $this->contextService = $container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
     }
 
     /**

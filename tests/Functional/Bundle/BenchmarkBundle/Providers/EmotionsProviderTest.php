@@ -28,7 +28,7 @@ use PHPUnit\Framework\Constraint\IsType;
 
 class EmotionsProviderTest extends ProviderTestCase
 {
-    const SERVICE_ID = 'shopware.benchmark_bundle.providers.emotions';
+    const SERVICE_ID = \Shopware\Bundle\BenchmarkBundle\Provider\EmotionsProvider::class;
     const EXPECTED_KEYS_COUNT = 5;
     const EXPECTED_TYPES = [
         'total' => IsType::TYPE_INT,

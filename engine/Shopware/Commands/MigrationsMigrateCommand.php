@@ -84,7 +84,7 @@ class MigrationsMigrateCommand extends ShopwareCommand implements CompletionAwar
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $connection = $this->getContainer()->get('db_connection');
+        $connection = $this->getContainer()->get(\PDO::class);
         $rootDir = $this->getContainer()->getParameter('kernel.root_dir');
 
         $mode = $input->getOption('mode');

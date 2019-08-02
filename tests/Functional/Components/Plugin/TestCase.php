@@ -59,7 +59,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$pluginManager = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager');
+        self::$pluginManager = Shopware()->Container()->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
         $loadedPlugins = static::$ensureLoadedPlugins;
 
         foreach ($loadedPlugins as $key => $value) {

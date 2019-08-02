@@ -33,7 +33,7 @@
         </service>
 
         <service id="shopware_search_es.similar_product_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\SimilarProductConditionHandler" >
-            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="Doctrine\DBAL\Connection" />
             <tag name="shopware_search_es.search_handler" />
         </service>
 
@@ -58,7 +58,7 @@
         </service>
 
         <service id="shopware_search_es.is_new_condtion_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\IsNewConditionHandler" >
-            <argument type="service" id="config" />
+            <argument type="service" id="Shopware_Components_Config" />
             <tag name="shopware_search_es.search_handler" />
         </service>
 
@@ -84,7 +84,8 @@
         </service>
 
         <service id="shopware_search_es.product_attribute_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\ProductAttributeConditionHandler" >
-            <argument type="service" id="shopware_attribute.crud_service" />
+            <argument type="service" id="Shopware\Bundle\AttributeBundle\Service\CrudService" />
+
             <tag name="shopware_search_es.search_handler" />
         </service>
 
@@ -118,62 +119,69 @@
         </service>
 
         <service id="shopware_search_es.price_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\PriceFacetHandler">
-            <argument type="service" id="snippets" />
-            <argument type="service" id="query_alias_mapper" />
+            <argument type="service" id="Shopware_Components_Snippet_Manager" />
+            <argument type="service" id="Shopware\Components\QueryAliasMapper" />
             <argument type="service" id="shopware_search_es.price_field_mapper" />
+
             <tag name="shopware_search_es.search_handler" />
         </service>
 
         <service id="shopware_search_es.manufacturer_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\ManufacturerFacetHandler">
-            <argument type="service" id="shopware_storefront.manufacturer_service" />
-            <argument type="service" id="snippets" />
-            <argument type="service" id="query_alias_mapper" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface" />
+            <argument type="service" id="Shopware_Components_Snippet_Manager" />
+            <argument type="service" id="Shopware\Components\QueryAliasMapper" />
+
             <tag name="shopware_search_es.search_handler" />
         </service>
 
         <service id="shopware_search_es.property_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\PropertyFacetHandler">
-            <argument type="service" id="query_alias_mapper" />
-            <argument type="service" id="shopware_elastic_search.client" />
-            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="Shopware\Components\QueryAliasMapper" />
+            <argument type="service" id="Elasticsearch\Client" />
+            <argument type="service" id="Doctrine\DBAL\Connection" />
             <argument type="service" id="shopware_search_es.struct_hydrator" />
-            <argument type="service" id="shopware_elastic_search.index_factory" />
+            <argument type="service" id="Shopware\Bundle\ESIndexingBundle\IndexFactory" />
             <argument>%shopware.es.version%</argument>
 
             <tag name="shopware_search_es.search_handler" />
         </service>
 
         <service id="shopware_search_es.shipping_free_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\ShippingFreeFacetHandler">
-            <argument type="service" id="snippets" />
-            <argument type="service" id="query_alias_mapper" />
+            <argument type="service" id="Shopware_Components_Snippet_Manager" />
+            <argument type="service" id="Shopware\Components\QueryAliasMapper" />
+
             <tag name="shopware_search_es.search_handler" />
         </service>
 
         <service id="shopware_search_es.immediate_delivery_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\ImmediateDeliveryFacetHandler">
-            <argument type="service" id="snippets" />
-            <argument type="service" id="query_alias_mapper" />
+            <argument type="service" id="Shopware_Components_Snippet_Manager" />
+            <argument type="service" id="Shopware\Components\QueryAliasMapper" />
+
             <tag name="shopware_search_es.search_handler" />
         </service>
 
         <service id="shopware_search_es.vote_average_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\VoteAverageFacetHandler">
-            <argument type="service" id="snippets" />
-            <argument type="service" id="query_alias_mapper" />
+            <argument type="service" id="Shopware_Components_Snippet_Manager" />
+            <argument type="service" id="Shopware\Components\QueryAliasMapper" />
+
             <tag name="shopware_search_es.search_handler" />
         </service>
 
         <service id="shopware_search_es.product_attribute_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\ProductAttributeFacetHandler">
-            <argument type="service" id="shopware_attribute.crud_service" />
+            <argument type="service" id="Shopware\Bundle\AttributeBundle\Service\CrudService" />
             <tag name="shopware_search_es.search_handler" />
         </service>
 
         <service id="shopware_search_es.category_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\CategoryFacetHandler">
-            <argument type="service" id="shopware_storefront.category_service" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface" />
             <argument type="service" id="shopware_storefront.category_depth_service" />
             <argument type="service" id="shopware_search.category_tree_facet_result_builder" />
+
             <tag name="shopware_search_es.search_handler" />
         </service>
 
         <service id="shopware_search_es.price_sorting_handler" class="Shopware\Bundle\SearchBundleES\SortingHandler\PriceSortingHandler">
             <argument type="service" id="shopware_search_es.price_field_mapper" />
+
             <tag name="shopware_search_es.search_handler" />
         </service>
 
@@ -223,12 +231,14 @@
         </service>
 
         <service id="shopware_search_es.combined_condition_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\CombinedConditionFacetHandler">
-            <argument type="service" id="shopware_search_es.combined_condition_query_builder" />
+            <argument type="service" id="Shopware\Bundle\SearchBundleES\CombinedConditionQueryBuilder" />
+
             <tag name="shopware_search_es.search_handler" />
         </service>
 
         <service id="shopware_search_es.combined_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\CombinedConditionHandler">
-            <argument type="service" id="shopware_search_es.combined_condition_query_builder" />
+            <argument type="service" id="Shopware\Bundle\SearchBundleES\CombinedConditionQueryBuilder" />
+
             <tag name="shopware_search_es.search_handler" />
         </service>
 
@@ -266,8 +276,8 @@
 
         <service id="shopware_search_es.variant_condition_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\VariantFacetHandler">
             <tag name="shopware_search_es.search_handler"/>
-            <argument type="service" id="shopware_storefront.configurator_options_gateway"/>
-            <argument type="service" id="query_alias_mapper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorOptionsGatewayInterface"/>
+            <argument type="service" id="Shopware\Components\QueryAliasMapper"/>
         </service>
 
         <service class="Shopware\Bundle\SearchBundleES\PriceFieldMapper" id="shopware_search_es.price_field_mapper"/>

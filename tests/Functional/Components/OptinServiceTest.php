@@ -37,7 +37,7 @@ class OptinServiceTest extends TestCase
     protected function setUp()
     {
         Shopware()->Models()->getConnection()->beginTransaction();
-        $this->service = Shopware()->Container()->get('shopware.components.optin_service');
+        $this->service = Shopware()->Container()->get(\Shopware\Components\OptinServiceInterface::class);
     }
 
     protected function tearDown()

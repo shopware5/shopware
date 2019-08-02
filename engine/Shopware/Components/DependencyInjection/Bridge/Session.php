@@ -81,7 +81,7 @@ class Session
 
         $name = 'session-' . $shop->getId();
 
-        if ($container->get('config')->get('shareSessionBetweenLanguageShops')) {
+        if ($container->get(\Shopware_Components_Config::class)->get('shareSessionBetweenLanguageShops')) {
             $name = 'session-' . $mainShop->getId();
         }
 

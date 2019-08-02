@@ -28,13 +28,13 @@ class Shopware_Tests_Controllers_Frontend_RobotsTxtTest extends Enlight_Componen
     {
         parent::setUp();
 
-        Shopware()->Container()->get('dbal_connection')->beginTransaction();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
     }
 
     public function tearDown(): void
     {
         parent::tearDown();
-        Shopware()->Container()->get('dbal_connection')->rollBack();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollBack();
     }
 
     /**

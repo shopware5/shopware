@@ -28,7 +28,7 @@ use PHPUnit\Framework\Constraint\IsType;
 
 class PluginsProviderTest extends ProviderTestCase
 {
-    const SERVICE_ID = 'shopware.benchmark_bundle.providers.plugins';
+    const SERVICE_ID = \Shopware\Bundle\BenchmarkBundle\Provider\PluginsProvider::class;
     const EXPECTED_KEYS_COUNT = 2;
     const EXPECTED_TYPES = [
         'total' => IsType::TYPE_INT,

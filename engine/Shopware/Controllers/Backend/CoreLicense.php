@@ -26,6 +26,7 @@ use Shopware\Components\License\Service\Exceptions\LicenseHostException;
 use Shopware\Components\License\Struct\LicenseInformation;
 use Shopware\Components\License\Struct\LicenseUnpackRequest;
 use Shopware\Components\LicenseInstaller;
+use Shopware\Models\Shop\Shop;
 
 class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Backend_ExtJs
 {
@@ -67,7 +68,7 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
         }
 
         try {
-            $licenseInstaller = new LicenseInstaller($this->container->get('dbal_connection'));
+            $licenseInstaller = new LicenseInstaller($this->container->get(\Doctrine\DBAL\Connection::class));
             $licenseInstaller->installLicense($licenseData);
         } catch (Exception $e) {
             $this->View()->assign([
@@ -175,7 +176,7 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
     {
         $sql = 'SELECT license FROM s_core_licenses WHERE active=1 AND module = "SwagCommercial"';
 
-        return $this->container->get('dbal_connection')->query($sql)->fetchColumn();
+        return $this->container->get(\Doctrine\DBAL\Connection::class)->query($sql)->fetchColumn();
     }
 
     /**
@@ -191,12 +192,12 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
      */
     private function unpackLicense($licenseString)
     {
-        $repository = $this->container->get('models')->getRepository('Shopware\Models\Shop\Shop');
+        $repository = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
         $host = $repository->getActiveDefault()->getHost();
         $request = new LicenseUnpackRequest($licenseString, $host);
 
         /** @var LicenseInformation $licenseData */
-        $licenseData = $this->container->get('shopware_core.local_license_unpack_service')->evaluateLicense($request);
+        $licenseData = $this->container->get(\Shopware\Components\License\Service\LocalLicenseUnpackService::class)->evaluateLicense($request);
 
         return $licenseData;
     }
@@ -210,7 +211,7 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
     {
         try {
             $sql = "DELETE FROM s_core_licenses WHERE module = 'SwagCommercial'";
-            $this->container->get('dbal_connection')->query($sql);
+            $this->container->get(\Doctrine\DBAL\Connection::class)->query($sql);
         } catch (\PDOException $e) {
             throw new \RuntimeException('Could not remove license from database', 0, $e);
         }

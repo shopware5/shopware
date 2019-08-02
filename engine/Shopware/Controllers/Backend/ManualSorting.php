@@ -32,7 +32,7 @@ class ManualSorting extends \Shopware_Controllers_Backend_ExtJs
     public function preDispatch()
     {
         parent::preDispatch();
-        $this->get('shopware.components.shop_registration_service')->registerShop($this->getModelManager()->getRepository(Shop::class)->getActiveDefault());
+        $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($this->getModelManager()->getRepository(Shop::class)->getActiveDefault());
     }
 
     public function listAction(int $start = 0, int $limit = 25, int $categoryId = 3, int $sortingId = 1): void
@@ -52,7 +52,7 @@ class ManualSorting extends \Shopware_Controllers_Backend_ExtJs
 
     public function removePositionAction(int $categoryId = 3, array $data = []): void
     {
-        $this->get('dbal_connection')->delete('s_categories_manual_sorting', [
+        $this->get(\Doctrine\DBAL\Connection::class)->delete('s_categories_manual_sorting', [
             'category_id' => $categoryId,
             'product_id' => $data['id'],
         ]);
@@ -60,7 +60,7 @@ class ManualSorting extends \Shopware_Controllers_Backend_ExtJs
 
     public function resetCategoryAction(int $categoryId): void
     {
-        $this->get('dbal_connection')->delete('s_categories_manual_sorting', [
+        $this->get(\Doctrine\DBAL\Connection::class)->delete('s_categories_manual_sorting', [
             'category_id' => $categoryId,
         ]);
     }
@@ -81,9 +81,9 @@ class ManualSorting extends \Shopware_Controllers_Backend_ExtJs
      */
     private function getSortings(int $categoryId): array
     {
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
 
-        return current($this->get('shopware_storefront.custom_sorting_service')->getSortingsOfCategories([$categoryId], $context));
+        return current($this->get(\Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface::class)->getSortingsOfCategories([$categoryId], $context));
     }
 
     private function getSorting(int $categoryId, int $sortingId): ?CustomSorting

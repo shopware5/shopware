@@ -42,10 +42,10 @@ class ProductMediaTest extends TestCase
             );
         }
 
-        $listProducts = Shopware()->Container()->get('shopware_storefront.list_product_service')
+        $listProducts = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)
             ->getList($numbers, $context);
 
-        $mediaList = Shopware()->Container()->get('shopware_storefront.product_media_gateway')
+        $mediaList = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::class)
             ->getList($listProducts, $context);
 
         static::assertCount(2, $mediaList);
@@ -83,10 +83,10 @@ class ProductMediaTest extends TestCase
 
         $variantNumbers = ['testVariantMediaList1-1', 'testVariantMediaList1-2', 'testVariantMediaList2-1'];
 
-        $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
+        $products = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)
             ->getList($variantNumbers, $context);
 
-        $mediaList = Shopware()->Container()->get('shopware_storefront.variant_media_gateway')
+        $mediaList = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Gateway\VariantMediaGatewayInterface::class)
             ->getList($products, $context);
 
         static::assertCount(3, $mediaList);
@@ -100,10 +100,10 @@ class ProductMediaTest extends TestCase
             }
         }
 
-        $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
+        $products = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)
             ->getList($numbers, $context);
 
-        $mediaList = Shopware()->Container()->get('shopware_storefront.product_media_gateway')
+        $mediaList = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::class)
             ->getList($products, $context);
 
         static::assertCount(2, $mediaList);
@@ -132,7 +132,7 @@ class ProductMediaTest extends TestCase
         $this->helper->createArticle($data);
 
         $variantNumber = 'testProductImagesWithVariant-1';
-        $product = Shopware()->Container()->get('shopware_storefront.product_service')
+        $product = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ProductServiceInterface::class)
             ->get($variantNumber, $context);
 
         static::assertCount(2, $product->getMedia());
@@ -196,7 +196,7 @@ class ProductMediaTest extends TestCase
     private function resetContext()
     {
         // correct router context for url building
-        Shopware()->Container()->get('router')->setContext(
+        Shopware()->Container()->get(\Shopware\Components\Routing\RouterInterface::class)->setContext(
             new Context(
                 'localhost',
                 Shopware()->Shop()->getBasePath(),

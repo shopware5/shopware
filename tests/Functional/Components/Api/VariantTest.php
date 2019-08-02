@@ -498,7 +498,7 @@ class VariantTest extends TestCase
         $configuratorSet = $this->getSimpleConfiguratorSet();
         $data['configuratorSet'] = $configuratorSet;
         $article = $this->resourceArticle->create($data);
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         $create = $this->getSimpleVariantData();
         $create['articleId'] = $article->getId();

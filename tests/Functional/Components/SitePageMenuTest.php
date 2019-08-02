@@ -28,9 +28,12 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Routing\Router;
 use Shopware\Components\SitePageMenu;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class SitePageMenuTest extends TestCase
 {
+    use DatabaseTransactionBehaviour;
+
     /**
      * @var Connection
      */
@@ -44,16 +47,9 @@ class SitePageMenuTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->connection = Shopware()->Container()->get('dbal_connection');
-        $this->connection->beginTransaction();
+        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $this->connection->executeQuery('DELETE FROM s_cms_static');
-        $this->sitePageMenu = Shopware()->Container()->get('shop_page_menu');
-    }
-
-    protected function tearDown()
-    {
-        $this->connection->rollBack();
-        parent::tearDown();
+        $this->sitePageMenu = Shopware()->Container()->get(SitePageMenu::class);
     }
 
     public function testSiteWithoutLink()
@@ -146,7 +142,7 @@ class SitePageMenuTest extends TestCase
     private function getPath()
     {
         /** @var Router $router */
-        $router = Shopware()->Container()->get('router');
+        $router = Shopware()->Container()->get(\Shopware\Components\Routing\RouterInterface::class);
         $path = implode('/', [
             $router->getContext()->getHost(),
             $router->getContext()->getBaseUrl(),

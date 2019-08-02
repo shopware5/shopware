@@ -29,18 +29,18 @@ class Smarty_Compiler_Media extends Smarty_Internal_CompileBase
      * Attribute definition: Overwrites base class.
      *
      * @var array
+     *
      * @see Smarty_Internal_CompileBase
      */
-    public $required_attributes = array('path');
+    public $required_attributes = ['path'];
 
     /**
-     * @param array $attributes
      * @return string
      */
     public function parseAttributes(array $attributes)
     {
         if (!empty($attributes['path'])) {
-            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
             $attributes['path'] = trim($attributes['path'], '"\'');
             $attributes['path'] = $mediaService->getUrl($attributes['path']);
         }
@@ -49,13 +49,14 @@ class Smarty_Compiler_Media extends Smarty_Internal_CompileBase
     }
 
     /**
-     * @param array $args
+     * @param array                                  $args
      * @param Smarty_Internal_SmartyTemplateCompiler $compiler
+     *
      * @return string
      */
     public function compile($args, $compiler)
     {
-        // check and get attributes
+        // Check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
 
         if (empty($_attr['path'])) {
@@ -64,11 +65,11 @@ class Smarty_Compiler_Media extends Smarty_Internal_CompileBase
 
         if (preg_match('/^([\'"]?)[a-zA-Z0-9\/\.\-\_]+(\\1)$/', $_attr['path'], $match)) {
             $_attr = $this->parseAttributes($_attr);
+
             return $_attr['path'];
         }
 
         return '<?php '
-             . '$mediaService = Shopware()->Container()->get(\'shopware_media.media_service\'); '
-             . 'echo $mediaService->getUrl(' . $_attr['path'] . '); ?>';
+             . 'echo Shopware()->Container()->get(\'' . \Shopware\Bundle\MediaBundle\MediaServiceInterface::class . '\')->getUrl(' . $_attr['path'] . '); ?>';
     }
 }

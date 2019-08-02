@@ -94,7 +94,7 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var InstallerService $pluginManager */
-        $pluginManager = $this->container->get('shopware_plugininstaller.plugin_manager');
+        $pluginManager = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
         if (!$input->getOption('no-refresh')) {
             $pluginManager->refreshPluginList();
             $output->writeln('Successfully refreshed');
@@ -128,7 +128,7 @@ EOF
     private function batchUpdate(InstallerService $pluginManager, $batchUpdate, OutputInterface $output)
     {
         /** @var ModelManager $em */
-        $em = $this->container->get('models');
+        $em = $this->container->get(\Shopware\Components\Model\ModelManager::class);
 
         $repository = $em->getRepository(\Shopware\Models\Plugin\Plugin::class);
         $builder = $repository->createQueryBuilder('plugin');

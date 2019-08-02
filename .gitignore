@@ -92,6 +92,7 @@ phpstan.phar
 !/build/artifacts/.gitkeep
 !/build/logs/mink/.gitkeep
 /tests/nightwatch/node_modules
+/tests/.phpunit.result.cache
 
 # scripts
 !/build/composer-post-install-cmd.sh

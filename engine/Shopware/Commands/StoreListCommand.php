@@ -90,7 +90,7 @@ class StoreListCommand extends StoreCommand implements CompletionAwareInterface
         );
 
         try {
-            $licences = $this->container->get('shopware_plugininstaller.plugin_service_store_production')
+            $licences = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService::class)
                 ->getLicences($context);
         } catch (\Exception $e) {
             $this->handleError([

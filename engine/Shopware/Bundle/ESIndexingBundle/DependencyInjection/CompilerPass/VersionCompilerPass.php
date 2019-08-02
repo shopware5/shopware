@@ -38,7 +38,7 @@ class VersionCompilerPass implements CompilerPassInterface
             return;
         }
 
-        $client = $container->get('shopware_elastic_search.client');
+        $client = $container->get(\Elasticsearch\Client::class);
 
         $version = null;
 

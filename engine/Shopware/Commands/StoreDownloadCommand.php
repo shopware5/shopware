@@ -76,9 +76,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
                 $context = new LicenceRequest('en_GB', $this->getVersionFromArguments($context->getWords()), $this->getDomainFromArguments($context->getWords()), $token);
 
                 /** @var PluginStoreService $pluginStoreService */
-                $pluginStoreService = $this->container->get(
-                    'shopware_plugininstaller.plugin_service_store_production'
-                );
+                $pluginStoreService = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService::class);
 
                 return array_map(function (LicenceStruct $licence) {
                     return $licence->getTechnicalName();
@@ -139,9 +137,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
 
                 try {
                     /** @var PluginStoreService $pluginStoreService */
-                    $pluginStoreService = $this->container->get(
-                        'shopware_plugininstaller.plugin_service_store_production'
-                    );
+                    $pluginStoreService = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService::class);
                     $licences = $pluginStoreService->getLicences($context);
                     $licences = array_filter(
                         $licences,
@@ -198,7 +194,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
 
         try {
             $this->clearOpcodeCache();
-            $this->container->get('shopware_plugininstaller.plugin_manager')->refreshPluginList();
+            $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class)->refreshPluginList();
 
             $this->io->success('Process completed successfully.');
         } catch (\Exception $e) {
@@ -225,7 +221,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
 
         $model = $this->getPluginModel($plugin->getTechnicalName());
         if ($plugin->isActive()) {
-            $this->container->get('shopware_plugininstaller.plugin_manager')->deactivatePlugin($model);
+            $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class)->deactivatePlugin($model);
         }
 
         $this->container->get('shopware_plugininstaller.plugin_download_service')
@@ -266,7 +262,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
 
         $model = $this->getPluginModel($plugin->getTechnicalName());
         if ($plugin->isActive()) {
-            $this->container->get('shopware_plugininstaller.plugin_manager')
+            $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class)
                 ->deactivatePlugin($model);
         }
 
@@ -297,7 +293,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
      */
     private function getPluginModel($technicalName)
     {
-        $repo = $this->container->get('models')->getRepository(Plugin::class);
+        $repo = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Plugin::class);
 
         return $repo->findOneBy(['name' => $technicalName]);
     }
@@ -351,7 +347,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
             $this->io->comment('Connection to store...');
 
             /** @var StoreClient $storeClient */
-            $storeClient = $this->container->get('shopware_plugininstaller.store_client');
+            $storeClient = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\StoreClient::class);
             $token = $storeClient->getAccessToken($username, $password);
 
             $this->io->comment('Authenticated successfully.');
@@ -479,7 +475,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
 
         try {
             /** @var StoreClient $storeClient */
-            $storeClient = $this->container->get('shopware_plugininstaller.store_client');
+            $storeClient = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\StoreClient::class);
 
             return $storeClient->getAccessToken($username, $password);
         } catch (\Exception $e) {

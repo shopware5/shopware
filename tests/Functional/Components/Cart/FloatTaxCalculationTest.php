@@ -42,7 +42,7 @@ class FloatTaxCalculationTest extends CheckoutTest
     public function setUp()
     {
         parent::setUp();
-        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $this->connection->beginTransaction();
         $this->connection->insert('s_core_tax', ['tax' => 7.75, 'description' => '7.75 %']);
         $this->taxId = $this->connection->lastInsertId();

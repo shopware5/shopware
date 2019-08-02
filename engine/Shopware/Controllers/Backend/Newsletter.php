@@ -24,6 +24,7 @@
 
 use Shopware\Bundle\MailBundle\Service\Filter\NewsletterMailFilter;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\Validator\EmailValidator;
 use Symfony\Component\HttpFoundation\Response;
 
 class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action implements CSRFWhitelistAware
@@ -256,7 +257,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             $mail->clearRecipients();
             $mail->addTo($user['email']);
             $mail->setAssociation(NewsletterMailFilter::NEWSLETTER_MAIL, true);
-            $validator = $this->container->get('validator.email');
+            $validator = $this->container->get(EmailValidator::class);
             if (!$validator->isValid($user['email'])) {
                 echo "Skipped invalid email\n";
             // SW-4526
@@ -381,15 +382,15 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             ->setBasePath($shop->getBasePath())
             ->setBaseUrl($shop->getBasePath());
 
-        $this->get('shopware.components.shop_registration_service')->registerShop($shop);
+        $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         Shopware()->Session()->sUserGroup = $mailing['customergroup'];
         $sql = 'SELECT * FROM s_core_customergroups WHERE groupkey=?';
         Shopware()->Session()->sUserGroupData = Shopware()->Db()->fetchRow($sql, [$mailing['customergroup']]);
 
-        Shopware()->Container()->get('router')->setGlobalParam('module', 'frontend');
+        Shopware()->Container()->get(\Shopware\Components\Routing\RouterInterface::class)->setGlobalParam('module', 'frontend');
         Shopware()->Config()->DontAttachSession = true;
-        Shopware()->Container()->get('shopware_storefront.context_service')->initializeShopContext();
+        Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->initializeShopContext();
 
         return $mailing;
     }

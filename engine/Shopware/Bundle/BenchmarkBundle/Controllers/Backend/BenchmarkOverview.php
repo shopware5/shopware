@@ -44,7 +44,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         $shopId = $this->getShopId();
 
         /** @var BenchmarkRepository $benchmarkRepository */
-        $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
+        $benchmarkRepository = $this->get(\Shopware\Models\Benchmark\Repository::class);
         $config = $benchmarkRepository->getConfigForShop($shopId);
 
         $this->handleSettings($config);
@@ -56,7 +56,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         $this->Front()->Plugins()->Json()->setRenderer(false);
 
         /** @var BenchmarkRepository $benchmarkRepository */
-        $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
+        $benchmarkRepository = $this->get(\Shopware\Models\Benchmark\Repository::class);
         $config = $benchmarkRepository->getConfigForShop($this->getShopId());
 
         if ($this->hasOutdatedStatistics($config->getLastReceived())) {
@@ -77,7 +77,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         $config = $this->request->getParam('config');
 
         /** @var BenchmarkRepository $benchmarkRepository */
-        $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
+        $benchmarkRepository = $this->get(\Shopware\Models\Benchmark\Repository::class);
         $benchmarkRepository->saveShopConfigs($config);
 
         $this->enableMenu();
@@ -87,7 +87,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
     public function getShopsAction()
     {
         /** @var BenchmarkRepository $benchmarkRepository */
-        $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
+        $benchmarkRepository = $this->get(\Shopware\Models\Benchmark\Repository::class);
 
         $shops = $benchmarkRepository->getShopsWithValidTemplate();
         $currentShop = $this->getShopId();
@@ -119,7 +119,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         $backendLanguage = $this->get('auth')->getIdentity()->locale->getId() === 1 ? 'de' : 'en';
 
         /** @var BenchmarkRepository $benchmarkRepository */
-        $benchmarkRepository = $this->get('shopware.benchmark_bundle.repository.config');
+        $benchmarkRepository = $this->get(\Shopware\Models\Benchmark\Repository::class);
 
         if (!$config || $benchmarkRepository->getConfigsCount() === 0) {
             $this->redirect([
@@ -193,7 +193,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         $shopId = $this->getShopId();
 
         if ($cachingHandler->isTemplateCached($shopId)) {
-            $link = $this->get('router')->assemble([
+            $link = $this->get(\Shopware\Components\Routing\RouterInterface::class)->assemble([
                 'controller' => 'BenchmarkOverview',
                 'action' => 'render',
                 'shopId' => $shopId,
@@ -216,7 +216,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
 
     private function enableMenu()
     {
-        $em = $this->get('models');
+        $em = $this->get(\Shopware\Components\Model\ModelManager::class);
         $repo = $em->getRepository(Menu::class);
 
         /** @var Menu|null $menuEntry */
@@ -236,7 +236,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
         $shopId = (int) $this->request->getParam('shopId');
 
         if (!$shopId) {
-            $shopId = $this->get('models')->getRepository(\Shopware\Models\Shop\Shop::class)->getActiveDefault()->getId();
+            $shopId = $this->get(\Shopware\Components\Model\ModelManager::class)->getRepository(\Shopware\Models\Shop\Shop::class)->getActiveDefault()->getId();
         }
 
         return $shopId;

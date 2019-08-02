@@ -254,7 +254,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     {
         /** @var array $filter */
         $filter = $this->Request()->getParam('filter', []);
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         $data = $this->getRepository()
             ->getBackendDetailQuery($filter)

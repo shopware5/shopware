@@ -33,7 +33,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
     public function getTablesAction()
     {
         /** @var TableMapping $mapping */
-        $mapping = $this->get('shopware_attribute.table_mapping');
+        $mapping = $this->get(\Shopware\Bundle\AttributeBundle\Service\TableMapping::class);
         $tables = $mapping->getAttributeTables();
 
         foreach ($tables as $name => &$table) {
@@ -46,7 +46,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
     public function getTypesAction()
     {
         /** @var TypeMapping $mapping */
-        $mapping = $this->get('shopware_attribute.type_mapping');
+        $mapping = $this->get(\Shopware\Bundle\AttributeBundle\Service\TypeMapping::class);
 
         $this->View()->assign([
             'success' => true,
@@ -57,7 +57,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
     public function getEntitiesAction()
     {
         /** @var TypeMapping $mapping */
-        $mapping = $this->get('shopware_attribute.type_mapping');
+        $mapping = $this->get(\Shopware\Bundle\AttributeBundle\Service\TypeMapping::class);
 
         $this->View()->assign([
             'success' => true,
@@ -81,7 +81,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
         }
 
         /** @var SchemaOperator $schemaOperator */
-        $schemaOperator = $this->get('shopware_attribute.schema_operator');
+        $schemaOperator = $this->get('\Shopware\Bundle\AttributeBundle\Service\SchemaOperator::class');
 
         try {
             $schemaOperator->resetColumn($table, $column);
@@ -96,7 +96,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
     public function getColumnAction()
     {
         /** @var CrudService $crudService */
-        $crudService = $this->get('shopware_attribute.crud_service');
+        $crudService = $this->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class);
         $columnName = $this->Request()->getParam('columnName');
 
         try {
@@ -119,7 +119,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
         $data['custom'] = true;
 
         /** @var CrudService $service */
-        $service = $this->get('shopware_attribute.crud_service');
+        $service = $this->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class);
 
         try {
             $service->update(
@@ -140,7 +140,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
     public function deleteAction()
     {
         /** @var CrudService $service */
-        $service = $this->get('shopware_attribute.crud_service');
+        $service = $this->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class);
 
         try {
             $service->delete(
@@ -161,7 +161,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
         $data = $this->Request()->getParams();
 
         /** @var CrudService $service */
-        $service = $this->get('shopware_attribute.crud_service');
+        $service = $this->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class);
 
         try {
             $service->update(
@@ -187,7 +187,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
         $table = $this->Request()->getParam('tableName');
 
         /** @var TableMapping $mapping */
-        $mapping = $this->get('shopware_attribute.table_mapping');
+        $mapping = $this->get(\Shopware\Bundle\AttributeBundle\Service\TableMapping::class);
 
         if (!$mapping->isAttributeTable($table) || !$table) {
             $this->View()->assign(['success' => false, 'message' => 'Table not supported']);
@@ -203,7 +203,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
 
         try {
             /** @var ModelManager $entityManager */
-            $entityManager = $this->get('models');
+            $entityManager = $this->get(\Shopware\Components\Model\ModelManager::class);
             $entityManager->generateAttributeModels([$table]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
@@ -220,7 +220,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
         $table = $this->Request()->getParam('tableName');
 
         /** @var TableMapping $mapping */
-        $mapping = $this->get('shopware_attribute.table_mapping');
+        $mapping = $this->get(\Shopware\Bundle\AttributeBundle\Service\TableMapping::class);
 
         $tables = array_merge([$table], $mapping->getDependingTables($table));
 

@@ -69,11 +69,11 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$addressService = Shopware()->Container()->get('shopware_account.address_service');
-        self::$modelManager = Shopware()->Container()->get('models');
-        self::$connection = Shopware()->Container()->get('dbal_connection');
-        self::$contextService = Shopware()->Container()->get('shopware_storefront.context_service');
-        self::$registerService = Shopware()->Container()->get('shopware_account.register_service');
+        self::$addressService = Shopware()->Container()->get(\Shopware\Bundle\AccountBundle\Service\AddressServiceInterface::class);
+        self::$modelManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
+        self::$connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        self::$contextService = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
+        self::$registerService = Shopware()->Container()->get(\Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface::class);
 
         self::$modelManager->clear();
     }

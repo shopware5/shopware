@@ -31,7 +31,7 @@ trait DatabaseTransactionBehaviour
      */
     public function startTransactionBefore(): void
     {
-        Shopware()->Container()->get('dbal_connection')->beginTransaction();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
     }
 
     /**
@@ -39,6 +39,6 @@ trait DatabaseTransactionBehaviour
      */
     public function stopTransactionAfter(): void
     {
-        Shopware()->Container()->get('dbal_connection')->rollBack();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollBack();
     }
 }

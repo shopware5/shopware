@@ -45,7 +45,7 @@ class TemplateManagerTest extends TestCase
         file_put_contents($tempFile, 'test');
 
         /** @var \Enlight_Template_Manager $templateManager */
-        $templateManager = clone Shopware()->Container()->get('template');
+        $templateManager = clone Shopware()->Container()->get(\Enlight_Template_Manager::class);
         $templateManager->addTemplateDir($tempDir);
         $renderingResult = $templateManager->fetch('template.tpl');
 
@@ -69,7 +69,7 @@ class TemplateManagerTest extends TestCase
         file_put_contents($tempFile, '{extends file="parent:frontent/detail/index.tpl"}');
 
         /** @var \Enlight_Template_Manager $templateManager */
-        $templateManager = clone Shopware()->Container()->get('template');
+        $templateManager = clone Shopware()->Container()->get(\Enlight_Template_Manager::class);
         $templateManager->addTemplateDir(Shopware()->Container()->getParameter('kernel.root_dir') . '/media/temp/');
 
         $this->expectException(\SmartyException::class);

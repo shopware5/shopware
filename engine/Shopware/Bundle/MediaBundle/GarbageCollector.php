@@ -242,10 +242,8 @@ class GarbageCollector
 
     /**
      * Handles tables with IDs separated by pipes
-     *
-     * @param MediaPosition $mediaPosition
      */
-    private function handlePipeTable($mediaPosition)
+    private function handlePipeTable(MediaPosition $mediaPosition)
     {
         $values = $this->fetchColumn($mediaPosition);
 

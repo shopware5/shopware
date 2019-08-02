@@ -28,7 +28,7 @@ use PHPUnit\Framework\Constraint\IsType;
 
 class AnalyticsProviderTest extends ProviderTestCase
 {
-    const SERVICE_ID = 'shopware.benchmark_bundle.providers.analytics';
+    const SERVICE_ID = \Shopware\Bundle\BenchmarkBundle\Provider\AnalyticsProvider::class;
     const EXPECTED_KEYS_COUNT = 2;
     const EXPECTED_TYPES = [
         'list' => IsType::TYPE_ARRAY,

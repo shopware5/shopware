@@ -57,11 +57,11 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
 
     public function setUp()
     {
-        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
 
-        $this->pluginManager = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager');
+        $this->pluginManager = Shopware()->Container()->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
 
-        $this->cacheManager = Shopware()->Container()->get('shopware.cache_manager');
+        $this->cacheManager = Shopware()->Container()->get(\Shopware\Components\CacheManager::class);
 
         $plugin = $this->pluginManager->getPluginByName('HttpCache');
 
@@ -227,7 +227,7 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
         $configReader = $this->createMock(CachedConfigReader::class);
         $configReader->method('getByPluginName')->willReturn($overrideConfig);
 
-        $cacheRouteGeneration = Shopware()->Container()->get('shopware.http_cache.cache_route_generation_service');
+        $cacheRouteGeneration = Shopware()->Container()->get(\Shopware\Components\HttpCache\CacheRouteGenerationService::class);
         $defaultRouteService = new DefaultRouteService($configReader, $cacheRouteGeneration);
         $defaultCacheTimeService = new DefaultCacheTimeService($defaultRouteService);
 

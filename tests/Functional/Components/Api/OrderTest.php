@@ -47,12 +47,12 @@ class OrderTest extends TestCase
     {
         parent::setUp();
         $this->order = Shopware()->Db()->fetchRow('SELECT * FROM `s_order` ORDER BY id DESC LIMIT 1');
-        Shopware()->Container()->get('dbal_connection')->beginTransaction();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
     }
 
     protected function tearDown()
     {
-        Shopware()->Container()->get('dbal_connection')->rollback();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollback();
     }
 
     /**

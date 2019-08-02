@@ -80,7 +80,7 @@ class CookieSubscriber implements SubscriberInterface
     {
         $request = $args->getRequest();
 
-        $config = $this->container->get('config');
+        $config = $this->container->get(\Shopware_Components_Config::class);
 
         if (!$config->get('useSltCookie')) {
             return;
@@ -97,7 +97,7 @@ class CookieSubscriber implements SubscriberInterface
             return;
         }
 
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
         if ($context->getShop()->hasCustomerScope()) {
             $parts = explode('.', $token);
 
@@ -121,7 +121,7 @@ class CookieSubscriber implements SubscriberInterface
 
     public function afterLogin(\Enlight_Event_EventArgs $args)
     {
-        $config = $this->container->get('config');
+        $config = $this->container->get(\Shopware_Components_Config::class);
 
         if (!$config->get('useSltCookie')) {
             return;
@@ -141,7 +141,7 @@ class CookieSubscriber implements SubscriberInterface
 
         $request = $controller->Request();
 
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
         $token = Uuid::uuid4()->toString();
         $token .= '.' . (string) $context->getShop()->getParentId();
 

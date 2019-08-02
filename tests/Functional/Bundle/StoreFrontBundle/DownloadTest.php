@@ -37,15 +37,15 @@ class DownloadTest extends TestCase
         $data = $this->getProduct($number, $context);
         $this->helper->createArticle($data);
 
-        $product = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($number, $context);
+        $product = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)->get($number, $context);
 
-        $downloads = Shopware()->Container()->get('shopware_storefront.product_download_service')->get($product, $context);
+        $downloads = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ProductDownloadServiceInterface::class)->get($product, $context);
 
         static::assertCount(2, $downloads);
 
         /** @var Download $download */
         foreach ($downloads as $download) {
-            static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Download', $download);
+            static::assertInstanceOf(Download::class, $download);
             static::assertContains($download->getFile(), [$data['downloads'][0]['file'], $data['downloads'][1]['file']]);
             static::assertCount(1, $download->getAttributes());
             static::assertTrue($download->hasAttribute('core'));
@@ -61,10 +61,10 @@ class DownloadTest extends TestCase
             $this->helper->createArticle($data);
         }
 
-        $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
+        $products = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)
             ->getList($numbers, $context);
 
-        $downloads = Shopware()->Container()->get('shopware_storefront.product_download_service')
+        $downloads = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ProductDownloadServiceInterface::class)
             ->getList($products, $context);
 
         static::assertCount(2, $downloads);

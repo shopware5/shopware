@@ -122,7 +122,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
         $shop = $repository->getById($shopId);
 
-        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerShop($shop);
+        Shopware()->Container()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         return $shop;
     }

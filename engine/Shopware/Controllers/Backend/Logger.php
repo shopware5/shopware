@@ -52,7 +52,7 @@ class Logger extends \Enlight_Controller_Action
     public function preDispatch()
     {
         parent::preDispatch();
-        $this->get('shopware.components.shop_registration_service')->registerShop($this->getModelManager()->getRepository(Shop::class)->getActiveDefault());
+        $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($this->getModelManager()->getRepository(Shop::class)->getActiveDefault());
     }
 
     /**

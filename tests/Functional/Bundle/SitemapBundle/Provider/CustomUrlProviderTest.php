@@ -148,6 +148,6 @@ class CustomUrlProviderTest extends TestCase
      */
     private function getContextService()
     {
-        return Shopware()->Container()->get('shopware_storefront.context_service');
+        return Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
     }
 }

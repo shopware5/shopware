@@ -24,65 +24,65 @@
         <service id="shopware.benchmark_bundle.providers.shop"
                  class="Shopware\Bundle\BenchmarkBundle\Provider\ShopProvider"
                  public="false">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
             <tag name="shopware.benchmark_provider" />
         </service>
 
         <service id="shopware.benchmark_bundle.providers.shopware"
                  class="Shopware\Bundle\BenchmarkBundle\Provider\ShopwareProvider"
                  public="false">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
             <argument type="service" id="shopware.release"/>
-            <argument type="service" id="shopware_core.local_license_unpack_service"/>
+            <argument type="service" id="Shopware\Components\License\Service\LocalLicenseUnpackService"/>
             <tag name="shopware.benchmark_provider" />
         </service>
 
         <service id="shopware.benchmark_bundle.providers.manufacturers"
                  class="Shopware\Bundle\BenchmarkBundle\Provider\ManufacturerProvider"
                  public="false">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
             <tag name="shopware.benchmark_provider" />
         </service>
 
         <service id="shopware.benchmark_bundle.providers.products"
                  class="Shopware\Bundle\BenchmarkBundle\Provider\ProductsProvider"
                  public="false">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
             <tag name="shopware.benchmark_provider" />
         </service>
 
         <service id="shopware.benchmark_bundle.providers.emotions"
                  class="Shopware\Bundle\BenchmarkBundle\Provider\EmotionsProvider"
                  public="false">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
             <tag name="shopware.benchmark_provider" />
         </service>
 
         <service id="shopware.benchmark_bundle.providers.categories"
                  class="Shopware\Bundle\BenchmarkBundle\Provider\CategoriesProvider"
                  public="false">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
             <tag name="shopware.benchmark_provider" />
         </service>
 
         <service id="shopware.benchmark_bundle.providers.analytics"
                  class="Shopware\Bundle\BenchmarkBundle\Provider\AnalyticsProvider"
                  public="false">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
             <tag name="shopware.benchmark_provider" />
         </service>
 
         <service id="shopware.benchmark_bundle.providers.plugins"
                  class="Shopware\Bundle\BenchmarkBundle\Provider\PluginsProvider"
                  public="false">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
             <tag name="shopware.benchmark_provider" />
         </service>
 
         <service id="shopware.benchmark_bundle.providers.payments"
                  class="Shopware\Bundle\BenchmarkBundle\Provider\PaymentsProvider"
                  public="false">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
             <argument type="service" id="shopware.benchmark_bundle.matcher_payment"/>
             <tag name="shopware.benchmark_provider" />
         </service>
@@ -90,14 +90,14 @@
         <service id="shopware.benchmark_bundle.providers.customers"
                  class="Shopware\Bundle\BenchmarkBundle\Provider\CustomersProvider"
                  public="false">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
             <tag name="shopware.benchmark_provider" />
         </service>
 
         <service id="shopware.benchmark_bundle.providers.shipments"
                  class="Shopware\Bundle\BenchmarkBundle\Provider\ShipmentsProvider"
                  public="false">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
             <argument type="service" id="shopware.benchmark_bundle.matcher_shipping"/>
             <tag name="shopware.benchmark_provider" />
         </service>
@@ -105,7 +105,7 @@
         <service id="shopware.benchmark_bundle.providers.orders"
                  class="Shopware\Bundle\BenchmarkBundle\Provider\OrdersProvider"
                  public="false">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
             <argument type="service" id="shopware.benchmark_bundle.matcher_payment"/>
             <argument type="service" id="shopware.benchmark_bundle.matcher_shipping"/>
             <tag name="shopware.benchmark_provider" />
@@ -114,7 +114,7 @@
         <service id="shopware.benchmark_bundle.providers.updated_orders"
                  class="Shopware\Bundle\BenchmarkBundle\Provider\UpdatedOrdersProvider"
                  public="false">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
             <argument type="service" id="shopware.benchmark_bundle.matcher_payment"/>
             <argument type="service" id="shopware.benchmark_bundle.matcher_shipping"/>
             <tag name="shopware.benchmark_provider" />
@@ -122,19 +122,19 @@
 
         <!-- Services-->
         <service id="shopware.benchmark_bundle.repository.config" class="Shopware\Models\Benchmark\Repository">
-            <factory service="models" method="getRepository" />
+            <factory service="Shopware\Components\Model\ModelManager" method="getRepository" />
             <argument type="string">\Shopware\Models\Benchmark\BenchmarkConfig</argument>
         </service>
 
         <service id="shopware.benchmark_bundle.components.template_caching_handler"
                  class="Shopware\Bundle\BenchmarkBundle\Service\TemplateCachingHandler">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
         </service>
 
         <service id="shopware.benchmark_bundle.components.translation"
                  class="Shopware\Bundle\BenchmarkBundle\Service\TranslationService">
-            <argument type="service" id="snippets"/>
-            <argument type="service" id="models"/>
+            <argument type="service" id="Shopware_Components_Snippet_Manager"/>
+            <argument type="service" id="Shopware\Components\Model\ModelManager"/>
         </service>
 
         <service id="shopware.benchmark_bundle.matcher_shipping" class="Shopware\Bundle\BenchmarkBundle\Service\MatcherService">
@@ -156,44 +156,44 @@
 
         <service id="shopware.benchmark_bundle.bi_transmission"
                  class="Shopware\Bundle\BenchmarkBundle\Service\BusinessIntelligenceService">
-            <argument id="shopware.benchmark_bundle.bi_client" type="service" />
-            <argument id="shopware.benchmark_bundle.repository.config" type="service" />
+            <argument type="service" id="shopware.benchmark_bundle.bi_client"/>
+            <argument type="service" id="shopware.benchmark_bundle.repository.config"/>
         </service>
 
         <service id="shopware.benchmark_bundle.statistics_transmission"
                  class="Shopware\Bundle\BenchmarkBundle\Service\StatisticsService">
-            <argument id="shopware.benchmark_bundle.collector" type="service" />
-            <argument id="shopware.benchmark_bundle.statistics_client" type="service" />
-            <argument id="shopware.benchmark_bundle.repository.config" type="service" />
-            <argument id="shopware_storefront.context_service" type="service" />
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware.benchmark_bundle.collector"/>
+            <argument type="service" id="shopware.benchmark_bundle.statistics_client"/>
+            <argument type="service" id="shopware.benchmark_bundle.repository.config"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
         </service>
 
         <service id="shopware.benchmark_bundle.benchmark_statistics"
                  class="Shopware\Bundle\BenchmarkBundle\Service\BenchmarkStatisticsService">
-            <argument id="shopware.benchmark_bundle.repository.config" type="service" />
-            <argument id="shopware.benchmark_bundle.statistics_transmission" type="service" />
-            <argument id="shopware.benchmark_bundle.bi_transmission" type="service" />
+            <argument type="service" id="shopware.benchmark_bundle.repository.config"/>
+            <argument type="service" id="shopware.benchmark_bundle.statistics_transmission"/>
+            <argument type="service" id="shopware.benchmark_bundle.bi_transmission"/>
         </service>
 
         <service id="shopware.benchmark_bundle.bi_client"
                  class="Shopware\Bundle\BenchmarkBundle\BusinessIntelligenceClient"
                  public="false">
             <argument type="string">%shopware.bi.endpoint.benchmark%</argument>
-            <argument id="shopware.benchmark_bundle.client" type="service" />
-            <argument id="shopware.benchmark_bundle.hydrator.bi_response_hydrator" type="service" />
-            <argument id="shopware_benchmark_bundle.benchmark_encryption" type="service" />
-            <argument id="corelogger" type="service" />
+            <argument type="service" id="shopware.benchmark_bundle.client"/>
+            <argument type="service" id="shopware.benchmark_bundle.hydrator.bi_response_hydrator"/>
+            <argument type="service" id="shopware_benchmark_bundle.benchmark_encryption"/>
+            <argument type="service" id="corelogger"/>
         </service>
 
         <service id="shopware.benchmark_bundle.statistics_client"
                  class="Shopware\Bundle\BenchmarkBundle\StatisticsClient"
                  public="false">
             <argument type="string">%shopware.bi.endpoint.statistics%</argument>
-            <argument id="shopware.benchmark_bundle.client" type="service" />
-            <argument id="shopware.benchmark_bundle.hydrator.statistics_response_hydrator" type="service" />
-            <argument id="corelogger" type="service"/>
-            <argument id="dbal_connection" type="service"/>
+            <argument type="service" id="shopware.benchmark_bundle.client"/>
+            <argument type="service" id="shopware.benchmark_bundle.hydrator.statistics_response_hydrator"/>
+            <argument type="service" id="corelogger"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
         </service>
 
         <service id="shopware.benchmark_bundle.hydrator.statistics_response_hydrator"

@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\SitePageMenu;
+
 /**
  * Shopware ControllerBase Plugin
  */
@@ -141,11 +143,11 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     public function getMenu($shopId = null, $activePageId = null)
     {
         if ($shopId === null) {
-            $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+            $context = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
             $shopId = $context->getShop()->getId();
         }
 
-        $data = Shopware()->Container()->get('shop_page_menu')
+        $data = Shopware()->Container()->get(SitePageMenu::class)
             ->getTree($shopId, $activePageId);
 
         return $data;

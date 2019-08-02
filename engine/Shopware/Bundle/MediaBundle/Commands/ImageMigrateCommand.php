@@ -76,7 +76,7 @@ class ImageMigrateCommand extends ShopwareCommand implements CompletionAwareInte
         $to = $input->getOption('to') ?: 'local';
         $skipScan = $input->getOption('skip-scan');
 
-        $filesystemFactory = $this->getContainer()->get('shopware_media.media_service_factory');
+        $filesystemFactory = $this->getContainer()->get(\Shopware\Bundle\MediaBundle\MediaServiceFactory::class);
         $fromFileSystem = $filesystemFactory->factory($from);
         $toFileSystem = $filesystemFactory->factory($to);
 

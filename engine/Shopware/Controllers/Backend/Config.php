@@ -654,7 +654,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 } else {
                     $data['mapping'] = null;
                 }
-                $connection = $this->container->get('dbal_connection');
+                $connection = $this->container->get(\Doctrine\DBAL\Connection::class);
 
                 $currentKey = $connection->fetchColumn('SELECT `key` FROM s_cms_static_groups WHERE id = ?', [
                     (int) $this->Request()->getParam('id'),
@@ -1325,7 +1325,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     private function getShopLocaleMapping()
     {
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $query = $connection->createQueryBuilder();
         $query->select(['locale_id, IFNULL(main_id, id)']);
         $query->from('s_core_shops');
@@ -1342,7 +1342,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     private function createSalutationSnippets($elementData)
     {
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
 
         $shops = $this->getShopLocaleMapping();
 
@@ -1357,7 +1357,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $date = new DateTime();
         foreach ($shops as $localeId => $shopId) {
             foreach ($salutations as $salutation) {
-                if (strlen(trim($salutation)) === 0) {
+                if (trim($salutation) === '') {
                     continue;
                 }
 
@@ -1469,7 +1469,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             return 1;
         }
 
-        $fallback = (int) $this->container->get('dbal_connection')->fetchColumn(
+        $fallback = (int) $this->container->get(\Doctrine\DBAL\Connection::class)->fetchColumn(
             "SELECT id FROM s_core_locales WHERE locale = 'en_GB'"
         );
 

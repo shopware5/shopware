@@ -49,7 +49,7 @@ class PluginCheck
      */
     public function checkInstalledPluginsAvailableForNewVersion($version)
     {
-        $service = $this->container->get('shopware_plugininstaller.plugin_service_store_production');
+        $service = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService::class);
         $installedPlugins = $this->getUserInstalledPlugins();
         $technicalNames = array_column($installedPlugins, 'name');
         $locale = $this->getLocale();
@@ -136,7 +136,7 @@ class PluginCheck
      */
     private function getUserInstalledPlugins()
     {
-        $query = $this->container->get('dbal_connection')->createQueryBuilder();
+        $query = $this->container->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
         $query->select(['plugin.name', 'plugin.label', 'plugin.version'])
             ->from('s_core_plugins', 'plugin')
             ->where('plugin.name NOT IN (:names)')

@@ -99,7 +99,7 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var InstallerService $pluginManager */
-        $pluginManager = $this->container->get('shopware_plugininstaller.plugin_manager');
+        $pluginManager = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
         $pluginName = $input->getArgument('plugin');
 
         try {
@@ -110,7 +110,7 @@ EOF
             return 1;
         }
         /** @var ModelManager $em */
-        $em = $this->container->get('models');
+        $em = $this->container->get(\Shopware\Components\Model\ModelManager::class);
 
         /** @var Shop[] $shop */
         $shops = null;

@@ -305,7 +305,7 @@ class ArticleTest extends TestCase
             'taxId' => 1,
             'supplierId' => 1,
             'mainDetail' => [
-                'number' => 'swAttr1' . uniqid(rand()),
+                'number' => 'swAttr1' . uniqid(rand(), true),
                 'inStock' => 15,
                 'unitId' => 1,
                 'prices' => [
@@ -315,7 +315,7 @@ class ArticleTest extends TestCase
             ],
             'variants' => [
                 [
-                    'number' => 'swAttr2' . uniqid(rand()),
+                    'number' => 'swAttr2' . uniqid(rand(), true),
                     'inStock' => 15,
                     'unitId' => 1,
                     'prices' => [
@@ -476,7 +476,7 @@ class ArticleTest extends TestCase
         static::assertGreaterThan(0, $article->getId());
         static::assertCount(4, $article->getImages());
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         foreach ($article->getImages() as $image) {
             static::assertCount(4, $image->getMedia()->getThumbnails());
@@ -585,7 +585,7 @@ class ArticleTest extends TestCase
         ];
 
         $article = $this->resource->update($id, $testData);
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         static::assertInstanceOf('\Shopware\Models\Article\Article', $article);
         static::assertGreaterThan(0, $article->getId());
@@ -740,7 +740,7 @@ class ArticleTest extends TestCase
             '140x140',
         ];
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         foreach ($article->getImages() as $image) {
             $thumbnails = $image->getMedia()->getThumbnails();
@@ -1984,7 +1984,7 @@ class ArticleTest extends TestCase
     public function testCreateTranslation()
     {
         /** @var \Shopware\Bundle\AttributeBundle\Service\CrudService $crud */
-        $crud = Shopware()->Container()->get('shopware_attribute.crud_service');
+        $crud = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class);
 
         $crud->update('s_articles_attributes', 'underscore_test', 'string');
 
@@ -2047,7 +2047,7 @@ class ArticleTest extends TestCase
         );
         $article = $this->resource->getOne($model->getId());
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         static::assertCount(count($data['images']), $article['images']);
         foreach ($article['images'] as $image) {

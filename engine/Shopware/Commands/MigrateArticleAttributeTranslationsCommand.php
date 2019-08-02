@@ -67,7 +67,7 @@ class MigrateArticleAttributeTranslationsCommand extends ShopwareCommand
     {
         $io = new SymfonyStyle($input, $output);
 
-        $this->connection = $this->container->get('dbal_connection');
+        $this->connection = $this->container->get(\Doctrine\DBAL\Connection::class);
         $this->updateStatement = $this->connection->prepare('UPDATE s_core_translations SET objectdata=:data WHERE id=:id');
         $this->columns = $this->getColumns();
 

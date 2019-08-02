@@ -65,7 +65,7 @@ class ContainerAwareEventManagerTest extends TestCase
         $this->eventManager->notify('onEvent', $eventArgs);
     }
 
-    public function testAddAListenerServiceCallMulitpleTimes()
+    public function testAddAListenerServiceCallMultipleTimes()
     {
         $service = $this->createMock(Service::class);
 

@@ -206,7 +206,7 @@ class StructConverter
                 foreach ($element->getData()->get('manufacturers') as $manufacturer) {
                     $manufacturerArray = $this->converter->convertManufacturerStruct($manufacturer);
 
-                    $manufacturerArray['link'] = $this->container->get('config')->get('baseFile') . '?controller=listing&action=manufacturer&sSupplier=' . $manufacturer->getId();
+                    $manufacturerArray['link'] = $this->container->get(\Shopware_Components_Config::class)->get('baseFile') . '?controller=listing&action=manufacturer&sSupplier=' . $manufacturer->getId();
                     $manufacturerArray['website'] = $manufacturer->getLink();
 
                     $elementArray['data']['values'][$manufacturer->getId()] = $manufacturerArray;

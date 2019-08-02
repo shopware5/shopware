@@ -262,7 +262,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
         /* @var \Shopware\Models\Shop\Template $template */
         if (!empty($this->_subshop['doc_template_id'])) {
-            $template = Shopware()->Container()->get('models')->find(\Shopware\Models\Shop\Template::class, $this->_subshop['doc_template_id']);
+            $template = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->find(\Shopware\Models\Shop\Template::class, $this->_subshop['doc_template_id']);
 
             $inheritance = Shopware()->Container()->get('theme_inheritance')->getTemplateDirectories($template);
             $this->_template->setTemplateDir($inheritance);
@@ -423,7 +423,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             return [];
         }
 
-        $service = Shopware()->Container()->get('shopware_attribute.data_loader');
+        $service = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataLoader::class);
 
         return $service->load('s_user_attributes', $userID);
     }
@@ -586,7 +586,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
      */
     protected function initTemplateEngine()
     {
-        $frontendThemeDirectory = Shopware()->Container()->get('theme_path_resolver')->getFrontendThemeDirectory();
+        $frontendThemeDirectory = Shopware()->Container()->get(\Shopware\Components\Theme\PathResolver::class)->getFrontendThemeDirectory();
 
         $this->_template = clone Shopware()->Template();
         $this->_view = $this->_template->createData();
@@ -607,7 +607,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
      */
     protected function setTranslationComponent()
     {
-        $this->translationComponent = Shopware()->Container()->get('translation');
+        $this->translationComponent = Shopware()->Container()->get(\Shopware_Components_Translation::class);
     }
 
     /**
@@ -626,7 +626,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             $shop->setCurrency($repository->find($this->_order->order->currencyID));
         }
 
-        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerResources($shop);
+        Shopware()->Container()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerResources($shop);
     }
 
     /**
@@ -761,7 +761,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 }
 
                 /** @var NumberRangeIncrementerInterface $incrementer */
-                $incrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
+                $incrementer = Shopware()->Container()->get(\Shopware\Components\NumberRangeIncrementerInterface::class);
 
                 // Get the next number and save it in the document
                 $nextNumber = $incrementer->increment($numberrange);

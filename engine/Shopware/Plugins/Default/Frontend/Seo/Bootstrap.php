@@ -76,10 +76,10 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             return;
         }
 
-        $config = $this->get('config');
+        $config = $this->get(\Shopware_Components_Config::class);
 
         /** @var QueryAliasMapper $mapper */
-        $mapper = $this->get('query_alias_mapper');
+        $mapper = $this->get(QueryAliasMapper::class);
 
         $controllerBlacklist = preg_replace('#\s#', '', $config['sSEOVIEWPORTBLACKLIST']);
         $controllerBlacklist = explode(',', $controllerBlacklist);
@@ -147,8 +147,8 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             $view->assign('SeoMetaDescription', $metaDescription);
         }
 
-        if ($this->get('config')->get('hrefLangEnabled')) {
-            $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        if ($this->get(\Shopware_Components_Config::class)->get('hrefLangEnabled')) {
+            $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
 
             $params = $request->getParams();
             $sCategoryContent = $view->getAssign('sCategoryContent');
@@ -160,7 +160,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             $view->assign('sHrefLinks', $this->get('shopware_storefront.cached_href_lang_service')->getUrls($params, $context));
         }
 
-        $view->assign('SeoDescriptionMaxLength', (int) $this->get('config')->get('metaDescriptionLength'));
+        $view->assign('SeoDescriptionMaxLength', (int) $this->get(\Shopware_Components_Config::class)->get('metaDescriptionLength'));
     }
 
     /**
@@ -171,7 +171,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
     public function onFilterRender(Enlight_Event_EventArgs $args)
     {
         $source = $args->getReturn();
-        $config = $this->get('config');
+        $config = $this->get(\Shopware_Components_Config::class);
 
         /** @var Enlight_Controller_Action $controller */
         $controller = $args->get('subject')->Action();

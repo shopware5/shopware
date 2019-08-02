@@ -152,26 +152,27 @@
         </service>
 
         <service id="customer_search.dbal.indexing.cron_job_subscriber" class="Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\CronJobSubscriber">
-            <argument id="dbal_connection" type="service"/>
-            <argument id="customer_search.dbal.indexing.indexer" type="service"/>
-            <argument id="shopware.customer_stream.stream_indexer" type="service"/>
-            <argument id="shopware.api.customer_stream" type="service"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\SearchIndexerInterface"/>
+            <argument type="service" id="Shopware\Components\CustomerStream\StreamIndexerInterface"/>
+            <argument type="service" id="Shopware\Components\Api\Resource\CustomerStream"/>
+
             <tag name="shopware.event_subscriber"/>
         </service>
 
         <service id="customer_search.dbal.indexing.indexer" class="Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\SearchIndexer">
-            <argument id="dbal_connection" type="service"/>
-            <argument id="customer_search.dbal.indexing.provider" type="service"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\CustomerProviderInterface"/>
         </service>
 
         <service id="customer_search.dbal.indexing.provider" class="Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\CustomerProvider" >
-            <argument id="customer_search.dbal.gateway.service" type="service"/>
-            <argument id="customer_search.dbal.indexing.order_gateway" type="service"/>
+            <argument type="service" id="customer_search.dbal.gateway.service"/>
+            <argument type="service" id="Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\CustomerOrderGateway"/>
         </service>
 
         <service id="customer_search.dbal.number_search" class="Shopware\Bundle\CustomerSearchBundleDBAL\CustomerNumberSearch">
-            <argument id="customer_search.dbal.handler_registry" type="service"/>
-            <argument id="dbal_connection" type="service"/>
+            <argument type="service" id="Shopware\Bundle\CustomerSearchBundleDBAL\HandlerRegistry"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
         </service>
 
         <service id="customer_search.dbal.handler_registry" class="Shopware\Bundle\CustomerSearchBundleDBAL\HandlerRegistry">
@@ -184,8 +185,8 @@
         </service>
 
         <service id="customer_search.dbal.indexing.order_gateway" class="Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\CustomerOrderGateway" >
-            <argument id="dbal_connection" type="service"/>
-            <argument id="customer_search.dbal.indexing.customer_order_hydrator" type="service"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\CustomerOrderHydrator"/>
         </service>
 
         <service id="customer_search.dbal.indexing.customer_order_hydrator" class="Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\CustomerOrderHydrator"/>

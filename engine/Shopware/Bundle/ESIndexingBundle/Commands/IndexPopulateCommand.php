@@ -45,7 +45,7 @@ class IndexPopulateCommand extends ShopwareCommand implements CompletionAwareInt
     {
         if ($optionName === 'shopId') {
             /** @var Repository $shopRepository */
-            $shopRepository = $this->getContainer()->get('models')->getRepository(ShopModel::class);
+            $shopRepository = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(ShopModel::class);
             $queryBuilder = $shopRepository->createQueryBuilder('shop');
 
             if (is_numeric($context->getCurrentWord())) {
@@ -93,9 +93,9 @@ class IndexPopulateCommand extends ShopwareCommand implements CompletionAwareInt
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if ($shopId = $input->getOption('shopId')) {
-            $shops = [$this->container->get('shopware_storefront.shop_gateway_dbal')->get($shopId)];
+            $shops = [$this->container->get(\Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface::class)->get($shopId)];
         } else {
-            $shops = $this->container->get('shopware_elastic_search.identifier_selector')->getShops();
+            $shops = $this->container->get(\Shopware\Bundle\ESIndexingBundle\IdentifierSelector::class)->getShops();
         }
 
         /** @var ShopIndexerInterface $indexer */
@@ -103,7 +103,7 @@ class IndexPopulateCommand extends ShopwareCommand implements CompletionAwareInt
 
         $helper = new ConsoleProgressHelper($output);
 
-        $evaluation = $this->container->get('shopware_elastic_search.console.console_evaluation_helper');
+        $evaluation = $this->container->get(\Shopware\Bundle\ESIndexingBundle\Console\EvaluationHelperInterface::class);
         $evaluation->setOutput($output)
             ->setActive(!$input->getOption('no-evaluation'))
             ->setStopOnError($input->getOption('stop-on-error'));

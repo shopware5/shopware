@@ -41,7 +41,7 @@ class Context implements \JsonSerializable
     public $params = [];
 
     /**
-     * only for NOT mode_rewrite mode
+     * Only for NOT mode_rewrite mode
      *
      * @var string
      */
@@ -77,7 +77,7 @@ class Context implements \JsonSerializable
     /**
      * @var int|null
      */
-    protected $shopId = null;
+    protected $shopId;
 
     /**
      * @var array

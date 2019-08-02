@@ -7,13 +7,13 @@
     <services>
         <defaults public="true" />
 
-        <service id="Shopware\Bundle\StoreFrontBundle\Service\Core\ShopContextFactoryInterface" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ShopContextFactory">
-            <argument type="service" id="shopware_storefront.customer_group_gateway"/>
-            <argument type="service" id="shopware_storefront.tax_gateway"/>
-            <argument type="service" id="shopware_storefront.country_gateway"/>
-            <argument type="service" id="shopware_storefront.price_group_discount_gateway" />
-            <argument type="service" id="shopware_storefront.shop_gateway_dbal" />
-            <argument type="service" id="shopware_storefront.currency_gateway_dbal" />
+        <service id="shopware_storefront.shop_context_factory" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ShopContextFactory">
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGroupGatewayInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\TaxGatewayInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\PriceGroupDiscountGatewayInterface" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\CurrencyGatewayInterface" />
         </service>
 
         <!-- Shopware services definition. This classes contains the business logic-->
@@ -23,304 +23,304 @@
         </service>
 
         <service id="shopware_storefront.product_number_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ProductNumberService">
-            <argument type="service" id="dbal_connection" />
-            <argument type="service" id="config" />
+            <argument type="service" id="Doctrine\DBAL\Connection" />
+            <argument type="service" id="Shopware_Components_Config" />
         </service>
 
         <service id="shopware_storefront.list_product_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ListProductService">
-            <argument type="service" id="shopware_storefront.list_product_gateway"/>
-            <argument type="service" id="shopware_storefront.graduated_prices_service"/>
-            <argument type="service" id="shopware_storefront.cheapest_price_service"/>
-            <argument type="service" id="shopware_storefront.price_calculation_service"/>
-            <argument type="service" id="shopware_storefront.media_service"/>
-            <argument type="service" id="shopware_storefront.marketing_service"/>
-            <argument type="service" id="shopware_storefront.vote_service"/>
-            <argument type="service" id="shopware_storefront.category_service" />
-            <argument type="service" id="config" />
-            <argument type="service" id="shopware_storefront.additional_text_service"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\ListProductGatewayInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\GraduatedPricesServiceInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\CheapestPriceServiceInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\MarketingServiceInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface" />
+            <argument type="service" id="Shopware_Components_Config" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface"/>
         </service>
 
         <service id="shopware_storefront.base_product_factory" class="Shopware\Bundle\StoreFrontBundle\Service\Core\BaseProductFactoryService">
-            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="Doctrine\DBAL\Connection" />
         </service>
 
         <service id="shopware_storefront.product_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ProductService">
-            <argument type="service" id="shopware_storefront.list_product_service"/>
-            <argument type="service" id="shopware_storefront.vote_service"/>
-            <argument type="service" id="shopware_storefront.media_service"/>
-            <argument type="service" id="shopware_storefront.related_products_service"/>
-            <argument type="service" id="shopware_storefront.related_product_streams_service"/>
-            <argument type="service" id="shopware_storefront.similar_products_service"/>
-            <argument type="service" id="shopware_storefront.product_download_service"/>
-            <argument type="service" id="shopware_storefront.product_link_service"/>
-            <argument type="service" id="shopware_storefront.property_service"/>
-            <argument type="service" id="shopware_storefront.configurator_service"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\RelatedProductsServiceInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\RelatedProductStreamsServiceInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\SimilarProductsServiceInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ProductDownloadServiceInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ProductLinkServiceInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\PropertyServiceInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface"/>
         </service>
 
         <service id="shopware_storefront.marketing_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\MarketingService">
-            <argument type="service" id="config"/>
+            <argument type="service" id="Shopware_Components_Config"/>
         </service>
 
         <service id="shopware_storefront.product_download_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ProductDownloadService">
-            <argument type="service" id="shopware_storefront.download_gateway"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DownloadGatewayInterface"/>
         </service>
 
         <service id="shopware_storefront.product_link_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ProductLinkService">
-            <argument type="service" id="shopware_storefront.link_gateway"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\LinkGatewayInterface"/>
         </service>
 
         <service id="shopware_storefront.related_products_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\RelatedProductsService">
-            <argument type="service" id="shopware_storefront.related_products_gateway"/>
-            <argument type="service" id="shopware_storefront.list_product_service"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\RelatedProductsGatewayInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface"/>
         </service>
 
         <service id="shopware_storefront.related_product_streams_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\RelatedProductStreamsService">
-            <argument type="service" id="shopware_storefront.related_product_streams_gateway"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\RelatedProductStreamsGatewayInterface"/>
         </service>
 
         <service id="shopware_storefront.similar_products_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\SimilarProductsService">
-            <argument type="service" id="shopware_storefront.similar_products_gateway"/>
-            <argument type="service" id="shopware_storefront.list_product_service"/>
-            <argument type="service" id="shopware_search.product_search"/>
-            <argument type="service" id="shopware_search.store_front_criteria_factory"/>
-            <argument type="service" id="config" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGatewayInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface"/>
+            <argument type="service" id="Shopware\Bundle\SearchBundle\ProductSearchInterface"/>
+            <argument type="service" id="Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface"/>
+            <argument type="service" id="Shopware_Components_Config" />
         </service>
 
         <service id="shopware_storefront.graduated_prices_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\GraduatedPricesService">
-            <argument type="service" id="shopware_storefront.graduated_prices_gateway"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface"/>
         </service>
 
         <service id="shopware_storefront.manufacturer_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ManufacturerService">
-            <argument type="service" id="shopware_storefront.manufacturer_gateway"/>
-            <argument type="service" id="router" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\ManufacturerGatewayInterface"/>
+            <argument type="service" id="Shopware\Components\Routing\RouterInterface" />
         </service>
 
         <service id="shopware_storefront.shop_page_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ShopPageService">
-            <argument type="service" id="shopware_storefront.shop_page_gateway"/>
-            <argument type="service" id="shopware_storefront.shop_gateway_dbal"/>
-            <argument type="service" id="shopware_storefront.shop_page_children_gateway"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\ShopPageGatewayInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\ShopPageChildrenGatewayInterface"/>
         </service>
 
         <service id="shopware_storefront.price_calculation_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\PriceCalculationService">
-            <argument type="service" id="shopware_storefront.price_calculator"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\PriceCalculatorInterface"/>
         </service>
 
         <service id="shopware_storefront.price_calculator" class="Shopware\Bundle\StoreFrontBundle\Service\Core\PriceCalculator"/>
 
         <service id="shopware_storefront.cheapest_price_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CheapestPriceService">
-            <argument type="service" id="shopware_storefront.cheapest_price_gateway"/>
-            <argument type="service" id="config" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\CheapestPriceGatewayInterface"/>
+            <argument type="service" id="Shopware_Components_Config" />
         </service>
 
         <service id="shopware_storefront.cheapest_price_es_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CheapestPriceService">
             <argument type="service" id="shopware_storefront.cheapest_price_es_gateway"/>
-            <argument type="service" id="config" />
+            <argument type="service" id="Shopware_Components_Config" />
         </service>
 
         <service id="shopware_storefront.media_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\MediaService">
-            <argument type="service" id="shopware_storefront.media_gateway"/>
-            <argument type="service" id="shopware_storefront.product_media_gateway"/>
-            <argument type="service" id="shopware_storefront.variant_media_gateway"/>
-            <argument type="service" id="config"/>
-            <argument type="service" id="shopware_storefront.variant_cover_service"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\VariantMediaGatewayInterface"/>
+            <argument type="service" id="Shopware_Components_Config"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\VariantCoverServiceInterface"/>
         </service>
 
         <service id="shopware_storefront.variant_cover_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\VariantCoverService">
-            <argument type="service" id="shopware_storefront.product_media_gateway"/>
-            <argument type="service" id="shopware_storefront.variant_media_gateway"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\VariantMediaGatewayInterface"/>
         </service>
 
         <service id="shopware_storefront.property_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\PropertyService">
-            <argument type="service" id="shopware_storefront.product_property_gateway"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\ProductPropertyGatewayInterface"/>
         </service>
 
         <service id="shopware_storefront.configurator_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ConfiguratorService">
-            <argument type="service" id="shopware_storefront.product_configuration_gateway"/>
-            <argument type="service" id="shopware_storefront.configurator_gateway"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGatewayInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorGatewayInterface"/>
         </service>
 
         <service id="shopware_storefront.category_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryService">
-            <argument type="service" id="shopware_storefront.category_gateway"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGatewayInterface"/>
         </service>
 
         <service id="shopware_storefront.vote_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\VoteService">
-            <argument type="service" id="shopware_storefront.vote_gateway"/>
-            <argument type="service" id="shopware_storefront.vote_average_gateway"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\VoteGatewayInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\VoteAverageGatewayInterface"/>
         </service>
 
         <service id="shopware_storefront.additional_text_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\AdditionalTextService">
-            <argument type="service" id="shopware_storefront.configurator_service"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface"/>
         </service>
 
         <!-- DBAL gateway classes, which used as shopware default -->
         <service id="shopware_storefront.list_product_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ListProductGateway">
-            <argument type="service" id="shopware_storefront.product_hydrator_dbal"/>
-            <argument type="service" id="shopware_bundle_store_front.gateway_dbal.list_product_query_helper" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ProductHydrator"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\ListProductQueryHelperInterface" />
         </service>
 
         <service id="shopware_storefront.media_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\MediaGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.media_hydrator_dbal"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\MediaHydrator"/>
         </service>
 
         <service id="shopware_storefront.product_media_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductMediaGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.media_hydrator_dbal"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\MediaHydrator"/>
         </service>
 
         <service id="shopware_storefront.variant_media_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\VariantMediaGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.media_hydrator_dbal"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\MediaHydrator"/>
         </service>
 
         <service id="shopware_storefront.product_configuration_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductConfigurationGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.configurator_hydrator_dbal"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ConfiguratorHydrator"/>
         </service>
 
         <service id="shopware_storefront.manufacturer_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ManufacturerGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.manufacturer_hydrator_dbal"/>
-            <argument type="service" id="shopware_storefront.media_service"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ManufacturerHydrator"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface"/>
         </service>
 
         <service id="shopware_storefront.shop_page_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ShopPageGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.shop_page_hydrator_dbal"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ShopPageHydrator"/>
         </service>
 
         <service id="shopware_storefront.shop_page_children_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ShopPageChildrenGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.shop_page_gateway"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\ShopPageGatewayInterface"/>
         </service>
 
         <service id="shopware_storefront.tax_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\TaxGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.tax_hydrator_dbal"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\TaxHydrator"/>
         </service>
 
         <service id="shopware_storefront.configurator_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.configurator_hydrator_dbal"/>
-            <argument type="service" id="shopware_storefront.media_gateway" />
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ConfiguratorHydrator"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface" />
         </service>
 
-        <service class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorOptionsGateway" id="shopware_storefront.configurator_options_gateway">
-            <argument id="dbal_connection" type="service"/>
-            <argument id="shopware_storefront.field_helper_dbal" type="service"/>
-            <argument id="shopware_storefront.configurator_hydrator_dbal" type="service"/>
-            <argument id="shopware_storefront.media_gateway" type="service"/>
+        <service id="shopware_storefront.configurator_options_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorOptionsGateway">
+            <argument id="Doctrine\DBAL\Connection" type="service"/>
+            <argument id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper" type="service"/>
+            <argument id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ConfiguratorHydrator" type="service"/>
+            <argument id="Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface" type="service"/>
         </service>
 
         <service id="shopware_storefront.graduated_prices_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\GraduatedPricesGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.price_hydrator_dbal"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PriceHydrator"/>
         </service>
 
         <service id="shopware_storefront.cheapest_price_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CheapestPriceGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.price_hydrator_dbal"/>
-            <argument type="service" id="config" />
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PriceHydrator"/>
+            <argument type="service" id="Shopware_Components_Config" />
         </service>
 
         <service id="shopware_storefront.cheapest_price_es_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CheapestPriceESGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.price_hydrator_dbal"/>
-            <argument type="service" id="config" />
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PriceHydrator"/>
+            <argument type="service" id="Shopware_Components_Config" />
         </service>
 
         <service id="shopware_storefront.variant_cheapest_price_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\VariantCheapestPriceGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.price_hydrator_dbal"/>
-            <argument type="service" id="config" />
-            <argument type="service" id="shopware_searchdbal.variant_helper"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PriceHydrator"/>
+            <argument type="service" id="Shopware_Components_Config" />
+            <argument type="service" id="Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface"/>
         </service>
 
         <service id="shopware_storefront.price_group_discount_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\PriceGroupDiscountGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.price_hydrator_dbal"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PriceHydrator"/>
         </service>
 
         <service id="shopware_storefront.property_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\PropertyGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.property_hydrator_dbal"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PropertyHydrator"/>
         </service>
 
         <service id="shopware_storefront.product_property_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.property_hydrator_dbal"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PropertyHydrator"/>
         </service>
 
         <service id="shopware_storefront.related_products_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\RelatedProductsGateway">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
         </service>
 
         <service id="shopware_storefront.related_product_streams_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\RelatedProductStreamsGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.product_stream_hydrator_dbal"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ProductStreamHydrator"/>
         </service>
 
         <service id="shopware_storefront.similar_products_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\SimilarProductsGateway">
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
         </service>
 
         <service id="shopware_storefront.download_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\DownloadGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.download_hydrator_dbal"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\DownloadHydrator"/>
         </service>
 
         <service id="shopware_storefront.link_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\LinkGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.link_hydrator_dbal"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\LinkHydrator"/>
         </service>
 
         <service id="shopware_storefront.vote_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\VoteGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.vote_hydrator_dbal"/>
-            <argument type="service" id="config"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\VoteHydrator"/>
+            <argument type="service" id="Shopware_Components_Config"/>
         </service>
 
         <service id="shopware_storefront.vote_average_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\VoteAverageGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.vote_hydrator_dbal"/>
-            <argument type="service" id="config"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\VoteHydrator"/>
+            <argument type="service" id="Shopware_Components_Config"/>
         </service>
 
         <service id="shopware_storefront.customer_group_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CustomerGroupGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.customer_group_hydrator_dbal"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomerGroupHydrator"/>
         </service>
 
         <service id="shopware_storefront.country_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CountryGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.country_hydrator_dbal"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CountryHydrator"/>
         </service>
 
         <service id="shopware_storefront.category_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CategoryGateway">
             <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\CategoryQueryHelperInterface"/>
-            <argument type="service" id="shopware_storefront.category_hydrator_dbal"/>
-            <argument type="service" id="shopware_storefront.media_service"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CategoryHydrator"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface"/>
         </service>
 
         <service id="Shopware\Bundle\StoreFrontBundle\Gateway\CategoryQueryHelperInterface" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CategoryQueryHelper">
@@ -329,103 +329,102 @@
         </service>
 
         <service id="shopware_storefront.payment_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\PaymentGateway">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="shopware_storefront.payment_hydrator_dbal"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PaymentHydrator"/>
         </service>
 
         <!-- Helper classes -->
         <service id="shopware_storefront.field_helper_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware_storefront.storefront_cache" />
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\Core\CoreCache" />
         </service>
 
         <service id="shopware_bundle_store_front.gateway_dbal.list_product_query_helper" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ListProductQueryHelper">
-            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
-            <argument type="service" id="config"/>
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware_Components_Config"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
         </service>
 
         <!-- Shopware hydrator definitions -->
         <service id="shopware_storefront.product_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ProductHydrator">
-            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
-            <argument type="service" id="shopware_storefront.manufacturer_hydrator_dbal"/>
-            <argument type="service" id="shopware_storefront.tax_hydrator_dbal"/>
-            <argument type="service" id="shopware_storefront.unit_hydrator_dbal"/>
-            <argument type="service" id="shopware_storefront.esd_hydrator_dbal"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ManufacturerHydrator"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\TaxHydrator"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\UnitHydrator"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\EsdHydrator"/>
         </service>
 
         <service id="shopware_storefront.price_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PriceHydrator">
-            <argument type="service" id="shopware_storefront.customer_group_hydrator_dbal"/>
-            <argument type="service" id="shopware_storefront.unit_hydrator_dbal"/>
-            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
-            <argument type="service" id="shopware_storefront.product_hydrator_dbal" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomerGroupHydrator"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\UnitHydrator"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ProductHydrator" />
         </service>
 
         <service id="shopware_storefront.manufacturer_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ManufacturerHydrator">
-            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
-            <argument type="service" id="shopware_media.media_service" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator"/>
+            <argument type="service" id="Shopware\Bundle\MediaBundle\MediaServiceInterface" />
         </service>
 
         <service id="shopware_storefront.shop_page_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ShopPageHydrator">
-            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator"/>
         </service>
 
         <service id="shopware_storefront.category_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CategoryHydrator">
-            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
-            <argument type="service" id="shopware_storefront.media_hydrator_dbal"/>
-            <argument type="service" id="shopware_storefront.product_stream_hydrator_dbal"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\MediaHydrator"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ProductStreamHydrator"/>
         </service>
 
         <service id="shopware_storefront.configurator_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ConfiguratorHydrator">
-            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
-            <argument type="service" id="shopware_storefront.media_hydrator_dbal"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\MediaHydrator"/>
         </service>
 
         <service id="shopware_storefront.media_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\MediaHydrator">
-            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
-            <argument type="service" id="thumbnail_manager"/>
-            <argument type="service" id="shopware_media.media_service"/>
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator"/>
+            <argument type="service" id="Shopware\Components\Thumbnail\Manager"/>
+            <argument type="service" id="Shopware\Bundle\MediaBundle\MediaServiceInterface"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
         </service>
 
         <service id="shopware_storefront.download_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\DownloadHydrator">
-            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator"/>
         </service>
 
         <service id="shopware_storefront.link_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\LinkHydrator">
-            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator"/>
         </service>
 
         <service id="shopware_storefront.customer_group_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomerGroupHydrator">
-            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator"/>
         </service>
 
         <service id="shopware_storefront.attribute_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator">
-            <argument type="service" id="shopware_storefront.field_helper_dbal" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper" />
         </service>
 
         <service id="shopware_storefront.tax_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\TaxHydrator"/>
-
         <service id="shopware_storefront.unit_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\UnitHydrator"/>
 
         <service id="shopware_storefront.product_stream_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ProductStreamHydrator">
-            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator" />
         </service>
 
         <service id="shopware_storefront.vote_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\VoteHydrator"/>
 
         <service id="shopware_storefront.property_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PropertyHydrator">
-            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
-            <argument type="service" id="shopware_storefront.media_hydrator_dbal"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\MediaHydrator"/>
         </service>
 
         <service id="shopware_storefront.country_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CountryHydrator">
-            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator"/>
         </service>
 
         <service id="shopware_storefront.esd_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\EsdHydrator">
-            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator"/>
         </service>
 
         <service id="shopware_storefront.storefront_cache" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CoreCache">
@@ -433,135 +432,134 @@
         </service>
 
         <service id="shopware_storefront.shop_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ShopHydrator">
-            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
-            <argument type="service" id="shopware_storefront.template_hydrator_dbal" />
-            <argument type="service" id="shopware_storefront.category_hydrator_dbal" />
-            <argument type="service" id="shopware_storefront.locale_hydrator_dbal" />
-            <argument type="service" id="shopware_storefront.currency_hydrator_dbal" />
-            <argument type="service" id="shopware_storefront.customer_group_hydrator_dbal" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\TemplateHydrator" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CategoryHydrator" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\LocaleHydrator" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CurrencyHydrator" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomerGroupHydrator" />
         </service>
 
         <service id="shopware_storefront.template_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\TemplateHydrator" />
         <service id="shopware_storefront.currency_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CurrencyHydrator" />
-
         <service id="shopware_storefront.locale_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\LocaleHydrator" />
 
         <service id="shopware_storefront.payment_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PaymentHydrator">
-            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator"/>
         </service>
 
         <service id="shopware_storefront.shop_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ShopGateway">
-            <argument type="service" id="shopware_storefront.shop_hydrator_dbal" />
-            <argument type="service" id="shopware_storefront.field_helper_dbal" />
-            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ShopHydrator" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper" />
+            <argument type="service" id="Doctrine\DBAL\Connection" />
         </service>
 
         <service id="shopware_storefront.currency_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CurrencyGateway">
-            <argument type="service" id="shopware_storefront.currency_hydrator_dbal" />
-            <argument type="service" id="shopware_storefront.field_helper_dbal" />
-            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CurrencyHydrator" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper" />
+            <argument type="service" id="Doctrine\DBAL\Connection" />
         </service>
 
         <service id="shopware_storefront.location_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\LocationService">
-            <argument type="service" id="shopware_storefront.country_gateway" />
-            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface" />
+            <argument type="service" id="Doctrine\DBAL\Connection" />
         </service>
 
         <service id="shopware_storefront.category_depth_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryDepthService">
-            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="Doctrine\DBAL\Connection" />
         </service>
 
         <service id="shopware_storefront.blog_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\BlogService">
-            <argument type="service" id="shopware_storefront.blog_gateway_dbal" />
-            <argument type="service" id="shopware_storefront.media_service" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\BlogGatewayInterface" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface" />
         </service>
 
         <service id="shopware_storefront.blog_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\BlogGateway">
-            <argument type="service" id="dbal_connection" />
-            <argument type="service" id="shopware_storefront.field_helper_dbal" />
-            <argument type="service" id="shopware_storefront.blog_hydrator_dbal" />
+            <argument type="service" id="Doctrine\DBAL\Connection" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\BlogHydrator" />
         </service>
 
         <service id="shopware_storefront.blog_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\BlogHydrator">
-            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator" />
         </service>
 
-        <service id="shopware_storefront.custom_sorting_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CustomSortingService">
-            <argument type="service" id="shopware_storefront.custom_sorting_gateway" />
+        <service id="Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CustomSortingService">
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\CustomSortingGatewayInterface" />
         </service>
 
-        <service id="shopware_storefront.custom_sorting_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CustomSortingGateway">
-            <argument type="service" id="dbal_connection" />
-            <argument type="service" id="shopware_storefront.field_helper_dbal" />
-            <argument type="service" id="shopware_storefront.custom_listing_hydrator" />
-            <argument type="service" id="config" />
+        <service id="Shopware\Bundle\StoreFrontBundle\Gateway\CustomSortingGatewayInterface" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CustomSortingGateway">
+            <argument type="service" id="Doctrine\DBAL\Connection" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomListingHydrator" />
+            <argument type="service" id="Shopware_Components_Config" />
         </service>
 
         <service id="shopware_storefront.custom_facet_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CustomFacetService">
-            <argument type="service" id="shopware_storefront.custom_facet_gateway" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\CustomFacetGatewayInterface" />
         </service>
 
         <service id="shopware_storefront.custom_facet_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CustomFacetGateway">
-            <argument type="service" id="dbal_connection" />
-            <argument type="service" id="shopware_storefront.field_helper_dbal" />
-            <argument type="service" id="shopware_storefront.custom_listing_hydrator" />
+            <argument type="service" id="Doctrine\DBAL\Connection" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper" />
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomListingHydrator" />
         </service>
 
-        <service id="shopware_storefront.custom_listing_hydrator" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomListingHydrator">
+        <service id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomListingHydrator" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomListingHydrator">
             <argument type="service" id="shopware.logaware_reflection_helper" />
         </service>
 
         <service id="customer_search.dbal.gateway.service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CustomerService">
-            <argument id="shopware_customer_search.gateway.customer_gateway" type="service"/>
-            <argument id="shopware_customer_search.gateway.address_gateway" type="service"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGatewayInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\AddressGatewayInterface"/>
         </service>
 
         <service id="shopware_customer_search.gateway.customer_hydrator" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomerHydrator">
-            <argument id="shopware_storefront.attribute_hydrator_dbal" type="service"/>
-            <argument id="shopware_storefront.customer_group_hydrator_dbal" type="service"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomerGroupHydrator"/>
         </service>
 
         <service id="shopware_customer_search.gateway.address_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\AddressGateway">
-            <argument id="dbal_connection" type="service"/>
-            <argument id="shopware_storefront.field_helper_dbal" type="service"/>
-            <argument id="shopware_customer_search.gateway.address_hydrator" type="service"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AddressHydrator"/>
         </service>
 
         <service id="shopware_customer_search.gateway.customer_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CustomerGateway">
-            <argument id="dbal_connection" type="service"/>
-            <argument id="shopware_storefront.field_helper_dbal" type="service"/>
-            <argument id="shopware_customer_search.gateway.customer_hydrator" type="service"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomerHydrator"/>
         </service>
 
         <service id="shopware_customer_search.gateway.address_hydrator" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AddressHydrator">
-            <argument id="shopware_storefront.country_hydrator_dbal" type="service"/>
-            <argument id="shopware_storefront.attribute_hydrator_dbal" type="service"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CountryHydrator"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator"/>
         </service>
 
         <service id="shopware_storefront.variant_listing_price_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\VariantListingPriceService">
-            <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory"/>
-            <argument type="service" id="shopware_searchdbal.variant_helper"/>
-            <argument type="service" id="shopware_storefront.variant_cheapest_price_gateway"/>
-            <argument type="service" id="shopware_storefront.price_calculation_service"/>
-            <argument type="service" id="config"/>
+            <argument type="service" id="Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory"/>
+            <argument type="service" id="Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\VariantCheapestPriceGatewayInterface"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface"/>
+            <argument type="service" id="Shopware_Components_Config"/>
         </service>
 
         <service id="shopware_storefront.listing_link_rewrite_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ListingLinkRewriteService">
-            <argument id="shopware_storefront.configurator_service" type="service"/>
-            <argument type="service" id="router"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface"/>
+            <argument type="service" id="Shopware\Components\Routing\RouterInterface"/>
         </service>
 
         <service id="shopware_storefront.href_lang_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\HrefLangService">
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="router"/>
-            <argument type="service" id="config"/>
-            <argument type="service" id="models"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Components\Routing\RouterInterface"/>
+            <argument type="service" id="Shopware_Components_Config"/>
+            <argument type="service" id="Shopware\Components\Model\ModelManager"/>
             <argument type="tagged" tag="router.pre_filter"/>
         </service>
 
         <service id="shopware_storefront.cached_href_lang_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CachedHrefLangService">
-            <argument type="service" id="shopware_storefront.href_lang_service"/>
-            <argument type="service" id="cache"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\Core\HrefLangService"/>
+            <argument type="service" id="Zend_Cache_Core"/>
         </service>
     </services>
 </container>

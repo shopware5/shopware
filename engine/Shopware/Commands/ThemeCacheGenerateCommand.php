@@ -79,7 +79,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand implements CompletionAwa
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var Repository $repository */
-        $repository = $this->container->get('models')->getRepository(Shop::class);
+        $repository = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
 
         $shopIds = $input->getOption('shopId');
         $current = (bool) $input->getOption('current');
@@ -119,7 +119,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand implements CompletionAwa
         }
 
         /** @var CacheManager $cacheManager */
-        $cacheManager = $this->container->get('shopware.cache_manager');
+        $cacheManager = $this->container->get(\Shopware\Components\CacheManager::class);
         $output->writeln('Clearing HTTP cache ...');
         $cacheManager->clearHttpCache();
     }

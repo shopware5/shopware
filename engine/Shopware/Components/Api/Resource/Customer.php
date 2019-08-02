@@ -211,8 +211,8 @@ class Customer extends Resource
         $billing = $this->createAddress($params['billing']) ?: new AddressModel();
         $shipping = $this->createAddress($params['shipping']);
 
-        $registerService = $this->getContainer()->get('shopware_account.register_service');
-        $context = $this->getContainer()->get('shopware_storefront.context_service')->getShopContext()->getShop();
+        $registerService = $this->getContainer()->get(\Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface::class);
+        $context = $this->getContainer()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()->getShop();
 
         $context->addAttribute('sendOptinMail', new Attribute([
             'sendOptinMail' => $params['sendOptinMail'] === true,
@@ -270,9 +270,9 @@ class Customer extends Resource
 
         $customer->fromArray($params);
 
-        $customerValidator = $this->getContainer()->get('shopware_account.customer_validator');
-        $addressValidator = $this->getContainer()->get('shopware_account.address_validator');
-        $addressService = $this->getContainer()->get('shopware_account.address_service');
+        $customerValidator = $this->getContainer()->get(\Shopware\Bundle\AccountBundle\Service\Validator\CustomerValidatorInterface::class);
+        $addressValidator = $this->getContainer()->get(\Shopware\Bundle\AccountBundle\Service\Validator\AddressValidatorInterface::class);
+        $addressService = $this->getContainer()->get(\Shopware\Bundle\AccountBundle\Service\AddressServiceInterface::class);
 
         $customerValidator->validate($customer);
         $addressValidator->validate($customer->getDefaultBillingAddress());
@@ -471,7 +471,7 @@ class Customer extends Resource
     private function setupContext($shopId = null)
     {
         /** @var Repository $shopRepository */
-        $shopRepository = $this->getContainer()->get('models')->getRepository(ShopModel::class);
+        $shopRepository = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(ShopModel::class);
 
         if ($shopId) {
             $shop = $shopRepository->getActiveById($shopId);
@@ -482,7 +482,7 @@ class Customer extends Resource
             $shop = $shopRepository->getActiveDefault();
         }
 
-        $this->getContainer()->get('shopware.components.shop_registration_service')->registerShop($shop);
+        $this->getContainer()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
     }
 
     /**
@@ -517,8 +517,8 @@ class Customer extends Resource
      */
     private function prepareAddressData(array $data, $filter = false)
     {
-        $data['country'] = !empty($data['country']) ? $this->getContainer()->get('models')->find(CountryModel::class, (int) $data['country']) : null;
-        $data['state'] = !empty($data['state']) ? $this->getContainer()->get('models')->find(StateModel::class, $data['state']) : null;
+        $data['country'] = !empty($data['country']) ? $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(CountryModel::class, (int) $data['country']) : null;
+        $data['state'] = !empty($data['state']) ? $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(StateModel::class, $data['state']) : null;
 
         return $filter ? array_filter($data) : $data;
     }

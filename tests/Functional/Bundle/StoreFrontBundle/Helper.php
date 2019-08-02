@@ -115,10 +115,10 @@ class Helper
         ConfiguratorGateway $configuratorGateway = null
     ) {
         if ($productConfigurationGateway == null) {
-            $productConfigurationGateway = Shopware()->Container()->get('shopware_storefront.product_configuration_gateway');
+            $productConfigurationGateway = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGatewayInterface::class);
         }
         if ($configuratorGateway == null) {
-            $configuratorGateway = Shopware()->Container()->get('shopware_storefront.configurator_gateway');
+            $configuratorGateway = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorGatewayInterface::class);
         }
 
         $service = new StoreFrontBundle\Service\Core\ConfiguratorService(
@@ -140,7 +140,7 @@ class Helper
         StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway $productPropertyGateway = null
     ) {
         if ($productPropertyGateway === null) {
-            $productPropertyGateway = Shopware()->Container()->get('shopware_storefront.product_property_gateway');
+            $productPropertyGateway = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Gateway\ProductPropertyGatewayInterface::class);
         }
         $service = new StoreFrontBundle\Service\Core\PropertyService($productPropertyGateway);
 
@@ -154,14 +154,14 @@ class Helper
      */
     public function getListProducts($numbers, ShopContextInterface $context, array $configs = [])
     {
-        $config = Shopware()->Container()->get('config');
+        $config = Shopware()->Container()->get(\Shopware_Components_Config::class);
         $originals = [];
         foreach ($configs as $key => $value) {
             $originals[$key] = $config->get($key);
             $config->offsetSet($key, $value);
         }
 
-        $service = Shopware()->Container()->get('shopware_storefront.list_product_service');
+        $service = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class);
         $result = $service->getList($numbers, $context);
         foreach ($originals as $key => $value) {
             $config->offsetSet($key, $value);

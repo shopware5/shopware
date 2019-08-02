@@ -46,7 +46,7 @@ class CustomerStreamTest extends \Enlight_Components_Test_TestCase
 
         $this->resource = $this->createResource();
         $this->resource->setManager(Shopware()->Models());
-        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $this->connection->beginTransaction();
     }
 
@@ -59,7 +59,7 @@ class CustomerStreamTest extends \Enlight_Components_Test_TestCase
 
     public function createResource()
     {
-        return Shopware()->Container()->get('shopware.api.customer_stream');
+        return Shopware()->Container()->get(\Shopware\Components\Api\Resource\CustomerStream::class);
     }
 
     public function testCreateStaticStream()

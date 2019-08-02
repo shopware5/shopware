@@ -36,7 +36,7 @@ class Shopware_Controllers_Frontend_Media extends Enlight_Controller_Action
 
     public function fallbackAction()
     {
-        $mediaService = $this->get('shopware_media.media_service');
+        $mediaService = $this->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         $requestedImage = $this->Request()->getRequestUri();
 
         if (!$mediaService->has($requestedImage)) {

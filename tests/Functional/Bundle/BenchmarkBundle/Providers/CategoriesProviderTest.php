@@ -28,7 +28,7 @@ use PHPUnit\Framework\Constraint\IsType;
 
 class CategoriesProviderTest extends ProviderTestCase
 {
-    const SERVICE_ID = 'shopware.benchmark_bundle.providers.categories';
+    const SERVICE_ID = \Shopware\Bundle\BenchmarkBundle\Provider\CategoriesProvider::class;
     const EXPECTED_KEYS_COUNT = 2;
     const EXPECTED_TYPES = [
         'products' => [

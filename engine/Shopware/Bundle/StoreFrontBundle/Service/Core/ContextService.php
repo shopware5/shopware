@@ -166,7 +166,7 @@ class ContextService implements ContextServiceInterface
     private function getStoreFrontBaseUrl()
     {
         /** @var \Shopware_Components_Config $config */
-        $config = $this->container->get('config');
+        $config = $this->container->get(\Shopware_Components_Config::class);
 
         $request = null;
         if ($this->container->initialized('front')) {
@@ -270,7 +270,7 @@ class ContextService implements ContextServiceInterface
      */
     private function getStreamsOfCustomerId($customerId)
     {
-        $query = $this->container->get('dbal_connection')->createQueryBuilder();
+        $query = $this->container->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
         $query->select('mapping.stream_id');
         $query->from('s_customer_streams_mapping', 'mapping');
         $query->where('mapping.customer_id = :customerId');

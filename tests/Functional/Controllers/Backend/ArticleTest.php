@@ -61,12 +61,12 @@ class Shopware_Tests_Controllers_Backend_ArticleTest extends Enlight_Components_
     {
         parent::setUp();
 
-        $this->modelManager = Shopware()->Container()->get('models');
+        $this->modelManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
         $this->repository = $this->modelManager->getRepository(Article::class);
 
-        Shopware()->Container()->get('dbal_connection')->beginTransaction();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
 
-        // disable auth and acl
+        // Disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
 
@@ -87,7 +87,7 @@ class Shopware_Tests_Controllers_Backend_ArticleTest extends Enlight_Components_
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth(false);
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl(false);
 
-        Shopware()->Container()->get('dbal_connection')->rollBack();
+        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollBack();
     }
 
     /**

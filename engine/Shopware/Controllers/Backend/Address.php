@@ -43,7 +43,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
     public function preDispatch()
     {
         parent::preDispatch();
-        $this->addressService = $this->get('shopware_account.address_service');
+        $this->addressService = $this->get(\Shopware\Bundle\AccountBundle\Service\AddressServiceInterface::class);
     }
 
     /**
@@ -58,7 +58,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
             return;
         }
         $address = $this->getManager()->getRepository(AddressModel::class)->find($customerAddressId);
-        Shopware()->Container()->get('shopware_account.address_service')->update($address);
+        Shopware()->Container()->get(\Shopware\Bundle\AccountBundle\Service\AddressServiceInterface::class)->update($address);
     }
 
     /**
@@ -104,7 +104,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
             $this->addressService->update($model);
         } else {
             /** @var Customer $customer */
-            $customer = $this->get('models')->find(Customer::class, $data['user_id']);
+            $customer = $this->get(\Shopware\Components\Model\ModelManager::class)->find(Customer::class, $data['user_id']);
             $this->addressService->create($model, $customer);
         }
 

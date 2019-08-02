@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Components\Routing\Context;
 use Shopware\Models\Category\Category;
@@ -218,7 +219,7 @@ class CoverTest extends TestCase
 
     private function assertMediaFile($expected, Struct\Media $media)
     {
-        static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Media', $media);
+        static::assertInstanceOf(Media::class, $media);
         static::assertNotEmpty($media->getThumbnails());
         static::assertContains($expected, $media->getFile());
 
@@ -249,7 +250,7 @@ class CoverTest extends TestCase
     private function resetContext()
     {
         // correct router context for url building
-        Shopware()->Container()->get('router')->setContext(
+        Shopware()->Container()->get(\Shopware\Components\Routing\RouterInterface::class)->setContext(
             new Context(
                 'localhost',
                 Shopware()->Shop()->getBasePath(),

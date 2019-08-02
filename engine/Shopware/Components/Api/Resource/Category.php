@@ -45,7 +45,7 @@ class Category extends Resource
 
     public function __construct(TranslationComponent $translationComponent = null)
     {
-        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
+        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get(\Shopware_Components_Translation::class);
     }
 
     /**
@@ -398,7 +398,7 @@ class Category extends Resource
 
         if (isset($data['media']['link'])) {
             /** @var Media $mediaResource */
-            $mediaResource = $this->getContainer()->get('shopware.api.media');
+            $mediaResource = $this->getContainer()->get(\Shopware\Components\Api\Resource\Media::class);
             /** @var MediaModel $media */
             $media = $mediaResource->internalCreateMediaByFileLink($data['media']['link']);
         } elseif (!empty($data['media']['mediaId'])) {
@@ -473,7 +473,7 @@ class Category extends Resource
     private function getAttributeProperties()
     {
         /** @var \Shopware\Bundle\AttributeBundle\Service\CrudService $crud */
-        $crud = $this->getContainer()->get('shopware_attribute.crud_service');
+        $crud = $this->getContainer()->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class);
         $list = $crud->getList('s_categories_attributes');
         $fields = [];
         foreach ($list as $property) {

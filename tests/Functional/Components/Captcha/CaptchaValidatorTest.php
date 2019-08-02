@@ -38,8 +38,8 @@ class CaptchaValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->captcha = new DefaultCaptcha(
             Shopware()->Container(),
-            Shopware()->Container()->get('config'),
-            Shopware()->Container()->get('template')
+            Shopware()->Container()->get(\Shopware_Components_Config::class),
+            Shopware()->Container()->get(\Enlight_Template_Manager::class)
         );
     }
 

@@ -39,8 +39,8 @@ class VoteTest extends TestCase
         $points = [1, 2, 2, 3, 3];
         $this->helper->createVotes($product->getId(), $points);
 
-        $listProduct = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($number, $context);
-        $votes = Shopware()->Container()->get('shopware_storefront.vote_service')->get($listProduct, $context);
+        $listProduct = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)->get($number, $context);
+        $votes = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface::class)->get($listProduct, $context);
 
         static::assertCount(5, $votes);
 
@@ -60,7 +60,7 @@ class VoteTest extends TestCase
         $points = [1, 2, 2, 3, 3, 3, 3, 3];
         $this->helper->createVotes($product->getId(), $points);
 
-        $listProduct = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($number, $context);
+        $listProduct = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)->get($number, $context);
         $voteAverage = $listProduct->getVoteAverage();
 
         static::assertEquals(5, $voteAverage->getAverage());
@@ -184,7 +184,7 @@ class VoteTest extends TestCase
     private function assertShopVotes($number, $points = [], $expected = [], $configs = [])
     {
         //switch config values
-        $config = Shopware()->Container()->get('config');
+        $config = Shopware()->Container()->get(\Shopware_Components_Config::class);
         $originals = [];
         foreach ($configs as $key => $value) {
             $originals = $config->get($key);
@@ -208,7 +208,7 @@ class VoteTest extends TestCase
         //load product struct
         $factory = Shopware()->Container()->get('shopware_storefront.base_product_factory');
         $product = $factory->createBaseProduct($number);
-        $service = Shopware()->Container()->get('shopware_storefront.vote_service');
+        $service = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface::class);
 
         //iterate all expected shop votes/averages
         foreach ($expected as $shopId => $data) {

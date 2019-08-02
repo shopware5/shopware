@@ -135,7 +135,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
                 try {
                     $result = $this->get('shopware.emotion.emotion_landingpage_loader')->load(
                         $targetEmotionId,
-                        $this->get('shopware_storefront.context_service')->getShopContext()
+                        $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext()
                     );
 
                     $this->View()->loadTemplate('frontend/campaign/index.tpl');
@@ -221,7 +221,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
      */
     private function enableBackendTheme()
     {
-        $directory = Shopware()->Container()->get('theme_path_resolver')->getExtJsThemeDirectory();
+        $directory = Shopware()->Container()->get(\Shopware\Components\Theme\PathResolver::class)->getExtJsThemeDirectory();
         Shopware()->Container()->get('template')->setTemplateDir([
             'backend' => $directory,
             'include_dir' => '.',

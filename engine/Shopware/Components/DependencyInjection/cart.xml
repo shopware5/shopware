@@ -8,16 +8,11 @@
                  class="Shopware\Components\Cart\ProportionalTaxCalculator"/>
 
         <service id="shopware.cart.basket_query_helper" class="Shopware\Components\Cart\BasketQueryHelper">
-            <argument type="service" id="dbal_connection"/>
-        </service>
-
-        <service id="shopware.cart.basket_helper" class="Shopware\Components\Cart\BasketHelper">
-            <argument type="service" id="shopware.cart.proportional_tax_calculator"/>
-            <argument type="service" id="shopware.cart.basket_query_helper" />
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
         </service>
 
         <service id="shopware.cart.proportional_cart_merger" class="Shopware\Components\Cart\ProportionalCartMerger">
-            <argument type="service" id="modules"/>
+            <argument type="service" id="Shopware_Components_Modules"/>
         </service>
 
         <service id="shopware.cart.net_rounding.after_quantity"
@@ -32,15 +27,15 @@
         </service>
 
         <service id="shopware.components.cart.cart_migration" class="Shopware\Components\Cart\CartMigration">
-            <argument type="service" id="session"/>
-            <argument type="expression">container.get('modules').Basket()</argument>
-            <argument type="service" id="dbal_connection"/>
-            <argument type="service" id="shopware.components.cart.cart_migration_cleaner"/>
+            <argument type="service" id="Zend_Session_Namespace"/>
+            <argument type="expression">container.get('Shopware_Components_Modules').Basket()</argument>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Components\Cart\CartMigrationCleaner"/>
         </service>
 
         <service id="shopware.components.cart.cart_migration_cleaner" class="Shopware\Components\Cart\CartMigrationCleaner">
-            <argument type="service" id="session"/>
-            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="Zend_Session_Namespace"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
         </service>
     </services>
 </container>

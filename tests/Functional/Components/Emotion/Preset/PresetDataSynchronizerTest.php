@@ -49,14 +49,14 @@ class PresetDataSynchronizerTest extends TestCase
 
     protected function setUp()
     {
-        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $this->connection->beginTransaction();
 
         $this->connection->executeQuery('DELETE FROM s_emotion_presets');
         $this->connection->executeQuery('DELETE FROM s_core_plugins');
 
-        $this->synchronizerService = Shopware()->Container()->get('shopware.emotion.preset_data_synchronizer');
-        $this->presetResource = Shopware()->Container()->get('shopware.api.emotion_preset');
+        $this->synchronizerService = Shopware()->Container()->get(\Shopware\Components\Emotion\Preset\PresetDataSynchronizerInterface::class);
+        $this->presetResource = Shopware()->Container()->get(\Shopware\Components\Api\Resource\EmotionPreset::class);
 
         $this->imageData = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
     }

@@ -36,7 +36,7 @@ class CustomerAttributeConditionHandlerTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $service = Shopware()->Container()->get('shopware_attribute.crud_service');
+        $service = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class);
         $service->update('s_user_attributes', 'test', 'integer');
     }
 
@@ -44,11 +44,11 @@ class CustomerAttributeConditionHandlerTest extends TestCase
     {
         parent::tearDown();
         /** @var CrudService $service */
-        $service = Shopware()->Container()->get('shopware_attribute.crud_service');
+        $service = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class);
         $service->delete('s_user_attributes', 'test');
 
         /** @var CacheManager $cache */
-        $cache = Shopware()->Container()->get('shopware.cache_manager');
+        $cache = Shopware()->Container()->get(\Shopware\Components\CacheManager::class);
 
         $cache->clearProxyCache();
         $cache->clearOpCache();

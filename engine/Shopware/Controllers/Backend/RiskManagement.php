@@ -64,7 +64,7 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
             $total = Shopware()->Models()->getQueryCount($builder->getQuery());
 
             // Translate the payment methods
-            $translationComponent = $this->get('translation');
+            $translationComponent = $this->get(\Shopware_Components_Translation::class);
             $result = $translationComponent->translatePaymentMethods($result);
 
             $this->View()->assign(['success' => true, 'data' => $result, 'total' => $total]);

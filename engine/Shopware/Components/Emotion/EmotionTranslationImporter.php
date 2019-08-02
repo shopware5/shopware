@@ -43,7 +43,7 @@ class EmotionTranslationImporter
     public function __construct(Connection $connection, Shopware_Components_Translation $translationComponent = null)
     {
         $this->connection = $connection;
-        $this->translator = $translationComponent ?: Shopware()->Container()->get('translation');
+        $this->translator = $translationComponent ?: Shopware()->Container()->get(\Shopware_Components_Translation::class);
     }
 
     /**

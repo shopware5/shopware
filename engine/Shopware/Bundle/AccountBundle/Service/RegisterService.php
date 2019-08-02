@@ -261,9 +261,9 @@ class RegisterService implements RegisterServiceInterface
         );
 
         if (((int) $customer->getAccountMode()) === 1) {
-            $mail = $container->get('templatemail')->createMail('sOPTINREGISTERACCOUNTLESS', $context);
+            $mail = $container->get(\Shopware_Components_TemplateMail::class)->createMail('sOPTINREGISTERACCOUNTLESS', $context);
         } else {
-            $mail = $container->get('templatemail')->createMail('sOPTINREGISTER', $context);
+            $mail = $container->get(\Shopware_Components_TemplateMail::class)->createMail('sOPTINREGISTER', $context);
         }
         $mail->addTo($customer->getEmail());
         $mail->send();

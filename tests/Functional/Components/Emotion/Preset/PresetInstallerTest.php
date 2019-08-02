@@ -42,7 +42,7 @@ class PresetInstallerTest extends TestCase
 
     protected function setUp()
     {
-        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection = Shopware()->Container()->get('Doctrine\DBAL\Connection');
         $this->connection->beginTransaction();
 
         $this->connection->executeQuery('DELETE FROM s_emotion_presets');

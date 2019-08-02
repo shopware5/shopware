@@ -67,7 +67,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
     {
         if (in_array($argumentName, ['category', 'target'])) {
             /** @var Repository $categoryRepository */
-            $categoryRepository = $this->container->get('models')
+            $categoryRepository = $this->container->get(\Shopware\Components\Model\ModelManager::class)
                 ->getRepository(Category::class);
 
             $columnOfChoice = is_numeric($context->getCurrentWord()) ? 'id' : 'name';
@@ -146,7 +146,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
 
         $copyProductAssociations = !$input->getOption('noArticleAssociations');
 
-        $count = $this->container->get('models')
+        $count = $this->container->get(\Shopware\Components\Model\ModelManager::class)
             ->getRepository(Category::class)
             ->getChildrenCountList($originalCategory->getId());
 
@@ -185,7 +185,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
             $mode = 'findByName';
         }
 
-        $category = $this->container->get('models')
+        $category = $this->container->get(\Shopware\Components\Model\ModelManager::class)
             ->getRepository(Category::class)
             ->$mode(
                 $categoryInput
@@ -229,7 +229,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
         $copyProductAssociations,
         $newRootCategoryId = null
     ) {
-        $categoryDuplicator = $this->container->get('CategoryDuplicator');
+        $categoryDuplicator = $this->container->get(\Shopware\Components\CategoryHandling\CategoryDuplicator::class);
 
         $newCategoryId = $categoryDuplicator->duplicateCategory($categoryId, $newParentId, $copyProductAssociations);
         $this->progressBar->advance();

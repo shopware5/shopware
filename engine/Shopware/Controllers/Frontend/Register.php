@@ -90,13 +90,13 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         }
 
         /** @var ShopContextInterface $context */
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
 
         /** @var Enlight_Components_Session_Namespace $session */
         $session = $this->get('session');
 
         /** @var RegisterServiceInterface $registerService */
-        $registerService = $this->get('shopware_account.register_service');
+        $registerService = $this->get(\Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface::class);
 
         $data = $this->getPostData();
 
@@ -119,14 +119,14 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             /** @var Address $billing */
             $billing = $billingForm->getData();
 
-            $country = $this->get('shopware_storefront.country_gateway')->getCountry($billing->getCountry()->getId(), $context);
+            $country = $this->get(\Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface::class)->getCountry($billing->getCountry()->getId(), $context);
 
             if (!$country->allowShipping()) {
                 $errors['billing']['country'] = $this->get('snippets')->getNamespace('frontend/register/index')->get('CountryNotAvailableForShipping');
             }
         }
 
-        $validCaptcha = $this->validateCaptcha($this->get('config')->get('registerCaptcha'), $this->request);
+        $validCaptcha = $this->validateCaptcha($this->get(\Shopware_Components_Config::class)->get('registerCaptcha'), $this->request);
         if (!$validCaptcha) {
             $errors['captcha'] = [
                 $this->get('snippets')
@@ -162,7 +162,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         /** @var Address $billing */
         $billing = $billingForm->getData();
 
-        $config = $this->container->get('config');
+        $config = $this->container->get(\Shopware_Components_Config::class);
 
         $accountMode = (int) $customer->getAccountMode();
         $doubleOptinWithAccount = ($accountMode === 0) && $config->get('optinregister');
@@ -225,10 +225,10 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     public function confirmValidationAction()
     {
         /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = $this->container->get('dbal_connection');
+        $connection = $this->container->get(\Doctrine\DBAL\Connection::class);
 
         /** @var \Shopware\Components\Model\ModelManager $modelManager */
-        $modelManager = $this->container->get('models');
+        $modelManager = $this->container->get(\Shopware\Components\Model\ModelManager::class);
 
         $hash = $this->Request()->get('sConfirmation');
 
@@ -465,7 +465,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     private function getCustomerGroupKey()
     {
         $customerGroupKey = $this->request->getParam('sValidation');
-        $customerGroupId = $this->get('dbal_connection')->fetchColumn(
+        $customerGroupId = $this->get(\Doctrine\DBAL\Connection::class)->fetchColumn(
             'SELECT id FROM s_core_customergroups WHERE `groupkey` = ?',
             [$customerGroupKey]
         );
@@ -480,7 +480,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         );
 
         if ($event) {
-            return $this->get('config')->get('defaultCustomerGroup', 'EK');
+            return $this->get(\Shopware_Components_Config::class)->get('defaultCustomerGroup', 'EK');
         }
 
         return $customerGroupKey;
@@ -593,11 +593,11 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
      */
     private function getCountries()
     {
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
         $service = $this->get('shopware_storefront.location_service');
         $countries = $service->getCountries($context);
 
-        return $this->get('legacy_struct_converter')->convertCountryStructList($countries);
+        return $this->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertCountryStructList($countries);
     }
 
     private function sendRegistrationMail(Customer $customer)

@@ -207,7 +207,7 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
         Shopware()->Db()->executeUpdate('UPDATE s_categories SET mediaID = 564 WHERE id = ?', [$first1->getId()]);
 
         $result = $this->module->sGetCategories($second1->getId());
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         $result = array_values($result);
         $category = $result[1];

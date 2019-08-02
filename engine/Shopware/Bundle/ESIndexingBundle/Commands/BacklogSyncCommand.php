@@ -66,7 +66,7 @@ class BacklogSyncCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $reader = $this->container->get('shopware_elastic_search.backlog_reader');
+        $reader = $this->container->get(\Shopware\Bundle\ESIndexingBundle\BacklogReader::class);
         $lastBackLogId = $reader->getLastBacklogId();
         $backlogs = $reader->read($lastBackLogId, $this->batchSize);
 
@@ -83,12 +83,12 @@ class BacklogSyncCommand extends ShopwareCommand
         /** @var Backlog $last */
         $last = $backlogs[count($backlogs) - 1];
         $reader->setLastBacklogId($last->getId());
-        $shops = $this->container->get('shopware_elastic_search.identifier_selector')->getShops();
+        $shops = $this->container->get(\Shopware\Bundle\ESIndexingBundle\IdentifierSelector::class)->getShops();
         foreach ($shops as $shop) {
             foreach ($this->mappings as $mapping) {
-                $index = $this->container->get('shopware_elastic_search.index_factory')->createShopIndex($shop, $mapping->getType());
+                $index = $this->container->get(\Shopware\Bundle\ESIndexingBundle\IndexFactory::class)->createShopIndex($shop, $mapping->getType());
 
-                $this->container->get('shopware_elastic_search.backlog_processor')
+                $this->container->get(\Shopware\Bundle\ESIndexingBundle\BacklogProcessorInterface::class)
                     ->process($index, $backlogs);
             }
         }

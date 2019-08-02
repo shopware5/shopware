@@ -95,7 +95,7 @@ class ExportContext extends SubContext
     public function enableExports()
     {
         /** @var Connection $dbal */
-        $dbal = Shopware()->Container()->get('dbal_connection');
+        $dbal = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $dump = <<<'SQL'
 INSERT INTO s_export VALUES (4711,'csv','2000-01-01 00:00:00',1,'4ebfa063359a73c356913df45b3fbe7f',1,0,'2017-02-27 14:10:18',0,1,'2017-02-27 14:10:18','export.csv',2,NULL,1,1,'',NULL,0,0,0,0,0,'','{strip}id{#S#}title{#S#}url{#S#}image{#S#}price{#S#}versand{#S#}währung {/strip}{#L#}','{strip}\n{$sArticle.ordernumber|escape}{#S#}\n{$sArticle.name|strip_tags|strip|truncate:80:\"...\":true|escape|htmlentities}{#S#}\n{$sArticle.articleID|link:$sArticle.name|escape}{#S#}\n{$sArticle.image|image:2}{#S#}\n{$sArticle.price|escape:\"number\"}{#S#}\nDE::DHL:{$sArticle|@shippingcost:\"prepayment\":\"de\"}{#S#}\n{$sCurrency.currency}\n{/strip}{#L#}','',0,1,1,'2000-01-01 00:00:00',0),(4712,'txt tab','2000-01-01 00:00:00',1,'4ebfa063359a73c356913df45b3fbe7f',1,0,'2017-02-27 14:10:18',0,2,'2017-02-27 14:10:18','export.txt',2,NULL,1,1,'',NULL,0,0,0,0,0,'','{strip}id{#S#}title{#S#}url{#S#}image{#S#}price{#S#}versand{#S#}währung{/strip}{#L#}','{strip}\n{$sArticle.ordernumber|escape}{#S#}\n{$sArticle.name|strip_tags|strip|truncate:80:"...":true|escape|htmlentities}{#S#}\n{$sArticle.articleID|link:$sArticle.name|escape}{#S#}\n{$sArticle.image|image:2}{#S#}\n{$sArticle.price|escape:"number"}{#S#}\nDE::DHL:{$sArticle|@shippingcost:"prepayment":"de"}{#S#}\n{$sCurrency.currency}\n{/strip}{#L#}','',0,1,1,'2000-01-01 00:00:00',0),(4713,'xml','2000-01-01 00:00:00',1,'4ebfa063359a73c356913df45b3fbe7f',1,0,'2000-01-01 00:00:00',0,3,'0000-00-00 00:00:00','export.xml',2,NULL,1,1,'',NULL,0,0,0,0,0,'','<?xml version="1.0" encoding="UTF-8" ?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n<channel>\n    <atom:link href="http://{$sConfig.sBASEPATH}/engine/connectors/export/{$sSettings.id}/{$sSettings.hash}/{$sSettings.filename}" rel="self" type="application/rss+xml" />\n    <title>{$sConfig.sSHOPNAME}</title>\n<link>http://{$sConfig.sBASEPATH}</link>\n    <language>{$sLanguage.isocode}-{$sLanguage.isocode}</language>\n    <image>\n        <url>http://{$sConfig.sBASEPATH}/templates/0/de/media/img/default/store/logo.gif</url>\n        <title>{$sConfig.sSHOPNAME}</title>\n        <link>http://{$sConfig.sBASEPATH}</link>\n    </image>{#L#}','<item> \n    <title>{$sArticle.name|strip_tags|htmlspecialchars_decode|strip|escape}</title>\n    <id>{$sArticle.ordernumber|escape}</id>\n    <url>{$sArticle.articleID|link:$sArticle.name}</url>\n    <description>{if $sArticle.image}\n        <a href="{$sArticle.articleID|link:$sArticle.name}" style="border:0 none;">\n            <img src="{$sArticle.image|image:0}" align="right" style="padding: 0pt 0pt 12px 12px; float: right;" />\n        </a>\n{/if}\n        {$sArticle.description_long|strip_tags|regex_replace:"/[^\\wöäüÖÄÜß .?!,&:%;\\-\\"\']/i":""|trim|truncate:900:"..."|escape}\n    </description>\n    <image>{$sArticle.image|image:2}</image>\n <price>{$sArticle.price|escape:"number"}</price><category>{$sArticle.articleID|category:">"|htmlspecialchars_decode|escape}</category>\n{if $sArticle.changed}     {assign var="sArticleChanged" value=$sArticle.changed|strtotime}<pubDate>{"r"|date:$sArticleChanged}</pubDate>{"rn"}{/if}\n</item>{#L#}','</channel>\n</rss>',0,1,1,'2000-01-01 00:00:00',0),(4714,'txt pipe','2000-01-01 00:00:00',1,'4ebfa063359a73c356913df45b3fbe7f',1,0,'2017-02-27 14:10:18',0,4,'2017-02-27 14:10:18','export.txt',2,NULL,1,1,'',NULL,0,0,0,0,0,'','{strip}id{#S#}title{#S#}url{#S#}image{#S#}price{#S#}versand{#S#}währung{/strip}{#L#}','{strip}\n{$sArticle.ordernumber|escape}{#S#}\n{$sArticle.name|strip_tags|strip|truncate:80:"...":true|escape|htmlentities}{#S#}\n{$sArticle.articleID|link:$sArticle.name|escape}{#S#}\n{$sArticle.image|image:2}{#S#}\n{$sArticle.price|escape:"number"}{#S#}\nDE::DHL:{$sArticle|@shippingcost:"prepayment":"de"}{#S#}\n{$sCurrency.currency}\n{/strip}{#L#}','',0,1,1,'2000-01-01 00:00:00',0)
 SQL;
@@ -111,7 +111,7 @@ SQL;
     public function disableExports()
     {
         /** @var Connection $dbal */
-        $dbal = Shopware()->Container()->get('dbal_connection');
+        $dbal = Shopware()->Container()->get('Doctrine\DBAL\Connection');
         $dbal->exec('DELETE FROM s_export WHERE id in (4711, 4712, 4713, 4714)');
     }
 
@@ -123,7 +123,7 @@ SQL;
     public function createSubshop()
     {
         /** @var Connection $dbal */
-        $dbal = Shopware()->Container()->get('dbal_connection');
+        $dbal = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $dbal->exec('INSERT INTO s_core_shops
             (id, main_id, name, title, position, host, base_path, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, fallback_id, customer_scope, `default`, active) VALUES
             ("3", NULL, "Export Testshop", "Export Testshop", "0", "' . $this->subShopDomain . '", NULL, NULL, "", "0", "23", "23", "3", "1", "1", "1", "1", "0", "0", "1");');
@@ -139,7 +139,7 @@ SQL;
     public static function removeSubshop()
     {
         /** @var Connection $dbal */
-        $dbal = Shopware()->Container()->get('dbal_connection');
+        $dbal = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $dbal->exec('DELETE FROM s_core_shops WHERE id=3');
     }
 

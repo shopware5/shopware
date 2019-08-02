@@ -128,7 +128,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         $file = $media['path'];
         $tmpFileName = $media['name'] . '.' . $media['extension'];
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         @set_time_limit(0);
         $response = $this->Response();
@@ -182,7 +182,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $totalResult = $paginator->count();
 
         $mediaList = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $mediaService = $this->get('shopware_media.media_service');
+        $mediaService = $this->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         /** @var array $media */
         foreach ($mediaList as &$media) {
@@ -297,7 +297,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $data = $builder->getQuery()->getArrayResult();
         $data = $data[0];
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         if ($data['path']) {
             $data['path'] = $mediaService->getUrl($data['path']);
         }
@@ -433,11 +433,11 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
             if ($media->getType() === Media::TYPE_IMAGE // GD doesn't support the following image formats
                 && !in_array($media->getExtension(), ['tif', 'tiff'], true)) {
-                $manager = Shopware()->Container()->get('thumbnail_manager');
+                $manager = Shopware()->Container()->get(\Shopware\Components\Thumbnail\Manager::class);
                 $manager->createMediaThumbnail($media, [], true);
             }
 
-            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
             $data[0]['path'] = $mediaService->getUrl($data[0]['path']);
 
             $this->View()->assign(['success' => true, 'data' => $data[0]]);
@@ -555,7 +555,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         }
 
         /** @var Shopware\Components\Thumbnail\Manager $manager */
-        $manager = $this->get('thumbnail_manager');
+        $manager = $this->get(\Shopware\Components\Thumbnail\Manager::class);
 
         $fails = [];
         foreach ($medias as $media) {
@@ -579,7 +579,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     public function emptyTrashAction()
     {
         /** @var \Shopware\Components\Model\ModelManager $em */
-        $em = $this->get('models');
+        $em = $this->get(\Shopware\Components\Model\ModelManager::class);
         /** @var \Shopware\Models\Media\Repository $repository */
         $repository = $em->getRepository(Media::class);
 
@@ -606,7 +606,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      */
     public function getMediaUrlsAction()
     {
-        $mediaService = $this->get('shopware_media.media_service');
+        $mediaService = $this->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         $input = $this->Request()->get('paths');
         $output = [];
 
@@ -628,7 +628,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $file = $this->Request()->files->get('file');
         $mediaId = $this->request->get('mediaId');
 
-        $mediaReplaceService = $this->container->get('shopware_media.replace_service');
+        $mediaReplaceService = $this->container->get(\Shopware\Bundle\MediaBundle\MediaReplaceServiceInterface::class);
 
         try {
             $mediaReplaceService->replace($mediaId, $file);
@@ -953,7 +953,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $oldName = $media->getName();
         $media->setName($params['name']);
         $name = $media->getName();
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         $projectDir = Shopware()->Container()->getParameter('shopware.app.rootdir');
 
         // Check if the name passed and is valid
@@ -973,7 +973,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         // Check if a new album id is passed and is valid
         if (isset($params['newAlbumID']) && !empty($params['newAlbumID'])) {
             /** @var Album|null $album */
-            $album = Shopware()->Container()->get('models')->getRepository(Album::class)->find($params['newAlbumID']);
+            $album = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Album::class)->find($params['newAlbumID']);
             if ($album) {
                 $media->setAlbum($album);
                 $media->setAlbumId($params['newAlbumID']);
@@ -1006,7 +1006,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      */
     private function createThumbnailsForMovedMedia(Media $media)
     {
-        $albumRepository = Shopware()->Container()->get('models')->getRepository(Album::class);
+        $albumRepository = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Album::class);
 
         /** @var Album|null $album */
         $album = $albumRepository->find($media->getAlbumId());

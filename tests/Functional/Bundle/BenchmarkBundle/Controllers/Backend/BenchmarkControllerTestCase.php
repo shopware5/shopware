@@ -58,7 +58,7 @@ class BenchmarkControllerTestCase extends BenchmarkTestCase
     protected function loadSettingColumn($select)
     {
         /** @var QueryBuilder $queryBuilder */
-        $queryBuilder = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $queryBuilder = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
 
         return $queryBuilder->select($select)
             ->from('s_benchmark_config', 'config')
@@ -73,7 +73,7 @@ class BenchmarkControllerTestCase extends BenchmarkTestCase
     protected function setSetting($key, $value)
     {
         /** @var QueryBuilder $queryBuilder */
-        $queryBuilder = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $queryBuilder = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
 
         $queryBuilder->update('s_benchmark_config', 'config')
             ->set($key, ':value')

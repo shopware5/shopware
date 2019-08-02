@@ -44,7 +44,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
 
     protected function setUp()
     {
-        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         if (!$this->debug) {
             $this->connection->beginTransaction();
         }
@@ -84,10 +84,10 @@ class TestCase extends \Enlight_Components_Test_TestCase
         }
 
         /** @var CustomerNumberSearch $search */
-        $search = Shopware()->Container()->get('customer_search.dbal.number_search');
+        $search = Shopware()->Container()->get(\Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchInterface::class);
 
         /** @var \Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\SearchIndexer $indexer */
-        $indexer = Shopware()->Container()->get('customer_search.dbal.indexing.indexer');
+        $indexer = Shopware()->Container()->get(\Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\SearchIndexerInterface::class);
         $indexer->clearIndex();
         $indexer->populate($ids);
 
@@ -180,7 +180,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
 
         if (array_key_exists('attribute', $customer)) {
             /** @var DataPersister $persister */
-            $persister = Shopware()->Container()->get('shopware_attribute.data_persister');
+            $persister = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataPersister::class);
             $persister->persist($customer['attribute'], 's_user_attributes', $userId);
         }
 

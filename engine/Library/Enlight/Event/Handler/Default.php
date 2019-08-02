@@ -64,7 +64,7 @@ class Enlight_Event_Handler_Default extends Enlight_Event_Handler
             throw new Enlight_Event_Exception('Listener "' . $listener_event . '" is not callable');
         }
         $this->listener = $listener;
-        ;
+
         return $this;
     }
 

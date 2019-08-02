@@ -25,6 +25,7 @@
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 use Shopware\Components\Random;
+use Shopware\Components\Validator\EmailValidator;
 use Shopware\Models\Blog\Blog;
 use Shopware\Models\Shop\Shop;
 
@@ -197,8 +198,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             }
         }, $blogArticles);
 
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
-        $medias = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
+        $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
+        $medias = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface::class)->getList($mediaIds, $context);
 
         foreach ($blogArticles as $key => $blogArticle) {
             // Adding number of comments to the blog article
@@ -225,7 +226,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
             /** @var Media $media */
             $media = $medias[$mediaId];
-            $media = $this->get('legacy_struct_converter')->convertMediaStruct($media);
+            $media = $this->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertMediaStruct($media);
 
             $blogArticles[$key]['media'] = $media;
         }
@@ -293,7 +294,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId, $shop->getId());
         $blogArticleData = $blogArticleQuery->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
-        $translation = $this->get('translation')->readWithFallback($shop->getId(), $shop->getFallback() ? $shop->getFallback()->getId() : null, 'blog', $blogArticleId);
+        $translation = $this->get(\Shopware_Components_Translation::class)->readWithFallback($shop->getId(), $shop->getFallback() ? $shop->getFallback()->getId() : null, 'blog', $blogArticleId);
         $blogArticleData = array_merge($blogArticleData, $translation);
 
         // Redirect if the blog item is not available
@@ -338,13 +339,13 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         }
 
         $mediaIds = array_column($blogArticleData['media'], 'mediaId');
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
-        $mediaStructs = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
+        $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
+        $mediaStructs = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface::class)->getList($mediaIds, $context);
 
         // Adding thumbnails to the blog article
         foreach ($blogArticleData['media'] as &$media) {
             $mediaId = $media['mediaId'];
-            $mediaData = $this->get('legacy_struct_converter')->convertMediaStruct($mediaStructs[$mediaId]);
+            $mediaData = $this->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertMediaStruct($mediaStructs[$mediaId]);
             if ($media['preview']) {
                 $blogArticleData['preview'] = $mediaData;
             }
@@ -452,7 +453,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                     }
                 }
 
-                $validator = $this->container->get('validator.email');
+                $validator = $this->container->get(EmailValidator::class);
                 if (!empty(Shopware()->Config()->sOPTINVOTE) && (empty($this->Request()->eMail) || !$validator->isValid($this->Request()->eMail))) {
                     $sErrorFlag['eMail'] = true;
                 }
@@ -735,7 +736,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $data[$blogArticle['id']] = $blogArticle;
         }
 
-        $translations = $this->get('translation')->readBatchWithFallback($shop->getId(), $shop->getFallback() ? $shop->getFallback()->getId() : null, 'blog', $ids, false);
+        $translations = $this->get(\Shopware_Components_Translation::class)->readBatchWithFallback($shop->getId(), $shop->getFallback() ? $shop->getFallback()->getId() : null, 'blog', $ids, false);
 
         foreach ($translations as $translation) {
             $data[$translation['objectkey']] = array_merge($data[$translation['objectkey']], $translation['objectdata']);

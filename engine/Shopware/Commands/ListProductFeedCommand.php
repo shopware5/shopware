@@ -52,7 +52,7 @@ class ListProductFeedCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $productFeedRepository = $this->container->get('models')->getRepository('Shopware\Models\ProductFeed\ProductFeed');
+        $productFeedRepository = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository('Shopware\Models\ProductFeed\ProductFeed');
         $productFeeds = $productFeedRepository->findAll();
 
         $rows = [];

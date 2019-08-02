@@ -166,7 +166,7 @@ class ModelManager extends EntityManager
      */
     public function getValidator()
     {
-        return Shopware()->Container()->get('validator');
+        return Shopware()->Container()->get(ValidatorInterface::class);
     }
 
     /**

@@ -95,7 +95,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
             return;
         }
 
-        $search = $this->container->get('shopware.backend.global_search');
+        $search = $this->container->get(\Shopware\Components\Backend\GlobalSearch::class);
         $result = $search->search($term);
 
         $this->View()->assign('searchResult', $result);
@@ -115,7 +115,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.5.8 and will be removed in 5.7. Use the ProductRepository instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
-        $query = $this->container->get('dbal_connection')->createQueryBuilder();
+        $query = $this->container->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
 
         $query->select([
             'article.id',
@@ -244,7 +244,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     public function createEntitySearchQuery($entity)
     {
         /** @var \Doctrine\ORM\QueryBuilder $query */
-        $query = $this->get('models')->createQueryBuilder();
+        $query = $this->get(\Shopware\Components\Model\ModelManager::class)->createQueryBuilder();
         $query->select('entity')
             ->from($entity, 'entity');
 
@@ -289,7 +289,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
         /** @var \Shopware\Components\Model\ModelManager $entityManager */
-        $entityManager = $this->get('models');
+        $entityManager = $this->get(\Shopware\Components\Model\ModelManager::class);
 
         return $entityManager->createPaginator($query);
     }
@@ -327,7 +327,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     private function getEntitySearchFields($entity)
     {
         /** @var \Shopware\Components\Model\ModelManager $entityManager */
-        $entityManager = $this->get('models');
+        $entityManager = $this->get(\Shopware\Components\Model\ModelManager::class);
         $metaData = $entityManager->getClassMetadata($entity);
 
         $fields = array_filter(
@@ -417,7 +417,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     private function getCategories($ids)
     {
         /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
-        $query = $this->get('dbal_connection')->createQueryBuilder();
+        $query = $this->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
         $query->select(['id', 'description'])
             ->from('s_categories', 'category')
             ->where('category.id IN (:ids)')

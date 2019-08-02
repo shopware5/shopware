@@ -46,14 +46,14 @@ class EmotionToPresetDataTransformerTest extends TestCase
 
     protected function setUp()
     {
-        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $this->connection->beginTransaction();
 
         $this->connection->executeQuery('DELETE FROM s_emotion_presets');
         $this->connection->executeQuery('DELETE FROM s_core_plugins');
 
-        $this->transformer = Shopware()->Container()->get('shopware.emotion.emotion_presetdata_transformer');
-        $this->presetResource = Shopware()->Container()->get('shopware.api.emotion_preset');
+        $this->transformer = Shopware()->Container()->get(\Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformerInterface::class);
+        $this->presetResource = Shopware()->Container()->get(\Shopware\Components\Api\Resource\EmotionPreset::class);
     }
 
     protected function tearDown()

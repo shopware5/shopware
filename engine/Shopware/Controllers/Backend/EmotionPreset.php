@@ -33,7 +33,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
 {
     public function listAction()
     {
-        $resource = $this->container->get('shopware.api.emotionpreset');
+        $resource = $this->container->get(\Shopware\Components\Api\Resource\EmotionPreset::class);
 
         $presets = $resource->getList($this->getLocale(), false);
 
@@ -58,7 +58,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
             return;
         }
 
-        $previewData = $this->container->get('models')->getRepository(Preset::class)->createQueryBuilder('preset')
+        $previewData = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Preset::class)->createQueryBuilder('preset')
             ->select('preset.presetData, preset.preview')
             ->where('preset.id = :id')
             ->setParameter('id', $id)
@@ -89,7 +89,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
             return;
         }
 
-        $loader = $this->container->get('shopware.emotion.preset_loader');
+        $loader = $this->container->get(\Shopware\Components\Emotion\Preset\PresetLoader::class);
 
         try {
             $presetData = $loader->load($id);
@@ -118,8 +118,8 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
             throw new Enlight_Controller_Exception('You do not have sufficient rights to save a preset.', 401);
         }
 
-        $resource = $this->container->get('shopware.api.emotionpreset');
-        $transformer = $this->container->get('shopware.emotion.emotion_presetdata_transformer');
+        $resource = $this->container->get(\Shopware\Components\Api\Resource\EmotionPreset::class);
+        $transformer = $this->container->get(\Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformerInterface::class);
         $data = $this->Request()->getParams();
 
         if (!$data['emotionId']) {
@@ -147,7 +147,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
 
         $id = $this->Request()->getParam('id');
 
-        $resource = $this->container->get('shopware.api.emotionpreset');
+        $resource = $this->container->get(\Shopware\Components\Api\Resource\EmotionPreset::class);
 
         $resource->delete($id);
 
@@ -174,7 +174,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
         }
 
         /** @var Preset|null $preset */
-        $preset = $this->container->get('models')->getRepository(Preset::class)->find($id);
+        $preset = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Preset::class)->find($id);
 
         if (!$preset || $preset->getAssetsImported()) {
             $this->View()->assign(['success' => false]);
@@ -182,7 +182,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
             return;
         }
 
-        $synchronizerService = $this->container->get('shopware.emotion.preset_data_synchronizer');
+        $synchronizerService = $this->container->get(\Shopware\Components\Emotion\Preset\PresetDataSynchronizerInterface::class);
 
         try {
             $synchronizerService->importElementAssets($preset, $syncKey);
@@ -248,7 +248,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
         }
 
         /** @var MediaService $mediaService */
-        $mediaService = $this->container->get('shopware_media.media_service');
+        $mediaService = $this->container->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         if (strpos($path, 'media') === 0) {
             $path = $mediaService->getUrl($path);

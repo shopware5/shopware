@@ -61,7 +61,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     {
         parent::preDispatch();
 
-        $this->cacheManager = $this->get('shopware.cache_manager');
+        $this->cacheManager = $this->get(\Shopware\Components\CacheManager::class);
     }
 
     /**
@@ -157,7 +157,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     {
         $shopId = $this->Request()->get('shopId');
 
-        $repository = $this->get('models')->getRepository(\Shopware\Models\Shop\Shop::class);
+        $repository = $this->get(\Shopware\Components\Model\ModelManager::class)->getRepository(\Shopware\Models\Shop\Shop::class);
 
         $query = $repository->getShopsWithThemes(['shop.id' => $shopId]);
 
@@ -197,10 +197,10 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     public function moveThemeFilesAction()
     {
         /** @var \Shopware\Models\Shop\Repository $repository */
-        $repository = $this->get('models')->getRepository(\Shopware\Models\Shop\Shop::class);
+        $repository = $this->get(\Shopware\Components\Model\ModelManager::class)->getRepository(\Shopware\Models\Shop\Shop::class);
         $shops = $repository->getShopsWithThemes()->getResult();
         $compiler = $this->container->get('theme_compiler');
-        $pathResolver = $this->container->get('theme_path_resolver');
+        $pathResolver = $this->container->get(\Shopware\Components\Theme\PathResolver::class);
 
         $time = time();
 

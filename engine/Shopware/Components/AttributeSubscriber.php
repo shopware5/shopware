@@ -75,7 +75,7 @@ class AttributeSubscriber implements SubscriberInterface
         $response = new \Enlight_Controller_Response_ResponseHttp();
 
         if ($this->isModelException($exception)) {
-            $generator = $this->container->get('models')->createModelGenerator();
+            $generator = $this->container->get(\Shopware\Components\Model\ModelManager::class)->createModelGenerator();
             $result = $generator->generateAttributeModels();
             if ($result['success'] === true) {
                 $response->setRedirect(

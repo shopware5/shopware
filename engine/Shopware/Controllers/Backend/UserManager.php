@@ -35,7 +35,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     /**
      * @var \Shopware\Models\User\Repository
      */
-    protected $userRepository = null;
+    protected $userRepository;
 
     /**
      * @var ModelManager
@@ -355,7 +355,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         $userId = (int) $this->Request()->getParam('userId');
 
         try {
-            $connection = $this->container->get('dbal_connection');
+            $connection = $this->container->get(\Doctrine\DBAL\Connection::class);
             $connection->executeQuery('UPDATE s_core_auth SET lockedUntil = NOW(), failedLogins = 0 WHERE id = ?', [$userId]);
         } catch (Exception $e) {
             $this->View()->assign('success', false);
@@ -375,7 +375,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     {
         // Get posted user
         $userID = $this->Request()->getParam('id');
-        $getCurrentIdentity = $this->get('Auth')->getIdentity();
+        $getCurrentIdentity = $this->get('auth')->getIdentity();
 
         // Backend users shall not delete their current login
         if ($userID == $getCurrentIdentity->id) {

@@ -53,7 +53,7 @@ class MediaTest extends TestCase
 
         $data['file'] = $dest;
         $path = Shopware()->DocPath('media_image') . 'test-bild-used.jpg';
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         if ($mediaService->has($path)) {
             $mediaService->delete($path);
         }
@@ -82,7 +82,7 @@ class MediaTest extends TestCase
         $media = $this->resource->create($data);
 
         $pathPicture = Shopware()->DocPath('media_image') . $media->getFileName();
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         static::assertTrue($mediaService->has($pathPicture));
 
         //check if the thumbnails are generated
@@ -135,7 +135,7 @@ class MediaTest extends TestCase
 
         $data['file'] = $dest;
         $path = Shopware()->DocPath('media_image') . 'test-bild-used.jpg';
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         if ($mediaService->has($path)) {
             $mediaService->delete($path);
         }
@@ -167,7 +167,7 @@ class MediaTest extends TestCase
         $data['file'] = $dest;
 
         $path = Shopware()->DocPath('media_unknown') . 'test-bild-used.foo';
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
         if ($mediaService->has($path)) {
             $mediaService->delete($path);
         }

@@ -10,19 +10,19 @@
         </service>
 
         <service id="Shopware\Bundle\ContentTypeBundle\FieldResolver\MediaResolver">
-            <argument type="service" id="shopware_storefront.media_service"/>
-            <argument type="service" id="legacy_struct_converter"/>
-            <argument type="service" id="shopware_storefront.context_service"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface"/>
+            <argument type="service" id="Shopware\Components\Compatibility\LegacyStructConverter"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface"/>
         </service>
 
         <service id="Shopware\Bundle\ContentTypeBundle\FieldResolver\ProductResolver">
-            <argument type="service" id="shopware_storefront.list_product_service"/>
-            <argument type="service" id="legacy_struct_converter"/>
-            <argument type="service" id="shopware_storefront.context_service"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface"/>
+            <argument type="service" id="Shopware\Components\Compatibility\LegacyStructConverter"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface"/>
         </service>
 
         <service id="Shopware\Bundle\ContentTypeBundle\FieldResolver\ShopResolver">
-            <argument type="service" id="shopware_storefront.shop_gateway_dbal"/>
+            <argument type="service" id="Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface"/>
         </service>
 
         <service id="Shopware\Bundle\ContentTypeBundle\FieldResolver\TypeResolver">
