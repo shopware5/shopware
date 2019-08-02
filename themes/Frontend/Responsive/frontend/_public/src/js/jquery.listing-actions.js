@@ -216,12 +216,12 @@
             /**
              * selector for the wrapper of the whole listing
              */
-            listingWrapperSelector: '.listing--content-wrapper',
+            listingWrapperSelector: '.listing--wrapper',
 
             /**
              * The selector for the element which get the loading indicator after customer activates a filter
              */
-            loadingIndSelector: '.listing--content-wrapper',
+            loadingIndSelector: '.listing--wrapper',
 
             /**
              * The selector for "no filter result found" container
@@ -404,9 +404,9 @@
          */
         disableActiveFilterContainer: function (disabled) {
             var me = this;
-            
+
             $.publish('plugin/swListingActions/disableActiveFilter', [this, disabled]);
-            
+
             if (me.showInstantFilterResult || me.isFilterpanelInSidebar) {
                 return;
             }
