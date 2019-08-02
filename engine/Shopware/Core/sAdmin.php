@@ -27,8 +27,7 @@ use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\Captcha\CaptchaValidator;
-use Shopware\Components\Cart\BasketHelperInterface;
-use Shopware\Components\Cart\Struct\DiscountContext;
+use Shopware\Components\Cart\ConditionalLineItemServiceInterface;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Random;
 use Shopware\Components\Validator\EmailValidatorInterface;
@@ -170,9 +169,9 @@ class sAdmin implements \Enlight_Hook
     private $connection;
 
     /**
-     * @var BasketHelperInterface
+     * @var ConditionalLineItemServiceInterface
      */
-    private $basketHelper;
+    private $conditionalLineItemService;
 
     /**
      * @var array
@@ -221,7 +220,7 @@ class sAdmin implements \Enlight_Hook
         $this->numberRangeIncrementer = $numberRangeIncrementer ?: Shopware()->Container()->get('shopware.number_range_incrementer');
         $this->translationComponent = $translationComponent ?: Shopware()->Container()->get('translation');
         $this->connection = $connection ?: Shopware()->Container()->get('dbal_connection');
-        $this->basketHelper = Shopware()->Container()->get('shopware.cart.basket_helper');
+        $this->conditionalLineItemService = Shopware()->Container()->get(ConditionalLineItemServiceInterface::class);
     }
 
     /**
@@ -3040,6 +3039,7 @@ class sAdmin implements \Enlight_Hook
         $discount_basket_ordernumber = $this->config->get('sDISCOUNTNUMBER', 'DISCOUNT');
         $discount_ordernumber = $this->config->get('sSHIPPINGDISCOUNTNUMBER', 'SHIPPINGDISCOUNT');
         $percent_ordernumber = $this->config->get('sPAYMENTSURCHARGENUMBER', 'PAYMENTSURCHARGE');
+        $dispatch_surcharge_ordernumber = $this->config->get('shippingSurchargeNumber');
 
         $this->db->delete('s_order_basket', [
             'sessionID = ?' => $this->session->offsetGet('sessionId'),
@@ -3049,6 +3049,7 @@ class sAdmin implements \Enlight_Hook
                 $discount_ordernumber,
                 $percent_ordernumber,
                 $discount_basket_ordernumber,
+                $dispatch_surcharge_ordernumber,
             ],
         ]);
 
@@ -3074,6 +3075,11 @@ class sAdmin implements \Enlight_Hook
             [$this->session->offsetGet('sessionId')]
         );
 
+        $this->handleDispatchSurcharge(
+            $basket,
+            $discount_tax
+        );
+
         $this->handleBasketDiscount(
             $amount,
             $currencyFactor,
@@ -3082,7 +3088,6 @@ class sAdmin implements \Enlight_Hook
 
         $this->handleDispatchDiscount(
             $basket,
-            $currencyFactor,
             $discount_tax
         );
 
@@ -4034,15 +4039,7 @@ SQL;
         return $surcharge;
     }
 
-    /**
-     * Helper method for sAdmin::sGetPremiumShippingcosts()
-     * Calculates basket discount
-     *
-     * @param float $amount
-     * @param float $currencyFactor
-     * @param float $discount_tax
-     */
-    private function handleBasketDiscount($amount, $currencyFactor, $discount_tax)
+    private function handleBasketDiscount(float $amount, float $currencyFactor, float $discount_tax): void
     {
         $discount_basket_ordernumber = $this->config->get('sDISCOUNTNUMBER', 'DISCOUNT');
         $discount_basket_name = $this->snippetManager
@@ -4062,58 +4059,18 @@ SQL;
             $percent = $basket_discount;
             $basket_discount = round($basket_discount / 100 * ($amount * $currencyFactor), 2);
 
-            if (empty($this->sSYSTEM->sUSERGROUPDATA['tax']) && !empty($this->sSYSTEM->sUSERGROUPDATA['id'])) {
-                $basket_discount_net = $basket_discount;
-            } else {
-                $basket_discount_net = round($basket_discount / (100 + $discount_tax) * 100, 2);
-            }
-            $tax_rate = $discount_tax;
-            $basket_discount_net = $basket_discount_net * -1;
-            $basket_discount = $basket_discount * -1;
-
-            if ($this->config->get('proportionalTaxCalculation') && !$this->session->get('taxFree')) {
-                $this->basketHelper->addProportionalDiscount(
-                    new DiscountContext(
-                        $this->session->get('sessionId'),
-                        BasketHelperInterface::DISCOUNT_ABSOLUTE,
-                        $basket_discount,
-                        '- ' . $percent . ' % ' . $discount_basket_name,
-                        $discount_basket_ordernumber,
-                        3,
-                        $this->sSYSTEM->sCurrency['factor'],
-                        !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
-                    )
-                );
-            } else {
-                $this->db->insert(
-                    's_order_basket',
-                    [
-                        'sessionID' => $this->session->offsetGet('sessionId'),
-                        'articlename' => '- ' . $percent . ' % ' . $discount_basket_name,
-                        'articleID' => 0,
-                        'ordernumber' => $discount_basket_ordernumber,
-                        'quantity' => 1,
-                        'price' => $basket_discount,
-                        'netprice' => $basket_discount_net,
-                        'tax_rate' => $tax_rate,
-                        'datum' => new Zend_Date(),
-                        'modus' => 3,
-                        'currencyFactor' => $currencyFactor,
-                    ]
-                );
-            }
+            $lineItemName = '- ' . $percent . ' % ' . $discount_basket_name;
+            $this->conditionalLineItemService->addConditionalLineItem(
+                $lineItemName,
+                $discount_basket_ordernumber,
+                $basket_discount * -1,
+                $discount_tax,
+                3
+            );
         }
     }
 
-    /**
-     * Helper method for sAdmin::sGetPremiumShippingcosts()
-     * Calculates dispatch discount
-     *
-     * @param array $basket
-     * @param float $currencyFactor
-     * @param float $discountTax
-     */
-    private function handleDispatchDiscount($basket, $currencyFactor, $discountTax)
+    private function handleDispatchDiscount(array $basket, float $discountTax): void
     {
         $discount_ordernumber = $this->config->get('sSHIPPINGDISCOUNTNUMBER', 'SHIPPINGDISCOUNT');
         $discount_name = $this->snippetManager
@@ -4123,46 +4080,39 @@ SQL;
         $discount = $this->sGetPremiumDispatchSurcharge($basket, 3);
 
         if (!empty($discount)) {
+            $currencyFactor = empty($this->sSYSTEM->sCurrency['factor']) ? 1 : $this->sSYSTEM->sCurrency['factor'];
             $discount *= -$currencyFactor;
 
-            if (empty($this->sSYSTEM->sUSERGROUPDATA['tax']) && !empty($this->sSYSTEM->sUSERGROUPDATA['id'])) {
-                $discount_net = $discount;
-            } else {
-                $discount_net = round($discount / (100 + $discountTax) * 100, 2);
-            }
-            $tax_rate = $discountTax;
+            $this->conditionalLineItemService->addConditionalLineItem(
+                $discount_name,
+                $discount_ordernumber,
+                $discount,
+                $discountTax,
+                4
+            );
+        }
+    }
 
-            if (!$this->session->get('taxFree') && $this->config->get('proportionalTaxCalculation')) {
-                $this->basketHelper->addProportionalDiscount(
-                    new DiscountContext(
-                        $this->session->get('sessionId'),
-                        BasketHelperInterface::DISCOUNT_ABSOLUTE,
-                        $discount,
-                        $discount_name,
-                        $discount_ordernumber,
-                        4,
-                        $this->sSYSTEM->sCurrency['factor'],
-                        !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
-                    )
-                );
-            } else {
-                $this->db->insert(
-                    's_order_basket',
-                    [
-                        'sessionID' => $this->session->offsetGet('sessionId'),
-                        'articlename' => $discount_name,
-                        'articleID' => 0,
-                        'ordernumber' => $discount_ordernumber,
-                        'quantity' => 1,
-                        'price' => $discount,
-                        'netprice' => $discount_net,
-                        'tax_rate' => $tax_rate,
-                        'datum' => new Zend_Date(),
-                        'modus' => 4,
-                        'currencyFactor' => $currencyFactor,
-                    ]
-                );
-            }
+    private function handleDispatchSurcharge(array $basket, float $discountTax): void
+    {
+        $discount_ordernumber = $this->config->get('shippingSurchargeNumber');
+        $discount_name = $this->snippetManager
+            ->getNamespace('backend/static/discounts_surcharges')
+            ->get('shipping_surcharge_name', 'Dispatch surcharge');
+
+        $discount = $this->sGetPremiumDispatchSurcharge($basket, 4);
+
+        if (!empty($discount)) {
+            $currencyFactor = empty($this->sSYSTEM->sCurrency['factor']) ? 1 : $this->sSYSTEM->sCurrency['factor'];
+            $discount *= $currencyFactor;
+
+            $this->conditionalLineItemService->addConditionalLineItem(
+                $discount_name,
+                $discount_ordernumber,
+                $discount,
+                $discountTax,
+                4
+            );
         }
     }
 
@@ -4196,13 +4146,6 @@ SQL;
         if (!empty($payment['surcharge']) && (empty($dispatch) || $dispatch['surcharge_calculation'] == 3)) {
             $surcharge = round($payment['surcharge'], 2);
             $payment['surcharge'] = 0;
-            if (empty($this->sSYSTEM->sUSERGROUPDATA['tax']) && !empty($this->sSYSTEM->sUSERGROUPDATA['id'])) {
-                $surcharge_net = $surcharge;
-            } else {
-                $surcharge_net = round($surcharge / (100 + $discount_tax) * 100, 2);
-            }
-
-            $tax_rate = $discount_tax;
 
             if ($surcharge > 0) {
                 $surcharge_name = $this->snippetManager
@@ -4214,37 +4157,13 @@ SQL;
                     ->get('payment_surcharge_dev');
             }
 
-            if ($this->config->get('proportionalTaxCalculation') && !$this->session->get('taxFree')) {
-                $this->basketHelper->addProportionalDiscount(
-                    new DiscountContext(
-                        $this->session->get('sessionId'),
-                        BasketHelperInterface::DISCOUNT_ABSOLUTE,
-                        $surcharge,
-                        $surcharge_name,
-                        $surcharge_ordernumber,
-                        4,
-                        $this->sSYSTEM->sCurrency['factor'],
-                        !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
-                    )
-                );
-            } else {
-                $this->db->insert(
-                    's_order_basket',
-                    [
-                        'sessionID' => $this->session->offsetGet('sessionId'),
-                        'articlename' => $surcharge_name,
-                        'articleID' => 0,
-                        'ordernumber' => $surcharge_ordernumber,
-                        'quantity' => 1,
-                        'price' => $surcharge,
-                        'netprice' => $surcharge_net,
-                        'tax_rate' => $tax_rate,
-                        'datum' => new Zend_Date(),
-                        'modus' => 4,
-                        'currencyFactor' => $currencyFactor,
-                    ]
-                );
-            }
+            $this->conditionalLineItemService->addConditionalLineItem(
+                $surcharge_name,
+                $surcharge_ordernumber,
+                $surcharge,
+                $discount_tax,
+                4
+            );
         }
 
         // Percentage surcharge
@@ -4268,45 +4187,13 @@ SQL;
                     ->get('payment_surcharge_dev');
             }
 
-            if (empty($this->sSYSTEM->sUSERGROUPDATA['tax']) && !empty($this->sSYSTEM->sUSERGROUPDATA['id'])) {
-                $percent_net = $percent;
-            } else {
-                $percent_net = round($percent / (100 + $discount_tax) * 100, 2);
-            }
-
-            $tax_rate = $discount_tax;
-
-            if ($this->config->get('proportionalTaxCalculation') && !$this->session->get('taxFree')) {
-                $this->basketHelper->addProportionalDiscount(
-                    new DiscountContext(
-                        $this->session->get('sessionId'),
-                        BasketHelperInterface::DISCOUNT_PERCENT,
-                        $payment['debit_percent'],
-                        $percent_name,
-                        $percent_ordernumber,
-                        4,
-                        $this->sSYSTEM->sCurrency['factor'],
-                        !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']
-                    )
-                );
-            } else {
-                $this->db->insert(
-                    's_order_basket',
-                    [
-                        'sessionID' => $this->session->offsetGet('sessionId'),
-                        'articlename' => $percent_name,
-                        'articleID' => 0,
-                        'ordernumber' => $percent_ordernumber,
-                        'quantity' => 1,
-                        'price' => $percent,
-                        'netprice' => $percent_net,
-                        'tax_rate' => $tax_rate,
-                        'datum' => new Zend_Date(),
-                        'modus' => 4,
-                        'currencyFactor' => $currencyFactor,
-                    ]
-                );
-            }
+            $this->conditionalLineItemService->addConditionalLineItem(
+                $percent_name,
+                $percent_ordernumber,
+                $percent,
+                $discount_tax,
+                4
+            );
         }
 
         return $payment;

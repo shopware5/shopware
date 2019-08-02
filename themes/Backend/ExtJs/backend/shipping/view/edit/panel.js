@@ -117,7 +117,8 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
         [0, '{s name=dispatch_type_data_default}Default shipping type{/s}'],
         [1, '{s name=dispatch_type_data_alternative}Alternate shipping type{/s}'],
         [2, '{s name=dispatch_type_data_charge}Surcharge type{/s}'],
-        [3, '{s name=dispatch_calculation_data_discount}Reduction type{/s}']
+        [4, '{s name=dispatch_type_data_charge_as_position}Surcharge type as position{/s}'],
+        [3, '{s name=dispatch_calculation_data_discount}Reduction type{/s}'],
     ],
 
     /**
