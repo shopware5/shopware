@@ -23,6 +23,7 @@
  */
 
 use Doctrine\DBAL\Connection;
+use Shopware\Components\CacheManager;
 use Shopware\Components\ShopwareReleaseStruct;
 
 /**
@@ -48,7 +49,7 @@ class Shopware_Components_Config implements ArrayAccess
     /**
      * @var string[]
      */
-    protected $_cacheTags = ['Shopware_Config'];
+    protected $_cacheTags = [CacheManager::ITEM_TAG_CONFIG];
 
     /**
      * @var array
@@ -238,7 +239,7 @@ class Shopware_Components_Config implements ArrayAccess
     protected function load()
     {
         if ($this->_cache !== null) {
-            $cacheId = 'Shopware_Config';
+            $cacheId = CacheManager::ITEM_TAG_CONFIG;
             if ($this->_shop !== null) {
                 $cacheId .= '_' . $this->_shop->getId();
             }

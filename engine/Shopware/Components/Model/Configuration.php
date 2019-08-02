@@ -40,6 +40,7 @@ use DoctrineExtensions\Query\Mysql\IfElse;
 use DoctrineExtensions\Query\Mysql\IfNull;
 use DoctrineExtensions\Query\Mysql\Regexp;
 use DoctrineExtensions\Query\Mysql\Replace;
+use Shopware\Components\CacheManager;
 use Shopware\Components\ShopwareReleaseStruct;
 
 class Configuration extends BaseConfiguration
@@ -169,7 +170,7 @@ class Configuration extends BaseConfiguration
 
     public function setCacheResource(\Zend_Cache_Core $cacheResource)
     {
-        $cache = new Cache($cacheResource, 'Shopware_Models_' . $this->release->getRevision() . '_', ['Shopware_Models']);
+        $cache = new Cache($cacheResource, 'Shopware_Models_' . $this->release->getRevision() . '_', [CacheManager::ITEM_TAG_MODELS]);
 
         $this->setCache($cache);
     }

@@ -106,17 +106,17 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         } else {
             $tags = [];
             if ($cache['config'] === 'on' || $cache['backend'] === 'on') {
-                $tags[] = 'Shopware_Config';
-                $tags[] = 'Shopware_Plugin';
+                $tags[] = CacheManager::ITEM_TAG_CONFIG;
+                $tags[] = CacheManager::ITEM_TAG_PLUGIN;
             }
             if ($cache['search'] === 'on') {
-                $tags[] = 'Shopware_Modules_Search';
+                $tags[] = CacheManager::ITEM_TAG_SEARCH;
             }
             if ($cache['backend'] === 'on') {
-                $tags[] = 'Shopware_Config';
+                $tags[] = CacheManager::ITEM_TAG_CONFIG;
             }
             if ($cache['proxy'] === 'on') {
-                $tags[] = 'Shopware_Models';
+                $tags[] = CacheManager::ITEM_TAG_MODELS;
             }
             if (!empty($tags) && $tags < 7) {
                 $cacheInstance->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $tags);

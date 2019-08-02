@@ -112,6 +112,13 @@ class Element extends ModelEntity
     private $scope = 0;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="form_id", type="integer", nullable=true)
+     */
+    private $formId = 0;
+
+    /**
      * @var array
      *
      * @ORM\Column(name="options", type="array")
@@ -239,10 +246,7 @@ class Element extends ModelEntity
         $this->form = $form;
     }
 
-    /**
-     * @return \Shopware\Models\Config\Form
-     */
-    public function getForm()
+    public function getForm(): Form
     {
         return $this->form;
     }
@@ -404,5 +408,17 @@ class Element extends ModelEntity
     public function hasTranslations()
     {
         return $this->translations->count() > 0;
+    }
+
+    public function getFormId(): int
+    {
+        return $this->formId;
+    }
+
+    public function setFormId(int $formId): self
+    {
+        $this->formId = $formId;
+
+        return $this;
     }
 }
