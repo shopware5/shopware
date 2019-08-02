@@ -169,10 +169,10 @@ abstract class ModelEntity
      * <li>So the parameter expect <b>"customer"</b></li>
      * </ul>
      *
-     * @param array[]|ModelEntity[]|null $data      Model data, example: an array of \Shopware\Models\Order\Order
-     * @param string                     $model     Full namespace of the association model, example: '\Shopware\Models\Order\Order'
-     * @param string                     $property  Name of the association property, example: 'orders'
-     * @param string                     $reference Name of the reference property, example: 'customer'
+     * @param array[]|ModelEntity[]|iterable|null $data      Model data, example: an array of \Shopware\Models\Order\Order
+     * @param string                              $model     Full namespace of the association model, example: '\Shopware\Models\Order\Order'
+     * @param string                              $property  Name of the association property, example: 'orders'
+     * @param string                              $reference Name of the reference property, example: 'customer'
      *
      * @return $this
      */
@@ -190,8 +190,8 @@ abstract class ModelEntity
 
             return $this;
         }
-        // If no array passed or if false passed, return
-        if (!is_array($data)) {
+        // If no iterable passed or if false passed, return
+        if (!is_iterable($data)) {
             return $this;
         }
 
