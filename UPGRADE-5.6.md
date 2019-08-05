@@ -187,6 +187,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed ajax-search to cancel ajax request, when submit button is pressed
 * Changed elasticsearch backend backlog to write variant backlogs correctly
 * Changed the attribute entity selection for `\Shopware\Models\Order\Detail`
+* Changed the first parameter in `Shopware\Components\Model\ModelEntity:setOneToMany` to allow iterables
 
 ### Removals
 
