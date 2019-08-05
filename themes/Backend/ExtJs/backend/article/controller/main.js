@@ -453,9 +453,9 @@ Ext.define('Shopware.apps.Article.controller.Main', {
 
                 var propertiesTab = me.getPropertiesTab();
                 propertiesTab.article = article;
-                propertiesTab.setComboBox.setValue('');
-                propertiesTab.groupComboBox.setValue('');
-                propertiesTab.valueComboBox.setValue('');
+                propertiesTab.groupComboBox.reset();
+                propertiesTab.setComboBox.reset();
+                propertiesTab.valueComboBox.reset();
 
                 var propertyStore = Ext.data.StoreManager.lookup('Property');
                 propertiesTab.propertyGrid.reconfigure(propertyStore);
