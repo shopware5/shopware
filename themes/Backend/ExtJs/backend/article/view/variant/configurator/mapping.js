@@ -98,6 +98,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
         basePrice: '{s name=variant/configurator/mapping/basePrice}Apply base price configuration{/s}',
         purchasePrice: '{s name=variant/configurator/mapping/purchasePrice}Apply pruchase price configuration{/s}',
         settings: '{s name=variant/configurator/mapping/settings}Apply settings configuration{/s}',
+        stock: '{s name=variant/configurator/mapping/settings}Apply stock{/s}',
         translations: '{s name=variant/configurator/mapping/translations}Apply translations{/s}',
         save: '{s name=variant/configurator/mapping/save}Save{/s}',
         cancel: '{s name=variant/configurator/mapping/cancel}Cancel{/s}'
@@ -180,6 +181,9 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
         } , {
             name: 'settings',
             fieldLabel: me.snippets.settings
+        } , {
+            name: 'stock',
+            fieldLabel: me.snippets.stock
         } , {
             name: 'attributes',
             fieldLabel: me.snippets.attribute

@@ -45,6 +45,7 @@ Ext.define('Shopware.apps.Article.model.Mapping', {
         { name: 'id', type: 'int' },
         { name: 'articleId', type: 'int' },
         { name: 'settings', type: 'boolean', defaultValue: true },
+        { name: 'stock', type: 'boolean', defaultValue: false },
         { name: 'prices', type: 'boolean', defaultValue: true },
         { name: 'basePrice', type: 'boolean', defaultValue: true },
         { name: 'purchasePrice', type: 'boolean', defaultValue: true },
