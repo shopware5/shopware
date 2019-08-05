@@ -2252,7 +2252,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         if ($mapping['settings']) {
             $mainData['supplierNumber'] = $mainDetail->getSupplierNumber();
             $mainData['weight'] = $mainDetail->getWeight();
-            $mainData['inStock'] = $mainDetail->getInStock();
             $mainData['stockMin'] = $mainDetail->getStockMin();
             $mainData['ean'] = $mainDetail->getEan();
             $mainData['minPurchase'] = $mainDetail->getMinPurchase();
@@ -2264,6 +2263,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $mainData['width'] = $mainDetail->getWidth();
             $mainData['height'] = $mainDetail->getHeight();
             $mainData['len'] = $mainDetail->getLen();
+        }
+        if ($mapping['stock']) {
+            $mainData['inStock'] = $mainDetail->getInStock();
         }
         if ($mapping['attributes']) {
             $builder = Shopware()->Models()->createQueryBuilder();
