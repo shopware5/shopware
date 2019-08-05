@@ -94,6 +94,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added `es.index_configuration` and `es.backend.index_configuration` section to `config.php` to allow custom elasticsearch settings
 * Added getter and setter to Config/Form model
 * Added new event `Shopware_Controllers_Order_SendMail_Prepare` to `Shopware_Controllers_Backend_Order::sendMailAction`
+* Added `Shopware\Components\CacheSubscriber` to clear config cache, when plugin config changes
 
 ### Changes
 
