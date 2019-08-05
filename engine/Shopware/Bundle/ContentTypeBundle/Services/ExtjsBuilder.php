@@ -53,6 +53,7 @@ class ExtjsBuilder implements ExtjsBuilderInterface
             $fields[] = [
                 'name' => $field->getName(),
                 'type' => $field->getType()::getExtjsType(),
+                'useNull' => !$field->isRequired(),
             ];
         }
 
