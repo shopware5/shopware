@@ -43,6 +43,9 @@ class BlogHydrator extends Hydrator
      */
     public function hydrate(array $data)
     {
+        $translation = $this->getBlogTranslation($data);
+        $data = array_merge($data, $translation);
+
         $blog = new Struct\Blog\Blog();
 
         $blog->setId((int) $data['__blog_id']);
@@ -60,7 +63,9 @@ class BlogHydrator extends Hydrator
         $blog->setMetaTitle($data['__blog_meta_title']);
 
         if (isset($data['__blogAttribute_id'])) {
-            $this->attributeHydrator->addAttribute($blog, $data, 'blogAttribute');
+            $attributeData = $this->extractFields('__blogAttribute_', $data);
+            $attribute = $this->attributeHydrator->hydrate($attributeData);
+            $blog->addAttribute('core', $attribute);
         }
 
         if (isset($data['__blog_tags'])) {
@@ -68,5 +73,23 @@ class BlogHydrator extends Hydrator
         }
 
         return $blog;
+    }
+
+    public function getBlogTranslation(array $data): array
+    {
+        $translation = $this->getTranslation($data, '__blog', [], null, false);
+
+        if (empty($translation)) {
+            return $translation;
+        }
+
+        return $this->convertArrayKeys($translation, [
+            'title' => '__blog_title',
+            'shortDescription' => '__blog_short_description',
+            'description' => '__blog_description',
+            'metaTitle' => '__blog_meta_title',
+            'metaKeyWords' => '__blog_meta_keywords',
+            'metaDescription' => '__blog_meta_description',
+        ]);
     }
 }

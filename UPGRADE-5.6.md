@@ -8,6 +8,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 * Changed the meta property `og:type` in the listing from `product` to `product.group`
 * Changed password recovery form to also work with invalid customer objects
+* Changed `Shopware\Bundle\StoreFrontBundle\Gateway\BlogGateway` to consider blog translations
 
 ## 5.6.0
 
