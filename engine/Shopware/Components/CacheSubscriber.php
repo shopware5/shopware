@@ -48,6 +48,7 @@ class CacheSubscriber implements SubscriberInterface
         return [
             'Shopware\Models\Config\Value::postUpdate' => 'onConfigElement',
             'Shopware\Models\Config\Value::postPersist' => 'onConfigElement',
+            'Shopware\Models\Config\Value::postRemove' => 'onConfigElement',
             KernelEvents::TERMINATE => 'onKernelTerminate',
         ];
     }
