@@ -27,8 +27,10 @@ namespace Shopware\Models\Order;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Security\AttributeCleanerTrait;
+use Shopware\Models\Order\Document\Document;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -1093,45 +1095,19 @@ class Order extends ModelEntity
     /**
      * The calculateInvoiceAmount function recalculated the net and gross amount based on the
      * order positions.
+     *
+     * @deprecated since 5.7 will be removed in version 5.8 - Please use the service \Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface::class.
      */
     public function calculateInvoiceAmount()
     {
-        $invoiceAmount = 0;
-        $invoiceAmountNet = 0;
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.7 and will be removed with 5.8. Please use the service with id `%s` instead',
+            __CLASS__,
+            __METHOD__,
+            \Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface::class), E_USER_DEPRECATED);
 
-        // Iterate order details to recalculate the amount.
-        /** @var Detail $detail */
-        foreach ($this->getDetails() as $detail) {
-            $price = round($detail->getPrice(), 2);
-
-            $invoiceAmount += $price * $detail->getQuantity();
-
-            $tax = $detail->getTax();
-
-            $taxValue = $detail->getTaxRate();
-
-            // Additional tax checks required for sw-2238, sw-2903 and sw-3164
-            if ($tax && $tax->getId() !== 0 && $tax->getId() !== null && $tax->getTax() !== null) {
-                $taxValue = $tax->getTax();
-            }
-
-            if ($this->net) {
-                $invoiceAmountNet += Shopware()->Container()->get('shopware.cart.net_rounding')->round($price, $taxValue, $detail->getQuantity());
-            } else {
-                $invoiceAmountNet += round(($price * $detail->getQuantity()) / (100 + $taxValue) * 100, 2);
-            }
-        }
-
-        if ($this->taxFree) {
-            $this->invoiceAmountNet = $invoiceAmount + $this->invoiceShippingNet;
-            $this->invoiceAmount = $this->invoiceAmountNet;
-        } elseif ($this->net) {
-            $this->invoiceAmountNet = $invoiceAmount + $this->invoiceShippingNet;
-            $this->invoiceAmount = $invoiceAmountNet + $this->invoiceShipping;
-        } else {
-            $this->invoiceAmount = $invoiceAmount + $this->invoiceShipping;
-            $this->invoiceAmountNet = $invoiceAmountNet + $this->invoiceShippingNet;
-        }
+        /** @var CalculationServiceInterface $service */
+        $service = Shopware()->Container()->get(\Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface::class);
+        $service->recalculateOrderTotals($this);
     }
 
     /**
@@ -1183,7 +1159,7 @@ class Order extends ModelEntity
      */
     public function setDocuments($documents)
     {
-        return $this->setOneToMany($documents, '\Shopware\Models\Order\Document\Document', 'documents', 'order');
+        return $this->setOneToMany($documents, Document::class, 'documents', 'order');
     }
 
     /**

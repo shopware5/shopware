@@ -122,7 +122,7 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
     }
 
     /**
-     * Compares the calculated price from a basket with the calculated price from Order/Order::calculateInvoiceAmount
+     * Compares the calculated price from a basket with the calculated price from \Shopware\Bundle\OrderBundle\Service\CalculationService::recalculateOrderTotals()
      * It does so by creating via the frontend controllers, and comparing the amount (net & gross) with the values provided by
      * Order/Order::calculateInvoiceAmount (Which will be called when one changes / saves the order in the backend).
      *
@@ -186,7 +186,9 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
         $previousInvoiceAmountNet = $order->getInvoiceAmountNet();
 
         // Simulate backend order save
-        $order->calculateInvoiceAmount();
+        /** @var \Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface $calculationService */
+        $calculationService = Shopware()->Container()->get(\Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface::class);
+        $calculationService->recalculateOrderTotals($order);
 
         // Assert messages
         $message = 'InvoiceAmount' . ($net ? ' (net shop)' : '') . ': ' . $previousInvoiceAmount . ' from sBasket, ' . $order->getInvoiceAmount() . ' from getInvoiceAmount';
