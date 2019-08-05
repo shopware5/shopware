@@ -24,12 +24,16 @@
 
 namespace Shopware\Tests\Unit\Components\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Configurator\Template\Template;
 use Shopware\Models\Article\Link;
 use Shopware\Models\Article\Supplier;
+use Shopware\Models\Country\Area;
+use Shopware\Models\Document\Document;
 use Shopware\Models\Tax\Tax;
+use Shopware\Models\Voucher\Voucher;
 
 /**
  * @covers \Shopware\Components\Model\ModelEntity
@@ -474,6 +478,81 @@ class ModelEntityTest extends TestCase
         static::assertNotContains($link0, $article->getLinks());
 
         static::assertEquals('batz', $article->getLinks()->first()->getName());
+    }
+
+    public function testCanSetElementsOnDocument()
+    {
+        $document = new Document();
+
+        $data = [
+            [
+                'name' => 'dummy',
+            ],
+        ];
+        $document->setElements($data);
+
+        static::assertCount(1, $document->getElements());
+        static::assertEquals('dummy', $document->getElements()->first()->getName());
+    }
+
+    public function testCanSetElementsOnDocumentWithArrayCollection()
+    {
+        $document = new Document();
+
+        $data = new ArrayCollection([
+            [
+                'name' => 'dummy',
+            ],
+        ]);
+        $document->setElements($data);
+
+        static::assertCount(1, $document->getElements());
+        static::assertEquals('dummy', $document->getElements()->first()->getName());
+    }
+
+    public function testCanSetCodesOnVoucher()
+    {
+        $voucher = new Voucher();
+
+        $data = [
+            [
+                'code' => 'dummy',
+            ],
+        ];
+        $voucher->setCodes($data);
+
+        static::assertCount(1, $voucher->getCodes());
+        static::assertEquals('dummy', $voucher->getCodes()->first()->getCode());
+    }
+
+    public function testCanSetCodesOnVoucherWithArrayCollection()
+    {
+        $voucher = new Voucher();
+
+        $data = new ArrayCollection([
+            [
+                'code' => 'dummy',
+            ],
+        ]);
+        $voucher->setCodes($data);
+
+        static::assertCount(1, $voucher->getCodes());
+        static::assertEquals('dummy', $voucher->getCodes()->first()->getCode());
+    }
+
+    public function testCanSetCountriesOnArea()
+    {
+        $area = new Area();
+
+        $data = [
+            [
+                'name' => 'dummy',
+            ],
+        ];
+        $area->setCountries($data);
+
+        static::assertCount(1, $area->getCountries());
+        static::assertEquals('dummy', $area->getCountries()->first()->getName());
     }
 
     /**
