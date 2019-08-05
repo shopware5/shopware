@@ -32,6 +32,7 @@ Ext.define('Shopware.apps.PluginManager.model.Domain', {
     extend: 'Ext.data.Model',
 
     fields: [
+        { name: 'id', type: 'int' },
         { name: 'domain', type: 'string' },
         { name: 'balance', type: 'float' },
         { name: 'dispo', type: 'float' },

@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,6 +28,11 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 class DomainStruct implements \JsonSerializable
 {
     /**
+     * @var int
+     */
+    private $id;
+
+    /**
      * @var string
      */
     private $domain;
@@ -46,48 +52,36 @@ class DomainStruct implements \JsonSerializable
      */
     private $isPartner;
 
-    /**
-     * @param string $domain
-     * @param float  $balance
-     * @param float  $dispo
-     * @param bool   $isPartner
-     */
-    public function __construct($domain, $balance, $dispo, $isPartner)
+    public function __construct(int $id, string $domain, float $balance, float $dispo, bool $isPartner)
     {
+        $this->id = $id;
         $this->domain = $domain;
         $this->balance = $balance;
         $this->dispo = $dispo;
         $this->isPartner = $isPartner;
     }
 
-    /**
-     * @return string
-     */
-    public function getDomain()
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getDomain(): string
     {
         return $this->domain;
     }
 
-    /**
-     * @return float
-     */
-    public function getBalance()
+    public function getBalance(): float
     {
         return $this->balance;
     }
 
-    /**
-     * @return float
-     */
-    public function getDispo()
+    public function getDispo(): float
     {
         return $this->dispo;
     }
 
-    /**
-     * @return bool
-     */
-    public function isPartner()
+    public function isPartner(): bool
     {
         return $this->isPartner;
     }
@@ -95,7 +89,7 @@ class DomainStruct implements \JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return get_object_vars($this);
     }
