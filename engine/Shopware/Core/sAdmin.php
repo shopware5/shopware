@@ -3519,14 +3519,14 @@ SQL;
         }
 
         // Check if account is disabled or not verified yet
-        $sql = 'SELECT id, doubleOptinRegister, doubleOptinEmailSentDate, doubleOptinConfirmDate, email, firstname, lastname, salutation
+        $sql = 'SELECT id, doubleOptinRegister, doubleOptinEmailSentDate, doubleOptinConfirmDate, email, firstname, lastname, salutation, register_opt_in_id
                 FROM s_user
                 WHERE email=? AND active=0 ' . $addScopeSql;
         $getUser = $this->db->fetchRow($sql, [$email]);
 
         // If the verification process is active, the customer has an email sent date, but no confirm date
         if ($getUser['doubleOptinRegister'] && $getUser['doubleOptinEmailSentDate'] !== null && $getUser['doubleOptinConfirmDate'] === null) {
-            $hash = \Shopware\Components\Random::getAlphanumericString(32);
+            $hash = $this->getOptInHash((int) $getUser['register_opt_in_id'], $getUser['doubleOptinEmailSentDate']);
 
             $userInfo = [
                 'mail' => $getUser['email'],
@@ -4328,5 +4328,31 @@ SQL;
             ->groupBy('b.sessionID');
 
         return $queryBuilder;
+    }
+
+    /**
+     * Checks, if the opt-in mail was sent in the previous 15 minutes.
+     */
+    private function getOptInHash(int $optinId, string $sentDate): string
+    {
+        if ($this->isDateInLast15Minutes($sentDate)) {
+            $sql = 'SELECT hash
+                FROM s_core_optin opt
+                WHERE opt.id = :id';
+
+            return $this->connection->fetchColumn($sql, [':id' => $optinId]);
+        }
+
+        return Random::getAlphanumericString(32);
+    }
+
+    private function isDateInLast15Minutes(string $sentDate): bool
+    {
+        $sentDateTimestamp = (\DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $sentDate))->getTimestamp();
+        $nowTimestamp = time();
+
+        $sentDateTimestampPlus15Minutes = $sentDateTimestamp + (15 * 60);
+
+        return $sentDateTimestampPlus15Minutes >= $nowTimestamp;
     }
 }
