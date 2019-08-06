@@ -2,6 +2,14 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
+## 5.6.1
+
+### Changes
+
+* Changed the meta property `og:type` in the listing from `product` to `product.group`
+
+## 5.6.0
+
 [View all changes from v5.5.10...v5.6.0](https://github.com/shopware/shopware/compare/v5.5.10...v5.6.0)
 
 ### Additions
