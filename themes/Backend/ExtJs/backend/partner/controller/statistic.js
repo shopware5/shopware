@@ -138,8 +138,8 @@ Ext.define('Shopware.apps.Partner.controller.Statistic', {
      * @param date
      */
     convertDate:function(date){
-        var day = (date.getDate() +1 < 10) ? "0" + date.getDate() : date.getDate() +1;
-        var month = (date.getMonth() +1 < 10) ? "0" + (date.getMonth() +1) : date.getMonth() +1;
+        var day = (date.getDate() < 10) ? "0" + date.getDate() : date.getDate();
+        var month = (date.getMonth() < 10) ? "0" + (date.getMonth() +1) : date.getMonth();
         var year = date.getFullYear();
 
         return year+"-"+month+"-"+day;
