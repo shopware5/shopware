@@ -61,42 +61,11 @@ Ext.define('Shopware.apps.Config.view.base.Table', {
     },
 
     getPagingToolbar: function() {
-        var me = this;
-
-        var pageSize = Ext.create('Ext.form.field.ComboBox', {
-            fieldLabel: '{s name=paging_bar/page_size}Entries{/s}',
-            labelWidth: 155,
-            cls: Ext.baseCSSPrefix + 'page-size',
-            queryMode: 'local',
-            width: 250,
-            listeners: {
-                scope: me,
-                select: me.onPageSizeChange
-            },
-            store: Ext.create('Ext.data.Store', {
-                fields: [ 'value' ],
-                data: [
-                    { value: '20' },
-                    { value: '40' },
-                    { value: '60' },
-                    { value: '80' },
-                    { value: '100' }
-                ]
-            }),
-            displayField: 'value',
-            valueField: 'value'
-        });
-        pageSize.setValue(me.store.pageSize || 20);
-
-        var pagingBar = Ext.create('Ext.toolbar.Paging', {
-            store: me.store,
+        return Ext.create('Ext.toolbar.Paging', {
+            store: this.store,
             dock:'bottom',
             displayInfo:true
         });
-
-        pagingBar.insert(pagingBar.items.length - 2, [ { xtype: 'tbspacer', width: 6 }, pageSize ]);
-
-        return pagingBar;
     },
 
     onPageSizeChange: function(combo, records) {
