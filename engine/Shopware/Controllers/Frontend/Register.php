@@ -271,6 +271,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $customer->setFirstLogin($date);
         $customer->setDoubleOptinConfirmDate($date);
         $customer->setActive(true);
+        $customer->setRegisterOptInId(null);
 
         $modelManager->persist($customer);
         $modelManager->flush();

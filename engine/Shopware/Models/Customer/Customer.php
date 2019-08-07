@@ -503,6 +503,15 @@ class Customer extends LazyFetchModelEntity
      */
     private $passwordChangeDate;
 
+    /**
+     * Contains the ID of the opt-in entry, if any available
+     *
+     * @var int
+     *
+     * @ORM\Column(name="register_opt_in_id", type="integer", nullable=true)
+     */
+    private $registerOptInId;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -1474,5 +1483,18 @@ class Customer extends LazyFetchModelEntity
     public function updateChangedTimestamp()
     {
         $this->changed = new \DateTime();
+    }
+
+    public function getRegisterOptInId(): int
+    {
+        return $this->registerOptInId;
+    }
+
+    /**
+     * @param int $registerOptInId
+     */
+    public function setRegisterOptInId(int $registerOptInId = null): void
+    {
+        $this->registerOptInId = $registerOptInId;
     }
 }
