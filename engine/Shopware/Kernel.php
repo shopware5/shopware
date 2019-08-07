@@ -463,14 +463,16 @@ class Kernel extends SymfonyKernel
             ]
         );
 
-        $this->bundles = array_merge($this->bundles, $initializer->initializePlugins());
+        $plugins = $initializer->initializePlugins();
 
         /*
          * @deprecated since 5.5, is true by default since 5.6 will be removed in Shopware 5.7
          */
         if ($this->config['backward_compatibility']['predictable_plugin_order'] === true) {
-            ksort($this->bundles);
+            ksort($plugins);
         }
+
+        $this->bundles = array_merge($this->bundles, $plugins);
 
         $this->activePlugins = $initializer->getActivePlugins();
 
