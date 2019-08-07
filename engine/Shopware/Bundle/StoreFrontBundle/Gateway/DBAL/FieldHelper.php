@@ -1249,6 +1249,12 @@ class FieldHelper
         $this->addTranslation('paymentAttribute', 's_core_paymentmeans_attributes', $query, $context, 'paymentAttribute.paymentmeanID');
     }
 
+    public function addBlogTranslation(QueryBuilder $query, ShopContextInterface $context): void
+    {
+        $this->addTranslation('blog', 'blog', $query, $context, 'blog.id');
+        $this->addTranslation('blogAttribute', 's_blog_attributes', $query, $context, 'blog.id');
+    }
+
     /**
      * @return string[]
      */
