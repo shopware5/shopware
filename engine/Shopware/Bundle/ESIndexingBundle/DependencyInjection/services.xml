@@ -156,6 +156,7 @@
             <argument type="service" id="shopware_elastic_search.field_mapping"/>
             <argument type="service" id="shopware_elastic_search.text_mapping"/>
             <argument type="service" id="shopware_attribute.crud_service"/>
+            <argument type="service" id="shopware_searchdbal.variant_helper"/>
             <argument>%shopware.es.dynamic_mapping_enabled%</argument>
             <argument>%shopware.es.debug%</argument>
 
