@@ -12,7 +12,7 @@
                             {$item.description_long={$item.description_long|strip_tags|truncate:100}}
                             {$item.description={$item.description|strip_tags|truncate:100}}
 
-                            {include file="frontend/listing/product-box/box-basic.tpl" sArticle=$item}
+                            {include file="frontend/listing/product-box/box-basic.tpl" productBoxLayout='content-type' sArticle=$item}
 
                         {/block}
                     </div>
