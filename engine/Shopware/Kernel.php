@@ -640,7 +640,7 @@ class Kernel extends SymfonyKernel
         $container->addCompilerPass(new AddConsoleCommandPass());
         $container->addCompilerPass(new MatcherCompilerPass());
         $container->addCompilerPass(new LegacyApiResourcesPass());
-        $container->addCompilerPass(new ConfigureApiResourcesPass());
+        $container->addCompilerPass(new ConfigureApiResourcesPass(), PassConfig::TYPE_OPTIMIZE, -500);
         $container->addCompilerPass(new RegisterFieldsCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 500);
         $container->addCompilerPass(new RegisterDynamicController());
         $container->addCompilerPass(new RegisterTypeRepositories());

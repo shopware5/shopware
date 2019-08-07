@@ -49,6 +49,13 @@ class Utils
         }, $object);
     }
 
+    public static function hijackMethod($object, $methodName, array $arguments = [])
+    {
+        return self::bindAndCall(function () use ($object, $methodName, $arguments) {
+            return call_user_func_array([$object, $methodName], $arguments);
+        }, $object);
+    }
+
     public static function hijackAndReadProperty($object, $propertyName)
     {
         $ret = self::bindAndCall(function () use ($object, $propertyName) {
