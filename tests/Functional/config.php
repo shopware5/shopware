@@ -40,6 +40,9 @@ return array_replace_recursive($this->loadConfig($this->AppPath() . 'Configs/Def
         'gc_divisor' => 100,
         'save_handler' => 'db',
     ],
+    'backendsession' => [
+        'unitTestEnabled' => true,
+    ],
     'mail' => [
         'type' => 'file',
         'path' => $this->getCacheDir(),

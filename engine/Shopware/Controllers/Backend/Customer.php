@@ -458,16 +458,12 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
-        session_regenerate_id(true);
-        $newSessionId = session_id();
+        $session = $this->get('session');
+        $session->migrate();
 
-        session_write_close();
-        session_start();
-
-        Shopware()->Session()->offsetSet('sessionId', $newSessionId);
-        Shopware()->Container()->reset('sessionid');
-        Shopware()->Container()->set('sessionid', $newSessionId);
-        Shopware()->Session()->unsetAll();
+        Shopware()->Session()->offsetSet('sessionId', $session->getId());
+        Shopware()->Container()->set('sessionid', $session->getId());
+        Shopware()->Session()->clear();
 
         Shopware()->Session()->Admin = true;
         Shopware()->System()->_POST = [

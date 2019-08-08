@@ -1,34 +1,59 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
+
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Enlight session namespace component.
  *
  * The Enlight_Components_Session_Namespace extends the Zend_Session_Namespace with an easy array access.
  *
- * @category    Enlight
  *
- * @copyright   Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license     http://enlight.de/license     New BSD License
  */
-class Enlight_Components_Session_Namespace extends Zend_Session_Namespace implements Countable, IteratorAggregate, ArrayAccess
+class Enlight_Components_Session_Namespace extends Session implements ArrayAccess
 {
+    public function __get($name)
+    {
+        return $this->get($name);
+    }
+
+    public function __set($name, $value)
+    {
+        return $this->set($name, $value);
+    }
+
+    public function __unset($name)
+    {
+        return $this->remove($name);
+    }
+
+    public function __isset($name)
+    {
+        return $this->has($name);
+    }
+
     /**
      * Whether an offset exists
      *
@@ -38,7 +63,7 @@ class Enlight_Components_Session_Namespace extends Zend_Session_Namespace implem
      */
     public function offsetExists($key)
     {
-        return $this->__isset($key);
+        return $this->has($key);
     }
 
     /**
@@ -48,7 +73,7 @@ class Enlight_Components_Session_Namespace extends Zend_Session_Namespace implem
      */
     public function offsetUnset($key)
     {
-        $this->__unset($key);
+        $this->remove($key);
     }
 
     /**
@@ -60,7 +85,7 @@ class Enlight_Components_Session_Namespace extends Zend_Session_Namespace implem
      */
     public function offsetGet($key)
     {
-        return $this->__get($key);
+        return $this->get($key);
     }
 
     /**
@@ -71,7 +96,7 @@ class Enlight_Components_Session_Namespace extends Zend_Session_Namespace implem
      */
     public function offsetSet($key, $value)
     {
-        $this->__set($key, $value);
+        $this->set($key, $value);
     }
 
     /**
@@ -81,19 +106,17 @@ class Enlight_Components_Session_Namespace extends Zend_Session_Namespace implem
      */
     public function count()
     {
-        return $this->apply('count');
+        return $this->count();
     }
 
-    /**
-     * @param string $name
-     * @param mixed  $default
-     *
-     * @return mixed
-     */
-    public function get($name, $default = null)
+    public function unsetAll()
     {
-        $value = $this->offsetGet($name);
+        return $this->clear();
+    }
 
-        return $value !== null ? $value : $default;
+    public function clear()
+    {
+        parent::clear();
+        $this->set('sessionId', $this->getId());
     }
 }

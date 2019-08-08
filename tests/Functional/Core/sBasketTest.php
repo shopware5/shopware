@@ -1276,6 +1276,8 @@ class sBasketTest extends PHPUnit\Framework\TestCase
      */
     public function testsAddVoucherWithCurrencyFactor()
     {
+        $this->session->clear();
+
         // Prepare a voucher
         $voucherData = [
             'vouchercode' => 'testOne',
@@ -1351,6 +1353,8 @@ class sBasketTest extends PHPUnit\Framework\TestCase
      */
     public function testsAddVoucherWithSupplier()
     {
+        $this->session->clear();
+
         $randomArticleOne = $this->db->fetchRow(
             'SELECT * FROM s_articles_details detail
             INNER JOIN s_articles article
@@ -1676,6 +1680,8 @@ class sBasketTest extends PHPUnit\Framework\TestCase
      */
     public function testsInsertSurchargePercent()
     {
+        $this->session->clear();
+
         // No user and no payment id, expect false
         static::assertFalse(
             $this->invokeMethod(
@@ -2138,6 +2144,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     public function testsGetNotes($input)
     {
         list($randomArticle, $cookieId) = $input;
+        $this->session->clear();
 
         // Test with no id in cookie
         static::assertEquals([], $this->module->sGetNotes());

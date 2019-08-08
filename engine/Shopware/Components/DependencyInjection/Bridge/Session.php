@@ -26,6 +26,9 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Session\PdoSessionHandler;
+use Symfony\Component\HttpFoundation\Session\Attribute\NamespacedAttributeBag;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 
 /**
  * Session Dependency Injection Bridge
@@ -66,14 +69,12 @@ class Session
     {
         $sessionOptions = $container->getParameter('shopware.session');
 
-        if (!empty($sessionOptions['unitTestEnabled'])) {
-            \Enlight_Components_Session::$_unitTestEnabled = true;
+        $storage = new NativeSessionStorage();
+
+        if (!empty($sessionOptions['unitTestEnabled']) || session_status() === PHP_SESSION_ACTIVE) {
+            $storage = new MockArraySessionStorage();
         }
         unset($sessionOptions['unitTestEnabled']);
-
-        if (\Enlight_Components_Session::isStarted()) {
-            \Enlight_Components_Session::writeClose();
-        }
 
         /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $container->get('shop');
@@ -98,13 +99,14 @@ class Session
 
         unset($sessionOptions['locking']);
 
-        \Enlight_Components_Session::start($sessionOptions);
+        $attributeBag = new NamespacedAttributeBag('Shopware');
 
-        $container->set('sessionid', \Enlight_Components_Session::getId());
+        $session = new \Enlight_Components_Session_Namespace($storage, $attributeBag);
+        $session->start();
+        $session->set('sessionId', $session->getId());
 
-        $namespace = new \Enlight_Components_Session_Namespace('Shopware');
-        $namespace->offsetSet('sessionId', \Enlight_Components_Session::getId());
+        $container->set('sessionid', $session->getId());
 
-        return $namespace;
+        return $session;
     }
 }

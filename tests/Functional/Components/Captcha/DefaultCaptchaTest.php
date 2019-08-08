@@ -35,11 +35,7 @@ class DefaultCaptchaTest extends \PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        if (!function_exists('imagettftext')) {
-            static::markTestSkipped(
-                'The imagettftext() function is not available.'
-            );
-        }
+        Shopware()->Session()->clear();
 
         $this->captcha = new DefaultCaptcha(
             Shopware()->Container(),
