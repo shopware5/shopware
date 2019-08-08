@@ -513,12 +513,54 @@ class Customer extends Resource
      *
      * @param bool $filter
      *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     *
      * @return array
      */
     private function prepareAddressData(array $data, $filter = false)
     {
-        $data['country'] = !empty($data['country']) ? $this->getContainer()->get('models')->find(CountryModel::class, (int) $data['country']) : null;
-        $data['state'] = !empty($data['state']) ? $this->getContainer()->get('models')->find(StateModel::class, $data['state']) : null;
+        // fetch country via ID or ISO 3166
+        $em = $this->getContainer()->get('models');
+        if (is_numeric($data['country'])) {
+            $data['country'] = $em->find(CountryModel::class, (int) $data['country']);
+        } elseif (ctype_print($data['country'])) {
+            $builder = $em->createQueryBuilder();
+            $builder
+                ->select('country')
+                ->from(CountryModel::class, 'country')
+                ->where('country.iso3 = :iso or country.iso = :iso')
+                ->setParameter('iso', $data['country']);
+
+            $data['country'] = $builder->getQuery()->getSingleResult();
+        } else {
+            $data['country'] = null;
+        }
+
+        // try fetching state via ID or ISO 3166-2 extension
+        if (is_numeric($data['state'])) {
+            $data['state'] = $em->find(StateModel::class, (int) $data['state']);
+            // use state to set country if no country is set
+            if ($data['state'] && is_null($data['country'])) {
+                $data['country'] = $data['state']->getCountry()->getId();
+            }
+        } elseif ($data['country'] && ctype_print($data['state'])) {
+            $builder = $em->createQueryBuilder();
+            $builder
+                ->select('state')
+                ->from(StateModel::class, 'state')
+                ->join('state.country', 'country')
+                ->where('state.shortCode = :code')
+                ->andWhere('country.id = :countryId')
+                ->setParameter('code', $data['state'])
+                ->setParameter('countryId', $data['country']->getId());
+            $data['state'] = $builder->getQuery()->getSingleResult();
+        } else {
+            $data['state'] = null;
+        }
 
         return $filter ? array_filter($data) : $data;
     }

@@ -271,8 +271,44 @@ class Address extends Resource
             unset($data['customer']);
         }
 
-        $data['country'] = !empty($data['country']) ? $this->getContainer()->get('models')->find(Country::class, (int) $data['country']) : null;
-        $data['state'] = !empty($data['state']) ? $this->getContainer()->get('models')->find(State::class, $data['state']) : null;
+        // fetch country via ID or ISO 3166
+        $em = $this->getContainer()->get('models');
+        if (is_numeric($data['country'])) {
+            $data['country'] = $em->find(Country::class, (int) $data['country']);
+        } elseif (ctype_print($data['country'])) {
+            $builder = $em->createQueryBuilder();
+            $builder
+                ->select('country')
+                ->from(Country::class, 'country')
+                ->where('country.iso3 = :iso or country.iso = :iso')
+                ->setParameter('iso', $data['country']);
+
+            $data['country'] = $builder->getQuery()->getSingleResult();
+        } else {
+            $data['country'] = null;
+        }
+
+        // try fetching state via ID or ISO 3166-2 extension
+        if (is_numeric($data['state'])) {
+            $data['state'] = $em->find(State::class, (int) $data['state']);
+            // use state to set country if no country is set
+            if ($data['state'] && is_null($data['country'])) {
+                $data['country'] = $data['state']->getCountry()->getId();
+            }
+        } elseif ($data['country'] && ctype_print($data['state'])) {
+            $builder = $em->createQueryBuilder();
+            $builder
+                ->select('state')
+                ->from(State::class, 'state')
+                ->join('state.country', 'country')
+                ->where('state.shortCode = :code')
+                ->andWhere('country.id = :countryId')
+                ->setParameter('code', $data['state'])
+                ->setParameter('countryId', $data['country']->getId());
+            $data['state'] = $builder->getQuery()->getSingleResult();
+        } else {
+            $data['state'] = null;
+        }
 
         return $filter ? array_filter($data) : $data;
     }
