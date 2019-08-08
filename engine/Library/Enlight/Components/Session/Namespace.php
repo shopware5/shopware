@@ -27,31 +27,61 @@ use Symfony\Component\HttpFoundation\Session\Session;
 /**
  * Enlight session namespace component.
  *
- * The Enlight_Components_Session_Namespace extends the Zend_Session_Namespace with an easy array access.
+ * The Enlight_Components_Session_Namespace extends the Symfony Session with an easy array access.
  *
  *
  * @license     http://enlight.de/license     New BSD License
  */
 class Enlight_Components_Session_Namespace extends Session implements ArrayAccess
 {
+    /**
+     * Legacy wrapper
+     *
+     * @param string $name
+     */
     public function __get($name)
     {
         return $this->get($name);
     }
 
+    /**
+     * Legacy wrapper
+     *
+     * @param string $name
+     */
     public function __set($name, $value)
     {
         return $this->set($name, $value);
     }
 
+    /**
+     * Legacy wrapper
+     *
+     * @param string $name
+     */
     public function __unset($name)
     {
         return $this->remove($name);
     }
 
+    /**
+     * Legacy wrapper
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
     public function __isset($name)
     {
-        return $this->has($name);
+        if (!$this->has($name)) {
+            return false;
+        }
+
+        if ($this->get($name) === null) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -100,15 +130,10 @@ class Enlight_Components_Session_Namespace extends Session implements ArrayAcces
     }
 
     /**
-     * Count elements of the object
+     * Clear session
      *
-     * @return int The custom count as an integer
+     * @deprecated since 5.7, and will be removed with 5.8. Use clear instead.
      */
-    public function count()
-    {
-        return $this->count();
-    }
-
     public function unsetAll()
     {
         return $this->clear();

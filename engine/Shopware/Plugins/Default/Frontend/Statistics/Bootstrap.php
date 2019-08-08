@@ -139,13 +139,13 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     /**
      * @param Enlight_Controller_Request_Request $request
      */
-    public function refreshBasket($request)
+    public function refreshBasket(Enlight_Controller_Request_RequestHttp $request)
     {
         $currentController = $request->getParam('requestController', $request->getControllerName());
-        $sessionId = (string) Enlight_Components_Session::getId();
+        $sessionId = (string) $request->getSession()->getId();
 
         if (!empty($currentController) && !empty($sessionId)) {
-            $userId = (int) Shopware()->Session()->sUserId;
+            $userId = (int) $request->getSession()->get('sUserId');
             $userAgent = (string) $request->getServer('HTTP_USER_AGENT');
             $sql = '
                 UPDATE s_order_basket

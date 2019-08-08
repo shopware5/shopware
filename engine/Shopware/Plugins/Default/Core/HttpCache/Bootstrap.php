@@ -161,7 +161,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     public function initCacheControl(Enlight_Event_EventArgs $args)
     {
         return new CacheControl(
-            $this->get(\Zend_Session_Namespace::class),
+            $this->get(\Symfony\Component\HttpFoundation\Session\SessionInterface::class),
             $this->get(\Shopware\Components\Plugin\CachedConfigReader::class)->getByPluginName('HttpCache'),
             $this->get(\Shopware\Components\ContainerAwareEventManager::class),
             $this->get(\Shopware\Components\HttpCache\DefaultRouteService::class),

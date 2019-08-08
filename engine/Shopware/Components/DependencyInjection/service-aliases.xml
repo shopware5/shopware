@@ -89,7 +89,7 @@
         <service id="Enlight_Template_Manager" alias="template" />
         <service id="Shopware\Components\DependencyInjection\Bridge\Session" alias="session_factory" />
         <service id="SessionHandlerInterface" alias="session.save_handler" />
-        <service id="Zend_Session_Namespace" alias="session" />
+        <service id="Symfony\Component\HttpFoundation\Session\SessionInterface" alias="session" />
         <service id="Shopware\Components\DependencyInjection\Bridge\MailTransport" alias="mailtransport_factory" />
         <service id="Zend_Mail_Transport_Abstract" alias="shopware.mail_transport" />
         <service id="Shopware\Components\DependencyInjection\Bridge\Mail" alias="mail_factory" />

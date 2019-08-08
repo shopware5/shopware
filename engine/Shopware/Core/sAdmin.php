@@ -3314,7 +3314,7 @@ class sAdmin implements \Enlight_Hook
             return;
         }
 
-        $this->session->migrate();
+        $this->session->migrate(true);
         $newSessionId = $this->session->getId();
 
         $this->sSYSTEM->sSESSION_ID = $newSessionId;

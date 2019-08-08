@@ -378,6 +378,14 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
             session_set_save_handler($saveHandler);
         }
 
+        if (isset($sessionOptions['save_path'])) {
+            ini_set('session.save_path', $sessionOptions['save_path']);
+        }
+
+        if (isset($sessionOptions['save_handler'])) {
+            ini_set('session.save_handler', $sessionOptions['save_handler']);
+        }
+
         $session = new Enlight_Components_Session_Namespace($storage, new NamespacedAttributeBag('ShopwareBackend'));
         $session->start();
 

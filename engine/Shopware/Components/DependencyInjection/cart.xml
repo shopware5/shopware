@@ -27,14 +27,14 @@
         </service>
 
         <service id="shopware.components.cart.cart_migration" class="Shopware\Components\Cart\CartMigration">
-            <argument type="service" id="Zend_Session_Namespace"/>
+            <argument type="service" id="Symfony\Component\HttpFoundation\Session\SessionInterface"/>
             <argument type="expression">container.get('Shopware_Components_Modules').Basket()</argument>
             <argument type="service" id="Doctrine\DBAL\Connection"/>
             <argument type="service" id="Shopware\Components\Cart\CartMigrationCleaner"/>
         </service>
 
         <service id="shopware.components.cart.cart_migration_cleaner" class="Shopware\Components\Cart\CartMigrationCleaner">
-            <argument type="service" id="Zend_Session_Namespace"/>
+            <argument type="service" id="Symfony\Component\HttpFoundation\Session\SessionInterface"/>
             <argument type="service" id="Doctrine\DBAL\Connection"/>
         </service>
     </services>

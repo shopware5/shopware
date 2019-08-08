@@ -69,13 +69,6 @@ class Session
     {
         $sessionOptions = $container->getParameter('shopware.session');
 
-        $storage = new NativeSessionStorage();
-
-        if (!empty($sessionOptions['unitTestEnabled']) || session_status() === PHP_SESSION_ACTIVE) {
-            $storage = new MockArraySessionStorage();
-        }
-        unset($sessionOptions['unitTestEnabled']);
-
         /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $container->get('shop');
         $mainShop = $shop->getMain() ?: $shop;
@@ -99,6 +92,20 @@ class Session
 
         unset($sessionOptions['locking']);
 
+        if (isset($sessionOptions['save_path'])) {
+            ini_set('session.save_path', $sessionOptions['save_path']);
+        }
+
+        if (isset($sessionOptions['save_handler'])) {
+            ini_set('session.save_handler', $sessionOptions['save_handler']);
+        }
+
+        $storage = new NativeSessionStorage($sessionOptions, $saveHandler);
+
+        if (!empty($sessionOptions['unitTestEnabled']) || session_status() === PHP_SESSION_ACTIVE) {
+            $storage = new MockArraySessionStorage();
+        }
+
         $attributeBag = new NamespacedAttributeBag('Shopware');
 
         $session = new \Enlight_Components_Session_Namespace($storage, $attributeBag);
@@ -106,6 +113,12 @@ class Session
         $session->set('sessionId', $session->getId());
 
         $container->set('sessionid', $session->getId());
+
+        $requestStack = $container->get('request_stack');
+
+        if ($requestStack->getCurrentRequest()) {
+            $requestStack->getCurrentRequest()->setSession($session);
+        }
 
         return $session;
     }

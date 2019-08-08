@@ -32,7 +32,7 @@ class Shopware_Controllers_Widgets_Checkout extends Enlight_Controller_Action
     /**
      * Reference to Shopware session object (Shopware()->Session)
      *
-     * @var Zend_Session_Namespace
+     * @var Enlight_Components_Session_Namespace
      */
     protected $session;
 

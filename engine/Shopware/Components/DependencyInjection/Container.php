@@ -168,11 +168,6 @@ class Container extends BaseContainer
      */
     public function reset($name = null)
     {
-        if ($name === 'session') {
-            debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-            die('fck');
-        }
-
         if ($name === null) {
             parent::reset();
 
