@@ -158,7 +158,7 @@
                 location += '&c=' + stateObj.params.c;
             }
 
-            window.history.pushState(stateObj.state, stateObj.title, location);
+            window.history.replaceState(stateObj.state, stateObj.title, location);
         },
 
         /**
