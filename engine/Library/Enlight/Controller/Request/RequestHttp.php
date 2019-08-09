@@ -739,9 +739,13 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
     {
         if (isset($this->_params[$key])) {
             return $this->_params[$key];
-        } elseif ($this->query->has($key)) {
+        }
+
+        if ($this->query->has($key) && $this->query->get($key) !== null) {
             return $this->query->get($key);
-        } elseif ($this->request->has($key)) {
+        }
+
+        if ($this->request->has($key) && $this->request->get($key) !== null) {
             return $this->request->get($key);
         }
 
