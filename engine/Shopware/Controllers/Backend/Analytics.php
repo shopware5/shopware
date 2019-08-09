@@ -97,6 +97,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             'getCustomers',
             'getCustomerAge',
             'getMonth',
+            'getDay',
             'getCalendarWeeks',
             'getWeekdays',
             'getTime',
@@ -558,6 +559,20 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     public function getMonthAction()
     {
         $result = $this->getRepository()->getAmountPerMonth(
+            $this->getFromDate(),
+            $this->getToDate(),
+            $this->getSelectedShopIds()
+        );
+
+        $this->send(
+            $this->formatOrderAnalyticsData($result->getData()),
+            $result->getTotalCount()
+        );
+    }
+
+    public function getDayAction()
+    {
+        $result = $this->getRepository()->getAmountPerDay(
             $this->getFromDate(),
             $this->getToDate(),
             $this->getSelectedShopIds()

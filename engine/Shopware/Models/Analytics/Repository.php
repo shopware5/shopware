@@ -785,6 +785,52 @@ class Repository
 
     /**
      * Selects the total amount for the passed date range.
+     * The data will be grouped per day.
+     *
+     * For each passed shop id the query builder selects additionally the amount for the passed shop id
+     * under the array key "amount[shopId]". The described [shopId] suffix will be replaced with the id of
+     * the shop.
+     *
+     * @param int[] $shopIds
+     *
+     * @throws \Enlight_Event_Exception
+     *
+     * @return Result
+     *                array (
+     *                'count' => '2',
+     *                'amount' => '403.72',
+     *                'displayDate' => 'Saturday',
+     *                'amount1' => '403.72',
+     *                'amount2' => '0',
+     *                'date' => '2000-07-01',
+     *                ),
+     *
+     *      array (
+     *          'count' => '1',
+     *          'amount' => '201.86',
+     *          'displayDate' => 'Saturday',
+     *          'amount1' => '201.86',
+     *          'amount2' => '0',
+     *          'date' => '2001-10-01',
+     *      ),
+     */
+    public function getAmountPerDay(\DateTimeInterface $from = null, \DateTimeInterface $to = null, array $shopIds = [])
+    {
+        $dateCondition = 'DATE_FORMAT(ordertime, \'%Y-%m-%d\')';
+        $builder = $this->createAmountBuilder($from, $to, $shopIds)
+            ->addSelect($dateCondition . ' AS date')
+            ->groupBy($dateCondition)
+            ->orderBy('date', 'DESC');
+
+        $builder = $this->eventManager->filter('Shopware_Analytics_AmountPerDay', $builder, [
+            'subject' => $this,
+        ]);
+
+        return new Result($builder);
+    }
+
+    /**
+     * Selects the total amount for the passed date range.
      * The data will be grouped per calender week.
      *
      * For each passed shop id the query builder selects additionally the amount for the passed shop id

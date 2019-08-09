@@ -121,6 +121,15 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
                 multiShop: true
             },
             {
+                id: 'day',
+                text: '{s name=nav/salesBy/day}Turnover by day{/s}',
+                store: 'analytics-store-navigation-day',
+                iconCls: 'sprite-calendar-day',
+                comparable: true,
+                leaf: true,
+                multiShop: true
+            },
+            {
                 id: 'week',
                 text: '{s name=nav/salesBy/calendarWeeks}Turnover by calendar weeks{/s}',
                 store: 'analytics-store-navigation-calendar_weeks',
