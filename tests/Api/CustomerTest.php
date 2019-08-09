@@ -48,6 +48,8 @@ use Shopware\Models\Customer\Customer;
  */
 class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
 {
+    use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+
     public $apiBaseUrl = '';
 
     /**
@@ -164,7 +166,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
                 'firstName' => 'Max',
                 'lastName' => 'Mustermann',
                 'country' => 2,
-                'street' => 'Fakesreet 123',
+                'street' => 'Fakestreet 123',
                 'city' => 'City',
                 'zipcode' => 55555,
             ],
@@ -175,7 +177,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
                 'firstName' => 'Max',
                 'lastName' => 'Mustermann',
                 'country' => 2,
-                'street' => 'Fakesreet 123',
+                'street' => 'Fakestreet 123',
                 'city' => 'City',
                 'zipcode' => 55555,
             ],
@@ -245,7 +247,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
                 'firstName' => 'Max',
                 'lastName' => 'Mustermann',
                 'country' => 2,
-                'street' => 'Fakesreet 123',
+                'street' => 'Fakestreet 123',
                 'city' => 'City',
                 'zipcode' => 55555,
             ],
@@ -256,7 +258,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
                 'firstName' => 'Max',
                 'lastName' => 'Mustermann',
                 'country' => 2,
-                'street' => 'Fakesreet 123',
+                'street' => 'Fakestreet 123',
                 'city' => 'City',
                 'zipcode' => 55555,
             ],
@@ -335,7 +337,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
                 'firstName' => 'Max',
                 'lastName' => 'Mustermann',
                 'country' => 2,
-                'street' => 'Fakesreet 123',
+                'street' => 'Fakestreet 123',
                 'city' => 'City',
                 'zipcode' => 55555,
             ],
@@ -346,7 +348,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
                 'firstName' => 'Max',
                 'lastName' => 'Mustermann',
                 'country' => 2,
-                'street' => 'Fakesreet 123',
+                'street' => 'Fakestreet 123',
                 'city' => 'City',
                 'zipcode' => 55555,
             ],
@@ -631,5 +633,99 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
 
         $data = $result['data'];
         static::assertInternalType('array', $data);
+    }
+
+    public function testPostCustomerWithCountryIso()
+    {
+        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers/');
+
+        $requestData = [
+            'password' => 'fooobar',
+            'active' => true,
+            'email' => uniqid('', true) . 'test@foobar.com',
+
+            'salutation' => 'mr',
+            'firstname' => 'Max',
+            'lastname' => 'Mustermann',
+
+            'billing' => [
+                'salutation' => 'Mr',
+                'firstName' => 'Max',
+                'lastName' => 'Mustermann',
+                'country' => 'DE',
+                'street' => 'Fakestreet 123',
+                'city' => 'City',
+                'zipcode' => 55555,
+            ],
+        ];
+
+        $requestData = Zend_Json::encode($requestData);
+        $client->setRawData($requestData, 'application/json; charset=UTF-8');
+
+        $response = $client->request('POST');
+
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(201, $response->getStatus());
+        static::assertArrayHasKey('Location', $response->getHeaders());
+
+        $result = $response->getBody();
+        $result = Zend_Json::decode($result);
+
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
+
+        $location = $response->getHeader('Location');
+        $identifier = (int) array_pop(explode('/', $location));
+
+        static::assertGreaterThan(0, $identifier);
+
+        return $identifier;
+    }
+
+    public function testPostCustomerWithoutCountryButState()
+    {
+        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers/');
+
+        $requestData = [
+            'password' => 'fooobar',
+            'active' => true,
+            'email' => uniqid('', true) . 'test@foobar.com',
+
+            'salutation' => 'mr',
+            'firstname' => 'Max',
+            'lastname' => 'Mustermann',
+
+            'billing' => [
+                'salutation' => 'Mr',
+                'firstName' => 'Max',
+                'lastName' => 'Mustermann',
+                'state' => 10,
+                'street' => 'Fakestreet 123',
+                'city' => 'City',
+                'zipcode' => 55555,
+            ],
+        ];
+
+        $requestData = Zend_Json::encode($requestData);
+        $client->setRawData($requestData, 'application/json; charset=UTF-8');
+
+        $response = $client->request('POST');
+
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(201, $response->getStatus());
+        static::assertArrayHasKey('Location', $response->getHeaders());
+
+        $result = $response->getBody();
+        $result = Zend_Json::decode($result);
+
+        static::assertArrayHasKey('success', $result);
+        static::assertTrue($result['success']);
+
+        $location = $response->getHeader('Location');
+        $identifier = (int) array_pop(explode('/', $location));
+
+        static::assertGreaterThan(0, $identifier);
+
+        return $identifier;
     }
 }
