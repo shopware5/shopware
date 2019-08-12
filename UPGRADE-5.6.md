@@ -10,6 +10,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed password recovery form to also work with invalid customer objects
 * Changed `Shopware\Bundle\StoreFrontBundle\Gateway\BlogGateway` to consider blog translations
 * Changed the SEO meta tags in the blog listing
+* Changed `Shopware_Components_Translation` to work with missing payment or dispatch entries
 
 ## 5.6.0
 
