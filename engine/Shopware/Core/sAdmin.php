@@ -27,6 +27,7 @@ use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\Captcha\CaptchaValidator;
+use Shopware\Components\Cart\CartPersistServiceInterface;
 use Shopware\Components\Cart\ConditionalLineItemServiceInterface;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Random;
@@ -671,12 +672,20 @@ class sAdmin implements \Enlight_Hook
 
     public function logout()
     {
+        if ($this->config->get('migrateCartAfterLogin')) {
+            Shopware()->Container()->get(CartPersistServiceInterface::class)->prepare();
+        }
+
         if ($this->config->get('clearBasketAfterLogout')) {
             $this->moduleManager->Basket()->sDeleteBasket();
         }
 
         $this->session->unsetAll();
         $this->regenerateSessionId();
+
+        if ($this->config->get('migrateCartAfterLogin')) {
+            Shopware()->Container()->get(CartPersistServiceInterface::class)->persist();
+        }
 
         $shop = Shopware()->Shop();
 
