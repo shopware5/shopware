@@ -46,43 +46,27 @@ class DBALConfigReader implements ConfigReader
      */
     public function getByPluginName($pluginName, Shop $shop = null)
     {
-        $sql = <<<'SQL'
-SELECT
-  ce.name,
-  COALESCE(currentShop.value, parentShop.value, fallbackShop.value, ce.value) as value
+        $builder = $this->connection->createQueryBuilder();
+        $builder
+            ->select([
+                'ce.name',
+                'COALESCE(currentShop.value, parentShop.value, fallbackShop.value, ce.value) as value',
+            ])
+            ->from('s_core_plugins', 'p')
+            ->innerJoin('p', 's_core_config_forms', 'cf', 'cf.plugin_id = p.id')
+            ->innerJoin('cf', 's_core_config_elements', 'ce', 'ce.form_id = cf.id')
+            ->leftJoin('ce', 's_core_config_values', 'currentShop', 'currentShop.element_id = ce.id AND currentShop.shop_id = :currentShopId')
+            ->leftJoin('ce', 's_core_config_values', 'parentShop', 'parentShop.element_id = ce.id AND parentShop.shop_id = :parentShopId')
+            ->leftJoin('ce', 's_core_config_values', 'fallbackShop', 'fallbackShop.element_id = ce.id AND fallbackShop.shop_id = :fallbackShopId')
+            ->where('p.name = :pluginName')
+            ->setParameters([
+                'fallbackShopId' => 1, //Shop parent id
+                'parentShopId' => $shop !== null && $shop->getMain() !== null ? $shop->getMain()->getId() : 1,
+                'currentShopId' => $shop !== null ? $shop->getId() : null,
+                'pluginName' => $pluginName,
+            ]);
 
-FROM s_core_plugins p
-
-INNER JOIN s_core_config_forms cf
-  ON cf.plugin_id = p.id
-
-INNER JOIN s_core_config_elements ce
-  ON ce.form_id = cf.id
-
-LEFT JOIN s_core_config_values currentShop
-  ON currentShop.element_id = ce.id
-  AND currentShop.shop_id = :currentShopId
-
-LEFT JOIN s_core_config_values parentShop
-  ON parentShop.element_id = ce.id
-  AND parentShop.shop_id = :parentShopId
-
-LEFT JOIN s_core_config_values fallbackShop
-  ON fallbackShop.element_id = ce.id
-  AND fallbackShop.shop_id = :fallbackShopId
-
-WHERE p.name=:pluginName
-SQL;
-
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute([
-            'fallbackShopId' => 1, //Shop parent id
-            'parentShopId' => $shop !== null && $shop->getMain() !== null ? $shop->getMain()->getId() : 1,
-            'currentShopId' => $shop !== null ? $shop->getId() : null,
-            'pluginName' => $pluginName,
-        ]);
-
-        $config = $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $config = $builder->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
 
         foreach ($config as $key => $value) {
             $config[$key] = !empty($value) ? @unserialize($value) : null;
