@@ -251,7 +251,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         // Needed for 'added' date
         $this->front->setParam('optinDate', $getVote['datum']);
 
-        Shopware()->System()->_POST = unserialize($getVote['data']);
+        Shopware()->System()->_POST = unserialize($getVote['data'], ['allowed_classes' => false]);
 
         Shopware()->Db()->query(
             'DELETE FROM s_core_optin WHERE hash = ?',

@@ -244,7 +244,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             return;
         }
 
-        if (($data = unserialize($result)) === false || !isset($data['customerId'])) {
+        if (($data = unserialize($result, ['allowed_classes' => false])) === false || !isset($data['customerId'])) {
             throw new InvalidArgumentException(sprintf('The data for hash \'%s\' is corrupted.', $hash));
         }
         $customerId = (int) $data['customerId'];

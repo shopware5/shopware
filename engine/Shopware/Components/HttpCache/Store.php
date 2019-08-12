@@ -132,7 +132,7 @@ class Store extends BaseStore
             }
 
             $headerData = file_get_contents($headerFile->getPathname());
-            $headerData = unserialize($headerData);
+            $headerData = unserialize($headerData, ['allowed_classes' => false]);
 
             $changed = false;
             foreach ($headerData as $headerIndex => $header) {

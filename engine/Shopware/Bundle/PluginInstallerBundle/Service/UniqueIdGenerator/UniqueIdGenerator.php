@@ -74,7 +74,7 @@ sql;
         $uniqueId = $this->connection->fetchColumn($sql);
 
         if ($uniqueId !== false && is_string($uniqueId)) {
-            return unserialize($uniqueId);
+            return unserialize($uniqueId, ['allowed_classes' => false]);
         }
 
         return null;
