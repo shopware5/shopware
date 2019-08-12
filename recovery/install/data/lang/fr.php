@@ -111,7 +111,7 @@ EOT
     'edition_info' => 'Il existe une édition Shopware <a href="https://en.shopware.com/pricing/" target="_blank">Community</a> gratuite ainsi que des éditions payantes <a href="https://en.shopware.com/pricing/" target="_blank">Professional, Professional Plus et Enterprise</a>.',
     'edition_ce' => 'Je souhaite utiliser l\'édition <a href="https://en.shopware.com/pricing/" target="_blank">Community</a> gratuite.',
     'edition_cm' => 'Je possède une licence Shopware payante (<a href="https://en.shopware.com/pricing/" target="_blank">Professional, Professional Plus ou Enterprise</a>).',
-    'edition_license' => 'Saisis ici ta clé de licence. Tu la trouveras sur ton compte Shopware sous "Licences"; "Licences de produits"; "Détails/Téléchargement":',
+    'edition_license' => 'Saisis ici ta clé de licence. Tu la trouveras sur ton compte Shopware sous "Merchant area" &rarr; "Shops" &rarr; [Choisissez votre nom de domaine] &rarr; "Copy license key":',
     'edition_license_error' => 'Il est nécessaire de posséder une licence valable pour installer une version Shopware payante.',
 
     'configuration_header' => 'Configuration de base de la boutique',
