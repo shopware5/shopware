@@ -427,10 +427,10 @@ class Shopware_Components_Translation
 
         // Extract documents, payment and dispatch methods
         foreach ($orders as $order) {
-            if (array_key_exists('dispatch', $order)) {
+            if (isset($order['dispatch'])) {
                 $dispatchMethods[$order['dispatch']['id']] = $order['dispatch'];
             }
-            if (array_key_exists('payment', $order)) {
+            if (isset($order['payment'])) {
                 $paymentMethods[$order['payment']['id']] = $order['payment'];
             }
             if (array_key_exists('documents', $order)) {
