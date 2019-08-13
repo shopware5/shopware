@@ -114,7 +114,7 @@ class SynchronizerService implements SynchronizerServiceInterface
         $currentSchema = $con->getSchemaManager()->createSchema();
         $schema = clone $currentSchema;
 
-        // Mark all content type to be deleted, hopeful they will be redefined in the next step
+        // Mark all content type to be deleted, hopefully they will be redefined in the next step
         foreach ($schema->getTables() as $table) {
             if (strpos($table->getName(), 's_custom_') === 0) {
                 $schema->dropTable($table->getName());
