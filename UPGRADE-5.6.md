@@ -4,6 +4,10 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 ## 5.6.1
 
+### Additions
+
+* Added new config checkbox for applying stock on chosen variants while applying standard data
+
 ### Changes
 
 * Changed the meta property `og:type` in the listing from `product` to `product.group`
