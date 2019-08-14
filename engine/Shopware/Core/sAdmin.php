@@ -676,7 +676,7 @@ class sAdmin implements \Enlight_Hook
             $this->moduleManager->Basket()->sDeleteBasket();
         }
 
-        $this->session->unsetAll();
+        $this->session->clear();
         $this->regenerateSessionId();
 
         $shop = Shopware()->Shop();

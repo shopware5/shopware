@@ -465,7 +465,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     public function returnAction()
     {
         if ($this->View()->sUserData['additional']['user']['accountmode'] == 1) {
-            Shopware()->Session()->unsetAll();
+            $this->Request()->getSession()->clear();
             Shopware()->Modules()->Basket()->sRefreshBasket();
         }
 

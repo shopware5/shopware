@@ -32,3 +32,4 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `Zend_Session_Validator_Abstract`
     * `Zend_Session_Validator_HttpUserAgent`
     * `Zend_Session_Validator_Interface`
+* Removed referenced value from magic getter in session
