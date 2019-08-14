@@ -93,7 +93,7 @@
     <div class="alert is--{$type}{if $hasBorderRadius && $hasBorderRadius === true} is--rounded{/if}{if $isVisible === false} is--hidden{/if}">
 
         {* Icon to remove the message *}
-        {block name="frontend_global_messages_icon"}
+        {block name="frontend_global_messages_icon_remove"}
             {if $remoteMessageLink}
                 <a class="alert--close icon--cross" data-notification-message-close="true" data-link="{$remoteMessageLink}" title="{s name="Hide" namespace="frontend"}{/s}"></a>
             {/if}

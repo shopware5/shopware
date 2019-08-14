@@ -7,6 +7,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 ### Additions
 
 * Added new config checkbox for applying stock on chosen variants while applying standard data
+* Added new smarty block `frontend_global_messages_icon_remove`
 
 ### Changes
 
