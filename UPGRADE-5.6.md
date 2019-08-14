@@ -19,6 +19,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `sAdmin` to save cart after logout
 * Changed `Shopware\Components\DependencyInjection\Compiler\LegacyApiResourcesPass` to work correctly
 * Changed the calculation of the date in the affiliate marketing statistics
+* Changed `Enlight_Controller_Response_ResponseHttp::isRedirect` to not consider http response code 201 
 
 ## 5.6.0
 
