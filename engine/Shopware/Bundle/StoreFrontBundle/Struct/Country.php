@@ -356,18 +356,12 @@ class Country extends Extendable
         $this->active = $active;
     }
 
-    /**
-     * @return int
-     */
-    public function getAreaId()
+    public function getAreaId(): ?int
     {
         return $this->areaId;
     }
 
-    /**
-     * @param int $areaId
-     */
-    public function setAreaId($areaId)
+    public function setAreaId(int $areaId): void
     {
         $this->areaId = $areaId;
     }

@@ -40,7 +40,6 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
      */
     public function preDispatch()
     {
-        $this->admin = Shopware()->Modules()->Admin();
         $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);
     }
 
@@ -64,11 +63,15 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $this->forward('index', 'account');
 
             return;
-        } elseif ($this->shouldRedirectToCheckout()) {
+        }
+
+        if ($this->shouldRedirectToCheckout()) {
             $this->forward('confirm', 'checkout');
 
             return;
-        } elseif ($this->shouldRedirectToTarget()) {
+        }
+
+        if ($this->shouldRedirectToTarget()) {
             $this->redirect(['controller' => $sTarget, 'action' => $sTargetAction]);
 
             return;
@@ -76,7 +79,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
         $this->View()->assign('isAccountless', $this->get('session')->get('isAccountless'));
         $this->View()->assign('register', $this->getRegisterData());
-        $this->View()->assign('countryList', $this->admin->sGetCountryList());
+        $this->View()->assign('countryList', $this->get('modules')->Admin()->sGetCountryList());
     }
 
     /**
@@ -590,9 +593,6 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         return $form;
     }
 
-    /**
-     * @param Customer $customer
-     */
     private function sendRegistrationMail(Customer $customer)
     {
         try {
