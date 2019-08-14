@@ -1,10 +1,10 @@
 {extends file='frontend/index/index.tpl'}
 
-{block name='frontend_index_content_left'}{/block}
-
 {block name='frontend_index_header'}
     {include file='frontend/content_type/detail_header.tpl'}
 {/block}
+
+{block name="frontend_index_body_classes"}{$smarty.block.parent} is--content-type{/block}
 
 {* Main content *}
 {block name='frontend_index_content'}

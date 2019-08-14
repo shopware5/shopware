@@ -8,6 +8,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 * Added new config checkbox for applying stock on chosen variants while applying standard data
 * Added new smarty block `frontend_global_messages_icon_remove`
+* Added new div class `is--content-type` to all content type pages
 
 ### Changes
 
@@ -20,6 +21,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `Shopware\Components\DependencyInjection\Compiler\LegacyApiResourcesPass` to work correctly
 * Changed the calculation of the date in the affiliate marketing statistics
 * Changed `Enlight_Controller_Response_ResponseHttp::isRedirect` to not consider http response code 201 
+* Changed content type pages to display the off canvas menu in mobile view
 
 ## 5.6.0
 
