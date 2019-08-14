@@ -17,6 +17,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `Shopware_Components_Translation` to work with missing payment or dispatch entries
 * Changed `sAdmin` to save cart after logout
 * Changed `Shopware\Components\DependencyInjection\Compiler\LegacyApiResourcesPass` to work correctly
+* Changed the calculation of the date in the affiliate marketing statistics
 
 ## 5.6.0
 
