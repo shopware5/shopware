@@ -350,7 +350,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
             return null;
         }
 
-        $result = @unserialize($row[$key]);
+        $result = @unserialize($row[$key], ['allowed_classes' => false]);
         if (!$result) {
             return null;
         }

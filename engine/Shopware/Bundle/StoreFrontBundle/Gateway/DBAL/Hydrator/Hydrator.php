@@ -148,7 +148,7 @@ class Hydrator
             return [];
         }
 
-        $translation = unserialize($data[$key]);
+        $translation = unserialize($data[$key], ['allowed_classes' => false]);
         if (!$translation) {
             return [];
         }

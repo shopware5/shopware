@@ -439,7 +439,7 @@ class Translation extends Resource implements BatchInterface
         if (!$existing) {
             $existing = [];
         } else {
-            $existing['data'] = unserialize($existing['data']);
+            $existing['data'] = unserialize($existing['data'], ['allowed_classes' => false]);
             $this->delete($data['key'], $data);
         }
 

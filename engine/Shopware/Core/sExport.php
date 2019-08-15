@@ -656,7 +656,7 @@ class sExport implements \Enlight_Hook
             return [];
         }
 
-        $objectData = @unserialize($objectData);
+        $objectData = @unserialize($objectData, ['allowed_classes' => false]);
         if (empty($objectData)) {
             return [];
         }

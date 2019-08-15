@@ -413,7 +413,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                 $getComment = $commentConfirmQuery->getOneOrNullResult();
 
                 if ($getComment) {
-                    $commentData = unserialize($getComment->getData());
+                    $commentData = unserialize($getComment->getData(), ['allowed_classes' => false]);
 
                     // Delete the data in the s_core_optin table. We don't need it anymore
                     Shopware()->Models()->remove($getComment);

@@ -53,7 +53,7 @@ class BacklogReader implements BacklogReaderInterface
             ->execute()
             ->fetch(\PDO::FETCH_COLUMN);
 
-        return unserialize($value);
+        return unserialize($value, ['allowed_classes' => false]);
     }
 
     /**

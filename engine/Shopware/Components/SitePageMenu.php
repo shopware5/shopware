@@ -96,7 +96,7 @@ class SitePageMenu
             }
 
             if ($site['__page_translation']) {
-                $translations = unserialize($site['__page_translation']);
+                $translations = unserialize($site['__page_translation'], ['allowed_classes' => false]);
 
                 if ($translations) {
                     foreach ($translations as $property => $translation) {

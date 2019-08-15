@@ -396,9 +396,9 @@ class Inheritance
     {
         foreach ($config as &$row) {
             if (!isset($row['value'])) {
-                $row['value'] = unserialize($row['defaultValue']);
+                $row['value'] = unserialize($row['defaultValue'], ['allowed_classes' => false]);
             } else {
-                $row['value'] = unserialize($row['value']);
+                $row['value'] = unserialize($row['value'], ['allowed_classes' => false]);
             }
 
             if ($row['type'] === 'theme-media-selection' && $row['value'] !== $row['defaultValue'] && strpos($row['value'], 'media/') !== false) {

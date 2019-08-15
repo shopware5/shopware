@@ -730,7 +730,14 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             return null;
         }
 
-        return unserialize($this->get('backendsession')->offsetGet('store_token'));
+        $allowedClassList = [
+            AccessTokenStruct::class,
+        ];
+
+        return unserialize(
+            $this->get('backendsession')->offsetGet('store_token'),
+            ['allowed_classes' => $allowedClassList]
+        );
     }
 
     /**
