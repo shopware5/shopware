@@ -135,7 +135,7 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
          * Fill in session data into s_core_sessions_backend
          */
         $this->dispatch('/backend');
-        static::assertNotEmpty(Shopware()->Session()->Auth->sessionID);
+        static::assertNotEmpty(Shopware()->BackendSession()->Auth->sessionID);
 
         $this->resetRequest()
         ->resetResponse();

@@ -1110,6 +1110,8 @@ class sAdminTest extends PHPUnit\Framework\TestCase
      */
     public function testsGetOpenOrderData($demoData)
     {
+        $this->session->clear();
+
         // Inherit data from previous test
         $customer = $demoData['customer'];
         $oldOrderId = $demoData['orderId'];
@@ -1219,6 +1221,8 @@ class sAdminTest extends PHPUnit\Framework\TestCase
      */
     public function testGetEmailAndUser()
     {
+        $this->session->clear();
+
         $customer = $this->createDummyCustomer();
 
         // Test sGetUserMailById with null and expected cases
@@ -1245,6 +1249,8 @@ class sAdminTest extends PHPUnit\Framework\TestCase
      */
     public function testsGetUserDataWithoutLogin()
     {
+        $this->session->clear();
+
         static::assertEquals(
             ['additional' => [
                     'country' => [],
@@ -2323,6 +2329,8 @@ class sAdminTest extends PHPUnit\Framework\TestCase
      */
     public function testsGetDispatchBasket()
     {
+        $this->session->clear();
+
         // No basket, return false
         static::assertFalse($this->module->sGetDispatchBasket());
 
@@ -2363,6 +2371,8 @@ class sAdminTest extends PHPUnit\Framework\TestCase
      */
     public function testsGetPremiumDispatches()
     {
+        $this->session->clear();
+
         // No basket, return empty array,
         static::assertEquals([], $this->module->sGetPremiumDispatches());
 
@@ -2387,6 +2397,8 @@ class sAdminTest extends PHPUnit\Framework\TestCase
      */
     public function testsGetPremiumDispatchSurcharge()
     {
+        $this->session->clear();
+
         // No basket, return false,
         static::assertFalse($this->module->sGetPremiumDispatchSurcharge(null));
 

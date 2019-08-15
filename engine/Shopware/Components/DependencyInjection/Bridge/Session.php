@@ -26,6 +26,9 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Session\PdoSessionHandler;
+use Symfony\Component\HttpFoundation\Session\Attribute\NamespacedAttributeBag;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 
 /**
  * Session Dependency Injection Bridge
@@ -66,15 +69,6 @@ class Session
     {
         $sessionOptions = $container->getParameter('shopware.session');
 
-        if (!empty($sessionOptions['unitTestEnabled'])) {
-            \Enlight_Components_Session::$_unitTestEnabled = true;
-        }
-        unset($sessionOptions['unitTestEnabled']);
-
-        if (\Enlight_Components_Session::isStarted()) {
-            \Enlight_Components_Session::writeClose();
-        }
-
         /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $container->get('shop');
         $mainShop = $shop->getMain() ?: $shop;
@@ -98,13 +92,34 @@ class Session
 
         unset($sessionOptions['locking']);
 
-        \Enlight_Components_Session::start($sessionOptions);
+        if (isset($sessionOptions['save_path'])) {
+            ini_set('session.save_path', $sessionOptions['save_path']);
+        }
 
-        $container->set('sessionid', \Enlight_Components_Session::getId());
+        if (isset($sessionOptions['save_handler'])) {
+            ini_set('session.save_handler', $sessionOptions['save_handler']);
+        }
 
-        $namespace = new \Enlight_Components_Session_Namespace('Shopware');
-        $namespace->offsetSet('sessionId', \Enlight_Components_Session::getId());
+        $storage = new NativeSessionStorage($sessionOptions, $saveHandler);
 
-        return $namespace;
+        if (!empty($sessionOptions['unitTestEnabled']) || session_status() === PHP_SESSION_ACTIVE) {
+            $storage = new MockArraySessionStorage();
+        }
+
+        $attributeBag = new NamespacedAttributeBag('Shopware');
+
+        $session = new \Enlight_Components_Session_Namespace($storage, $attributeBag);
+        $session->start();
+        $session->set('sessionId', $session->getId());
+
+        $container->set('sessionid', $session->getId());
+
+        $requestStack = $container->get('request_stack');
+
+        if ($requestStack->getCurrentRequest()) {
+            $requestStack->getCurrentRequest()->setSession($session);
+        }
+
+        return $session;
     }
 }

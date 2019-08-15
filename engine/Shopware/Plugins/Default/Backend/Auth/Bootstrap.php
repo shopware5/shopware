@@ -26,6 +26,9 @@ use Shopware\Components\DependencyInjection\Bridge\Db;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Session\PdoSessionHandler;
 use Shopware\Models\Shop\Locale;
+use Symfony\Component\HttpFoundation\Session\Attribute\NamespacedAttributeBag;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 
 /**
  * Shopware Auth Plugin
@@ -365,15 +368,28 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     public function onInitResourceBackendSession(Enlight_Event_EventArgs $args)
     {
-        $options = $this->getSessionOptions();
+        $sessionOptions = $this->getSessionOptions();
         $saveHandler = $this->createSaveHandler(Shopware()->Container());
-        if ($saveHandler) {
+        $storage = new NativeSessionStorage($sessionOptions);
+
+        if (!empty($sessionOptions['unitTestEnabled'])) {
+            $storage = new MockArraySessionStorage();
+        } elseif ($saveHandler) {
             session_set_save_handler($saveHandler);
         }
 
-        Enlight_Components_Session::start($options);
+        if (isset($sessionOptions['save_path'])) {
+            ini_set('session.save_path', $sessionOptions['save_path']);
+        }
 
-        return new Enlight_Components_Session_Namespace('ShopwareBackend');
+        if (isset($sessionOptions['save_handler'])) {
+            ini_set('session.save_handler', $sessionOptions['save_handler']);
+        }
+
+        $session = new Enlight_Components_Session_Namespace($storage, new NamespacedAttributeBag('ShopwareBackend'));
+        $session->start();
+
+        return $session;
     }
 
     /**
@@ -388,11 +404,12 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     public function onInitResourceAuth(Enlight_Event_EventArgs $args)
     {
-        Shopware()->Container()->load('backendsession');
+        /** @var Enlight_Components_Session_Namespace $session */
+        $session = Shopware()->Container()->get('backendsession');
 
         $resource = Shopware_Components_Auth::getInstance();
-        $adapter = new Shopware_Components_Auth_Adapter_Default();
-        $storage = new Zend_Auth_Storage_Session('Shopware', 'Auth');
+        $adapter = new Shopware_Components_Auth_Adapter_Default($session);
+        $storage = new Zend_Auth_Storage_Session($session);
         $resource->setBaseAdapter($adapter);
         $resource->addAdapter($adapter);
         $resource->setStorage($storage);
@@ -448,12 +465,9 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     protected function getCurrentLocale()
     {
-        $options = $this->getSessionOptions();
         $modelManager = $this->get(\Shopware\Components\Model\ModelManager::class);
 
-        Enlight_Components_Session::setOptions($options);
-
-        if (Enlight_Components_Session::sessionExists()) {
+        if (Shopware()->Container()->initialized('backendsession')) {
             $auth = $this->get('auth');
             if ($auth->hasIdentity()) {
                 $user = $auth->getIdentity();

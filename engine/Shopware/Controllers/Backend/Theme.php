@@ -87,6 +87,9 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         /** @var Shop $shop */
         $shop = $this->getManager()->getRepository(Shop::class)->getActiveById($shopId);
+
+        session_write_close();
+
         $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         $session = $this->get('session');
@@ -137,9 +140,11 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             return;
         }
 
+        session_write_close();
+
         $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
 
-        Shopware()->Session()->offsetSet('template', null);
+        $this->get('session')->offsetSet('template', null);
     }
 
     /**

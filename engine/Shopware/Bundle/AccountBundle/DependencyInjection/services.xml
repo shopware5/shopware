@@ -30,7 +30,7 @@
         </service>
 
         <service id="shopware_account.constraint.current_password_validator" class="Shopware\Bundle\AccountBundle\Constraint\CurrentPasswordValidator">
-            <argument type="service" id="Zend_Session_Namespace" />
+            <argument type="service" id="Symfony\Component\HttpFoundation\Session\SessionInterface" />
             <argument type="service" id="Shopware_Components_Snippet_Manager" />
             <argument type="service" id="passwordencoder" />
             <argument type="service" id="Shopware\Components\Model\ModelManager" />
@@ -127,7 +127,7 @@
         </service>
 
         <service id="shopware_account.store_front_greeting_service" class="Shopware\Bundle\AccountBundle\Service\StoreFrontCustomerGreetingService" >
-            <argument type="service" id="Zend_Session_Namespace"/>
+            <argument type="service" id="Symfony\Component\HttpFoundation\Session\SessionInterface"/>
             <argument type="service" id="Doctrine\DBAL\Connection"/>
             <argument type="service" id="Shopware_Components_Config"/>
         </service>

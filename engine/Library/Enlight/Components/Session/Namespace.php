@@ -17,18 +17,68 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
+use Symfony\Component\HttpFoundation\Session\Session;
+
 /**
  * Enlight session namespace component.
  *
- * The Enlight_Components_Session_Namespace extends the Zend_Session_Namespace with an easy array access.
+ * The Enlight_Components_Session_Namespace extends the Symfony Session with an easy array access.
  *
- * @category    Enlight
  *
- * @copyright   Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license     http://enlight.de/license     New BSD License
  */
-class Enlight_Components_Session_Namespace extends Zend_Session_Namespace implements Countable, IteratorAggregate, ArrayAccess
+class Enlight_Components_Session_Namespace extends Session implements ArrayAccess
 {
+    /**
+     * Legacy wrapper
+     *
+     * @param string $name
+     */
+    public function __get($name)
+    {
+        return $this->get($name);
+    }
+
+    /**
+     * Legacy wrapper
+     *
+     * @param string $name
+     */
+    public function __set($name, $value)
+    {
+        return $this->set($name, $value);
+    }
+
+    /**
+     * Legacy wrapper
+     *
+     * @param string $name
+     */
+    public function __unset($name)
+    {
+        return $this->remove($name);
+    }
+
+    /**
+     * Legacy wrapper
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function __isset($name)
+    {
+        if (!$this->has($name)) {
+            return false;
+        }
+
+        if ($this->get($name) === null) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * Whether an offset exists
      *
@@ -38,7 +88,7 @@ class Enlight_Components_Session_Namespace extends Zend_Session_Namespace implem
      */
     public function offsetExists($key)
     {
-        return $this->__isset($key);
+        return $this->has($key);
     }
 
     /**
@@ -48,7 +98,7 @@ class Enlight_Components_Session_Namespace extends Zend_Session_Namespace implem
      */
     public function offsetUnset($key)
     {
-        $this->__unset($key);
+        $this->remove($key);
     }
 
     /**
@@ -60,7 +110,7 @@ class Enlight_Components_Session_Namespace extends Zend_Session_Namespace implem
      */
     public function offsetGet($key)
     {
-        return $this->__get($key);
+        return $this->get($key);
     }
 
     /**
@@ -71,29 +121,23 @@ class Enlight_Components_Session_Namespace extends Zend_Session_Namespace implem
      */
     public function offsetSet($key, $value)
     {
-        $this->__set($key, $value);
+        $this->set($key, $value);
     }
 
     /**
-     * Count elements of the object
+     * Clear session
      *
-     * @return int The custom count as an integer
+     * @deprecated since 5.7, and will be removed with 5.9. Use clear instead.
      */
-    public function count()
+    public function unsetAll()
     {
-        return $this->apply('count');
+        trigger_error('Enlight_Components_Session_Namespace::unsetAll is deprecated since 5.7 and will be removed with 5.9. Use Enlight_Components_Session_Namespace::clear instead', E_USER_DEPRECATED);
+        return $this->clear();
     }
 
-    /**
-     * @param string $name
-     * @param mixed  $default
-     *
-     * @return mixed
-     */
-    public function get($name, $default = null)
+    public function clear()
     {
-        $value = $this->offsetGet($name);
-
-        return $value !== null ? $value : $default;
+        parent::clear();
+        $this->set('sessionId', $this->getId());
     }
 }

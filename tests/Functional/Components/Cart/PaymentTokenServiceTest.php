@@ -26,9 +26,12 @@ namespace Shopware\Tests\Functional\Components\Cart;
 
 use Shopware\Components\Cart\PaymentTokenService;
 use Shopware\Components\Cart\Struct\PaymentTokenResult;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class PaymentTokenServiceTest extends \Enlight_Components_Test_Controller_TestCase
 {
+    use DatabaseTransactionBehaviour;
+
     /**
      * @var PaymentTokenService
      */
@@ -36,13 +39,7 @@ class PaymentTokenServiceTest extends \Enlight_Components_Test_Controller_TestCa
 
     public function setUp(): void
     {
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
         $this->service = Shopware()->Container()->get(\Shopware\Components\Cart\PaymentTokenService::class);
-    }
-
-    protected function tearDown(): void
-    {
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollBack();
     }
 
     public function testPaymentTokenStorage(): void
@@ -62,9 +59,11 @@ class PaymentTokenServiceTest extends \Enlight_Components_Test_Controller_TestCa
 
     public function testPaymentTokenValidRequest(): void
     {
+        $this->reset();
         $hash = $this->service->generate();
 
         $this->dispatch('/?swPaymentToken=' . $hash);
+
         $cookies = $this->Response()->getCookies();
 
         static::assertArrayHasKey(session_name() . '-', $cookies);
@@ -73,6 +72,7 @@ class PaymentTokenServiceTest extends \Enlight_Components_Test_Controller_TestCa
 
     public function testPaymentTokenInvalidRequest(): void
     {
+        $this->reset();
         $this->dispatch('/?swPaymentToken=fooooooo');
         $cookies = $this->Response()->getCookies();
 

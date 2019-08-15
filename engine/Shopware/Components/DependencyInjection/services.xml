@@ -942,12 +942,12 @@
 
         <service id="Shopware\Components\Cart\PaymentTokenService">
             <argument type="service" id="Shopware\Components\OptinServiceInterface"/>
-            <argument type="service" id="Zend_Session_Namespace"/>
+            <argument type="service" id="Symfony\Component\HttpFoundation\Session\SessionInterface"/>
         </service>
 
         <service id="Shopware\Components\Cart\PaymentTokenService_subscriber" class="Shopware\Components\Cart\PaymentTokenSubscriber">
             <argument type="service" id="Shopware\Components\Cart\PaymentTokenService"/>
-            <argument type="service" id="Zend_Session_Namespace" on-invalid="null"/>
+            <argument type="service" id="Symfony\Component\HttpFoundation\Session\SessionInterface" on-invalid="null"/>
 
             <tag name="shopware.event_subscriber"/>
         </service>
