@@ -104,6 +104,11 @@ class Country extends Extendable
     protected $states;
 
     /**
+     * @var int
+     */
+    private $areaId;
+
+    /**
      * @param int $id
      */
     public function setId($id)
@@ -349,5 +354,15 @@ class Country extends Extendable
     public function setActive($active)
     {
         $this->active = $active;
+    }
+
+    public function getAreaId(): ?int
+    {
+        return $this->areaId;
+    }
+
+    public function setAreaId(int $areaId): void
+    {
+        $this->areaId = $areaId;
     }
 }
