@@ -23,6 +23,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `Enlight_Controller_Response_ResponseHttp::isRedirect` to not consider http response code 201 
 * Changed content type pages to display the off canvas menu in mobile view
 * Changed `sAdmin::sGetCountryList` to use CountryService
+* Changed the pagesize for the snippets module
 
 ## 5.6.0
 
