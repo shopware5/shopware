@@ -487,7 +487,7 @@ class Kernel extends SymfonyKernel
         $this->bundles = array_merge($this->bundles, $plugins);
 
         $this->activePlugins = $initializer->getActivePlugins();
-        
+
         $this->pluginHash = $this->createPluginHash($this->bundles);
     }
 
