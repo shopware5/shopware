@@ -138,7 +138,7 @@ class Shopware_Controllers_Backend_BenchmarkLocalOverview extends Shopware_Contr
         );
 
         if ($value) {
-            return unserialize($value);
+            return unserialize($value, ['allowed_classes' => false]);
         }
 
         $db->executeUpdate(

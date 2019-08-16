@@ -370,7 +370,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                         'active' => !empty($row['active']) && !empty($row['end']),
                         'disableOnError' => ($row['disable_on_error'] == 1),
                         'elementId' => $row['elementID'],
-                        'data' => !empty($row['data']) ? unserialize($row['data']) : $row['data'],
+                        'data' => !empty($row['data']) ? unserialize($row['data'], ['allowed_classes' => false]) : $row['data'],
                         'next' => isset($row['next']) ? new DateTime($row['next']) : $row['next'],
                         'start' => isset($row['start']) ? new DateTime($row['start']) : $row['start'],
                         'interval' => (int) $row['interval'],

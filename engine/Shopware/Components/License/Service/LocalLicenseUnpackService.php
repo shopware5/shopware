@@ -97,7 +97,7 @@ class LocalLicenseUnpackService implements LicenseUnpackServiceInterface
             throw new LicenseInvalidException('License key seems to be incorrect');
         }
 
-        $info = unserialize($info);
+        $info = unserialize($info, ['allowed_classes' => false]);
         if ($info === false) {
             throw new LicenseInvalidException('License key seems to be incorrect');
         }

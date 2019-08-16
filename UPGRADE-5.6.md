@@ -2,6 +2,31 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
+## 5.6.1
+
+### Additions
+
+* Added new config checkbox for applying stock on chosen variants while applying standard data
+* Added new smarty block `frontend_global_messages_icon_remove`
+* Added new div class `is--content-type` to all content type pages
+
+### Changes
+
+* Changed the meta property `og:type` in the listing from `product` to `product.group`
+* Changed password recovery form to also work with invalid customer objects
+* Changed `Shopware\Bundle\StoreFrontBundle\Gateway\BlogGateway` to consider blog translations
+* Changed the SEO meta tags in the blog listing
+* Changed `Shopware_Components_Translation` to work with missing payment or dispatch entries
+* Changed `sAdmin` to save cart after logout
+* Changed `Shopware\Components\DependencyInjection\Compiler\LegacyApiResourcesPass` to work correctly
+* Changed the calculation of the date in the affiliate marketing statistics
+* Changed `Enlight_Controller_Response_ResponseHttp::isRedirect` to not consider http response code 201 
+* Changed content type pages to display the off canvas menu in mobile view
+* Changed `sAdmin::sGetCountryList` to use CountryService
+* Changed the pagesize for the snippets module
+
+## 5.6.0
+
 [View all changes from v5.5.10...v5.6.0](https://github.com/shopware/shopware/compare/v5.5.10...v5.6.0)
 
 ### Additions

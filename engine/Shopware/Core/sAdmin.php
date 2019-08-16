@@ -27,6 +27,7 @@ use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\Captcha\CaptchaValidator;
+use Shopware\Components\Cart\CartPersistServiceInterface;
 use Shopware\Components\Cart\ConditionalLineItemServiceInterface;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Random;
@@ -671,12 +672,20 @@ class sAdmin implements \Enlight_Hook
 
     public function logout()
     {
+        if ($this->config->get('migrateCartAfterLogin')) {
+            Shopware()->Container()->get(CartPersistServiceInterface::class)->prepare();
+        }
+
         if ($this->config->get('clearBasketAfterLogout')) {
             $this->moduleManager->Basket()->sDeleteBasket();
         }
 
         $this->session->unsetAll();
         $this->regenerateSessionId();
+
+        if ($this->config->get('migrateCartAfterLogin')) {
+            Shopware()->Container()->get(CartPersistServiceInterface::class)->persist();
+        }
 
         $shop = Shopware()->Shop();
 
@@ -1074,61 +1083,20 @@ class sAdmin implements \Enlight_Hook
      */
     public function sGetCountryList()
     {
-        $countryList = $this->db->fetchAll(
-            'SELECT * FROM s_core_countries ORDER BY position, countryname ASC'
-        );
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $service = Shopware()->Container()->get('shopware_storefront.location_service');
 
-        $countryTranslations = $this->sGetCountryTranslation();
-        $stateTranslations = $this->sGetCountryStateTranslation();
+        $countryList = $service->getCountries($context);
+        $countryList = Shopware()->Container()->get('legacy_struct_converter')->convertCountryStructList($countryList);
 
-        foreach ($countryList as $key => $country) {
-            if (isset($countryTranslations[$country['id']]['active'])) {
-                if (!$countryTranslations[$country['id']]['active']) {
-                    unset($countryList[$key]);
-                    continue;
-                }
-            } else {
-                // Use main config when nothing is set for subshop or if current is main shop (isocode 1)
-                if (!$country['active']) {
-                    unset($countryList[$key]);
-                    continue;
-                }
-            }
-
-            $countryList[$key]['states'] = [];
-            if (!empty($country['display_state_in_registration'])) {
-                // Get country states
-                $states = $this->db->fetchAssoc('
-                    SELECT * FROM s_core_countries_states
-                    WHERE countryID = ? AND active = 1
-                    ORDER BY position, name ASC
-                ', [$country['id']]);
-
-                foreach ($states as $stateId => $state) {
-                    if (isset($stateTranslations[$stateId])) {
-                        $states[$stateId] = array_merge($state, $stateTranslations[$stateId]);
-                    }
-                }
-                $countryList[$key]['states'] = $states;
-            }
-
-            if (!empty($countryTranslations[$country['id']]['countryname'])) {
-                $countryList[$key]['countryname'] = $countryTranslations[$country['id']]['countryname'];
-            }
-
-            if (!empty($countryTranslations[$country['id']]['notice'])) {
-                $countryList[$key]['notice'] = $countryTranslations[$country['id']]['notice'];
-            }
-
-            if (isset($countryTranslations[$country['id']]['allow_shipping'])) {
-                $countryList[$key]['allow_shipping'] = $countryTranslations[$country['id']]['allow_shipping'];
-            }
-
-            $countryList[$key]['flag'] =
-                ($this->front->Request()->getPost('country') == $countryList[$key]['id']
-                    || $this->front->Request()->getPost('countryID') == $countryList[$key]['id']
+        $countryList = array_map(function ($country) {
+            $country['flag'] =
+                ($this->front->Request()->getPost('country') == $country['id']
+                    || $this->front->Request()->getPost('countryID') == $country['id']
                 );
-        }
+
+            return $country;
+        }, $countryList);
 
         $countryList = $this->eventManager->filter(
             'Shopware_Modules_Admin_GetCountries_FilterResult',
@@ -3519,14 +3487,14 @@ SQL;
         }
 
         // Check if account is disabled or not verified yet
-        $sql = 'SELECT id, doubleOptinRegister, doubleOptinEmailSentDate, doubleOptinConfirmDate, email, firstname, lastname, salutation
+        $sql = 'SELECT id, doubleOptinRegister, doubleOptinEmailSentDate, doubleOptinConfirmDate, email, firstname, lastname, salutation, register_opt_in_id
                 FROM s_user
                 WHERE email=? AND active=0 ' . $addScopeSql;
         $getUser = $this->db->fetchRow($sql, [$email]);
 
         // If the verification process is active, the customer has an email sent date, but no confirm date
         if ($getUser['doubleOptinRegister'] && $getUser['doubleOptinEmailSentDate'] !== null && $getUser['doubleOptinConfirmDate'] === null) {
-            $hash = \Shopware\Components\Random::getAlphanumericString(32);
+            $hash = $this->getOptInHash((int) $getUser['register_opt_in_id'], $getUser['doubleOptinEmailSentDate']);
 
             $userInfo = [
                 'mail' => $getUser['email'],
@@ -3608,7 +3576,7 @@ SQL;
 
         // Most times iterates only once
         foreach ($result as $row) {
-            $data = unserialize($row['data']);
+            $data = unserialize($row['data'], ['allowed_classes' => false]);
             $optInId = $row['id'];
             $customerId = $data['customerId'];
             if ($customerId === $user['id']) {
@@ -4328,5 +4296,31 @@ SQL;
             ->groupBy('b.sessionID');
 
         return $queryBuilder;
+    }
+
+    /**
+     * Checks, if the opt-in mail was sent in the previous 15 minutes.
+     */
+    private function getOptInHash(int $optinId, string $sentDate): string
+    {
+        if ($this->isDateInLast15Minutes($sentDate)) {
+            $sql = 'SELECT hash
+                FROM s_core_optin opt
+                WHERE opt.id = :id';
+
+            return $this->connection->fetchColumn($sql, [':id' => $optinId]);
+        }
+
+        return Random::getAlphanumericString(32);
+    }
+
+    private function isDateInLast15Minutes(string $sentDate): bool
+    {
+        $sentDateTimestamp = (\DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $sentDate))->getTimestamp();
+        $nowTimestamp = time();
+
+        $sentDateTimestampPlus15Minutes = $sentDateTimestamp + (15 * 60);
+
+        return $sentDateTimestampPlus15Minutes >= $nowTimestamp;
     }
 }

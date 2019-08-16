@@ -73,6 +73,8 @@ class Router
             $action = 'put';
         } elseif ($method === 'POST') {
             $action = 'post';
+            // Set default http status code for successful request
+            $response->setStatusCode(SymfonyResponse::HTTP_CREATED);
         } elseif ($method === 'DELETE' && $id === false) {
             $action = 'batchDelete';
             $response->setStatusCode(SymfonyResponse::HTTP_OK);

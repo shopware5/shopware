@@ -185,11 +185,17 @@ class PreCommitChecks
         }
 
         foreach ($fileList as $file) {
-            exec('./vendor/bin/php-cs-fixer fix -v --no-ansi --dry-run ' . escapeshellarg($file) . ' 2>&1', $output, $return);
+            $configParameter = '';
+
+            if (strpos($file, 'engine/Library/Enlight/') === 0) {
+                $configParameter = '--config engine/Library/Enlight/.php_cs.dist';
+            }
+
+            exec('./vendor/bin/php-cs-fixer fix -v ' . $configParameter . ' --no-ansi --dry-run ' . escapeshellarg($file) . ' 2>&1', $output, $return);
 
             if ($return !== 0) {
                 $this->writeln('- ' . preg_replace('#^(\s+)?\d\)\s#', '', $output[3]), 2);
-                $fixes[] = './vendor/bin/php-cs-fixer fix -v ' . escapeshellarg($file);
+                $fixes[] = './vendor/bin/php-cs-fixer fix -v ' . $configParameter . ' ' . escapeshellarg($file);
                 $this->error = true;
             }
         }

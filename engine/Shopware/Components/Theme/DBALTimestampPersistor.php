@@ -53,7 +53,7 @@ sql;
 
         $timestamp = $this->connection->fetchColumn($sql, ['shopId' => $shopId]);
 
-        if ($timestamp !== false && ($timestamp = unserialize($timestamp)) !== false) {
+        if ($timestamp !== false && ($timestamp = unserialize($timestamp, ['allowed_classes' => false])) !== false) {
             return $timestamp;
         }
 

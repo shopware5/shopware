@@ -192,7 +192,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
                 SELECT * FROM s_core_optin WHERE hash = ?
             ', [$hash]);
             if (!empty($getVote['data'])) {
-                Shopware()->System()->_POST = unserialize($getVote['data']);
+                Shopware()->System()->_POST = unserialize($getVote['data'], ['allowed_classes' => false]);
                 $voteConfirmed = true;
                 Shopware()->Db()->query('DELETE FROM s_core_optin WHERE hash = ?', [$hash]);
             }

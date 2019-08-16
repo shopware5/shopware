@@ -75,7 +75,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         ';
         $cachedTime = Shopware()->Db()->fetchOne($sql, [$elementId, $shopId]);
         if (!empty($cachedTime)) {
-            $cachedTime = unserialize($cachedTime);
+            $cachedTime = unserialize($cachedTime, ['allowed_classes' => false]);
         }
         if (empty($cachedTime)) {
             $cachedTime = '0000-00-00 00:00:00';

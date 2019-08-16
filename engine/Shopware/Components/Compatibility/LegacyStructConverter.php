@@ -125,12 +125,19 @@ class LegacyStructConverter
             'iso3' => $country->getIso3(),
             'display_state_in_registration' => $country->displayStateSelection(),
             'force_state_in_registration' => $country->requiresStateSelection(),
+            'areaID' => $country->getAreaId(),
+            'allow_shipping' => $country->allowShipping(),
             'states' => [],
             'attributes' => $country->getAttributes(),
         ]);
 
         if ($country->displayStateSelection()) {
             $data['states'] = $this->convertStateStructList($country->getStates());
+            $data['states'] = array_map(function ($state) use ($country) {
+                $state['countryID'] = $country->getId();
+
+                return $state;
+            }, $data['states']);
         }
 
         return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Country', $data, [

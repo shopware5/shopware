@@ -77,6 +77,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use Symfony\Component\HttpKernel\DependencyInjection\MergeExtensionConfigurationPass;
 use Symfony\Component\HttpKernel\DependencyInjection\RegisterControllerArgumentLocatorsPass;
 use Symfony\Component\HttpKernel\Event\PostResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -145,7 +146,7 @@ class Kernel extends SymfonyKernel
             $this->startTime = microtime(true);
         }
 
-        $this->bundles = $this->registerBundles();
+        $this->initializeBundles();
         $this->initializeConfig();
 
         if (!empty($this->config['phpsettings'])) {
@@ -328,7 +329,7 @@ class Kernel extends SymfonyKernel
      */
     public function getRootDir()
     {
-        return dirname(dirname(__DIR__));
+        return dirname(__DIR__, 2);
     }
 
     /**
@@ -424,8 +425,19 @@ class Kernel extends SymfonyKernel
         return 'Shopware';
     }
 
-    public function registerContainerConfiguration(LoaderInterface $loader): void
+    /**
+     * {@inheritdoc}
+     */
+    public function registerContainerConfiguration(LoaderInterface $loader)
     {
+        $config = $this->config;
+        $loader->load(static function (ContainerBuilder $containerBuilder) use ($config) {
+            foreach ($config as $key => $values) {
+                if ($containerBuilder->hasExtension($key)) {
+                    $containerBuilder->loadFromExtension($key, $values);
+                }
+            }
+        });
     }
 
     public function registerBundles(): array
@@ -475,7 +487,7 @@ class Kernel extends SymfonyKernel
         $this->bundles = array_merge($this->bundles, $plugins);
 
         $this->activePlugins = $initializer->getActivePlugins();
-
+        
         $this->pluginHash = $this->createPluginHash($this->bundles);
     }
 
@@ -606,6 +618,10 @@ class Kernel extends SymfonyKernel
         $container->addObjectResource($this);
         $this->prepareContainer($container);
 
+        if (null !== $cont = $this->registerContainerConfiguration($this->getContainerLoader($container))) {
+            $container->merge($cont);
+        }
+
         return $container;
     }
 
@@ -692,13 +708,28 @@ class Kernel extends SymfonyKernel
      */
     protected function getKernelParameters()
     {
+        $bundles = [];
+        $bundlesMetadata = [];
+
+        foreach ($this->bundles as $name => $bundle) {
+            $bundles[$name] = \get_class($bundle);
+            $bundlesMetadata[$name] = [
+                'parent' => $bundle->getParent(),
+                'path' => $bundle->getPath(),
+                'namespace' => $bundle->getNamespace(),
+            ];
+        }
+
         return [
             'kernel.root_dir' => $this->getRootDir(),
+            'kernel.project_dir' => realpath($this->getProjectDir()) ?: $this->getProjectDir(),
             'kernel.environment' => $this->environment,
             'kernel.debug' => $this->debug,
             'kernel.name' => $this->name,
             'kernel.cache_dir' => $this->getCacheDir(),
             'kernel.logs_dir' => $this->getLogDir(),
+            'kernel.bundles' => $bundles,
+            'kernel.bundles_metadata' => $bundlesMetadata,
             'kernel.charset' => 'UTF-8',
             'kernel.container_class' => $this->getContainerClass(),
             'shopware.release.version' => $this->release['version'],
@@ -746,6 +777,10 @@ class Kernel extends SymfonyKernel
                 continue;
             }
 
+            if ($extension = $bundle->getContainerExtension()) {
+                $container->registerExtension($extension);
+            }
+
             $container->addObjectResource($bundle);
             $bundle->build($container);
 
@@ -756,6 +791,14 @@ class Kernel extends SymfonyKernel
 
         $container->addCompilerPass(new RegisterControllerCompilerPass($activePlugins));
         $container->addCompilerPass(new PluginLoggerCompilerPass($activePlugins));
+
+        $extensions = [];
+
+        foreach ($container->getExtensions() as $extension) {
+            $extensions[] = $extension->getAlias();
+        }
+        // ensure these extensions are implicitly loaded
+        $container->getCompilerPassConfig()->setMergePass(new MergeExtensionConfigurationPass($extensions));
     }
 
     private function loadContentTypes(): array

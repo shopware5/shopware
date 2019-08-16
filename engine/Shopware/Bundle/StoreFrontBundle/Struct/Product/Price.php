@@ -132,6 +132,11 @@ class Price extends Extendable
         return $this->rule;
     }
 
+    public function setRule(PriceRule $rule = null)
+    {
+        $this->rule = $rule;
+    }
+
     /**
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit|null
      */

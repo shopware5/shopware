@@ -241,7 +241,7 @@ class Product extends ListProduct
         return $this->visibility;
     }
 
-    public function setAvailableCombinations(array $combinations)
+    public function setAvailableCombinations(array $combinations = null)
     {
         $this->availableCombinations = $combinations;
     }
@@ -252,9 +252,9 @@ class Product extends ListProduct
     }
 
     /**
-     * @param Group[] $fullConfiguration
+     * @param Group[]|null $fullConfiguration
      */
-    public function setFullConfiguration(array $fullConfiguration)
+    public function setFullConfiguration(array $fullConfiguration = null)
     {
         $this->fullConfiguration = $fullConfiguration;
     }
@@ -314,5 +314,22 @@ class Product extends ListProduct
     public function setManualSorting(array $manualSorting): void
     {
         $this->manualSorting = $manualSorting;
+    }
+
+    public function jsonSerialize(): array
+    {
+        $data = parent::jsonSerialize();
+        unset(
+            $data['fullConfiguration'],
+            $data['releaseDate'],
+            $data['cheapestPrice'],
+            $data['priceRules'],
+            $data['prices'],
+            $data['allowBuyInListing'],
+            $data['displayFromPrice'],
+            $data['cover']
+        );
+
+        return $data;
     }
 }
