@@ -57,15 +57,38 @@ class OptinCleanupService implements OptinCleanupServiceInterface
             $this->connection->beginTransaction();
             $queryBuilder = $this->connection->createQueryBuilder();
 
-            $queryBuilder->delete('s_core_optin')
+            $ids = $queryBuilder->select('optin.id')
+                ->from('s_core_optin', 'optin')
                 ->where('type != "swRegister"')
-                ->where('type LIKE "sw%"')
+                ->andWhere('type LIKE "sw%"')
                 ->andWhere('datum < NOW() - INTERVAL :interval DAY')
                 ->setParameter(':interval', $interval)
+                ->execute()
+                ->fetchAll(\PDO::FETCH_COLUMN);
+
+            if (!$ids) {
+                $this->connection->commit();
+
+                return false;
+            }
+
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder->delete('s_core_optin')
+                ->where('id IN (:groupIds)')
+                ->setParameter(':groupIds', $ids, Connection::PARAM_INT_ARRAY)
+                ->execute();
+
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder->update('s_user', 'user')
+                ->set('register_opt_in_id', 'NULL')
+                ->where('register_opt_in_id IN (:groupIds)')
+                ->setParameter(':groupIds', $ids, Connection::PARAM_INT_ARRAY)
                 ->execute();
 
             $this->connection->commit();
         } catch (DBALException $exp) {
+            $this->connection->rollBack();
+
             return false;
         }
 

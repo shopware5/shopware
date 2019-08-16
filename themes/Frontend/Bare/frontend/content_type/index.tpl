@@ -4,7 +4,7 @@
     {include file='frontend/content_type/listing_header.tpl'}
 {/block}
 
-{block name='frontend_index_content_left'}{/block}
+{block name="frontend_index_body_classes"}{$smarty.block.parent} is--content-type{/block}
 
 {* Main content *}
 {block name='frontend_index_content'}

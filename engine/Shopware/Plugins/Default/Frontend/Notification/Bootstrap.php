@@ -223,7 +223,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
             $json_data = [];
             if (!empty($getConfirmation['hash'])) {
                 $notificationConfirmed = true;
-                $json_data = unserialize($getConfirmation['data']);
+                $json_data = unserialize($getConfirmation['data'], ['allowed_classes' => false]);
                 $db->query('DELETE FROM s_core_optin WHERE hash=?', [$action->Request()->sNotificationConfirmation]);
             }
             if ($notificationConfirmed) {

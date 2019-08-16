@@ -34,7 +34,13 @@ class CalculationOnLogoutTest extends CheckoutTest
 
     public $clearBasketOnReset = false;
 
-    public function testLogout()
+    public function setUp()
+    {
+        parent::setUp();
+        Shopware()->Session()->offsetSet('sessionId', null);
+    }
+
+    public function testLogout(): void
     {
         Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
 

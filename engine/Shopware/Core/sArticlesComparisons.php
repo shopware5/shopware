@@ -317,14 +317,14 @@ class sArticlesComparisons implements \Enlight_Hook
     private function extractPropertyTranslation($articleProperty)
     {
         if ($articleProperty['translation']) {
-            $translation = unserialize($articleProperty['translation']);
+            $translation = unserialize($articleProperty['translation'], ['allowed_classes' => false]);
             if ($this->containsTranslation($translation)) {
                 return (string) $translation['optionName'];
             }
         }
 
         if ($articleProperty['translationFallback']) {
-            $translation = unserialize($articleProperty['translationFallback']);
+            $translation = unserialize($articleProperty['translationFallback'], ['allowed_classes' => false]);
             if ($this->containsTranslation($translation)) {
                 return (string) $translation['optionName'];
             }

@@ -111,7 +111,7 @@ EOT
     'edition_info' => 'Shopware is available as a free <a href="https://en.shopware.com/pricing/" target="_blank">Community Edition</a>, and is also available as <a href="https://en.shopware.com/pricing/" target="_blank">Professional, Professional Plus or Enterprise Edition</a>, for a one-time fee.',
     'edition_ce' => 'No, I would like to use the free <a href="https://en.shopware.com/pricing/" target="_blank">Community Edition</a>.',
     'edition_cm' => 'Yes, I have purchased a Shopware licence (<a href="https://en.shopware.com/pricing/" target="_blank">Professional, Professional Plus or Enterprise</a>).',
-    'edition_license' => 'Please enter your licence key here. You can find it in your Shopware account under "Licences" &rarr; "Product licences" &rarr; "Details / Download":',
+    'edition_license' => 'Please enter your licence key here. You can find it in your Shopware account under "Merchant area" &rarr; "Shops" &rarr; [Click on your domain] &rarr; "Copy license key":',
     'edition_license_error' => 'A valid licence is required in order to install a fee-based Shopware version.',
 
     'configuration_header' => 'Basic shop set-up',

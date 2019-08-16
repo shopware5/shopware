@@ -29,7 +29,7 @@ Ext.define('Shopware.apps.Snippet.store.Snippet', {
     extend: 'Ext.data.Store',
     autoLoad: false,
     model : 'Shopware.apps.Snippet.model.Snippet',
-    pageSize: 30,
+    pageSize: 100,
     remoteFilter: true,
     remoteSort: true,
 

@@ -51,10 +51,9 @@ class LegacyApiResourcesPass implements CompilerPassInterface
                 }
 
                 if (count($definition->getTag('shopware.api_resource')) !== 0) {
-                    return;
+                    continue;
                 }
 
-                trigger_error(sprintf('Usage of shopware.api prefix without shopware.api_resource tag is deprecated and will be removed with 5.8. Add tag shopware.api_resource to the service "%s"', $id));
                 $definition->addTag('shopware.api_resource');
             }
         }

@@ -52,10 +52,10 @@ class ConfigWriter
         $result = $query->execute()->fetch(\PDO::FETCH_ASSOC);
 
         if ($result['configured']) {
-            return unserialize($result['configured']);
+            return unserialize($result['configured'], ['allowed_classes' => false]);
         }
 
-        return unserialize($result['value']);
+        return unserialize($result['value'], ['allowed_classes' => false]);
     }
 
     /**

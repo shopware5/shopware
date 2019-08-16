@@ -881,8 +881,8 @@ class sRewriteTable implements \Enlight_Hook
                 continue;
             }
 
-            $objectData = @unserialize($product['objectdata']);
-            $objectDataFallback = @unserialize($product['objectdataFallback']);
+            $objectData = @unserialize($product['objectdata'], ['allowed_classes' => false]);
+            $objectDataFallback = @unserialize($product['objectdataFallback'], ['allowed_classes' => false]);
 
             if (empty($objectData)) {
                 $objectData = [];

@@ -85,7 +85,7 @@ SQL;
         $config = $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
 
         foreach ($config as $key => $value) {
-            $config[$key] = !empty($value) ? @unserialize($value) : null;
+            $config[$key] = !empty($value) ? @unserialize($value, ['allowed_classes' => false]) : null;
         }
 
         return $config;

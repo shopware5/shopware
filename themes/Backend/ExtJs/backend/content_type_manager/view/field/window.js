@@ -83,7 +83,18 @@ Ext.define('Shopware.apps.ContentTypeManager.view.field.Window', {
             cls: 'primary',
             scope: me,
             handler: function () {
-                this.down('form').getForm().updateRecord(this.record);
+                var form = this.down('form').getForm();
+
+                if (!form.isValid()) {
+                    Ext.Msg.show({
+                        title: '{s name="error/invalidFields/title"}{/s}',
+                        msg: '{s name="error/invalidFields/message"}{/s}',
+                        buttons: Ext.Msg.OK
+                    });
+                    return;
+                }
+
+                form.updateRecord(this.record);
                 this.fireEvent('saveField', this, this.record, this.isNewField);
             }
         });

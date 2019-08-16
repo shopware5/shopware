@@ -210,6 +210,7 @@ class Enlight_Controller_Response_ResponseHttp extends Response implements Enlig
 
     /**
      * {@inheritdoc}
+     *
      * @deprecated since 5.6, will be removed in 5.8. Use setHeader instead
      */
     public function setRawHeader($value)
@@ -235,6 +236,7 @@ class Enlight_Controller_Response_ResponseHttp extends Response implements Enlig
     public function getRawHeaders()
     {
         trigger_error(__CLASS__ . ':' . __METHOD__ . ' is deprecated. Please set $response->headers->all() instead', E_USER_DEPRECATED);
+
         return $this->headers->all();
     }
 
@@ -336,6 +338,11 @@ class Enlight_Controller_Response_ResponseHttp extends Response implements Enlig
         $this->content = null;
 
         return true;
+    }
+
+    public function isRedirect($location = null)
+    {
+        return \in_array($this->statusCode, [self::HTTP_MOVED_PERMANENTLY, self::HTTP_FOUND, self::HTTP_SEE_OTHER, self::HTTP_TEMPORARY_REDIRECT, self::HTTP_PERMANENTLY_REDIRECT]) && ($location === null ?: $location == $this->headers->get('Location'));
     }
 
     /**
@@ -512,6 +519,7 @@ class Enlight_Controller_Response_ResponseHttp extends Response implements Enlig
     public function renderExceptions($flag = null)
     {
         trigger_error(__CLASS__ . ':' . __METHOD__ . ' is deprecated without replacement', E_USER_DEPRECATED);
+
         return false;
     }
 

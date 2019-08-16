@@ -121,9 +121,9 @@ class Shopware_Components_Translation
      */
     public function unFilterData($type, $data, $key = null)
     {
-        $tmp = unserialize($data);
+        $tmp = unserialize($data, ['allowed_classes' => false]);
         if ($tmp === false) {
-            $tmp = unserialize(utf8_decode($data));
+            $tmp = unserialize(utf8_decode($data), ['allowed_classes' => false]);
         }
         if ($tmp === false) {
             return [];
@@ -427,10 +427,10 @@ class Shopware_Components_Translation
 
         // Extract documents, payment and dispatch methods
         foreach ($orders as $order) {
-            if (array_key_exists('dispatch', $order)) {
+            if (isset($order['dispatch'])) {
                 $dispatchMethods[$order['dispatch']['id']] = $order['dispatch'];
             }
-            if (array_key_exists('payment', $order)) {
+            if (isset($order['payment'])) {
                 $paymentMethods[$order['payment']['id']] = $order['payment'];
             }
             if (array_key_exists('documents', $order)) {
@@ -686,7 +686,7 @@ class Shopware_Components_Translation
 
     private function prepareArticleData(string $data): array
     {
-        $data = unserialize($data);
+        $data = unserialize($data, ['allowed_classes' => false]);
         if (!empty($data['txtlangbeschreibung']) && strlen($data['txtlangbeschreibung']) > 1000) {
             $data['txtlangbeschreibung'] = substr(strip_tags($data['txtlangbeschreibung']), 0, 1000);
         }

@@ -127,8 +127,13 @@
 .content-type--field-product-field {
   .field--full;
 
+  .product--box {
+    background-color: #fff;
+    padding: unset;
+  }
+
   .box--content {
-    border: unset;
+    .unitize-padding(20, 30);
   }
 }
 
@@ -195,5 +200,13 @@
   .content-type {
     width: 75%;
     margin: 0 auto;
+  }
+}
+
+@media screen and (min-width: @desktopViewportWidth) {
+  .is--content-type {
+    .sidebar-main {
+      display: none;
+    }
   }
 }

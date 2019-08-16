@@ -111,7 +111,7 @@ EOT
     'edition_info' => 'Shopware gibt es in einer kostenlosen <a href="https://de.shopware.com/versionen/" target="_blank">Community Edition </a> sowie in kostenpflichtigen <a href="https://de.shopware.com/versionen/" target="_blank">Professional, Professional Plus und Enterprise Editionen</a>.',
     'edition_ce' => 'Nein, ich möchte die kostenfreie <a href="https://de.shopware.com/versionen/" target="_blank">Community Edition</a> verwenden.',
     'edition_cm' => 'Ja, ich habe eine kostenpflichtige Shopware-Lizenz (<a href="https://de.shopware.com/versionen/" target="_blank">Professional, Professional Plus oder Enterprise</a>).',
-    'edition_license' => 'Dann trage hier Deinen Lizenzschlüssel ein. Diesen findest Du in Deinem Shopware-Account unter "Lizenzen" &rarr; "Produktlizenzen" &rarr; "Details / Download":',
+    'edition_license' => 'Dann trage hier Deinen Lizenzschlüssel ein. Diesen findest Du in Deinem Shopware-Account unter "Shopbetreiberbereich" &rarr; "Shops" &rarr; [Wähle deine Domain] &rarr; "Lizenschlüssel kopieren":',
     'edition_license_error' => 'Für die Installation einer kostenpflichtigen Shopware-Version ist eine gültige Lizenz erforderlich.',
 
     'configuration_header' => 'Shop Grundeinrichtung',
