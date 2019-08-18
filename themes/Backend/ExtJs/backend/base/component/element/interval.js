@@ -31,7 +31,8 @@
 Ext.define('Shopware.apps.Base.view.element.Interval', {
     extend:'Ext.form.field.ComboBox',
     alias:[
-        'widget.base-element-interval'
+        'widget.base-element-interval',
+        'widget.config-element-interval'
     ],
 
     queryMode: 'local',

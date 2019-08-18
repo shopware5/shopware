@@ -29,7 +29,8 @@
 Ext.define('Shopware.apps.Base.view.element.Color', {
     extend: 'Ext.form.TriggerField',
     alias: [
-        'widget.base-element-color'
+        'widget.base-element-color',
+        'widget.config-element-color'
     ],
 
     triggerConfig: {

@@ -30,6 +30,8 @@ Ext.define('Shopware.apps.Base.view.element.Text', {
     extend: 'Ext.form.field.Text',
     alias: [
         'widget.base-element-text',
-        'widget.base-element-textfield'
+        'widget.base-element-textfield',
+        'widget.config-element-text',
+        'widget.config-element-textfield'
     ]
 });
