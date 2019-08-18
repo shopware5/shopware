@@ -30,7 +30,9 @@ Ext.define('Shopware.apps.Base.view.element.Number', {
     extend: 'Ext.form.field.Number',
     alias: [
         'widget.base-element-number',
-        'widget.base-element-numberfield'
+        'widget.base-element-numberfield',
+        'widget.config-element-number',
+        'widget.config-element-numberfield'
     ],
     submitLocaleSeparator: false
 });

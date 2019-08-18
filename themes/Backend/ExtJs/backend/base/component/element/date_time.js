@@ -29,7 +29,8 @@
 Ext.define('Shopware.apps.Base.view.element.DateTime', {
     extend:'Ext.form.FieldContainer',
     alias: [
-        'widget.base-element-datetime'
+        'widget.base-element-datetime',
+        'widget.config-element-datetime'
     ],
 
     mixins: {

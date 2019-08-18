@@ -30,7 +30,9 @@ Ext.define('Shopware.apps.Base.view.element.Date', {
     extend: 'Ext.form.field.Date',
     alias: [
         'widget.base-element-date',
-        'widget.base-element-datefield'
+        'widget.base-element-datefield',
+        'widget.config-element-date',
+        'widget.config-element-datefield'
     ],
 
     setValue: function(value) {

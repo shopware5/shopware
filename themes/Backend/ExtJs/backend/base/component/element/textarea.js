@@ -29,7 +29,8 @@
 Ext.define('Shopware.apps.Base.view.element.TextArea', {
     extend: 'Ext.form.field.TextArea',
     alias: [
-        'widget.base-element-textarea'
+        'widget.base-element-textarea',
+        'widget.config-element-textarea'
     ],
     grow: true
 });

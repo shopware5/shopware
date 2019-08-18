@@ -30,6 +30,8 @@ Ext.define('Shopware.apps.Base.view.element.Html', {
     extend: 'Ext.form.field.HtmlEditor',
     alias: [
         'widget.base-element-html',
-        'widget.base-element-htmleditor'
+        'widget.base-element-htmleditor',
+        'widget.config-element-html',
+        'widget.config-element-htmleditor'
     ]
 });
