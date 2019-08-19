@@ -525,6 +525,16 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             return $products;
         }
 
+        $useShortDescription = $this->get('config')->get('useShortDescriptionInListing');
+        if ($useShortDescription) {
+            foreach ($products as &$product) {
+                if (strlen($product['description']) > 5) {
+                    $product['description_long'] = $product['description'];
+                }
+            }
+            unset($product);
+        }
+
         return $this->get('shopware_storefront.listing_link_rewrite_service')->rewriteLinks(
             $result->getCriteria(),
             $products,
