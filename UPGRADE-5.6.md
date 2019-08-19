@@ -24,6 +24,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed content type pages to display the off canvas menu in mobile view
 * Changed `sAdmin::sGetCountryList` to use CountryService
 * Changed the pagesize for the snippets module
+* Changed the handling of browser notifications to support browsers without notifications
 
 ## 5.6.0
 
