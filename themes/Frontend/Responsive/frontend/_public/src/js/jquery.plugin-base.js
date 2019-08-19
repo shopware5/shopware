@@ -322,6 +322,18 @@
             $.publish('plugin/' + me._name + '/onDataAttributes', [ me.$el, me.opts ]);
 
             return me.opts;
+        },
+
+        /**
+         * @param {string} value
+         * @returns {string} value
+         */
+        safeURIDecode: function (value) {
+            try {
+                return decodeURIComponent(value);
+            } catch (e) {
+                return value;
+            }
         }
     };
 

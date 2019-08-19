@@ -27,6 +27,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed PHPStan to 0.11.15
 * Changed `Zend_Cache_Backend_Redis` to make it compatible with PhpRedis 5.0.0
 * Changed `Listing` controller to prevent it from accessing categories of subshops
+* Changed jquery plugins `ajax-product-navigation`, `infinite-scrolling` and `listing-actions` to work with invalid query strings
 
 ## 5.6.1
 

@@ -23,8 +23,8 @@
             var key, value;
 
             qpart = qparts[i].split('=');
-            key = decodeURIComponent(qpart[0]);
-            value = decodeURIComponent(qpart[1] || '');
+            key = $.PluginBase.prototype.safeURIDecode(qpart[0]);
+            value = $.PluginBase.prototype.safeURIDecode(qpart[1] || '');
             qparams[key] = ($.isNumeric(value) ? parseFloat(value, 10) : value);
         }
 
