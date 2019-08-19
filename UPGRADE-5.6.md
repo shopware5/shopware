@@ -13,7 +13,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 ### Changes
 
 * Changed the base price declaration shown in the product box (`themes/Frontend/Bare/frontend/listing/product-box/product-price-unit.tpl`), so that an ellipsis is shown when the text is truncated
-* Changed `Shopware_Controllers_Widgets_Listing::convertProductsResult` to consider use short description configuration.
+* Changed `Shopware_Controllers_Widgets_Listing::convertProductsResult` to consider use short description configuration
+* Changed the block of the registration verification alert
 
 ## 5.6.1
 
