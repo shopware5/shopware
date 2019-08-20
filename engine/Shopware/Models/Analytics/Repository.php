@@ -1227,8 +1227,8 @@ class Repository
         $builder->from('s_order', 'orders')
             ->leftJoin('orders', 's_premium_dispatch', 'dispatch', 'orders.dispatchID = dispatch.id')
             ->leftJoin('orders', 's_core_paymentmeans', 'payment', 'orders.paymentID = payment.id')
-            ->innerJoin('orders', 's_order_billingaddress', 'billing', 'orders.id = billing.orderID')
-            ->innerJoin('billing', 's_core_countries', 'country', 'billing.countryID = country.id')
+            ->leftJoin('orders', 's_order_billingaddress', 'billing', 'orders.id = billing.orderID')
+            ->leftJoin('billing', 's_core_countries', 'country', 'billing.countryID = country.id')
             ->where('orders.status NOT IN (4, -1)');
 
         $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
