@@ -947,10 +947,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $thumbnailManager = Shopware()->Container()->get('thumbnail_manager');
 
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(['images', 'media'])
+        $builder->select(['images', 'media', 'imageMapping', 'mappingRule', 'ruleOption'])
                 ->from(Image::class, 'images')
                 ->leftJoin('images.article', 'article')
                 ->leftJoin('images.media', 'media')
+                ->leftJoin('images.mappings', 'imageMapping')
+                ->leftJoin('imageMapping.rules', 'mappingRule')
+                ->leftJoin('mappingRule.option', 'ruleOption')
                 ->where('article.id = :articleId')
                 ->andWhere('images.parentId IS NULL')
                 ->orderBy('images.position')
