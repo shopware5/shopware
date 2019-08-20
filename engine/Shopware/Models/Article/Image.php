@@ -131,7 +131,7 @@ class Image extends ModelEntity
      *
      * @ORM\Column(name="main", type="integer", nullable=false)
      */
-    private $main = 0;
+    private $main = 2;
 
     /**
      * @var int

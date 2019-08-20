@@ -17,6 +17,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `Shopware\Models\Analytics\Repository::createAmountBuilder` to join with `left join` instead `inner join`
 * Changed the block of the registration verification alert
 * Changed the `x-robots` header to `x-robots-tag`
+* Changed `Shopware\Models\Analytics\Repository::createAmountBuilder` to join with `left join` instead `inner join`
+* Changed default value of `Shopware\Models\Article\Image::$main` to 2
 
 ## 5.6.1
 
