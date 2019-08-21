@@ -683,7 +683,7 @@ class DqlHelper
                 $mode = $lastToken === '~' ? 1 : 0;
 
                 // Build the DQL Token - we've registered our own RegExp DoctrineExtension before
-                $newTokens[] = ' RegExp (?' . count($params) . ", {$attribute}) = {$mode}";
+                $newTokens[] = " RegExp ({$attribute}, ?" . count($params) . ") = {$mode}";
                 // Consume the next token as param and skip it in the next iteration
                 $params[] = substr($token['token'], 1, -1);
                 continue;
