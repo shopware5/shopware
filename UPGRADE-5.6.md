@@ -19,6 +19,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed the `x-robots` header to `x-robots-tag`
 * Changed `Shopware\Models\Analytics\Repository::createAmountBuilder` to join with `left join` instead `inner join`
 * Changed default value of `Shopware\Models\Article\Image::$main` to 2
+* Added all global defined attachments to the order document mail sending
 
 ## 5.6.1
 
