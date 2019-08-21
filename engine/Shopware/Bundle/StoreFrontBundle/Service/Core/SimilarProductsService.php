@@ -180,11 +180,11 @@ class SimilarProductsService implements SimilarProductsServiceInterface
         // Collect all numbers to send a single list product request.
         $related = [];
         foreach ($numbers as $value) {
-            $related = array_merge($related, $value);
+            $related[] = $value;
         }
 
         // Filter duplicate numbers to prevent duplicate data requests and iterations.
-        $unique = array_unique($related);
+        $unique = array_unique(array_merge([], ...$related));
 
         return array_values($unique);
     }

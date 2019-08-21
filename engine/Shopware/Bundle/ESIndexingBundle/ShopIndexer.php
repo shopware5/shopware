@@ -158,9 +158,9 @@ class ShopIndexer implements ShopIndexerInterface
             throw new \RuntimeException(sprintf('ElasticSearch index %s already exist.', $configuration->getName()));
         }
 
-        $mergedSettings = [
+        $mergedSettings = [[
             'settings' => $configuration->toArray(),
-        ];
+        ]];
 
         // Merge default settings with those set by plugins
         foreach ($this->settings as $setting) {
@@ -169,8 +169,9 @@ class ShopIndexer implements ShopIndexerInterface
                 continue;
             }
 
-            $mergedSettings = array_replace_recursive($mergedSettings, $settings);
+            $mergedSettings[] = $settings;
         }
+        $mergedSettings = array_replace_recursive(...$mergedSettings);
 
         $this->client->indices()->create([
             'index' => $configuration->getName(),

@@ -158,10 +158,10 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
         $active = [];
         foreach ($criteria->getUserConditions() as $condition) {
             if ($condition instanceof CategoryCondition) {
-                $active = array_merge($active, $condition->getCategoryIds());
+                $active[] = $condition->getCategoryIds();
             }
         }
 
-        return $active;
+        return array_merge([], ...$active);
     }
 }

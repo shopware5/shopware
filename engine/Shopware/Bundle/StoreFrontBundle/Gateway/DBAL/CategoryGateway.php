@@ -169,10 +169,10 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     {
         $ids = [];
         foreach ($mapping as $row) {
-            $ids = array_merge($ids, explode(',', $row));
+            $ids[] = explode(',', $row);
         }
         /** @var array<int> $ids */
-        $ids = array_unique($ids);
+        $ids = array_unique(array_merge([], ...$ids));
 
         return $ids;
     }

@@ -269,13 +269,14 @@ class SitemapXMLRepository
     private function readStaticUrls()
     {
         $shopId = $this->contextService->getShopContext()->getShop()->getId();
-        $sites = $this->getSitesByShopId($shopId);
+        $sites = [$this->getSitesByShopId($shopId)];
 
         foreach ($sites as $site) {
             if (!empty($site['children'])) {
-                $sites = array_merge($sites, $site['children']);
+                $sites[] = $site['children'];
             }
         }
+        $sites = array_merge(...$sites);
 
         foreach ($sites as &$site) {
             $site['urlParams'] = [
@@ -285,6 +286,7 @@ class SitemapXMLRepository
 
             $site['show'] = $this->filterLink($site['link'], $site['urlParams']);
         }
+        unset($site);
 
         return $sites;
     }

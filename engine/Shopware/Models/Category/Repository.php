@@ -435,15 +435,14 @@ class Repository extends ModelRepository
             $category['childrenCount'] = $child['childrenCount'];
             $category['articleCount'] = $child['articleCount'];
 
-            $categories[] = $category;
+            $categories[] = [$category];
             // Check if no depth passed or the current depth is lower than the passed depth
             if ($depth === null || $depth > 0) {
-                $subCategories = $this->getActiveChildrenList($child['category']['id'], $customerGroupId, $depth);
-                $categories = array_merge($categories, $subCategories);
+                $categories[] = $this->getActiveChildrenList($child['category']['id'], $customerGroupId, $depth);
             }
         }
 
-        return $categories;
+        return array_merge([], ...$categories);
     }
 
     /**

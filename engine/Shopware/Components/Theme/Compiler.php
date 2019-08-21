@@ -172,13 +172,13 @@ class Compiler
         $less = $this->lessCollector->collectLessDefinitions($shop->getTemplate(), $shop);
         $js = $this->javascriptCollector->collectJavascriptFiles($shop->getTemplate(), $shop);
 
-        $config = $this->getConfig($shop->getTemplate(), $shop);
         $timestamp = $this->getThemeTimestamp($shop);
 
+        $config = [$this->getConfig($shop->getTemplate(), $shop)];
         $lessFiles = [];
         foreach ($less as $definition) {
-            $config = array_merge($config, $definition->getConfig());
-            $lessFiles = array_merge($lessFiles, $definition->getFiles());
+            $config[] = $definition->getConfig();
+            $lessFiles[] = $definition->getFiles();
         }
 
         $js = array_map(function ($file) {
@@ -187,7 +187,7 @@ class Compiler
 
         $lessFiles = array_map(function ($file) {
             return ltrim(str_replace($this->rootDir, '', $file), '/');
-        }, $lessFiles);
+        }, array_merge([], ...$lessFiles));
 
         $lessTarget = $this->pathResolver->getCssFilePath($shop, $timestamp);
         $lessTarget = ltrim(str_replace($this->rootDir, '', $lessTarget), '/');
@@ -199,7 +199,7 @@ class Compiler
         return new Configuration(
             $lessFiles,
             $js,
-            $config,
+            array_merge(...$config),
             $lessTarget,
             $jsTarget,
             $inheritancePath
@@ -396,8 +396,8 @@ class Compiler
      */
     private function getConfig(Shop\Template $template, Shop\Shop $shop)
     {
-        $config = $this->inheritance->buildConfig($template, $shop);
-        $config['shopware-revision'] = $this->release->getRevision();
+        $baseConfig = $this->inheritance->buildConfig($template, $shop);
+        $baseConfig['shopware-revision'] = $this->release->getRevision();
 
         $collection = new ArrayCollection();
 
@@ -407,14 +407,15 @@ class Compiler
             ['shop' => $shop, 'template' => $template]
         );
 
+        $config = [];
         foreach ($collection as $temp) {
             if (!is_array($temp)) {
                 throw new \Exception('The passed plugin less config isn\'t an array!');
             }
-            $config = array_merge($config, $temp);
+            $config[] = $temp;
         }
 
-        return $config;
+        return array_merge($baseConfig, ...$config);
     }
 
     /**

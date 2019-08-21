@@ -111,15 +111,15 @@ class SnippetsValidateCommand extends ShopwareCommand implements CompletionAware
         $pluginDirectories = $this->container->getParameter('shopware.plugin_directories');
         foreach ($pluginDirectories as $key => $pluginBasePath) {
             if ($key === 'ShopwarePlugins') {
-                $invalidPaths = array_merge($invalidPaths, $this->getInvalidPaths($validator, $pluginBasePath));
+                $invalidPaths[] = $this->getInvalidPaths($validator, $pluginBasePath);
             } else {
                 foreach (['Backend', 'Core', 'Frontend'] as $namespace) {
-                    $invalidPaths = array_merge($invalidPaths, $this->getInvalidPaths($validator, $pluginBasePath . $namespace));
+                    $invalidPaths[] = $this->getInvalidPaths($validator, $pluginBasePath . $namespace);
                 }
             }
         }
 
-        return $invalidPaths;
+        return array_merge([], ...$invalidPaths);
     }
 
     /**
@@ -129,16 +129,16 @@ class SnippetsValidateCommand extends ShopwareCommand implements CompletionAware
      */
     protected function getInvalidPaths(SnippetValidator $validator, $pluginBasePath)
     {
-        $invalidPaths = [];
+        $invalidPaths = [[]];
 
         foreach (new \DirectoryIterator($pluginBasePath) as $pluginDir) {
             if ($pluginDir->isDot() || !$pluginDir->isDir()) {
                 continue;
             }
 
-            $invalidPaths = array_merge($invalidPaths, $validator->validate($pluginDir->getPathname()));
+            $invalidPaths[] = $validator->validate($pluginDir->getPathname());
         }
 
-        return $invalidPaths;
+        return array_merge(...$invalidPaths);
     }
 }

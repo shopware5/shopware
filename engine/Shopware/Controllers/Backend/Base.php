@@ -1199,10 +1199,11 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             $value = [];
         }
 
+        $shopValues = [];
         foreach ($data['values'] as $shopValue) {
-            $value = array_merge($value, explode(',', $shopValue['value']));
+            $shopValues[] = explode(',', $shopValue['value']);
         }
-        $value = array_unique(array_filter($value));
+        $value = array_unique(array_filter(array_merge($value, ...$shopValues)));
 
         return $value;
     }

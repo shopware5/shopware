@@ -450,13 +450,13 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         foreach ($emotions as $emotion) {
             // Always show the listing in the emotion viewports when the option "show listing" is active
             if ($emotion['showListing']) {
-                $permanentVisibleDevices = array_merge($permanentVisibleDevices, $emotion['devicesArray']);
+                $permanentVisibleDevices[] = $emotion['devicesArray'];
             }
 
             $visibleDevices = array_diff($visibleDevices, $emotion['devicesArray']);
         }
 
-        $visibleDevices = array_merge($permanentVisibleDevices, $visibleDevices);
+        $visibleDevices = array_merge(array_merge([], ...$permanentVisibleDevices), $visibleDevices);
 
         return array_values($visibleDevices);
     }

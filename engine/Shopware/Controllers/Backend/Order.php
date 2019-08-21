@@ -1398,12 +1398,12 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         $numbers = [];
         foreach ($orders as $orderKey => $order) {
-            $temp = array_column($order['details'], 'articleNumber');
-            $numbers = array_merge($numbers, (array) $temp);
+            $numbers[] = (array) array_column($order['details'], 'articleNumber');
 
             $orders[$orderKey]['orderStatus'] = $stateTranslator->translateState(StateTranslatorService::STATE_ORDER, $order['orderStatus']);
             $orders[$orderKey]['paymentStatus'] = $stateTranslator->translateState(StateTranslatorService::STATE_PAYMENT, $order['paymentStatus']);
         }
+        $numbers = array_merge([], ...$numbers);
 
         $stocks = $this->getVariantsStock($numbers);
 

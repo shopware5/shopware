@@ -241,10 +241,10 @@ class EmotionPreset extends Resource
         foreach ($presets as $id => $preset) {
             $plugins = json_decode($preset['requiredPlugins'], true);
             $preset['requiredPlugins'] = array_combine(array_column($plugins, 'name'), $plugins);
-            $pluginNames = array_merge($pluginNames, array_keys($preset['requiredPlugins']));
+            $pluginNames[] = array_keys($preset['requiredPlugins']);
             $presets[$id] = $preset;
         }
-        $localPlugins = $this->getPlugins($pluginNames);
+        $localPlugins = $this->getPlugins(array_merge([], ...$pluginNames));
 
         $result = [];
         foreach ($presets as $preset) {

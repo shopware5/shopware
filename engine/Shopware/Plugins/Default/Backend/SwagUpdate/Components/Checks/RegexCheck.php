@@ -65,14 +65,13 @@ class RegexCheck implements CheckInterface
     {
         $results = [];
         foreach ($requirement['value']['directories'] as $dir) {
-            $result = $this->scanDirectoryForRegex(
+            $results[] = $this->scanDirectoryForRegex(
                 Shopware()->DocPath($dir),
                 $requirement['value']['expression'],
                 $requirement['value']['fileRegex']
             );
-
-            $results = array_merge($results, $result);
         }
+        $results = array_merge([], ...$results);
 
         $message = $this->extractLocalizedMessage($requirement['value']['message']);
 

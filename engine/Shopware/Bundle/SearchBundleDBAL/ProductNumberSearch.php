@@ -137,8 +137,6 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
             return [];
         }
 
-        $facets = [];
-
         $clone = clone $criteria;
 
         if (!$criteria->generatePartialFacets()) {
@@ -146,6 +144,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
             $clone->resetSorting();
         }
 
+        $facets = [];
         foreach ($criteria->getFacets() as $facet) {
             $handler = $this->getFacetHandler($facet);
 
@@ -168,8 +167,9 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
                 $result = [$result];
             }
 
-            $facets = array_merge($facets, $result);
+            $facets[] = $result;
         }
+        $facets = array_merge([], ...$facets);
 
         return $facets;
     }

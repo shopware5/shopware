@@ -1295,13 +1295,11 @@ class Media extends ModelEntity
         $sizes = [];
         foreach ($joinedSizes as $sizeItem) {
             $explodedSizes = explode(';', $sizeItem);
-            if (empty($explodedSizes)) {
-                continue;
+            if (!empty($explodedSizes)) {
+                $sizes[] = array_flip($explodedSizes);
             }
-
-            $sizes = array_merge($sizes, array_flip($explodedSizes));
         }
 
-        return array_keys($sizes);
+        return array_keys(array_merge([], ...$sizes));
     }
 }

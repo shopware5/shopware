@@ -1350,14 +1350,14 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
         $salutations = [];
         foreach ($elementData['values'] as $value) {
-            $salutations = array_merge($salutations, explode(',', $value['value']));
+            $salutations[] = explode(',', $value['value']);
         }
-        $salutations = array_unique($salutations);
+        $salutations = array_unique(array_merge([], ...$salutations));
 
         $date = new DateTime();
         foreach ($shops as $localeId => $shopId) {
             foreach ($salutations as $salutation) {
-                if (strlen(trim($salutation)) === 0) {
+                if (trim($salutation) === '') {
                     continue;
                 }
 

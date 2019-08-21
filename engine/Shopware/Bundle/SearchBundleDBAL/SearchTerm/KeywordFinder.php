@@ -75,10 +75,10 @@ class KeywordFinder implements KeywordFinderInterface
 
         $matches = [];
         foreach ($keywords as $searchTerm) {
-            $matches = array_merge($matches, $this->searchMatchingKeywords($searchTerm));
+            $matches[] = $this->searchMatchingKeywords($searchTerm);
         }
 
-        return $matches;
+        return array_merge([], ...$matches);
     }
 
     /**

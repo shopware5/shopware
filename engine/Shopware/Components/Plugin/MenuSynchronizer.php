@@ -54,14 +54,14 @@ class MenuSynchronizer
      */
     public function synchronize(Plugin $plugin, array $menu)
     {
-        $menuNames = array_column($menu, 'name');
+        $menuNames = [array_column($menu, 'name')];
 
         $items = [];
         foreach ($menu as $menuItem) {
             if (isset($menuItem['children'])) {
                 $childMenuNames = array_column($menuItem['children'], 'name');
                 if ($childMenuNames) {
-                    $menuNames = array_merge($menuNames, $childMenuNames);
+                    $menuNames[] = $childMenuNames;
                 }
             }
 
@@ -82,7 +82,7 @@ class MenuSynchronizer
         }
 
         $this->em->flush($items);
-        $this->removeNotExistingEntries($plugin->getId(), $menuNames);
+        $this->removeNotExistingEntries($plugin->getId(), array_merge(...$menuNames));
     }
 
     /**

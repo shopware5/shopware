@@ -111,8 +111,9 @@ class TypeBuilder
         foreach ($type['fieldSets'] as $fieldSet) {
             $fieldSet = $this->createFieldset($fieldSet);
             $fieldSets[] = $fieldSet;
-            $fields = array_merge($fields, $fieldSet->getFields());
+            $fields[] = $fieldSet->getFields();
         }
+        $fields = array_merge([], ...$fields);
 
         $class->setFields($fields);
         $class->setFieldSets($fieldSets);

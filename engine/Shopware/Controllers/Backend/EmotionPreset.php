@@ -276,8 +276,10 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
 
         $names = [];
         foreach ($presets as $preset) {
-            $names = array_merge($names, array_column($preset['requiredPlugins'], 'name'));
+            $names[] = array_column($preset['requiredPlugins'], 'name');
         }
+        $names = array_merge([], ...$names);
+
         if (empty($names)) {
             return $presets;
         }

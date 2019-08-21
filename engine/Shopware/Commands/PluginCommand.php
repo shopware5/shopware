@@ -89,9 +89,9 @@ abstract class PluginCommand extends ShopwareCommand
                 continue;
             }
 
-            $tags = array_merge($tags, $context->getScheduled()['cache']);
+            $tags[] = $context->getScheduled()['cache'];
         }
 
-        return array_unique($tags);
+        return array_unique(array_merge([], ...$tags));
     }
 }

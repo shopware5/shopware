@@ -783,12 +783,11 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         }
 
         $result = [];
-
         foreach ($nodes as $arr) {
-            $result = array_merge_recursive($result, $arr);
+            $result[] = $arr;
         }
 
-        return $this->normalize($result);
+        return $this->normalize(array_merge_recursive([], ...$result));
     }
 
     /**

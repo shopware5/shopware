@@ -32,14 +32,15 @@ class TypeReader
 {
     public function getTypes(array $activePlugins, array $pluginDirectories, array $fieldAlias): array
     {
-        $result = [];
         $configs = $this->getConfigPaths($activePlugins, $pluginDirectories);
 
         $reader = new ContentTypesReader();
 
+        $result = [];
         foreach ($configs as $config) {
-            $result = array_merge($result, $reader->readType($config));
+            $result[] = $reader->readType($config);
         }
+        $result = array_merge([], ...$result);
 
         $result = self::resolveAlias($result, $fieldAlias);
 

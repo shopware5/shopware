@@ -177,10 +177,11 @@ class WarmUpHttpCacheCommand extends ShopwareCommand implements CompletionAwareI
             foreach ($options as $resource => $active) {
                 if ($active) {
                     $provider = $urlProviderFactory->getProvider($resource);
-                    $urls = array_merge($urls, $provider->getUrls($context));
+                    $urls[] = $provider->getUrls($context);
                     $totalResultCount += $provider->getCount($context);
                 }
             }
+            $urls = array_merge([], ...$urls);
 
             // Progressbar
             $progressBar = $io->createProgressBar($totalResultCount);

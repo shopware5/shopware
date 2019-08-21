@@ -389,10 +389,10 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     {
         $ids = [];
         foreach ($data as $row) {
-            $ids = array_merge($ids, explode('|', $row['path']));
-            $ids[] = $row['id'];
+            $ids[] = explode('|', $row['path']);
+            $ids[] = [$row['id']];
         }
-        $ids = array_values(array_unique(array_filter($ids)));
+        $ids = array_values(array_unique(array_filter(array_merge([], ...$ids))));
         $categories = $this->getCategories($ids);
 
         foreach ($data as &$row) {

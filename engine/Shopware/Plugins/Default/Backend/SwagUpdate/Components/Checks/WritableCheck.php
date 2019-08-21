@@ -62,22 +62,19 @@ class WritableCheck implements CheckInterface
      */
     public function check($requirement)
     {
-        $directories = [];
-        $checkedDirectories = [];
-
         $successMessage = $this->namespace->get('controller/check_writable_success', 'The following directories are writeable <br/>%s');
         $failMessage = $this->namespace->get('controller/check_writable_failure', 'The following directories are not writable: <br> %s');
 
+        $directories = [];
+        $checkedDirectories = [];
         foreach ($requirement['value'] as $path) {
             $fullPath = rtrim(Shopware()->DocPath($path), '/');
             $checkedDirectories[] = $fullPath;
 
             $fixPermissions = true;
-            $directories = array_merge(
-                $directories,
-                $this->fileSystem->checkSingleDirectoryPermissions($fullPath, $fixPermissions)
-            );
+            $directories[] = $this->fileSystem->checkSingleDirectoryPermissions($fullPath, $fixPermissions);
         }
+        $directories = array_merge([], ...$directories);
 
         if (empty($directories)) {
             return [

@@ -249,9 +249,11 @@ class Repository implements RepositoryInterface
 
         foreach ($items as &$item) {
             foreach ($translations as $translation) {
+                $data = [$item];
                 if ($translation['objectkey'] === $item['id']) {
-                    $item = array_merge($item, $translation['objectdata']);
+                    $data[] = $translation['objectdata'];
                 }
+                $item = array_merge(...$data);
             }
         }
 

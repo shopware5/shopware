@@ -71,8 +71,9 @@ class CategoryReader extends GenericReader
     {
         $parents = [];
         foreach ($data as $id => $row) {
-            $parents = array_merge($parents, explode('|', $row['path']));
+            $parents[] = explode('|', $row['path']);
         }
+        $parents = array_merge([], ...$parents);
         $parents = array_values(array_unique(array_filter($parents)));
 
         $query = $this->entityManager->getConnection()->createQueryBuilder();

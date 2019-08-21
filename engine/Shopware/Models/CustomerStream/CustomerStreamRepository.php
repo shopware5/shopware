@@ -299,9 +299,9 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
 
         $streamIds = [];
         foreach ($mapping as $row) {
-            $streamIds = array_merge($streamIds, $row);
+            $streamIds[] = $row;
         }
-        $streamIds = array_keys(array_flip($streamIds));
+        $streamIds = array_keys(array_flip(array_merge([], ...$streamIds)));
 
         $query = $this->connection->createQueryBuilder();
         $query->select(['streams.id as array_key', 'streams.id', 'streams.name']);

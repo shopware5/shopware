@@ -93,9 +93,9 @@ class StoreFrontEmotionDeviceConfiguration implements StoreFrontEmotionDeviceCon
     {
         $replacements = [];
         foreach ($configurations as $config) {
-            $replacements = array_merge($replacements, explode('|', $config['replacement']));
+            $replacements[] = explode('|', $config['replacement']);
         }
 
-        return array_filter($replacements);
+        return array_filter(array_merge([], ...$replacements));
     }
 }

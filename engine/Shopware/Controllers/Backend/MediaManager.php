@@ -790,16 +790,15 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         foreach ($albums as $album) {
             if (stripos($album['text'], $search) === 0) {
-                $found[] = $album;
+                $found[] = [$album];
             }
             $children = $album['data'];
             if (count($children) > 0) {
-                $foundChildren = $this->filterAlbums($children, $search);
-                $found = array_merge($found, $foundChildren);
+                $found[] = $this->filterAlbums($children, $search);
             }
         }
 
-        return $found;
+        return array_merge([], ...$found);
     }
 
     /**

@@ -151,11 +151,11 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
         $values = [];
         foreach ($criteria->getConditions() as $condition) {
             if ($condition instanceof PropertyCondition) {
-                $values = array_merge($values, $condition->getValueIds());
+                $values[] = $condition->getValueIds();
             }
         }
 
-        return $values;
+        return array_merge([], ...$values);
     }
 
     /**

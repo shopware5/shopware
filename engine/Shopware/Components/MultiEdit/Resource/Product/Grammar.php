@@ -88,8 +88,9 @@ class Grammar
             foreach ($mappings as $key => $value) {
                 $newMapping[strtoupper($prefix . '.' . $key)] = $value;
             }
-            $columnInfo = array_merge($columnInfo, $newMapping);
+            $columnInfo[] = $newMapping;
         }
+        $columnInfo = array_merge([], ...$columnInfo);
 
         $attributes = [];
 
