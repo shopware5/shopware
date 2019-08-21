@@ -2321,7 +2321,7 @@ class sArticles implements \Enlight_Hook
                 $size = $size . 'x' . $size;
             }
 
-            if ($image['media']['type'] === Media::TYPE_IMAGE) {
+            if ($image['type'] === Media::TYPE_IMAGE || $image['media']['type'] === Media::TYPE_IMAGE) {
                 $imageData['src'][$key] = $mediaService->getUrl('media/image/thumbnail/' . $image['path'] . '_' . $size . '.' . $image['extension']);
 
                 if ($highDpiThumbnails) {
