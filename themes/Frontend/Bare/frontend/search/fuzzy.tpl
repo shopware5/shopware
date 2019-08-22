@@ -4,7 +4,7 @@
 {block name='frontend_index_start'}
     {if $sRequests.sSearchOrginal}
         {s name="SearchResultsFor" assign="snippetSearchResultsFor"}{/s}
-        {$sBreadcrumb = [['name' => $snippetSearchResultsFor]]}
+        {$sBreadcrumb = [['name' => $snippetSearchResultsFor|htmlentities]]}
     {else}
         {s name="SearchResultsEmpty" assign="snippetSearchResultsEmpty"}{/s}
         {$sBreadcrumb = [['name' => $snippetSearchResultsEmpty]]}
