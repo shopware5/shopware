@@ -16,6 +16,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `Shopware\Bundle\OrderBundle\Subscriber\ProductStockSubscriber`
     * `Shopware\Bundle\OrderBundle\Subscriber\OrderRecalculationSubscriber`
 * Changed `Enlight_Components_Session_Namespace` to extend from `Symfony\Component\HttpFoundation\Session\Session`
+* Changed the default config for smarty `compileCheck` to false
 
 ### Removals
 

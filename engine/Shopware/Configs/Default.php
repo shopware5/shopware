@@ -219,7 +219,7 @@ return array_replace_recursive([
         'ProjectPlugins' => $this->DocPath('custom_project'),
     ],
     'template' => [
-        'compileCheck' => true,
+        'compileCheck' => false,
         'compileLocking' => true,
         'useSubDirs' => true,
         'forceCompile' => false,
