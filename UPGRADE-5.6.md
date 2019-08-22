@@ -21,6 +21,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed default value of `Shopware\Models\Article\Image::$main` to 2
 * Added all global defined attachments to the order document mail sending
 * Changed the label of the config form `Service` to `Maintenance`
+* Changed `s_mail_log` foreign keys to set null on delete
 
 ## 5.6.1
 
