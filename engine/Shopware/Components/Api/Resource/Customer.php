@@ -28,8 +28,6 @@ use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Models\Attribute\Customer as CustomerAttribute;
-use Shopware\Models\Country\Country as CountryModel;
-use Shopware\Models\Country\State as StateModel;
 use Shopware\Models\Customer\Address as AddressModel;
 use Shopware\Models\Customer\Customer as CustomerModel;
 use Shopware\Models\Customer\PaymentData;
@@ -523,44 +521,8 @@ class Customer extends Resource
      */
     private function prepareAddressData(array $data, $filter = false)
     {
-        // fetch country via ID or ISO 3166
-        $em = $this->getContainer()->get('models');
-        if (is_numeric($data['country'])) {
-            $data['country'] = $em->find(CountryModel::class, (int) $data['country']);
-        } elseif (ctype_print($data['country'])) {
-            $builder = $em->createQueryBuilder();
-            $builder
-                ->select('country')
-                ->from(CountryModel::class, 'country')
-                ->where('country.iso3 = :iso or country.iso = :iso')
-                ->setParameter('iso', $data['country']);
-
-            $data['country'] = $builder->getQuery()->getSingleResult();
-        } else {
-            $data['country'] = null;
-        }
-
-        // try fetching state via ID or ISO 3166-2 extension
-        if (is_numeric($data['state'])) {
-            $data['state'] = $em->find(StateModel::class, (int) $data['state']);
-            // use state to set country if no country is set
-            if ($data['state'] && is_null($data['country'])) {
-                $data['country'] = $data['state']->getCountry()->getId();
-            }
-        } elseif ($data['country'] && ctype_print($data['state'])) {
-            $builder = $em->createQueryBuilder();
-            $builder
-                ->select('state')
-                ->from(StateModel::class, 'state')
-                ->join('state.country', 'country')
-                ->where('state.shortCode = :code')
-                ->andWhere('country.id = :countryId')
-                ->setParameter('code', $data['state'])
-                ->setParameter('countryId', $data['country']->getId());
-            $data['state'] = $builder->getQuery()->getSingleResult();
-        } else {
-            $data['state'] = null;
-        }
+        $countryService = $this->getContainer()->get('shopware_account.country_service');
+        $data = $countryService->fetchCountryData($data);
 
         return $filter ? array_filter($data) : $data;
     }

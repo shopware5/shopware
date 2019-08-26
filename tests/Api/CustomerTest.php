@@ -652,7 +652,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
                 'salutation' => 'Mr',
                 'firstName' => 'Max',
                 'lastName' => 'Mustermann',
-                'country' => 'DE',
+                'countryIso' => 'DE',
                 'street' => 'Fakestreet 123',
                 'city' => 'City',
                 'zipcode' => 55555,

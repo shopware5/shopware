@@ -115,6 +115,10 @@
             <argument type="service" id="front"/>
         </service>
 
+        <service id="shopware_account.country_service" class="Shopware\Bundle\AccountBundle\Service\CountryService" >
+            <argument type="service" id="models" />
+        </service>
+
         <service id="shopware_account.store_front_greeting_service" class="Shopware\Bundle\AccountBundle\Service\StoreFrontCustomerGreetingService" >
             <argument id="session" type="service"/>
             <argument id="dbal_connection" type="service"/>
