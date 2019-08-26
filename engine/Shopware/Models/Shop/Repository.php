@@ -160,7 +160,7 @@ class Repository extends ModelRepository
                 ->leftJoin('shop.category', 'category')
                 ->leftJoin('shop.currency', 'currency')
                 ->orderBy('default', 'DESC')
-                ->addOrderBy('name');
+                ->addOrderBy('shop.position');
 
         if ($filter !== null) {
             $builder->addFilter($filter);
@@ -230,7 +230,7 @@ class Repository extends ModelRepository
         return $this->createQueryBuilder('s')
             ->where('s.mainId IS NULL')
             ->orderBy('s.default', 'DESC')
-            ->addOrderBy('s.name');
+            ->addOrderBy('s.position');
     }
 
     /**
