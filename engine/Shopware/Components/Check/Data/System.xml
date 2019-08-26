@@ -8,7 +8,11 @@
         <notice>The Apache Module "mod_rewrite" should be active when using Shopware with the Apache Server.</notice>
     </requirement>
     <requirement>
-        <name>mysql</name><group>core</group><required>5.7.0</required><database>1</database>
+        <name>database</name>
+        <group>core</group>
+        <mysql>5.7.0</mysql>
+        <mariadb>10.1.0</mariadb>
+        <database>1</database>
     </requirement>
     <requirement>
         <name>pdo</name><group>extension</group><required>1</required>

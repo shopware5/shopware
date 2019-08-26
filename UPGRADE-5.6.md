@@ -23,6 +23,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed the label of the config form `Service` to `Maintenance`
 * Changed `s_mail_log` foreign keys to set null on delete
 * Changed `Item by sales` to consider only products
+* Changed systeminfo to consider mariadb installations
 
 ## 5.6.1
 
