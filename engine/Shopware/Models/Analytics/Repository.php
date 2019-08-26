@@ -1362,6 +1362,7 @@ class Repository
             ->innerJoin('details', 's_articles', 'articles', 'articles.id = details.articleID')
             ->innerJoin('details', 's_order', 'orders', 'orders.id = details.orderID')
             ->andWhere('orders.status NOT IN (-1, 4)')
+            ->andWhere('details.modus = 0')
             ->groupBy('articles.id')
             ->orderBy('sales', 'DESC');
 
