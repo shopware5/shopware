@@ -34,3 +34,4 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `Zend_Session_Validator_HttpUserAgent`
     * `Zend_Session_Validator_Interface`
 * Removed referenced value from magic getter in session
+* Removed the assignment of all request parameters to the view in `Shopware_Controllers_Widgets_Listing::productsAction`

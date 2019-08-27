@@ -461,8 +461,6 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         $products = $this->convertProductsResult($result, $categoryId);
 
-        $this->View()->assign($this->Request()->getParams());
-
         $this->loadThemeConfig();
 
         $this->View()->assign([
