@@ -24,6 +24,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `s_mail_log` foreign keys to set null on delete
 * Changed `Item by sales` to consider only products
 * Changed systeminfo to consider mariadb installations
+* Changed PHPStan to 0.11.15
 
 ## 5.6.1
 
