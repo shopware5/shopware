@@ -22,9 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Functional\Controllers\Frontend;
+
 use Shopware\Components\Captcha\DefaultCaptcha;
 
-class Shopware_Tests_Controllers_Frontend_RegisterTest extends Enlight_Components_Test_Plugin_TestCase
+class RegisterWithCaptchaTest extends \Enlight_Components_Test_Plugin_TestCase
 {
     public static function tearDownAfterClass()
     {

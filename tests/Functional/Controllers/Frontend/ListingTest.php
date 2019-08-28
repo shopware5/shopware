@@ -22,32 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Frontend_ListingTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Controllers\Frontend;
+
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+
+class ListingTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
-    private $connection;
-
-    /**
-     * Set up test case, fix demo data where needed
-     */
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->connection = Shopware()->Container()->get('dbal_connection');
-        $this->connection->beginTransaction();
-    }
-
-    /**
-     * Cleaning up testData
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
-        $this->connection->rollBack();
-    }
+    use DatabaseTransactionBehaviour;
 
     /**
      * Test that requesting an existing category-id is successfull

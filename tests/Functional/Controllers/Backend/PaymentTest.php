@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
+class PaymentTest extends \Enlight_Components_Test_Controller_TestCase
 {
     private $testDataCreate = [
         'name' => 'New payment',
@@ -50,7 +52,7 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
     {
         parent::setUp();
 
-        // disable auth and acl
+        // Disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
@@ -61,7 +63,7 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
      */
     public function testGetPayments()
     {
-        /* @var Enlight_Controller_Response_ResponseTestCase */
+        /* @var \Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/payment/getPayments');
         static::assertTrue($this->View()->success);
 
@@ -77,7 +79,7 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
      */
     public function testGetCountries()
     {
-        /* @var Enlight_Controller_Response_ResponseTestCase */
+        /* @var \Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/payment/getCountries');
         static::assertTrue($this->View()->success);
 
@@ -116,7 +118,7 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
     {
         $this->Request()->setMethod('POST')->setPost(['id' => $data['id'], 'name' => 'Neue Zahlungsart']);
 
-        /* @var Enlight_Controller_Response_ResponseTestCase */
+        /* @var \Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/payment/updatePayments');
         static::assertTrue($this->View()->success);
 
@@ -136,7 +138,7 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
     {
         $this->Request()->setMethod('POST')->setPost(['id' => $data['id']]);
 
-        /* @var Enlight_Controller_Response_ResponseTestCase */
+        /* @var \Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/payment/deletePayment');
         static::assertTrue($this->View()->success);
 

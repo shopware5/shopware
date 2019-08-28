@@ -22,16 +22,18 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
 use Shopware\Models\ProductFeed\ProductFeed;
 
-class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Components_Test_Controller_TestCase
+class ProductFeedTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    /** @var ProductFeed $repository */
-    protected $repository = null;
+    /**
+     * @var ProductFeed
+     */
+    protected $repository;
 
     /**
-     * feed dummy data
-     *
      * @var array
      */
     private $feedData = [
@@ -66,7 +68,7 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
         'variantExport' => '1',
     ];
 
-    /** @var Shopware\Components\Model\ModelManager */
+    /** @var \Shopware\Components\Model\ModelManager */
     private $manager = null;
 
     /**
@@ -79,7 +81,7 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
         $this->manager = Shopware()->Models();
         $this->repository = Shopware()->Models()->getRepository(ProductFeed::class);
 
-        // disable auth and acl
+        // Disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
@@ -89,7 +91,7 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
      */
     public function testGetFeeds()
     {
-        //delete old data
+        // Delete old data
         $feeds = $this->repository->findBy(['hash' => '0805bbb935327228edb5374083b81416']);
         foreach ($feeds as $testFeed) {
             $this->manager->remove($testFeed);
@@ -97,7 +99,7 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
         $this->manager->flush();
 
         $feed = $this->createDummy();
-        /* @var Enlight_Controller_Response_ResponseTestCase */
+        /* @var \Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/ProductFeed/getFeeds?page=1&start=0&limit=30');
         static::assertTrue($this->View()->success);
         $returnData = $this->View()->data;
@@ -118,7 +120,7 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
     /**
      * test adding a feed
      *
-     * @return the id to for the testUpdateFeed Method
+     * @return int The id to for the testUpdateFeed Method
      */
     public function testAddFeed()
     {
@@ -140,7 +142,7 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
      *
      * @param string $id
      *
-     * @return the id to for the testUpdateFeed Method
+     * @return string The id to for the testUpdateFeed Method
      */
     public function testGetDetailFeed($id)
     {

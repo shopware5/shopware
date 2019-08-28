@@ -22,9 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
 use Doctrine\DBAL\Connection;
 
-class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
+class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var Connection
@@ -68,8 +70,8 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 
     public function testConversionIsCalucatedFromBeginningOfDay()
     {
-        $date = new DateTime();
-        $date->sub(new DateInterval('P7DT1M'));
+        $date = new \DateTime();
+        $date->sub(new \DateInterval('P7DT1M'));
 
         $this->connection
             ->insert('s_statistics_visitors', [
@@ -101,8 +103,8 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 
     public function testConversionStillWorks()
     {
-        $date = new DateTime();
-        $date->sub(new DateInterval('P6DT59M'));
+        $date = new \DateTime();
+        $date->sub(new \DateInterval('P6DT59M'));
 
         $this->connection
             ->insert('s_statistics_visitors', [
@@ -134,8 +136,8 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 
     public function testIfNoConversionAfterEightDays()
     {
-        $date = new DateTime();
-        $date->sub(new DateInterval('P8D'));
+        $date = new \DateTime();
+        $date->sub(new \DateInterval('P8D'));
 
         $this->connection
             ->insert('s_statistics_visitors', [
@@ -185,14 +187,14 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 
         $response = $this->View()->getAssign();
 
-        //check if success
+        // Check if success
         static::assertArrayHasKey('success', $response);
-        //check if has data
+        // Check if has data
         static::assertArrayHasKey('data', $response);
-        //check if data contains customers
+        // Check if data contains customers
         static::assertArrayHasKey('customers', $response['data']);
 
-        //first customer should be the one we added, ass there isn't any other process adding any s_statistics_currentusers
+        // First customer should be the one we added, ass there isn't any other process adding any s_statistics_currentusers
         static::assertEquals($this->userId, $response['data']['customers'][0]['userID']);
         static::assertEquals($addressData['company'], $response['data']['customers'][0]['customer']);
     }
@@ -213,14 +215,14 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 
         $response = $this->View()->getAssign();
 
-        //check if success
+        // Check if success
         static::assertArrayHasKey('success', $response);
-        //check if has data
+        // Check if has data
         static::assertArrayHasKey('data', $response);
-        //check if data contains customers
+        // Check if data contains customers
         static::assertArrayHasKey('customers', $response['data']);
 
-        //first customer should be the one we added, ass there isn't any other process adding any s_statistics_currentusers
+        // First customer should be the one we added, ass there isn't any other process adding any s_statistics_currentusers
         static::assertEquals($this->userId, $response['data']['customers'][0]['userID']);
         static::assertEquals($addressData['firstname'] . ' ' . $addressData['lastname'],
             $response['data']['customers'][0]['customer']);
@@ -243,14 +245,14 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 
         $response = $this->View()->getAssign();
 
-        //check if success
+        // Check if success
         static::assertArrayHasKey('success', $response);
-        //check if has data
+        // Check if has data
         static::assertArrayHasKey('data', $response);
-        //check if data contains customers
+        // Check if data contains customers
         static::assertArrayHasKey('customers', $response['data']);
 
-        //first customer should be the one we added, ass there isn't any other process adding any s_statistics_currentusers
+        // First customer should be the one we added, ass there isn't any other process adding any s_statistics_currentusers
         static::assertEquals($this->userId, $response['data']['customers'][0]['userID']);
         static::assertEquals($addressData['firstname'] . ' ' . $addressData['lastname'], $response['data']['customers'][0]['customer']);
     }
@@ -290,7 +292,7 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
         $this->connection->insert('s_statistics_currentusers', [
             'remoteaddr' => '127.0.0.1',
             'page' => '/',
-            'time' => new Zend_Db_Expr('NOW()'),
+            'time' => new \Zend_Db_Expr('NOW()'),
             'userID' => $this->userId,
             'deviceType' => 'Test',
         ]);

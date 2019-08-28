@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Backend_FormTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
+class FormTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
      * Standard set up for every test - just disable auth

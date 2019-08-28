@@ -22,10 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
 use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Locale;
 
-class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Test_Controller_TestCase
+class OrderTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
      * Test to delete the position
@@ -173,12 +175,12 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
 
-        /** @var DateTime $orderTime */
+        /** @var \DateTime $orderTime */
         $orderTime = $data['orderTime'];
         $oldDate = clone $orderTime;
-        $orderTime->setTimezone(new DateTimeZone('US/Alaska'));
+        $orderTime->setTimezone(new \DateTimeZone('US/Alaska'));
 
-        $data['orderTime'] = new DateTime($orderTime->format(\DateTime::ATOM));
+        $data['orderTime'] = new \DateTime($orderTime->format(\DateTime::ATOM));
         $data['changed'] = $data['changed']->format('Y-m-d H:i:s');
 
         $data['billing'] = [$data['billing']];

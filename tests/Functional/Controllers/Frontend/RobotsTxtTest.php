@@ -22,24 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Frontend_RobotsTxtTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Controllers\Frontend;
+
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+
+class RobotsTxtTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
+    use DatabaseTransactionBehaviour;
 
-        Shopware()->Container()->get('dbal_connection')->beginTransaction();
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-        Shopware()->Container()->get('dbal_connection')->rollBack();
-    }
-
-    /**
-     * Test case method
-     */
     public function testRobotsTxtTwoShops(): void
     {
         Shopware()->Db()->query('

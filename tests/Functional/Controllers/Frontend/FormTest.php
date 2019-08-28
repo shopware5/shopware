@@ -26,25 +26,14 @@ namespace Shopware\Tests\Functional\Controllers\Frontend;
 
 use Enlight_Components_Test_Plugin_TestCase;
 use Shopware\Models\Shop\Shop;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class FormTest extends Enlight_Components_Test_Plugin_TestCase
 {
+    use DatabaseTransactionBehaviour;
+
     const GERMAN_NAME = 'Partnerformular';
     const ENGLISH_NAME = 'Partner Form';
-
-    public function setUp()
-    {
-        parent::setUp();
-
-        Shopware()->Container()->get('dbal_connection')->beginTransaction();
-    }
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        Shopware()->Container()->get('dbal_connection')->rollBack();
-    }
 
     /**
      * Request form page

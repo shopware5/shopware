@@ -22,11 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Frontend_SitemapXmlTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Controllers\Frontend;
+
+class SitemapXmlTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    /**
-     * Test case method
-     */
     public function testIndex()
     {
         $this->dispatch('/SitemapXml');

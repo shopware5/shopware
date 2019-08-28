@@ -22,13 +22,15 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
+class CustomerTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /** @var \Shopware\Models\Customer\Customer $repository */
-    protected $repository = null;
+    protected $repository;
 
-    /** @var Shopware\Components\Model\ModelManager */
-    private $manager = null;
+    /** @var \Shopware\Components\Model\ModelManager */
+    private $manager;
 
     /**
      * Standard set up for every test - just disable auth
@@ -294,7 +296,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
 
         $this->Request()->setParams(['id' => $customer->getId()]);
 
-        /** @var Enlight_Controller_Response_ResponseTestCase $response */
+        /** @var \Enlight_Controller_Response_ResponseTestCase $response */
         $response = $this->dispatch('backend/Customer/performOrder');
 
         $headerLocation = $response->getHeader('Location');

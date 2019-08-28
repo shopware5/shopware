@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Backend_VoteTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
+class VoteTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
      * Standard set up for every test - just disable auth
@@ -31,7 +33,7 @@ class Shopware_Tests_Controllers_Backend_VoteTest extends Enlight_Components_Tes
     {
         parent::setUp();
 
-        // disable auth and acl
+        // Disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
@@ -52,15 +54,14 @@ class Shopware_Tests_Controllers_Backend_VoteTest extends Enlight_Components_Tes
         $sql = "SELECT * FROM s_articles_vote WHERE articleID = 3 AND name='Patrick'";
         $data = Shopware()->Db()->fetchRow($sql, []);
 
-        /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/vote/list');
         static::assertTrue($this->View()->success);
 
         static::assertNotNull($this->View()->data);
         static::assertNotNull($this->View()->total);
 
-        //Testing the search-function
-        $filter = ['filter' => Zend_Json::encode([['value' => 'test']])];
+        // Testing the search-function
+        $filter = ['filter' => \Zend_Json::encode([['value' => 'test']])];
         $this->Request()->setMethod('POST')->setPost($filter);
         $this->dispatch('backend/premium/getPremiumArticles');
 
