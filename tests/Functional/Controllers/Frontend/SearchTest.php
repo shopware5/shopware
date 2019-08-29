@@ -26,9 +26,14 @@ namespace Shopware\Tests\Functional\Controllers\Frontend;
 
 class SearchTest extends \Enlight_Components_Test_Controller_TestCase
 {
+    public function tearDown()
+    {
+        $this->reset();
+    }
+
     public function testAjaxSearch()
     {
-        $this->dispatch('/ajax_search?sSearch=ipad');
+        $this->dispatch('ajax_search?sSearch=ipad');
 
         // Check for valid markup
         static::assertContains(
@@ -45,5 +50,32 @@ class SearchTest extends \Enlight_Components_Test_Controller_TestCase
             ' alt="iPadtasche mit Stiftmappe" class="media--image"> </span> <span class="entry--name block"> iPadtasche mit Stiftmappe </span> <span class="entry--price block"> <div class="product--price"> <span class="price--default is--nowrap"> 39,99&nbsp;&euro; * </span> </div> <div class="price--unit"> </div> </span> </a> </li> <li class="entry--all-results block-group result--item">',
             $this->Response()->getBody()
         );
+    }
+
+    /**
+     * @dataProvider searchTermProvider
+     */
+    public function testSearchEscapes(string $term, string $filtered)
+    {
+        $this->dispatch(sprintf('search?sSearch=%s', $term));
+
+        static::assertContains($filtered, $this->Response()->getBody());
+        static::assertNotContains($term, $this->Response()->getBody());
+    }
+
+    public function searchTermProvider()
+    {
+        return [
+            ['"Apostrophes"', htmlentities(strip_tags('"Apostrophes"'))],
+            ['"Apostrophe', htmlentities(strip_tags('"Apostrophe'))],
+            ['<tags></tags>', htmlentities(strip_tags('<tags></tags>'))],
+            ['<tag/>', htmlentities(strip_tags('<tag/>'))],
+            ['&#x3c;tag>', htmlentities(strip_tags('Suchergebnisse | Shopware Demo'))], // This is stripped completely
+            ["<script>
+x='<%'
+</script> %>/
+alert(2)
+</script>", "r _x='"],
+        ];
     }
 }
