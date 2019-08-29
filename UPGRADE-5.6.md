@@ -9,6 +9,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 ### Additions
 
 * Added a title to the base price declaration shown in the product box (`themes/Frontend/Bare/frontend/listing/product-box/product-price-unit.tpl`), so users may view the full text by hovering, in case the declaration was truncated
+* Added all global defined attachments to the order document mail sending
+* Added example HSTS configuration in the htaccess file
 
 ### Changes
 
@@ -19,7 +21,6 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed the `x-robots` header to `x-robots-tag`
 * Changed `Shopware\Models\Analytics\Repository::createAmountBuilder` to join with `left join` instead `inner join`
 * Changed default value of `Shopware\Models\Article\Image::$main` to 2
-* Added all global defined attachments to the order document mail sending
 * Changed the label of the config form `Service` to `Maintenance`
 * Changed `s_mail_log` foreign keys to set null on delete
 * Changed `Item by sales` to consider only products
