@@ -84,8 +84,6 @@ class SchemaOperatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \CrudService::parseDefaultValue
-     *
      * @throws \Exception
      */
     public function testDefaultValuesBoolean()
