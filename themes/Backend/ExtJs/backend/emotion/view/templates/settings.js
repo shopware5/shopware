@@ -94,7 +94,7 @@ Ext.define('Shopware.apps.Emotion.view.templates.Settings', {
         me.items = [ me.formPanel ];
         me.bbar = me.createActionButtons();
 
-        if(me.hasOwnProperty('record')) {
+        if (me.hasOwnProperty('record')) {
             me.formPanel.loadRecord(me.record);
         }
 

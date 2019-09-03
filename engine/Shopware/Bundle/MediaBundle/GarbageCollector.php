@@ -193,7 +193,7 @@ class GarbageCollector
         $values = $this->fetchColumn($mediaPosition);
 
         foreach ($values as $value) {
-            $value = unserialize($value);
+            $value = unserialize($value, ['allowed_classes' => false]);
             $this->addMediaByPath($value);
         }
     }

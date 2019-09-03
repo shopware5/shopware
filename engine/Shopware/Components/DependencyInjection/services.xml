@@ -980,6 +980,11 @@
             <argument type="service" id="service_container"/>
         </service>
 
+        <service id="Shopware\Components\Cart\CartPersistServiceInterface" class="Shopware\Components\Cart\CartPersistService">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="session"/>
+        </service>
+
         <service id="Shopware\Components\CacheSubscriber">
             <argument type="service" id="cache"/>
             <tag name="shopware.event_subscriber"/>

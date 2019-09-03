@@ -947,10 +947,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $thumbnailManager = Shopware()->Container()->get(\Shopware\Components\Thumbnail\Manager::class);
 
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(['images', 'media'])
+        $builder->select(['images', 'media', 'imageMapping', 'mappingRule', 'ruleOption'])
                 ->from(Image::class, 'images')
                 ->leftJoin('images.article', 'article')
                 ->leftJoin('images.media', 'media')
+                ->leftJoin('images.mappings', 'imageMapping')
+                ->leftJoin('imageMapping.rules', 'mappingRule')
+                ->leftJoin('mappingRule.option', 'ruleOption')
                 ->where('article.id = :articleId')
                 ->andWhere('images.parentId IS NULL')
                 ->orderBy('images.position')
@@ -2470,7 +2473,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         if ($mapping['settings']) {
             $mainData['supplierNumber'] = $mainDetail->getSupplierNumber();
             $mainData['weight'] = $mainDetail->getWeight();
-            $mainData['inStock'] = $mainDetail->getInStock();
             $mainData['stockMin'] = $mainDetail->getStockMin();
             $mainData['ean'] = $mainDetail->getEan();
             $mainData['minPurchase'] = $mainDetail->getMinPurchase();
@@ -2483,6 +2485,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $mainData['height'] = $mainDetail->getHeight();
             $mainData['len'] = $mainDetail->getLen();
             $mainData['lastStock'] = $mainDetail->getLastStock();
+        }
+        if ($mapping['stock']) {
+            $mainData['inStock'] = $mainDetail->getInStock();
         }
         if ($mapping['attributes']) {
             $builder = Shopware()->Models()->createQueryBuilder();
@@ -4471,7 +4476,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $translatedFields = [];
         foreach ($newTranslations as $values) {
             $data = $values['objectdata'];
-            foreach (unserialize($data) as $field => $translation) {
+            foreach (unserialize($data, ['allowed_classes' => false]) as $field => $translation) {
                 if (!array_key_exists($field, $translatedFields)) {
                     $translatedFields[$field] = true;
                 }
@@ -4480,7 +4485,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         // Save the old product translation as new variant translations
         foreach ($oldTranslations as $language => $values) {
-            $data = unserialize($values['objectdata']);
+            $data = unserialize($values['objectdata'], ['allowed_classes' => false]);
             $newData = array_intersect_key($data, $translatedFields);
             $this->getTranslationComponent()->write(
                 $language,
@@ -4492,12 +4497,12 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         // Save the new mainDetail translations as product translations
         foreach ($newTranslations as $language => $values) {
-            $data = unserialize($values['objectdata']);
+            $data = unserialize($values['objectdata'], ['allowed_classes' => false]);
             $newData = array_intersect_key($data, $translatedFields);
             // We need to check and include old translations, as an product
             // translation is a superset of a variant translation
             if ($oldValues = $oldTranslations[$language]) {
-                $oldData = unserialize($oldValues['objectdata']);
+                $oldData = unserialize($oldValues['objectdata'], ['allowed_classes' => false]);
                 $newData = array_merge($oldData, $newData);
             }
             $this->getTranslationComponent()->write(

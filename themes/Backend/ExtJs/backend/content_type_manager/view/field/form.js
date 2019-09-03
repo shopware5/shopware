@@ -135,6 +135,10 @@ Ext.define('Shopware.apps.ContentTypeManager.view.field.Form', {
             return '{s name="error/nameAlreadyExists"}{/s}';
         }
 
+        if (Ext.isNumeric(value)) {
+            return '{s name="error/numericOnlyLabel"}{/s}';
+        }
+
         return true;
     },
 
@@ -194,6 +198,6 @@ Ext.define('Shopware.apps.ContentTypeManager.view.field.Form', {
         if (value) {
             return '{s name="field/name"}{/s}: ' + value;
         }
-    }
+    },
 });
 // {/block}

@@ -67,7 +67,11 @@
             <div class="panel--body is--wide">
 
                 {if $manufacturer->getCoverMedia() !== null}
-                    {$thumbnail = $manufacturer->getCoverMedia()->getThumbnail(0)->getSource()}
+                    {$thumbnail = $manufacturer->getCoverMedia()->getFile()}
+
+                    {if $manufacturer->getCoverMedia()->getThumbnail(0)}
+                        {$thumbnail = $manufacturer->getCoverMedia()->getThumbnail(0)->getSource()}
+                    {/if}
                     {if $thumbnail}
                         <div class="vendor--image-wrapper">
                             <img class="vendor--image" src="{$thumbnail}" alt="{$manufacturer->getName()|escape}">

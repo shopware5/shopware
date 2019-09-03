@@ -293,7 +293,7 @@ class Shopware_Components_Config implements ArrayAccess
 
         $result = [];
         foreach ($data as $row) {
-            $value = !empty($row['value']) ? @unserialize($row['value']) : null;
+            $value = !empty($row['value']) ? @unserialize($row['value'], ['allowed_classes' => false]) : null;
             $result[$row['name']] = $value;
             // Take namespaces (form names) into account
             $result[$row['form'] . '::' . $row['name']] = $value;

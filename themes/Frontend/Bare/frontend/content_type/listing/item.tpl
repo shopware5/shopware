@@ -71,7 +71,7 @@
                         {* Read more button *}
                         {block name='frontend_content_type_col_read_more'}
                             <div class="blog--box-readmore">
-                                <a href="{url action=detail id=$sItem.id}" title="{$sItem[$sTitleKey]|escape}" class="btn is--primary is--small">Mehr Lesen</a>
+                                <a href="{url action=detail id=$sItem.id}" title="{$sItem[$sTitleKey]|escape}" class="btn is--primary is--small">{s name="ReadMore" namespace="frontend/content_type/index"}{/s}</a>
                             </div>
                         {/block}
                     </div>

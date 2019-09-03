@@ -42,46 +42,46 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
      * Define that the order main window is an extension of the enlight application window
      * @string
      */
-    extend:'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     /**
      * Set base css class prefix and module individual css class for css styling
      * @string
      */
-    cls:Ext.baseCSSPrefix + 'article-mapping-window',
+    cls: Ext.baseCSSPrefix + 'article-mapping-window',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.article-mapping-window',
+    alias: 'widget.article-mapping-window',
     /**
      * Set no border for the window
      * @boolean
      */
-    border:false,
+    border: false,
     /**
      * True to automatically show the component upon creation.
      * @boolean
      */
-    autoShow:false,
+    autoShow: false,
     /**
-     * Set border layout for the window
+     * Set fit layout for the window
      * @string
      */
-    layout:'fit',
+    layout: 'fit',
     /**
      * Define window width
      * @integer
      */
-    width:400,
+    width: 400,
     /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
      */
-    stateful:true,
+    stateful: true,
 
     /**
      * The unique id for this object to use for state management purposes.
      */
-    stateId:'shopware-article-mapping-window',
+    stateId: 'shopware-article-mapping-window',
     footerButton: false,
     minimizable: false,
     maximizable: false,
@@ -98,6 +98,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
         basePrice: '{s name=variant/configurator/mapping/basePrice}Apply base price configuration{/s}',
         purchasePrice: '{s name=variant/configurator/mapping/purchasePrice}Apply pruchase price configuration{/s}',
         settings: '{s name=variant/configurator/mapping/settings}Apply settings configuration{/s}',
+        stock: '{s name=variant/configurator/mapping/stock}Apply stock{/s}',
         translations: '{s name=variant/configurator/mapping/translations}Apply translations{/s}',
         save: '{s name=variant/configurator/mapping/save}Save{/s}',
         cancel: '{s name=variant/configurator/mapping/cancel}Cancel{/s}'
@@ -126,7 +127,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
 
         // Set height when showing the window, since all other height changes are ignored
         me.on('show', function() {
-            me.setHeight(330);
+            me.setHeight(375);
         });
     },
 
@@ -180,6 +181,9 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
         } , {
             name: 'settings',
             fieldLabel: me.snippets.settings
+        } , {
+            name: 'stock',
+            fieldLabel: me.snippets.stock
         } , {
             name: 'attributes',
             fieldLabel: me.snippets.attribute

@@ -155,7 +155,7 @@ class CacheManager
         $values = $this->db->fetchPairs($sql, [$elementId]);
 
         foreach ($values as $shopId => $value) {
-            $value = unserialize($value);
+            $value = unserialize($value, ['allowed_classes' => false]);
             $value = min(strtotime($value), time() - $cache);
             $value = date('Y-m-d H:i:s', $value);
             $value = serialize($value);

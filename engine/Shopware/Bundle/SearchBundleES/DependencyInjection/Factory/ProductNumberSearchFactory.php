@@ -72,9 +72,12 @@ class ProductNumberSearchFactory
 
     /**
      * @return ArrayCollection
+     *
+     * @deprecated since Shopware 5.6, will be removed with 5.7. Please use the di tag shopware_search_es.search_handler instead
      */
     public function registerHandlerCollection(ContainerInterface $container)
     {
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6, will be removed in 5.7. Please use the di tag shopware_search_es.search_handler instead', __CLASS__, __FUNCTION__), E_USER_DEPRECATED);
         $handlers = $this->registerHandlers($container);
 
         return new ArrayCollection($handlers);

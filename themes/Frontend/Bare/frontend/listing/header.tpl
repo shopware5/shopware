@@ -14,7 +14,7 @@
 
     {$description = $description|truncate:$SeoDescriptionMaxLength:'…'}
 
-    <meta property="og:type" content="product" />
+    <meta property="og:type" content="product.group" />
     <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />
     <meta property="og:title" content="{$sCategoryContent.name|escapeHtml}" />
     <meta property="og:description" content="{$description|escapeHtml}" />

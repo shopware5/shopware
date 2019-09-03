@@ -2,6 +2,34 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
+## 5.6.1
+
+### Additions
+
+* Added new config checkbox for applying stock on chosen variants while applying standard data
+* Added new smarty block `frontend_global_messages_icon_remove`
+* Added new div class `is--content-type` to all content type pages
+* Added fallback for missing widget label translation
+
+### Changes
+
+* Changed the meta property `og:type` in the listing from `product` to `product.group`
+* Changed password recovery form to also work with invalid customer objects
+* Changed `Shopware\Bundle\StoreFrontBundle\Gateway\BlogGateway` to consider blog translations
+* Changed the SEO meta tags in the blog listing
+* Changed `Shopware_Components_Translation` to work with missing payment or dispatch entries
+* Changed `sAdmin` to save cart after logout
+* Changed `Shopware\Components\DependencyInjection\Compiler\LegacyApiResourcesPass` to work correctly
+* Changed the calculation of the date in the affiliate marketing statistics
+* Changed `Enlight_Controller_Response_ResponseHttp::isRedirect` to not consider http response code 201 
+* Changed content type pages to display the off canvas menu in mobile view
+* Changed `sAdmin::sGetCountryList` to use CountryService
+* Changed the pagesize for the snippets module
+* Changed the handling of browser notifications to support browsers without notifications
+* Changed `themes/Frontend/Bare/frontend/_includes/emotion.tpl` to also work with emotion preview
+
+## 5.6.0
+
 [View all changes from v5.5.10...v5.6.0](https://github.com/shopware/shopware/compare/v5.5.10...v5.6.0)
 
 ### Additions
@@ -94,6 +122,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added `es.index_configuration` and `es.backend.index_configuration` section to `config.php` to allow custom elasticsearch settings
 * Added getter and setter to Config/Form model
 * Added new event `Shopware_Controllers_Order_SendMail_Prepare` to `Shopware_Controllers_Backend_Order::sendMailAction`
+* Added `Shopware\Components\CacheSubscriber` to clear config cache, when plugin config changes
 
 ### Changes
 
@@ -186,6 +215,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed ajax-search to cancel ajax request, when submit button is pressed
 * Changed elasticsearch backend backlog to write variant backlogs correctly
 * Changed the attribute entity selection for `\Shopware\Models\Order\Detail`
+* Changed the first parameter in `Shopware\Components\Model\ModelEntity:setOneToMany` to allow iterables
 
 ### Removals
 

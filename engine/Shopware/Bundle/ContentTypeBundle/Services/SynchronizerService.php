@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ContentTypeBundle\Services;
 
 use Doctrine\DBAL\Schema\Comparator;
+use Shopware\Bundle\ContentTypeBundle\Structs\Field;
 use Shopware\Bundle\ContentTypeBundle\Structs\Type;
 use Shopware\Components\Model\ModelManager;
 
@@ -113,7 +114,7 @@ class SynchronizerService implements SynchronizerServiceInterface
         $currentSchema = $con->getSchemaManager()->createSchema();
         $schema = clone $currentSchema;
 
-        // Mark all content type to be deleted, hopeful they will be redefined in the next step
+        // Mark all content type to be deleted, hopefully they will be redefined in the next step
         foreach ($schema->getTables() as $table) {
             if (strpos($table->getName(), 's_custom_') === 0) {
                 $schema->dropTable($table->getName());
@@ -126,8 +127,9 @@ class SynchronizerService implements SynchronizerServiceInterface
             $myTable->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
             $myTable->setPrimaryKey(['id']);
 
+            /** @var Field $field */
             foreach ($type->getFields() as $field) {
-                $myTable->addColumn($field->getName(), $field->getType()::getDbalType(), []);
+                $myTable->addColumn($field->getName(), $field->getType()::getDbalType(), ['notnull' => $field->isRequired()]);
             }
 
             $myTable->addColumn('created_at', 'datetime', []);

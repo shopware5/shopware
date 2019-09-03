@@ -21,37 +21,15 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-/**
- * <code>
- * $pointComponent = new Shopware_Components_Benchmark_Point
- * $pointComponent->Start($label);
- * </code>
- *
- * @deprecated Will be removed without replacement in 5.6
- */
-class Shopware_Components_Benchmark_Point
+class Migrations_Migration1635 extends Shopware\Components\Migrations\AbstractMigration
 {
-    public $start;
-    public $end;
-    public $label;
-    public $start_ram;
-    public $stop_ram;
-    public $stopped = false;
-
-    public function Start($label)
+    public function up($modus)
     {
-        $this->label = $label;
-        $this->start = microtime(true);
-        $this->start_ram = memory_get_peak_usage(true);
+        $sql = <<<SQL
+        ALTER TABLE `s_user`
+        ADD `register_opt_in_id` int NULL;
+SQL;
 
-        return $this;
-    }
-
-    public function Stop()
-    {
-        $this->stopped = true;
-        $this->end = microtime(true);
-        $this->stop_ram = memory_get_peak_usage(true);
+        $this->addSql($sql);
     }
 }

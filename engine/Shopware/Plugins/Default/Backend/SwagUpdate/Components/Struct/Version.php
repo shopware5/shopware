@@ -60,4 +60,24 @@ class Version extends Struct
      * @var array
      */
     public $checks;
+
+    /**
+     * @var string
+     */
+    public $release_date;
+
+    /**
+     * @var bool
+     */
+    public $security_update;
+
+    /**
+     * @var string
+     */
+    public $sha256;
+
+    /**
+     * @var bool
+     */
+    public $signature_verified;
 }

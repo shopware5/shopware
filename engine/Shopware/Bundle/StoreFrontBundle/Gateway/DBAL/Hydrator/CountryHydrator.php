@@ -104,6 +104,10 @@ class CountryHydrator extends Hydrator
             $country->setVatIdCheck((bool) $data['__country_taxfree_ustid_checked']);
         }
 
+        if (isset($data['__country_areaID'])) {
+            $country->setAreaId((int) $data['__country_areaID']);
+        }
+
         $country->setPosition((int) $data['__country_position']);
         $country->setActive((bool) $data['__country_active']);
 
@@ -135,6 +139,11 @@ class CountryHydrator extends Hydrator
         if (isset($data['__countryState_shortcode'])) {
             $state->setCode($data['__countryState_shortcode']);
         }
+
+        if (isset($data['__countryState_active'])) {
+            $state->setActive((bool) $data['__countryState_active']);
+        }
+
         $state->setPosition((int) $data['__countryState_position']);
 
         if ($data['__countryStateAttribute_id'] !== null) {

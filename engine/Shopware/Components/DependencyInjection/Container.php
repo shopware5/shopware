@@ -178,6 +178,10 @@ class Container extends BaseContainer
 
         parent::set($name, null);
 
+        if (isset($this->services[$name])) {
+            unset($this->services[$name]);
+        }
+
         return $this;
     }
 
