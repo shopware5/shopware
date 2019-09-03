@@ -762,7 +762,7 @@ class sOrder implements \Enlight_Hook
             $this->sBasketData['content'][$key]['attributes'] = $detailAttributes;
 
             // Update sales and stock
-            if ($basketRow['priceNumeric'] >= 0) {
+            if ($basketRow['priceNumeric'] >= 0 && $basketRow['modus'] == '0') {
                 $this->refreshOrderedVariant(
                     $basketRow['ordernumber'],
                     $basketRow['quantity']
