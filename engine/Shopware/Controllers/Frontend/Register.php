@@ -599,7 +599,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     private function getCountries()
     {
         $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
-        $service = $this->get('shopware_storefront.location_service');
+        $service = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\LocationServiceInterface::class);
         $countries = $service->getCountries($context);
 
         return $this->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertCountryStructList($countries);

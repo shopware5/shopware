@@ -1,8 +1,8 @@
 # CHANGELOG for Shopware 5.7.x
 
-This changelog references changes done in Shopware 5.6 patch versions.
+This changelog references changes done in Shopware 5.7 patch versions.
 
-[View all changes from v5.6.0...v5.7.0](https://github.com/shopware/shopware/compare/v5.6.0...v5.7.0)
+[View all changes from v5.6.1...v5.7.0](https://github.com/shopware/shopware/compare/v5.6.1...v5.7.0)
 
 ### Additions
 
