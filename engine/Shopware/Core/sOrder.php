@@ -486,7 +486,7 @@ class sOrder implements \Enlight_Hook
                 $basketRow['taxID'] = '0';
             }
             if (!$basketRow['releasedate']) {
-                $basketRow['releasedate'] = '0000-00-00';
+                $basketRow['releasedate'] = null;
             }
 
             $data = [

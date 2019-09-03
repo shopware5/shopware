@@ -302,7 +302,7 @@ class Customer extends LazyFetchModelEntity
      *
      * @var \DateTimeInterface
      *
-     * @ORM\Column(name="firstlogin", type="date", nullable=false)
+     * @ORM\Column(name="firstlogin", type="date", nullable=true)
      */
     private $firstLogin;
 
@@ -311,7 +311,7 @@ class Customer extends LazyFetchModelEntity
      *
      * @var \DateTimeInterface
      *
-     * @ORM\Column(name="lastlogin", type="datetime", nullable=false)
+     * @ORM\Column(name="lastlogin", type="datetime", nullable=true)
      */
     private $lastLogin;
 
@@ -516,7 +516,6 @@ class Customer extends LazyFetchModelEntity
     {
         $this->orders = new ArrayCollection();
         $this->firstLogin = new \DateTime();
-        $this->lastLogin = new \DateTime();
         $this->passwordChangeDate = new \DateTime();
         $this->notifications = new ArrayCollection();
         $this->paymentInstances = new ArrayCollection();
@@ -687,13 +686,13 @@ class Customer extends LazyFetchModelEntity
      * with the date when the customer creates the account. The parameter can be a DateTime object
      * or a string with the date. If a string is passed, the string converts to an DateTime object.
      *
-     * @param \DateTimeInterface|string $firstLogin
+     * @param \DateTimeInterface|string|null $firstLogin
      *
      * @return Customer
      */
     public function setFirstLogin($firstLogin)
     {
-        if (!$firstLogin instanceof \DateTimeInterface) {
+        if ($firstLogin !== null && !($firstLogin instanceof \DateTimeInterface)) {
             $firstLogin = new \DateTime($firstLogin);
         }
         $this->firstLogin = $firstLogin;
@@ -705,7 +704,7 @@ class Customer extends LazyFetchModelEntity
      * Getter function for the first login column property of the customer, which contains a DateTime object
      * with the date when the customer creates the account.
      *
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getFirstLogin()
     {
@@ -717,13 +716,13 @@ class Customer extends LazyFetchModelEntity
      * with the date when the customer last logged in. The parameter can be a DateTime object
      * or a string with the date. If a string is passed, the string converts to an DateTime object.
      *
-     * @param \DateTimeInterface|string $lastLogin
+     * @param \DateTimeInterface|string|null $lastLogin
      *
      * @return Customer
      */
     public function setLastLogin($lastLogin)
     {
-        if (!$lastLogin instanceof \DateTimeInterface) {
+        if ($lastLogin !== null && !($lastLogin instanceof \DateTimeInterface)) {
             $lastLogin = new \DateTime($lastLogin);
         }
         $this->lastLogin = $lastLogin;
@@ -735,7 +734,7 @@ class Customer extends LazyFetchModelEntity
      * Getter function for the last login column property of the customer, which contains a DateTime object
      * with the date when the customer last logged in.
      *
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getLastLogin()
     {
@@ -963,7 +962,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * Getter function for the lockedUntil column property, which contains the time since the customer is logged into a session.
      *
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getLockedUntil()
     {

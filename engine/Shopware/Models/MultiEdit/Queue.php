@@ -94,9 +94,9 @@ class Queue extends ModelEntity
     private $active = false;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
-     * @ORM\Column(name="created", type="datetime", nullable=false)
+     * @ORM\Column(name="created", type="datetime", nullable=true)
      */
     private $created;
 
@@ -109,13 +109,13 @@ class Queue extends ModelEntity
         $this->articleDetails = new ArrayCollection();
     }
 
-    public function setCreated(\DateTimeInterface $created)
+    public function setCreated(?\DateTimeInterface $created)
     {
         $this->created = $created;
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getCreated()
     {

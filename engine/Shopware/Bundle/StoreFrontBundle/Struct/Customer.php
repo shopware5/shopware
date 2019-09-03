@@ -312,7 +312,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getLastLogin()
     {

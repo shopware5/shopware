@@ -163,8 +163,8 @@ class RegisterService implements RegisterServiceInterface
 
         if (!$customerConfirmed) {
             // Reset login information if Double-Opt-In is active
-            $customer->setFirstLogin('0000-00-00');
-            $customer->setLastLogin('0000-00-00');
+            $customer->setFirstLogin(null);
+            $customer->setLastLogin(null);
             $customer->setDoubleOptinEmailSentDate(new \DateTime());
         }
 
