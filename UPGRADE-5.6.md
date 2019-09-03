@@ -169,11 +169,11 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed display mode of voucher field on the shopping cart page into a configurable display mode
 * Changed symfony form request handler to `Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationRequestHandler`
 * Changed `.htaccess`-file to no longer contain references to PHP5
-* Changed following tables 
+* Changed following tables to varchar limit of 15 for customer group key
     * `s_core_customergroups`
     * `s_article_configurator_template_prices`
     * `s_articles_prices`
-    * `s_campaigns_mailings` to varchar limit of 15 for customer group key
+    * `s_campaigns_mailings`
 * Changed backend customer login to start with a fresh session
 * Changed `Shopware_Controllers_Backend_Application` to be an abstract class
 * Changed `sExport::sGetArticleCategoryPath` to allow various attributes in category path
@@ -301,7 +301,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Deprecated `Shopware\Bundle\EmotionBundle\Exception\ComponentHandlerNotFoundException`. It will be removed in 5.7 without replacement.
 * Deprecated `Shopware\Bundle\EsBackendBundle\EsAwareSearcher`. It will be removed in 5.7 without replacement.
 * Deprecated `Shopware\Bundle\ESIndexingBundle\Product\ProductQueryFactoryInterface::createPriceIdQuery`, `::createVoteIdQuery`, `::createVariantIdQuery`, `::createProductCategoryQuery`. It will be removed in 5.7 without replacement.
-* Deprecated `Shopware\Bundle\ESIndexingBundle\Product\ProductQueryFactory` Deprecated `Shopware\Bundle\ESIndexingBundle\Product\ProductQueryFactoryInterface::createPriceIdQuery`, `::createVoteIdQuery`, `::createVariantIdQuery`, `::createProductCategoryQuery`. It will be removed in 5.7 without replacement.::createPriceIdQuery`, `::createVoteIdQuery`, `::createVariantIdQuery`, `::createProductCategoryQuery`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Bundle\ESIndexingBundle\Product\ProductQueryFactory::createPriceIdQuery`, `::createVoteIdQuery`, `::createVariantIdQuery`, `::createProductCategoryQuery`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Bundle\ESIndexingBundle\Product\ProductQueryFactoryInterface::createPriceIdQuery`, `::createVoteIdQuery`, `::createVariantIdQuery`, `::createProductCategoryQuery`. It will be removed in 5.7 without replacement.
 * Deprecated `Shopware\Bundle\ESIndexingBundle\LastIdQuery::getQuery`. It will be removed in 5.7 without replacement.
 * Deprecated `Shopware\Bundle\PluginInstallerBundle\Context\PluginLicenceRequest`. It will be removed in 5.7 without replacement.
 * Deprecated `Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService::getPluginLicence`. It will be removed in 5.7 without replacement.
