@@ -11,6 +11,16 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added a title to the base price declaration shown in the product box (`themes/Frontend/Bare/frontend/listing/product-box/product-price-unit.tpl`), so users may view the full text by hovering, in case the declaration was truncated
 * Added all global defined attachments to the order document mail sending
 * Added example HSTS configuration in the htaccess file
+* Added the same context variables to `sREGISTERCONFIRMATION` when the mail is sent after a DOI eMail compared to when it is sent directly
+* Added some values to the context of eMails `sOPTINREGISTER` and `sOPTINREGISTERACCOUNTLESS` to include the same values as eMail `sREGISTERCONFIRMATION`, these are:
+    * `customer_type` and `additional.customer_type`
+    * `accountmode`
+    * `email` and `sMAIL`
+    * `street`
+    * `zipcode`
+    * `city`
+    * `country`
+    * `state`
 
 ### Changes
 
@@ -29,6 +39,22 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `Zend_Cache_Backend_Redis` to make it compatible with PhpRedis 5.0.0
 * Changed `Listing` controller to prevent it from accessing categories of subshops
 * Changed jquery plugins `ajax-product-navigation`, `infinite-scrolling` and `listing-actions` to work with invalid query strings
+* Changed the context variables of eMail `sREGISTERCONFIRMATION` to contain the same variables when the mail is sent after a DOI eMail compared to when it is sent directly
+* Changed the context variables of eMails `sOPTINREGISTER` and `sOPTINREGISTERACCOUNTLESS` to include the same values as eMail `sREGISTERCONFIRMATION`, these are:
+    * The already existing variables:
+        * `sConfirmLink`
+        * `firstname`
+        * `lastname`
+        * `salutation`
+    * New are the variables:
+        * `customer_type` and `additional.customer_type`
+        * `accountmode`
+        * `email` and `sMAIL`
+        * `street`
+        * `zipcode`
+        * `city`
+        * `country`
+        * `state`
 
 ## 5.6.1
 
