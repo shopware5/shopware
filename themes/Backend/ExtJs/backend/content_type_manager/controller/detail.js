@@ -26,7 +26,8 @@ Ext.define('Shopware.apps.ContentTypeManager.controller.Detail', {
     extend: 'Shopware.detail.Controller',
 
     refs: [
-        { ref: 'detailContainer', selector: 'content-type-manager-detail-container' }
+        { ref: 'detailContainer', selector: 'content-type-manager-detail-container' },
+        { ref: 'grid', selector: 'content-type-manager-detail-fields' }
     ],
 
     init: function() {
@@ -37,6 +38,17 @@ Ext.define('Shopware.apps.ContentTypeManager.controller.Detail', {
             me.getDetailContainer().seoUrlGrid.reconfigure(newRecord.getUrls());
         });
 
+        this.control({
+            'content-type-manager-detail-window': {
+                'content-type-manager-after-tab-changed': this.onTabChange
+            }
+        });
+
+        this.callParent(arguments);
+    },
+
+    onSave: function () {
+        this.getGrid().store.clearFilter();
         this.callParent(arguments);
     },
 
@@ -45,6 +57,10 @@ Ext.define('Shopware.apps.ContentTypeManager.controller.Detail', {
             detailWindow: 'Shopware.apps.ContentTypeManager.view.detail.Window',
             eventAlias: 'content-type-manager'
         }
-    }
+    },
+
+    onTabChange: function () {
+        this.getGrid().store.clearFilter();
+    },
 });
 // {/block}

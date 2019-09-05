@@ -158,6 +158,7 @@
             <argument type="service" id="Shopware\Bundle\ESIndexingBundle\FieldMapping"/>
             <argument type="service" id="shopware_elastic_search.text_mapping"/>
             <argument type="service" id="Shopware\Bundle\AttributeBundle\Service\CrudService"/>
+            <argument type="service" id="Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface"/>
             <argument>%shopware.es.dynamic_mapping_enabled%</argument>
             <argument>%shopware.es.debug%</argument>
 

@@ -101,6 +101,14 @@ Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
                     return;
                 }
 
+                if (result.data.security_update && !result.data.security_plugin_active) {
+                    Ext.create('Shopware.apps.SwagUpdate.view.SecurityUpdateWindow', {
+                        onCloseButton: onCloseButton,
+                        updateVersion: result.data.name,
+                    });
+                    return;
+                }
+
                 // Create growl notification for the update
                 Shopware.Notification.createStickyGrowlMessage({
                     title: snippets.title,
@@ -113,13 +121,13 @@ Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
                             });
                         }
                     },
-
-                    onCloseButton: function() {
-                        /* {if {acl_is_allowed privilege=skipUpdate resource=swagupdate}} */
-                        Ext.MessageBox.confirm('{s name="skip_update"}Skip update{/s}', '{s name="skip_update_question"}Do you want to disable the notifications for this update permanently?{/s}', skipUpdate);
-                        /* {/if} */
-                    }
                 });
+
+                function onCloseButton() {
+                    /* {if {acl_is_allowed privilege=skipUpdate resource=swagupdate}} */
+                    Ext.MessageBox.confirm('{s name="skip_update"}Skip update{/s}', '{s name="skip_update_question"}Do you want to disable the notifications for this update permanently?{/s}', skipUpdate);
+                    /* {/if} */
+                }
 
                 function skipUpdate(button) {
                     if (button == 'yes') {

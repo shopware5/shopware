@@ -29,6 +29,7 @@ use Enlight_Controller_Request_Request as Request;
 use Enlight_Controller_Response_ResponseHttp as Response;
 use Shopware\Bundle\PluginInstallerBundle\Exception\ShopSecretException;
 use Shopware\Bundle\PluginInstallerBundle\StoreClient;
+use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationResultStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationStruct;
 use Shopware\Components\Model\ModelManager;
@@ -105,7 +106,7 @@ class SubscriptionService
 
         $statement = $queryBuilder->execute();
 
-        $secret = unserialize($statement->fetchColumn());
+        $secret = unserialize($statement->fetchColumn(), ['allowed_classes' => false]);
 
         return $secret;
     }
@@ -219,7 +220,11 @@ class SubscriptionService
      */
     private function generateApiShopSecret()
     {
-        $token = unserialize(Shopware()->BackendSession()->offsetGet('store_token'));
+        $allowedClassList = [
+            AccessTokenStruct::class,
+        ];
+
+        $token = unserialize(Shopware()->BackendSession()->offsetGet('store_token'), ['allowed_classes' => $allowedClassList]);
 
         if ($token === null) {
             $token = Shopware()->BackendSession()->accessToken;

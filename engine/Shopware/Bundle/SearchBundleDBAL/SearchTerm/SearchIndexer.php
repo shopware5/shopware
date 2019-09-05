@@ -99,7 +99,7 @@ class SearchIndexer implements SearchIndexerInterface
 
         $result = $result[0];
 
-        $last = !empty($result['last']) ? unserialize($result['last']) : null;
+        $last = !empty($result['last']) ? unserialize($result['last'], ['allowed_classes' => false]) : null;
 
         if (empty($last) || empty($result['not_force']) || strtotime($last) < strtotime($result['current']) - $interval) {
             $this->build();
@@ -363,7 +363,7 @@ class SearchIndexer implements SearchIndexerInterface
 
             $categoryTranslations = $translations[$id];
             foreach ($categoryTranslations as $translation) {
-                $translation = unserialize($translation);
+                $translation = unserialize($translation, ['allowed_classes' => false]);
                 $mapping[] = ['id' => $id, $field => $translation[$field]];
             }
         }

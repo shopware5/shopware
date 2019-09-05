@@ -37,7 +37,8 @@ Ext.define('Shopware.apps.PluginManager.model.Basket', {
         { name: 'taxPrice', type: 'float' },
         { name: 'taxRate', type: 'string' },
         { name: 'bookingDomain', type: 'string' },
-        { name: 'licenceDomain', type: 'string' }
+        { name: 'licenceDomain', type: 'string' },
+        { name: 'licenceShopId', type: 'int' }
     ],
 
     associations: [

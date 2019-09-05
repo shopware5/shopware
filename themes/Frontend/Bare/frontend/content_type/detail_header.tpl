@@ -11,7 +11,7 @@
     {/if}
 
     {if empty($sMetaDescription)}
-        {$sMetaDescription = $sItem[$sMetaDescriptionKey]}
+        {$sMetaDescription = $sItem[$sDescriptionKey]}
     {/if}
 {/block}
 
@@ -30,7 +30,7 @@
     <meta name="twitter:description" content="{$sMetaDescription|strip_tags|trim|truncate:$SeoDescriptionMaxLength:'…'|escapeHtml}" />
 
     {$image = $sItem[$sImageKey]}
-    {if $image[0]}
+    {if is_array($image[0])}
         {* Image-Slider, take first image *}
         {$image = $image[0]}
     {/if}

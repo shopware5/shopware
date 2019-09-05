@@ -142,8 +142,10 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         me.taskBarBtn = Ext.getCmp('widgetTaskBarBtn');
         me.taskBarBtn.on('click', me.toggleMinimizeWindow.bind(me));
 
-        me.notificationBtn = Ext.getCmp('notificationTaskBarBtn');
-        me.notificationBtn.on('click', me.askForNotificationPermission.bind(me));
+        if (window.Notification){
+            me.notificationBtn = Ext.getCmp('notificationTaskBarBtn');
+            me.notificationBtn.on('click', me.askForNotificationPermission.bind(me));
+        }
 
         me.control({
             'widget-sidebar-window': {

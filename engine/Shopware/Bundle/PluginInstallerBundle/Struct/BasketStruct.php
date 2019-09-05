@@ -67,16 +67,23 @@ class BasketStruct implements \JsonSerializable
     private $taxPrice;
 
     /**
-     * @param DomainStruct[]         $domains
-     * @param AddressStruct          $address
-     * @param BasketPositionStruct[] $positions
-     * @param float                  $netPrice
-     * @param float                  $grossPrice
-     * @param float                  $taxRate
-     * @param float                  $taxPrice
+     * @var int
      */
-    public function __construct($domains, $address, $positions, $netPrice, $grossPrice, $taxRate, $taxPrice)
-    {
+    private $licenceShopId;
+
+    /**
+     * @param DomainStruct[]         $domains
+     * @param BasketPositionStruct[] $positions
+     */
+    public function __construct(
+        array $domains,
+        AddressStruct $address,
+        array $positions,
+        float $netPrice,
+        float $grossPrice,
+        float $taxRate,
+        float $taxPrice
+    ) {
         $this->domains = $domains;
         $this->address = $address;
         $this->positions = $positions;
@@ -97,15 +104,12 @@ class BasketStruct implements \JsonSerializable
     /**
      * @return DomainStruct[]
      */
-    public function getDomains()
+    public function getDomains(): array
     {
         return $this->domains;
     }
 
-    /**
-     * @return AddressStruct
-     */
-    public function getAddress()
+    public function getAddress(): AddressStruct
     {
         return $this->address;
     }
@@ -113,56 +117,48 @@ class BasketStruct implements \JsonSerializable
     /**
      * @return BasketPositionStruct[]
      */
-    public function getPositions()
+    public function getPositions(): array
     {
         return $this->positions;
     }
 
-    /**
-     * @return float
-     */
-    public function getNetPrice()
+    public function getNetPrice(): float
     {
         return $this->netPrice;
     }
 
-    /**
-     * @return float
-     */
-    public function getGrossPrice()
+    public function getGrossPrice(): float
     {
         return $this->grossPrice;
     }
 
-    /**
-     * @return float
-     */
-    public function getTaxRate()
+    public function getTaxRate(): float
     {
         return $this->taxRate;
     }
 
-    /**
-     * @return float
-     */
-    public function getTaxPrice()
+    public function getTaxPrice(): float
     {
         return $this->taxPrice;
     }
 
-    /**
-     * @return string
-     */
-    public function getLicenceDomain()
+    public function getLicenceDomain(): string
     {
         return $this->licenceDomain;
     }
 
-    /**
-     * @param string $licenceDomain
-     */
-    public function setLicenceDomain($licenceDomain)
+    public function setLicenceDomain(string $licenceDomain): void
     {
         $this->licenceDomain = $licenceDomain;
+    }
+
+    public function setLicenceShopId(int $licenceShopId): void
+    {
+        $this->licenceShopId = $licenceShopId;
+    }
+
+    public function getLicenceShopId(): int
+    {
+        return $this->licenceShopId;
     }
 }

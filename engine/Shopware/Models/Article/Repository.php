@@ -2559,6 +2559,7 @@ class Repository extends ModelRepository
             'imageParent.height',
             'imageParent.extension',
             'imageParent.parentId',
+            'media.type',
             'attribute.attribute1',
             'attribute.attribute2',
             'attribute.attribute3',
@@ -2567,6 +2568,7 @@ class Repository extends ModelRepository
             ->innerJoin('images.articleDetail', 'articleDetail')
             ->innerJoin('images.parent', 'imageParent')
             ->leftJoin('imageParent.attribute', 'attribute')
+            ->leftJoin('imageParent.media', 'media')
             ->where('articleDetail.number = ?1')
             ->setParameter(1, $number)
             ->orderBy('imageParent.main', 'ASC')

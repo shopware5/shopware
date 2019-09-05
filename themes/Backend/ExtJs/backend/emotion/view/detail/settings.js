@@ -171,14 +171,18 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             listeners: {
                 scope: me,
                 change: function(field, value) {
-                    if(value) {
-                        me.generalFieldSet.hide();
-                        me.landingPageFieldSet.show();
+                    if (value) {
                         me.customerFieldSet.hide();
+                        me.generalFieldSet.hide();
+                        me.displayInListingSelection.disable();
+
+                        me.landingPageFieldSet.show();
                     } else {
-                        me.landingPageFieldSet.hide();
-                        me.generalFieldSet.show();
                         me.customerFieldSet.show();
+                        me.generalFieldSet.show();
+                        me.displayInListingSelection.enable();
+
+                        me.landingPageFieldSet.hide();
                     }
                 }
             }
@@ -235,13 +239,13 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             displayField: 'label',
             valueField: 'key',
             listeners: {
-                    change: function (element, value) {
-                        if (value === 'only_listing') {
-                            me.listingCheckbox.disable();
-                        } else {
-                            me.listingCheckbox.enable();
-                        }
+                change: function (element, value) {
+                    if (value === 'only_listing') {
+                        me.listingCheckbox.disable();
+                    } else {
+                        me.listingCheckbox.enable();
                     }
+                }
             }
         });
 

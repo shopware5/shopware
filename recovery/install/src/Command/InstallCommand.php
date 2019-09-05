@@ -745,8 +745,7 @@ EOT;
         $question->setErrorMessage('Edition %s is invalid.');
         $edition = $this->IOHelper->ask($question);
 
-        $flip = array_flip($choices);
-        $edition = strtoupper($flip[$edition]);
+        $edition = strtoupper($edition);
 
         $license = null;
         if ($edition != ShopwareEdition::CE) {

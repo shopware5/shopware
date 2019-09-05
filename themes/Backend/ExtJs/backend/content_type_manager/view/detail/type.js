@@ -81,7 +81,10 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
                             displayField: 'label',
                             queryMode: 'local',
                             labelWidth: 150,
-                            forceSelection: true
+                            forceSelection: true,
+                            listeners: {
+                                expand: this.resetFilters
+                            }
                         },
                         viewDescriptionFieldName: {
                             fieldLabel: '{s name="view/descriptionField"}{/s}',
@@ -90,7 +93,10 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
                             displayField: 'label',
                             queryMode: 'local',
                             labelWidth: 150,
-                            forceSelection: true
+                            forceSelection: true,
+                            listeners: {
+                                expand: this.resetFilters
+                            }
                         },
                         viewImageFieldName: {
                             fieldLabel: '{s name="view/imageField"}{/s}',
@@ -99,7 +105,10 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
                             displayField: 'label',
                             queryMode: 'local',
                             labelWidth: 150,
-                            forceSelection: true
+                            forceSelection: true,
+                            listeners: {
+                                expand: this.resetFilters
+                            }
                         },
                     }
                 },
@@ -115,7 +124,8 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
                             labelWidth: 150,
                             supportText: '{s name="seo/metaTitleFieldHelpText"}{/s}',
                             listeners: {
-                                change: this.comboboxResetListener
+                                change: this.comboboxResetListener,
+                                expand: this.resetFilters
                             }
                         },
                         viewMetaDescriptionFieldName: {
@@ -127,7 +137,8 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
                             labelWidth: 150,
                             supportText: '{s name="seo/metaDescriptionFieldHelpText"}{/s}',
                             listeners: {
-                                change: this.comboboxResetListener
+                                change: this.comboboxResetListener,
+                                expand: this.resetFilters
                             }
                         },
                         seoUrlTemplate: {
@@ -263,6 +274,10 @@ Ext.define('Shopware.apps.ContentTypeManager.view.detail.Type', {
         if (!this.getValue() || this.getValue().length === 0) {
             this.setValue('');
         }
+    },
+
+    resetFilters: function () {
+        this.store.clearFilter();
     }
 });
 // {/block}

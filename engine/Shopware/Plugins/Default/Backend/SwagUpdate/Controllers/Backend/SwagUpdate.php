@@ -299,6 +299,8 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
                 'data' => [
                     'success' => true,
                     'name' => $data->version,
+                    'security_update' => (bool) $data->security_update,
+                    'security_plugin_active' => $this->checkSecurityPlugin(),
                 ],
             ]);
         }
@@ -603,5 +605,10 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         $locale = strtolower($locale->getLocale());
 
         return substr($locale, 0, 2);
+    }
+
+    private function checkSecurityPlugin(): bool
+    {
+        return array_key_exists('SwagSecurity', $this->container->getParameter('active_plugins'));
     }
 }

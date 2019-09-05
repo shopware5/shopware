@@ -899,9 +899,13 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             Shopware()->Db()->insert('s_core_translations', $demoStateData);
         }
 
+        //Hack current context, so next test works
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $context->getShop()->setIsDefault(false);
+
         // Test with translations but display_states = false
         $result = $this->module->sGetCountryList();
-        $country = $result[0]; // Germany
+        $country = array_shift($result); // Germany
         static::assertArrayHasKey('id', $country);
         static::assertArrayHasKey('countryname', $country);
         static::assertArrayHasKey('countryiso', $country);
@@ -914,9 +918,6 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         static::assertArrayHasKey('flag', $country);
         static::assertCount(0, $country['states']);
         static::assertEquals('Germany', $country['countryname']);
-
-        // Hack the current system shop, so we can properly test this
-        Shopware()->Shop()->setDefault(false);
 
         // Make Germany display states, so we can test it
         $existingGermanyData = Shopware()->Db()->fetchRow("
@@ -931,7 +932,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Test with translations and states
         $result = $this->module->sGetCountryList();
-        $country = $result[0]; // Germany
+        $country = array_shift($result); // Germany
         static::assertArrayHasKey('id', $country);
         static::assertArrayHasKey('countryname', $country);
         static::assertArrayHasKey('countryiso', $country);
@@ -971,7 +972,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         }
 
         // Remove shop hack
-        Shopware()->Shop()->setDefault(true);
+        $context->getShop()->setIsDefault(true);
     }
 
     /**

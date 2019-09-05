@@ -463,7 +463,7 @@
         <service id="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PaymentHydrator" alias="shopware_storefront.payment_hydrator_dbal" />
         <service id="Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface" alias="shopware_storefront.shop_gateway_dbal" />
         <service id="Shopware\Bundle\StoreFrontBundle\Gateway\CurrencyGatewayInterface" alias="shopware_storefront.currency_gateway_dbal" />
-        <service id="Shopware\Bundle\StoreFrontBundle\Service\Core\LocationService" alias="shopware_storefront.location_service" />
+        <service id="Shopware\Bundle\StoreFrontBundle\Service\LocationServiceInterface" alias="shopware_storefront.location_service" />
         <service id="Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryDepthService" alias="shopware_storefront.category_depth_service" />
         <service id="Shopware\Bundle\StoreFrontBundle\Service\BlogServiceInterface" alias="shopware_storefront.blog_service" />
         <service id="Shopware\Bundle\StoreFrontBundle\Gateway\BlogGatewayInterface" alias="shopware_storefront.blog_gateway_dbal" />

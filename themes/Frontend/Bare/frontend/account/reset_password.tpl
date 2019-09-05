@@ -42,7 +42,7 @@
                                             {block name='frontend_account_password_new_hash_input'}
                                                 <div class="password-new--hash">
                                                     <input name="hash"
-                                                           value="{$hash}"
+                                                           value="{$hash|escape}"
                                                            type="hidden"
                                                            id="hash"
                                                            class="password-new--input input--hash{if $sErrorFlag.hash} has--error{/if}">

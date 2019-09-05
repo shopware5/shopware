@@ -63,11 +63,15 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $this->forward('index', 'account');
 
             return;
-        } elseif ($this->shouldRedirectToCheckout()) {
+        }
+
+        if ($this->shouldRedirectToCheckout()) {
             $this->forward('confirm', 'checkout');
 
             return;
-        } elseif ($this->shouldRedirectToTarget()) {
+        }
+
+        if ($this->shouldRedirectToTarget()) {
             $this->redirect(['controller' => $sTarget, 'action' => $sTargetAction]);
 
             return;
@@ -75,7 +79,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
         $this->View()->assign('isAccountless', $this->get('session')->get('isAccountless'));
         $this->View()->assign('register', $this->getRegisterData());
-        $this->View()->assign('countryList', $this->getCountries());
+        $this->View()->assign('countryList', $this->get('modules')->Admin()->sGetCountryList());
     }
 
     /**
@@ -244,7 +248,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             return;
         }
 
-        if (($data = unserialize($result)) === false || !isset($data['customerId'])) {
+        if (($data = unserialize($result, ['allowed_classes' => false])) === false || !isset($data['customerId'])) {
             throw new InvalidArgumentException(sprintf('The data for hash \'%s\' is corrupted.', $hash));
         }
         $customerId = (int) $data['customerId'];
@@ -271,6 +275,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $customer->setFirstLogin($date);
         $customer->setDoubleOptinConfirmDate($date);
         $customer->setActive(true);
+        $customer->setRegisterOptInId(null);
 
         $modelManager->persist($customer);
         $modelManager->flush();
@@ -594,7 +599,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     private function getCountries()
     {
         $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
-        $service = $this->get('shopware_storefront.location_service');
+        $service = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\LocationServiceInterface::class);
         $countries = $service->getCountries($context);
 
         return $this->get(\Shopware\Components\Compatibility\LegacyStructConverter::class)->convertCountryStructList($countries);

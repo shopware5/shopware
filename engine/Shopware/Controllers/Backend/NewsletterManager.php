@@ -779,7 +779,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
      */
     private function unserializeGroup($group)
     {
-        $groups = unserialize($group);
+        $groups = unserialize($group, ['allowed_classes' => false]);
 
         $flattenedGroup = [];
         foreach ($groups as $group => $item) {

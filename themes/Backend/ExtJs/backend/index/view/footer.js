@@ -202,7 +202,7 @@ Ext.define('Shopware.apps.Index.view.Footer', {
     },
 
     createNotificationMenuButton: function () {
-        if (!'Notification' in window) {
+        if (!window.Notification) {
             return;
         }
 

@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Voucher;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -194,6 +195,11 @@ class Voucher extends ModelEntity
      * @ORM\Column(name="customer_stream_ids", type="text", nullable=true)
      */
     private $customerStreamIds;
+
+    public function __construct()
+    {
+        $this->codes = new ArrayCollection();
+    }
 
     /**
      * Getter Method to get the Id field from the Model

@@ -83,6 +83,14 @@ class StoreOrderService
 
         $basket->setLicenceDomain($context->getLicenceShop());
 
+        foreach ($basket->getDomains() as $domain) {
+            if ($domain->getDomain() !== $context->getLicenceShop()) {
+                continue;
+            }
+
+            $basket->setLicenceShopId($domain->getId());
+        }
+
         return $basket;
     }
 

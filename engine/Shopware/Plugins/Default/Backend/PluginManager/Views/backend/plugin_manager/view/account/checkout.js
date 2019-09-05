@@ -170,7 +170,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Checkout', {
 
         me.chargeDomainButton = Ext.create('PluginManager.container.Container', {
             cls: 'plugin-manager-action-button primary charge-amount',
-            html: '<a href="https://account.shopware.com/#/accountCharging" target="_blank">{s name="charge_amount"}Charge amount{/s}</a>'
+            html: '<a href="https://account.shopware.com/shops/shops/' +  me.basket.get('licenceShopId') + '/account" target="_blank">{s name="charge_amount"}Charge amount{/s}</a>'
         });
 
         me.bookingDomain = Ext.create('Ext.container.Container', {

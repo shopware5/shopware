@@ -118,7 +118,7 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
 
         $jobs = [];
         foreach ($rows as $row) {
-            $row['data'] = unserialize($row['data']);
+            $row['data'] = unserialize($row['data'], ['allowed_classes' => false]);
             $jobs[$row['id']] = new Enlight_Components_Cron_Job($row);
         }
 
@@ -147,6 +147,7 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
                 return $nextJob;
             }
         }
+
         return null;
     }
 
@@ -218,7 +219,7 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
             return null;
         }
 
-        $row['data'] = unserialize($row['data']);
+        $row['data'] = unserialize($row['data'], ['allowed_classes' => false]);
 
         return new Enlight_Components_Cron_Job($row);
     }
@@ -242,7 +243,7 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
 
         $overdueJobsList = [];
         foreach ($rows as $row) {
-            $row['data'] = unserialize($row['data']);
+            $row['data'] = unserialize($row['data'], ['allowed_classes' => false]);
             $overdueJobsList[$row['id']] = new Enlight_Components_Cron_Job($row);
         }
 
@@ -250,7 +251,7 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     private function isJobStillOverdue($jobId)
     {
@@ -267,6 +268,7 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
         if (!$row) {
             return false;
         }
+
         return true;
     }
 }

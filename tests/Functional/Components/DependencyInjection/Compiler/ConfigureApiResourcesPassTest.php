@@ -26,6 +26,9 @@ namespace Shopware\Tests\Functional\Components\DependencyInjection\Compiler;
 
 use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Components\Api\Resource\Resource;
+use Shopware\Components\DependencyInjection\Container;
+use Shopware\Tests\Functional\Helper\Utils;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class ConfigureApiResourcesPassTest extends Enlight_Components_Test_Controller_TestCase
 {
@@ -33,17 +36,32 @@ class ConfigureApiResourcesPassTest extends Enlight_Components_Test_Controller_T
      * @param string $serviceId
      * @dataProvider provideApiResourceIds
      */
-    public function testApiResourcesAreSetUpCorrect($serviceId)
+    public function testApiResourcesAreSetUpCorrect($serviceId): void
     {
         /** @var resource $service */
         $resource = Shopware()->Container()->get($serviceId);
         static::assertNotNull($resource->getManager());
     }
 
-    /**
-     * @return array
-     */
-    public function provideApiResourceIds()
+    public function testApiResourcesDecoration(): void
+    {
+        $kernel = Shopware()->Container()->get('kernel');
+
+        /** @var ContainerBuilder $container */
+        $container = Utils::hijackMethod($kernel, 'buildContainer');
+
+        $container
+            ->register('api.deco1')
+            ->setClass(Container::class)
+            ->setDecoratedService('shopware.api.article', null, 50);
+
+        $container->compile();
+
+        static::assertNotEmpty($container->getDefinition('api.deco1')->getTags());
+        static::assertNotEmpty($container->getDefinition('api.deco1')->getTag('shopware.api_resource'));
+    }
+
+    public function provideApiResourceIds(): array
     {
         $services = array_map(
             function ($id) {

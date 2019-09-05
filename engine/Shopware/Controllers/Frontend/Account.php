@@ -517,7 +517,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             return;
         }
 
-        $form = $this->createForm(ResetPasswordFormType::class, $customer);
+        $form = $this->createForm(ResetPasswordFormType::class, $customer, ['validation_groups' => ['registration']]);
         $form->handleRequest($this->Request());
 
         if (!$form->isValid()) {
@@ -535,7 +535,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
         $customer->setEncoderName($this->get('passwordencoder')->getDefaultPasswordEncoderName());
 
-        $this->customerService->update($customer);
+        $this->get('models')->persist($customer);
+        $this->get('models')->flush($customer);
 
         // Perform a login for the user and redirect him to his account
         $this->Request()->setPost(['email' => $customer->getEmail(), 'password' => $form->get('password')->getData()]);
