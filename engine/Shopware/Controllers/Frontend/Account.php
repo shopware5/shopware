@@ -516,7 +516,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             return;
         }
 
-        $form = $this->createForm(ResetPasswordFormType::class, $customer, ['validation_groups' => ['registration']]);
+        $form = $this->createForm(ResetPasswordFormType::class, $customer);
         $form->handleRequest($this->Request());
 
         if (!$form->isValid()) {
@@ -697,10 +697,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $this->forward('downloads');
     }
 
-    /**
-     * @return array
-     */
-    private function applyTrackingUrl(array $orderData)
+    private function applyTrackingUrl(array $orderData): array
     {
         foreach ($orderData['orderData'] as &$order) {
             if (!empty($order['trackingcode']) && !empty($order['dispatch']) && !empty($order['dispatch']['status_link'])) {
@@ -714,13 +711,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         return $orderData;
     }
 
-    /**
-     * @param string $link
-     * @param string $trackingCode
-     *
-     * @return string
-     */
-    private function renderTrackingLink($link, $trackingCode)
+    private function renderTrackingLink(string $link, string $trackingCode): string
     {
         $regEx = '/(\{\$offerPosition.trackingcode\})/';
 
@@ -741,13 +732,9 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     }
 
     /**
-     * @param string $hash
-     *
      * @throws Exception
-     *
-     * @return Customer
      */
-    private function getCustomerByResetHash($hash)
+    private function getCustomerByResetHash(string $hash): Customer
     {
         $resetPasswordNamespace = $this->container->get('snippets')->getNamespace('frontend/account/reset_password');
 
@@ -781,19 +768,13 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         return $customer;
     }
 
-    /**
-     * @return bool
-     */
-    private function shouldForwardToRegister()
+    private function shouldForwardToRegister(): bool
     {
         return !in_array($this->Request()->getActionName(), ['login', 'logout', 'password', 'resetPassword'])
             && !$this->admin->sCheckUser();
     }
 
-    /**
-     * @return array
-     */
-    private function getForwardParameters()
+    private function getForwardParameters(): array
     {
         if (!$this->Request()->getParam('sTarget') && !$this->Request()->getParam('sTargetAction')) {
             return [
@@ -808,19 +789,13 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         ];
     }
 
-    /**
-     * @return bool
-     */
-    private function isOneTimeAccount()
+    private function isOneTimeAccount(): bool
     {
         return $this->container->get('session')->offsetGet('sOneTimeAccount')
             || $this->View()->getAssign('sUserData')['additional']['user']['accountmode'] == 1;
     }
 
-    /**
-     * @return bool
-     */
-    private function isNotInUnitTestMode()
+    private function isNotInUnitTestMode(): bool
     {
         return !$this->container->hasParameter('shopware.session.unitTestEnabled') || !$this->container->getParameter('shopware.session.unitTestEnabled');
     }
