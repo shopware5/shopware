@@ -2,7 +2,21 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
+## 5.6.2
+
+[View all changes from v5.6.1...v5.6.2](https://github.com/shopware/shopware/compare/v5.6.1...v5.6.2)
+
+### Additions
+
+* Added a title to the base price declaration shown in the product box (`themes/Frontend/Bare/frontend/listing/product-box/product-price-unit.tpl`), so users may view the full text by hovering, in case the declaration was truncated
+
+### Changes
+
+* Changed the base price declaration shown in the product box (`themes/Frontend/Bare/frontend/listing/product-box/product-price-unit.tpl`), so that an ellipsis is shown when the text is truncated
+
 ## 5.6.1
+
+[View all changes from v5.6.0...v5.6.1](https://github.com/shopware/shopware/compare/v5.6.0...v5.6.1)
 
 ### Additions
 
