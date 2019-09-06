@@ -13,6 +13,7 @@
     {$robotsTxt->setDisallow('/widgets')}
     {$robotsTxt->setDisallow('/listing')}
     {$robotsTxt->setDisallow('/ticket')}
+    {$robotsTxt->setDisallow('/tracking')}
 
     {block name="frontend_robots_txt_disallows_output"}
         {foreach $robotsTxt->getDisallows() as $disallow}

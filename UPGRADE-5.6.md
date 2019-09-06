@@ -24,6 +24,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added new smarty block `frontend_global_messages_icon_remove`
 * Added new div class `is--content-type` to all content type pages
 * Added fallback for missing widget label translation
+* Added path `/tracking` to `robots.txt`
 
 ### Changes
 
