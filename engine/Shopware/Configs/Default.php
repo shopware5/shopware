@@ -148,6 +148,7 @@ return array_replace_recursive([
         'dbname' => 'shopware',
         'host' => 'localhost',
         'charset' => 'utf8mb4',
+        'timezone' => null, // Something like: 'UTC', 'Europe/Berlin', '-09:30',
         'adapter' => 'pdo_mysql',
         'pdoOptions' => null,
         'serverVersion' => null,

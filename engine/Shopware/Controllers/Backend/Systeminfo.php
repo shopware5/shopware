@@ -127,20 +127,27 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     {
         $offset = 0;
         try {
-            $sql = 'SELECT @@system_time_zone;';
-            $timezone = $this->container->get('dbal_connection')->query($sql)->fetchColumn(0);
-            $datebaseZone = timezone_open(timezone_name_from_abbr($timezone));
-            $phpZone = timezone_open(date_default_timezone_get());
-            $databaseTime = new DateTime('now', $datebaseZone);
+            $timezone = $this->container->get('dbal_connection')
+                ->query('SELECT @@SESSION.time_zone;')
+                ->fetchColumn();
 
-            if (!empty($timezone) && timezone_name_from_abbr($timezone)) {
-                $offset = abs($datebaseZone->getOffset(new DateTime()) - $phpZone->getOffset($databaseTime));
+            if (in_array($timezone[0], ['-', '+'], true)) {
+                $databaseZone = new DateTimeZone($timezone);
+            } else {
+                $databaseZone = timezone_open(timezone_name_from_abbr($timezone));
+            }
+
+            $phpZone = timezone_open(date_default_timezone_get());
+            $databaseTime = new DateTime('now', $databaseZone);
+
+            if (!empty($timezone)) {
+                $offset = abs($databaseZone->getOffset(new DateTime()) - $phpZone->getOffset($databaseTime));
             }
         } catch (\PDOException $e) {
         }
         if (empty($offset)) {
             $sql = 'SELECT UNIX_TIMESTAMP()-' . time();
-            $offset = $this->container->get('dbal_connection')->query($sql)->fetchColumn(0);
+            $offset = $this->container->get('dbal_connection')->query($sql)->fetchColumn();
         }
 
         $this->View()->assign(['success' => true, 'offset' => $offset < 60 ? 0 : round($offset / 60)]);
