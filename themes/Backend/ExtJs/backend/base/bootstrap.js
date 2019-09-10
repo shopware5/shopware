@@ -131,6 +131,9 @@
 {include file='backend/base/model/attribute_config.js'}
 {include file='backend/base/model/corner_position.js'}
 {include file='backend/base/model/cookie_mode.js'}
+{include file='backend/base/model/landing_page.js'}
+{include file='backend/base/model/blog.js'}
+{include file='backend/base/model/static.js'}
 
 {* Include global stores *}
 {include file='backend/base/store/user.js'}
@@ -166,7 +169,9 @@
 {include file='backend/base/store/salutation.js'}
 {include file='backend/base/store/corner_position.js'}
 {include file='backend/base/store/cookie_mode.js'}
-
+{include file='backend/base/store/landing_page.js'}
+{include file='backend/base/store/blog.js'}
+{include file='backend/base/store/static.js'}
 
 {* Include shopware related components *}
 {include file='backend/base/component/Shopware.button.HoverButton.js'}
@@ -196,6 +201,7 @@
 {include file='backend/base/component/Shopware.component.ValidatePassword.js'}
 {include file='backend/base/component/Shopware.window.ExpiredPluginWarning.js'}
 {include file='backend/base/component/Shopware.window.ExpiredPluginStop.js'}
+{include file='backend/base/component/Shopware.grid.Searchable.js'}
 
 {include file='backend/base/component/Shopware.form.field.ColorField.js'}
 {include file='backend/base/component/Shopware.form.field.ColorSelection.js'}

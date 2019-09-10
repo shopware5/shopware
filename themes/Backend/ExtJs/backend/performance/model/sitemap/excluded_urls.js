@@ -1,4 +1,3 @@
-<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,17 +21,23 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SitemapBundle\UrlFilter;
+//{block name="backend/performance/model/sitemap/excluded_urls"}
+Ext.define('Shopware.apps.Performance.model.sitemap.ExcludedUrls', {
 
-use Shopware\Bundle\SitemapBundle\Provider\ManufacturerUrlProvider;
-
-class Manufacturer extends Base
-{
     /**
-     * {@inheritdoc}
+     * @string
      */
-    public function supports($resourceName)
-    {
-        return $resourceName === ManufacturerUrlProvider::NAME;
-    }
-}
+    extend: 'Ext.data.Model',
+
+    /**
+     * @array
+     */
+    fields: [
+        //{block name="backend/performance/model/sitemap/excluded_urls/fields"}{/block}
+        { name: 'id', type: 'int' },
+        { name: 'resource', type: 'string' },
+        { name: 'identifier', type: 'string', useNull: true, defaultValue: null },
+        { name: 'shopId', type: 'int', useNull: true, defaultValue: null },
+    ]
+});
+//{/block}

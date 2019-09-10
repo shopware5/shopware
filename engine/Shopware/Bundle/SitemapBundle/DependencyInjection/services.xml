@@ -167,6 +167,10 @@
 
         <service id="shopware_bundle_sitemap.config_handler.file" class="Shopware\Bundle\SitemapBundle\ConfigHandler\File">
             <argument>%shopware.sitemap%</argument>
+        </service>
+
+        <service id="Shopware\Bundle\SitemapBundle\ConfigHandler\Database">
+            <argument type="service" id="dbal_connection" />
 
             <tag name="shopware.sitemap.config_handler" />
         </service>

@@ -4,9 +4,17 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 [View all changes from v5.6.1...v5.7.0](https://github.com/shopware/shopware/compare/v5.6.1...v5.7.0)
 
+### Breaks
+* Added new required methods `saveCustomUrls` and `saveExcludedUrls` to interface `Shopware\Bundle\SitemapBundle\ConfigHandler\ConfigHandlerInterface`
+
 ### Additions
 
 * Added Symfony session to `Request` object
+* Added new user interface for the sitemap configuration. It's available in the backend performance module
+* Added `Shopware\Bundle\SitemapBundle\ConfigHandler\Database` to save and read the sitemap configuration from the database
+* Added new doctrine model `Shopware\Models\Emotion\LandingPage`, which extends from `Shopware\Models\Emotion\Emotion`. It's needed to search for landing pages only using the backend store `Shopware.store.Search`
+* Added new doctrine models `Shopware\Models\Sitemap\CustomUrl` and `Shopware\Models\Sitemap\ExcludeUrl`
+* Added new ExtJS component `Shopware.grid.Searchable`. Using it you can search for different entities in a single grid, such as products, categories, blogs, etc. Have a look at the new sitemap UI to see what it looks like
 
 ### Changes
 
@@ -35,3 +43,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
     * `Zend_Session_Validator_Interface`
 * Removed referenced value from magic getter in session
 * Removed the assignment of all request parameters to the view in `Shopware_Controllers_Widgets_Listing::productsAction`
+
+### Deprecations
+
+* Deprecated the class `Shopware\Bundle\SitemapBundle\ConfigHandler\File`. It will be removed in Shopware 5.8. Use `Shopware\Bundle\SitemapBundle\ConfigHandler\Database` instead.

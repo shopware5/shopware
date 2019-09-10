@@ -48,6 +48,11 @@ Ext.define('Shopware.apps.Performance.model.Sitemap', {
         { name: 'sitemapRefreshStrategy', type:'int' },
         { name: 'sitemapRefreshTime', type:'int' },
         { name: 'sitemapLastRefresh', type:'int' },
+    ],
+
+    associations: [
+        { type: 'hasMany', model: 'Shopware.apps.Performance.model.sitemap.CustomUrls', name: 'getCustomUrls', associationKey: 'customUrls' },
+        { type: 'hasMany', model: 'Shopware.apps.Performance.model.sitemap.ExcludedUrls', name: 'getExcludedUrls', associationKey: 'excludedUrls' },
     ]
 });
 //{/block}

@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\SitemapBundle\UrlFilter;
 
+use Shopware\Bundle\SitemapBundle\Provider\CategoryUrlProvider;
+
 class Category extends Base
 {
     /**
@@ -31,6 +33,6 @@ class Category extends Base
      */
     public function supports($resourceName)
     {
-        return $resourceName === \Shopware\Models\Category\Category::class;
+        return $resourceName === CategoryUrlProvider::NAME;
     }
 }

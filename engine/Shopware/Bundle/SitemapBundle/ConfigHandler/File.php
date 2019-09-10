@@ -26,6 +26,9 @@ namespace Shopware\Bundle\SitemapBundle\ConfigHandler;
 
 use Shopware\Bundle\SitemapBundle\Service\ConfigHandler;
 
+/**
+ * @deprecated Will be removed with Shopware 5.8 without replacement. Use `Shopware\Bundle\SitemapBundle\ConfigHandler\Database` instead.
+ */
 class File implements ConfigHandlerInterface
 {
     /**
@@ -47,6 +50,14 @@ class File implements ConfigHandlerInterface
             ConfigHandler::EXCLUDED_URLS_KEY => $this->sitemapConfig['excluded_urls'],
             ConfigHandler::CUSTOM_URLS_KEY => $this->getSitemapCustomUrls($this->sitemapConfig['custom_urls']),
         ];
+    }
+
+    public function saveCustomUrls(array $customUrls): void
+    {
+    }
+
+    public function saveExcludedUrls(array $excludedUrls): void
+    {
     }
 
     /**

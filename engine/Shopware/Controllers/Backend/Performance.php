@@ -25,9 +25,11 @@
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
+use Shopware\Bundle\SitemapBundle\Service\ConfigHandler;
 use Shopware\Components\CacheManager;
 use Shopware\Components\HttpCache\CacheWarmer;
 use Shopware\Components\HttpCache\UrlProviderFactoryInterface;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing\Context;
 use Shopware\Models\Config\Element;
 use Shopware\Models\Config\Form;
@@ -120,7 +122,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     public function getActiveShopsAction()
     {
         /** @var ShopRepository $shopRepo */
-        $shopRepo = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
+        $shopRepo = $this->container->get(ModelManager::class)->getRepository(Shop::class);
         $shops = $shopRepo->getActiveShops(AbstractQuery::HYDRATE_ARRAY);
         $this->View()->assign([
             'success' => true,
@@ -138,8 +140,10 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $data = $this->Request()->getParams();
 
         // Save the config
+        $sitemapData = $data['sitemap'][0];
         $data = $this->prepareDataForSaving($data);
         $this->saveConfigData($data);
+        $this->saveSitemapData($sitemapData);
 
         Shopware()->Container()->get(\Zend_Cache_Core::class)->remove(CacheManager::ITEM_TAG_CONFIG);
 
@@ -191,7 +195,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $output['categories'] = $this->prepareForSavingDefault($data['categories'][0]);
         $output['various'] = $this->prepareForSavingDefault($data['various'][0]);
         $output['customer'] = $this->prepareForSavingDefault($data['customer'][0]);
-        $output['sitemap'] = $this->prepareForSavingDefault($data['sitemap'][0]);
+        $output['sitemap'] = $this->prepareSitemapConfigForSaving($data['sitemap'][0]);
 
         return $output;
     }
@@ -250,7 +254,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     {
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
-        $modelManager = $this->container->get(\Shopware\Components\Model\ModelManager::class);
+        $modelManager = $this->container->get(ModelManager::class);
         $repo = $modelManager->getRepository(Plugin::class);
 
         /** @var Plugin $plugin */
@@ -302,7 +306,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     {
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
-        $modelManager = $this->container->get(\Shopware\Components\Model\ModelManager::class);
+        $modelManager = $this->container->get(ModelManager::class);
         /** @var ShopRepository $shopRepository */
         $shopRepository = $modelManager->getRepository(Shop::class);
         $elementRepository = $modelManager->getRepository(Element::class);
@@ -373,8 +377,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         // The colon separates formName and elementName
         list($scope, $config) = explode(':', $configName, 2);
 
-        $elementRepository = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(\Shopware\Models\Config\Element::class);
-        $formRepository = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(\Shopware\Models\Config\Form::class);
+        $elementRepository = $this->container->get(ModelManager::class)->getRepository(\Shopware\Models\Config\Element::class);
+        $formRepository = $this->container->get(ModelManager::class)->getRepository(\Shopware\Models\Config\Form::class);
 
         $form = $formRepository->findOneBy(['name' => $scope]);
 
@@ -449,7 +453,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
         /** @var Context $context */
         $context = Context::createFromShop(
-            $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class)->getById($shopId),
+            $this->container->get(ModelManager::class)->getRepository(Shop::class)->getById($shopId),
             $this->container->get(\Shopware_Components_Config::class)
         );
 
@@ -579,11 +583,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                 'similarValidationTime',
                 'similarActive',
             ]),
-            'sitemap' => $this->genericConfigLoader([
-                'sitemapRefreshStrategy',
-                'sitemapRefreshTime',
-                'sitemapLastRefresh',
-            ]),
+            'sitemap' => $this->prepareSitemapConfig(),
         ];
     }
 
@@ -677,7 +677,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     protected function prepareHttpCacheConfig()
     {
-        $controllers = Shopware()->Config()->get('cacheControllers');
+        $controllers = $this->get('config')->get('cacheControllers');
         $cacheControllers = [];
         if (!empty($controllers)) {
             $controllers = str_replace(["\r\n", "\r"], "\n", $controllers);
@@ -688,7 +688,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             }
         }
 
-        $controllers = Shopware()->Config()->get('noCacheControllers');
+        $controllers = $this->get('config')->get('noCacheControllers');
         $noCacheControllers = [];
         if (!empty($controllers)) {
             $controllers = str_replace(["\r\n", "\r"], "\n", $controllers);
@@ -699,7 +699,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             }
         }
 
-        $repo = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Plugin::class);
+        $repo = $this->get(ModelManager::class)->getRepository(Plugin::class);
 
         /** @var Plugin $plugin */
         $plugin = $repo->findOneBy(['name' => 'HttpCache']);
@@ -714,52 +714,36 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         ];
     }
 
-    /**
-     * Activate httpCache-Plugin
-     *
-     * @param Plugin $httpCache
-     */
-    private function activeHttpCache($httpCache)
+    private function activeHttpCache(Plugin $httpCache): void
     {
         /** @var InstallerService $service */
-        $service = Shopware()->Container()->get('shopware.plugin_manager');
+        $service = $this->get('shopware.plugin_manager');
 
         if (!$httpCache->getInstalled()) {
             $service->installPlugin($httpCache);
         }
+
         if (!$httpCache->getActive()) {
             $service->activatePlugin($httpCache);
         }
     }
 
-    /**
-     * Deactivate httpCache-Plugin
-     *
-     * @param Plugin $httpCache
-     */
-    private function deactivateHttpCache($httpCache)
+    private function deactivateHttpCache(Plugin $httpCache): void
     {
         if (!$httpCache->getActive()) {
             return;
         }
 
         /** @var InstallerService $service */
-        $service = Shopware()->Container()->get('shopware.plugin_manager');
+        $service = $this->get('shopware.plugin_manager');
         $service->deactivatePlugin($httpCache);
     }
 
-    /**
-     * Get plugin orm-model by name
-     *
-     * @param string $name
-     *
-     * @return Plugin|null
-     */
-    private function getPluginByName($name)
+    private function getPluginByName(string $name): ?Plugin
     {
         /** @var Plugin|null $return */
-        $return = $this->get(\Shopware\Components\Model\ModelManager::class)
-            ->getRepository(\Shopware\Models\Plugin\Plugin::class)
+        $return = $this->get(ModelManager::class)
+            ->getRepository(Plugin::class)
             ->findOneBy(['name' => $name]);
 
         return $return;
@@ -767,14 +751,38 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     /**
      * Converts the fuzzysearchlastupdate to a DateTime object
-     *
-     * @return array
      */
-    private function prepareSearchConfig()
+    private function prepareSearchConfig(): array
     {
         $data = $this->genericConfigLoader(['searchRefreshStrategy', 'cachesearch', 'traceSearch', 'fuzzysearchlastupdate']);
         $data['fuzzysearchlastupdate'] = new DateTime($data['fuzzysearchlastupdate']);
 
         return $data;
+    }
+
+    private function prepareSitemapConfig(): array
+    {
+        $sitemapConfig = $this->genericConfigLoader([
+            'sitemapRefreshStrategy',
+            'sitemapRefreshTime',
+            'sitemapLastRefresh',
+        ]);
+
+        $sitemapConfig['customUrls'] = $this->get(ConfigHandler::class)->get(Confighandler::CUSTOM_URLS_KEY);
+        $sitemapConfig['excludedUrls'] = $this->get(ConfigHandler::class)->get(Confighandler::EXCLUDED_URLS_KEY);
+
+        return $sitemapConfig;
+    }
+
+    private function prepareSitemapConfigForSaving(array $sitemapData): array
+    {
+        unset($sitemapData['id'], $sitemapData['excludedUrls'], $sitemapData['customUrls']);
+
+        return $sitemapData;
+    }
+
+    private function saveSitemapData(array $sitemapData): void
+    {
+        $this->get(ConfigHandler::class)->save($sitemapData);
     }
 }

@@ -24,8 +24,14 @@
  */
 
 use Doctrine\DBAL\Connection;
-use Shopware\Models\Article\Article;
+use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Shopware\Components\Backend\GlobalSearch;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Article\Article as Product;
 use Shopware\Models\Category\Category;
+use Shopware\Models\Emotion\LandingPage;
 use Shopware\Models\Property\Option;
 use Shopware\Models\Property\Value;
 
@@ -95,7 +101,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
             return;
         }
 
-        $search = $this->container->get(\Shopware\Components\Backend\GlobalSearch::class);
+        $search = $this->container->get(GlobalSearch::class);
         $result = $search->search($term);
 
         $this->View()->assign('searchResult', $result);
@@ -114,8 +120,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     {
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.5.8 and will be removed in 5.7. Use the ProductRepository instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
-        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
-        $query = $this->container->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
+        /** @var DBALQueryBuilder $query */
+        $query = $this->container->get(Connection::class)->createQueryBuilder();
 
         $query->select([
             'article.id',
@@ -239,17 +245,17 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     /**
      * @param string $entity
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function createEntitySearchQuery($entity)
     {
-        /** @var \Doctrine\ORM\QueryBuilder $query */
-        $query = $this->get(\Shopware\Components\Model\ModelManager::class)->createQueryBuilder();
+        /** @var QueryBuilder $query */
+        $query = $this->get(ModelManager::class)->createQueryBuilder();
         $query->select('entity')
             ->from($entity, 'entity');
 
         switch ($entity) {
-            case Article::class:
+            case Product::class:
                 $query->select(['entity.id', 'entity.name', 'mainDetail.number'])
                     ->innerJoin('entity.mainDetail', 'mainDetail')
                     ->leftJoin('entity.details', 'details');
@@ -258,7 +264,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
             case Value::class:
                 if ($groupId = $this->Request()->getParam('groupId')) {
                     $query->andWhere('entity.optionId = :optionId')
-                        ->setParameter(':optionId', $this->Request()->getParam('groupId'));
+                        ->setParameter(':optionId', $groupId);
                 }
                 break;
 
@@ -268,10 +274,15 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
                         ->setParameter(':setId', $setId);
                 }
                 break;
+
             case Category::class:
                 $query->andWhere('entity.parent IS NOT NULL')
                     ->addOrderBy('entity.parentId')
                     ->addOrderBy('entity.position');
+                break;
+
+            case LandingPage::class:
+                $query->andWhere('entity.isLandingPage = 1');
                 break;
         }
 
@@ -279,30 +290,29 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * @param \Doctrine\ORM\QueryBuilder $builder
+     * @param QueryBuilder $builder
      *
-     * @return \Doctrine\ORM\Tools\Pagination\Paginator
+     * @return Paginator
      */
     protected function getPaginator($builder)
     {
         $query = $builder->getQuery();
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        /** @var \Shopware\Components\Model\ModelManager $entityManager */
-        $entityManager = $this->get(\Shopware\Components\Model\ModelManager::class);
+        /** @var ModelManager $entityManager */
+        $entityManager = $this->get(ModelManager::class);
 
         return $entityManager->createPaginator($query);
     }
 
     /**
-     * @param string  $entity
      * @param array[] $data
      *
      * @return array[]
      */
-    private function hydrateSearchResult($entity, $data)
+    private function hydrateSearchResult(string $entity, array $data): array
     {
-        $data = array_map(function ($row) {
+        $data = array_map(static function ($row) {
             if (array_key_exists('_score', $row) && array_key_exists(0, $row)) {
                 return $row[0];
             }
@@ -310,24 +320,17 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
             return $row;
         }, $data);
 
-        switch ($entity) {
-            case Category::class:
-                $data = $this->resolveCategoryPath($data);
-                break;
+        if ($entity === Category::class) {
+            $data = $this->resolveCategoryPath($data);
         }
 
         return $data;
     }
 
-    /**
-     * @param string $entity
-     *
-     * @return string[]
-     */
-    private function getEntitySearchFields($entity)
+    private function getEntitySearchFields(string $entity): array
     {
-        /** @var \Shopware\Components\Model\ModelManager $entityManager */
-        $entityManager = $this->get(\Shopware\Components\Model\ModelManager::class);
+        /** @var ModelManager $entityManager */
+        $entityManager = $this->get(ModelManager::class);
         $metaData = $entityManager->getClassMetadata($entity);
 
         $fields = array_filter(
@@ -346,12 +349,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         return $fields;
     }
 
-    /**
-     * @param string                     $entity
-     * @param \Doctrine\ORM\QueryBuilder $query
-     * @param string                     $term
-     */
-    private function addSearchTermCondition($entity, $query, $term)
+    private function addSearchTermCondition(string $entity, QueryBuilder $query, string $term): void
     {
         $fields = $this->getEntitySearchFields($entity);
 
@@ -361,31 +359,23 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
             return 'entity.' . $field;
         }, $fields);
 
-        switch ($entity) {
-            case Article::class:
-                $fields[] = 'mainDetail.number';
-                break;
+        if ($entity === Product::class) {
+            $fields[] = 'mainDetail.number';
         }
 
         $builder->addSearchTerm($query, $term, $fields);
     }
 
-    /**
-     * @param \Doctrine\ORM\QueryBuilder $query
-     * @param int[]                      $ids
-     */
-    private function addIdsCondition($query, $ids)
+    private function addIdsCondition(QueryBuilder $query, array $ids): void
     {
         $query->andWhere('entity.id IN (:ids)')
             ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
     }
 
     /**
-     * @param array $data
-     *
      * @return array[]
      */
-    private function resolveCategoryPath($data)
+    private function resolveCategoryPath(array $data): array
     {
         $ids = [];
         foreach ($data as $row) {
@@ -411,13 +401,11 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
 
     /**
      * @param int[] $ids
-     *
-     * @return array
      */
-    private function getCategories($ids)
+    private function getCategories(array $ids): array
     {
-        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
-        $query = $this->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
+        /** @var DBALQueryBuilder $query */
+        $query = $this->get(Connection::class)->createQueryBuilder();
         $query->select(['id', 'description'])
             ->from('s_categories', 'category')
             ->where('category.id IN (:ids)')

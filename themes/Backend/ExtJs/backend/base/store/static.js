@@ -1,4 +1,3 @@
-<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -20,19 +19,39 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Base
+ * @subpackage Store
+ * @version    $Id$
+ * @author shopware AG
  */
 
-namespace Shopware\Bundle\SitemapBundle\UrlFilter;
+//{block name="backend/base/store/static"}
+Ext.define('Shopware.apps.Base.store.Static', {
 
-use Shopware\Bundle\SitemapBundle\Provider\ManufacturerUrlProvider;
+    alternateClassName: 'Shopware.store.Static',
 
-class Manufacturer extends Base
-{
-    /**
-     * {@inheritdoc}
-     */
-    public function supports($resourceName)
-    {
-        return $resourceName === ManufacturerUrlProvider::NAME;
-    }
-}
+    extend: 'Ext.data.Store',
+
+    storeId: 'base.Static',
+
+    remoteSort: true,
+
+    remoteFilter: true,
+
+    model: 'Shopware.apps.Base.model.Static',
+
+    proxy: {
+        type: 'ajax',
+
+        url: '{url action=getStatics}',
+
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
+        }
+    },
+}).create();
+//{/block}

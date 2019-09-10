@@ -22,17 +22,17 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SitemapBundle\UrlFilter;
+namespace Shopware\Models\Emotion;
 
-use Shopware\Bundle\SitemapBundle\Provider\ManufacturerUrlProvider;
+use Doctrine\ORM\Mapping as ORM;
 
-class Manufacturer extends Base
+/**
+ * Necessary to be able to search for landing pages only by using the backend store Shopware.store.Search.
+ *
+ * @ORM\Entity(repositoryClass="Repository")
+ * @ORM\Table(name="s_emotion")
+ * @ORM\HasLifecycleCallbacks()
+ */
+class LandingPage extends Emotion
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function supports($resourceName)
-    {
-        return $resourceName === ManufacturerUrlProvider::NAME;
-    }
 }

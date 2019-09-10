@@ -87,6 +87,8 @@ Ext.define('Shopware.apps.Performance', {
         'tabs.settings.elements.CacheTime',
         'tabs.settings.elements.NoCache',
         'tabs.settings.elements.MultiRequestButton',
+        'tabs.settings.elements.SitemapCustomUrls',
+        'tabs.settings.elements.SitemapExcludedUrls',
     ],
 
     /**
@@ -113,6 +115,8 @@ Ext.define('Shopware.apps.Performance', {
         'Various',
         'Customer',
         'Sitemap',
+        'sitemap.ExcludedUrls',
+        'sitemap.CustomUrls',
     ],
 
     bulkLoad: true,
