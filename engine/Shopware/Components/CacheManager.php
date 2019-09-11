@@ -147,7 +147,9 @@ class CacheManager
     }
 
     /**
-     * @return \Zend_Cache_Core
+     * @deprecated in 5.7, will be removed in 5.8. Use `cache` service directly via DI
+     *
+     * @return Zend_Cache_Core
      */
     public function getCoreCache()
     {

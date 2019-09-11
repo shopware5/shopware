@@ -48,6 +48,11 @@ class Cache extends Resource implements BatchInterface
     private $cacheManager;
 
     /**
+     * @var Zend_Cache_Core
+     */
+    private $cache;
+
+    /**
      * Sets the Container.
      *
      * @param Container $container
@@ -57,6 +62,7 @@ class Cache extends Resource implements BatchInterface
         if ($container) {
             $this->request = $container->get('front')->Request();
             $this->cacheManager = $container->get('shopware.cache_manager');
+            $this->cache = $container->get('cache');
         }
         parent::setContainer($container);
     }
@@ -197,10 +203,10 @@ class Cache extends Resource implements BatchInterface
      */
     protected function clearCache($cache)
     {
-        $capabilities = $this->cacheManager->getCoreCache()->getBackend()->getCapabilities();
+        $capabilities = $this->cache->getBackend()->getCapabilities();
 
         if ($cache === 'all') {
-            $this->cacheManager->getCoreCache()->clean();
+            $this->cache->clean();
 
             $this->cacheManager->clearHttpCache();
             $this->cacheManager->clearConfigCache();
@@ -252,9 +258,9 @@ class Cache extends Resource implements BatchInterface
 
         if (!empty($capabilities['tags'])) {
             if (!empty($tags)) {
-                $this->cacheManager->getCoreCache()->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $tags);
+                $this->cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $tags);
             } else {
-                $this->cacheManager->getCoreCache()->clean();
+                $this->cache->clean();
             }
         }
     }
