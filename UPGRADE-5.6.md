@@ -9,6 +9,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 ### Additions
 
 * Added a title to the base price declaration shown in the product box (`themes/Frontend/Bare/frontend/listing/product-box/product-price-unit.tpl`), so users may view the full text by hovering, in case the declaration was truncated
+* Added a filter event 'Shopware_Plugins_AdvancedMenu_CacheKey' to `\Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap::getAdvancedMenu`
 * Added all global defined attachments to the order document mail sending
 * Added example HSTS configuration in the htaccess file
 * Added the same context variables to `sREGISTERCONFIRMATION` when the mail is sent after a DOI eMail compared to when it is sent directly
