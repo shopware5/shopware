@@ -46,7 +46,7 @@ use Shopware\Models\Tax\Tax;
 class Order extends Resource
 {
     /**
-     * @return \Doctrine\ORM\EntityRepository
+     * @return \Shopware\Models\Order\Repository
      */
     public function getRepository()
     {
