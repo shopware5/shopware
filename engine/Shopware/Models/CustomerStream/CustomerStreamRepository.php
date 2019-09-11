@@ -103,7 +103,7 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
         $query = $this->connection->createQueryBuilder();
         $query->select([
             'stream_id',
-            'COUNT(customer_id) as customer_count',
+            'COUNT(DISTINCT customer_id) as customer_count',
             'SUM(IF(campaign.id IS NULL, 0, 1)) as newsletter_count',
         ]);
 
