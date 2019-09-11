@@ -123,7 +123,6 @@ class CacheManager
         Shopware_Components_Config $config,
         ContainerAwareEventManager $events,
         PathResolver $themePathResolver,
-
         array $httpCache,
         array $cacheConfig,
         array $templateConfig,
@@ -205,7 +204,7 @@ class CacheManager
             ->from('s_core_config_values', 'v')
             ->join('v', 's_core_config_elements', 'e', 'v.element_id = e.id')
             ->select(['v.shop_id', 'v.value', 'e.id as element_id'])
-            ->where($builder->expr()->like('e.name', 'routerlastupdate'));
+            ->where($builder->expr()->like('e.name', $builder->expr()->literal('routerlastupdate')));
 
         $values = $builder->execute()->fetchAll(PDO::FETCH_ASSOC);
         $stmt = $this->db->prepare('UPDATE s_core_config_values SET value=? WHERE shop_id=? AND element_id=?');
@@ -429,6 +428,8 @@ class CacheManager
     /**
      * Returns cache information
      *
+     * @deprecated in 5.7, will be private in 5.8 without replacement
+     *
      * @param string $dir
      *
      * @return array
@@ -483,21 +484,6 @@ class CacheManager
         $info['freeSpace'] = $this->encodeSize($info['freeSpace']);
 
         return $info;
-    }
-
-    /**
-     * Format size method
-     *
-     * @param float $bytes
-     *
-     * @return string
-     */
-    public function encodeSize($bytes)
-    {
-        $types = ['B', 'KB', 'MB', 'GB', 'TB'];
-        for ($i = 0; $bytes >= 1024 && $i < (count($types) - 1); $bytes /= 1024, $i++);
-
-        return round($bytes, 2) . ' ' . $types[$i];
     }
 
     /**
@@ -556,34 +542,51 @@ class CacheManager
     }
 
     /**
-     * Clear directory contents
+     * Format size method
      *
-     * @param string $dir
+     * @deprecated in 5.7, will be private in 5.8 without replacement
+     *
+     * @param float $bytes
+     *
+     * @return string
      */
-    private function clearDirectory($dir)
+    public function encodeSize($bytes)
+    {
+        $types = ['B', 'KB', 'MB', 'GB', 'TB'];
+        for ($i = 0; $bytes >= 1024 && $i < (count($types) - 1); ++$i) {
+            $bytes /= 1024;
+        }
+
+        return round($bytes, 2) . ' ' . $types[$i];
+    }
+
+    /**
+     * Clear directory contents
+     */
+    private function clearDirectory(string $dir): void
     {
         if (!file_exists($dir)) {
             return;
         }
 
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::CHILD_FIRST
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST
         );
 
-        /** @var \SplFileInfo $path */
+        /** @var SplFileInfo $path */
         foreach ($iterator as $path) {
             if ($path->getFilename() === '.gitkeep') {
                 continue;
             }
 
             if ($path->isDir()) {
-                rmdir($path->__toString());
+                rmdir((string) $path);
             } else {
                 if (!$path->isFile()) {
                     continue;
                 }
-                unlink($path->__toString());
+                unlink((string) $path);
             }
         }
     }
