@@ -68,6 +68,7 @@ class Enlight_Components_Snippet_Manager extends Enlight_Class
             $options = ['adapter' => $options];
         }
 
+
         if (isset($options['adapter']) && $options['adapter'] instanceof Enlight_Config_Adapter) {
             $this->setAdapter($options['adapter']);
         }
@@ -75,12 +76,13 @@ class Enlight_Components_Snippet_Manager extends Enlight_Class
         if (isset($options['ignore_namespace'])) {
             $this->ignoreNamespace = (bool) $options['ignore_namespace'];
         }
+        parent::__construct();
     }
 
     /**
      * Returns a snippet model instance
      *
-     * @param string $namespace
+     * @param string|null $namespace
      *
      * @return Enlight_Components_Snippet_Namespace
      */
