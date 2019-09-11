@@ -26,9 +26,12 @@ namespace Shopware\Tests\Functional\Api;
 
 use Shopware\Kernel;
 
+/**
+ * @covers \Shopware_Controllers_Api_Version
+ */
 class VersionTest extends AbstractApiTestCase
 {
-    public function testGetVersionShouldBeSuccessful()
+    public function testGetVersionShouldBeSuccessful(): void
     {
         $kernel = new Kernel('testing', true);
         $release = $kernel->getRelease();
