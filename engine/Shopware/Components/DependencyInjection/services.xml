@@ -113,11 +113,11 @@
         <service id="plugin_manager" alias="plugins" />
         <service id="plugins" class="Enlight_Plugin_PluginManager">
             <factory service="plugins_factory" method="factory" />
-            <argument type="service" id="service_container"/>
             <argument type="service" id="loader"/>
             <argument type="service" id="events"/>
             <argument type="service" id="application"/>
             <argument>%shopware.plugin_directories%</argument>
+            <argument type="service" id="shopware.plugin.cached_config_reader" />
         </service>
 
         <service id="router_factory" class="Shopware\Components\DependencyInjection\Bridge\Router" />
@@ -326,7 +326,19 @@
             <argument>%kernel.root_dir%/snippets/</argument>
         </service>
         <service id="shopware.cache_manager" class="Shopware\Components\CacheManager">
-            <argument type="service" id="service_container" />
+            <argument type="service" id="cache" />
+            <argument type="service" id="modelconfig" />
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="config" />
+            <argument type="service" id="events"/>
+            <argument type="service" id="theme_path_resolver" />
+
+            <argument>%shopware.httpCache%</argument>
+            <argument>%shopware.cache%</argument>
+            <argument>%shopware.template%</argument>
+            <argument>%shopware.app.rootdir%</argument>
+            <argument>%shopware.hook.proxyDir%</argument>
+            <argument>%shopware.model.proxyDir%</argument>
         </service>
 
         <service id="mediasubscriber" class="Shopware\Models\Media\MediaSubscriber">

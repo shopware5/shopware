@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
-use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\Plugin\ConfigReader;
 
 class Plugins
 {
@@ -32,15 +32,9 @@ class Plugins
      * @return \Enlight_Plugin_PluginManager
      */
     public function factory(
-        Container $container,
-        \Enlight_Loader $loader,
-        \Enlight_Event_EventManager $eventManager,
-        \Shopware $application,
-        array $pluginDirectories
+        \Enlight_Loader $loader, \Enlight_Event_EventManager $eventManager, \Shopware $application, array $pluginDirectories, ConfigReader $configReader
     ) {
         $pluginManager = new \Enlight_Plugin_PluginManager($application);
-
-        $configReader = $container->get('shopware.plugin.cached_config_reader');
 
         foreach (['Core', 'Frontend', 'Backend'] as $namespace) {
             $namespace = new \Shopware_Components_Plugin_Namespace(
