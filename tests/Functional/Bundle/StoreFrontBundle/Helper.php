@@ -45,6 +45,7 @@ class Helper
      * @var Converter
      */
     protected $converter;
+
     /**
      * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
      */
@@ -76,12 +77,19 @@ class Helper
     private $categoryApi;
 
     private $createdProducts = [];
+
     private $createdManufacturers = [];
+
     private $createdCategories = [];
+
     private $createdCustomerGroups = [];
+
     private $createdTaxes = [];
+
     private $createdCurrencies = [];
+
     private $createdConfiguratorGroups = [];
+
     private $propertyNames = [];
 
     public function __construct()

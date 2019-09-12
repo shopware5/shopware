@@ -27,6 +27,7 @@ use Shopware\Models\Order\Order;
 class sOrderTest extends PHPUnit\Framework\TestCase
 {
     public static $sessionId;
+
     /**
      * @var sOrder
      */

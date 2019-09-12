@@ -48,6 +48,7 @@ class CurrencyService
             'symbol_position' => 0,
         ],
     ];
+
     /**
      * @var \PDO
      */

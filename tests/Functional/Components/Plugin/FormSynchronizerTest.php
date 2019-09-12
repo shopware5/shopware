@@ -83,6 +83,7 @@ class FormSynchronizerTest extends Base
             ],
         ],
     ];
+
     /**
      * @var Form
      */

@@ -38,7 +38,9 @@ use Shopware\Models\Shop\Currency;
 class sExport implements \Enlight_Hook
 {
     public $sFeedID;
+
     public $sHash;
+
     public $sSettings;
 
     /**
@@ -50,6 +52,7 @@ class sExport implements \Enlight_Hook
      * @deprecated in 5.6, will be removed in 5.7 without replacement
      */
     public $sApi;
+
     public $sSYSTEM;
 
     /**
@@ -63,6 +66,7 @@ class sExport implements \Enlight_Hook
     public $sTemplates;
 
     public $sCurrency;
+
     public $sCustomergroup;
 
     /**

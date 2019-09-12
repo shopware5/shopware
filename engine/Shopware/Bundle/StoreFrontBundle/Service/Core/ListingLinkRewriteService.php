@@ -39,6 +39,7 @@ class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
      * @var ConfiguratorServiceInterface
      */
     private $configuratorService;
+
     /**
      * @var RouterInterface
      */

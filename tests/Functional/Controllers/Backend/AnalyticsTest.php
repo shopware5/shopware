@@ -32,12 +32,19 @@ class AnalyticsTest extends \Enlight_Components_Test_Controller_TestCase
     private $repository;
 
     private $userId;
+
     private $customerNumber;
+
     private $articleId;
+
     private $categoryId;
+
     private $orderNumber;
+
     private $articleDetailId;
+
     private $orderIds;
+
     private $addressId;
 
     /**
