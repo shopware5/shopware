@@ -22,34 +22,19 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * @ticket SW-4724
- */
-class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Test_Plugin_TestCase
-{
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
-    private $connection;
+namespace Shopware\Tests\Functional\Controllers\Frontend;
 
-    /**
-     * Set up test case, fix demo data where needed
-     */
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+
+class BlogTest extends \Enlight_Components_Test_Plugin_TestCase
+{
+    use DatabaseTransactionBehaviour;
+
     public function setUp()
     {
         parent::setUp();
 
         $this->connection = Shopware()->Container()->get('dbal_connection');
-        $this->connection->beginTransaction();
-    }
-
-    /**
-     * Cleaning up testData
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
-        $this->connection->rollBack();
     }
 
     /**
@@ -87,7 +72,7 @@ class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Te
         $ex = null;
         try {
             $this->dispatch('/blog/?sCategory=17');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $ex = $e;
         }
         static::assertEquals(404, $ex->getCode());
@@ -95,7 +80,7 @@ class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Te
         // Should be redirected because blog category is inactive
         try {
             $this->dispatch('/blog/detail/?blogArticle=3');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $ex = $e;
         }
         static::assertEquals(404, $ex->getCode());

@@ -22,12 +22,15 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
+use ReflectionMethod;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Repository;
 
-class Shopware_Tests_Controllers_Backend_ArticleTest extends Enlight_Components_Test_Controller_TestCase
+class ArticleTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var ModelManager
@@ -66,7 +69,7 @@ class Shopware_Tests_Controllers_Backend_ArticleTest extends Enlight_Components_
 
         Shopware()->Container()->get('dbal_connection')->beginTransaction();
 
-        // disable auth and acl
+        // Disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
 

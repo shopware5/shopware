@@ -22,9 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Functional\Controllers\Frontend;
+
 use Shopware\Models\Shop\Shop;
 
-class Shopware_Tests_Controllers_Frontend_SitemapTest extends Enlight_Components_Test_Controller_TestCase
+class SitemapTest extends \Enlight_Components_Test_Controller_TestCase
 {
     public static function tearDownAfterClass()
     {
@@ -97,18 +99,18 @@ class Shopware_Tests_Controllers_Frontend_SitemapTest extends Enlight_Components
     }
 
     /**
-     * @return Shopware_Controllers_Frontend_Sitemap
+     * @return \Shopware_Controllers_Frontend_Sitemap
      */
     private function getController()
     {
-        /** @var Shopware_Controllers_Frontend_Sitemap $controller */
-        $controller = Enlight_Class::Instance(Shopware_Controllers_Frontend_Sitemap::class, [
+        /** @var \Shopware_Controllers_Frontend_Sitemap $controller */
+        $controller = \Enlight_Class::Instance(\Shopware_Controllers_Frontend_Sitemap::class, [
             $this->Request(),
             $this->Response(),
         ]);
 
         $controller->setContainer(Shopware()->Container());
-        $controller->setView(new Enlight_View_Default(new Enlight_Template_Manager()));
+        $controller->setView(new \Enlight_View_Default(new \Enlight_Template_Manager()));
 
         return $controller;
     }

@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Backend_ConfigGetFormTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
+class ConfigGetFormTest extends \Enlight_Components_Test_Controller_TestCase
 {
     const TEST_USER_USERNAME = 'testuser';
     const TEST_ROLE_NAME = 'testadminrole';

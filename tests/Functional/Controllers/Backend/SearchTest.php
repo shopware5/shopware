@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Backend_SearchTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
+class SearchTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
      * Standard set up for every test - just disable auth
@@ -31,7 +33,7 @@ class Shopware_Tests_Controllers_Backend_SearchTest extends Enlight_Components_T
     {
         parent::setUp();
 
-        // disable auth and acl
+        // Disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
