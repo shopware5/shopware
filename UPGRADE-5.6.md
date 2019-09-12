@@ -84,6 +84,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed the pagesize for the snippets module
 * Changed the handling of browser notifications to support browsers without notifications
 * Changed `themes/Frontend/Bare/frontend/_includes/emotion.tpl` to also work with emotion preview
+* Changed dependency `beberlei/assert` to version 2.9.9 to fix issues with PHP 7.3
 
 ## 5.6.0
 
