@@ -60,7 +60,7 @@ EOD;
 
 Hello {$sUser.salutation|salutation} {$sUser.firstname} {$sUser.lastname},
 
-Thank you for your order at {config name=shopName}. In the attachement you will find documents about your order as PDF.
+Thank you for your order at {config name=shopName}. In the attachment you will find documents about your order as PDF.
 We wish you a nice day.
 
 {include file="string:{config name=emailfooterplain}"}";}', @documentId, '2', '0');

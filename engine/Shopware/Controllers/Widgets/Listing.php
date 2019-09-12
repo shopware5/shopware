@@ -35,7 +35,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     public function preDispatch()
     {
-        $this->Response()->setHeader('x-robots', 'noindex');
+        $this->Response()->setHeader('x-robots-tag', 'noindex');
     }
 
     /**
@@ -461,6 +461,11 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         $products = $this->convertProductsResult($result, $categoryId);
 
+        /*
+         * @deprecated
+         * The assignment of all request parameters to the view below is deprecated
+         * and about to be removed in 5.7
+         */
         $this->View()->assign($this->Request()->getParams());
 
         $this->loadThemeConfig();
@@ -523,6 +528,16 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         if (empty($products)) {
             return $products;
+        }
+
+        $useShortDescription = $this->get('config')->get('useShortDescriptionInListing');
+        if ($useShortDescription) {
+            foreach ($products as &$product) {
+                if (strlen($product['description']) > 5) {
+                    $product['description_long'] = $product['description'];
+                }
+            }
+            unset($product);
         }
 
         return $this->get('shopware_storefront.listing_link_rewrite_service')->rewriteLinks(

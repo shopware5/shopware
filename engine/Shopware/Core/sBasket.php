@@ -677,7 +677,7 @@ SQL;
             return false;
         }
 
-        $voucherCode = strtolower(stripslashes($voucherCode));
+        $voucherCode = trim(strtolower(stripslashes($voucherCode)));
 
         // Load the voucher details
         $voucherDetails = $this->db->fetchRow(

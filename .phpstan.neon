@@ -4,6 +4,8 @@ includes:
     #- ../vendor/phpstan/phpstan-doctrine/extension.neon
 parameters:
     level: 5
+    inferPrivatePropertyTypeFromConstructor: true
+    reportUnmatchedIgnoredErrors: false
 
     autoload_directories:
         - %currentWorkingDirectory%/var/cache
@@ -101,5 +103,3 @@ parameters:
         # We manually check if the class exists before instantiating / using it
         - '#Instantiated class SwagPaymentPayPalUnified\\Setup\\FirstRunWizardInstaller not found#'
         - '#Call to method saveConfiguration\(\) on an unknown class SwagPaymentPayPalUnified\\Setup\\FirstRunWizardInstaller#'
-
-    reportUnmatchedIgnoredErrors: false

@@ -38,7 +38,7 @@ class Shopware_Controllers_Widgets_Recommendation extends Enlight_Controller_Act
      */
     public function preDispatch()
     {
-        $this->Response()->setHeader('x-robots', 'noindex');
+        $this->Response()->setHeader('x-robots-tag', 'noindex');
     }
 
     public function init()

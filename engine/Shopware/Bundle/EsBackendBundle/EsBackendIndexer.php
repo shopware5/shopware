@@ -200,6 +200,8 @@ class EsBackendIndexer
             $progress->advance(count($ids));
         }
 
+        $this->client->indices()->refresh(['index' => $index]);
+
         $progress->finish();
         $this->evaluation->finish();
     }

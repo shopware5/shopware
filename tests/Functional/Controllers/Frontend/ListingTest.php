@@ -44,7 +44,7 @@ class ListingTest extends \Enlight_Components_Test_Controller_TestCase
      *
      * @expectedException \Enlight_Exception
      */
-    public function testDispatchNonexistingCategory()
+    public function testDispatchNonExistingCategory()
     {
         $this->dispatch('/cat/?sCategory=4711');
         static::assertEquals(404, $this->Response()->getHttpResponseCode());
@@ -52,13 +52,25 @@ class ListingTest extends \Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * Test that requesting a non-existing category-id throws an error
+     * Test that requesting an empty category-id throws an error
      *
      * @expectedException \Enlight_Exception
      */
     public function testDispatchEmptyCategoryId()
     {
         $this->dispatch('/cat/?sCategory=');
+        static::assertEquals(404, $this->Response()->getHttpResponseCode());
+        static::assertTrue($this->Response()->isRedirect());
+    }
+
+    /**
+     * Test that requesting a category-id of a subshop throws an error
+     *
+     * @expectedException \Enlight_Exception
+     */
+    public function testDispatchSubshopCategoryId()
+    {
+        $this->dispatch('/cat/?sCategory=43');
         static::assertEquals(404, $this->Response()->getHttpResponseCode());
         static::assertTrue($this->Response()->isRedirect());
     }

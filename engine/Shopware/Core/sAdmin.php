@@ -3855,15 +3855,15 @@ SQL;
      * Helper function for sAdmin::sGetUserData()
      * Gets user billing data
      *
-     * @param int   $userId
-     * @param array $userData
-     *
-     * @return array
+     * @throws Exception
      */
-    private function getUserBillingData($userId, $userData)
+    private function getUserBillingData(int $userId, array $userData): array
     {
         $entityManager = Shopware()->Container()->get('models');
         $customer = $entityManager->find(Customer::class, $userId);
+        if (!$customer) {
+            throw new Exception(sprintf('Customer with id %s not found', $userId));
+        }
         $billing = $this->convertToLegacyAddressArray($customer->getDefaultBillingAddress());
         $billing['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $billing['id']);
         $userData['billingaddress'] = $billing;
@@ -3874,13 +3874,8 @@ SQL;
     /**
      * Helper method for sAdmin::sNewsletterSubscription
      * Subscribes the provided email address to the newsletter group
-     *
-     * @param string $email
-     * @param int    $groupID
-     *
-     * @return array|int
      */
-    private function subscribeNewsletter($email, $groupID)
+    private function subscribeNewsletter(string $email, int $groupID): array
     {
         $result = $this->db->fetchAll(
             'SELECT * FROM s_campaigns_mailaddresses WHERE email = ?',

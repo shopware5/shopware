@@ -3,7 +3,7 @@ RewriteEngine on
 
 #RewriteBase /shopware/
 
-# Https config for the backend
+# HTTPS config for the backend
 #RewriteCond %{HTTPS} !=on
 #RewriteRule backend/(.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
@@ -102,9 +102,11 @@ DirectoryIndex shopware.php
     Options -MultiViews
 </IfModule>
 
-#   AddType x-mapp-php7 .php
-#   AddHandler x-mapp-php7.php
+# AddType x-mapp-php7 .php
+# AddHandler x-mapp-php7.php
 
 <IfModule mod_headers.c>
     Header append X-Frame-Options SAMEORIGIN
+    # Uncomment the following line to enable HSTS (https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security) and force clients to use HTTPS for at least one year (31536000 seconds)
+    # Header always set Strict-Transport-Security "max-age=31536000"
 </IfModule>

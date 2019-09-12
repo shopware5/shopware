@@ -6,4 +6,4 @@ TEMPLATE: ./../templates/config-elasticsearch.php:./../../../config.php
 php bin/console sw:es:index:populate
 php bin/console sw:es:backend:index:populate
 
-php vendor/bin/phpunit --config tests/phpunit.xml.dist --stop-on-failure --stop-on-error --exclude-group=skipElasticSearch --group=elasticSearch
+vendor/bin/phpunit --config tests/phpunit.xml.dist --log-junit build/artifacts/test-log.xml --exclude-group=skipElasticSearch --group=elasticSearch

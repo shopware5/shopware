@@ -62,9 +62,6 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
         return $method->invokeArgs($object, $parameters);
     }
 
-    /**
-     * @covers \BatchProductNumberSearch::getOptimizedCriteriaList
-     */
     public function testOptimizeCriteriaListWithEmptyCriteria()
     {
         $criteriaList = $this->invokeMethod($this->batchSearch, 'getOptimizedCriteriaList', [[]]);
@@ -72,9 +69,6 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
         static::assertSame([], $criteriaList);
     }
 
-    /**
-     * @covers \BatchProductNumberSearch::getOptimizedCriteriaList
-     */
     public function testOptimizeCriteriaListWithSingleCriteria()
     {
         $criteria = new Criteria();
@@ -103,9 +97,6 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($expectedOptimizedCriteriaList, $criteriaList);
     }
 
-    /**
-     * @covers \BatchProductNumberSearch::getOptimizedCriteriaList
-     */
     public function testOptimizeCriteriaListWithMultipleEqualCriteriaButMixedBaseConditions()
     {
         $criteria = new Criteria();
@@ -140,9 +131,6 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($expectedOptimizedCriteriaList, $criteriaList);
     }
 
-    /**
-     * @covers \BatchProductNumberSearch::getOptimizedCriteriaList
-     */
     public function testOptimizeCriteriaListWithMultipleDifferentCriteria()
     {
         $criteria = new Criteria();
@@ -191,9 +179,6 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($expectedOptimizedCriteriaList, $criteriaList);
     }
 
-    /**
-     * @covers \BatchProductNumberSearch::getOptimizedCriteriaList
-     */
     public function testOptimizeCriteriaListWithDifferentCriteriaSorting()
     {
         $criteria = new Criteria();
@@ -243,9 +228,6 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($expectedOptimizedCriteriaList, $criteriaList);
     }
 
-    /**
-     * @covers \BatchProductNumberSearch::getOptimizedCriteriaList
-     */
     public function testOptimizeCriteriaListWithMultipleEqualCriteria()
     {
         $criteria = new Criteria();
@@ -284,9 +266,6 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($expectedOptimizedCriteriaList, $criteriaList);
     }
 
-    /**
-     * @covers \BatchProductNumberSearch::getOptimizedCriteriaList
-     */
     public function testOptimizeCriteriaListWithMultipleEqualAndDifferentCriteria()
     {
         $criteria = new Criteria();
@@ -405,7 +384,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \BatchProductNumberSearch::getBaseProductsRange
+     * @covers \Shopware\Bundle\SearchBundle\BatchProductNumberSearch::getBaseProductsRange
      */
     public function testGetBaseProductsRangeWithEmptyProducts()
     {
@@ -414,7 +393,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \BatchProductNumberSearch::getBaseProductsRange
+     * @covers \Shopware\Bundle\SearchBundle\BatchProductNumberSearch::getBaseProductsRange
      */
     public function testGetBaseProductsRangeWithMoreProductsThanRequested()
     {
@@ -434,7 +413,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \BatchProductNumberSearch::getBaseProductsRange
+     * @covers \Shopware\Bundle\SearchBundle\BatchProductNumberSearch::getBaseProductsRange
      */
     public function testMultipleCallGetBaseProductsRangeWithMoreProductsThanRequested()
     {
@@ -464,7 +443,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \BatchProductNumberSearch::getBaseProductsRange
+     * @covers \Shopware\Bundle\SearchBundle\BatchProductNumberSearch::getBaseProductsRange
      */
     public function testGetBaseProductsRangeWithLessProductsThanRequested()
     {
@@ -489,7 +468,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \BatchProductNumberSearch::getBaseProductsRange
+     * @covers \Shopware\Bundle\SearchBundle\BatchProductNumberSearch::getBaseProductsRange
      */
     public function testGetBaseProductsRangeWithLessProductsThanRequestedAndDifferentHashes()
     {

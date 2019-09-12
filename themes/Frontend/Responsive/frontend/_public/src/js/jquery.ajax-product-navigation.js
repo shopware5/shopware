@@ -120,7 +120,7 @@
             if (!(isListing || isDetail)) {
                 return;
             }
-            
+
             me.applyDataAttributes();
 
             me.storage = StorageManager.getStorage('session');
@@ -183,8 +183,8 @@
 
                 part = queryParts[p].split('=');
 
-                key = decodeURIComponent(part[0]);
-                value = decodeURIComponent(part[1] || '');
+                key = this.safeURIDecode(part[0]);
+                value = this.safeURIDecode(part[1] || '');
 
                 params[key] = $.isNumeric(value) ? parseFloat(value) : value;
             }

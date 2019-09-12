@@ -21,10 +21,32 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-class Migrations_Migration1636 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration1637 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
-        $this->addSql('INSERT INTO `s_core_widgets` (`name`, `label`, `plugin_id`) VALUES (\'swag-rating-widget\', NULL, NULL);');
+        $sql = <<<'SQL'
+ALTER TABLE s_mail_log DROP FOREIGN KEY s_mail_log_fk_type_id;
+ALTER TABLE s_mail_log ADD CONSTRAINT s_mail_log_fk_type_id
+  FOREIGN KEY (type_id)
+  REFERENCES s_core_config_mails (id) ON DELETE SET NULL ON UPDATE NO ACTION;
+SQL;
+        $this->addSql($sql);
+
+        $sql = <<<'SQL'
+ALTER TABLE s_mail_log DROP FOREIGN KEY s_mail_log_fk_order_id;
+ALTER TABLE s_mail_log ADD CONSTRAINT s_mail_log_fk_order_id
+  FOREIGN KEY (order_id)
+  REFERENCES s_order (id) ON DELETE SET NULL ON UPDATE NO ACTION;
+SQL;
+        $this->addSql($sql);
+
+        $sql = <<<'SQL'
+ALTER TABLE s_mail_log DROP FOREIGN KEY s_mail_log_fk_shop_id;
+ALTER TABLE s_mail_log ADD CONSTRAINT s_mail_log_fk_shop_id
+  FOREIGN KEY (shop_id)
+  REFERENCES s_core_shops (id) ON DELETE SET NULL ON UPDATE NO ACTION;
+SQL;
+        $this->addSql($sql);
     }
 }

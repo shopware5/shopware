@@ -168,6 +168,7 @@ Ext.define('Shopware.apps.Order.controller.Mail', {
 
                 success: function (response) {
                     var decodedResponse = Ext.JSON.decode(response.responseText);
+                    decodedResponse.mail.templateName = newValue;
                     var mail = Ext.create('Shopware.apps.Order.model.Mail', decodedResponse.mail);
                     mailFormPanel.loadRecord(mail);
                 },

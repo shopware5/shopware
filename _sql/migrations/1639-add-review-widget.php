@@ -21,19 +21,10 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-class Shopware_Controllers_Widgets_Compare extends Enlight_Controller_Action
+class Migrations_Migration1639 extends Shopware\Components\Migrations\AbstractMigration
 {
-    /**
-     * Pre dispatch method
-     */
-    public function preDispatch()
+    public function up($modus)
     {
-        $this->Response()->setHeader('x-robots-tag', 'noindex');
-    }
-
-    public function indexAction()
-    {
-        $this->View()->assign('sComparisons', Shopware()->Modules()->Articles()->sGetComparisons());
+        $this->addSql('INSERT INTO `s_core_widgets` (`name`, `label`, `plugin_id`) VALUES (\'swag-rating-widget\', NULL, NULL);');
     }
 }

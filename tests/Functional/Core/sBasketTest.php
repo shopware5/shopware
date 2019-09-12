@@ -2518,9 +2518,6 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @covers \sBasket::getTaxesForUpdateArticle
-     */
     public function testsPriceCalculationTaxfreeWithPriceGroupDiscount()
     {
         $resourceHelper = new \Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper();
