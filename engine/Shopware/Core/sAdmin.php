@@ -3577,9 +3577,10 @@ SQL;
         // Most times iterates only once
         foreach ($result as $row) {
             $data = unserialize($row['data'], ['allowed_classes' => false]);
-            $optInId = $row['id'];
             $customerId = $data['customerId'];
-            if ($customerId === $user['id']) {
+            if ($customerId === (int) $user['id']) {
+                $optInId = $row['id'];
+
                 break;
             }
         }
