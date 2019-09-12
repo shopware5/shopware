@@ -33,6 +33,7 @@ class Helper
 {
     const EXCEPTION_GENERIC = 1;
     const EXCEPTION_PENDING = 2;
+
     private static $language;
 
     /** @var MultipleElement */

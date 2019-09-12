@@ -37,6 +37,7 @@ class EventCollector implements CollectorInterface
      * @var \Enlight_Event_EventManager
      */
     protected $eventManager;
+
     /**
      * @var Utils
      */

@@ -33,7 +33,9 @@ class HookManagerTestTarget implements \Enlight_Hook
     const VOID_TEST_METHOD_NAME = 'voidTestMethod';
 
     public $originalMethodCallCounter = 0;
+
     public $originalRecursiveMethodCallCounter = 0;
+
     public $originalProtectedMethodCallCounter = 0;
 
     public function testMethod($name, array $values = [])

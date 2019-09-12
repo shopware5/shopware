@@ -34,6 +34,7 @@ use Shopware\Models\Shop\Shop;
 class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Backend_Application
 {
     protected $model = ProductStream::class;
+
     protected $alias = 'stream';
 
     public function copyStreamAttributesAction()

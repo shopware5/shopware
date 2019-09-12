@@ -29,6 +29,7 @@ use Shopware\Recovery\Common\DumpIterator;
 class SnippetStep
 {
     private $conn;
+
     private $dumper;
 
     public function __construct(\PDO $connection, DumpIterator $dumper)

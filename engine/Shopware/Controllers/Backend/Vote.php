@@ -28,6 +28,7 @@ use Shopware\Models\Article\Vote;
 class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_Application
 {
     protected $model = Vote::class;
+
     protected $alias = 'vote';
 
     public function save($data)

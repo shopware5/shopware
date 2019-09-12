@@ -37,6 +37,7 @@ class Shopware_Tests_Models_FormTest extends Enlight_Components_Test_TestCase
         'emailSubject' => 'Test Email Subject',
         'text2' => 'Test Text2',
     ];
+
     /**
      * @var Shopware\Components\Model\ModelManager
      */

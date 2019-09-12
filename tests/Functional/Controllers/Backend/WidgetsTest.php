@@ -32,6 +32,7 @@ class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
      * @var Connection
      */
     private $connection;
+
     private $userId;
 
     public function setUp()

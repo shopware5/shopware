@@ -33,6 +33,7 @@ abstract class Adapter implements SeekableIterator, Countable
      * @var int
      */
     protected $position;
+
     /**
      * @var int
      */

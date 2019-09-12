@@ -30,6 +30,7 @@ use Shopware\Models\Customer\Customer;
 class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controllers_Backend_Application
 {
     protected $model = Customer::class;
+
     protected $alias = 'customer';
 
     /**

@@ -30,6 +30,7 @@ use Shopware\Models\Customer\Customer;
 class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_Application
 {
     protected $model = AddressModel::class;
+
     protected $alias = 'address';
 
     /**
