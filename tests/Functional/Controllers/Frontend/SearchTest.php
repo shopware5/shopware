@@ -47,7 +47,7 @@ class SearchTest extends \Enlight_Components_Test_Controller_TestCase
         );
         // Check for expected name and price
         static::assertContains(
-            ' alt="iPadtasche mit Stiftmappe" class="media--image"> </span> <span class="entry--name block"> iPadtasche mit Stiftmappe </span> <span class="entry--price block"> <div class="product--price"> <span class="price--default is--nowrap"> 39,99&nbsp;&euro; * </span> </div> <div class="price--unit"> </div> </span> </a> </li> <li class="entry--all-results block-group result--item">',
+            ' alt="iPadtasche mit Stiftmappe" class="media--image"> </span> <span class="entry--name block"> iPadtasche mit Stiftmappe </span> <span class="entry--price block"> <div class="product--price"> <span class="price--default is--nowrap"> 39,99&nbsp;&euro; * </span> </div> <div class="price--unit" title="Inhalt"> </div> </span> </a> </li> <li class="entry--all-results block-group result--item">',
             $this->Response()->getBody()
         );
     }
