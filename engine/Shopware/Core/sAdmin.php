@@ -681,7 +681,7 @@ class sAdmin implements \Enlight_Hook
         }
 
         $this->session->unsetAll();
-        $this->regenerateSessionId();
+        $this->regenerateSessionId(true);
 
         if ($this->config->get('migrateCartAfterLogin')) {
             Shopware()->Container()->get(CartPersistServiceInterface::class)->persist();
@@ -3276,7 +3276,7 @@ class sAdmin implements \Enlight_Hook
      * Regenerates session id and updates references in the db
      * Used internally by sAdmin::sLogin
      */
-    private function regenerateSessionId()
+    private function regenerateSessionId(bool $ignoreUserTable = false): void
     {
         $oldSessionId = session_id();
 
@@ -3310,9 +3310,12 @@ class sAdmin implements \Enlight_Hook
 
         $sessions = [
             's_order_basket' => 'sessionID',
-            's_user' => 'sessionID',
             's_order_comparisons' => 'sessionID',
         ];
+
+        if (!$ignoreUserTable) {
+            $sessions['s_user'] = 'sessionID';
+        }
 
         foreach ($sessions as $tableName => $column) {
             $this->db->update(
