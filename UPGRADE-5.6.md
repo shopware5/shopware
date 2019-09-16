@@ -55,6 +55,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
         * `city`
         * `country`
         * `state`
+* Changed `StateManager.getScrollBarSize` to lazily get the size of the scrollbar
 
 ## 5.6.1
 
