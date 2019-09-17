@@ -37,7 +37,8 @@ class RegisterControllerCompilerPassTest extends TestCase
     {
         $plugins = [];
         $container = new ContainerBuilder();
-        $compilerPass = new RegisterControllerCompilerPass($plugins);
+        $container->setParameter('active_plugin_instances', $plugins);
+        $compilerPass = new RegisterControllerCompilerPass();
         $compilerPass->process($container);
 
         static::assertFalse(
@@ -49,8 +50,9 @@ class RegisterControllerCompilerPassTest extends TestCase
     {
         $plugins = [new NoneController(true, 'ShopwarePlugins')];
         $container = new ContainerBuilder();
+        $container->setParameter('active_plugin_instances', $plugins);
 
-        $compilerPass = new RegisterControllerCompilerPass($plugins);
+        $compilerPass = new RegisterControllerCompilerPass();
         $compilerPass->process($container);
 
         static::assertFalse(
@@ -62,8 +64,9 @@ class RegisterControllerCompilerPassTest extends TestCase
     {
         $plugins = [new BackendController(true, 'ShopwarePlugins')];
         $container = new ContainerBuilder();
+        $container->setParameter('active_plugin_instances', $plugins);
 
-        $compilerPass = new RegisterControllerCompilerPass($plugins);
+        $compilerPass = new RegisterControllerCompilerPass();
         $compilerPass->process($container);
 
         static::assertTrue(
@@ -80,8 +83,9 @@ class RegisterControllerCompilerPassTest extends TestCase
     {
         $plugins = [new BackendController(true, 'ShopwarePlugins'), new DifferentController(true, 'ShopwarePlugins')];
         $container = new ContainerBuilder();
+        $container->setParameter('active_plugin_instances', $plugins);
 
-        $compilerPass = new RegisterControllerCompilerPass($plugins);
+        $compilerPass = new RegisterControllerCompilerPass();
         $compilerPass->process($container);
 
         static::assertTrue(

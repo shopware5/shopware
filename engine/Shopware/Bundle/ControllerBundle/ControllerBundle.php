@@ -24,10 +24,13 @@
 
 namespace Shopware\Bundle\ControllerBundle;
 
+use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\ControllerCompilerPass;
+use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\RegisterControllerCompilerPass;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\HttpKernel\DependencyInjection\RegisterControllerArgumentLocatorsPass;
 
 class ControllerBundle extends Bundle
 {
@@ -37,5 +40,9 @@ class ControllerBundle extends Bundle
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/DependencyInjection'));
         $loader->load('services.xml');
+
+        $container->addCompilerPass(new ControllerCompilerPass());
+        $container->addCompilerPass(new RegisterControllerArgumentLocatorsPass('argument_resolver.service', 'shopware.controller'));
+        $container->addCompilerPass(new RegisterControllerCompilerPass());
     }
 }

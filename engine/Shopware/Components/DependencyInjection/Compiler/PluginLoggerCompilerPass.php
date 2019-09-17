@@ -35,22 +35,10 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class PluginLoggerCompilerPass implements CompilerPassInterface
 {
-    /**
-     * @var Plugin[]
-     */
-    private $plugins;
-
-    /**
-     * @param Plugin[] $plugins
-     */
-    public function __construct(array $plugins)
-    {
-        $this->plugins = $plugins;
-    }
-
     public function process(ContainerBuilder $container): void
     {
-        foreach ($this->plugins as $plugin) {
+        /** @var Plugin $plugin */
+        foreach ($container->getParameter('active_plugin_instances') as $plugin) {
             $this->processPlugin($container, $plugin->getContainerPrefix());
         }
     }

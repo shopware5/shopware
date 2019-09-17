@@ -35,22 +35,11 @@ class RegisterControllerCompilerPass implements CompilerPassInterface
 {
     const MODULES = ['Backend', 'Frontend', 'Widgets', 'Api'];
 
-    /**
-     * @var Plugin[]
-     */
-    private $plugins;
-
-    /**
-     * @param Plugin[] $plugins
-     */
-    public function __construct(array $plugins)
-    {
-        $this->plugins = $plugins;
-    }
-
     public function process(ContainerBuilder $container)
     {
-        $paths = $this->collectControllerPaths($this->plugins);
+        $plugins = $container->getParameter('active_plugin_instances');
+
+        $paths = $this->collectControllerPaths($plugins);
         if (count($paths) === 0) {
             return;
         }
