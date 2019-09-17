@@ -22,50 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Models\Mail;
-
-use Doctrine\ORM\Mapping as ORM;
-use Shopware\Components\Model\ModelEntity;
-
-/**
- * @ORM\Entity
- * @ORM\Table(name="s_mail_log_contact")
- */
-class Contact extends ModelEntity
+class Migrations_Migration1640 extends Shopware\Components\Migrations\AbstractMigration
 {
-    /**
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="mail_address", type="string", nullable=false)
-     */
-    protected $mailAddress;
-
-    public function getId(): ?int
+    public function up($modus)
     {
-        return $this->id;
-    }
-
-    public function setId(int $id): void
-    {
-        $this->id = $id;
-    }
-
-    public function getMailAddress(): ?string
-    {
-        return $this->mailAddress;
-    }
-
-    public function setMailAddress(?string $mailAddress = ''): void
-    {
-        $this->mailAddress = $mailAddress;
+        $this->addSql('ALTER TABLE `s_mail_log_contact` DROP KEY `s_mail_log_contact_uniq_mail_address`;');
     }
 }
