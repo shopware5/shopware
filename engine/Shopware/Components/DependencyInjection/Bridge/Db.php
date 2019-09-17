@@ -42,7 +42,7 @@ class Db
             return $factory::createPDO($dbConfig);
         }
 
-        $password = isset($dbConfig['password']) ? $dbConfig['password'] : '';
+        $password = $dbConfig['password'] ?? '';
         $connectionString = self::buildConnectionString($dbConfig);
 
         try {
@@ -58,18 +58,21 @@ class Db
 
             // Reset sql_mode "STRICT_TRANS_TABLES" that will be default in MySQL 5.6
             $conn->exec('SET @@session.sql_mode = ""');
+
+            if (isset($dbConfig['timezone'])) {
+                $conn->exec(sprintf('SET @@session.time_zone = %s;', $conn->quote($dbConfig['timezone'])));
+            }
         } catch (\PDOException $e) {
-            $message = $e->getMessage();
             $message = str_replace(
                 [
                     $dbConfig['username'],
                     $dbConfig['password'],
                 ],
                 '******',
-                $message
+                $e->getMessage()
             );
 
-            throw new \RuntimeException(sprintf('Could not connect to database. Message from SQL Server: %s', $message), $e->getCode());
+            throw new \RuntimeException(sprintf('Could not connect to database. Message from SQL Server: %s', $message));
         }
 
         return $conn;
@@ -112,10 +115,7 @@ class Db
         return $db;
     }
 
-    /**
-     * @return string
-     */
-    private static function buildConnectionString(array $dbConfig)
+    private static function buildConnectionString(array $dbConfig): string
     {
         if (!isset($dbConfig['host']) || empty($dbConfig['host'])) {
             $dbConfig['host'] = 'localhost';
