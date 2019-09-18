@@ -30,4 +30,8 @@ interface ConfigHandlerInterface
      * @return array
      */
     public function getSitemapConfig();
+
+    public function saveCustomUrls(array $customUrls): void;
+
+    public function saveExcludedUrls(array $excludedUrls): void;
 }

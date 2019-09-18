@@ -1,4 +1,3 @@
-<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,17 +21,25 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SitemapBundle\UrlFilter;
+//{block name="backend/performance/model/sitemap/custom_urls"}
+Ext.define('Shopware.apps.Performance.model.sitemap.CustomUrls', {
 
-use Shopware\Bundle\SitemapBundle\Provider\ManufacturerUrlProvider;
-
-class Manufacturer extends Base
-{
     /**
-     * {@inheritdoc}
+     * @string
      */
-    public function supports($resourceName)
-    {
-        return $resourceName === ManufacturerUrlProvider::NAME;
-    }
-}
+    extend: 'Ext.data.Model',
+
+    /**
+     * @array
+     */
+    fields: [
+        //{block name="backend/performance/model/sitemap/custom_urls/fields"}{/block}
+        { name: 'id', type: 'int' },
+        { name: 'url', type: 'string', defaultValue: 'example.org' },
+        { name: 'priority', type: 'int' },
+        { name: 'changeFreq', type: 'string', defaultValue: 'weekly' },
+        { name: 'lastMod', type: 'datetime' },
+        { name: 'shopId', type: 'int', useNull: true },
+    ]
+});
+//{/block}

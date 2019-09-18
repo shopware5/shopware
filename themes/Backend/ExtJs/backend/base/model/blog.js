@@ -1,4 +1,3 @@
-<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -20,19 +19,34 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Base
+ * @subpackage Model
+ * @version    $Id$
+ * @author shopware AG
  */
 
-namespace Shopware\Bundle\SitemapBundle\UrlFilter;
+//{block name="backend/base/model/blog"}
+Ext.define('Shopware.apps.Base.model.Blog', {
 
-use Shopware\Bundle\SitemapBundle\Provider\ManufacturerUrlProvider;
+    alternateClassName: 'Shopware.model.Blog',
 
-class Manufacturer extends Base
-{
-    /**
-     * {@inheritdoc}
-     */
-    public function supports($resourceName)
-    {
-        return $resourceName === ManufacturerUrlProvider::NAME;
-    }
-}
+    extend: 'Shopware.data.Model',
+
+    idProperty: 'id',
+
+    fields: [
+        //{block name="backend/base/model/blog/fields"}{/block}
+        { name: 'id', type: 'int' },
+        { name: 'title', type: 'string' },
+        { name: 'shortDescription', type: 'string' },
+        { name: 'description', type: 'string' },
+        { name: 'active', type: 'boolean' },
+        { name: 'views', type: 'int' },
+        { name: 'displayDate', type: 'date' },
+        { name: 'numberOfComments', type: 'int' },
+        { name: 'name', convert: function (value, record) { return record.get('title'); } },
+    ]
+});
+//{/block}

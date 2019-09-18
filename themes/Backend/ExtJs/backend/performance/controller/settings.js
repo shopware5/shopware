@@ -45,7 +45,9 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
         { ref: 'settings', selector: 'performance-tabs-settings-main' },
         { ref: 'cacheTime', selector: 'performance-tabs-settings-elements-cache-time' },
         { ref: 'noCache', selector: 'performance-tabs-settings-elements-no-cache' },
-        { ref: 'checkGrid', selector: 'performance-tabs-settings-home grid' }
+        { ref: 'checkGrid', selector: 'performance-tabs-settings-home grid' },
+        { ref: 'sitemapCustomUrlsGrid', selector: 'performance-tabs-settings-elements-sitemap-custom-urls' },
+        { ref: 'sitemapExcludeUrlsGrid', selector: 'performance-tabs-settings-elements-sitemap-excluded-urls' },
     ],
 
     snippets: {
@@ -114,6 +116,9 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
         me.getCheckGrid().reconfigure(config.getPerformanceCheck());
         me.getCacheTime().reconfigure(config.getHttpCache().first().getCacheControllers());
         me.getNoCache().reconfigure(config.getHttpCache().first().getNoCacheControllers());
+
+        me.getSitemapCustomUrlsGrid().reconfigure(config.getSitemap().first().getCustomUrls());
+        me.getSitemapExcludeUrlsGrid().reconfigure(config.getSitemap().first().getExcludedUrls());
 
         me.configData = Ext.clone(config);
     },

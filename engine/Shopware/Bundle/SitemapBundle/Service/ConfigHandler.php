@@ -68,10 +68,20 @@ class ConfigHandler
         throw new \RuntimeException(sprintf("Invalid sitemap config key: '%s'", $key));
     }
 
-    /**
-     * @return array
-     */
-    private function addUrls(array $urls, array $config)
+    public function save(array $config): void
+    {
+        foreach ($this->configHandlers as $configHandler) {
+            if (isset($config[self::EXCLUDED_URLS_KEY])) {
+                $configHandler->saveExcludedUrls($config[self::EXCLUDED_URLS_KEY]);
+            }
+
+            if (isset($config[self::CUSTOM_URLS_KEY])) {
+                $configHandler->saveCustomUrls($config[self::CUSTOM_URLS_KEY]);
+            }
+        }
+    }
+
+    private function addUrls(array $urls, array $config): array
     {
         foreach ($config as $configUrl) {
             $urls[] = $configUrl;

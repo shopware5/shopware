@@ -45,32 +45,32 @@ Ext.define('Shopware.apps.Base.model.Category', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.data.Model',
+    extend: 'Shopware.data.Model',
 
     /**
      * unique id
      * @int
      */
-    idProperty:'id',
+    idProperty: 'id',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
+    fields: [
         //{block name="backend/base/model/category/fields"}{/block}
-        { name : 'id', type:'int' },
-        { name : 'parent', type:'int' },
-        { name : 'name', type:'string' },
-        { name : 'position', type:'int' },
-        { name : 'active', type:'boolean', defaultValue: true },
-        { name : 'childrenCount', type: 'int' },
+        { name: 'id', type:'int' },
+        { name: 'parent', type:'int' },
+        { name: 'name', type:'string' },
+        { name: 'position', type:'int' },
+        { name: 'active', type:'boolean', defaultValue: true },
+        { name: 'childrenCount', type: 'int' },
 
         // Some tree fields
-        { name : 'text', type: 'string' },
-        { name : 'cls', type: 'string' },
-        { name : 'leaf', type: 'boolean' },
-        { name : 'allowDrag', type: 'boolean' }
+        { name: 'text', type: 'string' },
+        { name: 'cls', type: 'string' },
+        { name: 'leaf', type: 'boolean' },
+        { name: 'allowDrag', type: 'boolean' }
     ]
 });
 //{/block}

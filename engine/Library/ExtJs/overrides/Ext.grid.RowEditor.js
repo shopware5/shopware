@@ -23,6 +23,10 @@
 
 //{block name="extjs/overrides/rowEditor"}
 Ext.override(Ext.grid.RowEditor, {
+    style: {
+        background: '#eaf1fb'
+    },
+
     getFloatingButtons: function() {
        var me = this,
            cssPrefix = Ext.baseCSSPrefix,
@@ -80,6 +84,43 @@ Ext.override(Ext.grid.RowEditor, {
            });
        }
        return me.floatingButtons;
-   }
+   },
+
+    /**
+     * This is a version of the default Ext.grid.RowEditor, but with support for the CheckBoxSelectionModel.
+     * Usually, when having a CheckBoxSelectionModel with the configuration `clicksToEdit: 1` and the RowEditing plugin
+     * active at the same time, you wouldn't be able to select more than one entry at once anymore.
+     *
+     * This override changes the `startEdit` method and makes sure the other entries are not de-selected again.
+     * This is done using a new configuration 'keepExisting' on the editor plugin itself. For compatibility reasons,
+     * this is `false` by default.
+     *
+     * @param { Ext.data.Model } record
+     */
+    startEdit: function(record) {
+        var me = this,
+            grid = me.editingPlugin.grid,
+            store = grid.store,
+            context = me.context = Ext.apply(me.editingPlugin.context, {
+                view: grid.getView(),
+                store: store
+            }),
+            keepExisting = me.editingPlugin.keepExisting || false;
+
+        // make sure our row is selected before editing
+        context.grid.getSelectionModel().select(record, keepExisting);
+
+        // Reload the record data
+        me.loadRecord(record);
+
+        if (!me.isVisible()) {
+            me.show();
+            me.focusContextCell();
+        } else {
+            me.reposition({
+                callback: this.focusContextCell
+            });
+        }
+    }
 });
 //{/block}

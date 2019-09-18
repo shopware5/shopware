@@ -36,18 +36,18 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
      * Define that the additional information is an Ext.panel.Panel extension
      * @string
      */
-    extend:'Ext.panel.Panel',
+    extend: 'Ext.panel.Panel',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.performance-tabs-settings-main',
+    alias: 'widget.performance-tabs-settings-main',
 
     // Title of the panel shown in the tab
     title: '{s name=tabs/settings/title}Settings{/s}',
 
-    // Define the layout of the panel to be a border layut
+    // Define the layout of the panel to be a border layout
     layout: 'border',
 
     /**
@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.items = me.createItems();

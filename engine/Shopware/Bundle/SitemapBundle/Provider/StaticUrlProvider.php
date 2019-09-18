@@ -33,6 +33,8 @@ use Shopware\Components\Routing;
 
 class StaticUrlProvider implements UrlProviderInterface
 {
+    public const NAME = 'static';
+
     /**
      * @var Routing\RouterInterface
      */
@@ -94,7 +96,7 @@ class StaticUrlProvider implements UrlProviderInterface
         $urls = [];
 
         for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
-            $urls[] = new Url($routes[$i], $sites[$i]['changed'], 'weekly', \Shopware\Models\Site\Site::class, $sites[$i]['id']);
+            $urls[] = new Url($routes[$i], $sites[$i]['changed'], 'weekly', self::NAME, $sites[$i]['id']);
         }
 
         return $urls;

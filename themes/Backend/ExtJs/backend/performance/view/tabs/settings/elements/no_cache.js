@@ -40,13 +40,13 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
      * Extend from our base grid
      * @string
      */
-    extend:'Shopware.apps.Performance.view.tabs.settings.elements.BaseGrid',
+    extend: 'Shopware.apps.Performance.view.tabs.settings.elements.BaseGrid',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.performance-tabs-settings-elements-no-cache',
+    alias: 'widget.performance-tabs-settings-elements-no-cache',
 
     /**
      * Desciptive title for the grid
@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
      * default configuration
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.columns = me.getColumns();
@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
      * to open the order in a new window.
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
         );
     },
@@ -83,7 +83,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
      *
      * @return [array] grid columns
      */
-    getColumns:function () {
+    getColumns: function () {
         var me = this;
 
         return [
@@ -93,7 +93,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
                 flex: 2,
                 editor: {
                     allowBlank: false,
-                    enableKeyEvents:true
+                    enableKeyEvents: true
                 }
             },
             {
@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
                 flex: 1,
                 editor: {
                     allowBlank: false,
-                    enableKeyEvents:true
+                    enableKeyEvents: true
                 }
             },
             {
@@ -110,19 +110,19 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.NoCache', {
                  * Special column type which provides
                  * clickable icons in each row
                  */
-                xtype:'actioncolumn',
-                width:50,
-                items:[
+                xtype: 'actioncolumn',
+                width: 50,
+                items: [
                     {
-                        cls:'delteBtn',
-                        iconCls:'sprite-minus-circle-frame',
-                        action:'http-cache-delete-controller-time',
-                        tooltip:'{s name=grid/actionButton/delete}Delete entry{/s}',
+                        cls: 'delteBtn',
+                        iconCls: 'sprite-minus-circle-frame',
+                        action: 'http-cache-delete-controller-time',
+                        tooltip: '{s name=grid/actionButton/delete}Delete entry{/s}',
                         /**
                          * Add button handler to fire the generatePassword event which is handled
                          * in the detail controller. The detail controller generates a password and set it into the password field
                          */
-                        handler:function (view, rowIndex, colIndex, item) {
+                        handler: function (view, rowIndex) {
                             var store = view.getStore(),
                                 record = store.getAt(rowIndex);
 

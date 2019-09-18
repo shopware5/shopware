@@ -88,7 +88,9 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Sitemap', {
                     this.getRefreshTimeField(),
                     this.getLastUpdateField()
                 ]
-            }
+            },
+            this.getSitemapCustomUrlsFieldSet(),
+            this.getSitemapExcludeUrlsFieldSet()
         ];
     },
 
@@ -167,6 +169,36 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Sitemap', {
                 return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
             }
         };
-    }
+    },
+
+    /**
+     * @returns { Object }
+     */
+    getSitemapCustomUrlsFieldSet: function () {
+        return {
+            xtype: 'fieldset',
+            title: '{s namespace="backend/performance/sitemap" name="customUrl/fieldSet"}Add custom URLs{/s}',
+            items: [
+                {
+                    xtype: 'performance-tabs-settings-elements-sitemap-custom-urls',
+                }
+            ]
+        };
+    },
+
+    /**
+     * @returns { Object }
+     */
+    getSitemapExcludeUrlsFieldSet: function () {
+        return {
+            xtype: 'fieldset',
+            title: '{s namespace="backend/performance/sitemap" name="excludedUrl/fieldSet"}Excluded URLs{/s}',
+            items: [
+                {
+                    xtype: 'performance-tabs-settings-elements-sitemap-excluded-urls',
+                }
+            ]
+        };
+    },
 });
 //{/block}
