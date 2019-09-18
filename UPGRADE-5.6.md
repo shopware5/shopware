@@ -40,6 +40,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `Listing` controller to prevent it from accessing categories of subshops
 * Changed jquery plugins `ajax-product-navigation`, `infinite-scrolling` and `listing-actions` to work with invalid query strings
 * Changed the context variables of eMail `sREGISTERCONFIRMATION` to contain the same variables when the mail is sent after a DOI eMail compared to when it is sent directly
+* Changes how the IP of the client get's determined when an order is being stored
 * Changed the context variables of eMails `sOPTINREGISTER` and `sOPTINREGISTERACCOUNTLESS` to include the same values as eMail `sREGISTERCONFIRMATION`, these are:
     * The already existing variables:
         * `sConfirmLink`
