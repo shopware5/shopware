@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler;
 
 use Shopware\Bundle\ControllerBundle\Listener\ControllerPathListener;
-use Shopware\Components\Plugin;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -37,7 +36,7 @@ class RegisterControllerCompilerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container)
     {
-        $plugins = $container->getParameter('active_plugin_instances');
+        $plugins = $container->getParameter('active_plugin_data');
 
         $paths = $this->collectControllerPaths($plugins);
         if (count($paths) === 0) {
@@ -97,19 +96,17 @@ class RegisterControllerCompilerPass implements CompilerPassInterface
     }
 
     /**
-     * @param Plugin[] $actives
-     *
      * @return string[]
      */
-    private function collectControllerPaths($actives)
+    private function collectControllerPaths(array $activePlugins)
     {
-        $controllerPaths = array_map(function (Plugin $plugin) {
-            if (is_dir($plugin->getPath() . '/Controllers')) {
-                return $plugin->getPath() . '/Controllers';
+        $controllerPaths = array_map(function (array $plugin) {
+            if (is_dir($plugin['path'] . '/Controllers')) {
+                return $plugin['path'] . '/Controllers';
             }
 
             return null;
-        }, $actives);
+        }, $activePlugins);
 
         return array_filter($controllerPaths);
     }
