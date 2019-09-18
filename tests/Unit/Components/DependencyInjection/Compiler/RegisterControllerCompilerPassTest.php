@@ -26,6 +26,7 @@ namespace Shopware\Tests\Unit\Components\DependencyInjection\Compiler;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\RegisterControllerCompilerPass;
+use Shopware\Components\Plugin;
 use Shopware\Tests\Unit\Components\DependencyInjection\Compiler\RegisterControllerExamplePlugins\BackendController\BackendController;
 use Shopware\Tests\Unit\Components\DependencyInjection\Compiler\RegisterControllerExamplePlugins\DifferentController\DifferentController;
 use Shopware\Tests\Unit\Components\DependencyInjection\Compiler\RegisterControllerExamplePlugins\NoneController\NoneController;
@@ -35,9 +36,8 @@ class RegisterControllerCompilerPassTest extends TestCase
 {
     public function testWithNoneActivePlugins()
     {
-        $plugins = [];
         $container = new ContainerBuilder();
-        $container->setParameter('active_plugin_instances', $plugins);
+        $container->setParameter('active_plugin_data', []);
         $compilerPass = new RegisterControllerCompilerPass();
         $compilerPass->process($container);
 
@@ -50,7 +50,7 @@ class RegisterControllerCompilerPassTest extends TestCase
     {
         $plugins = [new NoneController(true, 'ShopwarePlugins')];
         $container = new ContainerBuilder();
-        $container->setParameter('active_plugin_instances', $plugins);
+        $container->setParameter('active_plugin_data', $this->getPluginData($plugins));
 
         $compilerPass = new RegisterControllerCompilerPass();
         $compilerPass->process($container);
@@ -64,7 +64,7 @@ class RegisterControllerCompilerPassTest extends TestCase
     {
         $plugins = [new BackendController(true, 'ShopwarePlugins')];
         $container = new ContainerBuilder();
-        $container->setParameter('active_plugin_instances', $plugins);
+        $container->setParameter('active_plugin_data', $this->getPluginData($plugins));
 
         $compilerPass = new RegisterControllerCompilerPass();
         $compilerPass->process($container);
@@ -83,7 +83,7 @@ class RegisterControllerCompilerPassTest extends TestCase
     {
         $plugins = [new BackendController(true, 'ShopwarePlugins'), new DifferentController(true, 'ShopwarePlugins')];
         $container = new ContainerBuilder();
-        $container->setParameter('active_plugin_instances', $plugins);
+        $container->setParameter('active_plugin_data', $this->getPluginData($plugins));
 
         $compilerPass = new RegisterControllerCompilerPass();
         $compilerPass->process($container);
@@ -95,5 +95,15 @@ class RegisterControllerCompilerPassTest extends TestCase
         $definition = $container->getDefinition('shopware.generic_controller_listener');
         static::assertTrue($definition->hasTag('shopware.event_listener'));
         static::assertCount(5, $definition->getTag('shopware.event_listener'));
+    }
+
+    private function getPluginData(array $plugins)
+    {
+        return array_map(function (Plugin $plugin) {
+            return [
+                'path' => $plugin->getPath(),
+                'containerPrefix' => $plugin->getContainerPrefix(),
+            ];
+        }, $plugins);
     }
 }

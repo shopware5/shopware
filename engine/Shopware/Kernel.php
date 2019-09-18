@@ -647,7 +647,7 @@ class Kernel extends SymfonyKernel
         $container->addCompilerPass(new PluginLoggerCompilerPass());
 
         $container->setParameter('active_plugins', $this->activePlugins);
-        $container->setParameter('active_plugin_instances', $this->getActivePlugins());
+        $container->setParameter('active_plugin_data', $this->getActivePluginData());
 
         $this->loadBundles($container);
     }
@@ -732,11 +732,14 @@ class Kernel extends SymfonyKernel
         return $this->name . ucfirst($this->environment) . $this->pluginHash . ($this->debug ? 'Debug' : '') . 'ProjectContainer';
     }
 
-    private function getActivePlugins(): array
+    private function getActivePluginData(): array
     {
-        return array_filter($this->bundles, function (BundleInterface $bundle) {
-            return $bundle instanceof Plugin && $bundle->isActive();
-        });
+        return array_map(function (Plugin $plugin) {
+            return [
+                'path' => $plugin->getPath(),
+                'containerPrefix' => $plugin->getContainerPrefix(),
+            ];
+        }, $this->getPlugins());
     }
 
     /**
