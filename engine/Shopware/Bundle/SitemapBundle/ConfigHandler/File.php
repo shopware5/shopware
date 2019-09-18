@@ -44,7 +44,7 @@ class File implements ConfigHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function getSitemapConfig()
+    public function getSitemapConfig(): array
     {
         return [
             ConfigHandler::EXCLUDED_URLS_KEY => $this->sitemapConfig['excluded_urls'],

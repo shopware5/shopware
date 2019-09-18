@@ -30,23 +30,29 @@ class Migrations_Migration1700 extends AbstractMigration
     public function up($modus)
     {
         $customTableSql = <<<'SQL'
-            CREATE TABLE IF NOT EXISTS`s_sitemap_custom` (
-                `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `url` varchar(512) NOT NULL,
-                `priority` int NOT NULL,
-                `change_freq` varchar(20) NOT NULL,
+            CREATE TABLE IF NOT EXISTS `s_sitemap_custom` (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `url` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
+                `priority` int(11) NOT NULL,
+                `change_freq` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
                 `last_mod` datetime NOT NULL,
-                `shop_id` int NULL
-            ) ENGINE='InnoDB' COLLATE 'utf8_unicode_ci';
+                `shop_id` int(11) unsigned DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `shop_id` (`shop_id`),
+                CONSTRAINT `s_sitemap_custom_ibfk_1` FOREIGN KEY (`shop_id`) REFERENCES `s_core_shops` (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 SQL;
 
         $excludeTableSql = <<<'SQL'
             CREATE TABLE IF NOT EXISTS `s_sitemap_exclude` (
-                `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `resource` varchar(255) NOT NULL,
-                `identifier` LONGTEXT NULL,
-                `shop_id` int NULL
-            ) ENGINE='InnoDB' COLLATE 'utf8_unicode_ci';
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `resource` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                `identifier` longtext COLLATE utf8_unicode_ci,
+                `shop_id` int(11) unsigned DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `shop_id` (`shop_id`),
+                CONSTRAINT `s_sitemap_exclude_ibfk_1` FOREIGN KEY (`shop_id`) REFERENCES `s_core_shops` (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 SQL;
 
         $this->addSql($customTableSql);
