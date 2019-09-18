@@ -524,7 +524,7 @@
 
             dateFormat = dateFormat || me.opts.dateFormat;
 
-            var formattedDate = me.flatpickr.formatDate(dateFormat, date);
+            var formattedDate = me.flatpickr.formatDate(date, dateFormat);
 
             $.publish('plugin/swDatePicker/onFormatDate', [ me, formattedDate, dateFormat, date ]);
 

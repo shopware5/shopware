@@ -59,6 +59,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
         * `country`
         * `state`
 * Changed PHPStan to 0.11.16
+* Changed a call to the `flatpickr`'s `formatDate()` method, so that it now reflects the current parameter order
 
 ### Removals
 
