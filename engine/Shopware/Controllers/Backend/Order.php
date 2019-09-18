@@ -988,7 +988,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             return;
         }
 
-        $mailTemplateName = $this->Request()->getParam('templateName', 'sORDERDOCUMENTS');
+        $mailTemplateName = $this->Request()->getParam('templateName') ?: 'sORDERDOCUMENTS';
 
         /** @var Enlight_Components_Mail $mail */
         $mail = $this->container->get('modules')->Order()->createStatusMail($orderId, 0, $mailTemplateName);
