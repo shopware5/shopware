@@ -40,14 +40,23 @@ class CategoryUrlProvider extends BaseUrlProvider
             return [];
         }
 
-        $parentId = $shopContext->getShop()->getCategory()->getId();
+        $parentId = $shopContext->getShop()->getCategory()->getParentId();
         $categoryRepository = $this->modelManager->getRepository(Category::class);
         $categories = $categoryRepository->getActiveChildrenList($parentId, $shopContext->getFallbackCustomerGroup()->getId(), null, $shopContext->getShop()->getId());
 
-        /** @var array<string, array> $category */
+        /** @var array $category */
         foreach ($categories as $key => &$category) {
             if (!empty($category['external'])) {
                 unset($categories[$key]);
+                continue;
+            }
+
+            // Root category
+            if ((int) $category['parentId'] === $parentId) {
+                $category['urlParams'] = [
+                    'sViewport' => 'index',
+                ];
+
                 continue;
             }
 
