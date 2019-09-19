@@ -56,6 +56,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
         * `city`
         * `country`
         * `state`
+* Changed PHPStan to 0.11.16
 
 ### Removals
 
