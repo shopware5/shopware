@@ -88,7 +88,9 @@ Ext.define('Shopware.apps.RiskManagement.store.Risks', {
         { description: '{s name=risks_store/comboBox/currencyIsoIs}Currency Iso IS{/s}', value: 'CURRENCIESISOIS' },
         { description: '{s name=risks_store/comboBox/currencyIsoIsNot}Currency Iso IS NOT{/s}', value: 'CURRENCIESISOISNOT' },
         { description: '{s name=risks_store/comboBox/articleAttributeIs}Article attribute IS (1>5){/s}', value: 'ATTRIS' },
-        { description: '{s name=risks_store/comboBox/articleAttributeIsNot}Article attribute IS NOT (1>5){/s}', value: 'ATTRISNOT' }
+        { description: '{s name=risks_store/comboBox/articleAttributeIsNot}Article attribute IS NOT (1>5){/s}', value: 'ATTRISNOT' },
+        { description: '{s name=risks_store/comboBox/customerAttributeIs}Customer attribute IS (1>5){/s}', value: 'CUSTOMERATTRIS' },
+        { description: '{s name=risks_store/comboBox/customerAttributeIsNot}Customer attribute IS NOT (1>5){/s}', value: 'CUSTOMERATTRISNOT' }
     ]
 });
 //{/block}

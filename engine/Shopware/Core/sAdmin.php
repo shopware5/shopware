@@ -1977,6 +1977,58 @@ class sAdmin implements \Enlight_Hook
     }
 
     /**
+     * @param bool|array $user
+     *
+     * @return bool|void
+     */
+    public function sRiskCUSTOMERATTRIS($user, array $order, string $value)
+    {
+        if (!isset($user['additional']['user'])) {
+            return;
+        }
+
+        $values = explode('|', $value);
+        if (!isset($values[0], $values[1])) {
+            return;
+        }
+
+        $attribute = $values[0];
+        $value = $values[1];
+
+        if (!isset($user['additional']['user'][$attribute])) {
+            return;
+        }
+
+        return $user['additional']['user'][$attribute] === $value;
+    }
+
+    /**
+     * @param bool|array $user
+     *
+     * @return bool|void
+     */
+    public function sRiskCUSTOMERATTRISNOT($user, array $order, string $value)
+    {
+        if (!isset($user['additional']['user'])) {
+            return;
+        }
+
+        $values = explode('|', $value);
+        if (!isset($values[0], $values[1])) {
+            return;
+        }
+
+        $attribute = $values[0];
+        $value = $values[1];
+
+        if (!isset($user['additional']['user'][$attribute])) {
+            return;
+        }
+
+        return $user['additional']['user'][$attribute] !== $value;
+    }
+
+    /**
      * Risk management
      * Check if at least one order of the customer has a payment status 13
      *
