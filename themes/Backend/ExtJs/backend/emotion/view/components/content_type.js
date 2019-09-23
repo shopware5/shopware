@@ -35,31 +35,34 @@ Ext.define('Shopware.apps.Emotion.view.components.ContentType', {
 
     initComponent: function() {
         var me = this;
-        me.callParent(arguments);
+        this.callParent(arguments);
 
-        me.contentTypeSelection = me.down('[name="content_type"]');
-        me.contentTypeModeSelection = me.down('[name="mode"]');
-        me.hiddenIdsField = me.down('[name="ids"]');
+        this.contentTypeSelection = this.down('[name="content_type"]');
+        this.contentTypeModeSelection = this.down('[name="mode"]');
+        this.hiddenIdsField = this.down('[name="ids"]');
 
-        me.selectionGrid = Ext.create('Shopware.form.field.Grid', {
+        this.selectionGrid = Ext.create('Shopware.form.field.Grid', {
             labelWidth: 170,
-            model: me.getCurrentContentType(),
-            hidden: parseInt(me.contentTypeModeSelection.getValue()) !== 2,
+            model: this.getCurrentContentType(),
+            hidden: parseInt(this.contentTypeModeSelection.getValue()) !== 2,
             fieldLabel: '{s name="selection"}{/s}'
         });
 
-        if (me.hiddenIdsField.getValue()) {
-            me.selectionGrid.setValue(me.hiddenIdsField.getValue());
+        this.selectionGrid.searchField.store.remoteSort = true;
+        this.selectionGrid.searchField.store.sorters.add(new Ext.util.Sorter(this.getSortConfiguration()));
+
+        if (this.hiddenIdsField.getValue()) {
+            this.selectionGrid.setValue(this.hiddenIdsField.getValue());
         }
 
-        me.selectionGrid.on('change', function (grid, value) {
+        this.selectionGrid.on('change', function (grid, value) {
             me.hiddenIdsField.setValue(value);
         });
 
-        me.contentTypeSelection.on('select', this.changeListener, this);
-        me.contentTypeModeSelection.on('select', this.changeListener, this);
+        this.contentTypeSelection.on('select', this.changeListener, this);
+        this.contentTypeModeSelection.on('select', this.changeListener, this);
 
-        me.elementFieldset.add(me.selectionGrid);
+        this.elementFieldset.add(this.selectionGrid);
     },
 
     getCurrentContentType: function() {
@@ -92,15 +95,22 @@ Ext.define('Shopware.apps.Emotion.view.components.ContentType', {
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
         this.selectionGrid.store = factory.createEntitySearchStore(model);
         this.selectionGrid.searchStore = factory.createEntitySearchStore(model);
-        this.selectionGrid.searchStore.sort([{
-            property: 'id',
-            direction: 'DESC'
-        }]);
+        this.selectionGrid.searchStore.sort([ this.getSortConfiguration() ]);
         this.selectionGrid.searchStore.remoteSort = true;
         this.selectionGrid.searchStore.load();
 
         this.selectionGrid.grid.reconfigure(this.selectionGrid.store);
         this.selectionGrid.searchField.combo.bindStore(this.selectionGrid.searchStore);
+    },
+
+    /**
+     * @returns { Object }
+     */
+    getSortConfiguration: function () {
+        return {
+            property: 'id',
+            direction: 'DESC'
+        };
     }
 });
 //{/block}
