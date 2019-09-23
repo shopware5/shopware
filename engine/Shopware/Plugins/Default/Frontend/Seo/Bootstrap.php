@@ -227,6 +227,11 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
 
         $templateFile = $controller->View()->Template()->template_resource;
 
-        return substr($templateFile, -3) !== '.js';
+        if (substr($templateFile, -3) === '.js') {
+            return false;
+        }
+
+        // The cart page can become very slow very fast due to many html tags for amount selections
+        return $controller->Front()->Request()->getControllerName() !== 'checkout';
     }
 }
