@@ -38,7 +38,7 @@ PHP analyze:
 Code Coverage:
     stage: Static analysis
     script:
-        - ./psh.phar init
+        - ./psh.phar init --SW_HOST="localhost"
         - composer require pcov/clobber
         - vendor/bin/pcov clobber
         - php -d pcov.enabled=1 -d pcov.directory=$CI_PROJECT_DIR
@@ -68,8 +68,8 @@ Code Coverage:
         -   name: mysql:5.7
             alias: mysql
     script:
-        - ./psh.phar init
-        - ./psh.phar unit-fast
+        - ./psh.phar init --SW_HOST="localhost"
+        - ./psh.phar unit-fast --SW_HOST="localhost"
 
     artifacts:
         reports:
@@ -79,8 +79,8 @@ Code Coverage:
     extends: .phpunit_base
     stage: Elasticsearch
     script:
-        - ./psh.phar init
-        - ./psh.phar unit-elasticsearch
+        - ./psh.phar init --SW_HOST="localhost"
+        - ./psh.phar unit-elasticsearch --SW_HOST="localhost"
 
     artifacts:
         reports:
