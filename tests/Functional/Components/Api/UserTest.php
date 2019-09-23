@@ -64,6 +64,7 @@ class UserTest extends TestCase
         ];
 
         $this->resource->create($testData);
+        $this->resource->create($testData);
     }
 
     public function testCreateShouldBeSuccessful()
