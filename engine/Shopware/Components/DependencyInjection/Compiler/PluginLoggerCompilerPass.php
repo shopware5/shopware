@@ -27,6 +27,7 @@ namespace Shopware\Components\DependencyInjection\Compiler;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Processor\PsrLogMessageProcessor;
 use Shopware\Components\Logger;
+use Shopware\Components\Plugin;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -34,11 +35,23 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class PluginLoggerCompilerPass implements CompilerPassInterface
 {
+    /**
+     * @var Plugin[]
+     */
+    private $plugins;
+
+    /**
+     * @param Plugin[] $plugins
+     */
+    public function __construct(array $plugins)
+    {
+        $this->plugins = $plugins;
+    }
+
     public function process(ContainerBuilder $container): void
     {
-        /** @var array $plugin */
-        foreach ($container->getParameter('active_plugin_data') as $plugin) {
-            $this->processPlugin($container, $plugin['containerPrefix']);
+        foreach ($this->plugins as $plugin) {
+            $this->processPlugin($container, $plugin->getContainerPrefix());
         }
     }
 

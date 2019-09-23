@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\AttributeBundle;
 
-use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\StaticResourcesCompilerPass;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -38,7 +37,5 @@ class AttributeBundle extends Bundle
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/DependencyInjection'));
         $loader->load('services.xml');
-
-        $container->addCompilerPass(new StaticResourcesCompilerPass());
     }
 }
