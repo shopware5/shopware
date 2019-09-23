@@ -31,8 +31,6 @@ use Shopware\Models\Category\Category;
 
 class CategoryUrlProvider extends BaseUrlProvider
 {
-    public const NAME = 'category';
-
     /**
      * {@inheritdoc}
      */
@@ -72,7 +70,7 @@ class CategoryUrlProvider extends BaseUrlProvider
         $urls = [];
 
         for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
-            $urls[] = new Url($routes[$i], $categories[$i]['changed'], 'weekly', self::NAME, $categories[$i]['id']);
+            $urls[] = new Url($routes[$i], $categories[$i]['changed'], 'weekly', Category::class, $categories[$i]['id']);
         }
 
         $this->allExported = true;

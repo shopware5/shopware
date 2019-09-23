@@ -30,11 +30,10 @@ use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Routing;
+use Shopware\Models\Article\Supplier;
 
 class ManufacturerUrlProvider implements UrlProviderInterface
 {
-    public const NAME = 'manufacturer';
-
     /**
      * @var Routing\RouterInterface
      */
@@ -82,7 +81,7 @@ class ManufacturerUrlProvider implements UrlProviderInterface
         $urls = [];
 
         for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
-            $urls[] = new Url($routes[$i], $manufacturers[$i]['changed'], 'weekly', self::NAME, $manufacturers[$i]['id']);
+            $urls[] = new Url($routes[$i], $manufacturers[$i]['changed'], 'weekly', Supplier::class, $manufacturers[$i]['id']);
         }
 
         $this->allExported = true;

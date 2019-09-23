@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SitemapBundle\UrlFilter;
 
-use Shopware\Bundle\SitemapBundle\Provider\BlogUrlProvider;
+use Shopware\Models\Blog\Blog as BlogModel;
 
 class Blog extends Base
 {
@@ -33,6 +33,6 @@ class Blog extends Base
      */
     public function supports($resourceName)
     {
-        return $resourceName === BlogUrlProvider::NAME;
+        return $resourceName === BlogModel::class;
     }
 }
