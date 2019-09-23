@@ -24,8 +24,6 @@
 
 namespace Shopware\Bundle\FormBundle;
 
-use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\AddConstraintValidatorsPass;
-use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -39,8 +37,5 @@ class FormBundle extends Bundle
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/DependencyInjection'));
         $loader->load('services.xml');
-
-        $container->addCompilerPass(new FormPass());
-        $container->addCompilerPass(new AddConstraintValidatorsPass());
     }
 }
