@@ -127,8 +127,19 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     {
         $offset = 0;
         try {
+            $sql = <<<'SQL'
+                SELECT timeZones.timeZone
+                FROM (
+                    SELECT @@SESSION.time_zone AS timeZone
+                    UNION
+                    SELECT @@system_time_zone AS timeZone
+                ) AS timeZones
+                WHERE timeZone != 'SYSTEM'
+                LIMIT 1
+SQL;
+
             $timezone = $this->container->get('dbal_connection')
-                ->query('SELECT @@SESSION.time_zone;')
+                ->query($sql)
                 ->fetchColumn();
 
             if (in_array($timezone[0], ['-', '+'], true)) {

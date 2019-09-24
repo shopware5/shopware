@@ -22,6 +22,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `city`
     * `country`
     * `state`
+* Added `db.timezone` section to `config.php` to configure a custom timezone for the database connection
 
 ### Changes
 
