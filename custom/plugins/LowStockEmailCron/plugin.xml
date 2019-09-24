@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.3/engine/Shopware/Components/Plugin/schema/plugin.xsd">
+    <label>Extension for CustomProducts (v2)</label>
+    <version>1.0.0</version>
+    <author>Dimitri-Virtua</author>
+    <requiredPlugins>
+        <requiredPlugin pluginName="LowStockEmail"/>
+    </requiredPlugins>
+</plugin>

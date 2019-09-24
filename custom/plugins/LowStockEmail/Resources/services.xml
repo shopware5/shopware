@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service class="LowStockEmail\Services\Sender" id="low_stock_email.services.sender">
+            <argument id="service_container" type="service"/>
+        </service>
+    </services>
+</container>

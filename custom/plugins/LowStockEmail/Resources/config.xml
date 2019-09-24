@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.3/engine/Shopware/Components/Plugin/schema/config.xsd">
+    <elements>
+        <element type="boolean">
+            <name>low_stock_alert</name>
+            <label>Low stock alert</label>
+            <value>0</value>
+        </element>
+        <element type="text" required="true">
+            <name>low_stock_qty</name>
+            <label>Low stock quantity</label>
+            <value>5</value>
+        </element>
+        <element type="select">
+            <name>template</name>
+            <label>E-mail Template</label>
+            <store>
+                <option>
+                    <value>default.tpl</value>
+                    <label>Default template</label>
+                </option>
+            </store>
+        </element>
+    </elements>
+</config>

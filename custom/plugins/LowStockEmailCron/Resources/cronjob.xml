@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cronjobs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.3/engine/Shopware/Components/Plugin/schema/cronjob.xsd">
+    <cronjob>
+        <name>Send low stock email</name>
+        <action>Shopware_CronJob_SendLowStockEmail</action>
+        <active>true</active>
+        <interval>10</interval>
+        <disableOnError>true</disableOnError>
+    </cronjob>
+</cronjobs>
