@@ -5,7 +5,7 @@
         <name>Send low stock email</name>
         <action>Shopware_CronJob_SendLowStockEmail</action>
         <active>true</active>
-        <interval>10</interval>
+        <interval>86400</interval>
         <disableOnError>true</disableOnError>
     </cronjob>
 </cronjobs>
