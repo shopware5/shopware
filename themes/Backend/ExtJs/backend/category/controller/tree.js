@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         moveCategorySuccess : '{s name=tree/move_success}Category has been moved.{/s}',
         moveCategoryFailure : '{s name=tree/move_failure}Category could not be moved.{/s}',
         confirmDeleteCategoryTitle   : '{s name=tree/delete_confirmation_title}Are you sure you want to delete the category?{/s}',
-        confirmDeleteCategory : '{s name=tree/delete_confirmation}Are you sure you want to delete category: [0] and all its sub categories?.{/s}',
+        confirmDeleteCategory : '{s name=tree/delete_confirmation}Are you sure you want to delete category: [0] and all its subcategories?{/s}',
         confirmDeleteCategoryHeadline: '{s name=tree/delete_confirmation_headline}Delete this Category?{/s}',
         deleteSingleItemSuccess : '{s name=tree/delete_success}Category has been deleted.{/s}',
         deleteSingleItemFailure : '{s name=tree/delete_failure}Category could not be deleted.{/s}',
