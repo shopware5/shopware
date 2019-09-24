@@ -30,11 +30,10 @@ use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Routing;
+use Shopware\Models\Site\Site;
 
 class StaticUrlProvider implements UrlProviderInterface
 {
-    public const NAME = 'static';
-
     /**
      * @var Routing\RouterInterface
      */
@@ -96,7 +95,7 @@ class StaticUrlProvider implements UrlProviderInterface
         $urls = [];
 
         for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
-            $urls[] = new Url($routes[$i], $sites[$i]['changed'], 'weekly', self::NAME, $sites[$i]['id']);
+            $urls[] = new Url($routes[$i], $sites[$i]['changed'], 'weekly', Site::class, $sites[$i]['id']);
         }
 
         return $urls;

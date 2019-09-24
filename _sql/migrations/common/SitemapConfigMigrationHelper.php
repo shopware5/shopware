@@ -100,34 +100,13 @@ SQL;
 
         foreach ($excludedUrls as $excludedUrl) {
             $statement = $this->connection->prepare($sqlStatement);
-            $resource = $this->getConvertedResource($excludedUrl['resource']);
             $identifier = $excludedUrl['identifier'] ?: null;
             $shopId = $excludedUrl['shopId'] ?: null;
-            $statement->bindParam(':resource', $resource);
+            $statement->bindParam(':resource', $excludedUrl['resource']);
             $statement->bindParam(':identifier', $identifier);
             $statement->bindParam(':shopId', $shopId);
 
             $statement->execute();
-        }
-    }
-
-    private function getConvertedResource(string $resource): string
-    {
-        switch ($resource) {
-            case Article::class:
-                return ProductUrlProvider::NAME;
-            case Emotion::class:
-                return LandingPageUrlProvider::NAME;
-            case Blog::class:
-                return BlogUrlProvider::NAME;
-            case Category::class:
-                return CategoryUrlProvider::NAME;
-            case Supplier::class:
-                return ManufacturerUrlProvider::NAME;
-            case Site::class:
-                return StaticUrlProvider::NAME;
-            default:
-                return 'unknown';
         }
     }
 }

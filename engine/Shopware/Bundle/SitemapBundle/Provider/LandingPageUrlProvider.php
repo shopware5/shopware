@@ -31,8 +31,6 @@ use Shopware\Models\Emotion\Emotion;
 
 class LandingPageUrlProvider extends BaseUrlProvider
 {
-    public const NAME = 'landing_page';
-
     /**
      * {@inheritdoc}
      */
@@ -73,7 +71,7 @@ class LandingPageUrlProvider extends BaseUrlProvider
         $urls = [];
 
         for ($i = 0, $routeCount = count($routes); $i < $routeCount; ++$i) {
-            $urls[] = new Url($routes[$i], $campaigns[$i]['changed'], 'weekly', self::NAME, $campaigns[$i]['id']);
+            $urls[] = new Url($routes[$i], $campaigns[$i]['changed'], 'weekly', Emotion::class, $campaigns[$i]['id']);
         }
 
         unset($campaign);

@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SitemapBundle\UrlFilter;
 
-use Shopware\Bundle\SitemapBundle\Provider\StaticUrlProvider;
+use Shopware\Models\Site\Site;
 
 class Statics extends Base
 {
@@ -33,6 +33,6 @@ class Statics extends Base
      */
     public function supports($resourceName)
     {
-        return $resourceName === StaticUrlProvider::NAME;
+        return $resourceName === Site::class;
     }
 }

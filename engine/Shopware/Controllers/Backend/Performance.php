@@ -31,11 +31,17 @@ use Shopware\Components\HttpCache\CacheWarmer;
 use Shopware\Components\HttpCache\UrlProviderFactoryInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing\Context;
+use Shopware\Models\Article\Article as ProductModel;
+use Shopware\Models\Article\Supplier;
+use Shopware\Models\Blog\Blog;
+use Shopware\Models\Category\Category;
 use Shopware\Models\Config\Element;
 use Shopware\Models\Config\Form;
+use Shopware\Models\Emotion\Emotion;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop;
+use Shopware\Models\Site\Site;
 
 class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Backend_ExtJs
 {
@@ -771,6 +777,12 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $sitemapConfig['customUrls'] = $this->get(ConfigHandler::class)->get(Confighandler::CUSTOM_URLS_KEY);
         $sitemapConfig['excludedUrls'] = $this->get(ConfigHandler::class)->get(Confighandler::EXCLUDED_URLS_KEY);
 
+        $sitemapConfig['excludedUrls'] = array_map(function ($excludeUrl) {
+            $excludeUrl['resource'] = $this->convertModelToResource($excludeUrl['resource']);
+
+            return $excludeUrl;
+        }, $sitemapConfig['excludedUrls']);
+
         return $sitemapConfig;
     }
 
@@ -783,6 +795,34 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     private function saveSitemapData(array $sitemapData): void
     {
+        $sitemapData['excludedUrls'] = array_map(function ($excludeUrl) {
+            $excludeUrl['resource'] = $this->convertResourceToModel($excludeUrl['resource']);
+
+            return $excludeUrl;
+        }, $sitemapData['excludedUrls']);
+
         $this->get(ConfigHandler::class)->save($sitemapData);
+    }
+
+    private function convertModelToResource(string $model): string
+    {
+        return array_flip($this->getResourceMapping())[$model];
+    }
+
+    private function convertResourceToModel(string $resource): string
+    {
+        return $this->getResourceMapping()[$resource];
+    }
+
+    private function getResourceMapping(): array
+    {
+        return [
+            'product' => ProductModel::class,
+            'blog' => Blog::class,
+            'manufacturer' => Supplier::class,
+            'category' => Category::class,
+            'landing_page' => Emotion::class,
+            'static' => Site::class,
+        ];
     }
 }

@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SitemapBundle\UrlFilter;
 
-use Shopware\Bundle\SitemapBundle\Provider\LandingPageUrlProvider;
+use Shopware\Models\Emotion\Emotion;
 
 class LandingPage extends Base
 {
@@ -33,6 +33,6 @@ class LandingPage extends Base
      */
     public function supports($resourceName)
     {
-        return $resourceName === LandingPageUrlProvider::NAME;
+        return $resourceName === Emotion::class;
     }
 }
