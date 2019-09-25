@@ -33,8 +33,6 @@ use Shopware\Models\Country\State as StateModel;
 use Shopware\Models\Customer\Address as AddressModel;
 use Shopware\Models\Customer\Customer as CustomerModel;
 use Shopware\Models\Customer\PaymentData;
-use Shopware\Models\Shop\Repository;
-use Shopware\Models\Shop\Shop as ShopModel;
 
 /**
  * Customer API Resource
@@ -470,19 +468,7 @@ class Customer extends Resource
      */
     private function setupContext($shopId = null)
     {
-        /** @var Repository $shopRepository */
-        $shopRepository = $this->getContainer()->get('models')->getRepository(ShopModel::class);
-
-        if ($shopId) {
-            $shop = $shopRepository->getActiveById($shopId);
-            if (!$shop) {
-                throw new ApiException\CustomValidationException(sprintf('Shop by id %s not found', $shopId));
-            }
-        } else {
-            $shop = $shopRepository->getActiveDefault();
-        }
-
-        $this->getContainer()->get('shopware.components.shop_registration_service')->registerShop($shop);
+        $this->getContainer()->get('shopware_storefront.context_service')->setShopContext($shopId ?: 1);
     }
 
     /**

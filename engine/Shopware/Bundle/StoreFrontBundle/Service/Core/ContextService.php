@@ -161,6 +161,25 @@ class ContextService implements ContextServiceInterface
     }
 
     /**
+     * @param int         $shopId
+     * @param int|null    $currencyId
+     * @param string|null $customerGroupKey
+     *
+     * @return ShopContextInterface
+     */
+    public function setShopContext($shopId, $currencyId = null, $customerGroupKey = null)
+    {
+        $this->context = $this->shopContextFactory->create(
+            $this->getStoreFrontBaseUrl(),
+            $shopId,
+            $currencyId,
+            $customerGroupKey
+        );
+
+        return $this->context;
+    }
+
+    /**
      * @return string
      */
     private function getStoreFrontBaseUrl()
