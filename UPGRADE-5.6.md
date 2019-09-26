@@ -2,6 +2,14 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
+## 5.6.3
+
+[View all changes from v5.6.2...v5.6.3](https://github.com/shopware/shopware/compare/v5.6.2...v5.6.3)
+
+### Additions
+
+* Added customer attribute risk rules to risk management
+
 ## 5.6.2
 
 [View all changes from v5.6.1...v5.6.2](https://github.com/shopware/shopware/compare/v5.6.1...v5.6.2)
