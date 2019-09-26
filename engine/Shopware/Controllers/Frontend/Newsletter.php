@@ -162,6 +162,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         $this->View()->assign('sNumberPages', $count);
         $this->View()->assign('sPages', $pages);
         $this->View()->assign('sContent', $content);
+        $this->View()->assign('shortParameters', $this->container->get('query_alias_mapper')->getQueryAliases());
     }
 
     /**
