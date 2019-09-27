@@ -74,6 +74,10 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 * Removed the `UNIQUE`-Constraint from `\Shopware\Models\Mail\Contact::$mailAddress`
 
+### Removals
+
+* Removed 'p' parameter and its alias 'sPage' from "NoIndex queries" configuration
+
 ## 5.6.1
 
 [View all changes from v5.6.0...v5.6.1](https://github.com/shopware/shopware/compare/v5.6.0...v5.6.1)
