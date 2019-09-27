@@ -163,7 +163,7 @@ class XmlReaderBaseTest extends TestCase
         $store3 = $this->xpath->query('//config/elements/element[5]/store');
         $store3Result = XmlReaderBase::parseStoreNodeList($store3);
 
-        static::assertNull(null, $store3Result);
+        static::assertNull($store3Result);
     }
 
     public function testParseOptionsNodeList(): void
