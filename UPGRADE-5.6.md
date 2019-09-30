@@ -54,7 +54,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `s_mail_log` foreign keys to set null on delete
 * Changed `Item by sales` to consider only products
 * Changed systeminfo to consider mariadb installations
-* Changed PHPStan to 0.11.15
+* Changed `\Shopware_Controllers_Frontend_Address::handleExtraData` to split `sessionKey` correctly
 * Changed `Zend_Cache_Backend_Redis` to make it compatible with PhpRedis 5.0.0
 * Changed `Listing` controller to prevent it from accessing categories of subshops
 * Changed jquery plugins `ajax-product-navigation`, `infinite-scrolling` and `listing-actions` to work with invalid query strings
