@@ -28,11 +28,12 @@ class RoundLineAfterTax implements RoundingInterface
 {
     public function round(float $netPrice, float $tax, int $quantity = null): float
     {
-        $netPrice = round(round($netPrice, 2) / 100 * (100 + $tax), 2);
-
-        if ($quantity) {
-            $netPrice = round($netPrice * $quantity, 2);
+        if ($quantity === 0) {
+            return 0.0;
         }
+
+        $netPrice = round(round($netPrice, 2) / 100 * (100 + $tax), 2);
+        $netPrice = (is_int($quantity) && $quantity !== 1) ? round($netPrice * $quantity, 2) : $netPrice;
 
         return $netPrice;
     }
