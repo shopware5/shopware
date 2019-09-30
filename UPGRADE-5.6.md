@@ -13,6 +13,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 ### Changes
 
 * Changed aria-label in `themes/Frontend/Bare/frontend/_includes/privacy.tpl` to remove html tags
+* Changed `sAdmin::sRiskATTRIS` to allow any product attribute
 
 ### Removals
 
