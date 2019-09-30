@@ -10,6 +10,10 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 * Added customer attribute risk rules to risk management
 
+### Removals
+
+* Removed the smarty blocks `frontend_blog_bookmarks_delicious` and `frontend_blog_bookmarks_digg` and their content from `themes/Frontend/Bare/frontend/blog/bookmarks.tpl
+
 ## 5.6.2
 
 [View all changes from v5.6.1...v5.6.2](https://github.com/shopware/shopware/compare/v5.6.1...v5.6.2)
