@@ -475,9 +475,9 @@ Controllers can be now registered using the DI tag `shopware.controller`. This D
 ##### DI:
 
 ```xml
-<service id="swag_example.controller.frontend.test" class="SwagExample\Controller\Frontend\Test">
+<service id="SwagExample\Controller\Frontend\SwagTest">
     <argument type="service" id="dbal_connection"/>
-    <tag name="shopware.controller" module="frontend" controller="test"/>
+    <tag name="shopware.controller" module="frontend" controller="swagTest"/>
 </service>
 ```
 
@@ -490,7 +490,7 @@ namespace SwagExample\Controller\Frontend;
 
 use Doctrine\DBAL\Connection;
 
-class Test extends \Enlight_Controller_Action
+class SwagTest extends \Enlight_Controller_Action
 {
     private $connection;
 
