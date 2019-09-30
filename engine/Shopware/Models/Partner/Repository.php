@@ -301,6 +301,7 @@ class Repository extends ModelRepository
         $builder->setParameter(0, $mappingValue);
         $builder->setParameter(1, $mappingValue);
         $builder->setParameter(2, $mappingValue);
+        $builder->setMaxResults(1);
 
         return $builder;
     }
