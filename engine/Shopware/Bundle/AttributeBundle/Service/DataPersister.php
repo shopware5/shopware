@@ -29,7 +29,7 @@ use Doctrine\DBAL\Schema\Column;
 use Shopware\Components\Model\DBAL\Types\DateStringType;
 use Shopware\Components\Model\DBAL\Types\DateTimeStringType;
 
-class DataPersister
+class DataPersister implements DataPersisterInterface
 {
     /**
      * @var Connection
@@ -37,16 +37,16 @@ class DataPersister
     private $connection;
 
     /**
-     * @var TableMapping
+     * @var TableMappingInterface
      */
     private $mapping;
 
     /**
-     * @var DataLoader
+     * @var DataLoaderInterface
      */
     private $dataLoader;
 
-    public function __construct(Connection $connection, TableMapping $mapping, DataLoader $dataLoader)
+    public function __construct(Connection $connection, TableMappingInterface $mapping, DataLoaderInterface $dataLoader)
     {
         $this->connection = $connection;
         $this->mapping = $mapping;
@@ -54,12 +54,7 @@ class DataPersister
     }
 
     /**
-     * Persists the provided data into the provided attribute table.
-     * Only attribute tables supported.
-     *
-     * @param string     $table
-     * @param array      $data
-     * @param int|string $foreignKey
+     * {@inheritdoc}
      *
      * @throws \Exception
      */
@@ -89,9 +84,7 @@ class DataPersister
     }
 
     /**
-     * @param string $table
-     * @param int    $sourceForeignKey
-     * @param int    $targetForeignKey
+     * {@inheritdoc}
      *
      * @throws \Exception
      */
@@ -115,9 +108,7 @@ class DataPersister
     }
 
     /**
-     * @param string $table
-     * @param int    $sourceForeignKey
-     * @param int    $targetForeignKey
+     * {@inheritdoc}
      *
      * @throws \Exception
      */

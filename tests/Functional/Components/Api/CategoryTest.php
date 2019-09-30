@@ -213,7 +213,7 @@ class CategoryTest extends TestCase
 
     public function testCreateCategoryWithTranslation()
     {
-        /** @var \Shopware\Bundle\AttributeBundle\Service\CrudService $crud */
+        /** @var \Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface $crud */
         $crud = Shopware()->Container()->get('shopware_attribute.crud_service');
 
         $crud->update('s_categories_attributes', 'underscore_test', 'string');
