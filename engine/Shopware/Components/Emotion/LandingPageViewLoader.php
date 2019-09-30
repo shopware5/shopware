@@ -30,7 +30,7 @@ use Shopware_Components_Translation;
 class LandingPageViewLoader
 {
     /**
-     * @var DeviceConfiguration
+     * @var DeviceConfigurationInterface
      */
     private $deviceConfiguration;
 
@@ -40,7 +40,7 @@ class LandingPageViewLoader
     private $translationComponent;
 
     public function __construct(
-        DeviceConfiguration $deviceConfiguration,
+        DeviceConfigurationInterface $deviceConfiguration,
         Shopware_Components_Translation $translationComponent = null
     ) {
         $this->deviceConfiguration = $deviceConfiguration;
