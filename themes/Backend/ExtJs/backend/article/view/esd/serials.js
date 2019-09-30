@@ -172,7 +172,7 @@ Ext.define('Shopware.apps.Article.view.esd.Serials', {
                  */
                 xtype: 'actioncolumn',
                 width: 70,
-                items:[
+                items: [
                     {
                         iconCls: 'sprite-minus-circle-frame',
                         action: 'deleteSerial',
