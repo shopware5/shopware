@@ -2184,12 +2184,12 @@ SQL;
     {
         $builder = Shopware()->Models()->getConnection()->createQueryBuilder();
 
-        $builder->select('id', 'quantity')
+        $builder->select('basket.id', 'basket.quantity')
             ->from('s_order_basket', 'basket')
-            ->where('articleID = :articleId')
-            ->andWhere('sessionID = :sessionId')
-            ->andWhere('ordernumber = :ordernumber')
-            ->andWhere('modus != 1')
+            ->where('basket.articleID = :articleId')
+            ->andWhere('basket.sessionID = :sessionId')
+            ->andWhere('basket.ordernumber = :ordernumber')
+            ->andWhere('basket.modus != 1')
             ->setParameter('articleId', $productId)
             ->setParameter('sessionId', $sessionId)
             ->setParameter('ordernumber', $orderNumber);
