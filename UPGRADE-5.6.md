@@ -10,6 +10,10 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 * Added customer attribute risk rules to risk management
 
+### Changes
+
+* Changed aria-label in `themes/Frontend/Bare/frontend/_includes/privacy.tpl` to remove html tags
+
 ### Removals
 
 * Removed the smarty blocks `frontend_blog_bookmarks_delicious` and `frontend_blog_bookmarks_digg` and their content from `themes/Frontend/Bare/frontend/blog/bookmarks.tpl
