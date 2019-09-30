@@ -156,7 +156,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.Grid', {
             },
             {
                 xtype: 'actioncolumn',
-                width: 50,
+                width: 55,
                 items: me.getActionColumnItems()
             }
         ];

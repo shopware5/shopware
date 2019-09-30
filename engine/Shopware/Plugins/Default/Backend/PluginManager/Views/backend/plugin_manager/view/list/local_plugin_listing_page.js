@@ -115,7 +115,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
 
         var actionColumn = me.callParent(arguments);
 
-        actionColumn.width = 120;
+        actionColumn.width = 125;
         return actionColumn;
     },
 

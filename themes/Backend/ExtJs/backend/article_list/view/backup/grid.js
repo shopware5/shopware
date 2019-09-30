@@ -98,7 +98,7 @@ Ext.define('Shopware.apps.ArticleList.view.Backup.Grid', {
              * clickable icons in each row
              */
             xtype: 'actioncolumn',
-            width: 50,
+            width: 55,
             items: [
                 {
                     iconCls: 'sprite-arrow-circle-225-left',

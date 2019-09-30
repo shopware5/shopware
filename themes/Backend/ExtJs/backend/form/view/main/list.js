@@ -136,7 +136,7 @@ Ext.define('Shopware.apps.Form.view.main.List', {
              * clickable icons in each row
              */
             xtype: 'actioncolumn',
-            width: actionColumItems.length * 26,
+            width: actionColumItems.length * 30,
             items: actionColumItems
         }];
     },
