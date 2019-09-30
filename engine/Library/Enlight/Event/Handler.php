@@ -93,10 +93,8 @@ abstract class Enlight_Event_Handler
 
     /**
      * Checks if the event listener is callable.
-     *
-     * @return bool
      */
-    abstract public function isCallable();
+    abstract public function isCallable(): bool;
 
     /**
      * Executes the event handler with the Enlight_Event_EventArgs.
