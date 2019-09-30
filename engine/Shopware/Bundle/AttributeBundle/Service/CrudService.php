@@ -27,36 +27,33 @@ namespace Shopware\Bundle\AttributeBundle\Service;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Attribute\Configuration;
 
-class CrudService
+class CrudService implements CrudServiceInterface
 {
-    const EXT_JS_PREFIX = '__attribute_';
-    const NULL_STRING = 'NULL';
-
     /**
      * @var ModelManager
      */
     private $entityManager;
 
     /**
-     * @var SchemaOperator
+     * @var SchemaOperatorInterface
      */
     private $schemaOperator;
 
     /**
-     * @var TableMapping
+     * @var TableMappingInterface
      */
     private $tableMapping;
 
     /**
-     * @var TypeMapping
+     * @var TypeMappingInterface
      */
     private $typeMapping;
 
     public function __construct(
         ModelManager $entityManager,
-        SchemaOperator $schemaOperator,
-        TableMapping $tableMapping,
-        TypeMapping $typeMapping
+        SchemaOperatorInterface $schemaOperator,
+        TableMappingInterface $tableMapping,
+        TypeMappingInterface $typeMapping
     ) {
         $this->entityManager = $entityManager;
         $this->schemaOperator = $schemaOperator;
@@ -65,9 +62,7 @@ class CrudService
     }
 
     /**
-     * @param string $table
-     * @param string $column
-     * @param bool   $updateDependingTables
+     * {@inheritdoc}
      *
      * @throws \Exception
      */
@@ -104,18 +99,7 @@ class CrudService
     }
 
     /**
-     * Translations for different fields (help, support, label) can be configured via snippets.
-     * Snippet namespace         :  backend/attribute_columns
-     * Snippet name label        :  s_articles_attributes_attr1_label
-     * Snippet name support text :  s_articles_attributes_attr1_supportText
-     * Snippet name help text    :  s_articles_attributes_attr1_helpText
-     *
-     * @param string                $table
-     * @param string                $columnName
-     * @param string                $unifiedType
-     * @param string|null           $newColumnName
-     * @param bool                  $updateDependingTables
-     * @param string|int|float|null $defaultValue
+     * {@inheritdoc}
      *
      * @throws \Exception
      */
@@ -150,8 +134,7 @@ class CrudService
     }
 
     /**
-     * @param string $table
-     * @param string $columnName
+     * {@inheritdoc}
      *
      * @return ConfigurationStruct|null
      */
@@ -170,7 +153,7 @@ class CrudService
     }
 
     /**
-     * @param string $table
+     * {@inheritdoc}
      *
      * @return ConfigurationStruct[]
      */
@@ -383,13 +366,13 @@ class CrudService
         $types = $this->typeMapping->getTypes();
         $type = $types[$type];
 
-        if ($type['unified'] === TypeMapping::TYPE_BOOLEAN) {
+        if ($type['unified'] === TypeMappingInterface::TYPE_BOOLEAN) {
             return (bool) $defaultValue === true ? 1 : 0;
         }
         if (!$type['allowDefaultValue'] || $defaultValue === null) {
-            return self::NULL_STRING;
+            return CrudServiceInterface::NULL_STRING;
         }
-        if ($defaultValue == self::NULL_STRING) {
+        if ($defaultValue == CrudServiceInterface::NULL_STRING) {
             return $defaultValue;
         }
         if ($type['quoteDefaultValue'] && $defaultValue !== null) {

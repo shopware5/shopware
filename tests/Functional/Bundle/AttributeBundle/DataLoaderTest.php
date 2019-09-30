@@ -25,13 +25,13 @@
 namespace Shopware\Tests\Functional\Bundle\AttributeBundle;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\AttributeBundle\Service\DataLoader;
-use Shopware\Bundle\AttributeBundle\Service\DataPersister;
+use Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface;
+use Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface;
 
 class DataLoaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var DataLoader
+     * @var DataLoaderInterface
      */
     private $attributeLoader;
 
@@ -41,7 +41,7 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
     private $connection;
 
     /**
-     * @var DataPersister
+     * @var DataPersisterInterface
      */
     private $attributePersister;
 

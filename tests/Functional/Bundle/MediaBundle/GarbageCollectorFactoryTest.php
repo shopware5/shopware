@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Functional\Bundle\MediaBundle;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
+use Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface;
 use Shopware\Bundle\MediaBundle\GarbageCollector;
 use Shopware\Bundle\MediaBundle\GarbageCollectorFactory;
 
@@ -38,7 +38,7 @@ class GarbageCollectorFactoryTest extends TestCase
 
         $currentCount = count($this->getMediaPositionsFromGarbageCollector($collector));
 
-        Shopware()->Container()->get('shopware_attribute.crud_service')->update('s_articles_attributes', 'foo', TypeMapping::TYPE_HTML);
+        Shopware()->Container()->get('shopware_attribute.crud_service')->update('s_articles_attributes', 'foo', TypeMappingInterface::TYPE_HTML);
 
         $collector = $factory->factory();
 

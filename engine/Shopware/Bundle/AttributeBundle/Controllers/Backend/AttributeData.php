@@ -23,14 +23,14 @@
  */
 
 use Shopware\Bundle\AttributeBundle\Service\ConfigurationStruct;
-use Shopware\Bundle\AttributeBundle\Service\CrudService;
-use Shopware\Bundle\AttributeBundle\Service\DataLoader;
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
+use Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface;
 
 class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Backend_ExtJs
 {
     public function loadDataAction()
     {
-        /** @var DataLoader $dataLoader */
+        /** @var DataLoaderInterface $dataLoader */
         $dataLoader = $this->get('shopware_attribute.data_loader');
 
         try {
@@ -50,7 +50,7 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
 
         $result = [];
         foreach ($data as $key => $value) {
-            $key = CrudService::EXT_JS_PREFIX . $key;
+            $key = CrudServiceInterface::EXT_JS_PREFIX . $key;
             $result[$key] = $value;
         }
 
@@ -59,12 +59,12 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
 
     public function saveDataAction()
     {
-        /** @var \Shopware\Bundle\AttributeBundle\Service\DataPersister $dataPersister */
+        /** @var \Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface $dataPersister */
         $dataPersister = $this->get('shopware_attribute.data_persister');
 
         $data = [];
         foreach ($this->Request()->getParams() as $key => $value) {
-            $key = str_replace(CrudService::EXT_JS_PREFIX, '', $key);
+            $key = str_replace(CrudServiceInterface::EXT_JS_PREFIX, '', $key);
             $data[$key] = $value;
         }
 
@@ -84,7 +84,7 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
 
     public function listAction()
     {
-        /** @var CrudService $crudService */
+        /** @var CrudServiceInterface $crudService */
         $crudService = $this->get('shopware_attribute.crud_service');
         $columns = $crudService->getList(
             $this->Request()->getParam('table')

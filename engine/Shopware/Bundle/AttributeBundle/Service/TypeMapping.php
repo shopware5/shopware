@@ -26,95 +26,83 @@ namespace Shopware\Bundle\AttributeBundle\Service;
 
 use Doctrine\DBAL\Types\Type;
 
-class TypeMapping
+class TypeMapping implements TypeMappingInterface
 {
-    const TYPE_STRING = 'string';
-    const TYPE_TEXT = 'text';
-    const TYPE_HTML = 'html';
-    const TYPE_INTEGER = 'integer';
-    const TYPE_FLOAT = 'float';
-    const TYPE_BOOLEAN = 'boolean';
-    const TYPE_DATE = 'date';
-    const TYPE_DATETIME = 'datetime';
-    const TYPE_COMBOBOX = 'combobox';
-    const TYPE_SINGLE_SELECTION = 'single_selection';
-    const TYPE_MULTI_SELECTION = 'multi_selection';
-
     /**
      * @var array
      */
     private $types = [
-        self::TYPE_STRING => [
+        TypeMappingInterface::TYPE_STRING => [
             'sql' => 'TEXT',
             'dbal' => 'string',
             'allowDefaultValue' => false,
             'quoteDefaultValue' => false,
             'elastic' => ['type' => 'string'],
         ],
-        self::TYPE_TEXT => [
+        TypeMappingInterface::TYPE_TEXT => [
             'sql' => 'TEXT',
             'dbal' => 'text',
             'allowDefaultValue' => false,
             'quoteDefaultValue' => false,
             'elastic' => ['type' => 'string'],
         ],
-        self::TYPE_HTML => [
+        TypeMappingInterface::TYPE_HTML => [
             'sql' => 'MEDIUMTEXT',
             'dbal' => 'text',
             'allowDefaultValue' => false,
             'quoteDefaultValue' => false,
             'elastic' => ['type' => 'string'],
         ],
-        self::TYPE_INTEGER => [
+        TypeMappingInterface::TYPE_INTEGER => [
             'sql' => 'INT(11)',
             'dbal' => 'integer',
             'allowDefaultValue' => true,
             'quoteDefaultValue' => false,
             'elastic' => ['type' => 'long'],
         ],
-        self::TYPE_FLOAT => [
+        TypeMappingInterface::TYPE_FLOAT => [
             'sql' => 'DOUBLE',
             'dbal' => 'float',
             'allowDefaultValue' => true,
             'quoteDefaultValue' => false,
             'elastic' => ['type' => 'double'],
         ],
-        self::TYPE_BOOLEAN => [
+        TypeMappingInterface::TYPE_BOOLEAN => [
             'sql' => 'INT(1)',
             'dbal' => 'boolean',
             'allowDefaultValue' => true,
             'quoteDefaultValue' => false,
             'elastic' => ['type' => 'boolean'],
         ],
-        self::TYPE_DATE => [
+        TypeMappingInterface::TYPE_DATE => [
             'sql' => 'DATE',
             'dbal' => 'date',
             'allowDefaultValue' => true,
             'quoteDefaultValue' => true,
             'elastic' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
         ],
-        self::TYPE_DATETIME => [
+        TypeMappingInterface::TYPE_DATETIME => [
             'sql' => 'DATETIME',
             'dbal' => 'datetime',
             'allowDefaultValue' => true,
             'quoteDefaultValue' => true,
             'elastic' => ['type' => 'date', 'format' => 'yyyy-MM-dd HH:mm:ss'],
         ],
-        self::TYPE_COMBOBOX => [
+        TypeMappingInterface::TYPE_COMBOBOX => [
             'sql' => 'MEDIUMTEXT',
             'dbal' => 'text',
             'allowDefaultValue' => false,
             'quoteDefaultValue' => false,
             'elastic' => ['type' => 'string'],
         ],
-        self::TYPE_SINGLE_SELECTION => [
+        TypeMappingInterface::TYPE_SINGLE_SELECTION => [
             'sql' => 'TEXT',
             'dbal' => 'text',
             'allowDefaultValue' => false,
             'quoteDefaultValue' => false,
             'elastic' => ['type' => 'string'],
         ],
-        self::TYPE_MULTI_SELECTION => [
+        TypeMappingInterface::TYPE_MULTI_SELECTION => [
             'sql' => 'MEDIUMTEXT',
             'dbal' => 'text',
             'allowDefaultValue' => false,
@@ -127,25 +115,25 @@ class TypeMapping
      * @var array
      */
     private $dbalTypes = [
-        'array' => self::TYPE_TEXT,
-        'simple_array' => self::TYPE_TEXT,
-        'json_array' => self::TYPE_TEXT,
-        'bigint' => self::TYPE_INTEGER,
-        'boolean' => self::TYPE_BOOLEAN,
-        'datetime' => self::TYPE_DATETIME,
-        'datetimetz' => self::TYPE_DATE,
-        'date' => self::TYPE_DATE,
-        'time' => self::TYPE_STRING,
-        'decimal' => self::TYPE_FLOAT,
-        'integer' => self::TYPE_INTEGER,
-        'object' => self::TYPE_TEXT,
-        'smallint' => self::TYPE_INTEGER,
-        'string' => self::TYPE_STRING,
-        'text' => self::TYPE_TEXT,
-        'binary' => self::TYPE_TEXT,
-        'blob' => self::TYPE_TEXT,
-        'float' => self::TYPE_FLOAT,
-        'guid' => self::TYPE_TEXT,
+        'array' => TypeMappingInterface::TYPE_TEXT,
+        'simple_array' => TypeMappingInterface::TYPE_TEXT,
+        'json_array' => TypeMappingInterface::TYPE_TEXT,
+        'bigint' => TypeMappingInterface::TYPE_INTEGER,
+        'boolean' => TypeMappingInterface::TYPE_BOOLEAN,
+        'datetime' => TypeMappingInterface::TYPE_DATETIME,
+        'datetimetz' => TypeMappingInterface::TYPE_DATE,
+        'date' => TypeMappingInterface::TYPE_DATE,
+        'time' => TypeMappingInterface::TYPE_STRING,
+        'decimal' => TypeMappingInterface::TYPE_FLOAT,
+        'integer' => TypeMappingInterface::TYPE_INTEGER,
+        'object' => TypeMappingInterface::TYPE_TEXT,
+        'smallint' => TypeMappingInterface::TYPE_INTEGER,
+        'string' => TypeMappingInterface::TYPE_STRING,
+        'text' => TypeMappingInterface::TYPE_TEXT,
+        'binary' => TypeMappingInterface::TYPE_TEXT,
+        'blob' => TypeMappingInterface::TYPE_TEXT,
+        'float' => TypeMappingInterface::TYPE_FLOAT,
+        'guid' => TypeMappingInterface::TYPE_TEXT,
     ];
 
     /**
@@ -159,7 +147,7 @@ class TypeMapping
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getTypes()
     {
@@ -173,7 +161,7 @@ class TypeMapping
     }
 
     /**
-     * @return array<array>
+     * {@inheritdoc}
      */
     public function getEntities()
     {
@@ -215,7 +203,7 @@ class TypeMapping
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function dbalToUnified(Type $type)
     {
@@ -229,9 +217,7 @@ class TypeMapping
     }
 
     /**
-     * @param string $type
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function unifiedToSQL($type)
     {
@@ -245,9 +231,7 @@ class TypeMapping
     }
 
     /**
-     * @param string $unified
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function unifiedToElasticSearch($unified)
     {

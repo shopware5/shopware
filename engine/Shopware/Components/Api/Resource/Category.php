@@ -472,7 +472,7 @@ class Category extends Resource
      */
     private function getAttributeProperties()
     {
-        /** @var \Shopware\Bundle\AttributeBundle\Service\CrudService $crud */
+        /** @var \Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface $crud */
         $crud = $this->getContainer()->get('shopware_attribute.crud_service');
         $list = $crud->getList('s_categories_attributes');
         $fields = [];

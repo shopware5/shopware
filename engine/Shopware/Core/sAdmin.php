@@ -26,7 +26,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AccountBundle\Service\OptInLoginService;
 use Shopware\Bundle\AccountBundle\Service\OptInLoginServiceInterface;
-use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\Captcha\CaptchaValidator;
 use Shopware\Components\Cart\CartPersistServiceInterface;
@@ -152,12 +152,12 @@ class sAdmin implements \Enlight_Hook
     private $numberRangeIncrementer;
 
     /**
-     * @var Shopware\Bundle\AttributeBundle\Service\DataLoader
+     * @var Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface
      */
     private $attributeLoader;
 
     /**
-     * @var Shopware\Bundle\AttributeBundle\Service\DataPersister
+     * @var Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface
      */
     private $attributePersister;
 
@@ -2843,7 +2843,7 @@ class sAdmin implements \Enlight_Hook
                 );
 
                 foreach ($translationData as $key => $attribute) {
-                    $key = str_replace(CrudService::EXT_JS_PREFIX, '', $key);
+                    $key = str_replace(CrudServiceInterface::EXT_JS_PREFIX, '', $key);
                     $dispatch['attribute'][$key] = $attribute;
                 }
             }

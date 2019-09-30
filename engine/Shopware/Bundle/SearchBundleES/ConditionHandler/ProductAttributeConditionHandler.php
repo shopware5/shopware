@@ -34,7 +34,7 @@ use ONGR\ElasticsearchDSL\Query\TermLevel\TermQuery;
 use ONGR\ElasticsearchDSL\Query\TermLevel\TermsQuery;
 use ONGR\ElasticsearchDSL\Query\TermLevel\WildcardQuery;
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
@@ -44,11 +44,11 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 class ProductAttributeConditionHandler implements PartialConditionHandlerInterface
 {
     /**
-     * @var CrudService
+     * @var CrudServiceInterface
      */
     private $attributeService;
 
-    public function __construct(CrudService $attributeService)
+    public function __construct(CrudServiceInterface $attributeService)
     {
         $this->attributeService = $attributeService;
     }

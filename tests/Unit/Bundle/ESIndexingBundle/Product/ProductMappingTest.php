@@ -26,6 +26,7 @@ namespace Shopware\Tests\Unit\Bundle\ESIndexingBundle\Product;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\ESIndexingBundle\FieldMapping;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\Product\ProductMapping;
@@ -184,7 +185,7 @@ class ProductMappingTest extends TestCase
         return $identifierSelector;
     }
 
-    public function getCrudService(): CrudService
+    public function getCrudService(): CrudServiceInterface
     {
         $crudService = $this->createMock(CrudService::class);
 

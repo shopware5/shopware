@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 
-use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\CustomerSearchBundle\Condition\CustomerAttributeCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -43,7 +43,7 @@ class CustomerAttributeConditionHandlerTest extends TestCase
     protected function tearDown()
     {
         parent::tearDown();
-        /** @var CrudService $service */
+        /** @var CrudServiceInterface $service */
         $service = Shopware()->Container()->get('shopware_attribute.crud_service');
         $service->delete('s_user_attributes', 'test');
 

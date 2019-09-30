@@ -26,7 +26,7 @@ namespace Shopware\Bundle\MediaBundle;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
+use Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface;
 use Shopware\Bundle\MediaBundle\Struct\MediaPosition;
 
 class GarbageCollectorFactory
@@ -134,7 +134,7 @@ class GarbageCollectorFactory
             ->andWhere('column_type = :columnType')
             ->setParameters([
                 'entityName' => \Shopware\Models\Media\Media::class,
-                'columnType' => TypeMapping::TYPE_SINGLE_SELECTION,
+                'columnType' => TypeMappingInterface::TYPE_SINGLE_SELECTION,
             ])
             ->execute()
             ->fetchAll();
@@ -151,7 +151,7 @@ class GarbageCollectorFactory
             ->andWhere('column_type = :columnType')
             ->setParameters([
                 'entityName' => \Shopware\Models\Media\Media::class,
-                'columnType' => TypeMapping::TYPE_MULTI_SELECTION,
+                'columnType' => TypeMappingInterface::TYPE_MULTI_SELECTION,
             ])
             ->execute()
             ->fetchAll();
@@ -166,7 +166,7 @@ class GarbageCollectorFactory
             ->from('s_attribute_configuration')
             ->andWhere('column_type = :columnType')
             ->setParameters([
-                'columnType' => TypeMapping::TYPE_HTML,
+                'columnType' => TypeMappingInterface::TYPE_HTML,
             ])
             ->execute()
             ->fetchAll();
