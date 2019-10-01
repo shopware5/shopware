@@ -17,6 +17,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 ### Removals
 
 * Removed the smarty blocks `frontend_blog_bookmarks_delicious` and `frontend_blog_bookmarks_digg` and their content from `themes/Frontend/Bare/frontend/blog/bookmarks.tpl
+* Removed unnecessary `extendsAction` from `Shopware_Controllers_Backend_ExtJs`
+* Removed 'p' parameter and its alias 'sPage' from "NoIndex queries" configuration
 
 ## 5.6.2
 
@@ -81,10 +83,6 @@ This changelog references changes done in Shopware 5.6 patch versions.
 ### Removals
 
 * Removed the `UNIQUE`-Constraint from `\Shopware\Models\Mail\Contact::$mailAddress`
-
-### Removals
-
-* Removed 'p' parameter and its alias 'sPage' from "NoIndex queries" configuration
 
 ## 5.6.1
 
