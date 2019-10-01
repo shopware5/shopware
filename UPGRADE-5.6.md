@@ -9,6 +9,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 ### Additions
 
 * Added customer attribute risk rules to risk management
+* Added interface `ArrayAccess` to `Shopware\Bundle\StoreFrontBundle\Struct\Attribute`
+* Added `attribute` to struct data after being converted by the `Shopware\Components\Compatibility\LegacyStructConverter`
 
 ### Changes
 
