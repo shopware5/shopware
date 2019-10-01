@@ -5,6 +5,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 [View all changes from v5.6.1...v5.7.0](https://github.com/shopware/shopware/compare/v5.6.1...v5.7.0)
 
 ### Breaks
+
 * Added new required methods `saveCustomUrls` and `saveExcludedUrls` to interface `Shopware\Bundle\SitemapBundle\ConfigHandler\ConfigHandlerInterface`
 
 ### Additions
@@ -43,6 +44,21 @@ This changelog references changes done in Shopware 5.7 patch versions.
     * `Zend_Session_Validator_Interface`
 * Removed referenced value from magic getter in session
 * Removed the assignment of all request parameters to the view in `Shopware_Controllers_Widgets_Listing::productsAction`
+* Removed duplicate ExtJs classes and added alias to new class:
+    * `Shopware.apps.Config.view.element.Boolean`
+    * `Shopware.apps.Config.view.element.Button`
+    * `Shopware.apps.Config.view.element.Color`
+    * `Shopware.apps.Config.view.element.Date`
+    * `Shopware.apps.Config.view.element.DateTime`
+    * `Shopware.apps.Config.view.element.Html`
+    * `Shopware.apps.Config.view.element.Interval`
+    * `Shopware.apps.Config.view.element.Number`
+    * `Shopware.apps.Config.view.element.ProductBoxLayoutSelect`
+    * `Shopware.apps.Config.view.element.Select`
+    * `Shopware.apps.Config.view.element.SelectTree`
+    * `Shopware.apps.Config.view.element.Text`
+    * `Shopware.apps.Config.view.element.TextArea`
+    * `Shopware.apps.Config.view.element.Time`
 
 ### Deprecations
 

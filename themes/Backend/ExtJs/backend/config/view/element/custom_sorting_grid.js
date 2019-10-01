@@ -23,7 +23,10 @@
 
 Ext.define('Shopware.apps.Config.view.element.CustomSortingGrid', {
     extend: 'Shopware.form.field.CustomSortingGrid',
-    alias: 'widget.config-element-custom-sorting-grid',
+    alias: [
+        'widget.config-element-custom-sorting-grid',
+        'widget.base-element-custom-sorting-grid'
+    ],
 
     initComponent: function() {
         var me = this,

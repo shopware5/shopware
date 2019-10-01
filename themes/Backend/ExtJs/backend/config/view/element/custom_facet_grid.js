@@ -23,7 +23,10 @@
 
 Ext.define('Shopware.apps.Config.view.element.CustomFacetGrid', {
     extend: 'Shopware.form.field.CustomFacetGrid',
-    alias: 'widget.config-element-custom-facet-grid',
+    alias: [
+        'widget.config-element-custom-facet-grid',
+        'widget.base-element-custom-facet-grid'
+    ],
 
     initComponent: function() {
         var me = this;
