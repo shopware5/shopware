@@ -22,7 +22,10 @@
  */
 
 Ext.define('Shopware.apps.Config.view.element.CustomSortingSelection', {
-    alias: 'widget.config-element-custom-sorting-selection',
+    alias: [
+        'widget.config-element-custom-sorting-selection',
+        'widget.base-element-custom-sorting-selection'
+    ],
     extend: 'Shopware.form.field.SingleSelection',
 
     initComponent: function() {

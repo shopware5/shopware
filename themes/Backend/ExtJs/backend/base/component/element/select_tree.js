@@ -30,7 +30,9 @@ Ext.define('Shopware.apps.Base.view.element.SelectTree', {
     extend: 'Shopware.form.field.ComboTree',
     alias: [
         'widget.base-element-selecttree',
-        'widget.base-element-combotree'
+        'widget.base-element-combotree',
+        'widget.config-element-selecttree',
+        'widget.config-element-combotree'
     ],
 
     queryMode: 'local',

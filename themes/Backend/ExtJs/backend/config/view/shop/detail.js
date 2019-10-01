@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
     getTypeSwitchField: function(){
         var me = this;
         return {
-            xtype: 'config-element-select',
+            xtype: 'base-element-select',
             name: 'typeSwitch',
             fieldLabel: '{s name=shop/detail/shop_type_label}Shop type{/s}',
             helpText: '{s name=shop/detail/shop_type_help}A sub shop is available via an extra url, a language shop holds the translation for a sub shop or the default shop{/s}',
@@ -130,7 +130,7 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
     getMainField: function() {
         var me = this;
         return {
-            xtype: 'config-element-select',
+            xtype: 'base-element-select',
             name: 'mainId',
             isLangField: true,
             isLangRequired: true,
@@ -143,7 +143,7 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
     getDefaultField: function() {
         var me = this;
         return {
-            xtype: 'config-element-boolean',
+            xtype: 'base-element-boolean',
             name: 'default',
             fieldLabel: '{s name=shop/detail/default_label}Default{/s}',
             isMainField: true,
@@ -161,7 +161,7 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
     getItems: function() {
         var me = this;
 
-        me.categorySelect = Ext.create('Shopware.apps.Config.view.element.SelectTree', {
+        me.categorySelect = Ext.create('Shopware.apps.Base.view.element.SelectTree', {
             name: 'categoryId',
             allowBlank: false,
             fieldLabel: '{s name=shop/detail/category_label}Category{/s}',

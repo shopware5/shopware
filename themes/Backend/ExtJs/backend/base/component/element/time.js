@@ -30,6 +30,8 @@ Ext.define('Shopware.apps.Base.view.element.Time', {
     extend: 'Ext.form.field.Time',
     alias: [
         'widget.base-element-time',
-        'widget.base-element-timefield'
+        'widget.base-element-timefield',
+        'widget.config-element-time',
+        'widget.config-element-timefield'
     ]
 });

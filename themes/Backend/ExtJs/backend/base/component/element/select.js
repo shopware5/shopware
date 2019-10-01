@@ -32,7 +32,11 @@ Ext.define('Shopware.apps.Base.view.element.Select', {
         'widget.base-element-select',
         'widget.base-element-combo',
         'widget.base-element-combobox',
-        'widget.base-element-comboremote'
+        'widget.base-element-comboremote',
+        'widget.config-element-select',
+        'widget.config-element-combo',
+        'widget.config-element-combobox',
+        'widget.config-element-comboremote'
     ],
 
     queryMode:'local',

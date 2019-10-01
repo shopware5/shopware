@@ -30,7 +30,9 @@ Ext.define('Shopware.apps.Base.view.element.Button', {
     extend: 'Ext.button.Button',
     alias: [
         'widget.base-element-button',
-        'widget.base-element-controllerbutton'
+        'widget.base-element-controllerbutton',
+        'widget.config-element-button',
+        'widget.config-element-controllerbutton'
     ],
     initComponent:function () {
         var me = this;

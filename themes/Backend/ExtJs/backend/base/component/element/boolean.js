@@ -30,7 +30,9 @@ Ext.define('Shopware.apps.Base.view.element.Boolean', {
     extend: 'Ext.form.field.Checkbox',
     alias: [
         'widget.base-element-boolean',
-        'widget.base-element-checkbox'
+        'widget.base-element-checkbox',
+        'widget.config-element-boolean',
+        'widget.config-element-checkbox'
     ],
     inputValue: true,
     uncheckedValue:false,

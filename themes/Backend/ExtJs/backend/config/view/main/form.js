@@ -106,7 +106,7 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
                 }
 
                 type = element.get('type').toLowerCase();
-                type = 'config-element-' + type;
+                type = 'base-element-' + type;
                 name = 'values[' + shop.get('id') + ']['+ element.get('id') + ']';
 
                 options = element.get('options');
@@ -134,7 +134,7 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
                 }
                 /*{/if}*/
 
-                var field = Ext.applyIf({
+                var field = Ext.apply({
                     xtype: type,
                     name: name,
                     elementName: elementName,
@@ -146,7 +146,7 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
                     allowBlank: !element.get('required') || !shop.get('default')
                 }, options);
 
-                if (field.xtype === 'config-element-boolean' || field.xtype === 'config-element-checkbox') {
+                if (field.xtype === 'base-element-boolean' || field.xtype === 'base-element-checkbox') {
                     field = me.convertCheckBoxToComboBox(field, shop, initialValue);
                 }
 
