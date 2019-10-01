@@ -608,12 +608,7 @@ class LegacyStructConverter
             'price' => $price->getCalculatedPrice(),
             'pseudoprice' => $price->getCalculatedPseudoPrice(),
             'referenceprice' => $price->getCalculatedReferencePrice(),
-            'attributes' => $price->getAttributes(),
         ];
-
-        if ($price->hasAttribute('core')) {
-            $data['attribute'] = $price->getAttribute('core');
-        }
 
         return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Price', $data, [
             'price' => $price,
@@ -1071,6 +1066,10 @@ class LegacyStructConverter
             'mobile_inactive' => $payment->getMobileInactive(),
             'attributes' => $payment->getAttributes(),
         ];
+
+        if ($payment->hasAttribute('core')) {
+            $data['attribute'] = $payment->getAttribute('core');
+        }
 
         return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Payment', $data, [
             'payment' => $payment,

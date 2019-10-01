@@ -103,28 +103,6 @@ class Attribute extends Struct implements \JsonSerializable, \ArrayAccess
     }
 
     /**
-     * @return bool
-     */
-    private function isValid($value)
-    {
-        if ($value instanceof \JsonSerializable || is_scalar($value) || $value === null) {
-            return true;
-        }
-
-        if (is_array($value)) {
-            foreach ($value as $val) {
-                if (!$this->isValid($val)) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function offsetExists($offset)
@@ -142,6 +120,7 @@ class Attribute extends Struct implements \JsonSerializable, \ArrayAccess
 
     /**
      * {@inheritdoc}
+     *
      * @throws \InvalidArgumentException
      */
     public function offsetSet($offset, $value)
@@ -157,5 +136,24 @@ class Attribute extends Struct implements \JsonSerializable, \ArrayAccess
         if ($this->exists($offset)) {
             unset($this->storage[$offset]);
         }
+    }
+
+    private function isValid($value): bool
+    {
+        if ($value instanceof \JsonSerializable || is_scalar($value) || $value === null) {
+            return true;
+        }
+
+        if (is_array($value)) {
+            foreach ($value as $val) {
+                if (!$this->isValid($val)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }
