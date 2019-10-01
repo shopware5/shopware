@@ -35,6 +35,7 @@ class KeywordFinder implements KeywordFinderInterface
      * @var int
      */
     protected $maxKeywords = 5;
+
     /**
      * @var \Shopware_Components_Config
      */

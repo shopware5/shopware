@@ -48,6 +48,7 @@ return PhpCsFixer\Config::create()
         'phpdoc_summary' => false,
         'blank_line_after_opening_tag' => false,
         'concat_space' => ['spacing' => 'one'],
+        'class_attributes_separation' => ['elements' => ['method', 'property']],
         'array_syntax' => ['syntax' => 'short'],
         'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
         'general_phpdoc_annotation_remove' => [

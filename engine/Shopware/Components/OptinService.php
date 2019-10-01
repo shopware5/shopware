@@ -53,11 +53,22 @@ class OptinService implements OptinServiceInterface
 
         $hash = Random::getAlphanumericString(32);
 
-        $this->connection->insert('s_core_optin', [
-            'type' => $type,
-            'datum' => date('Y-m-d H:i:s', time() + $duration),
-            'hash' => $hash,
-            'data' => serialize($data),
+        $sql = <<<'SQL'
+            INSERT INTO s_core_optin
+            (type, datum, hash, data)
+            VALUES
+           (:type, :datum, :hash, :data)
+SQL;
+
+        $serializedData = serialize($data);
+        $newDatum = date('Y-m-d H:i:s', time() + $duration);
+
+        $statement = $this->connection->prepare($sql);
+        $statement->execute([
+            ':type' => $type,
+            ':datum' => $newDatum,
+            ':hash' => $hash,
+            ':data' => $serializedData,
         ]);
 
         return $hash;
@@ -76,16 +87,24 @@ class OptinService implements OptinServiceInterface
             throw new \InvalidArgumentException('$hash has to be of type string');
         }
 
-        $data = $this->connection->createQueryBuilder()->from('s_core_optin', 'optin')
-            ->select('data')
-            ->where('optin.hash = :hash')
-            ->andWhere('optin.type = :type')
-            ->andWhere('optin.datum >= :currentDate')
-            ->setParameter('hash', $hash)
-            ->setParameter('type', $type)
-            ->setParameter('currentDate', date('Y-m-d H:i:s'))
-            ->execute()
-            ->fetchColumn();
+        $sql = <<<'SQL'
+            SELECT data
+            FROM s_core_optin AS optIn
+            WHERE optIn.hash = :hash
+                AND optIn.type = :type
+                AND optIn.datum >= :currentDate
+SQL;
+
+        $currentDate = (new \DateTimeImmutable())->format('Y-m-d H:i:s');
+
+        $statement = $this->connection->prepare($sql);
+        $statement->execute([
+            ':type' => $type,
+            ':hash' => $hash,
+            ':currentDate' => $currentDate,
+        ]);
+
+        $data = $statement->fetchColumn();
 
         if (empty($data)) {
             return null;
@@ -107,12 +126,15 @@ class OptinService implements OptinServiceInterface
             throw new \InvalidArgumentException('$hash has to be of type string');
         }
 
-        $this->connection->createQueryBuilder()
-            ->delete('s_core_optin')
-            ->where('hash = :hash')
-            ->andWhere('type = :type')
-            ->setParameter('hash', $hash)
-            ->setParameter('type', $type)
-            ->execute();
+        $sql = <<<'SQL'
+            DELETE FROM s_core_optin
+            WHERE hash = :hash AND type = :type
+SQL;
+
+        $statement = $this->connection->prepare($sql);
+        $statement->execute([
+            ':type' => $type,
+            ':hash' => $hash,
+        ]);
     }
 }

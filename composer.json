@@ -57,7 +57,7 @@
         "doctrine/dbal": "2.6.3",
         "doctrine/orm": "2.6.3",
         "doctrine/cache": "1.8.0",
-        "beberlei/assert": "2.9.2",
+        "beberlei/assert": "2.9.9",
         "zendframework/zend-escaper": "2.5.2",
         "oyejorge/less.php": "1.7.0.14",
         "guzzlehttp/guzzle": "5.3.3",

@@ -22,10 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
+class VoucherTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /** @var \Shopware\Models\Voucher\Voucher $repository */
-    protected $repository = null;
+    protected $repository;
 
     /**
      * Voucher dummy data
@@ -53,8 +55,8 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
         'value' => '10',
     ];
 
-    /** @var Shopware\Components\Model\ModelManager */
-    private $manager = null;
+    /** @var \Shopware\Components\Model\ModelManager */
+    private $manager;
 
     /**
      * Standard set up for every test - just disable auth
@@ -66,7 +68,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
         $this->manager = Shopware()->Models();
         $this->repository = Shopware()->Models()->getRepository(\Shopware\Models\Voucher\Voucher::class);
 
-        // disable auth and acl
+        // Disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
@@ -76,7 +78,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
      */
     public function testGetVoucher()
     {
-        //delete old data
+        // Delete old data
         $vouchers = $this->repository->findBy(['orderCode' => '65168phpunit']);
         foreach ($vouchers as $voucher) {
             $this->manager->remove($voucher);
@@ -85,7 +87,6 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
 
         $voucher = $this->createDummy();
 
-        /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/voucher/getVoucher?page=1&start=0&limit=2000');
         static::assertTrue($this->View()->success);
         $returnData = $this->View()->data;
@@ -101,7 +102,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
     /**
      * test adding a voucher
      *
-     * @return the id to for the testUpdateVoucher Method
+     * @return string The id to for the testUpdateVoucher Method
      */
     public function testAddVoucher()
     {
@@ -125,7 +126,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
      *
      * @param string $id
      *
-     * @return the id to for the testUpdateVoucher Method
+     * @return string the id to for the testUpdateVoucher Method
      */
     public function testGetVoucherDetail($id)
     {
@@ -167,7 +168,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
 
         $params['value'] = $voucherData['voucherCode'];
 
-        //test with an unknown voucher id
+        // Test with an unknown voucher id
         $params['param'] = 416531;
         $this->Request()->setParams($params);
         $this->dispatch('backend/voucher/validateVoucherCode');
@@ -178,7 +179,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
     }
 
     /**
-     * test the orderCode validation methods with the created voucher
+     * Test the orderCode validation methods with the created voucher
      *
      * @depends testAddVoucher
      *
@@ -201,7 +202,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
 
         $params['value'] = $voucherData['orderCode'];
 
-        //test with an unknown voucher id
+        // Test with an unknown voucher id
         $params['param'] = 416531;
         $this->Request()->setParams($params);
         $this->dispatch('backend/voucher/validateOrderCode');
@@ -209,7 +210,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
     }
 
     /**
-     * test updating a voucher
+     * Test updating a voucher
      *
      * @depends testGetVoucherDetail
      *
@@ -230,7 +231,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
     }
 
     /**
-     * test generating voucher codes
+     * Test generating voucher codes
      *
      * @depends testUpdateVoucher
      *
@@ -241,7 +242,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
         $voucherData = $this->voucherData;
         $params = [];
         $params['numberOfUnits'] = $voucherData['numberOfUnits'];
-        $params['voucherId'] = intval($id);
+        $params['voucherId'] = (int) $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/voucher/createVoucherCodes');
         static::assertTrue($this->View()->success);
@@ -250,7 +251,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
     }
 
     /**
-     * the the listing of the voucher codes
+     * Test the listing of the voucher codes
      *
      * @depends testGenerateVoucherCodes
      *
@@ -266,7 +267,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
     }
 
     /**
-     * test the exportVoucherCode Method
+     * Test the exportVoucherCode Method
      *
      * @depends testGetVoucherCodes
      *
@@ -275,7 +276,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
     public function testExportVoucherCode($id)
     {
         $params = [];
-        $params['voucherId'] = intval($id);
+        $params['voucherId'] = (int) $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/voucher/exportVoucherCode');
         $header = $this->Response()->getHeaders();
@@ -289,7 +290,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
     }
 
     /**
-     * test delete the voucher method
+     * Test the delete the voucher method
      *
      * @depends testExportVoucherCode
      *
@@ -298,7 +299,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
     public function testDeleteVoucher($id)
     {
         $params = [];
-        $params['id'] = intval($id);
+        $params['id'] = (int) $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/voucher/deleteVoucher');
         static::assertTrue($this->View()->success);
@@ -306,7 +307,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
     }
 
     /**
-     * test getTaxConfiguration Method
+     * Test getTaxConfiguration Method
      */
     public function testGetTaxConfiguration()
     {
@@ -320,7 +321,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
      *
      * @param bool $individualMode
      *
-     * @return Shopware\Models\Voucher\Voucher
+     * @return \Shopware\Models\Voucher\Voucher
      */
     private function getDummyVoucher($individualMode = true)
     {

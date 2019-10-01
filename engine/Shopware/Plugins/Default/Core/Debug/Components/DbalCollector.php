@@ -34,6 +34,7 @@ class DbalCollector implements CollectorInterface
      * @var Configuration
      */
     protected $modelConfig;
+
     /**
      * @var
      */

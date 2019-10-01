@@ -29,6 +29,7 @@ use Doctrine\DBAL\Connection;
 class BasketPersister
 {
     const DBAL_TABLE = 's_order_basket_signatures';
+
     /**
      * @var Connection
      */

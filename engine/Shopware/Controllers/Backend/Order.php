@@ -993,8 +993,13 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             return;
         }
 
-        $mail = clone $this->container->get('mail');
+        $mailTemplateName = $this->Request()->getParam('templateName') ?: 'sORDERDOCUMENTS';
+
+        /** @var Enlight_Components_Mail $mail */
+        $mail = $this->container->get('modules')->Order()->createStatusMail($orderId, 0, $mailTemplateName);
         $mail->clearRecipients();
+        $mail->clearSubject();
+        $mail->clearFrom();
 
         $mailData = [
             'attachments' => $attachments,

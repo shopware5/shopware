@@ -3116,6 +3116,7 @@ class ArticleTest extends TestCase
     }
 
     /**
+     * @group pcovAdapterBrokenTest
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      */

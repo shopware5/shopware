@@ -126,6 +126,9 @@ Ext.define('Shopware.form.field.PagingComboBox',
             return;
         }
 
+        // This method may only be called once - thus, we remove the listener instantly
+        this.un('change', this.templateComboBoxChanged);
+
         store.getProxy().setExtraParam(combo.valueField, newValue);
         store.currentPage = 1;
         store.load({

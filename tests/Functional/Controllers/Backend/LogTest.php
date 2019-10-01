@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
+class LogTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
      * Standard set up for every test - just disable auth
@@ -41,7 +43,7 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
      */
     public function testGetLogs()
     {
-        /* @var Enlight_Controller_Response_ResponseTestCase */
+        /* @var \Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/log/getLogs');
         static::assertTrue($this->View()->success);
 

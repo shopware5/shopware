@@ -22,20 +22,29 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
 use Shopware\Models\Analytics\Repository;
 
-class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Components_Test_Controller_TestCase
+class AnalyticsTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    /** @var Shopware\Models\Analytics\Repository */
+    /** @var \Shopware\Models\Analytics\Repository */
     private $repository;
 
     private $userId;
+
     private $customerNumber;
+
     private $articleId;
+
     private $categoryId;
+
     private $orderNumber;
+
     private $articleDetailId;
+
     private $orderIds;
+
     private $addressId;
 
     /**
@@ -68,8 +77,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $result = $this->repository->getVisitorImpressions(
             0,
             25,
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01'),
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01'),
             [
                 [
                     'property' => 'datum',
@@ -130,8 +139,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createOrders();
 
         $result = $this->repository->getOrdersOfCustomers(
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01')
         );
 
         static::assertEquals(
@@ -157,8 +166,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
         $result = $this->repository->getReferrerRevenue(
             $shop,
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01')
         );
 
         static::assertEquals(
@@ -183,8 +192,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $result = $this->repository->getPartnerRevenue(
             0,
             25,
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01')
         );
 
         static::assertEquals(
@@ -209,8 +218,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $result = $this->repository->getProductSales(
             0,
             25,
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01')
         );
 
         static::assertEquals(
@@ -233,8 +242,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $result = $this->repository->getProductImpressions(
             0,
             25,
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01'),
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01'),
             [
                 [
                     'property' => 'articleId',
@@ -265,8 +274,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createCustomer();
 
         $result = $this->repository->getAgeOfCustomers(
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01'),
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01'),
             ['1']
         );
 
@@ -288,8 +297,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createOrders();
 
         $result = $this->repository->getAmountPerHour(
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01'),
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01'),
             ['1']
         );
 
@@ -314,8 +323,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createOrders();
 
         $result = $this->repository->getAmountPerWeekday(
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01')
         );
 
         static::assertEquals(
@@ -337,8 +346,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createOrders();
 
         $result = $this->repository->getAmountPerCalendarWeek(
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01')
         );
 
         static::assertEquals(
@@ -360,8 +369,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createOrders();
 
         $result = $this->repository->getAmountPerMonth(
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01')
         );
 
         static::assertEquals(
@@ -383,8 +392,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createOrders();
 
         $result = $this->repository->getCustomerGroupAmount(
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01')
         );
 
         static::assertEquals(
@@ -406,8 +415,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createOrders();
 
         $result = $this->repository->getAmountPerCountry(
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01')
         );
 
         static::assertEquals(
@@ -429,8 +438,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createOrders();
 
         $result = $this->repository->getAmountPerShipping(
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01')
         );
 
         static::assertEquals(
@@ -452,8 +461,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createOrders();
 
         $result = $this->repository->getAmountPerPayment(
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01')
         );
 
         static::assertEquals(
@@ -476,8 +485,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $result = $this->repository->getSearchTerms(
             0,
             25,
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01'),
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01'),
             [
                 [
                     'property' => 'countRequests',
@@ -504,8 +513,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createVisitors();
 
         $result = $this->repository->getDailyVisitors(
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01')
         );
 
         static::assertEquals(
@@ -532,8 +541,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createVisitors();
 
         $result = $this->repository->getDailyShopVisitors(
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01'),
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01'),
             ['1']
         );
 
@@ -564,8 +573,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createOrders();
 
         $result = $this->repository->getDailyShopOrders(
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01'),
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01'),
             ['1']
         );
 
@@ -597,8 +606,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createCustomer();
 
         $result = $this->repository->getDailyRegistrations(
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01')
         );
 
         static::assertEquals(
@@ -620,8 +629,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createOrders();
 
         $result = $this->repository->getDailyTurnover(
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01')
         );
 
         static::assertEquals(
@@ -646,8 +655,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $result = $this->repository->getProductAmountPerManufacturer(
             0,
             25,
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01')
         );
 
         static::assertEquals(
@@ -669,8 +678,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $result = $this->repository->getVisitedReferrer(
             0,
             25,
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01')
         );
 
         static::assertEquals(
@@ -737,8 +746,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
         $result = $this->repository->getProductAmountPerCategory(
             1,
-            new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new \DateTime('2013-01-01'),
+            new \DateTime('2014-01-01')
         );
 
         static::assertEquals(
@@ -760,8 +769,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createOrders();
 
         $result = $this->repository->getAmountPerHour(
-            new DateTime('2014-01-01'),
-            new DateTime('2014-02-02')
+            new \DateTime('2014-01-01'),
+            new \DateTime('2014-02-02')
         );
 
         static::assertEquals(

@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Backend_SysteminfoTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
+class SysteminfoTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
      * Standard set up for every test - just disable auth
@@ -31,7 +33,7 @@ class Shopware_Tests_Controllers_Backend_SysteminfoTest extends Enlight_Componen
     {
         parent::setUp();
 
-        // disable auth and acl
+        // Disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
@@ -43,7 +45,7 @@ class Shopware_Tests_Controllers_Backend_SysteminfoTest extends Enlight_Componen
         static::assertTrue($this->View()->success);
 
         $body = $response->getBody();
-        $jsonBody = Zend_Json::decode($body);
+        $jsonBody = \Zend_Json::decode($body);
 
         static::assertArrayHasKey('data', $jsonBody);
         static::assertArrayHasKey('success', $jsonBody);
@@ -61,7 +63,7 @@ class Shopware_Tests_Controllers_Backend_SysteminfoTest extends Enlight_Componen
         static::assertTrue($this->View()->success);
 
         $body = $response->getBody();
-        $jsonBody = Zend_Json::decode($body);
+        $jsonBody = \Zend_Json::decode($body);
 
         static::assertArrayHasKey('data', $jsonBody);
         static::assertArrayHasKey('success', $jsonBody);
@@ -77,7 +79,7 @@ class Shopware_Tests_Controllers_Backend_SysteminfoTest extends Enlight_Componen
         static::assertTrue($this->View()->success);
 
         $body = $response->getBody();
-        $jsonBody = Zend_Json::decode($body);
+        $jsonBody = \Zend_Json::decode($body);
 
         static::assertArrayHasKey('data', $jsonBody);
         static::assertArrayHasKey('success', $jsonBody);
@@ -90,7 +92,7 @@ class Shopware_Tests_Controllers_Backend_SysteminfoTest extends Enlight_Componen
         static::assertTrue($this->View()->success);
 
         $body = $response->getBody();
-        $jsonBody = Zend_Json::decode($body);
+        $jsonBody = \Zend_Json::decode($body);
 
         static::assertArrayHasKey('data', $jsonBody);
         static::assertArrayHasKey('success', $jsonBody);

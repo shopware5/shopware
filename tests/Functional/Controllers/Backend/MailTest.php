@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
+class MailTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var array
@@ -44,7 +46,7 @@ class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Tes
     {
         parent::setUp();
 
-        // disable auth and acl
+        // Disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
@@ -55,7 +57,7 @@ class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Tes
 
         $this->Request()->setMethod('POST')->setPost($this->testData);
         $response = $this->dispatch('/backend/mail/createMail');
-        $jsonBody = Zend_Json::decode($response->getBody());
+        $jsonBody = \Zend_Json::decode($response->getBody());
 
         static::assertArrayHasKey('data', $jsonBody);
         static::assertArrayHasKey('success', $jsonBody);
@@ -84,7 +86,7 @@ class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Tes
 
         $response = $this->dispatch('/backend/mail/getMails?&node=NaN&id=' . $id);
         $body = $response->getBody();
-        $jsonBody = Zend_Json::decode($body);
+        $jsonBody = \Zend_Json::decode($body);
 
         static::assertArrayHasKey('data', $jsonBody);
         static::assertArrayHasKey('success', $jsonBody);
@@ -114,7 +116,7 @@ class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Tes
 
         $this->Request()->setMethod('POST')->setPost($updateTestData);
         $response = $this->dispatch('/backend/mail/updateMail?id=' . $id);
-        $jsonBody = Zend_Json::decode($response->getBody());
+        $jsonBody = \Zend_Json::decode($response->getBody());
 
         static::assertArrayHasKey('data', $jsonBody);
         static::assertArrayHasKey('success', $jsonBody);
@@ -135,7 +137,7 @@ class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Tes
     public function testRemoveMail($id)
     {
         $response = $this->dispatch('/backend/mail/removeMail?id=' . $id);
-        $jsonBody = Zend_Json::decode($response->getBody());
+        $jsonBody = \Zend_Json::decode($response->getBody());
 
         static::assertArrayHasKey('success', $jsonBody);
         static::assertTrue($jsonBody['success']);
@@ -146,7 +148,7 @@ class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Tes
         $this->Request()->setMethod('GET');
 
         $response = $this->dispatch('/backend/mail/getAttachments');
-        $jsonBody = Zend_Json::decode($response->getBody());
+        $jsonBody = \Zend_Json::decode($response->getBody());
 
         static::assertArrayHasKey('data', $jsonBody);
         static::assertArrayHasKey('success', $jsonBody);
@@ -158,7 +160,7 @@ class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Tes
         $this->Request()->setMethod('GET');
 
         $response = $this->dispatch('/backend/mail/getMails?&node=NaN');
-        $jsonBody = Zend_Json::decode($response->getBody());
+        $jsonBody = \Zend_Json::decode($response->getBody());
 
         static::assertArrayHasKey('data', $jsonBody);
         static::assertArrayHasKey('success', $jsonBody);

@@ -35,6 +35,7 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
         'notification' => true,
         'maxdownloads' => 55,
     ];
+
     /**
      * @var Shopware\Components\Model\ModelManager
      */

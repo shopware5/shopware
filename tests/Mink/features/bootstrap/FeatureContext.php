@@ -44,8 +44,11 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
      * @var array
      */
     protected $dirtyConfigElements;
+
     protected static $isPrepared = false;
+
     protected static $lastScenarioLine = 0;
+
     /**
      * @var Suite
      */

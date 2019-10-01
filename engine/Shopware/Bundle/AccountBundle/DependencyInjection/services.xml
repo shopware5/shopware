@@ -135,5 +135,9 @@
         <service id="shopware_account.customer_unlock_service" class="Shopware\Bundle\AccountBundle\Service\CustomerUnlockService">
             <argument type="service" id="Doctrine\DBAL\Connection"/>
         </service>
+
+        <service id="Shopware\Bundle\AccountBundle\Service\OptInLoginService">
+            <argument id="dbal_connection" type="service"/>
+        </service>
     </services>
 </container>

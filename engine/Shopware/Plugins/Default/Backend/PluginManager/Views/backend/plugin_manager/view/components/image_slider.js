@@ -114,6 +114,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.ImageSlider', {
 
         me.previewContainer = Ext.create('Ext.view.View', {
             tpl: me.createPreviewTemplate(),
+            itemSelector: 'preview-image',
             flex: 1,
             cls: 'preview-container',
             listeners: {

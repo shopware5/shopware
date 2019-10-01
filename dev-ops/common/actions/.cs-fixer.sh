@@ -1,5 +1,3 @@
 #!/usr/bin/env bash
 
-if [ "$1" = "7.2" ]; then
-    vendor/bin/php-cs-fixer fix --verbose --show-progress=dots
-fi
+vendor/bin/php-cs-fixer  fix --dry-run -v --allow-risky=yes --format=junit | tee php-cs-fixer.xml

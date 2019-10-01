@@ -504,7 +504,8 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         }
         if (empty($options['gc_maxlifetime'])) {
             $backendTimeout = $this->Config()->get('backendTimeout', 60 * 90);
-            $options['gc_maxlifetime'] = (int) $backendTimeout ?: PHP_INT_MAX;
+            // 10 years
+            $options['gc_maxlifetime'] = (int) $backendTimeout ?: 315360000;
         }
         unset($options['locking']);
 

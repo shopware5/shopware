@@ -35,7 +35,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     public function preDispatch()
     {
-        $this->Response()->setHeader('x-robots', 'noindex');
+        $this->Response()->setHeader('x-robots-tag', 'noindex');
     }
 
     /**
@@ -521,6 +521,16 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         if (empty($products)) {
             return $products;
+        }
+
+        $useShortDescription = $this->get('config')->get('useShortDescriptionInListing');
+        if ($useShortDescription) {
+            foreach ($products as &$product) {
+                if (strlen($product['description']) > 5) {
+                    $product['description_long'] = $product['description'];
+                }
+            }
+            unset($product);
         }
 
         return $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ListingLinkRewriteServiceInterface::class)->rewriteLinks(

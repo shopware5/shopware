@@ -50,6 +50,7 @@ class Value extends ModelEntity
      * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
      */
     protected $shop;
+
     /**
      * @var int
      *

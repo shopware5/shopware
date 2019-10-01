@@ -106,6 +106,17 @@ class RegisterService implements RegisterServiceInterface
         $this->modelManager->beginTransaction();
         try {
             $this->saveCustomer($shop, $customer);
+
+            $this->addressService->create($billing, $customer);
+            $this->addressService->setDefaultBillingAddress($billing);
+
+            if ($shipping !== null) {
+                $this->addressService->create($shipping, $customer);
+                $this->addressService->setDefaultShippingAddress($shipping);
+            } else {
+                $this->addressService->setDefaultShippingAddress($billing);
+            }
+
             if (
                 ($optinAttribute = $shop->getAttribute('sendOptinMail')) !== null
                 && $optinAttribute->get('sendOptinMail') === true
@@ -119,16 +130,6 @@ class RegisterService implements RegisterServiceInterface
                 $this->doubleOptInVerificationMail($shop, $customer, $hash);
             }
 
-            $this->addressService->create($billing, $customer);
-            $this->addressService->setDefaultBillingAddress($billing);
-
-            if ($shipping !== null) {
-                $this->addressService->create($shipping, $customer);
-                $this->addressService->setDefaultShippingAddress($shipping);
-            } else {
-                $this->addressService->setDefaultShippingAddress($billing);
-            }
-
             $this->saveReferer($customer);
 
             $this->modelManager->commit();
@@ -138,7 +139,7 @@ class RegisterService implements RegisterServiceInterface
         }
     }
 
-    private function saveReferer(Customer $customer)
+    private function saveReferer(Customer $customer): void
     {
         if (!$customer->getReferer()) {
             return;
@@ -151,7 +152,7 @@ class RegisterService implements RegisterServiceInterface
         ]);
     }
 
-    private function saveCustomer(Shop $shop, Customer $customer)
+    private function saveCustomer(Shop $shop, Customer $customer): void
     {
         if ($customer->getValidation() !== ContextService::FALLBACK_CUSTOMER_GROUP) {
             $customer->setCustomerType(Customer::CUSTOMER_TYPE_BUSINESS);
@@ -216,20 +217,12 @@ class RegisterService implements RegisterServiceInterface
         $this->modelManager->refresh($customer);
     }
 
-    /**
-     * @return int
-     */
-    private function getPartnerId(Customer $customer)
+    private function getPartnerId(Customer $customer): int
     {
         return (int) $this->connection->fetchColumn('SELECT id FROM s_emarketing_partner WHERE idcode = ?', [$customer->getAffiliate()]);
     }
 
-    /**
-     * @param string $hash
-     *
-     * @throws \Doctrine\ORM\ORMException
-     */
-    private function doubleOptInVerificationMail(Shop $shop, Customer $customer, $hash)
+    private function doubleOptInVerificationMail(Shop $shop, Customer $customer, string $hash): void
     {
         $container = Shopware()->Container();
         $router = Shopware()->Front()->Router();
@@ -246,12 +239,31 @@ class RegisterService implements RegisterServiceInterface
             'sConfirmation' => $hash,
         ]);
 
+        // Should be compatible with the sREGISTERCONFIRMATION context
         $context = [
             'sConfirmLink' => $link,
+            'email' => $customer->getEmail(),
+            'sMAIL' => $customer->getEmail(),
             'firstname' => $customer->getFirstname(),
             'lastname' => $customer->getLastname(),
             'salutation' => $customer->getSalutation(),
+            'customer_type' => $customer->getCustomerType(),
+            'additional' => [
+                'customer_type' => $customer->getCustomerType(),
+            ],
+            'accountmode' => $customer->getAccountMode(),
         ];
+
+        $address = $customer->getDefaultBillingAddress();
+        if ($address) {
+            $context = array_merge($context, [
+                'street' => $address->getStreet(),
+                'zipcode' => $address->getZipcode(),
+                'city' => $address->getCity(),
+                'country' => $address->getCountry() ? $address->getCountry()->getId() : null,
+                'state' => $address->getState() ? $address->getState()->getId() : null,
+            ]);
+        }
 
         $context = $container->get('events')->filter(
             'Shopware_Controllers_Frontend_RegisterService_DoubleOptIn_ConfirmationMail',
@@ -270,9 +282,6 @@ class RegisterService implements RegisterServiceInterface
         $mail->send();
     }
 
-    /**
-     * @throws \Doctrine\DBAL\DBALException
-     */
     private function doubleOptInSaveHash(Customer $customer, string $hash): int
     {
         /** @var Request|null $request */
@@ -282,16 +291,34 @@ class RegisterService implements RegisterServiceInterface
         $sql = "INSERT INTO `s_core_optin` (`type`, `datum`, `hash`, `data`)
                 VALUES ('swRegister', ?, ?, ?)";
 
-        // Minimal billing data for Mailtemplates
+        // Needs to be compatible with the sREGISTERCONFIRMATION context
+        $mailContext = [
+            'email' => $customer->getEmail(),
+            'sMAIL' => $customer->getEmail(),
+            'firstname' => $customer->getFirstname(),
+            'lastname' => $customer->getLastname(),
+            'salutation' => $customer->getSalutation(),
+            'accountmode' => $customer->getAccountMode(),
+            'customer_type' => $customer->getCustomerType(),
+            'additional' => [
+                'customer_type' => $customer->getCustomerType(),
+            ],
+        ];
+
+        $address = $customer->getDefaultBillingAddress();
+        if ($address) {
+            $mailContext = array_merge($mailContext, [
+                'street' => $address->getStreet(),
+                'zipcode' => $address->getZipcode(),
+                'city' => $address->getCity(),
+                'country' => $address->getCountry() ? $address->getCountry()->getId() : null,
+                'state' => $address->getState() ? $address->getState()->getId() : null,
+            ]);
+        }
+
         $storedData = [
             'customerId' => $customer->getId(),
-            'register' => [
-                'billing' => [
-                    'firstname' => $customer->getFirstname(),
-                    'lastname' => $customer->getLastname(),
-                    'salutation' => $customer->getSalutation(),
-                    ],
-                ],
+            'register' => ['billing' => $mailContext], // This structure being required by \sAdmin::sSaveRegisterSendConfirmation
             'fromCheckout' => $fromCheckout,
         ];
 

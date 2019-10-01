@@ -123,13 +123,24 @@ class Requirements
 
         foreach ($xmlObject->requirement as $requirement) {
             $name = (string) $requirement->name;
-            $value = $this->getRuntimeValue($name);
-            $requirement->result = $this->compare(
-                $name,
-                $value,
-                (string) $requirement->required
-            );
-            $requirement->version = $value;
+
+            if ($name === 'database') {
+                [$platform, $version] = $this->getMysqlVersion();
+
+                $requirement->version = $version;
+                $requireVersion = (string) $platform === 'mysql' ? $requirement->mysql : $requirement->mariadb;
+                $requirement->result = version_compare($version, $requireVersion, '>=');
+                $requirement->required = $requireVersion;
+                $requirement->name = $platform;
+            } else {
+                $value = $this->getRuntimeValue($name, $requirement);
+                $requirement->result = $this->compare(
+                    $name,
+                    $value,
+                    (string) $requirement->required
+                );
+                $requirement->version = $value;
+            }
         }
 
         return $xmlObject->requirement;
@@ -138,23 +149,29 @@ class Requirements
     /**
      * Checks a requirement
      *
-     * @param string $name
-     *
      * @return bool|string|int|null
      */
-    private function getRuntimeValue($name)
+    private function getRuntimeValue(string $name, \SimpleXMLElement $requirement)
     {
         $m = 'check' . str_replace(' ', '', ucwords(str_replace(['_', '.'], ' ', $name)));
         if (method_exists($this, $m)) {
-            return $this->$m();
-        } elseif (extension_loaded($name)) {
+            return $this->$m($requirement);
+        }
+
+        if (extension_loaded($name)) {
             return true;
-        } elseif (function_exists($name)) {
+        }
+
+        if (function_exists($name)) {
             return true;
-        } elseif (($value = ini_get($name)) !== null) {
-            if (strtolower($value) == 'off' || (is_numeric($value) && $value == 0)) {
+        }
+
+        if (($value = ini_get($name)) !== null) {
+            if (strtolower($value) === 'off' || (is_numeric($value) && $value == 0)) {
                 return false;
-            } elseif (strtolower($value) == 'on' || (is_numeric($value) && $value == 1)) {
+            }
+
+            if (strtolower($value) === 'on' || (is_numeric($value) && $value == 1)) {
                 return true;
             }
 
@@ -176,13 +193,20 @@ class Requirements
     private function compare($name, $value, $requiredValue)
     {
         $m = 'compare' . str_replace(' ', '', ucwords(str_replace(['_', '.'], ' ', $name)));
+
         if (method_exists($this, $m)) {
             return $this->$m($value, $requiredValue);
-        } elseif (preg_match('#^[0-9]+[A-Z]$#', $requiredValue)) {
+        }
+
+        if (preg_match('#^[0-9]+[A-Z]$#', $requiredValue)) {
             return $this->decodePhpSize($requiredValue) <= $this->decodePhpSize($value);
-        } elseif (preg_match('#^[0-9]+ [A-Z]+$#i', $requiredValue)) {
+        }
+
+        if (preg_match('#^[0-9]+ [A-Z]+$#i', $requiredValue)) {
             return $this->decodeSize($requiredValue) <= $this->decodeSize($value);
-        } elseif (preg_match('#^[0-9][0-9\.]+$#', $requiredValue)) {
+        }
+
+        if (preg_match('#^[0-9][0-9\.]+$#', $requiredValue)) {
             return version_compare($requiredValue, $value, '<=');
         }
 
@@ -239,16 +263,13 @@ class Requirements
     /**
      * Checks the mysql version
      *
-     * @return bool|string
+     * @return array
      */
-    private function checkMysql()
+    private function getMysqlVersion()
     {
-        $v = $this->connection->getAttribute(\PDO::ATTR_SERVER_VERSION);
-        if (strpos($v, '-')) {
-            return substr($v, 0, strpos($v, '-'));
-        }
+        $v = $this->connection->query('SELECT VERSION()')->fetchColumn();
 
-        return $v;
+        return MySQLVersionExtractor::extract($v);
     }
 
     /**

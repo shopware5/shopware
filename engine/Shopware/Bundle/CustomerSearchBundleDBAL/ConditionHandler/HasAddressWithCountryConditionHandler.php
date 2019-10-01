@@ -46,6 +46,7 @@ class HasAddressWithCountryConditionHandler implements ConditionHandlerInterface
             'addresses.user_id = customer.id
             AND addresses.country_id IN (:HasAddressWithCountryCondition)'
         );
+        $query->addGroupBy('customer.id');
 
         /* @var HasAddressWithCountryCondition $condition */
         $query->setParameter(':HasAddressWithCountryCondition', $condition->getCountryIds(), Connection::PARAM_INT_ARRAY);

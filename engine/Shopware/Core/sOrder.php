@@ -25,9 +25,11 @@
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Models\Customer\Customer;
+use Shopware\Models\Mail\Mail;
+use Shopware\Models\Shop\Shop;
 
 /**
- * Deprecated Shopware Class that handle frontend orders
+ * Deprecated Shopware Class that handles frontend orders
  */
 class sOrder implements \Enlight_Hook
 {
@@ -220,6 +222,11 @@ class sOrder implements \Enlight_Hook
     private $attributePersister;
 
     /**
+     * @var Shopware\Components\Model\ModelManager
+     */
+    private $modelManager;
+
+    /**
      * Injects all dependencies which are required for this class.
      *
      * @param ContextServiceInterface $contextService
@@ -229,14 +236,17 @@ class sOrder implements \Enlight_Hook
     public function __construct(
         ContextServiceInterface $contextService = null
     ) {
+        $container = Shopware()->Container();
+
         $this->db = Shopware()->Db();
         $this->eventManager = Shopware()->Events();
         $this->config = Shopware()->Config();
-        $this->numberRangeIncrementer = Shopware()->Container()->get(\Shopware\Components\NumberRangeIncrementerInterface::class);
+        $this->numberRangeIncrementer = $container->get(\Shopware\Components\NumberRangeIncrementerInterface::class);
 
         $this->contextService = $contextService ?: Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
         $this->attributeLoader = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataLoader::class);
         $this->attributePersister = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataPersister::class);
+        $this->modelManager = $container->get(\Shopware\Components\Model\ModelManager::class);
     }
 
     /**
@@ -577,8 +587,9 @@ class sOrder implements \Enlight_Hook
         );
 
         $ip = Shopware()->Container()->get(\Shopware\Components\Privacy\IpAnonymizerInterface::class)
-            ->anonymize((string) $_SERVER['REMOTE_ADDR']);
-
+            ->anonymize(
+                (string) Shopware()->Container()->get('request_stack')->getCurrentRequest()->getClientIp()
+            );
         $orderParams = [
             'ordernumber' => $orderNumber,
             'userID' => $this->sUserData['additional']['user']['id'],
@@ -1001,7 +1012,7 @@ class sOrder implements \Enlight_Hook
     public function sSaveBillingAddress($address, $id)
     {
         /** @var Customer $customer */
-        $customer = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->find(Customer::class, $address['userID']);
+        $customer = $this->modelManager->find(Customer::class, $address['userID']);
 
         $sql = '
         INSERT INTO s_order_billingaddress
@@ -1192,7 +1203,7 @@ class sOrder implements \Enlight_Hook
 
         if ($shippingAddressId === null) {
             /** @var Customer $customer */
-            $customer = Shopware()->Models()->getRepository(\Shopware\Models\Customer\Customer::class)
+            $customer = $this->modelManager->getRepository(\Shopware\Models\Customer\Customer::class)
                 ->find($address['userID']);
             $shippingAddressId = $customer->getDefaultShippingAddress()->getId();
         }
@@ -1305,7 +1316,7 @@ class sOrder implements \Enlight_Hook
             return;
         }
 
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $repository = $this->modelManager->getRepository(Shop::class);
         $shopId = is_numeric($order['language']) ? $order['language'] : $order['subshopID'];
         // The (sub-)shop might be inactive by now, so that's why we use `getById` instead of `getActiveById`
         $shop = $repository->getById($shopId);
@@ -1328,7 +1339,7 @@ class sOrder implements \Enlight_Hook
         }
 
         /* @var \Shopware\Models\Mail\Mail $mailModel */
-        $mailModel = Shopware()->Models()->getRepository('Shopware\Models\Mail\Mail')->findOneBy(
+        $mailModel = $this->modelManager->getRepository(Mail::class)->findOneBy(
             ['name' => $templateName]
         );
 

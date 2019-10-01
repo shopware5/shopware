@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Controllers\Frontend;
+
+class CheckoutTest extends \Enlight_Components_Test_Plugin_TestCase
 {
     const ARTICLE_NUMBER = 'SW10239';
     const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
@@ -111,7 +113,7 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
      */
     public function testAddBasketOverGetFails()
     {
-        $this->expectException(LogicException::class);
+        $this->expectException(\LogicException::class);
 
         $this->reset();
         $this->Request()->setHeader('User-Agent', self::USER_AGENT);
@@ -222,18 +224,15 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
 
     /**
      * Login as a frontend user
-     *
-     * @throws Enlight_Exception
-     * @throws Exception
      */
     public function loginFrontendUser()
     {
-        Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
+        Shopware()->Front()->setRequest(new \Enlight_Controller_Request_RequestHttp());
         $user = Shopware()->Db()->fetchRow(
             'SELECT id, email, password, subshopID, language FROM s_user WHERE id = 1'
         );
 
-        /** @var Shopware\Models\Shop\Repository $repository */
+        /** @var \Shopware\Models\Shop\Repository $repository */
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
         $shop = $repository->getActiveById($user['language']);
 
