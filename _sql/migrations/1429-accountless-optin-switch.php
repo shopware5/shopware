@@ -80,7 +80,7 @@ VALUES
     '{config name=shopName}',
     'Bitte bestätigen Sie Ihre E-Mail-Adresse für Ihre Bestellung bei {config name=shopName}',
     '{include file="string:{config name=emailheaderplain}"}
-    
+
 Hallo,
 
 Bitte bestätigen Sie Ihre E-Mail-Adresse über den nachfolgenden Link:

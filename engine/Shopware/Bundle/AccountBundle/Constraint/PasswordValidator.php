@@ -94,20 +94,14 @@ class PasswordValidator extends ConstraintValidator
         }
     }
 
-    /**
-     * @param string $message
-     */
-    private function addError($message)
+    private function addError(string $message): void
     {
         $this->context->buildViolation($message)
             ->atPath($this->context->getPropertyPath())
             ->addViolation();
     }
 
-    /**
-     * @return bool
-     */
-    private function isFastLogin(FormInterface $form)
+    private function isFastLogin(FormInterface $form): bool
     {
         if ($form->has('accountmode')) {
             return $form->get('accountmode')->getData() == Customer::ACCOUNT_MODE_FAST_LOGIN;
@@ -122,11 +116,9 @@ class PasswordValidator extends ConstraintValidator
     }
 
     /**
-     * @param array $snippet with namespace, name and default value
-     *
-     * @return string
+     * @param array $snippet A snippet with namespace, name and default value
      */
-    private function getSnippet(array $snippet)
+    private function getSnippet(array $snippet): string
     {
         return $this->snippets->getNamespace($snippet['namespace'])->get($snippet['name'], $snippet['default'], true);
     }

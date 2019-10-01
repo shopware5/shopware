@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Backend_PremiumTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
+class PremiumTest extends \Enlight_Components_Test_Controller_TestCase
 {
     private $premiumData = [
         'orderNumber' => 'SW2001_test',
@@ -38,7 +40,7 @@ class Shopware_Tests_Controllers_Backend_PremiumTest extends Enlight_Components_
     {
         parent::setUp();
 
-        // disable auth and acl
+        // Disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
@@ -50,7 +52,7 @@ class Shopware_Tests_Controllers_Backend_PremiumTest extends Enlight_Components_
      */
     public function testGetPremiumArticles()
     {
-        /* @var Enlight_Controller_Response_ResponseTestCase */
+        /* @var \Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/premium/getPremiumArticles');
         static::assertTrue($this->View()->success);
 
@@ -60,9 +62,9 @@ class Shopware_Tests_Controllers_Backend_PremiumTest extends Enlight_Components_
         static::assertArrayHasKey('data', $jsonBody);
         static::assertArrayHasKey('success', $jsonBody);
 
-        //Testing the search-function
+        // Testing the search-function
         $filter = [
-            'filter' => Zend_Json::encode([[
+            'filter' => \Zend_Json::encode([[
                 'value' => 'test',
             ]]),
         ];

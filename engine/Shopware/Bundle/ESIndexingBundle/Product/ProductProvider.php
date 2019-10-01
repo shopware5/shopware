@@ -218,7 +218,7 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
                 $this->addVariantSearchDetails($product, $configurations, $variantFacet, $variantConfiguration, $combinations, $listingPrices, $availability);
             } elseif (!$product->isMainVariant()) {
                 continue;
-            } elseif ($listProduct->getStock() < $listProduct->getUnit()->getMinPurchase()) {
+            } elseif (!$listProduct->isAvailable()) {
                 $product->setHasAvailableVariant(false);
             }
 

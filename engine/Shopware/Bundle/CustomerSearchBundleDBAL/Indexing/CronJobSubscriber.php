@@ -46,6 +46,7 @@ class CronJobSubscriber implements SubscriberInterface
      * @var SearchIndexerInterface
      */
     private $searchIndexer;
+
     /**
      * @var CustomerStream
      */

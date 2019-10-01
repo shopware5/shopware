@@ -203,6 +203,16 @@ Shopware provides 3 product box types:<br/>
             .unitize(line-height, 16);
             display: block;
             overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .price--unit[title] {
+           user-select: none;
+        }
+
+        .price--unit[title]:hover {
+           user-select: auto;
         }
     }
 

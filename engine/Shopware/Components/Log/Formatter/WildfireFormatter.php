@@ -57,6 +57,7 @@ class WildfireFormatter extends BaseWildfireFormatter
      * @var array
      */
     protected $objectStack = [];
+
     /**
      * Translates Monolog log levels to Wildfire levels.
      */

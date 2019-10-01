@@ -45,6 +45,7 @@ class Helper
      * @var Converter
      */
     protected $converter;
+
     /**
      * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
      */
@@ -76,12 +77,19 @@ class Helper
     private $categoryApi;
 
     private $createdProducts = [];
+
     private $createdManufacturers = [];
+
     private $createdCategories = [];
+
     private $createdCustomerGroups = [];
+
     private $createdTaxes = [];
+
     private $createdCurrencies = [];
+
     private $createdConfiguratorGroups = [];
+
     private $propertyNames = [];
 
     public function __construct()
@@ -938,10 +946,7 @@ class Helper
         );
     }
 
-    /**
-     * @return bool
-     */
-    public function isElasticSearchEnabled()
+    public function isElasticSearchEnabled(): bool
     {
         /** @var Kernel $kernel */
         $kernel = Shopware()->Container()->get('kernel');
@@ -949,15 +954,30 @@ class Helper
         return $kernel->isElasticSearchEnabled();
     }
 
-    public function refreshSearchIndexes(Shop $shop)
+    public function refreshSearchIndexes(Shop $shop): void
     {
         if (!$this->isElasticSearchEnabled()) {
             return;
         }
 
-        $indexer = Shopware()->Container()->get('shopware_elastic_search.shop_indexer');
-        $indexer->cleanupIndices();
-        $indexer->index($shop, new ProgressHelper());
+        $this->clearSearchIndex();
+        Shopware()->Container()->get('shopware_elastic_search.shop_indexer')->index($shop, new ProgressHelper());
+    }
+
+    public function refreshBackendSearchIndex(): void
+    {
+        if (!$this->isElasticSearchEnabled()) {
+            return;
+        }
+
+        $this->clearSearchIndex();
+        Shopware()->Container()->get('shopware_es_backend.indexer')->index(new ProgressHelper());
+    }
+
+    public function clearSearchIndex(): void
+    {
+        $client = Shopware()->Container()->get('shopware_elastic_search.client');
+        $client->indices()->delete(['index' => '_all']);
     }
 
     /**

@@ -36,6 +36,7 @@ class Shopware_Tests_Models_SnippetTest extends Enlight_Components_Test_TestCase
         'shopid' => '1',
         'localeId' => '1',
     ];
+
     /**
      * @var Shopware\Components\Model\ModelManager
      */

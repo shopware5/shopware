@@ -127,14 +127,32 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     {
         $offset = 0;
         try {
-            $sql = 'SELECT @@system_time_zone;';
-            $timezone = $this->container->get(\Doctrine\DBAL\Connection::class)->query($sql)->fetchColumn(0);
-            $datebaseZone = timezone_open(timezone_name_from_abbr($timezone));
-            $phpZone = timezone_open(date_default_timezone_get());
-            $databaseTime = new DateTime('now', $datebaseZone);
+            $sql = <<<'SQL'
+                SELECT timeZones.timeZone
+                FROM (
+                    SELECT @@SESSION.time_zone AS timeZone
+                    UNION
+                    SELECT @@system_time_zone AS timeZone
+                ) AS timeZones
+                WHERE timeZone != 'SYSTEM'
+                LIMIT 1
+SQL;
 
-            if (!empty($timezone) && timezone_name_from_abbr($timezone)) {
-                $offset = abs($datebaseZone->getOffset(new DateTime()) - $phpZone->getOffset($databaseTime));
+            $timezone = $this->container->get(\Doctrine\DBAL\Connection::class)
+                ->query($sql)
+                ->fetchColumn(0);
+
+            if (in_array($timezone[0], ['-', '+'], true)) {
+                $databaseZone = new DateTimeZone($timezone);
+            } else {
+                $databaseZone = timezone_open(timezone_name_from_abbr($timezone));
+            }
+
+            $phpZone = timezone_open(date_default_timezone_get());
+            $databaseTime = new DateTime('now', $databaseZone);
+
+            if (!empty($timezone)) {
+                $offset = abs($databaseZone->getOffset(new DateTime()) - $phpZone->getOffset($databaseTime));
             }
         } catch (\PDOException $e) {
         }

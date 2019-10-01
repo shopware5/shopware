@@ -22,9 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
 use Shopware\Models\Shop\Locale;
 
-class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_Test_Controller_TestCase
+class ConfigTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
      * Tests the cron job config pagination
@@ -248,7 +250,7 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
      */
     private function checkTableListConfig($tableListName)
     {
-        // should return more than 2 items
+        // Should return more than 2 items
         $this->Request()->setMethod('GET');
         $this->dispatch('backend/Config/getTableList/_repositoryClass/' . $tableListName);
         $returnData = $this->View()->getAssign('data');
@@ -335,11 +337,11 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
     }
 
     /**
-     * Resets the shopware container
+     * Resets the Shopware container
      */
     private function resetContainer()
     {
-        // synthetic services
+        // Synthetic services
         $kernel = Shopware()->Container()->get('kernel');
         $connection = Shopware()->Container()->get(\PDO::class);
         $application = Shopware()->Container()->get('application');

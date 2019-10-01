@@ -27,7 +27,7 @@ namespace Shopware\Components;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Base class for the shopware themes.
+ * Base class for the Shopware themes.
  * Used as meta information container for a theme.
  * Contains the inheritance and config definition of a theme.
  */
@@ -38,7 +38,7 @@ class Theme
      *
      * @var string|null
      */
-    protected $extend = null;
+    protected $extend;
 
     /**
      * Defines for which themes the LESS definition should be discarded
@@ -68,21 +68,21 @@ class Theme
      *
      * @var string|null
      */
-    protected $description = null;
+    protected $description;
 
     /**
      * Name of the theme author.
      *
      * @var string|null
      */
-    protected $author = null;
+    protected $author;
 
     /**
      * License of the theme source code.
      *
      * @var string|null
      */
-    protected $license = null;
+    protected $license;
 
     /**
      * Flag for the inheritance configuration.
@@ -114,7 +114,7 @@ class Theme
     /**
      * The css property allows to define .css files
      * which should be compressed into one small .css file for the frontend.
-     * The shopware theme compiler expects that this files are
+     * The Shopware theme compiler expects that this files are
      * stored in the ../Themes/NAME/frontend/_public/ directory.
      *
      * @var array
@@ -175,8 +175,7 @@ class Theme
     }
 
     /**
-     * Helper function which returns the theme
-     * directory name
+     * Helper function which returns the theme directory name
      */
     public function getTemplate()
     {
@@ -303,7 +302,7 @@ class Theme
     }
 
     /**
-     * Creates a ext js tab panel.
+     * Creates an Ext js tab panel.
      *
      * @param string $name
      *
@@ -318,7 +317,7 @@ class Theme
     }
 
     /**
-     * Creates a ext js form field.
+     * Creates an Ext js form field.
      *
      * @param string $name
      * @param string $title
@@ -334,8 +333,7 @@ class Theme
     }
 
     /**
-     * Creates a ext js container which can be used as tab panel element or
-     * as normal container.
+     * Creates an Ext js container which can be used as tab panel element or as normal container.
      *
      * @param string $name
      * @param string $title
@@ -351,7 +349,7 @@ class Theme
     }
 
     /**
-     * Creates a ext js text field.
+     * Creates an Ext js text field.
      *
      * @param string $name
      * @param string $label
@@ -369,7 +367,7 @@ class Theme
     }
 
     /**
-     * Creates a ext js number field.
+     * Creates an Ext js number field.
      *
      * @param string $name
      * @param string $label
@@ -387,7 +385,7 @@ class Theme
     }
 
     /**
-     * Creates a ext js check box field.
+     * Creates an Ext js check box field.
      *
      * @param string $name
      * @param string $label
@@ -405,7 +403,7 @@ class Theme
     }
 
     /**
-     * Creates a custom shopware color picker field.
+     * Creates a custom Shopware color picker field.
      *
      * @param string $name
      * @param string $label
@@ -423,7 +421,7 @@ class Theme
     }
 
     /**
-     * Creates a ext js date field.
+     * Creates an Ext js date field.
      *
      * @param string $name
      * @param string $label
@@ -441,7 +439,7 @@ class Theme
     }
 
     /**
-     * Creates a ext js text field with auto suffix `em`
+     * Creates an Ext js text field with auto suffix `em`
      *
      * @param string $name
      * @param string $label
@@ -495,7 +493,7 @@ class Theme
     }
 
     /**
-     * Creates a text field with an auto suffix `px
+     * Creates a text field with an auto suffix `px`
      *
      * @param string $name
      * @param string $label
@@ -513,7 +511,7 @@ class Theme
     }
 
     /**
-     * Creates a ext js combo box field.
+     * Creates an Ext js combo box field.
      *
      * @param string  $name
      * @param string  $label
@@ -532,7 +530,7 @@ class Theme
     }
 
     /**
-     * Creates a ext js text area field.
+     * Creates an Ext js text area field.
      *
      * @param string $name
      * @param string $label

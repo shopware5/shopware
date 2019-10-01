@@ -60,7 +60,7 @@ class OrderNumberValidatorTest extends TestCase
                 $catch = null;
             }
 
-            static::assertNull($catch, sprintf('Type of variable "%s" did not throw an exception', print_r($value, true)));
+            static::assertNull($catch, sprintf('Type of variable "%s" did not throw an exception', gettype($value)));
         }
     }
 

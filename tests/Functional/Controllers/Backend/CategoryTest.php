@@ -22,18 +22,18 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
 use Shopware\Models\Category\Category;
 
-class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components_Test_Controller_TestCase
+class CategoryTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var Category
      */
-    protected $repository = null;
+    protected $repository;
 
     /**
-     * dummy data
-     *
      * @var array
      */
     private $dummyData = [
@@ -44,8 +44,8 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
 
     private $updateMetaDescription = 'testMetaDescription';
 
-    /** @var Shopware\Components\Model\ModelManager */
-    private $manager = null;
+    /** @var \Shopware\Components\Model\ModelManager */
+    private $manager;
 
     /**
      * Standard set up for every test - just disable auth
@@ -57,17 +57,14 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
         $this->manager = Shopware()->Models();
         $this->repository = Shopware()->Models()->getRepository(Category::class);
 
-        // disable auth and acl
+        // Disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
-    /**
-     * test getList controller action
-     */
     public function testGetList()
     {
-        //delete old data
+        // Delete old data
         $repositoryData = $this->repository->findBy(['name' => $this->dummyData['name']]);
         foreach ($repositoryData as $testDummy) {
             $this->manager->remove($testDummy);
@@ -76,7 +73,6 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
 
         $dummy = $this->createDummy();
 
-        /* @var Enlight_Controller_Response_ResponseTestCase */
         $params['node'] = 1;
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/getList');
@@ -97,9 +93,7 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
     }
 
     /**
-     * test saveDetail controller action
-     *
-     * @return the id of the new category
+     * @return int The id of the new category
      */
     public function testSaveDetail()
     {
@@ -108,13 +102,13 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
         $params['articles'] = [];
         $params['customerGroups'] = [];
 
-        //test new category
+        // Test new category
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/createDetail');
         static::assertTrue($this->View()->success);
         static::assertEquals($this->dummyData['name'], $this->View()->data['name']);
 
-        //test update category
+        // Test update category
         $params['id'] = $this->View()->data['id'];
         $params['metaDescription'] = $this->updateMetaDescription;
         $this->Request()->setParams($params);
@@ -126,8 +120,6 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
     }
 
     /**
-     * test getDetail controller action
-     *
      * @depends testSaveDetail
      *
      * @param string $id
@@ -152,7 +144,7 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
     }
 
     /**
-     * test getIdPath controller method f.e. used by product feed module
+     * Test getIdPath controller method f.e. used by product feed module
      *
      * @depends testGetDetail
      */
@@ -168,13 +160,13 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
     }
 
     /**
-     * test moveTreeItem controller method
+     * Test moveTreeItem controller method
      *
      * @depends testGetDetail
      */
     public function testMoveTreeItem($id)
     {
-        //test move to another position
+        // Test move to another position
         $params['id'] = $id;
         $params['position'] = 2;
         $this->Request()->setParams($params);
@@ -191,13 +183,11 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
         $movedCategoryModel = $this->repository->find($id);
         $parentModel = $movedCategoryModel->getParent();
 
-        //parentCategory should be Deutsch Id = 3
+        // parentCategory should be Deutsch Id = 3
         static::assertEquals(3, $parentModel->getId());
     }
 
     /**
-     * test delete controller action
-     *
      * @depends testGetDetail
      *
      * @param string $id
@@ -227,7 +217,7 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
         $dummyData = $this->dummyData;
 
         $dummyModel->fromArray($dummyData);
-        //set category parent
+        // Set category parent
         $parent = $this->repository->find($dummyData['parentId']);
         $dummyModel->setParent($parent);
 
@@ -235,7 +225,7 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
     }
 
     /**
-     * helper method to create the dummy object
+     * Helper method to create the dummy object
      *
      * @return Category
      */

@@ -2,9 +2,73 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
-[View all changes from v5.6.0...v5.6.1](https://github.com/shopware/shopware/compare/v5.6.0...v5.6.1)
+## 5.6.2
+
+[View all changes from v5.6.1...v5.6.2](https://github.com/shopware/shopware/compare/v5.6.1...v5.6.2)
+
+### Additions
+
+* Added a title to the base price declaration shown in the product box (`themes/Frontend/Bare/frontend/listing/product-box/product-price-unit.tpl`), so users may view the full text by hovering, in case the declaration was truncated
+* Added a filter event 'Shopware_Plugins_AdvancedMenu_CacheKey' to `\Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap::getAdvancedMenu`
+* Added all global defined attachments to the order document mail sending
+* Added example HSTS configuration in the htaccess file
+* Added the same context variables to `sREGISTERCONFIRMATION` when the mail is sent after a DOI eMail compared to when it is sent directly
+* Added some values to the context of eMails `sOPTINREGISTER` and `sOPTINREGISTERACCOUNTLESS` to include the same values as eMail `sREGISTERCONFIRMATION`, these are:
+    * `customer_type` and `additional.customer_type`
+    * `accountmode`
+    * `email` and `sMAIL`
+    * `street`
+    * `zipcode`
+    * `city`
+    * `country`
+    * `state`
+* Added `db.timezone` section to `config.php` to configure a custom timezone for the database connection
+
+### Changes
+
+* Changed the base price declaration shown in the product box (`themes/Frontend/Bare/frontend/listing/product-box/product-price-unit.tpl`), so that an ellipsis is shown when the text is truncated
+* Changed `Shopware_Controllers_Widgets_Listing::convertProductsResult` to consider use short description configuration
+* Changed `Shopware\Models\Analytics\Repository::createAmountBuilder` to join with `left join` instead `inner join`
+* Changed the block of the registration verification alert
+* Changed the `x-robots` header to `x-robots-tag`
+* Changed HTML minification to exclude `checkout` controller due to performance issues with many items in the cart
+* Changed `Shopware\Models\Analytics\Repository::createAmountBuilder` to join with `left join` instead `inner join`
+* Changed default value of `Shopware\Models\Article\Image::$main` to 2
+* Changed the label of the config form `Service` to `Maintenance`
+* Changed `s_mail_log` foreign keys to set null on delete
+* Changed `Item by sales` to consider only products
+* Changed systeminfo to consider mariadb installations
+* Changed PHPStan to 0.11.15
+* Changed `Zend_Cache_Backend_Redis` to make it compatible with PhpRedis 5.0.0
+* Changed `Listing` controller to prevent it from accessing categories of subshops
+* Changed jquery plugins `ajax-product-navigation`, `infinite-scrolling` and `listing-actions` to work with invalid query strings
+* Changed the context variables of eMail `sREGISTERCONFIRMATION` to contain the same variables when the mail is sent after a DOI eMail compared to when it is sent directly
+* Changes how the IP of the client get's determined when an order is being stored
+* Changed the context variables of eMails `sOPTINREGISTER` and `sOPTINREGISTERACCOUNTLESS` to include the same values as eMail `sREGISTERCONFIRMATION`, these are:
+    * The already existing variables:
+        * `sConfirmLink`
+        * `firstname`
+        * `lastname`
+        * `salutation`
+    * New are the variables:
+        * `customer_type` and `additional.customer_type`
+        * `accountmode`
+        * `email` and `sMAIL`
+        * `street`
+        * `zipcode`
+        * `city`
+        * `country`
+        * `state`
+* Changed PHPStan to 0.11.16
+* Changed a call to the `flatpickr`'s `formatDate()` method, so that it now reflects the current parameter order
+
+### Removals
+
+* Removed the `UNIQUE`-Constraint from `\Shopware\Models\Mail\Contact::$mailAddress`
 
 ## 5.6.1
+
+[View all changes from v5.6.0...v5.6.1](https://github.com/shopware/shopware/compare/v5.6.0...v5.6.1)
 
 ### Additions
 
@@ -12,6 +76,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added new smarty block `frontend_global_messages_icon_remove`
 * Added new div class `is--content-type` to all content type pages
 * Added fallback for missing widget label translation
+* Added path `/tracking` to `robots.txt`
 
 ### Changes
 
@@ -29,6 +94,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed the pagesize for the snippets module
 * Changed the handling of browser notifications to support browsers without notifications
 * Changed `themes/Frontend/Bare/frontend/_includes/emotion.tpl` to also work with emotion preview
+* Changed dependency `beberlei/assert` to version 2.9.9 to fix issues with PHP 7.3
 
 ## 5.6.0
 
@@ -171,11 +237,11 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed display mode of voucher field on the shopping cart page into a configurable display mode
 * Changed symfony form request handler to `Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationRequestHandler`
 * Changed `.htaccess`-file to no longer contain references to PHP5
-* Changed following tables 
+* Changed following tables to varchar limit of 15 for customer group key
     * `s_core_customergroups`
     * `s_article_configurator_template_prices`
     * `s_articles_prices`
-    * `s_campaigns_mailings` to varchar limit of 15 for customer group key
+    * `s_campaigns_mailings`
 * Changed backend customer login to start with a fresh session
 * Changed `Shopware_Controllers_Backend_Application` to be an abstract class
 * Changed `sExport::sGetArticleCategoryPath` to allow various attributes in category path
@@ -303,7 +369,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Deprecated `Shopware\Bundle\EmotionBundle\Exception\ComponentHandlerNotFoundException`. It will be removed in 5.7 without replacement.
 * Deprecated `Shopware\Bundle\EsBackendBundle\EsAwareSearcher`. It will be removed in 5.7 without replacement.
 * Deprecated `Shopware\Bundle\ESIndexingBundle\Product\ProductQueryFactoryInterface::createPriceIdQuery`, `::createVoteIdQuery`, `::createVariantIdQuery`, `::createProductCategoryQuery`. It will be removed in 5.7 without replacement.
-* Deprecated `Shopware\Bundle\ESIndexingBundle\Product\ProductQueryFactory` Deprecated `Shopware\Bundle\ESIndexingBundle\Product\ProductQueryFactoryInterface::createPriceIdQuery`, `::createVoteIdQuery`, `::createVariantIdQuery`, `::createProductCategoryQuery`. It will be removed in 5.7 without replacement.::createPriceIdQuery`, `::createVoteIdQuery`, `::createVariantIdQuery`, `::createProductCategoryQuery`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Bundle\ESIndexingBundle\Product\ProductQueryFactory::createPriceIdQuery`, `::createVoteIdQuery`, `::createVariantIdQuery`, `::createProductCategoryQuery`. It will be removed in 5.7 without replacement.
+* Deprecated `Shopware\Bundle\ESIndexingBundle\Product\ProductQueryFactoryInterface::createPriceIdQuery`, `::createVoteIdQuery`, `::createVariantIdQuery`, `::createProductCategoryQuery`. It will be removed in 5.7 without replacement.
 * Deprecated `Shopware\Bundle\ESIndexingBundle\LastIdQuery::getQuery`. It will be removed in 5.7 without replacement.
 * Deprecated `Shopware\Bundle\PluginInstallerBundle\Context\PluginLicenceRequest`. It will be removed in 5.7 without replacement.
 * Deprecated `Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService::getPluginLicence`. It will be removed in 5.7 without replacement.

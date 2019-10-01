@@ -28,14 +28,18 @@ use DateInterval;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Enlight_Components_Mail;
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
 use Shopware\Bundle\MailBundle\Service\LogEntryBuilderInterface;
 use Shopware\Models\Mail\Log;
 use Shopware\Models\Mail\LogRepositoryInterface;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class LogRepositoryTest extends \PHPUnit\Framework\TestCase
+class LogRepositoryTest extends TestCase
 {
     use MailBundleTestTrait;
+    use DatabaseTransactionBehaviour;
 
     /**
      * @var string
@@ -96,15 +100,7 @@ class LogRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->currentDate = new DateTime('now');
         $this->currentDateMinusOneDay = (new DateTime('now'))->sub($oneDay);
 
-        $this->deleteLogEntries();
         $this->createLogEntries();
-    }
-
-    protected function tearDown()
-    {
-        $this->deleteLogEntries();
-
-        parent::tearDown();
     }
 
     public function testFindByDate(): void
@@ -143,6 +139,36 @@ class LogRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $entries = $this->repository->findByDate($this->pastDate, $this->currentDate);
         static::assertEmpty($entries);
+    }
+
+    /**
+     * Ensure that similar recipient addresses, which differ only by whitespace or
+     * upper case/lower case, do not lead to problems when they're persisted.
+     *
+     * This is a regression test for SW-24564.
+     *
+     * @doesNotPerformAssertions
+     */
+    public function testUniqueConstraintIsCaseSensitive(): void
+    {
+        $firstMail = $this->createSimpleMail();
+        $secondMail = new Enlight_Components_Mail('UTF-8');
+
+        $secondMail->setSubject($firstMail->getSubject());
+        $secondMail->setFrom(ucfirst($firstMail->getFrom()));
+        $secondMail->setBodyText($firstMail->getBodyText()->getRawContent());
+
+        // Try to create log entries with addresses the MySQL UNIQUE-constraint would treat as equal.
+        $secondMail->addTo(sprintf('%s ', $firstMail->getRecipients()[0]));
+        $secondMail->addTo(sprintf('    %s     ', $firstMail->getRecipients()[0]));
+        $secondMail->addTo(ucfirst($firstMail->getRecipients()[0]));
+
+        $first = $this->builder->build($firstMail);
+        $second = $this->builder->build($secondMail);
+
+        $this->entityManager->persist($first);
+        $this->entityManager->persist($second);
+        $this->entityManager->flush();
     }
 
     protected function createLogEntries(): void

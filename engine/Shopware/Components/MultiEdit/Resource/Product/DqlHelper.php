@@ -130,10 +130,15 @@ class DqlHelper
      * Some mappings we will need later
      */
     protected $attributeToEntityMapping = [];
+
     protected $attributeToColumn = [];
+
     protected $entityToPrefix = [];
+
     protected $prefixToEntity = [];
+
     protected $columns = [];
+
     protected $columnInfo = [];
 
     public function __construct(

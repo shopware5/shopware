@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Backend_RiskManagementTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
+class RiskManagementTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
      * Standard set up for every test - just disable auth
@@ -31,7 +33,7 @@ class Shopware_Tests_Controllers_Backend_RiskManagementTest extends Enlight_Comp
     {
         parent::setUp();
 
-        // disable auth and acl
+        // Disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
@@ -43,7 +45,7 @@ class Shopware_Tests_Controllers_Backend_RiskManagementTest extends Enlight_Comp
      */
     public function testGetPayments()
     {
-        /* @var Enlight_Controller_Response_ResponseTestCase */
+        /* @var \Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/risk_management/getPayments');
         static::assertTrue($this->View()->success);
 
@@ -62,9 +64,7 @@ class Shopware_Tests_Controllers_Backend_RiskManagementTest extends Enlight_Comp
     public function testCreateRule()
     {
         $manager = Shopware()->Models();
-        /**
-         * @var Shopware\Models\Payment\RuleSet
-         */
+        /** @var \Shopware\Models\Payment\RuleSet */
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Payment\RuleSet');
 
         $rules = $repository->findBy(['paymentId' => 2]);

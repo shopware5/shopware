@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
+class UserManagerTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
      * Temporary user data
@@ -61,7 +63,7 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
 
     public function setUp()
     {
-        //Parent will not be called since parent::setUp destroys the session and we need it.
+        // Parent will not be called since parent::setUp destroys the session and we need it.
 
         // Clear entitymanager to prevent weird 'model shop not persisted' errors.
         Shopware()->Models()->clear();
@@ -153,7 +155,7 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
      */
     public function testUserAdd()
     {
-        //Delete the user in case the username is duplicated
+        // Delete the user in case the username is duplicated
         $this->deleteUserByUsername($this->temporaryUserData['username']);
 
         $this->Request()->setParams($this->temporaryUserData);
@@ -185,14 +187,14 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
 
         static::assertGreaterThan(0, $user['id']);
 
-        //Update the username
+        // Update the username
         $this->Request()->setParam('id', $user['id']);
         $this->Request()->setParam('name', $randomName);
 
         $this->dispatch('backend/UserManager/updateUser');
         static::assertTrue($this->View()->success);
 
-        //Verify that the username has effectively changed in the database
+        // Verify that the username has effectively changed in the database
         $user = $this->getUserByUsername($username);
 
         static::assertEquals($randomName, $user['name']);

@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Backend_CanceledOrderTest extends Enlight_Components_Test_Plugin_TestCase
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
+class CanceledOrderTest extends \Enlight_Components_Test_Plugin_TestCase
 {
     const FIRST_DUMMY_SESSION_ID = '1231231231231231231231231231231231231320';
     const SECOND_DUMMY_SESSION_ID = '1231231231231231231231231231231231231321';
@@ -34,7 +36,7 @@ class Shopware_Tests_Controllers_Backend_CanceledOrderTest extends Enlight_Compo
     {
         parent::setUp();
 
-        // insert test order
+        // Insert test order
         $sql = "
               INSERT INTO `s_order_basket` (`sessionID`, `userID`, `articlename`, `articleID`, `ordernumber`, `shippingfree`, `quantity`, `price`, `netprice`, `tax_rate`, `datum`, `modus`, `esdarticle`, `partnerID`, `lastviewport`, `useragent`, `config`, `currencyFactor`) VALUES
                 (:firstSession, 0, 'Sonnenbrille Red', 170, 'SW10170', 0, 4, 39.95, 33.571428571429, 19, '2101-09-11 11:49:54', 0, 0, '', 'index', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:22.0) Gecko/20100101 Firefox/22.0 FirePHP/0.7.2', '', 1),
@@ -65,7 +67,7 @@ class Shopware_Tests_Controllers_Backend_CanceledOrderTest extends Enlight_Compo
     }
 
     /**
-     * test if the canceled order statistic returns the right values
+     * Test if the canceled order statistic returns the right values
      *
      * @ticket SW-6624
      */

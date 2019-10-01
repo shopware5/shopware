@@ -76,20 +76,19 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
     },
 
     initComponent: function() {
-        var me = this;
+        this.setWidth(this.basicGridWidth);
 
-        me.setWidth(me.basicGridWidth);
+        this.settings = this.getSettings();
 
-        me.settings = me.getSettings();
+        this.fixEmotionRows();
 
-        me.fixEmotionRows();
+        this.store = this.createStore();
+        this.tpl = this.createGridTemplate();
+        this.itemSelector = '.' + this.itemCls;
 
-        me.store = me.createStore();
-        me.tpl = me.createGridTemplate();
+        this.registerEvents();
 
-        me.registerEvents();
-
-        me.callParent(arguments);
+        this.callParent(arguments);
     },
 
     registerEvents: function() {

@@ -29,7 +29,7 @@ use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="s_mail_log_contact", uniqueConstraints={@ORM\UniqueConstraint(name="s_mail_log_contact_uniq_mail_address", columns={"mail_address"})})
+ * @ORM\Table(name="s_mail_log_contact")
  */
 class Contact extends ModelEntity
 {
@@ -45,7 +45,7 @@ class Contact extends ModelEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="mail_address", type="string", nullable=false, unique=true)
+     * @ORM\Column(name="mail_address", type="string", nullable=false)
      */
     protected $mailAddress;
 

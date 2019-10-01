@@ -29,7 +29,7 @@ class Shopware_Controllers_Widgets_Campaign extends Shopware_Controllers_Widgets
      */
     public function preDispatch()
     {
-        $this->Response()->setHeader('x-robots', 'noindex');
+        $this->Response()->setHeader('x-robots-tag', 'noindex');
     }
 
     /**

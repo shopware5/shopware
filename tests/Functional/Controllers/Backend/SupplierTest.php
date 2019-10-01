@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Backend_SupplierTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Controllers\Backend;
+
+class SupplierTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
      * Supplier dummy data
@@ -43,7 +45,7 @@ class Shopware_Tests_Controllers_Backend_SupplierTest extends Enlight_Components
     {
         parent::setUp();
 
-        // disable auth and acl
+        // Disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
@@ -57,7 +59,7 @@ class Shopware_Tests_Controllers_Backend_SupplierTest extends Enlight_Components
     public function testGetSuppliers()
     {
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        /* @var Enlight_Controller_Response_ResponseTestCase */
+        /* @var \Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/supplier/getSuppliers');
         static::assertTrue($this->View()->success);
 

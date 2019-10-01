@@ -25,6 +25,7 @@
 class Shopware_Tests_Api_PaymentMethodsTest extends PHPUnit\Framework\TestCase
 {
     const API_PATH = '/PaymentMethods/';
+
     public $apiBaseUrl = '';
 
     /**

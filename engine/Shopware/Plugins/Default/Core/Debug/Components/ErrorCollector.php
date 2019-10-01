@@ -32,6 +32,7 @@ class ErrorCollector implements CollectorInterface
      * @var \Shopware_Plugins_Core_ErrorHandler_Bootstrap
      */
     protected $errorHandler;
+
     /**
      * @var Utils
      */

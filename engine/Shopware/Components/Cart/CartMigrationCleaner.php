@@ -33,6 +33,7 @@ class CartMigrationCleaner implements CartMigrationCleanerInterface
      * @var Session
      */
     private $session;
+
     /**
      * @var Connection
      */

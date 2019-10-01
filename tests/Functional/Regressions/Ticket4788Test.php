@@ -32,7 +32,9 @@ class Shopware_RegressionTests_Ticket4788 extends Enlight_Components_Test_Plugin
     protected $backup = null;
 
     protected $shortDescription = '';
+
     protected $longDescription = '&nbsp;äü @ Старт <strong>test</strong>';
+
     protected $longDescriptionStripped = 'äü @ Старт test';
 
     /**

@@ -59,6 +59,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
         'subject' => 'Test Email Subject EN',
         'content' => 'Plaintext Content Example EN',
     ];
+
     /**
      * @var Shopware\Components\Model\ModelManager
      */

@@ -57,6 +57,17 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     /**
      * @return array
      */
+    public function disable()
+    {
+        return [
+            'success' => true,
+            'invalidateCache' => ['template', 'theme'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public function getInfo()
     {
         return [
@@ -144,6 +155,13 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
             $category,
             ($this->Config()->get('includeCustomergroup') ? $context->getCurrentCustomerGroup()->getId() : 'x')
         );
+
+        $eventManager = $this->get('events');
+        $cacheKey = $eventManager->filter('Shopware_Plugins_AdvancedMenu_CacheKey', $cacheKey, [
+            'shopContext' => $context,
+            'config' => $this->Config(),
+        ]);
+
         $cache = Shopware()->Container()->get(\Zend_Cache_Core::class);
 
         if ($this->Config()->get('caching') && $cache->test($cacheKey)) {

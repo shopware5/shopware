@@ -90,7 +90,7 @@ class LogEntryBuilder implements LogEntryBuilderInterface
         $this->assignOrder($logEntry, $mail);
         $this->assignShop($logEntry, $mail);
 
-        $this->assignRecipients($logEntry, $mail->getRecipients());
+        $this->assignRecipients($logEntry, array_map('trim', $mail->getRecipients()));
         $this->assignDocuments($logEntry, $mail);
 
         return $logEntry;

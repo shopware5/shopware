@@ -41,6 +41,7 @@ class EmotionGateway
      * @var FieldHelper
      */
     private $fieldHelper;
+
     /**
      * @var Connection
      */

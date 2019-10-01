@@ -579,7 +579,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     private function loadCategoryContent($requestCategoryId)
     {
-        if (empty($requestCategoryId) && !$this->isValidCategoryPath($requestCategoryId)) {
+        if (empty($requestCategoryId) || !$this->isValidCategoryPath($requestCategoryId)) {
             throw new Enlight_Controller_Exception(
                 'Listing category missing, non-existent or invalid for the current shop',
                 404

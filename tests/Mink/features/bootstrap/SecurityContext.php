@@ -27,6 +27,7 @@ namespace Shopware\Tests\Mink;
 class SecurityContext extends SubContext
 {
     public static $configPath = __DIR__ . '/../../../../config.php';
+
     public static $testConfig = [];
 
     /**
