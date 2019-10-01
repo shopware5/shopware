@@ -92,6 +92,11 @@ abstract class Enlight_Event_Handler
     abstract public function getListener();
 
     /**
+     * Checks if the event listener is callable.
+     */
+    abstract public function isCallable(): bool;
+
+    /**
      * Executes the event handler with the Enlight_Event_EventArgs.
      * @param   Enlight_Event_EventArgs $args
      * @return  mixed
