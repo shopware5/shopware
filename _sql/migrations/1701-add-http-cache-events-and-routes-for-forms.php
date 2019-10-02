@@ -22,23 +22,25 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration1463 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration1701 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
+        // Update user entries
         $values = $this->connection->query('SELECT v.id, v.value FROM s_core_config_values v INNER JOIN s_core_config_elements e ON e.id = v.element_id WHERE e.name = \'cacheControllers\'')
             ->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($values as $row) {
-            $value = unserialize($row['value']);
-            $value = explode("\n", $value);
-            $value[] = 'frontend/forms 14400';
-            $value = implode("\n", $value);
-            $value = serialize($value);
+            $value = $this->addCacheEntry($row['value']);
 
-            $sql = sprintf('UPDATE `s_core_config_values` SET `value` = \'%s\' WHERE id = ' . (int) $row['id'], $value);
+            $sql = sprintf('UPDATE `s_core_config_values` SET `value` = \'%s\' WHERE id = %d', $value, (int) $row['id']);
             $this->addSql($sql);
         }
+
+        // Update default
+        $value = $this->connection->query('SELECT `value` FROM s_core_config_elements WHERE `name` = "cacheControllers"')->fetchColumn();
+        $value = $this->addCacheEntry($value);
+        $this->addSql(sprintf('UPDATE s_core_config_elements SET `value` = \'%s\' WHERE `name` = "cacheControllers"', $value));
 
         $sql = <<<'EOD'
 SET @plugin_id = (SELECT id FROM s_core_plugins WHERE name='HttpCache');
@@ -50,5 +52,14 @@ INSERT IGNORE INTO `s_core_subscribes` (`subscribe`, `type`, `listener`, `plugin
 INSERT IGNORE INTO `s_core_subscribes` (`subscribe`, `type`, `listener`, `pluginID`, `position`) VALUES ('Shopware\\Models\\Form\\Field::postRemove', 0, 'Shopware_Plugins_Core_HttpCache_Bootstrap::onPostPersist', @plugin_id, 0);
 EOD;
         $this->addSql($sql);
+    }
+
+    private function addCacheEntry(string $entry): string
+    {
+        $value = unserialize($entry, ['allowed_classes' => false]);
+        $value = explode("\n", $value);
+        $value[] = 'frontend/forms 14400';
+        $value = implode("\n", $value);
+        return serialize($value);
     }
 }

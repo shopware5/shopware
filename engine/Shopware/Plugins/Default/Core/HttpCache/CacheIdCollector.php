@@ -215,10 +215,7 @@ class CacheIdCollector
         return ['s' . (int) $staticSiteId];
     }
 
-    /**
-     * @return array
-     */
-    private function getFormsCacheIds(Request $request)
+    private function getFormsCacheIds(Request $request): array
     {
         $formsId = $request->getParam('sFid');
         $formsId = $formsId ?: $request->getParam('id');

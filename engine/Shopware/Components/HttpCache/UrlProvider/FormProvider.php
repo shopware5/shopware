@@ -52,7 +52,7 @@ class FormProvider implements UrlProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return self::NAME;
     }
@@ -60,7 +60,7 @@ class FormProvider implements UrlProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getUrls(Context $context, $limit = null, $offset = null)
+    public function getUrls(Context $context, $limit = null, $offset = null): array
     {
         $qb = $this->getBaseQuery()
             ->addSelect(['id'])
@@ -92,7 +92,7 @@ class FormProvider implements UrlProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getCount(Context $context)
+    public function getCount(Context $context): int
     {
         return (int) $this->getBaseQuery()
             ->addSelect(['COUNT(id)'])
@@ -101,10 +101,7 @@ class FormProvider implements UrlProviderInterface
             ->fetchColumn();
     }
 
-    /**
-     * @return QueryBuilder
-     */
-    protected function getBaseQuery()
+    protected function getBaseQuery(): QueryBuilder
     {
         return $this->connection->createQueryBuilder()
             ->from('s_cms_support')
