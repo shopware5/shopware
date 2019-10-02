@@ -330,8 +330,9 @@ Ext.define('Shopware.form.field.TinyMCE',
         }
 
         // Support the readOnly property
-        if(me.readOnly) {
+        if (me.readOnly) {
             me.config.editor.readonly = true;
+            me.config.editor.body_class = 'tinymce-readonly';
         }
 
         // Fire the "beforerendereditor" event
@@ -401,6 +402,10 @@ Ext.define('Shopware.form.field.TinyMCE',
                 value = me.replaceImagePathsWithSmartyPlugin(value);
                 me.setRawValue(value);
             }, 300);
+
+            if (me.readOnly) {
+                ed.dom.doc.firstElementChild.classList.add('tinymce-readonly');
+            }
         });
 
         // Render the TinyMCE editor

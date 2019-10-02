@@ -203,6 +203,7 @@ class CrudService
                 $item->setSupportText($config['supportText']);
                 $item->setHelpText($config['helpText']);
                 $item->setDisplayInBackend((bool) $config['displayInBackend']);
+                $item->setReadonly((bool) $config['readonly']);
                 $item->setLabel($config['label']);
                 $item->setPosition((int) $config['position']);
                 $item->setCustom((bool) $config['custom']);

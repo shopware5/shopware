@@ -90,6 +90,7 @@ Ext.define('Shopware.form.field.Grid', {
             this.searchStore = factory.createEntitySearchStore(this.model);
         }
 
+        me.setReadOnlyProperties();
         me.store = me.initializeStore();
         me.items = me.createItems();
 
@@ -98,6 +99,30 @@ Ext.define('Shopware.form.field.Grid', {
         }
 
         me.callParent(arguments);
+    },
+
+    setReadOnlyProperties: function () {
+        this.allowSorting = !this.readOnly;
+        this.allowDelete = !this.readOnly;
+        this.allowAdd = !this.readOnly;
+
+        if (this.readOnly) {
+            this.cls = 'multi-selection-readonly'
+        }
+    },
+
+    /**
+     *
+     * @param { boolean } readOnly
+     */
+    setReadOnly: function(readOnly) {
+        this.readOnly = readOnly;
+
+        this.setReadOnlyProperties();
+
+        var columns = this.grid.columns;
+        columns[0].setHidden(readOnly);
+        columns[columns.length - 1].down('[cls=sprite-minus-circle-frame]').hidden = readOnly;
     },
 
     initializeStore: function() {
@@ -190,6 +215,7 @@ Ext.define('Shopware.form.field.Grid', {
         }
 
         return {
+            hidden: me.readOnly,
             width: 24,
             hideable: false,
             renderer : me.renderSorthandleColumn
@@ -208,7 +234,7 @@ Ext.define('Shopware.form.field.Grid', {
     createActionColumnItems: function() {
         var items = [];
 
-        if (this.allowDelete) {
+        if (this.allowDelete && !this.readOnly) {
             items.push(this.createDeleteColumn());
         }
 
@@ -219,6 +245,7 @@ Ext.define('Shopware.form.field.Grid', {
         var me = this;
         return {
             action: 'delete',
+            hidden: me.allowDelete,
             iconCls: 'sprite-minus-circle-frame',
             handler: function (view, rowIndex, colIndex, item, opts, record) {
                 me.removeItem(record);
@@ -288,6 +315,8 @@ Ext.define('Shopware.form.field.Grid', {
         }
 
         return {
+            disabled: me.disabled,
+            readOnly: me.readOnly,
             emptyText: emptyText,
             helpText: me.helpText,
             helpTitle: me.helpTitle,

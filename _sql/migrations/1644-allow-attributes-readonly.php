@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -19,35 +20,11 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Styling
- * @subpackage FormPanel
- * @version    $Id$
- * @author shopware AG
  */
-div[id*=form], .shopware-form {
-    & > .#{$prefix}panel-body {
-        background: #f0f2f4;
-    }
-}
-
-.x-form-readonly .x-form-item-body :read-only {
-    background: lightgrey;
-}
-
-.shopware-attribute-form {
-    // Disable cursor for checkboxes
-    .x-form-readonly .x-form-item-body .x-form-checkbox {
-        cursor: not-allowed;
-    }
-
-    // Add background to read-only multi-selection grid
-    .multi-selection-readonly .x-grid-view {
-        background: lightgrey;
-
-        td {
-            background: #E8E8E8;
-        }
+class Migrations_Migration1644 extends Shopware\Components\Migrations\AbstractMigration
+{
+    public function up($modus)
+    {
+        $this->addSql('ALTER TABLE `s_attribute_configuration` ADD `readonly` int(1) NOT NULL;');
     }
 }
