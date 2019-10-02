@@ -89,7 +89,6 @@ class LogService implements LogServiceInterface
             return;
         }
 
-        $this->entityManager->clear();
         $this->entityManager->beginTransaction();
 
         try {
