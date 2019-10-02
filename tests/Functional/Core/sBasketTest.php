@@ -912,7 +912,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             'numorder' => 1,
             'value' => 10,
             'minimumcharge' => 10,
-            'ordercode' => uniqid(rand(), true),
+            'ordercode' => uniqid(random_int(PHP_INT_MIN, PHP_INT_MAX), true),
             'modus' => 0,
             'subshopID' => 3,
             'taxconfig' => $tax['id'],
@@ -924,7 +924,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         $customer = $this->createDummyCustomer();
         $this->session['sUserId'] = $customer->getId();
-        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand(), true);
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(random_int(PHP_INT_MIN, PHP_INT_MAX), true);
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Add one article to the basket with enough value to use discount
@@ -960,7 +960,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             [$this->module->sSYSTEM->sSESSION_ID]
         );
         static::assertEquals($voucherData['value'] * -1, $discount['price']);
-        static::assertEquals($tax['tax'], $discount['tax_rate']);
+        static::assertEquals((float) $tax['tax'], (float) $discount['tax_rate']);
 
         // Test again with the same one-time code, fail
         $result = $this->module->sAddVoucher($voucherData['vouchercode']);

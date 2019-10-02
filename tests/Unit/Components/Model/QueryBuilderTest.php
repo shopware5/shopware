@@ -345,7 +345,7 @@ class QueryBuilderTest extends TestCase
         $expectedResult = [];
         $counter = 0;
         foreach ($testValues as $testValue) {
-            $expectedResult[] = new Parameter(trim($parts[$counter]->getRightExpr(), '()'), $testValue['values'], $testValue['type']);
+            $expectedResult[] = new Parameter(trim($parts[$counter]->getRightExpr(), '()'), $testValue['values']);
             ++$counter;
         }
 

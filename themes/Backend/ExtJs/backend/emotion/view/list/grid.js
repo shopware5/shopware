@@ -247,7 +247,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
         }, {
             xtype: 'actioncolumn',
             header: '{s name=grid/column/action}Actions{/s}',
-            width: 100,
+            width: 105,
             border: 0,
             menuDisabled: true,
             draggable: false,

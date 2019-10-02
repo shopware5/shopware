@@ -2,6 +2,30 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
+## 5.6.3
+
+[View all changes from v5.6.2...v5.6.3](https://github.com/shopware/shopware/compare/v5.6.2...v5.6.3)
+
+### Additions
+
+* Added customer attribute risk rules to risk management
+* Added interface `ArrayAccess` to `Shopware\Bundle\StoreFrontBundle\Struct\Attribute`
+* Added `attribute` to struct data after being converted by the `Shopware\Components\Compatibility\LegacyStructConverter`
+
+### Changes
+
+* Changed aria-label in `themes/Frontend/Bare/frontend/_includes/privacy.tpl` to remove html tags
+* Changed `sAdmin::sRiskATTRIS` to allow any product attribute
+* Changed event manager to log, when event listener is not callable
+* Changed `Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\GraduatedPricesGateway` to consider minimum purchase quantity
+* Changed `\Shopware_Controllers_Frontend_Address::handleExtraData` to split `sessionKey` correctly
+
+### Removals
+
+* Removed the smarty blocks `frontend_blog_bookmarks_delicious` and `frontend_blog_bookmarks_digg` and their content from `themes/Frontend/Bare/frontend/blog/bookmarks.tpl
+* Removed unnecessary `extendsAction` from `Shopware_Controllers_Backend_ExtJs`
+* Removed 'p' parameter and its alias 'sPage' from "NoIndex queries" configuration
+
 ## 5.6.2
 
 [View all changes from v5.6.1...v5.6.2](https://github.com/shopware/shopware/compare/v5.6.1...v5.6.2)
@@ -38,7 +62,6 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `s_mail_log` foreign keys to set null on delete
 * Changed `Item by sales` to consider only products
 * Changed systeminfo to consider mariadb installations
-* Changed PHPStan to 0.11.15
 * Changed `Zend_Cache_Backend_Redis` to make it compatible with PhpRedis 5.0.0
 * Changed `Listing` controller to prevent it from accessing categories of subshops
 * Changed jquery plugins `ajax-product-navigation`, `infinite-scrolling` and `listing-actions` to work with invalid query strings
@@ -459,9 +482,9 @@ Controllers can be now registered using the DI tag `shopware.controller`. This D
 ##### DI:
 
 ```xml
-<service id="swag_example.controller.frontend.test" class="SwagExample\Controller\Frontend\Test">
+<service id="SwagExample\Controller\Frontend\SwagTest">
     <argument type="service" id="dbal_connection"/>
-    <tag name="shopware.controller" module="frontend" controller="test"/>
+    <tag name="shopware.controller" module="frontend" controller="swagTest"/>
 </service>
 ```
 
@@ -474,7 +497,7 @@ namespace SwagExample\Controller\Frontend;
 
 use Doctrine\DBAL\Connection;
 
-class Test extends \Enlight_Controller_Action
+class SwagTest extends \Enlight_Controller_Action
 {
     private $connection;
 

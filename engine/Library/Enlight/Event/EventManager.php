@@ -19,6 +19,8 @@
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Enlight\Event\SubscriberInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * The Enlight_Event_EventManager stores all event listeners.
@@ -45,6 +47,26 @@ class Enlight_Event_EventManager extends Enlight_Class
      *                              registerListener(Enlight_Event_Handler $handler) function.
      */
     protected $listeners = [];
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * Enlight_Event_EventManager constructor.
+     * @param LoggerInterface $logger
+     */
+    public function __construct()
+    {
+        $this->logger = new NullLogger();
+        parent::__construct();
+    }
+
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
 
     /**
      * Returns all event listeners of the Enlight_Event_EventManager
@@ -93,6 +115,28 @@ class Enlight_Event_EventManager extends Enlight_Class
      */
     public function registerListener(Enlight_Event_Handler $handler)
     {
+        if (!$handler->isCallable()) {
+            $handlerInfo = $handler->toArray();
+
+            $listener = $handlerInfo['listener'];
+            if (is_array($listener)) {
+                if (is_object($listener[0])) {
+                    $listener[0] = get_class($listener[0]);
+                }
+
+                $listener = implode('::', $listener);
+            }
+
+            $this->logger->error(sprintf(
+                'The event listener "%s::%s" for the event "%s" cannot be registered because it is not callable.',
+                $handlerInfo['plugin'],
+                $listener,
+                $handlerInfo['name']
+            ));
+
+            return $this;
+        }
+
         $eventName = strtolower($handler->getName());
 
         if (!isset($this->listeners[$eventName])) {

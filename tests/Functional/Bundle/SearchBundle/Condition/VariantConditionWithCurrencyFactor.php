@@ -503,7 +503,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
      *
      * @param ListProduct[] $products
      */
-    private function assertPrices(array  $products, array $prices)
+    private function assertPrices(array $products, array $prices)
     {
         $this->assertPriceCount($products, $prices);
 
