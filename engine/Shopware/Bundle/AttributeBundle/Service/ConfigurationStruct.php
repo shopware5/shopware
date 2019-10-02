@@ -227,18 +227,12 @@ class ConfigurationStruct implements \JsonSerializable
         $this->displayInBackend = $displayInBackend;
     }
 
-    /**
-     * @return bool
-     */
-    public function isReadonly()
+    public function isReadonly(): bool
     {
         return $this->readonly;
     }
 
-    /**
-     * @param bool $readonly
-     */
-    public function setReadonly($readonly)
+    public function setReadonly(bool $readonly): void
     {
         $this->readonly = $readonly;
     }

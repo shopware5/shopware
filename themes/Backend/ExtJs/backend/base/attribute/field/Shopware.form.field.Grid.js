@@ -102,21 +102,27 @@ Ext.define('Shopware.form.field.Grid', {
     },
 
     setReadOnlyProperties: function () {
-        var me = this;
-        me.allowSorting = !me.readOnly;
-        me.allowDelete = !me.readOnly;
-        me.allowAdd = !me.readOnly;
+        this.allowSorting = !this.readOnly;
+        this.allowDelete = !this.readOnly;
+        this.allowAdd = !this.readOnly;
+
+        if (this.readOnly) {
+            this.cls = 'multi-selection-readonly'
+        }
     },
 
+    /**
+     *
+     * @param { boolean } readOnly
+     */
     setReadOnly: function(readOnly) {
-        var me = this;
-        me.readOnly = readOnly;
+        this.readOnly = readOnly;
 
-        me.setReadOnlyProperties();
+        this.setReadOnlyProperties();
 
-        var columns = me.grid.columns;
-        me.grid.columns[0].setHidden(readOnly);
-        me.grid.columns[columns.length - 1].down('[cls=sprite-minus-circle-frame]').hidden = readOnly;
+        var columns = this.grid.columns;
+        columns[0].setHidden(readOnly);
+        columns[columns.length - 1].down('[cls=sprite-minus-circle-frame]').hidden = readOnly;
     },
 
     initializeStore: function() {

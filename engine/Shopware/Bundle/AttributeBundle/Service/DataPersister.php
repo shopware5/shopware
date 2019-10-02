@@ -216,12 +216,15 @@ class DataPersister
             if ($this->mapping->isIdentifierColumn($table, $column->getName())) {
                 continue;
             }
+
             if (!array_key_exists($column->getName(), $data)) {
                 continue;
             }
-            if (in_array($column->getName(), $readOnly)) {
+
+            if (in_array($column->getName(), $readOnly, true)) {
                 continue;
             }
+
             $value = $data[$column->getName()];
 
             if ($this->isDateColumn($column) && !$this->isValidDate($value)) {
@@ -261,11 +264,9 @@ class DataPersister
     }
 
     /**
-     * @param string $table
-     *
      * @return string[]
      */
-    private function getReadOnlyColumns($table)
+    private function getReadOnlyColumns(string $table): array
     {
         $builder = $this->connection->createQueryBuilder();
         $builder
@@ -273,7 +274,7 @@ class DataPersister
             ->from('s_attribute_configuration', 'config')
             ->where('config.table_name = :tablename')
             ->andWhere('config.readonly = 1')
-            ->setParameter('tablename', $table)
+            ->setParameter(':tablename', $table)
         ;
 
         return $builder->execute()->fetchAll(\PDO::FETCH_COLUMN);
