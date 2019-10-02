@@ -108,7 +108,7 @@ Ext.define('Shopware.apps.ProductStream.view.SearchGrid', {
     createActionColumn: function() {
         return {
             xtype: 'actioncolumn',
-            width: 50,
+            width: 55,
             sortable: false,
             items: this.createActionItems()
         };

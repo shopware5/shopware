@@ -47,7 +47,7 @@ class SalesConditionHandler implements ConditionHandlerInterface
      */
     public function generateCondition(
         ConditionInterface $condition,
-        QueryBuilder  $query,
+        QueryBuilder $query,
         ShopContextInterface $context
     ) {
         if (!$query->hasState(self::STATE_INCLUDES_TOPSELLER_TABLE)) {

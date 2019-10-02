@@ -435,6 +435,9 @@ class Shopware_Components_Translation
             }
             if (array_key_exists('documents', $order)) {
                 foreach ($order['documents'] as $documentIndex => $document) {
+                    if (!$document['type']) {
+                        continue;
+                    }
                     $documentTypes[$document['type']['id']] = $document['type'];
                 }
             }

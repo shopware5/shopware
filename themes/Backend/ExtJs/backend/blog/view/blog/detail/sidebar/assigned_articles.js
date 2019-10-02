@@ -235,7 +235,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.AssignedArticles', {
                     flex: 1
                 }, {
                     xtype: 'actioncolumn',
-                    width: 52,
+                    width: 55,
                     items: [
                         {
                             iconCls: 'sprite-inbox',

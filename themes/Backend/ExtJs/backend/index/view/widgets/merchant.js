@@ -193,7 +193,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Merchant', {
             flex: 1
         }, {
             xtype: 'actioncolumn',
-            width: 80,
+            width: 85,
             items: [{
                 iconCls:'sprite-user--arrow',
                 tooltip: me.snippets.tooltips.customer,
