@@ -44,7 +44,7 @@ class WarmUpHttpCacheCommand extends ShopwareCommand implements CompletionAwareI
      *
      * @var string[]
      */
-    private $defaultProviderNames = ['blog', 'category', 'emotion', 'manufacturer', 'product', 'productwithcategory', 'productwithnumber', 'static', 'variantswitch'];
+    private $defaultProviderNames = ['blog', 'category', 'emotion', 'manufacturer', 'product', 'productwithcategory', 'productwithnumber', 'static', 'form', 'variantswitch'];
 
     /**
      * {@inheritdoc}
@@ -84,6 +84,7 @@ class WarmUpHttpCacheCommand extends ShopwareCommand implements CompletionAwareI
             ->addOption('blog', 'g', InputOption::VALUE_NONE, 'Warm up blogs')
             ->addOption('manufacturer', 'm', InputOption::VALUE_NONE, 'Warm up manufacturers')
             ->addOption('static', 't', InputOption::VALUE_NONE, 'Warm up static pages')
+            ->addOption('form', 'f', InputOption::VALUE_NONE, 'Warm up contact form pages')
             ->addOption('product', 'p', InputOption::VALUE_NONE, 'Warm up products')
             ->addOption('variantswitch', 'd', InputOption::VALUE_NONE, 'Warm up variant switch of configurators')
             ->addOption('productwithnumber', 'z', InputOption::VALUE_NONE, 'Warm up products and variants with number parameter')

@@ -414,6 +414,12 @@ class %className% extends ModelEntity
             ];
         }
 
+        // s_emotion has two Doctrine models
+        $classes['s_emotion'] = [
+            'class' => 'Emotion',
+            'namespace' => 'Shopware\Models\Emotion',
+        ];
+
         return $classes;
     }
 

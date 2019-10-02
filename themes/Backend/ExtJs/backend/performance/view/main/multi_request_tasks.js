@@ -153,6 +153,10 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
         productwithcategory: {
             providerLabel: '{s name=progress/productWithCategoryLabel}Products with category parameter{/s}',
             requestUrl: '{url controller="Performance" action="warmUpCache" resource=productwithcategory}',
+        },
+        form: {
+            providerLabel: '{s name=progress/formsLabel}Contact forms{/s}',
+            requestUrl: '{url controller="Performance" action="warmUpCache" resource=form}',
         }
     },
 
