@@ -624,7 +624,7 @@ class VariantConditionWithGraduationTest extends TestCase
      *
      * @param ListProduct[] $products
      */
-    private function assertPrices(array  $products, array $prices)
+    private function assertPrices(array $products, array $prices)
     {
         foreach ($products as $product) {
             $number = $product->getNumber();

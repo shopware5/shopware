@@ -102,11 +102,11 @@ PHP 7.3:
         -   name: mysql:5.7
             alias: mysql
 
-.PHP 7.4: # disabled until available
-    allow_failure: true
+PHP 7.4:
     extends: .phpunit_base
     image: shopware/5-continuous:7.4
     stage: Unit
+    allow_failure: true
     services:
         -   name: mysql:5.7
             alias: mysql
