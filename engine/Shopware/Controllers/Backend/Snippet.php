@@ -901,7 +901,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
                         $settings['fieldmark'], $settings['escaped_fieldmark'], $line[$key]
                     ) . $settings['fieldmark'];
                 } else {
-                    $csv .= "\"" . $line[$key]. "\"";
+                    $csv .= '"' . $line[$key] . '"';
                 }
             }
             if ($lastKey != $key) {
