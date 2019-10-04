@@ -1110,7 +1110,7 @@
                 plugin;
 
             if (!len) {
-                return;
+                return this;
             }
 
             for (; i < len; i++) {
