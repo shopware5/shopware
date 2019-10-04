@@ -1099,6 +1099,7 @@
          * @method destroyPlugin
          * @param {String|jQuery} selector
          * @param {String} pluginName
+         * @returns {StateManager}
          */
         destroyPlugin: function (selector, pluginName) {
             var $el = (typeof selector === 'string') ? $(selector) : selector,
@@ -1109,7 +1110,7 @@
                 plugin;
 
             if (!len) {
-                return;
+                return this;
             }
 
             for (; i < len; i++) {
@@ -1120,6 +1121,8 @@
                     $currentEl.removeData(name);
                 }
             }
+
+            return this;
         },
 
         /**
