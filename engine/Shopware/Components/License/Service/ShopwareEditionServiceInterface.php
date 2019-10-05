@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,36 +24,7 @@
 
 namespace Shopware\Components\License\Service;
 
-use Enlight\Event\SubscriberInterface;
-use Enlight_Controller_Action;
-use Enlight_Event_EventArgs;
-
-class LicenseServiceSubscriber implements SubscriberInterface
+interface ShopwareEditionServiceInterface
 {
-    /**
-     * @var ShopwareEditionServiceInterface
-     */
-    private $shopwareEditionService;
-
-    public function __construct(ShopwareEditionServiceInterface $shopwareEditionService)
-    {
-        $this->shopwareEditionService = $shopwareEditionService;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents()
-    {
-        return [
-            'Enlight_Controller_Action_PostDispatchSecure_Backend_Index' => 'onPostDispatchBackendIndex',
-        ];
-    }
-
-    public function onPostDispatchBackendIndex(Enlight_Event_EventArgs $args)
-    {
-        /** @var Enlight_Controller_Action $controller */
-        $controller = $args->get('subject');
-        $controller->View()->assign('product', $this->shopwareEditionService->getProductEdition());
-    }
+    public function getProductEdition(): string;
 }
