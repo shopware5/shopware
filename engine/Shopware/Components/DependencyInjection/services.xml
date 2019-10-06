@@ -541,6 +541,7 @@
         <service id="shopware_core.license_service_subscriber" class="Shopware\Components\License\Service\LicenseServiceSubscriber">
             <tag name="shopware.event_subscriber" />
             <argument type="service" id="Shopware\Components\License\Service\ShopwareEditionServiceInterface" />
+            <argument type="service" id="plugins" />
         </service>
 
         <service id="shopware_core.local_license_unpack_service" class="Shopware\Components\License\Service\LocalLicenseUnpackService" />

@@ -27,6 +27,9 @@ namespace Shopware\Components\License\Service;
 use Enlight\Event\SubscriberInterface;
 use Enlight_Controller_Action;
 use Enlight_Event_EventArgs;
+use Enlight_Plugin_PluginManager;
+use Shopware\Components\License\Struct\ShopwareEdition;
+use Shopware_Plugins_Backend_Auth_Bootstrap;
 
 class LicenseServiceSubscriber implements SubscriberInterface
 {
@@ -35,9 +38,17 @@ class LicenseServiceSubscriber implements SubscriberInterface
      */
     private $shopwareEditionService;
 
-    public function __construct(ShopwareEditionServiceInterface $shopwareEditionService)
-    {
+    /**
+     * @var Enlight_Plugin_PluginManager
+     */
+    private $plugins;
+
+    public function __construct(
+        ShopwareEditionServiceInterface $shopwareEditionService,
+        Enlight_Plugin_PluginManager $plugins
+    ) {
         $this->shopwareEditionService = $shopwareEditionService;
+        $this->plugins = $plugins;
     }
 
     /**
@@ -54,6 +65,15 @@ class LicenseServiceSubscriber implements SubscriberInterface
     {
         /** @var Enlight_Controller_Action $controller */
         $controller = $args->get('subject');
-        $controller->View()->assign('product', $this->shopwareEditionService->getProductEdition());
+        $edition = $this->hasBackendLogin() ? $this->shopwareEditionService->getProductEdition() : ShopwareEdition::CE;
+        $controller->View()->assign('product', $edition);
+    }
+
+    protected function hasBackendLogin(): bool
+    {
+        /** @var Shopware_Plugins_Backend_Auth_Bootstrap $authPlugin */
+        $authPlugin = $this->plugins->get('Backend')->get('Auth');
+
+        return $authPlugin->checkAuth() !== null;
     }
 }
