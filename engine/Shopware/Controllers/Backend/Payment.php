@@ -267,7 +267,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
             } else {
                 $result['iconCls'] = 'sprite-cross-small';
             }
-            $result['text'] = $result['translatedDescription'] . ' (' . $result['id'] . ')';
+            $result['text'] = $result['translatedDescription'];
             $result['leaf'] = true;
 
             // Matches the surcharges with the countries

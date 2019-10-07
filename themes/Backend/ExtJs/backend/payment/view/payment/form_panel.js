@@ -85,8 +85,9 @@ Ext.define('Shopware.apps.Payment.view.payment.FormPanel', {
             name: 'name'
         },{
             xtype: 'textfield',
-            hidden: true,
-            name: 'id'
+            name: 'id',
+            fieldLabel: '{s name=formpanel_id_label}Id{/s}',
+            disabled: true
         },{
             xtype: 'textfield',
             fieldLabel: '{s name=formpanel_template_label}Template{/s}',
