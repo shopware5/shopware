@@ -130,9 +130,9 @@ class Basket extends ModelEntity
     private $netPrice = 0;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
-     * @ORM\Column(name="datum", type="datetime", nullable=false)
+     * @ORM\Column(name="datum", type="datetime", nullable=true)
      */
     private $date;
 
@@ -397,7 +397,7 @@ class Basket extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getDate()
     {
@@ -405,7 +405,7 @@ class Basket extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $date
+     * @param \DateTimeInterface|null $date
      */
     public function setDate($date)
     {

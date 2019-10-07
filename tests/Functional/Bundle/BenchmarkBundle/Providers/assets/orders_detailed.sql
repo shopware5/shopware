@@ -21,23 +21,23 @@ INSERT INTO `s_order` (`id`, `ordernumber`, `userID`, `invoice_amount`, `invoice
     (9, '20009', 6, 120.00, 20.00, 4, 7, 0, 0, '2012-08-30 15:50:00', 0, 0, '', '', '', '', 0, 0, '', '', '', NULL, '', '1', 'EUR', 1, 2, '', NULL, '1998-01-01 00:00:00');
 
 INSERT INTO `s_order_details` (`orderID`, `ordernumber`, `articleID`, `articleordernumber`, `price`, `quantity`, `name`, `ean`, `unit`, `pack_unit`, `status`, `shipped`, `shippedgroup`, `releasedate`, `modus`, `esdarticle`, `taxID`, `tax_rate`, `config`) VALUES
-    (1, '20001', 10, 'SW10010', 150.00, 1, 'Example product 1', 'example_ean', NULL, NULL, 0, 0, 0, '0000-00-00', 0, 1, 1, 19, ''),
-    (1, '20001', 11, 'SW10011', 20, 4, 'Example product 2', NULL, NULL, NULL, 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
-    (2, '20002', 12, 'SW10012', 30, 1, 'Example product 3', NULL, 'liter', 'bottles', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
-    (3, '20003', 13, 'SW10013', 40, 3, 'Example product 4', NULL, NULL, NULL, 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
-    (4, '20004', 14, 'SW10014', 50, 5, 'Example product 5', NULL, NULL, NULL, 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
-    (4, '20004', 15, 'SW10015', 60, 7, 'Example product 6', NULL, NULL, NULL, 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
-    (4, '20004', 16, 'SW10016', 70, 1, 'Example product 7', NULL, NULL, NULL, 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
-    (5, '20005', 17, 'SW10017', 80, 2, 'Example product 8', NULL, NULL, NULL, 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
-    (5, '20005', 18, 'SW10018', 90, 1, 'Example product 9', NULL, NULL, NULL, 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
-    (6, '20006', 19, 'SW10019', 100, 6, 'Example product 10', NULL, NULL, NULL, 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
-    (6, '20006', 20, 'SW10020', 110, 9, 'Example product 11', NULL, NULL, NULL, 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
-    (6, '20006', 21, 'SW10021', 120, 1, 'Example product 12', NULL, NULL, NULL, 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
-    (7, '20007', 22, 'SW10022', 130, 2, 'Example product 13', NULL, NULL, NULL, 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
-    (7, '20007', 23, 'SW10023', 140, 4, 'Example product 14', NULL, NULL, NULL, 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
-    (7, '20007', 24, 'SW10024', 150, 5, 'Example product 15', NULL, NULL, NULL, 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
-    (7, '20007', 25, 'SW10025', 160, 2, 'Example product 16', NULL, NULL, NULL, 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
-    (8, '20008', 26, 'SW10026', 170, 1, 'Example product 17', NULL, NULL, NULL, 0, 0, 0, '0000-00-00', 0, 0, 1, 19, '');
+    (1, '20001', 10, 'SW10010', 150.00, 1, 'Example product 1', 'example_ean', NULL, NULL, 0, 0, 0, '2010-01-01', 0, 1, 1, 19, ''),
+    (1, '20001', 11, 'SW10011', 20, 4, 'Example product 2', NULL, NULL, NULL, 0, 0, 0, '2010-01-01', 0, 0, 1, 19, ''),
+    (2, '20002', 12, 'SW10012', 30, 1, 'Example product 3', NULL, 'liter', 'bottles', 0, 0, 0, '2010-01-01', 0, 0, 1, 19, ''),
+    (3, '20003', 13, 'SW10013', 40, 3, 'Example product 4', NULL, NULL, NULL, 0, 0, 0, '2010-01-01', 0, 0, 1, 19, ''),
+    (4, '20004', 14, 'SW10014', 50, 5, 'Example product 5', NULL, NULL, NULL, 0, 0, 0, '2010-01-01', 0, 0, 1, 19, ''),
+    (4, '20004', 15, 'SW10015', 60, 7, 'Example product 6', NULL, NULL, NULL, 0, 0, 0, '2010-01-01', 0, 0, 1, 19, ''),
+    (4, '20004', 16, 'SW10016', 70, 1, 'Example product 7', NULL, NULL, NULL, 0, 0, 0, '2010-01-01', 0, 0, 1, 19, ''),
+    (5, '20005', 17, 'SW10017', 80, 2, 'Example product 8', NULL, NULL, NULL, 0, 0, 0, '2010-01-01', 0, 0, 1, 19, ''),
+    (5, '20005', 18, 'SW10018', 90, 1, 'Example product 9', NULL, NULL, NULL, 0, 0, 0, '2010-01-01', 0, 0, 1, 19, ''),
+    (6, '20006', 19, 'SW10019', 100, 6, 'Example product 10', NULL, NULL, NULL, 0, 0, 0, '2010-01-01', 0, 0, 1, 19, ''),
+    (6, '20006', 20, 'SW10020', 110, 9, 'Example product 11', NULL, NULL, NULL, 0, 0, 0, '2010-01-01', 0, 0, 1, 19, ''),
+    (6, '20006', 21, 'SW10021', 120, 1, 'Example product 12', NULL, NULL, NULL, 0, 0, 0, '2010-01-01', 0, 0, 1, 19, ''),
+    (7, '20007', 22, 'SW10022', 130, 2, 'Example product 13', NULL, NULL, NULL, 0, 0, 0, '2010-01-01', 0, 0, 1, 19, ''),
+    (7, '20007', 23, 'SW10023', 140, 4, 'Example product 14', NULL, NULL, NULL, 0, 0, 0, '2010-01-01', 0, 0, 1, 19, ''),
+    (7, '20007', 24, 'SW10024', 150, 5, 'Example product 15', NULL, NULL, NULL, 0, 0, 0, '2010-01-01', 0, 0, 1, 19, ''),
+    (7, '20007', 25, 'SW10025', 160, 2, 'Example product 16', NULL, NULL, NULL, 0, 0, 0, '2010-01-01', 0, 0, 1, 19, ''),
+    (8, '20008', 26, 'SW10026', 170, 1, 'Example product 17', NULL, NULL, NULL, 0, 0, 0, '2010-01-01', 0, 0, 1, 19, '');
 
 UPDATE `s_benchmark_config` SET last_order_id=0, batch_size=5;
 

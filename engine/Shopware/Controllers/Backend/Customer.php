@@ -359,7 +359,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $customer->fromArray($params);
 
         // If user will be activated, but the first login is still 0, because he was in doi-process
-        if ($customer->getActive() && $customer->getFirstLogin()->getTimestamp() === 0) {
+        if ($customer->getActive() && (!$customer->getFirstLogin() || $customer->getFirstLogin()->getTimestamp() === 0)) {
             $customer->setFirstLogin(new DateTime());
         }
 

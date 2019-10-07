@@ -195,6 +195,12 @@ class Partner extends ModelEntity
      */
     private $orders;
 
+    public function __construct()
+    {
+        $this->date = new \DateTime();
+        $this->orders = new ArrayCollection();
+    }
+
     /**
      * @return int
      */

@@ -397,7 +397,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         // Test that it's the same user, but with different last login
         static::assertEquals($modifiedMd5User['email'], $customer->getEmail());
         static::assertEquals($modifiedMd5User['password'], md5('fooobar'));
-        static::assertNotEquals($modifiedMd5User['lastlogin'], $customer->getLastLogin()->format('Y-m-d H:i:s'));
+        static::assertNotEquals($modifiedMd5User['lastlogin'], $customer->getLastLogin() ? $customer->getLastLogin()->format('Y-m-d H:i:s') : null);
 
         // Test inactive account
         Shopware()->Db()->update('s_user', ['active' => 0], 'id = ' . $customer->getId());
@@ -1032,7 +1032,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             'status' => '0',
             'shipped' => '0',
             'shippedgroup' => '0',
-            'releasedate' => '0000-00-00',
+            'releasedate' => null,
             'modus' => '0',
             'esdarticle' => '1',
             'taxID' => '1',
@@ -1155,9 +1155,9 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         Shopware()->Db()->query("
             INSERT IGNORE INTO `s_order_details` (`orderID`, `ordernumber`, `articleID`, `articleordernumber`, `price`, `quantity`, `name`, `status`, `shipped`, `shippedgroup`, `releasedate`, `modus`, `esdarticle`, `taxID`, `tax_rate`, `config`) VALUES
-            (?, ?, 12, 'SW10012', 9.99, 1, 'Kobra Vodka 37,5%', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
-            (?, ?, 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, ''),
-            (?, ?, 0, 'sw-surcharge', 5, 1, 'Mindermengenzuschlag', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, '');
+            (?, ?, 12, 'SW10012', 9.99, 1, 'Kobra Vodka 37,5%', 0, 0, 0, NULL, 0, 0, 1, 19, ''),
+            (?, ?, 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, NULL, 4, 0, 0, 19, ''),
+            (?, ?, 0, 'sw-surcharge', 5, 1, 'Mindermengenzuschlag', 0, 0, 0, NULL, 4, 0, 0, 19, '');
         ", [
             $orderId, $orderNumber,
             $orderId, $orderNumber,

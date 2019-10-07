@@ -164,7 +164,7 @@ class Queue
             $queueId = $queue->getId();
         }
 
-        $this->getBackupResource()->create($results, $operations, $newBackup, $queue->getCreated()->getTimestamp());
+        $this->getBackupResource()->create($results, $operations, $newBackup, $queue->getCreated() ? $queue->getCreated()->getTimestamp() : time());
 
         // Tested this with ~140k products - compared with pure SQL this is reasonable fast
         // In most cases the filter query will be the bottleneck
@@ -194,7 +194,8 @@ class Queue
         // When done, set the queue to active and finish the backup
         if ($done) {
             $queue->setActive(true);
-            $this->getBackupResource()->finishBackup($filterString, $operations, $queue->getInitialSize(), $queue->getCreated()->getTimestamp());
+            $timestamp = $queue->getCreated() ? $queue->getCreated()->getTimestamp() : null;
+            $this->getBackupResource()->finishBackup($filterString, $operations, $queue->getInitialSize(), $timestamp);
         }
 
         $entityManager->flush();

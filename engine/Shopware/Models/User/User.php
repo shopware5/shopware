@@ -125,7 +125,7 @@ class User extends ModelEntity
     /**
      * @var \DateTimeInterface
      *
-     * @ORM\Column(name="lastlogin", type="datetime", nullable=false)
+     * @ORM\Column(name="lastlogin", type="datetime", nullable=true)
      */
     private $lastLogin;
 
@@ -160,7 +160,7 @@ class User extends ModelEntity
     /**
      * @var \DateTimeInterface
      *
-     * @ORM\Column(name="lockeduntil", type="datetime", nullable=false)
+     * @ORM\Column(name="lockeduntil", type="datetime", nullable=true)
      */
     private $lockedUntil;
 
@@ -188,15 +188,6 @@ class User extends ModelEntity
      * @ORM\JoinColumn(name="roleID", referencedColumnName="id")
      */
     private $role;
-
-    /**
-     * Initial the date fields
-     */
-    public function __construct()
-    {
-        $this->lastLogin = new \DateTime();
-        $this->lockedUntil = new \DateTime();
-    }
 
     /**
      * @return int
@@ -295,13 +286,13 @@ class User extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface|string $lastLogin
+     * @param \DateTimeInterface|string|null $lastLogin
      *
      * @return User
      */
     public function setLastLogin($lastLogin)
     {
-        if (!$lastLogin instanceof \DateTimeInterface) {
+        if ($lastLogin !== null && !($lastLogin instanceof \DateTimeInterface)) {
             $lastLogin = new \DateTime((string) $lastLogin);
         }
         $this->lastLogin = $lastLogin;
@@ -310,7 +301,7 @@ class User extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getLastLogin()
     {
@@ -411,7 +402,7 @@ class User extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getLockedUntil()
     {
