@@ -103,7 +103,7 @@ class StaticProvider implements UrlProviderInterface
         $countSitesForXhr = (int) $this->getBaseQuery()
             ->addSelect(['COUNT(id)'])
             ->setParameter(':shop', $context->getShopId())
-            ->andWhere('link IS NULL OR or link = ""')
+            ->andWhere('link IS NULL OR link = ""')
             ->execute()
             ->fetchColumn();
 
@@ -147,10 +147,7 @@ class StaticProvider implements UrlProviderInterface
         return $query;
     }
 
-    /**
-     * @return array|null
-     */
-    private function createXhrRequestParameters(array $custom)
+    private function createXhrRequestParameters(array $custom): ?array
     {
         if (empty($custom['link'])) {
             return ['sViewport' => 'custom', 'sCustom' => $custom['id'], 'isXHR' => 1];
