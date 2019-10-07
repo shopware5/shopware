@@ -79,23 +79,12 @@ class StaticProvider implements UrlProviderInterface
         }
 
         return $this->router->generateList(
-            array_filter(array_map(
-                function ($custom) {
-                    if (empty($custom['link']) || !$this->isShopwareLink($custom['link'])) {
-                        return ['sViewport' => 'custom', 'sCustom' => $custom['id']];
-                    }
-                    $parts = parse_url($custom['link']);
-                    parse_str($parts['query'], $query);
-
-                    if (isset($query['sViewport,registerFC'])) {
-                        unset($query['sViewport,registerFC']);
-                        $query['sViewport'] = 'registerFC';
-                    }
-
-                    return $query;
-                },
-                $result
-            )),
+            array_filter(
+                array_merge(
+                    array_map([$this, 'createRequestParameters'], $result),
+                    array_map([$this, 'createXhrRequestParameters'], $result)
+                )
+            ),
             $context
         );
     }
@@ -105,11 +94,20 @@ class StaticProvider implements UrlProviderInterface
      */
     public function getCount(Context $context)
     {
-        return (int) $this->getBaseQuery()
+        $countSites = (int) $this->getBaseQuery()
             ->addSelect(['COUNT(id)'])
             ->setParameter(':shop', $context->getShopId())
             ->execute()
             ->fetchColumn();
+
+        $countSitesForXhr = (int) $this->getBaseQuery()
+            ->addSelect(['COUNT(id)'])
+            ->setParameter(':shop', $context->getShopId())
+            ->andWhere('link IS NULL OR link = ""')
+            ->execute()
+            ->fetchColumn();
+
+        return $countSites + $countSitesForXhr;
     }
 
     /**
@@ -131,5 +129,30 @@ class StaticProvider implements UrlProviderInterface
     private function isShopwareLink($link)
     {
         return strpos($link, 'shopware.php') !== false;
+    }
+
+    private function createRequestParameters(array $custom): array
+    {
+        if (empty($custom['link']) || !$this->isShopwareLink($custom['link'])) {
+            return ['sViewport' => 'custom', 'sCustom' => $custom['id']];
+        }
+        $parts = parse_url($custom['link']);
+        parse_str($parts['query'], $query);
+
+        if (isset($query['sViewport,registerFC'])) {
+            unset($query['sViewport,registerFC']);
+            $query['sViewport'] = 'registerFC';
+        }
+
+        return $query;
+    }
+
+    private function createXhrRequestParameters(array $custom): ?array
+    {
+        if (empty($custom['link'])) {
+            return ['sViewport' => 'custom', 'sCustom' => $custom['id'], 'isXHR' => 1];
+        }
+
+        return null;
     }
 }
