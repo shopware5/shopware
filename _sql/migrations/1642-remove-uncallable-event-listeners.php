@@ -21,10 +21,24 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-class Migrations_Migration1644 extends Shopware\Components\Migrations\AbstractMigration
+
+class Migrations_Migration1642 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
-        $this->addSql('ALTER TABLE `s_attribute_configuration` ADD `readonly` int(1) NOT NULL;');
+        $uncallableListeners = [
+            'Shopware_Plugins_Backend_Menu_Bootstrap::onInitResourceMenu',
+            'Shopware_Plugins_Core_Router_Bootstrap::onFilterAssemble',
+            'Shopware_Plugins_Core_Router_Bootstrap::onFilterUrl',
+            'Shopware_Plugins_Core_Router_Bootstrap::onAssemble',
+            'Shopware_Plugins_Backend_Check_Bootstrap::onGetControllerPathBackend',
+            'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::initTopSeller',
+        ];
+
+        $sql = 'DELETE FROM s_core_subscribes WHERE listener = "%s";';
+
+        foreach ($uncallableListeners as $uncallableListener) {
+            $this->addSql(sprintf($sql, $uncallableListener));
+        }
     }
 }

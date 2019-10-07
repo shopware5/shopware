@@ -21,24 +21,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-class Migrations_Migration1643 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration1644 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
-        $uncallableListeners = [
-            'Shopware_Plugins_Backend_Menu_Bootstrap::onInitResourceMenu',
-            'Shopware_Plugins_Core_Router_Bootstrap::onFilterAssemble',
-            'Shopware_Plugins_Core_Router_Bootstrap::onFilterUrl',
-            'Shopware_Plugins_Core_Router_Bootstrap::onAssemble',
-            'Shopware_Plugins_Backend_Check_Bootstrap::onGetControllerPathBackend',
-            'Shopware_Plugins_Core_MarketingAggregate_Bootstrap::initTopSeller',
-        ];
-
-        $sql = 'DELETE FROM s_core_subscribes WHERE listener = "%s";';
-
-        foreach ($uncallableListeners as $uncallableListener) {
-            $this->addSql(sprintf($sql, $uncallableListener));
-        }
+        // Add scope to hrefLangCountry
+        $sql = "UPDATE `s_core_config_elements` SET `scope` = 1 WHERE `name` = 'hrefLangCountry'";
+        $this->addSql($sql);
     }
 }
