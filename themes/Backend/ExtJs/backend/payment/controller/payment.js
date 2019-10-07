@@ -291,6 +291,11 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
         }else{
             btnDelete.disable();
         }
+
+        form.fieldsetWrapper.setTitle(Ext.String.format(
+            form.snippets.fieldsetTitleFormat,
+            record.get("description"), record.get("id")
+        ));
         tabPanel.setDisabled(false);
         btnSave.enable(true);
         tabPanel.setActiveTab(0);
