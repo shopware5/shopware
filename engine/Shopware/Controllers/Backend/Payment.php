@@ -64,7 +64,10 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
     {
         $this->repository = Shopware()->Models()->getRepository(Payment::class);
 
-        $query = $this->repository->getListQuery();
+        $query = $this->repository->getListQuery(null, [
+            ['property' => 'payment.active', 'direction' => 'DESC'],
+            ['property' => 'payment.position'],
+        ]);
         $results = $query->getArrayResult();
 
         // Translate payments
