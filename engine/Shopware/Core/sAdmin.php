@@ -3216,9 +3216,10 @@ class sAdmin implements \Enlight_Hook
             $newHash = $this->passwordEncoder->reencodePassword($plaintext, $hash, $encoderName);
         }
 
+        $userId = (int) $getUser['id'];
+
         if (!empty($newHash) && $newHash !== $hash) {
             $hash = $newHash;
-            $userId = (int) $getUser['id'];
             $this->db->update(
                 's_user',
                 [
@@ -3229,9 +3230,23 @@ class sAdmin implements \Enlight_Hook
             );
         }
 
+        // Update note userID
+        $uniqueId = $this->front->Request()->getCookie('sUniqueID');
+        if (!empty($uniqueId)) {
+            $this->connection->executeQuery(
+                'UPDATE s_order_notes SET userID = :userId, sUniqueID = NULL WHERE sUniqueID = :uniqueId AND userID = 0',
+                [
+                    'userId' => $userId,
+                    'uniqueId' => $uniqueId,
+                ]
+            );
+            //destroy cookie
+            $this->front->Response()->setCookie('sUniqueID');
+        }
+
         $this->session->offsetSet('sUserMail', $email);
         $this->session->offsetSet('sUserPassword', $hash);
-        $this->session->offsetSet('sUserId', $getUser['id']);
+        $this->session->offsetSet('sUserId', $userId);
 
         if (!$this->sCheckUser()) {
             return;
