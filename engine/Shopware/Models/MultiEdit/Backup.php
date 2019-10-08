@@ -72,7 +72,7 @@ class Backup extends ModelEntity
     /**
      * @var \DateTimeInterface
      *
-     * @ORM\Column(name="date", type="datetime", nullable=null)
+     * @ORM\Column(name="date", type="datetime", nullable=false)
      */
     private $date;
 

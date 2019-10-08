@@ -26,6 +26,22 @@ This changelog references changes done in Shopware 5.7 patch versions.
     * `Shopware\Bundle\OrderBundle\Subscriber\OrderRecalculationSubscriber`
 * Changed `Enlight_Components_Session_Namespace` to extend from `Symfony\Component\HttpFoundation\Session\Session`
 * Changed the default config for smarty `compileCheck` to false
+* Changed following columns to nullable
+    * `s_order_details.releasedate`
+    * `s_core_auth.lastlogin`
+    * `s_campaigns_logs.datum`
+    * `s_emarketing_banners.valid_from`
+    * `s_emarketing_banners.valid_to`
+    * `s_emarketing_lastarticles.time`
+    * `s_emarketing_tellafriend.datum`
+    * `s_order_basket.datum`
+    * `s_order_comparisons.datum`
+    * `s_order_notes.datum`
+    * `s_statistics_pool.datum`
+    * `s_statistics_referer.datum`
+    * `s_statistics_visitors.datum`
+    * `s_user.firstlogin`
+    * `s_user.lastlogin`
 
 ### Removals
 

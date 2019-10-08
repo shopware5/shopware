@@ -72,7 +72,7 @@ class Filter extends ModelEntity
     /**
      * @var \DateTimeInterface|null
      *
-     * @ORM\Column(name="created", type="datetime", nullable=null)
+     * @ORM\Column(name="created", type="datetime", nullable=false)
      */
     private $created;
 
