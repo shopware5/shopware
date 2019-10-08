@@ -433,6 +433,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                                fieldLabel: '{s name=create_user/email}Email address{/s}',
                                anchor: '100%',
                                vtype: 'remote',
+                               checkChangeBuffer: 500,
                                validationUrl: '{url controller="base" action="validateEmail"}',
                                validationErrorMsg: '{s name=invalid_email namespace=backend/base/vtype}The email address entered is not valid{/s}',
                                name: 'email',
