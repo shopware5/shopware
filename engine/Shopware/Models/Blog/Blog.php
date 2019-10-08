@@ -308,8 +308,6 @@ class Blog extends ModelEntity
     }
 
     /**
-     * Set Views
-     *
      * @param int $views
      */
     public function setViews($views)

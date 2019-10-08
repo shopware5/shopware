@@ -309,10 +309,7 @@ class BenchmarkConfig extends ModelEntity
         return $this->lastUpdatedOrdersDate;
     }
 
-    /**
-     * @param \DateTimeInterface|null $lastUpdatedOrdersDate
-     */
-    public function setLastUpdatedOrdersDate($lastUpdatedOrdersDate)
+    public function setLastUpdatedOrdersDate(\DateTimeInterface $lastUpdatedOrdersDate = null)
     {
         $this->lastUpdatedOrdersDate = $lastUpdatedOrdersDate;
     }
@@ -421,10 +418,7 @@ class BenchmarkConfig extends ModelEntity
         return $this->locked;
     }
 
-    /**
-     * @param \DateTimeInterface|null $locked
-     */
-    public function setLocked($locked)
+    public function setLocked(\DateTimeInterface $locked = null)
     {
         $this->locked = $locked;
     }

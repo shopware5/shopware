@@ -454,9 +454,9 @@ class Article extends ModelEntity
     private $notification = false;
 
     /**
-     * @var string|null
+     * @var string
      *
-     * @ORM\Column(name="template", type="string", length=255, nullable=true)
+     * @ORM\Column(name="template", type="string", length=255, nullable=false)
      */
     private $template = '';
 
@@ -781,7 +781,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param string|null $template
+     * @param string $template
      *
      * @return Article
      */
@@ -793,7 +793,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getTemplate()
     {

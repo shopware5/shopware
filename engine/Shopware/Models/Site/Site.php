@@ -203,7 +203,7 @@ class Site extends ModelEntity
     /**
      * @var int|null
      *
-     * @ORM\Column(name="parentID", type="integer", nullable=true)
+     * @ORM\Column(name="parentID", type="integer", nullable=false)
      */
     private $parentId;
 
@@ -519,7 +519,7 @@ class Site extends ModelEntity
     }
 
     /**
-     * @return int|null
+     * @return int
      */
     public function getParentId()
     {

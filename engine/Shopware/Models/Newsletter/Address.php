@@ -82,9 +82,9 @@ class Address extends LazyFetchModelEntity
     /**
      * ID of the newsletter-group this mail address belongs to
      *
-     * @var int|null
+     * @var int
      *
-     * @ORM\Column(name="groupID", type="integer", length=11, nullable=true)
+     * @ORM\Column(name="groupID", type="integer", length=11, nullable=false)
      */
     private $groupId = 0;
 
@@ -246,7 +246,7 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Newsletter\Group|null $newsletterGroup
+     * @param \Shopware\Models\Newsletter\Group $newsletterGroup
      *
      * @return Address
      */
@@ -258,7 +258,7 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Newsletter\Group|null
+     * @return \Shopware\Models\Newsletter\Group
      */
     public function getNewsletterGroup()
     {
@@ -266,7 +266,7 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @param int|null $groupId
+     * @param int $groupId
      */
     public function setGroupId($groupId)
     {
@@ -274,7 +274,7 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @return int|null
+     * @return int
      */
     public function getGroupId()
     {

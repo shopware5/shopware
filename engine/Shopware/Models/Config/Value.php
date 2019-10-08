@@ -124,7 +124,6 @@ class Value extends ModelEntity
     /**
      * @param string $value
      *
-     *
      * @return Value
      */
     public function setValue($value)

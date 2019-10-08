@@ -92,7 +92,7 @@ class ArticleImpression extends ModelEntity
     /**
      * @var string|null
      *
-     * @ORM\Column(name="deviceType", type="string", length=50, nullable=true)
+     * @ORM\Column(name="deviceType", type="string", length=50, nullable=false)
      */
     private $deviceType;
 
@@ -218,7 +218,7 @@ class ArticleImpression extends ModelEntity
     }
 
     /**
-     * @param string|null $deviceType
+     * @param string $deviceType
      */
     public function setDeviceType($deviceType)
     {
@@ -226,7 +226,7 @@ class ArticleImpression extends ModelEntity
     }
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getDeviceType()
     {

@@ -83,7 +83,7 @@ class Banner extends ModelEntity
      *
      * @var int|null
      *
-     * @ORM\Column(name="clicks", type="integer", nullable=true)
+     * @ORM\Column(name="clicks", type="integer", nullable=false)
      */
     private $clicks;
 
@@ -92,7 +92,7 @@ class Banner extends ModelEntity
      *
      * @var int|null
      *
-     * @ORM\Column(name="views", type="integer", nullable=true)
+     * @ORM\Column(name="views", type="integer", nullable=false)
      */
     private $views;
 
@@ -160,7 +160,7 @@ class Banner extends ModelEntity
     /**
      * Returns the amount of clicks on a particular banner.
      *
-     * @return int|null
+     * @return int
      */
     public function getClicks()
     {
@@ -170,7 +170,7 @@ class Banner extends ModelEntity
     /**
      * Sets the numbers of clicks this banner received
      *
-     * @param int|null $clicks
+     * @param int $clicks
      *
      * @return Banner
      */
@@ -184,7 +184,7 @@ class Banner extends ModelEntity
     /**
      * Return the number of times a banner has been shown
      *
-     * @return int|null
+     * @return int
      */
     public function getViews()
     {
@@ -194,7 +194,7 @@ class Banner extends ModelEntity
     /**
      * Sets the number of times the banner has been displayed.
      *
-     * @param int|null $views
+     * @param int $views
      *
      * @return Banner
      */

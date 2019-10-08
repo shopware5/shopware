@@ -792,8 +792,6 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * Get bindWeekdayTo
-     *
      * @return int|null
      */
     public function getBindWeekdayTo()
