@@ -75,7 +75,7 @@ class ComponentInstaller
             $component = new Component();
         }
 
-        $config = array_merge(self::COMPONENT_DEFAULTS, $data);
+        $config = array_merge(static::COMPONENT_DEFAULTS, ['name' => $componentName], $data);
         $component->fromArray($config);
         $component->setPluginId($plugin->getId());
         $component->setPlugin($plugin);

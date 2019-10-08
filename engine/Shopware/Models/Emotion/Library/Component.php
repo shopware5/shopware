@@ -31,7 +31,7 @@ use Shopware\Models\Plugin\Plugin;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="s_library_component")
+ * @ORM\Table(name="s_library_component", uniqueConstraints={@ORM\UniqueConstraint(name="name_idx", columns={"name", "pluginID"})})
  */
 class Component extends ModelEntity
 {
