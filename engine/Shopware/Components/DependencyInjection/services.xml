@@ -533,9 +533,15 @@
             <tag name="shopware.event_subscriber" />
         </service>
 
+        <service id="Shopware\Components\License\Service\ShopwareEditionServiceInterface" class="Shopware\Components\License\Service\ShopwareEditionService">
+            <argument type="service" id="models"/>
+            <argument type="service" id="shopware_core.local_license_unpack_service" />
+        </service>
+
         <service id="shopware_core.license_service_subscriber" class="Shopware\Components\License\Service\LicenseServiceSubscriber">
-            <argument type="service" id="service_container" />
             <tag name="shopware.event_subscriber" />
+            <argument type="service" id="Shopware\Components\License\Service\ShopwareEditionServiceInterface" />
+            <argument type="service" id="plugins" />
         </service>
 
         <service id="shopware_core.local_license_unpack_service" class="Shopware\Components\License\Service\LocalLicenseUnpackService" />
