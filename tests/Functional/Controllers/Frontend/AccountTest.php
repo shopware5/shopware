@@ -51,7 +51,8 @@ class AccountTest extends Enlight_Components_Test_Plugin_TestCase
                         'password' => 'shopware1',
                         'passwordConfirmation' => 'shopware1',
                     ],
-                ]);
+                ]
+            );
         $this->dispatch('account/resetPassword');
 
         $changed = $this->getPasswordForEmail('test@example.com');
@@ -73,7 +74,8 @@ class AccountTest extends Enlight_Components_Test_Plugin_TestCase
                         'password' => 'shopware1',
                         'passwordConfirmation' => 'shopware12',
                     ],
-                ]);
+                ]
+            );
 
         $this->dispatch('account/resetPassword');
 
@@ -97,7 +99,8 @@ class AccountTest extends Enlight_Components_Test_Plugin_TestCase
                         'password' => 'test',
                         'passwordConfirmation' => 'test',
                     ],
-                ]);
+                ]
+            );
         $this->dispatch('account/resetPassword');
 
         $after = $this->getPasswordForEmail('test@example.com');
@@ -123,7 +126,8 @@ class AccountTest extends Enlight_Components_Test_Plugin_TestCase
                         'password' => 'shopware12',
                         'passwordConfirmation' => 'shopware12',
                     ],
-                ]);
+                ]
+            );
         $this->dispatch('account/resetPassword');
 
         $changed = $this->getPasswordForEmail('test@example.com');

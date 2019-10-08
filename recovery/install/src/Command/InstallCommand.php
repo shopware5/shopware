@@ -365,7 +365,8 @@ class InstallCommand extends Command
         }
 
         $question = new ConfirmationQuestion(
-            'The database already contains shopware tables. Skip import? (yes/no) [yes]', true
+            'The database already contains shopware tables. Skip import? (yes/no) [yes]',
+            true
         );
         $skipImport = $this->IOHelper->ask($question);
 

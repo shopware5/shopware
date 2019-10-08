@@ -262,7 +262,9 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
                 $product->getNumber(),
                 sprintf(
                     'Expected %s at search result position %s, but got product %s',
-                    $expectedProduct, $index, $product->getNumber()
+                    $expectedProduct,
+                    $index,
+                    $product->getNumber()
                 )
             );
         }

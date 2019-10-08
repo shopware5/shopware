@@ -378,17 +378,21 @@ class Repository extends ModelRepository
 
         $builder = Shopware()->Models()->createQueryBuilder();
 
-        return $builder->select(['voucher.id', 'voucher.description', 'voucher.voucherCode', 'voucher.value', 'voucher.minimumCharge'])
-                       ->from(\Shopware\Models\Voucher\Voucher::class, 'voucher')
-                       ->join('voucher.codes', 'codes')
-                       ->where(
-                           '(voucher.validTo>= :today OR voucher.validTo IS NULL)')
-                           ->setParameter('today', $today
-                       )
-                       ->andWhere('codes.customerId IS NULL')
-                       ->andWhere('codes.cashed= 0')
-                       ->andWhere('voucher.modus= 1')
-                       ->getQuery();
+        return $builder->select([
+                'voucher.id',
+                'voucher.description',
+                'voucher.voucherCode',
+                'voucher.value',
+                'voucher.minimumCharge',
+            ])
+           ->from(\Shopware\Models\Voucher\Voucher::class, 'voucher')
+           ->join('voucher.codes', 'codes')
+           ->where('(voucher.validTo>= :today OR voucher.validTo IS NULL)')
+           ->setParameter('today', $today)
+           ->andWhere('codes.customerId IS NULL')
+           ->andWhere('codes.cashed= 0')
+           ->andWhere('voucher.modus= 1')
+           ->getQuery();
     }
 
     /**

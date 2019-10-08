@@ -188,22 +188,21 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
         $document->setDocumentId($documentID);
         if (!empty($orderID)) {
-            $document->_subshop = Shopware()->Db()->fetchRow("
-                SELECT
-                    s.id,
-                    m.document_template_id as doc_template_id,
-                    m.template_id as template_id,
-                    (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id = m.document_template_id) as doc_template,
-                    (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id = m.template_id) as template,
-                    s.id as isocode,
-                    s.locale_id as locale
-                FROM s_order, s_core_shops s
-                LEFT JOIN s_core_shops m
-                    ON m.id=s.main_id
-                    OR (s.main_id IS NULL AND m.id=s.id)
-                WHERE s_order.language = s.id
-                AND s_order.id = ?
-                ",
+            $document->_subshop = Shopware()->Db()->fetchRow(
+                "SELECT
+                     s.id,
+                     m.document_template_id as doc_template_id,
+                     m.template_id as template_id,
+                     (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id = m.document_template_id) as doc_template,
+                     (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id = m.template_id) as template,
+                     s.id as isocode,
+                     s.locale_id as locale
+                 FROM s_order, s_core_shops s
+                 LEFT JOIN s_core_shops m
+                     ON m.id=s.main_id
+                     OR (s.main_id IS NULL AND m.id=s.id)
+                 WHERE s_order.language = s.id
+                 AND s_order.id = ?",
                 [$orderID]
             );
 

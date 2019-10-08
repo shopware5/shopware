@@ -54,7 +54,8 @@ class CategoryConditionHandler implements PartialConditionHandlerInterface
     ) {
         /* @var CategoryCondition $criteriaPart */
         $search->addQuery(
-            new TermsQuery('categoryIds', $criteriaPart->getCategoryIds()), BoolQuery::FILTER
+            new TermsQuery('categoryIds', $criteriaPart->getCategoryIds()),
+            BoolQuery::FILTER
         );
     }
 

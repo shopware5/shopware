@@ -587,7 +587,9 @@ class sBasket implements \Enlight_Hook
 
         if ($premium['configurator_set_id'] > 0) {
             $premium = $this->moduleManager->Articles()->sGetTranslation(
-                $premium, $premium['variantID'], 'variant'
+                $premium,
+                $premium['variantID'],
+                'variant'
             );
 
             $product = new StoreFrontBundle\Struct\ListProduct(

@@ -531,9 +531,11 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
         static::assertEquals(200, $response->getStatus());
         static::assertEquals('application/json', $response->getHeader('Content-Type'));
         static::assertNull(
-            $response->getHeader('location',
-            'There should be no location header set.'
-        ));
+            $response->getHeader(
+                'location',
+                'There should be no location header set.'
+            )
+        );
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);

@@ -299,7 +299,8 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         ";
 
         $fetchConversion = Shopware()->Container()->get('db')->fetchRow(
-            $sql, [
+            $sql,
+            [
                 'startDate' => $startDate->format('Y-m-d H:i:s'),
             ]
         );

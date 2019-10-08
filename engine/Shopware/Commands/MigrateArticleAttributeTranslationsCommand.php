@@ -84,7 +84,7 @@ class MigrateArticleAttributeTranslationsCommand extends ShopwareCommand
     private function migrate(ProgressBar $progressBar, $maxId)
     {
         $selectStatement = $this->connection->prepare(
-<<<'EOL'
+            <<<'EOL'
 SELECT id, objectdata
 FROM s_core_translations
 WHERE objecttype IN ("article", "variantMain", "variant")

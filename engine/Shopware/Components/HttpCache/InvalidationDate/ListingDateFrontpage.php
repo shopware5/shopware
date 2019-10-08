@@ -90,7 +90,8 @@ class ListingDateFrontpage implements InvalidationDateInterface
             'emotion',
             's_emotion_categories',
             'mapping',
-            'mapping.emotion_id = emotion.id AND mapping.category_id = :resourceId');
+            'mapping.emotion_id = emotion.id AND mapping.category_id = :resourceId'
+        );
         $query->where('emotion.active = 1');
         $query->andWhere('(emotion.valid_from IS NOT NULL OR emotion.valid_to IS NOT NULL)');
         $query->setParameter(':resourceId', $resourceId);

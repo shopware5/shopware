@@ -395,7 +395,8 @@ class Repository extends ModelRepository
                 'blog.displayDate as displayDate',
                 'blog.active as active',
                 'COUNT(comments) as numberOfComments',
-            ])
+            ]
+        )
             ->from($this->getEntityName(), 'blog')
             ->leftJoin('blog.comments', 'comments', Join::WITH, 'comments.active != 1')
             ->groupBy('blog.id');
@@ -558,7 +559,8 @@ class Repository extends ModelRepository
                 'comment.headline as headline',
                 'comment.comment as content',
                 'comment.shopId',
-            ])
+            ]
+        )
                 ->from(Comment::class, 'comment')
                 ->where('comment.blogId = ?1')
                 ->setParameter(1, $blogId);

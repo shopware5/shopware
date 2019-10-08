@@ -216,9 +216,11 @@ class Shopware_Tests_Api_ManufacturerTest extends PHPUnit\Framework\TestCase
         static::assertEquals(200, $response->getStatus());
         static::assertEquals('application/json', $response->getHeader('Content-Type'));
         static::assertNull(
-            $response->getHeader('location',
+            $response->getHeader(
+                'location',
                 'There should be no location header set.'
-            ));
+            )
+        );
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
@@ -251,9 +253,11 @@ class Shopware_Tests_Api_ManufacturerTest extends PHPUnit\Framework\TestCase
         static::assertEquals(200, $response->getStatus());
         static::assertEquals('application/json', $response->getHeader('Content-Type'));
         static::assertNull(
-            $response->getHeader('location',
+            $response->getHeader(
+                'location',
                 'There should be no location header set.'
-            ));
+            )
+        );
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);

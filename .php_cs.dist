@@ -1,13 +1,21 @@
 <?php
 
+use PhpCsFixer\Config;
+use PhpCsFixerCustomFixers\Fixer\NoUnneededConcatenationFixer;
+use PhpCsFixerCustomFixers\Fixer\NoUselessCommentFixer;
+use PhpCsFixerCustomFixers\Fixer\OperatorLinebreakFixer;
+use PhpCsFixerCustomFixers\Fixer\PhpdocParamTypeFixer;
+use PhpCsFixerCustomFixers\Fixer\SingleSpaceAfterStatementFixer;
+use PhpCsFixerCustomFixers\Fixer\SingleSpaceBeforeStatementFixer;
+use PhpCsFixerCustomFixers\Fixers;
+
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__ . '/engine/Shopware')
     ->in(__DIR__ . '/tests')
     ->in(__DIR__ . '/recovery')
     ->exclude('Plugins/Community')
     ->exclude('Plugins/Local')
-    ->notPath('LegacyPhpDumper.php')
-;
+    ->notPath('LegacyPhpDumper.php');
 
 $header = <<<EOF
 Shopware 5
@@ -32,8 +40,8 @@ trademark license. Therefore any rights, title and interest in
 our trademarks remain entirely with us.
 EOF;
 
-return PhpCsFixer\Config::create()
-    ->registerCustomFixers(new PhpCsFixerCustomFixers\Fixers())
+return Config::create()
+    ->registerCustomFixers(new Fixers())
     ->setRiskyAllowed(true)
     ->setUsingCache(false)
     ->setRules([
@@ -49,6 +57,7 @@ return PhpCsFixer\Config::create()
         'blank_line_after_opening_tag' => false,
         'concat_space' => ['spacing' => 'one'],
         'class_attributes_separation' => ['elements' => ['method', 'property']],
+        'method_argument_space' => ['on_multiline' => 'ensure_fully_multiline'],
         'array_syntax' => ['syntax' => 'short'],
         'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
         'general_phpdoc_annotation_remove' => [
@@ -59,12 +68,11 @@ return PhpCsFixer\Config::create()
         'doctrine_annotation_spaces' => true,
         'no_superfluous_phpdoc_tags' => true,
         'php_unit_test_case_static_method_calls' => true,
-        PhpCsFixerCustomFixers\Fixer\NoUselessCommentFixer::name() => true,
-        PhpCsFixerCustomFixers\Fixer\NoUnneededConcatenationFixer::name() => true,
-        PhpCsFixerCustomFixers\Fixer\SingleSpaceAfterStatementFixer::name() => true,
-        PhpCsFixerCustomFixers\Fixer\SingleSpaceBeforeStatementFixer::name() => true,
-        PhpCsFixerCustomFixers\Fixer\PhpdocParamTypeFixer::name() => true,
-        PhpCsFixerCustomFixers\Fixer\OperatorLinebreakFixer::name() => ['only_booleans' => true],
+        NoUselessCommentFixer::name() => true,
+        NoUnneededConcatenationFixer::name() => true,
+        SingleSpaceAfterStatementFixer::name() => true,
+        SingleSpaceBeforeStatementFixer::name() => true,
+        PhpdocParamTypeFixer::name() => true,
+        OperatorLinebreakFixer::name() => ['only_booleans' => true],
     ])
-    ->setFinder($finder)
-;
+    ->setFinder($finder);

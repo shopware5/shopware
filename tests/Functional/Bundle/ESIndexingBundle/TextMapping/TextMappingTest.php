@@ -95,9 +95,7 @@ class TextMappingTest extends TestCase
             );
         }
 
-        $response = $client->search(
-                $arguments
-        );
+        $response = $client->search($arguments);
 
         static::assertEquals('test9999', $response['hits']['hits'][0]['_id']);
     }

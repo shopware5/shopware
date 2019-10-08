@@ -250,9 +250,11 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
             'There should be no set-cookie header set.'
         );
         static::assertNull(
-            $response->getHeader('location',
+            $response->getHeader(
+                'location',
                 'There should be no location header set.'
-            ));
+            )
+        );
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);

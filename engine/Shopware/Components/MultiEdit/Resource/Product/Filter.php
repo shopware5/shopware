@@ -178,9 +178,10 @@ class Filter
 
         $totalCount = $paginator->count();
 
-        $result = array_map(function ($item) {
-            return $item->getId();
-        },
+        $result = array_map(
+            function ($item) {
+                return $item->getId();
+            },
             $paginator->getIterator()->getArrayCopy()
         );
 

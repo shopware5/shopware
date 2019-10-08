@@ -240,7 +240,8 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         if ($cookieKey === 'currency') {
             $path = rtrim($shop->getBasePath(), '/') . '/';
             $response->headers->setCookie(new Cookie($cookieKey, $cookieValue, 0, $path));
-            $url = sprintf('%s://%s%s',
+            $url = sprintf(
+                '%s://%s%s',
                 $request->getScheme(),
                 $request->getHttpHost(),
                 $request->getRequestUri()

@@ -102,8 +102,8 @@ class Theme implements Form\Interfaces\Persister
     private function createContainer(
         ContainerInterface $container,
         Template $template,
-        TemplateConfig\Layout $parent = null)
-    {
+        TemplateConfig\Layout $parent = null
+    ) {
         $entity = $this->checkExistingLayout(
             $template->getLayouts(),
             $container->getName()

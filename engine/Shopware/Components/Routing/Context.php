@@ -341,7 +341,8 @@ class Context implements \JsonSerializable
     public static function createFromEnlightRequest(EnlightRequest $request)
     {
         return new self(
-            $request->getHttpHost(), $request->getBaseUrl(),
+            $request->getHttpHost(),
+            $request->getBaseUrl(),
             $request->isSecure(),
             [self::getGlobalParamsFromRequest($request)]
         );
@@ -383,7 +384,8 @@ class Context implements \JsonSerializable
     public static function createFromShop(ShopwareShop $shop, ShopwareConfig $config)
     {
         $self = new self(
-            $shop->getHost(), $shop->getBaseUrl(),
+            $shop->getHost(),
+            $shop->getBaseUrl(),
             $shop->getSecure(),
             []
         );

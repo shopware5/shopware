@@ -431,8 +431,8 @@ class Service
     protected function buildConfigLayout(
         Shop\Template $template,
         Shop\Shop $shop = null,
-        $parentId = null)
-    {
+        $parentId = null
+    ) {
         $builder = $this->entityManager->createQueryBuilder();
         $builder->select([
             'layout',

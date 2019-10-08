@@ -59,7 +59,9 @@ class SitemapNameGenerator implements SitemapNameGeneratorInterface
         do {
             $path = 'shop-' . $shopId . '/' . str_ireplace(
                 ['{number}'],
-                [$number], $this->pattern);
+                [$number],
+                $this->pattern
+            );
             ++$number;
         } while ($this->filesystem->has($path));
 

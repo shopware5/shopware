@@ -47,7 +47,8 @@ class HeightConditionHandler implements PartialConditionHandlerInterface
         ShopContextInterface $context
     ) {
         $search->addQuery(
-            $this->createQuery($criteriaPart), BoolQuery::FILTER
+            $this->createQuery($criteriaPart),
+            BoolQuery::FILTER
         );
     }
 

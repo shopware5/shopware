@@ -169,14 +169,14 @@ class Repository extends ModelRepository
                 ->setParameter(':category', $path)
                 ->setParameter(':categoryId', $categoryId);
         } else {
-            $builder->addSelect('(
-                CASE
-                    WHEN (emotions.is_landingpage = 1 AND emotions.parent_id IS NOT NULL) THEN parent.name
-                    WHEN (emotions.is_landingpage = 1 AND emotions.parent_id IS NULL)     THEN emotions.name
-                    WHEN (emotions.is_landingpage = 1) THEN -10
-                    ELSE -15
-                END
-                ) as emotionGroup'
+            $builder->addSelect(
+                '(CASE
+                      WHEN (emotions.is_landingpage = 1 AND emotions.parent_id IS NOT NULL) THEN parent.name
+                      WHEN (emotions.is_landingpage = 1 AND emotions.parent_id IS NULL)     THEN emotions.name
+                      WHEN (emotions.is_landingpage = 1) THEN -10
+                      ELSE -15
+                  END
+                 ) as emotionGroup'
             );
         }
 

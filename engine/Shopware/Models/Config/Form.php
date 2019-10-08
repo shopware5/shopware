@@ -287,7 +287,9 @@ class Form extends ModelEntity
     {
         if (!$element instanceof Element) {
             $element = new Element(
-                $element, $name, $options
+                $element,
+                $name,
+                $options
             );
         }
         $element->setForm($this);

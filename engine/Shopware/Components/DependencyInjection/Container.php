@@ -55,7 +55,8 @@ class Container extends BaseContainer
         parent::set($name, $resource);
 
         parent::get('events')->notify(
-            'Enlight_Bootstrap_AfterRegisterResource_' . $name, [
+            'Enlight_Bootstrap_AfterRegisterResource_' . $name,
+            [
                 'subject' => $this,
                 'resource' => $resource,
             ]
@@ -205,7 +206,8 @@ class Container extends BaseContainer
 
         if ($fallbackName !== null && !$event && $fallbackName !== $id) {
             $event = $eventManager->notifyUntil(
-                'Enlight_Bootstrap_InitResource_' . $fallbackName, ['subject' => $this]
+                'Enlight_Bootstrap_InitResource_' . $fallbackName,
+                ['subject' => $this]
             );
         }
 
@@ -223,12 +225,14 @@ class Container extends BaseContainer
         } finally {
             if ($circularReference === false) {
                 $eventManager->notify(
-                    'Enlight_Bootstrap_AfterInitResource_' . $id, ['subject' => $this]
+                    'Enlight_Bootstrap_AfterInitResource_' . $id,
+                    ['subject' => $this]
                 );
 
                 if ($fallbackName !== null && $fallbackName !== $id) {
                     $eventManager->notify(
-                        'Enlight_Bootstrap_AfterInitResource_' . $fallbackName, ['subject' => $this]
+                        'Enlight_Bootstrap_AfterInitResource_' . $fallbackName,
+                        ['subject' => $this]
                     );
                 }
             }

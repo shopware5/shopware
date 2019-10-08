@@ -116,9 +116,7 @@ class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_
      */
     public function onGetSwagUpdateControllerPath(Enlight_Event_EventArgs $args)
     {
-        $this->get('template')->addTemplateDir(
-            __DIR__ . '/Views/', 'swag_update'
-        );
+        $this->get('template')->addTemplateDir(__DIR__ . '/Views/', 'swag_update');
 
         return __DIR__ . '/Controllers/Backend/SwagUpdate.php';
     }
@@ -142,15 +140,19 @@ class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_
      */
     protected function installForm(Shopware\Models\Config\Form $form)
     {
-        $form->setElement('select', 'update-channel', [
-            'label' => 'Channel',
-            'value' => 'stable',
-            'store' => [
-                ['stable', 'stable'],
-                ['beta',   'beta'],
-                ['rc',     'rc'],
-                ['dev',    'dev'],
-            ], ]
+        $form->setElement(
+            'select',
+            'update-channel',
+            [
+                'label' => 'Channel',
+                'value' => 'stable',
+                'store' => [
+                    ['stable', 'stable'],
+                    ['beta',   'beta'],
+                    ['rc',     'rc'],
+                    ['dev',    'dev'],
+                ],
+            ]
         );
 
         $form->setElement('text', 'update-api-endpoint', [

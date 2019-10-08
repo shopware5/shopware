@@ -612,14 +612,15 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
                 $value = Shopware()->Db()->quote($row['value']);
                 $value = str_replace("\n", '\\n', $value);
 
-                $rows[] = sprintf("(%s, %s, %s, '%s', '%s', '%s', NOW(), %d)",
-                      Shopware()->Db()->quote($row['namespace']),
-                      Shopware()->Db()->quote($row['name']),
-                      $value,
-                      (int) $row['localeID'],
-                      (int) $row['shopID'],
-                      $row['created'],
-                      $row['dirty']
+                $rows[] = sprintf(
+                    "(%s, %s, %s, '%s', '%s', '%s', NOW(), %d)",
+                    Shopware()->Db()->quote($row['namespace']),
+                    Shopware()->Db()->quote($row['name']),
+                    $value,
+                    (int) $row['localeID'],
+                    (int) $row['shopID'],
+                    $row['created'],
+                    $row['dirty']
                 );
             }
             echo implode(",\r\n", $rows) . ';';
@@ -894,11 +895,14 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         foreach ($keys as $key) {
             if ($line[$key] !== null) {
                 if (strpos($line[$key], "\r") !== false || strpos($line[$key], "\n") !== false || strpos(
-                    $line[$key], $settings['fieldmark']
+                    $line[$key],
+                    $settings['fieldmark']
                 ) !== false || strpos($line[$key], $settings['separator']) !== false
                 ) {
                     $csv .= $settings['fieldmark'] . str_replace(
-                        $settings['fieldmark'], $settings['escaped_fieldmark'], $line[$key]
+                        $settings['fieldmark'],
+                        $settings['escaped_fieldmark'],
+                        $line[$key]
                     ) . $settings['fieldmark'];
                 } else {
                     $csv .= '"' . $line[$key] . '"';

@@ -44,8 +44,8 @@ class BusinessIntelligenceService
 
     public function __construct(
         BusinessIntelligenceClientInterface $biClient,
-        BenchmarkRepository $benchmarkRepository)
-    {
+        BenchmarkRepository $benchmarkRepository
+    ) {
         $this->biClient = $biClient;
         $this->benchmarkRepository = $benchmarkRepository;
     }

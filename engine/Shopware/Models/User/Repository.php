@@ -109,15 +109,14 @@ class Repository extends ModelRepository
         /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select([
-                'user.id as id',
-                'user.username as username',
-                'user.lastLogin as lastLogin',
-                'user.name as name',
-                'role.name as groupname',
-                'user.active as active',
-                'user.email as email',
-            ]
-        );
+            'user.id as id',
+            'user.username as username',
+            'user.lastLogin as lastLogin',
+            'user.name as name',
+            'role.name as groupname',
+            'user.active as active',
+            'user.email as email',
+        ]);
         $builder->from(User::class, 'user');
         $builder->join('user.role', 'role');
         if (!empty($filter)) {

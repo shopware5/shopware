@@ -295,11 +295,11 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
         $connection = Shopware()->Container()->get('dbal_connection');
 
         // Create broken data
-        $connection->executeQuery('
-            INSERT INTO s_core_optin (type, datum, hash, data)
-            SELECT type, (datum - INTERVAL 1 MINUTE), CONCAT(hash,\'X\'), \'I am definitly not working\' 
-            FROM s_core_optin
-            WHERE hash = :hash',
+        $connection->executeQuery(
+            'INSERT INTO s_core_optin (type, datum, hash, data)
+             SELECT type, (datum - INTERVAL 1 MINUTE), CONCAT(hash,\'X\'), \'I am definitly not working\' 
+             FROM s_core_optin
+             WHERE hash = :hash',
             [':hash' => $hash]
         );
 

@@ -138,7 +138,8 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
         ];
 
         $route = strtolower(
-            implode('/',
+            implode(
+                '/',
                 [$request->getModuleName(), $request->getControllerName(), $request->getActionName()]
             )
         );

@@ -361,8 +361,11 @@ class Account extends Page implements HelperSelectorInterface
             return;
         }
 
-        $message = sprintf('The addresses are different! ("%s" not was found in "%s")', $result['value2'],
-            $result['value']);
+        $message = sprintf(
+            'The addresses are different! ("%s" not was found in "%s")',
+            $result['value2'],
+            $result['value']
+        );
         Helper::throwException($message);
     }
 
@@ -564,8 +567,12 @@ class Account extends Page implements HelperSelectorInterface
             return;
         }
 
-        $message = sprintf('The %s of a position is different! (is "%s", should be "%s")', $result['key'],
-            $result['value'], $result['value2']);
+        $message = sprintf(
+            'The %s of a position is different! (is "%s", should be "%s")',
+            $result['key'],
+            $result['value'],
+            $result['value2']
+        );
         Helper::throwException($message);
     }
 
