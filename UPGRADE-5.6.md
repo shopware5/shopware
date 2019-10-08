@@ -21,6 +21,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\GraduatedPricesGateway` to consider minimum purchase quantity
 * Changed `\Shopware_Controllers_Frontend_Address::handleExtraData` to split `sessionKey` correctly
 * Changed `StateManager.getScrollBarSize` to lazily get the size of the scrollbar
+* Changed missing german translation in `snippets/backend/article_list/main.ini`
 
 ### Removals
 
