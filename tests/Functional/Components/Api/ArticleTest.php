@@ -972,8 +972,8 @@ class ArticleTest extends TestCase
         static::assertEquals(2, count($article->getMainDetail()->getPrices()));
 
         $groups = Shopware()->Models()->getRepository('Shopware\Models\Article\Configurator\Group')->findBy(
-                ['name' => ['Group1', 'Group2']]
-            );
+            ['name' => ['Group1', 'Group2']]
+        );
 
         foreach ($groups as $group) {
             Shopware()->Models()->remove($group);
@@ -1858,8 +1858,8 @@ class ArticleTest extends TestCase
                 '2 as main',
             ]
         )->from('Shopware\Models\Media\Media', 'media')->addOrderBy('media.id', 'ASC')->setFirstResult(
-                5
-            )->setMaxResults(4);
+            5
+        )->setMaxResults(4);
 
         /**
          * Get random images.
@@ -2164,9 +2164,9 @@ class ArticleTest extends TestCase
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(['values', 'option'])->from('Shopware\Models\Property\Value', 'values')->innerJoin(
-                'values.option',
-                'option'
-            )->setFirstResult(0)->setMaxResults(20);
+            'values.option',
+            'option'
+        )->setFirstResult(0)->setMaxResults(20);
         $databaseValues = $builder->getQuery()->getArrayResult();
         $properties = [];
         foreach ($databaseValues as $value) {
@@ -2220,8 +2220,8 @@ class ArticleTest extends TestCase
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(['option'])->from('Shopware\Models\Property\Option', 'option')->where(
-                'option.name = :optionName'
-            )->setParameter('optionName', $optionName)->setFirstResult(0)->setMaxResults(20);
+            'option.name = :optionName'
+        )->setParameter('optionName', $optionName)->setFirstResult(0)->setMaxResults(20);
         $databaseValuesOptions = $builder->getQuery()->getArrayResult();
 
         static::assertEquals($article['propertyValues'][0]['optionId'], $article['propertyValues'][1]['optionId']);
@@ -2239,17 +2239,17 @@ class ArticleTest extends TestCase
 
         //delete test values in s_filter_options
         $builder->delete('Shopware\Models\Property\Option', 'option')->andWhere(
-                'option.name = :optionName'
-            )->setParameter('optionName', $optionName)->getQuery()->execute();
+            'option.name = :optionName'
+        )->setParameter('optionName', $optionName)->getQuery()->execute();
     }
 
     public function testUpdateWithDuplicateProperties()
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(['values', 'option'])->from('Shopware\Models\Property\Value', 'values')->innerJoin(
-                'values.option',
-                'option'
-            )->setFirstResult(0)->setMaxResults(20);
+            'values.option',
+            'option'
+        )->setFirstResult(0)->setMaxResults(20);
         $databaseValues = $builder->getQuery()->getArrayResult();
         $properties = [];
         foreach ($databaseValues as $value) {
@@ -2344,8 +2344,8 @@ class ArticleTest extends TestCase
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(['option'])->from('Shopware\Models\Property\Option', 'option')->where(
-                'option.name = :optionName'
-            )->setParameter('optionName', $optionName)->setFirstResult(0)->setMaxResults(20);
+            'option.name = :optionName'
+        )->setParameter('optionName', $optionName)->setFirstResult(0)->setMaxResults(20);
         $databaseValuesOptions = $builder->getQuery()->getArrayResult();
 
         static::assertEquals($article['propertyValues'][0]['optionId'], $article['propertyValues'][1]['optionId']);
@@ -2363,8 +2363,8 @@ class ArticleTest extends TestCase
 
         //delete test values in s_filter_options
         $builder->delete('Shopware\Models\Property\Option', 'option')->andWhere(
-                'option.name = :optionName'
-            )->setParameter('optionName', $optionName)->getQuery()->execute();
+            'option.name = :optionName'
+        )->setParameter('optionName', $optionName)->getQuery()->execute();
     }
 
     public function testImageConfiguration()
@@ -3299,8 +3299,8 @@ class ArticleTest extends TestCase
                 '2 as main',
             ]
         )->from('Shopware\Models\Media\Media', 'media', 'media.id')->addOrderBy('media.id', 'ASC')->setFirstResult(
-                $offset
-            )->setMaxResults($limit);
+            $offset
+        )->setMaxResults($limit);
 
         /**
          * Get random images.
@@ -3358,20 +3358,20 @@ class ArticleTest extends TestCase
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(['groups.id', 'groups.name'])->from(
-                'Shopware\Models\Article\Configurator\Group',
-                'groups'
-            )->setFirstResult(0)->setMaxResults($groupLimit)->orderBy('groups.position', 'ASC');
+            'Shopware\Models\Article\Configurator\Group',
+            'groups'
+        )->setFirstResult(0)->setMaxResults($groupLimit)->orderBy('groups.position', 'ASC');
 
         $groups = $builder->getQuery()->getArrayResult();
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(['options.id', 'options.name'])->from(
-                'Shopware\Models\Article\Configurator\Option',
-                'options'
-            )->where('options.groupId = :groupId')->setFirstResult(0)->setMaxResults($optionLimit)->orderBy(
-                'options.position',
-                'ASC'
-            );
+            'Shopware\Models\Article\Configurator\Option',
+            'options'
+        )->where('options.groupId = :groupId')->setFirstResult(0)->setMaxResults($optionLimit)->orderBy(
+            'options.position',
+            'ASC'
+        );
 
         foreach ($groups as &$group) {
             $builder->setParameter('groupId', $group['id']);

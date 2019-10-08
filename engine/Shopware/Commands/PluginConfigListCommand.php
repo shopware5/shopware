@@ -87,7 +87,8 @@ class PluginConfigListCommand extends ShopwareCommand implements CompletionAware
                 InputArgument::REQUIRED,
                 'Name of the plugin to list config.'
             )
-            ->setHelp(<<<'EOF'
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> lists a plugin configuration.
 EOF
             );

@@ -484,7 +484,9 @@ class Shopware_Components_Translation
                 }
 
                 return $translator->translateObjectProperty($dispatchMethod, 'dispatch_name', 'name');
-            }, $dispatchMethods);
+            },
+            $dispatchMethods
+        );
 
         return $translatedDispatchMethods;
     }
@@ -501,7 +503,9 @@ class Shopware_Components_Translation
         $translatedDocuments = array_map(
             static function ($document) use ($translator) {
                 return $translator->translateObjectProperty($document, 'name');
-            }, $documents);
+            },
+            $documents
+        );
 
         return $translatedDocuments;
     }
@@ -519,13 +523,15 @@ class Shopware_Components_Translation
             static function ($payment) use ($translator) {
                 $translatedPayment = $translator->translateObjectProperty($payment, 'description');
                 $translatedPayment = $translator->translateObjectProperty(
-                $translatedPayment,
-                'additionalDescription',
-                'additionaldescription'
-            );
+                    $translatedPayment,
+                    'additionalDescription',
+                    'additionaldescription'
+                );
 
                 return $translatedPayment;
-            }, $payments);
+            },
+            $payments
+        );
 
         return $translatedPayments;
     }

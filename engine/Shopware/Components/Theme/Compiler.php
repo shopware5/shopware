@@ -366,7 +366,8 @@ class Compiler
         }
 
         $this->eventManager->notify(
-            'Theme_Compiler_Compile_Less', [
+            'Theme_Compiler_Compile_Less',
+            [
                 'shop' => $shop,
                 'less' => $definition,
             ]
@@ -449,7 +450,9 @@ class Compiler
         }
 
         $config = $this->eventManager->filter(
-            'Theme_Compiler_Configure', $config, [
+            'Theme_Compiler_Configure',
+            $config,
+            [
                 'shop' => $shop,
                 'settings' => $settings,
             ]

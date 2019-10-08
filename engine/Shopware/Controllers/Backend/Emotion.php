@@ -1144,8 +1144,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 $this->View()->assign([
                     'success' => false,
                     'data' => $this->Request()->getParams(),
-                    'message' => $namespace->get('no_valid_id', 'No valid emotion id passed.'), ]
-                );
+                    'message' => $namespace->get('no_valid_id', 'No valid emotion id passed.'),
+                ]);
 
                 return null;
             }

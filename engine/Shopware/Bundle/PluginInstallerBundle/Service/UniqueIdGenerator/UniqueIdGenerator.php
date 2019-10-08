@@ -92,7 +92,8 @@ INSERT INTO s_core_config_values (element_id, shop_id, value) VALUES (
 sql;
 
         $this->connection->executeUpdate(
-            $sql, [
+            $sql,
+            [
                 'value' => serialize($uniqueId),
             ]
         );

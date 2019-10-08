@@ -275,12 +275,24 @@ class Shopware_Components_Config implements ArrayAccess
                 'fallbackShop.value as fallbackShopval',
             ])
             ->from('s_core_config_elements', 'e')
-            ->leftJoin('e', 's_core_config_values', 'currentShop',
-                'currentShop.element_id = e.id AND currentShop.shop_id = :currentShopId')
-            ->leftJoin('e', 's_core_config_values', 'parentShop',
-                'parentShop.element_id = e.id AND parentShop.shop_id = :parentShopId')
-            ->leftJoin('e', 's_core_config_values', 'fallbackShop',
-                'fallbackShop.element_id = e.id AND fallbackShop.shop_id = :fallbackShopId')
+            ->leftJoin(
+                'e',
+                's_core_config_values',
+                'currentShop',
+                'currentShop.element_id = e.id AND currentShop.shop_id = :currentShopId'
+            )
+            ->leftJoin(
+                'e',
+                's_core_config_values',
+                'parentShop',
+                'parentShop.element_id = e.id AND parentShop.shop_id = :parentShopId'
+            )
+            ->leftJoin(
+                'e',
+                's_core_config_values',
+                'fallbackShop',
+                'fallbackShop.element_id = e.id AND fallbackShop.shop_id = :fallbackShopId'
+            )
             ->leftJoin('e', 's_core_config_forms', 'forms', 'forms.id = e.form_id');
 
         $builder->setParameters([

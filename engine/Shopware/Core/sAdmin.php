@@ -1099,10 +1099,9 @@ class sAdmin implements \Enlight_Hook
         $countryList = Shopware()->Container()->get('legacy_struct_converter')->convertCountryStructList($countryList);
 
         $countryList = array_map(function ($country) {
-            $country['flag'] =
-                ($this->front->Request()->getPost('country') == $country['id']
-                    || $this->front->Request()->getPost('countryID') == $country['id']
-                );
+            $request = $this->front->Request();
+            $countryId = (int) $country['id'];
+            $country['flag'] = ((int) $request->getPost('country') === $countryId || (int) $request->getPost('countryID') === $countryId);
 
             return $country;
         }, $countryList);
@@ -3037,12 +3036,11 @@ class sAdmin implements \Enlight_Hook
             return false;
         }
 
-        $amount = (float) $this->db->fetchOne('
-                SELECT SUM((CAST(price AS DECIMAL(10,2))*quantity)/currencyFactor) AS amount
-                FROM s_order_basket
-                WHERE sessionID = ?
-                GROUP BY sessionID
-            ',
+        $amount = (float) $this->db->fetchOne(
+            'SELECT SUM((CAST(price AS DECIMAL(10,2))*quantity)/currencyFactor) AS amount
+             FROM s_order_basket
+             WHERE sessionID = ?
+             GROUP BY sessionID',
             [$this->session->offsetGet('sessionId')]
         );
 
@@ -3114,13 +3112,13 @@ class sAdmin implements \Enlight_Hook
         } else {
             return false;
         }
-        $result = $this->db->fetchRow('
-            SELECT `value` , `factor`
-            FROM `s_premium_shippingcosts`
-            WHERE `from` <= ?
-            AND `dispatchID` = ?
-            ORDER BY `from` DESC
-            LIMIT 1',
+        $result = $this->db->fetchRow(
+            'SELECT `value` , `factor`
+             FROM `s_premium_shippingcosts`
+             WHERE `from` <= ?
+             AND `dispatchID` = ?
+             ORDER BY `from` DESC
+             LIMIT 1',
             [$from, $dispatch['id']]
         );
         if ($result === false) {
@@ -4173,9 +4171,9 @@ SQL;
             return false;
         }
 
-        $checkOrder = $this->db->fetchRow('
-            SELECT id FROM s_order
-            WHERE cleared = ? AND userID = ?',
+        $checkOrder = $this->db->fetchRow(
+            'SELECT id FROM s_order
+             WHERE cleared = ? AND userID = ?',
             [
                 $cleared,
                 $this->session->offsetGet('sUserId'),
@@ -4212,9 +4210,9 @@ SQL;
         }
         $dbal = Shopware()->Container()->get('dbal_connection');
 
-        return (int) $dbal->fetchColumn('
-            SELECT default_billing_address_id
-            FROM s_user WHERE id = :id
+        return (int) $dbal->fetchColumn(
+            'SELECT default_billing_address_id
+             FROM s_user WHERE id = :id
             ',
             ['id' => $this->session->offsetGet('sUserId')]
         );
@@ -4233,9 +4231,9 @@ SQL;
         }
         $dbal = Shopware()->Container()->get('dbal_connection');
 
-        return (int) $dbal->fetchColumn('
-            SELECT default_shipping_address_id
-            FROM s_user WHERE id = :id
+        return (int) $dbal->fetchColumn(
+            'SELECT default_shipping_address_id
+             FROM s_user WHERE id = :id
             ',
             ['id' => $this->session->offsetGet('sUserId')]
         );

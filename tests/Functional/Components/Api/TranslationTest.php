@@ -43,9 +43,7 @@ class TranslationTest extends TestCase
 
     public function testList()
     {
-        $list = $this->resource->getList(
-            0, 5
-        );
+        $list = $this->resource->getList(0, 5);
         static::assertCount(5, $list['data']);
 
         foreach ($list['data'] as $item) {
@@ -126,7 +124,8 @@ class TranslationTest extends TestCase
         static::assertEquals(
             $data['data'],
             $this->resource->getTranslationComponent()->unFilterData(
-                'article', $translation->getData()
+                'article',
+                $translation->getData()
             ),
             'Translation data do not match'
         );
@@ -159,7 +158,8 @@ class TranslationTest extends TestCase
         static::assertEquals(
             $data['data'],
             $this->resource->getTranslationComponent()->unFilterData(
-                'article', $translation->getData()
+                'article',
+                $translation->getData()
             ),
             'Translation data do not match'
         );
@@ -198,7 +198,8 @@ class TranslationTest extends TestCase
         static::assertEquals(
             $data['data'],
             $this->resource->getTranslationComponent()->unFilterData(
-                'article', $translation->getData()
+                'article',
+                $translation->getData()
             ),
             'Translation data do not match'
         );
@@ -238,7 +239,8 @@ class TranslationTest extends TestCase
         static::assertEquals(
             $translation['data'],
             $this->resource->getTranslationComponent()->unFilterData(
-                'article', $updated->getData()
+                'article',
+                $updated->getData()
             ),
             'Translation data do not match'
         );

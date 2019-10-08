@@ -726,7 +726,8 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         // Add voucher to the orders table, so we can test the usage limit
-        $this->db->insert('s_order_details',
+        $this->db->insert(
+            's_order_details',
             [
                 'orderID' => 15,
                 'articleordernumber' => $voucherData['ordercode'],
@@ -739,11 +740,13 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         static::assertTrue($result['sErrorFlag']);
         static::assertContains(
             $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
-                'VoucherFailureNotFound', 'Voucher could not be found or is not valid anymore'
+                'VoucherFailureNotFound',
+                'Voucher could not be found or is not valid anymore'
             ),
             $result['sErrorMessages']
         );
-        $this->db->delete('s_order_details',
+        $this->db->delete(
+            's_order_details',
             [
                 'articleordernumber = ?' => $voucherData['ordercode'],
             ]
@@ -771,7 +774,8 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         static::assertTrue($result['sErrorFlag']);
         static::assertContains(
             $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
-                'VoucherFailureOnlyOnes', 'Only one voucher can be processed in order'
+                'VoucherFailureOnlyOnes',
+                'Only one voucher can be processed in order'
             ),
             $result['sErrorMessages']
         );

@@ -127,7 +127,8 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
             if ($this->_zendDb->fetchOne($sql, [$user->roleID]) == false) {
                 return new Zend_Auth_Result(
                     Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND,
-                    $this->_identity, []
+                    $this->_identity,
+                    []
                 );
             }
 
@@ -186,7 +187,8 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
             $this->_tableName,
             [$this->_credentialColumn => $newHash],
             $this->_zendDb->quoteInto(
-                $this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?', $this->_identity
+                $this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?',
+                $this->_identity
             )
         );
     }
@@ -205,7 +207,8 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
             $this->_tableName,
             ['encoder' => $defaultEncoderName, $this->_credentialColumn => $newHash],
             $this->_zendDb->quoteInto(
-                $this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?', $this->_identity
+                $this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?',
+                $this->_identity
             )
         );
     }
@@ -219,12 +222,13 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
         $user = $this->getResultRowObject();
 
         $this->_zendDb->update(
-           $this->_tableName,
-           [$this->expiryColumn => Zend_Date::now()],
-           $this->_zendDb->quoteInto(
-               $this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?', $user->username
-           )
-       );
+            $this->_tableName,
+            [$this->expiryColumn => Zend_Date::now()],
+            $this->_zendDb->quoteInto(
+                $this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?',
+                $user->username
+            )
+        );
     }
 
     /**
@@ -240,7 +244,8 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
             $this->_tableName,
             ['failedlogins' => $number],
             $this->_zendDb->quoteInto(
-                $this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?', $this->_identity
+                $this->_zendDb->quoteIdentifier($this->_identityColumn, true) . ' = ?',
+                $this->_identity
             )
         );
 

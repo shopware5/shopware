@@ -99,8 +99,10 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
     {
         $conn = $this->container->get('dbal_connection');
         $elementId = $conn->fetchColumn('SELECT id FROM s_core_config_elements WHERE name LIKE "benchmarkTeaser"');
-        $valueId = $conn->fetchColumn('SELECT id FROM s_core_config_values WHERE element_id = :elementId',
-            ['elementId' => $elementId]);
+        $valueId = $conn->fetchColumn(
+            'SELECT id FROM s_core_config_values WHERE element_id = :elementId',
+            ['elementId' => $elementId]
+        );
 
         $data = [
             'element_id' => $elementId,

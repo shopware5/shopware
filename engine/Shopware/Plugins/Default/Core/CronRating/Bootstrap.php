@@ -422,7 +422,8 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
 
             $shopPositionNumbers[$shopId] = array_merge(
                 array_column($positions, 'articleordernumber'),
-                $shopPositionNumbers[$shopId]);
+                $shopPositionNumbers[$shopId]
+            );
         }
 
         $shopPositionBaseProducts = [];

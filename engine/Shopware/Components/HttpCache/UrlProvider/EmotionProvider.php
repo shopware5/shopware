@@ -102,7 +102,8 @@ class EmotionProvider extends CategoryProvider
                 'emo',
                 's_emotion_categories',
                 'emo_cat',
-                'emo.id = emo_cat.emotion_id')
+                'emo.id = emo_cat.emotion_id'
+            )
             ->leftJoin('emo_cat', 's_categories', 'cat', 'emo_cat.category_id = cat.id')
             ->where('emo.active = 1')
             ->andWhere(sprintf('emo_cat.category_id IN (%s)', $this->prepareSubQuery()->getSQL()))

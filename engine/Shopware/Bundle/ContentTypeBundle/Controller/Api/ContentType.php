@@ -53,8 +53,8 @@ class ContentType extends \Shopware_Controllers_Api_Rest
         array $sort = [],
         array $filter = [],
         bool $resolve = false,
-        bool $loadTranslations = false): void
-    {
+        bool $loadTranslations = false
+    ): void {
         $criteria = new Criteria();
         $criteria->offset = $start;
         $criteria->limit = $limit;

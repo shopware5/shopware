@@ -86,7 +86,8 @@ class PluginUninstallCommand extends PluginCommand implements CompletionAwareInt
                 InputOption::VALUE_NONE,
                 'Keep the saved data of the plugin. (if supported)'
             )
-            ->setHelp(<<<'EOF'
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> uninstalls a plugin.
 EOF
             );

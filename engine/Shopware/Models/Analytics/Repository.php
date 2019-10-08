@@ -595,7 +595,11 @@ class Repository
     public function getVisitorImpressions($offset, $limit, \DateTimeInterface $from = null, \DateTimeInterface $to = null, $sort = [], array $shopIds = [])
     {
         $builder = $this->createVisitorImpressionBuilder(
-            $offset, $limit, $from, $to, $sort
+            $offset,
+            $limit,
+            $from,
+            $to,
+            $sort
         );
 
         if (!empty($shopIds)) {
@@ -1133,7 +1137,10 @@ class Repository
         ]);
 
         $builder->from('s_user', 'users')
-            ->leftJoin('users', 's_order', 'orders',
+            ->leftJoin(
+                'users',
+                's_order',
+                'orders',
                 'orders.userID = users.id AND (DATE(orders.ordertime) = DATE(users.firstlogin)) AND orders.status NOT IN (-1, 4)'
             )
             ->orderBy('users.firstlogin', 'DESC')

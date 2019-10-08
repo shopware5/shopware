@@ -330,7 +330,8 @@ class %className% extends ModelEntity
 
         if (file_exists($file) && !is_writable($file)) {
             throw new \Exception(
-                sprintf('File: "%s" isn\'t writable, please check the file permissions for this model!', $file), 501
+                sprintf('File: "%s" isn\'t writable, please check the file permissions for this model!', $file),
+                501
             );
         }
 

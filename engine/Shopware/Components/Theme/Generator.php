@@ -297,7 +297,8 @@ EOD;
             'w+'
         );
 
-        $source = $this->eventManager->filter('Theme_Generator_Theme_Source_Generated',
+        $source = $this->eventManager->filter(
+            'Theme_Generator_Theme_Source_Generated',
             $source,
             ['data' => $data, 'parent' => $parent]
         );

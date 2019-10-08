@@ -225,8 +225,10 @@ class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
 
         // First customer should be the one we added, ass there isn't any other process adding any s_statistics_currentusers
         static::assertEquals($this->userId, $response['data']['customers'][0]['userID']);
-        static::assertEquals($addressData['firstname'] . ' ' . $addressData['lastname'],
-            $response['data']['customers'][0]['customer']);
+        static::assertEquals(
+            $addressData['firstname'] . ' ' . $addressData['lastname'],
+            $response['data']['customers'][0]['customer']
+        );
     }
 
     public function testGetVisitorsWithEmptyCompanyAction()

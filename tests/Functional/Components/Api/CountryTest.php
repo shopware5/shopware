@@ -52,12 +52,12 @@ class CountryTest extends TestCase
         parent::setUpBeforeClass();
 
         static::$existingCountryIds = Shopware()->Db()->fetchCol(
-           'SELECT id
-            FROM s_core_countries'
+            'SELECT id
+             FROM s_core_countries'
         );
         static::$existingStatesIds = Shopware()->Db()->fetchCol(
-           'SELECT id
-            FROM s_core_countries_states'
+            'SELECT id
+             FROM s_core_countries_states'
         );
     }
 
@@ -70,12 +70,12 @@ class CountryTest extends TestCase
         parent::setUpBeforeClass();
 
         Shopware()->Db()->query(
-           'DELETE FROM s_core_countries
-            WHERE id NOT IN (' . implode(',', static::$existingCountryIds) . ')'
+            'DELETE FROM s_core_countries
+             WHERE id NOT IN (' . implode(',', static::$existingCountryIds) . ')'
         );
         Shopware()->Db()->query(
-           'DELETE FROM s_core_countries_states
-            WHERE id NOT IN (' . implode(',', static::$existingStatesIds) . ')'
+            'DELETE FROM s_core_countries_states
+             WHERE id NOT IN (' . implode(',', static::$existingStatesIds) . ')'
         );
     }
 

@@ -38,7 +38,8 @@ class SessionCleanupCommand extends ShopwareCommand
         $this
             ->setName('sw:session:cleanup')
             ->setDescription('Removes expired sessions')
-            ->setHelp(<<<'EOF'
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> command removes expired sessions.
 This is most useful combined with <comment>gc_probability: 0</comment> to disable session garbage collection during runtime.
 EOF

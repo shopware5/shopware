@@ -535,8 +535,8 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $this->module->sUserData = $user;
 
-        $previousTellAFriendCount = Shopware()->Db()->fetchAll('
-            SELECT * FROM s_emarketing_tellafriend WHERE recipient=?',
+        $previousTellAFriendCount = Shopware()->Db()->fetchAll(
+            'SELECT * FROM s_emarketing_tellafriend WHERE recipient=?',
             [$user['additional']['user']['email']]
         );
 
@@ -550,20 +550,20 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $this->module->sTellFriend();
 
-        $afterTellAFriendCount = Shopware()->Db()->fetchAll('
-            SELECT * FROM s_emarketing_tellafriend WHERE confirmed=1 AND recipient=?',
+        $afterTellAFriendCount = Shopware()->Db()->fetchAll(
+            'SELECT * FROM s_emarketing_tellafriend WHERE confirmed=1 AND recipient=?',
             [$user['additional']['user']['email']]
         );
 
         static::assertCount(1, $afterTellAFriendCount);
 
-        Shopware()->Db()->query('
-            DELETE FROM s_emarketing_tellafriend WHERE recipient=?',
+        Shopware()->Db()->query(
+            'DELETE FROM s_emarketing_tellafriend WHERE recipient=?',
             [$user['additional']['user']['email']]
         );
 
-        $cleanTellAFriendCount = Shopware()->Db()->fetchAll('
-            SELECT * FROM s_emarketing_tellafriend WHERE recipient=?',
+        $cleanTellAFriendCount = Shopware()->Db()->fetchAll(
+            'SELECT * FROM s_emarketing_tellafriend WHERE recipient=?',
             [$user['additional']['user']['email']]
         );
 
@@ -580,8 +580,8 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $orderId = $order->getId();
 
-        $orderHistory = Shopware()->Db()->fetchAll('
-            SELECT * FROM s_order_history WHERE orderID=?',
+        $orderHistory = Shopware()->Db()->fetchAll(
+            'SELECT * FROM s_order_history WHERE orderID=?',
             [$orderId]
         );
 
@@ -592,8 +592,8 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         Shopware()->Models()->refresh($order);
 
-        $orderHistory = Shopware()->Db()->fetchRow('
-            SELECT * FROM s_order_history WHERE orderID=? LIMIT 1',
+        $orderHistory = Shopware()->Db()->fetchRow(
+            'SELECT * FROM s_order_history WHERE orderID=? LIMIT 1',
             [$orderId]
         );
 
@@ -617,8 +617,8 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $orderId = $order->getId();
 
-        $orderHistory = Shopware()->Db()->fetchAll('
-            SELECT * FROM s_order_history WHERE orderID=?',
+        $orderHistory = Shopware()->Db()->fetchAll(
+            'SELECT * FROM s_order_history WHERE orderID=?',
             [$orderId]
         );
 
@@ -629,8 +629,8 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         Shopware()->Models()->refresh($order);
 
-        $orderHistory = Shopware()->Db()->fetchRow('
-            SELECT * FROM s_order_history WHERE orderID=? LIMIT 1',
+        $orderHistory = Shopware()->Db()->fetchRow(
+            'SELECT * FROM s_order_history WHERE orderID=? LIMIT 1',
             [$orderId]
         );
 

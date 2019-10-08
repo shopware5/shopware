@@ -68,7 +68,8 @@ class SchemaOperator
             throw new \Exception('No column type provided');
         }
 
-        $sql = sprintf('ALTER TABLE `%s` ADD `%s` %s NULL DEFAULT %s',
+        $sql = sprintf(
+            'ALTER TABLE `%s` ADD `%s` %s NULL DEFAULT %s',
             $table,
             $column,
             $type,
@@ -102,7 +103,8 @@ class SchemaOperator
         $this->validateField($newName);
         $defaultValue = $this->filterDefaultValue($defaultValue);
 
-        $sql = sprintf('ALTER TABLE `%s` CHANGE `%s` `%s` %s NULL DEFAULT %s;',
+        $sql = sprintf(
+            'ALTER TABLE `%s` CHANGE `%s` `%s` %s NULL DEFAULT %s;',
             $table,
             $originalName,
             $newName,

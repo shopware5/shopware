@@ -46,7 +46,8 @@ class EventComponentHandlerTest extends \Enlight_Components_Test_TestCase
             Shopware()->Container()->get('shopware_emotion.emotion_element_gateway'),
             $eventComponentHandlerMock,
             Shopware()->Container()->get('shopware_emotion.data_collection_resolver'),
-            Shopware()->Container()->get('events'));
+            Shopware()->Container()->get('events')
+        );
 
         $contextService = Shopware()->Container()->get('shopware_storefront.context_service');
 

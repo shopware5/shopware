@@ -198,8 +198,8 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $this->View()->assign([
                 'success' => false,
                 'data' => $this->Request()->getParams(),
-                'message' => $namespace->get('no_order_rights', 'You do not have sufficient rights to view customer orders.'), ]
-            );
+                'message' => $namespace->get('no_order_rights', 'You do not have sufficient rights to view customer orders.'),
+            ]);
 
             return;
         }
@@ -244,8 +244,8 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $this->View()->assign([
                 'success' => false,
                 'data' => $this->Request()->getParams(),
-                'message' => $namespace->get('no_order_rights', 'You do not have sufficient rights to view customer orders.'), ]
-            );
+                'message' => $namespace->get('no_order_rights', 'You do not have sufficient rights to view customer orders.'),
+            ]);
 
             return;
         }
@@ -403,9 +403,9 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $this->getManager()->flush();
 
         $this->View()->assign([
-                'success' => true,
-                'data' => $this->Request()->getParams(), ]
-        );
+            'success' => true,
+            'data' => $this->Request()->getParams(),
+        ]);
     }
 
     /**

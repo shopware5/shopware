@@ -56,7 +56,8 @@ class HasPseudoPriceConditionHandler implements PartialConditionHandlerInterface
             new RangeQuery(
                 $this->getPseudoPriceField($context),
                 ['gt' => 0]
-            ), BoolQuery::FILTER
+            ),
+            BoolQuery::FILTER
         );
     }
 

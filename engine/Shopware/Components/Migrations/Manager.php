@@ -214,7 +214,9 @@ class Manager
             $this->markMigrationAsFailed($migration, $e);
 
             throw new \Exception(sprintf(
-                'Could not apply migration (%s). Error: %s ', get_class($migration), $e->getMessage()
+                'Could not apply migration (%s). Error: %s ',
+                get_class($migration),
+                $e->getMessage()
             ));
         }
 

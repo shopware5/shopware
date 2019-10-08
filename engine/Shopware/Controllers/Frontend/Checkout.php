@@ -965,8 +965,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     public function getInstockInfo($orderNumber, $quantity)
     {
         if (empty($orderNumber)) {
-            return Shopware()->Snippets()->getNamespace('frontend')->get('CheckoutSelectVariant',
-                'Please select an option to place the required product in the cart', true);
+            return Shopware()->Snippets()->getNamespace('frontend')->get(
+                'CheckoutSelectVariant',
+                'Please select an option to place the required product in the cart',
+                true
+            );
         }
 
         $quantity = max(1, (int) $quantity);
@@ -974,17 +977,26 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $inStock['quantity'] += $quantity;
 
         if (empty($inStock['articleID'])) {
-            return Shopware()->Snippets()->getNamespace('frontend')->get('CheckoutArticleNotFound',
-                'Product could not be found.', true);
+            return Shopware()->Snippets()->getNamespace('frontend')->get(
+                'CheckoutArticleNotFound',
+                'Product could not be found.',
+                true
+            );
         }
         if (!empty($inStock['laststock']) || !empty(Shopware()->Config()->InstockInfo)) {
             if ($inStock['instock'] <= 0 && !empty($inStock['laststock'])) {
-                return Shopware()->Snippets()->getNamespace('frontend')->get('CheckoutArticleNoStock',
-                    'Unfortunately we can not deliver the desired product in sufficient quantity', true);
+                return Shopware()->Snippets()->getNamespace('frontend')->get(
+                    'CheckoutArticleNoStock',
+                    'Unfortunately we can not deliver the desired product in sufficient quantity',
+                    true
+                );
             } elseif ($inStock['instock'] < $inStock['quantity']) {
                 $result = 'Unfortunately we can not deliver the desired product in sufficient quantity. (#0 of #1 in stock).';
-                $result = Shopware()->Snippets()->getNamespace('frontend')->get('CheckoutArticleLessStock', $result,
-                    true);
+                $result = Shopware()->Snippets()->getNamespace('frontend')->get(
+                    'CheckoutArticleLessStock',
+                    $result,
+                    true
+                );
 
                 return str_replace(['#0', '#1'], [$inStock['instock'], $inStock['quantity']], $result);
             }
@@ -1183,8 +1195,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             } elseif ($item['modus'] == 2) {
                 // Ticket 4842 - dynamic tax-rates
                 $resultVoucherTaxMode = Shopware()->Db()->fetchOne(
-                    'SELECT taxconfig FROM s_emarketing_vouchers WHERE ordercode=?
-                ', [$item['ordernumber']]);
+                    'SELECT taxconfig FROM s_emarketing_vouchers WHERE ordercode=?',
+                    [$item['ordernumber']]
+                );
 
                 $tax = null;
 
