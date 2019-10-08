@@ -24,7 +24,6 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components;
 
-use Shopware\Components\OpenSSLEncryption;
 use Shopware\Components\ShopwareReleaseStruct;
 
 class FeedbackCollector
@@ -33,11 +32,6 @@ class FeedbackCollector
      * @var string
      */
     private $apiEndpoint;
-
-    /**
-     * @var OpenSSLEncryption
-     */
-    private $encryption;
 
     /**
      * @var string
@@ -53,10 +47,9 @@ class FeedbackCollector
      * @param string $apiEndpoint
      * @param string $uniqueId
      */
-    public function __construct($apiEndpoint, OpenSSLEncryption $encryption, $uniqueId, ShopwareReleaseStruct $release)
+    public function __construct($apiEndpoint, $uniqueId, ShopwareReleaseStruct $release)
     {
         $this->apiEndpoint = rtrim($apiEndpoint, '/');
-        $this->encryption = $encryption;
         $this->uniqueId = $uniqueId;
         $this->release = $release;
     }
@@ -77,12 +70,6 @@ class FeedbackCollector
     private function submitData(array $data)
     {
         $dataString = json_encode($data);
-
-        $encryptionMethod = 'aes128';
-        if ($this->encryption->isEncryptionSupported($encryptionMethod)) {
-            $data = $this->encryption->encryptData($dataString, $encryptionMethod);
-            $dataString = json_encode($data);
-        }
 
         $apiUrl = $this->apiEndpoint . '/submission';
 

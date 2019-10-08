@@ -21,42 +21,11 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-namespace Shopware\Bundle\BenchmarkBundle;
-
-use Shopware\Components\OpenSSLVerifier;
-
-class BenchmarkEncryption
+class Migrations_Migration1645 extends Shopware\Components\Migrations\AbstractMigration
 {
-    /**
-     * @var OpenSSLVerifier
-     */
-    private $verifier;
-
-    /**
-     * @param string $publicKeyPath
-     */
-    public function __construct($publicKeyPath)
+    public function up($modus)
     {
-        $this->verifier = new OpenSSLVerifier($publicKeyPath);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSignatureSupported()
-    {
-        return $this->verifier->isSystemSupported();
-    }
-
-    /**
-     * @param string $message
-     * @param string $signature
-     *
-     * @return bool
-     */
-    public function isSignatureValid($message, $signature)
-    {
-        return $this->verifier->isValid($message, $signature);
+        $this->addSql(sprintf("UPDATE `s_core_config_elements` SET `value` = '%s' WHERE `name` = 'update-api-endpoint'", serialize('https://update-api.shopware.com/v1/')));
+        $this->addSql(sprintf("UPDATE `s_core_config_elements` SET `value` = '%s' WHERE `name` = 'update-feedback-api-endpoint'", serialize('https://feedback.update-api.shopware.com/v1/')));
     }
 }
