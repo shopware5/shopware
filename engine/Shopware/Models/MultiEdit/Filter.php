@@ -70,7 +70,7 @@ class Filter extends ModelEntity
     private $description;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="created", type="datetime", nullable=false)
      */
@@ -90,13 +90,13 @@ class Filter extends ModelEntity
      */
     private $isSimple = false;
 
-    public function setCreated(\DateTimeInterface $created)
+    public function setCreated(?\DateTimeInterface $created)
     {
         $this->created = $created;
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getCreated()
     {

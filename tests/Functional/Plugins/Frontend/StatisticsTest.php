@@ -40,7 +40,7 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
         $this->plugin = Shopware()->Plugins()->Frontend()->Statistics();
 
         $sql = "INSERT IGNORE INTO `s_emarketing_partner` (`idcode`, `datum`, `company`, `contact`, `street`, `zipcode`, `city`, `phone`, `fax`, `country`, `email`, `web`, `profil`, `fix`, `percent`, `cookielifetime`, `active`, `userID`) VALUES
-                  ('test123', '0000-00-00', 'Partner', '', '', '', '', '', '', '', '', '', '', 0, 10, 3600, 1, NULL)";
+                  ('test123', '2010-01-01', 'Partner', '', '', '', '', '', '', '', '', '', '', 0, 10, 3600, 1, NULL)";
         Shopware()->Db()->query($sql);
     }
 

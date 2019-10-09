@@ -91,7 +91,7 @@ class Banner extends ModelEntity
      *
      * @var \DateTimeInterface
      *
-     * @ORM\Column(name="valid_from", type="datetime", nullable=false)
+     * @ORM\Column(name="valid_from", type="datetime", nullable=true)
      */
     private $validFrom;
 
@@ -100,7 +100,7 @@ class Banner extends ModelEntity
      *
      * @var \DateTimeInterface
      *
-     * @ORM\Column(name="valid_to", type="datetime", nullable=false)
+     * @ORM\Column(name="valid_to", type="datetime", nullable=true)
      */
     private $validTo;
 
@@ -214,7 +214,7 @@ class Banner extends ModelEntity
     /**
      * Returns a datetime object containing the date this banner should displayed.
      *
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getValidFrom()
     {
@@ -245,7 +245,7 @@ class Banner extends ModelEntity
     /**
      * Returns a dateTime object with the datetime on which this banner should no more displayed
      *
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getValidTo()
     {

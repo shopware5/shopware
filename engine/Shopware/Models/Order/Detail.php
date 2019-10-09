@@ -215,11 +215,11 @@ class Detail extends ModelEntity
     private $shippedGroup = 0;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="releasedate", type="date", nullable=true)
      */
-    private $releaseDate = null;
+    private $releaseDate;
 
     /**
      * @var int
@@ -425,7 +425,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param \DateTimeInterface $releaseDate
+     * @param \DateTimeInterface|null $releaseDate
      *
      * @return Detail
      */
@@ -437,7 +437,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getReleaseDate()
     {

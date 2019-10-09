@@ -56,9 +56,9 @@ class ArticleImpression extends ModelEntity
     private $id;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
-     * @ORM\Column(name="date", type="date", nullable=false)
+     * @ORM\Column(name="date", type="date", nullable=true)
      */
     private $date;
 
@@ -128,7 +128,7 @@ class ArticleImpression extends ModelEntity
     /**
      * Set the date
      *
-     * @param \DateTimeInterface $date
+     * @param \DateTimeInterface|null $date
      */
     public function setDate($date)
     {
@@ -138,7 +138,7 @@ class ArticleImpression extends ModelEntity
     /**
      * Get the date
      *
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getDate()
     {
