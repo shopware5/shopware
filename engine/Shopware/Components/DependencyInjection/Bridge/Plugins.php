@@ -42,6 +42,13 @@ class Plugins
 
         $configReader = $container->get('shopware.plugin.cached_config_reader');
 
+        foreach ($pluginDirectories as $source => $path) {
+            $loader->registerNamespace(
+                'Shopware_Plugins',
+                $path
+            );
+        }
+
         foreach (['Core', 'Frontend', 'Backend'] as $namespace) {
             $namespace = new \Shopware_Components_Plugin_Namespace(
                 $namespace,
@@ -52,13 +59,6 @@ class Plugins
 
             $pluginManager->registerNamespace($namespace);
             $eventManager->registerSubscriber($namespace->Subscriber());
-        }
-
-        foreach ($pluginDirectories as $source => $path) {
-            $loader->registerNamespace(
-                'Shopware_Plugins',
-                $path
-            );
         }
 
         return $pluginManager;
