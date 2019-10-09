@@ -32,11 +32,11 @@ div[id*=form], .shopware-form {
     }
 }
 
-.x-form-readonly .x-form-item-body :read-only {
-    background: lightgrey;
-}
-
 .shopware-attribute-form {
+    .x-form-readonly .x-form-item-body :read-only {
+        background: lightgrey;
+    }
+
     // Disable cursor for checkboxes
     .x-form-readonly .x-form-item-body .x-form-checkbox {
         cursor: not-allowed;
