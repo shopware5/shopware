@@ -29,6 +29,10 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Removed unnecessary `extendsAction` from `Shopware_Controllers_Backend_ExtJs`
 * Removed 'p' parameter and its alias 'sPage' from "NoIndex queries" configuration
 
+### Deprecations
+
+* Deprecated class `\Shopware\Components\OpenSSLEncryption`. It will be removed in 5.7, use own implementation instead
+
 ## 5.6.2
 
 [View all changes from v5.6.1...v5.6.2](https://github.com/shopware/shopware/compare/v5.6.1...v5.6.2)

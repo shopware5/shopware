@@ -28,16 +28,6 @@ use Shopware\Bundle\BenchmarkBundle\BenchmarkEncryption;
 
 class BenchmarkEncryptionTest extends \PHPUnit\Framework\TestCase
 {
-    public function testAesEncryptionIsWorking()
-    {
-        $encryption = new BenchmarkEncryption(__DIR__ . '/fixtures/public_test_key.pem');
-
-        $result = $encryption->encryptData('foobar', 'aes128');
-
-        static::assertCount(4, $result);
-        static::assertEquals('aes128', $result['encryptionMethod']);
-    }
-
     public function testCorrectSignatureIsWorking()
     {
         $encryption = new BenchmarkEncryption(__DIR__ . '/fixtures/public_test_key.pem');
@@ -63,20 +53,6 @@ class BenchmarkEncryptionTest extends \PHPUnit\Framework\TestCase
         $encryption = new BenchmarkEncryption(__DIR__ . '/fixtures/public_test_key.pem');
 
         static::assertTrue($encryption->isSignatureSupported());
-    }
-
-    public function testAesEncryptionIsSupported()
-    {
-        $encryption = new BenchmarkEncryption(__DIR__ . '/fixtures/public_test_key.pem');
-
-        static::assertTrue($encryption->isEncryptionSupported('aes128'));
-    }
-
-    public function testUnknownEncryptionIsNotSupported()
-    {
-        $encryption = new BenchmarkEncryption(__DIR__ . '/fixtures/public_test_key.pem');
-
-        static::assertFalse($encryption->isEncryptionSupported('foobar'));
     }
 
     /**
