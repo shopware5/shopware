@@ -89,7 +89,7 @@ class LandingPageViewLoader
         }
 
         $struct = new LandingPageViewStruct();
-        $struct->sBreadcrumb = [['name' => $landingPage['name']]];
+        $struct->sBreadcrumb = [['name' => $landingPage['name'], 'link' => 'shopware.php?sViewport=campaign&emotionId=' . $emotionId]];
         $struct->seo_title = $landingPage['seo_title'];
         $struct->seo_keywords = $landingPage['seo_keywords'];
         $struct->seo_description = $landingPage['seo_description'];
