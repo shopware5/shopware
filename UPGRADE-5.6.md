@@ -12,6 +12,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added interface `ArrayAccess` to `Shopware\Bundle\StoreFrontBundle\Struct\Attribute`
 * Added `attribute` to struct data after being converted by the `Shopware\Components\Compatibility\LegacyStructConverter`
 * Added multiple smarty blocks to `themes/Frontend/Bare/frontend/plugins/index/delivery_informations.tpl`
+* Added method `clearBody` to `Enlight_Components_Mail` to clear the plain and html body
 
 ### Changes
 

@@ -995,6 +995,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $mail->clearRecipients();
         $mail->clearSubject();
         $mail->clearFrom();
+        $mail->clearBody();
 
         $mailData = [
             'attachments' => $attachments,
