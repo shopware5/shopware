@@ -16,7 +16,7 @@
         <meta property="og:type" content="article" />
         <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />
         <meta property="og:title" content="{$sArticle.title|escapeHtml}" />
-        <meta property="og:description" content="{$sArticle.description|strip_tags|truncate:$SeoDescriptionMaxLength:'…'|escapeHtml}" />
+        <meta property="og:description" content="{$sArticle.description|strip_tags|trim|truncate:$SeoDescriptionMaxLength:'…'|escapeHtml}" />
 
         {if $sArticle.author}
         <meta property="article:author" content="{$sArticle.author.name|escapeHtml}" />
@@ -24,7 +24,7 @@
 
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content="{$sArticle.title|escapeHtml}" />
-        <meta name="twitter:description" content="{$sArticle.description|strip_tags|truncate:$SeoDescriptionMaxLength:'…'|escapeHtml}" />
+        <meta name="twitter:description" content="{$sArticle.description|strip_tags|trim|truncate:$SeoDescriptionMaxLength:'…'|escapeHtml}" />
 
         {if $sArticle.media[0].source}
             <meta property="og:image" content="{$sArticle.media[0].source}" />
@@ -38,7 +38,7 @@
             {$description = "{$sCategoryContent.metaDescription|trim|strip_tags|escapeHtml}"}
         {/if}
 
-        {$description = $description|truncate:$SeoDescriptionMaxLength:'…'}
+        {$description = $description|trim|truncate:$SeoDescriptionMaxLength:'…'}
 
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />
