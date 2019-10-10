@@ -22,10 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Components\Password\Encoder\PasswordEncoderInterface;
+namespace Shopware\Tests\Functional\Components;
 
-class Shopware_Tests_Components_AuthTest extends Enlight_Components_Test_TestCase
+use DateTime;
+use Enlight_Components_Db_Adapter_Pdo_Mysql;
+use Enlight_Components_Test_TestCase;
+use Shopware\Components\Password\Encoder\PasswordEncoderInterface;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+use Shopware_Components_Auth;
+use Shopware_Components_Auth_Adapter_Default;
+
+class AuthTest extends Enlight_Components_Test_TestCase
 {
+    use DatabaseTransactionBehaviour;
+
     /**
      * @var Enlight_Components_Db_Adapter_Pdo_Mysql
      */
@@ -46,7 +56,6 @@ class Shopware_Tests_Components_AuthTest extends Enlight_Components_Test_TestCas
         parent::setUp();
 
         $this->db = Shopware()->Db();
-        $this->db->beginTransaction();
 
         $this->auth = Shopware_Components_Auth::getInstance();
 
@@ -54,13 +63,6 @@ class Shopware_Tests_Components_AuthTest extends Enlight_Components_Test_TestCas
         $passworEncoderRegistry = Shopware()->Container()->get('PasswordEncoder');
         $defaultEncoderName = $passworEncoderRegistry->getDefaultPasswordEncoderName();
         $this->encoder = $passworEncoderRegistry->getEncoderByName($defaultEncoderName);
-    }
-
-    protected function tearDown()
-    {
-        $this->db->rollBack();
-
-        parent::tearDown();
     }
 
     public function testAuthenticateWithPassedAdapter()
