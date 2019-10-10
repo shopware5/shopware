@@ -63,8 +63,6 @@ class CrudService implements CrudServiceInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Exception
      */
     public function delete($table, $column, $updateDependingTables = false)
     {
@@ -100,8 +98,6 @@ class CrudService implements CrudServiceInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Exception
      */
     public function update(
         $table,
@@ -135,8 +131,6 @@ class CrudService implements CrudServiceInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return ConfigurationStruct|null
      */
     public function get($table, $columnName)
     {
@@ -154,8 +148,6 @@ class CrudService implements CrudServiceInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return ConfigurationStruct[]
      */
     public function getList($table)
     {
