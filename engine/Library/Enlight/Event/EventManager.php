@@ -127,7 +127,7 @@ class Enlight_Event_EventManager extends Enlight_Class
                 $listener = implode('::', $listener);
             }
 
-            $this->logger->warning(sprintf(
+            $this->logger->error(sprintf(
                 'The event listener "%s::%s" for the event "%s" cannot be registered because it is not callable.',
                 $handlerInfo['plugin'],
                 $listener,
