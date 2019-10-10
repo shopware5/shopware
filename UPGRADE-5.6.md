@@ -18,7 +18,6 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 * Changed aria-label in `themes/Frontend/Bare/frontend/_includes/privacy.tpl` to remove html tags
 * Changed `sAdmin::sRiskATTRIS` to allow any product attribute
-* Changed event manager to log, when event listener is not callable
 * Changed `Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\GraduatedPricesGateway` to consider minimum purchase quantity
 * Changed `\Shopware_Controllers_Frontend_Address::handleExtraData` to split `sessionKey` correctly
 * Changed `StateManager.getScrollBarSize` to lazily get the size of the scrollbar

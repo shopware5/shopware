@@ -118,19 +118,18 @@ class Enlight_Event_EventManager extends Enlight_Class
         if (!$handler->isCallable()) {
             $handlerInfo = $handler->toArray();
 
-            $listener = $handlerInfo['listener'];
-            if (is_array($listener)) {
-                if (is_object($listener[0])) {
-                    $listener[0] = get_class($listener[0]);
+            if (is_array($handlerInfo['listener'])) {
+                if (is_object($handlerInfo['listener'][0])) {
+                    $handlerInfo['listener'][0] = get_class($handlerInfo['listener'][0]);
                 }
 
-                $listener = implode('::', $listener);
+                $handlerInfo['listener'] = implode('::', $handlerInfo['listener']);
             }
 
             $this->logger->error(sprintf(
                 'The event listener "%s::%s" for the event "%s" cannot be registered because it is not callable.',
                 $handlerInfo['plugin'],
-                $listener,
+                $handlerInfo['listener'],
                 $handlerInfo['name']
             ));
 

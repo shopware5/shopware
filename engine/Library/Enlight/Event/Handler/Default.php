@@ -78,9 +78,11 @@ class Enlight_Event_Handler_Default extends Enlight_Event_Handler
     }
 
     /**
-     * {@inheritdoc}
+     * Checks if the event listener is callable.
+     *
+     * @return bool
      */
-    public function isCallable(): bool
+    public function isCallable()
     {
         return is_callable($this->getListener());
     }
