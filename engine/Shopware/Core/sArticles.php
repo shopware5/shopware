@@ -1234,7 +1234,14 @@ class sArticles implements \Enlight_Hook
         }
         $money_str[1] = substr($money_str[1], 0, 3); // convert to rounded (to the nearest thousandth) string
 
-        return round((float) ($money_str[0] . '.' . $money_str[1]), 2);
+        $value = (float) ($money_str[0] . '.' . $money_str[1]);
+
+        // round handles "-0" different since PHP 7.4, @see https://bugs.php.net/bug.php?id=78660
+        if ($value === -0.0) {
+            return 0;
+        }
+
+        return round($value, 2);
     }
 
     /**

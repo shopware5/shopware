@@ -27,6 +27,7 @@ PHP analyze:
     stage: Static analysis
     script:
         - ./psh.phar init
+        - chown -R 1000:1000 .
         - ./psh.phar check-code
     services:
         -   name: mysql:5.7
@@ -39,6 +40,7 @@ Code Coverage:
     stage: Static analysis
     script:
         - ./psh.phar init --SW_HOST="localhost"
+        - chown -R 1000:1000 .
         - composer require pcov/clobber
         - vendor/bin/pcov clobber
         - php -d pcov.enabled=1 -d pcov.directory=$CI_PROJECT_DIR
@@ -69,6 +71,7 @@ Code Coverage:
             alias: mysql
     script:
         - ./psh.phar init --SW_HOST="localhost"
+        - chown -R 1000:1000 .
         - ./psh.phar unit-fast --SW_HOST="localhost"
 
     artifacts:
@@ -80,6 +83,7 @@ Code Coverage:
     stage: Elasticsearch
     script:
         - ./psh.phar init --SW_HOST="localhost"
+        - chown -R 1000:1000 .
         - ./psh.phar unit-elasticsearch --SW_HOST="localhost"
 
     artifacts:
@@ -106,7 +110,6 @@ PHP 7.4:
     extends: .phpunit_base
     image: shopware/5-continuous:7.4
     stage: Unit
-    allow_failure: true
     services:
         -   name: mysql:5.7
             alias: mysql
