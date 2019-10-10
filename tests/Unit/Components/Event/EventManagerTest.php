@@ -298,7 +298,6 @@ class EventManagerTest extends TestCase
         static::assertCount(1, $this->eventManager->getListeners('eventName1'));
         static::assertCount(1, $this->eventManager->getListeners('eventName2'));
         static::assertCount(3, $this->eventManager->getListeners('eventName3'));
-        static::assertCount(0, $this->eventManager->getListeners('eventName4'));
 
         $listeners = $this->eventManager->getListeners('eventName3');
         $listener = $listeners[5];
@@ -350,31 +349,6 @@ class EventSubsciberTest implements SubscriberInterface
                 ['callback3_1'],
                 ['callback3_2'],
             ],
-            'eventName4' => 'brokenCallback',
         ];
-    }
-
-    public function callback0()
-    {
-    }
-
-    public function callback1()
-    {
-    }
-
-    public function callback2()
-    {
-    }
-
-    public function callback3_0()
-    {
-    }
-
-    public function callback3_1()
-    {
-    }
-
-    public function callback3_2()
-    {
     }
 }
