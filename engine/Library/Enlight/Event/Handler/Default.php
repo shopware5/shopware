@@ -78,14 +78,6 @@ class Enlight_Event_Handler_Default extends Enlight_Event_Handler
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function isCallable(): bool
-    {
-        return is_callable($this->getListener());
-    }
-
-    /**
      * Executes the listener with the given Enlight_Event_EventArgs.
      * @param   Enlight_Event_EventArgs $args
      * @return  mixed
