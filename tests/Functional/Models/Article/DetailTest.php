@@ -22,9 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Models\Order;
+
+use ReflectionClass;
 use Shopware\Models\Article\Detail;
 
-class Shopware_Tests_Models_Order_DetailTest extends Enlight_Components_Test_TestCase
+class DetailTest extends \Enlight_Components_Test_TestCase
 {
     /**
      * @var \Shopware\Components\Model\ModelManager
@@ -130,7 +133,7 @@ class Shopware_Tests_Models_Order_DetailTest extends Enlight_Components_Test_Tes
     /**
      * This helper set's the new regex pattern via inflection into the Validator-instance defined in the DIC
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     private function internalTestChangingOrderNumberRegexIsWorking(string $regex, string $number): void
     {

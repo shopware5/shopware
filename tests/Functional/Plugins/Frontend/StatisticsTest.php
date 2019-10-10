@@ -22,10 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_Test_Plugin_TestCase
+namespace Shopware\Tests\Plugins\Frontend;
+
+class StatisticsTest extends \Enlight_Components_Test_Plugin_TestCase
 {
     /**
-     * @var Shopware_Plugins_Frontend_Paypal_Bootstrap
+     * @var \Shopware_Plugins_Frontend_Statistics_Bootstrap
      */
     protected $plugin;
 
@@ -57,7 +59,7 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
     /**
      * Retrieve plugin instance
      *
-     * @return Shopware_Plugins_Frontend_Statistics_Bootstrap
+     * @return \Shopware_Plugins_Frontend_Statistics_Bootstrap
      */
     public function Plugin()
     {

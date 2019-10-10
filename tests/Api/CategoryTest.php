@@ -22,7 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
+namespace Shopware\Tests\Api;
+
+use PHPUnit\Framework\TestCase;
+use Zend_Http_Client;
+use Zend_Http_Client_Adapter_Curl;
+use Zend_Json;
+
+class CategoryTest extends TestCase
 {
     public $apiBaseUrl = '';
 

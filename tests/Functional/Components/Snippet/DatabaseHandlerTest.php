@@ -22,7 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Components_Snippet_DatabaseHandlerTest extends Enlight_Components_Test_TestCase
+namespace Shopware\Tests\Components\Snippet;
+
+use Shopware\Models\Shop\Locale;
+use Shopware\Models\Snippet\Snippet;
+
+class DatabaseHandlerTest extends \Enlight_Components_Test_TestCase
 {
     /**
      * Tests the import of snippets with missing locale.
@@ -34,12 +39,12 @@ class Shopware_Tests_Components_Snippet_DatabaseHandlerTest extends Enlight_Comp
         $em = Shopware()->Container()->get('models');
 
         // Delete necessary locale
-        $germanLocale = $em->getRepository(\Shopware\Models\Shop\Locale::class)->findOneBy([
+        $germanLocale = $em->getRepository(Locale::class)->findOneBy([
             'locale' => 'de_DE',
         ]);
         $em->remove($germanLocale);
         // Delete snippets of the AdvancedMenu plugin
-        $advancedMenuSnippets = $em->getRepository(\Shopware\Models\Snippet\Snippet::class)->findBy([
+        $advancedMenuSnippets = $em->getRepository(Snippet::class)->findBy([
             'namespace' => 'frontend/plugins/advanced_menu/advanced_menu',
         ]);
         foreach ($advancedMenuSnippets as $advancedMenuSnippet) {
@@ -48,7 +53,7 @@ class Shopware_Tests_Components_Snippet_DatabaseHandlerTest extends Enlight_Comp
         $em->flush();
 
         // No snippets are remaining
-        $advancedMenuSnippets = $em->getRepository(\Shopware\Models\Snippet\Snippet::class)->findBy([
+        $advancedMenuSnippets = $em->getRepository(Snippet::class)->findBy([
             'namespace' => 'frontend/plugins/advanced_menu/advanced_menu',
         ]);
         static::assertCount(0, $advancedMenuSnippets);
@@ -60,7 +65,7 @@ class Shopware_Tests_Components_Snippet_DatabaseHandlerTest extends Enlight_Comp
             ->loadToDatabase($pluginBootstrap->Path() . 'Snippets/');
 
         // Check that all snippets of the remaining locale are installed
-        $advancedMenuSnippets = $em->getRepository(\Shopware\Models\Snippet\Snippet::class)->findBy([
+        $advancedMenuSnippets = $em->getRepository(Snippet::class)->findBy([
             'namespace' => 'frontend/plugins/advanced_menu/advanced_menu',
         ]);
         static::assertCount(3, $advancedMenuSnippets);

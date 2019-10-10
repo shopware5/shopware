@@ -22,7 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework\TestCase
+namespace Shopware\Tests\Components\Thumbnail;
+
+use PHPUnit\Framework\TestCase;
+
+class ManagerTest extends TestCase
 {
     public function testManagerInstance()
     {

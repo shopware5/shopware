@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Components_Router_RouterTest extends Enlight_Components_Test_TestCase
+namespace Shopware\Tests\Components\Router;
+
+class RouterTest extends \Enlight_Components_Test_TestCase
 {
     /**
      * Tests if a generated SEO route is the same with or without the _seo parameters

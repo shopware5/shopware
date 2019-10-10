@@ -22,7 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Modules_Articles_getListingArrayKeyTest extends Enlight_Components_Test_TestCase
+namespace Shopware\Tests\Modules\Articles;
+
+use sArticles;
+
+class getListingArrayKeyTest extends \Enlight_Components_Test_TestCase
 {
     /**
      * Module instance

@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Components_StringCompilerTest extends Enlight_Components_Test_TestCase
+namespace Shopware\Tests\Components;
+
+class StringCompilerTest extends \Enlight_Components_Test_TestCase
 {
     /**
      * @var \Shopware_Components_StringCompiler
@@ -37,7 +39,7 @@ class Shopware_Tests_Components_StringCompilerTest extends Enlight_Components_Te
     {
         parent::setUp();
 
-        $this->compiler = new Shopware_Components_StringCompiler(Shopware()->Template());
+        $this->compiler = new \Shopware_Components_StringCompiler(Shopware()->Template());
     }
 
     /**

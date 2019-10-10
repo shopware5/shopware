@@ -22,7 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Components_AclTest extends Enlight_Components_Test_TestCase
+namespace Shopware\Tests\Components;
+
+use Enlight_Components_Test_TestCase;
+
+class AclTest extends Enlight_Components_Test_TestCase
 {
     /**
      * @var \Shopware_Components_Acl

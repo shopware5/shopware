@@ -22,10 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Models;
+
 use Shopware\Models\Mail\Mail;
 use Shopware\Models\Order\Status;
 
-class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
+class MailTest extends \Enlight_Components_Test_TestCase
 {
     /**
      * @var array
@@ -61,12 +63,12 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
     ];
 
     /**
-     * @var Shopware\Components\Model\ModelManager
+     * @var \Shopware\Components\Model\ModelManager
      */
     protected $em;
 
     /**
-     * @var Shopware\Models\User\Repository
+     * @var \Shopware\Models\User\Repository
      */
     protected $repo;
 
@@ -80,7 +82,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
 
         $this->em = Shopware()->Models();
         $this->repo = Shopware()->Models()
-                                ->getRepository('Shopware\Models\Mail\Mail');
+                                ->getRepository(Mail::class);
     }
 
     /**
@@ -107,7 +109,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
         foreach ($this->testData as $field => $value) {
             $setMethod = 'set' . ucfirst($field);
 
-            if (substr($field, 0, 2) == 'is') {
+            if (substr($field, 0, 2) === 'is') {
                 $getMethod = $field;
             } else {
                 $getMethod = 'get' . ucfirst($field);
@@ -128,7 +130,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
         $mail->fromArray($this->testData);
 
         foreach ($this->testData as $fieldname => $value) {
-            if (substr($fieldname, 0, 2) == 'is') {
+            if (substr($fieldname, 0, 2) === 'is') {
                 $getMethod = $fieldname;
             } else {
                 $getMethod = 'get' . ucfirst($fieldname);
@@ -152,7 +154,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
         $testData = array_merge($this->testData, $this->translation);
 
         foreach ($testData as $fieldname => $value) {
-            if (substr($fieldname, 0, 2) == 'is') {
+            if (substr($fieldname, 0, 2) === 'is') {
                 $getMethod = $fieldname;
             } else {
                 $getMethod = 'get' . ucfirst($fieldname);
@@ -182,7 +184,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
         $mail = $this->repo->find($mailId);
 
         foreach ($this->testData as $fieldname => $value) {
-            if (substr($fieldname, 0, 2) == 'is') {
+            if (substr($fieldname, 0, 2) === 'is') {
                 $getMethod = $fieldname;
             } else {
                 $getMethod = 'get' . ucfirst($fieldname);

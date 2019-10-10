@@ -26,6 +26,7 @@ namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Article\Configurator\Group;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
@@ -341,7 +342,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
      */
     protected function getProduct(
         $number,
-        TestContext $context,
+        ShopContext $context,
         Category $category = null,
         $data = []
     ) {

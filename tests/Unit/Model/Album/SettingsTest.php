@@ -22,9 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Models\Album;
+
 use PHPUnit\Framework\TestCase;
 
-class Shopware_Tests_Models_Album_SettingsTest extends TestCase
+class SettingsTest extends TestCase
 {
     public function testGetThumbnailSizeReturnValue()
     {

@@ -22,10 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Controllers\Backend;
+
+use Zend_Json;
+
+class PartnerTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /** @var \Shopware\Models\Partner\Partner $repository */
-    protected $repository = null;
+    protected $repository;
 
     /**
      * dummy data
@@ -54,7 +58,7 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
 
     private $updateStreet = 'Abbey Road';
 
-    /** @var Shopware\Components\Model\ModelManager */
+    /** @var \Shopware\Components\Model\ModelManager */
     private $manager = null;
 
     /**
@@ -94,7 +98,7 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         $this->manager->flush();
 
         $dummy = $this->createDummy();
-        /* @var Enlight_Controller_Response_ResponseTestCase */
+        /* @var \Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/Partner/getList?page=1&start=0&limit=30');
         static::assertTrue($this->View()->success);
         $returnData = $this->View()->data;
