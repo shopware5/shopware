@@ -3240,6 +3240,7 @@ class sAdmin implements \Enlight_Hook
                     'uniqueId' => $uniqueId,
                 ]
             );
+
             //destroy cookie
             $this->front->Response()->setCookie('sUniqueID');
         }
@@ -3247,6 +3248,7 @@ class sAdmin implements \Enlight_Hook
         $this->session->offsetSet('sUserMail', $email);
         $this->session->offsetSet('sUserPassword', $hash);
         $this->session->offsetSet('sUserId', $userId);
+        $this->session->offsetSet('sNotesQuantity', $this->moduleManager->Basket()->sCountNotes());
 
         if (!$this->sCheckUser()) {
             return;
