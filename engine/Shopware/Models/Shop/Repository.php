@@ -86,12 +86,13 @@ class Repository extends ModelRepository
      * @param string|array|null $order
      * @param int|null          $offset
      * @param int|null          $limit
+     * @param bool              $orderByShopPositionAsDefault Deprecated since 5.6.3, will be default starting with Shopware 5.8.
      *
      * @return Query
      */
-    public function getBaseListQuery($filter = null, $order = null, $offset = null, $limit = null)
+    public function getBaseListQuery($filter = null, $order = null, $offset = null, $limit = null, bool $orderByShopPositionAsDefault = false)
     {
-        $builder = $this->getBaseListQueryBuilder($filter, $order);
+        $builder = $this->getBaseListQueryBuilder($filter, $order, $orderByShopPositionAsDefault);
         if ($limit !== null) {
             $builder->setFirstResult($offset)
                 ->setMaxResults($limit);
@@ -140,10 +141,11 @@ class Repository extends ModelRepository
      *
      * @param array|null        $filter
      * @param string|array|null $order
+     * @param bool              $orderByShopPositionAsDefault Deprecated since 5.6.3, will be default starting with Shopware 5.8.
      *
      * @return QueryBuilder
      */
-    public function getBaseListQueryBuilder($filter = null, $order = null)
+    public function getBaseListQueryBuilder($filter = null, $order = null, bool $orderByShopPositionAsDefault = false)
     {
         $builder = $this->createQueryBuilder('shop');
         $fields = [
@@ -157,11 +159,14 @@ class Repository extends ModelRepository
         ];
         $builder->select($fields);
         $builder->leftJoin('shop.locale', 'locale')
-                ->leftJoin('shop.category', 'category')
-                ->leftJoin('shop.currency', 'currency')
-                ->orderBy('default', 'DESC')
-                ->addOrderBy('shop.position');
+            ->leftJoin('shop.category', 'category')
+            ->leftJoin('shop.currency', 'currency')
+            ->orderBy('default', 'DESC')
+            ->addOrderBy('name');
 
+        if ($orderByShopPositionAsDefault) {
+            $builder->orderBy('shop.position');
+        }
         if ($filter !== null) {
             $builder->addFilter($filter);
         }
@@ -223,14 +228,22 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getShopsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
+     * @param bool $orderByShopPositionAsDefault Deprecated since 5.6.3, will be default starting with Shopware 5.8.
+     *
      * @return QueryBuilder
      */
-    public function getMainListQueryBuilder()
+    public function getMainListQueryBuilder(bool $orderByShopPositionAsDefault = false)
     {
-        return $this->createQueryBuilder('s')
+        $queryBuilder = $this->createQueryBuilder('s')
             ->where('s.mainId IS NULL')
             ->orderBy('s.default', 'DESC')
-            ->addOrderBy('s.position');
+            ->addOrderBy('s.name');
+
+        if ($orderByShopPositionAsDefault) {
+            $queryBuilder->orderBy('s.position');
+        }
+
+        return $queryBuilder;
     }
 
     /**

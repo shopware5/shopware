@@ -25,7 +25,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `\Shopware_Controllers_Frontend_Address::handleExtraData` to split `sessionKey` correctly
 * Changed `StateManager.getScrollBarSize` to lazily get the size of the scrollbar
 * Changed missing german translation in `snippets/backend/article_list/main.ini`
-* Changed the smarty block `frontend_detail_data_delivery`, added availability meta tags for the pre selected configurator products for configurator types 'Selection' and 'Image'
+* Changed the `\Shopware\Models\Shop\Repository::getBaseListQueryBuilder`, `\Shopware\Models\Shop\Repository::getBaseListQuery` and `\Shopware\Models\Shop\Repository::getMainListQueryBuilder` methods. Added a boolean `$orderByShopPositionAsDefault` that can be set to true to filter by shop position instead of shop name
+* Changed the smarty block `frontend_detail_data_delivery`, added availability meta tags for the pre selected configurator products for configurator types 'Selection' and 'Image' 
 * Changed the path value of following cookies, so they correctly consider the shop's base path
   * `session-<shopId>`
   * `partner`
@@ -40,6 +41,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 ### Deprecations
 
 * Deprecated class `\Shopware\Components\OpenSSLEncryption`. It will be removed in 5.7, use own implementation instead
+* Deprecated parameter `$orderByShopPositionAsDefault` for methods `getBaseListQuery`, `getBaseListQueryBuilder`and `getMainListQueryBuilder` in `engine/Shopware/Models/Shop/Repository.php`
 
 ## 5.6.2
 
