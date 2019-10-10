@@ -39,7 +39,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     public $em;
 
     /**
-     * @var \Shopware\Bundle\AttributeBundle\Service\CrudService
+     * @var \Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface
      */
     public $cs;
 

@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
-use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\ESIndexingBundle\FieldMappingInterface;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\MappingInterface;
@@ -63,7 +63,7 @@ class ProductMapping implements MappingInterface
     private $textMapping;
 
     /**
-     * @var CrudService
+     * @var CrudServiceInterface
      */
     private $crudService;
 
@@ -76,7 +76,7 @@ class ProductMapping implements MappingInterface
         IdentifierSelector $identifierSelector,
         FieldMappingInterface $fieldMapping,
         TextMappingInterface $textMapping,
-        CrudService $crudService,
+        CrudServiceInterface $crudService,
         VariantHelperInterface $variantHelper,
         bool $isDynamic = true,
         bool $isDebug = false

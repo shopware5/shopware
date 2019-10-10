@@ -23,7 +23,7 @@
  */
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Translation\ObjectTranslator;
 
@@ -714,7 +714,7 @@ class Shopware_Components_Translation
 
         foreach ($data as $key => $value) {
             $column = strtolower($key);
-            $column = str_replace(CrudService::EXT_JS_PREFIX, '', $column);
+            $column = str_replace(CrudServiceInterface::EXT_JS_PREFIX, '', $column);
 
             unset($data[$key]);
             if (in_array($column, $columns)) {

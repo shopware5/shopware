@@ -27,7 +27,7 @@ namespace Shopware\Bundle\AttributeBundle\Service;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Column;
 
-class TableMapping
+class TableMapping implements TableMappingInterface
 {
     /**
      * @var Connection
@@ -46,12 +46,9 @@ class TableMapping
     }
 
     /**
-     * @param string $table
-     * @param string $name
+     * {@inheritdoc}
      *
      * @throws \Exception
-     *
-     * @return bool
      */
     public function isIdentifierColumn($table, $name)
     {
@@ -66,12 +63,9 @@ class TableMapping
     }
 
     /**
-     * @param string $table
-     * @param string $name
+     * {@inheritdoc}
      *
      * @throws \Exception
-     *
-     * @return bool
      */
     public function isCoreColumn($table, $name)
     {
@@ -86,9 +80,7 @@ class TableMapping
     }
 
     /**
-     * @param string $table
-     *
-     * @return string|null
+     * {@inheritdoc}
      */
     public function getTableModel($table)
     {
@@ -100,7 +92,7 @@ class TableMapping
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getAttributeTables()
     {
@@ -110,9 +102,7 @@ class TableMapping
     }
 
     /**
-     * @param string $table
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTableForeignKey($table)
     {
@@ -120,9 +110,7 @@ class TableMapping
     }
 
     /**
-     * @param string $table
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isAttributeTable($table)
     {
@@ -130,10 +118,7 @@ class TableMapping
     }
 
     /**
-     * @param string $table
-     * @param string $column
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isTableColumn($table, $column)
     {
@@ -146,11 +131,9 @@ class TableMapping
     }
 
     /**
-     * @param string $table
+     * {@inheritdoc}
      *
      * @throws \Exception
-     *
-     * @return array
      */
     public function getDependingTables($table)
     {
@@ -162,9 +145,7 @@ class TableMapping
     }
 
     /**
-     * @param string $table
-     *
-     * @return \Doctrine\DBAL\Schema\Column[]
+     * {@inheritdoc}
      */
     public function getTableColumns($table)
     {
