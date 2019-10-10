@@ -39,7 +39,7 @@ class Article extends LazyFetchModelEntity
      * OWNING SIDE
      * Owning side of relation between container type 'article' and parent container
      *
-     * @var \Shopware\Models\Newsletter\Container
+     * @var \Shopware\Models\Newsletter\Container|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="articles")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
@@ -71,7 +71,7 @@ class Article extends LazyFetchModelEntity
     /**
      * ID of the container this model belongs to
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="parentID", type="integer", length=11, nullable=true)
      */
@@ -132,7 +132,7 @@ class Article extends LazyFetchModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Newsletter\Container
+     * @return \Shopware\Models\Newsletter\Container|null
      */
     public function getContainer()
     {

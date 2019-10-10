@@ -47,7 +47,7 @@ class Download extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ProductDownloadAttribute
+     * @var ProductDownloadAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleDownload", mappedBy="articleDownload", cascade={"persist"})
      */
@@ -191,7 +191,7 @@ class Download extends ModelEntity
     }
 
     /**
-     * @return ProductDownloadAttribute
+     * @return ProductDownloadAttribute|null
      */
     public function getAttribute()
     {

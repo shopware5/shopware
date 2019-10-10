@@ -81,7 +81,7 @@ class Address extends ModelEntity
     /**
      * Contains the name of the address address company
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="company", type="string", length=255, nullable=true)
      */
@@ -90,7 +90,7 @@ class Address extends ModelEntity
     /**
      * Contains the department name of the address address company
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="department", type="string", length=35, nullable=true)
      */
@@ -115,7 +115,7 @@ class Address extends ModelEntity
     protected $firstname;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="title", type="string", length=100, nullable=true)
      */
@@ -160,7 +160,7 @@ class Address extends ModelEntity
     /**
      * Contains the phone number of the address
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="phone", type="string", length=40, nullable=true)
      */
@@ -169,7 +169,7 @@ class Address extends ModelEntity
     /**
      * Contains the vat id of the address
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="ustid", type="string", length=50, nullable=true)
      */
@@ -178,7 +178,7 @@ class Address extends ModelEntity
     /**
      * Contains the additional address line data
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="additional_address_line1", type="string", length=255, nullable=true)
      */
@@ -187,7 +187,7 @@ class Address extends ModelEntity
     /**
      * Contains the additional address line data 2
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="additional_address_line2", type="string", length=255, nullable=true)
      */
@@ -205,7 +205,7 @@ class Address extends ModelEntity
     /**
      * Contains the id of the state.
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="state_id", type="integer", nullable=true)
      */
@@ -226,7 +226,7 @@ class Address extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var CustomerAddressAttribute
+     * @var CustomerAddressAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerAddress", mappedBy="customerAddress", orphanRemoval=true, cascade={"persist"})
      */
@@ -241,7 +241,7 @@ class Address extends ModelEntity
     protected $country;
 
     /**
-     * @var State
+     * @var State|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Country\State")
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
@@ -266,7 +266,7 @@ class Address extends ModelEntity
     /**
      * Setter function for the company column property
      *
-     * @param string $company
+     * @param string|null $company
      */
     public function setCompany($company)
     {
@@ -276,7 +276,7 @@ class Address extends ModelEntity
     /**
      * Getter function for the company column property.
      *
-     * @return string
+     * @return string|null
      */
     public function getCompany()
     {
@@ -286,7 +286,7 @@ class Address extends ModelEntity
     /**
      * Setter function for the department column property.
      *
-     * @param string $department
+     * @param string|null $department
      */
     public function setDepartment($department)
     {
@@ -296,7 +296,7 @@ class Address extends ModelEntity
     /**
      * Getter function for the department column property.
      *
-     * @return string
+     * @return string|null
      */
     public function getDepartment()
     {
@@ -426,7 +426,7 @@ class Address extends ModelEntity
     /**
      * Setter function for the phone column property.
      *
-     * @param string $phone
+     * @param string|null $phone
      */
     public function setPhone($phone)
     {
@@ -436,7 +436,7 @@ class Address extends ModelEntity
     /**
      * Getter function for the phone column property.
      *
-     * @return string
+     * @return string|null
      */
     public function getPhone()
     {
@@ -447,7 +447,7 @@ class Address extends ModelEntity
      * Setter function for the vatId column property.
      * The vatId will be saved in the ustId table field.
      *
-     * @param string $vatId
+     * @param string|null $vatId
      */
     public function setVatId($vatId)
     {
@@ -458,7 +458,7 @@ class Address extends ModelEntity
      * Getter function for the vatId column property.
      * The vatId is saved in the ustId table field.
      *
-     * @return string
+     * @return string|null
      */
     public function getVatId()
     {
@@ -499,7 +499,7 @@ class Address extends ModelEntity
     /**
      * Setter function for the setAdditionalAddressLine1 column property.
      *
-     * @param string $additionalAddressLine1
+     * @param string|null $additionalAddressLine1
      */
     public function setAdditionalAddressLine1($additionalAddressLine1)
     {
@@ -509,7 +509,7 @@ class Address extends ModelEntity
     /**
      * Getter function for the getAdditionalAddressLine1 column property.
      *
-     * @return string
+     * @return string|null
      */
     public function getAdditionalAddressLine1()
     {
@@ -519,7 +519,7 @@ class Address extends ModelEntity
     /**
      * Setter function for the setAdditionalAddressLine2 column property.
      *
-     * @param string $additionalAddressLine2
+     * @param string|null $additionalAddressLine2
      */
     public function setAdditionalAddressLine2($additionalAddressLine2)
     {
@@ -529,7 +529,7 @@ class Address extends ModelEntity
     /**
      * Getter function for the getAdditionalAddressLine2 column property.
      *
-     * @return string
+     * @return string|null
      */
     public function getAdditionalAddressLine2()
     {
@@ -579,7 +579,7 @@ class Address extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getTitle()
     {
@@ -587,7 +587,7 @@ class Address extends ModelEntity
     }
 
     /**
-     * @param string $title
+     * @param string|null $title
      */
     public function setTitle($title)
     {

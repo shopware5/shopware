@@ -50,7 +50,7 @@ class User extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\User
+     * @var \Shopware\Models\Attribute\User|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\User", mappedBy="user", orphanRemoval=true, cascade={"persist"})
      */
@@ -109,7 +109,7 @@ class User extends ModelEntity
     private $encoder;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="apiKey", type="string", length=40, nullable=true)
      */
@@ -249,7 +249,7 @@ class User extends ModelEntity
     /**
      * Set API-Key
      *
-     * @param string $apiKey
+     * @param string|null $apiKey
      *
      * @return User
      */
@@ -267,7 +267,7 @@ class User extends ModelEntity
     /**
      * Get API-Key
      *
-     * @return string
+     * @return string|null
      */
     public function getApiKey()
     {
@@ -537,7 +537,7 @@ class User extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\User
+     * @return \Shopware\Models\Attribute\User|null
      */
     public function getAttribute()
     {

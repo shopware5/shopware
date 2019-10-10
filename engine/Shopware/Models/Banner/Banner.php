@@ -60,7 +60,7 @@ class Banner extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var BannerAttribute
+     * @var BannerAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Banner", mappedBy="banner", cascade={"persist"})
      */
@@ -394,7 +394,7 @@ class Banner extends ModelEntity
     }
 
     /**
-     * @return BannerAttribute
+     * @return BannerAttribute|null
      */
     public function getAttribute()
     {

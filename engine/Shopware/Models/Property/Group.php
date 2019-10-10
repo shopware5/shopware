@@ -41,7 +41,7 @@ class Group extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var PropertyGroupAttribute
+     * @var PropertyGroupAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyGroup", mappedBy="propertyGroup", orphanRemoval=true, cascade={"persist"})
      */
@@ -264,7 +264,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return PropertyGroupAttribute
+     * @return PropertyGroupAttribute|null
      */
     public function getAttribute()
     {

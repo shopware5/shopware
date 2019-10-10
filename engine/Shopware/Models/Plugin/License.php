@@ -98,42 +98,42 @@ class License extends ModelEntity
     private $source;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="added", type="date", nullable=true)
      */
     private $added;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="creation", type="date", nullable=true)
      */
     private $creation;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="expiration", type="date", nullable=true)
      */
     private $expiration;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="active", type="integer", nullable=true)
      */
     private $active;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="plugin_id", type="integer", nullable=true)
      */
     private $pluginId;
 
     /**
-     * @var \Shopware\Models\Plugin\Plugin
+     * @var \Shopware\Models\Plugin\Plugin|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="licenses")
      * @ORM\JoinColumn(name="plugin_id", referencedColumnName="id")
@@ -157,7 +157,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getActive()
     {
@@ -173,7 +173,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getAdded()
     {
@@ -189,7 +189,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getCreation()
     {
@@ -205,7 +205,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getExpiration()
     {
@@ -293,7 +293,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @param Plugin $plugin
+     * @param Plugin|null $plugin
      */
     public function setPlugin($plugin)
     {
@@ -301,7 +301,7 @@ class License extends ModelEntity
     }
 
     /**
-     * @return Plugin
+     * @return Plugin|null
      */
     public function getPlugin()
     {

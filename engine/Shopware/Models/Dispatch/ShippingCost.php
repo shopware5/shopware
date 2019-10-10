@@ -184,7 +184,7 @@ class ShippingCost extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Dispatch\Dispatch|array|null $dispatch
+     * @param \Shopware\Models\Dispatch\Dispatch|array $dispatch
      */
     public function setDispatch($dispatch)
     {

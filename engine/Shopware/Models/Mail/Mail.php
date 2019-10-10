@@ -80,7 +80,7 @@ class Mail extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\Mail
+     * @var \Shopware\Models\Attribute\Mail|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Mail", mappedBy="mail", orphanRemoval=true, cascade={"persist"})
      */
@@ -147,7 +147,7 @@ class Mail extends ModelEntity
     private $isHtml = false;
 
     /**
-     * @var bool
+     * @var bool|null
      *
      * @ORM\Column(name="dirty", type="boolean", nullable=true)
      */
@@ -555,7 +555,7 @@ class Mail extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Mail
+     * @return \Shopware\Models\Attribute\Mail|null
      */
     public function getAttribute()
     {
@@ -573,7 +573,7 @@ class Mail extends ModelEntity
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
     public function isDirty()
     {

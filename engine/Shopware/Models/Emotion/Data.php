@@ -111,7 +111,7 @@ class Data extends ModelEntity
     private $fieldId;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="value", type="text", nullable=true)
      */
@@ -190,7 +190,7 @@ class Data extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getValue()
     {

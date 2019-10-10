@@ -50,7 +50,7 @@ class ProductFeed extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ProductFeedAttribute
+     * @var ProductFeedAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ProductFeed", mappedBy="productFeed", orphanRemoval=true, cascade={"persist"})
      */
@@ -150,35 +150,35 @@ class ProductFeed extends ModelEntity
     private $encodingId = 1;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="categoryID", type="integer", nullable=true)
      */
     private $categoryId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="currencyID", type="integer", nullable=true)
      */
     private $currencyId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="customergroupID", type="integer", nullable=true)
      */
     private $customerGroupId;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="partnerID", type="string", length=255, nullable=true)
      */
     private $partnerId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="languageID", type="integer", nullable=true)
      */
@@ -255,14 +255,14 @@ class ProductFeed extends ModelEntity
     private $countFilter;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="multishopID", type="integer", nullable=true)
      */
     private $shopId;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="cache_refreshed", type="datetime", nullable=true)
      */
@@ -578,7 +578,7 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getCategoryId()
     {
@@ -598,7 +598,7 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getCurrencyId()
     {
@@ -618,7 +618,7 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getCustomerGroupId()
     {
@@ -638,7 +638,7 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPartnerId()
     {
@@ -658,7 +658,7 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getLanguageId()
     {
@@ -878,7 +878,7 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getShopId()
     {
@@ -958,7 +958,7 @@ class ProductFeed extends ModelEntity
     }
 
     /**
-     * @return ProductFeedAttribute
+     * @return ProductFeedAttribute|null
      */
     public function getAttribute()
     {
@@ -978,7 +978,7 @@ class ProductFeed extends ModelEntity
     /**
      * Set cache refreshed datetime
      *
-     * @param \DateTimeInterface|string $cacheRefreshed
+     * @param \DateTimeInterface|string|null $cacheRefreshed
      *
      * @return ProductFeed
      */
@@ -995,7 +995,7 @@ class ProductFeed extends ModelEntity
     /**
      * Get cache refreshed datetime
      *
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getCacheRefreshed()
     {

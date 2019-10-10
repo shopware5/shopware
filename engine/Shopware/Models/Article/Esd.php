@@ -39,7 +39,7 @@ class Esd extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ProductEsdAttribute
+     * @var ProductEsdAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleEsd", mappedBy="articleEsd", cascade={"persist"})
      */
@@ -98,7 +98,7 @@ class Esd extends ModelEntity
     private $articleDetailId;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="file", type="string", length=255, nullable=true)
      */
@@ -126,7 +126,7 @@ class Esd extends ModelEntity
     private $maxdownloads = 0;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="datum", type="datetime", nullable=true)
      */
@@ -138,7 +138,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @return ProductEsdAttribute
+     * @return ProductEsdAttribute|null
      */
     public function getAttribute()
     {
@@ -228,7 +228,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getDate()
     {
@@ -244,7 +244,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getFile()
     {

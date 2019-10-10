@@ -52,7 +52,7 @@ class Group extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ConfiguratorGroupAttribute
+     * @var ConfiguratorGroupAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ConfiguratorGroup", mappedBy="configuratorGroup", orphanRemoval=true, cascade={"persist"})
      */
@@ -75,7 +75,7 @@ class Group extends ModelEntity
     private $name;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
@@ -119,7 +119,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDescription()
     {
@@ -127,7 +127,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param string $description
+     * @param string|null $description
      */
     public function setDescription($description)
     {
@@ -183,7 +183,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return ConfiguratorGroupAttribute
+     * @return ConfiguratorGroupAttribute|null
      */
     public function getAttribute()
     {

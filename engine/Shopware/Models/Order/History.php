@@ -86,7 +86,7 @@ class History extends ModelEntity
      * The $userId property contains the unique user id of the user which changed the order status.
      * Used for the $user association property.
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="userID", type="integer", nullable=true)
      */
@@ -96,7 +96,7 @@ class History extends ModelEntity
      * The $previousOrderStatusId property contains the id of the previous order status of the order.
      * Used for the $previousOrderStatus association property.
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="previous_order_status_id", type="integer", nullable=true)
      */
@@ -106,7 +106,7 @@ class History extends ModelEntity
      * The $orderStatusId property contains the id of the current order status of the order.
      * Used for the $orderStatus association property.
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="order_status_id", type="integer", nullable=true)
      */
@@ -116,7 +116,7 @@ class History extends ModelEntity
      * The $previousPaymentStatusId property contains the id of the previous payment status of the order.
      * Used for the $previousPaymentStatus association property.
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="previous_payment_status_id", type="integer", nullable=true)
      */
@@ -126,7 +126,7 @@ class History extends ModelEntity
      * The $paymentStatusId property contains the id of the current payment status of the order.
      * Used for the $paymentStatus association property.
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="payment_status_id", type="integer", nullable=true)
      */
@@ -160,7 +160,7 @@ class History extends ModelEntity
      * user model. This association is an uni-directional association. That means that the user model
      * don't know anything about the order status history.
      *
-     * @var \Shopware\Models\User\User
+     * @var \Shopware\Models\User\User|null
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\User\User")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
@@ -173,7 +173,7 @@ class History extends ModelEntity
      * previous order status model. This association is an uni-directional association. That means that the order
      * status model don't know anything about the order status history.
      *
-     * @var \Shopware\Models\Order\Status
+     * @var \Shopware\Models\Order\Status|null
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="previous_order_status_id", referencedColumnName="id")
@@ -186,7 +186,7 @@ class History extends ModelEntity
      * current order status model. This association is an uni-directional association. That means that the order
      * status model don't know anything about the order status history.
      *
-     * @var \Shopware\Models\Order\Status
+     * @var \Shopware\Models\Order\Status|null
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="order_status_id", referencedColumnName="id")
@@ -199,7 +199,7 @@ class History extends ModelEntity
      * previous payment status model. This association is an uni-directional association. That means that the payment
      * status model don't know anything about the order status history.
      *
-     * @var \Shopware\Models\Order\Status
+     * @var \Shopware\Models\Order\Status|null
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="previous_payment_status_id", referencedColumnName="id")
@@ -212,7 +212,7 @@ class History extends ModelEntity
      * current payment status model. This association is an uni-directional association. That means that the payment
      * status model don't know anything about the order status history.
      *
-     * @var \Shopware\Models\Order\Status
+     * @var \Shopware\Models\Order\Status|null
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="payment_status_id", referencedColumnName="id")
@@ -265,7 +265,7 @@ class History extends ModelEntity
      * user model. This association is an uni-directional association. That means that the user model
      * don't know anything about the order status history.
      *
-     * @return \Shopware\Models\User\User
+     * @return \Shopware\Models\User\User|null
      */
     public function getUser()
     {
@@ -355,7 +355,7 @@ class History extends ModelEntity
      * current order status model. This association is an uni-directional association. That means that the order
      * status model don't know anything about the order status history.
      *
-     * @return \Shopware\Models\Order\Status
+     * @return \Shopware\Models\Order\Status|null
      */
     public function getOrderStatus()
     {
@@ -387,7 +387,7 @@ class History extends ModelEntity
      * current payment status model. This association is an uni-directional association. That means that the payment
      * status model don't know anything about the order status history.
      *
-     * @return \Shopware\Models\Order\Status
+     * @return \Shopware\Models\Order\Status|null
      */
     public function getPaymentStatus()
     {
@@ -419,7 +419,7 @@ class History extends ModelEntity
      * previous order status model. This association is an uni-directional association. That means that the order
      * status model don't know anything about the order status history.
      *
-     * @return \Shopware\Models\Order\Status
+     * @return \Shopware\Models\Order\Status|null
      */
     public function getPreviousOrderStatus()
     {
@@ -451,7 +451,7 @@ class History extends ModelEntity
      * previous payment status model. This association is an uni-directional association. That means that the payment
      * status model don't know anything about the order status history.
      *
-     * @return \Shopware\Models\Order\Status
+     * @return \Shopware\Models\Order\Status|null
      */
     public function getPreviousPaymentStatus()
     {
