@@ -132,17 +132,7 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
             $adapter = $this->_baseAdapter;
         }
 
-        $result = parent::authenticate($adapter);
-
-        // If authentication with the current adapter was succeeded, read user data from default adapter (database)
-        if ($result->isValid() && method_exists($this->getAdapter(0), 'getResultRowObject')) {
-            $user = $this->getAdapter(0)->getResultRowObject();
-            $this->getStorage()->write($user);
-        } else {
-            $this->getStorage()->clear();
-        }
-
-        return $result;
+        return parent::authenticate($adapter);
     }
 
     /**
