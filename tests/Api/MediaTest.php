@@ -22,7 +22,15 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
+namespace Shopware\Tests\Api;
+
+use PHPUnit\Framework\TestCase;
+use Zend_Http_Client;
+use Zend_Http_Client_Adapter_Curl;
+use Zend_Http_Client_Adapter_Exception;
+use Zend_Json;
+
+class MediaTest extends TestCase
 {
     const UPLOAD_FILE_NAME = 'test-bild';
     const UPLOAD_OVERWRITTEN_FILE_NAME = 'a-different-file-name';
@@ -52,6 +60,8 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
     }
 
     /**
+     * @throws Zend_Http_Client_Adapter_Exception
+     *
      * @return Zend_Http_Client
      */
     public function getHttpClient()

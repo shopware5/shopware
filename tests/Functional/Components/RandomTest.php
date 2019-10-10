@@ -22,9 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Components;
+
 use Shopware\Components\Random;
 
-class Shopware_Tests_Components_RandomTest extends Enlight_Components_Test_TestCase
+class RandomTest extends \Enlight_Components_Test_TestCase
 {
     /**
      * Test case

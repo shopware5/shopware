@@ -22,7 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
+namespace Shopware\Tests\Api;
+
+use PHPUnit\Framework\TestCase;
+use Zend_Http_Client;
+use Zend_Http_Client_Adapter_Curl;
+use Zend_Http_Client_Exception;
+use Zend_Json;
+use Zend_Json_Exception;
+
+class ArticleTest extends TestCase
 {
     public $apiBaseUrl = '';
 
@@ -50,9 +59,6 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
         Shopware()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', [sha1('demo')]);
     }
 
-    /**
-     * @return Zend_Http_Client
-     */
     public function getHttpClient()
     {
         $username = 'demo';
@@ -224,7 +230,6 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
 
                     'minPurchase' => 5,
                     'purchaseSteps' => 2,
-                    'purchaseSteps' => 2,
 
                     'prices' => [
                         [
@@ -267,7 +272,6 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
                     ],
 
                     'minPurchase' => 5,
-                    'purchaseSteps' => 2,
                     'purchaseSteps' => 2,
 
                     'prices' => [

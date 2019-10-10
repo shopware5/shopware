@@ -22,7 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Test_TestCase
+namespace Shopware\Tests\Modules\Articles;
+
+use Enlight_Components_Test_TestCase;
+use sArticles;
+
+class CompareTest extends Enlight_Components_Test_TestCase
 {
     /**
      * Module instance

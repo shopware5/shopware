@@ -22,9 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Kernel;
+namespace Shopware\Tests\Api;
 
-class Shopware_Tests_Api_VersionTest extends PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Shopware\Kernel;
+use Zend_Http_Client;
+use Zend_Http_Client_Adapter_Curl;
+use Zend_Http_Client_Adapter_Exception;
+use Zend_Json;
+
+class VersionTest extends TestCase
 {
     public $apiBaseUrl = '';
 
@@ -50,6 +57,8 @@ class Shopware_Tests_Api_VersionTest extends PHPUnit\Framework\TestCase
     }
 
     /**
+     * @throws Zend_Http_Client_Adapter_Exception
+     *
      * @return Zend_Http_Client
      */
     public function getHttpClient()

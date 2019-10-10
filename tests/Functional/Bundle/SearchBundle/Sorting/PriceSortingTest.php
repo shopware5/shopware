@@ -189,7 +189,8 @@ class PriceSortingTest extends TestCase
         $facets = [],
         $sortings = [],
         $context = null,
-        array $configs = []
+        array $configs = [],
+        $variantSearch = false
     ) {
         $result = parent::search(
             $products,

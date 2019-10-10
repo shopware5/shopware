@@ -22,7 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Models_Category_BlogCategoryTreeListQueryTest extends Enlight_Components_Test_TestCase
+namespace Shopware\Tests\Models\Category;
+
+use Shopware\Models\Category\Category;
+
+class BlogCategoryTreeListQueryTest extends \Enlight_Components_Test_TestCase
 {
     /**
      * @var \Shopware\Models\Category\Repository
@@ -85,12 +89,12 @@ class Shopware_Tests_Models_Category_BlogCategoryTreeListQueryTest extends Enlig
     }
 
     /**
-     * @return Shopware\Models\Category\Repository
+     * @return \Shopware\Models\Category\Repository
      */
     protected function getRepo()
     {
         if ($this->repo === null) {
-            $this->repo = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class);
+            $this->repo = Shopware()->Models()->getRepository(Category::class);
         }
 
         return $this->repo;
@@ -98,16 +102,16 @@ class Shopware_Tests_Models_Category_BlogCategoryTreeListQueryTest extends Enlig
 
     /**
      * @param array $data
-     *
-     * @return array
      */
-    protected function removeDates($data)
+    protected function removeDates($data): array
     {
         foreach ($data as &$subCategory) {
             unset($subCategory['changed'], $subCategory['cmsText'], $subCategory['added']);
             foreach ($subCategory['emotions'] as &$emotion) {
                 unset($emotion['createDate'], $emotion['modified']);
             }
+            unset($emotion);
+
             foreach ($subCategory['articles'] as &$article) {
                 unset($article['added'], $article['changed'], $article['mainDetail']['releaseDate']);
             }

@@ -22,10 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Components\LegacyRequestWrapper;
+
 /**
  * @covers \Shopware\Components\LegacyRequestWrapper\PostWrapper
  */
-class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enlight_Components_Test_Controller_TestCase
+class PostWrapperTest extends \Enlight_Components_Test_Controller_TestCase
 {
     private static $resources = [
         'Admin',
