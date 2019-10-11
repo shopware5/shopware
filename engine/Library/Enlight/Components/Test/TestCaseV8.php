@@ -17,8 +17,6 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
-use PHPUnit\DbUnit\DataSet\XmlDataSet;
-
 /**
  * Basic class for each specified test case.
  *
@@ -30,12 +28,12 @@ use PHPUnit\DbUnit\DataSet\XmlDataSet;
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-abstract class Enlight_Components_Test_TestCase extends PHPUnit\Framework\TestCase
+abstract class Enlight_Components_Test_TestCaseV8 extends PHPUnit\Framework\TestCase
 {
     /**
      * Sets up the fixture, for example, open a network connection.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -46,7 +44,7 @@ abstract class Enlight_Components_Test_TestCase extends PHPUnit\Framework\TestCa
     /**
      * Performs operation returned by getSetUpOperation().
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         set_time_limit(0);
         ini_restore('memory_limit');
