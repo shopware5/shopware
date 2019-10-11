@@ -149,11 +149,10 @@ class TemplateMailTest extends \Enlight_Components_Test_TestCase
 
     /**
      * Test case
-     *
-     * @expectedException \Enlight_Exception
      */
     public function testCreateMailWithInvalidTemplateNameShouldThrowException()
     {
+        $this->expectException('Enlight_Exception');
         $this->mail->createMail('ThisIsNoTemplateName', []);
     }
 

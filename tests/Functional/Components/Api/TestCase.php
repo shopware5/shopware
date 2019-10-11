@@ -56,30 +56,24 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
      */
     abstract public function createResource();
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\PrivilegeException
-     */
     public function testGetOneWithMissingPrivilegeShouldThrowPrivilegeException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\PrivilegeException');
         $this->resource->setRole('dummy');
         $this->resource->setAcl($this->getAclMock());
 
         $this->resource->getOne(1);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testGetOneWithInvalidIdShouldThrowNotFoundException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $this->resource->getOne(9999999);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testGetOneWithMissingIdShouldThrowParameterMissingException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->getOne('');
     }
 

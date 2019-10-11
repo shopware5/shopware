@@ -61,11 +61,9 @@ class EmotionToPresetDataTransformerTest extends TestCase
         $this->connection->rollBack();
     }
 
-    /**
-     * @expectedException
-     */
     public function testShouldFailBecauseOfMissingEmotion()
     {
+        $this->expectException('');
         $this->expectException(NoResultException::class);
         $this->transformer->transform(null);
     }

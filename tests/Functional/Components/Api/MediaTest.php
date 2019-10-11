@@ -150,12 +150,10 @@ class MediaTest extends TestCase
         static::assertEquals($content, $base64Data, 'Replaced file was not persisted correctly.');
     }
 
-    /**
-     * @expectedException \Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionNotAllowedException
-     * @expectedExceptionMessage The media file extension "foo" is not allowed.
-     */
     public function testUploadMediaWithNonWhitelistedExtension()
     {
+        $this->expectException('Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionNotAllowedException');
+        $this->expectExceptionMessage('The media file extension "foo" is not allowed.');
         $source = __DIR__ . '/fixtures/test-bild.jpg';
         $dest = __DIR__ . '/fixtures/test-bild-used.foo';
 

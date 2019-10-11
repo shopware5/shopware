@@ -72,11 +72,9 @@ class ResourceTest extends \Enlight_Components_Test_TestCase
         static::assertEquals($this->resource->getAutoFlush(), false);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\PrivilegeException
-     */
     public function testCheckPrivilegeShouldThrowException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\PrivilegeException');
         $aclMock = $this->createMock(\Shopware_Components_Acl::class);
 
         $aclMock->expects(static::any())

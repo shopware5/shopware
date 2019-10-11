@@ -64,11 +64,10 @@ class AclTest extends Enlight_Components_Test_TestCase
 
     /**
      * Test case
-     *
-     * @expectedException \Zend_Acl_Exception
      */
     public function testTestNotExistingRoleShouldThrowException()
     {
+        $this->expectException('Zend_Acl_Exception');
         $role = 'this_is_a_not_existing_role';
         $privilege = 'create';
         $resource = 'debug_test';
@@ -78,11 +77,10 @@ class AclTest extends Enlight_Components_Test_TestCase
 
     /**
      * Test case
-     *
-     * @expectedException \Zend_Acl_Exception
      */
     public function testTestNotExistingResourceShouldThrowException()
     {
+        $this->expectException('Zend_Acl_Exception');
         $role = 'Test-Group1';
         $privilege = 'create';
         $resource = 'this_is_a_not_existing_resource';

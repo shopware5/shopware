@@ -61,11 +61,9 @@ class PresetLoaderTest extends TestCase
         $this->connection->rollBack();
     }
 
-    /**
-     * @expectedException
-     */
     public function testPresetLoadingShouldFailMissingIdentifier()
     {
+        $this->expectException('');
         $this->expectException(ORMException::class);
         $this->presetLoader->load(null);
     }

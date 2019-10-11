@@ -44,11 +44,9 @@ class CustomerGroupTest extends TestCase
         return new CustomerGroup();
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
-     */
     public function testCreateWithInvalidDataShouldThrowValidationException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
         // required parameter 'name' is missing
         $testData = [
             'key' => 'TS',
@@ -134,19 +132,15 @@ class CustomerGroupTest extends TestCase
         return $id;
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testUpdateWithInvalidIdShouldThrowNotFoundException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $this->resource->update(9999999, []);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testUpdateWithMissingIdShouldThrowParameterMissingException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->update('', []);
     }
 
@@ -161,19 +155,15 @@ class CustomerGroupTest extends TestCase
         static::assertEquals(null, $customerGroup->getId());
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testDeleteWithInvalidIdShouldThrowNotFoundException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $this->resource->delete(9999999);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testDeleteWithMissingIdShouldThrowParameterMissingException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->delete('');
     }
 

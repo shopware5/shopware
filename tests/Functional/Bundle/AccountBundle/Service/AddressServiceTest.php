@@ -95,22 +95,18 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
         self::$modelManager->clear();
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ValidationException
-     */
     public function testCreateWithEmptyData()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
         $address = new Address();
         $customer = new Customer();
 
         self::$addressService->create($address, $customer);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testCreateWithEmptyCustomer()
     {
+        $this->expectException('InvalidArgumentException');
         $address = new Address();
         $address->setSalutation('mr');
         $address->setFirstname('Lars');
@@ -125,11 +121,9 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
         self::$addressService->create($address, $customer);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ValidationException
-     */
     public function testCreateWithEmptyAddress()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
         $address = new Address();
         $customer = $this->createCustomer();
 
@@ -221,11 +215,11 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
 
     /**
      * @depends testSetDefaultBilling
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage The address is defined as default billing or shipping address and cannot be removed.
      */
     public function testDeleteDefaultAddressShouldFail($addressId)
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('The address is defined as default billing or shipping address and cannot be removed.');
         $address = self::$modelManager->find(Address::class, $addressId);
 
         self::$addressService->delete($address);

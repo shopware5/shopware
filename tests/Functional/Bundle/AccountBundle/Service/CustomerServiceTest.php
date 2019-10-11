@@ -105,11 +105,9 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
         self::$customerService->update($customer);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ValidationException
-     */
     public function testUpdateExistingEmail()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
         $newMail = 'test@example.com';
 
         $customer = self::$modelManager->find(Customer::class, 2);
@@ -118,11 +116,9 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
         self::$customerService->update($customer);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ValidationException
-     */
     public function testUpdateProfileWithEmptyData()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
         $updateData = [
             'firstname' => '',
             'lastname' => '',

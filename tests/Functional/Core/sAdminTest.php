@@ -194,11 +194,11 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
     /**
      * @covers \sAdmin::sValidateStep3
-     * @expectedException \Enlight_Exception
-     * @expectedExceptionMessage sValidateStep3 #00: No payment id
      */
     public function testExceptionInsValidateStep3()
     {
+        $this->expectException('Enlight_Exception');
+        $this->expectExceptionMessage('sValidateStep3 #00: No payment id');
         $this->module->sValidateStep3();
     }
 
