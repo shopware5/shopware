@@ -79,3 +79,4 @@ This changelog references changes done in Shopware 5.7 patch versions.
 ### Deprecations
 
 * Deprecated the class `Shopware\Bundle\SitemapBundle\ConfigHandler\File`. It will be removed in Shopware 5.8. Use `Shopware\Bundle\SitemapBundle\ConfigHandler\Database` instead.
+* Deprecated getting plugin config from `Shopware_Components_Config` without plugin namespace, use `SwagTestPlugin:MyConfigName` instead
