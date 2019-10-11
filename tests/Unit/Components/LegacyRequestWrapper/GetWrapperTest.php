@@ -59,7 +59,7 @@ class GetWrapperTest extends TestCase
 
         $this->system->_GET->offsetSet('foo', []);
         static::assertEmpty($this->request->getQuery('bar'));
-        static::assertInternalType('array', $this->request->getQuery('foo'));
+        static::assertIsArray($this->request->getQuery('foo'));
     }
 
     public function testGet()
@@ -72,7 +72,7 @@ class GetWrapperTest extends TestCase
 
         $this->request->setQuery('foo', []);
         static::assertEmpty($this->system->_GET->offsetGet('bar'));
-        static::assertInternalType('array', $this->system->_GET->offsetGet('foo'));
+        static::assertIsArray($this->system->_GET->offsetGet('foo'));
     }
 
     public function testUnset()

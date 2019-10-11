@@ -60,7 +60,7 @@ class XmlMenuReaderTest extends TestCase
     {
         $result = $this->readFile('menu.xml');
 
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertCount(2, $result);
 
         $firstMenu = $result[0];

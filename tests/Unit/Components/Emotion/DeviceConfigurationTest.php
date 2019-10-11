@@ -102,7 +102,7 @@ class DeviceConfigurationTest extends TestCase
     /**
      * @param array[] $expectedResult
      *
-     * @return Connection|\PHPUnit_Framework_MockObject_MockObject
+     * @return Connection|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createQueryMock($expectedResult)
     {

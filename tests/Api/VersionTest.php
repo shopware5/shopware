@@ -100,7 +100,7 @@ class VersionTest extends TestCase
 
         static::assertArrayHasKey('data', $result);
         $data = $result['data'];
-        static::assertInternalType('array', $data);
+        static::assertIsArray($data);
 
         static::assertEquals($release['version'], $data['version']);
         static::assertEquals($release['revision'], $data['revision']);

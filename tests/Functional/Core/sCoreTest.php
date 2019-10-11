@@ -52,7 +52,7 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
             'other' => 'test',
             'variables' => 'values',
         ]);
-        static::assertInternalType('string', $sVariablesTestResult);
+        static::assertIsString($sVariablesTestResult);
         static::assertGreaterThan(0, strlen($sVariablesTestResult));
 
         $resultArray = [];
@@ -80,7 +80,7 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
             'variables' => 'values',
             'nullVariables' => null,
         ]);
-        static::assertInternalType('string', $sVariablesTestResult);
+        static::assertIsString($sVariablesTestResult);
         static::assertGreaterThan(0, strlen($sVariablesTestResult));
 
         $resultArray = [];
@@ -110,7 +110,7 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
             'other' => 'with',
             'variables' => 'values',
         ]);
-        static::assertInternalType('string', $sVariablesTestResult);
+        static::assertIsString($sVariablesTestResult);
         static::assertGreaterThan(0, strlen($sVariablesTestResult));
 
         $resultArray = [];
@@ -141,7 +141,7 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
             'other' => 'with',
             'variables' => 'values',
         ]);
-        static::assertInternalType('string', $sVariablesTestResult);
+        static::assertIsString($sVariablesTestResult);
         static::assertGreaterThan(0, strlen($sVariablesTestResult));
 
         $resultArray = [];
@@ -170,7 +170,7 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
         $baseUrl = $this->module->sRewriteLink();
 
         // Without arguments, we expect the base url
-        static::assertInternalType('string', $baseUrl);
+        static::assertIsString($baseUrl);
         static::assertGreaterThan(0, strlen($baseUrl));
 
         // Fetch all rows and test them

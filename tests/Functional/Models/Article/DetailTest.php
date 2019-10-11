@@ -70,7 +70,7 @@ class DetailTest extends \Enlight_Components_Test_TestCase
 
         $detail = $this->repo->find(6);
 
-        static::assertEquals('SW100066', $detail->getNumber());
+        static::assertContains('SW100066', $detail->getNumber());
     }
 
     public function testInvalidOrderNumber(): void

@@ -80,7 +80,7 @@ class PresetLoaderTest extends TestCase
 
         $presetData = $this->presetLoader->load($preset->getId());
 
-        static::assertInternalType('string', $presetData);
+        static::assertIsString($presetData);
         static::assertJson($presetData);
         static::assertEquals('[]', $presetData);
     }
@@ -92,7 +92,7 @@ class PresetLoaderTest extends TestCase
 
         $presetData = $this->presetLoader->load($preset->getId());
 
-        static::assertInternalType('string', $presetData);
+        static::assertIsString($presetData);
         static::assertJson($presetData);
         static::assertEquals($data, $presetData);
     }
@@ -104,7 +104,7 @@ class PresetLoaderTest extends TestCase
 
         $presetData = $this->presetLoader->load($preset->getId());
 
-        static::assertInternalType('string', $presetData);
+        static::assertIsString($presetData);
         static::assertJson($presetData);
 
         $decodedData = json_decode($presetData, true);
@@ -128,7 +128,7 @@ class PresetLoaderTest extends TestCase
 
         $presetData = $this->presetLoader->load($preset->getId());
 
-        static::assertInternalType('string', $presetData);
+        static::assertIsString($presetData);
         static::assertJson($presetData);
 
         $decodedData = json_decode($presetData, true);
@@ -138,7 +138,7 @@ class PresetLoaderTest extends TestCase
         static::assertEquals($componentId, $decodedData['elements'][0]['componentId']);
         static::assertEquals($componentId, $decodedData['elements'][0]['component']['id']);
 
-        static::assertInternalType('array', $decodedData['elements'][0]['data'][6]['value']);
+        static::assertIsArray($decodedData['elements'][0]['data'][6]['value']);
         static::assertRegExp('/http/', $decodedData['elements'][0]['data'][6]['value'][0]['path']);
     }
 }

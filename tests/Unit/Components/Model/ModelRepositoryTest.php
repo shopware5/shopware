@@ -49,7 +49,7 @@ class ModelRepositoryTest extends \PHPUnit\Framework\TestCase
         /** @var From[] $from */
         $from = $builder->getDQLPart('from');
 
-        static::assertInternalType('array', $from);
+        static::assertIsArray($from);
         static::assertCount(1, $from);
 
         /** @var From $from */

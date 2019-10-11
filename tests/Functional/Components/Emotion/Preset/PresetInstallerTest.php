@@ -108,7 +108,7 @@ class PresetInstallerTest extends TestCase
      * @param string $name
      * @param bool   $custom
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function buildMetaDataMock($name, $custom = false)
     {

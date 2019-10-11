@@ -95,7 +95,7 @@ class OptimizerServiceTest extends TestCase
     public function testGetOptimizers()
     {
         $optimizers = $this->optimizerService->getOptimizers();
-        static::assertInternalType('array', $optimizers);
+        static::assertIsArray($optimizers);
         static::assertSame($this->optimizers->toArray(), $optimizers);
     }
 

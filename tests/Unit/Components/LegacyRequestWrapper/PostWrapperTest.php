@@ -59,7 +59,7 @@ class PostWrapperTest extends TestCase
 
         $this->system->_POST->offsetSet('foo', []);
         static::assertEmpty($this->request->getPost('bar'));
-        static::assertInternalType('array', $this->request->getPost('foo'));
+        static::assertIsArray($this->request->getPost('foo'));
     }
 
     public function testGet()
@@ -72,7 +72,7 @@ class PostWrapperTest extends TestCase
 
         $this->request->setPost('foo', []);
         static::assertEmpty($this->system->_POST->offsetGet('bar'));
-        static::assertInternalType('array', $this->system->_POST->offsetGet('foo'));
+        static::assertIsArray($this->system->_POST->offsetGet('foo'));
     }
 
     public function testUnset()

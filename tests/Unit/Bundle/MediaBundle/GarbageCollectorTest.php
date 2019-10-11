@@ -41,7 +41,7 @@ class GarbageCollectorTest extends TestCase
 
         static::assertCount(11, $propertyValue['path']);
 
-        static::assertArraySubset([
+        static::assertTrue(array_intersect([
             'media/image/foo.png',
             'media/image/bar.png',
             'media/pdf/foo.pdf',
@@ -53,7 +53,19 @@ class GarbageCollectorTest extends TestCase
             'media/image/bar4.png',
             'media/image/foo5.png',
             'media/image/bar5.png',
-        ], $propertyValue['path']);
+        ], $propertyValue['path']) === [
+            'media/image/foo.png',
+            'media/image/bar.png',
+            'media/pdf/foo.pdf',
+            'media/pdf/bar.pdf',
+            'media/image/foo2.png',
+            'media/image/bar2.png',
+            'media/image/foo3.png',
+            'media/image/foo4.png',
+            'media/image/bar4.png',
+            'media/image/foo5.png',
+            'media/image/bar5.png',
+        ]);
     }
 
     private function getGarbageCollector()

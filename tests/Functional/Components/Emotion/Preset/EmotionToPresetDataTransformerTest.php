@@ -82,12 +82,12 @@ class EmotionToPresetDataTransformerTest extends TestCase
         static::assertArrayNotHasKey('id', $presetData);
 
         static::assertArrayNotHasKey('id', $presetData['elements'][0]);
-        static::assertInternalType('string', $presetData['elements'][0]['componentId']);
+        static::assertIsString($presetData['elements'][0]['componentId']);
         static::assertArrayHasKey('syncKey', $presetData['elements'][0]);
 
         static::assertArrayHasKey('data', $presetData['elements'][0]);
 
-        static::assertInternalType('array', $data['requiredPlugins']);
+        static::assertIsArray($data['requiredPlugins']);
     }
 
     public function testTransformWithTranslationsShouldSucceed()
@@ -125,7 +125,7 @@ class EmotionToPresetDataTransformerTest extends TestCase
 
         $result = $method->invoke($this->transformer, $ids);
 
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertEquals('SwagLiveShopping', $result[0]['name']);
     }
 }

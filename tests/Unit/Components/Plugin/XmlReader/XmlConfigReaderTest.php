@@ -114,7 +114,7 @@ class XmlConfigReaderTest extends TestCase
 
         static::assertArrayHasKey('store', $element1);
         static::assertEquals('XML Store', $element1['label']['en']);
-        static::assertInternalType('array', $element1['store']);
+        static::assertIsArray($element1['store']);
         static::assertCount(2, $element1['store']);
     }
 
@@ -136,7 +136,7 @@ class XmlConfigReaderTest extends TestCase
 
         $result = $method->invokeArgs($this->configReader, [new \DOMNodeList()]);
 
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertCount(0, $result);
     }
 

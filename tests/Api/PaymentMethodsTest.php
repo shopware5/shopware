@@ -137,10 +137,10 @@ class PaymentMethodsTest extends TestCase
         static::assertArrayHasKey('data', $result);
 
         static::assertArrayHasKey('total', $result);
-        static::assertInternalType('int', $result['total']);
+        static::assertIsInt($result['total']);
 
         $data = $result['data'];
-        static::assertInternalType('array', $data);
+        static::assertIsArray($data);
     }
 
     public function testPostPaymentShouldBeSuccessful()
@@ -205,7 +205,7 @@ class PaymentMethodsTest extends TestCase
         static::assertArrayHasKey('data', $result);
 
         $data = $result['data'];
-        static::assertInternalType('array', $data);
+        static::assertIsArray($data);
     }
 
     /**

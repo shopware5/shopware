@@ -97,7 +97,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
     public function validatePaymentContextData(Enlight_Event_EventArgs $args)
     {
         $context = $args->get('context');
-        static::assertInternalType('array', $context['sPaymentTable']);
+        static::assertIsArray($context['sPaymentTable']);
         static::assertCount(0, $context['sPaymentTable']);
     }
 

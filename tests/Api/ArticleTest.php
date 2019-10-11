@@ -385,7 +385,7 @@ class ArticleTest extends TestCase
         static::assertArrayHasKey('data', $result);
 
         $data = $result['data'];
-        static::assertInternalType('array', $data);
+        static::assertIsArray($data);
         static::assertArrayHasKey('id', $data);
         static::assertArrayHasKey('active', $data);
 
@@ -613,7 +613,7 @@ class ArticleTest extends TestCase
         static::assertArrayHasKey('data', $result);
 
         $data = $result['data'];
-        static::assertInternalType('array', $data);
+        static::assertIsArray($data);
         static::assertEquals($articleId, $data['id']);
     }
 
@@ -744,7 +744,7 @@ class ArticleTest extends TestCase
         static::assertArrayHasKey('data', $result);
 
         static::assertArrayHasKey('total', $result);
-        static::assertInternalType('int', $result['total']);
+        static::assertIsInt($result['total']);
     }
 
     public function getSimpleArticleData()

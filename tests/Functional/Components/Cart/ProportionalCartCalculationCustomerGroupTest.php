@@ -61,11 +61,11 @@ class ProportionalCartCalculationCustomerGroupTest extends CheckoutTest
 
         $sBasket = $this->View()->getAssign('sBasketProportional');
 
-        static::assertInternalType('float', $sBasket['sShippingcosts']);
-        static::assertInternalType('float', $sBasket['sShippingcostsTax']);
-        static::assertInternalType('float', $sBasket['sShippingcostsNet']);
-        static::assertInternalType('float', $sBasket['sShippingcostsWithTax']);
-        static::assertInternalType('array', $sBasket['sTaxRates']);
+        static::assertIsFloat($sBasket['sShippingcosts']);
+        static::assertIsFloat($sBasket['sShippingcostsTax']);
+        static::assertIsFloat($sBasket['sShippingcostsNet']);
+        static::assertIsFloat($sBasket['sShippingcostsWithTax']);
+        static::assertIsArray($sBasket['sTaxRates']);
 
         static::assertEquals(3.9, $sBasket['sShippingcosts']);
         static::assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
@@ -89,11 +89,11 @@ class ProportionalCartCalculationCustomerGroupTest extends CheckoutTest
 
         $sBasket = $this->View()->getAssign('sBasketProportional');
 
-        static::assertInternalType('float', $sBasket['sShippingcosts']);
-        static::assertInternalType('float', $sBasket['sShippingcostsTax']);
-        static::assertInternalType('float', $sBasket['sShippingcostsNet']);
-        static::assertInternalType('float', $sBasket['sShippingcostsWithTax']);
-        static::assertInternalType('array', $sBasket['sTaxRates']);
+        static::assertIsFloat($sBasket['sShippingcosts']);
+        static::assertIsFloat($sBasket['sShippingcostsTax']);
+        static::assertIsFloat($sBasket['sShippingcostsNet']);
+        static::assertIsFloat($sBasket['sShippingcostsWithTax']);
+        static::assertIsArray($sBasket['sTaxRates']);
 
         static::assertEquals(3.9, $sBasket['sShippingcosts']);
         static::assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
@@ -119,11 +119,11 @@ class ProportionalCartCalculationCustomerGroupTest extends CheckoutTest
 
         $sBasket = $this->View()->getAssign('sBasketProportional');
 
-        static::assertInternalType('float', $sBasket['sShippingcosts']);
-        static::assertInternalType('float', $sBasket['sShippingcostsTax']);
-        static::assertInternalType('float', $sBasket['sShippingcostsNet']);
-        static::assertInternalType('float', $sBasket['sShippingcostsWithTax']);
-        static::assertInternalType('array', $sBasket['sTaxRates']);
+        static::assertIsFloat($sBasket['sShippingcosts']);
+        static::assertIsFloat($sBasket['sShippingcostsTax']);
+        static::assertIsFloat($sBasket['sShippingcostsNet']);
+        static::assertIsFloat($sBasket['sShippingcostsWithTax']);
+        static::assertIsArray($sBasket['sTaxRates']);
 
         static::assertEquals(3.9, $sBasket['sShippingcosts']);
         static::assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
@@ -149,11 +149,11 @@ class ProportionalCartCalculationCustomerGroupTest extends CheckoutTest
 
         $sBasket = $this->View()->getAssign('sBasketProportional');
 
-        static::assertInternalType('float', $sBasket['sShippingcosts']);
-        static::assertInternalType('float', $sBasket['sShippingcostsTax']);
-        static::assertInternalType('float', $sBasket['sShippingcostsNet']);
-        static::assertInternalType('float', $sBasket['sShippingcostsWithTax']);
-        static::assertInternalType('array', $sBasket['sTaxRates']);
+        static::assertIsFloat($sBasket['sShippingcosts']);
+        static::assertIsFloat($sBasket['sShippingcostsTax']);
+        static::assertIsFloat($sBasket['sShippingcostsNet']);
+        static::assertIsFloat($sBasket['sShippingcostsWithTax']);
+        static::assertIsArray($sBasket['sTaxRates']);
 
         static::assertEquals(3.9, $sBasket['sShippingcosts']);
         static::assertEquals(3.9, $sBasket['sShippingcostsWithTax']);

@@ -65,7 +65,7 @@ class RandomTest extends \Enlight_Components_Test_TestCase
     public function testGetBoolean()
     {
         $result = Random::getBoolean();
-        static::assertInternalType('boolean', $result);
+        static::assertIsBool($result);
     }
 
     /**
@@ -88,7 +88,7 @@ class RandomTest extends \Enlight_Components_Test_TestCase
         $results = [];
         for ($i = 0; $i < 1000; ++$i) {
             $result = Random::getFloat();
-            static::assertInternalType('float', $result);
+            static::assertIsFloat($result);
             static::assertLessThanOrEqual(1, $result);
             static::assertGreaterThanOrEqual(0, $result);
             static::assertNotContains($result, $results);

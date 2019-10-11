@@ -56,7 +56,7 @@ class PluginsProviderTest extends ProviderTestCase
 
         $resultData = $this->getBenchmarkData();
 
-        static::assertArraySubset([
+        static::assertTrue(array_intersect([
             [
                 'name' => 'SwagExample2',
                 'active' => 0,
@@ -70,6 +70,20 @@ class PluginsProviderTest extends ProviderTestCase
                 'name' => 'SwagExample5',
                 'active' => 0,
             ],
-        ], $resultData['shopwarePlugins']);
+        ], $resultData['shopwarePlugins']) === [
+            [
+                'name' => 'SwagExample2',
+                'active' => 0,
+            ], [
+                'name' => 'SwagExample3',
+                'active' => 1,
+            ], [
+                'name' => 'SwagExample4',
+                'active' => 1,
+            ], [
+                'name' => 'SwagExample5',
+                'active' => 0,
+            ],
+        ]);
     }
 }

@@ -75,7 +75,7 @@ class BcryptTest extends TestCase
      */
     public function testGenerateShouldReturnString()
     {
-        static::assertInternalType('string', $this->hasher->encodePassword('foobar'));
+        static::assertIsString($this->hasher->encodePassword('foobar'));
     }
 
     /**

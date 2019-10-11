@@ -38,11 +38,10 @@ class StateTranslatorServiceTest extends TestCase
         ];
 
         $exampleData = $translator->translateState(StateTranslatorService::STATE_ORDER, $exampleData);
-
-        static::assertArraySubset([
-            'name' => 'none',
-            'description' => 'none',
-        ], $exampleData);
+        static::assertArrayHasKey('name', $exampleData);
+        static::assertArrayHasKey('description', $exampleData);
+        static::assertSame('none', $exampleData['name']);
+        static::assertSame('none', $exampleData['description']);
     }
 
     public function testTranslateStateOrdersTranslation()
@@ -54,11 +53,10 @@ class StateTranslatorServiceTest extends TestCase
         ];
 
         $exampleData = $translator->translateState(StateTranslatorService::STATE_ORDER, $exampleData);
-
-        static::assertArraySubset([
-            'name' => 'partially_delivered',
-            'description' => 'Partially delivered',
-        ], $exampleData);
+        static::assertArrayHasKey('name', $exampleData);
+        static::assertArrayHasKey('description', $exampleData);
+        static::assertSame('partially_delivered', $exampleData['name']);
+        static::assertSame('Partially delivered', $exampleData['description']);
     }
 
     public function testTranslateStatePaymentsTranslation()
@@ -71,22 +69,20 @@ class StateTranslatorServiceTest extends TestCase
         ];
 
         $exampleData = $translator->translateState(StateTranslatorService::STATE_PAYMENT, $exampleData);
-
-        static::assertArraySubset([
-            'name' => 'partially_delivered',
-            'description' => 'partially_delivered',
-        ], $exampleData);
+        static::assertArrayHasKey('name', $exampleData);
+        static::assertArrayHasKey('description', $exampleData);
+        static::assertSame('partially_delivered', $exampleData['name']);
+        static::assertSame('partially_delivered', $exampleData['description']);
 
         $exampleData = [
             'name' => 'no_credit_approved',
         ];
 
         $exampleData = $translator->translateState(StateTranslatorService::STATE_PAYMENT, $exampleData);
-
-        static::assertArraySubset([
-            'name' => 'no_credit_approved',
-            'description' => 'No credit approved',
-        ], $exampleData);
+        static::assertArrayHasKey('name', $exampleData);
+        static::assertArrayHasKey('description', $exampleData);
+        static::assertSame('no_credit_approved', $exampleData['name']);
+        static::assertSame('No credit approved', $exampleData['description']);
     }
 
     public function testTranslateStateDifferentLocale()
@@ -99,20 +95,18 @@ class StateTranslatorServiceTest extends TestCase
         ];
 
         $exampleData = $translator->translateState(StateTranslatorService::STATE_PAYMENT, $originalExampleData);
-
-        static::assertArraySubset([
-            'name' => 'partially_invoiced',
-            'description' => 'Partially invoiced',
-        ], $exampleData);
+        static::assertArrayHasKey('name', $exampleData);
+        static::assertArrayHasKey('description', $exampleData);
+        static::assertSame('partially_invoiced', $exampleData['name']);
+        static::assertSame('Partially invoiced', $exampleData['description']);
 
         $translator = $this->getTranslator('de_DE');
 
         $exampleData = $translator->translateState(StateTranslatorService::STATE_PAYMENT, $originalExampleData);
-
-        static::assertArraySubset([
-            'name' => 'partially_invoiced',
-            'description' => 'Teilweise in Rechnung gestellt',
-        ], $exampleData);
+        static::assertArrayHasKey('name', $exampleData);
+        static::assertArrayHasKey('description', $exampleData);
+        static::assertSame('partially_invoiced', $exampleData['name']);
+        static::assertSame('Teilweise in Rechnung gestellt', $exampleData['description']);
     }
 
     public function testTranslateStateShouldThrowException()

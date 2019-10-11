@@ -25,8 +25,6 @@
 namespace Shopware\Tests\Functional\Components\DependencyInjection\Compiler;
 
 use Shopware\Components\Api\Resource\Resource;
-use Shopware\Components\DependencyInjection\Container;
-use Shopware\Tests\Functional\Helper\Utils;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class ConfigureApiResourcesPassTest extends \Enlight_Components_Test_Controller_TestCase
@@ -46,8 +44,8 @@ class ConfigureApiResourcesPassTest extends \Enlight_Components_Test_Controller_
     {
         $kernel = Shopware()->Container()->get('kernel');
         /** @var ContainerBuilder $container */
-        $container = Utils::hijackMethod($kernel, 'buildContainer');
-        $container->register('api.deco1')->setClass(Container::class)->setDecoratedService('shopware.api.article', null, 50);
+        $container = \Shopware\Tests\Functional\Helper\Utils::hijackMethod($kernel, 'buildContainer');
+        $container->register('api.deco1')->setClass(\Shopware\Components\DependencyInjection\Container::class)->setDecoratedService('shopware.api.article', null, 50);
         $container->compile();
         static::assertNotEmpty($container->getDefinition('api.deco1')->getTags());
         static::assertNotEmpty($container->getDefinition('api.deco1')->getTag('shopware.api_resource'));

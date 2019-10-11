@@ -100,13 +100,13 @@ class OrderTest extends TestCase
     {
         $result = $this->resource->getList();
 
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
 
         static::assertArrayHasKey('total', $result);
         static::assertGreaterThanOrEqual(1, $result['total']);
 
         static::assertArrayHasKey('data', $result);
-        static::assertInternalType('array', $result['data']);
+        static::assertIsArray($result['data']);
 
         static::assertGreaterThanOrEqual(1, count($result['data']));
 
@@ -149,7 +149,7 @@ class OrderTest extends TestCase
             static::assertArrayHasKey($expectedKey, $firstOrder);
         }
 
-        static::assertInternalType('array', $firstOrder['customer']);
+        static::assertIsArray($firstOrder['customer']);
         static::assertArrayHasKey('id', $firstOrder['customer']);
         static::assertArrayHasKey('email', $firstOrder['customer']);
     }

@@ -62,15 +62,18 @@ class CountryTest extends Enlight_Components_Test_Controller_TestCase
         ]);
 
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
-
-        static::assertArraySubset([
-            'id' => $id,
-            'countryname' => 'Test Country',
-            'countryiso' => 'TS',
-            'iso3' => 'TST',
-            'active' => 1,
-            'allow_shipping' => 1, // Making sure the default value for the column is true
-        ], $result[0]);
+        static::assertArrayHasKey('id', $result[0]);
+        static::assertArrayHasKey('countryname', $result[0]);
+        static::assertArrayHasKey('countryiso', $result[0]);
+        static::assertArrayHasKey('iso3', $result[0]);
+        static::assertArrayHasKey('active', $result[0]);
+        static::assertArrayHasKey('allow_shipping', $result[0]);
+        static::assertSame($id, $result[0]['id']);
+        static::assertSame('Test Country', $result[0]['countryname']);
+        static::assertSame('TS', $result[0]['countryiso']);
+        static::assertSame('TST', $result[0]['iso3']);
+        static::assertSame(1, (int) $result[0]['active']);
+        static::assertSame(1, (int) $result[0]['allow_shipping']);
     }
 
     public function testNewCountryIsShippableByDefaultUsingDoctrine()

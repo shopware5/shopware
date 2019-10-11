@@ -980,6 +980,7 @@ class HookManagerTest extends TestCase
     private function assertHookArgs(\Enlight_Hook_HookArgs $args)
     {
         static::assertEquals(self::TEST_NAME_ARG, $args->name);
-        static::assertArraySubset(self::TEST_VALUES_ARG, $args->values);
+        static::assertArrayHasKey('foo', $args->values);
+        static::assertSame('bar', $args->values['foo']);
     }
 }

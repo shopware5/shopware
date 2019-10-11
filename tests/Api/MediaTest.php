@@ -141,10 +141,10 @@ class MediaTest extends TestCase
         static::assertArrayHasKey('data', $result);
 
         static::assertArrayHasKey('total', $result);
-        static::assertInternalType('int', $result['total']);
+        static::assertIsInt($result['total']);
 
         $data = $result['data'];
-        static::assertInternalType('array', $data);
+        static::assertIsArray($data);
     }
 
     public function testPostMediaWithoutImageShouldFailWithMessage()
@@ -233,7 +233,7 @@ class MediaTest extends TestCase
         static::assertArrayHasKey('data', $result);
 
         $data = $result['data'];
-        static::assertInternalType('array', $data);
+        static::assertIsArray($data);
     }
 
     /**
@@ -312,7 +312,7 @@ class MediaTest extends TestCase
         static::assertArrayHasKey('data', $result);
 
         $data = $result['data'];
-        static::assertInternalType('array', $data);
+        static::assertIsArray($data);
         static::assertArrayHasKey('name', $data);
         static::assertEquals(0, strpos($data['name'], self::UPLOAD_FILE_NAME));
     }
@@ -374,7 +374,7 @@ class MediaTest extends TestCase
         static::assertArrayHasKey('data', $result);
 
         $data = $result['data'];
-        static::assertInternalType('array', $data);
+        static::assertIsArray($data);
         static::assertArrayHasKey('name', $data);
         static::assertEquals(0, strpos($data['name'], self::UPLOAD_OVERWRITTEN_FILE_NAME));
     }
