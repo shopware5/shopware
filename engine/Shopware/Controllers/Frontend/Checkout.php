@@ -2141,7 +2141,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             }
 
             if (!empty($item['additional_details'])) {
-                continue;
+                if (!$item['additional_details']['laststock'] || $item['additional_details']['instock'] > 0) {
+                    continue;
+                }
             }
 
             $products[] = $item['articlename'];
