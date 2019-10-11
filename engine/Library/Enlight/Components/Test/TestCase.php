@@ -33,11 +33,6 @@ use PHPUnit\DbUnit\DataSet\XmlDataSet;
 abstract class Enlight_Components_Test_TestCase extends PHPUnit\Framework\TestCase
 {
     /**
-     * @var PHPUnit_Extensions_Database_ITester The IDatabaseTester for this testCase
-     */
-    protected $databaseTester;
-
-    /**
      * Sets up the fixture, for example, open a network connection.
      */
     protected function setUp()
@@ -46,17 +41,6 @@ abstract class Enlight_Components_Test_TestCase extends PHPUnit\Framework\TestCa
 
         // Clear entitymanager to prevent weird 'model shop not persisted' errors.
         Shopware()->Models()->clear();
-
-        $this->databaseTester = null;
-        if (method_exists($this, 'getSetUpOperation')) {
-            $this->getDatabaseTester()->setSetUpOperation($this->getSetUpOperation());
-        }
-        if (method_exists($this, 'getDataSet')) {
-            $this->getDatabaseTester()->setDataSet($this->getDataSet());
-        }
-        if ($this->databaseTester !== null) {
-            $this->getDatabaseTester()->onSetUp();
-        }
     }
 
     /**
@@ -64,58 +48,8 @@ abstract class Enlight_Components_Test_TestCase extends PHPUnit\Framework\TestCa
      */
     protected function tearDown()
     {
-        if ($this->databaseTester !== null) {
-            if (method_exists($this, 'getTearDownOperation')) {
-                $this->getDatabaseTester()->setTearDownOperation($this->getTearDownOperation());
-            }
-            if (method_exists($this, 'getDataSet')) {
-                $this->getDatabaseTester()->setDataSet($this->getDataSet());
-            }
-            $this->getDatabaseTester()->onTearDown();
-        }
-
-        $this->databaseTester = null;
-
         set_time_limit(0);
         ini_restore('memory_limit');
-    }
-
-    /**
-     * Gets the IDatabaseTester for this testCase. If the IDatabaseTester is
-     * not set yet, this method calls newDatabaseTester() to obtain a new
-     * instance.
-     *
-     * @return Enlight_Components_Test_Database_DefaultTester
-     */
-    protected function getDatabaseTester()
-    {
-        if ($this->databaseTester === null) {
-            $this->databaseTester = $this->newDatabaseTester();
-        }
-
-        return $this->databaseTester;
-    }
-
-    /**
-     * Creates a IDatabaseTester for this testCase.
-     *
-     * @return Enlight_Components_Test_Database_DefaultTester
-     */
-    protected function newDatabaseTester()
-    {
-        return new Enlight_Components_Test_Database_DefaultTester();
-    }
-
-    /**
-     * Creates a new XMLDataSet with the given $xmlFile. (absolute path.)
-     *
-     * @param string $xmlFile
-     *
-     * @return XmlDataSet
-     */
-    protected function createXMLDataSet($xmlFile)
-    {
-        return new XmlDataSet($xmlFile);
     }
 
     /**
