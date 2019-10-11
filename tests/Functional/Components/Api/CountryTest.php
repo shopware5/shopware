@@ -47,7 +47,7 @@ class CountryTest extends TestCase
     /**
      * Saves the IDs of currently existing countries and states.
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
@@ -65,7 +65,7 @@ class CountryTest extends TestCase
      * Restores the state of the 's_core_countries' and 's_core_countries_states' tables
      * by deleting all entries added by this class.
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::setUpBeforeClass();
 

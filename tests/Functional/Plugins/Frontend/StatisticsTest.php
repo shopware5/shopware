@@ -34,7 +34,7 @@ class StatisticsTest extends \Enlight_Components_Test_Plugin_TestCase
     /**
      * Test set up method
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -48,7 +48,7 @@ class StatisticsTest extends \Enlight_Components_Test_Plugin_TestCase
     /**
      * tear down the demo data
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

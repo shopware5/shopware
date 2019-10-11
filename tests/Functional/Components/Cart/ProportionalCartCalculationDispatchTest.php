@@ -31,7 +31,7 @@ use Shopware\Tests\Functional\Components\CheckoutTest;
  */
 class ProportionalCartCalculationDispatchTest extends CheckoutTest
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         Shopware()->Container()->get('dbal_connection')->beginTransaction();
@@ -40,7 +40,7 @@ class ProportionalCartCalculationDispatchTest extends CheckoutTest
         Shopware()->Container()->get('dbal_connection')->executeQuery('UPDATE s_premium_dispatch SET active = 0 WHERE id = 12');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

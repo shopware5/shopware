@@ -42,7 +42,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
      */
     protected $debug = false;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = Shopware()->Container()->get('dbal_connection');
         if (!$this->debug) {
@@ -59,7 +59,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (!$this->debug) {
             $this->connection->rollBack();

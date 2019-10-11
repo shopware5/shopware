@@ -35,7 +35,7 @@ class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
 
     private $userId;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
@@ -49,7 +49,7 @@ class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Db()->exec('DELETE FROM s_user');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

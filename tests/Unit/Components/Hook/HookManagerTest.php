@@ -57,7 +57,7 @@ class HookManagerTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->eventManager = new \Enlight_Event_EventManager();
         $proxyDir = rtrim(sys_get_temp_dir(), '\\/') . DIRECTORY_SEPARATOR . uniqid('hook-manager-test-' . rand(1000, 9000));

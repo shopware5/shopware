@@ -43,7 +43,7 @@ class LogEntryMailBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $mailBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

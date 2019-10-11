@@ -36,7 +36,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
      */
     protected $resource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -46,7 +46,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
         $this->resource->setManager(Shopware()->Models());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Shopware()->Models()->clear();
     }

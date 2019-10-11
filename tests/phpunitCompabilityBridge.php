@@ -22,33 +22,15 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\EsBackendBundle;
+use PHPUnit\Framework\TestCase;
 
-use Shopware\Components\Random;
-use Shopware\Models\Customer\Customer;
-use Shopware\Tests\Functional\Bundle\StoreFrontBundle\ProgressHelper;
-
-/**
- * @group elasticSearch
- */
-class BacklogTest extends \Enlight_Components_Test_TestCase
-{
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $indexer = Shopware()->Container()->get('shopware_es_backend.indexer');
-        $indexer->index(new ProgressHelper());
-    }
-
-    public function testBacklogWillBeWritten()
-    {
-        $customers = Shopware()->Models()->getRepository(Customer::class)->findAll();
-        $customers[0]->setReferer(Random::getAlphanumericString(12));
-
-        Shopware()->Models()->persist($customers[0]);
-        Shopware()->Models()->flush($customers[0]);
-
-        static::assertGreaterThanOrEqual(1, Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_es_backend_backlog'));
-    }
+$r = new \ReflectionClass(TestCase::class);
+if ($r->getMethod('setUp')->hasReturnType()) {
+    class_alias('Enlight_Components_Test_TestCaseV8', 'Enlight_Components_Test_TestCase');
+    class_alias('Enlight_Components_Test_Controller_TestCaseV8', 'Enlight_Components_Test_Controller_TestCase');
+    class_alias('Enlight_Components_Test_Plugin_TestCaseV8', 'Enlight_Components_Test_Plugin_TestCase');
+} else {
+    class_alias('Enlight_Components_Test_TestCaseV7', 'Enlight_Components_Test_TestCase');
+    class_alias('Enlight_Components_Test_Controller_TestCaseV7', 'Enlight_Components_Test_Controller_TestCase');
+    class_alias('Enlight_Components_Test_Plugin_TestCaseV7', 'Enlight_Components_Test_Plugin_TestCase');
 }

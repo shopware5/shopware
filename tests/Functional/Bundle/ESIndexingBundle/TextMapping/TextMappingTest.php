@@ -40,7 +40,7 @@ class TextMappingTest extends TestCase
      */
     private $connection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = Shopware()->Container()->get('dbal_connection');
         $this->connection->beginTransaction();
@@ -48,7 +48,7 @@ class TextMappingTest extends TestCase
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->connection->rollBack();
 

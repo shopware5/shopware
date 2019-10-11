@@ -40,7 +40,7 @@ class StringRendererServiceTest extends TestCase
      */
     private $view;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

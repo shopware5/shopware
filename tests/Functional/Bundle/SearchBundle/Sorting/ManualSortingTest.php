@@ -49,7 +49,7 @@ class ManualSortingTest extends TestCase
      */
     private $condition;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->category = $this->helper->createCategory(['name' => 'My fancy Products']);

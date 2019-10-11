@@ -37,7 +37,7 @@ class CustomerTest extends TestCase
      */
     protected $resource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         Shopware()->Container()->get('dbal_connection')->exec('UPDATE s_core_countries SET allow_shipping = 0 WHERE id = 25');

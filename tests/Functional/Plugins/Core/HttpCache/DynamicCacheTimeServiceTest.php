@@ -55,7 +55,7 @@ class DynamicCacheTimeServiceTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $pluginManager = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager');
 
@@ -69,7 +69,7 @@ class DynamicCacheTimeServiceTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         // Flush, so the entities created and removed by the test methods actually get deleted.
         Shopware()->Models()->flush();
@@ -78,7 +78,7 @@ class DynamicCacheTimeServiceTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->cacheTimeService = Shopware()->Container()->get('shopware.http_cache.cache_time_service');
 

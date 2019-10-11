@@ -38,13 +38,13 @@ class GetWrapperTest extends TestCase
      */
     private $system;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->request = new \Enlight_Controller_Request_RequestTestCase();
         $this->system = new \sSystem($this->request);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->request->clearAll();
     }

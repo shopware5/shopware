@@ -44,7 +44,7 @@ class EmotionToPresetDataTransformerTest extends TestCase
     /** @var Connection */
     private $connection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = Shopware()->Container()->get('dbal_connection');
         $this->connection->beginTransaction();
@@ -56,7 +56,7 @@ class EmotionToPresetDataTransformerTest extends TestCase
         $this->presetResource = Shopware()->Container()->get('shopware.api.emotion_preset');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->connection->rollBack();
     }

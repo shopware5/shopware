@@ -29,13 +29,13 @@ use Shopware\Models\Country\Country;
 
 class CountryTest extends Enlight_Components_Test_Controller_TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         Shopware()->Models()->getConnection()->beginTransaction();
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         Shopware()->Models()->getConnection()->rollBack();
         parent::tearDown();

@@ -45,7 +45,7 @@ class PresetLoaderTest extends TestCase
     /** @var EmotionPreset */
     private $presetResource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = Shopware()->Container()->get('dbal_connection');
         $this->connection->beginTransaction();
@@ -56,7 +56,7 @@ class PresetLoaderTest extends TestCase
         $this->presetResource = Shopware()->Container()->get('shopware.api.emotion_preset');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->connection->rollBack();
     }

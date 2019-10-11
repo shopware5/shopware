@@ -29,7 +29,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
      */
     private $module;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->module = Shopware()->Modules()->Categories();
     }

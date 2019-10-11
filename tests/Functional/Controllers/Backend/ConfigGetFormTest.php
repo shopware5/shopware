@@ -58,13 +58,13 @@ class ConfigGetFormTest extends \Enlight_Components_Test_Controller_TestCase
      */
     protected $temporaryLocales = [];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->formLocaleTestCleanup();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->formLocaleTestCleanup();
         $this->reset();

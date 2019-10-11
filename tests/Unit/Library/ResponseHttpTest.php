@@ -33,7 +33,7 @@ class ResponseHttpTest extends TestCase
      */
     private $response;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->response = new \Enlight_Controller_Response_ResponseHttp();
     }

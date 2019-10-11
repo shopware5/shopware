@@ -34,7 +34,7 @@ class FilterTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->inputFilter = $this->createMock(\Shopware_Plugins_Frontend_InputFilter_Bootstrap::class);
     }

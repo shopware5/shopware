@@ -38,7 +38,7 @@ class RequirementValidatorTest extends TestCase
      */
     private $plugins;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->plugins = [];

@@ -41,7 +41,7 @@ class SitePageMenuTest extends TestCase
      */
     private $sitePageMenu;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->connection = Shopware()->Container()->get('dbal_connection');
@@ -50,7 +50,7 @@ class SitePageMenuTest extends TestCase
         $this->sitePageMenu = Shopware()->Container()->get('shop_page_menu');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->connection->rollBack();
         parent::tearDown();

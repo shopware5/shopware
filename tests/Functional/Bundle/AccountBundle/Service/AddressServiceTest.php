@@ -67,7 +67,7 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
     /**
      * Set up fixtures
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$addressService = Shopware()->Container()->get('shopware_account.address_service');
         self::$modelManager = Shopware()->Container()->get('models');
@@ -81,7 +81,7 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
     /**
      * Clean up created entities and database entries
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
 

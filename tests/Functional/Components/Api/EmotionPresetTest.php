@@ -43,7 +43,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
      */
     private $resource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = Shopware()->Container()->get('dbal_connection');
         $this->connection->beginTransaction();
@@ -53,7 +53,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->connection->rollBack();
         parent::tearDown();

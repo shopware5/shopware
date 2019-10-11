@@ -33,7 +33,7 @@ class SubscriberArrayTest extends TestCase
      */
     protected $eventManager;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->eventManager = new \Enlight_Event_Subscriber_Array();
     }

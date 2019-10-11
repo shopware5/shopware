@@ -33,7 +33,7 @@ class ConfiguratorTest extends Base
      */
     protected $configurator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
     }

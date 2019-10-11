@@ -54,7 +54,7 @@ class FormTest extends \Enlight_Components_Test_TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -66,7 +66,7 @@ class FormTest extends \Enlight_Components_Test_TestCase
     /**
      * Tear down
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $form = $this->repo->findOneBy(['name' => 'Testform123']);
 

@@ -34,7 +34,7 @@ class HrefLangTest extends TestCase
      */
     private $service;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -48,7 +48,7 @@ class HrefLangTest extends TestCase
         $this->service = Shopware()->Container()->get('shopware_storefront.href_lang_service');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         Shopware()->Container()->get('dbal_connection')->rollBack();

@@ -33,14 +33,14 @@ use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
 
 class CustomerAttributeConditionHandlerTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $service = Shopware()->Container()->get('shopware_attribute.crud_service');
         $service->update('s_user_attributes', 'test', 'integer');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         /** @var CrudServiceInterface $service */

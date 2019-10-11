@@ -42,7 +42,7 @@ class OptimizerServiceTest extends TestCase
      */
     private $optimizers = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->optimizers = new ArrayCollection([
             new RunnableUnitOptimizer(),

@@ -43,7 +43,7 @@ class LogEntryBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $builder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

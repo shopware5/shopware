@@ -83,7 +83,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
      */
     private $front;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -102,7 +102,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->session->offsetSet('sessionId', null);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         Shopware()->Container()->get('models')->clear();

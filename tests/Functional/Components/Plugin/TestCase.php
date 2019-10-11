@@ -57,7 +57,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     private static $pluginStates = [];
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$pluginManager = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager');
         $loadedPlugins = static::$ensureLoadedPlugins;
@@ -75,7 +75,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         self::restorePluginStates();
         self::$pluginManager = null;

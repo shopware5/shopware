@@ -38,7 +38,7 @@ class ContainerTest extends TestCase
      */
     private $container;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->container = new ProjectServiceContainer();
         $service = $this->createMock(\Enlight_Event_EventManager::class);

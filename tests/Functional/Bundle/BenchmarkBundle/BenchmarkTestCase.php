@@ -26,14 +26,14 @@ namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle;
 
 abstract class BenchmarkTestCase extends \PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $dbalConnection->beginTransaction();
         Shopware()->Container()->get('models')->clear();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $dbalConnection = Shopware()->Container()->get('dbal_connection');
         $dbalConnection->rollBack();

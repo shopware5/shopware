@@ -46,7 +46,7 @@ class CompareTest extends Enlight_Components_Test_TestCase
     /**
      * Test set up method
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -61,7 +61,7 @@ class CompareTest extends Enlight_Components_Test_TestCase
     /**
      * Cleaning up testData
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->module->sDeleteComparisons();

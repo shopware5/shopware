@@ -34,7 +34,7 @@ class UserTest extends TestCase
      */
     protected $resource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->resource->setAcl($this->getAclMockAllowEverything());

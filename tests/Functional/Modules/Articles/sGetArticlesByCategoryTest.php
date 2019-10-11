@@ -38,7 +38,7 @@ class getListingArrayKeyTest extends \Enlight_Components_Test_TestCase
     /**
      * Test set up method
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->module = Shopware()->Modules()->Articles();

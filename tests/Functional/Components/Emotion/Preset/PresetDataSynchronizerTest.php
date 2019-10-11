@@ -47,7 +47,7 @@ class PresetDataSynchronizerTest extends TestCase
     /** @var string */
     private $imageData;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = Shopware()->Container()->get('dbal_connection');
         $this->connection->beginTransaction();
@@ -61,7 +61,7 @@ class PresetDataSynchronizerTest extends TestCase
         $this->imageData = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->connection->rollBack();
     }

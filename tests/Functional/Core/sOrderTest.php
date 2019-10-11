@@ -33,12 +33,12 @@ class sOrderTest extends PHPUnit\Framework\TestCase
      */
     private $module;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$sessionId = mt_rand(111111111, 999999999);
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->module = Shopware()->Modules()->Order();
         Shopware()->Session()->offsetSet('sessionId', self::$sessionId);

@@ -43,14 +43,14 @@ class OrderTest extends TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->order = Shopware()->Db()->fetchRow('SELECT * FROM `s_order` ORDER BY id DESC LIMIT 1');
         Shopware()->Container()->get('dbal_connection')->beginTransaction();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Shopware()->Container()->get('dbal_connection')->rollback();
     }

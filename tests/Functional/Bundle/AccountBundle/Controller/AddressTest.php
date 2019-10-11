@@ -61,7 +61,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * Create one customer to be used for these tests
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
@@ -97,7 +97,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * Clean up created entities and database entries
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
 

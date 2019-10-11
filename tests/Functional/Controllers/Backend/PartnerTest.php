@@ -64,7 +64,7 @@ class PartnerTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * Cleaning up testData
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         $sql = 'DELETE FROM s_emarketing_partner WHERE idcode = ?';
         Shopware()->Db()->query($sql, ['31337']);
@@ -73,7 +73,7 @@ class PartnerTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * Standard set up for every test - just disable auth
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

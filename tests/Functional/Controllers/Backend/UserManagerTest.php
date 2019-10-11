@@ -61,7 +61,7 @@ class UserManagerTest extends \Enlight_Components_Test_Controller_TestCase
         'lockedUntil' => '1999-01-01 00:00:00',
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
         // Parent will not be called since parent::setUp destroys the session and we need it.
 

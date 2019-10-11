@@ -42,7 +42,7 @@ class PrivacyServiceTest extends TestCase
     /** @var PrivacyService */
     private $privacyService;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

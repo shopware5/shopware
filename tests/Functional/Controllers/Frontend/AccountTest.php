@@ -32,7 +32,7 @@ class AccountTest extends Enlight_Components_Test_Plugin_TestCase
 {
     use DatabaseTransactionBehaviour;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->reset();
     }

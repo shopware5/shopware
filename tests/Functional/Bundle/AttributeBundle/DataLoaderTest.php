@@ -45,7 +45,7 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
      */
     private $attributePersister;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = Shopware()->Container()->get('dbal_connection');
         $this->connection->beginTransaction();
@@ -56,7 +56,7 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->connection->rollBack();
 

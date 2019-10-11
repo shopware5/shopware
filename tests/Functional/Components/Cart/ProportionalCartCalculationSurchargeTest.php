@@ -45,7 +45,7 @@ class ProportionalCartCalculationSurchargeTest extends CheckoutTest
      */
     private $tax19;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -61,7 +61,7 @@ class ProportionalCartCalculationSurchargeTest extends CheckoutTest
         $this->tax19 = $this->createArticle(10, 19.00);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

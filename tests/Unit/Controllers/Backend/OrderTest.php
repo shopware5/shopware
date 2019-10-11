@@ -39,7 +39,7 @@ class OrderTest extends TestCase
      */
     private $method;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->controller = $this->createPartialMock(Shopware_Controllers_Backend_Order::class, []);
         $class = new \ReflectionClass($this->controller);

@@ -34,7 +34,7 @@ class NumberRangeIncrementerTest extends \PHPUnit\Framework\TestCase
      */
     public $connection;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

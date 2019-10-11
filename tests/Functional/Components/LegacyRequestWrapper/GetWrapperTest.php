@@ -44,7 +44,7 @@ class GetWrapperTest extends Enlight_Components_Test_Controller_TestCase
         'RewriteTable',
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
