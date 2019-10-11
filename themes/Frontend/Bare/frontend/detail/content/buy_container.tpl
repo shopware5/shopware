@@ -81,6 +81,16 @@
                         <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}"/>
                     {/block}
 
+                    {block name="frontend_detail_index_data_pricespecification"}
+                        <span itemprop="priceSpecification" itemscope itemtype="http://schema.org/PriceSpecification">
+                            {if $sOutputNet}
+                                <meta itemprop="valueAddedTaxIncluded" content="false"/>
+                            {else}
+                                <meta itemprop="valueAddedTaxIncluded" content="true"/>
+                            {/if}
+                        </span>
+                    {/block}
+
                     {block name="frontend_detail_index_data_price_valid_until"}{/block}
 
                     {block name="frontend_detail_index_data_url"}
