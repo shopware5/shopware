@@ -28,6 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Components\QueryAliasMapper;
 use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\MatcherInterface;
+use Shopware_Components_Config as Config;
 
 class RewriteMatcher implements MatcherInterface
 {
@@ -46,14 +47,20 @@ class RewriteMatcher implements MatcherInterface
     ];
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * @var QueryAliasMapper
      */
     private $queryAliasMapper;
 
-    public function __construct(Connection $connection, QueryAliasMapper $queryAliasMapper)
+    public function __construct(Connection $connection, QueryAliasMapper $queryAliasMapper, Config $config)
     {
         $this->connection = $connection;
         $this->queryAliasMapper = $queryAliasMapper;
+        $this->config = $config;
     }
 
     /**
@@ -121,6 +128,19 @@ class RewriteMatcher implements MatcherInterface
           ORDER BY subshopID = :shopId DESC, main DESC
           LIMIT 1
         ';
+
+        if ($this->config->get('ignore_trailing_slash')) {
+            $sql = '
+                (' . $sql . '
+                ) UNION ALL (
+                  SELECT subshopID as shopId, path, org_path as orgPath, 0 as main
+                  FROM s_core_rewrite_urls
+                  WHERE path LIKE CONCAT(TRIM(TRAILING "/" FROM :pathInfo), "%")
+                  ORDER BY subshopID = :shopId DESC, LENGTH(path), main DESC
+                  LIMIT 1
+                )
+            ';
+        }
 
         return $this->connection->prepare($sql);
     }

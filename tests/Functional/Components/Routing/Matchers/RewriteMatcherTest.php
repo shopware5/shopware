@@ -26,6 +26,7 @@ namespace Shopware\Tests\Functional\Components\Api;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Routing\Context;
+use Shopware\Components\Routing\Matchers\RewriteMatcher;
 
 class RewriteMatcherTest extends \Enlight_Components_Test_TestCase
 {
@@ -35,7 +36,7 @@ class RewriteMatcherTest extends \Enlight_Components_Test_TestCase
     protected $connection;
 
     /**
-     * @var \Shopware\Components\Routing\Matchers\RewriteMatcher
+     * @var RewriteMatcher
      */
     protected $matcher;
 
@@ -78,7 +79,9 @@ class RewriteMatcherTest extends \Enlight_Components_Test_TestCase
             ('unique-url-main-with-s-action', 'sViewport=c&sAction=bar&param=3', 1, 1),
             ('unique-url-not-main', 'sViewport=d&param=4', 0, 1),
             ('same-url-different-subshops-one-main', 'sViewport=e&param=5', 0, 1),
-            ('same-url-different-subshops-one-main', 'sViewport=f&param=6', 1, 2)
+            ('same-url-different-subshops-one-main', 'sViewport=f&param=6', 1, 2),
+            ('url-with-slash/', 'sViewport=a&param=1', 1, 1),
+            ('same-url-short', 'sViewport=short', 1, 1)
         ");
     }
 
@@ -180,6 +183,38 @@ class RewriteMatcherTest extends \Enlight_Components_Test_TestCase
                     'action' => 'index',
                     'param' => '6',
                     'rewriteUrl' => true,
+                ],
+            ],
+            [
+                'shopId' => 1,
+                'path' => 'unique-url-main/',
+                'expected' => [
+                    'module' => 'frontend',
+                    'controller' => 'a',
+                    'action' => 'index',
+                    'param' => '1',
+                    'rewriteAlias' => true,
+                ],
+            ],
+            [
+                'shopId' => 1,
+                'path' => 'url-with-slash',
+                'expected' => [
+                    'module' => 'frontend',
+                    'controller' => 'a',
+                    'action' => 'index',
+                    'param' => '1',
+                    'rewriteAlias' => true,
+                ],
+            ],
+            [
+                'shopId' => 1,
+                'path' => 'same-url',
+                'expected' => [
+                    'module' => 'frontend',
+                    'controller' => 'short',
+                    'action' => 'index',
+                    'rewriteAlias' => true,
                 ],
             ],
         ];
