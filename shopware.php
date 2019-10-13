@@ -96,7 +96,7 @@ require __DIR__ . '/autoload.php';
 
 use Shopware\Components\HttpCache\AppCache;
 use Shopware\Kernel;
-use Symfony\Component\HttpFoundation\Request;
+use Enlight_Controller_Request_RequestHttp as Request;
 
 $environment = getenv('SHOPWARE_ENV') ?: getenv('REDIRECT_SHOPWARE_ENV') ?: 'production';
 

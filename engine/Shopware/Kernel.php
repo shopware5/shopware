@@ -24,7 +24,6 @@
 
 namespace Shopware;
 
-use Enlight_Controller_Request_RequestHttp as EnlightRequest;
 use Shopware\Bundle\AccountBundle\AccountBundle;
 use Shopware\Bundle\AttributeBundle\AttributeBundle;
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\StaticResourcesCompilerPass;
@@ -74,13 +73,13 @@ use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\MergeExtensionConfigurationPass;
 use Symfony\Component\HttpKernel\DependencyInjection\RegisterControllerArgumentLocatorsPass;
 use Symfony\Component\HttpKernel\Event\PostResponseEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Kernel as SymfonyKernel;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -156,59 +155,6 @@ class Kernel extends SymfonyKernel
         if ($trustedProxies = $this->config['trustedproxies']) {
             SymfonyRequest::setTrustedProxies($trustedProxies, $this->config['trustedheaderset']);
         }
-    }
-
-    /**
-     * This wraps Shopware:run execution and does not execute
-     * the default dispatching process from symfony.
-     * Therefore:
-     * Arguments are currently ignored. No dispatcher, no response handling.
-     * Shopware instance returns currently the rendered response directly.
-     *
-     * {@inheritdoc}
-     *
-     * @return SymfonyResponse
-     */
-    public function handle(SymfonyRequest $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
-    {
-        if ($this->booted === false) {
-            $this->boot();
-        }
-
-        /** @var \Enlight_Controller_Front $front */
-        $front = $this->container->get('front');
-
-        $enlightRequest = $this->transformSymfonyRequestToEnlightRequest($request);
-
-        if ($front->Request() === null) {
-            $front->setRequest($enlightRequest);
-            $response = $front->dispatch();
-        } else {
-            $dispatcher = clone $front->Dispatcher();
-            $response = clone $front->Response();
-
-            $response->clearHeaders()
-                ->clearBody();
-
-            $response->setStatusCode(SymfonyResponse::HTTP_OK);
-            $enlightRequest->setDispatched();
-            $dispatcher->dispatch($enlightRequest, $response);
-        }
-
-        $response->prepare($request);
-
-        return $response;
-    }
-
-    /**
-     * @return EnlightRequest
-     */
-    public function transformSymfonyRequestToEnlightRequest(SymfonyRequest $request)
-    {
-        // Overwrite superglobals with state of the SymfonyRequest
-        $request->overrideGlobals();
-
-        return EnlightRequest::createFromGlobals();
     }
 
     /**
@@ -412,6 +358,8 @@ class Kernel extends SymfonyKernel
      */
     public function terminate(SymfonyRequest $request, SymfonyResponse $response)
     {
+        parent::terminate($request, $response);
+
         if ($this->container && $this->container->initialized('events')) {
             $this->container->get('events')->notify(KernelEvents::TERMINATE, [
                 'postResponseEvent' => new PostResponseEvent($this, $request, $response),
@@ -663,6 +611,7 @@ class Kernel extends SymfonyKernel
         $container->addCompilerPass(new ControllerCompilerPass());
         $container->addCompilerPass(new RegisterControllerArgumentLocatorsPass('argument_resolver.service', 'shopware.controller'));
         $container->addCompilerPass(new VersionCompilerPass());
+        $container->addCompilerPass(new RegisterListenersPass());
 
         $container->setParameter('active_plugins', $this->activePlugins);
 

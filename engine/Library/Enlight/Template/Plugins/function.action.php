@@ -17,6 +17,10 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+
 /**
  * Method to fast deploy a query to enlight
  *
@@ -33,21 +37,6 @@
  */
 function smarty_function_action($params, Enlight_Template_Default $template)
 {
-    /** @var Enlight_Controller_Front $front */
-    $front = Shopware()->Front();
-    $dispatcher = clone $front->Dispatcher();
-
-    $request = $front->Request();
-    $response = $front->Response();
-
-    if (empty($request) || empty($response)) {
-        $e = new Exception(
-            'Action view helper requires both a registered request and response object in the front controller instance'
-        );
-        //$e->setView($view);
-        throw $e;
-    }
-
     if (isset($params['name'])) {
         $params['action'] = $params['name'];
         unset($params['name']);
@@ -61,41 +50,43 @@ function smarty_function_action($params, Enlight_Template_Default $template)
 
     $params = array_merge($userParams, $params);
 
-    $request = clone $request;
-    $response = clone $response;
+    /** @var Request $request */
+    $request = Shopware()->Container()->get('request_stack')->getCurrentRequest();
 
-    $request->clearParams();
-    $response->clearHeaders()
-             ->clearBody();
+    $baseUrl = $request->getBaseUrl();
+    $request = $request->duplicate($params, [], []);
+    $request->server->set('REQUEST_URI', '/' . $baseUrl);
 
-    if (isset($params['module'])) {
-        $request->setModuleName($params['module'])
+    if ($request instanceof Enlight_Controller_Request_RequestHttp) {
+        if (isset($params['module'])) {
+            $request->setModuleName($params['module'])
                 ->setControllerName('index')
                 ->setActionName('index');
-    }
-    if (isset($params['controller'])) {
-        $request->setControllerName($params['controller'])
+        }
+        if (isset($params['controller'])) {
+            $request->setControllerName($params['controller'])
                 ->setActionName('index');
+        }
+
+        // setParam is used for bc reasons, the attribute should be read for new code
+        $request->setParam('_isSubrequest', true);
+        $request->setAttribute('_isSubrequest', true);
+
+        $request->setActionName(isset($params['action']) ? $params['action'] : 'index');
     }
 
-    // setParam is used for bc reasons, the attribute should be read for new code
-    $request->setParam('_isSubrequest', true);
-    $request->setAttribute('_isSubrequest', true);
+    /** @var Response $response */
+    $response = Shopware()->Container()->get('http_kernel')->handle($request, HttpKernelInterface::SUB_REQUEST);
 
-    $request->setActionName(isset($params['action']) ? $params['action'] : 'index');
-    $request->setParams($params)
-            ->setDispatched(true);
-
-    Shopware()->Container()->get('request_stack')->push($request);
-
-    $dispatcher->dispatch($request, $response);
-
-    if (!$request->isDispatched() || $response->isRedirect()) {
-        // forwards and redirects render nothing
+    // forwards and redirects render nothing
+    if ($request instanceof Enlight_Controller_Request_RequestHttp) {
+        if (!$request->isDispatched()) {
+            return '';
+        }
+    }
+    if ($response->isRedirect()) {
         return '';
     }
 
-    $return = $response->getBody();
-
-    return $return;
+    return $response->getContent();
 }
