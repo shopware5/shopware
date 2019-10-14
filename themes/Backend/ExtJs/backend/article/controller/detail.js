@@ -91,6 +91,10 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             title: '{s name=overwriteArticle/title}Overwrite most recent changes{/s}',
             message: '{s name=overwriteArticle/message}Do you really want to overwrite the latest changes?{/s}',
         },
+        messages: {
+            linkDefaultPriceGroupTitle: '{s name=price/link_default_pricegroup_title}Use default price group{/s}',
+            linkDefaultPriceGroup: '{s name=price/link_default_pricegroup}Are you sure you want to use prices of the default price group?{/s}'
+        }
     },
 
     /**
@@ -130,7 +134,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
             },
             'article-prices-field-set': {
                 priceTabChanged: me.onPriceTabChanged,
-                removePrice: me.onRemovePrice
+                removePrice: me.onRemovePrice,
+                linkDefaultPrice: me.onLinkWithDefaultPricegroup
             },
             'article-prices-field-set grid': {
                 edit: me.onAfterEditPrice,
@@ -752,6 +757,33 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     },
 
     /**
+     * Removes every price from given pricegroup so Shopware will use the default price group
+     *
+     * @param record
+     * @param priceGrid
+     * @param priceStore
+     * @param customerGroupStore
+     * @param view
+     * @param rowIndex
+     */
+    onLinkWithDefaultPricegroup: function(record, view, priceGrid, priceStore, customerGroupStore, rowIndex) {
+        var me = this,
+            store = view.getStore();
+
+        Ext.MessageBox.confirm(me.snippets.messages.linkDefaultPriceGroupTitle, me.snippets.messages.linkDefaultPriceGroup, function (response) {
+            if (response !== 'yes') {
+                return false;
+            }
+
+            store.each(function(record) {
+                store.remove(record);
+            });
+
+            me.onPriceTabChanged(view, view, priceStore, customerGroupStore);
+        });
+    },
+
+    /**
      * Helper function to remove the cloned flag for the current customer group.
      * @param store
      */
@@ -803,7 +835,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                 icon.addCls('sprite-minus-circle-frame');
             }
         } else if ( event.field === 'price') {
-           this.updatedPriceField(event);
+            this.updatedPriceField(event);
             // If the user has edit the percent column, we have to calculate the price
         } else if (event.field === 'percent') {
             this.updatedPercentField(event);

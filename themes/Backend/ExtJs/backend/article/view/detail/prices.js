@@ -75,6 +75,8 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
                 pseudoPrice: '{s name=detail/price/pseudo_price}Pseudo price{/s}',
                 percentPseudo: '{s name=detail/price/percent_pseudo_price}Savings vs. pseudo price{/s}'
             },
+            delete: '{s name=detail/price/grid_action_delete}Delete{/s}',
+            linkPricegroup: '{s name=detail/price/grid_action_link}Use default pricegroup{/s}',
             any:'{s name=detail/price/any}Arbitrary{/s}'
         }
     },
@@ -344,6 +346,19 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
                          */
                         getClass: function(value, metadata, record, rowIdx) {
                             if (Ext.isNumeric(record.get('to')) || rowIdx === 0)  {
+                                return 'x-hidden';
+                            }
+                        }
+                    },
+                    {
+                        iconCls: 'sprite-chain',
+                        action: 'linkDefaultPrice',
+                        tooltip: me.snippets.grid.linkPricegroup,
+                        handler: function (view, rowIndex, colIndex, item, opts, record) {
+                            me.fireEvent('linkDefaultPrice', record, view, me.priceGrids, me.priceStore, me.customerGroupStore, rowIndex);
+                        },
+                        getClass: function (value, metadata, record, rowIdx) {
+                            if (!record.get('cloned') && (record.get('customerGroupKey') === me.customerGroupStore.first().get('key') || rowIdx !== 0)) {
                                 return 'x-hidden';
                             }
                         }
