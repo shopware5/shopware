@@ -27,9 +27,6 @@ namespace Shopware\Components\Model\DBAL\Types;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
-/**
- * @deprecated in 5.6, will be removed with 5.7. Please use `Doctrine\DBAL\Types\ArrayType` instead.
- */
 class AllowInvalidArrayType extends Type
 {
     public function getSQLDeclaration(array $fieldDeclaration, \Doctrine\DBAL\Platforms\AbstractPlatform $platform)
