@@ -44,7 +44,9 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
     },
 
     getColumns: function() {
-        var me = this;
+        var me = this,
+            countryStore = Ext.data.StoreManager.lookup('base.Country').load();
+        countryStore.remoteFilter = false;
 
         return [{
             header: '{s name=tax/rules/name_header}Name{/s}',
@@ -75,9 +77,9 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
             flex:1,
             editor: {
                 xtype: 'config-element-select',
-                queryMode:'local',
-                queryCaching:true,
-                store: Ext.data.StoreManager.lookup('base.Country').load(),
+                queryMode: 'local',
+                queryCaching: true,
+                store: countryStore,
                 displayField:'name',
                 valueField:'id',
                 emptyText: '{s name=tax/rules/select_empty_text}All{/s}',
