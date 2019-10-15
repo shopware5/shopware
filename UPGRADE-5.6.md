@@ -15,6 +15,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added method `clearBody` to `Enlight_Components_Mail` to clear the plain and html body
 * Added interfaces for all services in AttributeBundle
 * Added `AllowInvalidArrayType` to Doctrine to fix deserialization error on mail sending
+* Added missing template for `\Shopware\Bundle\ContentTypeBundle\Field\ComboboxField`
 
 ### Changes
 
