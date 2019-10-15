@@ -44,7 +44,6 @@ function smarty_function_action($params, Enlight_Template_Default $template)
         $e = new Exception(
             'Action view helper requires both a registered request and response object in the front controller instance'
         );
-        //$e->setView($view);
         throw $e;
     }
 
@@ -60,6 +59,12 @@ function smarty_function_action($params, Enlight_Template_Default $template)
     }
 
     $params = array_merge($userParams, $params);
+
+    /** @var \Shopware_Plugins_Core_HttpCache_Bootstrap $httpCache */
+    $httpCache = Shopware()->Plugins()->Core()->HttpCache();
+    if ($esiTag = $httpCache->renderEsiTag($request, $params)) {
+        return $esiTag;
+    }
 
     $request = clone $request;
     $response = clone $response;

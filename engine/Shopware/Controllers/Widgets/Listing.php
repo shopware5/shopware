@@ -311,10 +311,9 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             $body['listing'] = $this->fetchListing($result);
             $body['pagination'] = $this->fetchPagination($result);
         }
+        $this->View()->assign($body);
 
-        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
-        $this->Response()->setContent(json_encode($body));
-        $this->Response()->headers->set('content-type', 'application/json', true);
+        $this->Response()->headers->set('Shopware-Listing-Total', (string) $result->getTotalCount());
     }
 
     /**

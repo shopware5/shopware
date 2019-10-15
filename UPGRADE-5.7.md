@@ -16,6 +16,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Added new doctrine model `Shopware\Models\Emotion\LandingPage`, which extends from `Shopware\Models\Emotion\Emotion`. It's needed to search for landing pages only using the backend store `Shopware.store.Search`
 * Added new doctrine models `Shopware\Models\Sitemap\CustomUrl` and `Shopware\Models\Sitemap\ExcludeUrl`
 * Added new ExtJS component `Shopware.grid.Searchable`. Using it you can search for different entities in a single grid, such as products, categories, blogs, etc. Have a look at the new sitemap UI to see what it looks like
+* Added `Shopware-Listing-Total` header to ajax listing loading
 
 ### Changes
 
@@ -42,6 +43,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
     * `s_statistics_visitors.datum`
     * `s_user.firstlogin`
     * `s_user.lastlogin`
+* Changed response from `Shopware_Controllers_Widgets_Listing` from JSON to HTML
 
 ### Removals
 

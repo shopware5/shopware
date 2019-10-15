@@ -355,6 +355,42 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         );
     }
 
+    public function renderEsiTag(Enlight_Controller_Request_RequestHttp $request, array $params): ?string
+    {
+        if (!$this->Plugin()->getActive()) {
+            return null;
+        }
+
+        if ($this->request === null) {
+            return null;
+        }
+
+        if (!$this->get('shop')->get('esi')) {
+            return null;
+        }
+
+        if (!$this->hasSurrogateEsiCapability($this->request)) {
+            return null;
+        }
+
+        if (!in_array($this->request->getModuleName(), ['frontend', 'widgets'], true)) {
+            return null;
+        }
+
+        $targetName = strtolower($params['module'] . '/' . $params['controller']);
+
+        /** @var CacheControl $cacheControl */
+        $cacheControl = $this->get('http_cache.cache_control');
+
+        if ($cacheControl->useNoCacheParameterForEsi($request, $targetName)) {
+            $params['nocache'] = 1;
+        }
+
+        $url = sprintf('%s/?%s', $request->getBaseUrl(), http_build_query($params, null, '&'));
+
+        return '<esi:include src="' . $url . '" />';
+    }
+
     /**
      * On post dispatch we try to find affected articleIds displayed during this request
      */
@@ -380,9 +416,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         if (!Shopware()->Shop()->get('esi')) {
             return;
         }
-
-        // Enable ESI tag output
-        $this->registerEsiRenderer();
 
         $this->addSurrogateControl($this->response);
 
@@ -552,70 +585,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         if (isset($newCacheTags)) {
             $this->response->headers->setCookie(new Cookie('nocache', implode(', ', $newCacheTags), 0, $this->request->getBasePath() . '/'));
         }
-    }
-
-    /**
-     * Register the action plugin override
-     */
-    public function registerEsiRenderer()
-    {
-        $engine = $this->action->View()->Engine();
-
-        $engine->unregisterPlugin(
-            Smarty::PLUGIN_FUNCTION,
-            'action'
-        );
-        $engine->registerPlugin(
-            Smarty::PLUGIN_FUNCTION,
-            'action',
-            [$this, 'renderEsiTag']
-        );
-
-        if (strpos($engine->getCompileId(), '_esi') === false) {
-            $engine->setCompileId($engine->getCompileId() . '_esi');
-        }
-    }
-
-    /**
-     * @param array $params
-     *
-     * @return string
-     */
-    public function renderEsiTag($params)
-    {
-        $request = $this->action->Request();
-
-        // Alias from "name" to "action" to be compatible with non-http-cache implementation
-        // @see engine/Library/Enlight/Template/Plugins/function.action.php
-        if (isset($params['name'])) {
-            $params['action'] = $params['name'];
-            unset($params['name']);
-        }
-
-        if (isset($params['params'])) {
-            $params = array_merge((array) $params['params'], $params);
-            unset($params['params']);
-        }
-
-        if (!isset($params['module'])) {
-            $params['module'] = $request->getModuleName();
-            if (!isset($params['controller'])) {
-                $params['controller'] = $request->getControllerName();
-            }
-        }
-
-        $targetName = strtolower($params['module'] . '/' . $params['controller']);
-
-        /** @var CacheControl $cacheControl */
-        $cacheControl = $this->get('http_cache.cache_control');
-
-        if ($cacheControl->useNoCacheParameterForEsi($request, $targetName)) {
-            $params['nocache'] = 1;
-        }
-
-        $url = sprintf('%s/?%s', $request->getBaseUrl(), http_build_query($params, null, '&'));
-
-        return '<esi:include src="' . $url . '" />';
     }
 
     /**
