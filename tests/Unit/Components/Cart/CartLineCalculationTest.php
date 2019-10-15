@@ -22,15 +22,15 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\tests\Unit\Components\Cart;
+namespace Shopware\Tests\Unit\Components\Cart;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Cart\NetRounding\RoundLineAfterQuantity;
 use Shopware\Components\Cart\NetRounding\RoundLineAfterTax;
 
-class CartLinecalculationTest extends TestCase
+class CartLineCalculationTest extends TestCase
 {
-    public function testRoundingAfterQuantity()
+    public function testRoundingAfterQuantity(): void
     {
         $calculator = new RoundLineAfterQuantity();
 
@@ -38,7 +38,7 @@ class CartLinecalculationTest extends TestCase
         static::assertEquals(1.19, $lineValue);
     }
 
-    public function testRoundingDownAfterQuantity()
+    public function testRoundingDownAfterQuantity(): void
     {
         $calculator = new RoundLineAfterQuantity();
 
@@ -46,7 +46,7 @@ class CartLinecalculationTest extends TestCase
         static::assertEquals(1.23321, $lineValue);
     }
 
-    public function testRoundingUpAfterQuantity()
+    public function testRoundingUpAfterQuantity(): void
     {
         $calculator = new RoundLineAfterQuantity();
 
@@ -54,7 +54,7 @@ class CartLinecalculationTest extends TestCase
         static::assertEquals(1.5876000000000001, $lineValue);
     }
 
-    public function testRoundingAfterQuantityMultipleQuantity()
+    public function testRoundingAfterQuantityMultipleQuantity(): void
     {
         $calculator = new RoundLineAfterQuantity();
 
@@ -62,7 +62,7 @@ class CartLinecalculationTest extends TestCase
         static::assertEquals(15.88, $lineValue);
     }
 
-    public function testRoundingAfterQuantityNoQuanity()
+    public function testRoundingAfterQuantityNoQuanity(): void
     {
         $calculator = new RoundLineAfterQuantity();
 
@@ -70,7 +70,7 @@ class CartLinecalculationTest extends TestCase
         static::assertEquals(0.0, $lineValue);
     }
 
-    public function testRoundingAfterQuantityDefaultQuanity()
+    public function testRoundingAfterQuantityDefaultQuanity(): void
     {
         $calculator = new RoundLineAfterQuantity();
 
@@ -78,49 +78,49 @@ class CartLinecalculationTest extends TestCase
         static::assertEquals(1.19, $lineValue);
     }
 
-    public function testRoundingafterTax()
+    public function testRoundingafterTax(): void
     {
-        $calculator = new RoundLineafterTax();
+        $calculator = new RoundLineAfterTax();
 
         $lineValue = $calculator->round(1.0, 19, 1);
         static::assertEquals(1.19, $lineValue);
     }
 
-    public function testRoundingDownafterTax()
+    public function testRoundingDownafterTax(): void
     {
-        $calculator = new RoundLineafterTax();
+        $calculator = new RoundLineAfterTax();
 
         $lineValue = $calculator->round(1.111, 11.1, 1);
         static::assertEquals(1.23, $lineValue);
     }
 
-    public function testRoundingUpafterTax()
+    public function testRoundingUpafterTax(): void
     {
-        $calculator = new RoundLineafterTax();
+        $calculator = new RoundLineAfterTax();
 
         $lineValue = $calculator->round(1.26, 26, 1);
         static::assertEquals(1.59, $lineValue);
     }
 
-    public function testRoundingafterTaxMultipleQuantity()
+    public function testRoundingafterTaxMultipleQuantity(): void
     {
-        $calculator = new RoundLineafterTax();
+        $calculator = new RoundLineAfterTax();
 
         $lineValue = $calculator->round(1.26, 26, 10);
         static::assertEquals(15.90, $lineValue);
     }
 
-    public function testRoundingafterTaxNoQuanity()
+    public function testRoundingafterTaxNoQuanity(): void
     {
-        $calculator = new RoundLineafterTax();
+        $calculator = new RoundLineAfterTax();
 
         $lineValue = $calculator->round(1.26, 26, 0);
         static::assertEquals(0.0, $lineValue);
     }
 
-    public function testRoundingafterTaxDefaultQuanity()
+    public function testRoundingafterTaxDefaultQuanity(): void
     {
-        $calculator = new RoundLineafterTax();
+        $calculator = new RoundLineAfterTax();
 
         $lineValue = $calculator->round(1.0, 19);
         static::assertEquals(1.19, $lineValue);
