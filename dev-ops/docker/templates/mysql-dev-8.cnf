@@ -1,2 +1,0 @@
-[mysqld]
-default_authentication_plugin=mysql_native_password
