@@ -57,7 +57,7 @@ class Configuration extends BaseConfiguration
      *
      * @var string
      */
-    protected $cacheNamespace = null;
+    protected $cacheNamespace;
 
     /**
      * @var ShopwareReleaseStruct
@@ -86,6 +86,7 @@ class Configuration extends BaseConfiguration
 
         Type::overrideType('datetime', \Shopware\Components\Model\DBAL\Types\DateTimeStringType::class);
         Type::overrideType('date', \Shopware\Components\Model\DBAL\Types\DateStringType::class);
+        Type::overrideType('array', \Shopware\Components\Model\DBAL\Types\AllowInvalidArrayType::class);
 
         $this->addCustomStringFunction('DATE_FORMAT', DateFormat::class);
         $this->addCustomStringFunction('IFNULL', IfNull::class);
