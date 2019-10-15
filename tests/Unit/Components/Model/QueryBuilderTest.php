@@ -40,7 +40,7 @@ class QueryBuilderTest extends TestCase
      */
     public $querybuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         // Create a stub for the SomeClass class.
         $emMock = $this->createMock(EntityManager::class);

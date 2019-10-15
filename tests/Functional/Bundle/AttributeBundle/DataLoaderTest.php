@@ -45,7 +45,7 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
      */
     private $attributePersister;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = Shopware()->Container()->get('dbal_connection');
         $this->connection->beginTransaction();
@@ -56,7 +56,7 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->connection->rollBack();
 
@@ -67,7 +67,7 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
     {
         $result = $this->attributeLoader->load('s_user_addresses_attributes', 555);
 
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
     }
 
     public function testLoadReturnArrayIfNotEmpty()
@@ -75,7 +75,7 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
         $this->attributePersister->persist(['text1' => 'foo'], 's_user_addresses_attributes', 2);
         $result = $this->attributeLoader->load('s_user_addresses_attributes', 2);
 
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertNotEmpty($result);
     }
 
@@ -114,7 +114,7 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
     {
         $result = $this->attributeLoader->loadTranslations('s_user_addresses_attributes', 555);
 
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
     }
 
     public function testLoadTranslationsReturnArrayIfNotEmpty()
@@ -122,7 +122,7 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
         $this->attributePersister->persist(['text1' => 'foo'], 's_user_addresses_attributes', 2);
         $result = $this->attributeLoader->loadTranslations('s_user_addresses_attributes', 2);
 
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
     }
 
     /**

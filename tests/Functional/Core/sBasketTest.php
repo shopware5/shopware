@@ -54,7 +54,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
      */
     private $snippetManager;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -146,7 +146,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         $result = $this->module->sCheckBasketQuantities();
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('hideBasket', $result);
         static::assertArrayHasKey('articles', $result);
         static::assertFalse($result['hideBasket']);
@@ -207,7 +207,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         $result = $this->module->sCheckBasketQuantities();
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('hideBasket', $result);
         static::assertArrayHasKey('articles', $result);
         static::assertTrue($result['hideBasket']);
@@ -251,7 +251,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         $result = $this->module->sCheckBasketQuantities();
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('hideBasket', $result);
         static::assertArrayHasKey('articles', $result);
         static::assertFalse($result['hideBasket']);
@@ -642,7 +642,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     {
         // Test with empty args and session, expect failure
         $result = $this->module->sAddVoucher('');
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertTrue($result['sErrorFlag']);
@@ -656,7 +656,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand(), true);
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $result = $this->module->sAddVoucher('');
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertTrue($result['sErrorFlag']);
@@ -684,7 +684,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $result = $this->module->sAddVoucher('testOne');
 
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertTrue($result['sErrorFlag']);
@@ -697,7 +697,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand(), true);
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $result = $this->module->sAddVoucher('testOne');
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertTrue($result['sErrorFlag']);
@@ -734,7 +734,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             ]
         );
         $result = $this->module->sAddVoucher('testOne');
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertTrue($result['sErrorFlag']);
@@ -768,7 +768,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         // Second voucher should fail
         $result = $this->module->sAddVoucher('testOne');
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertTrue($result['sErrorFlag']);
@@ -830,7 +830,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         // Test with one-time code, fail due to minimum amount (cart is empty)
         $result = $this->module->sAddVoucher($voucherCodeData['code']);
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertTrue($result['sErrorFlag']);
@@ -871,7 +871,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         // Test again with the same one-time code, fail
         $result = $this->module->sAddVoucher($voucherCodeData['code']);
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertTrue($result['sErrorFlag']);
@@ -968,7 +968,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         // Test again with the same one-time code, fail
         $result = $this->module->sAddVoucher($voucherData['vouchercode']);
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertTrue($result['sErrorFlag']);
@@ -1064,7 +1064,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         // Test again with the same one-time code, fail
         $result = $this->module->sAddVoucher($voucherTwoData['vouchercode']);
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertTrue($result['sErrorFlag']);
@@ -1150,7 +1150,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         // Test again with the same one-time code, fail
         $result = $this->module->sAddVoucher($voucherData['vouchercode']);
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertTrue($result['sErrorFlag']);
@@ -1235,7 +1235,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
 
         // Test again  code, fail
         $result = $this->module->sAddVoucher($voucherData['vouchercode']);
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertTrue($result['sErrorFlag']);
@@ -1410,7 +1410,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             [$randomArticleOne['supplierID']]
         );
         $result = $this->module->sAddVoucher($voucherData['vouchercode']);
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertTrue($result['sErrorFlag']);
@@ -1927,7 +1927,8 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             static::assertArrayHasKey('amountnetNumeric', $basketData['content'][0], 'amountnetNumeric for cart item should exist');
             static::assertGreaterThan(0, $basketData['content'][0]['amountNumeric']);
             static::assertGreaterThan(0, $basketData['content'][0]['amountnetNumeric']);
-            static::assertEquals(29.97 * 2, $basketData['content'][0]['amountNumeric'], 'amountNumeric for cart item should respect cart item quantity', 0.001);
+            static::assertEquals(29.97 * 2, $basketData['content'][0]['amountNumeric'], 'amountNumeric for cart item should respect cart item quantity');
+            static::assertEqualsWithDelta(29.97 * 2, $basketData['content'][0]['amountNumeric'], 0.001, 'amountNumeric for cart item should respect cart item quantity');
         } finally {
             $resourceHelper->cleanUp();
         }
@@ -2024,7 +2025,8 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             // Assert that a valid basket was returned
             static::assertNotEmpty($basketData);
             // Assert that the total is approximately 0.00
-            static::assertEquals(0, $basketData['AmountNumeric'], 'total is approxmately 0.00', 0.0001);
+            static::assertEquals(0, $basketData['AmountNumeric'], 'total is approxmately 0.00');
+            static::assertEqualsWithDelta(0, $basketData['AmountNumeric'], 0.0001, 'total is approxmately 0.00');
         } finally {
             // Delete test resources
             if ($customerGroupDiscountId) {

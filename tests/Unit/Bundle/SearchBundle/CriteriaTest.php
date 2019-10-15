@@ -31,12 +31,12 @@ class CriteriaTest extends TestCase
 {
     /**
      * @dataProvider invalidCriteriaLimit
-     * @expectedException \InvalidArgumentException
      *
      * @param int $limit
      */
     public function testInvalidCriteriaLimit($limit)
     {
+        $this->expectException('InvalidArgumentException');
         $criteria = new Criteria();
         $criteria->limit($limit);
     }
@@ -55,12 +55,12 @@ class CriteriaTest extends TestCase
 
     /**
      * @dataProvider invalidCriteriaOffset
-     * @expectedException \InvalidArgumentException
      *
      * @param int $offset
      */
     public function testInvalidCriteriaOffset($offset)
     {
+        $this->expectException('InvalidArgumentException');
         $criteria = new Criteria();
         $criteria->offset($offset);
     }

@@ -54,7 +54,7 @@ class ORMBacklogSubscriberTest extends TestCase
      */
     private $modelManager;
 
-    public function __construct($name = null, array $data = [], string $dataName = '')
+    public function __construct($name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
 

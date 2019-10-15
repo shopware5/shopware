@@ -35,7 +35,7 @@ class CacheTest extends TestCase
 
     private $release;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->release = new ShopwareReleaseStruct('5.5.0', '', '4711');
     }

@@ -66,7 +66,7 @@ class StoreExtjsValueParserTest extends TestCase
         $store = $this->getStoreElement(1);
         $options = $this->parser->parse($store);
 
-        static::assertInternalType('string', $options);
+        static::assertIsString($options);
         static::assertEquals('Shopware.apps.Base.store.Category', $options);
     }
 
@@ -75,7 +75,7 @@ class StoreExtjsValueParserTest extends TestCase
         $store = $this->getStoreElement(2);
         $options = $this->parser->parse($store);
 
-        static::assertInternalType('string', $options);
+        static::assertIsString($options);
         static::assertEquals('', $options);
     }
 

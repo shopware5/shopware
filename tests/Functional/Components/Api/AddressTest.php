@@ -142,19 +142,15 @@ class AddressTest extends TestCase
         return $id;
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testUpdateWithInvalidIdShouldThrowNotFoundException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $this->resource->update(9999999, []);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testUpdateWithMissingIdShouldThrowParameterMissingException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->update('', []);
     }
 
@@ -169,19 +165,15 @@ class AddressTest extends TestCase
         static::assertEquals(null, $address->getId());
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testDeleteWithInvalidIdShouldThrowNotFoundException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $this->resource->delete(9999999);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testDeleteWithMissingIdShouldThrowParameterMissingException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->delete('');
     }
 }

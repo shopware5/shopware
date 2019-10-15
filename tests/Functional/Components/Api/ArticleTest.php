@@ -1057,11 +1057,9 @@ class ArticleTest extends TestCase
         static::assertEquals(0, $result['total']);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ValidationException
-     */
     public function testCreateWithInvalidDataShouldThrowValidationException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
         // required field name is missing
         $testData = [
             'description' => 'Update description',
@@ -1171,10 +1169,10 @@ class ArticleTest extends TestCase
 
     /**
      * @depends testCreateShouldBeSuccessful
-     * @expectedException \Shopware\Components\Api\Exception\ValidationException
      */
     public function testUpdateWithInvalidDataShouldThrowValidationException($id)
     {
+        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
         // required field name is blank
         $testData = [
             'name' => ' ',
@@ -1185,19 +1183,15 @@ class ArticleTest extends TestCase
         $this->resource->update($id, $testData);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testUpdateWithInvalidIdShouldThrowNotFoundException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $this->resource->update(9999999, []);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testUpdateWithMissingIdShouldThrowParameterMissingException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->update('', []);
     }
 
@@ -1212,19 +1206,15 @@ class ArticleTest extends TestCase
         static::assertEquals(null, $article->getId());
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testDeleteWithInvalidIdShouldThrowNotFoundException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $this->resource->delete(9999999);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testDeleteWithMissingIdShouldThrowParameterMissingException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->delete('');
     }
 

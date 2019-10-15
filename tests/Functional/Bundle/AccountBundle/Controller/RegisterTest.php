@@ -33,13 +33,13 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
     const SAVE_URL = '/register/saveRegister/sTarget/account/sTargetAction/index';
     const CONFIRM_URL_PREFIX = '/register/confirmValidation/sConfirmation/';
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
         Shopware()->Container()->reset('router');
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         Shopware()->Container()->get('dbal_connection')->beginTransaction();
@@ -47,7 +47,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Container()->get('models')->clear();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         Shopware()->Container()->get('dbal_connection')->rollback();

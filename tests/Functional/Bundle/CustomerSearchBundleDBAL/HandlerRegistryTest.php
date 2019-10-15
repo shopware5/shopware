@@ -84,11 +84,9 @@ class HandlerRegistryTest extends TestCase
         static::assertContains(SalutationConditionHandler::class, $classes);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testNoneSupportConditionThrowsException()
     {
+        $this->expectException('RuntimeException');
         /** @var HandlerRegistry $registry */
         $registry = Shopware()->Container()->get('customer_search.dbal.handler_registry');
         $registry->getConditionHandler(new SimpleCondition('test'));

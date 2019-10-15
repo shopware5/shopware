@@ -37,7 +37,7 @@ class ResourceTest extends \Enlight_Components_Test_TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -72,11 +72,9 @@ class ResourceTest extends \Enlight_Components_Test_TestCase
         static::assertEquals($this->resource->getAutoFlush(), false);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\PrivilegeException
-     */
     public function testCheckPrivilegeShouldThrowException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\PrivilegeException');
         $aclMock = $this->createMock(\Shopware_Components_Acl::class);
 
         $aclMock->expects(static::any())

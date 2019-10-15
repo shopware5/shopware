@@ -34,7 +34,7 @@ class PreHashedTest extends TestCase
      */
     private $hasher;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->hasher = new PreHashed();
     }

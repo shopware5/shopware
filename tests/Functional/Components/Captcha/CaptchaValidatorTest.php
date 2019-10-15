@@ -34,7 +34,7 @@ class CaptchaValidatorTest extends \PHPUnit\Framework\TestCase
      */
     private $captcha;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->captcha = new DefaultCaptcha(
             Shopware()->Container(),

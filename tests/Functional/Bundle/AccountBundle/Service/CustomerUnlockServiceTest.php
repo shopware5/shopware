@@ -28,14 +28,14 @@ use Shopware\Bundle\AccountBundle\Service\CustomerUnlockServiceInterface;
 
 class CustomerUnlockServiceTest extends \Enlight_Components_Test_TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         Shopware()->Db()->beginTransaction();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 

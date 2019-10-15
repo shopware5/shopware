@@ -35,7 +35,7 @@ class CategoryUrlProviderTest extends TestCase
 {
     use DatabaseTransactionBehaviour;
 
-    public function setup(): void
+    public function setUp(): void
     {
         $dbConnection = Shopware()->Container()->get('dbal_connection');
 

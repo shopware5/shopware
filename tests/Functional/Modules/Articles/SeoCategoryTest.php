@@ -31,7 +31,7 @@ class SeoCategoryTest extends \Enlight_Components_Test_Plugin_TestCase
      */
     private $resource;
 
-    public function setUp()
+    public function setUp(): void
     {
         Shopware()->Container()->get('models')->clear();
         $this->resource = new \Shopware\Components\Api\Resource\Article();

@@ -94,7 +94,7 @@ class FormSynchronizerTest extends Base
      */
     private $synchronizer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->form = new Form();
         $this->synchronizer = $this->getSynchronizer();

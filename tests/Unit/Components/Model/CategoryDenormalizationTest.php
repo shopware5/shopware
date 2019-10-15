@@ -24,10 +24,7 @@
 
 namespace Shopware\Tests\Unit\Components\Model;
 
-use PHPUnit\DbUnit\Database\DefaultConnection;
-use PHPUnit\DbUnit\DataSet\IDataSet;
-use PHPUnit\DbUnit\DataSet\ReplacementDataSet;
-use PHPUnit\DbUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\CategoryDenormalization;
 
 class PDOMock extends \PDO
@@ -74,37 +71,13 @@ class CategoryDenormalizationTest extends TestCase
         $schemaSql = file_get_contents(__DIR__ . '/_CategoryDenormalization/schema.sql');
         $conn->exec($schemaSql);
 
+        $seedSql = file_get_contents(__DIR__ . '/_CategoryDenormalization/seed.sql');
+        $conn->exec($seedSql);
+
         $this->conn = $conn;
         $this->component = new CategoryDenormalization($conn);
 
         parent::setUp();
-    }
-
-    public function getConnection(): DefaultConnection
-    {
-        if (!extension_loaded('sqlite3')) {
-            return null;
-        }
-
-        return $this->createDefaultDBConnection($this->conn, ':memory:');
-    }
-
-    /**
-     * 2. German
-     *   4. Genusswelten
-     *     5. Getränke
-     * 3. English
-     *   6. World of food
-     *     7. Spirits
-     */
-    public function getDataSet(): IDataSet
-    {
-        $dataset = $this->createFlatXMLDataSet(__DIR__ . '/_CategoryDenormalization/category-seed.xml');
-
-        $dataset = new ReplacementDataSet($dataset);
-        $dataset->addFullReplacement('##NULL##', null);
-
-        return $dataset;
     }
 
     /**
@@ -134,7 +107,7 @@ class CategoryDenormalizationTest extends TestCase
 
     public function testRebuildAssignment(): void
     {
-        static::assertEquals(0, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(0, $this->getRowCount('s_articles_categories_ro'));
 
         // Assign to Getränke
         $this->conn->exec('INSERT INTO s_articles_categories (articleID, categoryID) VALUES (1, 5)');
@@ -149,12 +122,12 @@ class CategoryDenormalizationTest extends TestCase
         // Six rows in s_articles_categories_ro have to be created
         $affectedRows = $this->component->rebuildAllAssignments();
         static::assertEquals(6, $affectedRows);
-        static::assertEquals(6, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(6, $this->getRowCount('s_articles_categories_ro'));
     }
 
     public function testAddAssignment(): void
     {
-        static::assertEquals(0, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(0, $this->getRowCount('s_articles_categories_ro'));
 
         // Assign to Getränke
         $this->conn->exec('INSERT INTO s_articles_categories (articleID, categoryID) VALUES (1, 5)');
@@ -164,12 +137,12 @@ class CategoryDenormalizationTest extends TestCase
         $this->conn->exec('INSERT INTO s_articles_categories (articleID, categoryID) VALUES (1, 7)');
         $this->component->addAssignment(1, 7);
 
-        static::assertEquals(6, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(6, $this->getRowCount('s_articles_categories_ro'));
     }
 
     public function testRemoveAssignment(): void
     {
-        static::assertEquals(0, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(0, $this->getRowCount('s_articles_categories_ro'));
 
         // Assign to Getränke
         $this->conn->exec('INSERT INTO s_articles_categories (articleID, categoryID) VALUES (1, 5)');
@@ -179,12 +152,12 @@ class CategoryDenormalizationTest extends TestCase
         $this->conn->exec('INSERT INTO s_articles_categories (articleID, categoryID) VALUES (1, 7)');
         $this->component->addAssignment(1, 7);
 
-        static::assertEquals(6, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(6, $this->getRowCount('s_articles_categories_ro'));
 
         $this->conn->exec('DELETE FROM s_articles_categories WHERE articleID = 1 AND categoryID = 5');
         $this->component->removeAssignment(1, 5);
 
-        static::assertEquals(3, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(3, $this->getRowCount('s_articles_categories_ro'));
     }
 
     public function testRebuildCategoryPath(): void
@@ -245,7 +218,7 @@ class CategoryDenormalizationTest extends TestCase
         $affectedRows = $this->component->rebuildAssignments(4);
         static::assertEquals(3, $affectedRows, '3 new assignments should be created');
 
-        static::assertEquals(7, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(7, $this->getRowCount('s_articles_categories_ro'));
     }
 
     /**
@@ -280,7 +253,7 @@ class CategoryDenormalizationTest extends TestCase
         $rows = $this->conn->query('SELECT count(id) FROM s_articles_categories_ro WHERE parentCategoryID = 5')->fetchColumn();
         static::assertEquals(3, $rows, '3 Rows should be in database');
 
-        static::assertEquals(6, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(6, $this->getRowCount('s_articles_categories_ro'));
     }
 
     public function testRemoveAllAssignments(): void
@@ -293,12 +266,12 @@ class CategoryDenormalizationTest extends TestCase
         $this->conn->exec('INSERT INTO s_articles_categories (articleID, categoryID) VALUES (1, 7)');
         $this->component->addAssignment(1, 7);
 
-        static::assertEquals(6, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(6, $this->getRowCount('s_articles_categories_ro'));
 
         $affectedRows = $this->component->removeAllAssignments();
 
         static::assertEquals(6, $affectedRows);
-        static::assertEquals(0, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(0, $this->getRowCount('s_articles_categories_ro'));
     }
 
     public function testRemoveArticleAssignmentments(): void
@@ -318,7 +291,7 @@ class CategoryDenormalizationTest extends TestCase
         $affectedRows = $this->component->removeArticleAssignmentments(1);
         static::assertEquals(6, $affectedRows);
 
-        static::assertEquals(3, $this->getConnection()->getRowCount('s_articles_categories_ro'));
+        static::assertEquals(3, $this->getRowCount('s_articles_categories_ro'));
     }
 
     public function testGetParentCategoryIdsForRootLevelReturnsEmptyArray(): void
@@ -395,5 +368,10 @@ class CategoryDenormalizationTest extends TestCase
     {
         $this->component->disableTransactions();
         static::assertFalse($this->component->transactionsEnabled());
+    }
+
+    private function getRowCount(string $table): int
+    {
+        return (int) $this->conn->query('SELECT COUNT(*) FROM ' . $table)->fetchColumn();
     }
 }

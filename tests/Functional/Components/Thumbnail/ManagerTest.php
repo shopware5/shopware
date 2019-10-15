@@ -130,12 +130,10 @@ class ManagerTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage No album configured for the passed media object and no size passed!
-     */
     public function testGenerationWithoutAlbum()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('No album configured for the passed media object and no size passed!');
         $media = new \Shopware\Models\Media\Media();
 
         $sourcePath = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'sw_icon.png';
@@ -154,12 +152,10 @@ class ManagerTest extends TestCase
         $manager->createMediaThumbnail($media);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /File .* is not an image/
-     */
     public function testGenerationWithEmptyMedia()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessageRegExp('/File .* is not an image/');
         $media = new \Shopware\Models\Media\Media();
 
         $manager = Shopware()->Container()->get('thumbnail_manager');

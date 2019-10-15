@@ -30,7 +30,7 @@ class BlogTest extends \Enlight_Components_Test_Plugin_TestCase
 {
     use DatabaseTransactionBehaviour;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -39,12 +39,11 @@ class BlogTest extends \Enlight_Components_Test_Plugin_TestCase
 
     /**
      * Tests the behavior if the blog article is not activated
-     *
-     * @expectedException \Enlight_Exception
-     * @expectedExceptionCode 404
      */
     public function testDispatchNoActiveBlogItem()
     {
+        $this->expectException('Enlight_Exception');
+        $this->expectExceptionCode('404');
         $this->connection->exec('UPDATE `s_blog` SET `active` = 0 WHERE `id` = 3;');
 
         $this->dispatch('/blog/detail/?blogArticle=3');
@@ -53,12 +52,11 @@ class BlogTest extends \Enlight_Components_Test_Plugin_TestCase
 
     /**
      * Tests the behavior if the BlogItem does not exist anymore
-     *
-     * @expectedException \Enlight_Exception
-     * @expectedExceptionCode 404
      */
     public function testDispatchNotExistingBlogItem()
     {
+        $this->expectException('Enlight_Exception');
+        $this->expectExceptionCode('404');
         $this->dispatch('/blog/detail/?blogArticle=2222');
         static::assertTrue($this->Response()->isRedirect());
     }
@@ -88,12 +86,11 @@ class BlogTest extends \Enlight_Components_Test_Plugin_TestCase
 
     /**
      * Test that requesting a non-blog category-id creates a redirect
-     *
-     * @expectedException \Enlight_Exception
-     * @expectedExceptionCode 404
      */
     public function testDispatchNonBlogCategory()
     {
+        $this->expectException('Enlight_Exception');
+        $this->expectExceptionCode('404');
         $this->dispatch('/blog/?sCategory=14');
     }
 
@@ -102,13 +99,12 @@ class BlogTest extends \Enlight_Components_Test_Plugin_TestCase
      *
      * @dataProvider invalidCategoryUrlDataProvider
      *
-     * @expectedException \Enlight_Exception
-     * @expectedExceptionCode 404
-     *
      * @param string $url
      */
     public function testDispatchNotExistingBlogCategory($url)
     {
+        $this->expectException('Enlight_Exception');
+        $this->expectExceptionCode('404');
         $this->dispatch($url);
     }
 

@@ -61,7 +61,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * Create one customer to be used for these tests
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
@@ -97,7 +97,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * Clean up created entities and database entries
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
 
@@ -216,12 +216,12 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage The address is defined as default billing or shipping address and cannot be removed.
      * @depends testCreation
      */
     public function testDeletionOfDefaultAddressesShouldFail()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('The address is defined as default billing or shipping address and cannot be removed.');
         $this->ensureLogin();
         $addressId = self::$customer->getDefaultBillingAddress()->getId();
 

@@ -35,7 +35,7 @@ class SepaPaymentMethodTest extends \Enlight_Components_Test_Plugin_TestCase
 
     protected static $sepaStatus;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
@@ -62,7 +62,7 @@ class SepaPaymentMethodTest extends \Enlight_Components_Test_Plugin_TestCase
         self::$sepaPaymentMethod = new SepaPaymentMethod();
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         Shopware()->Models()
             ->getRepository('\Shopware\Models\Payment\Payment')

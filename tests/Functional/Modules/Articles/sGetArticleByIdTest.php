@@ -3483,7 +3483,7 @@ class sGetArticleByIdTest extends \Enlight_Components_Test_Plugin_TestCase
     /**
      * Test set up method
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->module = Shopware()->Modules()->Articles();

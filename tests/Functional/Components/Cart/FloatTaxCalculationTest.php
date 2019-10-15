@@ -39,7 +39,7 @@ class FloatTaxCalculationTest extends CheckoutTest
      */
     private $taxId;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->connection = Shopware()->Container()->get('dbal_connection');
@@ -48,7 +48,7 @@ class FloatTaxCalculationTest extends CheckoutTest
         $this->taxId = $this->connection->lastInsertId();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         $this->connection->rollBack();

@@ -38,7 +38,7 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
      */
     private $module;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helper = new Helper();
 
@@ -53,7 +53,7 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->helper->cleanUp();
         parent::tearDown();

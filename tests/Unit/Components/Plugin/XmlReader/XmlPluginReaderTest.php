@@ -43,7 +43,7 @@ class XmlPluginReaderTest extends TestCase
     {
         $result = $this->readFile('plugin.xml');
 
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
 
         static::assertArrayHasKey('label', $result);
         static::assertArrayHasKey('en', $result['label']);

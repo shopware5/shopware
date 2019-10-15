@@ -26,7 +26,7 @@ namespace Shopware\Tests\Functional\Components\Theme;
 
 class InstallerTest extends Base
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
     }

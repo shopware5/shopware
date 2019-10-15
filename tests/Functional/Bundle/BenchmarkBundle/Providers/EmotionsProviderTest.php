@@ -83,10 +83,13 @@ class EmotionsProviderTest extends ProviderTestCase
 
         $resultData = $this->getBenchmarkData();
 
-        static::assertArraySubset([
+        static::assertTrue(array_intersect([
             ['elementCount' => 3, 'elementName' => 'example-element-1'],
             ['elementCount' => 2, 'elementName' => 'example-element-2'],
-        ], $resultData['elementUsages']);
+        ], $resultData['elementUsages']) === [
+            ['elementCount' => 3, 'elementName' => 'example-element-1'],
+            ['elementCount' => 2, 'elementName' => 'example-element-2'],
+        ]);
     }
 
     /**
@@ -98,7 +101,7 @@ class EmotionsProviderTest extends ProviderTestCase
 
         $resultData = $this->getBenchmarkData();
 
-        static::assertArraySubset(['4', '2', '4', '3', '4'], $resultData['viewportUsages']);
+        static::assertTrue(array_intersect(['4', '2', '4', '3', '4'], $resultData['viewportUsages']) === ['4', '2', '4', '3', '4']);
     }
 
     /**
@@ -127,15 +130,21 @@ class EmotionsProviderTest extends ProviderTestCase
         $provider = $this->getProvider();
 
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
-        static::assertArraySubset([
+        static::assertTrue(array_intersect([
             ['elementCount' => 3, 'elementName' => 'example-element-1'],
             ['elementCount' => 2, 'elementName' => 'example-element-2'],
-        ], $resultData['elementUsages']);
+        ], $resultData['elementUsages']) === [
+            ['elementCount' => 3, 'elementName' => 'example-element-1'],
+            ['elementCount' => 2, 'elementName' => 'example-element-2'],
+        ]);
 
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
-        static::assertArraySubset([
+        static::assertTrue(array_intersect([
             ['elementCount' => 2, 'elementName' => 'example-element-1'],
             ['elementCount' => 1, 'elementName' => 'example-element-2'],
-        ], $resultData['elementUsages']);
+        ], $resultData['elementUsages']) === [
+            ['elementCount' => 2, 'elementName' => 'example-element-1'],
+            ['elementCount' => 1, 'elementName' => 'example-element-2'],
+        ]);
     }
 }

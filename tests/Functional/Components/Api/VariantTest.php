@@ -46,7 +46,7 @@ class VariantTest extends TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -233,10 +233,10 @@ class VariantTest extends TestCase
 
     /**
      * @depends testCreateShouldBeSuccessful
-     * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
      */
     public function testCreateWithExistingOrderNumberShouldThrowCustomValidationException(\Shopware\Models\Article\Article $article)
     {
+        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
         $testData = [
             'articleId' => $article->getId(),
             'number' => $article->getMainDetail()->getNumber(),
@@ -314,19 +314,15 @@ class VariantTest extends TestCase
         $this->resourceArticle->delete($article->getId());
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testDeleteWithInvalidIdShouldThrowNotFoundException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $this->resource->delete(9999999);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testDeleteWithMissingIdShouldThrowParameterMissingException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->delete('');
     }
 

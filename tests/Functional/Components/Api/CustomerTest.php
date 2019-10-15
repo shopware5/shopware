@@ -37,7 +37,7 @@ class CustomerTest extends TestCase
      */
     protected $resource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         Shopware()->Container()->get('dbal_connection')->exec('UPDATE s_core_countries SET allow_shipping = 0 WHERE id = 25');
@@ -51,11 +51,9 @@ class CustomerTest extends TestCase
         return new Customer();
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ValidationException
-     */
     public function testCreateWithNonUniqueEmailShouldThrowException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
         $testData = [
             'password' => 'fooobar',
             'active' => true,
@@ -262,11 +260,9 @@ class CustomerTest extends TestCase
         static::assertInstanceOf('\Shopware\Models\Customer\Customer', $result['data'][0]);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ValidationException
-     */
     public function testCreateWithInvalidDataShouldThrowValidationException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
         $testData = [
             'active' => true,
             'email' => 'invalid',
@@ -280,12 +276,10 @@ class CustomerTest extends TestCase
         $this->resource->create($testData);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ValidationException
-     * @expectedExceptionMessageRegExp "salutation: The value you selected is not a valid choice."
-     */
     public function testCreateWithInvalidDataShouldThrowValidationExceptionWithCorrectToStringMessage()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
+        $this->expectExceptionMessageRegExp('"salutation: The value you selected is not a valid choice."');
         $testData = [
             'active' => true,
             'firstname' => 'Max',
@@ -371,10 +365,10 @@ class CustomerTest extends TestCase
 
     /**
      * @depends testCreateShouldBeSuccessful
-     * @expectedException \Shopware\Components\Api\Exception\ValidationException
      */
     public function testUpdateWithInvalidDataShouldThrowValidationException($id)
     {
+        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
         $testData = [
             'active' => true,
             'email' => 'invalid',
@@ -387,19 +381,15 @@ class CustomerTest extends TestCase
         $this->resource->update($id, $testData);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testUpdateWithInvalidIdShouldThrowNotFoundException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $this->resource->update(9999999, []);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testUpdateWithMissingIdShouldThrowParameterMissingException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->update('', []);
     }
 
@@ -414,19 +404,15 @@ class CustomerTest extends TestCase
         static::assertEquals(null, $customer->getId());
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testDeleteWithInvalidIdShouldThrowNotFoundException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $this->resource->delete(9999999);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testDeleteWithMissingIdShouldThrowParameterMissingException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->delete('');
     }
 

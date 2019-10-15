@@ -38,7 +38,7 @@ class ShopRepositoryTest extends \Enlight_Components_Test_Controller_TestCase
 
     private $mainShopBackup;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -73,7 +73,7 @@ class ShopRepositoryTest extends \Enlight_Components_Test_Controller_TestCase
         ]);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 

@@ -39,7 +39,7 @@ class VersionTest extends TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -100,7 +100,7 @@ class VersionTest extends TestCase
 
         static::assertArrayHasKey('data', $result);
         $data = $result['data'];
-        static::assertInternalType('array', $data);
+        static::assertIsArray($data);
 
         static::assertEquals($release['version'], $data['version']);
         static::assertEquals($release['revision'], $data['revision']);

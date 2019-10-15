@@ -48,7 +48,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public $generator;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->cs = Shopware()->Container()->get('shopware_attribute.crud_service');
@@ -60,7 +60,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 

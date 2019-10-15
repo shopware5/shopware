@@ -173,7 +173,7 @@ class GraduatedPricesTest extends TestCase
         static::assertEquals(null, $graduations[2]->getTo());
     }
 
-    protected function getContext()
+    protected function getContext($shopId = 1)
     {
         $context = parent::getContext();
 

@@ -34,7 +34,7 @@ class CalculationOnLogoutTest extends CheckoutTest
 
     public $clearBasketOnReset = false;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         Shopware()->Session()->offsetSet('sessionId', null);

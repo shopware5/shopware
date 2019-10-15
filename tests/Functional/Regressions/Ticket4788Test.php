@@ -22,14 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_RegressionTests_Ticket4788 extends Enlight_Components_Test_Plugin_TestCase
+namespace Shopware\Tests\Regressions;
+
+class Ticket4788Test extends \Enlight_Components_Test_Controller_TestCase
 {
     protected $articlesToTest = [
         206 => 23,
         209 => 23,
     ];
 
-    protected $backup = null;
+    protected $backup;
 
     protected $shortDescription = '';
 
@@ -40,7 +42,7 @@ class Shopware_RegressionTests_Ticket4788 extends Enlight_Components_Test_Plugin
     /**
      * Set up test case, fix demo data where needed
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -57,7 +59,7 @@ class Shopware_RegressionTests_Ticket4788 extends Enlight_Components_Test_Plugin
     /**
      * Cleaning up testData
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -75,7 +77,7 @@ class Shopware_RegressionTests_Ticket4788 extends Enlight_Components_Test_Plugin
     /**
      * Test for long description fallback in category listing
      */
-    public function testArticleLongDescriptionForCategoryListing()
+    public function testArticleLongDescriptionForCategoryListing(): void
     {
         $oldValue = Shopware()->Config()->get('useShortDescriptionInListing');
         Shopware()->Db()->query("UPDATE s_core_config_elements SET value = 'b:1;' WHERE name = 'useShortDescriptionInListing'");
@@ -98,7 +100,7 @@ class Shopware_RegressionTests_Ticket4788 extends Enlight_Components_Test_Plugin
     /**
      * Test long description on article detail page
      */
-    public function testArticleLongDescriptionOnDetailPage()
+    public function testArticleLongDescriptionOnDetailPage(): void
     {
         // Check
         foreach ($this->articlesToTest as $articleId => $categoryId) {

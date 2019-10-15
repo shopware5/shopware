@@ -74,7 +74,7 @@ class StoreXmlValueParserTest extends TestCase
         $store = $this->getStoreElement(1);
         $options = $this->parser->parse($store);
 
-        static::assertInternalType('array', $options);
+        static::assertIsArray($options);
         static::assertCount(2, $options);
 
         $firstOption = $options[0];
@@ -112,7 +112,7 @@ class StoreXmlValueParserTest extends TestCase
         $store = $this->getStoreElement(2);
         $options = $this->parser->parse($store);
 
-        static::assertInternalType('array', $options);
+        static::assertIsArray($options);
         static::assertCount(0, $options);
     }
 

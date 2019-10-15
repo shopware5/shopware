@@ -41,7 +41,7 @@ class SitemapLockTest extends TestCase
      */
     private $lifeTime;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

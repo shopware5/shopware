@@ -40,7 +40,7 @@ class CustomerTest extends TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -431,7 +431,7 @@ class CustomerTest extends TestCase
         static::assertArrayHasKey('data', $result);
 
         $data = $result['data'];
-        static::assertInternalType('array', $data);
+        static::assertIsArray($data);
         static::assertArrayHasKey('id', $data);
         static::assertArrayHasKey('active', $data);
         static::assertArrayHasKey('paymentData', $data);
@@ -617,9 +617,9 @@ class CustomerTest extends TestCase
         static::assertArrayHasKey('data', $result);
 
         static::assertArrayHasKey('total', $result);
-        static::assertInternalType('int', $result['total']);
+        static::assertIsInt($result['total']);
 
         $data = $result['data'];
-        static::assertInternalType('array', $data);
+        static::assertIsArray($data);
     }
 }

@@ -32,7 +32,7 @@ class CanceledOrderTest extends \Enlight_Components_Test_Plugin_TestCase
     /**
      * Set up test case, fix demo data where needed
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -54,7 +54,7 @@ class CanceledOrderTest extends \Enlight_Components_Test_Plugin_TestCase
     /**
      * Cleaning up testData
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

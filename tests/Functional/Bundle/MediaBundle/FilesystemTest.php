@@ -52,7 +52,7 @@ class FilesystemTest extends \Enlight_Components_Test_TestCase
      */
     private $testFileSize;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -69,7 +69,7 @@ class FilesystemTest extends \Enlight_Components_Test_TestCase
         $this->testFileSize = strlen(json_encode($this->testData));
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         foreach ($this->testPaths as $file) {
             if ($this->mediaService->has($file)) {

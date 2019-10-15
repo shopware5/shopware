@@ -22,34 +22,30 @@
  * our trademarks remain entirely with us.
  */
 
-use PHPUnit\DbUnit\DataSet\IDataSet;
+namespace Shopware\Tests\Regressions;
 
-class Shopware_RegressionTests_Ticket4609 extends Enlight_Components_Test_Plugin_TestCase
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+
+class Ticket4609Test extends \Enlight_Components_Test_Controller_TestCase
 {
+    use DatabaseTransactionBehaviour;
+
     /**
      * Test case method
      */
-    public function testNewsletterLog()
+    public function testNewsletterLog(): void
     {
+        Shopware()->Models()->getConnection()->exec(file_get_contents(__DIR__ . '/testdata/newsletter.sql'));
+
         $this->Front()->setParam('noViewRenderer', false);
 
         $e = null;
 
         try {
             $this->dispatch('/backend/newsletter/log/mailling/1/mailaddress/70');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
         }
 
         static::assertNull($e);
-    }
-
-    /**
-     * Returns the test dataset
-     *
-     * @return IDataSet
-     */
-    protected function getDataSet()
-    {
-        return $this->createXMLDataSet(__DIR__ . '/testdata/Log.xml');
     }
 }

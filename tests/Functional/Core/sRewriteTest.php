@@ -29,7 +29,7 @@ class sRewriteTest extends PHPUnit\Framework\TestCase
      */
     private $rewriteTable;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->rewriteTable = Shopware()->Modules()->RewriteTable();
     }

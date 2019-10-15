@@ -34,7 +34,7 @@ class PlainStrategyTest extends TestCase
      */
     private $strategy;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->strategy = new PlainStrategy();
     }

@@ -31,7 +31,7 @@ use Shopware\Tests\Functional\Components\CheckoutTest;
  */
 class ProportionalCartCalculationDispatchTest extends CheckoutTest
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         Shopware()->Container()->get('dbal_connection')->beginTransaction();
@@ -40,7 +40,7 @@ class ProportionalCartCalculationDispatchTest extends CheckoutTest
         Shopware()->Container()->get('dbal_connection')->executeQuery('UPDATE s_premium_dispatch SET active = 0 WHERE id = 12');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -60,11 +60,11 @@ class ProportionalCartCalculationDispatchTest extends CheckoutTest
 
         $sBasket = $this->View()->getAssign('sBasketProportional');
 
-        static::assertInternalType('float', $sBasket['sShippingcosts']);
-        static::assertInternalType('float', $sBasket['sShippingcostsTax']);
-        static::assertInternalType('float', $sBasket['sShippingcostsNet']);
-        static::assertInternalType('float', $sBasket['sShippingcostsWithTax']);
-        static::assertInternalType('array', $sBasket['sTaxRates']);
+        static::assertIsFloat($sBasket['sShippingcosts']);
+        static::assertIsFloat($sBasket['sShippingcostsTax']);
+        static::assertIsFloat($sBasket['sShippingcostsNet']);
+        static::assertIsFloat($sBasket['sShippingcostsWithTax']);
+        static::assertIsArray($sBasket['sTaxRates']);
 
         static::assertEquals(8.9000000000000004, $sBasket['sShippingcosts']);
         static::assertEquals(8.9000000000000004, $sBasket['sShippingcostsWithTax']);
@@ -89,11 +89,11 @@ class ProportionalCartCalculationDispatchTest extends CheckoutTest
 
         $sBasket = $this->View()->getAssign('sBasketProportional');
 
-        static::assertInternalType('float', $sBasket['sShippingcosts']);
-        static::assertInternalType('float', $sBasket['sShippingcostsTax']);
-        static::assertInternalType('float', $sBasket['sShippingcostsNet']);
-        static::assertInternalType('float', $sBasket['sShippingcostsWithTax']);
-        static::assertInternalType('array', $sBasket['sTaxRates']);
+        static::assertIsFloat($sBasket['sShippingcosts']);
+        static::assertIsFloat($sBasket['sShippingcostsTax']);
+        static::assertIsFloat($sBasket['sShippingcostsNet']);
+        static::assertIsFloat($sBasket['sShippingcostsWithTax']);
+        static::assertIsArray($sBasket['sTaxRates']);
 
         static::assertEquals(8.9000000000000004, $sBasket['sShippingcosts']);
         static::assertEquals(8.9000000000000004, $sBasket['sShippingcostsWithTax']);
@@ -117,11 +117,11 @@ class ProportionalCartCalculationDispatchTest extends CheckoutTest
 
         $sBasket = $this->View()->getAssign('sBasketProportional');
 
-        static::assertInternalType('float', $sBasket['sShippingcosts']);
-        static::assertInternalType('float', $sBasket['sShippingcostsTax']);
-        static::assertInternalType('float', $sBasket['sShippingcostsNet']);
-        static::assertInternalType('float', $sBasket['sShippingcostsWithTax']);
-        static::assertInternalType('array', $sBasket['sTaxRates']);
+        static::assertIsFloat($sBasket['sShippingcosts']);
+        static::assertIsFloat($sBasket['sShippingcostsTax']);
+        static::assertIsFloat($sBasket['sShippingcostsNet']);
+        static::assertIsFloat($sBasket['sShippingcostsWithTax']);
+        static::assertIsArray($sBasket['sTaxRates']);
 
         static::assertEquals(3.9, $sBasket['sShippingcosts']);
         static::assertEquals(3.9, $sBasket['sShippingcostsWithTax']);
@@ -148,11 +148,11 @@ class ProportionalCartCalculationDispatchTest extends CheckoutTest
 
         $sBasket = $this->View()->getAssign('sBasketProportional');
 
-        static::assertInternalType('float', $sBasket['sShippingcosts']);
-        static::assertInternalType('float', $sBasket['sShippingcostsTax']);
-        static::assertInternalType('float', $sBasket['sShippingcostsNet']);
-        static::assertInternalType('float', $sBasket['sShippingcostsWithTax']);
-        static::assertInternalType('array', $sBasket['sTaxRates']);
+        static::assertIsFloat($sBasket['sShippingcosts']);
+        static::assertIsFloat($sBasket['sShippingcostsTax']);
+        static::assertIsFloat($sBasket['sShippingcostsNet']);
+        static::assertIsFloat($sBasket['sShippingcostsWithTax']);
+        static::assertIsArray($sBasket['sTaxRates']);
 
         static::assertEquals(3.9, $sBasket['sShippingcosts']);
         static::assertEquals(3.9, $sBasket['sShippingcostsWithTax']);

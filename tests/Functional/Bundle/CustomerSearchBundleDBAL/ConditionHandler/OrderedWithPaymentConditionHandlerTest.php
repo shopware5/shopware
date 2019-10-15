@@ -35,7 +35,7 @@ class OrderedWithPaymentConditionHandlerTest extends TestCase
      */
     private $paymentId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->connection->insert('s_core_paymentmeans', [

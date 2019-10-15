@@ -36,7 +36,7 @@ class AwsS3v3FactoryTest extends TestCase
      */
     private $factory;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->factory = new AwsS3v3Factory();
     }

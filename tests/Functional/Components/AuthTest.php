@@ -51,7 +51,7 @@ class AuthTest extends Enlight_Components_Test_TestCase
      */
     private $encoder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

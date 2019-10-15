@@ -35,7 +35,7 @@ class CustomerTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * Standard set up for every test - just disable auth
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -29,7 +29,7 @@ class NotificationTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * Standard set up for every test - just disable auth
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         // Disable auth and acl
@@ -46,7 +46,7 @@ class NotificationTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * Cleaning up testData
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $sql = 'DELETE FROM s_articles_notification WHERE id IN (1111111111, 1111111112, 1111111113)';

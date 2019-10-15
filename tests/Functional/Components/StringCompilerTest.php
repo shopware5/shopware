@@ -35,7 +35,7 @@ class StringCompilerTest extends \Enlight_Components_Test_TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -159,12 +159,11 @@ EOD;
 
     /**
      * Test case
-     *
-     * @expectedException \Enlight_Exception
-     * @expectedExceptionMessage Syntax Error 74&quot;  on line 1 &quot;Hallo {$user|invalidmodifier}&quot; unknown modifier &quot;invalidmodifier&quot
      */
     public function testInvalidSmartyShouldThrowExceptionAndCustomExceptionMessage()
     {
+        $this->expectException('Enlight_Exception');
+        $this->expectExceptionMessage('Syntax Error 74&quot;  on line 1 &quot;Hallo {$user|invalidmodifier}&quot; unknown modifier &quot;invalidmodifier&quot');
         $defectSmartyString = 'Hallo {$user|invalidmodifier}';
         $this->compiler->compileString($defectSmartyString);
     }

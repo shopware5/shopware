@@ -30,7 +30,7 @@ use Shopware\Models\Shop\Template;
 class Base extends \Enlight_Components_Test_TestCase
 {
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getEntityManager()
     {
@@ -38,7 +38,7 @@ class Base extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getEventManager()
     {
@@ -46,7 +46,7 @@ class Base extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPathResolver()
     {
@@ -54,7 +54,7 @@ class Base extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getUtilClass()
     {
@@ -62,7 +62,7 @@ class Base extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getConfigurator()
     {
@@ -70,7 +70,7 @@ class Base extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getFormPersister()
     {
@@ -106,7 +106,7 @@ class Base extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getShopRepository()
     {

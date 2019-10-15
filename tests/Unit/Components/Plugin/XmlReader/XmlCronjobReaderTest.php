@@ -43,7 +43,7 @@ class XmlCronjobReaderTest extends TestCase
     {
         $result = $this->readFile('cronjob.xml');
 
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertCount(2, $result);
 
         $firstCron = $result[0];
@@ -83,7 +83,7 @@ class XmlCronjobReaderTest extends TestCase
 
         $result = $method->invokeArgs($this->cronjobReader, [new \DOMNodeList()]);
 
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertCount(0, $result);
     }
 

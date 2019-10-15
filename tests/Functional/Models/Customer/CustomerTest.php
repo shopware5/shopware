@@ -68,7 +68,7 @@ class CustomerTest extends TestCase
     /**
      * Set up fixtures
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$addressService = Shopware()->Container()->get('shopware_account.address_service');
         self::$modelManager = Shopware()->Container()->get('models');
@@ -82,7 +82,7 @@ class CustomerTest extends TestCase
     /**
      * Clean up created entities and database entries
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
 

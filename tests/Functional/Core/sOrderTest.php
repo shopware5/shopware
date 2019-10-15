@@ -33,12 +33,12 @@ class sOrderTest extends PHPUnit\Framework\TestCase
      */
     private $module;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$sessionId = mt_rand(111111111, 999999999);
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->module = Shopware()->Modules()->Order();
         Shopware()->Session()->offsetSet('sessionId', self::$sessionId);
@@ -97,7 +97,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
     public function validatePaymentContextData(Enlight_Event_EventArgs $args)
     {
         $context = $args->get('context');
-        static::assertInternalType('array', $context['sPaymentTable']);
+        static::assertIsArray($context['sPaymentTable']);
         static::assertCount(0, $context['sPaymentTable']);
     }
 

@@ -44,7 +44,7 @@ class LogServiceTest extends \PHPUnit\Framework\TestCase
      */
     private $logService;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -58,7 +58,7 @@ class LogServiceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         foreach ($this->entityManager->getRepository(Log::class)->findAll() as $entry) {
             $this->entityManager->remove($entry);

@@ -38,14 +38,14 @@ class BasketQueryHelperTest extends TestCase
      */
     private $queryHelper;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->queryHelper = new BasketQueryHelper(
             Shopware()->Container()->get('dbal_connection')
         );
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->queryHelper = null;
     }
