@@ -25,7 +25,11 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `\Shopware_Controllers_Frontend_Address::handleExtraData` to split `sessionKey` correctly
 * Changed `StateManager.getScrollBarSize` to lazily get the size of the scrollbar
 * Changed missing german translation in `snippets/backend/article_list/main.ini`
-* Changed the smarty block `frontend_detail_data_delivery`, added availability meta tags for the pre selected configurator products for configurator types 'Selection' and 'Image' 
+* Changed the smarty block `frontend_detail_data_delivery`, added availability meta tags for the pre selected configurator products for configurator types 'Selection' and 'Image'
+* Changed the path value of following cookies, so they correctly consider the shop's base path
+  * `session-<shopId>`
+  * `partner`
+  * `sUniqueID`
 
 ### Removals
 

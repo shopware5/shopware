@@ -519,12 +519,15 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $repository = $this->getShopRepository();
         $shop = $repository->getActiveById($data['shopId']);
 
-        $path = rtrim($shop->getBasePath(), '/') . '/';
+        $path = $shop->getBasePath();
+        if ($path === null || $path === '') {
+            $path = '/';
+        }
 
         // Update right domain cookies
         $this->Response()->headers->setCookie(new Cookie('shop', $data['shopId'], 0, $path));
         $this->Response()->headers->setCookie(new Cookie('sUniqueID', Random::getString(20), 0, $path));
-        $this->Response()->headers->setCookie(new Cookie('session-' . $data['shopId'], $data['sessionId'], 0, '/'));
+        $this->Response()->headers->setCookie(new Cookie('session-' . $data['shopId'], $data['sessionId'], 0, $path));
 
         $this->redirect($shop->getBaseUrl());
     }
