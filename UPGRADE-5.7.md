@@ -44,6 +44,19 @@ This changelog references changes done in Shopware 5.7 patch versions.
     * `s_user.firstlogin`
     * `s_user.lastlogin`
 * Changed response from `Shopware_Controllers_Widgets_Listing` from JSON to HTML
+* Changed emotion component names to allow translations using snippets
+    * `Artikel` => `product`
+    * `Kategorie-Teaser` => `category_teaser`
+    * `Blog-Artikel` => `blog_article`
+    * `Banner` => `banner`
+    * `Banner-Slider` => `banner_slider`
+    * `Youtube-Video` => `youtube`
+    * `Hersteller-Slider` => `manufacturer_slider`
+    * `Artikel-Slider` => `product_slider`
+    * `HTML-Element` => `html_element`
+    * `iFrame-Element` => `iframe`
+    * `HTML5 Video-Element` => `html_video`
+    * `Code Element` => `code_element`
 
 ### Removals
 
