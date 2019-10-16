@@ -48,10 +48,14 @@ class ProductManualPositionLoader implements ProductManualPositionLoaderInterfac
             ->execute()
             ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_ASSOC);
 
-        foreach ($data as $item) {
-            $item['category_id'] = (int) $item['category_id'];
-            $item['position'] = (int) $item['position'];
+        foreach ($data as &$fetchGroup) {
+            foreach ($fetchGroup as &$item) {
+                $item['category_id'] = (int) $item['category_id'];
+                $item['position'] = (int) $item['position'];
+            }
+            unset($item);
         }
+        unset($fetchGroup);
 
         return $data;
     }
