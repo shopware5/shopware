@@ -924,6 +924,7 @@ class sExport implements \Enlight_Hook
                    FROM s_articles_vote as av WHERE active=1
                    AND articleID=a.id
                 ) as sVoteCount,
+                d.laststock,
                 d.stockmin,
                 d.weight,
                 d.position,
