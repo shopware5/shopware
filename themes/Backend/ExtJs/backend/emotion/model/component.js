@@ -42,18 +42,6 @@ Ext.define('Shopware.apps.Emotion.model.Component', {
 
     snippets: {
         //{block name="backend/emotion/model/component/snippets"}{/block}
-
-        'Artikel': '{s name=article}Article{/s}',
-        'Kategorie-Teaser': '{s name=category_teaser}Category teaser{/s}',
-        'Blog-Artikel' : '{s name=blog_article}Blog article{/s}',
-        'Banner-Slider' : '{s name=banner_slider}Banner slider{/s}',
-        'Youtube-Video' : '{s name=youtube}Youtube video{/s}',
-        'Hersteller-Slider' : '{s name=manufacturer}Manufacturer slider{/s}',
-        'Artikel-Slider' : '{s name=article_slider}Article slider{/s}',
-        'HTML-Element' : '{s name=html_element}HTML element{/s}',
-        'iFrame-Element' : '{s name=iframe}iFrame element{/s}',
-        'HTML5 Video-Element' : '{s name=html_video}HTML5 video element{/s}',
-        'Content Type' : '{s name=content_type}{/s}',
     },
 
     /**
@@ -66,13 +54,14 @@ Ext.define('Shopware.apps.Emotion.model.Component', {
         { name: 'pluginId', type: 'int', useNull: true },
 
         { name: 'fieldLabel', type: 'string', convert: function(value, record) {
-            var name = record.get('name'),
-                fieldLabel = name;
-
-            if (record.snippets[name]) {
-                fieldLabel = record.snippets[name];
+            if (!value) {
+                value = record.get('name');
             }
-            return fieldLabel;
+
+            if (record.snippets[value]) {
+                return record.snippets[value];
+            }
+            return value;
         } },
 
         { name: 'name', type: 'string' },
