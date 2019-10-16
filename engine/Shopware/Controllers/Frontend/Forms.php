@@ -158,6 +158,11 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         /* @var Form $form */
         $form = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
+
+        if ($form->getAttribute()) {
+            $this->getModelManager()->detach($form->getAttribute());
+        }
+
         $this->getModelManager()->detach($form);
         foreach ($form->getFields() as $field) {
             $this->getModelManager()->detach($field);
