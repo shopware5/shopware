@@ -779,7 +779,7 @@
         <service id="shopware.routing.matchers.rewrite_matcher" class="Shopware\Components\Routing\Matchers\RewriteMatcher">
             <argument type="service" id="Doctrine\DBAL\Connection"/>
             <argument type="service" id="Shopware\Components\QueryAliasMapper"/>
-
+            <argument type="service" id="Shopware_Components_Config"/>
             <tag name="router.matcher" priority="50"/>
         </service>
 
