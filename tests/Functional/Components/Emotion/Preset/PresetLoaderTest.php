@@ -135,7 +135,9 @@ class PresetLoaderTest extends TestCase
 
         $decodedData = json_decode($presetData, true);
 
-        $componentId = $this->connection->fetchColumn('SELECT id FROM s_library_component WHERE name = "Banner-Slider"');
+        $componentId = $this->connection->fetchColumn('SELECT `id` FROM `s_library_component` c WHERE c.`name` = "banner_slider"');
+
+        static::assertNotFalse($componentId);
 
         static::assertEquals($componentId, $decodedData['elements'][0]['componentId']);
         static::assertEquals($componentId, $decodedData['elements'][0]['component']['id']);
