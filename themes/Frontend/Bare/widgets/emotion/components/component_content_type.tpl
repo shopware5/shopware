@@ -4,7 +4,7 @@
             {block name="widget_emotion_component_content_type_container"}
                 <div class="blog--container block-group">
                     {foreach $Data.sItems as $entry}
-                        {$link = {url controller='custom'|cat:$sType.internalName action=detail id=$entry.id}}
+                        {$link = {url controller='Custom'|cat:$Data.sType.internalName action=detail id=$entry.id}}
                         {$title = $entry[$Data.sType.viewTitleFieldName]}
                         {$image = $entry[$Data.sType.viewImageFieldName]}
                         {$description = $entry[$Data.sType.viewDescriptionFieldName]}
