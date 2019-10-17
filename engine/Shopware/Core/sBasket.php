@@ -1429,8 +1429,19 @@ SQL;
         $uniqueId = $this->front->Request()->getCookie('sUniqueID');
 
         if (!empty($cookieData) && empty($uniqueId)) {
+            $basePath = Shopware()->Shop()->getBasePath();
+            if ($basePath === null || $basePath === '') {
+                $basePath = '/';
+            }
             $uniqueId = Random::getAlphanumericString(32);
-            $this->front->Response()->headers->setCookie(new Cookie('sUniqueID', $uniqueId, time() + (86400 * 360), '/'));
+            $this->front->Response()->headers->setCookie(
+                new Cookie(
+                    'sUniqueID',
+                    $uniqueId,
+                    time() + (86400 * 360),
+                    $basePath
+                )
+            );
         }
 
         // Check if this product is already noted

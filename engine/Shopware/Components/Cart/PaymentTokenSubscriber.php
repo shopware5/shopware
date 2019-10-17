@@ -73,7 +73,16 @@ class PaymentTokenSubscriber implements SubscriberInterface
         }
 
         if ($restoreData) {
-            $controller->Response()->headers->setCookie(new Cookie($restoreData->getSessionName(), $restoreData->getValue(), 0, $request->getBaseUrl(), null, $request->isSecure(), true));
+            $controller->Response()->headers->setCookie(
+                new Cookie(
+                    $restoreData->getSessionName(),
+                    $restoreData->getValue(),
+                    0,
+                    $request->getBaseUrl(),
+                    null,
+                    $request->isSecure()
+                )
+            );
         }
 
         $params = $request->getParams();
