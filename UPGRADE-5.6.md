@@ -33,6 +33,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
   * `session-<shopId>`
   * `partner`
   * `sUniqueID`
+* Changed `unitize` mixin to only output rem values
 
 ### Removals
 
