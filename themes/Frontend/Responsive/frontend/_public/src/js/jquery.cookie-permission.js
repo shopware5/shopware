@@ -250,6 +250,8 @@
             document.cookie = 'allowCookie=1; path=/;expires=' + d.toGMTString() + ';';
 
             this.hideElement();
+            
+            $.publish('plugin/swCookiePermission/onAcceptButtonClick', [this, event]);
         },
 
         /**
@@ -264,6 +266,8 @@
             document.cookie = 'cookieDeclined=1; path=/;';
 
             this.hideElement();
+            
+            $.publish('plugin/swCookiePermission/onDeclineButtonClick', [this, event]);
         },
 
         /**
