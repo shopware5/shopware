@@ -27,10 +27,7 @@ namespace Shopware\Components\Plugin\Configuration;
 interface WriterInterface
 {
     /**
-     * @param string $pluginName
-     * @param int    $shopId
-     *
      * @throws WriterException
      */
-    public function setByPluginName($pluginName, array $elements, $shopId = 1);
+    public function setByPluginName(string $pluginName, array $elements, $shopId = 1);
 }

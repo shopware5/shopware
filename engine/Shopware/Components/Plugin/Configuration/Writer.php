@@ -39,7 +39,7 @@ class Writer implements WriterInterface
     /**
      * {@inheritdoc}
      */
-    public function setByPluginName($pluginName, array $elements, $shopId = 1)
+    public function setByPluginName(string $pluginName, array $elements, $shopId = 1)
     {
         $this->lastLayer->writeValues($pluginName, $shopId, $elements);
     }
