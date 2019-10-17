@@ -38,6 +38,6 @@ class Reader implements ReaderInterface
 
     public function getByPluginName(string $pluginName, ?int $shopId = null): array
     {
-        return $this->layer->readValues($shopId, $pluginName);
+        return $this->layer->readValues($pluginName, $shopId);
     }
 }

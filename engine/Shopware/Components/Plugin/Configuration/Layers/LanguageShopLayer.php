@@ -28,13 +28,13 @@ use Doctrine\DBAL\Query\QueryBuilder;
 
 class LanguageShopLayer extends AbstractShopConfigurationLayer
 {
-    public function readValues(?int $shopId, string $pluginName): array
+    public function readValues(string $pluginName, ?int $shopId): array
     {
         if (is_null($shopId)) {
-            return $this->getParent()->readValues($shopId, $pluginName);
+            return $this->getParent()->readValues($pluginName, $shopId);
         }
 
-        return parent::readValues($shopId, $pluginName);
+        return parent::readValues($pluginName, $shopId);
     }
 
     protected function configureQuery(QueryBuilder $builder, ?int $shopId, string $pluginName): QueryBuilder

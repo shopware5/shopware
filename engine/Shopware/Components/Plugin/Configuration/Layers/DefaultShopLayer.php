@@ -28,9 +28,9 @@ use Doctrine\DBAL\Query\QueryBuilder;
 
 class DefaultShopLayer extends AbstractShopConfigurationLayer
 {
-    public function readValues(?int $shopId, string $pluginName): array
+    public function readValues(string $pluginName, ?int $shopId): array
     {
-        return parent::readValues(1, $pluginName);
+        return parent::readValues($pluginName, 1);
     }
 
     protected function configureQuery(QueryBuilder $builder, ?int $shopId, string $pluginName): QueryBuilder

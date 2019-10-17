@@ -31,12 +31,12 @@ interface ConfigurationLayerInterface
     /**
      * Read the values attached to this layer by shop and plugin name
      */
-    public function readValues(?int $shopId, string $pluginName): array;
+    public function readValues(string $pluginName, ?int $shopId): array;
 
     /**
      * Write the values attached to this layer by shop and plugin name
      *
      * @throws WriterException
      */
-    public function writeValues(?int $shopId, string $pluginName, array $data): void;
+    public function writeValues(string $pluginName, ?int $shopId, array $data): void;
 }

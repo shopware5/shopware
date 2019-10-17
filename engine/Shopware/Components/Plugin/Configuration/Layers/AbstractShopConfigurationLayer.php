@@ -63,7 +63,7 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
         return $this->parent;
     }
 
-    public function readValues(?int $shopId, string $pluginName): array
+    public function readValues(string $pluginName, ?int $shopId): array
     {
         $builder = $this->getConnection()->createQueryBuilder();
 
@@ -98,13 +98,13 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
             ->fetchAll(\PDO::FETCH_KEY_PAIR)
         ;
 
-        return $this->mergeValues($this->getParent()->readValues($shopId, $pluginName), $this->unserializeArray($values));
+        return $this->mergeValues($this->getParent()->readValues($pluginName, $shopId), $this->unserializeArray($values));
     }
 
-    public function writeValues(?int $shopId, string $pluginName, array $data): void
+    public function writeValues(string $pluginName, ?int $shopId, array $data): void
     {
         if (!$this->isLayerResponsibleForShopId($shopId)) {
-            $this->getParent()->writeValues($shopId, $pluginName, $data);
+            $this->getParent()->writeValues($pluginName, $shopId, $data);
 
             return;
         }
@@ -124,7 +124,7 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
             throw new WriterException(sprintf('Plugin formular by plugin id "%u" not found.', $plugin->getId()));
         }
 
-        $parentValues = $this->getParent()->readValues($shopId, $pluginName);
+        $parentValues = $this->getParent()->readValues($pluginName, $shopId);
 
         foreach ($data as $key => $value) {
             $this->writeValue(
