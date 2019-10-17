@@ -17,10 +17,21 @@
         .cookie-permission--button {
             margin: 0 auto;
             .unitize(margin-top, 20);
+
+            &.cookie-permission--extra-button .cookie-permission--accept-button {
+                .unitize(margin-right, 5);
+
+            }
         }
 
         .cookie-permission--decline-button {
             .unitize(margin-right, 5);
+        }
+
+        .cookie-permission--accept-button,
+        .cookie-permission--decline-button,
+        .cookie-permission--configure-button {
+            .unitize(margin-top, 10);
         }
     }
 }
@@ -65,6 +76,14 @@
             display: inline-block;
         }
     }
+
+    .page-wrap--cookie-permission .cookie-permission--container {
+        .cookie-permission--accept-button,
+        .cookie-permission--decline-button,
+        .cookie-permission--configure-button {
+            margin-top: 0;
+        }
+    }
 }
 
 @media screen and (min-width: @tabletLandscapeViewportWidth) {
@@ -73,16 +92,25 @@
         width: 100%;
 
         &.cookie-mode--1 {
-          .cookie-permission--content {
-            width: ~"calc(100% - 230px)";
-            text-align: left;
-          }
-          .cookie-permission--button {
-              .unitize(width, 240);
-              .unitize(right, 5);
-              position: absolute;
-              top: ~"calc(50% - 21px)";
-          }
+            .cookie-permission--content {
+                width: ~"calc(100% - 240px)";
+                text-align: left;
+
+                &.cookie-permission--extra-button {
+                    width: ~"calc(100% - 370px)";
+                }
+            }
+
+            .cookie-permission--button {
+                .unitize-width(240);
+                .unitize(right, 5);
+                position: absolute;
+                top: ~"calc(50% - 21px)";
+
+                &.cookie-permission--extra-button {
+                    .unitize-width(370);
+                }
+            }
         }
 
         .cookie-permission--content {

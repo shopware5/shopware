@@ -106,6 +106,10 @@
                             {include file='frontend/index/sidebar.tpl'}
                         {/block}
 
+                        {block name='frontend_index_cookie_consent_manager'}
+                        	{include file='frontend/index/cookie_consent.tpl'}
+                        {/block}
+
                         {* Main content *}
                         {block name='frontend_index_content_wrapper'}
                             <div class="content--wrapper">
@@ -211,7 +215,7 @@
 
         {$csrfConfig = [
             'generateUrl' => {url controller="csrftoken" fullPath=false},
-            'basePath' => $Shop->getBasePath(),
+            'basePath' => {$Shop->getBasePath()|cat:'/'},
             'shopId' => $Shop->getId()
         ]}
 

@@ -25,7 +25,11 @@
 namespace Shopware\Components\Privacy;
 
 use Enlight\Event\SubscriberInterface;
-use Enlight_Event_EventArgs;
+use Enlight_Controller_Request_RequestHttp as Request;
+use Enlight_Controller_Response_ResponseHttp as Response;
+use Shopware\Bundle\CookieBundle\CookieGroupCollection;
+use Shopware\Bundle\CookieBundle\Services\CookieHandler;
+use Shopware\Bundle\CookieBundle\Services\CookieHandlerInterface;
 use Shopware_Components_Config as Config;
 use Symfony\Component\HttpFoundation\Cookie;
 
@@ -45,16 +49,19 @@ class CookieRemoveSubscriber implements SubscriberInterface
      */
     private $config;
 
-    public function __construct(Config $config)
+    /**
+     * @var CookieHandlerInterface
+     */
+    private $cookieHandler;
+
+    public function __construct(Config $config, CookieHandlerInterface $cookieHandler)
     {
         $this->cookieRemovalActive = $config->get('cookie_note_mode') && $config->get('show_cookie_note');
         $this->config = $config;
+        $this->cookieHandler = $cookieHandler;
     }
 
-    /**
-     * @return array
-     */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             'Enlight_Controller_Action_PostDispatch_Frontend' => 'onPostDispatch',
@@ -62,54 +69,104 @@ class CookieRemoveSubscriber implements SubscriberInterface
         ];
     }
 
-    public function onPostDispatch(Enlight_Event_EventArgs $args)
+    public function onPostDispatch(\Enlight_Controller_ActionEventArgs $args): void
     {
         if (!$this->cookieRemovalActive) {
             return;
         }
 
-        /** @var \Enlight_Controller_Action $controller */
-        $controller = $args->get('subject');
+        $controller = $args->getSubject();
 
         $allowCookie = (int) $controller->Request()->getCookie('allowCookie');
 
-        if ($allowCookie !== 1) {
-            $requestCookies = array_keys($controller->Request()->getCookie());
-            $cookiePath = $controller->Request()->getBasePath() . '/';
-
-            foreach ($controller->Response()->getCookies() as $cookie) {
-                if (!$this->isTechnicallyRequiredCookie($cookie['name']) || $this->config->get('cookie_note_mode') === self::COOKIE_MODE_ALL) {
-                    if (!in_array($cookie['name'], $requestCookies)) {
-                        $controller->Response()->headers->removeCookie($cookie['name']);
-                        $controller->Response()->headers->removeCookie($cookie['name'], $cookiePath);
-                    } else {
-                        $controller->Response()->headers->setCookie(new Cookie($cookie['name'], null, 0));
-                        $controller->Response()->headers->setCookie(new Cookie($cookie['name'], null, 0, $cookiePath));
-                    }
-                }
+        if ($this->config->get('cookie_note_mode') === self::COOKIE_MODE_ALL) {
+            if ($allowCookie === 1) {
+                return;
             }
 
-            foreach ($requestCookies as $key) {
-                if (!$this->isTechnicallyRequiredCookie($key) || $this->config->get('cookie_note_mode') === self::COOKIE_MODE_ALL) {
-                    $controller->Response()->headers->setCookie(new Cookie($key, null, 0));
-                    $controller->Response()->headers->setCookie(new Cookie($key, null, 0, $cookiePath));
+            header_remove('Set-Cookie');
+
+            $this->removeAllCookies($controller->Request(), $controller->Response());
+
+            return;
+        }
+
+        if ($this->config->get('cookie_note_mode') === self::COOKIE_MODE_TECHNICAL) {
+            $controller->View()->assign(
+                'cookieGroups',
+                $this->convertToArray($this->cookieHandler->getCookies())
+            );
+
+            if ($allowCookie === 1) {
+                return;
+            }
+
+            $this->removeCookiesFromPreferences($controller->Request(), $controller->Response());
+        }
+    }
+
+    private function removeCookiesFromPreferences(Request $request, Response $response): void
+    {
+        $preferences = $request->getCookie(CookieHandler::PREFERENCES_COOKIE_NAME);
+
+        if ($preferences === null) {
+            $this->removeAllCookies($request, $response);
+
+            return;
+        }
+
+        $preferences = json_decode($preferences, true);
+
+        $this->removeCookies($request, $response, function (string $cookieName) use ($preferences) {
+            return $this->cookieHandler->isCookieAllowedByPreferences($cookieName, $preferences);
+        });
+    }
+
+    private function removeAllCookies(Request $request, Response $response): void
+    {
+        $technicallyRequiredCookies = $this->cookieHandler->getTechnicallyRequiredCookies();
+
+        $this->removeCookies($request, $response, static function (string $cookieKey) use ($technicallyRequiredCookies) {
+            return $technicallyRequiredCookies->hasCookieWithName($cookieKey);
+        });
+    }
+
+    private function removeCookies(Request $request, Response $response, callable $validationFunction): void
+    {
+        $requestCookies = $request->getCookie();
+        $cookieBasePath = $request->getBasePath();
+
+        $cookiePath = $cookieBasePath . '/';
+        $currentPath = $cookieBasePath . $request->getPathInfo();
+        $currentPathWithoutSlash = trim($currentPath, '/');
+
+        foreach ($response->getCookies() as $responseCookie) {
+            if (!$validationFunction($responseCookie['name'])) {
+                if (array_key_exists($responseCookie['name'], $requestCookies)) {
+                    continue;
                 }
+
+                $response->headers->removeCookie($responseCookie['name']);
+                $response->headers->removeCookie($responseCookie['name'], $cookieBasePath);
+                $response->headers->removeCookie($responseCookie['name'], $cookiePath);
+                $response->headers->removeCookie($responseCookie['name'], $currentPath);
+                $response->headers->removeCookie($responseCookie['name'], $currentPathWithoutSlash);
+            }
+        }
+
+        foreach ($requestCookies as $cookieKey => $cookieName) {
+            if (!$validationFunction($cookieKey)) {
+                $response->headers->setCookie(new Cookie($cookieKey, null, 0));
+                $response->headers->setCookie(new Cookie($cookieKey, null, 0, $cookieBasePath));
+                $response->headers->setCookie(new Cookie($cookieKey, null, 0, $cookiePath));
+                $response->headers->setCookie(new Cookie($cookieKey, null, 0, $currentPath));
+                $response->headers->setCookie(new Cookie($cookieKey, null, 0, $currentPathWithoutSlash));
             }
         }
     }
 
-    /**
-     * Is cookie technically required?
-     *
-     * @param string $name
-     *
-     * @return bool
-     */
-    protected function isTechnicallyRequiredCookie($name)
+    private function convertToArray(CookieGroupCollection $cookieGroupCollection): array
     {
-        return strpos($name, 'session-') !== false
-            || strpos($name, '__csrf_') !== false
-            || $name === 'shop'
-            || $name === 'cookieDeclined';
+        return json_decode(json_encode($cookieGroupCollection), true);
     }
 }

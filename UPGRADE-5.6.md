@@ -21,6 +21,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added option `__options_details` to order api update to toggle order position replace mode 
 * Added setter and is methods for json renderer `formatDateTime` variable.
 * Added new smarty blocks `frontend_includes_emotion`, `frontend_includes_emotion_inner`, `frontend_includes_emotion_template` and `frontend_includes_emotion_template_inner` to `/frontend/_includes/emotion.tpl`
+* Added `Shopware\Bundle\CookieBundle`, which takes care of the new cookie consent manager. If you're using cookies in your plugin, make sure
+to read [this documentation](https://developers.shopware.com/developers-guide/cookie-consent-manager/)!
 
 ### Changes
 
