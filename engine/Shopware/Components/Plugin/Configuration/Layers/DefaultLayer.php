@@ -66,7 +66,6 @@ class DefaultLayer implements ConfigurationLayerInterface
             ->fetchAll(\PDO::FETCH_KEY_PAIR)
         ;
 
-        // TODO use a serialization helper
         return AbstractShopConfigurationLayer::unserializeArray($values);
     }
 
