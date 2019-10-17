@@ -24,19 +24,20 @@
 
 namespace Shopware\Components\Plugin\Configuration;
 
-use Psr\SimpleCache\CacheInterface;
-use Psr\SimpleCache\InvalidArgumentException;
+use Shopware\Components\CacheManager;
 use Shopware\Components\Plugin\Configuration\Layers\ConfigurationLayerInterface;
+use Zend_Cache_Core;
+use Zend_Cache_Exception;
 
 class CachedReader implements ReaderInterface
 {
     /** @var ConfigurationLayerInterface */
     private $layer;
 
-    /** @var CacheInterface */
+    /** @var Zend_Cache_Core */
     private $cache;
 
-    public function __construct(ConfigurationLayerInterface $lastLayer, CacheInterface $cache)
+    public function __construct(ConfigurationLayerInterface $lastLayer, Zend_Cache_Core $cache)
     {
         $this->layer = $lastLayer;
         $this->cache = $cache;
@@ -46,19 +47,20 @@ class CachedReader implements ReaderInterface
     {
         $cacheKey = $this->buildCacheKey($pluginName, $shopId);
 
-        try {
-            if ($this->cache->has($cacheKey)) {
-                return (array) $this->cache->get($cacheKey);
-            }
-        } catch (InvalidArgumentException $e) {
-            // progress normally
+        if ($this->cache->test($cacheKey)) {
+            return $this->cache->load($cacheKey, true);
         }
 
         $readValues = $this->layer->readValues($shopId, $pluginName);
 
         try {
-            $this->cache->set($cacheKey, $readValues);
-        } catch (InvalidArgumentException $e) {
+            $this->cache->save(
+                $readValues,
+                $cacheKey,
+                [CacheManager::ITEM_TAG_CONFIG, CacheManager::ITEM_TAG_PLUGIN_CONFIG . strtolower($pluginName)],
+                86400
+            );
+        } catch (Zend_Cache_Exception $e) {
             // progress normally
         }
 

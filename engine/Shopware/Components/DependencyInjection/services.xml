@@ -522,11 +522,9 @@
             <argument type="service" id="Shopware\Components\Plugin\Configuration\Layers\LanguageShopLayer"/>
         </service>
 
-        <service id="shopware.plugin.configuration.cached_reader_cache" class="Symfony\Component\Cache\Simple\ArrayCache" shared="false"/>
-
         <service id="Shopware\Components\Plugin\Configuration\CachedReader">
             <argument type="service" id="Shopware\Components\Plugin\Configuration\Layers\LanguageShopLayer"/>
-            <argument type="service" id="shopware.plugin.configuration.cached_reader_cache"/>
+            <argument type="service" id="Zend_Cache_Core"/>
         </service>
 
         <service id="Shopware\Components\Plugin\Configuration\Layers\DefaultLayer">
