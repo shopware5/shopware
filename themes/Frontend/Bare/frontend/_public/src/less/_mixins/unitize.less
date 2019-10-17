@@ -28,33 +28,21 @@ In addition to the general `.unitize()` mixin, Shopware contains specific mixins
 
     // @deprecated unitize mixin which should be called like ```.unitize(200, @remScaleFactor, height);```
 .unitize(@value, @baseValue: @remScaleFactor, @property: font-size) when (isnumber(@value)) and(isnumber(@baseValue)) and (iskeyword(@property)) {
-    @pxValue: @value;
     @remValue: (@value / @baseValue);
-    @{property}: ~"@{pxValue}px";
     @{property}: ~"@{remValue}rem";
 }
     // New default unitize mixin which should be called like ```.unitize(height, 200);```
 .unitize(@property, @value, @baseValue: @remScaleFactor) when (iskeyword(@property)) and (isnumber(@value)) and (isnumber(@baseValue)) {
-    @pxValue: @value;
     @remValue: (@value / @baseValue);
-    @{property}: ~"@{pxValue}px";
     @{property}: ~"@{remValue}rem";
 }
 
 .unitize-multiple(@topValue, @rightValue: @topValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor, @property: padding) {
-    @pxTopValue: @topValue;
     @emTopValue: (@topValue / @baseValue);
-
-    @pxRightValue: @rightValue;
     @emRightValue: (@rightValue / @baseValue);
-
-    @pxBottomValue: @bottomValue;
     @emBottomValue: (@bottomValue / @baseValue);
-
-    @pxLeftValue: @leftValue;
     @emLeftValue: (@leftValue / @baseValue);
 
-    @{property}: ~"@{pxTopValue}px @{pxRightValue}px @{pxBottomValue}px @{pxLeftValue}px";
     @{property}: ~"@{emTopValue}rem @{emRightValue}rem @{emBottomValue}rem @{emLeftValue}rem";
 }
 
