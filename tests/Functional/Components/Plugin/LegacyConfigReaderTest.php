@@ -28,6 +28,7 @@ use DateTime;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Plugin\Configuration\ReaderInterface;
 use Shopware\Components\Plugin\DBALConfigReader;
 use Shopware\Models\Shop\Shop;
 
@@ -148,7 +149,7 @@ class LegacyConfigReaderTest extends TestCase
         ]);
         $this->languageShop = $this->modelManager->find(Shop::class, $this->connection->lastInsertId());
 
-        $this->configReader = new DBALConfigReader(Shopware()->Container()->get('shopware.plugin.configuration.reader'));
+        $this->configReader = new DBALConfigReader(Shopware()->Container()->get(ReaderInterface::class));
     }
 
     public function tearDown()

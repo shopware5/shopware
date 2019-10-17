@@ -28,6 +28,8 @@ use DateTime;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Plugin\Configuration\ReaderInterface;
+use Shopware\Components\Plugin\Configuration\WriterInterface;
 use Shopware\Components\Plugin\ConfigWriter;
 use Shopware\Components\Plugin\DBALConfigReader;
 use Shopware\Models\Plugin\Plugin;
@@ -162,8 +164,8 @@ class LegacyConfigWriterTest extends TestCase
         ]);
         $this->languageShop = $this->modelManager->find(Shop::class, $this->connection->lastInsertId());
 
-        $this->configWriter = new ConfigWriter(Shopware()->Container()->get('shopware.plugin.configuration.writer'));
-        $this->configReader = new DBALConfigReader(Shopware()->Container()->get('shopware.plugin.configuration.reader'));
+        $this->configWriter = new ConfigWriter(Shopware()->Container()->get(WriterInterface::class));
+        $this->configReader = new DBALConfigReader(Shopware()->Container()->get(ReaderInterface::class));
     }
 
     public function tearDown()

@@ -28,7 +28,7 @@ use Shopware\Components\Plugin\Configuration\ReaderInterface;
 use Shopware\Models\Shop\Shop;
 
 /**
- * @deprecated since 5.6 and removed in 5.8. Use `shopware.plugin.configuration.reader` instead
+ * @deprecated since 5.6 and removed in 5.8. Use `Shopware\Components\Plugin\Configuration\ReaderInterface` instead
  */
 class DBALConfigReader implements ConfigReader
 {
@@ -47,7 +47,7 @@ class DBALConfigReader implements ConfigReader
      *
      * @return array
      *
-     * @deprecated since 5.6 and removed in 5.8. Use `shopware.plugin.configuration.reader`::getByPluginName instead
+     * @deprecated since 5.6 and removed in 5.8. Use `Shopware\Components\Plugin\Configuration\ReaderInterface`::getByPluginName instead
      */
     public function getByPluginName($pluginName, Shop $shop = null)
     {

@@ -158,8 +158,8 @@ class ConfigWriterTest extends TestCase
         ]);
         $this->languageShopId = $this->connection->lastInsertId();
 
-        $this->configWriter = Shopware()->Container()->get('shopware.plugin.configuration.writer');
-        $this->configReader = Shopware()->Container()->get('shopware.plugin.configuration.reader');
+        $this->configWriter = Shopware()->Container()->get(WriterInterface::class);
+        $this->configReader = Shopware()->Container()->get(ReaderInterface::class);
     }
 
     public function tearDown()

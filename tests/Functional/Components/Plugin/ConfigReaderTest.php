@@ -147,7 +147,7 @@ class ConfigReaderTest extends TestCase
         ]);
         $this->languageShopId = $this->connection->lastInsertId();
 
-        $this->configReader = Shopware()->Container()->get('shopware.plugin.configuration.reader');
+        $this->configReader = Shopware()->Container()->get(ReaderInterface::class);
     }
 
     public function tearDown()
