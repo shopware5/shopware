@@ -53,11 +53,6 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
         $this->parent = $parent;
     }
 
-    public function getConnection(): Connection
-    {
-        return $this->connection;
-    }
-
     public function getParent(): ConfigurationLayerInterface
     {
         return $this->parent;
@@ -204,6 +199,11 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
         }
 
         return $result;
+    }
+
+    protected function getConnection(): Connection
+    {
+        return $this->connection;
     }
 
     protected function mergeValues(array $old, array $new): array
