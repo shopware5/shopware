@@ -674,7 +674,8 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             $filter = $this->Request()->getParam('filter', []),
             $order = $this->Request()->getParam('sort', []),
             $offset = $this->Request()->getParam('start'),
-            $limit = $this->Request()->getParam('limit')
+            $limit = $this->Request()->getParam('limit'),
+            true
         );
 
         // Get total result of the query
