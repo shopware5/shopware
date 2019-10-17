@@ -114,13 +114,13 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
 
         /** @var Plugin|null $plugin */
         $plugin = $pluginRepository->findOneBy(['name' => $pluginName]);
-        if (is_null($plugin)) {
+        if ($plugin === null) {
             throw new WriterException(sprintf('Plugin by name "%s" not found.', $pluginName));
         }
 
         /** @var Form|null $form */
         $form = $formRepository->findOneBy(['pluginId' => $plugin->getId()]);
-        if (is_null($form)) {
+        if ($form === null) {
             throw new WriterException(sprintf('Plugin formular by plugin id "%u" not found.', $plugin->getId()));
         }
 
@@ -147,7 +147,7 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
 
         /** @var Element|null $element */
         $element = $elementRepository->findOneBy(['form' => $form, 'name' => $name]);
-        if (is_null($element)) {
+        if ($element === null) {
             throw new WriterException(sprintf('Config element "%s" not found.', $name));
         }
 
@@ -160,7 +160,7 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
         /** @var Value|null $valueModel */
         $valueModel = $valueRepository->findOneBy(['shopId' => $shopId, 'element' => $element]);
 
-        if (is_null($valueModel)) {
+        if ($valueModel === null) {
             if ($value === $parentValue || $value === null) {
                 return;
             }
@@ -209,7 +209,7 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
     protected function mergeValues(array $old, array $new): array
     {
         foreach ($new as $key => $value) {
-            if (!array_key_exists($key, $old) || !is_null($value)) {
+            if (!array_key_exists($key, $old) || $value !== null) {
                 $old[$key] = $value;
             }
         }
