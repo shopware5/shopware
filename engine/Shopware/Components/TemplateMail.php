@@ -232,16 +232,16 @@ class Shopware_Components_TemplateMail
             ];
         }
 
-        // Save current context to mail model
-        $mailContext = json_decode(json_encode($context), true);
-
-        $mailContext = $eventManager->filter(
+        $context = $eventManager->filter(
             'TemplateMail_CreateMail_MailContext',
-            $mailContext,
+            $context,
             [
                 'mailModel' => $mailModel,
             ]
         );
+
+        // Save current context to mail model
+        $mailContext = json_decode(json_encode($context), true);
 
         $mailModel->setContext($mailContext);
         $this->getModelManager()->flush($mailModel);
