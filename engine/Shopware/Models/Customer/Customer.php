@@ -1485,7 +1485,7 @@ class Customer extends LazyFetchModelEntity
         $this->changed = new \DateTime();
     }
 
-    public function getRegisterOptInId(): int
+    public function getRegisterOptInId(): ?int
     {
         return $this->registerOptInId;
     }
