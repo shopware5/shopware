@@ -209,6 +209,8 @@
             <argument type="service" id="service_container"/>
         </service>
 
+        <service id="event_dispatcher" class="\Symfony\Component\EventDispatcher\EventDispatcher" public="true" />
+
         <service id="shopware.event_manager" alias="events" public="true"/>
         <service id="events" class="Shopware\Components\ContainerAwareEventManager" public="true">
             <argument type="service" id="service_container"/>
@@ -983,6 +985,32 @@
         <service id="Shopware\Components\CacheSubscriber">
             <argument type="service" id="cache"/>
             <tag name="shopware.event_subscriber"/>
+        </service>
+
+        <service id="Shopware\Components\Controller\FrontController">
+            <argument type="service" id="front"/>
+        </service>
+
+        <service id="controller_resolver" class="Symfony\Component\HttpKernel\Controller\ContainerControllerResolver">
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="corelogger"/>
+        </service>
+
+        <service id="response_listener" class="Symfony\Component\HttpKernel\EventListener\ResponseListener">
+            <argument>%shopware.front.charset%</argument>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="router_listener" class="Shopware\Components\Controller\RouterListener">
+            <argument type="service" id="router"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="http_kernel" class="Symfony\Component\HttpKernel\HttpKernel">
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="controller_resolver"/>
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="argument_resolver"/>
         </service>
     </services>
 </container>
