@@ -45,9 +45,12 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
 
     getColumns: function() {
         var me = this,
-            countryStore = Ext.data.StoreManager.lookup('base.Country').load();
+            countryStore = Ext.data.StoreManager.lookup('base.Country').load(),
+            areaStore = Ext.data.StoreManager.lookup('base.CountryArea').load(),
+            stateStore = Ext.data.StoreManager.lookup('base.CountryState').load();
         countryStore.remoteFilter = false;
-
+        areaStore.remoteFilter = false;
+        stateStore.remoteFilter = false;
         return [{
             header: '{s name=tax/rules/name_header}Name{/s}',
             dataIndex: 'name',
@@ -59,9 +62,9 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
             flex:1,
             editor: {
                 xtype: 'config-element-select',
-                queryMode:'local',
-                queryCaching:true,
-                store: Ext.data.StoreManager.lookup('base.CountryArea').load(),
+                queryMode: 'local',
+                queryCaching: true,
+                store: areaStore,
                 displayField: 'name',
                 valueField: 'id',
                 emptyText: '{s name=tax/rules/select_empty_text}All{/s}',
@@ -95,9 +98,9 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
             flex:1,
             editor: {
                 xtype: 'config-element-select',
-                queryMode:'local',
-                queryCaching:true,
-                store:Ext.data.StoreManager.lookup('base.CountryState').load(),
+                queryMode: 'local',
+                queryCaching: true,
+                store: stateStore,
                 displayField:'name',
                 valueField:'id',
                 emptyText: '{s name=tax/rules/select_empty_text}All{/s}',
