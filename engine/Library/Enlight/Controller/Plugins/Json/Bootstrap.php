@@ -79,13 +79,11 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
     /**
      * Called from the Event Manager after the dispatch process
      *
-     * @param Enlight_Event_EventArgs $args
-     *
      * @return bool
      */
     public function onPostDispatch(Enlight_Event_EventArgs $args)
     {
-        /** @var $controller Enlight_Controller_Action $controller */
+        /** @var Enlight_Controller_Action $controller $controller */
         $subject = $args->get('subject');
         $response = $subject->Response();
         $request = $subject->Request();
@@ -208,10 +206,20 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
         return $this->encoding;
     }
 
+    public function isFormatDateTime(): bool
+    {
+        return $this->formatDateTime;
+    }
+
+    public function setFormatDateTime(bool $formatDateTime): self
+    {
+        $this->formatDateTime = $formatDateTime;
+
+        return $this;
+    }
+
     /**
      * Converts data to json
-     *
-     * @param mixed $data
      *
      * @return string
      */
@@ -235,7 +243,6 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
      * Converts date time objects
      *
      * @param DateTime $value
-     * @param mixed    $key
      */
     protected static function convertDateTime(&$value, $key)
     {
