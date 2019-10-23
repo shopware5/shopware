@@ -2499,6 +2499,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     ->setMaxResults(1)
                     ->getQuery()
                     ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            unset($mainData['attribute']['id'], $mainData['attribute']['articleDetailId']);
         }
         if ($mapping['prices']) {
             $builder = Shopware()->Models()->createQueryBuilder();
