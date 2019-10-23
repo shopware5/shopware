@@ -28,7 +28,6 @@ use Exception;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Privacy\IpAnonymizerInterface;
 use Shopware\Models\Log\Log;
-use Shopware\Models\Shop\Shop;
 use Symfony\Component\HttpFoundation\Request;
 
 class Logger extends \Enlight_Controller_Action
@@ -47,12 +46,6 @@ class Logger extends \Enlight_Controller_Action
     {
         $this->em = $em;
         $this->ipAnonymizer = $ipAnonymizer;
-    }
-
-    public function preDispatch()
-    {
-        parent::preDispatch();
-        $this->get('shopware.components.shop_registration_service')->registerShop($this->getModelManager()->getRepository(Shop::class)->getActiveDefault());
     }
 
     /**

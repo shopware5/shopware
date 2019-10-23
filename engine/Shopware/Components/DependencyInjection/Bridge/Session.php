@@ -90,9 +90,7 @@ class Session
 
         $sessionOptions['name'] = $name;
         $basePath = $mainShop->getBasePath();
-        if ($basePath !== null && $basePath !== '') {
-            $sessionOptions['cookie_path'] = $basePath;
-        }
+        $sessionOptions['cookie_path'] = empty($basePath) ? '/' : $basePath;
 
         if ($mainShop->getSecure()) {
             $sessionOptions['cookie_secure'] = true;
