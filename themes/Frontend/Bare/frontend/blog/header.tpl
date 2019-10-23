@@ -26,9 +26,9 @@
         <meta name="twitter:title" content="{$sArticle.title|escapeHtml}" />
         <meta name="twitter:description" content="{$sArticle.description|strip_tags|trim|truncate:$SeoDescriptionMaxLength:'…'|escapeHtml}" />
 
-        {if $sArticle.media[0].source}
-            <meta property="og:image" content="{$sArticle.media[0].source}" />
-            <meta name="twitter:image" content="{$sArticle.media[0].source}" />
+        {if $sArticle.preview.source}
+            <meta property="og:image" content="{$sArticle.preview.source}" />
+            <meta name="twitter:image" content="{$sArticle.preview.source}" />
         {/if}
     {else}
         {s name="IndexMetaDescriptionStandard" assign="description"}{/s}
