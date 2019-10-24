@@ -52,7 +52,7 @@ class LogServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->entityManager = $entityManager;
         $this->logService = new LogService(
-            $entityManager,
+            $entityManager->getConnection(),
             new LogEntryBuilder($entityManager),
             []
         );
