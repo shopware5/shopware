@@ -35,6 +35,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
   * `partner`
   * `sUniqueID`
 * Changed `unitize` mixin to only output rem values
+* Changed `Shopware\Models\Customer\Customer`, set correct return type for `getregisterOptInId`
 
 ### Removals
 
