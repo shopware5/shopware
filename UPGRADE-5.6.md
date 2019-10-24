@@ -19,6 +19,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added new smarty block `frontend_detail_index_data_pricespecification` to `frontend/detail/content/buy_container.tpl`
 * Added jQuery event `plugin/swCookiePermission/onAcceptButtonClick` and `plugin/swCookiePermission/onDeclineButtonClick`
 * Added option `__options_details` to order api update to toggle order position replace mode 
+* Added setter and is methods for json renderer `formatDateTime` variable.
 
 ### Changes
 
