@@ -2551,7 +2551,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 unset($coreTranslation['objectdata']['name']);
                 unset($coreTranslation['objectdata']['description']);
                 unset($coreTranslation['objectdata']['descriptionLong']);
-                unset($coreTranslation['objectdata']['shippingTime']);
                 unset($coreTranslation['objectdata']['keywords']);
                 $coreTranslation['objectkey'] = $variant->getId();
                 $coreTranslation['objecttype'] = 'variant';
