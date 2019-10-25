@@ -31,5 +31,5 @@
 
 {* Canonical link *}
 {block name='frontend_index_header_canonical'}
-    <link rel="canonical" href="{url sArticle=$sArticle.articleID title=$sArticle.articleName}" />
+    <link rel="canonical" href="{url sArticle=$sArticle.articleID title=$sArticle.articleName controller=detail}" />
 {/block}
