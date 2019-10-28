@@ -49,6 +49,9 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 * Deprecated class `\Shopware\Components\OpenSSLEncryption`. It will be removed in 5.7, use own implementation instead
 * Deprecated parameter `$orderByShopPositionAsDefault` for methods `getBaseListQuery`, `getBaseListQueryBuilder`and `getMainListQueryBuilder` in `engine/Shopware/Models/Shop/Repository.php`
+* Deprecated following methods in class `\Shopware\Models\Partner\Repository`
+  * `getCustomerForMappingQuery`
+  * `getCustomerForMappingQueryBuilder`
 
 ## 5.6.2
 

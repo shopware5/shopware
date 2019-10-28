@@ -24,6 +24,7 @@
 
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Models\Customer\Customer;
 use Shopware\Models\Partner\Partner;
 
 class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
@@ -198,17 +199,25 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
      */
     public function mapCustomerAccountAction()
     {
-        $mapCustomerAccountValue = $this->Request()->mapCustomerAccountValue;
+        $mapCustomerAccountValue = $this->Request()->request->getInt('mapCustomerAccountValue');
 
-        /** @var \Shopware\Models\Partner\Repository $repository */
-        $repository = Shopware()->Models()->getRepository(Partner::class);
-        $dataQuery = $repository->getCustomerForMappingQuery($mapCustomerAccountValue);
-        $customerData = $dataQuery->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
-        $userId = $customerData['id'];
-        unset($customerData['id']);
-        if (!empty($customerData)) {
-            echo implode(', ', array_filter($customerData)) . '|' . $userId;
+        /** @var \Shopware\Models\Customer\Repository $repository */
+        $repository = $this->getModelManager()->getRepository(Customer::class);
+        /** @var Customer|null $customer */
+        $customer = $repository->find($mapCustomerAccountValue);
+
+        if (!$customer) {
+            return;
         }
+
+        echo sprintf(
+            '%s %s %s %s|%d',
+            $customer->getNumber(),
+            $customer->getFirstname() . ' ' . $customer->getLastname(),
+            $customer->getDefaultBillingAddress()->getCompany(),
+            $customer->getEmail(),
+            $customer->getId()
+        );
     }
 
     /**

@@ -262,6 +262,8 @@ class Repository extends ModelRepository
      *
      * @param string $mappingValue
      *
+     * @deprecated since 5.6.3, will be removed with 5.8
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getCustomerForMappingQuery($mappingValue)
@@ -276,6 +278,8 @@ class Repository extends ModelRepository
      * This function can be hooked to modify the query builder of the query object.
      *
      * @param string $mappingValue
+     *
+     * @deprecated since 5.6.3, will be removed with 5.8
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
