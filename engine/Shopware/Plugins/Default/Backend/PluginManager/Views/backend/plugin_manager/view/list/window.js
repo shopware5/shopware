@@ -68,7 +68,6 @@ Ext.define('Shopware.apps.PluginManager.view.list.Window', {
             me.createLicencePage(),
             me.createPremiumPluginsPage(),
             me.createExpiredPluginsPage(),
-            me.createConnectIntroductionPage(),
             me.createImportExportTeaserPage()
         ];
 
@@ -181,17 +180,9 @@ Ext.define('Shopware.apps.PluginManager.view.list.Window', {
         return this.createExpiredPluginsPage;
     },
 
-    createConnectIntroductionPage: function() {
-        this.connectIntroductionPage = Ext.create('Shopware.apps.PluginManager.view.list.ConnectIntroductionPage', {
-            cardIndex: 8
-        });
-
-        return this.connectIntroductionPage;
-    },
-
     createImportExportTeaserPage: function() {
         this.importExportTeaserPage = Ext.create('Shopware.apps.PluginManager.view.list.ImportExportTeaserPage', {
-            cardIndex: 9
+            cardIndex: 8
         });
 
         return this.importExportTeaserPage;

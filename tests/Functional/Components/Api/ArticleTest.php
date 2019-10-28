@@ -579,7 +579,7 @@ class ArticleTest extends TestCase
         $testData = [
             'images' => [
                 [
-                    'link' => 'https://cdn.shopware.de/github/readme_screenshot.png',
+                    'link' => 'https://assets.shopware.com/media/github/shopware5_readme.png',
                 ],
             ],
         ];
