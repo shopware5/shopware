@@ -32,7 +32,11 @@ div[id*=form], .shopware-form {
     }
 }
 
-.shopware-attribute-form {
+.shopware-attribute-form, .x-translation-manager-form {
+    .x-form-readonly label {
+        opacity: 0.3;
+    }
+
     .x-form-readonly .x-form-item-body :read-only {
         background: lightgrey;
     }

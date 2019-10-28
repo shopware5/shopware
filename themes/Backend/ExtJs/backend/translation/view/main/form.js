@@ -43,6 +43,7 @@ Ext.define('Shopware.apps.Translation.view.main.Form',
     bodyPadding: 10,
     title: '{s name=form_title}Translatable fields{/s}',
     layout: 'anchor',
+    cls: Ext.baseCSSPrefix + 'translation-manager-form',
 
     disabled: true,
     defaultType: 'textfield',
@@ -91,7 +92,7 @@ Ext.define('Shopware.apps.Translation.view.main.Form',
                     );
                     break;
             }
-            
+
             currentField.hidden = false;
             items.push(currentField);
         });
