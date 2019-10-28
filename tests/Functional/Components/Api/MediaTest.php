@@ -134,10 +134,12 @@ class MediaTest extends TestCase
         copy($source, $dest);
 
         $data['file'] = $dest;
-        $path = Shopware()->DocPath('media_image') . 'test-bild-used.jpg';
+        $deletePath = Shopware()->DocPath('media_image') . 'test-bild-used.jpg';
+        $readPath = Shopware()->DocPath('media_image') . 'test-bild-used.png';
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        if ($mediaService->has($path)) {
-            $mediaService->delete($path);
+
+        if ($mediaService->has($deletePath)) {
+            $mediaService->delete($deletePath);
         }
 
         $media = $this->resource->create($data);
@@ -145,7 +147,9 @@ class MediaTest extends TestCase
         //check if the thumbnails are generated
         $this->resource->update($media->getId(), $updateData);
 
-        $content = base64_encode($mediaService->read($path));
+        $content = base64_encode($mediaService->read($readPath));
+
+        $mediaService->delete($readPath);
 
         static::assertEquals($content, $base64Data, 'Replaced file was not persisted correctly.');
     }
