@@ -206,12 +206,14 @@ class SitemapWriter implements SitemapWriterInterface
                 try {
                     $this->filesystem->write($sitemapFileName, file_get_contents($sitemap->getFilename()));
                 } catch (\League\Flysystem\Exception $exception) {
+                    $this->logger->error(sprintf('Could not move sitemap to "%s" in the location for sitemaps', $sitemapFileName));
+                } finally {
                     // If we could not move the file to it's target, we remove it here to not clutter tmp dir
                     unlink($sitemap->getFilename());
-
-                    $this->logger->error(sprintf('Could not move sitemap to "%s" in the location for sitemaps', $sitemapFileName));
                 }
             }
         }
+
+        $this->sitemaps = [];
     }
 }
