@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "efa21c47195104bb8110b53783e158a7",
+    "content-hash": "f4058d5e56020024c414af4006096b8e",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.112.19",
+            "version": "3.112.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "8e69a518ff058612b94d328c2cde644621a4c0cc"
+                "reference": "6d56cc8372e66a99c68f3e9d4bfe26fc485269bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/8e69a518ff058612b94d328c2cde644621a4c0cc",
-                "reference": "8e69a518ff058612b94d328c2cde644621a4c0cc",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/6d56cc8372e66a99c68f3e9d4bfe26fc485269bc",
+                "reference": "6d56cc8372e66a99c68f3e9d4bfe26fc485269bc",
                 "shasum": ""
             },
             "require": {
@@ -87,7 +87,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2019-10-10T18:23:11+00:00"
+            "time": "2019-10-28T21:23:42+00:00"
         },
         {
             "name": "bcremer/line-reader",
@@ -2665,16 +2665,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v2.0.11",
+            "version": "v2.0.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "5da4d3c796c275c55f057af5a643ae297d96b4d8"
+                "reference": "0a58ef6e3146256cc3dc7cc393927bcc7d1b72db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/5da4d3c796c275c55f057af5a643ae297d96b4d8",
-                "reference": "5da4d3c796c275c55f057af5a643ae297d96b4d8",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/0a58ef6e3146256cc3dc7cc393927bcc7d1b72db",
+                "reference": "0a58ef6e3146256cc3dc7cc393927bcc7d1b72db",
                 "shasum": ""
             },
             "require": {
@@ -2706,10 +2706,11 @@
             "description": "PHP 5.x polyfill for random_bytes() and random_int() from PHP 7",
             "keywords": [
                 "csprng",
+                "polyfill",
                 "pseudorandom",
                 "random"
             ],
-            "time": "2017-09-27T21:40:39+00:00"
+            "time": "2019-01-03T20:59:08+00:00"
         },
         {
             "name": "php-http/curl-client",
@@ -3256,16 +3257,16 @@
         },
         {
             "name": "psr/log",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd"
+                "reference": "bf73deb2b3b896a9d9c75f3f0d88185d2faa27e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
-                "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/bf73deb2b3b896a9d9c75f3f0d88185d2faa27e2",
+                "reference": "bf73deb2b3b896a9d9c75f3f0d88185d2faa27e2",
                 "shasum": ""
             },
             "require": {
@@ -3274,7 +3275,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -3299,7 +3300,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2018-11-20T15:27:04+00:00"
+            "time": "2019-10-25T08:06:51+00:00"
         },
         {
             "name": "ramsey/uuid",
@@ -6574,16 +6575,16 @@
         },
         {
             "name": "kubawerlos/php-cs-fixer-custom-fixers",
-            "version": "v1.15.1",
+            "version": "v1.16.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers.git",
-                "reference": "44e13a965520814fadfbdebb2765ee4f48837a7d"
+                "reference": "8e3355a440b50341f4813c68fbcb5d096706201a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kubawerlos/php-cs-fixer-custom-fixers/zipball/44e13a965520814fadfbdebb2765ee4f48837a7d",
-                "reference": "44e13a965520814fadfbdebb2765ee4f48837a7d",
+                "url": "https://api.github.com/repos/kubawerlos/php-cs-fixer-custom-fixers/zipball/8e3355a440b50341f4813c68fbcb5d096706201a",
+                "reference": "8e3355a440b50341f4813c68fbcb5d096706201a",
                 "shasum": ""
             },
             "require": {
@@ -6592,19 +6593,10 @@
                 "php": "^7.1",
                 "symfony/finder": "^3.0 || ^4.0"
             },
-            "require-dev": {
-                "ext-json": "*",
-                "infection/infection": "^0.13.3",
-                "johnkary/phpunit-speedtrap": "^3.1",
-                "kubawerlos/types-checker": "^1.1",
-                "phpunit/phpunit": "^7.4 || ^8.0",
-                "sebastian/diff": "^3.0",
-                "symfony/console": "^4.0"
-            },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "PhpCsFixerCustomFixers\\": "src"
+                    "PhpCsFixerCustomFixers\\": "./src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -6618,11 +6610,7 @@
                 }
             ],
             "description": "A set of custom fixers for PHP CS Fixer",
-            "keywords": [
-                "fixer",
-                "php-cs-fixer"
-            ],
-            "time": "2019-08-26T19:21:54+00:00"
+            "time": "2019-10-28T14:30:30+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -7244,16 +7232,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "7.5.16",
+            "version": "7.5.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "316afa6888d2562e04aeb67ea7f2017a0eb41661"
+                "reference": "4c92a15296e58191a4cd74cff3b34fc8e374174a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/316afa6888d2562e04aeb67ea7f2017a0eb41661",
-                "reference": "316afa6888d2562e04aeb67ea7f2017a0eb41661",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/4c92a15296e58191a4cd74cff3b34fc8e374174a",
+                "reference": "4c92a15296e58191a4cd74cff3b34fc8e374174a",
                 "shasum": ""
             },
             "require": {
@@ -7324,7 +7312,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-09-14T09:08:39+00:00"
+            "time": "2019-10-28T10:37:36+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
