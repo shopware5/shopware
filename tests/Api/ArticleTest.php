@@ -28,8 +28,6 @@ use PHPUnit\Framework\TestCase;
 use Zend_Http_Client;
 use Zend_Http_Client_Adapter_Curl;
 use Zend_Http_Client_Exception;
-use Zend_Json;
-use Zend_Json_Exception;
 
 class ArticleTest extends TestCase
 {
@@ -89,7 +87,7 @@ class ArticleTest extends TestCase
 
         $result = $response->getBody();
 
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -110,7 +108,7 @@ class ArticleTest extends TestCase
 
         $result = $response->getBody();
 
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -315,7 +313,7 @@ class ArticleTest extends TestCase
             ],
         ];
 
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
 
         $response = $client->request('POST');
@@ -326,7 +324,7 @@ class ArticleTest extends TestCase
         static::assertArrayHasKey('Location', $response->getHeaders());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -346,7 +344,7 @@ class ArticleTest extends TestCase
         $requestData = [
             'test' => true,
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('POST');
@@ -356,7 +354,7 @@ class ArticleTest extends TestCase
         static::assertEquals(400, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -377,7 +375,7 @@ class ArticleTest extends TestCase
         static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -405,7 +403,7 @@ class ArticleTest extends TestCase
             'description' => 'Update description',
             'descriptionLong' => 'Update descriptionLong',
         ];
-        $requestData = Zend_Json::encode($testData);
+        $requestData = json_encode($testData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
@@ -415,7 +413,7 @@ class ArticleTest extends TestCase
         static::assertEquals(400, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -453,7 +451,7 @@ class ArticleTest extends TestCase
             // similar is set to empty array, therefore it should be cleared
             'similar' => [],
         ];
-        $requestData = Zend_Json::encode($testData);
+        $requestData = json_encode($testData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
@@ -472,7 +470,7 @@ class ArticleTest extends TestCase
         );
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -484,7 +482,7 @@ class ArticleTest extends TestCase
                 ->request('GET');
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         $article = $result['data'];
 
@@ -509,7 +507,6 @@ class ArticleTest extends TestCase
      * @param int $id
      *
      * @throws Zend_Http_Client_Exception
-     * @throws Zend_Json_Exception
      */
     public function testChangeVariantArticleMainVariantShouldBeSuccessful($id)
     {
@@ -522,7 +519,7 @@ class ArticleTest extends TestCase
         static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         $variantNumbers = array_map(function ($item) {
             return $item['number'];
@@ -541,7 +538,7 @@ class ArticleTest extends TestCase
                     ],
                 ],
             ];
-            $requestData = Zend_Json::encode($testData);
+            $requestData = json_encode($testData);
 
             $client->setRawData($requestData, 'application/json; charset=UTF-8');
             $response = $client->request('PUT');
@@ -549,7 +546,7 @@ class ArticleTest extends TestCase
             static::assertEquals(null, $response->getHeader('Set-Cookie'));
             static::assertEquals(200, $response->getStatus());
             $result = $response->getBody();
-            $result = Zend_Json::decode($result);
+            $result = json_decode($result, true);
             static::assertArrayHasKey('success', $result);
             static::assertTrue($result['success']);
 
@@ -560,7 +557,7 @@ class ArticleTest extends TestCase
             static::assertEquals(null, $response->getHeader('Set-Cookie'));
             static::assertEquals(200, $response->getStatus());
             $result = $response->getBody();
-            $result = Zend_Json::decode($result);
+            $result = json_decode($result, true);
 
             static::assertEquals($variantNumber, $result['data']['mainDetail']['number']);
 
@@ -597,7 +594,7 @@ class ArticleTest extends TestCase
                 ],
             ],
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
@@ -605,7 +602,7 @@ class ArticleTest extends TestCase
         static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -635,7 +632,7 @@ class ArticleTest extends TestCase
                 ],
             ],
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
@@ -643,7 +640,7 @@ class ArticleTest extends TestCase
         static::assertEquals(400, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -657,7 +654,6 @@ class ArticleTest extends TestCase
      * @param int $id
      *
      * @throws Zend_Http_Client_Exception
-     * @throws Zend_Json_Exception
      *
      * @return
      */
@@ -672,7 +668,7 @@ class ArticleTest extends TestCase
         static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -692,7 +688,7 @@ class ArticleTest extends TestCase
         static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -708,7 +704,7 @@ class ArticleTest extends TestCase
         $requestData = [
             'active' => true,
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
@@ -718,7 +714,7 @@ class ArticleTest extends TestCase
         static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -736,7 +732,7 @@ class ArticleTest extends TestCase
         static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -843,7 +839,7 @@ class ArticleTest extends TestCase
             ],
         ];
 
-        $requestData = Zend_Json::encode($data);
+        $requestData = json_encode($data);
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
 
         $response = $client->request('PUT');
@@ -853,7 +849,7 @@ class ArticleTest extends TestCase
         static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);

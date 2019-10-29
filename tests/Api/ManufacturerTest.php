@@ -27,7 +27,6 @@ namespace Shopware\Tests\Api;
 use PHPUnit\Framework\TestCase;
 use Zend_Http_Client;
 use Zend_Http_Client_Adapter_Curl;
-use Zend_Json;
 
 class ManufacturerTest extends TestCase
 {
@@ -87,7 +86,7 @@ class ManufacturerTest extends TestCase
         static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -111,7 +110,7 @@ class ManufacturerTest extends TestCase
                 'link' => 'http://assets.shopware.com/sw_logo_white.png',
             ],
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('POST');
@@ -121,7 +120,7 @@ class ManufacturerTest extends TestCase
         static::assertEquals(400, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -140,7 +139,7 @@ class ManufacturerTest extends TestCase
                 'link' => 'http://assets.shopware.com/sw_logo_white.png',
             ],
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('POST');
@@ -153,7 +152,7 @@ class ManufacturerTest extends TestCase
         );
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -181,7 +180,7 @@ class ManufacturerTest extends TestCase
             'description' => 'invalid',
             'image' => null,
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
@@ -190,7 +189,7 @@ class ManufacturerTest extends TestCase
         static::assertEquals(400, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -215,7 +214,7 @@ class ManufacturerTest extends TestCase
             'metaDescription' => 'Some meta description',
             'changed' => date('Y-m-d H:i:s'),
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
@@ -230,7 +229,7 @@ class ManufacturerTest extends TestCase
         );
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -252,7 +251,7 @@ class ManufacturerTest extends TestCase
                 'link' => 'http://assets.shopware.com/sw_logo_white.png',
             ],
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
@@ -267,7 +266,7 @@ class ManufacturerTest extends TestCase
         );
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);

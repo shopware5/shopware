@@ -29,7 +29,6 @@ use Shopware\Kernel;
 use Zend_Http_Client;
 use Zend_Http_Client_Adapter_Curl;
 use Zend_Http_Client_Adapter_Exception;
-use Zend_Json;
 
 class VersionTest extends TestCase
 {
@@ -93,7 +92,7 @@ class VersionTest extends TestCase
         static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);

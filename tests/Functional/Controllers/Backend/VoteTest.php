@@ -61,7 +61,7 @@ class VoteTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertNotNull($this->View()->total);
 
         // Testing the search-function
-        $filter = ['filter' => \Zend_Json::encode([['value' => 'test']])];
+        $filter = ['filter' => \json_encode([['value' => 'test']])];
         $this->Request()->setMethod('POST')->setPost($filter);
         $this->dispatch('backend/premium/getPremiumArticles');
 

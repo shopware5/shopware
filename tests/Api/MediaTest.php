@@ -28,7 +28,6 @@ use PHPUnit\Framework\TestCase;
 use Zend_Http_Client;
 use Zend_Http_Client_Adapter_Curl;
 use Zend_Http_Client_Adapter_Exception;
-use Zend_Json;
 
 class MediaTest extends TestCase
 {
@@ -94,7 +93,7 @@ class MediaTest extends TestCase
 
         $result = $response->getBody();
 
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -115,7 +114,7 @@ class MediaTest extends TestCase
 
         $result = $response->getBody();
 
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -133,7 +132,7 @@ class MediaTest extends TestCase
         static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -155,7 +154,7 @@ class MediaTest extends TestCase
             'album' => -1,
             'description' => 'flipflops',
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('POST');
@@ -165,7 +164,7 @@ class MediaTest extends TestCase
         static::assertEquals(400, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -182,7 +181,7 @@ class MediaTest extends TestCase
             'file' => 'http://assets.shopware.com/sw_logo_white.png',
             'description' => 'flipflops',
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('POST');
@@ -195,7 +194,7 @@ class MediaTest extends TestCase
         );
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -225,7 +224,7 @@ class MediaTest extends TestCase
         static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -250,7 +249,7 @@ class MediaTest extends TestCase
         static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -278,7 +277,7 @@ class MediaTest extends TestCase
         );
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -304,7 +303,7 @@ class MediaTest extends TestCase
         static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -340,7 +339,7 @@ class MediaTest extends TestCase
         );
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -366,7 +365,7 @@ class MediaTest extends TestCase
         static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -391,7 +390,7 @@ class MediaTest extends TestCase
         static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);

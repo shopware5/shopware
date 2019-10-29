@@ -27,7 +27,6 @@ namespace Shopware\Tests\Api;
 use PHPUnit\Framework\TestCase;
 use Zend_Http_Client;
 use Zend_Http_Client_Adapter_Curl;
-use Zend_Json;
 
 class PaymentMethodsTest extends TestCase
 {
@@ -90,7 +89,7 @@ class PaymentMethodsTest extends TestCase
 
         $result = $response->getBody();
 
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -111,7 +110,7 @@ class PaymentMethodsTest extends TestCase
 
         $result = $response->getBody();
 
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -129,7 +128,7 @@ class PaymentMethodsTest extends TestCase
         static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -152,7 +151,7 @@ class PaymentMethodsTest extends TestCase
             'description' => 'Lastschrift2',
             'position' => '6',
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('POST');
@@ -165,7 +164,7 @@ class PaymentMethodsTest extends TestCase
         );
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -197,7 +196,7 @@ class PaymentMethodsTest extends TestCase
         static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -224,7 +223,7 @@ class PaymentMethodsTest extends TestCase
         static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -242,7 +241,7 @@ class PaymentMethodsTest extends TestCase
         static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);

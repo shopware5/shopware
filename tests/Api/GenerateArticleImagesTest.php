@@ -27,7 +27,6 @@ namespace Shopware\Tests\Api;
 use PHPUnit\Framework\TestCase;
 use Zend_Http_Client;
 use Zend_Http_Client_Adapter_Curl;
-use Zend_Json;
 
 class GenerateArticleImagesTest extends TestCase
 {
@@ -87,7 +86,7 @@ class GenerateArticleImagesTest extends TestCase
         static::assertEquals(405, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -105,7 +104,7 @@ class GenerateArticleImagesTest extends TestCase
         static::assertEquals(405, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
