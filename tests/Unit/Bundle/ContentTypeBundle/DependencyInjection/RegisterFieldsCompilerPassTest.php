@@ -22,24 +22,22 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Traits;
+namespace Shopware\Tests\Unit\Bundle\ContentTypeBundle\DependencyInjection;
 
-trait DatabaseTransactionBehaviour
+use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\ContentTypeBundle\DependencyInjection\RegisterFieldsCompilerPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+class RegisterFieldsCompilerPassTest extends TestCase
 {
-    /**
-     * @before
-     */
-    public function startTransactionBefore(): void
+    public function testMissingFieldName(): void
     {
-        Shopware()->Container()->get('dbal_connection')->beginTransaction();
-    }
-
-    /**
-     * @after
-     */
-    public function stopTransactionAfter(): void
-    {
-        Shopware()->Container()->get('dbal_connection')->rollBack();
-        Shopware()->Models()->clear();
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Service with id "foo" need the tag attribute fieldName to identify the short name');
+        $container = new ContainerBuilder();
+        $container
+            ->register('foo')
+            ->setTags(['shopware.bundle.content_type.field' => ['attr' => 'baz']]);
+        (new RegisterFieldsCompilerPass())->process($container);
     }
 }

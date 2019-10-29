@@ -22,24 +22,40 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Traits;
+namespace Shopware\Tests\Functional\Bundle\ContentTypeBundle\FieldResolver;
 
-trait DatabaseTransactionBehaviour
+use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\ContentTypeBundle\Field\Shopware\ShopField;
+use Shopware\Bundle\ContentTypeBundle\FieldResolver\AbstractResolver;
+use Shopware\Bundle\ContentTypeBundle\FieldResolver\ShopResolver;
+use Shopware\Bundle\ContentTypeBundle\Structs\Field;
+
+class ShopResolverTest extends TestCase
 {
     /**
-     * @before
+     * @var AbstractResolver
      */
-    public function startTransactionBefore(): void
-    {
-        Shopware()->Container()->get('dbal_connection')->beginTransaction();
-    }
+    private $service;
 
     /**
-     * @after
+     * @var Field
      */
-    public function stopTransactionAfter(): void
+    private $field;
+
+    protected function setUp(): void
     {
-        Shopware()->Container()->get('dbal_connection')->rollBack();
-        Shopware()->Models()->clear();
+        $this->service = Shopware()->Container()->get(ShopResolver::class);
+        $this->field = new Field();
+        $this->field->setType(new ShopField());
+    }
+
+    public function testResolve(): void
+    {
+        $this->service->add(1, $this->field);
+        $this->service->resolve();
+
+        $shop = $this->service->get(1, $this->field);
+        static::assertIsArray($shop);
+        static::assertEquals(Shopware()->Shop()->getId(), $shop['id']);
     }
 }

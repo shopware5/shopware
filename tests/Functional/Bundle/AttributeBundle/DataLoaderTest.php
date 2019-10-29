@@ -110,14 +110,14 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
         $this->attributeLoader->load('table_does_not_exists', 1);
     }
 
-    public function testLoadTranslationsReturnArrayWhenEmpty()
+    public function testLoadTranslationsReturnArrayWhenEmpty(): void
     {
         $result = $this->attributeLoader->loadTranslations('s_user_addresses_attributes', 555);
 
         static::assertIsArray($result);
     }
 
-    public function testLoadTranslationsReturnArrayIfNotEmpty()
+    public function testLoadTranslationsReturnArrayIfNotEmpty(): void
     {
         $this->attributePersister->persist(['text1' => 'foo'], 's_user_addresses_attributes', 2);
         $result = $this->attributeLoader->loadTranslations('s_user_addresses_attributes', 2);
@@ -127,14 +127,12 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider getForeignKeyData
-     *
-     * @param string $input
      */
-    public function testLoadTranslationsForeignKeyValidation($input)
+    public function testLoadTranslationsForeignKeyValidation($input): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('No foreign key provided');
 
-        $this->attributeLoader->load('s_user_addresses_attributes', $input);
+        $this->attributeLoader->loadTranslations('s_user_addresses_attributes', $input);
     }
 }

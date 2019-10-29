@@ -22,24 +22,23 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Traits;
+namespace Shopware\Tests\Unit\Bundle\ContentTypeBundle\DependencyInjection;
 
-trait DatabaseTransactionBehaviour
+use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\ContentTypeBundle\DependencyInjection\RegisterTypeRepositories;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+class RegisterTypeRepositoriesTest extends TestCase
 {
-    /**
-     * @before
-     */
-    public function startTransactionBefore(): void
+    public function testRegistrationOfTypeRepository(): void
     {
-        Shopware()->Container()->get('dbal_connection')->beginTransaction();
-    }
+        $container = new ContainerBuilder();
+        $container->setParameter('shopware.bundle.content_type.types', [
+            'foo' => [],
+        ]);
 
-    /**
-     * @after
-     */
-    public function stopTransactionAfter(): void
-    {
-        Shopware()->Container()->get('dbal_connection')->rollBack();
-        Shopware()->Models()->clear();
+        (new RegisterTypeRepositories())->process($container);
+
+        static::assertTrue($container->hasDefinition('shopware.bundle.content_type.foo'));
     }
 }
