@@ -59,7 +59,6 @@ Ext.define('Shopware.apps.PluginManager', {
         'list.LicencePage',
         'list.PremiumPluginsPage',
         'list.ExpiredPluginsPage',
-        'list.ConnectIntroductionPage',
         'list.ImportExportTeaserPage',
         'list.Window',
 
@@ -136,7 +135,6 @@ Ext.define('Shopware.apps.PluginManager', {
         'display-premium-plugins',
         'display-expired-plugins',
         'display-importexport-teaser',
-        'display-connect-introduction',
         'enable-expired-plugins-mode',
         'enable-connect-introduction-mode',
         'enable-premium-plugins-mode',

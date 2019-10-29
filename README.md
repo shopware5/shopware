@@ -15,7 +15,7 @@
 
 ## Overview
 
-![Shopware 5 collage](https://cdn.shopware.de/github/readme_screenshot.png)
+![Shopware 5 collage](https://assets.shopware.com/media/github/shopware5_readme.png)
 
 Shopware 5 is the next generation of open source e-commerce software made in Germany. Based on bleeding edge technologies like `Symfony 3`, `Doctrine 2` & `Zend Framework` Shopware comes as the perfect platform for your next e-commerce project.
 Furthermore Shopware 5 provides an event-driven plugin system and an advanced hook system, giving you the ability to customize every part of the platform.
