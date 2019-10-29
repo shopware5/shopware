@@ -166,7 +166,9 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
 
         if ($this->Config()->get('caching') && $cache->test($cacheKey)) {
             $menu = $cache->load($cacheKey, true);
-        } else {
+        }
+
+        if (empty($menu) || !is_array($menu)) {
             $ids = $this->getCategoryIdsOfDepth($category, $depth);
             $categories = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface::class)->getList($ids, $context);
             $categoriesArray = $this->convertCategories($categories);
