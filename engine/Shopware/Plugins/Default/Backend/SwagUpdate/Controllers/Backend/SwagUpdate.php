@@ -150,17 +150,6 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         ]);
     }
 
-    /**
-     * $this->View()->assign(array(
-     *     'success' => false,
-     *     'error' => 'There are some problems. SORRY!!'
-     * ));
-     *
-     * $this->View()->assign(array(
-     *    'success' => true,
-     *     'ftpRequired' => false
-     * ));
-     */
     public function isUpdateAllowedAction()
     {
         $fs = new \ShopwarePlugins\SwagUpdate\Components\FileSystem();
@@ -187,71 +176,6 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         $this->View()->assign([
             'success' => true,
             'ftpRequired' => false,
-        ]);
-    }
-
-    public function saveFtpAction()
-    {
-        $ftpParams = [
-            'user' => $this->Request()->getParam('user'),
-            'password' => $this->Request()->getParam('password'),
-            'path' => $this->Request()->getParam('path'),
-            'server' => $this->Request()->getParam('server'),
-        ];
-
-        $basepath = rtrim($ftpParams['path'], '/');
-        $testFile = $basepath . '/shopware.php';
-
-        $localFh = fopen($testFile, 'rb');
-        $remoteFh = fopen('php://memory', 'w+');
-
-        if (false === $connection = ftp_connect($ftpParams['server'], 21, 5)) {
-            $this->View()->assign([
-                'success' => false,
-                'error' => 'Could not connect to server',
-            ]);
-
-            return;
-        }
-
-        if (!ftp_login($connection, $ftpParams['user'], $ftpParams['password'])) {
-            $this->View()->assign([
-                'success' => false,
-                'error' => 'Could not login into server',
-            ]);
-            ftp_close($connection);
-
-            return;
-        }
-
-        if (!ftp_fget($connection, $remoteFh, $testFile, FTP_ASCII)) {
-            $this->View()->assign([
-                'success' => false,
-                'error' => 'Could not read files from connection.',
-            ]);
-            ftp_close($connection);
-
-            return;
-        }
-
-        if (!$this->checkIdentical($localFh, $remoteFh)) {
-            $this->View()->assign([
-                'success' => false,
-                'error' => 'Files are not identical.',
-            ]);
-            ftp_close($connection);
-
-            return;
-        }
-
-        ftp_close($connection);
-
-        /** @var \Enlight_Components_Session_Namespace $session */
-        $session = Shopware()->BackendSession();
-        $session->offsetSet('update_ftp', $ftpParams);
-
-        $this->View()->assign([
-            'success' => true,
         ]);
     }
 
