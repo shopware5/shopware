@@ -87,7 +87,7 @@ class RegisterDynamicController implements CompilerPassInterface
                     ]
                 );
 
-                $container->setDefinition('shopware_bundle.content_type.controllers.api.' . $name, $apiController);
+                $container->setDefinition('shopware_bundle.content_type.controllers.frontend.' . $name, $apiController);
             }
         }
     }
