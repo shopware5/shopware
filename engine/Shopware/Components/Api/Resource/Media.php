@@ -299,11 +299,11 @@ class Media extends Resource
             throw new \RuntimeException(sprintf('Could not create temp directory "%s"', $destPath));
         }
 
+        $this->getContainer()->get('shopware.components.stream_protocol_validator')->validate($url);
+
         if (strpos($url, 'data:image') !== false) {
             return $this->uploadBase64File($url, $destPath, $baseFilename);
         }
-
-        $this->getContainer()->get('shopware.components.stream_protocol_validator')->validate($url);
 
         $filename = $this->getUniqueFileName($destPath, $baseFilename);
         $filePath = sprintf('%s/%s', $destPath, $filename);
