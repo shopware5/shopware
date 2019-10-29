@@ -68,17 +68,6 @@ class UserManagerTest extends \Enlight_Components_Test_Controller_TestCase
         // Clear entitymanager to prevent weird 'model shop not persisted' errors.
         Shopware()->Models()->clear();
 
-        $this->databaseTester = null;
-        if (method_exists($this, 'getSetUpOperation')) {
-            $this->getDatabaseTester()->setSetUpOperation($this->getSetUpOperation());
-        }
-        if (method_exists($this, 'getDataSet')) {
-            $this->getDatabaseTester()->setDataSet($this->getDataSet());
-        }
-        if ($this->databaseTester !== null) {
-            $this->getDatabaseTester()->onSetUp();
-        }
-
         $this->disableAuth();
     }
 
@@ -118,7 +107,7 @@ class UserManagerTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * Verify that the previously created admin user can login with a correct password
      *
-     * @backupGlobals
+     * @depends testCreateAdminUser
      */
     public function testAdminLogin()
     {

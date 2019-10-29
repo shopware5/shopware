@@ -92,6 +92,7 @@ abstract class Enlight_Components_Test_Controller_TestCaseV7 extends Enlight_Com
         parent::setUp();
 
         Shopware()->Container()->reset('session');
+        Shopware_Components_Auth::resetInstance();
         Shopware()->Container()->reset('auth');
 
         $this->reset();

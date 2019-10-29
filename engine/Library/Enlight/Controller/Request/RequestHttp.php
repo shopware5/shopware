@@ -897,4 +897,9 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
 
         return $name . ':' . $port;
     }
+
+    public function setContent(string $content): void
+    {
+        $this->content = $content;
+    }
 }
