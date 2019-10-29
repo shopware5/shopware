@@ -24,8 +24,6 @@
 
 namespace Shopware\Tests\Controllers\Backend;
 
-use Zend_Json;
-
 class PartnerTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /** @var \Shopware\Models\Partner\Partner $repository */
@@ -154,7 +152,7 @@ class PartnerTest extends \Enlight_Components_Test_Controller_TestCase
     public function testGetDetail($id)
     {
         $filter = [['property' => 'id', 'value' => $id]];
-        $params['filter'] = Zend_Json::encode($filter);
+        $params['filter'] = json_encode($filter);
         $this->Request()->setParams($params);
 
         $this->dispatch('backend/Partner/getDetail');

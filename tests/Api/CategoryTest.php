@@ -27,7 +27,6 @@ namespace Shopware\Tests\Api;
 use PHPUnit\Framework\TestCase;
 use Zend_Http_Client;
 use Zend_Http_Client_Adapter_Curl;
-use Zend_Json;
 
 class CategoryTest extends TestCase
 {
@@ -88,7 +87,7 @@ class CategoryTest extends TestCase
 
         $result = $response->getBody();
 
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -109,7 +108,7 @@ class CategoryTest extends TestCase
 
         $result = $response->getBody();
 
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -126,7 +125,7 @@ class CategoryTest extends TestCase
             'parentId' => 3,
         ];
 
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
 
         $response = $client->request('POST');
@@ -137,7 +136,7 @@ class CategoryTest extends TestCase
         static::assertArrayHasKey('Location', $response->getHeaders());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -162,7 +161,7 @@ class CategoryTest extends TestCase
                 'lastName' => 'Mustermann',
             ],
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('POST');
@@ -172,7 +171,7 @@ class CategoryTest extends TestCase
         static::assertEquals(400, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -193,7 +192,7 @@ class CategoryTest extends TestCase
         static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -217,7 +216,7 @@ class CategoryTest extends TestCase
             'active' => true,
             'email' => 'invalid',
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
@@ -227,7 +226,7 @@ class CategoryTest extends TestCase
         static::assertEquals(400, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -245,7 +244,7 @@ class CategoryTest extends TestCase
         $requestData = [
             'name' => 'Changed test category',
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
@@ -264,7 +263,7 @@ class CategoryTest extends TestCase
         );
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -279,7 +278,7 @@ class CategoryTest extends TestCase
         static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -309,7 +308,7 @@ class CategoryTest extends TestCase
         static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -329,7 +328,7 @@ class CategoryTest extends TestCase
         static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -346,7 +345,7 @@ class CategoryTest extends TestCase
             'active' => true,
             'email' => 'test@foobar.com',
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
@@ -356,7 +355,7 @@ class CategoryTest extends TestCase
         static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -374,7 +373,7 @@ class CategoryTest extends TestCase
         static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);

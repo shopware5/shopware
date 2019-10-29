@@ -30,7 +30,6 @@ use Shopware\Models\Customer\Customer;
 use Zend_Http_Client;
 use Zend_Http_Client_Adapter_Curl;
 use Zend_Http_Client_Adapter_Exception;
-use Zend_Json;
 
 class CustomerTest extends TestCase
 {
@@ -92,7 +91,7 @@ class CustomerTest extends TestCase
 
         $result = $response->getBody();
 
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -112,7 +111,7 @@ class CustomerTest extends TestCase
 
         $result = $response->getBody();
 
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -176,7 +175,7 @@ class CustomerTest extends TestCase
             ],
         ];
 
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
 
         $response = $client->request('POST');
@@ -186,7 +185,7 @@ class CustomerTest extends TestCase
         static::assertArrayHasKey('Location', $response->getHeaders());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -257,7 +256,7 @@ class CustomerTest extends TestCase
             ],
         ];
 
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
 
         $response = $client->request('POST');
@@ -267,7 +266,7 @@ class CustomerTest extends TestCase
         static::assertArrayHasKey('Location', $response->getHeaders());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -350,7 +349,7 @@ class CustomerTest extends TestCase
             ],
         ];
 
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
 
         $response = $client->request('POST');
@@ -360,7 +359,7 @@ class CustomerTest extends TestCase
         static::assertArrayHasKey('Location', $response->getHeaders());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -394,7 +393,7 @@ class CustomerTest extends TestCase
                 'lastName' => 'Mustermann',
             ],
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('POST');
@@ -403,7 +402,7 @@ class CustomerTest extends TestCase
         static::assertEquals(400, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -423,7 +422,7 @@ class CustomerTest extends TestCase
         static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -454,7 +453,7 @@ class CustomerTest extends TestCase
             'active' => true,
             'email' => 'test@foobar.com',
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
@@ -463,7 +462,7 @@ class CustomerTest extends TestCase
         static::assertEquals(405, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -481,7 +480,7 @@ class CustomerTest extends TestCase
             'active' => true,
             'email' => 'invalid',
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
@@ -490,7 +489,7 @@ class CustomerTest extends TestCase
         static::assertEquals(400, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -511,7 +510,7 @@ class CustomerTest extends TestCase
             'active' => true,
             'email' => $customer->getEmail(),
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
@@ -526,7 +525,7 @@ class CustomerTest extends TestCase
         );
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -547,7 +546,7 @@ class CustomerTest extends TestCase
         static::assertEquals(200, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
@@ -566,7 +565,7 @@ class CustomerTest extends TestCase
         static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -583,7 +582,7 @@ class CustomerTest extends TestCase
             'active' => true,
             'email' => 'test@foobar.com',
         ];
-        $requestData = Zend_Json::encode($requestData);
+        $requestData = json_encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
@@ -592,7 +591,7 @@ class CustomerTest extends TestCase
         static::assertEquals(404, $response->getStatus());
 
         $result = $response->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
@@ -609,7 +608,7 @@ class CustomerTest extends TestCase
         static::assertEquals(200, $result->getStatus());
 
         $result = $result->getBody();
-        $result = Zend_Json::decode($result);
+        $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
