@@ -81,6 +81,11 @@ class MenuSynchronizer
             $items[] = $this->createMenuItem($plugin, $parent, $menuItem);
         }
 
+        foreach ($menuNames as &$menuName) {
+            $menuName = $plugin->getName() . '_' . $menuName;
+        }
+        unset($menuName);
+
         $this->em->flush($items);
         $this->removeNotExistingEntries($plugin->getId(), $menuNames);
     }
@@ -121,7 +126,7 @@ class MenuSynchronizer
             /** @var Menu $item */
             $item = $this->menuRepository->findOneBy([
                 'pluginId' => $plugin->getId(),
-                'label' => $menuItem['name'],
+                'label' => $plugin->getName() . '_' . $menuItem['name'],
             ]);
         }
 
@@ -135,7 +140,7 @@ class MenuSynchronizer
         if (!isset($menuItem['label']['en']) || empty($menuItem['label']['en'])) {
             throw new \RuntimeException('Label with lang en required');
         }
-        $item->setLabel($menuItem['name']);
+        $item->setLabel($plugin->getName() . '_' . $menuItem['name']);
 
         $item->setController(
             isset($menuItem['controller']) ? $menuItem['controller'] : null
