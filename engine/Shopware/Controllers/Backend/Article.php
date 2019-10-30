@@ -3099,12 +3099,25 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $data = $this->prepareAssociatedData($data, $article);
 
+        $removeMainDetailOptions = false;
+        if ($article->getConfiguratorSet() !== null && $data['configuratorSetId'] === null) {
+            $removeMainDetailOptions = true;
+        }
+
         $article->fromArray($data);
 
         Shopware()->Models()->persist($article);
         Shopware()->Models()->flush();
         if (empty($data['id']) && !empty($data['autoNumber'])) {
             $this->increaseAutoNumber($data['autoNumber'], $article->getMainDetail()->getNumber());
+        }
+
+        if ($removeMainDetailOptions) {
+            $this->getManager()->getDBALQueryBuilder()
+                ->delete('s_article_configurator_option_relations')
+                ->where('article_id = :mainDetailId')
+                ->setParameter('mainDetailId', $article->getMainDetail()->getId())
+                ->execute();
         }
 
         $savedProduct = $this->getArticle($article->getId());
