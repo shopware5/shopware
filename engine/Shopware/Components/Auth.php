@@ -171,6 +171,11 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
         return $return;
     }
 
+    public static function resetInstance(): void
+    {
+        self::$_instance = null;
+    }
+
     /**
      * Validates the given credentials of a user
      *

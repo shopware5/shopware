@@ -22,70 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Api;
+namespace Shopware\Tests\Functional\Api;
 
-use PHPUnit\Framework\TestCase;
-use Zend_Http_Client;
-use Zend_Http_Client_Adapter_Curl;
-use Zend_Http_Client_Exception;
-
-class ArticleTest extends TestCase
+class ArticleTest extends AbstractApiTestCase
 {
-    public $apiBaseUrl = '';
-
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp(): void
+    public function testRequestWithoutAuthenticationShouldReturnError(): void
     {
-        parent::setUp();
+        $this->client->request('GET', '/api/articles/');
+        $response = $this->client->getResponse();
 
-        $helper = Shopware();
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertEquals(401, $response->getStatusCode());
 
-        $shop = $helper->Shop();
-        $hostname = $shop->getHost();
-        if (empty($hostname)) {
-            static::markTestSkipped(
-                'Hostname is not available.'
-            );
-        }
-
-        $protocol = $shop->getSecure() ? 'https://' : 'http://';
-
-        $this->apiBaseUrl = $protocol . $hostname . $helper->Shop()->getBasePath() . '/api';
-        Shopware()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', [sha1('demo')]);
-    }
-
-    public function getHttpClient()
-    {
-        $username = 'demo';
-        $password = sha1('demo');
-
-        $adapter = new Zend_Http_Client_Adapter_Curl();
-        $adapter->setConfig([
-            'curloptions' => [
-                CURLOPT_HTTPAUTH => CURLAUTH_DIGEST,
-                CURLOPT_USERPWD => "$username:$password",
-            ],
-        ]);
-
-        $client = new Zend_Http_Client();
-        $client->setAdapter($adapter);
-
-        return $client;
-    }
-
-    public function testRequestWithoutAuthenticationShouldReturnError()
-    {
-        $client = new Zend_Http_Client($this->apiBaseUrl . '/articles/');
-        $response = $client->request('GET');
-
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(null, $response->getHeader('Set-Cookie'));
-        static::assertEquals(401, $response->getStatus());
-
-        $result = $response->getBody();
+        $result = $response->getContent();
 
         $result = json_decode($result, true);
 
@@ -95,18 +45,18 @@ class ArticleTest extends TestCase
         static::assertArrayHasKey('message', $result);
     }
 
-    public function testGetArticlesWithInvalidIdShouldReturnMessage()
+    public function testGetArticlesWithInvalidIdShouldReturnMessage(): void
     {
         $id = 99999999;
-        $response = $this->getHttpClient()
-                         ->setUri($this->apiBaseUrl . '/articles/' . $id)
-                         ->request('GET');
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(null, $response->getHeader('Set-Cookie'));
-        static::assertEquals(404, $response->getStatus());
+        $this->authenticatedApiRequest('GET', '/api/articles/' . $id);
+        $response = $this->client->getResponse();
 
-        $result = $response->getBody();
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertEquals(404, $response->getStatusCode());
+
+        $result = $response->getContent();
 
         $result = json_decode($result, true);
 
@@ -116,10 +66,8 @@ class ArticleTest extends TestCase
         static::assertArrayHasKey('message', $result);
     }
 
-    public function testPostArticlesShouldBeSuccessful()
+    public function testPostArticlesShouldBeSuccessful(): string
     {
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/');
-
         $requestData = [
             'name' => 'Testartikel',
             'description' => 'Test description',
@@ -313,23 +261,21 @@ class ArticleTest extends TestCase
             ],
         ];
 
-        $requestData = json_encode($requestData);
-        $client->setRawData($requestData, 'application/json; charset=UTF-8');
+        $this->authenticatedApiRequest('POST', '/api/articles/', [], $requestData);
+        $response = $this->client->getResponse();
 
-        $response = $client->request('POST');
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(null, $response->headers->get(('Set-Cookie')));
+        static::assertEquals(201, $response->getStatusCode());
+        static::assertArrayHasKey('location', $response->headers->all());
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(null, $response->getHeader('Set-Cookie'));
-        static::assertEquals(201, $response->getStatus());
-        static::assertArrayHasKey('Location', $response->getHeaders());
-
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
 
-        $location = $response->getHeader('Location');
+        $location = $response->headers->get('location');
         $identifier = (int) array_pop(explode('/', $location));
 
         static::assertGreaterThan(0, $identifier);
@@ -337,23 +283,20 @@ class ArticleTest extends TestCase
         return $identifier;
     }
 
-    public function testPostArticlesWithInvalidDataShouldReturnError()
+    public function testPostArticlesWithInvalidDataShouldReturnError(): void
     {
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/');
-
         $requestData = [
             'test' => true,
         ];
-        $requestData = json_encode($requestData);
 
-        $client->setRawData($requestData, 'application/json; charset=UTF-8');
-        $response = $client->request('POST');
+        $this->authenticatedApiRequest('POST', '/api/articles/', [], $requestData);
+        $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(null, $response->getHeader('Set-Cookie'));
-        static::assertEquals(400, $response->getStatus());
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertEquals(400, $response->getStatusCode());
 
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -364,17 +307,16 @@ class ArticleTest extends TestCase
     /**
      * @depends testPostArticlesShouldBeSuccessful
      */
-    public function testGetArticlesWithIdShouldBeSuccessful($id)
+    public function testGetArticlesWithIdShouldBeSuccessful(string $id): void
     {
-        $response = $this->getHttpClient()
-                         ->setUri($this->apiBaseUrl . '/articles/' . $id)
-                         ->request('GET');
+        $this->authenticatedApiRequest('GET', '/api/articles/' . $id, []);
+        $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(null, $response->getHeader('Set-Cookie'));
-        static::assertEquals(200, $response->getStatus());
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertEquals(200, $response->getStatusCode());
 
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -393,26 +335,23 @@ class ArticleTest extends TestCase
     /**
      * @depends testPostArticlesShouldBeSuccessful
      */
-    public function testPutArticlesWithInvalidDataShouldReturnError($id)
+    public function testPutArticlesWithInvalidDataShouldReturnError($id): void
     {
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/' . $id);
-
         // required field name is blank
         $testData = [
             'name' => ' ',
             'description' => 'Update description',
             'descriptionLong' => 'Update descriptionLong',
         ];
-        $requestData = json_encode($testData);
 
-        $client->setRawData($requestData, 'application/json; charset=UTF-8');
-        $response = $client->request('PUT');
+        $this->authenticatedApiRequest('PUT', '/api/articles/' . $id, [], $testData);
+        $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(null, $response->getHeader('Set-Cookie'));
-        static::assertEquals(400, $response->getStatus());
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertEquals(400, $response->getStatusCode());
 
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -424,11 +363,10 @@ class ArticleTest extends TestCase
     /**
      * @depends testPostArticlesShouldBeSuccessful
      */
-    public function testPutArticlesShouldBeSuccessful($id)
+    public function testPutArticlesShouldBeSuccessful(string $id): void
     {
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/' . $id);
-
         $testData = [
+            'name' => 'Update',
             'description' => 'Update description',
             'descriptionLong' => 'Update descriptionLong',
 
@@ -451,25 +389,22 @@ class ArticleTest extends TestCase
             // similar is set to empty array, therefore it should be cleared
             'similar' => [],
         ];
-        $requestData = json_encode($testData);
 
-        $client->setRawData($requestData, 'application/json; charset=UTF-8');
-        $response = $client->request('PUT');
+        $this->authenticatedApiRequest('PUT', '/api/articles/' . $id, [], $testData);
+        $response = $this->client->getResponse();
 
-        static::assertEquals(200, $response->getStatus());
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(200, $response->getStatusCode());
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
         static::assertNull(
-            $response->getHeader('Set-Cookie'),
+            $response->headers->get('Set-Cookie'),
             'There should be no set-cookie header set.'
         );
         static::assertNull(
-            $response->getHeader(
-                'location',
-                'There should be no location header set.'
-            )
+            $response->headers->get('location'),
+            'There should be no location header set.'
         );
 
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -477,11 +412,10 @@ class ArticleTest extends TestCase
 
         static::assertArrayHasKey('data', $result);
 
-        $response = $this->getHttpClient()
-                ->setUri($this->apiBaseUrl . '/articles/' . $id)
-                ->request('GET');
+        $this->authenticatedApiRequest('GET', '/api/articles/' . $id, []);
+        $response = $this->client->getResponse();
 
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         $article = $result['data'];
@@ -492,10 +426,10 @@ class ArticleTest extends TestCase
         static::assertEquals($testData['supplierId'], $article['supplier']['id']);
 
         // Categories should be updated
-        static::assertEquals(1, count($article['categories']));
+        static::assertCount(1, $article['categories']);
 
         // Related should be untouched
-        static::assertEquals(2, count($article['related']));
+        static::assertCount(2, $article['related']);
 
         // Similar should be removed
         static::assertEquals(0, count($article['similar']));
@@ -505,20 +439,17 @@ class ArticleTest extends TestCase
      * @depends testPostArticlesShouldBeSuccessful
      *
      * @param int $id
-     *
-     * @throws Zend_Http_Client_Exception
      */
-    public function testChangeVariantArticleMainVariantShouldBeSuccessful($id)
+    public function testChangeVariantArticleMainVariantShouldBeSuccessful(string $id): void
     {
-        $response = $this->getHttpClient()
-            ->setUri($this->apiBaseUrl . '/articles/' . $id)
-            ->request('GET');
+        $this->authenticatedApiRequest('GET', '/api/articles/' . $id, []);
+        $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(null, $response->getHeader('Set-Cookie'));
-        static::assertEquals(200, $response->getStatus());
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertEquals(200, $response->getStatusCode());
 
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         $variantNumbers = array_map(function ($item) {
@@ -528,8 +459,6 @@ class ArticleTest extends TestCase
         $oldMain = $result['data']['mainDetail']['number'];
 
         foreach ($variantNumbers as $variantNumber) {
-            $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/' . $id);
-
             $testData = [
                 'variants' => [
                     [
@@ -538,25 +467,25 @@ class ArticleTest extends TestCase
                     ],
                 ],
             ];
-            $requestData = json_encode($testData);
 
-            $client->setRawData($requestData, 'application/json; charset=UTF-8');
-            $response = $client->request('PUT');
-            static::assertEquals('application/json', $response->getHeader('Content-Type'));
-            static::assertEquals(null, $response->getHeader('Set-Cookie'));
-            static::assertEquals(200, $response->getStatus());
-            $result = $response->getBody();
+            $this->authenticatedApiRequest('PUT', '/api/articles/' . $id, [], $testData);
+            $response = $this->client->getResponse();
+
+            static::assertEquals('application/json', $response->headers->get('Content-Type'));
+            static::assertEquals(null, $response->headers->get('Set-Cookie'));
+            static::assertEquals(200, $response->getStatusCode());
+            $result = $response->getContent();
             $result = json_decode($result, true);
             static::assertArrayHasKey('success', $result);
             static::assertTrue($result['success']);
 
-            $response = $this->getHttpClient()
-                ->setUri($this->apiBaseUrl . '/articles/' . $id)
-                ->request('GET');
-            static::assertEquals('application/json', $response->getHeader('Content-Type'));
-            static::assertEquals(null, $response->getHeader('Set-Cookie'));
-            static::assertEquals(200, $response->getStatus());
-            $result = $response->getBody();
+            $this->authenticatedApiRequest('GET', '/api/articles/' . $id, []);
+            $response = $this->client->getResponse();
+
+            static::assertEquals('application/json', $response->headers->get('Content-Type'));
+            static::assertEquals(null, $response->headers->get('Set-Cookie'));
+            static::assertEquals(200, $response->getStatusCode());
+            $result = $response->getContent();
             $result = json_decode($result, true);
 
             static::assertEquals($variantNumber, $result['data']['mainDetail']['number']);
@@ -574,10 +503,8 @@ class ArticleTest extends TestCase
     /**
      * @depends testPostArticlesShouldBeSuccessful
      */
-    public function testReplaceArticleImagesWithUrlAndMediaId($articleId)
+    public function testReplaceArticleImagesWithUrlAndMediaId($articleId): void
     {
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/' . $articleId);
-
         $requestData = [
             '__options_images' => [
                 'replace' => 1,
@@ -594,14 +521,13 @@ class ArticleTest extends TestCase
                 ],
             ],
         ];
-        $requestData = json_encode($requestData);
 
-        $client->setRawData($requestData, 'application/json; charset=UTF-8');
-        $response = $client->request('PUT');
+        $this->authenticatedApiRequest('PUT', '/api/articles/' . $articleId, [], $requestData);
+        $response = $this->client->getResponse();
 
-        static::assertEquals(200, $response->getStatus());
+        static::assertEquals(200, $response->getStatusCode());
 
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -617,10 +543,8 @@ class ArticleTest extends TestCase
     /**
      * @depends testPostArticlesShouldBeSuccessful
      */
-    public function testReplaceArticleImagesWithInvalidPayload($articleId)
+    public function testReplaceArticleImagesWithInvalidPayload($articleId): void
     {
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/' . $articleId);
-
         $requestData = [
             '__options_images' => [
                 'replace' => 1,
@@ -632,14 +556,13 @@ class ArticleTest extends TestCase
                 ],
             ],
         ];
-        $requestData = json_encode($requestData);
 
-        $client->setRawData($requestData, 'application/json; charset=UTF-8');
-        $response = $client->request('PUT');
+        $this->authenticatedApiRequest('PUT', '/api/articles/' . $articleId, [], $requestData);
+        $response = $this->client->getResponse();
 
-        static::assertEquals(400, $response->getStatus());
+        static::assertEquals(400, $response->getStatusCode());
 
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -653,21 +576,18 @@ class ArticleTest extends TestCase
      *
      * @param int $id
      *
-     * @throws Zend_Http_Client_Exception
-     *
      * @return
      */
-    public function testDeleteArticlesShouldBeSuccessful($id)
+    public function testDeleteArticlesShouldBeSuccessful($id): int
     {
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/' . $id);
+        $this->authenticatedApiRequest('DELETE', '/api/articles/' . $id, []);
+        $response = $this->client->getResponse();
 
-        $response = $client->request('DELETE');
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertEquals(200, $response->getStatusCode());
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(null, $response->getHeader('Set-Cookie'));
-        static::assertEquals(200, $response->getStatus());
-
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -676,18 +596,18 @@ class ArticleTest extends TestCase
         return $id;
     }
 
-    public function testDeleteArticlesWithInvalidIdShouldReturnMessage()
+    public function testDeleteArticlesWithInvalidIdShouldReturnMessage(): void
     {
         $id = 99999999;
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/' . $id);
 
-        $response = $client->request('DELETE');
+        $this->authenticatedApiRequest('DELETE', '/api/articles/' . $id, []);
+        $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(null, $response->getHeader('Set-Cookie'));
-        static::assertEquals(404, $response->getStatus());
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertEquals(404, $response->getStatusCode());
 
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -696,24 +616,22 @@ class ArticleTest extends TestCase
         static::assertArrayHasKey('message', $result);
     }
 
-    public function testPutArticlesWithInvalidIdShouldReturnMessage()
+    public function testPutArticlesWithInvalidIdShouldReturnMessage(): void
     {
         $id = 99999999;
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/' . $id);
 
         $requestData = [
             'active' => true,
         ];
-        $requestData = json_encode($requestData);
 
-        $client->setRawData($requestData, 'application/json; charset=UTF-8');
-        $response = $client->request('PUT');
+        $this->authenticatedApiRequest('PUT', '/api/articles/' . $id, [], $requestData);
+        $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(null, $response->getHeader('Set-Cookie'));
-        static::assertEquals(404, $response->getStatus());
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertEquals(404, $response->getStatusCode());
 
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -722,28 +640,28 @@ class ArticleTest extends TestCase
         static::assertArrayHasKey('message', $result);
     }
 
-    public function testGetArticlesShouldBeSuccessful()
+    public function testGetArticlesShouldBeSuccessful(): void
     {
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles');
-        $result = $client->request('GET');
+        $this->authenticatedApiRequest('GET', '/api/articles/', []);
+        $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $result->getHeader('Content-Type'));
-        static::assertEquals(null, $result->getHeader('Set-Cookie'));
-        static::assertEquals(200, $result->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(null, $response->getHeader('Set-Cookie'));
+        static::assertEquals(200, $response->getStatusCode());
 
-        $result = $result->getBody();
-        $result = json_decode($result, true);
+        $response = $response->getBody();
+        $response = json_decode($response, true);
 
-        static::assertArrayHasKey('success', $result);
-        static::assertTrue($result['success']);
+        static::assertArrayHasKey('success', $response);
+        static::assertTrue($response['success']);
 
-        static::assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('data', $response);
 
-        static::assertArrayHasKey('total', $result);
-        static::assertIsInt($result['total']);
+        static::assertArrayHasKey('total', $response);
+        static::assertIsInt($response['total']);
     }
 
-    public function getSimpleArticleData()
+    public function getSimpleArticleData(): array
     {
         return [
               'name' => 'Simple test article',
@@ -825,10 +743,8 @@ class ArticleTest extends TestCase
           ];
     }
 
-    public function testBatchModeShouldBeSuccessful()
+    public function testBatchModeShouldBeSuccessful(): void
     {
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/');
-
         $data = [
             $this->getSimpleArticleData(),
             $this->getSimpleArticleData(),
@@ -839,16 +755,14 @@ class ArticleTest extends TestCase
             ],
         ];
 
-        $requestData = json_encode($data);
-        $client->setRawData($requestData, 'application/json; charset=UTF-8');
+        $this->authenticatedApiRequest('PUT', '/api/articles/', [], $data);
+        $response = $this->client->getResponse();
 
-        $response = $client->request('PUT');
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(null, $response->headers->get('Set-Cookie'));
+        static::assertEquals(200, $response->getStatusCode());
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(null, $response->getHeader('Set-Cookie'));
-        static::assertEquals(200, $response->getStatus());
-
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);

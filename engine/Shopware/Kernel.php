@@ -208,7 +208,11 @@ class Kernel extends SymfonyKernel
         // Overwrite superglobals with state of the SymfonyRequest
         $request->overrideGlobals();
 
-        return EnlightRequest::createFromGlobals();
+        $enlightRequest = EnlightRequest::createFromGlobals();
+        $enlightRequest->setContent($request->getContent());
+        $enlightRequest->files->replace($request->files->all());
+
+        return $enlightRequest;
     }
 
     /**

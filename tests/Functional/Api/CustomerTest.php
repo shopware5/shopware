@@ -22,74 +22,22 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Api;
+namespace Shopware\Tests\Functional\Api;
 
 use DateTime;
-use PHPUnit\Framework\TestCase;
 use Shopware\Models\Customer\Customer;
-use Zend_Http_Client;
-use Zend_Http_Client_Adapter_Curl;
-use Zend_Http_Client_Adapter_Exception;
 
-class CustomerTest extends TestCase
+class CustomerTest extends AbstractApiTestCase
 {
-    public $apiBaseUrl = '';
-
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp(): void
+    public function testRequestWithoutAuthenticationShouldReturnError(): void
     {
-        parent::setUp();
+        $this->client->request('GET', '/api/customers/');
+        $response = $this->client->getResponse();
 
-        $helper = Shopware();
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(401, $response->getStatusCode());
 
-        $hostname = $helper->Shop()->getHost();
-        if (empty($hostname)) {
-            static::markTestSkipped(
-                'Hostname is not available.'
-            );
-        }
-
-        $this->apiBaseUrl = 'http://' . $hostname . $helper->Shop()->getBasePath() . '/api';
-
-        Shopware()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', [sha1('demo')]);
-    }
-
-    /**
-     * @throws Zend_Http_Client_Adapter_Exception
-     *
-     * @return Zend_Http_Client
-     */
-    public function getHttpClient()
-    {
-        $username = 'demo';
-        $password = sha1('demo');
-
-        $adapter = new Zend_Http_Client_Adapter_Curl();
-        $adapter->setConfig([
-            'curloptions' => [
-                CURLOPT_HTTPAUTH => CURLAUTH_DIGEST,
-                CURLOPT_USERPWD => "$username:$password",
-            ],
-        ]);
-
-        $client = new Zend_Http_Client();
-        $client->setAdapter($adapter);
-
-        return $client;
-    }
-
-    public function testRequestWithoutAuthenticationShouldReturnError()
-    {
-        $client = new Zend_Http_Client($this->apiBaseUrl . '/customers/');
-        $response = $client->request('GET');
-
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(401, $response->getStatus());
-
-        $result = $response->getBody();
+        $result = $response->getContent();
 
         $result = json_decode($result, true);
 
@@ -99,17 +47,17 @@ class CustomerTest extends TestCase
         static::assertArrayHasKey('message', $result);
     }
 
-    public function testGetCustomersWithInvalidIdShouldReturnMessage()
+    public function testGetCustomersWithInvalidIdShouldReturnMessage(): void
     {
         $id = 99999999;
-        $response = $this->getHttpClient()
-                         ->setUri($this->apiBaseUrl . '/customers/' . $id)
-                         ->request('GET');
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(404, $response->getStatus());
+        $this->authenticatedApiRequest('GET', '/api/customers/' . $id);
+        $response = $this->client->getResponse();
 
-        $result = $response->getBody();
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(404, $response->getStatusCode());
+
+        $result = $response->getContent();
 
         $result = json_decode($result, true);
 
@@ -119,18 +67,16 @@ class CustomerTest extends TestCase
         static::assertArrayHasKey('message', $result);
     }
 
-    public function testPostCustomersShouldBeSuccessful()
+    public function testPostCustomersShouldBeSuccessful(): string
     {
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers/');
-
         $date = new DateTime();
         $date->modify('-10 days');
-        $firstlogin = $date->format(DateTime::ISO8601);
+        $firstlogin = $date->format(DateTime::ATOM);
 
         $date->modify('+2 day');
-        $lastlogin = $date->format(DateTime::ISO8601);
+        $lastlogin = $date->format(DateTime::ATOM);
 
-        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
+        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ATOM);
 
         $requestData = [
             'password' => 'fooobar',
@@ -175,22 +121,20 @@ class CustomerTest extends TestCase
             ],
         ];
 
-        $requestData = json_encode($requestData);
-        $client->setRawData($requestData, 'application/json; charset=UTF-8');
+        $this->authenticatedApiRequest('POST', '/api/customers/', [], $requestData);
+        $response = $this->client->getResponse();
 
-        $response = $client->request('POST');
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(201, $response->getStatusCode());
+        static::assertArrayHasKey('location', $response->headers->all());
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(201, $response->getStatus());
-        static::assertArrayHasKey('Location', $response->getHeaders());
-
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
 
-        $location = $response->getHeader('Location');
+        $location = $response->headers->get('location');
         $identifier = (int) array_pop(explode('/', $location));
 
         static::assertGreaterThan(0, $identifier);
@@ -203,16 +147,14 @@ class CustomerTest extends TestCase
      */
     public function testPostCustomersWithDebitShouldCreatePaymentData()
     {
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers/');
-
         $date = new DateTime();
         $date->modify('-10 days');
-        $firstlogin = $date->format(DateTime::ISO8601);
+        $firstlogin = $date->format(DateTime::ATOM);
 
         $date->modify('+2 day');
-        $lastlogin = $date->format(DateTime::ISO8601);
+        $lastlogin = $date->format(DateTime::ATOM);
 
-        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
+        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ATOM);
 
         $requestData = [
             'password' => 'fooobar',
@@ -256,27 +198,25 @@ class CustomerTest extends TestCase
             ],
         ];
 
-        $requestData = json_encode($requestData);
-        $client->setRawData($requestData, 'application/json; charset=UTF-8');
+        $this->authenticatedApiRequest('POST', '/api/customers/', [], $requestData);
+        $response = $this->client->getResponse();
 
-        $response = $client->request('POST');
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(201, $response->getStatusCode());
+        static::assertArrayHasKey('location', $response->headers->all());
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(201, $response->getStatus());
-        static::assertArrayHasKey('Location', $response->getHeaders());
-
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
 
-        $location = $response->getHeader('Location');
+        $location = $response->headers->get('location');
         $identifier = (int) array_pop(explode('/', $location));
 
         static::assertGreaterThan(0, $identifier);
 
-        $customer = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($identifier);
+        $customer = Shopware()->Models()->getRepository(Customer::class)->find($identifier);
         $paymentData = array_shift($customer->getPaymentData()->toArray());
 
         static::assertNotNull($paymentData);
@@ -284,8 +224,6 @@ class CustomerTest extends TestCase
         static::assertEquals('Fake Account', $paymentData->getAccountNumber());
         static::assertEquals('Fake Bank', $paymentData->getBankName());
         static::assertEquals('55555555', $paymentData->getBankCode());
-
-        $this->testDeleteCustomersShouldBeSuccessful($identifier);
     }
 
     /**
@@ -293,16 +231,14 @@ class CustomerTest extends TestCase
      */
     public function testPostCustomersWithDebitPaymentDataShouldCreateDebitData()
     {
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers/');
-
         $date = new DateTime();
         $date->modify('-10 days');
-        $firstlogin = $date->format(DateTime::ISO8601);
+        $firstlogin = $date->format(DateTime::ATOM);
 
         $date->modify('+2 day');
-        $lastlogin = $date->format(DateTime::ISO8601);
+        $lastlogin = $date->format(DateTime::ATOM);
 
-        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
+        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ATOM);
 
         $requestData = [
             'password' => 'fooobar',
@@ -349,27 +285,25 @@ class CustomerTest extends TestCase
             ],
         ];
 
-        $requestData = json_encode($requestData);
-        $client->setRawData($requestData, 'application/json; charset=UTF-8');
+        $this->authenticatedApiRequest('POST', '/api/customers/', [], $requestData);
+        $response = $this->client->getResponse();
 
-        $response = $client->request('POST');
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(201, $response->getStatusCode());
+        static::assertArrayHasKey('location', $response->headers->all());
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(201, $response->getStatus());
-        static::assertArrayHasKey('Location', $response->getHeaders());
-
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
 
-        $location = $response->getHeader('Location');
+        $location = $response->headers->get('Location');
         $identifier = (int) array_pop(explode('/', $location));
 
         static::assertGreaterThan(0, $identifier);
 
-        $customer = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($identifier);
+        $customer = Shopware()->Models()->getRepository(Customer::class)->find($identifier);
         $paymentData = array_shift($customer->getPaymentData()->toArray());
 
         static::assertNotNull($paymentData);
@@ -377,14 +311,10 @@ class CustomerTest extends TestCase
         static::assertEquals('Fake Account', $paymentData->getAccountNumber());
         static::assertEquals('Fake Bank', $paymentData->getBankName());
         static::assertEquals('55555555', $paymentData->getBankCode());
-
-        $this->testDeleteCustomersShouldBeSuccessful($identifier);
     }
 
     public function testPostCustomersWithInvalidDataShouldReturnError()
     {
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers/');
-
         $requestData = [
             'active' => true,
             'email' => 'invalid',
@@ -393,15 +323,14 @@ class CustomerTest extends TestCase
                 'lastName' => 'Mustermann',
             ],
         ];
-        $requestData = json_encode($requestData);
 
-        $client->setRawData($requestData, 'application/json; charset=UTF-8');
-        $response = $client->request('POST');
+        $this->authenticatedApiRequest('POST', '/api/customers/', [], $requestData);
+        $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(400, $response->getStatus());
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(400, $response->getStatusCode());
 
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -414,14 +343,13 @@ class CustomerTest extends TestCase
      */
     public function testGetCustomersWithIdShouldBeSuccessful($id)
     {
-        $response = $this->getHttpClient()
-                         ->setUri($this->apiBaseUrl . '/customers/' . $id)
-                         ->request('GET');
+        $this->authenticatedApiRequest('GET', '/api/customers/' . $id, []);
+        $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(200, $response->getStatus());
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(200, $response->getStatusCode());
 
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -447,21 +375,18 @@ class CustomerTest extends TestCase
 
     public function testPutBatchCustomersShouldFail()
     {
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers/');
-
         $requestData = [
             'active' => true,
             'email' => 'test@foobar.com',
         ];
-        $requestData = json_encode($requestData);
 
-        $client->setRawData($requestData, 'application/json; charset=UTF-8');
-        $response = $client->request('PUT');
+        $this->authenticatedApiRequest('PUT', '/api/customers/', [], $requestData);
+        $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(405, $response->getStatus());
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(405, $response->getStatusCode());
 
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -472,23 +397,20 @@ class CustomerTest extends TestCase
     /**
      * @depends testPostCustomersShouldBeSuccessful
      */
-    public function testPutCustomersWithInvalidDataShouldReturnError($id)
+    public function testPutCustomersWithInvalidDataShouldReturnError($id): void
     {
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers/' . $id);
-
         $requestData = [
             'active' => true,
             'email' => 'invalid',
         ];
-        $requestData = json_encode($requestData);
 
-        $client->setRawData($requestData, 'application/json; charset=UTF-8');
-        $response = $client->request('PUT');
+        $this->authenticatedApiRequest('PUT', '/api/customers/' . $id, [], $requestData);
+        $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(400, $response->getStatus());
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(400, $response->getStatusCode());
 
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -502,29 +424,24 @@ class CustomerTest extends TestCase
      */
     public function testPutCustomersShouldBeSuccessful($id)
     {
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers/' . $id);
-
         $customer = Shopware()->Models()->getRepository(Customer::class)->find($id);
 
         $requestData = [
             'active' => true,
             'email' => $customer->getEmail(),
         ];
-        $requestData = json_encode($requestData);
 
-        $client->setRawData($requestData, 'application/json; charset=UTF-8');
-        $response = $client->request('PUT');
+        $this->authenticatedApiRequest('PUT', '/api/customers/' . $id, [], $requestData);
+        $response = $this->client->getResponse();
 
-        static::assertEquals(200, $response->getStatus());
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(200, $response->getStatusCode());
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
         static::assertNull(
-            $response->getHeader(
-                'location',
-                'There should be no location header set.'
-            )
+            $response->headers->get('location'),
+            'There should be no location header set.'
         );
 
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -538,14 +455,13 @@ class CustomerTest extends TestCase
      */
     public function testDeleteCustomersShouldBeSuccessful($id)
     {
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers/' . $id);
+        $this->authenticatedApiRequest('DELETE', '/api/customers/' . $id);
+        $response = $this->client->getResponse();
 
-        $response = $client->request('DELETE');
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(200, $response->getStatusCode());
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(200, $response->getStatus());
-
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -557,14 +473,14 @@ class CustomerTest extends TestCase
     public function testDeleteCustomersWithInvalidIdShouldReturnMessage()
     {
         $id = 99999999;
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers/' . $id);
 
-        $response = $client->request('DELETE');
+        $this->authenticatedApiRequest('DELETE', '/api/customers/' . $id);
+        $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(404, $response->getStatus());
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(404, $response->getStatusCode());
 
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -576,21 +492,19 @@ class CustomerTest extends TestCase
     public function testPutCustomersWithInvalidIdShouldReturnMessage()
     {
         $id = 99999999;
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers/' . $id);
 
         $requestData = [
             'active' => true,
             'email' => 'test@foobar.com',
         ];
-        $requestData = json_encode($requestData);
 
-        $client->setRawData($requestData, 'application/json; charset=UTF-8');
-        $response = $client->request('PUT');
+        $this->authenticatedApiRequest('PUT', '/api/customers/' . $id);
+        $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(404, $response->getStatus());
+        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertEquals(404, $response->getStatusCode());
 
-        $result = $response->getBody();
+        $result = $response->getContent();
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -599,26 +513,26 @@ class CustomerTest extends TestCase
         static::assertArrayHasKey('message', $result);
     }
 
-    public function testGetCustomersShouldBeSuccessful()
+    public function testGetCustomersShouldBeSuccessful(): void
     {
-        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers');
-        $result = $client->request('GET');
+        $this->authenticatedApiRequest('GET', '/api/customers/');
+        $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $result->getHeader('Content-Type'));
-        static::assertEquals(200, $result->getStatus());
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(200, $response->getStatusCode());
 
-        $result = $result->getBody();
-        $result = json_decode($result, true);
+        $response = $response->getBody();
+        $response = json_decode($response, true);
 
-        static::assertArrayHasKey('success', $result);
-        static::assertTrue($result['success']);
+        static::assertArrayHasKey('success', $response);
+        static::assertTrue($response['success']);
 
-        static::assertArrayHasKey('data', $result);
+        static::assertArrayHasKey('data', $response);
 
-        static::assertArrayHasKey('total', $result);
-        static::assertIsInt($result['total']);
+        static::assertArrayHasKey('total', $response);
+        static::assertIsInt($response['total']);
 
-        $data = $result['data'];
+        $data = $response['data'];
         static::assertIsArray($data);
     }
 }
