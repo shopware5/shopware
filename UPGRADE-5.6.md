@@ -20,6 +20,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added jQuery event `plugin/swCookiePermission/onAcceptButtonClick` and `plugin/swCookiePermission/onDeclineButtonClick`
 * Added option `__options_details` to order api update to toggle order position replace mode 
 * Added setter and is methods for json renderer `formatDateTime` variable.
+* Added new smarty blocks `frontend_includes_emotion`, `frontend_includes_emotion_inner`, `frontend_includes_emotion_template` and `frontend_includes_emotion_template_inner` to `/frontend/_includes/emotion.tpl`
 
 ### Changes
 
