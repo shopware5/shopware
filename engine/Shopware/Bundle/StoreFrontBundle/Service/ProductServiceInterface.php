@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 
-interface ProductServiceInterface
+interface ProductServiceInterface extends ListProductServiceInterface
 {
     /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\ProductServiceInterface::get()

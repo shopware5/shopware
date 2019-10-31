@@ -38,6 +38,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `unitize` mixin to only output rem values
 * Changed `Shopware\Models\Customer\Customer`, set correct return type for `getregisterOptInId`
 * Changed the `TemplateMail_CreateMail_MailContext` filter to work correctly.
+* Changed `ProductServiceInterface` to extend from `ListProductServiceInterface`
 
 ### Removals
 
