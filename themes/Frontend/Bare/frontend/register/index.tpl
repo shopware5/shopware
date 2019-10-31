@@ -215,7 +215,7 @@
                     {block name='frontend_register_index_form_submit'}
                         {* Submit button *}
                         <div class="register--action">
-                            <button type="submit" class="register--submit btn is--primary is--large is--icon-right" name="Submit">{s name="RegisterIndexNewActionSubmit"}{/s} <i class="icon--arrow-right"></i></button>
+                            <button type="submit" class="register--submit btn is--primary is--large is--icon-right" name="Submit" data-preloader-button="true">{s name="RegisterIndexNewActionSubmit"}{/s} <i class="icon--arrow-right"></i></button>
                         </div>
                     {/block}
                 </form>
