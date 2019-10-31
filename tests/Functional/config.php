@@ -30,6 +30,17 @@ return array_replace_recursive($this->loadConfig($this->AppPath() . 'Configs/Def
     ],
     'errorhandler' => [
         'throwOnRecoverableError' => true,
+        'ignoredExceptionClasses' => [
+            // Disable logging for defined exceptions by class, eg. to disable any logging for CSRF exceptions add this:
+            // \Shopware\Components\CSRFTokenValidationException::class
+            \Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException::class,
+            \Shopware\Components\Api\Exception\CustomValidationException::class,
+            \Shopware\Components\Api\Exception\NotFoundException::class,
+            \Shopware\Components\Api\Exception\OrmException::class,
+            \Shopware\Components\Api\Exception\ParameterMissingException::class,
+            \Shopware\Components\Api\Exception\PrivilegeException::class,
+            \Shopware\Components\Api\Exception\ValidationException::class,
+        ],
     ],
     'session' => [
         'unitTestEnabled' => true,
