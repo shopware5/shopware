@@ -24,6 +24,9 @@
 
 namespace Shopware\Tests\Functional\Api;
 
+/**
+ * @covers \Shopware_Controllers_Api_Articles
+ */
 class ArticleTest extends AbstractApiTestCase
 {
     public function testRequestWithoutAuthenticationShouldReturnError(): void
@@ -89,13 +92,13 @@ class ArticleTest extends AbstractApiTestCase
                 [
                     'value' => 'testWert',
                     'option' => [
-                        'name' => 'neueOption' . uniqid(rand()),
+                        'name' => 'neueOption' . uniqid(mt_rand(), true),
                     ],
                 ],
             ],
 
             'mainDetail' => [
-                'number' => 'swTEST' . uniqid(rand()),
+                'number' => 'swTEST' . uniqid(mt_rand(), true),
                 'inStock' => 15,
                 'unitId' => 1,
 
@@ -150,7 +153,7 @@ class ArticleTest extends AbstractApiTestCase
 
             'variants' => [
                 [
-                    'number' => 'swTEST.variant.' . uniqid(rand()),
+                    'number' => 'swTEST.variant.' . uniqid(mt_rand(), true),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => [
@@ -193,7 +196,7 @@ class ArticleTest extends AbstractApiTestCase
                     ],
                 ],
                 [
-                    'number' => 'swTEST.variant.' . uniqid(rand()),
+                    'number' => 'swTEST.variant.' . uniqid(mt_rand(), true),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => [
@@ -276,9 +279,9 @@ class ArticleTest extends AbstractApiTestCase
         static::assertTrue($result['success']);
 
         $location = $response->headers->get('location');
-        $identifier = (int) array_pop(explode('/', $location));
+        $identifier = array_pop(explode('/', $location));
 
-        static::assertGreaterThan(0, $identifier);
+        static::assertGreaterThan(0, (int) $identifier);
 
         return $identifier;
     }
@@ -452,7 +455,7 @@ class ArticleTest extends AbstractApiTestCase
         $result = $response->getContent();
         $result = json_decode($result, true);
 
-        $variantNumbers = array_map(function ($item) {
+        $variantNumbers = array_map(static function ($item) {
             return $item['number'];
         }, $result['data']['details']);
 
@@ -491,7 +494,7 @@ class ArticleTest extends AbstractApiTestCase
             static::assertEquals($variantNumber, $result['data']['mainDetail']['number']);
 
             foreach ($result['data']['details'] as $variantData) {
-                if ($variantData['number'] == $oldMain) {
+                if ($variantData['number'] === $oldMain) {
                     static::assertEquals(2, $variantData['kind']);
                 }
             }
@@ -684,13 +687,13 @@ class ArticleTest extends AbstractApiTestCase
                   [
                       'value' => 'testWert',
                       'option' => [
-                          'name' => 'neueOption' . uniqid(rand()),
+                          'name' => 'neueOption' . uniqid(mt_rand(), true),
                       ],
                   ],
               ],
 
               'mainDetail' => [
-                  'number' => 'swTEST' . uniqid(rand()),
+                  'number' => 'swTEST' . uniqid(mt_rand(), true),
                   'inStock' => 15,
                   'unitId' => 1,
 
