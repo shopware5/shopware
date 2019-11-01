@@ -43,7 +43,8 @@ SQL;
 
         if ($modus === self::MODUS_INSTALL) {
             $this->addSql($dropEnglish);
-            $this->addSql($renameGerman);
         }
+
+        $this->addSql($renameGerman);
     }
 }
