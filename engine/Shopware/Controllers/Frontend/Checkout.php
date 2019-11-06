@@ -298,6 +298,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $this->View()->assign('invalidBillingAddress', !$this->isValidAddress($activeBillingAddressId, $activeShippingAddressId === $activeBillingAddressId));
         $this->View()->assign('invalidShippingAddress', !$this->isValidAddress($activeShippingAddressId, true));
+        $this->View()->assign('sBasket', $this->getBasket());
     }
 
     /**
@@ -904,7 +905,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $order = Shopware()->Modules()->Order();
 
-        $orgBasketData = $this->View()->sBasket;
+        $orgBasketData = $this->View()->getAssign('sBasket');
         $this->View()->assign('sBasket', $this->getBasket(false));
 
         $order->sUserData = $this->View()->sUserData;
