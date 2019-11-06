@@ -11,18 +11,20 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added customer attribute risk rules to risk management
 * Added interface `ArrayAccess` to `Shopware\Bundle\StoreFrontBundle\Struct\Attribute`
 * Added `attribute` to struct data after being converted by the `Shopware\Components\Compatibility\LegacyStructConverter`
-* Added multiple smarty blocks to `themes/Frontend/Bare/frontend/plugins/index/delivery_informations.tpl`
 * Added method `clearBody` to `Enlight_Components_Mail` to clear the plain and html body
 * Added interfaces for all services in AttributeBundle
 * Added `AllowInvalidArrayType` to Doctrine to fix deserialization error on mail sending
 * Added missing template for `\Shopware\Bundle\ContentTypeBundle\Field\ComboboxField`
-* Added new smarty block `frontend_detail_index_data_pricespecification` to `frontend/detail/content/buy_container.tpl`
 * Added jQuery event `plugin/swCookiePermission/onAcceptButtonClick` and `plugin/swCookiePermission/onDeclineButtonClick`
 * Added option `__options_details` to order api update to toggle order position replace mode 
 * Added setter and is methods for json renderer `formatDateTime` variable.
-* Added new smarty blocks `frontend_includes_emotion`, `frontend_includes_emotion_inner`, `frontend_includes_emotion_template` and `frontend_includes_emotion_template_inner` to `/frontend/_includes/emotion.tpl`
+* Added multiple Smarty blocks to `frontend/plugins/index/delivery_informations.tpl`
+* Added new Smarty block `frontend_detail_index_data_pricespecification` to `frontend/detail/content/buy_container.tpl`
+* Added new Smarty blocks `frontend_includes_emotion`, `frontend_includes_emotion_inner`, `frontend_includes_emotion_template` and `frontend_includes_emotion_template_inner` to `frontend/_includes/emotion.tpl`
+* Added new Smarty blocks `frontend_index_left_categories_wrapper` and `frontend_index_left_subcategory_config` to `frontend/index/sidebar.tpl`
 * Added `Shopware\Bundle\CookieBundle`, which takes care of the new cookie consent manager. If you're using cookies in your plugin, make sure
 to read [this documentation](https://developers.shopware.com/developers-guide/cookie-consent-manager/)!
+
 
 ### Changes
 
@@ -33,7 +35,7 @@ to read [this documentation](https://developers.shopware.com/developers-guide/co
 * Changed `StateManager.getScrollBarSize` to lazily get the size of the scrollbar
 * Changed missing german translation in `snippets/backend/article_list/main.ini`
 * Changed the `\Shopware\Models\Shop\Repository::getBaseListQueryBuilder`, `\Shopware\Models\Shop\Repository::getBaseListQuery` and `\Shopware\Models\Shop\Repository::getMainListQueryBuilder` methods. Added a boolean `$orderByShopPositionAsDefault` that can be set to true to filter by shop position instead of shop name
-* Changed the smarty block `frontend_detail_data_delivery`, added availability meta tags for the pre selected configurator products for configurator types 'Selection' and 'Image' 
+* Changed the Smarty block `frontend_detail_data_delivery`, added availability meta tags for the pre selected configurator products for configurator types 'Selection' and 'Image' 
 * Changed the path value of following cookies, so they correctly consider the shop's base path
   * `session-<shopId>`
   * `partner`
