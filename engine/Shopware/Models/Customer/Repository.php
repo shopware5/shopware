@@ -186,13 +186,11 @@ class Repository extends ModelRepository
             $builder->where('orders.customerId = :customerId');
             $builder->andWhere(
                 '(
-                    orders.number LIKE ?1 
-                    OR orders.invoiceAmount LIKE ?3 
-                    OR orders.orderTime LIKE ?2 
-                    OR payment.description LIKE ?1 
-                    OR dispatch.name LIKE ?1 
-                    OR orderStatus.description LIKE ?1
-                    OR paymentStatus.description LIKE ?1
+                    orders.number LIKE ?1
+                    OR orders.invoiceAmount LIKE ?3
+                    OR orders.orderTime LIKE ?2
+                    OR payment.description LIKE ?1
+                    OR dispatch.name LIKE ?1
                 )'
             )
             ->setParameter(1, $filter . '%')
