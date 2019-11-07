@@ -37,6 +37,7 @@ use Shopware\Bundle\ContentTypeBundle\DependencyInjection\RegisterTypeRepositori
 use Shopware\Bundle\ControllerBundle\ControllerBundle;
 use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\ControllerCompilerPass;
 use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\RegisterControllerCompilerPass;
+use Shopware\Bundle\CookieBundle\CookieBundle;
 use Shopware\Bundle\CustomerSearchBundleDBAL\CustomerSearchBundleDBALBundle;
 use Shopware\Bundle\EmotionBundle\EmotionBundle;
 use Shopware\Bundle\EsBackendBundle\EsBackendBundle;
@@ -450,6 +451,7 @@ class Kernel extends SymfonyKernel
             new AccountBundle(),
             new AttributeBundle(),
             new BenchmarkBundle(),
+            new CookieBundle(),
             new ContentTypeBundle(),
             new ControllerBundle(),
             new CustomerSearchBundleDBALBundle(),

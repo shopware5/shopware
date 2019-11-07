@@ -40,6 +40,14 @@
             declineButtonSelector: '.cookie-permission--decline-button',
 
             /**
+             * Selector of the cookie consent manager.
+             *
+             * @property cookieConsentManagerSelector
+             * @type {string}
+             */
+            cookieConsentManagerSelector: '#cookie-consent',
+
+            /**
              * Selector of the close button to select the button and register events on it.
              *
              * @property declineButtonSelector
@@ -54,6 +62,24 @@
              * @type {string}
              */
             privacyLinkSelector: '.cookie-permission--privacy-link',
+
+            /**
+             * Selector of the hidden input element that contains a cookie group's name.
+             * Will be used to check if the cookie preferences are up to date by checking against a hash.
+             *
+             * @property cookieGroupNameSelector
+             * @type {String}
+             */
+            cookieGroupNameSelector: '.cookie-consent--group-name',
+
+            /**
+             * Selector of the hidden input element which contains the name of a cookie.
+             * Will be used to check if the cookie preferences are up to date by checking against a hash.
+             *
+             * @property cookieNameSelector
+             * @type {String}
+             */
+            cookieNameSelector: '.cookie-consent--cookie-name',
 
             /**
              * The current shopId for create the storageKey
@@ -204,12 +230,50 @@
          * @param {function} callback
          */
         displayCookiePermission: function(callback) {
-            if ((window.cookieRemoval === 2 && document.cookie.indexOf('allowCookie') !== -1) || (window.cookieRemoval === 1 && document.cookie.indexOf('cookieDeclined') !== -1)) {
+            if (window.cookieRemoval === 1) {
+                if ($.getCookie('cookieDeclined')) {
+                    callback(false);
+                    return;
+                }
+
+                if ($.getCookie('cookiePreferences') && !this.hasPreferencesHashChanged()) {
+                    callback(false);
+                    return;
+                }
+            }
+
+            if ((window.cookieRemoval === 2 && document.cookie.indexOf('allowCookie') !== -1)) {
                 callback(false);
                 return;
             }
 
             callback(!this.storage.getItem(this.storageKey));
+        },
+
+        /**
+         * Checks if the hash for the preferences has changed. This happened e.g. when a new cookie
+         * was registered by a plugin.
+         *
+         * @returns { boolean }
+         */
+        hasPreferencesHashChanged: function () {
+            var preferences = JSON.parse($.getCookie('cookiePreferences')),
+                currentHash = preferences.hash,
+                uniqueNames = [],
+                newHash;
+
+            $(this.opts.cookieGroupNameSelector).each(function (key, group) {
+                uniqueNames.push($(group).val());
+            });
+
+            $(this.opts.cookieNameSelector).each(function (key, cookie) {
+                uniqueNames.push($(cookie).val());
+            });
+
+            uniqueNames.sort();
+            newHash = window.btoa(JSON.stringify(uniqueNames));
+
+            return newHash !== currentHash;
         },
 
         /**
@@ -247,11 +311,17 @@
             var d = new Date();
             d.setTime(d.getTime() + (180 * 24 * 60 * 60 * 1000));
 
-            document.cookie = 'allowCookie=1; path=/;expires=' + d.toGMTString() + ';';
+            document.cookie = 'allowCookie=1; path=' + this.getBasePath() + ';expires=' + d.toGMTString() + ';';
 
             this.hideElement();
+            this.applyActiveToPreferences();
             
             $.publish('plugin/swCookiePermission/onAcceptButtonClick', [this, event]);
+        },
+
+        applyActiveToPreferences: function () {
+            var cookieConsentPlugin = $(this.opts.cookieConsentManagerSelector).data('plugin_swCookieConsentManager');
+            cookieConsentPlugin.buildCookiePreferences(true);
         },
 
         /**
@@ -263,7 +333,7 @@
         onDeclineButtonClick: function(event) {
             event.preventDefault();
 
-            document.cookie = 'cookieDeclined=1; path=/;';
+            document.cookie = 'cookieDeclined=1; path=' + this.getBasePath() + ';';
 
             this.hideElement();
             
@@ -316,6 +386,10 @@
             this.$el.addClass(this.opts.isHiddenClass);
             $body.css('padding-bottom', 0);
             $.modal.close();
+        },
+
+        getBasePath: function () {
+            return window.csrfConfig.basePath || '/';
         }
     });
 }(jQuery, window));
