@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Components;
 
+use DateTime;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\CacheSubscriber;
 use Shopware\Models\Config\Form;
@@ -36,10 +37,30 @@ class CacheSubscriberTest extends TestCase
 {
     use DatabaseTransactionBehaviour;
 
-    private const PLUGIN_ID = 10;
+    private $pluginId = 0;
 
     protected function setUp(): void
     {
+        $connection = Shopware()->Container()->get('dbal_connection');
+
+        // setup plugin
+        $connection->insert('s_core_plugins', [
+            'namespace' => 'Core',
+            'name' => 'CacheSubscriberTest',
+            'label' => 'This is a config reader test plugin',
+            'source' => 'php unit',
+            'active' => 0,
+            'added' => new DateTime(),
+            'version' => '1.0.0',
+            'capability_update' => 0,
+            'capability_install' => 0,
+            'capability_enable' => 1,
+            'capability_secure_uninstall' => 1,
+        ], [
+            'added' => 'datetime',
+        ]);
+        $this->pluginId = (int) $connection->lastInsertId();
+
         /** @var CacheSubscriber $cacheSubscriber */
         $cacheSubscriber = Shopware()->Container()->get(CacheSubscriber::class);
 
@@ -51,9 +72,7 @@ class CacheSubscriberTest extends TestCase
         $this->createConfig('testConfigOnChange', 'test');
         $this->resetTags();
 
-        $plugin = new Plugin();
-        Utils::hijackProperty($plugin, 'id', self::PLUGIN_ID);
-
+        $plugin = Shopware()->Models()->getRepository(Plugin::class)->find($this->pluginId);
         $shop = Shopware()->Models()->getRepository(Shop::class)->getDefault();
         Shopware()->Container()->get('shopware.plugin.config_writer')->saveConfigElement($plugin, 'testConfigOnChange', 'foo', $shop);
 
@@ -65,8 +84,7 @@ class CacheSubscriberTest extends TestCase
         $this->createConfig('testConfigOnChange', 'test');
         $this->resetTags();
 
-        $plugin = new Plugin();
-        Utils::hijackProperty($plugin, 'id', self::PLUGIN_ID);
+        $plugin = Shopware()->Models()->getRepository(Plugin::class)->find($this->pluginId);
 
         $shop = Shopware()->Models()->getRepository(Shop::class)->getDefault();
         Shopware()->Container()->get('shopware.plugin.config_writer')->saveConfigElement($plugin, 'testConfigOnChange', 'foo', $shop);
@@ -80,7 +98,7 @@ class CacheSubscriberTest extends TestCase
     protected function createConfig(string $elementName, string $value): void
     {
         $form = new Form();
-        $form->setPluginId(self::PLUGIN_ID);
+        $form->setPluginId($this->pluginId);
         $form->setName(__CLASS__ . __FUNCTION__);
         $form->setLabel(__CLASS__ . __FUNCTION__);
         $form->setDescription('');
