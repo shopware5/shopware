@@ -47,8 +47,12 @@ class CachedReader implements ReaderInterface
     {
         $cacheKey = $this->buildCacheKey($pluginName, $shopId);
 
-        if ($this->cache->test($cacheKey)) {
-            return $this->cache->load($cacheKey, true);
+        if ($this->cache->test($cacheKey) !== false) {
+            $cacheResult = $this->cache->load($cacheKey, true);
+
+            if (is_array($cacheResult)) {
+                return $cacheResult;
+            }
         }
 
         $readValues = $this->layer->readValues($pluginName, $shopId);
