@@ -46,9 +46,15 @@ class CookieStruct implements \JsonSerializable
      */
     public $group;
 
-    public function __construct(string $name, string $label, string $groupName = CookieGroupStruct::OTHERS)
+    /**
+     * @var string
+     */
+    private $matchingPattern;
+
+    public function __construct(string $name, string $matchingPattern, string $label, string $groupName = CookieGroupStruct::OTHERS)
     {
         $this->name = $name;
+        $this->matchingPattern = $matchingPattern;
         $this->label = $label;
         $this->groupName = $groupName;
     }
@@ -61,6 +67,16 @@ class CookieStruct implements \JsonSerializable
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getMatchingPattern(): string
+    {
+        return $this->matchingPattern;
+    }
+
+    public function setMatchingPattern(string $matchingPattern): void
+    {
+        $this->matchingPattern = $matchingPattern;
     }
 
     public function getLabel(): string

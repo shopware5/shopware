@@ -27,6 +27,7 @@ namespace Shopware\Bundle\CookieBundle;
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Bundle\CookieBundle\Exceptions\NoCookieGroupByNameKnownException;
 use Shopware\Bundle\CookieBundle\Structs\CookieGroupStruct;
+use Shopware\Bundle\CookieBundle\Structs\CookieStruct;
 
 class CookieGroupCollection extends ArrayCollection implements \JsonSerializable
 {
@@ -39,6 +40,20 @@ class CookieGroupCollection extends ArrayCollection implements \JsonSerializable
         }
 
         return true;
+    }
+
+    public function matchCookieByName(string $cookieName): ?CookieStruct
+    {
+        /** @var CookieGroupStruct $cookieGroup */
+        foreach ($this as $cookieGroup) {
+            if (!$foundCookie = $cookieGroup->getCookies()->getCookieByName($cookieName)) {
+                continue;
+            }
+
+            return $foundCookie;
+        }
+
+        return null;
     }
 
     public function getGroupByName(string $groupName): CookieGroupStruct
