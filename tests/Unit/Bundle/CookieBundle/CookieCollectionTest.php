@@ -33,7 +33,7 @@ class CookieCollectionTest extends TestCase
     public function testIsValidReturnsTrue(): void
     {
         $cookieCollection = new CookieCollection();
-        $cookieCollection->add(new CookieStruct('foo', 'bar'));
+        $cookieCollection->add(new CookieStruct('foo', '/^foo$/', 'bar'));
 
         static::assertTrue($cookieCollection->isValid());
     }
@@ -53,8 +53,8 @@ class CookieCollectionTest extends TestCase
         $name2 = 'baz';
 
         $cookieCollection = new CookieCollection();
-        $cookieCollection->add(new CookieStruct($name, 'bar'));
-        $cookieCollection->add(new CookieStruct($name2, 'bar'));
+        $cookieCollection->add(new CookieStruct($name, '/^' . $name . '$/', 'bar'));
+        $cookieCollection->add(new CookieStruct($name2, '/^' . $name2 . '$/', 'bar'));
 
         static::assertTrue($cookieCollection->hasCookieWithName($name));
         static::assertTrue($cookieCollection->hasCookieWithName($name2));
@@ -63,8 +63,24 @@ class CookieCollectionTest extends TestCase
     public function testHasCookieWithNameReturnsFalse(): void
     {
         $cookieCollection = new CookieCollection();
-        $cookieCollection->add(new CookieStruct('baz', 'bar'));
+        $cookieCollection->add(new CookieStruct('baz', '/^baz$/', 'bar'));
 
         static::assertFalse($cookieCollection->hasCookieWithName('foo'));
+    }
+
+    public function testGetCookieByNameReturnsCookie(): void
+    {
+        $cookieCollection = new CookieCollection();
+        $cookieCollection->add(new CookieStruct('baz', '/^baz$/', 'bar'));
+
+        static::assertSame('bar', $cookieCollection->getCookieByName('baz')->getLabel());
+    }
+
+    public function testGetCookieByNameReturnsNull(): void
+    {
+        $cookieCollection = new CookieCollection();
+        $cookieCollection->add(new CookieStruct('baz', '/^baz$/', 'bar'));
+
+        static::assertNull($cookieCollection->getCookieByName('baz2'));
     }
 }

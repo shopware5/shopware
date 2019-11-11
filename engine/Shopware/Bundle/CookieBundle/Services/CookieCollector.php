@@ -116,18 +116,18 @@ class CookieCollector implements CookieCollectorInterface
     {
         $snippetNamespace = $this->snippetManager->getNamespace('frontend/cookie_consent/cookies');
 
-        $cookieCollection->add(new CookieStruct('session-', $snippetNamespace->get('session'), CookieGroupStruct::TECHNICAL));
-        $cookieCollection->add(new CookieStruct('__csrf_token-', $snippetNamespace->get('csrf'), CookieGroupStruct::TECHNICAL));
-        $cookieCollection->add(new CookieStruct('shop-', $snippetNamespace->get('shop'), CookieGroupStruct::TECHNICAL));
-        $cookieCollection->add(new CookieStruct(CookieHandler::PREFERENCES_COOKIE_NAME, $snippetNamespace->get('preferences'), CookieGroupStruct::TECHNICAL));
-        $cookieCollection->add(new CookieStruct('slt', $snippetNamespace->get('slt'), CookieGroupStruct::COMFORT));
-        $cookieCollection->add(new CookieStruct('allowCookie', $snippetNamespace->get('allow'), CookieGroupStruct::TECHNICAL));
-        $cookieCollection->add(new CookieStruct('cookieDeclined', $snippetNamespace->get('decline'), CookieGroupStruct::TECHNICAL));
-        $cookieCollection->add(new CookieStruct('x-ua-device', $snippetNamespace->get('device'), CookieGroupStruct::STATISTICS));
-        $cookieCollection->add(new CookieStruct('sUniqueID', $snippetNamespace->get('note'), CookieGroupStruct::COMFORT));
-        $cookieCollection->add(new CookieStruct('partner', $snippetNamespace->get('partner'), CookieGroupStruct::STATISTICS));
-        $cookieCollection->add(new CookieStruct('currency', $snippetNamespace->get('currency'), CookieGroupStruct::TECHNICAL));
-        $cookieCollection->add(new CookieStruct('x-cache-context-hash', $snippetNamespace->get('context_hash'), CookieGroupStruct::TECHNICAL));
-        $cookieCollection->add(new CookieStruct('nocache', $snippetNamespace->get('no_cache'), CookieGroupStruct::TECHNICAL));
+        $cookieCollection->add(new CookieStruct('session', '/^session\-[0-9]+$/', $snippetNamespace->get('session'), CookieGroupStruct::TECHNICAL));
+        $cookieCollection->add(new CookieStruct('csrf_token', '/^__csrf_token\-[0-9]+$/', $snippetNamespace->get('csrf'), CookieGroupStruct::TECHNICAL));
+        $cookieCollection->add(new CookieStruct('shop', '/^shop\-[0-9]+$/', $snippetNamespace->get('shop'), CookieGroupStruct::TECHNICAL));
+        $cookieCollection->add(new CookieStruct(CookieHandler::PREFERENCES_COOKIE_NAME, '/^cookiePreferences$/', $snippetNamespace->get('preferences'), CookieGroupStruct::TECHNICAL));
+        $cookieCollection->add(new CookieStruct('slt', '/^slt$/', $snippetNamespace->get('slt'), CookieGroupStruct::COMFORT));
+        $cookieCollection->add(new CookieStruct('allowCookie', '/^allowCookie$/', $snippetNamespace->get('allow'), CookieGroupStruct::TECHNICAL));
+        $cookieCollection->add(new CookieStruct('cookieDeclined', '/^cookieDeclined$/', $snippetNamespace->get('decline'), CookieGroupStruct::TECHNICAL));
+        $cookieCollection->add(new CookieStruct('x-ua-device', '/^x\-ua\-device$/', $snippetNamespace->get('device'), CookieGroupStruct::STATISTICS));
+        $cookieCollection->add(new CookieStruct('sUniqueID', '/^sUniqueID$/', $snippetNamespace->get('note'), CookieGroupStruct::COMFORT));
+        $cookieCollection->add(new CookieStruct('partner', '/^partner$/', $snippetNamespace->get('partner'), CookieGroupStruct::STATISTICS));
+        $cookieCollection->add(new CookieStruct('currency', '/^currency$/', $snippetNamespace->get('currency'), CookieGroupStruct::TECHNICAL));
+        $cookieCollection->add(new CookieStruct('x-cache-context-hash', '/^x\-cache\-context\-hash$/', $snippetNamespace->get('context_hash'), CookieGroupStruct::TECHNICAL));
+        $cookieCollection->add(new CookieStruct('nocache', '/^nocache$/', $snippetNamespace->get('no_cache'), CookieGroupStruct::TECHNICAL));
     }
 }

@@ -54,9 +54,15 @@ class CookieHandler implements CookieHandlerInterface
 
     public function isCookieAllowedByPreferences(string $cookieName, array $preferences): bool
     {
+        $foundCookie = $this->getCookies()->matchCookieByName($cookieName);
+
+        if (!$foundCookie) {
+            return false;
+        }
+
         foreach ($preferences['groups'] as $cookieGroup) {
             foreach ($cookieGroup['cookies'] as $cookie) {
-                if (strpos($cookieName, $cookie['name']) === false) {
+                if ($cookie['name'] !== $foundCookie->getName()) {
                     continue;
                 }
 

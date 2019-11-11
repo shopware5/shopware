@@ -25,7 +25,10 @@
 namespace Shopware\Tests\Functional\Components\Privacy;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\CookieBundle\CookieCollection;
 use Shopware\Bundle\CookieBundle\Services\CookieHandler;
+use Shopware\Bundle\CookieBundle\Structs\CookieGroupStruct;
+use Shopware\Bundle\CookieBundle\Structs\CookieStruct;
 use Shopware\Components\Privacy\CookieRemoveSubscriber;
 
 class CookieRemoveSubscriberTest extends TestCase
@@ -197,6 +200,11 @@ class CookieRemoveSubscriberTest extends TestCase
 
     public function testPostDispatchShouldPreserveCookiesAllowedByPreferences(): void
     {
+        Shopware()->Container()->get('events')->addListener(
+            'CookieCollector_Collect_Cookies',
+            [PreserveCookieFromRemovingSubscriber::class, 'addCookie']
+        );
+
         $cookieRemoveSubscriber = $this->getCookieRemoveSubscriber();
 
         Shopware()->Config()->offsetSet('cookie_note_mode', CookieRemoveSubscriber::COOKIE_MODE_TECHNICAL);
@@ -247,5 +255,21 @@ class CookieRemoveSubscriberTest extends TestCase
             Shopware()->Config(),
             Shopware()->Container()->get(CookieHandler::class)
         );
+    }
+}
+
+class PreserveCookieFromRemovingSubscriber
+{
+    public function addCookie(): CookieCollection
+    {
+        $cookieCollection = new CookieCollection();
+        $cookieCollection->add(new CookieStruct(
+            'keepMe',
+            '/^keepMe$/',
+            'keepMe',
+            CookieGroupStruct::PERSONALIZATION
+        ));
+
+        return $cookieCollection;
     }
 }

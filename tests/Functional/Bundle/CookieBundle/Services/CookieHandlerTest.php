@@ -25,8 +25,11 @@
 namespace Shopware\Tests\Functional\Bundle\CookieBundle\Services;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\CookieBundle\CookieCollection;
 use Shopware\Bundle\CookieBundle\Services\CookieCollector;
 use Shopware\Bundle\CookieBundle\Services\CookieHandler;
+use Shopware\Bundle\CookieBundle\Structs\CookieGroupStruct;
+use Shopware\Bundle\CookieBundle\Structs\CookieStruct;
 
 class CookieHandlerTest extends TestCase
 {
@@ -51,12 +54,12 @@ class CookieHandlerTest extends TestCase
     public function testIsCookieAllowedByPreferencesReturnsTrueIsAllowed(): void
     {
         $cookieHandler = $this->getCookieHandler();
-        $result = $cookieHandler->isCookieAllowedByPreferences('statistic', [
+        $result = $cookieHandler->isCookieAllowedByPreferences('sUniqueID', [
             'groups' => [
                 [
                     'cookies' => [
                         'statistic' => [
-                            'name' => 'statistic',
+                            'name' => 'sUniqueID',
                             'active' => true,
                         ],
                     ],
@@ -67,15 +70,15 @@ class CookieHandlerTest extends TestCase
         static::assertTrue($result);
     }
 
-    public function testIsCookieAllowedByPreferencesReturnsFalseIsAllowed(): void
+    public function testIsCookieAllowedByPreferencesReturnsFalseIsNotAllowed(): void
     {
         $cookieHandler = $this->getCookieHandler();
-        $result = $cookieHandler->isCookieAllowedByPreferences('statistic', [
+        $result = $cookieHandler->isCookieAllowedByPreferences('sUniqueID', [
             'groups' => [
                 [
                     'cookies' => [
                         'statistic' => [
-                            'name' => 'statistic',
+                            'name' => 'sUniqueID',
                             'active' => false,
                         ],
                     ],
@@ -102,10 +105,90 @@ class CookieHandlerTest extends TestCase
         static::assertTrue($result);
     }
 
+    public function testIsCookieAllowedByPreferencesReturnsFalseUnknownCookie(): void
+    {
+        $cookieHandler = $this->getCookieHandler();
+        $result = $cookieHandler->isCookieAllowedByPreferences('bar', []);
+
+        static::assertFalse($result);
+    }
+
+    public function testIsCookieAllowedByPreferencesWorksWithRegex(): void
+    {
+        Shopware()->Container()->get('events')->addListener(
+            'CookieCollector_Collect_Cookies',
+            [RegexCookieSubscriber::class, 'addCookie']
+        );
+
+        $cookieHandler = $this->getCookieHandler();
+        $result = $cookieHandler->isCookieAllowedByPreferences('bar-ABC', [
+            'groups' => [
+                [
+                    'cookies' => [
+                        'statistic' => [
+                            'name' => 'bar',
+                            'active' => true,
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        static::assertTrue($result);
+    }
+
+    public function testIsCookieAllowedByPreferencesReturnsTrueValidRegexSecondElement(): void
+    {
+        Shopware()->Container()->get('events')->addListener(
+            'CookieCollector_Collect_Cookies',
+            [RegexCookieSubscriber::class, 'addCookie']
+        );
+
+        $cookieHandler = $this->getCookieHandler();
+        $result = $cookieHandler->isCookieAllowedByPreferences('bar-ABC', [
+            'groups' => [
+                [
+                    'cookies' => [
+                        'statistic' => [
+                            'name' => 'bar1',
+                            'active' => false,
+                        ],
+                        'statistic2' => [
+                            'name' => 'bar',
+                            'active' => true,
+                        ],
+                        'statistic3' => [
+                            'name' => 'bar3',
+                            'active' => false,
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        static::assertTrue($result);
+    }
+
     private function getCookieHandler(): CookieHandler
     {
         return new CookieHandler(
             Shopware()->Container()->get(CookieCollector::class)
         );
+    }
+}
+
+class RegexCookieSubscriber
+{
+    public function addCookie(): CookieCollection
+    {
+        $cookieCollection = new CookieCollection();
+        $cookieCollection->add(new CookieStruct(
+            'bar',
+            '/^bar\-[A-Za-z]{3}$/',
+            'bar',
+            CookieGroupStruct::PERSONALIZATION
+        ));
+
+        return $cookieCollection;
     }
 }

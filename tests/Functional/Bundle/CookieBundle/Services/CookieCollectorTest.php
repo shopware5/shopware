@@ -133,6 +133,7 @@ class ExampleTestSubscriber
         $cookieCollection = new CookieCollection();
         $cookieCollection->add(new CookieStruct(
             'foo',
+            '/^foo$/',
             'bar',
             CookieGroupStruct::PERSONALIZATION
         ));

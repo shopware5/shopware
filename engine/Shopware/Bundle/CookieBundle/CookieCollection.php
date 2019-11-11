@@ -43,8 +43,22 @@ class CookieCollection extends ArrayCollection implements \JsonSerializable
     public function hasCookieWithName(string $cookieName): bool
     {
         return $this->exists(static function (string $key, CookieStruct $cookieStruct) use ($cookieName) {
-            return strpos($cookieName, $cookieStruct->getName()) === 0;
+            return preg_match($cookieStruct->getMatchingPattern(), $cookieName) === 1;
         });
+    }
+
+    public function getCookieByName(string $cookieName): ?CookieStruct
+    {
+        /** @var CookieStruct $cookieStruct */
+        foreach ($this as $cookieStruct) {
+            if (!preg_match($cookieStruct->getMatchingPattern(), $cookieName)) {
+                continue;
+            }
+
+            return $cookieStruct;
+        }
+
+        return null;
     }
 
     public function jsonSerialize(): array
