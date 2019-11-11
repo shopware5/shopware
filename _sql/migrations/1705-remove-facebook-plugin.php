@@ -29,9 +29,9 @@ class Migrations_Migration1705 extends Shopware\Components\Migrations\AbstractMi
 SET @pluginId = (SELECT id FROM s_core_plugins WHERE name = 'Facebook' and namespace = 'Frontend' and `source` = 'Default' LIMIT 1);
 SET @formId = (SELECT id FROM s_core_config_forms WHERE plugin_id = @pluginId);
 
-DELETE FROM s_core_config_elements WHERE form_id = @formId;
-DELETE FROM s_core_config_forms WHERE id = @formId;
-DELETE FROM s_core_plugins WHERE id = @pluginId'
+DELETE FROM s_core_config_elements WHERE form_id = @formId AND form_id IS NOT NULL;
+DELETE FROM s_core_config_forms WHERE id = @formId AND id IS NOT NULL;
+DELETE FROM s_core_plugins WHERE id = @pluginId AND id IS NOT NULL'
 EOD;
         $this->addSql($sql);
     }
