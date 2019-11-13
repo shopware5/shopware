@@ -1,4 +1,4 @@
-;(function ($, Modernizr) {
+(function ($, Modernizr) {
     'use strict';
 
     /**

@@ -1,4 +1,4 @@
-;(function ($, window, StateManager, undefined) {
+(function ($, window, StateManager, undefined) {
     'use strict';
 
     var $body = $('body');
