@@ -17,7 +17,7 @@
  *     </div>
  * </div>
  */
-;(function ($, window) {
+(function ($, window) {
     'use strict';
 
     /**

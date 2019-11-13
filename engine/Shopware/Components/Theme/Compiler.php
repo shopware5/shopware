@@ -290,7 +290,7 @@ class Compiler
         $javascriptFiles = $this->javascriptCollector->collectJavascriptFiles($template, $shop);
         $content = '';
         foreach ($javascriptFiles as $jsFile) {
-            $content .= file_get_contents($jsFile) . "\n";
+            $content .= file_get_contents($jsFile) . ";\n";
         }
 
         if ($settings->getCompressJs()) {
