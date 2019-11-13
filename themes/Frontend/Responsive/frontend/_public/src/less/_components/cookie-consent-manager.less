@@ -65,7 +65,10 @@
     }
 
     .cookie-consent--cookie {
+        .clearfix();
         .unitize-padding(15, 0);
+
+        position: relative;
 
         &:last-child {
             padding-bottom: 0;
@@ -101,14 +104,17 @@
     }
 
     .cookie-consent--state-label {
-        .unitize(margin-left, 20);
-        display: inline-block;
+        .unitize(margin-left, 40);
     }
 }
 
 // State input
 .cookie-consent--state-input {
-    float: left;
+    position: absolute;
+
+    &.cookie-consent--cookie-state {
+        top: ~"calc(50% - 10px)";
+    }
 
     &.cookie-consent--required {
         opacity: 0.4;

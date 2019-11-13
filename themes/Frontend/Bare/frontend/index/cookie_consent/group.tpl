@@ -14,7 +14,7 @@
         {block name="frontend_index_cookie_consent_manager_group_title"}
             <div class='cookie-consent--group-title' data-collapse-panel='true' data-contentSiblingSelector=".cookie-consent--group-container">
                 <div class="cookie-consent--group-title-label cookie-consent--state-label">
-                    {$cookieGroup['label']}
+                    {$cookieGroup['label']|truncate:25}
                 </div>
 
                 <span class="cookie-consent--group-arrow is-icon--right">
