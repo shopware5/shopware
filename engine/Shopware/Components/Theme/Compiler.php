@@ -93,6 +93,11 @@ class Compiler
     private $release;
 
     /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
+
+    /**
      * @param string $rootDir
      */
     public function __construct(
@@ -104,7 +109,8 @@ class Compiler
         CompressorInterface $jsCompressor,
         \Enlight_Event_EventManager $eventManager,
         TimestampPersistor $timestampPersistor,
-        ShopwareReleaseStruct $release
+        ShopwareReleaseStruct $release,
+        \Shopware_Components_Config $config
     ) {
         $this->rootDir = $rootDir;
         $this->compiler = $compiler;
@@ -115,6 +121,7 @@ class Compiler
         $this->jsCompressor = $jsCompressor;
         $this->timestampPersistor = $timestampPersistor;
         $this->release = $release;
+        $this->config = $config;
 
         $this->lessCollector = new LessCollector(
             $pathResolver,
@@ -402,7 +409,7 @@ class Compiler
     private function getConfig(Shop\Template $template, Shop\Shop $shop)
     {
         $config = $this->inheritance->buildConfig($template, $shop);
-        $config['shopware-revision'] = $this->release->getRevision();
+        $config['shopware-revision'] = md5($this->release->getRevision() . $this->config->get('ApplicationSecret'));
 
         $collection = new ArrayCollection();
 
