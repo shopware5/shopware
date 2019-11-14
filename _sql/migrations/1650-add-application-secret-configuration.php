@@ -4,7 +4,7 @@ use Shopware\Components\Migrations\AbstractMigration;
 
 class Migrations_Migration1650 extends AbstractMigration
 {
-    public function up($modus)
+    public function up($modus): void
     {
         $secret = bin2hex(random_bytes(32));
         $serializedSecret = serialize($secret);
