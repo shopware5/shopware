@@ -26,6 +26,7 @@ namespace Shopware\Components\Theme;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
+use Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGeneratorInterface;
 use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Components\Theme\Compressor\CompressorInterface;
 use Shopware\Components\Theme\Compressor\Js;
@@ -93,9 +94,9 @@ class Compiler
     private $release;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var UniqueIdGeneratorInterface
      */
-    private $config;
+    private $uniqueIdGenerator;
 
     /**
      * @param string $rootDir
@@ -110,7 +111,7 @@ class Compiler
         \Enlight_Event_EventManager $eventManager,
         TimestampPersistor $timestampPersistor,
         ShopwareReleaseStruct $release,
-        \Shopware_Components_Config $config
+        UniqueIdGeneratorInterface $uniqueIdGenerator
     ) {
         $this->rootDir = $rootDir;
         $this->compiler = $compiler;
@@ -121,7 +122,7 @@ class Compiler
         $this->jsCompressor = $jsCompressor;
         $this->timestampPersistor = $timestampPersistor;
         $this->release = $release;
-        $this->config = $config;
+        $this->uniqueIdGenerator = $uniqueIdGenerator;
 
         $this->lessCollector = new LessCollector(
             $pathResolver,
@@ -409,7 +410,7 @@ class Compiler
     private function getConfig(Shop\Template $template, Shop\Shop $shop)
     {
         $config = $this->inheritance->buildConfig($template, $shop);
-        $config['shopware-revision'] = md5($this->release->getRevision() . $this->config->get('ApplicationSecret'));
+        $config['shopware-revision'] = md5($this->release->getRevision() . $this->uniqueIdGenerator->getUniqueId());
 
         $collection = new ArrayCollection();
 
