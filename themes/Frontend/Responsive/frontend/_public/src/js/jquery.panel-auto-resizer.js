@@ -205,9 +205,18 @@
 
             // shortcut to resize all
             if (typeof selector === 'undefined') {
-                me.resize(me.opts.panelHeaderSelector);
-                me.resize(me.opts.panelBodySelector);
-                me.resize(me.opts.panelFooterSelector);
+                if (typeof me.opts.panelHeaderSelector !== 'undefined') {
+                    me.resize(me.opts.panelHeaderSelector);
+                }
+
+                if (typeof me.opts.panelBodySelector !== 'undefined') {
+                    me.resize(me.opts.panelBodySelector);
+                }
+
+                if (typeof me.opts.panelFooterSelector !== 'undefined') {
+                    me.resize(me.opts.panelFooterSelector);
+                }
+
                 return;
             }
 
