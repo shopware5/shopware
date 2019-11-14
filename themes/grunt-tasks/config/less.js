@@ -1,9 +1,23 @@
 const md5File = require('md5-file');
+const crypto = require('crypto');
 
 const functions = {
     swhash: function (_, filename) {
         const path = filename._fileInfo.currentDirectory + filename.value;
-        filename.value = md5File.sync(path);
+        const pathHash = md5File.sync(path);
+        const shopwareRevision = this.context
+            .frames
+            .filter(o => o._variables)
+            .map(o => o._variables['@shopware-revision'])
+            .filter(o => o)
+            .map(o => o.value.value)
+            .pop()
+        ;
+        filename.value = crypto
+            .createHash('md5')
+            .update(shopwareRevision + pathHash)
+            .digest('hex')
+        ;
         return filename;
     }
 };

@@ -39,7 +39,8 @@ class Oyejorge implements LessCompiler
         $this->compiler = $compiler;
         $this->compiler->registerFunction('swhash', function (Less_Tree_Quoted $filename) {
             $absPath = $filename->currentFileInfo['currentDirectory'] . $filename->value;
-            $filename->value = md5_file($absPath);
+            $shopwareRevision = $this->compiler->findValueOf('shopware-revision');
+            $filename->value = md5($shopwareRevision . md5_file($absPath));
 
             return $filename;
         });
