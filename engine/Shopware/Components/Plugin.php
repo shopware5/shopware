@@ -47,6 +47,8 @@ abstract class Plugin extends Bundle implements SubscriberInterface
      */
     protected $pluginNamespace;
 
+    protected $autoloadViews = false;
+
     /**
      * @var bool
      */
@@ -84,6 +86,11 @@ abstract class Plugin extends Bundle implements SubscriberInterface
     final public function isActive()
     {
         return $this->isActive;
+    }
+
+    public function hasAutoloadViews(): bool
+    {
+        return $this->autoloadViews;
     }
 
     /**
