@@ -26,6 +26,7 @@ namespace Shopware\Components\Plugin;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Enlight\Event\SubscriberInterface;
+use Enlight_Event_EventArgs;
 use Shopware\Components\Theme\LessDefinition;
 use Symfony\Component\Finder\Finder;
 
@@ -37,11 +38,17 @@ class ResourceSubscriber implements SubscriberInterface
     private $pluginPath;
 
     /**
+     * @var bool
+     */
+    private $loadViewsDirectory;
+
+    /**
      * @param string $pluginPath
      */
-    public function __construct($pluginPath)
+    public function __construct($pluginPath, ?bool $loadViewsDirectory = null)
     {
         $this->pluginPath = $pluginPath;
+        $this->loadViewsDirectory = $loadViewsDirectory ?? false;
     }
 
     /**
@@ -53,6 +60,7 @@ class ResourceSubscriber implements SubscriberInterface
             'Theme_Compiler_Collect_Plugin_Less' => 'onCollectLess',
             'Theme_Compiler_Collect_Plugin_Css' => 'onCollectCss',
             'Theme_Compiler_Collect_Plugin_Javascript' => 'onCollectJavascript',
+            'Theme_Inheritance_Template_Directories_Collected' => 'onRegisterTemplate',
         ];
     }
 
@@ -96,6 +104,24 @@ class ResourceSubscriber implements SubscriberInterface
             [],
             [$file]
         );
+    }
+
+    public function onRegisterTemplate(Enlight_Event_EventArgs $args): void
+    {
+        if (!$this->loadViewsDirectory) {
+            return;
+        }
+
+        $viewsDirectory = $this->pluginPath . '/Resources/views';
+
+        if (@is_dir($viewsDirectory)) {
+            $templates = (array) $args->getReturn();
+
+            if (!in_array($viewsDirectory, $templates, true)) {
+                $templates[] = $viewsDirectory;
+                $args->setReturn($templates);
+            }
+        }
     }
 
     /**

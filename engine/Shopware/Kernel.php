@@ -254,7 +254,10 @@ class Kernel extends SymfonyKernel
             }
 
             $this->container->get('events')->addSubscriber($bundle);
-            $this->container->get('events')->addSubscriber(new Plugin\ResourceSubscriber($bundle->getPath()));
+            $this->container->get('events')->addSubscriber(new Plugin\ResourceSubscriber(
+                $bundle->getPath(),
+                $bundle instanceof Plugin && $bundle->isAutoloadViews()
+            ));
         }
 
         $this->booted = true;
