@@ -137,7 +137,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         /** @var \Shopware\Models\Payment\Repository $repository */
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Payment\Payment::class);
 
-        $query = $repository->getActivePaymentsQuery(
+        $query = $repository->getAllPaymentsQuery(
             $this->Request()->getParam('filter', []),
             $this->Request()->getParam('sort', []),
             $this->Request()->getParam('start'),

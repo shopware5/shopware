@@ -45,6 +45,11 @@ Ext.define('Shopware.apps.Base.store.Payment', {
         direction: 'ASC'
     }],
 
+    filters: [{
+        property: 'active',
+        value: true
+    }],
+
     proxy:{
         type:'ajax',
         url:'{url action="getPayments"}',
