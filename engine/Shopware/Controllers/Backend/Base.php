@@ -136,9 +136,18 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         // Load shop repository
         /** @var \Shopware\Models\Payment\Repository $repository */
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Payment\Payment::class);
+        $filter = $this->Request()->getParam('filter', []);
+        $hasActiveFilter = in_array('active', array_column($filter, 'property'), true);
 
-        $query = $repository->getActivePaymentsQuery(
-            $this->Request()->getParam('filter', []),
+        if (!$hasActiveFilter) {
+            $filter[] = [
+                'property' => 'active',
+                'value' => true,
+            ];
+        }
+
+        $query = $repository->getAllPaymentsQuery(
+            $filter,
             $this->Request()->getParam('sort', []),
             $this->Request()->getParam('start'),
             $this->Request()->getParam('limit')
