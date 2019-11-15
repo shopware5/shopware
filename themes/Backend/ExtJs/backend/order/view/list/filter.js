@@ -236,7 +236,10 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
             queryMode: 'remote',
             store: Ext.create('Shopware.store.Payment', {
                 pageSize: 7,
-                filters: [],
+                filters: [{
+                    property: 'active',
+                    value: [true, false]
+                }],
                 sorters: [{
                     property: 'active',
                     direction: 'DESC'
