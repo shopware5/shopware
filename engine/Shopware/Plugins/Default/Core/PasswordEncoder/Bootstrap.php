@@ -22,6 +22,23 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Password\Manager;
+
+/*
+ * @see rfc for argon2 in PHP -> https://wiki.php.net/rfc/argon2_password_hash
+ */
+if (!defined('PASSWORD_ARGON2_DEFAULT_MEMORY_COST')) {
+    define('PASSWORD_ARGON2_DEFAULT_MEMORY_COST', 1024); // 1KiB
+}
+
+if (!defined('PASSWORD_ARGON2_DEFAULT_TIME_COST')) {
+    define('PASSWORD_ARGON2_DEFAULT_TIME_COST', 2);
+}
+
+if (!defined('PASSWORD_ARGON2_DEFAULT_THREADS')) {
+    define('PASSWORD_ARGON2_DEFAULT_THREADS', 2);
+}
+
 class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     /**
@@ -57,10 +74,18 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
         return true;
     }
 
-    /**
-     * @return array
-     */
-    public function getBcryptOptions()
+    public function getArgon2Options(): array
+    {
+        $config = $this->Config();
+
+        return [
+            'memory_cost' => $config['argon2MemoryCost'],
+            'time_cost' => $config['argon2TimeCost'],
+            'threads' => $config['argon2Threads'],
+        ];
+    }
+
+    public function getBcryptOptions(): array
     {
         $config = $this->Config();
 
@@ -69,10 +94,7 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function getSha256Options()
+    public function getSha256Options(): array
     {
         $config = $this->Config();
 
@@ -85,9 +107,9 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
     }
 
     /**
-     * @return \Shopware\Components\Password\Manager
+     * @throws Enlight_Event_Exception
      */
-    public function onInitResourcePasswordEncoder(Enlight_Event_EventArgs $args)
+    public function onInitResourcePasswordEncoder(Enlight_Event_EventArgs $args): Manager
     {
         // Get a list of all available hashes
         $availableHasher = Shopware()->Events()->filter(
@@ -96,7 +118,7 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
             ['subject' => $this]
         );
 
-        $passwordManager = new \Shopware\Components\Password\Manager(
+        $passwordManager = new Manager(
             $this->Application()->Config()
         );
 
@@ -109,15 +131,13 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
 
     /**
      * This method registers shopware's default hash algorithm
-     *
-     * @param Enlight_Event_EventArgs $args
-     *
-     * @return array
      */
-    public function onAddEncoder(\Enlight_Event_EventArgs $args)
+    public function onAddEncoder(Enlight_Event_EventArgs $args): array
     {
         $hashes = $args->getReturn();
 
+        $hashes[] = new Shopware\Components\Password\Encoder\Argon2id($this->getArgon2Options());
+        $hashes[] = new Shopware\Components\Password\Encoder\Argon2i($this->getArgon2Options());
         $hashes[] = new Shopware\Components\Password\Encoder\Bcrypt($this->getBcryptOptions());
         $hashes[] = new Shopware\Components\Password\Encoder\Sha256($this->getSha256Options());
         $hashes[] = new Shopware\Components\Password\Encoder\LegacyBackendMd5();
@@ -149,9 +169,9 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
             'value' => true,
         ]);
 
-        $form->setElement('number', 'Bcrypt-Rechenaufwand', [
+        $form->setElement('number', 'bcryptCost', [
             'description' => 'Je höher der Rechenaufwand, desto aufwändiger ist es für einen möglichen Angreifer, ein Klartext-Passwort für das verschlüsselte Passwort zu berechnen.',
-            'label' => 'bcrypt Cost',
+            'label' => 'Bcrypt-Rechenaufwand',
             'minValue' => 4,
             'maxValue' => 31,
             'required' => true,
@@ -167,6 +187,33 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
             'value' => 100000,
         ]);
 
+        $form->setElement('number', 'argon2MemoryCost', [
+            'description' => 'Ein höherer Speicherverbrauch macht es einem möglichen Angreifer schwerer, ein passendes Klartext-Passwort zu erzeugen.',
+            'label' => 'Argon2-Speicher',
+            'minValue' => 1 << 20,
+            'maxValue' => 1 << 62,
+            'required' => true,
+            'value' => PASSWORD_ARGON2_DEFAULT_MEMORY_COST,
+        ]);
+
+        $form->setElement('number', 'argon2TimeCost', [
+            'description' => 'Ein höherer Zeitaufwand macht es einem möglichen Angreifer schwerer, ein passendes Klartext-Passwort zu erzeugen.',
+            'label' => 'Argon2-Dauer',
+            'minValue' => 1,
+            'maxValue' => 30,
+            'required' => true,
+            'value' => PASSWORD_ARGON2_DEFAULT_TIME_COST,
+        ]);
+
+        $form->setElement('number', 'argon2Threads', [
+            'description' => 'Anzahl paralleler Threads zur Erzeugung nutzen.',
+            'label' => 'Argon2-Threads',
+            'minValue' => 1,
+            'maxValue' => 32,
+            'required' => true,
+            'value' => PASSWORD_ARGON2_DEFAULT_THREADS,
+        ]);
+
         $form->setLabel('Passwörter');
         $form->setParent(
             $this->Forms()->findOneBy(['name' => 'Core'])
@@ -176,7 +223,7 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
     /**
      * Registers all necessary events and hooks.
      */
-    private function subscribeEvents()
+    private function subscribeEvents(): void
     {
         $this->subscribeEvent(
             'Enlight_Bootstrap_InitResource_PasswordEncoder',
