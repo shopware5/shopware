@@ -234,7 +234,17 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
             name: 'orders.paymentId',
             pageSize: 7,
             queryMode: 'remote',
-            store: Ext.create('Shopware.store.Payment', { pageSize: 7 }),
+            store: Ext.create('Shopware.store.Payment', {
+                pageSize: 7,
+                filters: [],
+                sorters: [{
+                    property: 'active',
+                    direction: 'DESC'
+                }, {
+                    property: 'position',
+                    direction: 'ASC'
+                }]
+            }),
             valueField: 'id',
             displayField: 'description',
             emptyText: me.snippets.empty,
