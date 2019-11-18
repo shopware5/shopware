@@ -23,7 +23,7 @@
  */
 class Migrations_Migration1705 extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up($modus)
+    public function up($modus): void
     {
         $sql = <<<'EOD'
 SET @pluginId = (SELECT id FROM s_core_plugins WHERE name = 'Facebook' and namespace = 'Frontend' and `source` = 'Default' LIMIT 1);
@@ -31,7 +31,7 @@ SET @formId = (SELECT id FROM s_core_config_forms WHERE plugin_id = @pluginId);
 
 DELETE FROM s_core_config_elements WHERE form_id = @formId;
 DELETE FROM s_core_config_forms WHERE id = @formId;
-DELETE FROM s_core_plugins WHERE id = @pluginId'
+DELETE FROM s_core_plugins WHERE id = @pluginId;
 EOD;
         $this->addSql($sql);
     }
