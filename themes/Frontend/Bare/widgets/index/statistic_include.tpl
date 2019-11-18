@@ -1,8 +1,37 @@
 {block name="widgets_index_statistic_include"}
     <iframe id="refresh-statistics" width="0" height="0" style="display:none;"></iframe>
     <script>
-        function hasCookiesAllowed() {
-            return !window.cookieRemoval || (window.cookieRemoval && document.cookie.indexOf('allowCookie') !== -1);
+        /**
+         * @returns { boolean }
+         */
+        function hasCookiesAllowed () {
+            if (window.cookieRemoval === 0) {
+                return true;
+            }
+
+            if (window.cookieRemoval === 1) {
+                if (document.cookie.indexOf('cookiePreferences') !== -1) {
+                    return true;
+                }
+
+                return document.cookie.indexOf('cookieDeclined') === -1;
+            }
+
+            // Must be cookieRemoval = 2, so only depends on existence of `allowCookie`
+            return document.cookie.indexOf('allowCookie') !== -1;
+        }
+
+        /**
+         * @returns { boolean }
+         */
+        function isDeviceCookieAllowed () {
+            var cookiesAllowed = hasCookiesAllowed();
+
+            if (window.cookieRemoval !== 1) {
+                return cookiesAllowed;
+            }
+
+            return cookiesAllowed && document.cookie.indexOf('"name":"x-ua-device","active":true') !== -1;
         }
 
         (function(window, document) {
@@ -23,7 +52,7 @@
             {/if}
 
             {* Early simple device detection for statistics, duplicated in StateManager for resizes *}
-            if (document.cookie.indexOf('x-ua-device') === -1 && hasCookiesAllowed()) {
+            if (isDeviceCookieAllowed()) {
                 var i = 0,
                     device = 'desktop',
                     width = window.innerWidth,

@@ -55,7 +55,7 @@
              * @property closeModalSelector
              * @type {String}
              */
-            closeModalSelector: '.cookie-consent--header-cross',
+            closeModalSelector: '.cookie-consent--close',
 
             /**
              * Selector of the element that wraps around each group.
@@ -215,7 +215,10 @@
 
         openConsentManager: function () {
             this.open();
-            this.cookiePermissionPlugin.hideElement();
+
+            if (window.cookieRemoval !== 2) {
+                this.cookiePermissionPlugin.hideElement();
+            }
         },
 
         buildCookiePreferences: function (allTrue) {

@@ -5,7 +5,6 @@
      * Global storage manager
      *
      * The storage manager provides a unified way to store items in the localStorage and sessionStorage.
-     * It uses a polyfill that uses cookies as a fallback when no localStorage or sessionStore is available or working.
      *
      * @example
      *

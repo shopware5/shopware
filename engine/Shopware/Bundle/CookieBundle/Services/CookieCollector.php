@@ -65,6 +65,7 @@ class CookieCollector implements CookieCollectorInterface
             throw new InvalidCookieItemException(sprintf('Found item inside cookie collection, which is not of type \Shopware\Bundle\CookieBundle\Structs\CookieStruct'));
         }
 
+        $cookieCollection = $this->sortCookies($cookieCollection);
         $this->assignCookiesToGroups($cookieCollection, $cookieGroupsCollection);
 
         $cookieGroupsCollection = $this->eventManager->filter('CookieCollector_Filter_Collected_Cookies', $cookieGroupsCollection);
@@ -129,5 +130,15 @@ class CookieCollector implements CookieCollectorInterface
         $cookieCollection->add(new CookieStruct('currency', '/^currency$/', $snippetNamespace->get('currency'), CookieGroupStruct::TECHNICAL));
         $cookieCollection->add(new CookieStruct('x-cache-context-hash', '/^x\-cache\-context\-hash$/', $snippetNamespace->get('context_hash'), CookieGroupStruct::TECHNICAL));
         $cookieCollection->add(new CookieStruct('nocache', '/^nocache$/', $snippetNamespace->get('no_cache'), CookieGroupStruct::TECHNICAL));
+    }
+
+    private function sortCookies(CookieCollection $cookieCollection): CookieCollection
+    {
+        $cookieIterator = $cookieCollection->getIterator();
+        $cookieIterator->uasort(static function (CookieStruct $firstCookie, CookieStruct $secondCookie) {
+            return strcmp($firstCookie->getLabel(), $secondCookie->getLabel());
+        });
+
+        return new CookieCollection(\iterator_to_array($cookieIterator, false));
     }
 }
