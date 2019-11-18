@@ -33,8 +33,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Shopware Article Model
  *
- *
- *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_articles")
  * @ORM\HasLifecycleCallbacks()

@@ -93,7 +93,6 @@ interface ProductMediaGatewayInterface
      * - Selects only product media which has no configurator configuration
      * - Sorted ascending by the image main flag and image position
      *
-     *
      * @return Struct\Media[]
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);

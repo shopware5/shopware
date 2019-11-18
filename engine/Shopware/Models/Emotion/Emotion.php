@@ -35,8 +35,6 @@ use Shopware\Components\Model\ModelEntity;
  * A grid element may extend over several cells. The grid elements can be filled with components
  * from the component library, such as banners, items or text elements.
  *
- *
- *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_emotion")
  * @ORM\HasLifecycleCallbacks()
