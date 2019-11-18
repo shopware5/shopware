@@ -254,7 +254,7 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
      * @param [object] eOpts
      * @return void
      */
-    mapCustomerAccount: function (field, newValue, oldValue, eOpts) {
+    mapCustomerAccount: function (field, newValue) {
         var me = this;
             Ext.Ajax.request({
                 url:'{url action="mapCustomerAccount"}',
@@ -262,22 +262,20 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
                     mapCustomerAccountValue: newValue
                 },
                 success:function (response) {
-                    if (response.length != 0) {
+                    var supportTextEl = field.up().items.items[1];
+                    if (response.length !== 0) {
                         var mappingData = response.responseText.split("|"),
                         mappingText = mappingData[0],
                         userID = mappingData[1];
 
-                        if(userID && userID != "undefined") {
+                        if (Ext.isDefined(userID)) {
                             var template = new Ext.Template(
                                 "{literal}<h1>"+me.snippets.mappedToCustomer+"</h1> {0} {/literal}"
                             );
-                            field.supportTextEl.update(template.apply([mappingText]));
-                            field.setRawValue(userID);
+                            supportTextEl.update(template.apply([mappingText]));
+                        } else {
+                            supportTextEl.update("{s name=detail_general/supportText/noCustomerMapped}No customer account has been linked{/s}");
                         }
-                        else {
-                            field.supportTextEl.update("{s name=detail_general/supportText/noCustomerMapped}No customer account has been linked{/s}");
-                        }
-
                     }
                 }
             });

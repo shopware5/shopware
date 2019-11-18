@@ -107,9 +107,6 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
         me.items = [ me.generalFieldset, me.partnerFieldset, me.attributeForm ];
 
         me.callParent(arguments);
-        if (me.record.get('customerId') > 0) {
-            me.fireEvent('mapCustomerAccount', me.customerMapping, me.record.get('customerId'), 0,null);
-        }
     },
 
     /**
@@ -208,9 +205,12 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
      */
     createGeneralFormLeft:function () {
         var me = this;
-        me.customerMapping = Ext.create('Ext.form.field.Text',{
+        var customerStore = Ext.create('Shopware.attribute.SelectionFactory').createEntitySearchStore('Shopware\\Models\\Customer\\Customer');
+
+        me.customerMapping = Ext.create('Shopware.form.field.CustomerSingleSelection',{
             fieldLabel: '{s name=detail_general/field/customer_account}Customer account{/s}',
             name: 'customerId',
+            store: customerStore,
             checkChangeBuffer: 800,
             labelWidth: 180,
             minWidth: 250,

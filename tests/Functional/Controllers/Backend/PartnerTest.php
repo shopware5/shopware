@@ -221,22 +221,13 @@ class PartnerTest extends \Enlight_Components_Test_Controller_TestCase
     public function testMapCustomerAccount()
     {
         $this->Response()->clearBody();
-        $params['mapCustomerAccountValue'] = '20001';
-        $this->Request()->setParams($params);
+        $this->Request()->request->set('mapCustomerAccountValue', 2);
         $this->dispatch('backend/Partner/mapCustomerAccount');
         $body = $this->Response()->getBody();
         static::assertTrue(!empty($body));
 
         $this->Response()->clearBody();
-        $params['mapCustomerAccountValue'] = 'test@example.com';
-        $this->Request()->setParams($params);
-        $this->dispatch('backend/Partner/mapCustomerAccount');
-        $body = $this->Response()->getBody();
-        static::assertTrue(!empty($body));
-
-        $this->Response()->clearBody();
-        $params['mapCustomerAccountValue'] = '542350';
-        $this->Request()->setParams($params);
+        $this->Request()->request->set('mapCustomerAccountValue', 542350);
         $this->dispatch('backend/Partner/mapCustomerAccount');
         $body = $this->Response()->getBody();
         static::assertTrue(empty($body));
