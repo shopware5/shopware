@@ -34,8 +34,6 @@ use Shopware\Models\Shop\Shop;
 /**
  * Shopware Categories
  *
- *
- *
  * @ORM\Table(name="s_categories")
  * @ORM\Entity(repositoryClass="Repository")
  */
@@ -429,7 +427,6 @@ class Category extends ModelEntity
 
     /**
      * Sets the id of the parent category
-     *
      *
      * @return Category
      */

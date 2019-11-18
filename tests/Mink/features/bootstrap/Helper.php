@@ -731,7 +731,6 @@ EOD
     /**
      * Returns the unique value of an array, throws in exception if there are differences
      *
-     *
      * @throws \Exception
      *
      * @return string

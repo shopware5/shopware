@@ -30,8 +30,6 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware SwagMultiEdit Plugin - Filter Model
  *
- *
- *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_multi_edit_filter")
  */

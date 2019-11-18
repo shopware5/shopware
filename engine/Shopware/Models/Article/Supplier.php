@@ -35,7 +35,6 @@ use Shopware\Models\Attribute\ArticleSupplier as ProductSupplierAttribute;
  * This Model represents a single supplier. Any article can be bound to one supplier.
  * If there is at least one article bound to the supplier, the supplier MUST not be deleted!
  *
- *
  * Relations and Associations
  * <code>
  * - Article    =>  Shopware\Models\Article\Article     [1:n] [s_articles]

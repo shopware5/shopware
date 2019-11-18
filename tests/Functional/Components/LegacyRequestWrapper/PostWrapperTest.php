@@ -77,7 +77,6 @@ class PostWrapperTest extends \Enlight_Components_Test_Controller_TestCase
      * Tests that resetting POST data inside any core class is equivalent to resetting it in the
      * global $_POST
      *
-     *
      * @depends testSetPost
      */
     public function testOverwriteAndClearPost($getData)

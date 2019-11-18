@@ -32,7 +32,6 @@ use Symfony\Component\HttpFoundation\Cookie;
 /**
  * Shopware Router Plugin
  *
- *
  * @license    http://shopware.de/license
  */
 class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_Bootstrap

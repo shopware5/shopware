@@ -32,8 +32,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Shopware Emotion Model - Template
  *
- *
- *
  * @ORM\Entity()
  * @ORM\Table(name="s_emotion_presets")
  */

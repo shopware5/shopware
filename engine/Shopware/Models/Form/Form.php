@@ -41,7 +41,6 @@ use Shopware\Components\Model\ModelEntity;
  *   - UNIQUE KEY `name` (`name`)
  * </code>
  *
- *
  * @license    http://shopware.de/license
  *
  * @ORM\Entity(repositoryClass="Repository")

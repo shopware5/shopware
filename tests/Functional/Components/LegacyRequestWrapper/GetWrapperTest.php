@@ -79,7 +79,6 @@ class GetWrapperTest extends Enlight_Components_Test_Controller_TestCase
      * Tests that reseting GET data inside any core class is equivalent to resetting it in the
      * global $_GET
      *
-     *
      * @depends testSetQuery
      */
     public function testOverwriteAndClearQuery($getData)

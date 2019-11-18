@@ -263,7 +263,6 @@ class Manager
      * Returns the full path of a thumbnail dir according to the media type
      * The default path for images after the root dir would be media/image/thumbnail/
      *
-     *
      * @return string
      */
     protected function getThumbnailDir(Media $media)

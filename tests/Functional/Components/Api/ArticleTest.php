@@ -3132,7 +3132,6 @@ class ArticleTest extends TestCase
      * Combinations merge the result of dimensional arrays not perfectly
      * so we have to clean up the first array level.
      *
-     *
      * @return array
      */
     protected function cleanUpCombinations(array $combinations)
