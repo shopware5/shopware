@@ -47,7 +47,7 @@ class StateTranslatorService implements StateTranslatorServiceInterface
         ]
     ) {
         $this->snippetManager = $snippetManager;
-        $this->availableTypes = $types;
+        $this->availableTypes = array_change_key_case($types, CASE_LOWER);
     }
 
     /**
@@ -57,6 +57,8 @@ class StateTranslatorService implements StateTranslatorServiceInterface
      */
     public function translateState($type, array $state)
     {
+        $type = strtolower($type);
+
         if (!$this->availableTypes[$type]) {
             throw new \RuntimeException(sprintf('Invalid type \'%s\' given.', $type));
         }
