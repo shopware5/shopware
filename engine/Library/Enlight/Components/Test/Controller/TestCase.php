@@ -26,9 +26,10 @@ use Symfony\Component\HttpFoundation\Response;
  * The Enlight_Components_Test_Controller_TestCase extends the basic Enlight_Components_Test_TestCase
  * with controller specified functions to grant an easily access to standard controller actions.
  *
+ *
  * @license    http://enlight.de/license     New BSD License
  */
-abstract class Enlight_Components_Test_Controller_TestCaseV7 extends Enlight_Components_Test_TestCase
+abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Components_Test_TestCase
 {
     /**
      * Instance of the Front resource
@@ -52,14 +53,14 @@ abstract class Enlight_Components_Test_Controller_TestCaseV7 extends Enlight_Com
     protected $_view;
 
     /**
-     * Instance of the Enlight request. Filled in the dispatch function.
+     * Instance of the enlight request. Filled in the dispatch function.
      *
      * @var Enlight_Controller_Request_Request
      */
     protected $_request;
 
     /**
-     * Instance of the Enlight response. Filled in the dispatch function.
+     * Instance of the enlight response. Filled in the dispatch function.
      *
      * @var Enlight_Controller_Response_Response
      */
@@ -67,10 +68,6 @@ abstract class Enlight_Components_Test_Controller_TestCaseV7 extends Enlight_Com
 
     /**
      * Magic get method
-     *
-     * @param string $name
-     *
-     * @return Enlight_Controller_Front|Enlight_Controller_Request_RequestTestCase|Enlight_Controller_Response_ResponseHttp|null
      */
     public function __get($name)
     {
@@ -90,7 +87,7 @@ abstract class Enlight_Components_Test_Controller_TestCaseV7 extends Enlight_Com
     /**
      * Tests set up method
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

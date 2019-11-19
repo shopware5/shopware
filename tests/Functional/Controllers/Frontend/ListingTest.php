@@ -104,7 +104,7 @@ class ListingTest extends \Enlight_Components_Test_Controller_TestCase
 
         $source = $this->Response()->getBody();
 
-        static::assertContains('blaueshaus_200x200.png', $source);
+        static::assertStringContainsString('blaueshaus_200x200.png', $source);
     }
 
     public function testWithoutImageManufacturerPage()
@@ -121,6 +121,6 @@ SQL;
 
         $source = $this->Response()->getBody();
 
-        static::assertNotContains('blaueshaus_200x200.png', $source);
+        static::assertStringNotContainsString('blaueshaus_200x200.png', $source);
     }
 }

@@ -42,7 +42,6 @@ Code Coverage:
     script:
         - ./psh.phar init --SW_HOST="localhost"
         - chown -R 1000:1000 .
-        - composer req --dev phpunit/phpunit:~8.0 --update-with-all-dependencies
         - php -d pcov.enabled=1 -d pcov.directory=$CI_PROJECT_DIR
             vendor/bin/phpunit
             --configuration tests/phpunit.xml.dist
@@ -72,7 +71,6 @@ Code Coverage:
     script:
         - ./psh.phar init --SW_HOST="localhost"
         - chown -R 1000:1000 .
-        - composer req --dev phpunit/phpunit:~8.0 --update-with-all-dependencies
         - ./psh.phar unit-fast --SW_HOST="localhost"
 
     artifacts:
@@ -85,7 +83,6 @@ Code Coverage:
     script:
         - ./psh.phar init --SW_HOST="localhost"
         - chown -R 1000:1000 .
-        - composer req --dev phpunit/phpunit:~8.0 --update-with-all-dependencies
         - ./psh.phar unit-elasticsearch --SW_HOST="localhost"
 
     artifacts:

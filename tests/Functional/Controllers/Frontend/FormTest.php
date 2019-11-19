@@ -46,8 +46,8 @@ class FormTest extends Enlight_Components_Test_Plugin_TestCase
             static::fail('Exception thrown. This should not occur.');
         }
 
-        static::assertTrue(!$this->Response()->isRedirect());
-        static::assertContains(self::GERMAN_NAME, $this->Response()->getBody());
+        static::assertNotTrue($this->Response()->isRedirect());
+        static::assertStringContainsString(self::GERMAN_NAME, $this->Response()->getBody());
     }
 
     /**
@@ -68,7 +68,7 @@ class FormTest extends Enlight_Components_Test_Plugin_TestCase
         }
 
         static::assertNotTrue($this->Response()->isRedirect());
-        static::assertContains(self::ENGLISH_NAME, $this->Response()->getBody());
+        static::assertStringContainsString(self::ENGLISH_NAME, $this->Response()->getBody());
 
         Shopware()->Models()->getRepository(Shop::class)->getActiveDefault()->registerResources();
 
@@ -79,7 +79,7 @@ class FormTest extends Enlight_Components_Test_Plugin_TestCase
     {
         $this->dispatch('/anfrage-formular?sInquiry=detail&sOrdernumber=sw10010');
 
-        static::assertContains(
+        static::assertStringContainsString(
             '<input type="hidden" class="normal " value="Aperitif-Glas Demi Sec (sw10010)" id="sordernumber" placeholder="Artikelnummer" name="sordernumber"/>',
             $this->Response()->getBody()
         );
@@ -89,7 +89,7 @@ class FormTest extends Enlight_Components_Test_Plugin_TestCase
     {
         $this->dispatch('/anfrage-formular?sInquiry=detail&sOrdernumber="this" [is] #not a {valid} <order> $number');
 
-        static::assertContains(
+        static::assertStringContainsString(
             '<input type="hidden" class="normal " value="" id="sordernumber" placeholder="Artikelnummer" name="sordernumber"/>',
             $this->Response()->getBody()
         );

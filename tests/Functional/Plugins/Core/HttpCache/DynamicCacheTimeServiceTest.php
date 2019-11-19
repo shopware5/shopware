@@ -30,6 +30,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Enlight_Controller_Request_RequestTestCase;
 use Exception;
 use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\PluginInstallerBundle\Service\LegacyPluginInstaller;
 use Shopware\Components\HttpCache\CacheTimeServiceInterface;
 use Shopware\Components\HttpCache\DynamicCacheTimeService;
 use Shopware\Models\Article\Article;
@@ -57,6 +58,11 @@ class DynamicCacheTimeServiceTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
+        Shopware()->Container()->reset(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
+        Shopware()->Container()->reset('shopware_plugininstaller.plugin_manager');
+        Shopware()->Container()->reset(LegacyPluginInstaller::class);
+        Shopware()->Container()->reset('shopware_plugininstaller.legacy_plugin_installer');
+
         $pluginManager = Shopware()->Container()->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
 
         /** @var Plugin $plugin */

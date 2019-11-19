@@ -116,12 +116,12 @@ class HrefLangTest extends TestCase
         $urls = $this->service->getUrls(['controller' => 'cat', 'action' => 'index', 'sCategory' => $category, 'foo' => 'bar'], $this->getContext());
 
         static::assertNotEmpty($urls);
-        static::assertContains('foo=bar', $urls[0]->getLink());
+        static::assertStringContainsString('foo=bar', $urls[0]->getLink());
 
         $urls = $this->service->getUrls(['controller' => 'forms', 'action' => 'index', 'sFid' => 5, 'foo' => 'bar'], $this->getContext());
 
         static::assertNotEmpty($urls);
-        static::assertNotContains('foo=bar', $urls[0]->getLink());
+        static::assertStringNotContainsString('foo=bar', $urls[0]->getLink());
     }
 
     private function createCategory()

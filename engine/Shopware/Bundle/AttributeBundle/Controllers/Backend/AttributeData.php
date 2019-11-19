@@ -30,7 +30,7 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
 {
     public function loadDataAction()
     {
-        /** @var DataLoader DataLoaderInterface */
+        /** @var DataLoaderInterface $dataLoader */
         $dataLoader = $this->get(DataLoaderInterface::class);
 
         try {
@@ -60,7 +60,7 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
     public function saveDataAction()
     {
         /** @var \Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface $dataPersister */
-        $dataPersister = $this->get(DataPersisterInterface::class);
+        $dataPersister = $this->get(\Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface::class);
 
         $data = [];
         foreach ($this->Request()->getParams() as $key => $value) {

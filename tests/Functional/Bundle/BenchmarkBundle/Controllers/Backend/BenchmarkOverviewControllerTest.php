@@ -43,7 +43,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $redirect = $this->getRedirect($controller->Response());
 
-        static::assertContains('BenchmarkLocalOverview/render/template/start', $redirect);
+        static::assertStringContainsString('BenchmarkLocalOverview/render/template/start', $redirect);
     }
 
     /**
@@ -63,7 +63,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $redirect = $this->getRedirect($controller->Response());
 
-        static::assertContains('BenchmarkOverview/render', $redirect);
+        static::assertStringContainsString('BenchmarkOverview/render', $redirect);
     }
 
     /**
@@ -82,7 +82,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $redirect = $this->getRedirect($controller->Response());
 
-        static::assertContains('BenchmarkLocalOverview/render/template/waiting', $redirect);
+        static::assertStringContainsString('BenchmarkLocalOverview/render/template/waiting', $redirect);
     }
 
     /**
@@ -101,7 +101,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $redirect = $this->getRedirect($controller->Response());
 
-        static::assertContains('BenchmarkLocalOverview/render/template/waiting', $redirect);
+        static::assertStringContainsString('BenchmarkLocalOverview/render/template/waiting', $redirect);
     }
 
     /**
@@ -121,7 +121,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $redirect = $this->getRedirect($controller->Response());
 
-        static::assertContains('BenchmarkLocalOverview/render/template/waiting', $redirect);
+        static::assertStringContainsString('BenchmarkLocalOverview/render/template/waiting', $redirect);
     }
 
     /**
@@ -142,7 +142,7 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 
         $redirect = $this->getRedirect($controller->Response());
 
-        static::assertContains('BenchmarkOverview/render', $redirect);
+        static::assertStringContainsString('BenchmarkOverview/render', $redirect);
     }
 
     public function testRenderAction_should_render_cached_template()

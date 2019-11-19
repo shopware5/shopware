@@ -543,7 +543,7 @@
 
         <service id="Shopware\Components\License\Service\ShopwareEditionServiceInterface" class="Shopware\Components\License\Service\ShopwareEditionService">
             <argument type="service" id="models"/>
-            <argument type="service" id="shopware_core.local_license_unpack_service" />
+            <argument type="service" id="Shopware\Components\License\Service\LocalLicenseUnpackService" />
         </service>
 
         <service id="shopware_core.license_service_subscriber" class="Shopware\Components\License\Service\LicenseServiceSubscriber">

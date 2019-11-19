@@ -89,11 +89,8 @@ class CountryTest extends Enlight_Components_Test_Controller_TestCase
 
         $modelManager->persist($testCountry);
         $modelManager->flush($testCountry);
-        unset($testCountry);
 
-        $id = $modelManager->getConnection()->lastInsertId();
-
-        $testCountry = $modelManager->getRepository(Country::class)->find($id);
+        $modelManager->refresh($testCountry);
 
         static::assertEquals(true, $testCountry->getActive());
         static::assertEquals(true, $testCountry->getAllowShipping()); // Checking that allowShipping is true

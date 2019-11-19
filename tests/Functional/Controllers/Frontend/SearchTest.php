@@ -36,17 +36,17 @@ class SearchTest extends \Enlight_Components_Test_Controller_TestCase
         $this->dispatch('ajax_search?sSearch=ipad');
 
         // Check for valid markup
-        static::assertContains(
+        static::assertStringContainsString(
             ' <ul class="results--list"> <li class="list--entry block-group result--item">',
             $this->Response()->getBody()
         );
         // Check for expected search link and number of results
-        static::assertContains(
+        static::assertStringContainsString(
             '/search?sSearch=ipad" class="search-result--link entry--all-results-link block"> <i class="icon--arrow-right"></i> Alle Ergebnisse anzeigen </a> <span class="entry--all-results-number block"> 1 Treffer </span>',
             $this->Response()->getBody()
         );
         // Check for expected name and price
-        static::assertContains(
+        static::assertStringContainsString(
             ' alt="iPadtasche mit Stiftmappe" class="media--image"> </span> <span class="entry--name block"> iPadtasche mit Stiftmappe </span> <span class="entry--price block"> <div class="product--price"> <span class="price--default is--nowrap"> 39,99&nbsp;&euro; * </span> </div> <div class="price--unit" title="Inhalt"> </div> </span> </a> </li> <li class="entry--all-results block-group result--item">',
             $this->Response()->getBody()
         );
@@ -59,8 +59,8 @@ class SearchTest extends \Enlight_Components_Test_Controller_TestCase
     {
         $this->dispatch(sprintf('search?sSearch=%s', $term));
 
-        static::assertContains($filtered, $this->Response()->getBody());
-        static::assertNotContains($term, $this->Response()->getBody());
+        static::assertStringContainsString($filtered, $this->Response()->getBody());
+        static::assertStringNotContainsString($term, $this->Response()->getBody());
     }
 
     public function searchTermProvider()

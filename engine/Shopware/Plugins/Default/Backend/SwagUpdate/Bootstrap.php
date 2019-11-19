@@ -117,7 +117,8 @@ class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_
     public function onGetSwagUpdateControllerPath(Enlight_Event_EventArgs $args)
     {
         $this->get(\Enlight_Template_Manager::class)->addTemplateDir(
-            __DIR__ . '/Views/', 'swag_update'
+            __DIR__ . '/Views/',
+            'swag_update'
         );
 
         return __DIR__ . '/Controllers/Backend/SwagUpdate.php';

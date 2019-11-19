@@ -110,7 +110,7 @@ class MediaTest extends TestCase
         // On the second pass the given name should still be used (extended with a random string)
         $media = $this->resource->create($data);
         $ids[] = $media->getId();
-        static::assertContains($data['name'], $media->getName());
+        static::assertStringContainsString($data['name'], $media->getName());
 
         // Delete the created media
         foreach ($ids as $id) {

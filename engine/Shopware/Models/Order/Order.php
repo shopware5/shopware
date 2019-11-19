@@ -1100,10 +1100,12 @@ class Order extends ModelEntity
      */
     public function calculateInvoiceAmount()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.7 and will be removed with 5.8. Please use the service with id `%s` instead',
+        trigger_error(sprintf(
+            '%s:%s is deprecated since Shopware 5.7 and will be removed with 5.8. Please use the service with id `%s` instead',
             __CLASS__,
             __METHOD__,
-            \Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface::class), E_USER_DEPRECATED);
+            \Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface::class
+        ), E_USER_DEPRECATED);
 
         /** @var CalculationServiceInterface $service */
         $service = Shopware()->Container()->get(\Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface::class);

@@ -221,10 +221,10 @@ class CoverTest extends TestCase
     {
         static::assertInstanceOf(Media::class, $media);
         static::assertNotEmpty($media->getThumbnails());
-        static::assertContains($expected, $media->getFile());
+        static::assertStringContainsString($expected, $media->getFile());
 
         foreach ($media->getThumbnails() as $thumbnail) {
-            static::assertContains($expected, $thumbnail->getSource());
+            static::assertStringContainsString($expected, $thumbnail->getSource());
         }
     }
 

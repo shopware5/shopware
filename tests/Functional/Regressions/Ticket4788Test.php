@@ -105,8 +105,8 @@ class Ticket4788Test extends \Enlight_Components_Test_Controller_TestCase
         // Check
         foreach ($this->articlesToTest as $articleId => $categoryId) {
             $this->dispatch("/detail/index/sArticle/{$articleId}");
-            static::assertContains($this->longDescription, $this->Response()->getBody());
-            static::assertContains($this->longDescriptionStripped, $this->Response()->getBody());
+            static::assertStringContainsString($this->longDescription, $this->Response()->getBody());
+            static::assertStringContainsString($this->longDescriptionStripped, $this->Response()->getBody());
             $this->reset();
         }
     }

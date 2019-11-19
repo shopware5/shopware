@@ -47,7 +47,7 @@ class RandomTest extends \Enlight_Components_Test_TestCase
         for ($i = 0; $i < strlen($password); ++$i) {
             $char = $password[$i];
 
-            static::assertContains($char, $chars);
+            static::assertStringContainsString($char, $chars);
 
             foreach ($sets as $key => $set) {
                 if (strpos($set, $char) !== false) {

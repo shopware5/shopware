@@ -363,7 +363,7 @@ class CustomerTest extends AbstractApiTestCase
         static::assertArrayHasKey('active', $data);
         static::assertArrayHasKey('paymentData', $data);
 
-        static::assertContains('test@foobar.com', $data['email']);
+        static::assertStringContainsString('test@foobar.com', $data['email']);
 
         $paymentInfo = array_shift($data['paymentData']);
 

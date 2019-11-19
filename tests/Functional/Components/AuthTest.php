@@ -31,6 +31,8 @@ use Shopware\Components\Password\Encoder\PasswordEncoderInterface;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware_Components_Auth;
 use Shopware_Components_Auth_Adapter_Default;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 class AuthTest extends Enlight_Components_Test_TestCase
 {
@@ -68,7 +70,7 @@ class AuthTest extends Enlight_Components_Test_TestCase
     public function testAuthenticateWithPassedAdapter()
     {
         // Create adapter
-        $adapter = new Shopware_Components_Auth_Adapter_Default();
+        $adapter = new Shopware_Components_Auth_Adapter_Default(new Session(new MockArraySessionStorage()));
 
         // Prepare backend user
         $username = 'testUser' . uniqid(rand());
@@ -92,7 +94,7 @@ class AuthTest extends Enlight_Components_Test_TestCase
     public function testAuthenticateWithSetAdapter()
     {
         // Create adapter
-        $adapter = new Shopware_Components_Auth_Adapter_Default();
+        $adapter = new Shopware_Components_Auth_Adapter_Default(new Session(new MockArraySessionStorage()));
 
         // Set adapter, so we don't have to pass it to authenticate method
         $this->auth->setBaseAdapter($adapter);

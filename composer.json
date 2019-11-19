@@ -87,7 +87,7 @@
         "ext-zend-opcache": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "~7.0",
+        "phpunit/phpunit": "~8.0",
         "behat/behat": "~3.4",
         "behat/mink": "~1.7",
         "behat/mink-extension": "v2.2",
@@ -124,9 +124,6 @@
         ]
     },
     "autoload-dev": {
-        "files": [
-            "tests/phpunitCompabilityBridge.php"
-        ],
         "psr-4": {
             "Shopware\\Behat\\ShopwareExtension\\": "tests/Mink/Extension/ShopwareExtension",
             "Shopware\\Tests\\Mink\\": "tests/Mink/features/bootstrap",

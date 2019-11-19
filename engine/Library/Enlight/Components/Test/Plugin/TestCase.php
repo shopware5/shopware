@@ -28,7 +28,7 @@
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-abstract class Enlight_Components_Test_Plugin_TestCaseV7 extends Enlight_Components_Test_Controller_TestCase
+abstract class Enlight_Components_Test_Plugin_TestCase extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * Creates a new instance of Enlight_Event_EventArgs by the passed parameters.
@@ -53,7 +53,7 @@ abstract class Enlight_Components_Test_Plugin_TestCaseV7 extends Enlight_Compone
     /**
      * Tests set up method
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

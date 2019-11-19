@@ -583,11 +583,17 @@
         <service id="Shopware\Bundle\AccountBundle\Service\CustomerUnlockService" alias="shopware_account.customer_unlock_service" />
         <service id="Shopware\Bundle\AttributeBundle\Repository\Registry" alias="shopware_attribute.repository_registry" />
         <service id="Shopware\Bundle\AttributeBundle\Service\CrudService" alias="shopware_attribute.crud_service" />
+        <service id="Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface" alias="shopware_attribute.crud_service" />
         <service id="Shopware\Bundle\AttributeBundle\Service\SchemaOperator" alias="shopware_attribute.schema_operator" />
+        <service id="Shopware\Bundle\AttributeBundle\Service\SchemaOperatorInterface" alias="shopware_attribute.schema_operator" />
         <service id="Shopware\Bundle\AttributeBundle\Service\TableMapping" alias="shopware_attribute.table_mapping" />
+        <service id="Shopware\Bundle\AttributeBundle\Service\TableMappingInterface" alias="shopware_attribute.table_mapping" />
         <service id="Shopware\Bundle\AttributeBundle\Service\TypeMapping" alias="shopware_attribute.type_mapping" />
+        <service id="Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface" alias="shopware_attribute.type_mapping" />
         <service id="Shopware\Bundle\AttributeBundle\Service\DataLoader" alias="shopware_attribute.data_loader" />
+        <service id="Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface" alias="shopware_attribute.data_loader" />
         <service id="Shopware\Bundle\AttributeBundle\Service\DataPersister" alias="shopware_attribute.data_persister" />
+        <service id="Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface" alias="shopware_attribute.data_persister" />
         <service id="Shopware\Bundle\AttributeBundle\Repository\Reader\MediaReader" alias="shopware_attribute.media_reader" />
         <service id="Shopware\Bundle\AttributeBundle\Repository\Reader\BlogReader" alias="shopware_attribute.blog_reader" />
         <service id="Shopware\Bundle\AttributeBundle\Repository\ProductRepository" alias="shopware_attribute.product_repository" />

@@ -26,6 +26,7 @@ namespace Shopware\Tests\Functional\Plugins\Core\HttpCache;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
+use Shopware\Bundle\PluginInstallerBundle\Service\LegacyPluginInstaller;
 use Shopware\Components\CacheManager;
 use Shopware\Components\HttpCache\DefaultCacheTimeService;
 use Shopware\Components\HttpCache\DefaultRouteService;
@@ -57,10 +58,13 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
 
     public function setUp(): void
     {
+        Shopware()->Container()->reset(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
+        Shopware()->Container()->reset('shopware_plugininstaller.plugin_manager');
+        Shopware()->Container()->reset(LegacyPluginInstaller::class);
+        Shopware()->Container()->reset('shopware_plugininstaller.legacy_plugin_installer');
+
         $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
-
         $this->pluginManager = Shopware()->Container()->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
-
         $this->cacheManager = Shopware()->Container()->get(\Shopware\Components\CacheManager::class);
 
         $plugin = $this->pluginManager->getPluginByName('HttpCache');
