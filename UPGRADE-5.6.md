@@ -44,6 +44,7 @@ to read [this documentation](https://developers.shopware.com/developers-guide/co
 * Changed `Shopware\Models\Customer\Customer`, set correct return type for `getregisterOptInId`
 * Changed the `TemplateMail_CreateMail_MailContext` filter to work correctly.
 * Changed `ProductServiceInterface` to extend from `ListProductServiceInterface`
+* Changed `\sArticles::sGetArticlePictures` to correctly return image thumbnail urls again
 
 ### Removals
 
