@@ -71,10 +71,7 @@ class Selection extends Field
         parent::validate();
 
         if (!$this->store) {
-            throw new \Exception(sprintf(
-                'Field %s requires a configured store',
-                $this->name
-            ));
+            throw new \Exception(sprintf('Field %s requires a configured store', $this->name));
         }
     }
 }

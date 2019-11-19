@@ -671,10 +671,7 @@ class sAdmin implements \Enlight_Hook
         );
 
         if ($this->db->getErrorMessage()) {
-            throw new Enlight_Exception(
-                'sUpdatePayment #01: Could not save data (payment)'
-                . $this->db->getErrorMessage()
-            );
+            throw new Enlight_Exception('sUpdatePayment #01: Could not save data (payment)' . $this->db->getErrorMessage());
         }
 
         return true;

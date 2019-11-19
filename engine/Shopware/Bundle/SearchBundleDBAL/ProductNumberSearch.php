@@ -226,13 +226,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
                 }
             }
             if (!$implements) {
-                throw new \RuntimeException(
-                    sprintf(
-                        'Object of class "%s" has to implement one of the following interfaces: "%s".',
-                        get_class($object),
-                        implode(',', $classes)
-                    )
-                );
+                throw new \RuntimeException(sprintf('Object of class "%s" has to implement one of the following interfaces: "%s".', get_class($object), implode(',', $classes)));
             }
         }
     }

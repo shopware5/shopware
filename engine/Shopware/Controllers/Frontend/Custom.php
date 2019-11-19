@@ -41,10 +41,7 @@ class Shopware_Controllers_Frontend_Custom extends Enlight_Controller_Action
         );
 
         if (!$staticPage) {
-            throw new Enlight_Controller_Exception(
-                'Custom page not found',
-                Enlight_Controller_Exception::PROPERTY_NOT_FOUND
-            );
+            throw new Enlight_Controller_Exception('Custom page not found', Enlight_Controller_Exception::PROPERTY_NOT_FOUND);
         }
 
         if (!empty($staticPage['link'])) {

@@ -82,7 +82,7 @@ class ChromePhpHandler extends BaseChromePhpHandler
     /**
      * {@inheritdoc}
      */
-    protected function sendHeader($header, $content)
+    protected function sendHeader(string $header, string $content): void
     {
         if (!$this->sendHeaders) {
             return;
@@ -98,7 +98,7 @@ class ChromePhpHandler extends BaseChromePhpHandler
     /**
      * Override default behavior since we check the user agent in onKernelResponse
      */
-    protected function headersAccepted()
+    protected function headersAccepted(): bool
     {
         return true;
     }

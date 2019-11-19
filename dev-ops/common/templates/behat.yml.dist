@@ -8,18 +8,18 @@ default:
         Behat\MinkExtension:
             ## defined in buildscript
             base_url: 'http://__SW_HOST____SW_BASE_PATH__'
-            default_session: 'goutte'
+            default_session: 'selenium2'
             javascript_session: 'selenium2'
             goutte: ~
             browser_name: chrome
             selenium2:
                 wd_host: "http://selenium:4444/wd/hub"
                 capabilities:
-                    chrome:
-                        switches:
-                            - "--disable-gpu"
-                            - "--headless"
-                            - "--no-sandbox"
+                    browser: chrome
+                    marionette: true
+                    extra_capabilities:
+                        chromeOptions:
+                            w3c: false
 
     gherkin:
       filters:
@@ -27,7 +27,7 @@ default:
 
     suites:
         default:
-            paths:    [ %paths.base%/features ]
+            paths:    [ "%paths.base%/features" ]
             template: Responsive
             contexts:
                 - Behat\MinkExtension\Context\MinkContext

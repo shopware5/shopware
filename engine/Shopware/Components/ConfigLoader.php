@@ -100,9 +100,7 @@ class ConfigLoader
         $config = include $file;
 
         if (!is_array($config)) {
-            throw new \Exception(
-                'Invalid configuration file provided; PHP file does not return an array value'
-            );
+            throw new \Exception('Invalid configuration file provided; PHP file does not return an array value');
         }
 
         $config = array_change_key_case($config, CASE_LOWER);

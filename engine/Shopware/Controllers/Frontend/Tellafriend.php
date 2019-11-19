@@ -39,10 +39,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
         $config = $this->container->get(\Shopware_Components_Config::class);
 
         if (!$config->get('showTellAFriend')) {
-            throw new Enlight_Controller_Exception(
-                'Tell a friend is not activated for the current shop',
-                404
-            );
+            throw new Enlight_Controller_Exception('Tell a friend is not activated for the current shop', 404);
         }
     }
 

@@ -159,7 +159,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
         if (!$plugin) {
             $io->error(sprintf('Plugin %s not found', $technicalName));
 
-            return null;
+            return 1;
         }
 
         $io->section($plugin->getLabel());

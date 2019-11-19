@@ -298,9 +298,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
 
         $templateId = $this->getService('db')->fetchOne($sql);
         if (!$templateId) {
-            throw new \RuntimeException(
-                sprintf('Unable to find template by name %s', self::$suite->getSetting('template'))
-            );
+            throw new \RuntimeException(sprintf('Unable to find template by name %s', self::$suite->getSetting('template')));
         }
 
         //set the template for shop "Deutsch" and activate SEPA payment method

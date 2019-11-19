@@ -64,10 +64,7 @@ class LandingPageViewLoader
         $fallbackId = $context->getShop()->getFallbackId();
 
         if (!$landingPage || !in_array($shopId, $landingPageShops)) {
-            throw new \Enlight_Controller_Exception(
-                'Landing page missing, non-existent or invalid for the current shop',
-                404
-            );
+            throw new \Enlight_Controller_Exception('Landing page missing, non-existent or invalid for the current shop', 404);
         }
 
         $translation = $this->translationComponent->readWithFallback($shopId, $fallbackId, 'emotion', $emotionId);

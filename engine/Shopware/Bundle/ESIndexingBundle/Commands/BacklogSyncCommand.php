@@ -77,7 +77,7 @@ class BacklogSyncCommand extends ShopwareCommand
         if (empty($backlogs)) {
             $io->success('Backlog is empty');
 
-            return null;
+            return 0;
         }
 
         /** @var Backlog $last */

@@ -105,7 +105,7 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand implements Comple
         if (!$locale) {
             $output->writeln('<error>Provided locale not found</error>');
 
-            return null;
+            return 1;
         }
 
         $this->exportFormLabels($output, $locale, $dir);

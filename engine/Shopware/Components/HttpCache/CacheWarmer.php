@@ -26,7 +26,6 @@ namespace Shopware\Components\HttpCache;
 
 use Doctrine\DBAL\Connection;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Event\ErrorEvent;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Request;
 use Psr\Log\LoggerInterface;

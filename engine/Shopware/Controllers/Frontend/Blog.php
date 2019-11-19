@@ -150,10 +150,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $category = $this->getCategoryRepository()->findOneBy(['id' => $categoryId, 'active' => true]);
         $isChild = ($shopCategory && $category) ? $category->isChildOf($shopCategory) : false;
         if (!$isChild) {
-            throw new Enlight_Controller_Exception(
-                'Blog category missing, non-existent or invalid for the current shop',
-                404
-            );
+            throw new Enlight_Controller_Exception('Blog category missing, non-existent or invalid for the current shop', 404);
         }
 
         $session = $this->get('session');
@@ -283,10 +280,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     {
         $blogArticleId = (int) $this->Request()->getQuery('blogArticle');
         if (empty($blogArticleId)) {
-            throw new Enlight_Controller_Exception(
-                'Missing necessary parameter "blogArticle"',
-                Enlight_Controller_Exception::PROPERTY_NOT_FOUND
-            );
+            throw new Enlight_Controller_Exception('Missing necessary parameter "blogArticle"', Enlight_Controller_Exception::PROPERTY_NOT_FOUND);
         }
 
         $shop = $this->get('shop');
@@ -299,10 +293,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         // Redirect if the blog item is not available
         if (empty($blogArticleData) || empty($blogArticleData['active'])) {
-            throw new Enlight_Controller_Exception(
-                sprintf('Blog article with id %d not found or inactive', $blogArticleId),
-                404
-            );
+            throw new Enlight_Controller_Exception(sprintf('Blog article with id %d not found or inactive', $blogArticleId), 404);
         }
 
         // Redirect if category is not available, inactive or external

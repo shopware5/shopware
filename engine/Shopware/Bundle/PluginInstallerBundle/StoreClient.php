@@ -503,12 +503,7 @@ class StoreClient
 
         $reason = array_key_exists('reason', $data) ? $data['reason'] : sprintf('Unknown error occurred. (%s)', $sbpCode);
 
-        throw new StoreException(
-            $sbpCode,
-            $reason,
-            $httpCode,
-            $requestException
-        );
+        throw new StoreException($sbpCode, $reason, $httpCode, $requestException);
     }
 
     private function verifyResponseSignature(Response $response)

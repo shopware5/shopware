@@ -252,9 +252,7 @@ class Media extends Resource
         if (!$album) {
             // Cleanup temporary file
             $this->deleteTmpFile($file);
-            throw new ApiException\CustomValidationException(
-                sprintf('Album by id %s not found', $albumId)
-            );
+            throw new ApiException\CustomValidationException(sprintf('Album by id %s not found', $albumId));
         }
 
         $media->setAlbum($album);
@@ -263,9 +261,7 @@ class Media extends Resource
             // Persist the model into the model manager this uploads and resizes the image
             $this->getManager()->persist($media);
         } catch (ORMException $e) {
-            throw new ApiException\CustomValidationException(
-                sprintf('Some error occurred while persisting your media')
-            );
+            throw new ApiException\CustomValidationException(sprintf('Some error occurred while persisting your media'));
         } finally {
             // Cleanup temporary file
             $this->deleteTmpFile($file);

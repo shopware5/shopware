@@ -27,7 +27,7 @@ namespace Shopware\Tests\Functional\Components;
 use DateTime;
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Enlight_Components_Test_TestCase;
-use Shopware\Components\Password\Encoder\PasswordEncoderInterface;
+use Shopware\Components\Password\Encoder\passwordencoderInterface;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware_Components_Auth;
 use Shopware_Components_Auth_Adapter_Default;
@@ -49,7 +49,7 @@ class AuthTest extends Enlight_Components_Test_TestCase
     private $auth;
 
     /**
-     * @var PasswordEncoderInterface
+     * @var passwordencoderInterface
      */
     private $encoder;
 
@@ -62,8 +62,8 @@ class AuthTest extends Enlight_Components_Test_TestCase
         $this->auth = Shopware_Components_Auth::getInstance();
 
         /** @var \Shopware\Components\Password\Manager $passworEncoderRegistry */
-        $passworEncoderRegistry = Shopware()->Container()->get('PasswordEncoder');
-        $defaultEncoderName = $passworEncoderRegistry->getDefaultPasswordEncoderName();
+        $passworEncoderRegistry = Shopware()->Container()->get('passwordencoder');
+        $defaultEncoderName = $passworEncoderRegistry->getDefaultpasswordencoderName();
         $this->encoder = $passworEncoderRegistry->getEncoderByName($defaultEncoderName);
     }
 

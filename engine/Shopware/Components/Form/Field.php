@@ -176,10 +176,7 @@ class Field extends Base implements FieldInterface, Validate
     public function validate()
     {
         if (!$this->name) {
-            throw new \Exception(sprintf(
-                'Field %s requires a configured name',
-                get_class($this)
-            ));
+            throw new \Exception(sprintf('Field %s requires a configured name', get_class($this)));
         }
     }
 }

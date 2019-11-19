@@ -41,14 +41,7 @@ class StatisticsResponseHydrator implements HydratorInterface
         $messageDataArrayKey = 'message';
         $messageDataSuccessValue = 'Success';
         if ($data[$messageDataArrayKey] !== $messageDataSuccessValue) {
-            throw new StatisticsHydratingException(
-                sprintf(
-                    'Expected field "%s" to be "%s", was "%s"',
-                    $messageDataArrayKey,
-                    $messageDataSuccessValue,
-                    $data[$messageDataArrayKey]
-                )
-            );
+            throw new StatisticsHydratingException(sprintf('Expected field "%s" to be "%s", was "%s"', $messageDataArrayKey, $messageDataSuccessValue, $data[$messageDataArrayKey]));
         }
 
         if (empty($data['responseToken'])) {

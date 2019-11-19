@@ -213,11 +213,7 @@ class Manager
         } catch (\Exception $e) {
             $this->markMigrationAsFailed($migration, $e);
 
-            throw new \Exception(sprintf(
-                'Could not apply migration (%s). Error: %s ',
-                get_class($migration),
-                $e->getMessage()
-            ));
+            throw new \Exception(sprintf('Could not apply migration (%s). Error: %s ', get_class($migration), $e->getMessage()));
         }
 
         $this->markMigrationAsFinished($migration);
@@ -306,9 +302,7 @@ class Manager
         $version = (int) $result['0'];
 
         if ($migrationClass->getVersion() !== $version) {
-            throw new \Exception(
-                sprintf('Version mismatch. Version in filename: %s, Version in Class: %s', $result['1'], $migrationClass->getVersion())
-            );
+            throw new \Exception(sprintf('Version mismatch. Version in filename: %s, Version in Class: %s', $result['1'], $migrationClass->getVersion()));
         }
     }
 }

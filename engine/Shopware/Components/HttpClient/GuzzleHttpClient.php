@@ -55,12 +55,7 @@ class GuzzleHttpClient implements HttpClientInterface
                 $body = (string) $e->getResponse()->getBody();
             }
 
-            throw new RequestException(
-                $e->getMessage(),
-                $e->getCode(),
-                $e,
-                $body
-            );
+            throw new RequestException($e->getMessage(), $e->getCode(), $e, $body);
         }
 
         return new Response(
@@ -179,12 +174,7 @@ class GuzzleHttpClient implements HttpClientInterface
                 $body = (string) $e->getResponse()->getBody();
             }
 
-            throw new RequestException(
-                $e->getMessage(),
-                $e->getCode(),
-                $e,
-                $body
-            );
+            throw new RequestException($e->getMessage(), $e->getCode(), $e, $body);
         }
 
         return new Response(

@@ -101,11 +101,7 @@ class ShopRegistrationService implements ShopRegistrationServiceInterface
         if ($template->getVersion() === 3) {
             $this->registerTheme($template);
         } else {
-            throw new \Exception(sprintf(
-                'Tried to load unsupported template version %s for template: %s',
-                $template->getVersion(),
-                $template->getName()
-            ));
+            throw new \Exception(sprintf('Tried to load unsupported template version %s for template: %s', $template->getVersion(), $template->getName()));
         }
 
         $templateManager->setCompileId(

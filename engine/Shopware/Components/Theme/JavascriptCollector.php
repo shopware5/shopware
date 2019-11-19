@@ -139,9 +139,7 @@ class JavascriptCollector
 
         foreach ($collection as $file) {
             if (!file_exists($file)) {
-                throw new \Exception(
-                    sprintf('Some plugin tries to compress a javascript file, but the file %s doesn\'t exist', $file)
-                );
+                throw new \Exception(sprintf('Some plugin tries to compress a javascript file, but the file %s doesn\'t exist', $file));
             }
         }
 

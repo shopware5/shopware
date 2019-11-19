@@ -575,9 +575,7 @@ class Variant extends Resource implements BatchInterface
                     $media = $this->getManager()->find(MediaModel::class, (int) $imageData['mediaId']);
 
                     if (!$media) {
-                        throw new ApiException\CustomValidationException(
-                            sprintf('Media by id %s not found', (int) $imageData['mediaId'])
-                        );
+                        throw new ApiException\CustomValidationException(sprintf('Media by id %s not found', (int) $imageData['mediaId']));
                     }
 
                     $image = $this->getArticleResource()->createNewArticleImage($article, $media);
@@ -851,9 +849,7 @@ class Variant extends Resource implements BatchInterface
         );
 
         if (empty($tax)) {
-            throw new ApiException\CustomValidationException(
-                sprintf('No product tax configured for variant: %s', $variant['id'])
-            );
+            throw new ApiException\CustomValidationException(sprintf('No product tax configured for variant: %s', $variant['id']));
         }
 
         $variant['prices'] = $this->getArticleResource()->getTaxPrices(

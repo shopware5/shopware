@@ -129,9 +129,7 @@ class SearchBundleDBALSubscriber implements SubscriberInterface
                 continue;
             }
 
-            throw new \RuntimeException(
-                sprintf('Unknown handler class %s detected', get_class($handler))
-            );
+            throw new \RuntimeException(sprintf('Unknown handler class %s detected', get_class($handler)));
         }
     }
 

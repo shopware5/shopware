@@ -166,9 +166,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         }
 
         if ($this->getRepository()->findOneByTemplate($template)) {
-            throw new Exception(
-                'A theme with that name already exists'
-            );
+            throw new Exception('A theme with that name already exists');
         }
 
         $parent = null;
@@ -176,10 +174,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             $parent = $this->getRepository()->find($parentId);
 
             if (!$parent instanceof Template) {
-                throw new Exception(sprintf(
-                    'Shop template by id %s not found',
-                    $parentId
-                ));
+                throw new Exception(sprintf('Shop template by id %s not found', $parentId));
             }
         }
 
@@ -255,10 +250,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
             $system->remove($file->getPathname());
 
-            throw new Exception(sprintf(
-                'Uploaded file %s is no zip file',
-                $name
-            ));
+            throw new Exception(sprintf('Uploaded file %s is no zip file', $name));
         }
         $targetDirectory = $this->container->get(\Shopware\Components\Theme\PathResolver::class)->getFrontendThemeDirectory();
 

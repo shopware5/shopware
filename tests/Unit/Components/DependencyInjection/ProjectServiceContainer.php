@@ -43,7 +43,7 @@ class ProjectServiceContainer extends Container
         $this->methodMap = [
             'parent' => 'getParentService',
             'child' => 'getChildService',
-            'bar' => 'getBarService'
+            'bar' => 'getBarService',
         ];
 
         $this->aliases = ['alias' => 'bar'];

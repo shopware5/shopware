@@ -10,7 +10,8 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Changed Symfony version to 4.4
 * Changed Slugify version to 3.2
 * Changed Doctrine ORM version to 2.7.0
-* Changed Guzzle version to 6.0.2
+* Changed Guzzle version to 6.4.1
+* Changed Monolog version to 2.0.1
 
 ### Additions
 
@@ -98,7 +99,6 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Removed following unused dependencies
     * `egulias/email-validator`
     * `symfony/translation`
-    * `setasign/fpdf`
     * `php-http/curl-client`
     * `psr/link`
     * `symfony/polyfill-ctype`

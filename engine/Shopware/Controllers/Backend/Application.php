@@ -139,9 +139,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
     public function init()
     {
         if (empty($this->model)) {
-            throw new Exception(
-                'The `model` property of your PHP controller is not configured!'
-            );
+            throw new Exception('The `model` property of your PHP controller is not configured!');
         }
 
         parent::init();

@@ -30,7 +30,6 @@ use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
-use Shopware\Components\HttpClient\GuzzleFactory;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Shop;
 
@@ -57,8 +56,6 @@ class AccountManagerService
     private $entityManager;
 
     /**
-     * @param string $apiEndPoint
-     *
      * @internal param ClientInterface $guzzleHttpClient
      */
     public function __construct(
