@@ -5,6 +5,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true"/>
+
         <service id="shopware_controllers_frontend_account" class="Shopware_Controllers_Frontend_Account">
             <tag name="shopware.controller" module="frontend" controller="account"/>
         </service>

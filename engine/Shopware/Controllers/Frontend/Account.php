@@ -512,7 +512,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $form = $this->createForm(ResetPasswordFormType::class, $customer);
         $form->handleRequest($this->Request());
 
-        if (!$form->isValid()) {
+        if ($form->isSubmitted() && !$form->isValid()) {
             $errors = ['sErrorFlag' => [], 'sErrorMessages' => []];
 
             foreach ($form->getErrors(true) as $error) {
@@ -608,7 +608,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $form = $this->createForm(ProfileUpdateFormType::class, $customer);
         $form->handleRequest($this->Request());
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->customerService->update($customer);
             $this->container->get('session')->offsetSet('userInfo', null);
             $this->redirect(['controller' => 'account', 'action' => 'profile', 'success' => true, 'section' => 'profile']);
@@ -632,7 +632,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $form = $this->createForm(EmailUpdateFormType::class, $customer);
         $form->handleRequest($this->Request());
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->customerService->update($customer);
             $this->get('session')->offsetSet('sUserMail', $customer->getEmail());
             $this->get('session')->offsetSet('userInfo', null);
@@ -656,7 +656,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $form = $this->createForm(PasswordUpdateFormType::class, $customer);
         $form->handleRequest($this->Request());
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->customerService->update($customer);
             $this->get('session')->offsetSet('sUserPassword', $customer->getPassword());
 

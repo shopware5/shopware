@@ -29,10 +29,10 @@
         </service>
 
         <service id="theme_path_resolver" class="Shopware\Components\Theme\PathResolver">
-            <argument>%shopware.app.rootdir%</argument>
+            <argument>%shopware.app.rootDir%</argument>
             <argument>%shopware.plugin_directories%</argument>
-            <argument>%shopware.template.templatedir%</argument>
-            <argument>%shopware.web.cachedir%</argument>
+            <argument>%shopware.template.templateDir%</argument>
+            <argument>%shopware.web.cacheDir%</argument>
             <argument type="service" id="shopware.release" />
         </service>
 
@@ -77,7 +77,7 @@
         </service>
 
         <service id="theme_compiler" class="Shopware\Components\Theme\Compiler">
-            <argument>%shopware.app.rootdir%</argument>
+            <argument>%shopware.app.rootDir%</argument>
             <argument type="service" id="less_compiler" />
             <argument type="service" id="Shopware\Components\Theme\PathResolver" />
             <argument type="service" id="theme_inheritance" />

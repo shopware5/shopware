@@ -12,6 +12,7 @@
     </parameters>
 
     <services>
+        <defaults public="true"/>
         <service id="argument_metadata_factory" class="Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory" />
 
         <service id="argument_resolver" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver">

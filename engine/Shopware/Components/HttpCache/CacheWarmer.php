@@ -28,6 +28,7 @@ use Doctrine\DBAL\Connection;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Event\ErrorEvent;
 use GuzzleHttp\Pool;
+use GuzzleHttp\Psr7\Request;
 use Psr\Log\LoggerInterface;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\HttpClient\GuzzleFactory;
@@ -103,12 +104,12 @@ class CacheWarmer
 
         $guzzleConfig = [];
         if (!empty($this->getMainShopId($shopId))) {
-            $guzzleConfig['cookies'] = ['shop' => $shopId];
+            $guzzleConfig['Cookie'] = 'shop=' . $shopId;
         }
 
         $requests = [];
         foreach ($urls as $url) {
-            $requests[] = $this->guzzleClient->createRequest('GET', $url, $guzzleConfig);
+            $requests[] = new Request('GET', $url, $guzzleConfig);
         }
 
         $events = $this->eventManager;
@@ -118,16 +119,16 @@ class CacheWarmer
             $requests,
             [
                 'pool_size' => $concurrentRequests,
-                'error' => function (ErrorEvent $e) use ($shopId, $events) {
+                'rejected' => function ($reason) use ($shopId, $events) {
                     $events->notify('Shopware_Components_CacheWarmer_ErrorOccured');
                     $this->logger->warning(
-                        'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getException()->getMessage()
+                        'Warm up http-cache error with shopId ' . $shopId . ' ' . $reason
                     );
                 },
             ]
         );
 
-        $pool->wait();
+        $pool->promise()->wait();
     }
 
     /**

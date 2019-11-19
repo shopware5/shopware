@@ -52,6 +52,11 @@ class Container extends BaseContainer
     {
         $name = $this->getNormalizedId($name);
 
+        // It's not allowed since Symfony 4 to replace initialized services
+        if (isset($this->services[$name])) {
+            unset($this->services[$name]);
+        }
+
         parent::set($name, $resource);
 
         parent::get('events')->notify(
@@ -74,7 +79,7 @@ class Container extends BaseContainer
      */
     public function has($name)
     {
-        $fallbackName = $this->getFormattedId($name);
+        $fallbackName = $name;
         $name = $this->getNormalizedId($name);
 
         return isset($this->services[$name]) || $this->doLoad($name, $fallbackName);
@@ -100,23 +105,11 @@ class Container extends BaseContainer
      *
      * @return string
      */
-    public function getFormattedId($id)
-    {
-        return strtolower($id);
-    }
-
-    /**
-     * @param string $id
-     *
-     * @return string
-     */
     public function getNormalizedId($id)
     {
         if (isset($this->aliases[$id])) {
             $id = $this->aliases[$id];
         }
-
-        $id = $this->getFormattedId($id);
 
         return $id;
     }
@@ -131,7 +124,7 @@ class Container extends BaseContainer
      */
     public function get($name, $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE)
     {
-        $fallbackName = $this->getFormattedId($name);
+        $fallbackName = $name;
         $name = $this->getNormalizedId($name);
 
         if (isset($this->services[$name])) {
@@ -150,7 +143,7 @@ class Container extends BaseContainer
      */
     public function load($name)
     {
-        $fallbackName = $this->getFormattedId($name);
+        $fallbackName = $name;
         $name = $this->getNormalizedId($name);
 
         if (isset($this->services[$name])) {
@@ -176,8 +169,6 @@ class Container extends BaseContainer
         }
 
         $name = $this->getNormalizedId($name);
-
-        parent::set($name, null);
 
         if (isset($this->services[$name])) {
             unset($this->services[$name]);

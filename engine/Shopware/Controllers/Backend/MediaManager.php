@@ -829,7 +829,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
                 $size = $size . 'x' . $size;
             }
 
-            $projectDir = $this->container->getParameter('shopware.app.rootdir');
+            $projectDir = $this->container->getParameter('shopware.app.rootDir');
             $thumbnailDir = $projectDir . 'media' . DIRECTORY_SEPARATOR . strtolower($media['type']) . DIRECTORY_SEPARATOR . 'thumbnail' . DIRECTORY_SEPARATOR;
             $path = $thumbnailDir . $this->removeSpecialCharacters($media['name']) . '_' . $size . '.' . $media['extension'];
 
@@ -954,7 +954,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $media->setName($params['name']);
         $name = $media->getName();
         $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
-        $projectDir = Shopware()->Container()->getParameter('shopware.app.rootdir');
+        $projectDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
 
         // Check if the name passed and is valid
         if (!empty($name)) {

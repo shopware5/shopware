@@ -44,7 +44,6 @@ use Shopware\Bundle\EsBackendBundle\EsBackendBundle;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\VersionCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\ESIndexingBundle;
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\AddConstraintValidatorsPass;
-use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
 use Shopware\Bundle\FormBundle\FormBundle;
 use Shopware\Bundle\MailBundle\MailBundle;
 use Shopware\Bundle\MediaBundle\MediaBundle;
@@ -76,6 +75,7 @@ use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\Form\DependencyInjection\FormPass;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
@@ -722,7 +722,6 @@ class Kernel extends SymfonyKernel
         foreach ($this->bundles as $name => $bundle) {
             $bundles[$name] = \get_class($bundle);
             $bundlesMetadata[$name] = [
-                'parent' => $bundle->getParent(),
                 'path' => $bundle->getPath(),
                 'namespace' => $bundle->getNamespace(),
             ];

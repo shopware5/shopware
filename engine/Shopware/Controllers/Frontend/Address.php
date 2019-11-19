@@ -117,7 +117,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $form = $this->createForm(AddressFormType::class, $address);
         $form->handleRequest($this->Request());
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $userId = $this->get('session')->get('sUserId');
             $customer = $this->get(\Shopware\Components\Model\ModelManager::class)->find(Customer::class, $userId);
 
@@ -162,7 +162,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $form = $this->createForm(AddressFormType::class, $address);
         $form->handleRequest($this->Request());
 
-        if ($form->isValid() && $this->isValidShippingAddress($address)) {
+        if ($form->isSubmitted() && $form->isValid() && $this->isValidShippingAddress($address)) {
             $this->addressService->update($address);
 
             if (!empty($address->getAdditional()['setDefaultBillingAddress'])) {
@@ -344,7 +344,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $form = $this->createForm(AddressFormType::class, $address);
         $form->handleRequest($this->Request());
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             if ($address->getId()) {
                 $this->addressService->update($address);
             } else {

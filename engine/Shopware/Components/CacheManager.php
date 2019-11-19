@@ -103,9 +103,9 @@ class CacheManager
      */
     public function clearHttpCache()
     {
-        if ($this->container->getParameter('shopware.httpCache.enabled')) {
+        if ($this->container->getParameter('shopware.httpcache.enabled')) {
             $this->clearDirectory(
-                $this->container->getParameter('shopware.httpCache.cache_dir')
+                $this->container->getParameter('shopware.httpcache.cache_dir')
             );
         }
 
@@ -245,9 +245,9 @@ class CacheManager
      */
     public function getHttpCacheInfo($request = null)
     {
-        if ($this->container->getParameter('shopware.httpCache.enabled')) {
+        if ($this->container->getParameter('shopware.httpcache.enabled')) {
             $info = $this->getDirectoryInfo(
-                $this->container->getParameter('shopware.httpCache.cache_dir')
+                $this->container->getParameter('shopware.httpcache.cache_dir')
             );
         } else {
             $info = [];
@@ -344,7 +344,7 @@ class CacheManager
      */
     public function getDoctrineProxyCacheInfo()
     {
-        $dir = $this->container->getParameter('shopware.model.proxydir');
+        $dir = $this->container->getParameter('shopware.model.proxyDir');
         $info = $this->getDirectoryInfo($dir);
         $info['name'] = 'Doctrine Proxies';
 
@@ -396,7 +396,7 @@ class CacheManager
      */
     public function getDirectoryInfo($dir)
     {
-        $docRoot = $this->container->getParameter('shopware.app.rootdir') . '/';
+        $docRoot = $this->container->getParameter('shopware.app.rootDir') . '/';
 
         $info = [];
         $info['dir'] = str_replace($docRoot, '', $dir);

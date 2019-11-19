@@ -476,7 +476,7 @@
         <service id="errorsubscriber" class="Shopware\Components\ErrorSubscriber">
             <argument type="service" id="corelogger"/>
             <argument type="service" id="events"/>
-            <argument>%shopware.errorHandler.ignoredExceptionClasses%</argument>
+            <argument>%shopware.errorhandler.ignoredExceptionClasses%</argument>
 
             <tag name="shopware.event_subscriber" />
         </service>
@@ -535,8 +535,8 @@
 
         <service id="shopware.csrftoken_validator" class="Shopware\Components\CSRFTokenValidator">
             <argument type="service" id="service_container" />
-            <argument>%shopware.csrfProtection.frontend%</argument>
-            <argument>%shopware.csrfProtection.backend%</argument>
+            <argument>%shopware.csrfprotection.frontend%</argument>
+            <argument>%shopware.csrfprotection.backend%</argument>
 
             <tag name="shopware.event_subscriber" />
         </service>
@@ -565,7 +565,7 @@
         <service id="shopware.plugin_xml_plugin_reader" class="Shopware\Components\Plugin\XmlReader\XmlPluginReader" />
 
         <service id="shopware.plugin_xml_plugin_info_reader" alias="shopware.plugin_xml_plugin_reader">
-            <deprecated>The "%service_id%" service id is deprecated since 5.6.0, use "shopware.plugin_xml_plugin_reader" instead.</deprecated>
+            <deprecated>The "%alias_id%" service id is deprecated since 5.6.0, use "shopware.plugin_xml_plugin_reader" instead.</deprecated>
         </service>
 
         <service id="shopware.plugin_requirement_validator" class="Shopware\Components\Plugin\RequirementValidator">

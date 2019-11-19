@@ -9,6 +9,7 @@
         <import resource="resolvers.xml"/>
     </imports>
     <services>
+        <defaults public="true"/>
         <service id="Shopware\Bundle\ContentTypeBundle\Controller\Backend\ContentTypeManager">
             <argument>%shopware.bundle.content_type.field_alias%</argument>
             <argument type="service" id="Shopware\Bundle\ContentTypeBundle\Services\TypeProvider"/>

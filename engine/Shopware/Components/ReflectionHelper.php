@@ -47,7 +47,7 @@ class ReflectionHelper
     {
         $reflectionClass = new \ReflectionClass($className);
 
-        $docPath = $docPath === null ? Shopware()->Container()->getParameter('shopware.app.rootdir') : $docPath;
+        $docPath = $docPath === null ? Shopware()->Container()->getParameter('shopware.app.rootDir') : $docPath;
 
         $folders = Shopware()->Container()->getParameter('shopware.plugin_directories');
 

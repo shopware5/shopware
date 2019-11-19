@@ -525,7 +525,7 @@ class Article extends Resource implements BatchInterface
         foreach ($article->getImages() as $image) {
             $media = $image->getMedia();
 
-            $projectDir = $this->getContainer()->getParameter('shopware.app.rootdir');
+            $projectDir = $this->getContainer()->getParameter('shopware.app.rootDir');
             if (!$force && $mediaService->has($projectDir . $media->getPath())) {
                 continue;
             }

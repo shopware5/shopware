@@ -87,7 +87,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
         $form = $this->get('shopware.form.factory')->create(AddressFormType::class, $model);
         $form->submit($data);
 
-        if (!$form->isValid()) {
+        if ($form->isSubmitted() && !$form->isValid()) {
             $errors = [];
             foreach ($form->getErrors(true) as $violation) {
                 $errors[] = [

@@ -40,12 +40,14 @@ class LegacyApiResourcesPassTest extends TestCase
 
         $container
             ->register('shopware.api.mynewresource')
-            ->setClass(Article::class);
+            ->setClass(Article::class)
+            ->setPublic(true);
 
         $container
             ->register('shopware.api.mynewresource.hasalreadytag')
             ->setClass(Article::class)
-            ->setTags(['shopware.api.mynewresource.hasalreadytag']);
+            ->setTags(['shopware.api.mynewresource.hasalreadytag'])
+            ->setPublic(true);
 
         $container->compile();
 

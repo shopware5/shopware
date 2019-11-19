@@ -205,7 +205,7 @@ class PluginLocalService
      */
     private function getIconOfPlugin($name)
     {
-        $rootDir = Shopware()->Container()->getParameter('shopware.app.rootdir');
+        $rootDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
 
         $path = Shopware()->Container()->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class)->getPluginPath($name);
         $path .= '/plugin.png';

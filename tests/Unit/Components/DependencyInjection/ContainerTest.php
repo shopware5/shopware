@@ -52,15 +52,12 @@ class ContainerTest extends TestCase
 
         $this->container->set('someKey', $object);
         static::assertSame($object, $this->container->get('someKey'));
-        static::assertSame($object, $this->container->get('somekey'));
     }
 
     public function testHas(): void
     {
         static::assertTrue($this->container->has('bar'));
-        static::assertTrue($this->container->has('BAR'));
         static::assertTrue($this->container->has('alias'));
-        static::assertTrue($this->container->has('ALIAS'));
 
         static::assertFalse($this->container->has('some'));
     }

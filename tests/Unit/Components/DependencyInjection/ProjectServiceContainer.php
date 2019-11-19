@@ -39,6 +39,13 @@ class ProjectServiceContainer extends Container
         parent::__construct();
 
         $this->__bar = new \stdClass();
+
+        $this->methodMap = [
+            'parent' => 'getParentService',
+            'child' => 'getChildService',
+            'bar' => 'getBarService'
+        ];
+
         $this->aliases = ['alias' => 'bar'];
 
         $this->__parent = new \stdClass();
