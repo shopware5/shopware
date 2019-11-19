@@ -36,7 +36,7 @@ class ReflectionHelperTest extends TestCase
      */
     private $helper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->helper = new ReflectionHelper();

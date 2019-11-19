@@ -34,7 +34,7 @@ class UserTest extends TestCase
      */
     protected $resource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->resource->setAcl($this->getAclMockAllowEverything());
@@ -48,11 +48,9 @@ class UserTest extends TestCase
         return new User();
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ValidationException
-     */
     public function testCreateWithNonUniqueEmailShouldThrowException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
         $this->resource->setRole('create');
 
         $testData = [
@@ -183,11 +181,9 @@ class UserTest extends TestCase
         static::assertInstanceOf('\Shopware\Models\User\User', $result['data'][0]);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ValidationException
-     */
     public function testCreateWithInvalidDataShouldThrowValidationException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
         $this->resource->setRole('create');
 
         $testData = [
@@ -225,10 +221,10 @@ class UserTest extends TestCase
 
     /**
      * @depends testCreateShouldBeSuccessful
-     * @expectedException \Shopware\Components\Api\Exception\ValidationException
      */
     public function testUpdateWithInvalidDataShouldThrowValidationException($id)
     {
+        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
         $this->resource->setRole('update');
 
         $testData = [
@@ -238,21 +234,17 @@ class UserTest extends TestCase
         $this->resource->update($id, $testData);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testUpdateWithInvalidIdShouldThrowNotFoundException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $this->resource->setRole('update');
 
         $this->resource->update(9999999, []);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testUpdateWithMissingIdShouldThrowParameterMissingException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->setRole('update');
 
         $this->resource->update('', []);
@@ -271,22 +263,18 @@ class UserTest extends TestCase
         static::assertEquals(null, $user->getId());
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testDeleteWithInvalidIdShouldThrowNotFoundException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         // TODO!!!
         $this->resource->setRole('delete');
 
         $this->resource->delete(9999999);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testDeleteWithMissingIdShouldThrowParameterMissingException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         // TODO!!!
 
         $this->resource->setRole('delete');
@@ -360,20 +348,16 @@ class UserTest extends TestCase
         static::assertEquals(2, $user->getLocaleId());
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testGetOneWithMissingIdShouldThrowParameterMissingException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->setRole('read');
         $this->resource->getOne('');
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testGetOneWithInvalidIdShouldThrowNotFoundException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $this->resource->setRole('read');
         $this->resource->getOne(9999999);
     }

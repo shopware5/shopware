@@ -556,7 +556,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
 
                 if ($this->_net == true) {
                     $position['netto'] = round($position['price'], 2);
-                    $position['price'] = Shopware()->Container()->get('shopware.cart.net_rounding')->round($position['price'], $position['tax']);
+                    $position['price'] = Shopware()->Container()->get('shopware.cart.net_rounding')->round($position['price'], $position['tax'], 1);
                 } else {
                     $position['netto'] = $position['price'] / (100 + $position['tax']) * 100;
                 }
@@ -771,9 +771,9 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     public function getPaymentInstances()
     {
         $this->_paymentInstances = new ArrayObject(
-            Shopware()->Db()->fetchAll('
-                SELECT * FROM s_core_payment_instance
-                WHERE order_id=?',
+            Shopware()->Db()->fetchAll(
+                'SELECT * FROM s_core_payment_instance
+                 WHERE order_id=?',
                 [$this->_id]
             ),
             ArrayObject::ARRAY_AS_PROPS

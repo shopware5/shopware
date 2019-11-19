@@ -33,14 +33,14 @@ use Shopware\Models\Shop\Template;
 
 class InheritanceTest extends Base
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var Connection $connection */
         $connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $connection->beginTransaction();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var Connection $connection */
         $connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);

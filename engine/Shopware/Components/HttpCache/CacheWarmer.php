@@ -124,7 +124,8 @@ class CacheWarmer
                         'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getException()->getMessage()
                     );
                 },
-            ]);
+            ]
+        );
 
         $pool->wait();
     }

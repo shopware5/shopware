@@ -140,19 +140,15 @@ class CategoryTest extends TestCase
         return $id;
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testUpdateWithInvalidIdShouldThrowNotFoundException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $this->resource->update(9999999, []);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testUpdateWithMissingIdShouldThrowParameterMissingException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->update('', []);
     }
 
@@ -167,19 +163,15 @@ class CategoryTest extends TestCase
         static::assertEquals(null, $category->getId());
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testDeleteWithInvalidIdShouldThrowNotFoundException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $this->resource->delete(9999999);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testDeleteWithMissingIdShouldThrowParameterMissingException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->delete('');
     }
 
@@ -213,8 +205,8 @@ class CategoryTest extends TestCase
 
     public function testCreateCategoryWithTranslation()
     {
-        /** @var \Shopware\Bundle\AttributeBundle\Service\CrudService $crud */
-        $crud = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class);
+        /** @var \Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface $crud */
+        $crud = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface::class);
 
         $crud->update('s_categories_attributes', 'underscore_test', 'string');
 

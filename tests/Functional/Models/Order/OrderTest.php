@@ -22,15 +22,19 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Models_Order_OrderTest extends Enlight_Components_Test_TestCase
+namespace Shopware\Tests\Models\Order;
+
+use Shopware\Models\Order\Order;
+
+class OrderTest extends \Enlight_Components_Test_TestCase
 {
     /**
-     * @var Shopware\Components\Model\ModelManager
+     * @var \Shopware\Components\Model\ModelManager
      */
     protected $em;
 
     /**
-     * @var Shopware\Models\User\Repository
+     * @var \Shopware\Models\User\Repository
      */
     protected $repo;
 
@@ -38,12 +42,12 @@ class Shopware_Tests_Models_Order_OrderTest extends Enlight_Components_Test_Test
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->em = Shopware()->Models();
-        $this->repo = Shopware()->Models()->getRepository('Shopware\Models\Order\Order');
+        $this->repo = Shopware()->Models()->getRepository(Order::class);
 
         Shopware()->Container()->set('auth', new ZendAuthMock());
     }

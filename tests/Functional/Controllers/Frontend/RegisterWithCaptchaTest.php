@@ -28,7 +28,7 @@ use Shopware\Components\Captcha\DefaultCaptcha;
 
 class RegisterWithCaptchaTest extends \Enlight_Components_Test_Plugin_TestCase
 {
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         static::saveConfig('registerCaptcha', 'nocaptcha');
     }

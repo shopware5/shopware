@@ -587,7 +587,9 @@ class sBasket implements \Enlight_Hook
 
         if ($premium['configurator_set_id'] > 0) {
             $premium = $this->moduleManager->Articles()->sGetTranslation(
-                $premium, $premium['variantID'], 'variant'
+                $premium,
+                $premium['variantID'],
+                'variant'
             );
 
             $product = new StoreFrontBundle\Struct\ListProduct(
@@ -1427,8 +1429,19 @@ SQL;
         $uniqueId = $this->front->Request()->getCookie('sUniqueID');
 
         if (!empty($cookieData) && empty($uniqueId)) {
+            $basePath = Shopware()->Shop()->getBasePath();
+            if ($basePath === null || $basePath === '') {
+                $basePath = '/';
+            }
             $uniqueId = Random::getAlphanumericString(32);
-            $this->front->Response()->headers->setCookie(new Cookie('sUniqueID', $uniqueId, time() + (86400 * 360), '/'));
+            $this->front->Response()->headers->setCookie(
+                new Cookie(
+                    'sUniqueID',
+                    $uniqueId,
+                    time() + (86400 * 360),
+                    $basePath
+                )
+            );
         }
 
         // Check if this product is already noted
@@ -2184,12 +2197,12 @@ SQL;
     {
         $builder = Shopware()->Models()->getConnection()->createQueryBuilder();
 
-        $builder->select('id', 'quantity')
+        $builder->select('basket.id', 'basket.quantity')
             ->from('s_order_basket', 'basket')
-            ->where('articleID = :articleId')
-            ->andWhere('sessionID = :sessionId')
-            ->andWhere('ordernumber = :ordernumber')
-            ->andWhere('modus != 1')
+            ->where('basket.articleID = :articleId')
+            ->andWhere('basket.sessionID = :sessionId')
+            ->andWhere('basket.ordernumber = :ordernumber')
+            ->andWhere('basket.modus != 1')
             ->setParameter('articleId', $productId)
             ->setParameter('sessionId', $sessionId)
             ->setParameter('ordernumber', $orderNumber);
@@ -2649,9 +2662,9 @@ SQL;
                 || (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])
             ) {
                 if (empty($getProducts[$key]['modus'])) {
-                    $priceWithTax = Shopware()->Container()->get('shopware.cart.net_rounding')->round($netprice, $tax);
+                    $getProducts[$key]['amountWithTax'] = Shopware()->Container()->get('shopware.cart.net_rounding')
+                        ->round($netprice, $tax, $quantity);
 
-                    $getProducts[$key]['amountWithTax'] = $quantity * $priceWithTax;
                     // If basket comprised any discount, calculate brutto-value for the discount
                     if ($this->sSYSTEM->sUSERGROUPDATA['basketdiscount'] && $this->sCheckForDiscount()) {
                         $discount += ($getProducts[$key]['amountWithTax'] / 100 * $this->sSYSTEM->sUSERGROUPDATA['basketdiscount']);

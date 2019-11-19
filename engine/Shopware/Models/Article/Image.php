@@ -50,7 +50,7 @@ class Image extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ProductImageAttribute
+     * @var ProductImageAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleImage", mappedBy="articleImage", orphanRemoval=true, cascade={"persist"})
      */
@@ -82,7 +82,7 @@ class Image extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Media\Media
+     * @var \Shopware\Models\Media\Media|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Media\Media", inversedBy="articles")
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
@@ -99,14 +99,14 @@ class Image extends ModelEntity
     private $id;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="articleID", type="integer", nullable=true)
      */
     private $articleId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="article_detail_id", type="integer", nullable=true)
      */
@@ -120,7 +120,7 @@ class Image extends ModelEntity
     private $description = '';
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="img", type="string", length=100, nullable=true)
      */
@@ -169,14 +169,14 @@ class Image extends ModelEntity
     private $extension = '';
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
     private $parentId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="media_id", type="integer", nullable=true)
      */
@@ -185,7 +185,7 @@ class Image extends ModelEntity
     /**
      * The parent image
      *
-     * @var Image
+     * @var Image|null
      *
      * @ORM\ManyToOne(targetEntity="Image", inversedBy="children", cascade={"persist"})
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
@@ -278,7 +278,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @param string $path
+     * @param string|null $path
      */
     public function setPath($path)
     {
@@ -286,7 +286,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPath()
     {
@@ -342,7 +342,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @return Article
+     * @return Article|null
      */
     public function getArticle()
     {
@@ -358,7 +358,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @return ProductImageAttribute
+     * @return ProductImageAttribute|null
      */
     public function getAttribute()
     {
@@ -410,7 +410,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @return Image
+     * @return Image|null
      */
     public function getParent()
     {
@@ -418,7 +418,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @param Image $parent
+     * @param Image|null $parent
      */
     public function setParent($parent)
     {
@@ -426,7 +426,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @return Detail
+     * @return Detail|null
      */
     public function getArticleDetail()
     {
@@ -442,7 +442,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @return Media
+     * @return Media|null
      */
     public function getMedia()
     {

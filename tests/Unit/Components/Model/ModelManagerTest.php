@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Unit\Components\Model;
 
-use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
+use Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface;
 
 class ModelManagerTest extends \PHPUnit\Framework\TestCase
 {
@@ -98,25 +98,25 @@ class ModelManagerTest extends \PHPUnit\Framework\TestCase
     {
         switch (true) {
             case (bool) preg_match('#\b(char\b|varchar)\b#i', $type):
-                $type = TypeMapping::TYPE_STRING;
+                $type = TypeMappingInterface::TYPE_STRING;
                 break;
             case (bool) preg_match('#\b(text|blob|array|simple_array|json_array|object|binary|guid)\b#i', $type):
-                $type = TypeMapping::TYPE_TEXT;
+                $type = TypeMappingInterface::TYPE_TEXT;
                 break;
             case (bool) preg_match('#\b(datetime|timestamp)\b#i', $type):
-                $type = TypeMapping::TYPE_DATETIME;
+                $type = TypeMappingInterface::TYPE_DATETIME;
                 break;
             case (bool) preg_match('#\b(date|datetimetz)\b#i', $type):
-                $type = TypeMapping::TYPE_DATE;
+                $type = TypeMappingInterface::TYPE_DATE;
                 break;
             case (bool) preg_match('#\b(int|integer|smallint|tinyint|mediumint|bigint)\b#i', $type):
-                $type = TypeMapping::TYPE_INTEGER;
+                $type = TypeMappingInterface::TYPE_INTEGER;
                 break;
             case (bool) preg_match('#\b(float|double|decimal|dec|fixed|numeric)\b#i', $type):
-                $type = TypeMapping::TYPE_FLOAT;
+                $type = TypeMappingInterface::TYPE_FLOAT;
                 break;
             case (bool) preg_match('#\b(bool|boolean)\b#i', $type):
-                $type = TypeMapping::TYPE_BOOLEAN;
+                $type = TypeMappingInterface::TYPE_BOOLEAN;
                 break;
             default:
                 throw new \InvalidArgumentException(sprintf('Column type "%s" cannot be converted.', $type));

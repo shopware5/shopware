@@ -234,8 +234,8 @@ class SearchIndexer implements SearchIndexerInterface
                 :ordered_products_of_categories,
                 :ordered_products_of_manufacturer,
                 NOW()
-            )
-      ');
+            )'
+        );
     }
 
     private function implodeUnique($array)

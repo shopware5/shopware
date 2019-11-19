@@ -47,17 +47,17 @@ class CountryTest extends TestCase
     /**
      * Saves the IDs of currently existing countries and states.
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
         static::$existingCountryIds = Shopware()->Db()->fetchCol(
-           'SELECT id
-            FROM s_core_countries'
+            'SELECT id
+             FROM s_core_countries'
         );
         static::$existingStatesIds = Shopware()->Db()->fetchCol(
-           'SELECT id
-            FROM s_core_countries_states'
+            'SELECT id
+             FROM s_core_countries_states'
         );
     }
 
@@ -65,17 +65,17 @@ class CountryTest extends TestCase
      * Restores the state of the 's_core_countries' and 's_core_countries_states' tables
      * by deleting all entries added by this class.
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::setUpBeforeClass();
 
         Shopware()->Db()->query(
-           'DELETE FROM s_core_countries
-            WHERE id NOT IN (' . implode(',', static::$existingCountryIds) . ')'
+            'DELETE FROM s_core_countries
+             WHERE id NOT IN (' . implode(',', static::$existingCountryIds) . ')'
         );
         Shopware()->Db()->query(
-           'DELETE FROM s_core_countries_states
-            WHERE id NOT IN (' . implode(',', static::$existingStatesIds) . ')'
+            'DELETE FROM s_core_countries_states
+             WHERE id NOT IN (' . implode(',', static::$existingStatesIds) . ')'
         );
     }
 

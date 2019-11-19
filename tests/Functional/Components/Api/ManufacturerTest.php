@@ -119,19 +119,15 @@ class ManufacturerTest extends TestCase
         return $id;
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testUpdateWithInvalidIdShouldThrowNotFoundException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $this->resource->update(9999999, []);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testUpdateWithMissingIdShouldThrowParameterMissingException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->update('', []);
     }
 
@@ -146,19 +142,15 @@ class ManufacturerTest extends TestCase
         static::assertEquals(null, $manufacturer->getId());
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testDeleteWithInvalidIdShouldThrowNotFoundException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $this->resource->delete(9999999);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testDeleteWithMissingIdShouldThrowParameterMissingException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->delete('');
     }
 

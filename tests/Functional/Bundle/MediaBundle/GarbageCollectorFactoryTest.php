@@ -25,7 +25,6 @@
 namespace Shopware\Tests\Functional\Bundle\MediaBundle;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use Shopware\Bundle\MediaBundle\GarbageCollector;
 use Shopware\Bundle\MediaBundle\GarbageCollectorFactory;
 
@@ -40,13 +39,13 @@ class GarbageCollectorFactoryTest extends TestCase
 
         $currentCount = count($this->getMediaPositionsFromGarbageCollector($collector));
 
-        Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class)->update('s_articles_attributes', 'foo', TypeMapping::TYPE_HTML);
+        Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface::class)->update('s_articles_attributes', 'foo', TypeMapping::TYPE_HTML);
 
         $collector = $factory->factory();
 
         static::assertNotEquals($currentCount, count($this->getMediaPositionsFromGarbageCollector($collector)));
 
-        Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class)->delete('s_articles_attributes', 'foo');
+        Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface::class)->delete('s_articles_attributes', 'foo');
     }
 
     /**

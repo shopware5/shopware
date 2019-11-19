@@ -56,10 +56,6 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
      */
     private $conditionHandlers;
 
-    /**
-     * @throws \RuntimeException
-     * @throws \Enlight_Event_Exception
-     */
     public function __construct(
         Connection $connection,
         \Enlight_Event_EventManager $eventManager,
@@ -75,8 +71,8 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
         $this->conditionHandlers = $this->registerConditionHandlers();
         $this->sortingHandlers = $this->registerSortingHandlers();
 
-        $container->set('shopware_searchdbal.condition_handlers', $this->conditionHandlers);
-        $container->set('shopware_searchdbal.sorting_handlers', $this->sortingHandlers);
+        $container->set('shopware_searchdbal.condition_handlers', new ArrayCollection($this->conditionHandlers));
+        $container->set('shopware_searchdbal.sorting_handlers', new ArrayCollection($this->sortingHandlers));
     }
 
     /**

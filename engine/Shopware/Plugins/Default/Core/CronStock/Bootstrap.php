@@ -114,7 +114,8 @@ class Shopware_Plugins_Core_CronStock_Bootstrap extends Shopware_Components_Plug
         ];
 
         $mail = Shopware()->TemplateMail()->createMail(
-            $job->get('inform_template'), $context
+            $job->get('inform_template'),
+            $context
         );
 
         $informMail = $job->get('inform_mail');

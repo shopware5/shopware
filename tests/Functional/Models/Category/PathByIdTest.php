@@ -22,12 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Models_Category_PathByIdTest extends Enlight_Components_Test_TestCase
+namespace Shopware\Tests\Models\Category;
+
+class PathByIdTest extends \Enlight_Components_Test_TestCase
 {
     /**
      * @var \Shopware\Models\Category\Repository
      */
-    protected $repo = null;
+    protected $repo;
 
     public function simpleNameArrayProvider()
     {
@@ -147,7 +149,7 @@ class Shopware_Tests_Models_Category_PathByIdTest extends Enlight_Components_Tes
     }
 
     /**
-     * @return Shopware\Models\Category\Repository
+     * @return \Shopware\Models\Category\Repository
      */
     protected function getRepo()
     {

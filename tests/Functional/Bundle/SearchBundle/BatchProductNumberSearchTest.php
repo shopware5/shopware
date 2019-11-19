@@ -49,7 +49,7 @@ class BatchProductNumberSearchTest extends TestCase
      */
     private $connection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $this->connection->beginTransaction();
@@ -58,7 +58,7 @@ class BatchProductNumberSearchTest extends TestCase
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->connection->rollBack();
 

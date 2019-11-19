@@ -230,7 +230,7 @@ class Status extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Mail\Mail|array|null $mail
+     * @param \Shopware\Models\Mail\Mail|array $mail
      *
      * @return Status
      */

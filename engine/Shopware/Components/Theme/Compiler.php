@@ -259,6 +259,8 @@ class Compiler
         }
         $file->flock(LOCK_UN);   // release the lock
 
+        $file = null; // release file handles, else Windows still locks the file
+
         rename($this->pathResolver->getTmpCssFilePath($shop, $timestamp), $this->pathResolver->getCssFilePath($shop, $timestamp));
     }
 
@@ -297,6 +299,8 @@ class Compiler
 
         $file->fwrite($content);
         $file->flock(LOCK_UN);   // release the lock
+
+        $file = null; // release file handles, else Windows still locks the file
 
         rename($this->pathResolver->getTmpJsFilePath($shop, $timestamp), $this->pathResolver->getJsFilePath($shop, $timestamp));
     }
@@ -362,7 +366,8 @@ class Compiler
         }
 
         $this->eventManager->notify(
-            'Theme_Compiler_Compile_Less', [
+            'Theme_Compiler_Compile_Less',
+            [
                 'shop' => $shop,
                 'less' => $definition,
             ]
@@ -445,7 +450,9 @@ class Compiler
         }
 
         $config = $this->eventManager->filter(
-            'Theme_Compiler_Configure', $config, [
+            'Theme_Compiler_Configure',
+            $config,
+            [
                 'shop' => $shop,
                 'settings' => $settings,
             ]

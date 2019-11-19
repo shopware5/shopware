@@ -3,7 +3,7 @@
         {if {config name=ACTDPRCHECK} && !$hideCheckbox}
             {block name="frontend_data_protection_information_checkbox"}
                 {s name="PrivacyText" namespace="frontend/index/privacy" assign="snippetPrivacyText"}{/s}
-                <input name="privacy-checkbox" type="checkbox" id="privacy-checkbox" required="required" aria-label="{$snippetPrivacyText|escape}" aria-required="true" value="1" class="is--required"{if $smarty.post['privacy-checkbox']} checked{/if} />
+                <input name="privacy-checkbox" type="checkbox" id="privacy-checkbox" required="required" aria-label="{$snippetPrivacyText|strip_tags|escape}" aria-required="true" value="1" class="is--required"{if $smarty.post['privacy-checkbox']} checked{/if} />
                 <label for="privacy-checkbox">
                     {s name="PrivacyText" namespace="frontend/index/privacy"}{/s}
                 </label>

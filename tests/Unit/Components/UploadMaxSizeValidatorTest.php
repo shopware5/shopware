@@ -35,7 +35,7 @@ class UploadMaxSizeValidatorTest extends TestCase
      */
     private $SUT;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->SUT = new UploadMaxSizeValidator();
     }

@@ -111,6 +111,14 @@
         {* Delivery informations *}
         {if ($sArticle.sConfiguratorSettings.type != 1 && $sArticle.sConfiguratorSettings.type != 2) || $activeConfiguratorSelection == true}
             {include file="frontend/plugins/index/delivery_informations.tpl" sArticle=$sArticle}
+        {elseif $sArticle.sReleaseDate && $sArticle.sReleaseDate|date_format:"%Y%m%d" > $smarty.now|date_format:"%Y%m%d"}
+            <link itemprop="availability" href="http://schema.org/PreOrder" />
+        {elseif $sArticle.esd}
+            <link itemprop="availability" href="http://schema.org/InStock" />
+        {elseif $sArticle.instock >= $sArticle.minpurchase}
+            <link itemprop="availability" href="http://schema.org/InStock" />
+        {else}
+            <link itemprop="availability" href="http://schema.org/LimitedAvailability" />
         {/if}
     {/block}
 {/block}

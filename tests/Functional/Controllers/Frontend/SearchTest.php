@@ -26,7 +26,7 @@ namespace Shopware\Tests\Functional\Controllers\Frontend;
 
 class SearchTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->reset();
     }

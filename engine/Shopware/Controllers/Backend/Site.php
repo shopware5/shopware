@@ -173,8 +173,10 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
                 // If the current site is associated with the requested group and has no other groups
                 if (in_array($key, $groups) && count($groups) == 1) {
                     //set group to gDisabled to prevent orphanage
-                    Shopware()->Db()->query('UPDATE s_cms_static SET grouping = ? WHERE id = ?',
-                        ['disabled', $site['id']]);
+                    Shopware()->Db()->query(
+                        'UPDATE s_cms_static SET grouping = ? WHERE id = ?',
+                        ['disabled', $site['id']]
+                    );
                 } // If the current site is associated with the requested group and does have other associations
                 else {
                     if (in_array($key, $groups) && count($groups) > 1) {

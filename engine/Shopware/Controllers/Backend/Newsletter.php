@@ -170,7 +170,9 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             // When entering the mail dispatch, set lock time to 15 minutes in the future *if* the
             // last lock time is in the past
             $sql = 'UPDATE s_campaigns_mailings SET locked=? WHERE id=? AND (locked < ? OR locked IS NULL)';
-            $result = Shopware()->Db()->query($sql, [
+            $result = Shopware()->Db()->query(
+                $sql,
+                [
                     date('Y-m-d H:i:s', time() + 15 * 60),
                     $mailing['id'],
                     date('Y-m-d H:i:s'),
@@ -199,7 +201,9 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             // As the above getMailingEmails query might be quite slow, we need to lock the
             // dispatch of newsletters before and after this query
             $sql = 'UPDATE s_campaigns_mailings SET locked=? WHERE id=?';
-            Shopware()->Db()->query($sql, [
+            Shopware()->Db()->query(
+                $sql,
+                [
                     date('Y-m-d H:i:s', time() + 15 * 60),
                     $mailing['id'],
                 ]
@@ -283,7 +287,9 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         // In cronmode: Once we are done, release the lock (by setting it 15 seconds to future)
         if (empty($mailingID)) {
             $sql = 'UPDATE s_campaigns_mailings SET locked=? WHERE id=?';
-            Shopware()->Db()->query($sql, [
+            Shopware()->Db()->query(
+                $sql,
+                [
                     date('Y-m-d H:i:s', time() + 15),
                     $mailing['id'],
                 ]

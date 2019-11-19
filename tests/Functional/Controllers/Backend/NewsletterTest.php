@@ -24,19 +24,25 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+
 class NewsletterTest extends \Enlight_Components_Test_Plugin_TestCase
 {
-    public function setUp()
+    use DatabaseTransactionBehaviour;
+
+    public function setUp(): void
     {
         parent::setUp();
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+
+        Shopware()->Models()->getConnection()->exec(file_get_contents(__DIR__ . '/testdata/lock.sql'));
     }
 
     /**
      * @ticket SW-4747
      */
-    public function testNewsletterLock()
+    public function testNewsletterLock(): void
     {
         $this->Front()->setParam('noViewRenderer', false);
         Shopware()->Config()->MailCampaignsPerCall = 1;
@@ -53,20 +59,10 @@ class NewsletterTest extends \Enlight_Components_Test_Plugin_TestCase
     /**
      * @ticket SW-23211
      */
-    public function testNewsletterGroup()
+    public function testNewsletterGroup(): void
     {
         $this->dispatch('/backend/NewsletterManager/getGroups');
 
         static::assertTrue($this->View()->getAssign('success'));
-    }
-
-    /**
-     * Returns the test dataset
-     *
-     * @return PHPUnit_Extensions_Database_DataSet_IDataSet
-     */
-    protected function getDataSet()
-    {
-        return $this->createXMLDataSet(__DIR__ . '/testdata/Lock.xml');
     }
 }

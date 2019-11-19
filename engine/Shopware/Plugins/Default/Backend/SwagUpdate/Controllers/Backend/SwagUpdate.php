@@ -150,17 +150,6 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         ]);
     }
 
-    /**
-     * $this->View()->assign(array(
-     *     'success' => false,
-     *     'error' => 'There are some problems. SORRY!!'
-     * ));
-     *
-     * $this->View()->assign(array(
-     *    'success' => true,
-     *     'ftpRequired' => false
-     * ));
-     */
     public function isUpdateAllowedAction()
     {
         $fs = new \ShopwarePlugins\SwagUpdate\Components\FileSystem();
@@ -190,82 +179,15 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         ]);
     }
 
-    public function saveFtpAction()
-    {
-        $ftpParams = [
-            'user' => $this->Request()->getParam('user'),
-            'password' => $this->Request()->getParam('password'),
-            'path' => $this->Request()->getParam('path'),
-            'server' => $this->Request()->getParam('server'),
-        ];
-
-        $basepath = rtrim($ftpParams['path'], '/');
-        $testFile = $basepath . '/shopware.php';
-
-        $localFh = fopen($testFile, 'rb');
-        $remoteFh = fopen('php://memory', 'w+');
-
-        if (false === $connection = ftp_connect($ftpParams['server'], 21, 5)) {
-            $this->View()->assign([
-                'success' => false,
-                'error' => 'Could not connect to server',
-            ]);
-
-            return;
-        }
-
-        if (!ftp_login($connection, $ftpParams['user'], $ftpParams['password'])) {
-            $this->View()->assign([
-                'success' => false,
-                'error' => 'Could not login into server',
-            ]);
-            ftp_close($connection);
-
-            return;
-        }
-
-        if (!ftp_fget($connection, $remoteFh, $testFile, FTP_ASCII)) {
-            $this->View()->assign([
-                'success' => false,
-                'error' => 'Could not read files from connection.',
-            ]);
-            ftp_close($connection);
-
-            return;
-        }
-
-        if (!$this->checkIdentical($localFh, $remoteFh)) {
-            $this->View()->assign([
-                'success' => false,
-                'error' => 'Files are not identical.',
-            ]);
-            ftp_close($connection);
-
-            return;
-        }
-
-        ftp_close($connection);
-
-        /** @var \Enlight_Components_Session_Namespace $session */
-        $session = Shopware()->BackendSession();
-        $session->offsetSet('update_ftp', $ftpParams);
-
-        $this->View()->assign([
-            'success' => true,
-        ]);
-    }
-
     public function popupAction()
     {
         $config = $this->getPluginConfig();
 
         if ($config['update-send-feedback']) {
             $apiEndpoint = $config['update-feedback-api-endpoint'];
-            $rootDir = Shopware()->Container()->getParameter('kernel.root_dir');
-            $publicKey = trim(file_get_contents($rootDir . '/engine/Shopware/Components/HttpClient/public.key'));
             $shopwareRelease = $this->container->get('shopware.release');
 
-            $collector = new FeedbackCollector($apiEndpoint, new \Shopware\Components\OpenSSLEncryption($publicKey), $this->getUnique(), $shopwareRelease);
+            $collector = new FeedbackCollector($apiEndpoint, $this->getUnique(), $shopwareRelease);
 
             try {
                 $collector->sendData();

@@ -286,8 +286,12 @@ class Detail extends Page implements HelperSelectorInterface
             $value += $graduation;
 
             if ($optionText !== $value . $unit) {
-                $errors[] = sprintf('There is the invalid option "%s" in "%s"! ("%s" expected)', $optionText, $select,
-                    $value . $unit);
+                $errors[] = sprintf(
+                    'There is the invalid option "%s" in "%s"! ("%s" expected)',
+                    $optionText,
+                    $select,
+                    $value . $unit
+                );
             }
         }
 

@@ -94,7 +94,8 @@ class BlogProvider extends CategoryProvider
                 's_categories',
                 'cat',
                 sprintf('blog.category_id = cat.id
-                        AND blog.category_id IN (%s)', $this->prepareSubQuery()->getSQL()))
+                        AND blog.category_id IN (%s)', $this->prepareSubQuery()->getSQL())
+            )
             ->where('blog.active = 1');
     }
 

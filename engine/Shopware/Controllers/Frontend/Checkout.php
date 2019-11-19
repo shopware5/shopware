@@ -104,8 +104,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function flagPaymentBlocked()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $this->View()->assign('paymentBlocked', true);
     }
 
@@ -862,8 +860,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getUserData()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $system = Shopware()->System();
         $userData = $this->admin->sGetUserData();
         if (!empty($userData['additional']['countryShipping'])) {
@@ -900,8 +896,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function saveTemporaryOrder()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $order = Shopware()->Modules()->Order();
 
         $orgBasketData = $this->View()->sBasket;
@@ -933,8 +927,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function saveOrder()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $order = Shopware()->Modules()->Order();
 
         $orgBasketData = $this->View()->getAssign('sBasket');
@@ -971,11 +963,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getInstockInfo($orderNumber, $quantity)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         if (empty($orderNumber)) {
-            return Shopware()->Snippets()->getNamespace('frontend')->get('CheckoutSelectVariant',
-                'Please select an option to place the required product in the cart', true);
+            return Shopware()->Snippets()->getNamespace('frontend')->get(
+                'CheckoutSelectVariant',
+                'Please select an option to place the required product in the cart',
+                true
+            );
         }
 
         $quantity = max(1, (int) $quantity);
@@ -983,17 +976,26 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $inStock['quantity'] += $quantity;
 
         if (empty($inStock['articleID'])) {
-            return Shopware()->Snippets()->getNamespace('frontend')->get('CheckoutArticleNotFound',
-                'Product could not be found.', true);
+            return Shopware()->Snippets()->getNamespace('frontend')->get(
+                'CheckoutArticleNotFound',
+                'Product could not be found.',
+                true
+            );
         }
         if (!empty($inStock['laststock']) || !empty(Shopware()->Config()->InstockInfo)) {
             if ($inStock['instock'] <= 0 && !empty($inStock['laststock'])) {
-                return Shopware()->Snippets()->getNamespace('frontend')->get('CheckoutArticleNoStock',
-                    'Unfortunately we can not deliver the desired product in sufficient quantity', true);
+                return Shopware()->Snippets()->getNamespace('frontend')->get(
+                    'CheckoutArticleNoStock',
+                    'Unfortunately we can not deliver the desired product in sufficient quantity',
+                    true
+                );
             } elseif ($inStock['instock'] < $inStock['quantity']) {
                 $result = 'Unfortunately we can not deliver the desired product in sufficient quantity. (#0 of #1 in stock).';
-                $result = Shopware()->Snippets()->getNamespace('frontend')->get('CheckoutArticleLessStock', $result,
-                    true);
+                $result = Shopware()->Snippets()->getNamespace('frontend')->get(
+                    'CheckoutArticleLessStock',
+                    $result,
+                    true
+                );
 
                 return str_replace(['#0', '#1'], [$inStock['instock'], $inStock['quantity']], $result);
             }
@@ -1014,8 +1016,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getAvailableStock($ordernumber)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $sql = '
             SELECT
                 a.id as articleID,
@@ -1049,8 +1049,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getShippingCosts()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $country = $this->getSelectedCountry();
         $payment = $this->getSelectedPayment();
         if (empty($country) || empty($payment)) {
@@ -1073,8 +1071,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getBasket($mergeProportional = true)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $shippingCosts = $this->getShippingCosts();
 
         $basket = $this->basket->sGetBasket();
@@ -1167,8 +1163,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getTaxRates($basket)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $result = [];
 
         if (!empty($basket['sShippingcostsTax'])) {
@@ -1200,8 +1194,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             } elseif ($item['modus'] == 2) {
                 // Ticket 4842 - dynamic tax-rates
                 $resultVoucherTaxMode = Shopware()->Db()->fetchOne(
-                    'SELECT taxconfig FROM s_emarketing_vouchers WHERE ordercode=?
-                ', [$item['ordernumber']]);
+                    'SELECT taxconfig FROM s_emarketing_vouchers WHERE ordercode=?',
+                    [$item['ordernumber']]
+                );
 
                 $tax = null;
 
@@ -1257,8 +1252,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getSimilarShown($articleID)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         Shopware()->Modules()->Marketing()->sBlacklist = $this->basket->sGetBasketIds();
 
         $similarId = Shopware()->Modules()->Marketing()->sGetSimilaryShownArticles($articleID);
@@ -1288,8 +1281,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getBoughtToo($articleID)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         Shopware()->Modules()->Marketing()->sBlacklist = $this->basket->sGetBasketIds();
 
         $alsoBoughtId = Shopware()->Modules()->Marketing()->sGetAlsoBoughtArticles($articleID);
@@ -1315,8 +1306,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getMinimumCharge()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         return $this->basket->sCheckMinimumCharge();
     }
 
@@ -1329,8 +1318,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getDispatchNoOrder()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         return !empty(Shopware()->Config()->PremiumShippingNoOrder) && (empty($this->session['sDispatch']) || empty($this->session['sCountry']));
     }
 
@@ -1343,8 +1330,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getPremiums()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $sql = 'SELECT `id` FROM `s_order_basket` WHERE `sessionID`=? AND `modus`=1';
         $result = Shopware()->Db()->fetchOne($sql, [Shopware()->Session()->get('sessionId')]);
         if (!empty($result)) {
@@ -1363,8 +1348,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getEsdNote()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $payment = empty($this->View()->sUserData['additional']['payment']) ? $this->session['sOrderVariables']['sUserData']['additional']['payment'] : $this->View()->sUserData['additional']['payment'];
 
         return $this->basket->sCheckForESD() && !$payment['esdactive'];
@@ -1380,8 +1363,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getInquiry()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         if (Shopware()->Config()->get('sINQUIRYVALUE')) {
             $factor = Shopware()->System()->sCurrency['factor'] ? 1 : Shopware()->System()->sCurrency['factor'];
             $value = Shopware()->Config()->get('sINQUIRYVALUE') * $factor;
@@ -1407,8 +1388,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getInquiryLink()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         return Shopware()->Config()->get('sBASEFILE') . '?sViewport=support&sFid=' . Shopware()->Config()->get('sINQUIRYID') . '&sInquiry=basket';
     }
 
@@ -1421,8 +1400,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getCountryList()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         return $this->admin->sGetCountryList();
     }
 
@@ -1435,8 +1412,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getDispatches($paymentId = null)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $country = $this->getSelectedCountry();
         $state = $this->getSelectedState();
         if (empty($country)) {
@@ -1456,8 +1431,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getPayments()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         return $this->admin->sGetPaymentMeans();
     }
 
@@ -1471,8 +1444,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getSelectedCountry()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         if (!empty($this->View()->sUserData['additional']['countryShipping'])) {
             $this->session['sCountry'] = (int) $this->View()->sUserData['additional']['countryShipping']['id'];
             $this->session['sArea'] = (int) $this->View()->sUserData['additional']['countryShipping']['areaID'];
@@ -1503,8 +1474,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getSelectedState()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         if (!empty($this->View()->sUserData['additional']['stateShipping'])) {
             $this->session['sState'] = (int) $this->View()->sUserData['additional']['stateShipping']['id'];
 
@@ -1523,8 +1492,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getSelectedPayment()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $payment = null;
         $paymentMethods = $this->getPayments();
 
@@ -1580,8 +1547,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getSelectedDispatch()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be protected with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         if (empty($this->session['sCountry'])) {
             return false;
         }
@@ -1720,13 +1685,14 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         // Necessary to call this first in order for 'sDispatch' session variable to be set
         // The basket will need this session variable to properly calculate the shipping costs
+        $country = $this->getSelectedCountry();
         $dispatch = $this->getSelectedDispatch();
         $basket = $this->getBasket();
 
         $view->assign('sCountryList', $this->getCountryList());
         $view->assign('sState', $this->getSelectedState());
         $view->assign('sPayments', $this->getPayments());
-        $view->assign('sCountry', $this->getSelectedCountry());
+        $view->assign('sCountry', $country);
         $view->assign('sPayment', $this->getSelectedPayment());
 
         $view->assign('sDispatch', $dispatch);

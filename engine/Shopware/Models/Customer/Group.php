@@ -60,7 +60,7 @@ class Group extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var CustomerGroup
+     * @var CustomerGroup|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerGroup", mappedBy="customerGroup", orphanRemoval=true, cascade={"persist"})
      */
@@ -410,7 +410,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return CustomerGroup
+     * @return CustomerGroup|null
      */
     public function getAttribute()
     {

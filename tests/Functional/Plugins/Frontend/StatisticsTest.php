@@ -23,17 +23,19 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_Test_Plugin_TestCase
+namespace Shopware\Tests\Plugins\Frontend;
+
+class StatisticsTest extends \Enlight_Components_Test_Plugin_TestCase
 {
     /**
-     * @var Shopware_Plugins_Frontend_Paypal_Bootstrap
+     * @var \Shopware_Plugins_Frontend_Statistics_Bootstrap
      */
     protected $plugin;
 
     /**
      * Test set up method
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -47,7 +49,7 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
     /**
      * tear down the demo data
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -58,7 +60,7 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
     /**
      * Retrieve plugin instance
      *
-     * @return Shopware_Plugins_Frontend_Statistics_Bootstrap
+     * @return \Shopware_Plugins_Frontend_Statistics_Bootstrap
      */
     public function Plugin()
     {

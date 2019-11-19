@@ -37,7 +37,7 @@ class ProportionalTaxCalculatorTest extends \Enlight_Components_Test_TestCase
      */
     private $taxCalculator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->taxCalculator = Shopware()->Container()->get('shopware.cart.proportional_tax_calculator');

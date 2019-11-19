@@ -22,11 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Models_Order_Document_DocumentTest extends Enlight_Components_Test_TestCase
+namespace Shopware\Tests\Models\Order\Document;
+
+use Shopware\Models\Order\Document\Document;
+use Shopware_Components_Document;
+
+class DocumentTest extends \Enlight_Components_Test_TestCase
 {
     public function testSetAttribute()
     {
-        $document = new \Shopware\Models\Order\Document\Document();
+        $document = new Document();
         $attribute = new \Shopware\Models\Attribute\Document();
         $document->setAttribute($attribute);
 
@@ -60,7 +65,7 @@ class Shopware_Tests_Models_Order_Document_DocumentTest extends Enlight_Componen
                     '_preview' => true,
                 ]
             );
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // Append exception to possible failure ouputs (caused by the assert in the finally block)
             throw $e;
         } finally {

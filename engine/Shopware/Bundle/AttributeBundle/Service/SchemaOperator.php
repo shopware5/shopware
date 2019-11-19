@@ -26,7 +26,7 @@ namespace Shopware\Bundle\AttributeBundle\Service;
 
 use Doctrine\DBAL\Connection;
 
-class SchemaOperator
+class SchemaOperator implements SchemaOperatorInterface
 {
     /**
      * @var Connection
@@ -34,7 +34,7 @@ class SchemaOperator
     private $connection;
 
     /**
-     * @var TableMapping
+     * @var TableMappingInterface
      */
     private $tableMapping;
 
@@ -43,7 +43,7 @@ class SchemaOperator
      */
     private $nameBlacklist;
 
-    public function __construct(Connection $connection, TableMapping $tableMapping)
+    public function __construct(Connection $connection, TableMappingInterface $tableMapping)
     {
         $this->connection = $connection;
         $this->tableMapping = $tableMapping;
@@ -51,10 +51,7 @@ class SchemaOperator
     }
 
     /**
-     * @param string                $table
-     * @param string                $column
-     * @param string                $type
-     * @param string|int|float|null $defaultValue
+     * {@inheritdoc}
      *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Exception
@@ -68,7 +65,8 @@ class SchemaOperator
             throw new \Exception('No column type provided');
         }
 
-        $sql = sprintf('ALTER TABLE `%s` ADD `%s` %s NULL DEFAULT %s',
+        $sql = sprintf(
+            'ALTER TABLE `%s` ADD `%s` %s NULL DEFAULT %s',
             $table,
             $column,
             $type,
@@ -79,11 +77,7 @@ class SchemaOperator
     }
 
     /**
-     * @param string                $table
-     * @param string                $originalName
-     * @param string                $newName
-     * @param string                $type
-     * @param string|int|float|null $defaultValue
+     * {@inheritdoc}
      *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Exception
@@ -102,7 +96,8 @@ class SchemaOperator
         $this->validateField($newName);
         $defaultValue = $this->filterDefaultValue($defaultValue);
 
-        $sql = sprintf('ALTER TABLE `%s` CHANGE `%s` `%s` %s NULL DEFAULT %s;',
+        $sql = sprintf(
+            'ALTER TABLE `%s` CHANGE `%s` `%s` %s NULL DEFAULT %s;',
             $table,
             $originalName,
             $newName,
@@ -114,8 +109,7 @@ class SchemaOperator
     }
 
     /**
-     * @param string $table
-     * @param string $column
+     * {@inheritdoc}
      *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Exception
@@ -133,10 +127,7 @@ class SchemaOperator
     }
 
     /**
-     * Updates the provided column data to sql NULL value
-     *
-     * @param string $table
-     * @param string $column
+     * {@inheritdoc}
      *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Exception

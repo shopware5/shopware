@@ -59,21 +59,21 @@ class Element extends ModelEntity
     private $type;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="`default`", type="string", nullable=true)
      */
     private $default;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="store", type="string", nullable=true)
      */
     private $store;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="label", type="string", nullable=true)
      */
@@ -87,7 +87,7 @@ class Element extends ModelEntity
     private $required = false;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="help", type="string", nullable=true)
      */
@@ -155,7 +155,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDefault()
     {
@@ -163,7 +163,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param string $default
+     * @param string|null $default
      */
     public function setDefault($default)
     {
@@ -171,7 +171,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getStore()
     {
@@ -179,7 +179,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param string $store
+     * @param string|null $store
      */
     public function setStore($store)
     {
@@ -187,7 +187,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getLabel()
     {
@@ -219,7 +219,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getHelp()
     {
@@ -227,7 +227,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param string $help
+     * @param string|null $help
      */
     public function setHelp($help)
     {

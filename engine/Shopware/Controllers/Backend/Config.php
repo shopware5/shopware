@@ -690,9 +690,11 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
                     $sql = 'UPDATE s_cms_static SET `grouping` = :grouping WHERE id = :id';
                     $statement = $connection->prepare($sql);
-                    $statement->execute([
-                        'grouping' => $site['grouping'],
-                        'id' => $site['id'], ]
+                    $statement->execute(
+                        [
+                            'grouping' => $site['grouping'],
+                            'id' => $site['id'],
+                        ]
                     );
                 }
                 break;
@@ -1442,11 +1444,14 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
         $this->beforeSaveElement($elementData);
 
-        $values = Shopware()->Events()->filter('Shopware_Controllers_Backend_Config_Before_Save_Config_Element',
-            $values, [
+        $values = Shopware()->Events()->filter(
+            'Shopware_Controllers_Backend_Config_Before_Save_Config_Element',
+            $values,
+            [
                 'subject' => $this,
                 'element' => $element,
-            ]);
+            ]
+        );
 
         $element->setValues($values);
 
@@ -1488,12 +1493,18 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $snippets = $this->container->get('snippets');
         foreach ($data as &$locale) {
             if (!empty($locale['language'])) {
-                $locale['language'] = $snippets->getNamespace('backend/locale/language')->get($locale['locale'],
-                    $locale['language'], true);
+                $locale['language'] = $snippets->getNamespace('backend/locale/language')->get(
+                    $locale['locale'],
+                    $locale['language'],
+                    true
+                );
             }
             if (!empty($locale['territory'])) {
-                $locale['territory'] = $snippets->getNamespace('backend/locale/territory')->get($locale['locale'],
-                    $locale['territory'], true);
+                $locale['territory'] = $snippets->getNamespace('backend/locale/territory')->get(
+                    $locale['locale'],
+                    $locale['territory'],
+                    true
+                );
             }
         }
 

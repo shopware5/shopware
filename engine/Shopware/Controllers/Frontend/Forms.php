@@ -159,7 +159,15 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         /* @var Form $form */
         $form = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
+
+        if ($form->getAttribute()) {
+            $this->getModelManager()->detach($form->getAttribute());
+        }
+
         $this->getModelManager()->detach($form);
+        foreach ($form->getFields() as $field) {
+            $this->getModelManager()->detach($field);
+        }
 
         if (!$form) {
             throw new \Enlight_Controller_Exception(
@@ -697,9 +705,9 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                     if ($this->_elements[$key]['typ'] === 'text2') {
                         $class = explode(';', $this->_elements[$key]['class']);
                         $this->_elements[$key]['class'] = implode(
-                                ' instyle_error has--error;',
-                                $class
-                            ) . ' instyle_error has--error';
+                            ' instyle_error has--error;',
+                            $class
+                        ) . ' instyle_error has--error';
                     } else {
                         $this->_elements[$key]['class'] .= ' instyle_error has--error';
                     }

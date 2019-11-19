@@ -727,7 +727,6 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     /**
      * Returns all resource ids for the passed role where a rule with privilege NULL exists.
      *
-     *
      * @return array
      */
     private function getResourceAdminRules(int $roleId)

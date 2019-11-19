@@ -49,7 +49,8 @@ class SitemapGenerateCommand extends ShopwareCommand
                 'shopId',
                 'i',
                 InputOption::VALUE_OPTIONAL,
-                'Generate sitemap only for for this shop')
+                'Generate sitemap only for for this shop'
+            )
             ->addOption(
                 'force',
                 'f',

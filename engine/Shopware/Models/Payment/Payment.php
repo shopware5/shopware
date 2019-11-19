@@ -68,7 +68,7 @@ class Payment extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var PaymentAttribute
+     * @var PaymentAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Payment", mappedBy="payment", orphanRemoval=true, cascade={"persist"})
      */
@@ -218,21 +218,21 @@ class Payment extends ModelEntity
     private $hideProspect = 0;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="action", type="string", length=255, nullable=true)
      */
     private $action;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="pluginID", type="integer", nullable=true)
      */
     private $pluginId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="source", type="integer", nullable=true)
      */
@@ -658,7 +658,7 @@ class Payment extends ModelEntity
     /**
      * Sets the action of a payment
      *
-     * @param string $action
+     * @param string|null $action
      *
      * @return Payment
      */
@@ -672,7 +672,7 @@ class Payment extends ModelEntity
     /**
      * Gets the action of a payment
      *
-     * @return string
+     * @return string|null
      */
     public function getAction()
     {
@@ -798,7 +798,7 @@ class Payment extends ModelEntity
     }
 
     /**
-     * @return PaymentAttribute
+     * @return PaymentAttribute|null
      */
     public function getAttribute()
     {

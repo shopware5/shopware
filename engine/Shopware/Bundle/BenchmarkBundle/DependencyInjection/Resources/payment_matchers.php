@@ -24,7 +24,7 @@
 
 return [
     'paypal' => [
-        '/pay[\s-_]?pal/i',
+        '/pay[\s\-_]?pal/i',
     ],
     'invoice' => [
         '/invoice/i',
@@ -32,28 +32,28 @@ return [
     ],
     'debit' => [
         '/debit/i',
-        '/last[\s-_]?schrift/i',
+        '/last[\s\-_]?schrift/i',
         '/sepa/i',
     ],
     'credit_card' => [
         '/credit/i',
-        '/credit[\s-_]?card/i',
+        '/credit[\s\-_]?card/i',
         '/visa/i',
-        '/master[\s-_]?card/i',
-        '/american[\s-_]?express/i',
+        '/master[\s\-_]?card/i',
+        '/american[\s\-_]?express/i',
     ],
     'sofort' => [
         '/sofort/i',
     ],
     'credit' => [
-        '/post[\s-_]?finance/i',
+        '/post[\s\-_]?finance/i',
     ],
     'stripe' => [
         '/stripe/i',
     ],
     'prepayment' => [
-        '/pre[\s-_]?payment/i',
-        '/vor[\s-_]?kasse/i',
+        '/pre[\s\-_]?payment/i',
+        '/vor[\s\-_]?kasse/i',
     ],
     'amazon_pay' => [
         '/amazon/i',
@@ -76,22 +76,22 @@ return [
         '/ideal/i',
     ],
     'pay_direkt' => [
-        '/pay[\s-_]?direct/i',
-        '/pay[\s-_]?direkt/i',
+        '/pay[\s\-_]?direct/i',
+        '/pay[\s\-_]?direkt/i',
     ],
     'giro_pay' => [
-        '/giro[\s-_]?pay/i',
+        '/giro[\s\-_]?pay/i',
     ],
     'bitcoin' => [
-        '/bit[\s-_]?coin/i',
+        '/bit[\s\-_]?coin/i',
     ],
     'sage' => [
         '/sage/i',
     ],
     'cash' => [
-        '/nach[\s-_]?nahme/i',
-        '/cash[\s-_]?on[\s-_]?delivery/i',
-        '/cash[[\s-_]?delivery/i',
+        '/nach[\s\-_]?nahme/i',
+        '/cash[\s\-_]?on[\s\-_]?delivery/i',
+        '/cash[[\s\-_]?delivery/i',
         '/cash/i',
     ],
 ];

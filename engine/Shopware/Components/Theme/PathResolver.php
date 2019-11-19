@@ -254,7 +254,7 @@ class PathResolver
      */
     public function getCacheDirectory()
     {
-        return rtrim($this->cacheDir, '/');
+        return rtrim($this->cacheDir, DIRECTORY_SEPARATOR);
     }
 
     /**
@@ -301,7 +301,7 @@ class PathResolver
      */
     public function getCssFilePath(Shop\Shop $shop, $timestamp)
     {
-        return $this->getCacheDirectory() . '/' . $this->buildTimestampName($timestamp, $shop, 'css');
+        return $this->getCacheDirectory() . DIRECTORY_SEPARATOR . $this->buildTimestampName($timestamp, $shop, 'css');
     }
 
     /**
@@ -313,7 +313,7 @@ class PathResolver
      */
     public function getTmpCssFilePath(Shop\Shop $shop, string $timestamp): string
     {
-        return $this->getCacheDirectory() . '/' . $this->buildTimestampName($timestamp, $shop, 'css.tmp');
+        return $this->getCacheDirectory() . DIRECTORY_SEPARATOR . $this->buildTimestampName($timestamp, $shop, 'css.tmp');
     }
 
     /**
@@ -329,7 +329,7 @@ class PathResolver
      */
     public function getJsFilePath(Shop\Shop $shop, $timestamp)
     {
-        return $this->getCacheDirectory() . '/' . $this->buildTimestampName($timestamp, $shop, 'js');
+        return $this->getCacheDirectory() . DIRECTORY_SEPARATOR . $this->buildTimestampName($timestamp, $shop, 'js');
     }
 
     /**
@@ -341,7 +341,7 @@ class PathResolver
      */
     public function getTmpJsFilePath(Shop\Shop $shop, string $timestamp): string
     {
-        return $this->getCacheDirectory() . '/' . $this->buildTimestampName($timestamp, $shop, 'js.tmp');
+        return $this->getCacheDirectory() . DIRECTORY_SEPARATOR . $this->buildTimestampName($timestamp, $shop, 'js.tmp');
     }
 
     /**

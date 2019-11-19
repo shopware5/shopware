@@ -2499,6 +2499,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     ->setMaxResults(1)
                     ->getQuery()
                     ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            unset($mainData['attribute']['id'], $mainData['attribute']['articleDetailId']);
         }
         if ($mapping['prices']) {
             $builder = Shopware()->Models()->createQueryBuilder();
@@ -2550,7 +2551,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 unset($coreTranslation['objectdata']['name']);
                 unset($coreTranslation['objectdata']['description']);
                 unset($coreTranslation['objectdata']['descriptionLong']);
-                unset($coreTranslation['objectdata']['shippingTime']);
                 unset($coreTranslation['objectdata']['keywords']);
                 $coreTranslation['objectkey'] = $variant->getId();
                 $coreTranslation['objecttype'] = 'variant';

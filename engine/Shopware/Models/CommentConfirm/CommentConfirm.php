@@ -52,7 +52,7 @@ class CommentConfirm extends ModelEntity
     private $creationDate;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="type", type="string", length=255, nullable=true)
      */
@@ -145,7 +145,7 @@ class CommentConfirm extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getType()
     {

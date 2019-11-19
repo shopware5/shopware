@@ -172,7 +172,8 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
 
         foreach ($campaigns as $position => $content) {
             $campaigns[$position] = Shopware()->Modules()->Marketing()->sCampaignsGetList(
-                $parentId, $position
+                $parentId,
+                $position
             );
         }
 

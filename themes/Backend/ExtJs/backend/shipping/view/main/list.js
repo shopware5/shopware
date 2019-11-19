@@ -285,13 +285,13 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
     /**
      * Formats the comment column
      *
-     * @param [string] value - Description for the dispatch
+     * @param [string] value - Comment for the dispatch
      * @param [object] metaData - Meta data for this column
      * @param [object] record - current record
      */
     commentColumn : function (value, metaData, record) {
-        // Show the translated description in the overview
-        return record.get('translatedDescription');
+        // Show the comment in the overview
+        return record.get('comment');
     },
     /**
      * Formats the action column

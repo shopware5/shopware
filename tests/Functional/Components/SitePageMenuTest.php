@@ -44,7 +44,7 @@ class SitePageMenuTest extends TestCase
      */
     private $sitePageMenu;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);

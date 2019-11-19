@@ -22,14 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Modules_Articles_SeoCategoryTest extends Enlight_Components_Test_Plugin_TestCase
+namespace Shopware\Tests\Modules\Articles;
+
+class SeoCategoryTest extends \Enlight_Components_Test_Plugin_TestCase
 {
     /**
      * @var \Shopware\Components\Api\Resource\Article
      */
     private $resource;
 
-    public function setUp()
+    public function setUp(): void
     {
         Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->clear();
         $this->resource = new \Shopware\Components\Api\Resource\Article();
@@ -55,7 +57,7 @@ class Shopware_Tests_Modules_Articles_SeoCategoryTest extends Enlight_Components
 
         $article = $this->resource->create($data);
 
-        $this->resource->setResultMode(Shopware\Components\Api\Resource\Resource::HYDRATE_OBJECT);
+        $this->resource->setResultMode(\Shopware\Components\Api\Resource\Resource::HYDRATE_OBJECT);
 
         /** @var Shopware\Models\Article\Article $article */
         $article = $this->resource->getOne($article->getId());

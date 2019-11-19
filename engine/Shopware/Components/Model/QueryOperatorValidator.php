@@ -98,10 +98,7 @@ class QueryOperatorValidator
      */
     public function isValid($operator)
     {
-        if (\in_array(
-            \trim(\str_replace([' ', 'NOT'], '', \strtoupper($operator))
-            ), $this->validOperators, true)
-        ) {
+        if (\in_array(\trim(\str_replace([' ', 'NOT'], '', \strtoupper($operator))), $this->validOperators, true)) {
             return true;
         }
 

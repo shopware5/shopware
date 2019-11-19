@@ -38,18 +38,16 @@ class RequirementValidatorTest extends TestCase
      */
     private $plugins;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->plugins = [];
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Plugin requires at least Shopware version 5.1.0
-     */
     public function testMinimumShopwareVersionShouldFail()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Plugin requires at least Shopware version 5.1.0');
         $validator = $this->getValidator([]);
         $validator->validate(__DIR__ . '/examples/shopware_version_requirement.xml', '4.0.0');
     }
@@ -66,12 +64,10 @@ class RequirementValidatorTest extends TestCase
         static::assertNull($e);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Plugin is only compatible with Shopware version <= 5.2
-     */
     public function testMaximumShopwareVersionShouldFail()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Plugin is only compatible with Shopware version <= 5.2');
         $validator = $this->getValidator([]);
         $validator->validate(__DIR__ . '/examples/shopware_version_requirement.xml', '5.3');
     }
@@ -87,12 +83,10 @@ class RequirementValidatorTest extends TestCase
         static::assertNull($e);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Shopware version 5.1.2 is blacklisted by the plugin
-     */
     public function testBlackListedShopwareVersionShouldFail()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Shopware version 5.1.2 is blacklisted by the plugin');
         $validator = $this->getValidator([]);
         $validator->validate(__DIR__ . '/examples/shopware_version_requirement.xml', '5.1.2');
     }
@@ -108,82 +102,68 @@ class RequirementValidatorTest extends TestCase
         static::assertNull($e);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Required plugin SwagBundle was not found
-     */
     public function testRequiredPluginNotExists()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Required plugin SwagBundle was not found');
         $validator = $this->getValidator([]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Required plugin SwagLiveShopping was not found
-     */
     public function testSecondRequiredPluginNotExists()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Required plugin SwagLiveShopping was not found');
         $validator = $this->getValidator([
             ['name' => 'SwagBundle', 'version' => '2.5', 'active' => true, 'installed' => '2016-01-01 11:00:00'],
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Required plugin SwagBundle is not installed
-     */
     public function testRequiredPluginInstalledShouldFail()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Required plugin SwagBundle is not installed');
         $validator = $this->getValidator([
             ['name' => 'SwagBundle', 'version' => '1.0', 'active' => false, 'installed' => null],
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Required plugin SwagBundle is not active
-     */
     public function testRequiredPluginActiveShouldFail()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Required plugin SwagBundle is not active');
         $validator = $this->getValidator([
             ['name' => 'SwagBundle', 'active' => false, 'version' => '1.0', 'installed' => '2016-01-01 11:00:00'],
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Version 2.0 of plugin SwagBundle is required.
-     */
     public function testRequiredPluginMinimumVersionShouldFail()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Version 2.0 of plugin SwagBundle is required.');
         $validator = $this->getValidator([
             ['name' => 'SwagBundle', 'version' => '1.0', 'active' => true, 'installed' => '2016-01-01 11:00:00'],
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Plugin is only compatible with Plugin SwagBundle version <= 3.0
-     */
     public function testRequiredPluginMaximumVersionShouldFail()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Plugin is only compatible with Plugin SwagBundle version <= 3.0');
         $validator = $this->getValidator([
             ['name' => 'SwagBundle', 'version' => '10.0', 'active' => true, 'installed' => '2016-01-01 11:00:00'],
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Required plugin SwagBundle with version 2.1 is blacklist
-     */
     public function testRequiredPluginVersionIsBlackListed()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Required plugin SwagBundle with version 2.1 is blacklist');
         $validator = $this->getValidator([
             ['name' => 'SwagBundle', 'version' => '2.1', 'active' => true, 'installed' => '2016-01-01 11:00:00'],
         ]);

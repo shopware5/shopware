@@ -148,6 +148,7 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
             fieldLabel:'{s name=label_email}Email{/s}',
             name: 'email',
             vtype: 'remote',
+            checkChangeBuffer: 500,
             validationUrl: '{url controller="base" action="validateEmail"}',
             validationErrorMsg: '{s name=invalid_email namespace=backend/base/vtype}The email address entered is not valid{/s}',
             allowBlank : false,

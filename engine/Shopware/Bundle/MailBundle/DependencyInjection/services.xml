@@ -45,7 +45,7 @@
 
         <service id="Shopware\Bundle\MailBundle\Service\LogServiceInterface"
                  class="Shopware\Bundle\MailBundle\Service\LogService">
-            <argument type="service" id="Shopware\Components\Model\ModelManager"/>
+            <argument type="service" id="dbal_connection"/>
             <argument type="service" id="Shopware\Bundle\MailBundle\Service\LogEntryBuilderInterface"/>
             <argument type="tagged" tag="shopware_mail.filter"/>
         </service>

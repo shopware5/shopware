@@ -399,14 +399,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         } catch (\League\Flysystem\FileNotFoundException $exception) {
             $this->forwardDownloadError(2);
         }
-
-        if ($this->isNotInUnitTestMode()) {
-            exit;
-        }
-
-        if ($this->isNotInUnitTestMode()) {
-            exit;
-        }
     }
 
     /**
@@ -456,7 +448,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             'sKey' => $hash,
         ];
 
-        $sql = 'SELECT 
+        $sql = 'SELECT
           s_user.accountmode,
           s_user.active,
           s_user.affiliate,
@@ -794,10 +786,5 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     {
         return $this->container->get('session')->offsetGet('sOneTimeAccount')
             || $this->View()->getAssign('sUserData')['additional']['user']['accountmode'] == 1;
-    }
-
-    private function isNotInUnitTestMode(): bool
-    {
-        return !$this->container->hasParameter('shopware.session.unitTestEnabled') || !$this->container->getParameter('shopware.session.unitTestEnabled');
     }
 }

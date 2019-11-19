@@ -251,9 +251,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
         $filter = $this->Request()->getParam('filter', []);
 
-        $sort = $this->Request()->getParam('sort',
-            [['property' => 'release']]
-        );
+        $sort = $this->Request()->getParam('sort', [['property' => 'release']]);
 
         if ($categoryId) {
             switch ($categoryId) {

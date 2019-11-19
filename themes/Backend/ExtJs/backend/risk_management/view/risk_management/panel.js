@@ -215,6 +215,8 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
         rules.push('<b> {s name=exampleFieldSet/rules/currencyIsoIsNot}Currency Iso IS NOT{/s} </b>');
         rules.push('<b> {s name=exampleFieldSet/rules/articleAttributeIs}Article attribute IS (1>5){/s} </b>');
         rules.push('<b> {s name=exampleFieldSet/rules/articleAttributeIsNot}Article attribute IS NOT (1>5){/s} </b>');
+        rules.push('<b> {s name=exampleFieldSet/rules/customerAttributeIs}{/s}</b>');
+        rules.push('<b> {s name=exampleFieldSet/rules/customerAttributeIsNot}{/s}</b>');
 
 
         syntax.push('<b> {s name=exampleFieldSet/syntax/syntax}Syntax{/s} </b>');
@@ -252,6 +254,8 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
         syntax.push('{s name=exampleFieldSet/syntax/currencyIso}Currency-Iso{/s}');
         syntax.push('{s name=exampleFieldSet/syntax/attributes}attr*1-20*|5{/s}');
         syntax.push('{s name=exampleFieldSet/syntax/attributes}attr*1-20*|5{/s}');
+        syntax.push('{s name=exampleFieldSet/syntax/customerAttribute}attr1|1{/s}');
+        syntax.push('{s name=exampleFieldSet/syntax/customerAttribute}attr1|1{/s}');
 
 
         example.push('<b> {s name=exampleFieldSet/example/example}Example{/s} </b>');
@@ -289,6 +293,8 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Panel', {
         example.push('{s name=exampleFieldSet/example/currencyIso}USD{/s}');
         example.push('{s name=exampleFieldSet/example/attribute}attr5|2 Disable payment if there are any articles in the basket with attr5 = 2{/s}');
         example.push('{s name=exampleFieldSet/example/attribute}attr5|2 Do not disable payment if there are any articles in the basket with attr5 = 2{/s}');
+        example.push('{s name=exampleFieldSet/example/customerAttribute}{/s}');
+        example.push('{s name=exampleFieldSet/example/customerAttribute}{/s}');
 
         //Creates an array like this:
         //[0] => One item of each array rules/syntax/example

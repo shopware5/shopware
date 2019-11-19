@@ -34,7 +34,7 @@ class Md5StrategyTest extends TestCase
      */
     private $strategy;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->strategy = new Md5Strategy();
     }

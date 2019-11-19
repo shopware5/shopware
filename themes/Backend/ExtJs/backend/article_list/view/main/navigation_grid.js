@@ -177,7 +177,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.NavigationGrid', {
              * clickable icons in each row
              */
             xtype: 'actioncolumn',
-            width: 50,
+            width: 55,
             items: [
                 {
                     /*{if {acl_is_allowed privilege=editFilters}}*/

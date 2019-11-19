@@ -38,7 +38,7 @@ class PathResolverTest extends TestCase
      */
     private $pathResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $kernel = new Kernel('testing', true);
         $releaseArray = $kernel->getRelease();

@@ -33,7 +33,7 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
     /**
      * Standard set up for every test - just disable auth
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -42,7 +42,7 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->setConfig('anonymizeIp', true);
         Shopware()->Container()->reset(\Shopware\Components\Privacy\IpAnonymizerInterface::class);

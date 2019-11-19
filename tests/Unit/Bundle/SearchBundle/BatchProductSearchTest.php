@@ -36,7 +36,7 @@ class BatchProductSearchTest extends \PHPUnit\Framework\TestCase
      */
     private $batchSearch;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->batchSearch = $this->createPartialMock(BatchProductSearch::class, []);
     }

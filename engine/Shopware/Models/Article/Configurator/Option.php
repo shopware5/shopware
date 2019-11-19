@@ -60,7 +60,7 @@ class Option extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ConfiguratorOptionAttribute
+     * @var ConfiguratorOptionAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ConfiguratorOption", mappedBy="configuratorOption", orphanRemoval=true, cascade={"persist"})
      */
@@ -76,7 +76,7 @@ class Option extends ModelEntity
     private $id;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="group_id", type="integer", nullable=true)
      */
@@ -97,7 +97,7 @@ class Option extends ModelEntity
     private $position;
 
     /**
-     * @var Group
+     * @var Group|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Group", inversedBy="options")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="id")
@@ -119,7 +119,7 @@ class Option extends ModelEntity
     private $dependencyChildren;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="media_id", type="integer", nullable=true)
      */
@@ -172,7 +172,7 @@ class Option extends ModelEntity
     }
 
     /**
-     * @return Group
+     * @return Group|null
      */
     public function getGroup()
     {
@@ -220,7 +220,7 @@ class Option extends ModelEntity
     }
 
     /**
-     * @return ConfiguratorOptionAttribute
+     * @return ConfiguratorOptionAttribute|null
      */
     public function getAttribute()
     {
@@ -238,7 +238,7 @@ class Option extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getMediaId()
     {
@@ -246,7 +246,7 @@ class Option extends ModelEntity
     }
 
     /**
-     * @param int $mediaId
+     * @param int|null $mediaId
      */
     public function setMediaId($mediaId)
     {

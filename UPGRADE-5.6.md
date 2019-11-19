@@ -2,6 +2,68 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
+## 5.6.3
+
+[View all changes from v5.6.2...v5.6.3](https://github.com/shopware/shopware/compare/v5.6.2...v5.6.3)
+
+### Additions
+
+* Added customer attribute risk rules to risk management
+* Added interface `ArrayAccess` to `Shopware\Bundle\StoreFrontBundle\Struct\Attribute`
+* Added `attribute` to struct data after being converted by the `Shopware\Components\Compatibility\LegacyStructConverter`
+* Added method `clearBody` to `Enlight_Components_Mail` to clear the plain and html body
+* Added interfaces for all services in AttributeBundle
+* Added `AllowInvalidArrayType` to Doctrine to fix deserialization error on mail sending
+* Added missing template for `\Shopware\Bundle\ContentTypeBundle\Field\ComboboxField`
+* Added jQuery event `plugin/swCookiePermission/onAcceptButtonClick` and `plugin/swCookiePermission/onDeclineButtonClick`
+* Added option `__options_details` to order api update to toggle order position replace mode 
+* Added setter and is methods for json renderer `formatDateTime` variable.
+* Added multiple Smarty blocks to `frontend/plugins/index/delivery_informations.tpl`
+* Added new Smarty block `frontend_detail_index_data_pricespecification` to `frontend/detail/content/buy_container.tpl`
+* Added new Smarty blocks `frontend_includes_emotion`, `frontend_includes_emotion_inner`, `frontend_includes_emotion_template` and `frontend_includes_emotion_template_inner` to `frontend/_includes/emotion.tpl`
+* Added new Smarty blocks `frontend_index_left_categories_wrapper` and `frontend_index_left_subcategory_config` to `frontend/index/sidebar.tpl`
+* Added `Shopware\Bundle\CookieBundle`, which takes care of the new cookie consent manager. If you're using cookies in your plugin, make sure
+to read [this documentation](https://developers.shopware.com/developers-guide/cookie-consent-manager/)!
+
+
+### Changes
+
+* Changed aria-label in `themes/Frontend/Bare/frontend/_includes/privacy.tpl` to remove html tags
+* Changed `sAdmin::sRiskATTRIS` to allow any product attribute
+* Changed `Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\GraduatedPricesGateway` to consider minimum purchase quantity
+* Changed `\Shopware_Controllers_Frontend_Address::handleExtraData` to split `sessionKey` correctly
+* Changed `StateManager.getScrollBarSize` to lazily get the size of the scrollbar
+* Changed missing german translation in `snippets/backend/article_list/main.ini`
+* Changed the `\Shopware\Models\Shop\Repository::getBaseListQueryBuilder`, `\Shopware\Models\Shop\Repository::getBaseListQuery` and `\Shopware\Models\Shop\Repository::getMainListQueryBuilder` methods. Added a boolean `$orderByShopPositionAsDefault` that can be set to true to filter by shop position instead of shop name
+* Changed the Smarty block `frontend_detail_data_delivery`, added availability meta tags for the pre selected configurator products for configurator types 'Selection' and 'Image' 
+* Changed the path value of following cookies, so they correctly consider the shop's base path
+  * `session-<shopId>`
+  * `partner`
+  * `sUniqueID`
+* Changed `unitize` mixin to only output rem values
+* Changed `Shopware\Models\Customer\Customer`, set correct return type for `getregisterOptInId`
+* Changed the `TemplateMail_CreateMail_MailContext` filter to work correctly.
+* Changed `ProductServiceInterface` to extend from `ListProductServiceInterface`
+* Changed `\sArticles::sGetArticlePictures` to correctly return image thumbnail urls again
+
+### Removals
+
+* Removed the smarty blocks `frontend_blog_bookmarks_delicious` and `frontend_blog_bookmarks_digg` and their content from `themes/Frontend/Bare/frontend/blog/bookmarks.tpl
+* Removed unnecessary `extendsAction` from `Shopware_Controllers_Backend_ExtJs`
+* Removed 'p' parameter and its alias 'sPage' from "NoIndex queries" configuration
+* Removed controller action `Shopware_Controllers_Backend_SwagUpdate::saveFtpAction`
+* Removed ExtJS model `engine/Shopware/Plugins/Default/Backend/SwagUpdate/Views/backend/swag_update/model/ftp.js`
+* Removed ExtJS view `engine/Shopware/Plugins/Default/Backend/SwagUpdate/Views/backend/swag_update/view/ftp.js`
+* Removed ExtJS controller method `engine/Shopware/Plugins/Default/Backend/SwagUpdate/Views/backend/swag_update/controller/main.js::onSaveFtp`
+
+### Deprecations
+
+* Deprecated class `\Shopware\Components\OpenSSLEncryption`. It will be removed in 5.7, use own implementation instead
+* Deprecated parameter `$orderByShopPositionAsDefault` for methods `getBaseListQuery`, `getBaseListQueryBuilder`and `getMainListQueryBuilder` in `engine/Shopware/Models/Shop/Repository.php`
+* Deprecated following methods in class `\Shopware\Models\Partner\Repository`
+  * `getCustomerForMappingQuery`
+  * `getCustomerForMappingQueryBuilder`
+
 ## 5.6.2
 
 [View all changes from v5.6.1...v5.6.2](https://github.com/shopware/shopware/compare/v5.6.1...v5.6.2)
@@ -38,7 +100,6 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `s_mail_log` foreign keys to set null on delete
 * Changed `Item by sales` to consider only products
 * Changed systeminfo to consider mariadb installations
-* Changed PHPStan to 0.11.15
 * Changed `Zend_Cache_Backend_Redis` to make it compatible with PhpRedis 5.0.0
 * Changed `Listing` controller to prevent it from accessing categories of subshops
 * Changed jquery plugins `ajax-product-navigation`, `infinite-scrolling` and `listing-actions` to work with invalid query strings
@@ -459,9 +520,9 @@ Controllers can be now registered using the DI tag `shopware.controller`. This D
 ##### DI:
 
 ```xml
-<service id="swag_example.controller.frontend.test" class="SwagExample\Controller\Frontend\Test">
+<service id="SwagExample\Controller\Frontend\SwagTest">
     <argument type="service" id="dbal_connection"/>
-    <tag name="shopware.controller" module="frontend" controller="test"/>
+    <tag name="shopware.controller" module="frontend" controller="swagTest"/>
 </service>
 ```
 
@@ -474,7 +535,7 @@ namespace SwagExample\Controller\Frontend;
 
 use Doctrine\DBAL\Connection;
 
-class Test extends \Enlight_Controller_Action
+class SwagTest extends \Enlight_Controller_Action
 {
     private $connection;
 

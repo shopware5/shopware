@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Components_Snippet_SnippetStructureTest extends Enlight_Components_Test_TestCase
+namespace Shopware\Tests\Components\Snippet;
+
+class SnippetStructureTest extends \Enlight_Components_Test_TestCase
 {
     /**
      * Test case

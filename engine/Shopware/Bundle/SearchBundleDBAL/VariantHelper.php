@@ -324,11 +324,13 @@ class VariantHelper implements VariantHelperInterface
     {
         $template = 'IFNULL(listing_price.%s, onsale_listing_price.%s) %s';
 
-        return implode(',',
+        return implode(
+            ',',
             array_map(
                 function ($column) use ($template) {
                     return sprintf($template, $column, $column, $column);
-                }, $this->listingPriceHelper->getPriceColumns()
+                },
+                $this->listingPriceHelper->getPriceColumns()
             )
         );
     }

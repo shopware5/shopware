@@ -32,7 +32,6 @@ use Symfony\Component\HttpFoundation\Cookie;
 /**
  * Shopware Router Plugin
  *
- *
  * @license    http://shopware.de/license
  */
 class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_Bootstrap
@@ -134,7 +133,11 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
             if (isset($newPath)) {
                 // reset the cookie so only one valid cookie will be set IE11 fix
-                $response->headers->setCookie(new Cookie('session-' . $shop->getId(), '', 1));
+                $basePath = $shop->getBasePath();
+                if ($basePath === null || $basePath === '') {
+                    $basePath = '/';
+                }
+                $response->headers->setCookie(new Cookie('session-' . $shop->getId(), '', 1, $basePath));
                 $response->setRedirect($newPath, 301);
             } else {
                 $this->upgradeShop($request, $response);
@@ -240,7 +243,8 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         if ($cookieKey === 'currency') {
             $path = rtrim($shop->getBasePath(), '/') . '/';
             $response->headers->setCookie(new Cookie($cookieKey, $cookieValue, 0, $path));
-            $url = sprintf('%s://%s%s',
+            $url = sprintf(
+                '%s://%s%s',
                 $request->getScheme(),
                 $request->getHttpHost(),
                 $request->getRequestUri()

@@ -43,9 +43,7 @@ class TranslationTest extends TestCase
 
     public function testList()
     {
-        $list = $this->resource->getList(
-            0, 5
-        );
+        $list = $this->resource->getList(0, 5);
         static::assertCount(5, $list['data']);
 
         foreach ($list['data'] as $item) {
@@ -126,7 +124,8 @@ class TranslationTest extends TestCase
         static::assertEquals(
             $data['data'],
             $this->resource->getTranslationComponent()->unFilterData(
-                'article', $translation->getData()
+                'article',
+                $translation->getData()
             ),
             'Translation data do not match'
         );
@@ -159,7 +158,8 @@ class TranslationTest extends TestCase
         static::assertEquals(
             $data['data'],
             $this->resource->getTranslationComponent()->unFilterData(
-                'article', $translation->getData()
+                'article',
+                $translation->getData()
             ),
             'Translation data do not match'
         );
@@ -198,7 +198,8 @@ class TranslationTest extends TestCase
         static::assertEquals(
             $data['data'],
             $this->resource->getTranslationComponent()->unFilterData(
-                'article', $translation->getData()
+                'article',
+                $translation->getData()
             ),
             'Translation data do not match'
         );
@@ -238,7 +239,8 @@ class TranslationTest extends TestCase
         static::assertEquals(
             $translation['data'],
             $this->resource->getTranslationComponent()->unFilterData(
-                'article', $updated->getData()
+                'article',
+                $updated->getData()
             ),
             'Translation data do not match'
         );
@@ -442,20 +444,16 @@ class TranslationTest extends TestCase
         static::assertTrue($result);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
-     */
     public function testLinkNumber()
     {
+        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
         $data = $this->getDummyData('link');
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
-     */
     public function testDownloadNumber()
     {
+        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
         $data = $this->getDummyData('download');
         $this->resource->createByNumber($data);
     }
@@ -622,76 +620,60 @@ class TranslationTest extends TestCase
         static::assertTrue($result);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testCreateMissingKey()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $data = $this->getDummyData('article');
         unset($data['key']);
         $this->resource->create($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testCreateByNumberMissingKey()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $data = $this->getDummyData('article');
         unset($data['key']);
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testUpdateMissingId()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $data = $this->getDummyData('article');
         $this->resource->update(null, $data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testUpdateByNumberMissingId()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $data = $this->getDummyData('article');
         $this->resource->updateByNumber(null, $data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testDeleteMissingId()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $data = $this->getDummyData('article');
         $this->resource->delete(null, $data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testDeleteByNumberMissingId()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $data = $this->getDummyData('article');
         $this->resource->deleteByNumber(null, $data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testDeleteInvalidTranslation()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $data = $this->getDummyData('article');
         $this->resource->delete(-200, $data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testDeleteByNumberInvalidTranslation()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $data = $this->getDummyData('article');
 
         $article = Shopware()->Db()->fetchRow('SELECT ordernumber, articleID FROM s_articles_details LIMIT 1');
@@ -704,91 +686,73 @@ class TranslationTest extends TestCase
         $this->resource->deleteByNumber($article['ordernumber'], $data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
-     */
     public function testInvalidTypeByNumber()
     {
+        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
         $data = $this->getDummyData('article');
         $data['type'] = 'Invalid';
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testInvalidArticleNumber()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $data = $this->getDummyData('article');
         $data['key'] = 'Invalid-Order-Number';
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testInvalidManufacturerNumber()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $data = $this->getDummyData('supplier');
         $data['key'] = 'Invalid-Order-Number';
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testInvalidCountryNumber()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $data = $this->getDummyData('config_countries');
         $data['key'] = 'Invalid-Order-Number';
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testInvalidCountryStateNumber()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $data = $this->getDummyData('config_country_states');
         $data['key'] = 'Invalid-Order-Number';
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testInvalidDispatchNumber()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $data = $this->getDummyData('config_dispatch');
         $data['key'] = 'Invalid-Order-Number';
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testInvalidPaymentNumber()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $data = $this->getDummyData('config_payment');
         $data['key'] = 'Invalid-Order-Number';
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testInvalidFilterSetNumber()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $data = $this->getDummyData('propertygroup');
         $data['key'] = 'Invalid-Order-Number';
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
-     */
     public function testInvalidFilterGroupSyntax()
     {
+        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
         $data = $this->getDummyData('propertyoption');
 
         $name = $this->getFilterGroupName();
@@ -797,11 +761,9 @@ class TranslationTest extends TestCase
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testInvalidFilterGroupSetName()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $data = $this->getDummyData('propertyoption');
         $name = $this->getFilterGroupName();
         $tmp = explode('|', $name['name']);
@@ -812,11 +774,9 @@ class TranslationTest extends TestCase
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testInvalidFilterGroupName()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $data = $this->getDummyData('propertyoption');
         $name = $this->getFilterGroupName();
         $tmp = explode('|', $name['name']);
@@ -827,11 +787,9 @@ class TranslationTest extends TestCase
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
-     */
     public function testInvalidFilterOptionSyntax()
     {
+        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
         $data = $this->getDummyData('propertyvalue');
 
         $name = $this->getFilterOptionName();
@@ -840,11 +798,9 @@ class TranslationTest extends TestCase
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testInvalidFilterOptionSetName()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $data = $this->getDummyData('propertyvalue');
         $name = $this->getFilterOptionName();
         $tmp = explode('|', $name['name']);
@@ -855,11 +811,9 @@ class TranslationTest extends TestCase
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testInvalidFilterOptionGroupName()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $data = $this->getDummyData('propertyvalue');
         $name = $this->getFilterOptionName();
         $tmp = explode('|', $name['name']);
@@ -870,11 +824,9 @@ class TranslationTest extends TestCase
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testInvalidFilterOptionName()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $data = $this->getDummyData('propertyvalue');
         $name = $this->getFilterOptionName();
         $tmp = explode('|', $name['name']);
@@ -885,21 +837,17 @@ class TranslationTest extends TestCase
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testInvalidConfiguratorGroupName()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $data = $this->getDummyData('configuratorgroup');
         $data['key'] = 'INVALID_NAME';
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
-     */
     public function testInvalidConfiguratorOptionSyntax()
     {
+        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
         $data = $this->getDummyData('configuratoroption');
         $entity = $this->getConfiguratorOptionName();
 
@@ -909,11 +857,9 @@ class TranslationTest extends TestCase
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testInvalidConfiguratorOptionWithGroupName()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $data = $this->getDummyData('configuratoroption');
         $entity = $this->getConfiguratorOptionName();
 
@@ -925,11 +871,9 @@ class TranslationTest extends TestCase
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testInvalidConfiguratorOptionWithOptionName()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $data = $this->getDummyData('configuratoroption');
         $entity = $this->getConfiguratorOptionName();
 
@@ -941,41 +885,33 @@ class TranslationTest extends TestCase
         $this->resource->createByNumber($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testMissingTypeException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $data = $this->getDummyData('article');
         unset($data['type']);
         $this->resource->create($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testMissingshopIdException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $data = $this->getDummyData('article');
         unset($data['shopId']);
         $this->resource->create($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testMissingDataException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $data = $this->getDummyData('article');
         unset($data['data']);
         $this->resource->create($data);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
-     */
     public function testMissingDataIsArrayException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
         $data = $this->getDummyData('article');
         $data['data'] = 1;
         $this->resource->create($data);

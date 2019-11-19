@@ -36,7 +36,7 @@ class PremiumTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * Standard set up for every test - just disable auth
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -64,7 +64,7 @@ class PremiumTest extends \Enlight_Components_Test_Controller_TestCase
 
         // Testing the search-function
         $filter = [
-            'filter' => \Zend_Json::encode([[
+            'filter' => \json_encode([[
                 'value' => 'test',
             ]]),
         ];

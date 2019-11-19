@@ -60,7 +60,7 @@ class Detail extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ProductAttribute
+     * @var ProductAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Article", mappedBy="articleDetail", orphanRemoval=true, cascade={"persist"})
      */
@@ -138,7 +138,7 @@ class Detail extends ModelEntity
     private $articleId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="unitID", type="integer", nullable=true)
      */
@@ -155,7 +155,7 @@ class Detail extends ModelEntity
     private $number = '';
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="suppliernumber", type="string", nullable=true)
      */
@@ -169,7 +169,7 @@ class Detail extends ModelEntity
     private $kind = 2;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="additionaltext", type="string", nullable=true)
      */
@@ -190,7 +190,7 @@ class Detail extends ModelEntity
     private $inStock = 0;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="stockmin", type="integer", nullable=true)
      */
@@ -204,35 +204,35 @@ class Detail extends ModelEntity
     private $lastStock = false;
 
     /**
-     * @var float
+     * @var float|null
      *
      * @ORM\Column(name="weight", type="decimal", nullable=true, precision=3)
      */
     private $weight;
 
     /**
-     * @var float
+     * @var float|null
      *
      * @ORM\Column(name="width", type="decimal", nullable=true, precision=3)
      */
     private $width;
 
     /**
-     * @var float
+     * @var float|null
      *
      * @ORM\Column(name="length", type="decimal", nullable=true, precision=3)
      */
     private $len;
 
     /**
-     * @var float
+     * @var float|null
      *
      * @ORM\Column(name="height", type="decimal", nullable=true, precision=3)
      */
     private $height;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="ean", type="string", nullable=true)
      */
@@ -260,35 +260,35 @@ class Detail extends ModelEntity
     private $minPurchase = 1;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="purchasesteps", type="integer", nullable=true)
      */
     private $purchaseSteps;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="maxpurchase", type="integer", nullable=true)
      */
     private $maxPurchase;
 
     /**
-     * @var float
+     * @var float|null
      *
      * @ORM\Column(name="purchaseunit", type="decimal", nullable=true)
      */
     private $purchaseUnit;
 
     /**
-     * @var float
+     * @var float|null
      *
      * @ORM\Column(name="referenceunit", type="decimal", nullable=true)
      */
     private $referenceUnit;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="packunit", type="text", nullable=true)
      */
@@ -302,14 +302,14 @@ class Detail extends ModelEntity
     private $shippingFree = false;
 
     /**
-     * @var \DateTimeInterface
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(name="releasedate", type="date", nullable=true)
      */
     private $releaseDate;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="shippingtime", type="string", length=11, nullable=true)
      */
@@ -366,7 +366,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getSupplierNumber()
     {
@@ -406,7 +406,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getAdditionalText()
     {
@@ -466,7 +466,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getStockMin()
     {
@@ -506,7 +506,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getWeight()
     {
@@ -596,7 +596,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getWidth()
     {
@@ -604,7 +604,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param float $width
+     * @param float|null $width
      */
     public function setWidth($width)
     {
@@ -612,7 +612,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getLen()
     {
@@ -620,7 +620,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param float $length
+     * @param float|null $length
      */
     public function setLen($length)
     {
@@ -628,7 +628,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getHeight()
     {
@@ -636,7 +636,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param float $height
+     * @param float|null $height
      */
     public function setHeight($height)
     {
@@ -644,7 +644,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getEan()
     {
@@ -652,7 +652,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param string $ean
+     * @param string|null $ean
      */
     public function setEan($ean)
     {
@@ -686,7 +686,7 @@ class Detail extends ModelEntity
     /**
      * Set shipping time
      *
-     * @param string $shippingTime
+     * @param string|null $shippingTime
      *
      * @return Detail
      */
@@ -700,7 +700,7 @@ class Detail extends ModelEntity
     /**
      * Get shipping time
      *
-     * @return string
+     * @return string|null
      */
     public function getShippingTime()
     {
@@ -744,7 +744,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
     public function getReleaseDate()
     {
@@ -788,7 +788,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getPurchaseSteps()
     {
@@ -808,7 +808,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getMaxPurchase()
     {
@@ -828,7 +828,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getPurchaseUnit()
     {
@@ -848,7 +848,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getReferenceUnit()
     {
@@ -868,7 +868,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPackUnit()
     {

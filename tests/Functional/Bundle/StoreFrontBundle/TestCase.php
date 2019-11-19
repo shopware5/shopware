@@ -47,14 +47,14 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
      */
     protected $converter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helper = new Helper();
         $this->converter = new Converter();
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->helper->cleanUp();
         parent::tearDown();
@@ -262,7 +262,9 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
                 $product->getNumber(),
                 sprintf(
                     'Expected %s at search result position %s, but got product %s',
-                    $expectedProduct, $index, $product->getNumber()
+                    $expectedProduct,
+                    $index,
+                    $product->getNumber()
                 )
             );
         }

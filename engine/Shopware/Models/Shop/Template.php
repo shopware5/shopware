@@ -39,7 +39,7 @@ use Shopware\Models\Shop\TemplateConfig\Set;
 class Template extends ModelEntity
 {
     /**
-     * @var \Shopware\Models\Shop\Template
+     * @var \Shopware\Models\Shop\Template|null
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Shop\Template")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
@@ -131,7 +131,7 @@ class Template extends ModelEntity
     /**
      * Author of the template
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="author", type="string", length=255, nullable=true)
      */
@@ -140,7 +140,7 @@ class Template extends ModelEntity
     /**
      * License of the template e.G. BSD / MIT / GPL
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="license", type="string", length=255, nullable=true)
      */
@@ -181,14 +181,14 @@ class Template extends ModelEntity
     private $version = 1;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="plugin_id", type="integer", nullable=true)
      */
     private $pluginId;
 
     /**
-     * @var \Shopware\Models\Plugin\Plugin
+     * @var \Shopware\Models\Plugin\Plugin|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="templates")
      * @ORM\JoinColumn(name="plugin_id", referencedColumnName="id")
@@ -196,7 +196,7 @@ class Template extends ModelEntity
     private $plugin;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
@@ -247,7 +247,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getAuthor()
     {
@@ -307,7 +307,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getLicense()
     {
@@ -403,7 +403,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Plugin\Plugin $plugin
+     * @param \Shopware\Models\Plugin\Plugin|null $plugin
      */
     public function setPlugin($plugin)
     {

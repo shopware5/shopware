@@ -40,5 +40,6 @@ trait DatabaseTransactionBehaviour
     public function stopTransactionAfter(): void
     {
         Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollBack();
+        Shopware()->Models()->clear();
     }
 }

@@ -22,12 +22,17 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_RegressionTests_Ticket5217 extends Enlight_Components_Test_TestCase
+namespace Shopware\Tests\Regressions;
+
+use Enlight_Components_Mail;
+use PHPUnit\Framework\TestCase;
+
+class Ticket5217Test extends TestCase
 {
     /**
      * Test case method
      */
-    public function testMailTransport()
+    public function testMailTransport(): void
     {
         $mailTransport = Shopware()->Container()->get('mailtransport');
 

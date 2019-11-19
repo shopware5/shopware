@@ -93,12 +93,14 @@ class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
 
         $query->select($this->fieldHelper->getPriceFields());
         $query->addSelect('variants.ordernumber as number');
+        $query->addSelect('GREATEST(price.from, variants.minpurchase) __price_from');
 
         $query->from('s_articles_prices', 'price')
             ->innerJoin('price', 's_articles_details', 'variants', 'variants.id = price.articledetailsID')
             ->leftJoin('price', 's_articles_prices_attributes', 'priceAttribute', 'priceAttribute.priceID = price.id')
             ->where('price.articledetailsID IN (:products)')
             ->andWhere('price.pricegroup = :customerGroup')
+            ->andWhere($query->expr()->orX('price.to >= variants.minpurchase', 'price.to = "beliebig"'))
             ->orderBy('price.articledetailsID', 'ASC')
             ->addOrderBy('price.from', 'ASC')
             ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY)

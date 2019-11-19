@@ -73,8 +73,8 @@ class Configurator
         Model\ModelManager $entityManager,
         Util $util,
         Form\Persister\Theme $persister,
-        \Enlight_Event_EventManager $eventManager)
-    {
+        \Enlight_Event_EventManager $eventManager
+    ) {
         $this->entityManager = $entityManager;
         $this->persister = $persister;
         $this->util = $util;
@@ -250,8 +250,8 @@ class Configurator
     private function removeUnused(
         ArrayCollection $containers,
         ArrayCollection $fields,
-        Form\Container $container)
-    {
+        Form\Container $container
+    ) {
         $structure = $this->getContainerNames($container);
 
         $structure = $this->eventManager->filter('Theme_Configurator_Container_Names_Loaded', $structure, [

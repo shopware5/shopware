@@ -46,12 +46,10 @@ class SearchBundleDBALSubscriberTest extends \PHPUnit\Framework\TestCase
         static::assertInstanceOf('\Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber', $subscriber);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Unknown handler class  detected
-     */
     public function testNestedArrays()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('Unknown handler class  detected');
         new SearchBundleDBALSubscriber([
             [new CategoryConditionHandler(), new CategoryConditionHandler()],
             new PopularitySortingHandler(),
@@ -59,21 +57,17 @@ class SearchBundleDBALSubscriberTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage No handlers provided in Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber
-     */
     public function testEmptyArray()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('No handlers provided in Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber');
         new SearchBundleDBALSubscriber([]);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Unknown handler class Shopware\Bundle\SearchBundle\Condition\CategoryCondition detected
-     */
     public function testInvalidClass()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('Unknown handler class Shopware\Bundle\SearchBundle\Condition\CategoryCondition detected');
         new SearchBundleDBALSubscriber([
             new CategoryCondition([1, 2]),
             new CategoryConditionHandler(),

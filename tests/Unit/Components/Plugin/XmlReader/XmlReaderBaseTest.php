@@ -65,7 +65,7 @@ class XmlReaderBaseTest extends TestCase
         $xmlReader = new XmlConfigReader();
         $data = $xmlReader->read(__DIR__ . '/examples/base/config.xml');
 
-        static::assertInternalType('array', $data);
+        static::assertIsArray($data);
         static::assertCount(3, $data);
     }
 
@@ -127,7 +127,7 @@ class XmlReaderBaseTest extends TestCase
             $element1->getAttribute('required')
         );
 
-        static::assertInternalType('bool', $element1Result);
+        static::assertIsBool($element1Result);
         static::assertEquals(true, $element1Result);
 
         //required not given - passed default value
@@ -137,7 +137,7 @@ class XmlReaderBaseTest extends TestCase
             false
         );
 
-        static::assertInternalType('bool', $element2Result);
+        static::assertIsBool($element2Result);
         static::assertEquals(false, $element2Result);
     }
 
@@ -147,14 +147,14 @@ class XmlReaderBaseTest extends TestCase
         $store1 = $this->xpath->query('//config/elements/element[3]/store');
         $store1Result = XmlReaderBase::parseStoreNodeList($store1);
 
-        static::assertInternalType('string', $store1Result);
+        static::assertIsString($store1Result);
         static::assertEquals('EXTJS-STORE', $store1Result);
 
         //Xml Store
         $store2 = $this->xpath->query('//config/elements/element[4]/store');
         $store2Result = XmlReaderBase::parseStoreNodeList($store2);
 
-        static::assertInternalType('array', $store2Result);
+        static::assertIsArray($store2Result);
         static::assertCount(3, $store2Result);
         static::assertEquals('value2', $store2Result[1][0]);
         static::assertEquals('label2', $store2Result[1][1]['en']);
@@ -163,7 +163,7 @@ class XmlReaderBaseTest extends TestCase
         $store3 = $this->xpath->query('//config/elements/element[5]/store');
         $store3Result = XmlReaderBase::parseStoreNodeList($store3);
 
-        static::assertNull(null, $store3Result);
+        static::assertNull($store3Result);
     }
 
     public function testParseOptionsNodeList(): void
@@ -171,7 +171,7 @@ class XmlReaderBaseTest extends TestCase
         $options = $this->xpath->query('//config/elements/element[6]/options');
         $optionsResult = XmlReaderBase::parseOptionsNodeList($options);
 
-        static::assertInternalType('array', $optionsResult);
+        static::assertIsArray($optionsResult);
         static::assertCount(2, $optionsResult);
         static::assertArrayHasKey('minValue', $optionsResult);
         static::assertArrayHasKey('maxValue', $optionsResult);

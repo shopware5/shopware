@@ -47,7 +47,7 @@ abstract class AbstractResolver
 
         foreach ($values as $value) {
             if (isset($this->storage[$value]) || isset($this->resolveIds[$value])) {
-                return;
+                continue;
             }
 
             $this->resolveIds[] = $value;

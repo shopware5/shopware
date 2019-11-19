@@ -61,62 +61,67 @@ class OrdersProviderTest extends ProviderTestCase
         $this->installDemoData('orders_detailed');
 
         $resultData = $this->getBenchmarkData();
-
-        static::assertArraySubset([
-            'orderId' => '1',
-            'currency' => 'EUR',
-            'shippingCosts' => '15',
-            'customer' => [
-                'registered' => 1,
-                'birthYear' => 1993,
-                'birthMonth' => 1,
-                'gender' => 'male',
-                'registerDate' => '2011-11-23',
-                'hasNewsletter' => 0,
-                'billing' => [
-                    'country' => 'DE',
-                ],
-                'shipping' => [
-                    'country' => 'GR',
-                ],
+        static::assertArrayHasKey('orderId', $resultData['list'][0]);
+        static::assertArrayHasKey('currency', $resultData['list'][0]);
+        static::assertArrayHasKey('shippingCosts', $resultData['list'][0]);
+        static::assertArrayHasKey('customer', $resultData['list'][0]);
+        static::assertArrayHasKey('analytics', $resultData['list'][0]);
+        static::assertArrayHasKey('shipment', $resultData['list'][0]);
+        static::assertArrayHasKey('payment', $resultData['list'][0]);
+        static::assertArrayHasKey('items', $resultData['list'][0]);
+        static::assertSame(1, $resultData['list'][0]['orderId']);
+        static::assertSame('EUR', $resultData['list'][0]['currency']);
+        static::assertSame(15.0, (float) $resultData['list'][0]['shippingCosts']);
+        static::assertSame([
+            'registered' => true,
+            'birthYear' => 1993,
+            'birthMonth' => 1,
+            'gender' => 'male',
+            'registerDate' => '2011-11-23',
+            'hasNewsletter' => false,
+            'billing' => [
+                'country' => 'DE',
             ],
-            'analytics' => [
-                'device' => 'mobile',
-                'referer' => null,
+            'shipping' => [
+                'country' => 'GR',
             ],
-            'shipment' => [
-                'name' => 'others',
-                'cost' => [
-                    'minPrice' => 14.00,
-                    'maxPrice' => 14.00,
-                ],
+        ], $resultData['list'][0]['customer']);
+        static::assertSame([
+            'device' => 'mobile',
+            'referer' => false,
+        ], $resultData['list'][0]['analytics']);
+        static::assertSame([
+            'name' => 'others',
+            'cost' => [
+                'minPrice' => 14.00,
+                'maxPrice' => 14.00,
             ],
-            'payment' => [
-                'name' => 'others',
-                'cost' => [
-                    'percentCosts' => 0,
-                    'absoluteCosts' => 0,
-                    'absoluteCostsPerCountry' => 'DE:4;AE:-1',
-                ],
+        ], $resultData['list'][0]['shipment']);
+        static::assertSame([
+            'name' => 'others',
+            'cost' => [
+                'percentCosts' => 0.0,
+                'absoluteCosts' => 0.0,
+                'absoluteCostsPerCountry' => 0.0,
             ],
-            'items' => [
-                [
-                    'detailId' => 206,
-                    'unitPrice' => 150.00,
-                    'totalPrice' => 150.00,
-                    'amount' => 1,
-                    'packUnit' => '',
-                    'purchaseUnit' => '',
-                ], [
-                    'detailId' => 207,
-                    'unitPrice' => 20.00,
-                    'totalPrice' => 80.00,
-                    'amount' => 4,
-                    'packUnit' => null,
-                    'purchaseUnit' => null,
-                ],
+        ], $resultData['list'][0]['payment']);
+        static::assertSame([
+            [
+                'detailId' => 206,
+                'unitPrice' => 150.00,
+                'totalPrice' => 150.00,
+                'amount' => 1,
+                'packUnit' => '',
+                'purchaseUnit' => '',
+            ], [
+                'detailId' => 207,
+                'unitPrice' => 20.00,
+                'totalPrice' => 80.00,
+                'amount' => 4,
+                'packUnit' => '',
+                'purchaseUnit' => '',
             ],
-        ], $resultData['list'][0]);
+        ], $resultData['list'][0]['items']);
     }
 
     /**

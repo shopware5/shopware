@@ -55,14 +55,14 @@ class Area extends ModelEntity
     private $id;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name = null;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="active", type="integer", nullable=true)
      */
@@ -94,7 +94,7 @@ class Area extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getName()
     {
@@ -114,7 +114,7 @@ class Area extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getActive()
     {

@@ -38,13 +38,13 @@ class PostWrapperTest extends TestCase
      */
     private $system;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->request = new \Enlight_Controller_Request_RequestTestCase();
         $this->system = new \sSystem($this->request);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->request->clearAll();
     }
@@ -59,7 +59,7 @@ class PostWrapperTest extends TestCase
 
         $this->system->_POST->offsetSet('foo', []);
         static::assertEmpty($this->request->getPost('bar'));
-        static::assertInternalType('array', $this->request->getPost('foo'));
+        static::assertIsArray($this->request->getPost('foo'));
     }
 
     public function testGet()
@@ -72,7 +72,7 @@ class PostWrapperTest extends TestCase
 
         $this->request->setPost('foo', []);
         static::assertEmpty($this->system->_POST->offsetGet('bar'));
-        static::assertInternalType('array', $this->system->_POST->offsetGet('foo'));
+        static::assertIsArray($this->system->_POST->offsetGet('foo'));
     }
 
     public function testUnset()

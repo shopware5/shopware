@@ -212,12 +212,12 @@ class sOrder implements \Enlight_Hook
     private $numberRangeIncrementer;
 
     /**
-     * @var Shopware\Bundle\AttributeBundle\Service\DataLoader
+     * @var Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface
      */
     private $attributeLoader;
 
     /**
-     * @var Shopware\Bundle\AttributeBundle\Service\DataPersister
+     * @var Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface
      */
     private $attributePersister;
 
@@ -703,7 +703,8 @@ class sOrder implements \Enlight_Hook
                 VALUES (%d, %s, %d, %s, %f, %d, %s, %d, %s, %d, %d, %d, %f, %s, %s, %s, %d)
             ';
 
-            $sql = sprintf($preparedQuery,
+            $sql = sprintf(
+                $preparedQuery,
                 $orderID,
                 $this->db->quote((string) $orderNumber),
                 $basketRow['articleID'],
@@ -748,8 +749,11 @@ class sOrder implements \Enlight_Hook
                 $this->db->executeUpdate($sql);
                 $orderdetailsID = $this->db->lastInsertId();
             } catch (Exception $e) {
-                throw new Enlight_Exception(sprintf('Shopware Order Fatal-Error %s :%s', $_SERVER['HTTP_HOST'],
-                    $e->getMessage()), 0, $e);
+                throw new Enlight_Exception(sprintf(
+                    'Shopware Order Fatal-Error %s :%s',
+                    $_SERVER['HTTP_HOST'],
+                    $e->getMessage()
+                ), 0, $e);
             }
 
             $this->sBasketData['content'][$key]['orderDetailId'] = $orderdetailsID;
@@ -918,9 +922,9 @@ class sOrder implements \Enlight_Hook
 
         // Support for individual payment means with custom-tables
         if ($variables['additional']['payment']['table']) {
-            $paymentTable = $this->db->fetchRow("
-                  SELECT * FROM {$variables['additional']['payment']['table']}
-                  WHERE userID=?",
+            $paymentTable = $this->db->fetchRow(
+                "SELECT * FROM {$variables['additional']['payment']['table']}
+                 WHERE userID=?",
                 [$variables['additional']['user']['id']]
             );
             $context['sPaymentTable'] = $paymentTable ?: [];
@@ -1878,11 +1882,11 @@ EOT;
      */
     private function refreshOrderedVariant($orderNumber, $quantity)
     {
-        $this->db->executeUpdate('
-            UPDATE s_articles_details
-            SET sales = sales + :quantity,
-                instock = instock - :quantity
-            WHERE ordernumber = :number',
+        $this->db->executeUpdate(
+            'UPDATE s_articles_details
+             SET sales = sales + :quantity,
+                 instock = instock - :quantity
+             WHERE ordernumber = :number',
             [':quantity' => $quantity, ':number' => $orderNumber]
         );
 

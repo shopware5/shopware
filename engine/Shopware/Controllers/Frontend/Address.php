@@ -509,7 +509,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     private function isShippingRequest()
     {
         $extraData = $this->Request()->getParam('extraData', []);
-        $keys = array_filter(explode(';', $extraData['sessionKey']));
+        $keys = array_filter(explode(',', $extraData['sessionKey']));
 
         return $extraData['setDefaultShippingAddress'] === '1'
             || in_array('checkoutShippingAddressId', $keys, true);

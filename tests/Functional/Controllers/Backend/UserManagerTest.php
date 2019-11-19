@@ -61,23 +61,12 @@ class UserManagerTest extends \Enlight_Components_Test_Controller_TestCase
         'lockedUntil' => '1999-01-01 00:00:00',
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
         // Parent will not be called since parent::setUp destroys the session and we need it.
 
         // Clear entitymanager to prevent weird 'model shop not persisted' errors.
         Shopware()->Models()->clear();
-
-        $this->databaseTester = null;
-        if (method_exists($this, 'getSetUpOperation')) {
-            $this->getDatabaseTester()->setSetUpOperation($this->getSetUpOperation());
-        }
-        if (method_exists($this, 'getDataSet')) {
-            $this->getDatabaseTester()->setDataSet($this->getDataSet());
-        }
-        if ($this->databaseTester !== null) {
-            $this->getDatabaseTester()->onSetUp();
-        }
 
         $this->disableAuth();
     }
@@ -118,7 +107,7 @@ class UserManagerTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * Verify that the previously created admin user can login with a correct password
      *
-     * @backupGlobals
+     * @depends testCreateAdminUser
      */
     public function testAdminLogin()
     {

@@ -44,7 +44,7 @@ class EmotionToPresetDataTransformerTest extends TestCase
     /** @var Connection */
     private $connection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $this->connection->beginTransaction();
@@ -56,16 +56,14 @@ class EmotionToPresetDataTransformerTest extends TestCase
         $this->presetResource = Shopware()->Container()->get(\Shopware\Components\Api\Resource\EmotionPreset::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->connection->rollBack();
     }
 
-    /**
-     * @expectedException
-     */
     public function testShouldFailBecauseOfMissingEmotion()
     {
+        $this->expectException('');
         $this->expectException(NoResultException::class);
         $this->transformer->transform(null);
     }
@@ -84,12 +82,12 @@ class EmotionToPresetDataTransformerTest extends TestCase
         static::assertArrayNotHasKey('id', $presetData);
 
         static::assertArrayNotHasKey('id', $presetData['elements'][0]);
-        static::assertInternalType('string', $presetData['elements'][0]['componentId']);
+        static::assertIsString($presetData['elements'][0]['componentId']);
         static::assertArrayHasKey('syncKey', $presetData['elements'][0]);
 
         static::assertArrayHasKey('data', $presetData['elements'][0]);
 
-        static::assertInternalType('array', $data['requiredPlugins']);
+        static::assertIsArray($data['requiredPlugins']);
     }
 
     public function testTransformWithTranslationsShouldSucceed()
@@ -127,7 +125,7 @@ class EmotionToPresetDataTransformerTest extends TestCase
 
         $result = $method->invoke($this->transformer, $ids);
 
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertEquals('SwagLiveShopping', $result[0]['name']);
     }
 }

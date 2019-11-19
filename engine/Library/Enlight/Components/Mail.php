@@ -239,6 +239,17 @@ class Enlight_Components_Mail extends Zend_Mail
         return $this->_to;
     }
 
+    public function clearBody(): void
+    {
+        // HTML
+        $this->_plainBody = null;
+        $this->_bodyHtml = false;
+
+        // Plain
+        $this->_plainBodyText = null;
+        $this->_bodyText = false;
+    }
+
     /**
      * Sets the text body for the message.
      *

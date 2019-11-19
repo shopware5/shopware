@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="Shopware\Bundle\CookieBundle\Services\CookieCollector">
+            <argument id="events" type="service" />
+            <argument id="snippets" type="service" />
+        </service>
+
+        <service id="Shopware\Bundle\CookieBundle\Services\CookieHandler">
+            <argument id="Shopware\Bundle\CookieBundle\Services\CookieCollector" type="service" />
+        </service>
+    </services>
+</container>

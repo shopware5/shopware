@@ -24,6 +24,9 @@
 
 namespace Shopware\Components;
 
+/**
+ * @deprecated since 5.6.3 and will be removed with 5.7. Use own implementation instead
+ */
 class OpenSSLEncryption
 {
     /**

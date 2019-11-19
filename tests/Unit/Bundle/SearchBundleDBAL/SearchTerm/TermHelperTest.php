@@ -38,7 +38,7 @@ class TermHelperTest extends TestCase
      * Sets up the {@link $termHelper} fixture
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $configStub = $this->createMock(\Shopware_Components_Config::class);
 

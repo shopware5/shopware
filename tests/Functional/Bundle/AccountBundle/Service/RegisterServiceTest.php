@@ -64,7 +64,7 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
     /**
      * Set up fixtures
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$registerService = Shopware()->Container()->get(\Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface::class);
         self::$modelManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
@@ -77,7 +77,7 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
     /**
      * Clean up created entities and database entries
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
 
@@ -93,12 +93,10 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         Shopware()->Container()->reset('router');
     }
 
-    /**
-     * @expectedException \Doctrine\ORM\ORMException
-     * @expectedExceptionMessage The identifier id is missing for a query of Shopware\Models\Shop\Shop
-     */
     public function testRegisterWithEmptyData()
     {
+        $this->expectException('Doctrine\ORM\ORMException');
+        $this->expectExceptionMessage('The identifier id is missing for a query of Shopware\Models\Shop\Shop');
         $shop = new Shop();
         $customer = new Customer();
         $billing = new Address();
@@ -106,12 +104,10 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         self::$registerService->register($shop, $customer, $billing);
     }
 
-    /**
-     * @expectedException \Doctrine\ORM\ORMException
-     * @expectedExceptionMessage The identifier id is missing for a query of Shopware\Models\Shop\Shop
-     */
     public function testRegisterWithEmptyShop()
     {
+        $this->expectException('Doctrine\ORM\ORMException');
+        $this->expectExceptionMessage('The identifier id is missing for a query of Shopware\Models\Shop\Shop');
         $shop = new Shop();
 
         $customer = new Customer();
@@ -123,11 +119,9 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         self::$registerService->register($shop, $customer, $billing);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ValidationException
-     */
     public function testRegisterWithEmptyCustomer()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
         $shop = $this->getShop();
 
         $customer = new Customer();
@@ -138,11 +132,9 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         self::$registerService->register($shop, $customer, $billing);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ValidationException
-     */
     public function testRegisterWithEmptyAddress()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
         $shop = $this->getShop();
 
         $customer = new Customer();
@@ -220,10 +212,10 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
 
     /**
      * @depends testRegister
-     * @expectedException \Shopware\Components\Api\Exception\ValidationException
      */
     public function testRegisterWithExistingEmail()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
         $demoData = $this->getCustomerDemoData();
 
         $shop = $this->getShop();

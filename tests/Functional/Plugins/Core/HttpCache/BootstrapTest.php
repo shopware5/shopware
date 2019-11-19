@@ -55,7 +55,7 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
      */
     private $cacheManager;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
 
@@ -73,7 +73,7 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $plugin = $this->pluginManager->getPluginByName('HttpCache');
 

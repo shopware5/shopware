@@ -142,15 +142,19 @@ class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_
      */
     protected function installForm(Shopware\Models\Config\Form $form)
     {
-        $form->setElement('select', 'update-channel', [
-            'label' => 'Channel',
-            'value' => 'stable',
-            'store' => [
-                ['stable', 'stable'],
-                ['beta',   'beta'],
-                ['rc',     'rc'],
-                ['dev',    'dev'],
-            ], ]
+        $form->setElement(
+            'select',
+            'update-channel',
+            [
+                'label' => 'Channel',
+                'value' => 'stable',
+                'store' => [
+                    ['stable', 'stable'],
+                    ['beta',   'beta'],
+                    ['rc',     'rc'],
+                    ['dev',    'dev'],
+                ],
+            ]
         );
 
         $form->setElement('text', 'update-api-endpoint', [

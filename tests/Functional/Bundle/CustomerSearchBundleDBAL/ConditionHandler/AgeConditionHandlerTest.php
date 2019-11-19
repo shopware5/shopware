@@ -147,8 +147,10 @@ class AgeConditionHandlerTest extends TestCase
     {
         $criteria = new Criteria();
         $criteria->addCondition(
-            new AgeCondition(ConditionInterface::OPERATOR_BETWEEN,
-                ['min' => 25, 'max' => 35])
+            new AgeCondition(
+                ConditionInterface::OPERATOR_BETWEEN,
+                ['min' => 25, 'max' => 35]
+            )
         );
 
         $date1 = new \DateTime();

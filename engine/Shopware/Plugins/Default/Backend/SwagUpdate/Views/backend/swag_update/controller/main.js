@@ -80,9 +80,6 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Main', {
                 validateUpdate: me.onValidateUpdate,
                 addPluginTooltips: me.addQuickTips,
                 showPluginUpdateDetails: me.onShowPluginUpdateDetails
-            },
-            'update-ftp': {
-                saveFtp: me.onSaveFtp
             }
         });
     },
@@ -182,51 +179,6 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Main', {
         }
     },
 
-    onSaveFtp: function(win, form) {
-        var me = this;
-
-        if (!form.getForm().isValid()) {
-            return;
-        }
-
-        var ftp = Ext.create('Shopware.apps.SwagUpdate.model.Ftp');
-
-        form.getForm().updateRecord(ftp);
-
-        ftp.save({
-            success: function(record, operation) {
-                win.destroy();
-
-                me.getView('Progress').create({
-                    ftp: record
-                }).show();
-            },
-
-            failure: function(record, operation) {
-                try {
-                    var data = operation.request.proxy.reader.rawData;
-
-                    if (data.error) {
-                        Shopware.Notification.createStickyGrowlMessage({
-                            title: '{s name="update_title"}Update{/s}',
-                            text: data.error
-                        });
-                    } else {
-                        Shopware.Notification.createStickyGrowlMessage({
-                            title: '{s name="update_title"}Update{/s}',
-                            text: '{s name="ftp_error"}An error occurred while validating the ftp data.{/s}'
-                        });
-                    }
-                } catch (e) {
-                    Shopware.Notification.createStickyGrowlMessage({
-                        title: '{s name="update_title"}Update{/s}',
-                        text: '{s name="ftp_error"}An error occurred while validating the ftp data.{/s}'
-                    });
-                }
-            }
-        });
-    },
-
     onValidateUpdate: function(win, checkbox, requirementStore, pluginStore) {
         var me = this;
 
@@ -291,7 +243,13 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Main', {
                 }
 
                 if (result.ftpRequired) {
-                    me.getView('Ftp').create({ wrongPermissionCount: result.wrongPermissionCount }).show();
+                    Ext.Msg.alert(
+                        '{s name="ftp/invalid_permissions"}{/s}',
+                        Ext.String.format(
+                            '{s name="ftp/info_text"}The file permissions of [0] file(s) could not be fixed.<br>A list of affected files can be found in the logs.<br><br>Please fix all file permission problems (recommended) or fill in your ftp credentials.{/s}',
+                            result.wrongPermissionCount
+                        )
+                    );
                 } else {
                     me.getView('Progress').create().show();
                 }
@@ -324,5 +282,4 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Main', {
     }
 
 });
-
 // {/block}

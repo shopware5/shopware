@@ -26,7 +26,7 @@ namespace Shopware\Bundle\AttributeBundle\Service;
 
 use Doctrine\DBAL\Connection;
 
-class DataLoader
+class DataLoader implements DataLoaderInterface
 {
     /**
      * @var Connection
@@ -34,23 +34,20 @@ class DataLoader
     private $connection;
 
     /**
-     * @var TableMapping
+     * @var TableMappingInterface
      */
     private $mapping;
 
-    public function __construct(Connection $connection, TableMapping $mapping)
+    public function __construct(Connection $connection, TableMappingInterface $mapping)
     {
         $this->connection = $connection;
         $this->mapping = $mapping;
     }
 
     /**
-     * @param string $table
-     * @param int    $foreignKey
+     * {@inheritdoc}
      *
      * @throws \Exception
-     *
-     * @return array
      */
     public function load($table, $foreignKey)
     {
@@ -77,12 +74,9 @@ class DataLoader
     }
 
     /**
-     * @param string $table
-     * @param int    $foreignKey
+     * {@inheritdoc}
      *
      * @throws \Exception
-     *
-     * @return array[]
      */
     public function loadTranslations($table, $foreignKey)
     {

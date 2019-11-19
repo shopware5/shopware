@@ -182,44 +182,29 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         }
 
         $link = $src[3];
-
-        $anchorPart = '';
-        if (strpos($link, '#') !== false) {
-            $anchorPart = substr($link, strpos($link, '#'));
-        }
-
-        switch ($src[1]) {
-            case 'input':
-            case 'img':
-            case 'link':
-            case 'script':
-                if (strpos($src[3], self::$baseFile) === 0) {
-                    $link = $this->rewriteLink($src[3]);
-                }
-                break;
-            case 'form':
-            case 'a':
-                if (strpos($src[3], self::$baseFile) === 0) {
-                    $link = $this->rewriteLink($src[3]);
-                }
-                break;
-            default:
-                break;
-        }
-
         if (strpos($link, '{media') === 0) {
             $link = $this->handleMediaPlugin($link);
         } else {
+            $anchorPart = '';
+            if (strpos($link, '#') !== false) {
+                $anchorPart = substr($link, strpos($link, '#'));
+            }
+
+            // If the link begins with the baseFile (default shopware.php) we always want to rewrite the link
+            if (strpos($link, self::$baseFile) === 0) {
+                $link = $this->rewriteLink($link);
+            }
+
             if (strpos($link, 'www.') === 0) {
                 $link = 'http://' . $link;
             }
             if (!preg_match('#^[a-z]+:|^\#|^/#', $link)) {
                 $link = $this->basePathUrl . $link;
             }
-        }
 
-        if ($anchorPart !== '' && strpos($link, $anchorPart) === false) {
-            $link .= $anchorPart;
+            if ($anchorPart !== '' && strpos($link, $anchorPart) === false) {
+                $link .= $anchorPart;
+            }
         }
 
         // Check if the current link is a canonical link

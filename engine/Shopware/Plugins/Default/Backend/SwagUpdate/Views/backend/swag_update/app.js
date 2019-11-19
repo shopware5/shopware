@@ -31,7 +31,7 @@ Ext.define('Shopware.apps.SwagUpdate', {
     controllers: [ 'Main', 'Progress' ],
     stores: [ 'Changelog', 'Requirements', 'Plugins' ],
     models: [ 'Changelog', 'Requirement', 'Plugins' ],
-    views: [ 'Window', 'Progress', 'NoUpdate', 'Ftp', 'SecurityUpdateWindow' ],
+    views: [ 'Window', 'Progress', 'NoUpdate', 'SecurityUpdateWindow' ],
 
     launch: function() {
         return this.getController('Main').mainWindow;

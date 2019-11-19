@@ -41,11 +41,10 @@ class ListingTest extends \Enlight_Components_Test_Controller_TestCase
 
     /**
      * Test that requesting a non-existing category-id throws an error
-     *
-     * @expectedException \Enlight_Exception
      */
     public function testDispatchNonExistingCategory()
     {
+        $this->expectException('Enlight_Exception');
         $this->dispatch('/cat/?sCategory=4711');
         static::assertEquals(404, $this->Response()->getHttpResponseCode());
         static::assertTrue($this->Response()->isRedirect());
@@ -53,11 +52,10 @@ class ListingTest extends \Enlight_Components_Test_Controller_TestCase
 
     /**
      * Test that requesting an empty category-id throws an error
-     *
-     * @expectedException \Enlight_Exception
      */
     public function testDispatchEmptyCategoryId()
     {
+        $this->expectException('Enlight_Exception');
         $this->dispatch('/cat/?sCategory=');
         static::assertEquals(404, $this->Response()->getHttpResponseCode());
         static::assertTrue($this->Response()->isRedirect());
@@ -65,11 +63,10 @@ class ListingTest extends \Enlight_Components_Test_Controller_TestCase
 
     /**
      * Test that requesting a category-id of a subshop throws an error
-     *
-     * @expectedException \Enlight_Exception
      */
     public function testDispatchSubshopCategoryId()
     {
+        $this->expectException('Enlight_Exception');
         $this->dispatch('/cat/?sCategory=43');
         static::assertEquals(404, $this->Response()->getHttpResponseCode());
         static::assertTrue($this->Response()->isRedirect());
@@ -77,11 +74,10 @@ class ListingTest extends \Enlight_Components_Test_Controller_TestCase
 
     /**
      * Test that requesting a blog category-id creates a redirect
-     *
-     * @expectedException \Enlight_Exception
      */
     public function testDispatchBlogCategory()
     {
+        $this->expectException('Enlight_Exception');
         $this->dispatch('/cat/?sCategory=17');
         static::assertEquals(404, $this->Response()->getHttpResponseCode());
         static::assertTrue($this->Response()->isRedirect());

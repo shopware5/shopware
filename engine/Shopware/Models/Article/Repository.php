@@ -2500,9 +2500,10 @@ class Repository extends ModelRepository
     {
         /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(['images', 'attribute'])
+        $builder->select(['images', 'media', 'attribute'])
                 ->from(Image::class, 'images')
                 ->leftJoin('images.attribute', 'attribute')
+                ->leftJoin('images.media', 'media')
                 ->where('images.articleId = :articleId')
                 ->andWhere('images.parentId IS NULL')
                 ->andWhere('images.main = :main')
@@ -2601,9 +2602,10 @@ class Repository extends ModelRepository
     {
         /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(['images'])
+        $builder->select(['images', 'media'])
                 ->from(Image::class, 'images')
                 ->leftJoin('images.children', 'children')
+                ->leftJoin('images.media', 'media')
                 ->where('images.articleId = :articleId')
                 ->andWhere('images.parentId IS NULL')
                 ->andWhere('images.articleDetailId IS NULL')

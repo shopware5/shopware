@@ -22,10 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Controllers\Backend;
+
+class PartnerTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /** @var \Shopware\Models\Partner\Partner $repository */
-    protected $repository = null;
+    protected $repository;
 
     /**
      * dummy data
@@ -54,13 +56,13 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
 
     private $updateStreet = 'Abbey Road';
 
-    /** @var Shopware\Components\Model\ModelManager */
+    /** @var \Shopware\Components\Model\ModelManager */
     private $manager = null;
 
     /**
      * Cleaning up testData
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         $sql = 'DELETE FROM s_emarketing_partner WHERE idcode = ?';
         Shopware()->Db()->query($sql, ['31337']);
@@ -69,7 +71,7 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
     /**
      * Standard set up for every test - just disable auth
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -94,7 +96,7 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         $this->manager->flush();
 
         $dummy = $this->createDummy();
-        /* @var Enlight_Controller_Response_ResponseTestCase */
+        /* @var \Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/Partner/getList?page=1&start=0&limit=30');
         static::assertTrue($this->View()->success);
         $returnData = $this->View()->data;
@@ -150,7 +152,7 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
     public function testGetDetail($id)
     {
         $filter = [['property' => 'id', 'value' => $id]];
-        $params['filter'] = Zend_Json::encode($filter);
+        $params['filter'] = json_encode($filter);
         $this->Request()->setParams($params);
 
         $this->dispatch('backend/Partner/getDetail');
@@ -219,22 +221,13 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
     public function testMapCustomerAccount()
     {
         $this->Response()->clearBody();
-        $params['mapCustomerAccountValue'] = '20001';
-        $this->Request()->setParams($params);
+        $this->Request()->request->set('mapCustomerAccountValue', 2);
         $this->dispatch('backend/Partner/mapCustomerAccount');
         $body = $this->Response()->getBody();
         static::assertTrue(!empty($body));
 
         $this->Response()->clearBody();
-        $params['mapCustomerAccountValue'] = 'test@example.com';
-        $this->Request()->setParams($params);
-        $this->dispatch('backend/Partner/mapCustomerAccount');
-        $body = $this->Response()->getBody();
-        static::assertTrue(!empty($body));
-
-        $this->Response()->clearBody();
-        $params['mapCustomerAccountValue'] = '542350';
-        $this->Request()->setParams($params);
+        $this->Request()->request->set('mapCustomerAccountValue', 542350);
         $this->dispatch('backend/Partner/mapCustomerAccount');
         $body = $this->Response()->getBody();
         static::assertTrue(empty($body));

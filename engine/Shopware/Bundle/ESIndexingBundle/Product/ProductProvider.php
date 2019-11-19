@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\ProviderInterface;
 use Shopware\Bundle\ESIndexingBundle\Struct\Product;
@@ -114,7 +114,7 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
     private $configurationLoader;
 
     /**
-     * @var CrudService
+     * @var CrudServiceInterface
      */
     private $crudService;
 
@@ -142,7 +142,7 @@ class ProductProvider implements ProviderInterface, ProductProviderInterface
         VariantHelperInterface $variantHelper,
         ProductConfigurationLoader $configurationLoader,
         ProductListingVariationLoader $visibilityLoader,
-        CrudService $crudService,
+        CrudServiceInterface $crudService,
         ProductManualPositionLoaderInterface $manualPositionLoader
     ) {
         $this->productGateway = $productGateway;

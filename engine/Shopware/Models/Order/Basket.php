@@ -35,21 +35,21 @@ use Shopware\Models\Attribute\OrderBasket as OrderBasketAttribute;
 class Basket extends ModelEntity
 {
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="userID", type="integer", nullable=true)
      */
     protected $customerId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="articleID", type="integer", nullable=true)
      */
     protected $articleId;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="ordernumber", type="string", length=255, nullable=true)
      */
@@ -88,7 +88,7 @@ class Basket extends ModelEntity
     private $sessionId;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="partnerID", type="string", length=45, nullable=true)
      */
@@ -301,7 +301,7 @@ class Basket extends ModelEntity
     }
 
     /**
-     * @param string $partnerId
+     * @param string|null $partnerId
      */
     public function setPartnerId($partnerId)
     {
@@ -309,7 +309,7 @@ class Basket extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPartnerId()
     {
@@ -429,7 +429,7 @@ class Basket extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getOrderNumber()
     {
@@ -453,7 +453,7 @@ class Basket extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getArticleId()
     {
@@ -469,7 +469,7 @@ class Basket extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getCustomerId()
     {

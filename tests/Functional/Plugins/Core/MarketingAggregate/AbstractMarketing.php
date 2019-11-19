@@ -31,7 +31,7 @@ use Shopware\Models\Shop\Shop;
 
 class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }

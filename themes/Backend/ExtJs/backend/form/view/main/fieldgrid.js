@@ -279,7 +279,7 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
              * clickable icons in each row
              */
             xtype: 'actioncolumn',
-            width: 24,
+            width: 25,
             hideable: false,
             items: [{
                 iconCls: 'sprite-minus-circle-frame',

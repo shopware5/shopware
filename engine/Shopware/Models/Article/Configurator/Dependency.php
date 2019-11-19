@@ -43,21 +43,21 @@ class Dependency extends ModelEntity
     private $id;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="configurator_set_id", type="integer", nullable=true)
      */
     private $configuratorSetId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
     private $parentId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="child_id", type="integer", nullable=true)
      */
@@ -72,7 +72,7 @@ class Dependency extends ModelEntity
     private $parentOption;
 
     /**
-     * @var \Shopware\Models\Article\Configurator\Option
+     * @var \Shopware\Models\Article\Configurator\Option|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Option", inversedBy="dependencyChildren")
      * @ORM\JoinColumn(name="child_id", referencedColumnName="id")
@@ -80,7 +80,7 @@ class Dependency extends ModelEntity
     private $childOption;
 
     /**
-     * @var \Shopware\Models\Article\Configurator\Set
+     * @var \Shopware\Models\Article\Configurator\Set|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Set", inversedBy="dependencies")
      * @ORM\JoinColumn(name="configurator_set_id", referencedColumnName="id")
@@ -96,7 +96,7 @@ class Dependency extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Configurator\Option
+     * @return \Shopware\Models\Article\Configurator\Option|null
      */
     public function getParentOption()
     {
@@ -112,7 +112,7 @@ class Dependency extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Configurator\Option
+     * @return \Shopware\Models\Article\Configurator\Option|null
      */
     public function getChildOption()
     {
@@ -128,7 +128,7 @@ class Dependency extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Configurator\Set
+     * @return \Shopware\Models\Article\Configurator\Set|null
      */
     public function getConfiguratorSet()
     {

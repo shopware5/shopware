@@ -70,8 +70,7 @@ class Repository extends ModelRepository
     {
         /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(
-            [
+        $builder->select([
                 'partner.id',
                 'partner.company as company',
                 'partner.active as active',
@@ -164,8 +163,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $expr = $this->getEntityManager()->getExpressionBuilder();
 
-        $builder->select(
-            [
+        $builder->select([
                 'o.orderTime as orderTime',
                 'o.id as id',
                 'o.number as number',
@@ -236,8 +234,7 @@ class Repository extends ModelRepository
     public function getStatisticChartQueryBuilder($partnerId, $fromDate, $toDate, $userCurrencyFactor = 1)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(
-            [
+        $builder->select([
                 'o.orderTime as date',
                 'DATE_FORMAT(o.orderTime,\'%Y-%V\') as timeScale',
                 'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor)) as netTurnOver',
@@ -265,6 +262,8 @@ class Repository extends ModelRepository
      *
      * @param string $mappingValue
      *
+     * @deprecated since 5.6.3, will be removed with 5.8
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getCustomerForMappingQuery($mappingValue)
@@ -279,6 +278,8 @@ class Repository extends ModelRepository
      * This function can be hooked to modify the query builder of the query object.
      *
      * @param string $mappingValue
+     *
+     * @deprecated since 5.6.3, will be removed with 5.8
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -332,10 +333,7 @@ class Repository extends ModelRepository
     public function getValidateTrackingCodeQueryBuilder($trackingCode, $partnerId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(
-            [
-                'partner.id',
-            ])
+        $builder->select(['partner.id'])
             ->from(\Shopware\Models\Partner\Partner::class, 'partner')
             ->where('partner.idCode = ?1')
             ->andWhere('partner.id != ?2')

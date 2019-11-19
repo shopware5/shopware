@@ -107,7 +107,8 @@ class MediaOptimizeCommand extends ShopwareCommand implements CompletionAwareInt
         }
 
         if ($mediaService->getAdapterType() !== 'local' && !$input->getOption('force')) {
-            $output->writeln("<error>Using the sw:media:optimize-command with remote filesystem adapters (you are using adapter '{$mediaService->getAdapterType()}') is discouraged!</error>
+            $output->writeln(
+                "<error>Using the sw:media:optimize-command with remote filesystem adapters (you are using adapter '{$mediaService->getAdapterType()}') is discouraged!</error>
 Due to the nature of the task, all files will be downloaded, optimized and uploaded again.
 This can take a very long time, depending on the number of files that need to be optimized.
 "
@@ -116,7 +117,8 @@ This can take a very long time, depending on the number of files that need to be
             $doProceed = $this->getHelper('question')->ask(
                 $input,
                 $output,
-                new ConfirmationQuestion('Do you still wish to proceed? (y/N) ', false));
+                new ConfirmationQuestion('Do you still wish to proceed? (y/N) ', false)
+            );
 
             if (!$doProceed) {
                 return 1;
@@ -158,8 +160,8 @@ This can take a very long time, depending on the number of files that need to be
         MediaServiceInterface $mediaService,
         OptimizerServiceInterface $optimizerService,
         ProgressBar $progressBar,
-        OutputInterface $output)
-    {
+        OutputInterface $output
+    ) {
         /** @var array $contents */
         $contents = $mediaService->getFilesystem()->listContents($directory);
 

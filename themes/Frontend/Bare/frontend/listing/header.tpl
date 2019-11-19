@@ -28,12 +28,7 @@
     {if $sCategoryContent.media.source}
         {$metaImage = {$sCategoryContent.media.source}}
     {else}
-        {foreach $sArticles as $sArticle}
-            {if $sArticle@first}
-                {$metaImage = $sArticle.image.source}
-                {break}
-            {/if}
-        {/foreach}
+        {$metaImage = {link file=$theme.desktopLogo fullPath}}
     {/if}
 
     <meta property="og:image" content="{$metaImage}" />

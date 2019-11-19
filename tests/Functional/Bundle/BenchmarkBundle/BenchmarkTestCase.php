@@ -30,7 +30,7 @@ abstract class BenchmarkTestCase extends \PHPUnit\Framework\TestCase
 {
     use DatabaseTransactionBehaviour;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -127,6 +127,7 @@
         .addPlugin('.navigation--entry.entry--account.with-slt', 'swDropdownMenu', [ 'm', 'l', 'xl' ])
         .addPlugin('*[data-storage-field="true"]', 'swStorageField')
         .addPlugin('*[data-notification-message-close="true"]', 'swNotificationMessageClose')
+        .addPlugin('*[data-cookie-consent-manager="true"]', 'swCookieConsentManager')
     ;
 
     $(function($) {

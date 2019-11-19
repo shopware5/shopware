@@ -40,7 +40,7 @@ class CustomerStreamTest extends \Enlight_Components_Test_TestCase
      */
     protected $connection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         Shopware()->Models()->clear();
 
@@ -50,7 +50,7 @@ class CustomerStreamTest extends \Enlight_Components_Test_TestCase
         $this->connection->beginTransaction();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         Shopware()->Models()->clear();
