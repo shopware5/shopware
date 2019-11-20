@@ -333,6 +333,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         if (!empty($variants)) {
             /** @var Detail $variant */
             foreach ($variants as $variant) {
+                $mainData['attribute']['articleDetailId'] = $variant->getId();
                 $variant->fromArray($mainData);
                 Shopware()->Models()->persist($variant);
             }
