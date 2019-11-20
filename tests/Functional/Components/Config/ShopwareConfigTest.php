@@ -39,7 +39,7 @@ class ShopwareConfigTest extends Enlight_Components_Test_TestCase
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -57,7 +57,7 @@ class ShopwareConfigTest extends Enlight_Components_Test_TestCase
     /**
      * @throws \Doctrine\DBAL\DBALException
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         // force reload from database
         Shopware()->Container()->reset('cache');

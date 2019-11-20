@@ -260,7 +260,7 @@ class RobotsTxtTest extends \Enlight_Components_Test_Controller_TestCase
 
             $this->dispatch($url);
 
-            static::assertContains($expected, $this->Response()->getBody());
+            static::assertStringContainsString($expected, $this->Response()->getBody());
         }
     }
 

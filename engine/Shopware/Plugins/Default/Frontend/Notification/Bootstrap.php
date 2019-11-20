@@ -382,8 +382,8 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 continue;
             }
 
-            /** @var Shopware\Bundle\AttributeBundle\Service\DataLoader $attributeLoader */
-            $attributeLoader = $this->get(\Shopware\Bundle\AttributeBundle\Service\DataLoader::class);
+            /** @var Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface $attributeLoader */
+            $attributeLoader = $this->get(\Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface::class);
             $notify['attribute'] = $attributeLoader->load('s_articles_notification_attributes', $notify['id']);
 
             /* @var \Shopware\Models\Shop\Shop $shop */

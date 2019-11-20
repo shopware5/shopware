@@ -25,13 +25,13 @@
 namespace Shopware\Tests\Functional\Bundle\AttributeBundle;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\AttributeBundle\Service\DataLoader;
-use Shopware\Bundle\AttributeBundle\Service\DataPersister;
+use Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface;
+use Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface;
 
 class DataLoaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var DataLoader
+     * @var DataLoaderInterface
      */
     private $attributeLoader;
 
@@ -41,11 +41,11 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
     private $connection;
 
     /**
-     * @var DataPersister
+     * @var DataPersisterInterface
      */
     private $attributePersister;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $this->connection->beginTransaction();
@@ -56,7 +56,7 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->connection->rollBack();
 
@@ -67,7 +67,7 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
     {
         $result = $this->attributeLoader->load('s_user_addresses_attributes', 555);
 
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
     }
 
     public function testLoadReturnArrayIfNotEmpty()
@@ -75,7 +75,7 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
         $this->attributePersister->persist(['text1' => 'foo'], 's_user_addresses_attributes', 2);
         $result = $this->attributeLoader->load('s_user_addresses_attributes', 2);
 
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertNotEmpty($result);
     }
 
@@ -110,31 +110,29 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
         $this->attributeLoader->load('table_does_not_exists', 1);
     }
 
-    public function testLoadTranslationsReturnArrayWhenEmpty()
+    public function testLoadTranslationsReturnArrayWhenEmpty(): void
     {
         $result = $this->attributeLoader->loadTranslations('s_user_addresses_attributes', 555);
 
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
     }
 
-    public function testLoadTranslationsReturnArrayIfNotEmpty()
+    public function testLoadTranslationsReturnArrayIfNotEmpty(): void
     {
         $this->attributePersister->persist(['text1' => 'foo'], 's_user_addresses_attributes', 2);
         $result = $this->attributeLoader->loadTranslations('s_user_addresses_attributes', 2);
 
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
     }
 
     /**
      * @dataProvider getForeignKeyData
-     *
-     * @param string $input
      */
-    public function testLoadTranslationsForeignKeyValidation($input)
+    public function testLoadTranslationsForeignKeyValidation($input): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('No foreign key provided');
 
-        $this->attributeLoader->load('s_user_addresses_attributes', $input);
+        $this->attributeLoader->loadTranslations('s_user_addresses_attributes', $input);
     }
 }

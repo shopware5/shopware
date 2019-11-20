@@ -181,7 +181,8 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
         // Count total number of associated blog articles
         $builder = Shopware()->Models()->getRepository(\Shopware\Models\Blog\Blog::class)->getListQueryBuilder(
-            $blogCategoryIds, null
+            $blogCategoryIds,
+            null
         );
         $numResults = $builder->select('COUNT(blog)')
             ->getQuery()

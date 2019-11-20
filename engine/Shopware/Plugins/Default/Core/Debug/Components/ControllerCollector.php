@@ -122,7 +122,9 @@ class ControllerCollector implements CollectorInterface
         foreach ($events as $event) {
             $listeners->registerListener(
                 new \Enlight_Event_Handler_Default(
-                    $event, [$this, 'onBenchmarkEvent'], -99
+                    $event,
+                    [$this, 'onBenchmarkEvent'],
+                    -99
                 )
             );
         }

@@ -57,7 +57,7 @@ class HookManagerTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->eventManager = new \Enlight_Event_EventManager();
         $proxyDir = rtrim(sys_get_temp_dir(), '\\/') . DIRECTORY_SEPARATOR . uniqid('hook-manager-test-' . rand(1000, 9000));
@@ -980,6 +980,7 @@ class HookManagerTest extends TestCase
     private function assertHookArgs(\Enlight_Hook_HookArgs $args)
     {
         static::assertEquals(self::TEST_NAME_ARG, $args->name);
-        static::assertArraySubset(self::TEST_VALUES_ARG, $args->values);
+        static::assertArrayHasKey('foo', $args->values);
+        static::assertSame('bar', $args->values['foo']);
     }
 }

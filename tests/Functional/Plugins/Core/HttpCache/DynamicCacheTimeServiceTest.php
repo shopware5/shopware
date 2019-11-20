@@ -30,6 +30,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Enlight_Controller_Request_RequestTestCase;
 use Exception;
 use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\PluginInstallerBundle\Service\LegacyPluginInstaller;
 use Shopware\Components\HttpCache\CacheTimeServiceInterface;
 use Shopware\Components\HttpCache\DynamicCacheTimeService;
 use Shopware\Models\Article\Article;
@@ -55,8 +56,13 @@ class DynamicCacheTimeServiceTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
+        Shopware()->Container()->reset(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
+        Shopware()->Container()->reset('shopware_plugininstaller.plugin_manager');
+        Shopware()->Container()->reset(LegacyPluginInstaller::class);
+        Shopware()->Container()->reset('shopware_plugininstaller.legacy_plugin_installer');
+
         $pluginManager = Shopware()->Container()->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
 
         /** @var Plugin $plugin */
@@ -69,7 +75,7 @@ class DynamicCacheTimeServiceTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         // Flush, so the entities created and removed by the test methods actually get deleted.
         Shopware()->Models()->flush();
@@ -78,7 +84,7 @@ class DynamicCacheTimeServiceTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->cacheTimeService = Shopware()->Container()->get(\Shopware\Components\HttpCache\CacheTimeServiceInterface::class);
 

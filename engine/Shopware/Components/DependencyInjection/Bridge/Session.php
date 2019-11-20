@@ -85,6 +85,9 @@ class Session
             $sessionOptions['cookie_secure'] = true;
         }
 
+        $basePath = $mainShop->getBasePath();
+        $sessionOptions['cookie_path'] = empty($basePath) ? '/' : $basePath;
+
         if ($saveHandler) {
             session_set_save_handler($saveHandler);
             unset($sessionOptions['save_handler']);

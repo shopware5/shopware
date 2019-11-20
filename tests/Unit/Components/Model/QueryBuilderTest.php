@@ -40,7 +40,7 @@ class QueryBuilderTest extends TestCase
      */
     public $querybuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         // Create a stub for the SomeClass class.
         $emMock = $this->createMock(EntityManager::class);
@@ -345,7 +345,7 @@ class QueryBuilderTest extends TestCase
         $expectedResult = [];
         $counter = 0;
         foreach ($testValues as $testValue) {
-            $expectedResult[] = new Parameter(trim($parts[$counter]->getRightExpr(), '()'), $testValue['values'], $testValue['type']);
+            $expectedResult[] = new Parameter(trim($parts[$counter]->getRightExpr(), '()'), $testValue['values']);
             ++$counter;
         }
 

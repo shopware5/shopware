@@ -172,7 +172,8 @@ class FacetFilter implements FacetFilterInterface
             $ids = array_map(
                 function ($item) {
                     return $item->getId();
-                }, $propertyFacet->getValues()
+                },
+                $propertyFacet->getValues()
             );
 
             $filtered = false;

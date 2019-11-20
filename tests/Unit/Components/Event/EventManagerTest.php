@@ -32,7 +32,7 @@ class EventManagerTest extends TestCase
 {
     private $eventManager;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->eventManager = new \Enlight_Event_EventManager();
     }

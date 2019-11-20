@@ -103,7 +103,7 @@ class Comment extends ModelEntity
     private $points;
 
     /**
-     * @var \Shopware\Models\Shop\Shop
+     * @var \Shopware\Models\Shop\Shop|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
@@ -111,7 +111,7 @@ class Comment extends ModelEntity
     private $shop;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="shop_id", type="integer", nullable=true)
      */
@@ -273,7 +273,7 @@ class Comment extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\Shop|null $shop
+     * @param \Shopware\Models\Shop\Shop $shop
      */
     public function setShop($shop)
     {
@@ -281,7 +281,7 @@ class Comment extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getShopId()
     {

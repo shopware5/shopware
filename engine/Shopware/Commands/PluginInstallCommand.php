@@ -92,7 +92,8 @@ class PluginInstallCommand extends PluginCommand implements CompletionAwareInter
                 InputOption::VALUE_NONE,
                 'Do not refresh plugin list.'
             )
-            ->setHelp(<<<'EOF'
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> installs a plugin.
 EOF
             );

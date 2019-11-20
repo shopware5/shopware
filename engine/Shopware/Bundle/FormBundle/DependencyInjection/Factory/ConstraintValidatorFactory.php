@@ -48,7 +48,6 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
  *         return 'some_alias';
  *     }
  *
- *
  * @see    https://github.com/symfony/framework-bundle/blob/master/Validator/ConstraintValidatorFactory.php
  *
  * @license https://opensource.org/licenses/MIT MIT License

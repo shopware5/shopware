@@ -82,10 +82,19 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
 
         $optinService->delete(OptinServiceInterface::TYPE_THEME_PREVIEW, $hash);
 
-        $this->Response()->headers->setCookie(new Cookie($data['sessionName'], $data['sessionValue'], 0, $this->Request()->getBaseUrl(), null, $this->Request()->isSecure(), true));
+        $this->Response()->headers->setCookie(
+            new Cookie(
+                $data['sessionName'],
+                $data['sessionValue'],
+                0,
+                $this->Request()->getBaseUrl(),
+                null,
+                $this->Request()->isSecure()
+            )
+        );
 
         // Disable http cache for this Request
-        $this->Response()->headers->set('cache-control', 'private', true);
+        $this->Response()->headers->set('cache-control', 'private');
 
         $this->redirect(['controller' => 'index', 'action' => 'index']);
 

@@ -43,7 +43,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
      */
     private $resource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $this->connection->beginTransaction();
@@ -53,7 +53,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->connection->rollBack();
         parent::tearDown();
@@ -72,35 +72,27 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         static::assertNotNull($preset->getId());
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testPresetDataIsRequiredOnCreate()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->create(['name' => 'Test']);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testPresetNameIsRequiredOnCreate()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->create(['presetData' => '[]']);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ValidationException
-     */
     public function testPresetNameCannotBeEmpty()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
         $this->resource->create(['name' => '', 'presetData' => '[]']);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ValidationException
-     */
     public function testPresetDataCanNotBeEmpty()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
         $this->resource->create(['name' => 'test', 'presetData' => '']);
     }
 
@@ -365,11 +357,9 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         static::assertCount(1, $this->connection->fetchAll("SELECT * FROM s_emotion_presets WHERE name = 'updated'"));
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testUpdateWithInvalidId()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $this->resource->update(1000, ['name' => 'test']);
     }
 
@@ -380,37 +370,29 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         static::assertEmpty($this->resource->getList());
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
-     */
     public function testValidateExistingName()
     {
+        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
         $this->resource->create(['name' => 'test', 'presetData' => '[]']);
         $this->resource->create(['name' => 'test', 'presetData' => '[]']);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testDeleteWithInvalidId()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->delete(null);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testDeleteWithNoneExistingId()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $this->resource->delete(1000);
         static::assertEmpty($this->resource->getList());
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\PrivilegeException
-     */
     public function testDeleteNoneCustomPreset()
     {
+        $this->expectException('Shopware\Components\Api\Exception\PrivilegeException');
         $preset = $this->resource->create(['name' => 'test', 'presetData' => '[]', 'custom' => false]);
         $this->resource->delete($preset->getId());
     }

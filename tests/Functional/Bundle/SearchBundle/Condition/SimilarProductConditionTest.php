@@ -44,18 +44,19 @@ class SimilarProductConditionTest extends TestCase
         $article = $this->helper->createArticle($product);
         $condition = new SimilarProductCondition($article->getId(), $article->getName());
 
-        $this->search([
-            'one' => $first,
-            'two' => $first,
-            'three' => $first,
-            'four' => $first,
-            'five' => $first,
-            'six' => $second,
-            'seven' => $second,
-            'eight' => $second,
-            'nine' => $second,
-            'ten' => $second,
-        ],
+        $this->search(
+            [
+                'one' => $first,
+                'two' => $first,
+                'three' => $first,
+                'four' => $first,
+                'five' => $first,
+                'six' => $second,
+                'seven' => $second,
+                'eight' => $second,
+                'nine' => $second,
+                'ten' => $second,
+            ],
             ['six', 'seven', 'eight', 'nine', 'ten'],
             $main,
             [$condition]

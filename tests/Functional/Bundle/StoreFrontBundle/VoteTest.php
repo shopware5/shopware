@@ -116,7 +116,6 @@ class VoteTest extends TestCase
                 1 => ['count' => 3, 'average' => 8, 'points' => [3 => 1, 4 => 1, 5 => 1]],
                 2 => ['count' => 3, 'average' => 8, 'points' => [4 => 3]],
             ],
-
             ['displayOnlySubShopVotes' => true]
         );
     }
@@ -136,7 +135,6 @@ class VoteTest extends TestCase
                 1 => ['count' => 6, 'average' => 8, 'points' => [3 => 1, 4 => 4, 5 => 1]],
                 2 => ['count' => 3, 'average' => 8, 'points' => [3 => 1, 4 => 1, 5 => 1]],
             ],
-
             ['displayOnlySubShopVotes' => true]
         );
     }

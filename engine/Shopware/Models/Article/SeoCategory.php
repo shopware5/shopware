@@ -30,8 +30,6 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware Article SeoCategory Model
  *
- *
- *
  * @ORM\Entity()
  * @ORM\Table(name="s_articles_categories_seo")
  */

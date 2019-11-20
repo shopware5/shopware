@@ -45,7 +45,6 @@ use Shopware\Components\Model\ModelEntity;
  *   - PRIMARY KEY (`id`)
  * </code>
  *
- *
  * @license    http://enlight.de/license     New BSD License
  *
  * @ORM\Entity()
@@ -100,7 +99,7 @@ class Album extends ModelEntity
     /**
      * Id of the parent album
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="parentID", type="integer", nullable=true)
      */

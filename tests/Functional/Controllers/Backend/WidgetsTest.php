@@ -35,7 +35,7 @@ class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
 
     private $userId;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
@@ -49,7 +49,7 @@ class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Db()->exec('DELETE FROM s_user');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -225,8 +225,10 @@ class WidgetsTest extends \Enlight_Components_Test_Controller_TestCase
 
         // First customer should be the one we added, ass there isn't any other process adding any s_statistics_currentusers
         static::assertEquals($this->userId, $response['data']['customers'][0]['userID']);
-        static::assertEquals($addressData['firstname'] . ' ' . $addressData['lastname'],
-            $response['data']['customers'][0]['customer']);
+        static::assertEquals(
+            $addressData['firstname'] . ' ' . $addressData['lastname'],
+            $response['data']['customers'][0]['customer']
+        );
     }
 
     public function testGetVisitorsWithEmptyCompanyAction()

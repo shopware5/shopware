@@ -61,7 +61,7 @@ class Shipping extends ModelEntity
     use AttributeCleanerTrait;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="title", type="string", length=100, nullable=true)
      */
@@ -70,7 +70,7 @@ class Shipping extends ModelEntity
     /**
      * Contains the additional address line data
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="additional_address_line1", type="string", length=255, nullable=true)
      */
@@ -79,7 +79,7 @@ class Shipping extends ModelEntity
     /**
      * Contains the additional address line data 2
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="additional_address_line2", type="string", length=255, nullable=true)
      */
@@ -89,7 +89,7 @@ class Shipping extends ModelEntity
      * The customer property is the owning side of the association between customer and shipping.
      * The association is joined over the shipping userID and the customer id
      *
-     * @var \Shopware\Models\Customer\Customer
+     * @var \Shopware\Models\Customer\Customer|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Customer\Customer")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
@@ -118,7 +118,7 @@ class Shipping extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var OrderShippingAttribute
+     * @var OrderShippingAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderShipping", mappedBy="orderShipping", orphanRemoval=true, cascade={"persist"})
      */
@@ -158,7 +158,7 @@ class Shipping extends ModelEntity
     /**
      * Contains the id of the state. Used for billing - state association.
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="stateID", type="integer", nullable=true)
      */
@@ -168,7 +168,7 @@ class Shipping extends ModelEntity
      * If of the associated customer. Used as foreign key for the
      * customer - shipping association.
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="userID", type="integer", nullable=true)
      */
@@ -256,7 +256,7 @@ class Shipping extends ModelEntity
     private $phone = '';
 
     /**
-     * @var State
+     * @var State|null
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Country\State")
      * @ORM\JoinColumn(name="stateID", referencedColumnName="id")
@@ -495,7 +495,7 @@ class Shipping extends ModelEntity
      * the Customer.shipping property (INVERSE SIDE) and the Shipping.customer (OWNING SIDE) property.
      * The customer data is joined over the s_user.id field.
      *
-     * @return \Shopware\Models\Customer\Customer
+     * @return \Shopware\Models\Customer\Customer|null
      */
     public function getCustomer()
     {
@@ -568,7 +568,7 @@ class Shipping extends ModelEntity
     }
 
     /**
-     * @return OrderShippingAttribute
+     * @return OrderShippingAttribute|null
      */
     public function getAttribute()
     {
@@ -598,7 +598,7 @@ class Shipping extends ModelEntity
     /**
      * Getter function for the getAdditionalAddressLine2 column property.
      *
-     * @return string
+     * @return string|null
      */
     public function getAdditionalAddressLine2()
     {
@@ -618,7 +618,7 @@ class Shipping extends ModelEntity
     /**
      * Getter function for the getAdditionalAddressLine1 column property.
      *
-     * @return string
+     * @return string|null
      */
     public function getAdditionalAddressLine1()
     {
@@ -653,7 +653,7 @@ class Shipping extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getTitle()
     {

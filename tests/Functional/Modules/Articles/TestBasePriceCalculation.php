@@ -22,17 +22,19 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Modules\Articles;
+
 /**
  * tests the base price calculation
  *
  * @ticket SW-7204
  */
-class Shopware_Tests_Modules_Articles_TestBasePriceCalculation extends Enlight_Components_Test_Plugin_TestCase
+class TestBasePriceCalculation extends \Enlight_Components_Test_Plugin_TestCase
 {
     /**
      * Set up test case, fix demo data where needed
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -46,7 +48,7 @@ class Shopware_Tests_Modules_Articles_TestBasePriceCalculation extends Enlight_C
     /**
      * Cleaning up testData
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

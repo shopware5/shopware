@@ -47,7 +47,7 @@ class PresetDataSynchronizerTest extends TestCase
     /** @var string */
     private $imageData;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $this->connection->beginTransaction();
@@ -61,16 +61,14 @@ class PresetDataSynchronizerTest extends TestCase
         $this->imageData = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->connection->rollBack();
     }
 
-    /**
-     * @expectedException
-     */
     public function testAssetImportWithPresetAlreadyImported()
     {
+        $this->expectException('');
         $preset = $this->presetResource->create(['name' => 'test', 'presetData' => '[]', 'assetsImported' => true]);
 
         $this->expectException(PresetAssetImportException::class);
@@ -78,11 +76,9 @@ class PresetDataSynchronizerTest extends TestCase
         $this->synchronizerService->importElementAssets($preset, 'key');
     }
 
-    /**
-     * @expectedException
-     */
     public function testAssetImportWithWrongPresetData()
     {
+        $this->expectException('');
         $preset = $this->presetResource->create(['name' => 'test', 'presetData' => 'wrongData', 'assetsImported' => false]);
 
         $this->expectException(PresetAssetImportException::class);
@@ -90,11 +86,9 @@ class PresetDataSynchronizerTest extends TestCase
         $this->synchronizerService->importElementAssets($preset, 'key');
     }
 
-    /**
-     * @expectedException
-     */
     public function testAssetImportWithMissingElementKey()
     {
+        $this->expectException('');
         $preset = $this->presetResource->create(['name' => 'test', 'presetData' => '{"syncData":{"assets":[{"abcdefg":"media\/this-is-no-link"}]},"elements":[{"componentId":null,"startRow":1,"startCol":1,"endRow":1,"endCol":1,"data":[]}]}', 'assetsImported' => false]);
 
         $this->expectException(PresetAssetImportException::class);

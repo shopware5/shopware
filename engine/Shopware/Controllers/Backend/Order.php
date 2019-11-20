@@ -1000,6 +1000,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $mail->clearRecipients();
         $mail->clearSubject();
         $mail->clearFrom();
+        $mail->clearBody();
 
         $mailData = [
             'attachments' => $attachments,
@@ -1225,8 +1226,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $response->headers->set('content-type', 'application/pdf');
         $response->headers->set('content-transfer-encoding', 'binary');
         $response->headers->set('content-length', $filesystem->getSize($file));
-        $response->sendHeaders();
-        $response->sendResponse();
 
         $upstream = $filesystem->readStream($file);
         $downstream = fopen('php://output', 'wb');

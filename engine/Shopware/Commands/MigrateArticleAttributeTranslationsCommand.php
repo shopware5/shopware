@@ -24,7 +24,7 @@
 
 namespace Shopware\Commands;
 
-use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -84,7 +84,7 @@ class MigrateArticleAttributeTranslationsCommand extends ShopwareCommand
     private function migrate(ProgressBar $progressBar, $maxId)
     {
         $selectStatement = $this->connection->prepare(
-<<<'EOL'
+            <<<'EOL'
 SELECT id, objectdata
 FROM s_core_translations
 WHERE objecttype IN ("article", "variantMain", "variant")
@@ -160,7 +160,7 @@ EOL
         $updated = false;
         foreach ($columns as $key => $column) {
             if (array_key_exists($key, $data)) {
-                $newKey = CrudService::EXT_JS_PREFIX . $column;
+                $newKey = CrudServiceInterface::EXT_JS_PREFIX . $column;
 
                 if (!array_key_exists($newKey, $data)) {
                     $data[$newKey] = $data[$key];

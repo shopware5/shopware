@@ -51,7 +51,7 @@ class View extends ModelEntity
     private $widget;
 
     /**
-     * @var \Shopware\Models\User\User
+     * @var \Shopware\Models\User\User|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\User\User")
      * @ORM\JoinColumn(name="auth_id", referencedColumnName="id")
@@ -59,7 +59,7 @@ class View extends ModelEntity
     private $auth;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="auth_id", type="integer", nullable=true)
      */
@@ -111,7 +111,7 @@ class View extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\User\User
+     * @return \Shopware\Models\User\User|null
      */
     public function getAuth()
     {
@@ -158,6 +158,9 @@ class View extends ModelEntity
         $this->position = $position;
     }
 
+    /**
+     * @return int|null
+     */
     public function getAuthId()
     {
         return $this->authId;

@@ -34,13 +34,13 @@ class OptinServiceTest extends TestCase
      */
     private $service;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         Shopware()->Models()->getConnection()->beginTransaction();
         $this->service = Shopware()->Container()->get(\Shopware\Components\OptinServiceInterface::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Shopware()->Models()->getConnection()->rollBack();
     }

@@ -23,7 +23,7 @@
  */
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Translation\ObjectTranslator;
 
@@ -435,6 +435,9 @@ class Shopware_Components_Translation
             }
             if (array_key_exists('documents', $order)) {
                 foreach ($order['documents'] as $documentIndex => $document) {
+                    if (!$document['type']) {
+                        continue;
+                    }
                     $documentTypes[$document['type']['id']] = $document['type'];
                 }
             }
@@ -481,7 +484,9 @@ class Shopware_Components_Translation
                 }
 
                 return $translator->translateObjectProperty($dispatchMethod, 'dispatch_name', 'name');
-            }, $dispatchMethods);
+            },
+            $dispatchMethods
+        );
 
         return $translatedDispatchMethods;
     }
@@ -498,7 +503,9 @@ class Shopware_Components_Translation
         $translatedDocuments = array_map(
             static function ($document) use ($translator) {
                 return $translator->translateObjectProperty($document, 'name');
-            }, $documents);
+            },
+            $documents
+        );
 
         return $translatedDocuments;
     }
@@ -516,13 +523,15 @@ class Shopware_Components_Translation
             static function ($payment) use ($translator) {
                 $translatedPayment = $translator->translateObjectProperty($payment, 'description');
                 $translatedPayment = $translator->translateObjectProperty(
-                $translatedPayment,
-                'additionalDescription',
-                'additionaldescription'
-            );
+                    $translatedPayment,
+                    'additionalDescription',
+                    'additionaldescription'
+                );
 
                 return $translatedPayment;
-            }, $payments);
+            },
+            $payments
+        );
 
         return $translatedPayments;
     }
@@ -705,7 +714,7 @@ class Shopware_Components_Translation
 
         foreach ($data as $key => $value) {
             $column = strtolower($key);
-            $column = str_replace(CrudService::EXT_JS_PREFIX, '', $column);
+            $column = str_replace(CrudServiceInterface::EXT_JS_PREFIX, '', $column);
 
             unset($data[$key]);
             if (in_array($column, $columns)) {

@@ -78,7 +78,8 @@ class Database implements ConfigHandlerInterface
         }, $customUrls);
 
         foreach ($customUrls as $customUrl) {
-            $this->connection->insert('s_sitemap_custom',
+            $this->connection->insert(
+                's_sitemap_custom',
                 $customUrl
             );
         }
@@ -105,7 +106,8 @@ class Database implements ConfigHandlerInterface
         }, $excludedUrls);
 
         foreach ($excludedUrls as $excludedUrl) {
-            $this->connection->insert('s_sitemap_exclude',
+            $this->connection->insert(
+                's_sitemap_exclude',
                 $excludedUrl
             );
         }

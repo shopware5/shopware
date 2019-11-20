@@ -33,7 +33,7 @@ class DefaultCaptchaTest extends \PHPUnit\Framework\TestCase
      */
     private $captcha;
 
-    public function setUp()
+    public function setUp(): void
     {
         Shopware()->Session()->clear();
 

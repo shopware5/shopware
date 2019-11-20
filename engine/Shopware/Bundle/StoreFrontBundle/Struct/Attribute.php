@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-class Attribute extends Struct implements \JsonSerializable
+class Attribute extends Struct implements \JsonSerializable, \ArrayAccess
 {
     /**
      * Internal storage which contains all struct data.
@@ -103,9 +103,42 @@ class Attribute extends Struct implements \JsonSerializable
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
-    private function isValid($value)
+    public function offsetExists($offset)
+    {
+        return $this->exists($offset);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetGet($offset)
+    {
+        return $this->get($offset);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function offsetSet($offset, $value)
+    {
+        $this->set($offset, $value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetUnset($offset)
+    {
+        if ($this->exists($offset)) {
+            unset($this->storage[$offset]);
+        }
+    }
+
+    private function isValid($value): bool
     {
         if ($value instanceof \JsonSerializable || is_scalar($value) || $value === null) {
             return true;

@@ -59,42 +59,45 @@ class MenuSynchronizerTest extends TestCase
 
     public function testIndexLowerCaseIsPartOfSnippet()
     {
-        $this->executeTestAndCheckResult([
+        $this->executeTestAndCheckResult(
             [
-                'isRootMenu' => true,
-                'name' => 'Menu',
-                'label' => [
-                    'en' => 'EN Label',
+                [
+                    'isRootMenu' => true,
+                    'name' => 'Menu',
+                    'label' => [
+                        'en' => 'EN Label',
+                    ],
+                    'controller' => 'SomeController',
+                    'action' => 'index', // <-- This is the important part
                 ],
-                'controller' => 'SomeController',
-                'action' => 'index', // <-- This is the important part
             ],
-        ],
-        [
-            'namespace' => 'backend/index/view/main',
-            'shopID' => 1,
-            'localeID' => 2,
-            'name' => 'SomeController/index',
-            'value' => 'EN Label',
-            'created' => date('Y-m-d H:i:s', time()),
-            'updated' => date('Y-m-d H:i:s', time()),
-            'dirty' => 0,
-        ]);
+            [
+                'namespace' => 'backend/index/view/main',
+                'shopID' => 1,
+                'localeID' => 2,
+                'name' => 'SomeController/index',
+                'value' => 'EN Label',
+                'created' => date('Y-m-d H:i:s', time()),
+                'updated' => date('Y-m-d H:i:s', time()),
+                'dirty' => 0,
+            ]
+        );
     }
 
     public function testOtherActionIsPartOfSnippet()
     {
-        $this->executeTestAndCheckResult([
+        $this->executeTestAndCheckResult(
             [
-                'isRootMenu' => true,
-                'name' => 'Menu',
-                'label' => [
-                    'en' => 'EN Label',
+                [
+                    'isRootMenu' => true,
+                    'name' => 'Menu',
+                    'label' => [
+                        'en' => 'EN Label',
+                    ],
+                    'controller' => 'SomeController',
+                    'action' => 'FooBar', // <-- This is the important part
                 ],
-                'controller' => 'SomeController',
-                'action' => 'FooBar', // <-- This is the important part
             ],
-        ],
             [
                 'namespace' => 'backend/index/view/main',
                 'shopID' => 1,
@@ -104,7 +107,8 @@ class MenuSynchronizerTest extends TestCase
                 'created' => date('Y-m-d H:i:s', time()),
                 'updated' => date('Y-m-d H:i:s', time()),
                 'dirty' => 0,
-            ]);
+            ]
+        );
     }
 
     protected function executeTestAndCheckResult(array $menu, array $expectedQueryParameters)

@@ -77,8 +77,8 @@
                  public="false">
             <argument type="service" id="Shopware\Components\Model\ModelManager"/>
             <argument type="service" id="Shopware\Components\Routing\RouterInterface"/>
-            <tag name="sitemap_url_provider" />
             <argument type="service" id="Shopware_Components_Translation"/>
+            <tag name="sitemap_url_provider" />
         </service>
 
         <service id="shopware_bundle_sitemap.provider.url.manufacturer"

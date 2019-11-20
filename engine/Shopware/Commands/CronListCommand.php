@@ -38,7 +38,8 @@ class CronListCommand extends ShopwareCommand
         $this
             ->setName('sw:cron:list')
             ->setDescription('Lists cronjobs.')
-            ->setHelp(<<<'EOF'
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> lists cronjobs.
 EOF
             );

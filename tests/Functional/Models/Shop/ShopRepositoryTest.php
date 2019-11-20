@@ -22,10 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Models;
+
 use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Shop;
 
-class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_Controller_TestCase
+class ShopRepositoryTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var \Shopware\Models\Shop\Repository
@@ -36,7 +38,7 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
 
     private $mainShopBackup;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -71,7 +73,7 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
         ]);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -153,7 +155,7 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
      */
     public function callGetActiveShopByRequest($url, $shopName, $secure = false)
     {
-        $request = new Enlight_Controller_Request_RequestTestCase();
+        $request = new \Enlight_Controller_Request_RequestTestCase();
         $request->setHttpHost($this->mainShop['host']);
         $request->setRequestUri($url);
         $request->setSecure($secure);

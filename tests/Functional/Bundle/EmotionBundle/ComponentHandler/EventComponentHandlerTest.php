@@ -46,7 +46,8 @@ class EventComponentHandlerTest extends \Enlight_Components_Test_TestCase
             Shopware()->Container()->get(\Shopware\Bundle\EmotionBundle\Service\Gateway\EmotionElementGateway::class),
             $eventComponentHandlerMock,
             Shopware()->Container()->get(\Shopware\Bundle\EmotionBundle\Service\DataCollectionResolverInterface::class),
-            Shopware()->Container()->get('events'));
+            Shopware()->Container()->get('events')
+        );
 
         $contextService = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
 

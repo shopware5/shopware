@@ -22,9 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Models;
+
 use Shopware\Models\Snippet\Snippet;
 
-class Shopware_Tests_Models_SnippetTest extends Enlight_Components_Test_TestCase
+class SnippetTest extends \Enlight_Components_Test_TestCase
 {
     /**
      * @var array
@@ -38,12 +40,12 @@ class Shopware_Tests_Models_SnippetTest extends Enlight_Components_Test_TestCase
     ];
 
     /**
-     * @var Shopware\Components\Model\ModelManager
+     * @var \Shopware\Components\Model\ModelManager
      */
     protected $em;
 
     /**
-     * @var Shopware\Models\User\Repository
+     * @var \Shopware\Models\User\Repository
      */
     protected $repo;
 
@@ -51,7 +53,7 @@ class Shopware_Tests_Models_SnippetTest extends Enlight_Components_Test_TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -62,7 +64,7 @@ class Shopware_Tests_Models_SnippetTest extends Enlight_Components_Test_TestCase
     /**
      * Tear down
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $snippet = $this->repo->findOneBy(['namespace' => 'unit/test/snippettestcase']);
 

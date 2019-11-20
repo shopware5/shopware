@@ -26,6 +26,7 @@ namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Article\Configurator\Group;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
@@ -35,7 +36,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
 {
     private $groups = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->setConfig('hideNoInStock', false);
@@ -341,7 +342,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
      */
     protected function getProduct(
         $number,
-        TestContext $context,
+        ShopContext $context,
         Category $category = null,
         $data = []
     ) {
@@ -503,7 +504,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
      *
      * @param ListProduct[] $products
      */
-    private function assertPrices(array  $products, array $prices)
+    private function assertPrices(array $products, array $prices)
     {
         $this->assertPriceCount($products, $prices);
 

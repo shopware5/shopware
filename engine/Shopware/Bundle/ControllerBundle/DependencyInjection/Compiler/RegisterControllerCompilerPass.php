@@ -98,9 +98,9 @@ class RegisterControllerCompilerPass implements CompilerPassInterface
 
         foreach ($finder as $file) {
             $eventName = $this->buildEventName(
-               $file->getPathInfo()->getBasename(),
-               $file->getBasename('.php')
-           );
+                $file->getPathInfo()->getBasename(),
+                $file->getBasename('.php')
+            );
             $controllers[$eventName] = $file->getPathname();
         }
 

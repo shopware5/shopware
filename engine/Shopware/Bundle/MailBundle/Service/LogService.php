@@ -24,18 +24,20 @@
 
 namespace Shopware\Bundle\MailBundle\Service;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\DBAL\Connection;
 use Enlight_Components_Mail;
 use Shopware\Bundle\MailBundle\Service\Filter\AdministrativeMailFilter;
 use Shopware\Bundle\MailBundle\Service\Filter\MailFilterInterface;
+use Shopware\Models\Mail\Contact;
 use Shopware\Models\Mail\Log;
+use Shopware\Models\Order\Document\Document;
 
 class LogService implements LogServiceInterface
 {
     /**
-     * @var EntityManagerInterface
+     * @var Connection
      */
-    private $entityManager;
+    private $connection;
 
     /**
      * @var LogEntryBuilderInterface
@@ -57,9 +59,9 @@ class LogService implements LogServiceInterface
      */
     private $flushError = false;
 
-    public function __construct(EntityManagerInterface $entityManager, LogEntryBuilderInterface $entryBuilder, iterable $filters)
+    public function __construct(Connection $connection, LogEntryBuilderInterface $entryBuilder, iterable $filters)
     {
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
         $this->entryBuilder = $entryBuilder;
         $this->filters = $filters;
         $this->entries = [];
@@ -89,21 +91,46 @@ class LogService implements LogServiceInterface
             return;
         }
 
-        $this->entityManager->clear();
-        $this->entityManager->beginTransaction();
+        $this->connection->beginTransaction();
 
         try {
-            while (count($this->entries) > 0) {
-                $this->entityManager->persist(array_pop($this->entries));
+            $contacts = $this->loadContacts();
 
-                if (count($this->entries) % 20 === 0) {
-                    $this->entityManager->flush();
+            foreach ($this->entries as $entry) {
+                $this->connection->insert('s_mail_log', [
+                    'type_id' => $entry->getType() ? $entry->getType()->getId() : null,
+                    'order_id' => $entry->getOrder() ? $entry->getOrder()->getId() : null,
+                    'shop_id' => $entry->getShop() ? $entry->getShop()->getId() : null,
+                    'subject' => $entry->getSubject(),
+                    'sender' => $entry->getSender(),
+                    'sent_at' => $entry->getSentAt()->format('Y-m-d H:i:s'),
+                    'content_html' => $entry->getContentHtml(),
+                    'content_text' => $entry->getContentText(),
+                ]);
+                $mailLogId = (int) $this->connection->lastInsertId();
+
+                /** @var Document $document */
+                foreach ($entry->getDocuments() as $document) {
+                    $this->connection->insert('s_mail_log_document', [
+                        'log_id' => $mailLogId,
+                        'document_id' => $document->getId(),
+                    ]);
+                }
+
+                /** @var Contact $recipient */
+                foreach ($entry->getRecipients() as $recipient) {
+                    $mail = mb_strtolower(trim($recipient->getMailAddress()));
+
+                    $this->connection->insert('s_mail_log_recipient', [
+                        'log_id' => $mailLogId,
+                        'contact_id' => $recipient->getId() ?: $contacts[$mail],
+                    ]);
                 }
             }
 
-            $this->entityManager->commit();
+            $this->connection->commit();
         } catch (\Exception $exception) {
-            $this->entityManager->rollback();
+            $this->connection->rollback();
             throw $exception;
         }
     }
@@ -126,5 +153,37 @@ class LogService implements LogServiceInterface
                 $this->flushError = true;
             }
         }
+    }
+
+    private function loadContacts(): array
+    {
+        $recipients = [];
+
+        foreach ($this->entries as $entry) {
+            /** @var Contact $recipient */
+            foreach ($entry->getRecipients() as $recipient) {
+                if ($recipient->getId()) {
+                    continue;
+                }
+
+                $recipients[] = mb_strtolower($recipient->getMailAddress());
+            }
+        }
+
+        $recipients = array_unique(array_filter(array_map('trim', $recipients)));
+
+        $sql = 'SELECT LOWER(mail_address), id FROM s_mail_log_contact WHERE mail_address IN (:addresses)';
+        $foundRecipients = $this->connection->executeQuery($sql, ['addresses' => $recipients])->fetchAll(\PDO::FETCH_KEY_PAIR);
+
+        foreach ($recipients as $recipient) {
+            if (array_key_exists($recipient, $foundRecipients)) {
+                continue;
+            }
+
+            $this->connection->insert('s_mail_log_contact', ['mail_address' => $recipient]);
+            $foundRecipients[$recipient] = (int) $this->connection->lastInsertId();
+        }
+
+        return $foundRecipients;
     }
 }

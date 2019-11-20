@@ -681,7 +681,8 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             $filter = $this->Request()->getParam('filter', []),
             $order = $this->Request()->getParam('sort', []),
             $offset = $this->Request()->getParam('start'),
-            $limit = $this->Request()->getParam('limit')
+            $limit = $this->Request()->getParam('limit'),
+            true
         );
 
         // Get total result of the query
@@ -1287,12 +1288,18 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $snippets = $this->container->get('snippets');
         foreach ($data as &$locale) {
             if (!empty($locale['language'])) {
-                $locale['language'] = $snippets->getNamespace('backend/locale/language')->get($locale['locale'],
-                    $locale['language'], true);
+                $locale['language'] = $snippets->getNamespace('backend/locale/language')->get(
+                    $locale['locale'],
+                    $locale['language'],
+                    true
+                );
             }
             if (!empty($locale['territory'])) {
-                $locale['territory'] = $snippets->getNamespace('backend/locale/territory')->get($locale['locale'],
-                    $locale['territory'], true);
+                $locale['territory'] = $snippets->getNamespace('backend/locale/territory')->get(
+                    $locale['locale'],
+                    $locale['territory'],
+                    true
+                );
             }
         }
 

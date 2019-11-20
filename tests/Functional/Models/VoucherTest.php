@@ -22,17 +22,19 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Models;
+
 use Shopware\Models\Voucher\Voucher;
 
-class Shopware_Tests_Models_VoucherTest extends Enlight_Components_Test_TestCase
+class VoucherTest extends \Enlight_Components_Test_TestCase
 {
     /**
-     * @var Shopware\Components\Model\ModelManager
+     * @var \Shopware\Components\Model\ModelManager
      */
     protected $em;
 
     /**
-     * @var Shopware\Models\User\Repository
+     * @var \Shopware\Models\User\Repository
      */
     protected $repo;
 
@@ -64,18 +66,18 @@ class Shopware_Tests_Models_VoucherTest extends Enlight_Components_Test_TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->em = Shopware()->Models();
-        $this->repo = Shopware()->Models()->getRepository('Shopware\Models\Voucher\Voucher');
+        $this->repo = Shopware()->Models()->getRepository(Voucher::class);
     }
 
     /**
      * Tear down
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $voucher = $this->repo->findOneBy(['description' => 'description']);
 

@@ -13,9 +13,11 @@
                 </li>
             {/block}
             {block name='frontend_compare_votings'}
-                <li class="list--entry entry--voting">
-                    {s name="CompareColumnRating"}{/s}
-                </li>
+                {if !{config name=VoteDisable}}
+                    <li class="list--entry entry--voting">
+                        {s name="CompareColumnRating"}{/s}
+                    </li>
+                {/if}
             {/block}
             {block name='frontend_compare_description'}
                 <li class="list--entry entry--description">

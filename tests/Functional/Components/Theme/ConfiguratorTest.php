@@ -33,7 +33,7 @@ class ConfiguratorTest extends Base
      */
     protected $configurator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
     }
@@ -155,12 +155,10 @@ class ConfiguratorTest extends Base
         static::assertTrue(true, 'validateConfig doesn\'t throw an exception');
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Field Shopware\Components\Form\Field\Text requires a configured name
-     */
     public function testValidateConfigException()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Field Shopware\Components\Form\Field\Text requires a configured name');
         $container = new \Shopware\Components\Form\Container\TabContainer('test');
         $container->setName(null);
 

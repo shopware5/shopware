@@ -35,7 +35,7 @@ class OrderedWithDeliveryConditionHandlerTest extends TestCase
      */
     private $dispatchId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->connection->insert('s_premium_dispatch', [

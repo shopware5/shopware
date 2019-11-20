@@ -40,13 +40,13 @@ abstract class CheckoutTest extends \Enlight_Components_Test_Controller_TestCase
      */
     protected $apiHelper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->apiHelper = new Helper();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->apiHelper->cleanUp();

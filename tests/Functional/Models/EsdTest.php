@@ -22,9 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Models;
+
+use Enlight_Components_Test_TestCase;
+use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Esd;
 
-class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
+class EsdTest extends Enlight_Components_Test_TestCase
 {
     /**
      * @var array
@@ -37,12 +41,12 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
     ];
 
     /**
-     * @var Shopware\Components\Model\ModelManager
+     * @var \Shopware\Components\Model\ModelManager
      */
     protected $em;
 
     /**
-     * @var Shopware\Models\User\Repository
+     * @var \Shopware\Models\User\Repository
      */
     protected $repo;
 
@@ -50,18 +54,18 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->em = Shopware()->Models();
-        $this->repo = Shopware()->Models()->getRepository('Shopware\Models\Article\Esd');
+        $this->repo = Shopware()->Models()->getRepository(Esd::class);
     }
 
     /**
      * Tear down
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $esd = $this->repo->findOneBy(['file' => '../foobar.pdf']);
 
@@ -110,7 +114,7 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
     {
         $esd = new Esd();
 
-        $articleDetail = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail')->findOneBy(['active' => true]);
+        $articleDetail = Shopware()->Models()->getRepository(Detail::class)->findOneBy(['active' => true]);
         $esd->setArticleDetail($articleDetail);
 
         $esd->fromArray($this->testData);
@@ -141,7 +145,7 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
     {
         $esd = new Esd();
 
-        $articleDetail = Shopware()->Models()->getRepository(\Shopware\Models\Article\Detail::class)->findOneBy(['active' => true]);
+        $articleDetail = Shopware()->Models()->getRepository(Detail::class)->findOneBy(['active' => true]);
         $esd->setArticleDetail($articleDetail);
 
         $esd->fromArray($this->testData);

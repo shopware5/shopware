@@ -83,6 +83,7 @@ class HrefLangService implements HrefLangServiceInterface
     public function getUrls(array $parameters, ShopContextInterface $contextService)
     {
         $shops = $this->getLanguageShops($contextService->getShop());
+        $config = clone $this->config;
 
         if (count($shops) === 1) {
             return [];
@@ -91,17 +92,21 @@ class HrefLangService implements HrefLangServiceInterface
         $hrefs = [];
 
         foreach ($shops as $key => $languageShop) {
+            $shop = $this->getDetachedShop($languageShop['id']);
+
+            $config->setShop($shop);
+
             $href = new HrefLang();
             $href->setShopId($languageShop['id']);
             $href->setLocale($languageShop['locale']);
-            $routingContext = $this->getContext($languageShop['id']);
+            $routingContext = $this->getContext($shop, $config);
             $href->setLink($this->filterUrl($this->router->assemble($parameters, $routingContext), $parameters));
 
-            if (!$this->config->get('hrefLangCountry')) {
+            if (!$config->get('hrefLangCountry')) {
                 $href->setLocale(explode('-', $languageShop['locale'])[0]);
             }
 
-            if ((int) $languageShop['id'] === $this->config->get('hrefLangDefaultShop')) {
+            if ((int) $languageShop['id'] === $config->get('hrefLangDefaultShop')) {
                 $href->setLocale('x-default');
             }
 
@@ -190,19 +195,19 @@ class HrefLangService implements HrefLangServiceInterface
     }
 
     /**
-     * @param int $shopId
-     *
      * @return Context
      */
-    private function getContext($shopId)
+    private function getContext(ShopModel $shop, Config $config)
     {
-        if (!isset($this->contextCache[$shopId])) {
-            $shop = $this->modelManager->getRepository(ShopModel::class)->getById($shopId);
-            $config = clone $this->config;
-            $config->setShop($shop);
-            $this->contextCache[$shopId] = Context::createFromShop($shop, $config);
+        if (!isset($this->contextCache[$shop->getId()])) {
+            $this->contextCache[$shop->getId()] = Context::createFromShop($shop, $config);
         }
 
-        return $this->contextCache[$shopId];
+        return $this->contextCache[$shop->getId()];
+    }
+
+    private function getDetachedShop(int $languageShopId): ShopModel
+    {
+        return $this->modelManager->getRepository(ShopModel::class)->getById($languageShopId);
     }
 }

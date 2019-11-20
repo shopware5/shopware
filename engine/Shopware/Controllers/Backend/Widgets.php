@@ -299,7 +299,8 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         ";
 
         $fetchConversion = Shopware()->Container()->get('db')->fetchRow(
-            $sql, [
+            $sql,
+            [
                 'startDate' => $startDate->format('Y-m-d H:i:s'),
             ]
         );
@@ -452,11 +453,10 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             }
 
             $order['amount'] = $amount;
-            if (strlen($order['customer']) > 25) {
-                $order['customer'] = substr($order['customer'], 0, 25) . '..';
+            if (mb_strlen($order['customer']) > 25) {
+                $order['customer'] = mb_substr($order['customer'], 0, 25) . '..';
             }
-            unset($order['firstname']);
-            unset($order['lastname']);
+            unset($order['firstname'], $order['lastname']);
         }
 
         $this->View()->assign(

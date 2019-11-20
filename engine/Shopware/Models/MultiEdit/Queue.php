@@ -31,8 +31,6 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware SwagMultiEdit Plugin - Queue Model
  *
- *
- *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_multi_edit_queue")
  */

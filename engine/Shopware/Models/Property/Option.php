@@ -47,7 +47,7 @@ class Option extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var PropertyOptionAttribute
+     * @var PropertyOptionAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyOption", mappedBy="propertyOption", orphanRemoval=true, cascade={"persist"})
      */
@@ -179,7 +179,7 @@ class Option extends ModelEntity
     }
 
     /**
-     * @return PropertyOptionAttribute
+     * @return PropertyOptionAttribute|null
      */
     public function getAttribute()
     {

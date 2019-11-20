@@ -24,8 +24,11 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Api\Resource\Order;
 use Shopware\Components\Api\Resource\Resource;
+use Shopware\Models\Order\Detail;
 
 class OrderTest extends TestCase
 {
@@ -43,55 +46,48 @@ class OrderTest extends TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->order = Shopware()->Db()->fetchRow('SELECT * FROM `s_order` ORDER BY id DESC LIMIT 1');
         Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollback();
     }
 
-    /**
-     * @return Order
-     */
-    public function createResource()
+    public function createResource(): Order
     {
         return new Order();
     }
 
-    public function testGetOneShouldBeSuccessful()
+    public function testGetOneShouldBeSuccessful(): void
     {
         $order = $this->resource->getOne($this->order['id']);
         static::assertEquals($this->order['id'], $order['id']);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
-    public function testGetOneByNumberWithInvalidNumberShouldThrowNotFoundException()
+    public function testGetOneByNumberWithInvalidNumberShouldThrowNotFoundException(): void
     {
+        $this->expectException(NotFoundException::class);
         $this->resource->getOneByNumber(9999999);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
-    public function testGetOneByNumberWithMissinNumberShouldThrowParameterMissingException()
+    public function testGetOneByNumberWithMissinNumberShouldThrowParameterMissingException(): void
     {
+        $this->expectException(ParameterMissingException::class);
         $this->resource->getOneByNumber('');
     }
 
-    public function testGetOneByNumberShouldBeSuccessful()
+    public function testGetOneByNumberShouldBeSuccessful(): void
     {
         $order = $this->resource->getOneByNumber($this->order['ordernumber']);
         static::assertEquals($this->order['ordernumber'], $order['number']);
     }
 
-    public function testGetOneShouldBeAbleToReturnObject()
+    public function testGetOneShouldBeAbleToReturnObject(): void
     {
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $order = $this->resource->getOne($this->order['id']);
@@ -100,17 +96,17 @@ class OrderTest extends TestCase
         static::assertEquals($this->order['id'], $order->getId());
     }
 
-    public function testGetListShouldBeSuccessful()
+    public function testGetListShouldBeSuccessful(): void
     {
         $result = $this->resource->getList();
 
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
 
         static::assertArrayHasKey('total', $result);
         static::assertGreaterThanOrEqual(1, $result['total']);
 
         static::assertArrayHasKey('data', $result);
-        static::assertInternalType('array', $result['data']);
+        static::assertIsArray($result['data']);
 
         static::assertGreaterThanOrEqual(1, count($result['data']));
 
@@ -153,12 +149,12 @@ class OrderTest extends TestCase
             static::assertArrayHasKey($expectedKey, $firstOrder);
         }
 
-        static::assertInternalType('array', $firstOrder['customer']);
+        static::assertIsArray($firstOrder['customer']);
         static::assertArrayHasKey('id', $firstOrder['customer']);
         static::assertArrayHasKey('email', $firstOrder['customer']);
     }
 
-    public function testGetListShouldBeAbleToReturnObjects()
+    public function testGetListShouldBeAbleToReturnObjects(): void
     {
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $result = $this->resource->getList();
@@ -172,27 +168,21 @@ class OrderTest extends TestCase
         static::assertInstanceOf(\Shopware\Models\Order\Order::class, $result['data'][0]);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
-    public function testUpdateWithInvalidIdShouldThrowNotFoundException()
+    public function testUpdateWithInvalidIdShouldThrowNotFoundException(): void
     {
+        $this->expectException(NotFoundException::class);
         $this->resource->update(9999999, []);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
-    public function testUpdateWithMissingIdShouldThrowParameterMissingException()
+    public function testUpdateWithMissingIdShouldThrowParameterMissingException(): void
     {
+        $this->expectException(ParameterMissingException::class);
         $this->resource->update('', []);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
-    public function testCreateOrderFailsOnMissingShippingAddress()
+    public function testCreateOrderFailsOnMissingShippingAddress(): void
     {
+        $this->expectException(ParameterMissingException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -204,11 +194,9 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
-    public function testCreateOrderFailsOnMissingBillingAddress()
+    public function testCreateOrderFailsOnMissingBillingAddress(): void
     {
+        $this->expectException(ParameterMissingException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -220,11 +208,9 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
-    public function testCreateOrderFailsOnMissingCustomerId()
+    public function testCreateOrderFailsOnMissingCustomerId(): void
     {
+        $this->expectException(ParameterMissingException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -236,11 +222,9 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
-    public function testCreateOrderFailsOnUnknownCustomerId()
+    public function testCreateOrderFailsOnUnknownCustomerId(): void
     {
+        $this->expectException(NotFoundException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -252,11 +236,9 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
-    public function testCreateOrderFailsOnUnknownCountryIdInBillingAddress()
+    public function testCreateOrderFailsOnUnknownCountryIdInBillingAddress(): void
     {
+        $this->expectException(NotFoundException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -268,11 +250,9 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
-    public function testCreateOrderFailsOnUnknownStateIdInBillingAddress()
+    public function testCreateOrderFailsOnUnknownStateIdInBillingAddress(): void
     {
+        $this->expectException(NotFoundException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -284,11 +264,9 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
-    public function testCreateOrderFailsOnUnknownCountryIdInShippingAddress()
+    public function testCreateOrderFailsOnUnknownCountryIdInShippingAddress(): void
     {
+        $this->expectException(NotFoundException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -300,11 +278,9 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
-    public function testCreateOrderFailsOnUnknownStateIdInShipppingAddress()
+    public function testCreateOrderFailsOnUnknownStateIdInShipppingAddress(): void
     {
+        $this->expectException(NotFoundException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -316,11 +292,9 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
-    public function testCreateOrderFailsOnUnknownStateIdInDetails()
+    public function testCreateOrderFailsOnUnknownStateIdInDetails(): void
     {
+        $this->expectException(NotFoundException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -332,7 +306,7 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    public function testCreateOrderOnEmptyStateIdInBillingAddress()
+    public function testCreateOrderOnEmptyStateIdInBillingAddress(): void
     {
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
@@ -346,7 +320,7 @@ class OrderTest extends TestCase
         static::assertEquals($newOrder->getBilling()->getState(), null);
     }
 
-    public function testCreateOrderOnEmptyStateIdInShippingAddress()
+    public function testCreateOrderOnEmptyStateIdInShippingAddress(): void
     {
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
@@ -360,11 +334,9 @@ class OrderTest extends TestCase
         static::assertEquals($newOrder->getShipping()->getState(), null);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
-    public function testCreateOrderOnInvalidStateId()
+    public function testCreateOrderOnInvalidStateId(): void
     {
+        $this->expectException(NotFoundException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -375,11 +347,9 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
-    public function testCreateOrderFailsOnUnknownTaxIdInDetails()
+    public function testCreateOrderFailsOnUnknownTaxIdInDetails(): void
     {
+        $this->expectException(NotFoundException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -391,11 +361,9 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
-    public function testCreateOrderFailsOnMissingOrderStatusId()
+    public function testCreateOrderFailsOnMissingOrderStatusId(): void
     {
+        $this->expectException(ParameterMissingException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -407,11 +375,9 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
-    public function testCreateOrderFailsOnUnknownOrderStatusId()
+    public function testCreateOrderFailsOnUnknownOrderStatusId(): void
     {
+        $this->expectException(NotFoundException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -423,11 +389,9 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
-    public function testCreateOrderFailsOnMissingPaymentId()
+    public function testCreateOrderFailsOnMissingPaymentId(): void
     {
+        $this->expectException(ParameterMissingException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -439,11 +403,9 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
-    public function testCreateOrderFailsOnUnknownPaymentId()
+    public function testCreateOrderFailsOnUnknownPaymentId(): void
     {
+        $this->expectException(NotFoundException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -455,11 +417,9 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
-    public function testCreateOrderFailsOnMissingPaymentStatusId()
+    public function testCreateOrderFailsOnMissingPaymentStatusId(): void
     {
+        $this->expectException(ParameterMissingException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -471,11 +431,9 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
-    public function testCreateOrderFailsOnUnknownPaymentStatusId()
+    public function testCreateOrderFailsOnUnknownPaymentStatusId(): void
     {
+        $this->expectException(NotFoundException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -487,11 +445,9 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
-    public function testCreateOrderFailsOnMissingDispatchId()
+    public function testCreateOrderFailsOnMissingDispatchId(): void
     {
+        $this->expectException(ParameterMissingException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -503,11 +459,9 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
-    public function testCreateOrderFailsOnUnknownDispatchId()
+    public function testCreateOrderFailsOnUnknownDispatchId(): void
     {
+        $this->expectException(NotFoundException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -519,11 +473,9 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
-    public function testCreateOrderFailsOnMissingShopId()
+    public function testCreateOrderFailsOnMissingShopId(): void
     {
+        $this->expectException(ParameterMissingException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -535,11 +487,9 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
-    public function testCreateOrderFailsOnUnknownShopId()
+    public function testCreateOrderFailsOnUnknownShopId(): void
     {
+        $this->expectException(NotFoundException::class);
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
@@ -551,7 +501,7 @@ class OrderTest extends TestCase
         $this->resource->create($order);
     }
 
-    public function testCreateOrderByCopy()
+    public function testCreateOrderByCopy(): void
     {
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
@@ -571,12 +521,12 @@ class OrderTest extends TestCase
         static::assertEquals($newOrder->getInvoiceAmount(), $order['invoiceAmount']);
         static::assertEquals($newOrder->getBilling()->getCity(), $order['billing']['city']);
         static::assertEquals($newOrder->getShipping()->getCity(), $order['shipping']['city']);
-        static::assertEquals(count($newOrder->getDetails()), count($order['details']));
+        static::assertCount(count($newOrder->getDetails()), $order['details']);
         static::assertEquals($newOrder->getDetails()[0]->getArticleName(), $order['details'][0]['articleName']);
         static::assertEquals((int) $newOrder->getDetails()[0]->getNumber(), ($oldOrderNumber + 1));
     }
 
-    public function testUpdateOrderPositionStatusShouldBeSuccessful()
+    public function testUpdateOrderPositionStatusShouldBeSuccessful(): void
     {
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
@@ -585,7 +535,7 @@ class OrderTest extends TestCase
         // Update the order details of that order
         $updateArray = [];
         foreach ($order['details'] as $detail) {
-            $updateArray['details'][$detail['id']] = ['id' => $detail['id'], 'status' => rand(0, 3), 'shipped' => 1];
+            $updateArray['details'][$detail['id']] = ['id' => $detail['id'], 'status' => random_int(0, 3), 'shipped' => 1];
         }
         $this->resource->update($this->order['id'], $updateArray);
 
@@ -600,7 +550,7 @@ class OrderTest extends TestCase
         }
     }
 
-    public function testCreateOrderWithDocuments()
+    public function testCreateOrderWithDocuments(): void
     {
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
@@ -631,12 +581,70 @@ class OrderTest extends TestCase
         static::assertCount(2, $order->getDocuments());
     }
 
-    /**
-     * @param array $order
-     *
-     * @return array
-     */
-    private function filterOrderId($order)
+    public function testSingleOrderDetailUpdate(): void
+    {
+        // Get existing order with at least two order items
+        $orderId = (int) Shopware()->Db()
+            ->query('SELECT `orderID`, COUNT(1) `counter` FROM `s_order_details` GROUP BY `orderId` HAVING `counter` > 1 ORDER BY id DESC LIMIT 1')
+            ->fetchColumn();
+        $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
+        $order = $this->resource->getOne($orderId);
+
+        /** @var Detail $firstDetail */
+        $firstDetail = $order->getDetails()->first();
+        $newShipped = $firstDetail->getShipped() + 1;
+        $orderCount = $order->getDetails()->count();
+
+        $order = $this->resource->update($order->getId(), [
+            'details' => [
+                [
+                    'id' => $firstDetail->getId(),
+                    'shipped' => $newShipped,
+                ],
+            ],
+            '__options_details' => [
+                'replace' => false,
+            ],
+        ]);
+
+        /** @var Detail|null $firstDetail */
+        $firstDetail = $order->getDetails()->filter(static function (Detail $detail) use ($firstDetail): bool {
+            return $detail->getId() === $firstDetail->getId();
+        })->first();
+
+        static::assertEquals($orderCount, $order->getDetails()->count());
+        static::assertNotNull($firstDetail);
+        static::assertEquals($newShipped, $firstDetail->getShipped());
+    }
+
+    public function testSingleOrderDetailUpdateToDeleteOtherItems(): void
+    {
+        // Get existing order with at least two order items
+        $orderId = (int) Shopware()->Db()
+            ->query('SELECT `orderID`, COUNT(1) `counter` FROM `s_order_details` GROUP BY `orderId` HAVING `counter` > 1 ORDER BY id DESC LIMIT 1')
+            ->fetchColumn();
+        $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
+        $order = $this->resource->getOne($orderId);
+
+        /** @var Detail $firstDetail */
+        $firstDetail = $order->getDetails()->first();
+
+        $order = $this->resource->update($order->getId(), [
+            'details' => [
+                ['id' => $firstDetail->getId()],
+            ],
+        ]);
+
+        /** @var Detail|null $firstDetail */
+        $firstDetail = $order->getDetails()->filter(static function (Detail $detail) use ($firstDetail): bool {
+            return $detail->getId() === $firstDetail->getId();
+        })->first();
+
+        static::assertEquals(1, $order->getDetails()->count());
+        static::assertNotNull($firstDetail);
+    }
+
+    private function filterOrderId(array $order): array
     {
         // Remove order Ids and order numbers
         unset($order['id'], $order['number']);

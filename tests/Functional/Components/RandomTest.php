@@ -22,9 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Components;
+
 use Shopware\Components\Random;
 
-class Shopware_Tests_Components_RandomTest extends Enlight_Components_Test_TestCase
+class RandomTest extends \Enlight_Components_Test_TestCase
 {
     /**
      * Test case
@@ -45,7 +47,7 @@ class Shopware_Tests_Components_RandomTest extends Enlight_Components_Test_TestC
         for ($i = 0; $i < strlen($password); ++$i) {
             $char = $password[$i];
 
-            static::assertContains($char, $chars);
+            static::assertStringContainsString($char, $chars);
 
             foreach ($sets as $key => $set) {
                 if (strpos($set, $char) !== false) {
@@ -63,7 +65,7 @@ class Shopware_Tests_Components_RandomTest extends Enlight_Components_Test_TestC
     public function testGetBoolean()
     {
         $result = Random::getBoolean();
-        static::assertInternalType('boolean', $result);
+        static::assertIsBool($result);
     }
 
     /**
@@ -86,7 +88,7 @@ class Shopware_Tests_Components_RandomTest extends Enlight_Components_Test_TestC
         $results = [];
         for ($i = 0; $i < 1000; ++$i) {
             $result = Random::getFloat();
-            static::assertInternalType('float', $result);
+            static::assertIsFloat($result);
             static::assertLessThanOrEqual(1, $result);
             static::assertGreaterThanOrEqual(0, $result);
             static::assertNotContains($result, $results);

@@ -43,17 +43,17 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
         ]));
 
         $result = $provider->get(new ShopContextMock());
-
-        static::assertArraySubset([
-            'id' => 1,
-            'foo' => [
-                'foo' => 'bar',
-                'john' => 'doe',
-            ],
-            'bar' => [
-                'test' => 'example',
-            ],
-        ], $result);
+        static::assertArrayHasKey('id', $result);
+        static::assertArrayHasKey('foo', $result);
+        static::assertArrayHasKey('bar', $result);
+        static::assertSame(1, (int) $result['id']);
+        static::assertSame([
+            'foo' => 'bar',
+            'john' => 'doe',
+        ], $result['foo']);
+        static::assertSame([
+            'test' => 'example',
+        ], $result['bar']);
     }
 
     /**

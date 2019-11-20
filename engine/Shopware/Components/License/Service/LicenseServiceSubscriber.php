@@ -25,24 +25,30 @@
 namespace Shopware\Components\License\Service;
 
 use Enlight\Event\SubscriberInterface;
+use Enlight_Controller_Action;
 use Enlight_Event_EventArgs;
-use Enlight_View_Default;
-use Shopware\Components\License\Struct\LicenseInformation;
-use Shopware\Components\License\Struct\LicenseUnpackRequest;
+use Enlight_Plugin_PluginManager;
 use Shopware\Components\License\Struct\ShopwareEdition;
-use Shopware\Models\Shop\Shop;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Shopware_Plugins_Backend_Auth_Bootstrap;
 
 class LicenseServiceSubscriber implements SubscriberInterface
 {
     /**
-     * @var ContainerInterface
+     * @var ShopwareEditionServiceInterface
      */
-    private $container;
+    private $shopwareEditionService;
 
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
+    /**
+     * @var Enlight_Plugin_PluginManager
+     */
+    private $plugins;
+
+    public function __construct(
+        ShopwareEditionServiceInterface $shopwareEditionService,
+        Enlight_Plugin_PluginManager $plugins
+    ) {
+        $this->shopwareEditionService = $shopwareEditionService;
+        $this->plugins = $plugins;
     }
 
     /**
@@ -57,36 +63,17 @@ class LicenseServiceSubscriber implements SubscriberInterface
 
     public function onPostDispatchBackendIndex(Enlight_Event_EventArgs $args)
     {
-        /** @var Enlight_View_Default $view */
-        $view = $args->getSubject()->View();
-        $view->assign('product', ShopwareEdition::CE);
+        /** @var Enlight_Controller_Action $controller */
+        $controller = $args->get('subject');
+        $edition = $this->hasBackendLogin() ? $this->shopwareEditionService->getProductEdition() : ShopwareEdition::CE;
+        $controller->View()->assign('product', $edition);
+    }
 
-        $sql = 'SELECT license FROM s_core_licenses WHERE active=1 AND module = "SwagCommercial"';
-        $license = $this->container
-            ->get(\Doctrine\DBAL\Connection::class)
-            ->query($sql)
-            ->fetchColumn()
-        ;
-        if (!$license) {
-            return;
-        }
+    protected function hasBackendLogin(): bool
+    {
+        /** @var Shopware_Plugins_Backend_Auth_Bootstrap $authPlugin */
+        $authPlugin = $this->plugins->get('Backend')->get('Auth');
 
-        $repository = $this->container->get(\Shopware\Components\Model\ModelManager::class)
-            ->getRepository(Shop::class)
-        ;
-        $host = $repository->getActiveDefault()->getHost();
-        $request = new LicenseUnpackRequest($license, $host);
-
-        try {
-            /** @var LicenseInformation $licenseInformation */
-            $licenseInformation = $this->container
-                ->get(\Shopware\Components\License\Service\LocalLicenseUnpackService::class)
-                ->evaluateLicense($request)
-            ;
-        } catch (\RuntimeException $e) {
-            return;
-        }
-
-        $view->assign('product', $licenseInformation->edition);
+        return $authPlugin->checkAuth() !== null;
     }
 }

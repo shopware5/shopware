@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class StoreTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $this->httpCacheStore = new \Shopware\Components\HttpCache\Store(
             'test',

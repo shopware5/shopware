@@ -34,8 +34,6 @@ use Shopware\Models\Shop\Shop;
 /**
  * Shopware Categories
  *
- *
- *
  * @ORM\Table(name="s_categories")
  * @ORM\Entity(repositoryClass="Repository")
  */
@@ -59,7 +57,7 @@ class Category extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\Category
+     * @var \Shopware\Models\Attribute\Category|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Category", mappedBy="category", cascade={"persist"})
      */
@@ -83,7 +81,7 @@ class Category extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Media\Media
+     * @var \Shopware\Models\Media\Media|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Media\Media")
      * @ORM\JoinColumn(name="mediaID", referencedColumnName="id")
@@ -91,7 +89,7 @@ class Category extends ModelEntity
     protected $media;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="sorting_ids", type="string", nullable=true)
      */
@@ -105,7 +103,7 @@ class Category extends ModelEntity
     protected $hideSortings = false;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="facet_ids", type="string", nullable=true)
      */
@@ -132,21 +130,21 @@ class Category extends ModelEntity
     /**
      * The id of the parent category
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="parent", type="integer", nullable=true)
      */
     private $parentId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="stream_id", type="integer", nullable=true)
      */
     private $streamId;
 
     /**
-     * @var ProductStream
+     * @var ProductStream|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\ProductStream\ProductStream")
      * @ORM\JoinColumn(name="stream_id", referencedColumnName="id")
@@ -158,7 +156,7 @@ class Category extends ModelEntity
      *
      * OWNING SIDE
      *
-     * @var Category
+     * @var Category|null
      *
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="children", cascade={"persist"})
      * @ORM\JoinColumn(name="parent", nullable=true, referencedColumnName="id", onDelete="SET NULL")
@@ -177,7 +175,7 @@ class Category extends ModelEntity
     /**
      * Integer value on which the return values are ordered (asc)
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="position", type="integer", nullable=true)
      */
@@ -186,7 +184,7 @@ class Category extends ModelEntity
     /**
      * SEO friendly title which is displayed in the HTML page.
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="meta_title", type="text", nullable=true)
      */
@@ -195,7 +193,7 @@ class Category extends ModelEntity
     /**
      * Keeps the meta keywords which are displayed in the HTML page.
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="metakeywords", type="text", nullable=true)
      */
@@ -204,7 +202,7 @@ class Category extends ModelEntity
     /**
      * Keeps the meta description which is displayed in the HTML page.
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="metadescription", type="text", nullable=true)
      */
@@ -215,7 +213,7 @@ class Category extends ModelEntity
      *
      * Max chars: 255
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="cmsheadline", type="string", length=255, nullable=true)
      */
@@ -224,7 +222,7 @@ class Category extends ModelEntity
     /**
      * Keeps the CMS Text for this category
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="cmstext", type="text", nullable=true)
      */
@@ -242,14 +240,14 @@ class Category extends ModelEntity
     /**
      * If this field is set the category page will uses this template
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="template", type="string", length=255, nullable=true)
      */
     private $template;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="product_box_layout", type="string", length=50, nullable=true)
      */
@@ -272,7 +270,7 @@ class Category extends ModelEntity
     /**
      * Is this category based outside from the shop?
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="external", type="string", length=255, nullable=true)
      */
@@ -360,7 +358,7 @@ class Category extends ModelEntity
     private $added;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="mediaID", type="integer", nullable=true)
      */
@@ -420,7 +418,7 @@ class Category extends ModelEntity
     /**
      * Get parent id
      *
-     * @return int
+     * @return int|null
      */
     public function getParentId()
     {
@@ -429,8 +427,6 @@ class Category extends ModelEntity
 
     /**
      * Sets the id of the parent category
-     *
-     * @param Category $parent
      *
      * @return Category
      */
@@ -542,7 +538,7 @@ class Category extends ModelEntity
     /**
      * Returns position
      *
-     * @return int
+     * @return int|null
      */
     public function getPosition()
     {
@@ -584,7 +580,7 @@ class Category extends ModelEntity
     /**
      * Set the meta keywords.
      *
-     * @param string $metaKeywords
+     * @param string|null $metaKeywords
      *
      * @return Category
      */
@@ -602,7 +598,7 @@ class Category extends ModelEntity
     /**
      * Returns the meta keywords
      *
-     * @return string
+     * @return string|null
      */
     public function getMetaKeywords()
     {
@@ -612,7 +608,7 @@ class Category extends ModelEntity
     /**
      * Sets the  meta description text.
      *
-     * @param string $metaDescription
+     * @param string|null $metaDescription
      *
      * @return Category
      */
@@ -626,7 +622,7 @@ class Category extends ModelEntity
     /**
      * Gets the meta description text.
      *
-     * @return string
+     * @return string|null
      */
     public function getMetaDescription()
     {
@@ -650,7 +646,7 @@ class Category extends ModelEntity
     /**
      * Gets the CMS headline
      *
-     * @return string
+     * @return string|null
      */
     public function getCmsHeadline()
     {
@@ -674,7 +670,7 @@ class Category extends ModelEntity
     /**
      * Gets CMS text
      *
-     * @return string
+     * @return string|null
      */
     public function getCmsText()
     {
@@ -694,7 +690,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getTemplate()
     {
@@ -760,7 +756,7 @@ class Category extends ModelEntity
     /**
      * Gets the flag if this category is linked to an external source
      *
-     * @return string
+     * @return string|null
      */
     public function getExternal()
     {
@@ -870,7 +866,7 @@ class Category extends ModelEntity
     /**
      * Returns the Attributes
      *
-     * @return \Shopware\Models\Attribute\Category
+     * @return \Shopware\Models\Attribute\Category|null
      */
     public function getAttribute()
     {
@@ -916,7 +912,7 @@ class Category extends ModelEntity
     /**
      * Returns the Media model
      *
-     * @return \Shopware\Models\Media\Media
+     * @return \Shopware\Models\Media\Media|null
      */
     public function getMedia()
     {
@@ -926,7 +922,7 @@ class Category extends ModelEntity
     /**
      * Sets the Media model
      *
-     * @param \Shopware\Models\Media\Media $media
+     * @param \Shopware\Models\Media\Media|null $media
      *
      * @return Category
      */
@@ -990,7 +986,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getProductBoxLayout()
     {
@@ -998,7 +994,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @param string $productBoxLayout
+     * @param string|null $productBoxLayout
      *
      * @return Category
      */
@@ -1010,7 +1006,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getMetaTitle()
     {
@@ -1018,7 +1014,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @param string $metaTitle
+     * @param string|null $metaTitle
      */
     public function setMetaTitle($metaTitle)
     {
@@ -1026,23 +1022,20 @@ class Category extends ModelEntity
     }
 
     /**
-     * @return ProductStream
+     * @return ProductStream|null
      */
     public function getStream()
     {
         return $this->stream;
     }
 
-    /**
-     * @param ProductStream $stream
-     */
     public function setStream(ProductStream $stream = null)
     {
         $this->stream = $stream;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getMediaId()
     {
@@ -1050,7 +1043,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getSortingIds()
     {
@@ -1058,7 +1051,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @param string $sortingIds
+     * @param string|null $sortingIds
      */
     public function setSortingIds($sortingIds)
     {
@@ -1082,7 +1075,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getFacetIds()
     {
@@ -1090,7 +1083,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @param string $facetIds
+     * @param string|null $facetIds
      */
     public function setFacetIds($facetIds)
     {

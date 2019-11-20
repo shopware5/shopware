@@ -87,7 +87,7 @@ Ext.define('Shopware.apps.Category.view.sorting.Table', {
             },
             {
                 xtype: 'actioncolumn',
-                width: 75,
+                width: 55,
                 items: this.getActionColumnItems()
             }
         ]

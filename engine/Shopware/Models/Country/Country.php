@@ -74,7 +74,7 @@ class Country extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var CountryAttribute
+     * @var CountryAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Country", mappedBy="country", orphanRemoval=true, cascade={"persist"})
      */
@@ -413,7 +413,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return CountryAttribute
+     * @return CountryAttribute|null
      */
     public function getAttribute()
     {
@@ -460,7 +460,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param Area|array|null $area
+     * @param Area|array $area
      *
      * @return Country
      */

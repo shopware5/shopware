@@ -68,7 +68,8 @@ class CronRunCommand extends ShopwareCommand implements CompletionAwareInterface
         $this
             ->setName('sw:cron:run')
             ->setDescription('Runs cronjobs.')
-            ->setHelp(<<<'EOF'
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> runs due cronjobs.
 EOF
             )

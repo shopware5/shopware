@@ -150,7 +150,8 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     {
         $context = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
 
-        $cacheKey = sprintf('Shopware_AdvancedMenu_Tree_%s_%s_%s',
+        $cacheKey = sprintf(
+            'Shopware_AdvancedMenu_Tree_%s_%s_%s',
             $context->getShop()->getId(),
             $category,
             ($this->Config()->get('includeCustomergroup') ? $context->getCurrentCustomerGroup()->getId() : 'x')

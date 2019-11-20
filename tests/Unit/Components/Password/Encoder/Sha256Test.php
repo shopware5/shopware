@@ -38,7 +38,7 @@ class Sha256Test extends TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -69,7 +69,7 @@ class Sha256Test extends TestCase
      */
     public function testGenerateShouldReturnString()
     {
-        static::assertInternalType('string', $this->hasher->encodePassword('foobar'));
+        static::assertIsString($this->hasher->encodePassword('foobar'));
     }
 
     /**

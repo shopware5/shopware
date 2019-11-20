@@ -43,7 +43,7 @@ class ContainerTest extends TestCase
      */
     private $eventHasBeenFired;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->eventHasBeenFired = false;
         $this->container = Shopware()->Container();

@@ -61,14 +61,14 @@ class ElementTranslation extends ModelEntity
     private $id;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="description", type="string", nullable=true)
      */
     private $description = null;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="label", type="string", nullable=true)
      */
@@ -109,7 +109,7 @@ class ElementTranslation extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDescription()
     {
@@ -129,7 +129,7 @@ class ElementTranslation extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getLabel()
     {

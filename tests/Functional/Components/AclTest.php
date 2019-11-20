@@ -22,7 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Components_AclTest extends Enlight_Components_Test_TestCase
+namespace Shopware\Tests\Components;
+
+use Enlight_Components_Test_TestCase;
+
+class AclTest extends Enlight_Components_Test_TestCase
 {
     /**
      * @var \Shopware_Components_Acl
@@ -33,7 +37,7 @@ class Shopware_Tests_Components_AclTest extends Enlight_Components_Test_TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -60,11 +64,10 @@ class Shopware_Tests_Components_AclTest extends Enlight_Components_Test_TestCase
 
     /**
      * Test case
-     *
-     * @expectedException \Zend_Acl_Exception
      */
     public function testTestNotExistingRoleShouldThrowException()
     {
+        $this->expectException('Zend_Acl_Exception');
         $role = 'this_is_a_not_existing_role';
         $privilege = 'create';
         $resource = 'debug_test';
@@ -74,11 +77,10 @@ class Shopware_Tests_Components_AclTest extends Enlight_Components_Test_TestCase
 
     /**
      * Test case
-     *
-     * @expectedException \Zend_Acl_Exception
      */
     public function testTestNotExistingResourceShouldThrowException()
     {
+        $this->expectException('Zend_Acl_Exception');
         $role = 'Test-Group1';
         $privilege = 'create';
         $resource = 'this_is_a_not_existing_resource';

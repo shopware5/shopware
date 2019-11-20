@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\AttributeBundle\Service\DataPersister;
+use Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult;
 use Shopware\Bundle\CustomerSearchBundleDBAL\CustomerNumberSearch;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -42,7 +42,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
      */
     protected $debug = false;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         if (!$this->debug) {
@@ -59,7 +59,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (!$this->debug) {
             $this->connection->rollBack();
@@ -179,8 +179,8 @@ class TestCase extends \Enlight_Components_Test_TestCase
         }
 
         if (array_key_exists('attribute', $customer)) {
-            /** @var DataPersister $persister */
-            $persister = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataPersister::class);
+            /** @var DataPersisterInterface $persister */
+            $persister = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface::class);
             $persister->persist($customer['attribute'], 's_user_attributes', $userId);
         }
 

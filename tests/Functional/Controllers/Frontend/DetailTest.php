@@ -30,7 +30,7 @@ class DetailTest extends \Enlight_Components_Test_Controller_TestCase
 {
     use DatabaseTransactionBehaviour;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -81,10 +81,10 @@ class DetailTest extends \Enlight_Components_Test_Controller_TestCase
         $response = $this->dispatch('/genusswelten/edelbraende/6/cigar-special-40');
 
         if ($gtin) {
-            static::assertContains($gtin, $response->getBody());
-            static::assertContains('"' . trim($value) . '"', $response->getBody());
+            static::assertStringContainsString($gtin, $response->getBody());
+            static::assertStringContainsString('"' . trim($value) . '"', $response->getBody());
         } else {
-            static::assertNotContains(trim($value), $response->getBody());
+            static::assertStringNotContainsString(trim($value), $response->getBody());
         }
     }
 

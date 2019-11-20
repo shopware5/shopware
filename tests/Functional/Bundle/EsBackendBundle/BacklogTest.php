@@ -33,7 +33,7 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\ProgressHelper;
  */
 class BacklogTest extends \Enlight_Components_Test_TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -81,7 +81,9 @@ class HeaderCart extends Element implements \Shopware\Tests\Mink\HelperSelectorI
         if ($result !== true) {
             $message = sprintf(
                 'The %s of the header cart is wrong! (%s instead of %s)',
-                $result, $check[$result][0], $check[$result][1]
+                $result,
+                $check[$result][0],
+                $check[$result][1]
             );
             Helper::throwException($message);
         }

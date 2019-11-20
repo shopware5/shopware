@@ -39,7 +39,7 @@ class CacheOptimizerServiceTest extends TestCase
      */
     private $optimizerService;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->optimizerService = new CacheOptimizerService(
             new OptimizerService(new ArrayCollection([

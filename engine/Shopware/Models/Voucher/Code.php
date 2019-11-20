@@ -52,7 +52,7 @@ class Code extends ModelEntity
     private $voucherId;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="userID", type="integer", nullable=true)
      */
@@ -81,7 +81,7 @@ class Code extends ModelEntity
     private $voucher;
 
     /**
-     * @var \Shopware\Models\Voucher\Voucher
+     * @var \Shopware\Models\Customer\Customer|null
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Customer\Customer")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
@@ -129,7 +129,7 @@ class Code extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getCustomerId()
     {
@@ -193,7 +193,7 @@ class Code extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Voucher\Voucher
+     * @return \Shopware\Models\Customer\Customer|null
      */
     public function getCustomer()
     {
@@ -201,7 +201,7 @@ class Code extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Voucher\Voucher $user
+     * @param \Shopware\Models\Customer\Customer $user
      */
     public function setCustomer($user)
     {

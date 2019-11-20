@@ -22,10 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Components\LegacyRequestWrapper;
+
 /**
  * @covers \Shopware\Components\LegacyRequestWrapper\PostWrapper
  */
-class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enlight_Components_Test_Controller_TestCase
+class PostWrapperTest extends \Enlight_Components_Test_Controller_TestCase
 {
     private static $resources = [
         'Admin',
@@ -40,7 +42,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
         'RewriteTable',
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -74,7 +76,6 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
     /**
      * Tests that resetting POST data inside any core class is equivalent to resetting it in the
      * global $_POST
-     *
      *
      * @depends testSetPost
      */

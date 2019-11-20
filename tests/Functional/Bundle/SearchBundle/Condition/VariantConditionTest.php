@@ -35,7 +35,7 @@ class VariantConditionTest extends TestCase
 {
     private $groups = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->setConfig('hideNoInStock', false);

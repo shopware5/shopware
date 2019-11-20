@@ -45,7 +45,6 @@ interface CategoryGatewayInterface
      * - Assigned media object
      * - Core attribute of the media object
      *
-     *
      * @return Struct\Category
      */
     public function get($id, Struct\ShopContextInterface $context);

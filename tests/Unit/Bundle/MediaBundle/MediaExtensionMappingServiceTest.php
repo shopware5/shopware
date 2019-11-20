@@ -36,7 +36,7 @@ class MediaExtensionMappingServiceTest extends TestCase
      */
     private $mappingService;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mappingService = new MediaExtensionMappingService(['xlsx', 'DOCX', 'pdf']);
     }

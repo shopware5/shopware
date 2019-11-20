@@ -29,7 +29,7 @@ use Doctrine\DBAL\Schema\Column;
 use Shopware\Components\Model\DBAL\Types\DateStringType;
 use Shopware\Components\Model\DBAL\Types\DateTimeStringType;
 
-class DataPersister
+class DataPersister implements DataPersisterInterface
 {
     /**
      * @var Connection
@@ -37,16 +37,16 @@ class DataPersister
     private $connection;
 
     /**
-     * @var TableMapping
+     * @var TableMappingInterface
      */
     private $mapping;
 
     /**
-     * @var DataLoader
+     * @var DataLoaderInterface
      */
     private $dataLoader;
 
-    public function __construct(Connection $connection, TableMapping $mapping, DataLoader $dataLoader)
+    public function __construct(Connection $connection, TableMappingInterface $mapping, DataLoaderInterface $dataLoader)
     {
         $this->connection = $connection;
         $this->mapping = $mapping;
@@ -54,12 +54,7 @@ class DataPersister
     }
 
     /**
-     * Persists the provided data into the provided attribute table.
-     * Only attribute tables supported.
-     *
-     * @param string     $table
-     * @param array      $data
-     * @param int|string $foreignKey
+     * {@inheritdoc}
      *
      * @throws \Exception
      */
@@ -89,9 +84,7 @@ class DataPersister
     }
 
     /**
-     * @param string $table
-     * @param int    $sourceForeignKey
-     * @param int    $targetForeignKey
+     * {@inheritdoc}
      *
      * @throws \Exception
      */
@@ -115,9 +108,7 @@ class DataPersister
     }
 
     /**
-     * @param string $table
-     * @param int    $sourceForeignKey
-     * @param int    $targetForeignKey
+     * {@inheritdoc}
      *
      * @throws \Exception
      */
@@ -209,15 +200,22 @@ class DataPersister
     {
         /** @var TableMapping $mapping */
         $columns = $this->mapping->getTableColumns($table);
+        $readOnly = $this->getReadOnlyColumns($table);
 
         $result = [];
         foreach ($columns as $column) {
             if ($this->mapping->isIdentifierColumn($table, $column->getName())) {
                 continue;
             }
+
             if (!array_key_exists($column->getName(), $data)) {
                 continue;
             }
+
+            if (in_array($column->getName(), $readOnly, true)) {
+                continue;
+            }
+
             $value = $data[$column->getName()];
 
             if ($this->isDateColumn($column) && !$this->isValidDate($value)) {
@@ -254,5 +252,22 @@ class DataPersister
     private function isDateColumn(Column $column)
     {
         return $column->getType() instanceof DateStringType || $column->getType() instanceof DateTimeStringType;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getReadOnlyColumns(string $table): array
+    {
+        $builder = $this->connection->createQueryBuilder();
+        $builder
+            ->select(['config.column_name'])
+            ->from('s_attribute_configuration', 'config')
+            ->where('config.table_name = :tablename')
+            ->andWhere('config.readonly = 1')
+            ->setParameter(':tablename', $table)
+        ;
+
+        return $builder->execute()->fetchAll(\PDO::FETCH_COLUMN);
     }
 }

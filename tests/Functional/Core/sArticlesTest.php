@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Tests\Functional\Helper\Utils;
+
 class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
 {
     public function testCanInstanciatesArticles()
@@ -142,9 +144,9 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
 
     protected function assertsArticlesState($sArticles, $categoryId, $translationId, $customerGroupId)
     {
-        static::assertInstanceOf('Shopware\Models\Category\Category', static::readAttribute($sArticles, 'category'));
-        static::assertEquals($categoryId, static::readAttribute($sArticles, 'categoryId'));
-        static::assertEquals($translationId, static::readAttribute($sArticles, 'translationId'));
-        static::assertEquals($customerGroupId, static::readAttribute($sArticles, 'customerGroupId'));
+        static::assertInstanceOf('Shopware\Models\Category\Category', Utils::hijackAndReadProperty($sArticles, 'category'));
+        static::assertEquals($categoryId, Utils::hijackAndReadProperty($sArticles, 'categoryId'));
+        static::assertEquals($translationId, Utils::hijackAndReadProperty($sArticles, 'translationId'));
+        static::assertEquals($customerGroupId, Utils::hijackAndReadProperty($sArticles, 'customerGroupId'));
     }
 }

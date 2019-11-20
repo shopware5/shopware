@@ -146,9 +146,9 @@ class SimilarShownTest extends AbstractMarketing
     protected function insertDemoData()
     {
         $this->Db()->query('DELETE FROM s_emarketing_lastarticles');
-        $statement = $this->Db()->prepare('
-            INSERT INTO s_emarketing_lastarticles (articleID, sessionID, time, userID, shopID)
-            VALUES(:articleID, :sessionID, :time, :userID, :shopID)'
+        $statement = $this->Db()->prepare(
+            'INSERT INTO s_emarketing_lastarticles (articleID, sessionID, time, userID, shopID)
+             VALUES(:articleID, :sessionID, :time, :userID, :shopID)'
         );
         foreach ($this->getDemoData() as $data) {
             $statement->execute($data);

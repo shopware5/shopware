@@ -66,14 +66,14 @@ class CookieSubscriber implements SubscriberInterface
         /** @var \Enlight_Controller_Front $controller */
         $controller = $this->container->get('front');
 
-        $request = $controller->Request();
-
         if ($this->container->initialized('session')) {
             $session = $this->container->get('session');
             $session->offsetSet('auto-user', null);
         }
 
-        $controller->Response()->headers->setCookie(new Cookie('slt', null, strtotime('-1 Year'), $request->getBasePath() . '/'));
+        $controller->Response()->headers->setCookie(
+            new Cookie('slt', null, strtotime('-1 Year'), $controller->Request()->getBasePath() . '/')
+        );
     }
 
     public function checkCookie(\Enlight_Controller_EventArgs $args)
@@ -91,17 +91,21 @@ class CookieSubscriber implements SubscriberInterface
         }
 
         $session = $this->container->get('session');
-        if (!$token = $request->getCookie('slt')) {
+        if (!$token = $args->getRequest()->getCookie('slt')) {
             $session->offsetSet('auto-user', null);
 
             return;
         }
 
         $context = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
+        if ($context === null) {
+            return;
+        }
+
         if ($context->getShop()->hasCustomerScope()) {
             $parts = explode('.', $token);
 
-            if ($context->getShop()->getParentId() != $parts[1]) {
+            if ((int) $context->getShop()->getParentId() !== (int) $parts[1]) {
                 return;
             }
         }
@@ -110,7 +114,10 @@ class CookieSubscriber implements SubscriberInterface
             return;
         }
 
-        $data = $this->connection->fetchAssoc('SELECT id, customergroup FROM s_user WHERE login_token = :token LIMIT 1', [':token' => $token]);
+        $data = $this->connection->fetchAssoc(
+            'SELECT id, customergroup FROM s_user WHERE login_token = :token LIMIT 1',
+            [':token' => $token]
+        );
         if (!$data) {
             return;
         }
@@ -143,7 +150,7 @@ class CookieSubscriber implements SubscriberInterface
 
         $context = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
         $token = Uuid::uuid4()->toString();
-        $token .= '.' . (string) $context->getShop()->getParentId();
+        $token .= '.' . $context->getShop()->getParentId();
 
         $expire = time() + 365 * 24 * 60 * 60;
 
@@ -151,7 +158,9 @@ class CookieSubscriber implements SubscriberInterface
         $session->offsetSet('auto-user', null);
         $session->offsetSet('userInfo', null);
 
-        $response->headers->setCookie(new Cookie('slt', $token, $expire, $request->getBasePath() . '/'));
+        $controller->Response()->headers->setCookie(
+            new Cookie('slt', $token, $expire, $controller->Request()->getBasePath() . '/')
+        );
 
         $this->connection->update('s_user', ['login_token' => $token], ['id' => $id]);
     }

@@ -22,10 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Components\LegacyRequestWrapper;
+
+use Enlight_Components_Test_Controller_TestCase;
+
 /**
  * @covers \Shopware\Components\LegacyRequestWrapper\GetWrapper
  */
-class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enlight_Components_Test_Controller_TestCase
+class GetWrapperTest extends Enlight_Components_Test_Controller_TestCase
 {
     private static $resources = [
         'Admin',
@@ -40,7 +44,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
         'RewriteTable',
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -74,7 +78,6 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
     /**
      * Tests that reseting GET data inside any core class is equivalent to resetting it in the
      * global $_GET
-     *
      *
      * @depends testSetQuery
      */

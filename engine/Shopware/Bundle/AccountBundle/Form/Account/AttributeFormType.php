@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
 use Psr\Log\LoggerInterface;
-use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Model\ModelManager;
 use Symfony\Component\Form\AbstractType;
@@ -42,7 +42,7 @@ class AttributeFormType extends AbstractType
     private $entityManager;
 
     /**
-     * @var CrudService
+     * @var CrudServiceInterface
      */
     private $attributeService;
 
@@ -53,7 +53,7 @@ class AttributeFormType extends AbstractType
 
     public function __construct(
         ModelManager $entityManager,
-        CrudService $attributeService,
+        CrudServiceInterface $attributeService,
         LoggerInterface $logger
     ) {
         $this->entityManager = $entityManager;

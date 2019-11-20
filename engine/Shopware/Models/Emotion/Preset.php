@@ -32,8 +32,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Shopware Emotion Model - Template
  *
- *
- *
  * @ORM\Entity()
  * @ORM\Table(name="s_emotion_presets")
  */
@@ -96,7 +94,7 @@ class Preset extends ModelEntity
     /**
      * Contains the thumbnail path
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="thumbnail", type="text", nullable=true)
      */
@@ -105,7 +103,7 @@ class Preset extends ModelEntity
     /**
      * Contains the preview image path
      *
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="preview", type="text", nullable=true)
      */
@@ -230,7 +228,7 @@ class Preset extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getThumbnail()
     {
@@ -238,7 +236,7 @@ class Preset extends ModelEntity
     }
 
     /**
-     * @param string $thumbnail
+     * @param string|null $thumbnail
      */
     public function setThumbnail($thumbnail)
     {
@@ -246,7 +244,7 @@ class Preset extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPreview()
     {
@@ -254,7 +252,7 @@ class Preset extends ModelEntity
     }
 
     /**
-     * @param string $preview
+     * @param string|null $preview
      */
     public function setPreview($preview)
     {

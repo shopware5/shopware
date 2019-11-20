@@ -40,7 +40,7 @@ class TextMappingTest extends TestCase
      */
     private $connection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $this->connection->beginTransaction();
@@ -48,7 +48,7 @@ class TextMappingTest extends TestCase
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->connection->rollBack();
 
@@ -95,9 +95,7 @@ class TextMappingTest extends TestCase
             );
         }
 
-        $response = $client->search(
-                $arguments
-        );
+        $response = $client->search($arguments);
 
         static::assertEquals('test9999', $response['hits']['hits'][0]['_id']);
     }

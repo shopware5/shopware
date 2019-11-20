@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ContentTypeBundle\Services;
 
 use Shopware\Bundle\ContentTypeBundle\Field\DummyField;
+use Shopware\Bundle\ContentTypeBundle\Field\FieldInterface;
 use Shopware\Bundle\ContentTypeBundle\Field\TypeField;
 use Shopware\Bundle\ContentTypeBundle\Field\TypeGrid;
 use Shopware\Bundle\ContentTypeBundle\Structs\Field;
@@ -150,7 +151,7 @@ class TypeBuilder
         $class->setTypeName($field['type']);
         $className = $this->getClassByAlias($field['type']) ?: $field['type'];
 
-        if (empty($className) || !class_exists($className)) {
+        if (empty($className) || !class_exists($className) || !$this->implementsFieldInterface($className)) {
             $className = DummyField::class;
         }
 
@@ -198,5 +199,10 @@ class TypeBuilder
     public function getClassByAlias(string $alias)
     {
         return $this->fields[$alias] ?? null;
+    }
+
+    private function implementsFieldInterface(string $className): bool
+    {
+        return array_key_exists(FieldInterface::class, class_implements($className));
     }
 }

@@ -36,7 +36,7 @@ class SimilarProductsTest extends TestCase
     /**
      * setting up test config
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         Shopware()->Config()->offsetSet('similarlimit', 3);
     }
@@ -44,7 +44,7 @@ class SimilarProductsTest extends TestCase
     /**
      * Cleaning up test config
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         Shopware()->Config()->offsetSet('similarlimit', 0);
     }

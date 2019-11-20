@@ -42,11 +42,9 @@ class PropertyGroupTest extends TestCase
         return new PropertyGroup();
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
-     */
     public function testCreateShouldThrowCustomValidationException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
         $testData = [
             'position' => 1,
             'comparable' => 1,
@@ -150,19 +148,15 @@ class PropertyGroupTest extends TestCase
         return $id;
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testUpdateWithInvalidIdShouldThrowNotFoundException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $this->resource->update(9999999, []);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testUpdateWithMissingIdShouldThrowParameterMissingException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->update('', []);
     }
 
@@ -177,19 +171,15 @@ class PropertyGroupTest extends TestCase
         static::assertEquals(null, $group->getId());
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\NotFoundException
-     */
     public function testDeleteWithInvalidIdShouldThrowNotFoundException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
         $this->resource->delete(9999999);
     }
 
-    /**
-     * @expectedException \Shopware\Components\Api\Exception\ParameterMissingException
-     */
     public function testDeleteWithMissingIdShouldThrowParameterMissingException()
     {
+        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
         $this->resource->delete('');
     }
 }

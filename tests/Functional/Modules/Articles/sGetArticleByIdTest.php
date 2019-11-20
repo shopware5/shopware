@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Components_Test_Plugin_TestCase
+namespace Shopware\Tests\Modules\Articles;
+
+class sGetArticleByIdTest extends \Enlight_Components_Test_Plugin_TestCase
 {
     protected $articles = [
         2 => [
@@ -3481,7 +3483,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
     /**
      * Test set up method
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->module = Shopware()->Modules()->Articles();

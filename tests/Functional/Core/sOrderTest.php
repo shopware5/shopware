@@ -33,12 +33,12 @@ class sOrderTest extends PHPUnit\Framework\TestCase
      */
     private $module;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$sessionId = mt_rand(111111111, 999999999);
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->module = Shopware()->Modules()->Order();
         Shopware()->Session()->offsetSet('sessionId', self::$sessionId);
@@ -97,7 +97,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
     public function validatePaymentContextData(Enlight_Event_EventArgs $args)
     {
         $context = $args->get('context');
-        static::assertInternalType('array', $context['sPaymentTable']);
+        static::assertIsArray($context['sPaymentTable']);
         static::assertCount(0, $context['sPaymentTable']);
     }
 
@@ -535,8 +535,8 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $this->module->sUserData = $user;
 
-        $previousTellAFriendCount = Shopware()->Db()->fetchAll('
-            SELECT * FROM s_emarketing_tellafriend WHERE recipient=?',
+        $previousTellAFriendCount = Shopware()->Db()->fetchAll(
+            'SELECT * FROM s_emarketing_tellafriend WHERE recipient=?',
             [$user['additional']['user']['email']]
         );
 
@@ -550,20 +550,20 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $this->module->sTellFriend();
 
-        $afterTellAFriendCount = Shopware()->Db()->fetchAll('
-            SELECT * FROM s_emarketing_tellafriend WHERE confirmed=1 AND recipient=?',
+        $afterTellAFriendCount = Shopware()->Db()->fetchAll(
+            'SELECT * FROM s_emarketing_tellafriend WHERE confirmed=1 AND recipient=?',
             [$user['additional']['user']['email']]
         );
 
         static::assertCount(1, $afterTellAFriendCount);
 
-        Shopware()->Db()->query('
-            DELETE FROM s_emarketing_tellafriend WHERE recipient=?',
+        Shopware()->Db()->query(
+            'DELETE FROM s_emarketing_tellafriend WHERE recipient=?',
             [$user['additional']['user']['email']]
         );
 
-        $cleanTellAFriendCount = Shopware()->Db()->fetchAll('
-            SELECT * FROM s_emarketing_tellafriend WHERE recipient=?',
+        $cleanTellAFriendCount = Shopware()->Db()->fetchAll(
+            'SELECT * FROM s_emarketing_tellafriend WHERE recipient=?',
             [$user['additional']['user']['email']]
         );
 
@@ -580,8 +580,8 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $orderId = $order->getId();
 
-        $orderHistory = Shopware()->Db()->fetchAll('
-            SELECT * FROM s_order_history WHERE orderID=?',
+        $orderHistory = Shopware()->Db()->fetchAll(
+            'SELECT * FROM s_order_history WHERE orderID=?',
             [$orderId]
         );
 
@@ -592,8 +592,8 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         Shopware()->Models()->refresh($order);
 
-        $orderHistory = Shopware()->Db()->fetchRow('
-            SELECT * FROM s_order_history WHERE orderID=? LIMIT 1',
+        $orderHistory = Shopware()->Db()->fetchRow(
+            'SELECT * FROM s_order_history WHERE orderID=? LIMIT 1',
             [$orderId]
         );
 
@@ -617,8 +617,8 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $orderId = $order->getId();
 
-        $orderHistory = Shopware()->Db()->fetchAll('
-            SELECT * FROM s_order_history WHERE orderID=?',
+        $orderHistory = Shopware()->Db()->fetchAll(
+            'SELECT * FROM s_order_history WHERE orderID=?',
             [$orderId]
         );
 
@@ -629,8 +629,8 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         Shopware()->Models()->refresh($order);
 
-        $orderHistory = Shopware()->Db()->fetchRow('
-            SELECT * FROM s_order_history WHERE orderID=? LIMIT 1',
+        $orderHistory = Shopware()->Db()->fetchRow(
+            'SELECT * FROM s_order_history WHERE orderID=? LIMIT 1',
             [$orderId]
         );
 

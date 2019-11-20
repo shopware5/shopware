@@ -684,8 +684,9 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             );
         }
         if ($addRemoveProperty) {
-            $filterData[] = ['removeProperty' => 1, 'link' => $this->blogBaseUrl . Shopware()->Modules()->Core()->sBuildLink(
-                ['sPage' => 1, $requestParameterName => '']),
+            $filterData[] = [
+                'removeProperty' => 1,
+                'link' => $this->blogBaseUrl . Shopware()->Modules()->Core()->sBuildLink(['sPage' => 1, $requestParameterName => '']),
             ];
         }
 

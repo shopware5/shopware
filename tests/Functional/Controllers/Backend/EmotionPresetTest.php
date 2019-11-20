@@ -42,7 +42,7 @@ class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
      */
     private $presetData;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->resource = Shopware()->Container()->get(\Shopware\Components\Api\Resource\EmotionPreset::class);
@@ -54,7 +54,7 @@ class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
         $this->presetData = ['name' => 'test', 'assetsImported' => false, 'presetData' => '{"id":null,"active":true,"articleHeight":2,"cellHeight":185,"cellSpacing":10,"cols":4,"device":"0,1,2,3,4","fullscreen":0,"isLandingPage":false,"mode":"fluid","position":1,"rows":22,"showListing":false,"templateId":1,"elements":[{"assets":{"assetkey":"data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs="},"componentId":"emotion-components-banner","syncKey":"58ac4ec7b38cc","startRow":1,"startCol":4,"endRow":3,"endCol":4,"data":[{"id":null,"fieldId":65,"type":"","key":"bannerPosition","value":"center"},{"id":2810,"fieldId":3,"type":"","key":"file","value":"assetkey"},{"id":2811,"fieldId":7,"type":"json","key":"bannerMapping","value":[{"x":"0","y":"356","width":"251","height":"198","link":"SW10211","resizerIndex":0,"path":""},{"x":"0","y":"184","width":"251","height":"176","link":"SW10170","resizerIndex":1,"path":""},{"x":"0","y":"0","width":"251","height":"188","link":"SW10178","resizerIndex":2,"path":""}]},{"id":2812,"fieldId":47,"type":"","key":"link","value":""},{"id":null,"fieldId":89,"type":"","key":"banner_link_target","value":""},{"id":null,"fieldId":85,"type":"","key":"title","value":""}],"viewports":[{"alias":"xs","startRow":5,"startCol":3,"endRow":6,"endCol":4,"visible":true},{"alias":"s","startRow":5,"startCol":3,"endRow":6,"endCol":4,"visible":true},{"alias":"m","startRow":5,"startCol":3,"endRow":6,"endCol":4,"visible":true},{"alias":"l","startRow":1,"startCol":4,"endRow":3,"endCol":4,"visible":true},{"alias":"xl","startRow":1,"startCol":1,"endRow":1,"endCol":4,"visible":true}]}]}'];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollback();

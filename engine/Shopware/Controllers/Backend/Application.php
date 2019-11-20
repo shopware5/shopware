@@ -853,7 +853,9 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
                     $data[$mapping['fieldName']] = $associationModel;
 
                     //remove the foreign key data.
-                    unset($data[$field]);
+                    if ($field !== $mapping['fieldName']) {
+                        unset($data[$field]);
+                    }
                 }
             } elseif ($mapping['type'] === ClassMetadataInfo::MANY_TO_MANY) {
                 /**
@@ -1123,11 +1125,11 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
             case 'datetime':
                 //validates the date value. If the value is no date value, return
                 $date = date_parse($value);
-                if (!checkdate($date['month'], $date['day'], $date['year'])) {
+
+                if ($date['error_count'] > 0 || !checkdate($date['month'], $date['day'], $date['year'])) {
                     $value = '%' . $value . '%';
                     break;
                 }
-
                 $date = new DateTime($value);
                 $value = $date->format('Y-m-d');
                 if (!$this->isSearchExpression($expression)) {

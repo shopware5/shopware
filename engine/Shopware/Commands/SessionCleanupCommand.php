@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use Shopware\Models\Shop\Shop;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -38,7 +39,8 @@ class SessionCleanupCommand extends ShopwareCommand
         $this
             ->setName('sw:session:cleanup')
             ->setDescription('Removes expired sessions')
-            ->setHelp(<<<'EOF'
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> command removes expired sessions.
 This is most useful combined with <comment>gc_probability: 0</comment> to disable session garbage collection during runtime.
 EOF
@@ -52,19 +54,20 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        $saveHandler = $this->container->get('session.save_handler');
-        if ($saveHandler === null) {
-            $io->error('Save handler not available');
+
+        if ($this->container->getParameter('shopware.session.save_handler') === 'file') {
+            $io->error('Session save handler "file" is not supported');
 
             return 1;
         }
 
-        $options = $this->container->getParameter('shopware.session');
-        $maxlifetime = (int) (isset($options['gc_maxlifetime']) ? $options['gc_maxlifetime'] : ini_get('session.gc_maxlifetime'));
+        /** @var Shop $shop */
+        $shop = $this->container->get('models')->getRepository(Shop::class)->getDefault();
+        $this->container->get('shopware.components.shop_registration_service')->registerShop($shop);
 
-        $saveHandler->gc($maxlifetime);
-        $saveHandler->close();
+        $count = session_gc();
+        session_destroy();
 
-        $io->success('Successfully removed expired sessions');
+        $io->success(sprintf('Successfully removed %d expired sessions', $count));
     }
 }

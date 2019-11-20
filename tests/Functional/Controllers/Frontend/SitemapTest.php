@@ -28,7 +28,7 @@ use Shopware\Models\Shop\Shop;
 
 class SitemapTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         Shopware()->Container()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop(Shopware()->Models()->getRepository(Shop::class)->getActiveDefault());
     }

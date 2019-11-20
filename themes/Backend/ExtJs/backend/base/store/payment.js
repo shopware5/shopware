@@ -40,6 +40,10 @@ Ext.define('Shopware.apps.Base.store.Payment', {
     model : 'Shopware.apps.Base.model.Payment',
     pageSize: 1000,
     remoteFilter: true,
+    sorters: [{
+        property: 'position',
+        direction: 'ASC'
+    }],
 
     proxy:{
         type:'ajax',

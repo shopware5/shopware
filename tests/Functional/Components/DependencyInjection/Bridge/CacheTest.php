@@ -35,7 +35,7 @@ class CacheTest extends TestCase
 
     private $release;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->release = new ShopwareReleaseStruct('5.5.0', '', '4711');
     }
@@ -53,7 +53,9 @@ class CacheTest extends TestCase
 
         mkdir($testDir);
 
-        $cache = (new Cache())->factory('file', [], $options, $this->release);
+        $cache = (new Cache())->factory('file', [
+            'automatic_serialization' => true,
+        ], $options, $this->release);
         $cache->save('foo', 'bar');
 
         $cacheDirectory = $testDir . '/shopware_test--0';
@@ -84,7 +86,9 @@ class CacheTest extends TestCase
 
         mkdir($testDir);
 
-        $cache = (new Cache())->factory('file', [], $options, $this->release);
+        $cache = (new Cache())->factory('file', [
+            'automatic_serialization' => true,
+        ], $options, $this->release);
         $cache->save('foo', 'bar');
 
         $cacheDirectory = $testDir . '/shopware_test--0';
@@ -115,7 +119,9 @@ class CacheTest extends TestCase
 
         mkdir($testDir);
 
-        $cache = (new Cache())->factory('file', [], $options, $this->release);
+        $cache = (new Cache())->factory('file', [
+            'automatic_serialization' => true,
+        ], $options, $this->release);
         $cache->save('foo', 'bar');
 
         $cacheDirectory = $testDir . '/shopware_test--0';
@@ -146,7 +152,9 @@ class CacheTest extends TestCase
 
         mkdir($testDir);
 
-        $cache = (new Cache())->factory('file', [], $options, $this->release);
+        $cache = (new Cache())->factory('file', [
+            'automatic_serialization' => true,
+        ], $options, $this->release);
         $cache->save('foo', 'bar');
 
         $cacheDirectory = $testDir . '/shopware_test--0';

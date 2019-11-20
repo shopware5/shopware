@@ -25,14 +25,11 @@
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Providers;
 
 use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Constraint\IsType;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
-use Shopware\Bundle\BenchmarkBundle\Service\StatisticsService;
-use Shopware\Bundle\BenchmarkBundle\StatisticsClient;
-use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Tests\Functional\Bundle\BenchmarkBundle\BenchmarkTestCase;
 
-abstract class ProviderTestCase extends BenchmarkTestCase
+abstract class ProviderTestCase extends \Shopware\Tests\Functional\Bundle\BenchmarkBundle\BenchmarkTestCase
 {
     /**
      * @var BenchmarkProviderInterface
@@ -46,7 +43,6 @@ abstract class ProviderTestCase extends BenchmarkTestCase
     {
         $resultData = $this->getBenchmarkData();
         $arrayKeys = array_keys($resultData);
-
         static::assertCount($this::EXPECTED_KEYS_COUNT, $arrayKeys);
     }
 
@@ -56,13 +52,26 @@ abstract class ProviderTestCase extends BenchmarkTestCase
     public function testGetValidateTypes()
     {
         $resultData = $this->getBenchmarkData();
-
         if (!is_array($this::EXPECTED_TYPES)) {
-            static::assertInternalType($this::EXPECTED_TYPES, $resultData);
+            foreach ($this::EXPECTED_TYPES as $key => $type) {
+                switch ($type) {
+                    case IsType::TYPE_ARRAY:
+                        static::assertIsArray($resultData[$key]);
+                        break;
+                    case IsType::TYPE_FLOAT:
+                        static::assertIsFloat($resultData[$key]);
+                        break;
+                    case IsType::TYPE_INT:
+                        static::assertIsInt($resultData[$key]);
+                        break;
+                    case IsType::TYPE_STRING:
+                        static::assertIsString($resultData[$key]);
+                        break;
+                }
+            }
 
             return;
         }
-
         $this->checkForTypes($resultData, $this::EXPECTED_TYPES);
     }
 
@@ -74,7 +83,6 @@ abstract class ProviderTestCase extends BenchmarkTestCase
         $dbalConnection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
         $basicContent = $this->openDemoDataFile('basic_setup');
         $dbalConnection->exec($basicContent);
-
         parent::installDemoData($dataName);
     }
 
@@ -104,24 +112,28 @@ abstract class ProviderTestCase extends BenchmarkTestCase
             if (!$expectedTypes[$resultKey]) {
                 continue;
             }
-
             if (is_array($expectedTypes[$resultKey])) {
                 $this->checkForTypes($resultItem, $expectedTypes[$resultKey]);
                 continue;
             }
-
             try {
-                static::assertInternalType(
-                    $expectedTypes[$resultKey],
-                    $resultItem
-                );
+                switch ($expectedTypes[$resultKey]) {
+                    case IsType::TYPE_ARRAY:
+                        static::assertIsArray($resultItem);
+                        break;
+                    case IsType::TYPE_FLOAT:
+                        static::assertIsFloat($resultItem);
+                        break;
+                    case IsType::TYPE_INT:
+                        static::assertIsInt($resultItem);
+                        break;
+                    case IsType::TYPE_STRING:
+                        static::assertIsString($resultItem);
+                        break;
+                }
             } catch (\PHPUnit_Framework_ExpectationFailedException $e) {
                 // Print custom error message
-                static::fail(sprintf(
-                    'Failed asserting that the value for the key %s is of type %s',
-                    $resultKey,
-                    $expectedTypes[$resultKey]
-                ));
+                static::fail(sprintf('Failed asserting that the value for the key %s is of type %s', $resultKey, $expectedTypes[$resultKey]));
             }
         }
     }
@@ -144,35 +156,18 @@ abstract class ProviderTestCase extends BenchmarkTestCase
     protected function resetConfig()
     {
         /** @var Connection $dbalConnection */
-        $dbalConnection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
-
-        $dbalConnection->update('s_benchmark_config', [
-            'last_order_id' => '0',
-            'last_customer_id' => '0',
-            'last_product_id' => '0',
-        ], ['1' => '1']);
+        $dbalConnection = Shopware()->Container()->get('dbal_connection');
+        $dbalConnection->update('s_benchmark_config', ['last_order_id' => '0', 'last_customer_id' => '0', 'last_product_id' => '0'], ['1' => '1']);
     }
 
     protected function sendStatistics($batchSize = null)
     {
         Shopware()->Models()->clear();
-        $response = new StatisticsResponse(new \DateTime('now', new \DateTimeZone('UTC')), 'foo', false);
-
-        $client = $this->createMock(StatisticsClient::class);
-
-        $client
-            ->method('sendStatistics')->willReturn($response);
-
-        $service = new StatisticsService(
-            Shopware()->Container()->get(\Shopware\Bundle\BenchmarkBundle\BenchmarkCollector::class),
-            $client,
-            Shopware()->Container()->get(\Shopware\Models\Benchmark\Repository::class),
-            Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class),
-            Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)
-        );
-
-        $config = Shopware()->Container()->get(\Shopware\Models\Benchmark\Repository::class)->findOneBy(['shopId' => 1]);
-
+        $response = new \Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse(new \DateTime('now', new \DateTimeZone('UTC')), 'foo', false);
+        $client = $this->createMock(\Shopware\Bundle\BenchmarkBundle\StatisticsClient::class);
+        $client->method('sendStatistics')->willReturn($response);
+        $service = new \Shopware\Bundle\BenchmarkBundle\Service\StatisticsService(Shopware()->Container()->get('shopware.benchmark_bundle.collector'), $client, Shopware()->Container()->get('shopware.benchmark_bundle.repository.config'), Shopware()->Container()->get('shopware_storefront.context_service'), Shopware()->Container()->get('dbal_connection'));
+        $config = Shopware()->Container()->get('shopware.benchmark_bundle.repository.config')->findOneBy(['shopId' => 1]);
         $service->transmit($config, $config->getBatchSize());
     }
 }

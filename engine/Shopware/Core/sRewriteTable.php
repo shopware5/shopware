@@ -204,14 +204,16 @@ class sRewriteTable implements \Enlight_Hook
         $keys = isset($this->template->registered_plugins['function']) ? array_keys($this->template->registered_plugins['function']) : [];
         if (!in_array('sCategoryPath', $keys)) {
             $this->template->registerPlugin(
-                Smarty::PLUGIN_FUNCTION, 'sCategoryPath',
+                Smarty::PLUGIN_FUNCTION,
+                'sCategoryPath',
                 [$this, 'sSmartyCategoryPath']
             );
         }
 
         if (!in_array('createSupplierPath', $keys)) {
             $this->template->registerPlugin(
-                Smarty::PLUGIN_FUNCTION, 'createSupplierPath',
+                Smarty::PLUGIN_FUNCTION,
+                'createSupplierPath',
                 [$this, 'createSupplierPath']
             );
         }
@@ -262,59 +264,59 @@ class sRewriteTable implements \Enlight_Hook
     public function sCreateRewriteTableCleanup()
     {
         // Delete CMS / campaigns
-        $this->db->query("
-            DELETE ru FROM s_core_rewrite_urls ru
-            LEFT JOIN s_cms_static cs
-              ON ru.org_path LIKE CONCAT('sViewport=custom&sCustom=', cs.id)
-            LEFT JOIN s_cms_support ct
-              ON ru.org_path LIKE CONCAT('sViewport=forms&sFid=', ct.id)
-            WHERE (
-                ru.org_path LIKE 'sViewport=custom&sCustom=%'
-                OR ru.org_path LIKE 'sViewport=forms&sFid=%'
-                OR ru.org_path LIKE 'sViewport=campaign&sCampaign=%'
-                OR ru.org_path LIKE 'sViewport=content&sContent=%'
-            )
-            AND cs.id IS NULL
-            AND ct.id IS NULL"
+        $this->db->query(
+            "DELETE ru FROM s_core_rewrite_urls ru
+             LEFT JOIN s_cms_static cs
+               ON ru.org_path LIKE CONCAT('sViewport=custom&sCustom=', cs.id)
+             LEFT JOIN s_cms_support ct
+               ON ru.org_path LIKE CONCAT('sViewport=forms&sFid=', ct.id)
+             WHERE (
+                 ru.org_path LIKE 'sViewport=custom&sCustom=%'
+                 OR ru.org_path LIKE 'sViewport=forms&sFid=%'
+                 OR ru.org_path LIKE 'sViewport=campaign&sCampaign=%'
+                 OR ru.org_path LIKE 'sViewport=content&sContent=%'
+             )
+             AND cs.id IS NULL
+             AND ct.id IS NULL"
         );
 
         // delete non-existing blog categories from rewrite table
-        $this->db->query("
-            DELETE ru FROM s_core_rewrite_urls ru
-            LEFT JOIN s_categories c
-              ON c.id = REPLACE(ru.org_path, 'sViewport=blog&sCategory=', '')
-              AND c.blog = 1
-            WHERE ru.org_path LIKE 'sViewport=blog&sCategory=%'
-            AND c.id IS NULL"
+        $this->db->query(
+            "DELETE ru FROM s_core_rewrite_urls ru
+             LEFT JOIN s_categories c
+               ON c.id = REPLACE(ru.org_path, 'sViewport=blog&sCategory=', '')
+               AND c.blog = 1
+             WHERE ru.org_path LIKE 'sViewport=blog&sCategory=%'
+             AND c.id IS NULL"
         );
 
         // delete non-existing categories
-        $this->db->query("
-            DELETE ru FROM s_core_rewrite_urls ru
-            LEFT JOIN s_categories c
-              ON c.id = REPLACE(ru.org_path, 'sViewport=cat&sCategory=', '')
-              AND (c.external = '' OR c.external IS NULL)
-              AND c.blog = 0
-            WHERE ru.org_path LIKE 'sViewport=cat&sCategory=%'
-            AND c.id IS NULL"
+        $this->db->query(
+            "DELETE ru FROM s_core_rewrite_urls ru
+             LEFT JOIN s_categories c
+               ON c.id = REPLACE(ru.org_path, 'sViewport=cat&sCategory=', '')
+               AND (c.external = '' OR c.external IS NULL)
+               AND c.blog = 0
+             WHERE ru.org_path LIKE 'sViewport=cat&sCategory=%'
+             AND c.id IS NULL"
         );
 
         // delete non-existing products
-        $this->db->query("
-            DELETE ru FROM s_core_rewrite_urls ru
-            LEFT JOIN s_articles a
-              ON a.id = REPLACE(ru.org_path, 'sViewport=detail&sArticle=', '')
-            WHERE ru.org_path LIKE 'sViewport=detail&sArticle=%'
-            AND a.id IS NULL"
+        $this->db->query(
+            "DELETE ru FROM s_core_rewrite_urls ru
+             LEFT JOIN s_articles a
+               ON a.id = REPLACE(ru.org_path, 'sViewport=detail&sArticle=', '')
+             WHERE ru.org_path LIKE 'sViewport=detail&sArticle=%'
+             AND a.id IS NULL"
         );
 
         // delete all non-existing suppliers
-        $this->db->query("
-            DELETE ru FROM s_core_rewrite_urls ru
-            LEFT JOIN s_articles_supplier s
-              ON s.id = REPLACE(ru.org_path, 'sViewport=listing&sAction=manufacturer&sSupplier=', '')
-            WHERE ru.org_path LIKE 'sViewport=listing&sAction=manufacturer&sSupplier=%'
-            AND s.id IS NULL"
+        $this->db->query(
+            "DELETE ru FROM s_core_rewrite_urls ru
+             LEFT JOIN s_articles_supplier s
+               ON s.id = REPLACE(ru.org_path, 'sViewport=listing&sAction=manufacturer&sSupplier=', '')
+             WHERE ru.org_path LIKE 'sViewport=listing&sAction=manufacturer&sSupplier=%'
+             AND s.id IS NULL"
         );
     }
 
@@ -941,11 +943,11 @@ class sRewriteTable implements \Enlight_Hook
         if ($this->preparedUpdate === null) {
             $this->preparedUpdate = $this->db->prepare(
                 'UPDATE s_core_rewrite_urls
-                SET main = 0
-                WHERE org_path = ?
-                AND path != ?
-                AND subshopID = ?
-            ');
+                 SET main = 0
+                 WHERE org_path = ?
+                   AND path != ?
+                   AND subshopID = ?'
+            );
         }
 
         return $this->preparedUpdate;

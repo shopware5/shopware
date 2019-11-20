@@ -40,7 +40,7 @@ class PresetInstallerTest extends TestCase
     /** @var Connection */
     private $connection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = Shopware()->Container()->get('Doctrine\DBAL\Connection');
         $this->connection->beginTransaction();
@@ -51,7 +51,7 @@ class PresetInstallerTest extends TestCase
         $this->presetInstaller = Shopware()->Container()->get('shopware.emotion.preset_installer');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->connection->rollBack();
     }
@@ -108,7 +108,7 @@ class PresetInstallerTest extends TestCase
      * @param string $name
      * @param bool   $custom
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function buildMetaDataMock($name, $custom = false)
     {

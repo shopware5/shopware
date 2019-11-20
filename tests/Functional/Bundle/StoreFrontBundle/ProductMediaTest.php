@@ -186,10 +186,10 @@ class ProductMediaTest extends TestCase
     {
         static::assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Media', $media);
         static::assertNotEmpty($media->getThumbnails());
-        static::assertContains($expected, $media->getFile());
+        static::assertStringContainsString($expected, $media->getFile());
 
         foreach ($media->getThumbnails() as $thumbnail) {
-            static::assertContains($expected, $thumbnail->getSource());
+            static::assertStringContainsString($expected, $thumbnail->getSource());
         }
     }
 

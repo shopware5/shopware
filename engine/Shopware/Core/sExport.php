@@ -23,7 +23,7 @@
  */
 
 use Doctrine\ORM\AbstractQuery;
-use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
@@ -646,7 +646,7 @@ class sExport implements \Enlight_Hook
                         continue;
                     }
                     $columnName = $attribute->getColumnName();
-                    $map[CrudService::EXT_JS_PREFIX . $columnName] = $columnName;
+                    $map[CrudServiceInterface::EXT_JS_PREFIX . $columnName] = $columnName;
                 }
                 break;
             case 'link':
@@ -924,6 +924,7 @@ class sExport implements \Enlight_Hook
                    FROM s_articles_vote as av WHERE active=1
                    AND articleID=a.id
                 ) as sVoteCount,
+                d.laststock,
                 d.stockmin,
                 d.weight,
                 d.position,

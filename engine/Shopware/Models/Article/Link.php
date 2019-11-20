@@ -48,7 +48,7 @@ class Link extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ProductLinkAttribute
+     * @var ProductLinkAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleLink", mappedBy="articleLink", cascade={"persist"})
      */
@@ -187,7 +187,7 @@ class Link extends ModelEntity
     }
 
     /**
-     * @return ProductLinkAttribute
+     * @return ProductLinkAttribute|null
      */
     public function getAttribute()
     {

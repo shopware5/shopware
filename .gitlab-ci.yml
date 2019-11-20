@@ -27,6 +27,8 @@ PHP analyze:
     stage: Static analysis
     script:
         - ./psh.phar init
+        - chown -R 1000:1000 .
+        - composer req --dev phpunit/phpunit:~8.0 --update-with-all-dependencies
         - ./psh.phar check-code
     services:
         -   name: mysql:5.7
@@ -39,8 +41,7 @@ Code Coverage:
     stage: Static analysis
     script:
         - ./psh.phar init --SW_HOST="localhost"
-        - composer require pcov/clobber
-        - vendor/bin/pcov clobber
+        - chown -R 1000:1000 .
         - php -d pcov.enabled=1 -d pcov.directory=$CI_PROJECT_DIR
             vendor/bin/phpunit
             --configuration tests/phpunit.xml.dist
@@ -69,6 +70,7 @@ Code Coverage:
             alias: mysql
     script:
         - ./psh.phar init --SW_HOST="localhost"
+        - chown -R 1000:1000 .
         - ./psh.phar unit-fast --SW_HOST="localhost"
 
     artifacts:
@@ -80,6 +82,7 @@ Code Coverage:
     stage: Elasticsearch
     script:
         - ./psh.phar init --SW_HOST="localhost"
+        - chown -R 1000:1000 .
         - ./psh.phar unit-elasticsearch --SW_HOST="localhost"
 
     artifacts:
@@ -102,8 +105,7 @@ PHP 7.3:
         -   name: mysql:5.7
             alias: mysql
 
-.PHP 7.4: # disabled until available
-    allow_failure: true
+PHP 7.4:
     extends: .phpunit_base
     image: shopware/5-continuous:7.4
     stage: Unit
@@ -194,10 +196,10 @@ RIPS security:
     image: php:7.3-alpine
     before_script: []
     only:
-        - "5.6"
-        - "5.7"
+        variables:
+            - $RIPS_SCAN == "1"
     script:
         - apk add --no-cache libzip-dev && docker-php-ext-configure zip --with-libzip=/usr/include && docker-php-ext-install zip
         - wget https://github.com/rips/rips-cli/releases/download/3.2.0/rips-cli.phar -O /usr/bin/rips-cli
         - chmod 755 /usr/bin/rips-cli
-        - rips-cli rips:scan:start -p . -C 20  -a ${RIPS_APP_ID} --progress
+        - rips-cli rips:scan:start -p . -C 20  -a ${RIPS_APP_ID} -T ${CI_COMMIT_REF_NAME} --progress

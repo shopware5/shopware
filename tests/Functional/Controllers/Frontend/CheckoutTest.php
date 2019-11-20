@@ -103,7 +103,7 @@ class CheckoutTest extends \Enlight_Components_Test_Plugin_TestCase
         $this->Request()->setParam('isXHR', 1);
 
         $response = $this->dispatch('/checkout/addArticle', true);
-        static::assertContains('<div class="modal--checkout-add-article">', $response->getBody());
+        static::assertStringContainsString('<div class="modal--checkout-add-article">', $response->getBody());
 
         Shopware()->Modules()->Basket()->sDeleteBasket();
     }
@@ -219,7 +219,7 @@ class CheckoutTest extends \Enlight_Components_Test_Plugin_TestCase
         static::assertEquals(302, $response->getHttpResponseCode());
         static::assertCount(2, $locationHeader); // Known bug due to Symfony migration
         $locationHeader = array_pop($locationHeader);
-        static::assertContains('/checkout/cart', $locationHeader['value']);
+        static::assertStringContainsString('/checkout/cart', $locationHeader['value']);
     }
 
     /**

@@ -364,7 +364,13 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
                     } else {
                         $valid = 0;
                     }
-                    $response->headers->setCookie(new Cookie('partner', $row['idcode'], $valid, '/'));
+                    $basePath = $request->getBasePath();
+                    if ($basePath === null || $basePath === '') {
+                        $basePath = '/';
+                    }
+                    $response->headers->setCookie(
+                        new Cookie('partner', $row['idcode'], $valid, $basePath)
+                    );
                 }
                 Shopware()->Session()->sPartner = $partner;
             }

@@ -221,7 +221,7 @@ class TranslationTest extends TestCase
         }
     }
 
-    protected function getContext()
+    protected function getContext($shopId = 1)
     {
         $tax = $this->helper->createTax();
         $customerGroup = $this->helper->createCustomerGroup();

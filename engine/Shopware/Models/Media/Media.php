@@ -99,7 +99,7 @@ class Media extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var MediaAttribute
+     * @var MediaAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Media", mappedBy="media", orphanRemoval=true, cascade={"persist"})
      */
@@ -239,7 +239,7 @@ class Media extends ModelEntity
     /**
      * Width of the file in px if it's an image
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="width", type="integer", nullable=true)
      */
@@ -248,7 +248,7 @@ class Media extends ModelEntity
     /**
      * Height of the file in px if it's an image
      *
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="height", type="integer", nullable=true)
      */
@@ -939,7 +939,7 @@ class Media extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getWidth()
     {
@@ -947,7 +947,7 @@ class Media extends ModelEntity
     }
 
     /**
-     * @param int $width
+     * @param int|null $width
      */
     public function setWidth($width)
     {
@@ -955,7 +955,7 @@ class Media extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getHeight()
     {
@@ -963,7 +963,7 @@ class Media extends ModelEntity
     }
 
     /**
-     * @param int $height
+     * @param int|null $height
      */
     public function setHeight($height)
     {
@@ -981,7 +981,7 @@ class Media extends ModelEntity
     }
 
     /**
-     * @return MediaAttribute
+     * @return MediaAttribute|null
      */
     public function getAttribute()
     {

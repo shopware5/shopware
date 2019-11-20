@@ -30,7 +30,7 @@ use Shopware_Components_Translation;
 class LandingPageViewLoader
 {
     /**
-     * @var DeviceConfiguration
+     * @var DeviceConfigurationInterface
      */
     private $deviceConfiguration;
 
@@ -40,7 +40,7 @@ class LandingPageViewLoader
     private $translationComponent;
 
     public function __construct(
-        DeviceConfiguration $deviceConfiguration,
+        DeviceConfigurationInterface $deviceConfiguration,
         Shopware_Components_Translation $translationComponent = null
     ) {
         $this->deviceConfiguration = $deviceConfiguration;
@@ -89,7 +89,7 @@ class LandingPageViewLoader
         }
 
         $struct = new LandingPageViewStruct();
-        $struct->sBreadcrumb = [['name' => $landingPage['name']]];
+        $struct->sBreadcrumb = [['name' => $landingPage['name'], 'link' => 'shopware.php?sViewport=campaign&emotionId=' . $emotionId]];
         $struct->seo_title = $landingPage['seo_title'];
         $struct->seo_keywords = $landingPage['seo_keywords'];
         $struct->seo_description = $landingPage['seo_description'];

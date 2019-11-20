@@ -24,16 +24,10 @@
 
 namespace Shopware\Bundle\BenchmarkBundle;
 
-use Shopware\Components\OpenSSLEncryption;
 use Shopware\Components\OpenSSLVerifier;
 
 class BenchmarkEncryption
 {
-    /**
-     * @var OpenSSLEncryption
-     */
-    private $encryption;
-
     /**
      * @var OpenSSLVerifier
      */
@@ -44,31 +38,7 @@ class BenchmarkEncryption
      */
     public function __construct($publicKeyPath)
     {
-        $publicKey = trim(file_get_contents($publicKeyPath));
-
-        $this->encryption = new OpenSSLEncryption($publicKey);
         $this->verifier = new OpenSSLVerifier($publicKeyPath);
-    }
-
-    /**
-     * @param string $data
-     * @param string $encryptionMethod
-     *
-     * @return array
-     */
-    public function encryptData($data, $encryptionMethod)
-    {
-        return $this->encryption->encryptData($data, $encryptionMethod);
-    }
-
-    /**
-     * @param string $encryptionMethod
-     *
-     * @return bool
-     */
-    public function isEncryptionSupported($encryptionMethod)
-    {
-        return $this->encryption->isEncryptionSupported($encryptionMethod);
     }
 
     /**

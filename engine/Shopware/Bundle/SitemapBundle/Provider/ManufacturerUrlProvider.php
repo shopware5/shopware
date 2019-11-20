@@ -66,6 +66,10 @@ class ManufacturerUrlProvider implements UrlProviderInterface
 
         $manufacturers = $this->getManufacturersForSitemap($shopContext);
 
+        if (!$manufacturers) {
+            return [];
+        }
+
         foreach ($manufacturers as &$manufacturer) {
             $manufacturer['changed'] = new \DateTime($manufacturer['changed']);
             $manufacturer['urlParams'] = [

@@ -22,9 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Models;
+
 use Shopware\Models\Form\Form;
 
-class Shopware_Tests_Models_FormTest extends Enlight_Components_Test_TestCase
+class FormTest extends \Enlight_Components_Test_TestCase
 {
     /**
      * @var array
@@ -39,12 +41,12 @@ class Shopware_Tests_Models_FormTest extends Enlight_Components_Test_TestCase
     ];
 
     /**
-     * @var Shopware\Components\Model\ModelManager
+     * @var \Shopware\Components\Model\ModelManager
      */
     protected $em;
 
     /**
-     * @var Shopware\Models\User\Repository
+     * @var \Shopware\Models\User\Repository
      */
     protected $repo;
 
@@ -52,19 +54,19 @@ class Shopware_Tests_Models_FormTest extends Enlight_Components_Test_TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->em = Shopware()->Models();
         $this->repo = Shopware()->Models()
-                                ->getRepository('Shopware\Models\Form\Form');
+                                ->getRepository(Form::class);
     }
 
     /**
      * Tear down
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $form = $this->repo->findOneBy(['name' => 'Testform123']);
 

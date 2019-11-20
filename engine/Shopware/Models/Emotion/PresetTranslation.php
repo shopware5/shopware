@@ -30,8 +30,6 @@ use Shopware\Components\Model\ModelEntity;
 /**
  * Shopware Emotion Model - Preset translation
  *
- *
- *
  * @ORM\Entity()
  * @ORM\Table(name="s_emotion_preset_translations")
  */

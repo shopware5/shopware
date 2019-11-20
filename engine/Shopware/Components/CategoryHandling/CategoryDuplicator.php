@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\CategoryHandling;
 
-use Shopware\Bundle\AttributeBundle\Service\DataPersister;
+use Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface;
 use Shopware\Components\Model\CategoryDenormalization;
 
 class CategoryDuplicator
@@ -40,14 +40,14 @@ class CategoryDuplicator
     protected $categoryDenormalization;
 
     /**
-     * @var DataPersister
+     * @var DataPersisterInterface
      */
     private $attributePersister;
 
     public function __construct(
         \PDO $connection,
         CategoryDenormalization $categoryDenormalization,
-        DataPersister $attributePersister
+        DataPersisterInterface $attributePersister
     ) {
         $this->connection = $connection;
         $this->categoryDenormalization = $categoryDenormalization;

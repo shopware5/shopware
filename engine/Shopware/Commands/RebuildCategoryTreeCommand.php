@@ -45,7 +45,8 @@ class RebuildCategoryTreeCommand extends ShopwareCommand
             ->setDescription('Rebuild the category tree')
              ->addOption('offset', 'o', InputOption::VALUE_OPTIONAL, 'Offset to start with.')
              ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'Categories to build per batch. Default: 1000')
-            ->setHelp(<<<'EOF'
+            ->setHelp(
+                <<<'EOF'
 The <info>%command.name%</info> command will rebuild your category tree.
 EOF
             );

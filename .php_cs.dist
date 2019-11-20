@@ -1,13 +1,21 @@
 <?php
 
+use PhpCsFixer\Config;
+use PhpCsFixerCustomFixers\Fixer\NoUnneededConcatenationFixer;
+use PhpCsFixerCustomFixers\Fixer\NoUselessCommentFixer;
+use PhpCsFixerCustomFixers\Fixer\OperatorLinebreakFixer;
+use PhpCsFixerCustomFixers\Fixer\PhpdocParamTypeFixer;
+use PhpCsFixerCustomFixers\Fixer\SingleSpaceAfterStatementFixer;
+use PhpCsFixerCustomFixers\Fixer\SingleSpaceBeforeStatementFixer;
+use PhpCsFixerCustomFixers\Fixers;
+
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__ . '/engine/Shopware')
     ->in(__DIR__ . '/tests')
     ->in(__DIR__ . '/recovery')
     ->exclude('Plugins/Community')
     ->exclude('Plugins/Local')
-    ->notPath('LegacyPhpDumper.php')
-;
+    ->notPath('LegacyPhpDumper.php');
 
 $header = <<<EOF
 Shopware 5
@@ -32,39 +40,42 @@ trademark license. Therefore any rights, title and interest in
 our trademarks remain entirely with us.
 EOF;
 
-return PhpCsFixer\Config::create()
-    ->registerCustomFixers(new PhpCsFixerCustomFixers\Fixers())
+return Config::create()
+    ->registerCustomFixers(new Fixers())
     ->setRiskyAllowed(true)
     ->setUsingCache(false)
     ->setRules([
         '@PSR2' => true,
         '@Symfony' => true,
+
+        'array_syntax' => ['syntax' => 'short'],
+        'blank_line_after_opening_tag' => false,
+        'class_attributes_separation' => ['elements' => ['method', 'property']],
+        'concat_space' => ['spacing' => 'one'],
+        'doctrine_annotation_indentation' => true,
+        'doctrine_annotation_spaces' => true,
+        'general_phpdoc_annotation_remove' => [
+             'annotations' => ['copyright', 'category'],
+        ],
         'header_comment' => ['header' => $header, 'separate' => 'bottom', 'commentType' => 'PHPDoc'],
+        'method_argument_space' => ['on_multiline' => 'ensure_fully_multiline'],
         'no_useless_else' => true,
         'no_useless_return' => true,
+        'no_superfluous_phpdoc_tags' => true,
         'ordered_class_elements' => true,
         'ordered_imports' => true,
         'phpdoc_order' => true,
         'phpdoc_summary' => false,
-        'blank_line_after_opening_tag' => false,
-        'concat_space' => ['spacing' => 'one'],
-        'class_attributes_separation' => ['elements' => ['method', 'property']],
-        'array_syntax' => ['syntax' => 'short'],
-        'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
-        'general_phpdoc_annotation_remove' => [
-            'annotations' => ['copyright', 'category'],
-        ],
         'phpdoc_var_annotation_correct_order' => true,
-        'doctrine_annotation_indentation' => true,
-        'doctrine_annotation_spaces' => true,
-        'no_superfluous_phpdoc_tags' => true,
         'php_unit_test_case_static_method_calls' => true,
-        PhpCsFixerCustomFixers\Fixer\NoUselessCommentFixer::name() => true,
-        PhpCsFixerCustomFixers\Fixer\NoUnneededConcatenationFixer::name() => true,
-        PhpCsFixerCustomFixers\Fixer\SingleSpaceAfterStatementFixer::name() => true,
-        PhpCsFixerCustomFixers\Fixer\SingleSpaceBeforeStatementFixer::name() => true,
-        PhpCsFixerCustomFixers\Fixer\PhpdocParamTypeFixer::name() => true,
-        PhpCsFixerCustomFixers\Fixer\OperatorLinebreakFixer::name() => ['only_booleans' => true],
+        'single_line_throw' => false,
+        'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
+
+        NoUselessCommentFixer::name() => true,
+        NoUnneededConcatenationFixer::name() => true,
+        SingleSpaceAfterStatementFixer::name() => true,
+        SingleSpaceBeforeStatementFixer::name() => true,
+        PhpdocParamTypeFixer::name() => true,
+        OperatorLinebreakFixer::name() => ['only_booleans' => true],
     ])
-    ->setFinder($finder)
-;
+    ->setFinder($finder);

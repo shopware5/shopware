@@ -33,7 +33,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
      */
     private $router;
 
-    public function setUp()
+    public function setUp(): void
     {
         $helper = Shopware();
         $loader = $helper->Container()->get(\Enlight_Loader::class);

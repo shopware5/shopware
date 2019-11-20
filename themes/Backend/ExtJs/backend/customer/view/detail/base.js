@@ -239,6 +239,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
 
         me.customerMail = Ext.create('Ext.form.field.Text', {
             fieldLabel: me.snippets.email.label,
+            checkChangeBuffer: 500,
             labelWidth: 155,
             anchor: '95%',
             name: 'email',

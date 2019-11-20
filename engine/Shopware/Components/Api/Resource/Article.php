@@ -2418,8 +2418,8 @@ class Article extends Resource implements BatchInterface
      */
     private function getAttributeProperties()
     {
-        /** @var \Shopware\Bundle\AttributeBundle\Service\CrudService $crud */
-        $crud = $this->getContainer()->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class);
+        /** @var \Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface $crud */
+        $crud = $this->getContainer()->get(\Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface::class);
         $attributeNames = $crud->getList('s_articles_attributes');
         $fields = [];
         foreach ($attributeNames as $property) {

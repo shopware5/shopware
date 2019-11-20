@@ -83,7 +83,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
      */
     private $front;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -102,7 +102,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->session->offsetSet('sessionId', null);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->clear();
@@ -118,7 +118,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Fetching existing inactive payment means returns the data array
         $sepaData = $this->module->sGetPaymentMeanById(6);
-        static::assertInternalType('array', $sepaData);
+        static::assertIsArray($sepaData);
         static::assertArrayHasKey('id', $sepaData);
         static::assertArrayHasKey('name', $sepaData);
         static::assertArrayHasKey('description', $sepaData);
@@ -130,7 +130,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Fetching existing active payment means returns the data array
         $debitData = $this->module->sGetPaymentMeanById(2);
-        static::assertInternalType('array', $debitData);
+        static::assertIsArray($debitData);
         static::assertArrayHasKey('id', $debitData);
         static::assertArrayHasKey('name', $debitData);
         static::assertArrayHasKey('description', $debitData);
@@ -194,11 +194,11 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
     /**
      * @covers \sAdmin::sValidateStep3
-     * @expectedException \Enlight_Exception
-     * @expectedExceptionMessage sValidateStep3 #00: No payment id
      */
     public function testExceptionInsValidateStep3()
     {
+        $this->expectException('Enlight_Exception');
+        $this->expectExceptionMessage('sValidateStep3 #00: No payment id');
         $this->module->sValidateStep3();
     }
 
@@ -215,13 +215,13 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         static::assertArrayHasKey('sProcessed', $result);
         static::assertArrayHasKey('sPaymentObject', $result);
 
-        static::assertInternalType('array', $result['checkPayment']);
+        static::assertIsArray($result['checkPayment']);
         static::assertCount(2, $result['checkPayment']);
-        static::assertInternalType('array', $result['paymentData']);
+        static::assertIsArray($result['paymentData']);
         static::assertCount(21, $result['paymentData']);
-        static::assertInternalType('boolean', $result['sProcessed']);
+        static::assertIsBool($result['sProcessed']);
         static::assertTrue($result['sProcessed']);
-        static::assertInternalType('object', $result['sPaymentObject']);
+        static::assertIsObject($result['sPaymentObject']);
         static::assertInstanceOf(BasePaymentMethod::class, $result['sPaymentObject']);
     }
 
@@ -307,7 +307,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     {
         // Test with no data, get error
         $result = $this->module->sLogin();
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertCount(1, $result['sErrorMessages']);
@@ -326,7 +326,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             'password' => uniqid(rand()) . 'test',
         ]);
         $result = $this->module->sLogin();
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertCount(1, $result['sErrorMessages']);
@@ -345,7 +345,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             'password' => 'fooobar',
         ]);
         $result = $this->module->sLogin();
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertNull($result['sErrorFlag']);
@@ -366,7 +366,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             'passwordMD5' => uniqid(rand()),
         ]);
         $result = $this->module->sLogin(true);
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertNull($result['sErrorFlag']);
@@ -383,7 +383,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             'passwordMD5' => md5('fooobar'),
         ]);
         $result = $this->module->sLogin(true);
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertNull($result['sErrorFlag']);
@@ -402,7 +402,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         // Test inactive account
         Shopware()->Db()->update('s_user', ['active' => 0], 'id = ' . $customer->getId());
         $result = $this->module->sLogin(true);
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertNull($result['sErrorFlag']);
@@ -432,7 +432,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->module->sLogin();
         $this->module->sLogin();
         $result = $this->module->sLogin();
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertNull($result['sErrorFlag']);
@@ -465,7 +465,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             'password' => 'fooobar',
         ]);
         $result = $this->module->sLogin();
-        static::assertInternalType('array', $result);
+        static::assertIsArray($result);
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertNull($result['sErrorFlag']);
@@ -479,7 +479,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         static::assertFalse($this->module->sCheckUser());
 
         static::assertEquals($customer->getGroup()->getKey(), $this->session->offsetGet('sUserGroup'));
-        static::assertInternalType('array', $this->session->offsetGet('sUserGroupData'));
+        static::assertIsArray($this->session->offsetGet('sUserGroupData'));
         static::assertArrayHasKey('groupkey', $this->session->offsetGet('sUserGroupData'));
         static::assertArrayHasKey('description', $this->session->offsetGet('sUserGroupData'));
         static::assertArrayHasKey('tax', $this->session->offsetGet('sUserGroupData'));

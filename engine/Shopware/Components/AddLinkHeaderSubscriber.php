@@ -46,10 +46,11 @@ class AddLinkHeaderSubscriber implements SubscriberInterface
      */
     private $webLinkManager;
 
-    public function __construct(HttpHeaderSerializer $headerSerializer,
+    public function __construct(
+        HttpHeaderSerializer $headerSerializer,
         WebLinkManager $webLinkManager,
-        bool $pushEnabled)
-    {
+        bool $pushEnabled
+    ) {
         $this->serializer = $headerSerializer;
         $this->pushEnabled = $pushEnabled;
         $this->webLinkManager = $webLinkManager;

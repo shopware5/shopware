@@ -31,3 +31,27 @@ div[id*=form], .shopware-form {
         background: #f0f2f4;
     }
 }
+
+.shopware-attribute-form, .x-translation-manager-form {
+    .x-form-readonly label {
+        opacity: 0.3;
+    }
+
+    .x-form-readonly .x-form-item-body :read-only {
+        background: lightgrey;
+    }
+
+    // Disable cursor for checkboxes
+    .x-form-readonly .x-form-item-body .x-form-checkbox {
+        cursor: not-allowed;
+    }
+
+    // Add background to read-only multi-selection grid
+    .multi-selection-readonly .x-grid-view {
+        background: lightgrey;
+
+        td {
+            background: #E8E8E8;
+        }
+    }
+}

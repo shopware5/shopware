@@ -274,17 +274,19 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
             pageSize: 5
         });
 
-        me.roleCombo = Ext.create('Shopware.form.field.PagingComboBox', {
+        me.roleCombo = Ext.create('Ext.form.field.ComboBox', {
             pageSize: 5,
             queryMode: 'remote',
             store: me.roleStore,
             valueField: 'id',
             displayField: 'name',
             forceSelection: true,
+            editable: false,
             allowBlank:false,
             labelWidth: 50,
             emptyText: me.snippets.role.empty,
             fieldLabel: me.snippets.role.label,
+            width: 350,
             listeners: {
                 change: function(field, value) {
                     me.fireEvent('roleSelect', me.store, value);

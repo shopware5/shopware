@@ -40,6 +40,10 @@ Ext.define('Shopware.apps.Base.store.Dispatch', {
     model : 'Shopware.apps.Base.model.Dispatch',
     pageSize: 1000,
     remoteFilter: true,
+    sorters: [{
+        property: 'position',
+        direction: 'ASC'
+    }],
     filters: [{
         property: 'active',
         value: true

@@ -33,13 +33,13 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
     const SAVE_URL = '/register/saveRegister/sTarget/account/sTargetAction/index';
     const CONFIRM_URL_PREFIX = '/register/confirmValidation/sConfirmation/';
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
         Shopware()->Container()->reset('router');
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
@@ -47,7 +47,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->clear();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollback();
@@ -295,11 +295,11 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
         $connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
 
         // Create broken data
-        $connection->executeQuery('
-            INSERT INTO s_core_optin (type, datum, hash, data)
-            SELECT type, (datum - INTERVAL 1 MINUTE), CONCAT(hash,\'X\'), \'I am definitly not working\' 
-            FROM s_core_optin
-            WHERE hash = :hash',
+        $connection->executeQuery(
+            'INSERT INTO s_core_optin (type, datum, hash, data)
+             SELECT type, (datum - INTERVAL 1 MINUTE), CONCAT(hash,\'X\'), \'I am definitly not working\' 
+             FROM s_core_optin
+             WHERE hash = :hash',
             [':hash' => $hash]
         );
 

@@ -34,7 +34,7 @@ class HrefLangTest extends TestCase
      */
     private $service;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -48,7 +48,7 @@ class HrefLangTest extends TestCase
         $this->service = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\Core\HrefLangService::class);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollBack();
@@ -116,12 +116,12 @@ class HrefLangTest extends TestCase
         $urls = $this->service->getUrls(['controller' => 'cat', 'action' => 'index', 'sCategory' => $category, 'foo' => 'bar'], $this->getContext());
 
         static::assertNotEmpty($urls);
-        static::assertContains('foo=bar', $urls[0]->getLink());
+        static::assertStringContainsString('foo=bar', $urls[0]->getLink());
 
         $urls = $this->service->getUrls(['controller' => 'forms', 'action' => 'index', 'sFid' => 5, 'foo' => 'bar'], $this->getContext());
 
         static::assertNotEmpty($urls);
-        static::assertNotContains('foo=bar', $urls[0]->getLink());
+        static::assertStringNotContainsString('foo=bar', $urls[0]->getLink());
     }
 
     private function createCategory()

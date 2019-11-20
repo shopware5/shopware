@@ -51,8 +51,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
         licencePage: 5,
         premiumPluginsPage: 6,
         expiredPluginsPage: 7,
-        connectIntroductionPage: 8,
-        importExportTeaserPage: 9
+        importExportTeaserPage: 8
     },
 
     animationSpeed: 150,
@@ -93,7 +92,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
             'plugin-manager-display-updates': me.displayPluginUpdatesPage,
             'display-premium-plugins': me.displayPremiumPluginsPage,
             'display-expired-plugins': me.displayExpiredPluginsPage,
-            'display-connect-introduction': me.displayConnectIntroductionPage,
             'display-importexport-teaser': me.displayImportExportTeaserPage,
             'load-store-listing': me.loadListingWithParams,
             scope: me
@@ -243,41 +241,25 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
     },
 
     displayPremiumPluginsPage: function () {
-        var me = this,
-            navigation = me.getNavigation();
-
         Shopware.app.Application.fireEvent('enable-premium-plugins-mode');
 
-        me.switchView(me.cards.premiumPluginsPage);
+        this.switchView(this.cards.premiumPluginsPage);
     },
 
     displayExpiredPluginsPage: function() {
-        var me = this;
-
         Shopware.app.Application.fireEvent('enable-expired-plugins-mode');
 
-        me.switchView(me.cards.expiredPluginsPage);
-    },
-
-    displayConnectIntroductionPage: function() {
-        var me = this;
-
-        Shopware.app.Application.fireEvent('enable-connect-introduction-mode');
-
-        me.switchView(me.cards.connectIntroductionPage);
+        this.switchView(this.cards.expiredPluginsPage);
     },
 
     displayImportExportTeaserPage: function() {
-        var me = this;
-
         Shopware.app.Application.fireEvent('enable-importexport-teaser-mode');
 
-        me.switchView(me.cards.importExportTeaserPage);
+        this.switchView(this.cards.importExportTeaserPage);
     },
 
     displayPluginUpdatesPage: function () {
         var me = this,
-            updatePage = me.getUpdatePage(),
             navigation = me.getNavigation();
 
         me.switchView(me.cards.pluginUpdatesPage);
@@ -437,8 +419,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
 
     removeNavigationSelection: function() {
         var me = this,
-            navigation = me.getNavigation(),
-            tree = me.getCategoryTree();
+            navigation = me.getNavigation();
 
         navigation.localUpdatesLink.removeCls('active');
         navigation.localHomeLink.removeCls('active');
