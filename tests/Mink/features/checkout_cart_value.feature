@@ -16,7 +16,6 @@ Feature: Check that cart value is not negative
             | shipping      | 3,90 €  |
             | total         | 14,89 € |
             | sumWithoutVat | 12,51 € |
-            | 19 %          | 2,38 €  |
 
         When    I remove the article on position 1
         Then    the cart should contain 0 articles with a value of "0,00 €"

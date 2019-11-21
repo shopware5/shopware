@@ -152,7 +152,9 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
     public function changeShippingAddress(array $data = [])
     {
         $element = $this->getElement('CheckoutShipping');
-        Helper::clickNamedLink($element, 'changeButton');
+        $url = $element->find('css', 'a[title="Adresse ändern"]')->getAttribute('href');
+
+        $this->getSession()->visit($url);
 
         $account = $this->getPage('Account');
         Helper::fillForm($account, 'shippingForm', $data);
@@ -167,7 +169,10 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
         $element = $this->getElement('CheckoutPayment');
         Helper::clickNamedLink($element, 'changeButton');
 
-        Helper::fillForm($this, 'shippingPaymentForm', $data);
+        Helper::fillForm($this, 'shippingPaymentForm', $data, true);
+
+        Helper::waitForOverlay($this);
+
         Helper::pressNamedButton($this, 'changePaymentButton');
     }
 

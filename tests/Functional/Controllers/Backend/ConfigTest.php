@@ -122,6 +122,7 @@ class ConfigTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * Tests the document type key unique constraint
      *
+     * @group pcovAdapterBrokenTest
      * @runInSeparateProcess
      */
     public function testDocumentTypeKeyUniqueConstraint()

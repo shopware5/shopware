@@ -10,7 +10,6 @@ default:
             base_url: 'http://__SW_HOST____SW_BASE_PATH__'
             default_session: 'selenium2'
             javascript_session: 'selenium2'
-            goutte: ~
             browser_name: chrome
             selenium2:
                 wd_host: "http://selenium:4444/wd/hub"

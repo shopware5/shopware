@@ -1,4 +1,4 @@
-@account
+@account @account-file
 Feature: My account (without changing login data)
 
     Background:
@@ -8,8 +8,9 @@ Feature: My account (without changing login data)
     @password
     Scenario Outline: I can't change my password, when something is wrong
         When  I follow "Persönliche Daten ändern"
-        And   I change my password from "<password>" to "<new_password>" with confirmation "<confirmation>"
-        Then  I should see "<message>"
+        And I ignore browser validation
+        And  I change my password from "<password>" to "<new_password>" with confirmation "<confirmation>"
+        And  I should see "<message>"
 
         Examples:
             | password  | new_password | confirmation | message                                                                  |
@@ -23,6 +24,7 @@ Feature: My account (without changing login data)
     @email
     Scenario Outline: I can't change my email, when something is wrong
         When  I follow "Persönliche Daten ändern"
+        And I ignore browser validation
         And   I change my email with password "<password>" to "<new_email>" with confirmation "<confirmation>"
         Then  I should see "<message>"
 
@@ -38,8 +40,10 @@ Feature: My account (without changing login data)
     @shipping
     Scenario Outline: I can change my shipping address
         When I follow "Lieferadresse ändern"
+        And I ignore browser validation
         And  I change my shipping address:
             | field         | address         |
+            | additional.customer_type | <customer_type> |
             | salutation    | <salutation>    |
             | company       | <company>       |
             | firstname     | <firstname>     |
@@ -48,14 +52,13 @@ Feature: My account (without changing login data)
             | zipcode       | <zipcode>       |
             | city          | <city>          |
             | country       | <country>       |
-            | additional.customer_type | <customer_type> |
 
         Then I should see "Die Adresse wurde erfolgreich gespeichert"
         And  the "shipping" address should be "<company>, <firstname> <lastname>, <street>, <zipcode> <city>, <country>"
 
         Examples:
             | salutation | company     | firstname | lastname   | street              | zipcode | city        | country     | customer_type |
-            | ms         |             | Erika     | Musterfrau | Heidestraße 17 c    | 12345   | Köln        | Schweiz     | private       |
+            | ms         | <ignore>    | Erika     | Musterfrau | Heidestraße 17 c    | 12345   | Köln        | Schweiz     | private       |
             | mr         | shopware AG | Max       | Mustermann | Mustermannstraße 92 | 48624   | Schöppingen | Deutschland | business      |
 
     @payment
@@ -92,17 +95,10 @@ Feature: My account (without changing login data)
         Then  I should see "Ihre Zahlungsweise wurde erfolgreich gespeichert"
         And   the current payment method should be "SEPA"
 
-    @configChange @esd @knownFailing
-    Scenario: I can disable ESD-Articles in account
-        Given I should see "Sofortdownloads"
-        When  I disable the config "showEsd"
-        And   I reload the page
-        Then  I should see "Willkommen, Max Mustermann"
-        But   I should not see "Sofortdownloads"
-
     @profile
     Scenario Outline: I can't change my profile when something is wrong
         Given I follow "Persönliche Daten ändern"
+        And I ignore browser validation
         And   I change my profile with "<salutation>" "<firstname>" "<lastname>"
         Then  I should see "Bitte füllen Sie alle rot markierten Felder aus"
 
@@ -112,5 +108,4 @@ Feature: My account (without changing login data)
         | mr          |               |             |
         | mr          | Max           |             |
         |             |               | Mustermann  |
-        |             | Max           | Mustermann  |
         |             | Max           |             |

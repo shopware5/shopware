@@ -77,7 +77,7 @@ class ExportContext extends SubContext
                 break;
 
             case 'csv':
-                $export = $this->parseCsv($this->getSession()->getPage()->getContent(), $this->mappings[$name]['delimiter']);
+                $export = $this->parseCsv($this->getSession()->getPage()->getText(), $this->mappings[$name]['delimiter']);
                 break;
 
             default:

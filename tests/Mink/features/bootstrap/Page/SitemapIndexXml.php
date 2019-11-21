@@ -41,6 +41,7 @@ class SitemapIndexXml extends Page
     {
         $homepageUrl = rtrim($this->getParameter('base_url'), '/');
         $xml = json_decode(json_encode(simplexml_load_string($this->getContent())), true);
+        $xml = $xml['body']['div'][0]['sitemapindex'];
 
         if (!isset($xml['sitemap']['loc'])) {
             Helper::throwException('Sitemap is missing in /sitemap_index.xml');

@@ -115,7 +115,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
             return;
         }
 
-        $this->getSession()->resizeWindow(1440, 900, 'current');
+        $this->getSession()->resizeWindow(1920, 1080, 'current');
     }
 
     /**
@@ -208,6 +208,8 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
         $cacheManager = $this->getService(\Shopware\Components\CacheManager::class);
         $cacheManager->clearConfigCache();
         $cacheManager->clearTemplateCache();
+        $cacheManager->clearOpCache();
+        $cacheManager->clearProxyCache();
     }
 
     public function registerErrorHandler()

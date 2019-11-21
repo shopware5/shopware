@@ -394,4 +394,38 @@ class ShopwareContext extends SubContext
     {
         $this->getDriver()->executeScript('window.scrollTo(0, document.body.scrollHeight);');
     }
+
+    /**
+     * @When /^I click "([^"]*)"$/
+     */
+    public function iClick($selector)
+    {
+        $element = $this->getSession()->getPage()->findField($selector);
+        $element->click();
+    }
+
+    /**
+     * @When /^I follow "(?P<link>(?:[^"]|\\")*)" on Account menu$/
+     */
+    public function clickLinkInAccount($link)
+    {
+        $element = $this->getSession()->getPage()->findAll('xpath', sprintf('//*[contains(concat(" ",normalize-space(@class)," ")," account--menu ")]//li//a[contains(text(),\'%s\')]', $link));
+
+        if (!isset($element[1])) {
+            throw new \RuntimeException(sprintf('Cannot find element with name "%s"', $link));
+        }
+
+        $element[1]->click();
+    }
+
+    /**
+     * @When /^Wait until ajax requests are done$/
+     */
+    public function waitForAjaxRequestsDone()
+    {
+        $session = $this->getSession();
+        $this->getSession()->getPage()->waitFor(2000, static function () use ($session) {
+            return $session->evaluateScript('return jQuery.active == 0') === true;
+        });
+    }
 }

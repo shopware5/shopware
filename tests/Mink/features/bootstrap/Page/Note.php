@@ -71,6 +71,7 @@ class Note extends Page
                 unset($item['description']);
             }
         }
+        unset($item);
 
         Helper::assertElementCount($notePositions, count($items));
         $result = Helper::searchElements($items, $notePositions);

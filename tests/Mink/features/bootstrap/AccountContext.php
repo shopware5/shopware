@@ -217,6 +217,7 @@ class AccountContext extends SubContext
         /** @var \Shopware\Tests\Mink\Page\Account|\Shopware\Tests\Mink\Page\Address $page */
         $page = $this->getPage('Address');
 
+        $address = str_replace('<ignore>', '', $address);
         $testAddress = array_values(array_filter(explode(', ', $address)));
 
         /** @var array $addressManagementAddressBoxes */

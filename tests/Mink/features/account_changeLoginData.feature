@@ -8,11 +8,13 @@ Feature: Successful changes of login data
     Scenario Outline: I can change my password
         Given I log in successful as "Max Mustermann" with email "test@example.com" and password "<password>"
         And   I follow "Persönliche Daten ändern"
+        And   I wait for "1" seconds
         When  I change my password from "<password>" to "<new_password>"
         Then  I should see "Das Passwort wurde erfolgreich geändert."
 
         When  I log me out
         And   I follow "Mein Konto"
+        Then  I follow "Anmelden"
         And   I log in with email "test@example.com" and password "<password>"
         Then  I should see "Ihre Zugangsdaten konnten keinem Benutzer zugeordnet werden"
 
@@ -25,11 +27,13 @@ Feature: Successful changes of login data
     Scenario Outline: I can change my email
         Given I log in successful as "Max Mustermann" with email "<email>" and password "shopware"
         And   I follow "Persönliche Daten ändern"
+        And   I wait for "1" seconds
         When  I change my email with password "shopware" to "<new_email>"
         Then  I should see "Die E-Mail Adresse wurde erfolgreich geändert."
 
         When  I log me out
         And   I follow "Mein Konto"
+        Then  I follow "Anmelden"
         And   I log in with email "<email>" and password "shopware"
         Then  I should see "Ihre Zugangsdaten konnten keinem Benutzer zugeordnet werden"
 
@@ -59,13 +63,16 @@ Feature: Successful changes of login data
 
         Examples:
             | user             | type     | salutation | company     | firstname | lastname   | street              | zipcode | city        | country     |
-            | Max Mustermann   | private  | ms         |             | Erika     | Musterfrau | Heidestraße 17 c    | 12345   | Köln        | Schweiz     |
+            | Max Mustermann   | private  | ms         | <ignore>    | Erika     | Musterfrau | Heidestraße 17 c    | 12345   | Köln        | Schweiz     |
             | Max Mustermann   | business | mr         | shopware AG | Max       | Mustermann | Mustermannstraße 92 | 48624   | Schöppingen | Deutschland |
 
     @registration
     Scenario: I can create a new account
         Given I am on the homepage
         When  I follow "Mein Konto"
+        Then  I follow "registrieren"
+        And   I ignore browser validation
+        And   I click "register_billing_shippingAddress"
         And   I register me:
             | field         | register[personal] | register[billing] | register[shipping] |
             | customer_type | business           |                   |                    |
@@ -74,7 +81,7 @@ Feature: Successful changes of login data
             | lastname      | Mustermann         |                   | Musterfrau         |
             | email         | ab.c               |                   |                    |
             | password      | abcdefgh           |                   |                    |
-            | company       |                    | Muster GmbH       |                    |
+            | company       |                    | Muster GmbH       | <ignore>           |
             | street        |                    |                   | Heidestraße        |
             | zipcode       |                    | 55555             | 12345              |
             | city          |                    | Musterhausen      | Bern               |
@@ -100,10 +107,10 @@ Feature: Successful changes of login data
 
         Then  I should see "Willkommen, Max Mustermann"
 
-        When  I follow "Bestellungen"
+        When  I follow "Bestellungen" on Account menu
         Then  I should see "Sie haben noch keine Bestellung durchgeführt."
 
-        When  I follow "Sofortdownloads"
+        When  I follow "Sofortdownloads" on Account menu
         Then  I should see "Sie haben noch keine Sofortdownloadartikel gekauft"
 
     @forgot @login
@@ -117,12 +124,13 @@ Feature: Successful changes of login data
         And   I press "E-Mail senden"
         Then  I should see "Wir haben Ihnen eine Bestätigungs-E-Mail gesendet, sofern die von Ihnen eingegebene E-Mail Adresse registriert ist."
 
-        When  I follow "Zurück"
+        When  I move backward one page
         And   I fill in "email" with "test@example.com"
         And   I press "E-Mail senden"
         Then  I should see "Wir haben Ihnen eine Bestätigungs-E-Mail gesendet, sofern die von Ihnen eingegebene E-Mail Adresse registriert ist."
 
         When  I follow "Mein Konto"
+        Then  I follow "Anmelden"
         And   I log in successful as "Max Mustermann" with email "test@example.com" and password "shopware"
         And   I log me out
         And   I click the link in my latest email
@@ -147,7 +155,7 @@ Feature: Successful changes of login data
         And   I change my profile with "<salutation>" "<firstname>" "<lastname>"
 
         Then  I should see "Die persönlichen Daten wurden erfolgreich gespeichert."
-        Then  I follow "Übersicht"
+        Then  I follow "Übersicht" on Account menu
         And   I should be welcomed with "Willkommen, <firstname> <lastname>"
 
         Examples:

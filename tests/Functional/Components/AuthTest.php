@@ -27,7 +27,7 @@ namespace Shopware\Tests\Functional\Components;
 use DateTime;
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Enlight_Components_Test_TestCase;
-use Shopware\Components\Password\Encoder\passwordencoderInterface;
+use Shopware\Components\Password\Encoder\PasswordEncoderInterface;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware_Components_Auth;
 use Shopware_Components_Auth_Adapter_Default;

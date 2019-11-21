@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Mink;
 
 use Behat\Behat\Tester\Exception\PendingException;
+use Behat\Mink\Element\DocumentElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\MultipleElement;
@@ -557,7 +558,7 @@ EOD
      * @param string                               $formKey
      * @param array                                $values
      */
-    public static function fillForm(HelperSelectorInterface $parent, $formKey, $values)
+    public static function fillForm(HelperSelectorInterface $parent, $formKey, $values, bool $waitForOverlays = false)
     {
         $elements = self::findElements($parent, [$formKey]);
         $form = $elements[$formKey];
@@ -567,6 +568,14 @@ EOD
             unset($value['field']);
 
             foreach ($value as $key => $fieldValue) {
+                if ($fieldValue === '<ignore>') {
+                    continue;
+                }
+
+                if ($waitForOverlays) {
+                    Helper::waitForOverlay($parent->getSession()->getPage());
+                }
+
                 if ($key !== 'value') {
                     $fieldName = sprintf('%s[%s]', $key, $tempFieldName);
                 }
@@ -874,6 +883,20 @@ EOD
         }
 
         self::throwException("Spin function timed out after {$wait} seconds");
+    }
+
+    public static function waitForOverlay(DocumentElement $page)
+    {
+        $page->waitFor(2000, static function () use ($page) {
+            $element = null;
+            try {
+                $element = $page->find('css', '.js--overlay');
+
+                return $element === null || !$element->isVisible();
+            } catch (\Exception $e) {
+                return true;
+            }
+        });
     }
 
     /**

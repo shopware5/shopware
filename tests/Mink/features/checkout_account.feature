@@ -19,7 +19,6 @@ Feature: Checkout articles (scenario origin is account without articles in baske
             | shipping      | <shipping>      |
             | total         | <total>         |
             | sumWithoutVat | <sumWithoutVat> |
-            | 19 %          | <tax>           |
 
         When  I proceed to order confirmation
         And   I proceed to checkout
@@ -40,7 +39,7 @@ Feature: Checkout articles (scenario origin is account without articles in baske
             | lastname      | Mustermann         |                   |
             | email         | <email>            |                   |
             | password      | shopware           |                   |
-            | company       |                    | Muster GmbH       |
+            | company       |                    | <company>         |
             | street        |                    | Musterstr. 55     |
             | zipcode       |                    | 55555             |
             | city          |                    | Musterhausen      |
@@ -58,13 +57,12 @@ Feature: Checkout articles (scenario origin is account without articles in baske
             | shipping      | 3,90 €  |
             | total         | 42,37 € |
             | sumWithoutVat | 35,61 € |
-            | 19 %          | 6,76 €  |
 
         When  I proceed to order confirmation
         And   I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
         Examples:
-            | customer_type | email             |
-            | private       | test@example.info |
-            | business      | test@example.air  |
+            | customer_type | email             | company     |
+            | private       | test@example.info | <ignore>    |
+            | business      | test@example.air  | Muster GmbH |

@@ -70,7 +70,6 @@ Feature: Checkout articles with voucher
         Then  the aggregations should look like this:
             | label | value   |
             | total | 15,38 € |
-            | 7 %   | 1,01 €  |
 
         When  I add the article "SW10039" to my basket
         And   I add the article "SW10172" to my basket
@@ -78,12 +77,8 @@ Feature: Checkout articles with voucher
         Then  the aggregations should look like this:
             | label | value   |
             | total | 34,35 € |
-            | 7 %   | 1,47 €  |
-            | 19 %  | 1,90 €  |
 
         When  I add the voucher "kostenfrei" to my basket
         Then  the aggregations should look like this:
             | label | value   |
             | total | 32,45 € |
-            | 7 %   | 1,47 €  |
-            | 19 %  | 1,60 €  |

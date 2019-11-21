@@ -293,7 +293,10 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
      */
     public function changeShippingMethod($data = [])
     {
-        Helper::fillForm($this, 'shippingPaymentForm', $data);
+        Helper::fillForm($this, 'shippingPaymentForm', $data, true);
+
+        Helper::waitForOverlay($this);
+
         Helper::pressNamedButton($this, 'changePaymentButton');
     }
 

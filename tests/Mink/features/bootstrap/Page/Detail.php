@@ -24,7 +24,6 @@
 
 namespace Shopware\Tests\Mink\Page;
 
-use Behat\Mink\Driver\GoutteDriver;
 use Behat\Mink\Element\NodeElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\ArticleEvaluation;
@@ -118,6 +117,15 @@ class Detail extends Page implements HelperSelectorInterface
     {
         $this->fillField('sQuantity', $quantity);
         $this->find('css', "button[name='In den Warenkorb']")->click();
+        $page = $this;
+        $this->waitFor(
+            2000,
+            static function () use ($page) {
+                return $page->find('css', "a[title='Warenkorb bearbeiten']") && $page->find('css', "a[title='Warenkorb bearbeiten']")->isVisible();
+            }
+        );
+
+        $this->find('css', "a[title='Warenkorb bearbeiten']")->click();
     }
 
     public function toBasket($offcanvasCart = false)
@@ -188,13 +196,6 @@ class Detail extends Page implements HelperSelectorInterface
     {
         $configuratorType = '';
 
-        if ($this->getSession()->getDriver() instanceof GoutteDriver) {
-            $element = Helper::findElements($this, ['configuratorForm']);
-
-            $configuratorClass = $element['configuratorForm']->getAttribute('class');
-            $configuratorType = array_search($configuratorClass, $this->configuratorTypes);
-        }
-
         foreach ($configuration as $group) {
             $field = sprintf('group[%d]', $group['groupId']);
             $this->selectFieldOption($field, $group['value']);
@@ -202,14 +203,17 @@ class Detail extends Page implements HelperSelectorInterface
             if ($configuratorType === 'select') {
                 $this->pressButton('recalc');
             }
+
+            $page = $this;
+            $this->getSession()->getPage()->waitFor(2000, static function () use ($page) {
+                return $page->getSession()->evaluateScript('return jQuery.active == 0') === true;
+            });
+
+            Helper::waitForOverlay($this->getSession()->getPage());
         }
 
         if ($configuratorType === 'select') {
             return;
-        }
-
-        if ($this->getSession()->getDriver() instanceof GoutteDriver) {
-            $this->pressButton('recalc');
         }
     }
 

@@ -5,6 +5,7 @@ Feature: Detail page
     Scenario: I can see evaluations
         Given I am on the detail page for article 198
 
+        Then  I follow "Bewertungen"
         Then  I should see "Kundenbewertungen für \"Artikel mit Bewertung\""
         And   I should see an average customer evaluation of 10 from following evaluations:
             | author        | stars | headline      | comment                                                                                                                                     | answer                                                                                                                                                      |
@@ -60,7 +61,7 @@ Feature: Detail page
     @captchaInactive @evaluations
     Scenario: I can write an evaluation
         Given I am on the detail page for article 100
-        Then  I should see "Bewertungen"
+        Then  I follow "Bewertungen"
         And   I should see "Bewertung schreiben"
         When  I write an evaluation:
             | field        | value           |
@@ -74,6 +75,7 @@ Feature: Detail page
 
         When  the shop owner activates my latest evaluation
         And   I am on the detail page for article 100
+        Then  I follow "Bewertungen"
         Then  I should see an average customer evaluation of 3 from following evaluations:
             | author         | stars | headline       | comment    |
             | Max Mustermann | 3     | Neue Bewertung | Hallo Welt |
@@ -101,7 +103,7 @@ Feature: Detail page
         Given I am on the detail page for article 207
         Then  I can select every 3. option of "sQuantity" from "3 Stück" to "30 Stück"
 
-        When  I press "In den Warenkorb"
+        When  I put the article "3" times into the basket
         Then  I can select every 3. option of "sQuantity" from "3" to "30"
 
     @variants
@@ -110,12 +112,12 @@ Feature: Detail page
         Then  I should see "19,99"
 
         When  I select "33" from "group[5]"
-        And   I press "Auswählen"
+        And   Wait until ajax requests are done
         Then  I should not see "19,99"
         But   I should see "59,99"
 
         When  I select "34" from "group[5]"
-        And   I press "Auswählen"
+        And   Wait until ajax requests are done
         Then  I should not see "59,99"
         But   I should see "199,00"
 

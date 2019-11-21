@@ -32,7 +32,6 @@ Feature: Checkout articles
             | shipping      | 3,90 €  |
             | total         | 82,32 € |
             | sumWithoutVat | 69,18 € |
-            | 19 %          | 13,14 € |
 
         When  I remove the article on position 1
         Then  the cart should contain 1 articles with a value of "37,95 €"
@@ -42,7 +41,6 @@ Feature: Checkout articles
             | shipping      | 3,90 €  |
             | total         | 41,85 € |
             | sumWithoutVat | 35,17 € |
-            | 19 %          | 6,68 €  |
 
         When  I proceed to order confirmation
         And   I change the payment method to 3
@@ -53,7 +51,6 @@ Feature: Checkout articles
             | shipping      | 3,90 €  |
             | total         | 41,85 € |
             | sumWithoutVat | 35,17 € |
-            | 19 %          | 6,68 €  |
 
         When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
@@ -70,7 +67,6 @@ Feature: Checkout articles
             | shipping      | 3,90 €  |
             | total         | 46,22 € |
             | sumWithoutVat | 38,84 € |
-            | 19 %          | 7,38 €  |
         And   I should see "AGB und Widerrufsbelehrung"
 
         When  I proceed to checkout
@@ -96,7 +92,6 @@ Feature: Checkout articles
             | label    | value   |
             | shipping | 3,90 €  |
             | total    | 42,37 € |
-            | 19 %     | 6,76 €  |
 
         When  I change the payment method to 4
         Then  the current payment method should be "Rechnung"
@@ -107,7 +102,6 @@ Feature: Checkout articles
             | shipping      | 3,90 €  |
             | total         | 47,37 € |
             | sumWithoutVat | 39,81 € |
-            | 19 %          | 7,56 €  |
         And   I should see "AGB und Widerrufsbelehrung"
 
         When  I proceed to checkout

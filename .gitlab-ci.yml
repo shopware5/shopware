@@ -10,8 +10,11 @@ variables:
     GIT_STRATEGY: clone
 
 stages:
+    - Static analysis
+    - Unit
+    - Elasticsearch
     - E2E
-#    - Security
+    - Security
 
 default:
     image: shopware/5-continuous:7.3
@@ -20,46 +23,45 @@ default:
 
 # Stage: static
 
-#PHP analyze:
-#    stage: Static analysis
-#    script:
-#        - ./psh.phar init
-#        - chown -R 1000:1000 .
-#        - composer req --dev phpunit/phpunit:~8.0 --update-with-all-dependencies
-#        - ./psh.phar check-code
-#    services:
-#        -   name: mysql:5.7
-#            alias: mysql
-#    artifacts:
-#        reports:
-#            junit: php-cs-fixer.xml
-#
-#Code Coverage:
-#    stage: Static analysis
-#    script:
-#        - ./psh.phar init --SW_HOST="localhost"
-#        - chown -R 1000:1000 .
-#        - php -d pcov.enabled=1 -d pcov.directory=$CI_PROJECT_DIR
-#            vendor/bin/phpunit
-#            --configuration tests/phpunit.xml.dist
-#            --log-junit build/artifacts/phpunit.junit.xml
-#            --colors=never
-#            --exclude-group=elasticSearch,pcovAdapterBrokenTest
-#            --coverage-clover build/artifacts/phpunit.clover.xml
-#            --coverage-html build/artifacts/phpunit-coverage-html
-#            --coverage-text=build/artifacts/phpunit-coverage-text
-#        - cat build/artifacts/phpunit-coverage-text | sed -e '/\\Shopware\\.*/d' -e '/\s*Methods:\s*\d*/d'
-#    coverage: '/^\s*Lines:\s*(\d+(?:\.\d+)?%)/'
-#    services:
-#        -   name: mysql:5.7
-#            alias: mysql
-#    artifacts:
-#        paths:
-#            - build/artifacts/*
-#        reports:
-#            junit: build/artifacts/phpunit.junit.xml
-#
-## stage: Unit
+PHP analyze:
+    stage: Static analysis
+    script:
+        - ./psh.phar init
+        - chown -R 1000:1000 .
+        - ./psh.phar check-code
+    services:
+        -   name: mysql:5.7
+            alias: mysql
+    artifacts:
+        reports:
+            junit: php-cs-fixer.xml
+
+Code Coverage:
+    stage: Static analysis
+    script:
+        - ./psh.phar init --SW_HOST="localhost"
+        - chown -R 1000:1000 .
+        - php -d pcov.enabled=1 -d pcov.directory=$CI_PROJECT_DIR
+            vendor/bin/phpunit
+            --configuration tests/phpunit.xml.dist
+            --log-junit build/artifacts/phpunit.junit.xml
+            --colors=never
+            --exclude-group=elasticSearch,pcovAdapterBrokenTest
+            --coverage-clover build/artifacts/phpunit.clover.xml
+            --coverage-html build/artifacts/phpunit-coverage-html
+            --coverage-text=build/artifacts/phpunit-coverage-text
+        - cat build/artifacts/phpunit-coverage-text | sed -e '/\\Shopware\\.*/d' -e '/\s*Methods:\s*\d*/d'
+    coverage: '/^\s*Lines:\s*(\d+(?:\.\d+)?%)/'
+    services:
+        -   name: mysql:5.7
+            alias: mysql
+    artifacts:
+        paths:
+            - build/artifacts/*
+        reports:
+            junit: build/artifacts/phpunit.junit.xml
+
+# stage: Unit
 .phpunit_base:
     stage: Unit
     services:
@@ -73,96 +75,96 @@ default:
     artifacts:
         reports:
             junit: build/artifacts/test-log.xml
-#
-#.phpunit_es_base:
-#    extends: .phpunit_base
-#    stage: Elasticsearch
-#    script:
-#        - ./psh.phar init --SW_HOST="localhost"
-#        - chown -R 1000:1000 .
-#        - ./psh.phar unit-elasticsearch --SW_HOST="localhost"
-#
-#    artifacts:
-#        reports:
-#            junit: build/artifacts/test-log.xml
-#
-#PHP 7.2:
-#    extends: .phpunit_base
-#    image: shopware/5-continuous:7.2
-#    stage: Unit
-#    services:
-#        -   name: mysql:5.7
-#            alias: mysql
-#
-#PHP 7.3:
-#    extends: .phpunit_base
-#    image: shopware/5-continuous:7.3
-#    stage: Unit
-#    services:
-#        -   name: mysql:5.7
-#            alias: mysql
-#
-#PHP 7.4:
-#    extends: .phpunit_base
-#    image: shopware/5-continuous:7.4
-#    stage: Unit
-#    services:
-#        -   name: mysql:5.7
-#            alias: mysql
-#
-#MySQL 5.7:
-#    extends: .phpunit_base
-#    stage: Unit
-#    services:
-#        -   name: mysql:5.7
-#            alias: mysql
-#
-#MySQL 8.0:
-#    extends: .phpunit_base
-#    stage: Unit
-#    services:
-#        -   name: mysql:8.0
-#            alias: mysql
-#            command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-authentication-plugin=mysql_native_password"]
-#
-#MariaDB 10.1:
-#    extends: .phpunit_base
-#    stage: Unit
-#    services:
-#        -   name: mariadb:10.1
-#            alias: mysql
-#
-#MariaDB 10.4:
-#    extends: .phpunit_base
-#    stage: Unit
-#    services:
-#        -   name: mariadb:10.4
-#            alias: mysql
-#
-## stage: Elasticsearch
-#Elasticsearch 6:
-#    extends: .phpunit_es_base
-#    image: shopware/5-continuous:7.2
-#    stage: Elasticsearch
-#    services:
-#        -   name: mysql:8.0
-#            alias: mysql
-#            command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-authentication-plugin=mysql_native_password"]
-#        -   name: elastic/elasticsearch:6.3.0
-#            alias: elasticsearch
-#            command: [ "bin/elasticsearch", "-Expack.security.enabled=false", "-Ediscovery.type=single-node" ]
-#
-#Elasticsearch 7:
-#    extends: .phpunit_es_base
-#    image: shopware/5-continuous:7.3
-#    stage: Elasticsearch
-#    services:
-#        -   name: mysql:8.0
-#            alias: mysql
-#            command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-authentication-plugin=mysql_native_password"]
-#        -   name: elastic/elasticsearch:7.0.0
-#            alias: elasticsearch
-#            command: [ "bin/elasticsearch", "-Expack.security.enabled=false", "-Ediscovery.type=single-node" ]
+
+.phpunit_es_base:
+    extends: .phpunit_base
+    stage: Elasticsearch
+    script:
+        - ./psh.phar init --SW_HOST="localhost"
+        - chown -R 1000:1000 .
+        - ./psh.phar unit-elasticsearch --SW_HOST="localhost"
+
+    artifacts:
+        reports:
+            junit: build/artifacts/test-log.xml
+
+PHP 7.2:
+    extends: .phpunit_base
+    image: shopware/5-continuous:7.2
+    stage: Unit
+    services:
+        -   name: mysql:5.7
+            alias: mysql
+
+PHP 7.3:
+    extends: .phpunit_base
+    image: shopware/5-continuous:7.3
+    stage: Unit
+    services:
+        -   name: mysql:5.7
+            alias: mysql
+
+PHP 7.4:
+    extends: .phpunit_base
+    image: shopware/5-continuous:7.4
+    stage: Unit
+    services:
+        -   name: mysql:5.7
+            alias: mysql
+
+MySQL 5.7:
+    extends: .phpunit_base
+    stage: Unit
+    services:
+        -   name: mysql:5.7
+            alias: mysql
+
+MySQL 8.0:
+    extends: .phpunit_base
+    stage: Unit
+    services:
+        -   name: mysql:8.0
+            alias: mysql
+            command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-authentication-plugin=mysql_native_password"]
+
+MariaDB 10.1:
+    extends: .phpunit_base
+    stage: Unit
+    services:
+        -   name: mariadb:10.1
+            alias: mysql
+
+MariaDB 10.4:
+    extends: .phpunit_base
+    stage: Unit
+    services:
+        -   name: mariadb:10.4
+            alias: mysql
+
+# stage: Elasticsearch
+Elasticsearch 6:
+    extends: .phpunit_es_base
+    image: shopware/5-continuous:7.2
+    stage: Elasticsearch
+    services:
+        -   name: mysql:8.0
+            alias: mysql
+            command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-authentication-plugin=mysql_native_password"]
+        -   name: elastic/elasticsearch:6.3.0
+            alias: elasticsearch
+            command: [ "bin/elasticsearch", "-Expack.security.enabled=false", "-Ediscovery.type=single-node" ]
+
+Elasticsearch 7:
+    extends: .phpunit_es_base
+    image: shopware/5-continuous:7.3
+    stage: Elasticsearch
+    services:
+        -   name: mysql:8.0
+            alias: mysql
+            command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-authentication-plugin=mysql_native_password"]
+        -   name: elastic/elasticsearch:7.0.0
+            alias: elasticsearch
+            command: [ "bin/elasticsearch", "-Expack.security.enabled=false", "-Ediscovery.type=single-node" ]
 
 Mink:
     extends: .phpunit_base
@@ -188,15 +190,15 @@ Mink:
             alias: mysql
             command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-authentication-plugin=mysql_native_password"]
 
-#RIPS security:
-#    stage: Security
-#    image: php:7.3-alpine
-#    before_script: []
-#    only:
-#        variables:
-#            - $RIPS_SCAN == "1"
-#    script:
-#        - apk add --no-cache libzip-dev && docker-php-ext-configure zip --with-libzip=/usr/include && docker-php-ext-install zip
-#        - wget https://github.com/rips/rips-cli/releases/download/3.2.0/rips-cli.phar -O /usr/bin/rips-cli
-#        - chmod 755 /usr/bin/rips-cli
-#        - rips-cli rips:scan:start -p . -C 20  -a ${RIPS_APP_ID} -T ${CI_COMMIT_REF_NAME} --progress
+RIPS security:
+    stage: Security
+    image: php:7.3-alpine
+    before_script: []
+    only:
+        variables:
+            - $RIPS_SCAN == "1"
+    script:
+        - apk add --no-cache libzip-dev && docker-php-ext-configure zip --with-libzip=/usr/include && docker-php-ext-install zip
+        - wget https://github.com/rips/rips-cli/releases/download/3.2.0/rips-cli.phar -O /usr/bin/rips-cli
+        - chmod 755 /usr/bin/rips-cli
+        - rips-cli rips:scan:start -p . -C 20  -a ${RIPS_APP_ID} -T ${CI_COMMIT_REF_NAME} --progress

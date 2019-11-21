@@ -312,6 +312,8 @@ class Account extends Page implements HelperSelectorInterface
      */
     public function checkOrder(AccountOrder $order, $orderNumber, array $articles)
     {
+        $this->getSession()->executeScript('$(\'[data-collapse-panel]\').click()');
+        sleep(1);
         $date = $order->getDateProperty();
         $this->checkOrderNumber($order, $orderNumber);
         $this->checkOrderPositions($order, $articles);
@@ -328,6 +330,7 @@ class Account extends Page implements HelperSelectorInterface
     {
         $this->open();
 
+        $address = str_replace('<ignore>', '', $address);
         $testAddress = explode(', ', $address);
         $testAddress = array_filter($testAddress);
         $testAddress = array_values($testAddress);

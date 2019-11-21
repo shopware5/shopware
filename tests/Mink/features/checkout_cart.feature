@@ -9,20 +9,21 @@ Feature: Checkout articles (scenario origin is cart with one product in it)
     @onlypostallowed
     Scenario: I can't add product to cart using the HTTP GET method
         When I add the article "181" to my basket over HTTP GET
-        Then the response status code should be 503
+        Then I should see "Ein Fehler ist aufgetreten"
 
     @fastOrder @payment @delivery
     Scenario Outline: I can finish my order with different payment and delivery methods
         Given I proceed to checkout as:
-            | field       | register[personal] | register[billing] |
-            | salutation  | mr                 |                   |
-            | firstname   | Max                |                   |
-            | lastname    | Mustermann         |                   |
-            | accountmode | 1                  |                   |
-            | email       | test@example.de    |                   |
-            | street      |                    | Musterstr. 55     |
-            | zipcode     |                    | 55555             |
-            | city        |                    | Musterhausen      |
+            | field         | register[personal] | register[billing] |
+            | customer_type | private            |                   |
+            | salutation    | mr                 |                   |
+            | firstname     | Max                |                   |
+            | lastname      | Mustermann         |                   |
+            | accountmode   | 1                  |                   |
+            | email         | test@example.de    |                   |
+            | street        |                    | Musterstr. 55     |
+            | zipcode       |                    | 55555             |
+            | city          |                    | Musterhausen      |
         And   I change the payment method to <paymentMethod>:
             | field     | value            |
             | sDispatch | <shippingMethod> |
@@ -47,6 +48,7 @@ Feature: Checkout articles (scenario origin is cart with one product in it)
     Scenario: I can finish my order with different payment and delivery methods
         Given I proceed to checkout as:
             | field       | register[personal] | register[billing] |
+            | customer_type | private            |                   |
             | salutation  | mr                 |                   |
             | firstname   | Max                |                   |
             | lastname    | Mustermann         |                   |
@@ -95,6 +97,7 @@ Feature: Checkout articles (scenario origin is cart with one product in it)
         And   the checkbox "esdAgreementChecked" is unchecked
         And   the current payment method should be "Rechnung"
 
+        And I ignore browser validation
         When  I proceed to checkout
         Then  I should see "Bitte bestätigen Sie die Wiederrufsbelehrung bezüglich der digitalen Inhalte."
         And   the checkbox "sAGB" is checked
@@ -204,7 +207,6 @@ Feature: Checkout articles (scenario origin is cart with one product in it)
             | shipping      | 0,00 €  |
             | total         | 254,00 € |
             | sumWithoutVat | 213,45 € |
-            | 19 %          | 40,55 €  |
 
     @calculation @repair
         Scenario: I should repair my database changes until we've implemented the new test structure :)
