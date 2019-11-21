@@ -37,6 +37,17 @@ class ResourceSubscriberTest extends TestCase
         static::assertNull($subscriber->onCollectCss());
         static::assertNull($subscriber->onCollectJavascript());
         static::assertNull($subscriber->onCollectLess());
+        $templateEventArgs = new \Enlight_Event_EventArgs();
+        $templateEventArgs->setReturn([]);
+        $subscriber->onRegisterTemplate($templateEventArgs);
+        static::assertTrue(is_array($templateEventArgs->getReturn()));
+        static::assertEmpty($templateEventArgs->getReturn());
+
+        $subscriberWithViews = new ResourceSubscriber(__DIR__ . '/examples/EmptyPlugin', true);
+        $templateEventArgs->setReturn([]);
+        $subscriberWithViews->onRegisterTemplate($templateEventArgs);
+        static::assertTrue(is_array($templateEventArgs->getReturn()));
+        static::assertEmpty($templateEventArgs->getReturn());
     }
 
     public function testFoo()
@@ -64,6 +75,22 @@ class ResourceSubscriberTest extends TestCase
                 __DIR__ . '/examples/TestPlugin/Resources/frontend/less/all.less',
             ]),
             $subscriber->onCollectLess()
+        );
+        $templateEventArgs = new \Enlight_Event_EventArgs();
+        $templateEventArgs->setReturn([]);
+        $subscriber->onRegisterTemplate($templateEventArgs);
+        static::assertTrue(is_array($templateEventArgs->getReturn()));
+        static::assertEmpty($templateEventArgs->getReturn());
+
+        $subscriberWithViews = new ResourceSubscriber(__DIR__ . '/examples/TestPlugin', true);
+        $templateEventArgs->setReturn([]);
+        $subscriberWithViews->onRegisterTemplate($templateEventArgs);
+        static::assertTrue(is_array($templateEventArgs->getReturn()));
+        static::assertSame(
+            [
+                __DIR__ . '/examples/TestPlugin/Resources/views',
+            ],
+            $templateEventArgs->getReturn()
         );
     }
 }
