@@ -22,19 +22,18 @@
  * our trademarks remain entirely with us.
  */
 
-namespace ShopwarePlugins\PluginManager\Components;
+namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\PDOStatement;
-use Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService;
 use Shopware\Bundle\PluginInstallerBundle\Struct\CategoryStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
 
 class PluginCategoryService
 {
-    const CATEGORY_HIGHLIGHTS = -1;
-    const CATEGORY_NEWCOMER = -2;
-    const CATEGORY_RECOMMENDATION = -3;
+    public const CATEGORY_HIGHLIGHTS = -1;
+    public const CATEGORY_NEWCOMER = -2;
+    public const CATEGORY_RECOMMENDATION = -3;
 
     /**
      * @var PluginStoreService

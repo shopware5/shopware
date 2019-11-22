@@ -33,6 +33,10 @@ use Shopware\Models\Shop\Shop;
  */
 class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Config
 {
+    private const DEPRECATED_PLUGINS = [
+        'PluginManager', // Remove with Shopware 5.8
+    ];
+
     /**
      * @var Shop
      */
@@ -539,11 +543,16 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
               update_date as updateDate, 
               version
             FROM s_core_plugins
-            WHERE namespace=?
+            WHERE namespace=:namespace AND name not IN(:names)
         ';
 
         $connection = $this->Application()->Container()->get(\Doctrine\DBAL\Connection::class);
-        $rows = $connection->fetchAll($sql, [$this->name]);
+        $rows = $connection->fetchAll($sql, [
+            'namespace' => $this->name,
+            'names' => self::DEPRECATED_PLUGINS,
+        ], [
+            'names' => Connection::PARAM_STR_ARRAY,
+        ]);
 
         $plugins = [];
         foreach ($rows as $row) {
@@ -613,11 +622,18 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
              JOIN s_core_plugins cp
              ON cp.id=ce.pluginID
              AND cp.active=1
-             AND cp.namespace=?
-             WHERE ce.type=0
+             AND cp.namespace = :namespace
+             WHERE ce.type=0 AND cp.name NOT IN(:names)
              ORDER BY name, position
         ';
-        $listeners = $this->Application()->Db()->fetchAll($sql, [$namespace]);
+
+        $connection = $this->Application()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $listeners = $connection->fetchAll($sql, [
+            'namespace' => $this->name,
+            'names' => self::DEPRECATED_PLUGINS,
+        ], [
+            'names' => Connection::PARAM_STR_ARRAY,
+        ]);
 
         foreach ($listeners as $listenerKey => $listener) {
             if (($position = strpos($listener['listener'], '::')) !== false) {
