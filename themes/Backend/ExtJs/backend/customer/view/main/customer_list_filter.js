@@ -127,7 +127,7 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerListFilter', {
                     fieldLabel: '{s name="column/accountMode"}{/s}',
                 },
                 customerGroup: {
-                    xtype: 'combobox',
+                    xtype: 'pagingcombobox',
                     displayField: 'name',
                     valueField: 'id',
                     store: customerGroupStore,
@@ -135,7 +135,7 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerListFilter', {
                 },
                 shop: {
                     fieldLabel: '{s name="shop"}{/s}',
-                    xtype: 'combobox',
+                    xtype: 'pagingcombobox',
                     displayField: 'name',
                     valueField: 'id',
                     store: shopStore
