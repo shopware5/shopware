@@ -109,8 +109,37 @@
         vendorPropertyDiv = document.createElement('div'),
         vendorPrefixes = ['webkit', 'moz', 'ms', 'o'];
 
-    function hasCookiesAllowed() {
-        return !window.cookieRemoval || (window.cookieRemoval && document.cookie.indexOf('allowCookie') !== -1);
+    /**
+     * @returns { boolean }
+     */
+    function hasCookiesAllowed () {
+        if (window.cookieRemoval === 0) {
+            return true;
+        }
+
+        if (window.cookieRemoval === 1) {
+            if (document.cookie.indexOf('cookiePreferences') !== -1) {
+                return true;
+            }
+
+            return document.cookie.indexOf('cookieDeclined') === -1;
+        }
+
+        // Must be cookieRemoval = 2, so only depends on existence of `allowCookie`
+        return document.cookie.indexOf('allowCookie') !== -1;
+    }
+
+    /**
+     * @returns { boolean }
+     */
+    function isDeviceCookieAllowed () {
+        var cookiesAllowed = hasCookiesAllowed();
+
+        if (window.cookieRemoval !== 1) {
+            return cookiesAllowed;
+        }
+
+        return cookiesAllowed && document.cookie.indexOf('"name":"x-ua-device","active":true') !== -1;
     }
 
     /**
@@ -1330,7 +1359,7 @@
         },
 
         _setDeviceCookie: function() {
-            if (!hasCookiesAllowed()) {
+            if (!isDeviceCookieAllowed()) {
                 return;
             }
 
