@@ -17,7 +17,9 @@
                 return document.cookie.indexOf('cookieDeclined') === -1;
             }
 
-            // Must be cookieRemoval = 2, so only depends on existence of `allowCookie`
+            /**
+             * Must be cookieRemoval = 2, so only depends on existence of `allowCookie`
+             */
             return document.cookie.indexOf('allowCookie') !== -1;
         }
 
