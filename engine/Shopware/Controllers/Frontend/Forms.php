@@ -159,6 +159,13 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         /* @var Form $form */
         $form = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
 
+        if (!$form) {
+            throw new \Enlight_Controller_Exception(
+                'Form not found',
+                Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found
+            );
+        }
+
         if ($form->getAttribute()) {
             $this->getModelManager()->detach($form->getAttribute());
         }
@@ -166,13 +173,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $this->getModelManager()->detach($form);
         foreach ($form->getFields() as $field) {
             $this->getModelManager()->detach($field);
-        }
-
-        if (!$form) {
-            throw new \Enlight_Controller_Exception(
-                'Form not found',
-                Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found
-            );
         }
 
         /* @var Field $field */
