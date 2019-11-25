@@ -211,7 +211,7 @@ class Kernel extends SymfonyKernel
 
         $enlightRequest = EnlightRequest::createFromGlobals();
         $enlightRequest->setContent($request->getContent());
-        $enlightRequest->files->replace($request->files->all());
+        $enlightRequest->setFiles($request->files->all());
 
         return $enlightRequest;
     }
