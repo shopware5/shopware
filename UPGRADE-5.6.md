@@ -24,6 +24,9 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added new Smarty blocks `frontend_index_left_categories_wrapper` and `frontend_index_left_subcategory_config` to `frontend/index/sidebar.tpl`
 * Added `Shopware\Bundle\CookieBundle`, which takes care of the new cookie consent manager. If you're using cookies in your plugin, make sure
 to read [this documentation](https://developers.shopware.com/developers-guide/cookie-consent-manager/)!
+* Added a filter event 'Shopware_Modules_Basket_AddVoucher_FilterSqlParams' to `sBasket::sAddVoucher` to modify sql params
+* Added a notify event 'Shopware_Modules_Basket_AddVoucher_Inserted' to `sBasket::sAddVoucher` to execute code after a voucher was inserted
+
 
 
 ### Changes

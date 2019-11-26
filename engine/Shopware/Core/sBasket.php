@@ -969,7 +969,37 @@ SQL;
             ]
         );
 
-        return (bool) $this->db->query($sql, $params);
+        $params = $this->eventManager->filter(
+            'Shopware_Modules_Basket_AddVoucher_FilterSqlParams',
+            $params,
+            [
+                'subject' => $this,
+                'voucher' => $voucherDetails,
+                'vouchername' => $voucherName,
+                'shippingfree' => $freeShipping,
+                'tax' => $tax,
+            ]
+        );
+
+        $isInserted = (bool) $this->db->query($sql, $params);
+
+        if($isInserted) {
+            $insertId = $this->db->lastInsertId('s_order_basket');
+
+            $this->eventManager->notify(
+                'Shopware_Modules_Basket_AddVoucher_Inserted',
+                [
+                    'subject' => $this,
+                    'basketId' => $insertId,
+                    'voucher' => $voucherDetails,
+                    'vouchername' => $voucherName,
+                    'shippingfree' => $freeShipping,
+                    'tax' => $tax,
+                ]
+            );
+        }
+
+        return $isInserted;
     }
 
     /**
