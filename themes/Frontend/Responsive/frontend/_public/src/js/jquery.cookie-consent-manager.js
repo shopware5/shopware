@@ -120,6 +120,14 @@
              * @type {string}
              */
             openConsentManagerButton: '*[data-openConsentManager=true]',
+
+            /**
+             * Selector of the element which can be clicked as well to toggle a cookies state.
+             *
+             * @property cookieLabelSelector
+             * @type {string}
+             */
+            cookieLabelSelector: '.cookie--label'
         },
 
         /**
@@ -166,6 +174,7 @@
             this.$el.find(this.opts.cookieGroupToggleInputSelector).on('change', $.proxy(this.onGroupToggleChanged, this));
             this.$el.find(this.opts.cookieActiveInputSelector).on('change', $.proxy(this.onCookieToggleChanged, this));
             this.$el.find(this.opts.saveButtonSelector).on('click', $.proxy(this.onSave, this));
+            this.$el.find(this.opts.cookieLabelSelector).on('click', $.proxy(this.onClickCookieName, this));
 
             this._on(this.opts.openConsentManagerButton, 'click', $.proxy(this.openConsentManager, this));
         },
@@ -269,6 +278,14 @@
             document.cookie = this.preferenceCookieName + '=' + JSON.stringify(preferences) + ';path=' + this.getBasePath() +';expires=' + date.toGMTString() + ';';
 
             $.publish('plugin/swCookieConsentManager/onBuildCookiePreferences', [ this, preferences ]);
+        },
+
+        onClickCookieName: function (event) {
+            var cookieNameEl = $(event.currentTarget),
+                cookieCt = cookieNameEl.parent(this.opts.cookieContainerSelector),
+                inputEl = cookieCt.find(this.opts.cookieActiveInputSelector);
+
+            inputEl.click();
         },
 
         toggleAllCookiesFromGroup: function (cookies, active) {
