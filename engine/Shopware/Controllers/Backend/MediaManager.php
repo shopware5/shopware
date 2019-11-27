@@ -24,6 +24,7 @@
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
+use Shopware\Bundle\MediaBundle\MediaModelServiceInterface;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media;
@@ -55,6 +56,13 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      * @var \Shopware\Components\Model\ModelManager
      */
     protected $manager = null;
+
+    /**
+     * Contains helper functions for media
+     *
+     * @var MediaModelServiceInterface
+     */
+    private $mediaModelService;
 
     /**
      * {@inheritdoc}
@@ -195,8 +203,18 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
             $media['thumbnail'] = $media['path'];
 
+            $mediaModel = new Media();
+            $mediaModel->fromArray($media);
+
+            /** @var Album|null $album */
+            $album = $this->getManager()->find(Album::class, $media['albumId']);
+            if ($album !== null) {
+                $mediaModel->setAlbum($album);
+            }
+
             if ($media['type'] === Media::TYPE_IMAGE) {
-                $thumbnails = $this->getMediaThumbnailPaths($media);
+                $thumbnails = $this->getMediaModelService()->getThumbnailFilePaths($mediaModel, false, ['140x140']);
+
                 $availableThumbs = [];
 
                 foreach ($thumbnails as $index => $thumbnail) {
@@ -803,64 +821,6 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     }
 
     /**
-     * Returns all thumbnails paths according to the given media object
-     *
-     * @return array
-     */
-    private function getMediaThumbnailPaths(array $media)
-    {
-        if ($media['type'] !== Media::TYPE_IMAGE) {
-            return [];
-        }
-        $sizes = ['140x140'];
-
-        $album = $this->getManager()->find(Album::class, $media['albumId']);
-
-        // Check if the album has loaded correctly.
-        if ($album && $album->getSettings() && $album->getSettings()->getCreateThumbnails() === 1) {
-            $sizes = array_merge($album->getSettings()->getThumbnailSize(), $sizes);
-            $sizes = array_unique($sizes);
-        }
-        $thumbnails = [];
-
-        // Iterate thumbnail sizes
-        foreach ($sizes as $size) {
-            if (strpos($size, 'x') === false) {
-                $size = $size . 'x' . $size;
-            }
-
-            $projectDir = $this->container->getParameter('shopware.app.rootdir');
-            $thumbnailDir = $projectDir . 'media' . DIRECTORY_SEPARATOR . strtolower($media['type']) . DIRECTORY_SEPARATOR . 'thumbnail' . DIRECTORY_SEPARATOR;
-            $path = $thumbnailDir . $this->removeSpecialCharacters($media['name']) . '_' . $size . '.' . $media['extension'];
-
-            $path = str_replace(Shopware()->DocPath(), '', $path);
-            if (DIRECTORY_SEPARATOR !== '/') {
-                $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
-            }
-            $thumbnails[$size] = $path;
-        }
-
-        return $thumbnails;
-    }
-
-    /**
-     * Removes special characters from a filename
-     *
-     * @param string $name
-     *
-     * @return string
-     */
-    private function removeSpecialCharacters($name)
-    {
-        $name = iconv('utf-8', 'ascii//translit', $name);
-        $name = preg_replace('#[^A-Za-z0-9\-_]#', '-', $name);
-        $name = preg_replace('#-{2,}#', '-', $name);
-        $name = trim($name, '-');
-
-        return mb_substr($name, 0, 180);
-    }
-
-    /**
      * Internal helper function to get a single media.
      *
      * @param int $id
@@ -1165,5 +1125,14 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             json_decode(json_encode($exception), true),
             ['_class' => get_class($exception)]
         );
+    }
+
+    private function getMediaModelService()
+    {
+        if ($this->mediaModelService === null) {
+            $this->mediaModelService = Shopware()->Container()->get(MediaModelServiceInterface::class);
+        }
+
+        return $this->mediaModelService;
     }
 }

@@ -25,10 +25,8 @@
 namespace Shopware\Models\Media;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Mapping as ORM;
-use Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionIsBlacklistedException;
-use Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionNotAllowedException;
+use Shopware\Bundle\MediaBundle\MediaModelServiceInterface;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Random;
 use Shopware\Models\Attribute\Media as MediaAttribute;
@@ -223,7 +221,7 @@ class Media extends ModelEntity
     /**
      * Internal container for the uploaded file.
      *
-     * @var UploadedFile
+     * @var File|null
      */
     private $file;
 
@@ -280,6 +278,13 @@ class Media extends ModelEntity
      */
     private $highDpiThumbnails;
 
+    /**
+     * Contains helper functions for media
+     *
+     * @var MediaModelServiceInterface
+     */
+    private $mediaModelService;
+
     /****************************************************************
      *                  Property Getter & Setter                    *
      ****************************************************************/
@@ -327,7 +332,7 @@ class Media extends ModelEntity
      */
     public function setName($name)
     {
-        $this->name = $this->removeSpecialCharacters($name);
+        $this->name = $this->getMediaModelService()->removeSpecialCharacters($name);
 
         return $this;
     }
@@ -556,7 +561,7 @@ class Media extends ModelEntity
     /**
      * Returns the file
      *
-     * @return File
+     * @return File|null
      */
     public function getFile()
     {
@@ -567,14 +572,14 @@ class Media extends ModelEntity
      * Setter method for the file property. If the file is set, the file information will be extracted
      * and set into the internal properties.
      *
-     * @param UploadedFile $file
+     * @param File $file
      *
      * @return Media
      */
     public function setFile(File $file)
     {
         $this->file = $file;
-        $this->setFileInfo();
+        $this->getMediaModelService()->setFileInfo($this);
 
         return $this;
     }
@@ -632,7 +637,7 @@ class Media extends ModelEntity
     public function onSave()
     {
         // Upload file
-        $this->uploadFile();
+        $this->getMediaModelService()->uploadFile($this);
     }
 
     /**
@@ -655,7 +660,7 @@ class Media extends ModelEntity
         if ($isNameChanged || $isAlbumChanged) {
             // To remove the old thumbnails, use the old name.
             $name = isset($changeSet['name']) ? $changeSet['name'][0] : $this->name;
-            $name = $this->removeSpecialCharacters($name);
+            $name = $this->getMediaModelService()->removeSpecialCharacters($name);
             $name = $name . '.' . $this->extension;
 
             // To remove the old album thumbnails, use the old album
@@ -663,10 +668,10 @@ class Media extends ModelEntity
 
             if ($isNameChanged) {
                 // Remove default thumbnails
-                $this->removeDefaultThumbnails($name);
+                $this->getMediaModelService()->removeDefaultThumbnails($this);
 
                 // Create default thumbnails
-                $this->createDefaultThumbnails();
+                $this->getMediaModelService()->createDefaultThumbnails($this);
             }
 
             // Remove the configured album thumbnail files
@@ -675,7 +680,7 @@ class Media extends ModelEntity
                 $this->removeAlbumThumbnails($settings->getThumbnailSize(), $name);
             }
 
-            $this->updateAssociations();
+            $this->getMediaModelService()->updateAssociations($this);
 
             // Create album thumbnails
             $this->createAlbumThumbnails($this->album);
@@ -685,7 +690,7 @@ class Media extends ModelEntity
         if ($isNameChanged) {
             $mediaService = Shopware()->Container()->get('shopware_media.media_service');
             $newName = $this->getFileName();
-            $newPath = $this->getUploadDir() . $newName;
+            $newPath = $this->getMediaModelService()->getUploadDir($this->type) . $newName;
 
             // Rename the file
             $mediaService->rename($this->path, $newPath);
@@ -724,9 +729,9 @@ class Media extends ModelEntity
             return;
         }
 
-        $thumbnailSizes = $this->getAllThumbnailSizes();
+        $thumbnailSizes = $this->getMediaModelService()->getAllThumbnailSizes();
 
-        $this->removeDefaultThumbnails($this->getFileName());
+        $this->getMediaModelService()->removeDefaultThumbnails($this);
         $this->removeAlbumThumbnails($thumbnailSizes, $this->getFileName());
     }
 
@@ -773,7 +778,7 @@ class Media extends ModelEntity
             $data['height'] = isset($data['height']) ? $data['height'] : 0;
 
             // Create thumbnail with the configured size
-            $this->createThumbnail((int) $data['width'], (int) $data['height']);
+            $this->getMediaModelService()->createThumbnail($this, (int) $data['width'], (int) $data['height']);
         }
     }
 
@@ -798,24 +803,14 @@ class Media extends ModelEntity
 
         foreach ($thumbnailSizes as $size) {
             if (strpos($size, 'x') === false) {
-                $size = $size . 'x' . $size;
+                $size .= 'x' . $size;
             }
-            $names = $this->getThumbnailNames($size, $fileName);
+            $names = $this->getMediaModelService()->getThumbnailNames($this, $size);
 
-            if ($mediaService->has($names['jpg'])) {
-                $mediaService->delete($names['jpg']);
-            }
-
-            if ($mediaService->has($names['jpgHD'])) {
-                $mediaService->delete($names['jpgHD']);
-            }
-
-            if ($mediaService->has($names['original'])) {
-                $mediaService->delete($names['original']);
-            }
-
-            if ($mediaService->has($names['originalHD'])) {
-                $mediaService->delete($names['originalHD']);
+            foreach ($names as $name) {
+                if ($mediaService->has($name)) {
+                    $mediaService->delete($name);
+                }
             }
         }
     }
@@ -828,7 +823,7 @@ class Media extends ModelEntity
     public function getFileName()
     {
         if ($this->name !== '') {
-            return $this->removeSpecialCharacters($this->name) . '.' . $this->extension;
+            return $this->getMediaModelService()->removeSpecialCharacters($this->name) . '.' . $this->extension;
         }
 
         // Do whatever you want to generate a unique name
@@ -856,7 +851,7 @@ class Media extends ModelEntity
 
             if (!$mediaService->has($thumbnail)) {
                 try {
-                    $this->createThumbnail((int) $size[0], (int) $size[1]);
+                    $this->getMediaModelService()->createThumbnail($this, (int) $size[0], (int) $size[1]);
                 } catch (\Exception $e) {
                     // Ignore for now
                     // Exception might be thrown when thumbnails can not
@@ -877,49 +872,7 @@ class Media extends ModelEntity
      */
     public function getThumbnailFilePaths($highDpi = false)
     {
-        if ($this->type !== self::TYPE_IMAGE) {
-            return [];
-        }
-        $sizes = [];
-
-        // Concat default sizes
-        foreach ($this->defaultThumbnails as $size) {
-            if (count($size) === 1) {
-                $sizes[] = $size . 'x' . $size;
-            } else {
-                $sizes[] = $size[0] . 'x' . $size[1];
-            }
-        }
-
-        // Check if the album has loaded correctly.
-        if ($this->album !== null && $this->album->getSettings() !== null && $this->album->getSettings()->getCreateThumbnails() === 1) {
-            $sizes = array_merge($this->album->getSettings()->getThumbnailSize(), $sizes);
-            $sizes = array_unique($sizes);
-        }
-        $thumbnails = [];
-        $suffix = $highDpi ? '@2x' : '';
-
-        // Iterate thumbnail sizes
-        foreach ($sizes as $size) {
-            if (strpos($size, 'x') === false) {
-                $size = $size . 'x' . $size;
-            }
-
-            $fileName = str_replace(
-                '.' . $this->extension,
-                '_' . $size . $suffix . '.' . $this->extension,
-                $this->getFileName()
-            );
-
-            $path = $this->getThumbnailDir() . $fileName;
-            $path = str_replace(Shopware()->DocPath(), '', $path);
-            if (DIRECTORY_SEPARATOR !== '/') {
-                $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
-            }
-            $thumbnails[$size] = $path;
-        }
-
-        return $thumbnails;
+        return $this->getMediaModelService()->getThumbnailFilePaths($this, $highDpi);
     }
 
     /**
@@ -1016,292 +969,18 @@ class Media extends ModelEntity
 
     public function removeThumbnails()
     {
-        $thumbnailSizes = $this->getAllThumbnailSizes();
+        $thumbnailSizes = $this->getMediaModelService()->getAllThumbnailSizes();
 
-        $this->removeDefaultThumbnails($this->getFileName());
+        $this->getMediaModelService()->removeDefaultThumbnails($this);
         $this->removeAlbumThumbnails($thumbnailSizes, $this->getFileName());
     }
 
-    /**
-     * Internal helper function which updates all associated data which has the image path as own property.
-     */
-    private function updateAssociations()
+    private function getMediaModelService()
     {
-        /** @var \Shopware\Models\Article\Image $article */
-        foreach ($this->articles as $article) {
-            $article->setPath($this->getName());
-            Shopware()->Models()->persist($article);
-        }
-        Shopware()->Models()->flush();
-    }
-
-    /****************************************************************
-     *                  Internal functions                          *
-     ****************************************************************/
-
-    /**
-     * Moves the uploaded file to the correctly directory.
-     *
-     * @return bool
-     */
-    private function uploadFile()
-    {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        $projectDir = Shopware()->Container()->getParameter('shopware.app.rootdir');
-
-        // Move the file to the upload directory
-        if ($this->file !== null) {
-            // File already exists?
-            if ($mediaService->has($this->getPath())) {
-                $this->name .= Random::getAlphanumericString(13);
-                // Path in setFileInfo is set, before the file gets a unique ID here
-                // Therefore the path is updated here SW-2889
-                $this->path = str_replace($projectDir, '', $this->getUploadDir() . $this->getFileName());
-
-                /*
-                 * SW-3805 - Hotfix for windows paths
-                 */
-                $this->path = str_replace('\\', '/', $this->path);
-            }
-            $tempPath = $projectDir . 'media' . DIRECTORY_SEPARATOR . 'temp' . DIRECTORY_SEPARATOR . $this->file->getFilename();
-
-            $mediaService->write($this->path, file_get_contents($this->file->getRealPath()));
-            if (file_exists($tempPath) || is_uploaded_file($this->file->getPathname())) {
-                unlink($this->file->getPathname());
-            }
+        if ($this->mediaModelService === null) {
+            $this->mediaModelService = Shopware()->Container()->get(MediaModelServiceInterface::class);
         }
 
-        return true;
-    }
-
-    /**
-     * Creates the default thumbnails 70x70 and 153x153 to display the images
-     * in the media manager listing.
-     */
-    private function createDefaultThumbnails()
-    {
-        // Create only thumbnails for image media
-        if ($this->type !== self::TYPE_IMAGE) {
-            return;
-        }
-
-        /** @var \Shopware\Components\Thumbnail\Manager $generator */
-        $generator = Shopware()->Container()->get('thumbnail_manager');
-
-        $generator->createMediaThumbnail($this, $this->defaultThumbnails, true);
-    }
-
-    /**
-     * Removes the default thumbnail files. The file name have to be passed, because on update the internal
-     * file name property is already changed to the new name.
-     *
-     * @param string $fileName
-     */
-    private function removeDefaultThumbnails($fileName)
-    {
-        if ($this->type !== self::TYPE_IMAGE) {
-            return;
-        }
-
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-
-        foreach ($this->defaultThumbnails as $size) {
-            if (count($size) === 1) {
-                $sizeString = $size . 'x' . $size;
-            } else {
-                $sizeString = $size[0] . 'x' . $size[1];
-            }
-            $names = $this->getThumbnailNames($sizeString, $fileName);
-
-            if ($mediaService->has($names['jpg'])) {
-                $mediaService->delete($names['jpg']);
-            }
-
-            if ($mediaService->has($names['jpgHD'])) {
-                $mediaService->delete($names['jpgHD']);
-            }
-
-            if ($mediaService->has($names['original'])) {
-                $mediaService->delete($names['original']);
-            }
-
-            if ($mediaService->has($names['originalHD'])) {
-                $mediaService->delete($names['originalHD']);
-            }
-        }
-    }
-
-    /**
-     * Returns the directory to upload
-     *
-     * @return string
-     */
-    private function getUploadDir()
-    {
-        // The absolute directory path where uploaded documents should be saved
-        $projectDir = Shopware()->Container()->getParameter('shopware.app.rootdir');
-
-        return $projectDir . 'media' . DIRECTORY_SEPARATOR . strtolower($this->type) . DIRECTORY_SEPARATOR;
-    }
-
-    /**
-     * Returns the directory of the thumbnail files.
-     *
-     * @return string
-     */
-    private function getThumbnailDir()
-    {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        $path = $this->getUploadDir() . 'thumbnail' . DIRECTORY_SEPARATOR;
-        $path = $mediaService->normalize($path);
-
-        return $path;
-    }
-
-    /**
-     * Create a thumbnail file for the internal file with the passed width and height.
-     *
-     * @param int $width
-     * @param int $height
-     */
-    private function createThumbnail($width, $height)
-    {
-        // Create only thumbnails for image media
-        if ($this->type !== self::TYPE_IMAGE) {
-            return;
-        }
-
-        /** @var \Shopware\Components\Thumbnail\Manager $manager */
-        $manager = Shopware()->Container()->get('thumbnail_manager');
-
-        $newSize = [
-            'width' => $width,
-            'height' => $height,
-        ];
-
-        $manager->createMediaThumbnail($this, [$newSize], true);
-    }
-
-    /**
-     * Create the new names for the jpg file and the file with the original extension
-     * Also returns high dpi paths
-     *
-     * @param string $suffix
-     * @param string $fileName
-     *
-     * @return array
-     */
-    private function getThumbnailNames($suffix, $fileName)
-    {
-        $jpgName = str_replace('.' . $this->extension, '_' . $suffix . '.jpg', $fileName);
-        $jpgHDName = str_replace('.' . $this->extension, '_' . $suffix . '@2x.jpg', $fileName);
-        $originalName = str_replace('.' . $this->extension, '_' . $suffix . '.' . $this->extension, $fileName);
-        $originalHDName = str_replace('.' . $this->extension, '_' . $suffix . '@2x.' . $this->extension, $fileName);
-
-        return [
-            'jpg' => $this->getThumbnailDir() . $jpgName,
-            'jpgHD' => $this->getThumbnailDir() . $jpgHDName,
-            'original' => $this->getThumbnailDir() . $originalName,
-            'originalHD' => $this->getThumbnailDir() . $originalHDName,
-        ];
-    }
-
-    /**
-     * Extract the file information from the uploaded file, into the internal properties
-     */
-    private function setFileInfo()
-    {
-        if ($this->file === null) {
-            return;
-        }
-
-        $extension = $this->file->guessExtension();
-        $name = $this->file->getBasename();
-
-        if ($this->file instanceof UploadedFile) {
-            // Load file information
-            $fileInfo = pathinfo($this->file->getClientOriginalName());
-            $name = $fileInfo['filename'];
-
-            if (isset($fileInfo['extension'])) {
-                $extension = $fileInfo['extension'];
-            }
-        }
-
-        $extension = strtolower($extension);
-
-        // Validate extension
-        // #1 - whitelist
-        $mappingService = Shopware()->Container()->get('shopware_media.extension_mapping');
-        if (!$mappingService->isAllowed($extension)) {
-            throw new MediaFileExtensionNotAllowedException($extension);
-        }
-
-        // #2 - blacklist
-        if (in_array($extension, \Shopware_Controllers_Backend_MediaManager::$fileUploadBlacklist, true)) {
-            throw new MediaFileExtensionIsBlacklistedException($extension);
-        }
-
-        // Make sure that the name doesn't contain the file extension.
-        $name = str_ireplace('.' . $extension, '', $name);
-        if ($extension === 'jpeg') {
-            $name = str_ireplace('.jpg', '', $name);
-        }
-
-        // Set the file type using the type mapping
-        $this->type = $mappingService->getType($extension);
-
-        // The filesize in bytes.
-        $this->fileSize = $this->file->getSize();
-        $this->name = $this->removeSpecialCharacters($name);
-        $this->extension = str_replace('jpeg', 'jpg', $extension);
-
-        $projectDir = Shopware()->Container()->getParameter('shopware.app.rootdir');
-        $this->path = str_replace($projectDir, '', $this->getUploadDir() . $this->getFileName());
-
-        if (DIRECTORY_SEPARATOR !== '/') {
-            $this->path = str_replace(DIRECTORY_SEPARATOR, '/', $this->path);
-        }
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return string
-     */
-    private function removeSpecialCharacters($name)
-    {
-        $name = iconv('utf-8', 'ascii//translit', $name);
-        $name = preg_replace('#[^A-Za-z0-9\-_]#', '-', $name);
-        $name = preg_replace('#-{2,}#', '-', $name);
-        $name = trim($name, '-');
-
-        return mb_substr($name, 0, 180);
-    }
-
-    /**
-     * Searches all album settings for thumbnail sizes
-     *
-     * @return array
-     */
-    private function getAllThumbnailSizes()
-    {
-        /** @var Connection $connection */
-        $connection = Shopware()->Container()->get('dbal_connection');
-        $joinedSizes = $connection
-            ->query('SELECT DISTINCT thumbnail_size FROM s_media_album_settings WHERE thumbnail_size != ""')
-            ->fetchAll(\PDO::FETCH_COLUMN);
-
-        $sizes = [];
-        foreach ($joinedSizes as $sizeItem) {
-            $explodedSizes = explode(';', $sizeItem);
-            if (empty($explodedSizes)) {
-                continue;
-            }
-
-            $sizes = array_merge($sizes, array_flip($explodedSizes));
-        }
-
-        return array_keys($sizes);
+        return $this->mediaModelService;
     }
 }

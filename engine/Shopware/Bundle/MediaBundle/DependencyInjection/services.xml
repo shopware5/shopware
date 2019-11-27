@@ -55,6 +55,16 @@
             <argument>%shopware.media.whitelist%</argument>
         </service>
 
+        <service id="Shopware\Bundle\MediaBundle\MediaModelServiceInterface" class="Shopware\Bundle\MediaBundle\MediaModelService">
+            <argument type="service" id="shopware_media.media_service"/>
+            <argument type="service" id="thumbnail_manager"/>
+            <argument type="service" id="shopware_media.extension_mapping"/>
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="models"/>
+            <argument type="service" id="events"/>
+            <argument>%shopware.app.rootdir%</argument>
+        </service>
+
         <!-- Optimizer -->
         <service id="shopware_media.cdn_optimizer_service" class="Shopware\Bundle\MediaBundle\CdnOptimizerService">
             <argument type="service" id="shopware_media.optimizer_service"/>
