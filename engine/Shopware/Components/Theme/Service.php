@@ -450,7 +450,7 @@ class Service
                 ->setParameter('shopId', $shop->getId());
         }
 
-        if ($parentId == null) {
+        if ($parentId === null) {
             $builder->andWhere('layout.parentId IS NULL');
         } else {
             $builder->andWhere('layout.parentId = :parentId')
@@ -574,15 +574,13 @@ class Service
      * value collection.
      * If no shop value exist, the function creates a new value object.
      *
-     * @param int $shopId
-     *
      * @return Shop\TemplateConfig\Value
      */
-    private function getElementShopValue(Collection $collection, $shopId)
+    private function getElementShopValue(Collection $collection, int $shopId)
     {
         /** @var Shop\TemplateConfig\Value $value */
         foreach ($collection as $value) {
-            if ($value->getShop() && $value->getShop()->getId() == $shopId) {
+            if ($value->getShop() && $value->getShop()->getId() === $shopId) {
                 return $value;
             }
         }

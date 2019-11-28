@@ -78,7 +78,7 @@ class DatabaseHandler
     {
         $snippetsDir = $snippetsDir ?: $this->kernelRoot . '/snippets/';
         if (!file_exists($snippetsDir)) {
-            if ($snippetsDir == ($this->kernelRoot . '/snippets/')) {
+            if ($snippetsDir === ($this->kernelRoot . '/snippets/')) {
                 $this->printWarning('<info>No snippets folder found in Shopware core, skipping</info>');
             }
 
@@ -103,7 +103,7 @@ class DatabaseHandler
 
         foreach ($finder as $file) {
             $filePath = $file->getRelativePathname();
-            if (strpos($filePath, '.ini') == strlen($filePath) - 4) {
+            if (strpos($filePath, '.ini') === strlen($filePath) - 4) {
                 $namespace = substr($filePath, 0, -4);
                 $namespace = str_replace('\\', '/', $namespace);
             } else {
@@ -118,7 +118,7 @@ class DatabaseHandler
             ]);
 
             foreach ($namespaceData->read()->toArray() as $index => $values) {
-                if ($index == 'default') {
+                if ($index === 'default') {
                     $locale = $defaultLocale;
                 } else {
                     $locale = $localeRepository->findOneBy(['locale' => $index]);
@@ -169,13 +169,13 @@ class DatabaseHandler
         ]);
 
         $namespaces = array_map(
-            function ($result) {
+            static function ($result) {
                 return $result['namespace'];
             },
             $snippetRepository->getDistinctNamespacesQuery($locale->getId())->getArrayResult()
         );
 
-        if (count($namespaces) == 0) {
+        if (empty($namespaces)) {
             $this->printWarning('<error>No snippets found for the given locale(s)</error>');
 
             return;
@@ -233,7 +233,7 @@ class DatabaseHandler
 
         foreach ($finder as $file) {
             $filePath = $file->getRelativePathname();
-            if (strpos($filePath, '.ini') == strlen($filePath) - 4) {
+            if (strpos($filePath, '.ini') === strlen($filePath) - 4) {
                 $namespace = substr($filePath, 0, -4);
                 $namespace = str_replace('\\', '/', $namespace);
             } else {
@@ -248,7 +248,7 @@ class DatabaseHandler
             ]);
 
             foreach ($namespaceData->read()->toArray() as $index => $values) {
-                if ($index == 'default') {
+                if ($index === 'default') {
                     $locale = $defaultLocale;
                 } else {
                     $locale = $localeRepository->findOneBy(['locale' => $index]);

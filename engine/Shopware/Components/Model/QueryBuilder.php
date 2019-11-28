@@ -199,7 +199,7 @@ class QueryBuilder extends BaseQueryBuilder
                 $exprKey = $this->alias . '.' . $exprKey;
             }
 
-            if ($expression == null) {
+            if ($expression === null) {
                 switch (true) {
                     case \is_string($where):
                         $expression = 'LIKE';

@@ -145,7 +145,7 @@ class QueryWriter
             ];
 
             $values[] = '(' . implode(', ', array_values($queryData)) . ')';
-            if (++$counter % 50 == 0) {
+            if (++$counter % 50 === 0) {
                 $this->queries[] = $insertSql . implode(', ', $values) . ';';
                 $values = [];
             }

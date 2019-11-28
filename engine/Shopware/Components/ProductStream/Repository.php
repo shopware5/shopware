@@ -30,6 +30,7 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Components\LogawareReflectionHelper;
+use Shopware\Models\ProductStream\ProductStream;
 
 class Repository implements RepositoryInterface
 {
@@ -56,13 +57,13 @@ class Repository implements RepositoryInterface
     {
         $productStream = $this->getStreamById($productStreamId);
 
-        if ($productStream['type'] == 1) {
+        if ((int) $productStream['type'] === ProductStream::TYPE_FILTERED) {
             $this->prepareConditionStream($productStream, $criteria);
 
             return;
         }
 
-        if ($productStream['type'] == 2) {
+        if ((int) $productStream['type'] === ProductStream::TYPE_SELECTION) {
             $this->prepareSelectionStream($productStream, $criteria);
 
             return;
@@ -117,13 +118,11 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @param int $productStreamId
-     *
      * @return array
      */
-    private function getStreamById($productStreamId)
+    private function getStreamById(int $productStreamId)
     {
-        $row = $this->conn->fetchAssoc(
+        return $this->conn->fetchAssoc(
             'SELECT streams.*, customSorting.sortings as customSortings
              FROM s_product_streams streams
              LEFT JOIN s_search_custom_sorting customSorting
@@ -132,8 +131,6 @@ class Repository implements RepositoryInterface
              LIMIT 1',
             ['productStreamId' => $productStreamId]
         );
-
-        return $row;
     }
 
     private function assignSortings(array $productStream, Criteria $criteria)

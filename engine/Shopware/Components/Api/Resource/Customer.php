@@ -403,7 +403,7 @@ class Customer extends Resource
                 unset($paymentDataData['paymentMeanId']);
             }
 
-            if ($paymentData->getCustomer() == null) {
+            if ($paymentData->getCustomer() === null) {
                 $paymentData->setCustomer($customer);
             }
 

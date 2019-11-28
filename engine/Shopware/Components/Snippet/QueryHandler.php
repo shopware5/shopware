@@ -70,7 +70,7 @@ class QueryHandler
         $finder->files()->in($snippetsDir);
         foreach ($finder as $file) {
             $filePath = $file->getRelativePathname();
-            if (strpos($filePath, '.ini') == strlen($filePath) - 4) {
+            if (strpos($filePath, '.ini') === strlen($filePath) - 4) {
                 $namespace = substr($filePath, 0, -4);
             } else {
                 continue;

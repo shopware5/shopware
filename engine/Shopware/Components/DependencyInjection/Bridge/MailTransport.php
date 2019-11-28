@@ -31,14 +31,14 @@ class MailTransport
      */
     public function factory(\Enlight_Loader $loader, \Shopware_Components_Config $config, array $options)
     {
-        if (!isset($options['type']) && !empty($config->MailerMailer) && $config->MailerMailer != 'mail') {
+        if (!isset($options['type']) && !empty($config->MailerMailer) && $config->MailerMailer !== 'mail') {
             $options['type'] = $config->MailerMailer;
         }
         if (empty($options['type'])) {
             $options['type'] = 'sendmail';
         }
 
-        if ($options['type'] == 'smtp') {
+        if ($options['type'] === 'smtp') {
             if (!isset($options['username']) && !empty($config->MailerUsername)) {
                 if (!empty($config->MailerAuth)) {
                     $options['auth'] = $config->MailerAuth;

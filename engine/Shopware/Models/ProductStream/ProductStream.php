@@ -34,6 +34,9 @@ use Shopware\Models\Attribute\ProductStream as ProductStreamAttribute;
  */
 class ProductStream extends ModelEntity
 {
+    public const TYPE_FILTERED = 1;
+    public const TYPE_SELECTION = 2;
+
     /**
      * INVERSE SIDE
      *

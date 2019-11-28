@@ -50,13 +50,12 @@ class LocalLicenseUnpackService implements LicenseUnpackServiceInterface
             throw new LicenseProductKeyException('License key does not match a commercial Shopware edition');
         }
 
-        if ($info['host'] != $host) {
+        if ($info['host'] !== $host) {
             throw new LicenseHostException(new LicenseInformation($info), sprintf('License key is not valid for domain %s', $request->host));
         }
 
         $info['edition'] = $info['product'];
-        unset($info['moduleLicense']);
-        unset($info['coreLicense']);
+        unset($info['moduleLicense'], $info['coreLicense']);
 
         return new LicenseInformation($info);
     }
@@ -70,8 +69,7 @@ class LocalLicenseUnpackService implements LicenseUnpackServiceInterface
      */
     public function readLicenseInfo($license)
     {
-        $license = str_replace('-------- LICENSE BEGIN ---------', '', $license);
-        $license = str_replace('--------- LICENSE END ----------', '', $license);
+        $license = str_replace(['-------- LICENSE BEGIN ---------', '--------- LICENSE END ----------'], '', $license);
         $license = preg_replace('#--.+?--#', '', (string) $license);
         $license = preg_replace('#[^A-Za-z0-9+/=]#', '', $license);
 

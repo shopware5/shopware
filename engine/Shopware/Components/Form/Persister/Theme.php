@@ -244,7 +244,7 @@ class Theme implements Form\Interfaces\Persister
     {
         /** @var TemplateConfig\Element $element */
         foreach ($collection as $element) {
-            if ($element->getName() == $name) {
+            if ($element->getName() === $name) {
                 return $element;
             }
         }
@@ -261,7 +261,7 @@ class Theme implements Form\Interfaces\Persister
     {
         /** @var TemplateConfig\Layout $element */
         foreach ($collection as $element) {
-            if ($element->getName() == $name) {
+            if ($element->getName() === $name) {
                 return $element;
             }
         }

@@ -61,7 +61,7 @@ class ShopwareEdition
      */
     public function isCommercial()
     {
-        return $this->edition != self::CE;
+        return $this->edition !== self::CE;
     }
 
     /**

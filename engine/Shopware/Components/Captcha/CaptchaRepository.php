@@ -97,7 +97,7 @@ class CaptchaRepository
     public function getCaptchaByName($captchaName)
     {
         foreach ($this->captchas as $captcha) {
-            if ($captcha->getName() == $captchaName) {
+            if ($captcha->getName() === $captchaName) {
                 return $captcha;
             }
         }

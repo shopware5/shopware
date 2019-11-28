@@ -24,7 +24,13 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Exception;
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Api\Exception\ValidationException;
+use Shopware\Models\Property\Group;
+use Shopware\Models\Property\Repository;
 
 /**
  * Property API Resource
@@ -32,37 +38,37 @@ use Shopware\Components\Api\Exception as ApiException;
 class PropertyGroup extends Resource
 {
     /**
-     * @return \Shopware\Models\Property\Repository
+     * @return Repository
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository(\Shopware\Models\Property\Group::class);
+        return $this->getManager()->getRepository(Group::class);
     }
 
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @return array|Group
+     *@throws NotFoundException
      *
-     * @return array|\Shopware\Models\Property\Group
+     * @throws ParameterMissingException
      */
     public function getOne($id)
     {
         $this->checkPrivilege('read');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
         $filters = [['property' => 'groups.id', 'expression' => '=', 'value' => $id]];
         $query = $this->getRepository()->getListGroupsQuery($filters);
 
-        /** @var \Shopware\Models\Property\Group|null $property */
+        /** @var Group|null $property */
         $property = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$property) {
-            throw new ApiException\NotFoundException(sprintf('PropertyGroup by id %d not found', $id));
+            throw new NotFoundException(sprintf('PropertyGroup by id %d not found', $id));
         }
 
         return $property;
@@ -93,10 +99,10 @@ class PropertyGroup extends Resource
     }
 
     /**
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Exception
+     * @throws ValidationException
+     * @throws Exception
      *
-     * @return \Shopware\Models\Property\Group
+     * @return Group
      */
     public function create(array $params)
     {
@@ -104,12 +110,12 @@ class PropertyGroup extends Resource
 
         $params = $this->preparePropertyData($params);
 
-        $property = new \Shopware\Models\Property\Group();
+        $property = new Group();
         $property->fromArray($params);
 
         $violations = $this->getManager()->validate($property);
         if ($violations->count() > 0) {
-            throw new ApiException\ValidationException($violations);
+            throw new ValidationException($violations);
         }
 
         $this->getManager()->persist($property);
@@ -121,25 +127,25 @@ class PropertyGroup extends Resource
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws ValidationException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
      *
-     * @return \Shopware\Models\Property\Group
+     * @return Group
      */
     public function update($id, array $params)
     {
         $this->checkPrivilege('update');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
-        /** @var \Shopware\Models\Property\Group|null $propertyGroup */
+        /** @var Group|null $propertyGroup */
         $propertyGroup = $this->getRepository()->find($id);
 
         if (!$propertyGroup) {
-            throw new ApiException\NotFoundException(sprintf('PropertyGroup by id %d not found', $id));
+            throw new NotFoundException(sprintf('PropertyGroup by id %d not found', $id));
         }
 
         $params = $this->preparePropertyData($params, $propertyGroup);
@@ -147,7 +153,7 @@ class PropertyGroup extends Resource
 
         $violations = $this->getManager()->validate($propertyGroup);
         if ($violations->count() > 0) {
-            throw new ApiException\ValidationException($violations);
+            throw new ValidationException($violations);
         }
 
         $this->flush();
@@ -158,24 +164,24 @@ class PropertyGroup extends Resource
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws ParameterMissingException
+     * @throws NotFoundException
      *
-     * @return \Shopware\Models\Property\Group
+     * @return Group
      */
     public function delete($id)
     {
         $this->checkPrivilege('delete');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
-        /** @var \Shopware\Models\Property\Group|null $propertyGroup */
+        /** @var Group|null $propertyGroup */
         $propertyGroup = $this->getRepository()->find($id);
 
         if (!$propertyGroup) {
-            throw new ApiException\NotFoundException(sprintf('PropertyGroup by id %d not found', $id));
+            throw new NotFoundException(sprintf('PropertyGroup by id %d not found', $id));
         }
 
         $this->getManager()->remove($propertyGroup);
@@ -185,7 +191,7 @@ class PropertyGroup extends Resource
     }
 
     /**
-     * @param \Shopware\Models\Property\Group|null $propertyGroup
+     * @param Group|null $propertyGroup
      *
      * @throws ApiException\CustomValidationException
      *
@@ -214,7 +220,7 @@ class PropertyGroup extends Resource
             }
 
             // Sortmode equals the old article_count sorting?
-            if ($params['sortmode'] == 2) {
+            if ((int) $params['sortmode'] === 2) {
                 // Fallback to the default sorting
                 $params['sortmode'] = 0;
             }

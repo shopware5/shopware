@@ -265,7 +265,7 @@ class Backup
         }
 
         // When done, delete the extracted files again
-        if (empty($dataFiles) || $numFiles == 1) {
+        if (empty($dataFiles) || $numFiles === 1) {
             $numFiles = 1;
 
             $files = $this->getDirectoryList($dir . '/');
@@ -278,7 +278,7 @@ class Backup
         return [
             'totalCount' => $numFiles + $offset,
             'offset' => $offset + 1,
-            'done' => $numFiles == 1,
+            'done' => $numFiles === 1,
         ];
     }
 
@@ -673,7 +673,7 @@ class Backup
         $files = scandir($path);
         foreach ($files as $key => &$file) {
             $extension = pathinfo($path . $file, PATHINFO_EXTENSION);
-            if ($file == '.' || $file == '..' || in_array($file, $blacklistName) || !in_array($extension, $findExtension)) {
+            if ($file === '.' || $file === '..' || in_array($file, $blacklistName, true) || !in_array($extension, $findExtension, true)) {
                 unset($files[$key]);
             }
             $file = $path . $file;

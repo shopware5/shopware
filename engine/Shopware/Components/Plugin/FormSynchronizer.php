@@ -255,7 +255,7 @@ class FormSynchronizer
                 $element = $form->getElement($targetName);
                 foreach ($element->getTranslations() as $existingTranslation) {
                     // Check if translation for this locale already exists
-                    if ($existingTranslation->getLocale()->getLocale() != $locale->getLocale()) {
+                    if ($existingTranslation->getLocale()->getLocale() !== $locale->getLocale()) {
                         continue;
                     }
 
@@ -290,7 +290,7 @@ class FormSynchronizer
         $isUpdate = false;
         foreach ($form->getTranslations() as $existingTranslation) {
             // Check if translation for this locale already exists
-            if ($existingTranslation->getLocale()->getLocale() != $locale->getLocale()) {
+            if ($existingTranslation->getLocale()->getLocale() !== $locale->getLocale()) {
                 continue;
             }
             if (array_key_exists('label', $translationArray)) {

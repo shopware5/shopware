@@ -123,7 +123,7 @@ class CacheManager
 
         $this->clearDirectory($compileDir);
 
-        if ($cacheDir != $compileDir) {
+        if ($cacheDir !== $compileDir) {
             $this->clearDirectory($cacheDir);
         }
     }

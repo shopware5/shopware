@@ -204,7 +204,7 @@ class BatchProcess
             }
 
             // In set mode: If column is nullable and value is "" - set it to null
-            if ($operation['operator'] === 'set' && $columnInfo[ucfirst($prefix) . ucfirst($column)]['nullable'] && $operation['value'] == '') {
+            if ($operation['operator'] === 'set' && $operation['value'] === '' && $columnInfo[ucfirst($prefix) . ucfirst($column)]['nullable']) {
                 $operationValue = 'NULL';
             } else {
                 $operationValue = $builder->expr()->literal(

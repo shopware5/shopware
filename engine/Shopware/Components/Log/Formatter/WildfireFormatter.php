@@ -275,7 +275,7 @@ class WildfireFormatter extends BaseWildfireFormatter
             foreach ($members as $just_name => $value) {
                 $name = $raw_name = $just_name;
 
-                if ($name[0] == "\0") {
+                if ($name[0] === "\0") {
                     $parts = explode("\0", $name);
                     $name = $parts[2];
                 }
@@ -304,7 +304,7 @@ class WildfireFormatter extends BaseWildfireFormatter
                 // if the recursion is not reset here as it contains
                 // a reference to itself. This is the only way I have come up
                 // with to stop infinite recursion in this case.
-                if ($key == 'GLOBALS' && is_array($val) && array_key_exists('GLOBALS', $val)) {
+                if ($key === 'GLOBALS' && is_array($val) && array_key_exists('GLOBALS', $val)) {
                     $val['GLOBALS'] = '** Recursion (GLOBALS) **';
                 }
                 $return[$key] = $this->encodeObject($val, 1, $arrayDepth + 1);

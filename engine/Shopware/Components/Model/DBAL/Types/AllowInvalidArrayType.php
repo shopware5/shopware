@@ -47,7 +47,7 @@ class AllowInvalidArrayType extends Type
 
         $value = (is_resource($value)) ? stream_get_contents($value) : $value;
         $val = unserialize($value, ['allowed_classes' => false]);
-        if ($val === false && $value != 'b:0;') {
+        if ($val === false && $value !== 'b:0;') {
             return null;
         }
 

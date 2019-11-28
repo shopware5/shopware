@@ -80,16 +80,7 @@ class SitePageMenu
         $links = [];
 
         foreach ($data as $site) {
-            if (isset($site['mapping'])) {
-                /**
-                 * If there's a mapping present, we're dealing with one of the
-                 * english legacy groups, so rename it to make it usable in the frontend.
-                 */
-                $key = $site['mapping'];
-            } else {
-                /** group either contains the new or the legacy group key */
-                $key = $site['group'];
-            }
+            $key = $site['mapping'] ?? $site['group'];
 
             if ($this->overrideExisting($menu, $key, $site)) {
                 $menu[$key] = [];
@@ -100,7 +91,7 @@ class SitePageMenu
 
                 if ($translations) {
                     foreach ($translations as $property => $translation) {
-                        if (strlen($translation) > 0) {
+                        if ($translation !== '') {
                             $site[$property] = $translation;
                         }
                     }
@@ -161,9 +152,9 @@ class SitePageMenu
     {
         $result = [];
         foreach ($sites as $index => $site) {
-            $site['active'] = ($site['id'] == $activeId);
+            $site['active'] = ((int) $site['id'] === $activeId);
 
-            if ($site['parentID'] != $parentId) {
+            if ((int) $site['parentID'] !== $parentId) {
                 continue;
             }
             $id = (int) $site['id'];

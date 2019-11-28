@@ -376,7 +376,7 @@ class Store extends BaseStore
         @fwrite($fp, $data);
         @fclose($fp);
 
-        if ($data != file_get_contents($tmpFile)) {
+        if ($data !== file_get_contents($tmpFile)) {
             return false;
         }
 

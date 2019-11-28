@@ -107,7 +107,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         }
 
         // Exception for Pre-Installed Plugins
-        if ($currentVersion == '1' && $updateVersion == '1.0.0') {
+        if ($currentVersion === '1' && $updateVersion === '1.0.0') {
             return false;
         }
 
@@ -794,7 +794,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
                 $translationArray = $translationSet['plugin_form'];
                 foreach ($form->getTranslations() as $existingTranslation) {
                     // Check if translation for this locale already exists
-                    if ($existingTranslation->getLocale()->getLocale() != $localeCode) {
+                    if ($existingTranslation->getLocale()->getLocale() !== $localeCode) {
                         continue;
                     }
                     if (array_key_exists('label', $translationArray)) {
@@ -826,7 +826,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
                 $element = $form->getElement($targetName);
                 foreach ($element->getTranslations() as $existingTranslation) {
                     // Check if translation for this locale already exists
-                    if ($existingTranslation->getLocale()->getLocale() != $localeCode) {
+                    if ($existingTranslation->getLocale()->getLocale() !== $localeCode) {
                         continue;
                     }
                     if (array_key_exists('label', $translationArray)) {

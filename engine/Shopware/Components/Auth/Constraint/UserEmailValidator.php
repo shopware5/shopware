@@ -115,6 +115,7 @@ class UserEmailValidator extends ConstraintValidator
         $builder->select(1);
         $builder->from('s_core_auth');
         $builder->andWhere('email = :email');
+        $builder->setMaxResults(1);
         $builder->setParameter('email', $value);
 
         if ($userId !== null) {
@@ -122,9 +123,7 @@ class UserEmailValidator extends ConstraintValidator
             $builder->setParameter('userId', $userId);
         }
 
-        $id = $builder->execute()->fetch(\PDO::FETCH_COLUMN);
-
-        return $id == 1;
+        return (bool) $builder->execute()->fetch(\PDO::FETCH_COLUMN);
     }
 
     /**

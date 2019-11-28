@@ -238,7 +238,7 @@ class CategoryDenormalization
             $path = '|' . $path . '|';
         }
 
-        if ($categoryPath != $path) {
+        if ($categoryPath !== $path) {
             $updateStmt->execute([':path' => $path, ':categoryId' => $categoryId]);
 
             return 1;

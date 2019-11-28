@@ -24,7 +24,9 @@
 
 namespace Shopware\Components\MultiEdit\Resource\Product;
 
+use Doctrine\ORM\Query;
 use Shopware\Components\Model\QueryBuilder;
+use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 
 /**
@@ -77,7 +79,7 @@ class Filter
      * @param int|null   $limit
      * @param array|null $orderBy
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getFilterQuery($tokens, $offset = null, $limit = null, $orderBy = null)
     {
@@ -126,7 +128,7 @@ class Filter
             $builder->leftJoin($this->getDqlHelper()->getAssociationForEntity($entity), $this->getDqlHelper()->getPrefixForEntity($entity));
         }
 
-        list($dql, $params) = $this->getDqlHelper()->getDqlFromTokens($tokens);
+        [$dql, $params] = $this->getDqlHelper()->getDqlFromTokens($tokens);
 
         foreach ($params as $key => $value) {
             $builder->setParameter($key, $value);
@@ -167,7 +169,7 @@ class Filter
     }
 
     /**
-     * @param \Doctrine\ORM\Query $query
+     * @param Query $query
      *
      * @return array
      */
@@ -204,14 +206,14 @@ class Filter
     public function filter($tokens, $offset, $limit, $orderBy)
     {
         $query = $this->getFilterQuery($tokens, $offset, $limit, $orderBy);
-        list($result, $totalCount) = $this->getPaginatedResult($query);
+        [$result, $totalCount] = $this->getPaginatedResult($query);
 
         $products = $this->getDqlHelper()->getProductsForListing($result);
 
         $sortedData = [];
         foreach ($result as $id) {
             foreach ($products as $key => $row) {
-                if ($row['Detail_id'] == $id) {
+                if ($row['Detail_id'] === $id) {
                     $sortedData[] = $row;
                     unset($products[$key]);
                     break;
@@ -235,8 +237,8 @@ class Filter
         // Remove Article-Entity
         $joinEntities = array_filter(
             $joinEntities,
-            function ($item) {
-                return $item !== 'Shopware\Models\Article\Article' && $item !== 'Shopware\Models\Article\Detail';
+            static function ($item) {
+                return $item !== Article::class && $item !== Detail::class;
             }
         );
 

@@ -236,11 +236,11 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
         $line = stream_get_line($this->_handler, self::DEFAULT_LENGTH, $this->_newline);
 
         // Remove possible utf8-bom
-        if (substr($line, 0, 3) == pack('CCC', 0xef, 0xbb, 0xbf)) {
+        if (substr($line, 0, 3) === pack('CCC', 0xef, 0xbb, 0xbf)) {
             $line = substr($line, 3);
         }
 
-        while ((empty($this->_fieldmark) || ($count = substr_count($line, $this->_fieldmark)) % 2 != 0) && !feof($this->_handler)) {
+        while ((empty($this->_fieldmark) || ($count = substr_count($line, $this->_fieldmark)) % 2 !== 0) && !feof($this->_handler)) {
             $line .= $this->_newline . stream_get_line($this->_handler, self::DEFAULT_LENGTH, $this->_newline);
         }
         if (empty($line)) {

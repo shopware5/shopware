@@ -244,11 +244,11 @@ class Basic implements GeneratorInterface
         $processWidth = $newSize['width'] + 0;
         for ($y = 0; $y < ($processHeight); ++$y) {
             for ($x = 0; $x < ($processWidth); ++$x) {
-                $colorat = imagecolorat($newImage, $x, $y);
-                $r = ($colorat >> 16) & 0xFF;
-                $g = ($colorat >> 8) & 0xFF;
-                $b = $colorat & 0xFF;
-                if (($r == 253 && $g == 253 && $b == 253) || ($r == 254 && $g == 254 && $b == 254)) {
+                $colorAt = imagecolorat($newImage, $x, $y);
+                $r = ($colorAt >> 16) & 0xFF;
+                $g = ($colorAt >> 8) & 0xFF;
+                $b = $colorAt & 0xFF;
+                if (($r === 253 && $g === 253 && $b === 253) || ($r === 254 && $g === 254 && $b === 254)) {
                     imagesetpixel($newImage, $x, $y, $colorWhite);
                 }
             }
@@ -276,8 +276,7 @@ class Basic implements GeneratorInterface
                 break;
         }
 
-        $content = ob_get_contents();
-        ob_end_clean();
+        $content = ob_get_clean();
 
         $this->mediaService->write($destination, $content);
     }

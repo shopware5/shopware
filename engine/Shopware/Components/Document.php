@@ -22,7 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\ORM\OptimisticLockException;
+use Mpdf\Mpdf;
 use Shopware\Components\NumberRangeIncrementerInterface;
+use Shopware\Models\Document\Document;
+use Shopware\Models\Shop\Currency;
+use Shopware\Models\Shop\Shop;
+use Shopware\Models\Shop\Template;
 
 /**
  * Shopware document generator
@@ -32,21 +38,21 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     /**
      * Object from Type Model\Order
      *
-     * @var \Shopware_Models_Document_Order
+     * @var Shopware_Models_Document_Order
      */
     public $_order;
 
     /**
      * Shopware Template Object (Smarty)
      *
-     * @var \Enlight_Template_Manager
+     * @var Enlight_Template_Manager
      */
     public $_template;
 
     /**
      * Shopware View Object (Smarty)
      *
-     * @var \Smarty_Data
+     * @var Smarty_Data
      */
     public $_view;
 
@@ -145,7 +151,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     /**
      * Ref to the translation component
      *
-     * @var \Shopware_Components_Translation
+     * @var Shopware_Components_Translation
      */
     public $translationComponent;
 
@@ -158,7 +164,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
      *
      * @throws Enlight_Exception
      *
-     * @return \Shopware_Components_Document
+     * @return Shopware_Components_Document
      */
     public static function initDocument($orderID, $documentID, array $config = [])
     {
@@ -247,7 +253,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
      *
      * @param string $_renderer optional define renderer (pdf,html,return)
      *
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Event_Exception
      * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      */
     public function render($_renderer = '')
@@ -259,9 +265,9 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             $this->assignValues();
         }
 
-        /* @var \Shopware\Models\Shop\Template $template */
+        /* @var Template $template */
         if (!empty($this->_subshop['doc_template_id'])) {
-            $template = Shopware()->Container()->get('models')->find(\Shopware\Models\Shop\Template::class, $this->_subshop['doc_template_id']);
+            $template = Shopware()->Container()->get('models')->find(Template::class, $this->_subshop['doc_template_id']);
 
             $inheritance = Shopware()->Container()->get('theme_inheritance')->getTemplateDirectories($template);
             $this->_template->setTemplateDir($inheritance);
@@ -269,7 +275,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
         $html = $this->_template->fetch('documents/' . $this->_document['template'], $this->_view);
 
-        /** @var \Enlight_Event_EventManager $eventManager */
+        /** @var Enlight_Event_EventManager $eventManager */
         $eventManager = Shopware()->Container()->get('events');
         $html = $eventManager->filter('Shopware_Components_Document_Render_FilterHtml', $html, [
             'subject' => $this,
@@ -297,14 +303,14 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 ]
             );
             if ($this->_preview == true || !$this->_documentHash) {
-                $mpdf = new \Mpdf\Mpdf($mpdfConfig);
+                $mpdf = new Mpdf($mpdfConfig);
                 $mpdf->WriteHTML($html);
                 $mpdf->Output();
                 exit;
             }
 
             $tmpFile = tempnam(sys_get_temp_dir(), 'document');
-            $mpdf = new \Mpdf\Mpdf($mpdfConfig);
+            $mpdf = new Mpdf($mpdfConfig);
             $mpdf->WriteHTML($html);
             $mpdf->Output($tmpFile, 'F');
 
@@ -394,7 +400,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             WHERE
                 id = ?
             ', [$this->_order->userID, $getVoucher['id']]);
-            if ($this->_order->currency->factor != 1) {
+
+            if ((float) $this->_order->currency->factor !== 1.0) {
                 $getVoucher['value'] *= $this->_order->currency->factor;
             }
             if (!empty($getVoucher['percental'])) {
@@ -412,7 +419,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
      *
      * @param int $userID
      *
-     * @throws \Exception
+     *@throws Exception
      *
      * @return array
      */
@@ -432,7 +439,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
      */
     protected function assignValues4x()
     {
-        if ($this->_preview == true) {
+        if ($this->_preview) {
             $id = 12345;
         } else {
             $id = $this->_documentID;
@@ -494,10 +501,11 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
         $articleModule = Shopware()->Modules()->Articles();
         foreach ($positions as &$position) {
-            if ($position['modus'] == 0) {
+            if ((int) $position['modus'] === 0) {
                 $position['meta'] = $articleModule->sGetPromotionById('fix', 0, $position['articleordernumber']);
             }
         }
+        unset($position);
 
         if ($this->_config['_previewForcePagebreak']) {
             $positions = array_merge($positions, $positions);
@@ -547,7 +555,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             Shopware()->Db()->fetchRow(
                 'SELECT * FROM s_core_documents WHERE id = ?',
                 [$id],
-                \PDO::FETCH_ASSOC
+                PDO::FETCH_ASSOC
             )
         );
 
@@ -555,7 +563,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         $containers = Shopware()->Db()->fetchAll(
             'SELECT * FROM s_core_documents_box WHERE documentID = ?',
             [$id],
-            \PDO::FETCH_ASSOC
+            PDO::FETCH_ASSOC
         );
 
         $translation = $this->translationComponent->read($this->_order->order->language, 'documents');
@@ -581,7 +589,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     /**
      * Initiate smarty template engine
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function initTemplateEngine()
     {
@@ -602,7 +610,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     /**
      * Sets the translation component
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function setTranslationComponent()
     {
@@ -610,18 +618,18 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     protected function setOrder(Shopware_Models_Document_Order $order)
     {
         $this->_order = $order;
 
-        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
+        $repository = Shopware()->Models()->getRepository(Shop::class);
         // "language" actually refers to a language-shop and not to a locale
         $shop = $repository->getById($this->_order->order->language);
 
         if (!empty($this->_order->order->currencyID)) {
-            $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Currency::class);
+            $repository = Shopware()->Models()->getRepository(Currency::class);
             $shop->setCurrency($repository->find($this->_order->order->currencyID));
         }
 
@@ -644,10 +652,10 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     /**
      * Save document in database / generate number
      *
-     * @throws \Exception
-     * @throws \RuntimeException
-     * @throws \Zend_Db_Adapter_Exception
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws Exception
+     * @throws RuntimeException
+     * @throws Zend_Db_Adapter_Exception
+     * @throws OptimisticLockException
      */
     protected function saveDocument()
     {
@@ -664,7 +672,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         }
 
         // Check if this kind of document already exists
-        $typID = $this->_typID;
+        $typID = (int) $this->_typID;
 
         $checkForExistingDocument = Shopware()->Db()->fetchRow('
         SELECT id , docID , hash FROM s_order_documents WHERE userID = ? AND orderID = ? AND `type` = ?
@@ -677,7 +685,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             WHERE `type` = ? AND userID = ? AND orderID = ? LIMIT 1
             ';
             $amount = ($this->_order->order->taxfree ? true : $this->_config['netto']) ? round($this->_order->amountNetto, 2) : round($this->_order->amount, 2);
-            if ($typID == 4) {
+            if ($typID === 4) {
                 $amount *= -1;
             }
             Shopware()->Db()->query($update, [
@@ -714,10 +722,10 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         } else {
             // Create new document
 
-            $hash = md5(uniqid((string) rand()));
+            $hash = md5(uniqid((string) mt_rand(), true));
 
             $amount = ($this->_order->order->taxfree ? true : $this->_config['netto']) ? round($this->_order->amountNetto, 2) : round($this->_order->amount, 2);
-            if ($typID == 4) {
+            if ($typID === Document::TYPE_CANCEL) {
                 $amount *= -1;
             }
             $sql = '
@@ -748,22 +756,22 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             Shopware()->Models()->flush($createdDocument);
 
             // Update numberrange, except for cancellations
-            if ($typID != 4) {
+            if ($typID !== Document::TYPE_CANCEL) {
                 if (!empty($this->_document['numbers'])) {
-                    $numberrange = $this->_document['numbers'];
+                    $numberRange = $this->_document['numbers'];
                 } else {
                     // The typID is indexed with base 0, so we need increase the typID
-                    if (!in_array($typID, ['1', '2', '3'])) {
-                        $typID = $typID + 1;
+                    if (!in_array($typID, [1, 2, 3], true)) {
+                        ++$typID;
                     }
-                    $numberrange = 'doc_' . $typID;
+                    $numberRange = 'doc_' . $typID;
                 }
 
                 /** @var NumberRangeIncrementerInterface $incrementer */
                 $incrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
 
                 // Get the next number and save it in the document
-                $nextNumber = $incrementer->increment($numberrange);
+                $nextNumber = $incrementer->increment($numberRange);
 
                 Shopware()->Db()->query('
                     UPDATE `s_order_documents` SET `docID` = ? WHERE `id` = ? LIMIT 1 ;

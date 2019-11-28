@@ -197,16 +197,11 @@ class DatabaseWriter
         $this->db->insert('s_core_snippets', $queryData);
     }
 
-    /**
-     * @param string $name
-     * @param string $value
-     * @param array  $row
-     */
-    private function updateRecord($name, $value, $row)
+    private function updateRecord(string $name, string $value, array $row)
     {
         $hasSameValue = $name === $row['name'] && $value === $row['value'];
 
-        $isDirty = $row['dirty'] == 1;
+        $isDirty = (int) $row['dirty'] === 1;
 
         // snippet was never touched after insert
         if (!$this->force && $hasSameValue && !$isDirty) {

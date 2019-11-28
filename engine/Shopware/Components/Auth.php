@@ -128,7 +128,7 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
      */
     public function authenticate(Zend_Auth_Adapter_Interface $adapter = null)
     {
-        if ($adapter == null) {
+        if ($adapter === null) {
             $adapter = $this->_baseAdapter;
         }
 
@@ -140,7 +140,7 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
      */
     public function refresh(Zend_Auth_Adapter_Interface $adapter = null)
     {
-        if ($adapter == null) {
+        if ($adapter === null) {
             $adapter = $this->getBaseAdapter();
         }
         $result = $adapter->refresh();

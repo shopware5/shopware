@@ -58,7 +58,7 @@ class LegacyCaptcha implements CaptchaInterface
             $captchaString = $request->get('sCaptcha');
             $captcha = str_replace(' ', '', strtolower($captchaString));
             $rand = $request->get('sRand');
-            if (empty($rand) || $captcha != substr(md5($rand), 0, 5)) {
+            if (empty($rand) || strpos(md5($rand), $captcha) !== 0) {
                 return false;
             }
         }

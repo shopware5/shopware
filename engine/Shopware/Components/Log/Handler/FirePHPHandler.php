@@ -123,10 +123,10 @@ class FirePHPHandler extends BaseFirePHPHandler
 
         $parts = str_split($record['formatted'], $chunkSize);
         $headers = [];
-        for ($i = 0; $i < count($parts); ++$i) {
+        for ($i = 0, $iMax = count($parts); $i < $iMax; ++$i) {
             $part = $parts[$i];
-            $isFirst = ($i == 0);
-            $isLast = ($i == count($parts) - 1);
+            $isFirst = ($i === 0);
+            $isLast = ($i === $iMax - 1);
 
             if ($isFirst) {
                 $headers[] = $this->createHeader(

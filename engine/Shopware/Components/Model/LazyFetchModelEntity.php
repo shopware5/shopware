@@ -71,7 +71,7 @@ abstract class LazyFetchModelEntity extends ModelEntity
             return $object;
         }
 
-        if ($em == null) {
+        if ($em === null) {
             $em = self::$em;
         }
 

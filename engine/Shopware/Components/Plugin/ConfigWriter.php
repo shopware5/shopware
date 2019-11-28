@@ -88,7 +88,7 @@ class ConfigWriter
             throw new \Exception(sprintf('Config element "%s" not found.', $name));
         }
 
-        if ($element->getScope() == 0 && $shop->getId() !== 1) {
+        if ($element->getScope() === 0 && $shop->getId() !== 1) {
             throw new \InvalidArgumentException(sprintf("Element '%s' is not writeable for shop %s", $element->getName(), $shop->getId()));
         }
 

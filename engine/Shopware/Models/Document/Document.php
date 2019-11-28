@@ -37,6 +37,11 @@ use Shopware\Components\Model\ModelEntity;
  */
 class Document extends ModelEntity
 {
+    public const TYPE_INVOICE = 1;
+    public const TYPE_SHIPPING = 2;
+    public const TYPE_CREDIT = 3;
+    public const TYPE_CANCEL = 4;
+
     /**
      * The id property is an identifier property which means
      * doctrine associations can be defined over this field

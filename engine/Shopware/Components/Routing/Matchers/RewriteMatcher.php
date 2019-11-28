@@ -95,7 +95,7 @@ class RewriteMatcher implements MatcherInterface
         if ($statement->execute() && $statement->rowCount() > 0) {
             $route = $statement->fetch(\PDO::FETCH_ASSOC);
             $query = $this->getQueryFormOrgPath($route['orgPath']);
-            if (empty($route['main']) || $route['shopId'] != $context->getShopId()) {
+            if (empty($route['main']) || (int) $route['shopId'] !== $context->getShopId()) {
                 $query['rewriteAlias'] = true;
             } else {
                 $query['rewriteUrl'] = true;

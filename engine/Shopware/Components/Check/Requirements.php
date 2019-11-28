@@ -184,13 +184,9 @@ class Requirements
     /**
      * Compares the requirement with the version
      *
-     * @param string $name
-     * @param string $value
-     * @param string $requiredValue
-     *
      * @return bool
      */
-    private function compare($name, $value, $requiredValue)
+    private function compare(string $name, string $value, string $requiredValue)
     {
         $m = 'compare' . str_replace(' ', '', ucwords(str_replace(['_', '.'], ' ', $name)));
 
@@ -210,7 +206,7 @@ class Requirements
             return version_compare($requiredValue, $value, '<=');
         }
 
-        return $requiredValue == $value;
+        return $requiredValue === $value;
     }
 
     /**
@@ -356,7 +352,7 @@ class Requirements
         if (function_exists('gd_info')) {
             $gd = gd_info();
             if (preg_match('#[0-9.]+#', $gd['GD Version'], $match)) {
-                if (substr_count($match[0], '.') == 1) {
+                if (substr_count($match[0], '.') === 1) {
                     $match[0] .= '.0';
                 }
 
@@ -459,7 +455,7 @@ class Requirements
         if (function_exists('set_include_path')) {
             $old = set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . DIRECTORY_SEPARATOR);
 
-            return $old && get_include_path() != $old;
+            return $old && get_include_path() !== $old;
         }
 
         return false;

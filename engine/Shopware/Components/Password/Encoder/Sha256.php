@@ -94,13 +94,13 @@ class Sha256 implements PasswordEncoderInterface
     public function isReencodeNeeded($hash)
     {
         /* @var int $interations */
-        list($iterations, $salt) = explode(':', $hash);
+        [$iterations, $salt] = explode(':', $hash);
 
-        if ($iterations != $this->options['iterations']) {
+        if ((int) $iterations !== $this->options['iterations']) {
             return true;
         }
 
-        if (strlen($salt) != $this->options['salt_len']) {
+        if (strlen($salt) !== $this->options['salt_len']) {
             return true;
         }
 

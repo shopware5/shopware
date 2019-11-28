@@ -357,7 +357,7 @@ class LegacyStructConverter
 
         if ($price->getCalculatedPseudoPrice()) {
             $discount = 0;
-            if ($price->getCalculatedPseudoPrice() != 0) {
+            if ($price->getCalculatedPseudoPrice() !== 0) {
                 $discount = round(($price->getCalculatedPrice() / $price->getCalculatedPseudoPrice() * 100) - 100, 2) * -1;
             }
 
@@ -951,10 +951,10 @@ class LegacyStructConverter
         }
 
         // Switch the template for the different configurator types.
-        if ($set->getType() == 1) {
+        if ($set->getType() === 1) {
             // Selection configurator
             $settings['template'] = 'article_config_step.tpl';
-        } elseif ($set->getType() == 2) {
+        } elseif ($set->getType() === 2) {
             // Table configurator
             $settings['template'] = 'article_config_picture.tpl';
         } else {

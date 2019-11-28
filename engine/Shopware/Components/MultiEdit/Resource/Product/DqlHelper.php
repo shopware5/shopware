@@ -503,7 +503,7 @@ class DqlHelper
         // Sort columns by position
         uasort(
             $result,
-            function ($a, $b) {
+            static function ($a, $b) {
                 $a = $a['position'];
                 $b = $b['position'];
                 if ($a == $b) {
@@ -534,7 +534,7 @@ class DqlHelper
     public function getColumnInfoByAlias($alias)
     {
         foreach ($this->columnInfo as $info) {
-            if ($info['alias'] == $alias) {
+            if ($info['alias'] === $alias) {
                 return $info;
             }
         }
@@ -565,28 +565,28 @@ class DqlHelper
         // Some generic searching for the association
         $metaData = $this->getEntityManager()->getClassMetadata(Detail::class);
         foreach ($metaData->associationMappings as $mapping) {
-            if ($mapping['targetEntity'] == $entity) {
+            if ($mapping['targetEntity'] === $entity) {
                 return 'detail.' . $mapping['fieldName'];
             }
         }
 
         $metaData = $this->getEntityManager()->getClassMetadata(Article::class);
         foreach ($metaData->associationMappings as $mapping) {
-            if ($mapping['targetEntity'] == $entity) {
+            if ($mapping['targetEntity'] === $entity) {
                 return 'article.' . $mapping['fieldName'];
             }
         }
 
         $metaData = $this->getEntityManager()->getClassMetadata(Set::class);
         foreach ($metaData->associationMappings as $mapping) {
-            if ($mapping['targetEntity'] == $entity) {
+            if ($mapping['targetEntity'] === $entity) {
                 return 'configuratorSet.' . $mapping['fieldName'];
             }
         }
 
         $metaData = $this->getEntityManager()->getClassMetadata(Group::class);
         foreach ($metaData->associationMappings as $mapping) {
-            if ($mapping['targetEntity'] == $entity) {
+            if ($mapping['targetEntity'] === $entity) {
                 return 'propertySet.' . $mapping['fieldName'];
             }
         }
@@ -606,7 +606,7 @@ class DqlHelper
             if ($token['type'] === 'attribute') {
                 $entity = $this->getEntityForAttribute($token['token']);
                 // Do not allow main entity to be joined
-                if ($entity == $this->getMainEntity()) {
+                if ($entity === $this->getMainEntity()) {
                     continue;
                 }
                 // In some cases, additional joins are needed - e.g. a ConfiguratorGroup does need the ConfiguratorSet
@@ -780,7 +780,7 @@ class DqlHelper
         $info = $this->getColumnsForProductListing();
         $info = $info[ucfirst($prefix) . ucfirst($field['field'])];
 
-        if ($info['nullable'] && $value == '') {
+        if ($info['nullable'] && $value === '') {
             $value = null;
         }
 
