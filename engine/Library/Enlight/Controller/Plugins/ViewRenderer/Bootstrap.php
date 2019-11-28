@@ -319,8 +319,8 @@ class Enlight_Controller_Plugins_ViewRenderer_Bootstrap extends Enlight_Plugin_B
             $part = trim($part, '_');
             $part = strtolower($part);
         }
+        unset($part);
 
-        $templateName = implode(DIRECTORY_SEPARATOR, $parts) . '.tpl';
-        return $templateName;
+        return implode(DIRECTORY_SEPARATOR, $parts) . '.tpl';
     }
 }

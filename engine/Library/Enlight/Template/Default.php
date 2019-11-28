@@ -35,17 +35,17 @@ class Enlight_Template_Default extends Smarty_Internal_Template
     /**
      * Constant to overwrite smarty blocks.
      */
-    const BLOCK_REPLACE = 'replace';
+    public const BLOCK_REPLACE = 'replace';
 
     /**
      * Constant to add a content before the smarty block
      */
-    const BLOCK_APPEND = 'append';
+    public const BLOCK_APPEND = 'append';
 
     /**
      * Constant to add a content after the smarty block
      */
-    const BLOCK_PREPEND = 'prepend';
+    public const BLOCK_PREPEND = 'prepend';
 
     /**
      * Assigns a smarty variable.

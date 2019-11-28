@@ -89,7 +89,7 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
         $request = $subject->Request();
 
         if (!$request->isDispatched()) {
-            return;
+            return false;
         }
 
         // If the attribute padding is a boolean true
@@ -104,7 +104,7 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
         } elseif (!empty($this->padding)) {
             $content = $response->getBody();
         } else {
-            return;
+            return false;
         }
 
         // Convert content to json

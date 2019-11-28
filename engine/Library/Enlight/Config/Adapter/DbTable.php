@@ -359,13 +359,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
         return $data;
     }
 
-    /**
-     * @param array $section
-     * @param Zend_Db_Adapter_Abstract $db
-     * @param array $insertData
-     * @return array
-     */
-    protected function buildWhereCondition(array $section, Zend_Db_Adapter_Abstract $db, array $insertData): array {
+    protected function buildWhereCondition(array $section, Zend_Db_Adapter_Abstract $db, array &$insertData): array {
         $where = [];
 
         if (is_array($this->_sectionColumn)) {

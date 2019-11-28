@@ -31,15 +31,15 @@ class Enlight_Hook_HookHandler
     /**
      * Constant that defines that the class method should be overwritten.
      */
-    const TypeReplace = 'replace';
+    public const TypeReplace = 'replace';
 
     /**
      * Constant that defines that the hook method must be called before the original method.
      */
-    const TypeBefore = 'before';
+    public const TypeBefore = 'before';
 
     /**
      * Constant that defines that the hook method must be called after the original method.
      */
-    const TypeAfter = 'after';
+    public const TypeAfter = 'after';
 }

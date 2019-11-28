@@ -50,7 +50,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
     /**
      * The dirty fields list.
      *
-     * @var bool
+     * @var bool[]
      */
     protected $_dirtyFields = [];
 
@@ -163,7 +163,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
     /**
      * Returns the config name.
      *
-     * @return Enlight_Config
+     * @return string
      */
     public function getName()
     {

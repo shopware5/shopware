@@ -33,17 +33,17 @@ class Enlight_Exception extends Exception
     /**
      * Constant that a class could not be found
      */
-    const CLASS_NOT_FOUND = 1000;
+    public const CLASS_NOT_FOUND = 1000;
 
     /**
      * Constant that a method could not be found
      */
-    const METHOD_NOT_FOUND = 1100;
+    public const METHOD_NOT_FOUND = 1100;
 
     /**
      * Constant that a class property could not be found
      */
-    const PROPERTY_NOT_FOUND = 1200;
+    public const PROPERTY_NOT_FOUND = 1200;
 
     /**
      * The class constructor sets the given previous exception into the internal property.
