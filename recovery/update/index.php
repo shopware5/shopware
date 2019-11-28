@@ -42,7 +42,7 @@ use Shopware\Recovery\Update\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 
 if (PHP_SAPI === 'cli') {
-    error_reporting(-1);
+    error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
     ini_set('display_errors', 1);
 
     $input = new ArgvInput();
