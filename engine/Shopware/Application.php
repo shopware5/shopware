@@ -51,7 +51,7 @@ class Shopware extends Enlight_Application
 
         $this->container = $container;
         $this->appPath = __DIR__ . DIRECTORY_SEPARATOR;
-        $this->docPath = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR;
+        $this->docPath = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR;
 
         parent::__construct();
     }
@@ -60,8 +60,9 @@ class Shopware extends Enlight_Application
      * Returns called resource
      *
      * @param string $name
-     * @param array  $value
+     * @param array $value
      *
+     * @return object|null
      * @throws Enlight_Exception
      *
      * @deprecated 4.2

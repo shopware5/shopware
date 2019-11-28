@@ -57,7 +57,7 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
      */
     public function __construct($name, $storage = null)
     {
-        if ($storage !== null && $storage instanceof Enlight_Config) {
+        if ($storage instanceof Enlight_Config) {
             $this->storage = $storage;
         }
 

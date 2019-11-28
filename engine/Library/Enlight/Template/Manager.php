@@ -91,7 +91,7 @@ class Enlight_Template_Manager extends Smarty
         // Set default dirs
         $this->setTemplateDir('.' . DS . 'templates' . DS)
             ->setCompileDir('.' . DS . 'templates_c' . DS)
-            ->setPluginsDir([dirname(__FILE__) . '/Plugins/', SMARTY_PLUGINS_DIR])
+            ->setPluginsDir([__DIR__ . '/Plugins/', SMARTY_PLUGINS_DIR])
             ->setCacheDir('.' . DS . 'cache' . DS)
             ->setConfigDir('.' . DS . 'configs' . DS);
 
@@ -220,6 +220,8 @@ class Enlight_Template_Manager extends Smarty
 
             return $this;
         }
+
+        /** @var array|null $_template_dir */
         $_template_dir = $this->getTemplateDir();
         if ($position === self::POSITION_PREPEND) {
             if ($key === null) {

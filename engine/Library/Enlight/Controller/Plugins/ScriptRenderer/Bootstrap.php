@@ -85,7 +85,11 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
 
         $this->render = false;
 
-        if ($this->viewRenderer->Action()->View()->hasTemplate()
+        $view = $this->viewRenderer->Action()->View();
+        if (!$view) {
+            return;
+        }
+        if ($view->hasTemplate()
             || !$this->viewRenderer->shouldRender()
         ) {
             return;
@@ -96,7 +100,7 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
             return;
         }
 
-        $this->viewRenderer->Action()->View()->loadTemplate($template);
+        $view->loadTemplate($template);
 
         foreach ($this->headers as $name => $value) {
             if ($name === 'Expires' && $value === null) {
@@ -175,11 +179,13 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
         $count = count($templateNames);
         if ($count === 0) {
             return null;
-        } elseif ($count === 1) {
-            return $templateNames[0];
-        } else {
-            return 'snippet:string:{include file="' . implode("\"}\n{include file=\"", $templateNames) . '"}';
         }
+
+        if ($count === 1) {
+            return $templateNames[0];
+        }
+
+        return 'snippet:string:{include file="' . implode("\"}\n{include file=\"", $templateNames) . '"}';
     }
 
     /**

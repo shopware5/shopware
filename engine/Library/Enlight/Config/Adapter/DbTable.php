@@ -102,7 +102,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
     /**
      * Sets the options of an array.
      *
-     *
+     * @param array $options
      * @return Enlight_Config_Adapter
      */
     public function setOptions(array $options)
@@ -120,10 +120,8 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
                     $this->{'_' . $key} = (bool) $option;
                     break;
                 case 'sectionColumn':
-                case 'table':
-                    $this->{'_' . $key} = $option;
-                    break;
                 case 'db':
+                case 'table':
                     $this->{'_' . $key} = $option;
                     break;
                 default:
@@ -160,7 +158,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
     /**
      * Reads a section from the data store.
      *
-     *
+     * @param Enlight_Config $config
      * @return Enlight_Config_Adapter_DbTable
      */
     public function read(Enlight_Config $config)
@@ -174,7 +172,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
         $currentSection = is_array($section) ? implode(':', $section) : $section;
         while ($currentSection !== null) {
             $data += $this->readSection($name, $currentSection);
-            $currentSection = isset($extends[$currentSection]) ? $extends[$currentSection] : null;
+            $currentSection = $extends[$currentSection] ?? null;
         }
 
         $config->setData($data);
@@ -227,19 +225,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
             $insertData[$this->_createdColumn] = new Zend_Date();
         }
 
-        if ($section !== null) {
-            if (is_array($this->_sectionColumn)) {
-                foreach ($this->_sectionColumn as $key => $sectionColumn) {
-                    if (isset($section[$key])) {
-                        $where[] = $db->quoteInto($sectionColumn . '=?', $section[$key]);
-                        $insertData[$sectionColumn] = $section[$key];
-                    }
-                }
-            } else {
-                $where[] = $db->quoteInto($this->_sectionColumn . '=?', $section);
-                $insertData[$this->_sectionColumn] = $section;
-            }
-        }
+        $where += $this->buildWhereCondition($section, $db, $insertData);
 
         foreach ((array) $fields as $field) {
             $fieldWhere = $where;
@@ -255,11 +241,11 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
                         $newValue = serialize($newValue);
                     }
 
-                    if (!$force && $row[$this->_dirtyColumn] == 1 && ($row[$this->_valueColumn] != $newValue || !$allowReset)) {
+                    if (!$force && $row[$this->_dirtyColumn] === 1 && ($row[$this->_valueColumn] !== $newValue || !$allowReset)) {
                         continue;
                     }
 
-                    if ($allowReset && $row[$this->_valueColumn] == $newValue) {
+                    if ($allowReset && $row[$this->_valueColumn] === $newValue) {
                         $data[$this->_dirtyColumn] = 0;
                     } else {
                         $data[$this->_valueColumn] = $newValue;
@@ -315,19 +301,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
             $where[] = $db->quoteInto($this->_namespaceColumn . '=?', $name);
         }
 
-        if ($section !== null) {
-            if (is_array($this->_sectionColumn)) {
-                foreach ($this->_sectionColumn as $key => $sectionColumn) {
-                    if (isset($section[$key])) {
-                        $where[] = $db->quoteInto($sectionColumn . '=?', $section[$key]);
-                        $insertData[$sectionColumn] = $section[$key];
-                    }
-                }
-            } else {
-                $where[] = $db->quoteInto($this->_sectionColumn . '=?', $section);
-                $insertData[$this->_sectionColumn] = $section;
-            }
-        }
+        $where += $this->buildWhereCondition($section, $db, $insertData);
 
         $where[] = $db->quoteInto($this->_nameColumn . ' IN (?)', $fields);
         if (!$deleteDirty) {
@@ -359,10 +333,10 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
 
         if ($section !== null && $this->_sectionColumn !== null) {
             if (is_array($this->_sectionColumn)) {
-                $section = explode(':', $section);
-                foreach ($this->_sectionColumn as $key => $sectionColumn) {
-                    if (!empty($section[$key])) {
-                        $select->where($sectionColumn . '=?', $section[$key]);
+                $sectionParts = explode(':', $section);
+                foreach ($this->_sectionColumn as $key => $sectionPartsColumn) {
+                    if (!empty($sectionParts[$key])) {
+                        $select->where($sectionPartsColumn . '=?', $sectionParts[$key]);
                     }
                 }
             } elseif ($this->_sectionColumn !== null) {
@@ -383,5 +357,29 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
         }
 
         return $data;
+    }
+
+    /**
+     * @param array $section
+     * @param Zend_Db_Adapter_Abstract $db
+     * @param array $insertData
+     * @return array
+     */
+    protected function buildWhereCondition(array $section, Zend_Db_Adapter_Abstract $db, array $insertData): array {
+        $where = [];
+
+        if (is_array($this->_sectionColumn)) {
+            foreach ($this->_sectionColumn as $key => $sectionColumn) {
+                if (isset($section[$key])) {
+                    $where[] = $db->quoteInto($sectionColumn . '=?', $section[$key]);
+                    $insertData[$sectionColumn] = $section[$key];
+                }
+            }
+        } else {
+            $where[] = $db->quoteInto($this->_sectionColumn . '=?', $section);
+            $insertData[$this->_sectionColumn] = $section;
+        }
+
+        return $where;
     }
 }

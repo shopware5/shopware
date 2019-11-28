@@ -86,16 +86,16 @@ class Enlight_Loader
             throw new Enlight_Exception('Class name must be a string');
         }
         $class = ltrim($class, self::DEFAULT_SEPARATOR);
-        if (!$this->isLoaded($class)) {
+        if (!self::isLoaded($class)) {
             if ($path !== null) {
-                $this->loadFile($path);
+                self::loadFile($path);
                 return true;
             }
             $path = $this->getClassPath($class);
             if ($path === null) {
                 return false;
             }
-            $this->loadFile($path, false);
+            self::loadFile($path, false);
         }
         return true;
     }
@@ -163,13 +163,13 @@ class Enlight_Loader
             return $path;
         }
 
-        if (!isset($path['0'])) {
+        if (!isset($path[0])) {
             return getcwd();
         }
 
         // Make path absolute
         if ($path[0] !== DIRECTORY_SEPARATOR) {
-            $path = getcwd().DIRECTORY_SEPARATOR.$path;
+            $path = getcwd() . DIRECTORY_SEPARATOR.$path;
         }
 
         // Remove . and ..
@@ -187,7 +187,7 @@ class Enlight_Loader
                 $absolutes[] = $part;
             }
         }
-        $newPath = DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, $absolutes);
+        $newPath = DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $absolutes);
 
         // Check if path/file exists
         if (!file_exists($newPath)) {
@@ -209,7 +209,7 @@ class Enlight_Loader
             $path = get_include_path();
         }
 
-        if (PATH_SEPARATOR == ':') {
+        if (PATH_SEPARATOR === ':') {
             // On *nix systems, include_paths which include paths with a stream
             // schema cannot be safely explode'd, so we have to be a bit more
             // intelligent in the approach.
@@ -228,7 +228,7 @@ class Enlight_Loader
      * Last is to consider whether the path is readable.
      *
      * @param   string $class
-     * @return  string|void
+     * @return  string|null
      */
     public function getClassPath($class)
     {
@@ -283,7 +283,7 @@ class Enlight_Loader
 
         switch ($position) {
             case self::POSITION_APPEND:
-                array_push($this->namespaces, $namespace);
+                $this->namespaces[] = $namespace;
                 break;
             case self::POSITION_PREPEND:
                 array_unshift($this->namespaces, $namespace);
@@ -299,7 +299,7 @@ class Enlight_Loader
      * Adds a path to the include paths array and returns the old include paths.
      * The position specifies at what point you want to add the include path in the array.
      *
-     * @param   string $path
+     * @param   string|string[] $path
      * @param   string $position
      * @throws  Enlight_Exception
      * @return  string
@@ -315,13 +315,13 @@ class Enlight_Loader
 
         $paths = self::explodeIncludePath();
 
-        if (($key = array_search($path, $paths)) !== false) {
+        if (($key = array_search($path, $paths, true)) !== false) {
             unset($paths[$key]);
         }
 
         switch ($position) {
             case self::POSITION_APPEND:
-                array_push($paths, $path);
+                $paths[] = $path;
                 break;
             case self::POSITION_PREPEND:
                 array_unshift($paths, $path);
@@ -348,7 +348,7 @@ class Enlight_Loader
         }
 
         $old = set_include_path($path);
-        if ($old !== $path && (!$old || $old == get_include_path())) {
+        if ($old !== $path && (!$old || $old === get_include_path())) {
             throw new Enlight_Exception('Include path "' . $path . '" could not be set failure');
         }
 

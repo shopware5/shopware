@@ -435,9 +435,8 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
                 return $this->request->get($key);
             case $this->cookies->has($key):
                 return $this->cookies->get($key);
-            case $key === 'REQUEST_URI':
-                return $this->getRequestUri();
             case $key === 'PATH_INFO':
+            case $key === 'REQUEST_URI':
                 return $this->getRequestUri();
             case $this->server->has($key):
                 return $this->server->get($key);
@@ -462,17 +461,12 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
     public function has($key)
     {
         switch (true) {
-            case isset($this->_params[$key]):
-                return true;
             case $this->query->has($key):
-                return true;
             case $this->request->has($key):
-                return true;
             case $this->cookies->has($key):
-                return true;
             case $this->server->has($key):
-                return true;
             case isset($_ENV[$key]):
+            case isset($this->_params[$key]):
                 return true;
             default:
                 return false;
@@ -525,7 +519,7 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
             return $_GET;
         }
 
-        return isset($_GET[$key]) ? $_GET[$key] : $default;
+        return $_GET[$key] ?? $default;
     }
 
     /**
@@ -581,7 +575,7 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
             return $_POST;
         }
 
-        return isset($_POST[$key]) ? $_POST[$key] : $default;
+        return $_POST[$key] ?? $default;
     }
 
     /**
@@ -593,7 +587,7 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
             return $_COOKIE;
         }
 
-        return isset($_COOKIE[$key]) ? $_COOKIE[$key] : $default;
+        return $_COOKIE[$key] ?? $default;
     }
 
     /**
@@ -617,7 +611,7 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
             return $_ENV;
         }
 
-        return isset($_ENV[$key]) ? $_ENV[$key] : $default;
+        return $_ENV[$key] ?? $default;
     }
 
     /**
@@ -677,7 +671,7 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
             $this->baseUrl = $this->prepareBaseUrl();
         }
 
-        return ($raw == false) ? urldecode($this->baseUrl) : $this->baseUrl;
+        return $raw ? $this->baseUrl : urldecode($this->baseUrl);
     }
 
     /**
@@ -837,7 +831,7 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
 
         $header = strtolower($this->getHeader('USER_AGENT'));
 
-        return strstr($header, ' flash') ? true : false;
+        return strpos($header, ' flash') !== false;
     }
 
     /**
@@ -891,7 +885,7 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
 
         if ($name === null) {
             return '';
-        } elseif (($scheme == self::SCHEME_HTTP && $port == 80) || ($scheme == self::SCHEME_HTTPS && $port == 443)) {
+        } elseif (($scheme === self::SCHEME_HTTP && $port === 80) || ($scheme === self::SCHEME_HTTPS && $port === 443)) {
             return $name;
         }
 

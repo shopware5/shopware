@@ -106,15 +106,15 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
     {
         switch (substr($name, 0, 3)) {
             case 'get':
-                $key = strtolower(substr($name, 3, 1)) . substr($name, 4);
+                $key = strtolower($name[3]) . substr($name, 4);
                 $key = strtolower(preg_replace('/([A-Z])/', '_$0', $key));
 
                 return $this->get($key);
             case 'set':
-                $key = strtolower(substr($name, 3, 1)) . substr($name, 4);
+                $key = strtolower($name[3]) . substr($name, 4);
                 $key = strtolower(preg_replace('/([A-Z])/', '_$0', $key));
 
-                return $this->set($key, isset($args[0]) ? $args[0] : null);
+                return $this->set($key, $args[0] ?? null);
             default:
                 throw new Enlight_Exception(
                     'Method "' . get_class($this) . '::' . $name . '" not found failure',
@@ -157,7 +157,7 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      */
     public function get($key)
     {
-        return isset($this->_elements[$key]) ? $this->_elements[$key] : null;
+        return $this->_elements[$key] ?? null;
     }
 
     /**
@@ -201,7 +201,7 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
     /**
      * Deletes an item from the list.
      *
-     * @param unknown_type $key
+     * @param string $key
      */
     public function offsetUnset($key)
     {

@@ -131,7 +131,8 @@ class Enlight_Hook_HookExecutionContext
         // Check for 'replace' hooks
         $replaceEventName = $this->getHookEventName(Enlight_Hook_HookHandler::TypeReplace);
         $listeners = $this->hookManager->getEventManager()->getListeners($replaceEventName);
-        if (count($listeners) === 0 || $this->parentExecutionLevel >= count($listeners)) {
+        $listenerCount = count($listeners);
+        if ($listenerCount === 0 || $this->parentExecutionLevel >= $listenerCount) {
             // No 'replace' listeners or reached the end of the execution chain, hence execute the original method
             // using a generated helper method. This allows us to call both public and protected methods.
             $returnValue = $this->args->getSubject()->__executeOriginalMethod($this->args->getMethod(), $args);

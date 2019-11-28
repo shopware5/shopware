@@ -265,7 +265,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     {
         if ($plugins === null) {
             $plugins = new Enlight_Plugin_Namespace_Loader('Controller');
-            $plugins->addPrefixPath('Enlight_Controller_Plugins', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Plugins');
+            $plugins->addPrefixPath('Enlight_Controller_Plugins', __DIR__ . DIRECTORY_SEPARATOR . 'Plugins');
         }
         $this->plugins = $plugins;
 

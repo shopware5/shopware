@@ -127,7 +127,7 @@ class Enlight_Hook_HookManager extends Enlight_Class
     public function getHookEvent($class, $method, $type)
     {
         return Enlight_Hook_HookExecutionContext::createHookEventName(
-            (isset($this->aliases[$class])) ? $this->aliases[$class] : $class,
+            $this->aliases[$class] ?? $class,
             $method,
             $type
         );
@@ -204,7 +204,7 @@ class Enlight_Hook_HookManager extends Enlight_Class
      */
     public function getAlias($name)
     {
-        return isset($this->aliases[$name]) ? $this->aliases[$name] : null;
+        return $this->aliases[$name] ?? null;
     }
 
     /**

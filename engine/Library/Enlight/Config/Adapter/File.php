@@ -159,7 +159,7 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
         $section = $config->getSection();
         $filename = $this->getFilename($config->getName());
 
-        if (!$config->isDirty() && !$forceWrite) {
+        if (!$forceWrite && !$config->isDirty()) {
             return $this;
         }
 
@@ -185,9 +185,11 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
         }
 
         $dir = dirname($filename);
-        if (!file_exists($dir) || !is_writeable($dir)) {
+        if (!file_exists($dir) || !is_writable($dir)) {
             $old = umask(0);
-            mkdir($dir, 0777, true);
+            if (!mkdir($dir, 0777, true) && !is_dir($dir)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
+            }
             chmod($dir, 0777);
             umask($old);
         }
@@ -216,7 +218,7 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
      */
     protected function getFilename($name)
     {
-        $suffix = $this->_nameSuffix !== null ? $this->_nameSuffix : '.' . $this->_configType;
+        $suffix = $this->_nameSuffix ?? '.' . $this->_configType;
         $indexed = false;
 
         foreach ($this->_configDir as $key => $dir) {

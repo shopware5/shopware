@@ -181,7 +181,7 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
     {
         $array = array();
         foreach ($this->_data as $key => $value) {
-            if ($value instanceof Enlight_Config_BaseConfig) {
+            if ($value instanceof self) {
                 $array[$key] = clone $value;
             } else {
                 $array[$key] = $value;
@@ -200,7 +200,7 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
         $array = array();
         $data = $this->_data;
         foreach ($data as $key => $value) {
-            if ($value instanceof Enlight_Config_BaseConfig) {
+            if ($value instanceof self) {
                 $array[$key] = $value->toArray();
             } else {
                 $array[$key] = $value;
@@ -311,7 +311,7 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      */
     public function getSectionName()
     {
-        if (is_array($this->_loadedSection) && count($this->_loadedSection) == 1) {
+        if (is_array($this->_loadedSection) && count($this->_loadedSection) === 1) {
             $this->_loadedSection = $this->_loadedSection[0];
         }
         return $this->_loadedSection;
@@ -340,13 +340,13 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
     {
         foreach ($merge as $key => $item) {
             if (array_key_exists($key, $this->_data)) {
-                if ($item instanceof Enlight_Config_BaseConfig && $this->$key instanceof Enlight_Config_BaseConfig) {
+                if ($item instanceof self && $this->$key instanceof self) {
                     $this->$key = $this->$key->merge(new Enlight_Config_BaseConfig($item->toArray(), !$this->readOnly()));
                 } else {
                     $this->$key = $item;
                 }
             } else {
-                if ($item instanceof Enlight_Config_BaseConfig) {
+                if ($item instanceof self) {
                     $this->$key = new Enlight_Config_BaseConfig($item->toArray(), !$this->readOnly());
                 } else {
                     $this->$key = $item;
@@ -367,7 +367,7 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
     {
         $this->_allowModifications = false;
         foreach ($this->_data as $key => $value) {
-            if ($value instanceof Enlight_Config_BaseConfig) {
+            if ($value instanceof self) {
                 $value->setReadOnly();
             }
         }
@@ -423,7 +423,7 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
         // detect circular section inheritance
         $extendedSectionCurrent = $extendedSection;
         while (array_key_exists($extendedSectionCurrent, $this->_extends)) {
-            if ($this->_extends[$extendedSectionCurrent] == $extendingSection) {
+            if ($this->_extends[$extendedSectionCurrent] === $extendingSection) {
                 throw new Enlight_Config_Exception('Illegal circular inheritance detected');
             }
             $extendedSectionCurrent = $this->_extends[$extendedSectionCurrent];

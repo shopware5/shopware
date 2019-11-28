@@ -222,7 +222,7 @@ class Enlight_Config_Format_Ini extends Enlight_Config_BaseConfig
         $thisSection = $iniArray[$section];
 
         foreach ($thisSection as $key => $value) {
-            if (strtolower($key) == ';extends') {
+            if (strtolower($key) === ';extends') {
                 if (isset($iniArray[$value])) {
                     $this->_assertValidExtend($section, $value);
 
@@ -253,7 +253,7 @@ class Enlight_Config_Format_Ini extends Enlight_Config_BaseConfig
     {
         if (strpos($key, $this->_nestSeparator) !== false) {
             $pieces = explode($this->_nestSeparator, $key, 2);
-            if (strlen($pieces[0]) && strlen($pieces[1])) {
+            if ($pieces[0] !== '' && $pieces[1] !== '') {
                 if (!isset($config[$pieces[0]])) {
                     if ($pieces[0] === '0' && !empty($config)) {
                         // convert the current values in $config into an array

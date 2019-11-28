@@ -355,9 +355,13 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
     {
         if ($key === null) {
             return array_merge($_SERVER, $this->_serverParams);
-        } elseif (isset($this->_serverParams[$key])) {
-            return $this->_serverParams[$key] !== null ? $this->_serverParams[$key] : $default;
-        } elseif ($this->server->has($key)) {
+        }
+
+        if (isset($this->_serverParams[$key])) {
+            return $this->_serverParams[$key] ?? $default;
+        }
+
+        if ($this->server->has($key)) {
             return $this->server->get($key);
         }
 

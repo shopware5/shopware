@@ -65,7 +65,7 @@ class Enlight_Template_Default extends Smarty_Internal_Template
             $this->smarty->assign($tpl_var, $value, $nocache);
         } elseif ($scope === Smarty::SCOPE_GLOBAL) {
             $this->smarty->assignGlobal($tpl_var, $value, $nocache);
-        } elseif ($scope == Smarty::SCOPE_PARENT) {
+        } elseif ($scope === Smarty::SCOPE_PARENT) {
             if ($this->parent !== null) {
                 $this->parent->assign($tpl_var, $value, $nocache);
             } else {
@@ -97,7 +97,7 @@ class Enlight_Template_Default extends Smarty_Internal_Template
         } elseif ($scope === Smarty::SCOPE_ROOT) {
             parent::$function($tpl_var);
             $this->smarty->$function($tpl_var);
-        } elseif ($scope == Smarty::SCOPE_PARENT) {
+        } elseif ($scope === Smarty::SCOPE_PARENT) {
             parent::$function($tpl_var);
             $this->parent->$function($tpl_var);
         } elseif ($scope === Smarty::SCOPE_GLOBAL) {
@@ -140,9 +140,9 @@ class Enlight_Template_Default extends Smarty_Internal_Template
         if (isset($this->block_data[$spec])) {
             if (strpos($this->block_data[$spec]['source'], '%%%%SMARTY_PARENT%%%%') !== false) {
                 $content = str_replace('%%%%SMARTY_PARENT%%%%', $content, $this->block_data[$spec]['source']);
-            } elseif ($this->block_data[$spec]['mode'] == 'prepend') {
+            } elseif ($this->block_data[$spec]['mode'] === 'prepend') {
                 $content = $this->block_data[$spec]['source'] . $content;
-            } elseif ($this->block_data[$spec]['mode'] == 'append') {
+            } elseif ($this->block_data[$spec]['mode'] === 'append') {
                 $content .= $this->block_data[$spec]['source'];
             }
         }
@@ -179,7 +179,7 @@ class Enlight_Template_Default extends Smarty_Internal_Template
     /**
      * Extends the cache id.
      *
-     * @param null $cacheId
+     * @param array|string|null $cacheId
      *
      * @return Enlight_Template_Default
      */

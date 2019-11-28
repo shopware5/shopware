@@ -393,7 +393,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
             return false;
         }
 
-        return in_array(strtolower($module), $this->modules);
+        return in_array(strtolower($module), $this->modules, true);
     }
 
     public function setModules(array $modules): void
@@ -497,7 +497,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     {
         $controllerKey = strtolower(sprintf('%s_%s', $module, $name));
 
-        return isset($this->controllers[$controllerKey]) ? $this->controllers[$controllerKey] : null;
+        return $this->controllers[$controllerKey] ?? null;
     }
 
     private function isForbiddenController(string $className): bool

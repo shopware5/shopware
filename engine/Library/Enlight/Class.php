@@ -152,7 +152,7 @@ abstract class Enlight_Class
             throw new Enlight_Exception('Class ' . $class . ' does not exist and could not be loaded');
         }
 
-        if (in_array('Enlight_Hook', class_implements($class))) {
+        if (in_array('Enlight_Hook', class_implements($class), true)) {
             $class = Shopware()->Hooks()->getProxy($class);
         }
 

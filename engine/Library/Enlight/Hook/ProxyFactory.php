@@ -96,7 +96,7 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
      */
     public function getProxy($class)
     {
-        if (!in_array('Enlight_Hook', class_implements($class))) {
+        if (!in_array('Enlight_Hook', class_implements($class), true)) {
             trigger_error(sprintf('The class "%s" does not implement the Enlight_Hook Interface. It will be thrown in 5.8.', $class), E_USER_WARNING);
             //throw new Enlight_Hook_Exception('The class' . $class . ' does not implement Enlight_Hook interface.');
         }
@@ -334,7 +334,7 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
                 return !$method->isConstructor()
                     && !$method->isFinal()
                     && !$method->isStatic()
-                    && substr($method->getName(), 0, 2) !== '__'
+                    && strpos($method->getName(), '__') !== 0
                     && $this->hookManager->hasHooks($class->getName(), $method->getName());
             }
         );
@@ -353,7 +353,7 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
 
         // Prepare parameters for the hook manager
         $params = array_map(
-            function ($parameter) {
+            static function ($parameter) {
                 $value = '$' . $parameter->getName();
                 if ($parameter->isPassedByReference()) {
                     $value = '&' . $value;
