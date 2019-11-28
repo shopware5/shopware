@@ -93,14 +93,19 @@ class HrefLangService implements HrefLangServiceInterface
 
         foreach ($shops as $key => $languageShop) {
             $shop = $this->getDetachedShop($languageShop['id']);
-
             $config->setShop($shop);
+            $routingContext = $this->getContext($shop, $config);
+
+            $link = $this->filterUrl($this->router->assemble($parameters, $routingContext), $parameters);
+
+            if (!$this->isSeoUrl($parameters, $link, $routingContext)) {
+                continue;
+            }
 
             $href = new HrefLang();
             $href->setShopId($languageShop['id']);
             $href->setLocale($languageShop['locale']);
-            $routingContext = $this->getContext($shop, $config);
-            $href->setLink($this->filterUrl($this->router->assemble($parameters, $routingContext), $parameters));
+            $href->setLink($link);
 
             if (!$config->get('hrefLangCountry')) {
                 $href->setLocale(explode('-', $languageShop['locale'])[0]);
@@ -108,10 +113,6 @@ class HrefLangService implements HrefLangServiceInterface
 
             if ((int) $languageShop['id'] === $config->get('hrefLangDefaultShop')) {
                 $href->setLocale('x-default');
-            }
-
-            if (!$this->isSeoUrl($parameters, $href->getLink(), $routingContext)) {
-                continue;
             }
 
             $hrefs[] = $href;
