@@ -34,8 +34,8 @@ use Shopware\Components\Model\ModelEntity;
  */
 class Element extends ModelEntity
 {
-    const SCOPE_LOCALE = 0;
-    const SCOPE_SHOP = 1;
+    public const SCOPE_LOCALE = 0;
+    public const SCOPE_SHOP = 1;
 
     /**
      * INVERSE SIDE

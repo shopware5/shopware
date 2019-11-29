@@ -25,6 +25,7 @@
 namespace Shopware\Components\Api\Resource;
 
 use Exception;
+use Shopware\Bundle\StoreFrontBundle\Struct\Property\Set;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
@@ -48,10 +49,10 @@ class PropertyGroup extends Resource
     /**
      * @param int $id
      *
-     * @return array|Group
      *@throws NotFoundException
-     *
      * @throws ParameterMissingException
+     *
+     * @return array|Group
      */
     public function getOne($id)
     {
@@ -216,18 +217,16 @@ class PropertyGroup extends Resource
 
             if (!isset($params['sortmode']) || empty($params['sortmode'])) {
                 // Set sortmode
-                $params['sortmode'] = 0;
+                $params['sortmode'] = Set::SORT_ALPHANUMERIC;
             }
 
             // Sortmode equals the old article_count sorting?
-            if ((int) $params['sortmode'] === 2) {
+            if ($params['sortmode'] === Set::SORT_LEGACY) {
                 // Fallback to the default sorting
-                $params['sortmode'] = 0;
+                $params['sortmode'] = Set::SORT_ALPHANUMERIC;
             }
-        } else {
-            if (isset($params['name']) && empty($params['name'])) {
-                throw new ApiException\CustomValidationException('Name must not be empty');
-            }
+        } elseif (isset($params['name']) && empty($params['name'])) {
+            throw new ApiException\CustomValidationException('Name must not be empty');
         }
 
         return $params;

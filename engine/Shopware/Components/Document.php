@@ -685,7 +685,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             WHERE `type` = ? AND userID = ? AND orderID = ? LIMIT 1
             ';
             $amount = ($this->_order->order->taxfree ? true : $this->_config['netto']) ? round($this->_order->amountNetto, 2) : round($this->_order->amount, 2);
-            if ($typID === 4) {
+            if ($typID === Document::TYPE_CANCEL) {
                 $amount *= -1;
             }
             Shopware()->Db()->query($update, [
@@ -761,7 +761,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                     $numberRange = $this->_document['numbers'];
                 } else {
                     // The typID is indexed with base 0, so we need increase the typID
-                    if (!in_array($typID, [1, 2, 3], true)) {
+                    if (!in_array($typID, [Document::TYPE_INVOICE, Document::TYPE_SHIPPING, Document::TYPE_CREDIT], true)) {
                         ++$typID;
                     }
                     $numberRange = 'doc_' . $typID;

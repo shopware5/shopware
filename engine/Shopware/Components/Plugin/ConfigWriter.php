@@ -24,6 +24,9 @@
 
 namespace Shopware\Components\Plugin;
 
+use Doctrine\ORM\EntityRepository;
+use Exception;
+use InvalidArgumentException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Config\Element;
 use Shopware\Models\Config\Form;
@@ -39,17 +42,17 @@ class ConfigWriter
     private $em;
 
     /**
-     * @var \Doctrine\ORM\EntityRepository
+     * @var EntityRepository
      */
     private $elementRepository;
 
     /**
-     * @var \Doctrine\ORM\EntityRepository
+     * @var EntityRepository
      */
     private $formRepository;
 
     /**
-     * @var \Doctrine\ORM\EntityRepository
+     * @var EntityRepository
      */
     private $valueRepository;
 
@@ -73,11 +76,9 @@ class ConfigWriter
     }
 
     /**
-     * @param string $name
-     *
      * @throws \Exception
      */
-    public function saveConfigElement(Plugin $plugin, $name, $value, Shop $shop)
+    public function saveConfigElement(Plugin $plugin, string $name, $value, Shop $shop)
     {
         /** @var Form $form */
         $form = $this->formRepository->findOneBy(['pluginId' => $plugin->getId()]);
@@ -85,11 +86,11 @@ class ConfigWriter
         /** @var Element|null $element */
         $element = $this->elementRepository->findOneBy(['form' => $form, 'name' => $name]);
         if (!$element) {
-            throw new \Exception(sprintf('Config element "%s" not found.', $name));
+            throw new Exception(sprintf('Config element "%s" not found.', $name));
         }
 
-        if ($element->getScope() === 0 && $shop->getId() !== 1) {
-            throw new \InvalidArgumentException(sprintf("Element '%s' is not writeable for shop %s", $element->getName(), $shop->getId()));
+        if ($element->getScope() === Element::SCOPE_LOCALE && $shop->getId() !== 1) {
+            throw new InvalidArgumentException(sprintf("Element '%s' is not writeable for shop %s", $element->getName(), $shop->getId()));
         }
 
         $defaultValue = $element->getValue();

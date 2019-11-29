@@ -24,8 +24,13 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Property\Set;
+use Shopware\Components\Api\Exception\CustomValidationException;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Api\Resource\PropertyGroup;
 use Shopware\Components\Api\Resource\Resource;
+use Shopware\Models\Property\Group;
 
 class PropertyGroupTest extends TestCase
 {
@@ -44,11 +49,11 @@ class PropertyGroupTest extends TestCase
 
     public function testCreateShouldThrowCustomValidationException()
     {
-        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
+        $this->expectException(CustomValidationException::class);
         $testData = [
             'position' => 1,
             'comparable' => 1,
-            'sortmode' => 2,
+            'sortmode' => Set::SORT_LEGACY,
         ];
 
         $this->resource->create($testData);
@@ -60,12 +65,12 @@ class PropertyGroupTest extends TestCase
             'name' => 'Eigenschaft1',
             'position' => 1,
             'comparable' => 1,
-            'sortmode' => 0,
+            'sortmode' => Set::SORT_ALPHANUMERIC,
         ];
 
         $group = $this->resource->create($testData);
 
-        static::assertInstanceOf('\Shopware\Models\Property\Group', $group);
+        static::assertInstanceOf(Group::class, $group);
         static::assertGreaterThan(0, $group->getId());
 
         static::assertEquals($group->getPosition(), $testData['position']);
@@ -92,7 +97,7 @@ class PropertyGroupTest extends TestCase
         $this->resource->setResultMode(1);
         $group = $this->resource->getOne($id);
 
-        static::assertInstanceOf('\Shopware\Models\Property\Group', $group);
+        static::assertInstanceOf(Group::class, $group);
         static::assertGreaterThan(0, $group->getId());
     }
 
@@ -124,7 +129,7 @@ class PropertyGroupTest extends TestCase
         static::assertGreaterThanOrEqual(1, $result['total']);
         static::assertGreaterThanOrEqual(1, $result['data']);
 
-        static::assertInstanceOf('\Shopware\Models\Property\Group', $result['data'][0]);
+        static::assertInstanceOf(Group::class, $result['data'][0]);
     }
 
     /**
@@ -133,13 +138,13 @@ class PropertyGroupTest extends TestCase
     public function testUpdateShouldBeSuccessful($id)
     {
         $testData = [
-            'name' => uniqid(rand()) . 'testProperty',
+            'name' => uniqid(mt_rand(), true) . 'testProperty',
             'sortmode' => 99,
         ];
 
         $group = $this->resource->update($id, $testData);
 
-        static::assertInstanceOf('\Shopware\Models\Property\Group', $group);
+        static::assertInstanceOf(Group::class, $group);
         static::assertEquals($id, $group->getId());
 
         static::assertEquals($group->getName(), $testData['name']);
@@ -150,13 +155,13 @@ class PropertyGroupTest extends TestCase
 
     public function testUpdateWithInvalidIdShouldThrowNotFoundException()
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $this->resource->update(9999999, []);
     }
 
     public function testUpdateWithMissingIdShouldThrowParameterMissingException()
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $this->resource->update('', []);
     }
 
@@ -167,19 +172,19 @@ class PropertyGroupTest extends TestCase
     {
         $group = $this->resource->delete($id);
 
-        static::assertInstanceOf('\Shopware\Models\Property\Group', $group);
+        static::assertInstanceOf(Group::class, $group);
         static::assertEquals(null, $group->getId());
     }
 
     public function testDeleteWithInvalidIdShouldThrowNotFoundException()
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $this->resource->delete(9999999);
     }
 
     public function testDeleteWithMissingIdShouldThrowParameterMissingException()
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $this->resource->delete('');
     }
 }
