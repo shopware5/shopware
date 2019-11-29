@@ -144,7 +144,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
             $translationkeys[] = $data[$keyField];
 
             if (!empty($data[$recursiveField])) {
-                $translationkeys += $this->getTranslationKeys($data[$recursiveField], $keyField, $recursiveField);
+                $translationkeys = array_merge($translationkeys, $this->getTranslationKeys($data[$recursiveField], $keyField, $recursiveField));
             }
         }
 
