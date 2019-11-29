@@ -53,7 +53,8 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
     refs: [
         { ref: 'mainWindow', selector: 'payment-main-window' },
         { ref: 'surchargeGrid', selector: 'payment-main-surcharge' },
-        { ref: 'attributeForm', selector: 'payment-main-window shopware-attribute-form' }
+        { ref: 'attributeForm', selector: 'payment-main-window shopware-attribute-form' },
+        { ref: 'paymentTree', selector: 'payment-main-tree' }
     ],
 
     /**
@@ -174,6 +175,9 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
 
         paymentModel.set('source', 1);
 
+        formPanel.fieldsetWrapper.setTitle('{s name="new_entry"}{/s}');
+        this.getPaymentTree().getSelectionModel().deselectAll();
+
         tabPanel.setDisabled(false);
         tabPanel.setActiveTab(0);
         formPanel.loadRecord(paymentModel);
@@ -256,7 +260,20 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
 
                 if(operation.success){
                     me.getAttributeForm().saveAttribute(record.get('id'));
-                    paymentStore.load();
+                    paymentStore.load({
+                        callback: function (records) {
+                            records.forEach(function (paymentStoreRecord) {
+                                if (paymentStoreRecord.get('id') === record.get('id')) {
+                                    me.getPaymentTree().getSelectionModel().select(paymentStoreRecord);
+                                }
+                            })
+                        }
+                    });
+
+                    generalForm.fieldsetWrapper.setTitle(Ext.String.format(
+                        generalForm.snippets.fieldsetTitleFormat,
+                        record.get("description"), record.get("id")
+                    ));
 
                     //tabPanel, newTab, oldTab, formPanel
                     me.onChangeTab(tabPanel, tabPanel.getActiveTab(), '', generalForm);
