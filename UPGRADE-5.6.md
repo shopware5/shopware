@@ -2,6 +2,14 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
+## 5.6.4
+
+[View all changes from v5.6.3...v5.6.4](https://github.com/shopware/shopware/compare/v5.6.3...v5.6.4)
+
+### Additions
+
+* Added PHP 7.4 support
+
 ## 5.6.3
 
 [View all changes from v5.6.2...v5.6.3](https://github.com/shopware/shopware/compare/v5.6.2...v5.6.3)
