@@ -186,34 +186,36 @@ class PluginInstaller
         $context = new UninstallContext($plugin, $this->release->getVersion(), $plugin->getVersion(), !$removeData);
         $bootstrap = $this->getPluginByName($plugin->getName());
 
-        $this->events->notify(PluginEvent::PRE_DEACTIVATE, new PrePluginDeactivateEvent($context, $bootstrap));
-        $this->events->notify(PluginEvent::PRE_UNINSTALL, new PrePluginUninstallEvent($context, $bootstrap));
+        $this->em->transactional(function ($em) use ($bootstrap, $plugin, $context, $removeData) {
+            $this->events->notify(PluginEvent::PRE_DEACTIVATE, new PrePluginDeactivateEvent($context, $bootstrap));
+            $this->events->notify(PluginEvent::PRE_UNINSTALL, new PrePluginUninstallEvent($context, $bootstrap));
 
-        $this->applyMigrations($bootstrap, AbstractPluginMigration::MODUS_UNINSTALL, !$removeData);
+            $this->applyMigrations($bootstrap, AbstractPluginMigration::MODUS_UNINSTALL, !$removeData);
 
-        $bootstrap->uninstall($context);
+            $bootstrap->uninstall($context);
 
-        $plugin->setInstalled(null);
-        $plugin->setActive(false);
+            $plugin->setInstalled(null);
+            $plugin->setActive(false);
 
-        $this->events->notify(PluginEvent::POST_UNINSTALL, new PostPluginUninstallEvent($context, $bootstrap));
-        $this->events->notify(PluginEvent::POST_DEACTIVATE, new PostPluginDeactivateEvent($context, $bootstrap));
+            $this->events->notify(PluginEvent::POST_UNINSTALL, new PostPluginUninstallEvent($context, $bootstrap));
+            $this->events->notify(PluginEvent::POST_DEACTIVATE, new PostPluginDeactivateEvent($context, $bootstrap));
 
-        $this->em->flush($plugin);
+            $this->em->flush($plugin);
 
-        $pluginId = $plugin->getId();
+            $pluginId = $plugin->getId();
 
-        $this->removeEventSubscribers($pluginId);
-        $this->removeCrontabEntries($pluginId);
-        $this->removeMenuEntries($pluginId);
-        $this->removeTemplates($pluginId);
-        $this->removeEmotionComponents($pluginId);
+            $this->removeEventSubscribers($pluginId);
+            $this->removeCrontabEntries($pluginId);
+            $this->removeMenuEntries($pluginId);
+            $this->removeTemplates($pluginId);
+            $this->removeEmotionComponents($pluginId);
 
-        $this->removeSnippets($bootstrap, $removeData);
+            $this->removeSnippets($bootstrap, $removeData);
 
-        if ($removeData) {
-            $this->removeFormsAndElements($pluginId);
-        }
+            if ($removeData) {
+                $this->removeFormsAndElements($pluginId);
+            }
+        });
 
         return $context;
     }
@@ -267,18 +269,19 @@ class PluginInstaller
     {
         $bootstrap = $this->getPluginByName($plugin->getName());
         $this->requirementValidator->validate($bootstrap->getPath() . '/plugin.xml', $this->release->getVersion());
-
         $context = new ActivateContext($plugin, $this->release->getVersion(), $plugin->getVersion());
 
-        $this->events->notify(PluginEvent::PRE_ACTIVATE, new PrePluginActivateEvent($context, $bootstrap));
+        $this->em->transactional(function ($em) use ($bootstrap, $plugin, $context) {
+            $this->events->notify(PluginEvent::PRE_ACTIVATE, new PrePluginActivateEvent($context, $bootstrap));
 
-        $bootstrap->activate($context);
+            $bootstrap->activate($context);
 
-        $this->events->notify(PluginEvent::POST_ACTIVATE, new PostPluginActivateEvent($context, $bootstrap));
+            $this->events->notify(PluginEvent::POST_ACTIVATE, new PostPluginActivateEvent($context, $bootstrap));
 
-        $plugin->setActive(true);
-        $plugin->setInSafeMode(false);
-        $this->em->flush($plugin);
+            $plugin->setActive(true);
+            $plugin->setInSafeMode(false);
+            $this->em->flush($plugin);
+        });
 
         return $context;
     }
@@ -294,14 +297,16 @@ class PluginInstaller
         $context = new DeactivateContext($plugin, $this->release->getVersion(), $plugin->getVersion());
         $bootstrap = $this->getPluginByName($plugin->getName());
 
-        $this->events->notify(PluginEvent::PRE_DEACTIVATE, new PrePluginDeactivateEvent($context, $bootstrap));
+        $this->em->transactional(function ($em) use ($bootstrap, $plugin, $context) {
+            $this->events->notify(PluginEvent::PRE_DEACTIVATE, new PrePluginDeactivateEvent($context, $bootstrap));
 
-        $bootstrap->deactivate($context);
+            $bootstrap->deactivate($context);
 
-        $plugin->setActive(false);
-        $this->events->notify(PluginEvent::POST_DEACTIVATE, new PostPluginDeactivateEvent($context, $bootstrap));
+            $plugin->setActive(false);
+            $this->events->notify(PluginEvent::POST_DEACTIVATE, new PostPluginDeactivateEvent($context, $bootstrap));
 
-        $this->em->flush($plugin);
+            $this->em->flush($plugin);
+        });
 
         return $context;
     }
