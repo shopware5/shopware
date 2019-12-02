@@ -29,8 +29,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 interface SimilarProductsGatewayInterface
 {
     /**
-     * Returns an array which contains the order number of
-     * each similar products for the provided products.
+     * Returns an array which contains the order numbers of
+     * each similar product for the provided products, indexed by the product id.
      *
      * Required conditions for the selection:
      * - Selects only main variants of the similar products.
@@ -40,8 +40,8 @@ interface SimilarProductsGatewayInterface
      *
      * Result:
      * array(
-     *    'SW100' => array('SW101', 'SW102')
-     *    'SW200' => array('SW201', 'SW202')
+     *    '123' => array('SW101', 'SW102')
+     *    '456' => array('SW201', 'SW202')
      * )
      *
      * @param Struct\BaseProduct[] $products
