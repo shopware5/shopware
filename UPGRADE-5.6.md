@@ -9,6 +9,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 ### Additions
 
 * Added PHP 7.4 support
+* Added new option `metaOptions` to S3 Adapter to set S3 options
+
 
 ## 5.6.3
 
