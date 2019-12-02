@@ -19,6 +19,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 * The `\Shopware\Components\StateTranslatorService` works case insensitive now
 * Changed `Shopware.apps.Emotion.view.components.Base` to properly handle a checkbox default value
+* Changed `\Shopware_Controllers_Backend_Base::getPaymentsAction` to optionally list all payment methods
 
 ## 5.6.3
 
