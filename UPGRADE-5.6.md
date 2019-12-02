@@ -20,6 +20,10 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * The `\Shopware\Components\StateTranslatorService` works case insensitive now
 * Changed `Shopware.apps.Emotion.view.components.Base` to properly handle a checkbox default value
 
+### Removals
+
+ * Removed usage of column `baseprice` in `engine/Shopware/Bundle/SearchBundleDBAL/ListingPriceHelper.php` 
+
 ## 5.6.3
 
 [View all changes from v5.6.2...v5.6.3](https://github.com/shopware/shopware/compare/v5.6.2...v5.6.3)
