@@ -1,14 +1,8 @@
 language: php
 
-addons:
-    apt:
-        packages:
-            - ant
-
 php:
   - 7.2
   - 7.3
-  - 7.4
 
 services: mysql
 
@@ -22,7 +16,8 @@ before_script:
     - if [[ "$(php --version | grep -cim1 xdebug)" -ge 1 ]]; then phpenv config-rm xdebug.ini; fi
 
 script:
-    - ant -f build/build.xml -Dapp.host=localhost -Ddb.user=travis -Ddb.host=127.0.0.1 -Ddb.name=shopware build-continuous static-lint
+    - ./psh.phar init --DB_HOST=localhost --DB_USER=travis --DB_PASSWORD= --SW_HOST=localhost
+    - ./psh.phar unit-fast --SW_HOST="localhost"
 
 notifications:
     email: false
@@ -32,7 +27,7 @@ jobs:
     - stage: lint
       php: 7.3
       install:
-      - composer install && ant -f build/build.xml -Dapp.host=localhost -Ddb.user=travis -Ddb.host=127.0.0.1 -Ddb.name=shopware build-unit
+      - ./psh.phar init --DB_HOST=localhost --DB_USER=travis --DB_PASSWORD= --SW_HOST=localhost
       script:
       # Static analyzer check
-      - php psh.phar check-code
+      - ./psh.phar check-code
