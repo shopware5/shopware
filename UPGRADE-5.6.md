@@ -17,6 +17,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 ### Changes
 
 * The `\Shopware\Components\StateTranslatorService` works case insensitive now
+* Changed `Shopware.apps.Emotion.view.components.Base` to properly handle a checkbox default value
 
 ## 5.6.3
 
