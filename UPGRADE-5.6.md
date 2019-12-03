@@ -626,7 +626,7 @@ return [
 ```
 Providing this value via config makes it unnecessary for Doctrine to figure the version out by itself, thus reducing the number of database calls Shopware makes per request by one.
 
-If you are running a MariaDB database, you should prefix the `serverVersion` with `mariadb`- (e.g.: `mariadb-10.2.12`).
+If you are running a MariaDB database, you should suffix the `serverVersion` with `-MariaDB` (e.g.: `10.3.18-MariaDB`).
 
 ### Payment Token
 
