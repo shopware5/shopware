@@ -87,11 +87,8 @@ Ext.define('Shopware.apps.Feedback.controller.Main', {
         }
     },
 
-    onPreviewWindowShowIssueTracker: function(win) {
-        Shopware.app.Application.addSubApplication({
-            name: 'Shopware.apps.Feedback'
-        });
-        win.close();
+    onPreviewWindowShowIssueTracker: function() {
+        window.open('https://issues.shopware.com/');
     }
 });
 //{/block}
