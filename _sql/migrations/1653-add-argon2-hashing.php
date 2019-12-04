@@ -37,7 +37,7 @@ if (!defined('PASSWORD_ARGON2_DEFAULT_THREADS')) {
     define('PASSWORD_ARGON2_DEFAULT_THREADS', 2);
 }
 
-class Migrations_Migration1655 extends AbstractMigration
+class Migrations_Migration1653 extends AbstractMigration
 {
     public function up($modus)
     {
