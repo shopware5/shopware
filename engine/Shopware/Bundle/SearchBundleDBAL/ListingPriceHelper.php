@@ -144,7 +144,6 @@ class ListingPriceHelper
             '`articledetailsID`',
             '`price`',
             '`pseudoprice`',
-            '`baseprice`',
             '`percent`',
         ];
     }
