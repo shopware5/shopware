@@ -63,6 +63,9 @@
         <name>fileinfo</name><group>extension</group><required>1</required>
     </requirement>
     <requirement>
+        <name>intl</name><group>extension</group><required>1</required>
+    </requirement>
+    <requirement>
         <name>ini_set</name><group>config</group><required>1</required>
     </requirement>
     <requirement>

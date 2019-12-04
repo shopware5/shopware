@@ -13,6 +13,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added a filter event 'Shopware_Modules_Basket_AddVoucher_FilterSqlParams' to `sBasket::sAddVoucher` to modify sql params
 * Added a notify event 'Shopware_Modules_Basket_AddVoucher_Inserted' to `sBasket::sAddVoucher` to execute code after a voucher was inserted
 * Added new product fields to product exports: `metaTitle`, `pseudosales`, `notification`, `available_from`, `available_to`, `pricegroupActive`, `pricegroupID`
+* Added `intl` extension to required php extensions
 
 ### Changes
 
