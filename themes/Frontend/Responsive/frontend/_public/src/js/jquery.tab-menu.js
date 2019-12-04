@@ -1,4 +1,4 @@
-;(function ($) {
+(function ($) {
     /**
      * Shopware Tab Menu Plugin
      *
