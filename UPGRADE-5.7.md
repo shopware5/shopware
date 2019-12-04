@@ -17,6 +17,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Added new doctrine models `Shopware\Models\Sitemap\CustomUrl` and `Shopware\Models\Sitemap\ExcludeUrl`
 * Added new ExtJS component `Shopware.grid.Searchable`. Using it you can search for different entities in a single grid, such as products, categories, blogs, etc. Have a look at the new sitemap UI to see what it looks like
 * Added `Shopware-Listing-Total` header to ajax listing loading
+* Added database transaction around plugin uninstall, activate and deactivate
 
 ### Changes
 
