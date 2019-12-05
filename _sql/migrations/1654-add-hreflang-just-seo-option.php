@@ -2,7 +2,7 @@
 
 use Shopware\Components\Migrations\AbstractMigration;
 
-class Migrations_Migration1650 extends AbstractMigration
+class Migrations_Migration1654 extends AbstractMigration
 {
     public function up($modus)
     {
@@ -18,5 +18,6 @@ class Migrations_Migration1650 extends AbstractMigration
                    VALUES (@elementId, '2', 'Just output href-lang with SEO URLs', 'If active, just SEO URLs are displayed in the meta tags \"href-lang\"');";
         $this->addSql($sql);
 
+        $this->addSql('UPDATE s_core_config_elements SET position = 50 WHERE name IN ("hrefLangEnabled", "hrefLangCountry", "hrefLangDefaultShop")');
     }
 }
