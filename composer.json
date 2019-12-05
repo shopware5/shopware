@@ -125,9 +125,6 @@
         ]
     },
     "autoload-dev": {
-        "files": [
-            "tests/phpunitCompabilityBridge.php"
-        ],
         "psr-4": {
             "Shopware\\Behat\\ShopwareExtension\\": "tests/Mink/Extension/ShopwareExtension",
             "Shopware\\Tests\\Mink\\": "tests/Mink/features/bootstrap",
