@@ -20,6 +20,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `CustomerGroup`
     * `Media`
     * `Country`
+* Added new config option to also show technical urls in hreflang
 
 ### Changes
 
