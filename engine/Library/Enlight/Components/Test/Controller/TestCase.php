@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @license    http://enlight.de/license     New BSD License
  */
-abstract class Enlight_Components_Test_Controller_TestCaseV7 extends Enlight_Components_Test_TestCase
+abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Components_Test_TestCase
 {
     /**
      * Instance of the Front resource
@@ -86,13 +86,11 @@ abstract class Enlight_Components_Test_Controller_TestCaseV7 extends Enlight_Com
 
     /**
      * Tests set up method
+     * @before
      */
-    public function setUp()
+    public function setUpEnlightControllerTestCase(): void
     {
-        parent::setUp();
-
         Shopware()->Container()->reset('session');
-        Shopware_Components_Auth::resetInstance();
         Shopware()->Container()->reset('auth');
 
         $this->reset();
