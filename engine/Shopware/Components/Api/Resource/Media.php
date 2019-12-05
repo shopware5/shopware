@@ -194,7 +194,7 @@ class Media extends Resource
             }
         }
 
-        if (!empty($params['attribute'])) {
+        if (isset($params['attribute']) && is_array($params['attribute'])) {
             $attribute = $media->getAttribute();
             $attribute->fromArray($params['attribute']);
 

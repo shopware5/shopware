@@ -16,6 +16,10 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added `intl` extension to required php extensions
 * Added unique index to `s_attribute_configuration` with columns `table_name` and `column_name`
 * Added new Argon2 password encoder
+* Added attributes to the following API resources
+    * `CustomerGroup`
+    * `Media`
+    * `Country`
 
 ### Changes
 
