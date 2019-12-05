@@ -111,7 +111,15 @@ class sCms implements \Enlight_Hook
                 $fallbackId = Shopware()->Shop()->getFallback()->getId();
             }
 
-            $translations = $this->translationComponent->readWithFallback($shopId, $fallbackId, 'page', $staticId);
+            $translations = \array_merge(
+                $this->translationComponent->readWithFallback($shopId, $fallbackId, 'page', $staticId),
+                $this->translationComponent->readWithFallback(
+                    $shopId,
+                    $fallbackId,
+                    's_cms_static_attributes',
+                    $staticId
+                )
+            );
         }
 
         // Load static page data from database
