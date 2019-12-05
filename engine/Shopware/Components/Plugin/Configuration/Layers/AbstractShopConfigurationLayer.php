@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -38,13 +39,13 @@ use Shopware\Models\Plugin\Plugin;
 abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInterface
 {
     /** @var Connection */
-    private $connection;
+    protected $connection;
 
     /** @var ConfigurationLayerInterface */
-    private $parent;
+    protected $parent;
 
     /** @var ModelManager */
-    private $modelManager;
+    protected $modelManager;
 
     public function __construct(Connection $connection, ModelManager $modelManager, ConfigurationLayerInterface $parent)
     {
@@ -60,7 +61,7 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
 
     public function readValues(string $pluginName, ?int $shopId): array
     {
-        $builder = $this->getConnection()->createQueryBuilder();
+        $builder = $this->connection->createQueryBuilder();
 
         $builder->from('s_core_config_values', 'coreConfigValues')
             ->innerJoin(
@@ -98,7 +99,7 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
 
     public function writeValues(string $pluginName, ?int $shopId, array $data): void
     {
-        if (!$this->isLayerResponsibleForShopId($shopId)) {
+        if (!$this->isLayerResponsible($shopId)) {
             $this->getParent()->writeValues($pluginName, $shopId, $data);
 
             return;
@@ -116,7 +117,7 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
         /** @var Form|null $form */
         $form = $formRepository->findOneBy(['pluginId' => $plugin->getId()]);
         if ($form === null) {
-            throw new WriterException(sprintf('Plugin formular by plugin id "%u" not found.', $plugin->getId()));
+            throw new WriterException(sprintf('Plugin form by plugin id "%u" not found.', $plugin->getId()));
         }
 
         $parentValues = $this->getParent()->readValues($pluginName, $shopId);
@@ -127,7 +128,7 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
                 $form,
                 $key,
                 $value,
-                array_key_exists($key, $parentValues) ? $parentValues[$key] : null
+                $parentValues[$key] ?? null
             );
         }
     }
@@ -146,7 +147,7 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
             throw new WriterException(sprintf('Config element "%s" not found.', $name));
         }
 
-        if ($element->getScope() == 0 && $shopId !== 1) {
+        if ($shopId !== 1 && $element->getScope() === 0) {
             $message = sprintf("Element '%s' is not writeable for shop %u", $element->getName(), $shopId);
             $baseException = new InvalidArgumentException($message);
             throw new WriterException('Element is not valid', 0, $baseException);
@@ -195,15 +196,10 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
         $result = [];
 
         foreach ($values as $key => $value) {
-            $result[$key] = empty($value) ? null : @unserialize($value);
+            $result[$key] = empty($value) ? null : @unserialize($value, ['allowed_classes' => false]);
         }
 
         return $result;
-    }
-
-    protected function getConnection(): Connection
-    {
-        return $this->connection;
     }
 
     protected function mergeValues(array $old, array $new): array
@@ -219,5 +215,5 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
 
     abstract protected function configureQuery(QueryBuilder $builder, ?int $shopId, string $pluginName): QueryBuilder;
 
-    abstract protected function isLayerResponsibleForShopId(?int $shopId): bool;
+    abstract protected function isLayerResponsible(?int $shopId): bool;
 }

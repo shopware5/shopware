@@ -46,8 +46,8 @@ class DefaultShopLayer extends AbstractShopConfigurationLayer
         ;
     }
 
-    protected function isLayerResponsibleForShopId(?int $shopId): bool
+    protected function isLayerResponsible(?int $shopId): bool
     {
-        return $shopId === 1 || is_null($shopId);
+        return $shopId === 1 || $shopId === null;
     }
 }

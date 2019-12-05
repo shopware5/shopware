@@ -24,8 +24,6 @@
 
 namespace Shopware\Components\Plugin\Configuration\Layers;
 
-use Shopware\Components\Plugin\Configuration\WriterException;
-
 interface ConfigurationLayerInterface
 {
     /**
@@ -35,8 +33,6 @@ interface ConfigurationLayerInterface
 
     /**
      * Write the values attached to this layer by shop and plugin name
-     *
-     * @throws WriterException
      */
     public function writeValues(string $pluginName, ?int $shopId, array $data): void;
 }

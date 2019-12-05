@@ -29,12 +29,15 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\Configuration\ReaderInterface;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class ConfigReaderTest extends TestCase
 {
-    const PLUGIN_NAME = 'swConfigReaderPluginTest';
+    use DatabaseTransactionBehaviour;
 
-    const NUMBER_CONFIGURATION_NAME = 'numberConfiguration';
+    private const PLUGIN_NAME = 'swConfigReaderPluginTest';
+
+    private const NUMBER_CONFIGURATION_NAME = 'numberConfiguration';
 
     /**
      * @var Connection
@@ -71,11 +74,10 @@ class ConfigReaderTest extends TestCase
      */
     private $languageShopId;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->connection = Shopware()->Container()->get('dbal_connection');
-        $this->connection->beginTransaction();
         $this->modelManager = Shopware()->Container()->get('models');
+        $this->connection = Shopware()->Container()->get('dbal_connection');
 
         // setup plugin
         $this->connection->insert('s_core_plugins', [
@@ -150,21 +152,20 @@ class ConfigReaderTest extends TestCase
         $this->configReader = Shopware()->Container()->get(ReaderInterface::class);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
-        $this->connection->rollBack();
         $this->connection = null;
         $this->configReader = null;
     }
 
     public function testReadElementDefault()
     {
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
             [self::NUMBER_CONFIGURATION_NAME => 1]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
             [self::NUMBER_CONFIGURATION_NAME => 1]
         );
@@ -178,22 +179,22 @@ class ConfigReaderTest extends TestCase
             'shop_id' => $this->installationShopId,
         ]);
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
@@ -213,22 +214,22 @@ class ConfigReaderTest extends TestCase
             'shop_id' => $this->subShopId,
         ]);
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId),
             [self::NUMBER_CONFIGURATION_NAME => 3]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId),
             [self::NUMBER_CONFIGURATION_NAME => 3]
         );
@@ -254,22 +255,22 @@ class ConfigReaderTest extends TestCase
             'shop_id' => $this->languageShopId,
         ]);
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId),
             [self::NUMBER_CONFIGURATION_NAME => 3]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId),
             [self::NUMBER_CONFIGURATION_NAME => 4]
         );

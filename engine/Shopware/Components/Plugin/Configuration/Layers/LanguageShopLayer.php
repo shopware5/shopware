@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -30,7 +31,7 @@ class LanguageShopLayer extends AbstractShopConfigurationLayer
 {
     public function readValues(string $pluginName, ?int $shopId): array
     {
-        if (is_null($shopId)) {
+        if ($shopId === null) {
             return $this->getParent()->readValues($pluginName, $shopId);
         }
 
@@ -39,20 +40,15 @@ class LanguageShopLayer extends AbstractShopConfigurationLayer
 
     protected function configureQuery(QueryBuilder $builder, ?int $shopId, string $pluginName): QueryBuilder
     {
-        $shopIdKey = 'shopId' . crc32(strval($shopId ?? ''));
-        $pluginNameKey = 'pluginName' . crc32($pluginName);
-
         return $builder
-            ->andWhere($builder->expr()->eq('corePlugins.name', ':' . $pluginNameKey))
-            ->andWhere($builder->expr()->eq('coreConfigValues.shop_id', ':' . $shopIdKey))
-            ->setParameter($pluginNameKey, $pluginName)
-            ->setParameter($shopIdKey, $shopId)
+            ->andWhere($builder->expr()->eq('corePlugins.name', $builder->createNamedParameter($pluginName)))
+            ->andWhere($builder->expr()->eq('coreConfigValues.shop_id', $builder->createNamedParameter($shopId)))
         ;
     }
 
-    protected function isLayerResponsibleForShopId(?int $shopId): bool
+    protected function isLayerResponsible(?int $shopId): bool
     {
-        $queryBuilder = $this->getConnection()->createQueryBuilder();
+        $queryBuilder = $this->connection->createQueryBuilder();
 
         return $queryBuilder->from('s_core_shops')
             ->select('1')

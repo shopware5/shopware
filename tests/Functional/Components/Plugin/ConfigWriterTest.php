@@ -32,14 +32,17 @@ use Shopware\Components\Plugin\Configuration\ReaderInterface;
 use Shopware\Components\Plugin\Configuration\WriterInterface;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Shop;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class ConfigWriterTest extends TestCase
 {
-    const PLUGIN_NAME = 'swConfigWriterPluginTest';
+    use DatabaseTransactionBehaviour;
 
-    const NUMBER_CONFIGURATION_NAME = 'numberConfiguration';
+    private const PLUGIN_NAME = 'swConfigWriterPluginTest';
 
-    const ELEMENT_DEFAULT_VALUE = 1;
+    private const NUMBER_CONFIGURATION_NAME = 'numberConfiguration';
+
+    private const ELEMENT_DEFAULT_VALUE = 1;
 
     /**
      * @var Connection
@@ -81,11 +84,10 @@ class ConfigWriterTest extends TestCase
      */
     private $configReader;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->connection = Shopware()->Container()->get('dbal_connection');
-        $this->connection->beginTransaction();
         $this->modelManager = Shopware()->Container()->get('models');
+        $this->connection = Shopware()->Container()->get('dbal_connection');
 
         // setup plugin
         $this->connection->insert('s_core_plugins', [
@@ -162,13 +164,6 @@ class ConfigWriterTest extends TestCase
         $this->configReader = Shopware()->Container()->get(ReaderInterface::class);
     }
 
-    public function tearDown()
-    {
-        $this->connection->rollBack();
-        $this->connection = null;
-        $this->configReader = null;
-    }
-
     public function testWriteValueForInstallation()
     {
         $this->configWriter->setByPluginName(
@@ -177,12 +172,12 @@ class ConfigWriterTest extends TestCase
             $this->installationShopId
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
@@ -196,17 +191,17 @@ class ConfigWriterTest extends TestCase
             $this->subShopId
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
@@ -220,22 +215,22 @@ class ConfigWriterTest extends TestCase
             $this->languageShopId
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
@@ -255,22 +250,22 @@ class ConfigWriterTest extends TestCase
             $this->subShopId
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
@@ -290,22 +285,22 @@ class ConfigWriterTest extends TestCase
             $this->languageShopId
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->installationShopId),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->subShopId),
             [self::NUMBER_CONFIGURATION_NAME => 2]
         );
 
-        static::assertArraySubset(
+        static::assertSame(
             $this->configReader->getByPluginName(self::PLUGIN_NAME, $this->languageShopId),
             [self::NUMBER_CONFIGURATION_NAME => self::ELEMENT_DEFAULT_VALUE]
         );

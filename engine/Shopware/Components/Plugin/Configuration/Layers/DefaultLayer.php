@@ -69,6 +69,9 @@ class DefaultLayer implements ConfigurationLayerInterface
         return AbstractShopConfigurationLayer::unserializeArray($values);
     }
 
+    /**
+     * @throws WriterException
+     */
     public function writeValues(string $pluginName, ?int $shopId, array $data): void
     {
         $baseException = new LogicException('Cannot change values on default layer');

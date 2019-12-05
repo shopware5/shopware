@@ -96,3 +96,5 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 * Deprecated the class `Shopware\Bundle\SitemapBundle\ConfigHandler\File`. It will be removed in Shopware 5.8. Use `Shopware\Bundle\SitemapBundle\ConfigHandler\Database` instead.
 * Deprecated getting plugin config from `Shopware_Components_Config` without plugin namespace, use `SwagTestPlugin:MyConfigName` instead
+* Deprecated the class `\Shopware\Components\Plugin\DBALConfigReader`. It will be removed in Shopware 5.9. Use `Shopware\Components\Plugin\Configuration\ReaderInterface` instead
+* Deprecated the class `\Shopware\Components\Plugin\CachedConfigReader`. It will be removed in Shopware 5.9. Use `Shopware\Components\Plugin\Configuration\ReaderInterface` instead

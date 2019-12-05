@@ -27,7 +27,7 @@ namespace Shopware\Components\Plugin;
 use Shopware\Models\Shop\Shop;
 
 /**
- * @deprecated since 5.6 and removed in 5.8. Use `Shopware\Components\Plugin\Configuration\ReaderInterface` instead
+ * @deprecated since 5.7 and removed in 5.9. Use `Shopware\Components\Plugin\Configuration\ReaderInterface` instead
  */
 interface ConfigReader
 {
@@ -36,7 +36,7 @@ interface ConfigReader
      *
      * @return array
      *
-     * @deprecated since 5.6 and removed in 5.8. Use `Shopware\Components\Plugin\Configuration\ReaderInterface`::getByPluginName instead
+     * @deprecated since 5.7 and removed in 5.9. Use `Shopware\Components\Plugin\Configuration\ReaderInterface`::getByPluginName instead
      */
     public function getByPluginName($pluginName, Shop $shop = null);
 }
