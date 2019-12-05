@@ -209,12 +209,12 @@ class CacheManager
         $values = $builder->execute()->fetchAll(PDO::FETCH_ASSOC);
         $stmt = $this->db->prepare('UPDATE s_core_config_values SET value=? WHERE shop_id=? AND element_id=?');
 
-        foreach ($values as $_value) {
-            $value = unserialize($_value['value'], ['allowed_classes' => false]);
+        foreach ($values as $rawValue) {
+            $value = unserialize($rawValue['value'], ['allowed_classes' => false]);
             $value = min(strtotime($value), time() - $cache);
             $value = date('Y-m-d H:i:s', $value);
             $value = serialize($value);
-            $stmt->execute([$value, $_value['shop_id'], $_value['element_id']]);
+            $stmt->execute([$value, $rawValue['shop_id'], $rawValue['element_id']]);
         }
     }
 
@@ -428,7 +428,7 @@ class CacheManager
     /**
      * Returns cache information
      *
-     * @deprecated in 5.3, will be private in 5.8 without replacement
+     * @deprecated in 5.6, will be private in 5.8 without replacement
      *
      * @param string $dir
      *
