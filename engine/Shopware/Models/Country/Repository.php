@@ -101,8 +101,9 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         $builder
-            ->select(['countries', 'states', 'area'])
+            ->select(['countries', 'states', 'area', 'attribute'])
             ->from(\Shopware\Models\Country\Country::class, 'countries')
+            ->leftJoin('countries.attribute', 'attribute')
             ->leftJoin('countries.states', 'states')
             ->leftJoin('countries.area', 'area');
 

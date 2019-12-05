@@ -24,6 +24,9 @@
 
 namespace Shopware\Tests\Functional\Api;
 
+/**
+ * @covers \Shopware_Controllers_Api_Categories
+ */
 class CategoryTest extends AbstractApiTestCase
 {
     public function testRequestWithoutAuthenticationShouldReturnError(): void
@@ -175,6 +178,8 @@ class CategoryTest extends AbstractApiTestCase
 
     /**
      * @depends testPostCategoriesShouldBeSuccessful
+     *
+     * @return string
      */
     public function testPutCategoriesShouldBeSuccessful(string $id)
     {
