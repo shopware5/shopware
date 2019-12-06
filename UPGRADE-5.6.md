@@ -32,6 +32,13 @@ This changelog references changes done in Shopware 5.6 patch versions.
 ### Removals
 
  * Removed usage of column `baseprice` in `engine/Shopware/Bundle/SearchBundleDBAL/ListingPriceHelper.php` 
+ 
+### Deprecations
+
+* Deprecated following methods of class `\Shopware\Components\CacheManager`
+    * `getCoreCache`
+    * `getDirectoryInfo`
+    * `encodeSize`
 
 ## 5.6.3
 

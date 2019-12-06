@@ -30,7 +30,7 @@ use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;
-use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * CategorySubscriber
@@ -68,11 +68,11 @@ class CategorySubscriber implements BaseEventSubscriber
     protected $disabledForNextFlush = false;
 
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
 
-    public function __construct(Container $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }

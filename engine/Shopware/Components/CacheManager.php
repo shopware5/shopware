@@ -24,8 +24,21 @@
 
 namespace Shopware\Components;
 
-use Shopware\Components\DependencyInjection\Container;
+use Doctrine\DBAL\Connection;
+use Enlight_Controller_Request_Request;
+use Enlight_Event_EventManager;
+use PDO;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use Redis;
+use Shopware\Components\Model\Configuration;
 use Shopware\Components\Theme\PathResolver;
+use Shopware_Components_Config;
+use SplFileInfo;
+use Zend_Cache;
+use Zend_Cache_Backend_Apcu;
+use Zend_Cache_Backend_Redis;
+use Zend_Cache_Core;
 
 class CacheManager
 {
@@ -44,32 +57,27 @@ class CacheManager
     public const ITEM_TAG_PLUGIN_CONFIG = 'Shopware_Plugin_Config_';
 
     /**
-     * @var Container
-     */
-    private $container;
-
-    /**
-     * @var \Shopware\Components\Model\Configuration
+     * @var Configuration
      */
     private $emConfig;
 
     /**
-     * @var \Zend_Cache_Core
+     * @var Zend_Cache_Core
      */
     private $cache;
 
     /**
-     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
+     * @var Connection
      */
     private $db;
 
     /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     private $config;
 
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Enlight_Event_EventManager
      */
     private $events;
 
@@ -78,20 +86,69 @@ class CacheManager
      */
     private $themePathResolver;
 
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
+    /**
+     * @var array
+     */
+    private $httpCache;
 
-        $this->cache = $container->get('cache');
-        $this->emConfig = $container->get('shopware.model_config');
-        $this->db = $container->get('db');
-        $this->config = $container->get('config');
-        $this->events = $container->get('events');
-        $this->themePathResolver = $container->get('theme_path_resolver');
+    /**
+     * @var array
+     */
+    private $cacheConfig;
+
+    /**
+     * @var array
+     */
+    private $templateConfig;
+
+    /**
+     * @var string
+     */
+    private $docRoot;
+
+    /**
+     * @var string
+     */
+    private $hookProxyDir;
+
+    /**
+     * @var string
+     */
+    private $modelProxyDir;
+
+    public function __construct(
+        Zend_Cache_Core $cache,
+        Configuration $emConfig,
+        Connection $db,
+        Shopware_Components_Config $config,
+        ContainerAwareEventManager $events,
+        PathResolver $themePathResolver,
+        array $httpCache,
+        array $cacheConfig,
+        array $templateConfig,
+        string $docRoot,
+        string $hookProxyDir,
+        string $modelProxyDir
+    ) {
+        $this->cache = $cache;
+        $this->emConfig = $emConfig;
+        $this->db = $db;
+        $this->config = $config;
+        $this->events = $events;
+        $this->themePathResolver = $themePathResolver;
+
+        $this->httpCache = $httpCache;
+        $this->cacheConfig = $cacheConfig;
+        $this->templateConfig = $templateConfig;
+        $this->docRoot = $docRoot;
+        $this->hookProxyDir = $hookProxyDir;
+        $this->modelProxyDir = $modelProxyDir;
     }
 
     /**
-     * @return \Zend_Cache_Core
+     * @deprecated in 5.6, will be removed in 5.8. Use `cache` service directly via DI
+     *
+     * @return Zend_Cache_Core
      */
     public function getCoreCache()
     {
@@ -103,10 +160,8 @@ class CacheManager
      */
     public function clearHttpCache()
     {
-        if ($this->container->getParameter('shopware.httpCache.enabled')) {
-            $this->clearDirectory(
-                $this->container->getParameter('shopware.httpCache.cache_dir')
-            );
+        if ($this->httpCache['enabled']) {
+            $this->clearDirectory($this->httpCache['cache_dir']);
         }
 
         // Fire event to let Plugin-Implementation clear cache
@@ -118,12 +173,12 @@ class CacheManager
      */
     public function clearTemplateCache()
     {
-        $cacheDir = $this->container->getParameter('shopware.template.cacheDir');
-        $compileDir = $this->container->getParameter('shopware.template.compileDir');
+        $cacheDir = $this->templateConfig['cacheDir'];
+        $compileDir = $this->templateConfig['compileDir'];
 
         $this->clearDirectory($compileDir);
 
-        if ($cacheDir != $compileDir) {
+        if ($cacheDir !== $compileDir) {
             $this->clearDirectory($cacheDir);
         }
     }
@@ -141,29 +196,25 @@ class CacheManager
      */
     public function clearRewriteCache()
     {
-        $cache = (int) $this->config->routerCache;
+        $cache = (int) $this->config->offsetGet('routerCache');
         $cache = $cache < 360 ? 86400 : $cache;
 
-        $sql = "SELECT `id` FROM `s_core_config_elements` WHERE `name` LIKE 'routerlastupdate'";
-        $elementId = $this->db->fetchOne($sql);
+        $builder = $this->db->createQueryBuilder();
+        $builder
+            ->from('s_core_config_values', 'v')
+            ->join('v', 's_core_config_elements', 'e', 'v.element_id = e.id')
+            ->select(['v.shop_id', 'v.value', 'e.id as element_id'])
+            ->where($builder->expr()->like('e.name', $builder->expr()->literal('routerlastupdate')));
 
-        $sql = '
-            SELECT v.shop_id, v.value
-            FROM s_core_config_values v
-            WHERE v.element_id=?
-        ';
-        $values = $this->db->fetchPairs($sql, [$elementId]);
+        $values = $builder->execute()->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = $this->db->prepare('UPDATE s_core_config_values SET value=? WHERE shop_id=? AND element_id=?');
 
-        foreach ($values as $shopId => $value) {
-            $value = unserialize($value, ['allowed_classes' => false]);
+        foreach ($values as $rawValue) {
+            $value = unserialize($rawValue['value'], ['allowed_classes' => false]);
             $value = min(strtotime($value), time() - $cache);
             $value = date('Y-m-d H:i:s', $value);
             $value = serialize($value);
-            $sql = '
-                UPDATE s_core_config_values SET value=?
-                WHERE shop_id=? AND element_id=?
-            ';
-            $this->db->query($sql, [$value, $shopId, $elementId]);
+            $stmt->execute([$value, $rawValue['shop_id'], $rawValue['element_id']]);
         }
     }
 
@@ -172,11 +223,10 @@ class CacheManager
      */
     public function clearSearchCache()
     {
-        $sql = "SELECT `id` FROM `s_core_config_elements` WHERE `name` LIKE 'fuzzysearchlastupdate'";
-        $elementId = $this->db->fetchOne($sql);
-
-        $sql = 'DELETE FROM s_core_config_values WHERE element_id=?';
-        $this->db->query($sql, [$elementId]);
+        $sql = 'DELETE v FROM s_core_config_values v
+                JOIN s_core_config_elements e ON e.id = v.element_id
+                WHERE `name` LIKE "fuzzysearchlastupdate"';
+        $this->db->executeQuery($sql);
     }
 
     /**
@@ -187,7 +237,7 @@ class CacheManager
         $capabilities = $this->cache->getBackend()->getCapabilities();
         if (!empty($capabilities['tags'])) {
             $this->cache->clean(
-                \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
                 [
                     self::ITEM_TAG_CONFIG,
                     self::ITEM_TAG_PLUGIN,
@@ -223,10 +273,10 @@ class CacheManager
         }
 
         // Clear Shopware Proxies / Classmaps / Container
-        $this->clearDirectory($this->container->getParameter('shopware.hook.proxyDir'));
+        $this->clearDirectory($this->hookProxyDir);
 
         // Clear Annotation file cache
-        $this->clearDirectory($this->container->getParameter('shopware.model.proxyDir'));
+        $this->clearDirectory($this->modelProxyDir);
     }
 
     public function clearOpCache()
@@ -239,26 +289,19 @@ class CacheManager
     /**
      * Returns cache information
      *
-     * @param \Enlight_Controller_Request_Request|null $request
+     * @param Enlight_Controller_Request_Request|null $request
      *
      * @return array
      */
     public function getHttpCacheInfo($request = null)
     {
-        if ($this->container->getParameter('shopware.httpCache.enabled')) {
-            $info = $this->getDirectoryInfo(
-                $this->container->getParameter('shopware.httpCache.cache_dir')
-            );
-        } else {
-            $info = [];
-        }
+        $info = $this->httpCache['enabled'] ? $this->getDirectoryInfo($this->httpCache['cache_dir']) : [];
 
         $info['name'] = 'Http-Reverse-Proxy';
+        $info['backend'] = 'Unknown';
 
         if ($request && $request->getHeader('Surrogate-Capability')) {
             $info['backend'] = $request->getHeader('Surrogate-Capability');
-        } else {
-            $info['backend'] = 'Unknown';
         }
 
         return $info;
@@ -273,28 +316,27 @@ class CacheManager
     {
         $backendCache = $this->cache->getBackend();
 
-        if ($backendCache instanceof \Zend_Cache_Backend_Apcu) {
+        if ($backendCache instanceof Zend_Cache_Backend_Apcu) {
             $info = [];
             $apcInfo = apcu_cache_info('user');
             $info['files'] = $apcInfo['num_entries'];
             $info['size'] = $this->encodeSize($apcInfo['mem_size']);
             $apcInfo = apcu_sma_info();
             $info['freeSpace'] = $this->encodeSize($apcInfo['avail_mem']);
-        } elseif ($backendCache instanceof \Zend_Cache_Backend_Redis) {
+        } elseif ($backendCache instanceof Zend_Cache_Backend_Redis) {
             $info = [];
 
-            /** @var \Redis $redis */
+            /** @var Redis $redis */
             $redis = $backendCache->getRedis();
             $info['files'] = $redis->dbSize();
             $info['size'] = $this->encodeSize($redis->info()['used_memory']);
         } else {
-            $cacheConfig = $this->container->getParameter('shopware.cache');
             $dir = null;
 
-            if (!empty($cacheConfig['backendOptions']['cache_dir'])) {
-                $dir = $cacheConfig['backendOptions']['cache_dir'];
-            } elseif (!empty($cacheConfig['backendOptions']['slow_backend_options']['cache_dir'])) {
-                $dir = $cacheConfig['backendOptions']['slow_backend_options']['cache_dir'];
+            if (!empty($this->cacheConfig['backendOptions']['cache_dir'])) {
+                $dir = $this->cacheConfig['backendOptions']['cache_dir'];
+            } elseif (!empty($this->cacheConfig['backendOptions']['slow_backend_options']['cache_dir'])) {
+                $dir = $this->cacheConfig['backendOptions']['slow_backend_options']['cache_dir'];
             }
             $info = $this->getDirectoryInfo($dir);
         }
@@ -316,8 +358,7 @@ class CacheManager
      */
     public function getTemplateCacheInfo()
     {
-        $dir = $this->container->getParameter('shopware.template.compileDir');
-        $info = $this->getDirectoryInfo($dir);
+        $info = $this->getDirectoryInfo($this->templateConfig['compileDir']);
         $info['name'] = 'Shopware templates';
 
         return $info;
@@ -330,7 +371,7 @@ class CacheManager
      */
     public function getThemeCacheInfo()
     {
-        $dir = $this->container->get('theme_path_resolver')->getCacheDirectory();
+        $dir = $this->themePathResolver->getCacheDirectory();
         $info = $this->getDirectoryInfo($dir);
         $info['name'] = 'Shopware theme';
 
@@ -344,8 +385,7 @@ class CacheManager
      */
     public function getDoctrineProxyCacheInfo()
     {
-        $dir = $this->container->getParameter('shopware.model.proxydir');
-        $info = $this->getDirectoryInfo($dir);
+        $info = $this->getDirectoryInfo($this->modelProxyDir);
         $info['name'] = 'Doctrine Proxies';
 
         return $info;
@@ -358,9 +398,7 @@ class CacheManager
      */
     public function getShopwareProxyCacheInfo()
     {
-        $dir = $this->container->getParameter('shopware.hook.proxyDir');
-
-        $info = $this->getDirectoryInfo($dir);
+        $info = $this->getDirectoryInfo($this->hookProxyDir);
         $info['name'] = 'Shopware Proxies';
 
         return $info;
@@ -390,16 +428,16 @@ class CacheManager
     /**
      * Returns cache information
      *
+     * @deprecated in 5.6, will be private in 5.8 without replacement
+     *
      * @param string $dir
      *
      * @return array
      */
     public function getDirectoryInfo($dir)
     {
-        $docRoot = $this->container->getParameter('shopware.app.rootdir') . '/';
-
         $info = [];
-        $info['dir'] = str_replace($docRoot, '', $dir);
+        $info['dir'] = str_replace($this->docRoot . '/', '', $dir);
         $info['dir'] = str_replace(DIRECTORY_SEPARATOR, '/', $info['dir']);
         $info['dir'] = rtrim($info['dir'], '/') . '/';
 
@@ -422,13 +460,13 @@ class CacheManager
         $info['size'] = (float) 0;
         $info['files'] = 0;
 
-        $dirIterator = new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS);
-        $iterator = new \RecursiveIteratorIterator(
+        $dirIterator = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
+        $iterator = new RecursiveIteratorIterator(
             $dirIterator,
-            \RecursiveIteratorIterator::LEAVES_ONLY
+            RecursiveIteratorIterator::LEAVES_ONLY
         );
 
-        /** @var \SplFileInfo $entry */
+        /** @var SplFileInfo $entry */
         foreach ($iterator as $entry) {
             if ($entry->getFilename() === '.gitkeep') {
                 continue;
@@ -446,21 +484,6 @@ class CacheManager
         $info['freeSpace'] = $this->encodeSize($info['freeSpace']);
 
         return $info;
-    }
-
-    /**
-     * Format size method
-     *
-     * @param float $bytes
-     *
-     * @return string
-     */
-    public function encodeSize($bytes)
-    {
-        $types = ['B', 'KB', 'MB', 'GB', 'TB'];
-        for ($i = 0; $bytes >= 1024 && $i < (count($types) - 1); $bytes /= 1024, $i++);
-
-        return round($bytes, 2) . ' ' . $types[$i];
     }
 
     /**
@@ -519,34 +542,51 @@ class CacheManager
     }
 
     /**
-     * Clear directory contents
+     * Format size method
      *
-     * @param string $dir
+     * @deprecated in 5.6, will be private in 5.8 without replacement
+     *
+     * @param float $bytes
+     *
+     * @return string
      */
-    private function clearDirectory($dir)
+    public function encodeSize($bytes)
+    {
+        $types = ['B', 'KB', 'MB', 'GB', 'TB'];
+        for ($i = 0; $bytes >= 1024 && $i < (count($types) - 1); ++$i) {
+            $bytes /= 1024;
+        }
+
+        return round($bytes, 2) . ' ' . $types[$i];
+    }
+
+    /**
+     * Clear directory contents
+     */
+    private function clearDirectory(string $dir): void
     {
         if (!file_exists($dir)) {
             return;
         }
 
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::CHILD_FIRST
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST
         );
 
-        /** @var \SplFileInfo $path */
+        /** @var SplFileInfo $path */
         foreach ($iterator as $path) {
             if ($path->getFilename() === '.gitkeep') {
                 continue;
             }
 
             if ($path->isDir()) {
-                rmdir($path->__toString());
+                rmdir((string) $path);
             } else {
                 if (!$path->isFile()) {
                     continue;
                 }
-                unlink($path->__toString());
+                unlink((string) $path);
             }
         }
     }
