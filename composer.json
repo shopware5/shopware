@@ -81,7 +81,8 @@
         "superbalist/flysystem-google-storage": "6.0.0",
         "stecman/symfony-console-completion": "0.10.1",
         "beberlei/doctrineextensions": "1.2.1",
-        "phpstan/phpstan-shim": "0.11.19"
+        "phpstan/phpstan-shim": "0.11.19",
+        "oomphinc/composer-installers-extender": "~1.1.2"
     },
     "suggest": {
         "ext-apcu": "*",
@@ -149,5 +150,8 @@
         "post-update-cmd": "./build/composer-post-update-cmd.sh",
         "test": "phpunit -c tests/ --colors=always",
         "test-unit": "phpunit -c tests/phpunit_unit.xml.dist --colors=always"
+    },
+    "extra": {
+        "installer-name": "shopware"
     }
 }
