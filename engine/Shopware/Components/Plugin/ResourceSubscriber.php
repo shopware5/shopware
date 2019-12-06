@@ -37,18 +37,15 @@ class ResourceSubscriber implements SubscriberInterface
      */
     private $pluginPath;
 
-    /**
-     * @var bool
-     */
-    private $loadViewsDirectory;
+    private $loadViewsDirectory = false;
 
     /**
      * @param string $pluginPath
      */
-    public function __construct($pluginPath, ?bool $loadViewsDirectory = null)
+    public function __construct($pluginPath, bool $loadViewsDirectory)
     {
         $this->pluginPath = $pluginPath;
-        $this->loadViewsDirectory = $loadViewsDirectory ?? false;
+        $this->loadViewsDirectory = $loadViewsDirectory;
     }
 
     /**

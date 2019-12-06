@@ -32,7 +32,7 @@ class ResourceSubscriberTest extends TestCase
 {
     public function testEmptyPlugin()
     {
-        $subscriber = new ResourceSubscriber(__DIR__ . '/examples/EmptyPlugin');
+        $subscriber = new ResourceSubscriber(__DIR__ . '/examples/EmptyPlugin', false);
 
         static::assertNull($subscriber->onCollectCss());
         static::assertNull($subscriber->onCollectJavascript());
@@ -52,7 +52,7 @@ class ResourceSubscriberTest extends TestCase
 
     public function testFoo()
     {
-        $subscriber = new ResourceSubscriber(__DIR__ . '/examples/TestPlugin');
+        $subscriber = new ResourceSubscriber(__DIR__ . '/examples/TestPlugin', false);
 
         static::assertSame(
             [
