@@ -502,7 +502,7 @@
         </service>
 
         <service id="shopware.plugin.config_writer" class="Shopware\Components\Plugin\ConfigWriter">
-            <argument type="service" id="Shopware\Components\Model\ModelManager" />
+            <argument type="service" id="Shopware\Components\Plugin\Configuration\WriterInterface" />
         </service>
 
         <service id="shopware.plugin.cached_config_reader" class="Shopware\Components\Plugin\CachedConfigReader">
@@ -511,7 +511,42 @@
         </service>
 
         <service id="shopware.plugin.config_reader" class="Shopware\Components\Plugin\DBALConfigReader">
-            <argument type="service" id="Doctrine\DBAL\Connection" />
+            <argument type="service" id="Shopware\Components\Plugin\Configuration\ReaderInterface" />
+        </service>
+
+        <service id="Shopware\Components\Plugin\Configuration\WriterInterface" class="Shopware\Components\Plugin\Configuration\Writer">
+            <argument type="service" id="Shopware\Components\Plugin\Configuration\Layers\LanguageShopLayer" />
+        </service>
+
+        <service id="Shopware\Components\Plugin\Configuration\ReaderInterface" class="Shopware\Components\Plugin\Configuration\Reader">
+            <argument type="service" id="Shopware\Components\Plugin\Configuration\Layers\LanguageShopLayer"/>
+        </service>
+
+        <service id="Shopware\Components\Plugin\Configuration\CachedReader">
+            <argument type="service" id="Shopware\Components\Plugin\Configuration\Layers\LanguageShopLayer"/>
+            <argument type="service" id="Zend_Cache_Core"/>
+        </service>
+
+        <service id="Shopware\Components\Plugin\Configuration\Layers\DefaultLayer">
+            <argument type="service" id="dbal_connection"/>
+        </service>
+
+        <service id="Shopware\Components\Plugin\Configuration\Layers\DefaultShopLayer">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="models"/>
+            <argument type="service" id="Shopware\Components\Plugin\Configuration\Layers\DefaultLayer"/>
+        </service>
+
+        <service id="Shopware\Components\Plugin\Configuration\Layers\SubShopLayer">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="models"/>
+            <argument type="service" id="Shopware\Components\Plugin\Configuration\Layers\DefaultShopLayer"/>
+        </service>
+
+        <service id="Shopware\Components\Plugin\Configuration\Layers\LanguageShopLayer">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="models"/>
+            <argument type="service" id="Shopware\Components\Plugin\Configuration\Layers\SubShopLayer"/>
         </service>
 
         <service id="shopware_product_stream.criteria_factory" class="Shopware\Components\ProductStream\CriteriaFactory">

@@ -22,21 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Plugin;
+namespace Shopware\Components\Plugin\Configuration;
 
-use Shopware\Models\Shop\Shop;
-
-/**
- * @deprecated since 5.7 and removed in 5.9. Use `Shopware\Components\Plugin\Configuration\ReaderInterface` instead
- */
-interface ConfigReader
+interface ReaderInterface
 {
-    /**
-     * @param string $pluginName
-     *
-     * @return array
-     *
-     * @deprecated since 5.7 and removed in 5.9. Use `Shopware\Components\Plugin\Configuration\ReaderInterface`::getByPluginName instead
-     */
-    public function getByPluginName($pluginName, Shop $shop = null);
+    public function getByPluginName(string $pluginName, ?int $shopId = null): array;
 }

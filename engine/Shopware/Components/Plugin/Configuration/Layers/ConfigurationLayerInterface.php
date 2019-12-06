@@ -22,21 +22,17 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Plugin;
+namespace Shopware\Components\Plugin\Configuration\Layers;
 
-use Shopware\Models\Shop\Shop;
-
-/**
- * @deprecated since 5.7 and removed in 5.9. Use `Shopware\Components\Plugin\Configuration\ReaderInterface` instead
- */
-interface ConfigReader
+interface ConfigurationLayerInterface
 {
     /**
-     * @param string $pluginName
-     *
-     * @return array
-     *
-     * @deprecated since 5.7 and removed in 5.9. Use `Shopware\Components\Plugin\Configuration\ReaderInterface`::getByPluginName instead
+     * Read the values attached to this layer by shop and plugin name
      */
-    public function getByPluginName($pluginName, Shop $shop = null);
+    public function readValues(string $pluginName, ?int $shopId): array;
+
+    /**
+     * Write the values attached to this layer by shop and plugin name
+     */
+    public function writeValues(string $pluginName, ?int $shopId, array $data): void;
 }

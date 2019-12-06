@@ -189,7 +189,7 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
 
         if ($shopId) {
             /** @var Shop|null $shop */
-            $shop = $em->getRepository(Shop::class)->find($input->getOption('shop'));
+            $shop = $em->getRepository(Shop::class)->find($shopId);
 
             if (!$shop) {
                 $output->writeln(sprintf('Could not find shop with id %s.', $shopId));

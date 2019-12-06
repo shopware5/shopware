@@ -22,21 +22,25 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Plugin;
+namespace Shopware\Components\Plugin\Configuration;
 
-use Shopware\Models\Shop\Shop;
+use Shopware\Components\Plugin\Configuration\Layers\ConfigurationLayerInterface;
 
-/**
- * @deprecated since 5.7 and removed in 5.9. Use `Shopware\Components\Plugin\Configuration\ReaderInterface` instead
- */
-interface ConfigReader
+class Writer implements WriterInterface
 {
+    /** @var ConfigurationLayerInterface */
+    private $lastLayer;
+
+    public function __construct(ConfigurationLayerInterface $lastLayer)
+    {
+        $this->lastLayer = $lastLayer;
+    }
+
     /**
-     * @param string $pluginName
-     *
-     * @return array
-     *
-     * @deprecated since 5.7 and removed in 5.9. Use `Shopware\Components\Plugin\Configuration\ReaderInterface`::getByPluginName instead
+     * {@inheritdoc}
      */
-    public function getByPluginName($pluginName, Shop $shop = null);
+    public function setByPluginName(string $pluginName, array $elements, $shopId = 1)
+    {
+        $this->lastLayer->writeValues($pluginName, $shopId, $elements);
+    }
 }

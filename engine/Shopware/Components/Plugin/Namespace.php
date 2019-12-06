@@ -24,7 +24,7 @@
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\Plugin\ConfigReader;
+use Shopware\Components\Plugin\Configuration\ReaderInterface as ConfigurationReader;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Shop;
 
@@ -34,7 +34,7 @@ use Shopware\Models\Shop\Shop;
 class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Config
 {
     /**
-     * @var Shop
+     * @var Shop|null
      */
     protected $shop;
 
@@ -44,7 +44,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     private $pluginDirectories;
 
     /**
-     * @var ConfigReader
+     * @var ConfigurationReader
      */
     private $configReader;
 
@@ -52,7 +52,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      * @param string              $name
      * @param Enlight_Config|null $storage
      */
-    public function __construct($name, $storage, array $pluginDirectories, ConfigReader $configReader)
+    public function __construct($name, $storage, array $pluginDirectories, ConfigurationReader $configReader)
     {
         $this->pluginDirectories = $pluginDirectories;
         $this->configReader = $configReader;
@@ -65,7 +65,6 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      * plugin has no config, the config is automatically set to an empty array.
      *
      * @param string $name
-     * @param Shop   $shop
      *
      * @return Enlight_Config
      */
@@ -75,7 +74,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             $shop = $this->shop;
         }
 
-        $config = $this->configReader->getByPluginName($name, $shop);
+        $config = $this->configReader->getByPluginName($name, $shop ? $shop->getId() : null);
 
         return new Enlight_Config($config, true);
     }
