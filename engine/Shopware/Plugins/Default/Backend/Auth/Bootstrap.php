@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Auth\Adapter\Otp;
 use Shopware\Components\DependencyInjection\Bridge\Db;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Session\PdoSessionHandler;
@@ -391,10 +392,12 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         Shopware()->Container()->load('backendsession');
 
         $resource = Shopware_Components_Auth::getInstance();
-        $adapter = new Shopware_Components_Auth_Adapter_Default();
+        $defaultAdapter = new Shopware_Components_Auth_Adapter_Default();
+        $otpAdapter = new Otp();
         $storage = new Zend_Auth_Storage_Session('Shopware', 'Auth');
-        $resource->setBaseAdapter($adapter);
-        $resource->addAdapter($adapter);
+        $resource->setBaseAdapter($defaultAdapter);
+        $resource->addAdapter($defaultAdapter);
+        $resource->addAdapter($otpAdapter);
         $resource->setStorage($storage);
 
         $this->registerAclPlugin($resource);

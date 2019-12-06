@@ -105,6 +105,19 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
             'locale' => isset($user->locale) ? $user->locale->toString() : null,
             'lockedUntil' => isset($lockedUntil) ? $lockedUntil : null,
         ]);
+
+        if ($this->Request()->isGet()) {
+            // GET-method indicates, that this is not the default xhr from the login form
+            // instead this request is likely to be an otp-login, so we should redirect to the backend
+            $this->redirect([
+                'module' => 'backend',
+                'controller' => 'index',
+                'action' => 'index',
+                // this is necessary, because with 302 chrome will not save the session cookie
+                // @see https://bugs.chromium.org/p/chromium/issues/detail?id=696204
+                'code' => 307,
+            ]);
+        }
     }
 
     /**

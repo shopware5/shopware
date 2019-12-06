@@ -9,6 +9,14 @@
             <tag name="console.command" command="sw:admin:create"/>
         </service>
 
+        <service id="Shopware\Commands\AdminLoginCommand">
+            <tag name="console.command" command="sw:admin:login"/>
+            <argument type="service" id="passwordencoder"/>
+            <argument type="service" id="router"/>
+            <argument type="service" id="models"/>
+            <argument type="service" id="config"/>
+        </service>
+
         <service id="shopware.commands.cache_clear_command" class="Shopware\Commands\CacheClearCommand">
             <tag name="console.command" command="sw:cache:clear"/>
         </service>
