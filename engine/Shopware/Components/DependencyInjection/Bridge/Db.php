@@ -62,6 +62,22 @@ class Db
             if (isset($dbConfig['timezone'])) {
                 $conn->exec(sprintf('SET @@session.time_zone = %s;', $conn->quote($dbConfig['timezone'])));
             }
+
+            foreach (($dbConfig['session'] ?? []) as $sessionKey => $sessionValue) {
+                if (is_int($sessionValue)) {
+                    $conn->exec(sprintf('SET @@session.`%s` = %d;', $sessionKey, $sessionValue));
+                } elseif (is_float($sessionValue)) {
+                    $conn->exec(sprintf('SET @@session.`%s` = %f;', $sessionKey, $sessionValue));
+                } elseif (is_string($sessionValue)) {
+                    $conn->exec(sprintf('SET @@session.`%s` = %s;', $sessionKey, $conn->quote($sessionValue)));
+                } elseif ($sessionValue === null) {
+                    $conn->exec(sprintf('SET @@session.`%s` = NULL;', $sessionKey));
+                } else {
+                    throw new \InvalidArgumentException(
+                        sprintf('Unexpected database session value for %s: %s', $sessionKey, serialize($sessionValue))
+                    );
+                }
+            }
         } catch (\PDOException $e) {
             $message = str_replace(
                 [

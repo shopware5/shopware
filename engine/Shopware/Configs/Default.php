@@ -156,6 +156,9 @@ return array_replace_recursive([
             'charset' => 'utf8',
             'collate' => 'utf8_unicode_ci',
         ],
+        // Session variables that are set after connection initialization e.g. 'wait_timeout' => 180
+        'session' => [
+        ],
     ],
     'es' => [
         'prefix' => 'sw_shop',
