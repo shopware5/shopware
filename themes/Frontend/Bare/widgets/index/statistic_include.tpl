@@ -52,6 +52,9 @@
             {if $sArticle.articleID}
             url += '&articleId=' + encodeURI("{$sArticle.articleID}");
             {/if}
+            {if $sArticle.id && $Controller === 'blog'}
+            url += '&blogId=' + encodeURI("{$sArticle.id}");
+            {/if}
 
             {* Early simple device detection for statistics, duplicated in StateManager for resizes *}
             if (isDeviceCookieAllowed()) {
