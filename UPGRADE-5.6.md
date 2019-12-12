@@ -2,9 +2,9 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
-## 5.6.4
+## 5.6.5
 
-[View all changes from v5.6.3...v5.6.4](https://github.com/shopware/shopware/compare/v5.6.3...v5.6.4)
+[View all changes from v5.6.4...v5.6.5](https://github.com/shopware/shopware/compare/v5.6.4...v5.6.5)
 
 ### Additions
 
@@ -39,6 +39,14 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `getCoreCache`
     * `getDirectoryInfo`
     * `encodeSize`
+
+## 5.6.4
+
+[View all changes from v5.6.3...v5.6.4](https://github.com/shopware/shopware/compare/v5.6.3...v5.6.4)
+
+### Changes
+
+* Changed status of SLT-cookie from 'Comfort' feature to 'Technically required' when feature is active
 
 ## 5.6.3
 
