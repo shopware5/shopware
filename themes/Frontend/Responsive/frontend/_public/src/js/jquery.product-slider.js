@@ -291,7 +291,15 @@
              * @property initOnEvent
              * @type {String}
              */
-            initOnEvent: null
+            initOnEvent: null,
+            
+            /**
+             * On update reset the slider position to the first element
+             *
+             * @property resetPositionOnUpdate
+             * @type {Boolean}
+             */
+            resetPositionOnUpdate: true
         },
 
         /**
@@ -380,9 +388,12 @@
             }
 
             /**
-             * Always set back to the first item on update
+             * Set back to the first item on update
              */
-            me.setPosition(0);
+            if (me.opts.resetPositionOnUpdate) {
+                me.setPosition(0);
+            }
+
             me.trackArrows();
 
             $.publish('plugin/swProductSlider/onUpdate', [ me ]);
