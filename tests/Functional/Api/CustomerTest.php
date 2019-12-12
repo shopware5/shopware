@@ -27,6 +27,9 @@ namespace Shopware\Tests\Functional\Api;
 use DateTime;
 use Shopware\Models\Customer\Customer;
 
+/**
+ * @covers \Shopware_Controllers_Api_Customers
+ */
 class CustomerTest extends AbstractApiTestCase
 {
     public function testRequestWithoutAuthenticationShouldReturnError(): void
@@ -143,16 +146,16 @@ class CustomerTest extends AbstractApiTestCase
     }
 
     /**
-     * @return int
+     * @throws \Exception
      */
     public function testPostCustomersWithDebitShouldCreatePaymentData()
     {
         $date = new DateTime();
         $date->modify('-10 days');
-        $firstlogin = $date->format(DateTime::ATOM);
+        $firstLogin = $date->format(DateTime::ATOM);
 
         $date->modify('+2 day');
-        $lastlogin = $date->format(DateTime::ATOM);
+        $lastLogin = $date->format(DateTime::ATOM);
 
         $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ATOM);
 
@@ -161,8 +164,8 @@ class CustomerTest extends AbstractApiTestCase
             'active' => true,
             'email' => uniqid('', true) . 'test@foobar.com',
 
-            'firstlogin' => $firstlogin,
-            'lastlogin' => $lastlogin,
+            'firstlogin' => $firstLogin,
+            'lastlogin' => $lastLogin,
 
             'salutation' => 'mr',
             'firstname' => 'Max',
@@ -227,7 +230,7 @@ class CustomerTest extends AbstractApiTestCase
     }
 
     /**
-     * @return int
+     * @throws \Exception
      */
     public function testPostCustomersWithDebitPaymentDataShouldCreateDebitData()
     {

@@ -56,8 +56,9 @@ class CustomerGroup extends Resource
         }
 
         $builder = $this->getRepository()->createQueryBuilder('customerGroup')
-                ->select('customerGroup', 'd')
+                ->select('customerGroup', 'd', 'attribute')
                 ->leftJoin('customerGroup.discounts', 'd')
+                ->leftJoin('customerGroup.attribute', 'attribute')
                 ->where('customerGroup.id = :id')
                 ->setParameter(':id', $id);
 

@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * @deprecated since 5.2 will be removed in 6.0
@@ -30,11 +30,11 @@ use Shopware\Components\DependencyInjection\Container;
 class Shopware_Bootstrap
 {
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     protected $container;
 
-    public function __construct(Container $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -49,7 +49,7 @@ class Shopware_Bootstrap
      *
      * @deprecated 4.2
      *
-     * @return Enlight_Class Resource
+     * @return mixed Resource
      */
     public function __call($name, $arguments = null)
     {
@@ -69,7 +69,10 @@ class Shopware_Bootstrap
     {
         trigger_error('Shopware()->Bootstrap()->Application() is deprecated since version 5.2 and will be removed in 6.0. Use Shopware()->Container() instead', E_USER_DEPRECATED);
 
-        return $this->container->get('application');
+        /** @var Shopware $shopware */
+        $shopware = $this->container->get('application');
+
+        return $shopware;
     }
 
     /**

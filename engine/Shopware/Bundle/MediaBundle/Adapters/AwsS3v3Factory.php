@@ -39,7 +39,7 @@ class AwsS3v3Factory implements AdapterFactoryInterface
 
         $client = new S3Client($options);
 
-        return new AwsS3Adapter($client, $options['bucket'], $options['root']);
+        return new AwsS3Adapter($client, $options['bucket'], $options['root'], $options['metaOptions']);
     }
 
     /**
@@ -58,16 +58,18 @@ class AwsS3v3Factory implements AdapterFactoryInterface
         $options = new OptionsResolver();
 
         $options->setRequired(['credentials', 'bucket', 'region']);
-        $options->setDefined(['version', 'root', 'type', 'mediaUrl', 'url', 'endpoint', 'use_path_style_endpoint']);
+        $options->setDefined(['version', 'root', 'type', 'mediaUrl', 'url', 'endpoint', 'use_path_style_endpoint', 'metaOptions']);
 
         $options->setAllowedTypes('credentials', 'array');
         $options->setAllowedTypes('region', 'string');
         $options->setAllowedTypes('version', 'string');
         $options->setAllowedTypes('root', 'string');
+        $options->setAllowedTypes('metaOptions', 'array');
 
         $options->setDefault('version', 'latest');
         $options->setDefault('root', '');
         $options->setDefault('endpoint', null);
+        $options->setDefault('metaOptions', []);
 
         $config = $options->resolve($definition);
         $config['credentials'] = $this->resolveCredentialsOptions($config['credentials']);

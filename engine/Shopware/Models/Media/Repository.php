@@ -68,8 +68,9 @@ class Repository extends ModelRepository
     {
         /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select('media')
-                ->from(\Shopware\Models\Media\Media::class, 'media');
+        $builder->select('media', 'attribute')
+                ->from(\Shopware\Models\Media\Media::class, 'media')
+                ->leftJoin('media.attribute', 'attribute');
         if ($filter) {
             $builder->addFilter($filter);
         }

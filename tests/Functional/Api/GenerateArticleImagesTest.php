@@ -24,8 +24,27 @@
 
 namespace Shopware\Tests\Functional\Api;
 
+/**
+ * @covers \Shopware_Controllers_Api_GenerateArticleImages
+ */
 class GenerateArticleImagesTest extends AbstractApiTestCase
 {
+    public function testRequestWithoutAuthenticationShouldReturnError()
+    {
+        $this->client->request('GET', '/api/generateArticleImages');
+        $response = $this->client->getResponse();
+
+        static::assertEquals('application/json', $response->getHeader('Content-Type'));
+        static::assertEquals(401, $response->getStatusCode());
+
+        $result = $response->getBody();
+        $result = json_decode($result, true);
+
+        static::assertArrayHasKey('success', $result);
+        static::assertFalse($result['success']);
+        static::assertArrayHasKey('message', $result);
+    }
+
     public function testBatchDeleteShouldFail(): void
     {
         $this->authenticatedApiRequest('DELETE', '/api/generateArticleImages');

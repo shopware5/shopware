@@ -24,11 +24,10 @@
 
 namespace Shopware\Components;
 
-use Psr\Container\ContainerInterface;
-use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Theme\Inheritance;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ShopRegistrationService implements ShopRegistrationServiceInterface
 {
@@ -37,7 +36,7 @@ class ShopRegistrationService implements ShopRegistrationServiceInterface
      */
     private $container;
 
-    public function __construct(Container $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }

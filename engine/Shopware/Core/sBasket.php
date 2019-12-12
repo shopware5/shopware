@@ -969,7 +969,37 @@ SQL;
             ]
         );
 
-        return (bool) $this->db->query($sql, $params);
+        $params = $this->eventManager->filter(
+            'Shopware_Modules_Basket_AddVoucher_FilterSqlParams',
+            $params,
+            [
+                'subject' => $this,
+                'voucher' => $voucherDetails,
+                'vouchername' => $voucherName,
+                'shippingfree' => $freeShipping,
+                'tax' => $tax,
+            ]
+        );
+
+        $isInserted = (bool) $this->db->query($sql, $params);
+
+        if ($isInserted) {
+            $insertId = $this->db->lastInsertId('s_order_basket');
+
+            $this->eventManager->notify(
+                'Shopware_Modules_Basket_AddVoucher_Inserted',
+                [
+                    'subject' => $this,
+                    'basketId' => $insertId,
+                    'voucher' => $voucherDetails,
+                    'vouchername' => $voucherName,
+                    'shippingfree' => $freeShipping,
+                    'tax' => $tax,
+                ]
+            );
+        }
+
+        return $isInserted;
     }
 
     /**
@@ -2852,7 +2882,7 @@ SELECT s_order_basket.id,
        IFNULL(catRo.id, 0) as hasCategory,
        s_articles_details.ordernumber
 FROM s_articles, s_order_basket, s_articles_details
-LEFT JOIN s_articles_avoid_customergroups avoid 
+LEFT JOIN s_articles_avoid_customergroups avoid
   ON avoid.articleID = s_articles_details.articleID
 LEFT JOIN s_articles_categories_ro catRo ON(catRo.articleID = s_articles_details.articleID AND catRo.categoryID = :mainCategoryId)
 WHERE s_order_basket.articleID = s_articles.id
