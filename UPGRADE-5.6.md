@@ -2,6 +2,44 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
+## 5.6.4
+
+[View all changes from v5.6.3...v5.6.4](https://github.com/shopware/shopware/compare/v5.6.3...v5.6.4)
+
+### Additions
+
+* Added PHP 7.4 support
+* Added new option `metaOptions` to S3 Adapter to set S3 options
+* Added a filter event 'Shopware_Modules_Basket_AddVoucher_FilterSqlParams' to `sBasket::sAddVoucher` to modify sql params
+* Added a notify event 'Shopware_Modules_Basket_AddVoucher_Inserted' to `sBasket::sAddVoucher` to execute code after a voucher was inserted
+* Added new product fields to product exports: `metaTitle`, `pseudosales`, `notification`, `available_from`, `available_to`, `pricegroupActive`, `pricegroupID`
+* Added `intl` extension to required php extensions
+* Added unique index to `s_attribute_configuration` with columns `table_name` and `column_name`
+* Added new Argon2 password encoder
+* Added attributes to the following API resources
+    * `CustomerGroup`
+    * `Media`
+    * `Country`
+* Added new config option to also show technical urls in hreflang
+
+### Changes
+
+* The `\Shopware\Components\StateTranslatorService` works case insensitive now
+* Changed `Shopware.apps.Emotion.view.components.Base` to properly handle a checkbox default value
+* Changed `\Shopware_Controllers_Backend_Base::getPaymentsAction` to optionally list all payment methods
+* Changed `\Shopware\Components\Cart\CartPersistService` to also persist cart item attributes
+
+### Removals
+
+ * Removed usage of column `baseprice` in `engine/Shopware/Bundle/SearchBundleDBAL/ListingPriceHelper.php` 
+ 
+### Deprecations
+
+* Deprecated following methods of class `\Shopware\Components\CacheManager`
+    * `getCoreCache`
+    * `getDirectoryInfo`
+    * `encodeSize`
+
 ## 5.6.3
 
 [View all changes from v5.6.2...v5.6.3](https://github.com/shopware/shopware/compare/v5.6.2...v5.6.3)
@@ -610,7 +648,7 @@ return [
 ```
 Providing this value via config makes it unnecessary for Doctrine to figure the version out by itself, thus reducing the number of database calls Shopware makes per request by one.
 
-If you are running a MariaDB database, you should prefix the `serverVersion` with `mariadb`- (e.g.: `mariadb-10.2.12`).
+If you are running a MariaDB database, you should suffix the `serverVersion` with `-MariaDB` (e.g.: `10.3.18-MariaDB`).
 
 ### Payment Token
 

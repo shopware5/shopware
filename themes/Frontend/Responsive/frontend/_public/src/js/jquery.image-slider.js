@@ -1,4 +1,4 @@
-;(function ($, Modernizr, window, Math) {
+(function ($, Modernizr, window, Math) {
     'use strict';
 
     var transitionProperty = StateManager.getVendorProperty('transition'),

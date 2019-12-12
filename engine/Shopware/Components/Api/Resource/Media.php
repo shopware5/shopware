@@ -28,6 +28,7 @@ use Doctrine\ORM\ORMException;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Random;
 use Shopware\Components\Thumbnail\Manager;
+use Shopware\Models\Attribute\Media as MediaAttribute;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media as MediaModel;
 use Symfony\Component\HttpFoundation\File\File;
@@ -127,6 +128,12 @@ class Media extends Resource
 
         $media = new MediaModel();
         $media->fromArray($params);
+        $attribute = new MediaAttribute();
+
+        if (isset($params['attribute']) && is_array($params['attribute'])) {
+            $attribute->fromArray($params['attribute']);
+        }
+        $media->setAttribute($attribute);
 
         $path = $this->prepareFilePath($media->getPath(), $media->getFileName());
         $media->setPath($path);
@@ -136,6 +143,7 @@ class Media extends Resource
             throw new ApiException\ValidationException($violations);
         }
 
+        $this->getManager()->persist($attribute);
         $this->getManager()->persist($media);
         $this->flush();
 
@@ -184,6 +192,15 @@ class Media extends Resource
                 @unlink($path);
                 throw new ApiException\CustomValidationException($exception->getMessage());
             }
+        }
+
+        if (isset($params['attribute']) && is_array($params['attribute'])) {
+            $attribute = $media->getAttribute();
+            $attribute->fromArray($params['attribute']);
+
+            $media->setAttribute($attribute);
+            $this->getManager()->persist($attribute);
+            $this->getManager()->flush();
         }
 
         return $media;

@@ -110,7 +110,7 @@ class HrefLangService implements HrefLangServiceInterface
                 $href->setLocale('x-default');
             }
 
-            if (!$this->isSeoUrl($parameters, $href->getLink(), $routingContext)) {
+            if ($this->config->get('hrefLangJustSeoUrl') && !$this->isSeoUrl($parameters, $href->getLink(), $routingContext)) {
                 continue;
             }
 

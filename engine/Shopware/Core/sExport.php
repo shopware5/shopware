@@ -638,6 +638,7 @@ class sExport implements \Enlight_Hook
                     'txtshippingtime' => 'shippingtime',
                     'txtArtikel' => 'name',
                     'txtzusatztxt' => 'additionaltext',
+                    'metaTitle' => 'metaTitle',
                 ];
 
                 $attributes = Shopware()->Container()->get('shopware_attribute.crud_service')->getList('s_articles_attributes');
@@ -881,7 +882,14 @@ class sExport implements \Enlight_Hook
                 d.shippingtime,
                 d.shippingfree,
                 a.topseller,
+                a.pseudosales,
                 a.keywords,
+                a.metaTitle,
+                a.notification,
+                a.available_from,
+                a.available_to,
+                a.pricegroupActive,
+                a.pricegroupID,
                 d.active as variantActive,
                 d.minpurchase,
                 d.purchasesteps,

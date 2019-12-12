@@ -27,6 +27,9 @@ namespace Shopware\Tests\Functional\Api;
 use Shopware\Models\Media\Media;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+/**
+ * @covers \Shopware_Controllers_Api_Media
+ */
 class MediaTest extends AbstractApiTestCase
 {
     private const UPLOAD_FILE_NAME = 'test-bild';
@@ -158,7 +161,7 @@ class MediaTest extends AbstractApiTestCase
     /**
      * @depends testPostMediaShouldBeSuccessful
      */
-    public function testGetMediaWithIdShouldBeSuccessful($identifier)
+    public function testGetMediaWithIdShouldBeSuccessful($id)
     {
         $this->authenticatedApiRequest('GET', '/api/media/' . $id);
         $response = $this->client->getResponse();
@@ -177,6 +180,7 @@ class MediaTest extends AbstractApiTestCase
 
         $data = $response['data'];
         static::assertIsArray($data);
+        static::assertArrayHasKey('attribute', $data);
     }
 
     /**
@@ -239,9 +243,9 @@ class MediaTest extends AbstractApiTestCase
     /**
      * @depends testPostMediaWithFileUploadShouldBeSuccessful
      */
-    public function testGetMediaWithUploadedFileByIdShouldBeSuccessful($identifier): void
+    public function testGetMediaWithUploadedFileByIdShouldBeSuccessful($id): void
     {
-        $this->authenticatedApiRequest('GET', '/api/media/' . $identifier);
+        $this->authenticatedApiRequest('GET', '/api/media/' . $id);
         $response = $this->client->getResponse();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));

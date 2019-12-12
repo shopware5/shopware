@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TEMPLATE: ./../templates/config.php:./../../../config.php
+TEMPLATE: ./../templates/config-mink.php:./../../../config.php
 
 cat config.php
 cat tests/Mink/behat.yml

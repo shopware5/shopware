@@ -24,6 +24,9 @@
 
 namespace Shopware\Tests\Functional\Api;
 
+/**
+ * @covers \Shopware_Controllers_Api_Manufacturers
+ */
 class ManufacturerTest extends AbstractApiTestCase
 {
     public function testGetManufacturersShouldBeSuccessful(): void
