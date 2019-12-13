@@ -51,7 +51,7 @@ class CookieCollectorTest extends TestCase
         static::assertSame(5, $collection->count());
 
         // Added cookies and they were assigned to their group
-        static::assertSame(9, $collection->getGroupByName(CookieGroupStruct::TECHNICAL)->getCookies()->count());
+        static::assertSame(10, $collection->getGroupByName(CookieGroupStruct::TECHNICAL)->getCookies()->count());
         static::assertSame(2, $collection->getGroupByName(CookieGroupStruct::STATISTICS)->getCookies()->count());
     }
 
@@ -112,7 +112,8 @@ class CookieCollectorTest extends TestCase
     {
         return new CookieCollector(
             Shopware()->Container()->get('events'),
-            Shopware()->Container()->get('snippets')
+            Shopware()->Container()->get('snippets'),
+            Shopware()->Container()->get('config')
         );
     }
 }

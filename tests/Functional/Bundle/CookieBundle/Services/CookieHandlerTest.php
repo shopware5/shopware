@@ -48,7 +48,7 @@ class CookieHandlerTest extends TestCase
 
         $cookieCollection = $cookieHandler->getTechnicallyRequiredCookies();
 
-        static::assertSame(9, $cookieCollection->count());
+        static::assertSame(10, $cookieCollection->count());
     }
 
     public function testIsCookieAllowedByPreferencesReturnsTrueIsAllowed(): void
@@ -57,6 +57,7 @@ class CookieHandlerTest extends TestCase
         $result = $cookieHandler->isCookieAllowedByPreferences('sUniqueID', [
             'groups' => [
                 [
+                    'name' => 'comfort',
                     'cookies' => [
                         'statistic' => [
                             'name' => 'sUniqueID',
@@ -76,6 +77,7 @@ class CookieHandlerTest extends TestCase
         $result = $cookieHandler->isCookieAllowedByPreferences('sUniqueID', [
             'groups' => [
                 [
+                    'name' => 'comfort',
                     'cookies' => [
                         'statistic' => [
                             'name' => 'sUniqueID',
@@ -124,6 +126,7 @@ class CookieHandlerTest extends TestCase
         $result = $cookieHandler->isCookieAllowedByPreferences('bar-ABC', [
             'groups' => [
                 [
+                    'name' => 'comfort',
                     'cookies' => [
                         'statistic' => [
                             'name' => 'bar',
@@ -148,6 +151,7 @@ class CookieHandlerTest extends TestCase
         $result = $cookieHandler->isCookieAllowedByPreferences('bar-ABC', [
             'groups' => [
                 [
+                    'name' => 'comfort',
                     'cookies' => [
                         'statistic' => [
                             'name' => 'bar1',
@@ -159,6 +163,26 @@ class CookieHandlerTest extends TestCase
                         ],
                         'statistic3' => [
                             'name' => 'bar3',
+                            'active' => false,
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        static::assertTrue($result);
+    }
+
+    public function testIsCookieAllowedByPreferencesReturnsTrueTechnicallyRequiredButInactive(): void
+    {
+        $cookieHandler = $this->getCookieHandler();
+        $result = $cookieHandler->isCookieAllowedByPreferences('session-1', [
+            'groups' => [
+                [
+                    'name' => 'technical',
+                    'cookies' => [
+                        'session' => [
+                            'name' => 'session',
                             'active' => false,
                         ],
                     ],
