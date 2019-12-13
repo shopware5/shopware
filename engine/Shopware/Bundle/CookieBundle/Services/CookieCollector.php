@@ -125,7 +125,7 @@ class CookieCollector implements CookieCollectorInterface
 
         $cookieCollection->add(new CookieStruct('session', '/^session\-[0-9]+$/', $snippetNamespace->get('session'), CookieGroupStruct::TECHNICAL));
         $cookieCollection->add(new CookieStruct('csrf_token', '/^__csrf_token\-[0-9]+$/', $snippetNamespace->get('csrf'), CookieGroupStruct::TECHNICAL));
-        $cookieCollection->add(new CookieStruct('shop', '/^shop\-[0-9]+$/', $snippetNamespace->get('shop'), CookieGroupStruct::TECHNICAL));
+        $cookieCollection->add(new CookieStruct('shop', '/^shop(\-[0-9]+)?$/', $snippetNamespace->get('shop'), CookieGroupStruct::TECHNICAL));
         $cookieCollection->add(new CookieStruct(CookieHandler::PREFERENCES_COOKIE_NAME, '/^cookiePreferences$/', $snippetNamespace->get('preferences'), CookieGroupStruct::TECHNICAL));
         $cookieCollection->add(new CookieStruct('allowCookie', '/^allowCookie$/', $snippetNamespace->get('allow'), CookieGroupStruct::TECHNICAL));
         $cookieCollection->add(new CookieStruct('cookieDeclined', '/^cookieDeclined$/', $snippetNamespace->get('decline'), CookieGroupStruct::TECHNICAL));
