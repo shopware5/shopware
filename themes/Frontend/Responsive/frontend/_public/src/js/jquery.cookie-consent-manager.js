@@ -106,6 +106,14 @@
             cookieActiveInputSelector: '.cookie-consent--cookie-state-input',
 
             /**
+             * Selector of the label element for the active input.
+             *
+             * @property cookieActiveInputLabelSelector
+             * @type {String}
+             */
+            cookieActiveInputLabelSelector: '.cookie-consent--cookie-state',
+
+            /**
              * Selector of the button which should save the configured preferences.
              *
              * @property saveButtonSelector
@@ -127,7 +135,15 @@
              * @property cookieLabelSelector
              * @type {string}
              */
-            cookieLabelSelector: '.cookie--label'
+            cookieLabelSelector: '.cookie--label',
+
+            /**
+             * The class which marks a group as "required".
+             *
+             * @property requiredClass
+             * @type {string}
+             */
+            requiredClass: 'cookie-consent--required'
         },
 
         /**
@@ -192,18 +208,20 @@
             var me = this,
                 groupNames = Object.keys(this.preferences['groups']),
                 group,
+                groupRequired,
                 cookieNames,
                 cookie;
 
             $.each(groupNames, function (groupIndex, groupName) {
                 group = me.findGroupByName(groupName);
-                me.toggleGroup(group, me.preferences['groups'][groupName].active);
+                groupRequired = group.find(me.opts.cookieActiveInputLabelSelector).hasClass(me.opts.requiredClass);
+                me.toggleGroup(group, groupRequired || me.preferences['groups'][groupName].active);
 
                 cookieNames = Object.keys(me.preferences['groups'][groupName].cookies);
 
                 $.each(cookieNames, function (cookieIndex, cookieName) {
                     cookie = me.findCookieByName(cookieName);
-                    me.toggleCookie(cookie, me.preferences['groups'][groupName].cookies[cookieName].active);
+                    me.toggleCookie(cookie, groupRequired || me.preferences['groups'][groupName].cookies[cookieName].active);
 
                     me.checkActiveStateForAllCookiesOfGroup(group, me.preferences['groups'][groupName].cookies[cookieName].active);
                 })
