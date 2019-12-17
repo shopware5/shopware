@@ -206,7 +206,7 @@
 
         parsePreferences: function () {
             var me = this,
-                groupNames = Object.keys(this.preferences['groups']),
+                groupNames = Object.keys(me.preferences['groups']),
                 group,
                 groupRequired,
                 cookieNames,
@@ -223,8 +223,8 @@
                     cookie = me.findCookieByName(cookieName);
                     me.toggleCookie(cookie, groupRequired || me.preferences['groups'][groupName].cookies[cookieName].active);
 
-                    me.checkActiveStateForAllCookiesOfGroup(group, me.preferences['groups'][groupName].cookies[cookieName].active);
-                })
+                    me.checkActiveStateForAllCookiesOfGroup(group, groupRequired || me.preferences['groups'][groupName].cookies[cookieName].active);
+                });
             });
         },
 
