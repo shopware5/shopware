@@ -147,15 +147,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         );
 
         if ($errors['occurred']) {
-            unset(
-                $data['register']['personal']['password'],
-                $data['register']['personal']['passwordConfirmation'],
-                $data['register']['personal']['emailConfirmation']
-            );
-
-            $this->View()->assign('errors', $errors);
-            $this->View()->assign($data);
-            $this->forward('index');
+            $this->handleRegisterError($data, $errors);
 
             return;
         }
@@ -185,6 +177,27 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $customer->setDoubleOptinRegister($doubleOptinRegister);
         $customer->setDoubleOptinConfirmDate(null);
 
+        /** @var Enlight_Event_EventManager $eventManager */
+        $eventManager = $this->get('events');
+
+        $errors = ['occurred' => false];
+        $errors = $eventManager->filter(
+            'Shopware_Modules_Admin_SaveRegister_BeforeRegister',
+            $errors,
+            [
+                'subject' => $this,
+                'customer' => $customer,
+                'billing' => $billing,
+                'shipping' => $shipping,
+            ]
+        );
+
+        if ($errors['occurred']) {
+            $this->handleRegisterError($data, $errors);
+
+            return;
+        }
+
         $registerService->register(
             $shop,
             $customer,
@@ -203,7 +216,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         );
 
         if ($doubleOptinRegister) {
-            $this->get('events')->notify(
+            $eventManager->notify(
                 'Shopware_Modules_Admin_SaveRegister_DoubleOptIn_Waiting',
                 [
                     'id' => $customer->getId(),
@@ -553,5 +566,18 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $message = sprintf('Could not send user registration email to address %s', $customer->getEmail());
             $this->get('corelogger')->error($message, ['exception' => $e->getMessage()]);
         }
+    }
+
+    private function handleRegisterError(array $data, array $errors): void
+    {
+        unset(
+            $data['register']['personal']['password'],
+            $data['register']['personal']['passwordConfirmation'],
+            $data['register']['personal']['emailConfirmation']
+        );
+
+        $this->View()->assign('errors', $errors);
+        $this->View()->assign($data);
+        $this->forward('index');
     }
 }
