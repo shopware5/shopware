@@ -88,7 +88,7 @@ abstract class Plugin extends Bundle implements SubscriberInterface
         return $this->isActive;
     }
 
-    public function isAutoloadViews(): bool
+    public function hasAutoloadViews(): bool
     {
         return $this->autoloadViews;
     }
