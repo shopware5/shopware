@@ -29,7 +29,7 @@
 Ext.define('Shopware.apps.Order.view.mail.Attachment', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.order-mail-attachment',
-    height: 350,
+    height: 200,
     title: '{s name=attachment/panel/title}{/s}',
 
     /**

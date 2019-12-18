@@ -179,6 +179,8 @@ Ext.define('Shopware.form.field.TinyMCE',
      */
     hasPlaceholder: false,
 
+    isFullPage: false,
+
     /**
      * List of configuration options with their default values, for which automatically accessor methods are generated
      * @object
@@ -327,6 +329,10 @@ Ext.define('Shopware.form.field.TinyMCE',
         if(me.height) {
             height = me.height - 12;
             me.config.editor.height = height;
+        }
+
+        if(me.isFullPage) {
+            me.config.editor.plugins += ',fullpage';
         }
 
         // Support the readOnly property

@@ -1027,9 +1027,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         if ($mailData['isHtml']) {
             $mail->setBodyHtml($mailData['bodyHtml']);
-        } else {
-            $mail->setBodyText($mailData['bodyText']);
         }
+        $mail->setBodyText($mailData['bodyText']);
+
         $mail = $this->addAttachments($mail, $orderId, $mailData['attachments']);
 
         $mail->setAssociation(LogEntryBuilder::ORDER_ID_ASSOCIATION, $orderId);

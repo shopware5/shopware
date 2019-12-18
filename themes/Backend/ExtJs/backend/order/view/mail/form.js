@@ -315,6 +315,7 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
             flex: 1,
             disabled: true,
             hidden: true,
+            isFullPage: true,
             listeners: {
                 // Attaching a change event on tinymce directy
                 afterrendereditor: function (editor, tinymce) {
@@ -343,8 +344,6 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
         var isHtml = mailTemplateRecord.get('isHtml');
         this.htmlContentTextField.setVisible(isHtml);
         this.htmlContentTextField.setDisabled(!isHtml);
-        this.textContentTextField.setVisible(!isHtml);
-        this.textContentTextField.setDisabled(isHtml);
     }
 });
 //{/block}
