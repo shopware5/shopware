@@ -111,13 +111,15 @@ class ResourceSubscriber implements SubscriberInterface
 
         $viewsDirectory = $this->pluginPath . '/Resources/views';
 
-        if (@is_dir($viewsDirectory)) {
-            $templates = (array) $args->getReturn();
+        if (!(@is_dir($viewsDirectory))) {
+            return;
+        }
 
-            if (!in_array($viewsDirectory, $templates, true)) {
-                $templates[] = $viewsDirectory;
-                $args->setReturn($templates);
-            }
+        $templates = (array)$args->getReturn();
+
+        if (!in_array($viewsDirectory, $templates, true)) {
+            $templates[] = $viewsDirectory;
+            $args->setReturn($templates);
         }
     }
 
