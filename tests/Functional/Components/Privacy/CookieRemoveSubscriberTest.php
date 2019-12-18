@@ -180,10 +180,10 @@ class CookieRemoveSubscriberTest extends TestCase
         $_COOKIE[CookieHandler::PREFERENCES_COOKIE_NAME] = json_encode([
             'groups' => [
                 [
-                    'name' => 'foo',
+                    'name' => 'comfort',
                     'cookies' => [
                         [
-                            'name' => 'removeMe',
+                            'name' => 'sUniqueID',
                             'active' => false,
                         ],
                     ],
@@ -191,7 +191,7 @@ class CookieRemoveSubscriberTest extends TestCase
             ],
         ]);
         $controller = $this->getController();
-        $controller->Response()->setCookie('removeMe', 'foo');
+        $controller->Response()->setCookie('sUniqueID', 'foo');
 
         $cookieRemoveSubscriber->onPostDispatch($this->getEventArgs($controller));
         $responseCookies = $controller->Response()->getCookies();
@@ -213,7 +213,7 @@ class CookieRemoveSubscriberTest extends TestCase
         $_COOKIE[CookieHandler::PREFERENCES_COOKIE_NAME] = json_encode([
             'groups' => [
                 [
-                    'name' => 'foo',
+                    'name' => 'technical',
                     'cookies' => [
                         [
                             'name' => 'keepMe',

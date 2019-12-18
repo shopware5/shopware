@@ -27,9 +27,11 @@ namespace Shopware\Components\Privacy;
 use Enlight\Event\SubscriberInterface;
 use Enlight_Controller_Request_RequestHttp as Request;
 use Enlight_Controller_Response_ResponseHttp as Response;
+use Shopware\Bundle\CookieBundle\CookieCollection;
 use Shopware\Bundle\CookieBundle\CookieGroupCollection;
 use Shopware\Bundle\CookieBundle\Services\CookieHandler;
 use Shopware\Bundle\CookieBundle\Services\CookieHandlerInterface;
+use Shopware\Bundle\CookieBundle\Structs\CookieStruct;
 use Shopware_Components_Config as Config;
 use Symfony\Component\HttpFoundation\Cookie;
 
@@ -117,6 +119,8 @@ class CookieRemoveSubscriber implements SubscriberInterface
 
         $preferences = json_decode($preferences, true);
 
+        $preferences = $this->removeInvalidCookiesFromPreferences($request, $response, $preferences);
+
         $this->removeCookies($request, $response, function (string $cookieName) use ($preferences) {
             return $this->cookieHandler->isCookieAllowedByPreferences($cookieName, $preferences);
         });
@@ -163,6 +167,43 @@ class CookieRemoveSubscriber implements SubscriberInterface
                 $response->headers->setCookie(new Cookie($cookieKey, null, 0, $currentPathWithoutSlash));
             }
         }
+    }
+
+    private function removeInvalidCookiesFromPreferences(Request $request, Response $response, array $preferences): array
+    {
+        $allowedCookies = $this->cookieHandler->getCookies();
+
+        foreach ($preferences['groups'] as $group) {
+            foreach ($group['cookies'] as $cookie) {
+                $cookieCollection = $allowedCookies->getGroupByName($group['name'])->getCookies();
+
+                if ($this->hasCookieWithTechnicalName($cookieCollection, $cookie['name'])) {
+                    continue;
+                }
+
+                unset($preferences['groups'][$group['name']]['cookies'][$cookie['name']]);
+                $this->setNewPreferencesCookie($request, $response, $preferences);
+            }
+        }
+
+        return $preferences;
+    }
+
+    private function hasCookieWithTechnicalName(CookieCollection $cookieCollection, string $technicalName): bool
+    {
+        return $cookieCollection->exists(static function (string $key, CookieStruct $cookieStruct) use ($technicalName) {
+            return $cookieStruct->getName() === $technicalName;
+        });
+    }
+
+    private function setNewPreferencesCookie(Request $request, Response $response, array $preferences): void
+    {
+        $expire = new \DateTime();
+        $expire->modify('+180 day');
+
+        $response->headers->setCookie(
+            new Cookie(CookieHandler::PREFERENCES_COOKIE_NAME, json_encode($preferences), $expire, $request->getBasePath() . '/', null, false, false, true)
+        );
     }
 
     private function convertToArray(CookieGroupCollection $cookieGroupCollection): array

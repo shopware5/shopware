@@ -43,10 +43,16 @@ class CookieCollector implements CookieCollectorInterface
      */
     private $snippetManager;
 
-    public function __construct(\Enlight_Event_EventManager $eventManager, \Shopware_Components_Snippet_Manager $snippetManager)
+    /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
+
+    public function __construct(\Enlight_Event_EventManager $eventManager, \Shopware_Components_Snippet_Manager $snippetManager, \Shopware_Components_Config $config)
     {
         $this->eventManager = $eventManager;
         $this->snippetManager = $snippetManager;
+        $this->config = $config;
     }
 
     public function collect(): CookieGroupCollection
@@ -119,9 +125,8 @@ class CookieCollector implements CookieCollectorInterface
 
         $cookieCollection->add(new CookieStruct('session', '/^session\-[0-9]+$/', $snippetNamespace->get('session'), CookieGroupStruct::TECHNICAL));
         $cookieCollection->add(new CookieStruct('csrf_token', '/^__csrf_token\-[0-9]+$/', $snippetNamespace->get('csrf'), CookieGroupStruct::TECHNICAL));
-        $cookieCollection->add(new CookieStruct('shop', '/^shop\-[0-9]+$/', $snippetNamespace->get('shop'), CookieGroupStruct::TECHNICAL));
+        $cookieCollection->add(new CookieStruct('shop', '/^shop(\-[0-9]+)?$/', $snippetNamespace->get('shop'), CookieGroupStruct::TECHNICAL));
         $cookieCollection->add(new CookieStruct(CookieHandler::PREFERENCES_COOKIE_NAME, '/^cookiePreferences$/', $snippetNamespace->get('preferences'), CookieGroupStruct::TECHNICAL));
-        $cookieCollection->add(new CookieStruct('slt', '/^slt$/', $snippetNamespace->get('slt'), CookieGroupStruct::COMFORT));
         $cookieCollection->add(new CookieStruct('allowCookie', '/^allowCookie$/', $snippetNamespace->get('allow'), CookieGroupStruct::TECHNICAL));
         $cookieCollection->add(new CookieStruct('cookieDeclined', '/^cookieDeclined$/', $snippetNamespace->get('decline'), CookieGroupStruct::TECHNICAL));
         $cookieCollection->add(new CookieStruct('x-ua-device', '/^x\-ua\-device$/', $snippetNamespace->get('device'), CookieGroupStruct::STATISTICS));
@@ -130,6 +135,10 @@ class CookieCollector implements CookieCollectorInterface
         $cookieCollection->add(new CookieStruct('currency', '/^currency$/', $snippetNamespace->get('currency'), CookieGroupStruct::TECHNICAL));
         $cookieCollection->add(new CookieStruct('x-cache-context-hash', '/^x\-cache\-context\-hash$/', $snippetNamespace->get('context_hash'), CookieGroupStruct::TECHNICAL));
         $cookieCollection->add(new CookieStruct('nocache', '/^nocache$/', $snippetNamespace->get('no_cache'), CookieGroupStruct::TECHNICAL));
+
+        if ($this->config->get('useSltCookie')) {
+            $cookieCollection->add(new CookieStruct('slt', '/^slt$/', $snippetNamespace->get('slt'), CookieGroupStruct::TECHNICAL));
+        }
     }
 
     private function sortCookies(CookieCollection $cookieCollection): CookieCollection

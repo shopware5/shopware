@@ -8,6 +8,7 @@
         <service id="Shopware\Bundle\CookieBundle\Services\CookieCollector">
             <argument id="events" type="service" />
             <argument id="snippets" type="service" />
+            <argument id="config" type="service" />
         </service>
 
         <service id="Shopware\Bundle\CookieBundle\Services\CookieHandler">
