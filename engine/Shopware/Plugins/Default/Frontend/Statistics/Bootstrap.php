@@ -406,7 +406,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         // Use plain sql, because the http cache should no be cleared
         $query = $connection->createQueryBuilder()
             ->update('s_blog', 'b')
-            ->set('b.views', 'b.views + 1')
+            ->set('b.views', 'IFNULL(b.views, 0) + 1')
             ->where('b.id = :id')
             ->setParameter('id', $blogArticleId);
         $query->execute();
