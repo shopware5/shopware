@@ -28,23 +28,23 @@
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-abstract class Enlight_Components_Test_TestCaseV8 extends PHPUnit\Framework\TestCase
+abstract class Enlight_Components_Test_TestCase extends PHPUnit\Framework\TestCase
 {
     /**
      * Sets up the fixture, for example, open a network connection.
+     * @before
      */
-    protected function setUp(): void
+    protected function setupEnlightTestCase(): void
     {
-        parent::setUp();
-
         // Clear entitymanager to prevent weird 'model shop not persisted' errors.
         Shopware()->Models()->clear();
     }
 
     /**
      * Performs operation returned by getSetUpOperation().
+     * @after
      */
-    protected function tearDown(): void
+    protected function teardownEnlightTestCase(): void
     {
         set_time_limit(0);
         ini_restore('memory_limit');
