@@ -152,7 +152,7 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
                 $stripTags = in_array($k, $whiteList) ? false : $stripTagsConf;
                 $filteredKey = self::filterValue($k, $regex, $stripTags);
                 if ($filteredKey === '' || $filteredKey === null) {
-                  continue;   
+                    continue;
                 }
                 if (is_array($v)) {
                     $process[$key][$filteredKey] = $v;
