@@ -5,6 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true"/>
         <service id="Shopware\Bundle\ContentTypeBundle\Services\TypeFieldResolver">
             <argument type="service" id="service_container"/>
         </service>

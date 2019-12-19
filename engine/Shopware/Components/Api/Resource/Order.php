@@ -398,9 +398,7 @@ class Order extends Resource
             $params['partner'] = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(Partner::class, $params['partnerId']);
 
             if (empty($params['partner'])) {
-                throw new ApiException\NotFoundException(
-                    sprintf('Partner by id %s not found', $params['partnerId'])
-                );
+                throw new ApiException\NotFoundException(sprintf('Partner by id %s not found', $params['partnerId']));
             }
 
             unset($params['partnerId']);
@@ -547,10 +545,7 @@ class Order extends Resource
             );
 
             if (empty($params['orderStatus'])) {
-                throw new ApiException\NotFoundException(sprintf(
-                    'OrderStatus by id %s not found',
-                    $params['orderStatusId']
-                ));
+                throw new ApiException\NotFoundException(sprintf('OrderStatus by id %s not found', $params['orderStatusId']));
             }
         }
 
@@ -563,10 +558,7 @@ class Order extends Resource
             );
 
             if (empty($params['paymentStatus'])) {
-                throw new ApiException\NotFoundException(sprintf(
-                    'PaymentStatus by id %s not found',
-                    $params['paymentStatusId']
-                ));
+                throw new ApiException\NotFoundException(sprintf('PaymentStatus by id %s not found', $params['paymentStatusId']));
             }
 
             return $params;
@@ -619,10 +611,7 @@ class Order extends Resource
                 $status = Shopware()->Models()->find(DetailStatus::class, $detail['status']);
 
                 if (!$status) {
-                    throw new ApiException\NotFoundException(sprintf(
-                        'DetailStatus by id %s not found',
-                        $detail['status']
-                    ));
+                    throw new ApiException\NotFoundException(sprintf('DetailStatus by id %s not found', $detail['status']));
                 }
 
                 $detailModel->setStatus($status);
@@ -667,10 +656,7 @@ class Order extends Resource
         if (isset($billing['stateId'])) {
             $state = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(State::class, (int) $billing['stateId']);
             if (!$state instanceof State) {
-                throw new ApiException\NotFoundException(sprintf(
-                    'Billing State by id %s not found',
-                    $billing['stateId']
-                ));
+                throw new ApiException\NotFoundException(sprintf('Billing State by id %s not found', $billing['stateId']));
             }
         } else {
             $billing['stateId'] = 0;
@@ -678,10 +664,7 @@ class Order extends Resource
 
         $country = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(CountryModel::class, $billing['countryId']);
         if (!$country) {
-            throw new ApiException\NotFoundException(sprintf(
-                'Billing Country by id %s not found',
-                $billing['countryId']
-            ));
+            throw new ApiException\NotFoundException(sprintf('Billing Country by id %s not found', $billing['countryId']));
         }
 
         $billingAddress = new Billing();
@@ -706,10 +689,7 @@ class Order extends Resource
         if (isset($shipping['stateId'])) {
             $state = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(State::class, (int) $shipping['stateId']);
             if (!$state instanceof State) {
-                throw new ApiException\NotFoundException(sprintf(
-                    'Shipping State by id %s not found',
-                    $shipping['stateId']
-                ));
+                throw new ApiException\NotFoundException(sprintf('Shipping State by id %s not found', $shipping['stateId']));
             }
         } else {
             $shipping['stateId'] = 0;
@@ -717,10 +697,7 @@ class Order extends Resource
 
         $country = $this->getContainer()->get(\Shopware\Components\Model\ModelManager::class)->find(CountryModel::class, $shipping['countryId']);
         if (!$country) {
-            throw new ApiException\NotFoundException(sprintf(
-                'Shipping Country by id %s not found',
-                $shipping['countryId']
-            ));
+            throw new ApiException\NotFoundException(sprintf('Shipping Country by id %s not found', $shipping['countryId']));
         }
 
         $shippingAddress = new Shipping();

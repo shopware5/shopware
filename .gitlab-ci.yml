@@ -28,7 +28,6 @@ PHP analyze:
     script:
         - ./psh.phar init
         - chown -R 1000:1000 .
-        - composer req --dev phpunit/phpunit:~8.0 --update-with-all-dependencies
         - ./psh.phar check-code
     services:
         -   name: mysql:5.7

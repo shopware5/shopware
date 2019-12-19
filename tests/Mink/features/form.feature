@@ -7,6 +7,7 @@ Feature: forms
         When  I follow "Fragen zum Artikel?"
         Then  I should be on the page "Form"
         And   I should see "Anfrage-Formular"
+        And   I ignore browser validation
         And   the "inquiry" field should contain "Ich habe folgende Fragen zum Artikel Blütenarrangement mit Rattan"
 
         When  I submit the inquiry form with:
@@ -29,6 +30,7 @@ Feature: forms
         And   I follow "Angebot anfordern"
         Then  I should be on the page "Form"
         And   I should see "Anfrage-Formular"
+        And   I ignore browser validation
         And   the "inquiry" field should contain:
         """
         Bitte unterbreiten Sie mir ein Angebot über die nachfolgenden Positionen

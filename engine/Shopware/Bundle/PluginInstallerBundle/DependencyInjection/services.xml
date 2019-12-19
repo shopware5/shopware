@@ -95,8 +95,6 @@
             <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator" />
             <argument type="service" id="Shopware_Components_Snippet_Manager" />
             <argument type="service" id="Shopware\Components\Model\ModelManager" />
-            <argument type="service" id="guzzle_http_client_factory" />
-            <argument>%shopware.store.apiEndpoint%</argument>
         </service>
 
         <service id="shopware_plugininstaller.plugin_licence_service" class="Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService">

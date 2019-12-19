@@ -60,6 +60,14 @@ class SpecialContext extends SubContext
     }
 
     /**
+     * @Given /^I ignore browser validation$/
+     */
+    public function IignoreFormValidations()
+    {
+        $this->getSession()->executeScript('for(var f=document.forms,i=f.length;i--;)f[i].setAttribute("novalidate",i)');
+    }
+
+    /**
      * @Then /^I should be on the (page "[^"]*")$/
      */
     public function iShouldBeOnThePage(Page $page)

@@ -245,12 +245,7 @@ class LegacyPluginInstaller
                     $name = $dir->getFilename();
 
                     if ($this->validateIonCube($file)) {
-                        throw new \Exception(
-                            sprintf(
-                                'Plugin "%s" is encrypted but the ionCube Loader extension is not installed',
-                                $name
-                            )
-                        );
+                        throw new \Exception(sprintf('Plugin "%s" is encrypted but the ionCube Loader extension is not installed', $name));
                     }
 
                     $plugin = $collection->get($name);

@@ -254,7 +254,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
     private function thumbnailExists($thumbnailPath)
     {
         $mediaService = $this->container->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
-        $projectDir = $this->container->getParameter('shopware.app.rootdir');
+        $projectDir = $this->container->getParameter('shopware.app.rootDir');
 
         return $mediaService->has($projectDir . $thumbnailPath);
     }
@@ -267,7 +267,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
     private function imageExists(Media $media)
     {
         $mediaService = $this->container->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
-        $projectDir = $this->container->getParameter('shopware.app.rootdir');
+        $projectDir = $this->container->getParameter('shopware.app.rootDir');
 
         return $mediaService->has($projectDir . $media->getPath());
     }

@@ -28,7 +28,6 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\ResponseTextException;
 use Doctrine\DBAL\Connection;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Exception\UnexpectedPageException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Tests\Mink\Element\CartPosition;
 use Shopware\Tests\Mink\Element\CheckoutAddressBox;
@@ -73,8 +72,7 @@ class CheckoutContext extends SubContext
             $page = $this->getPage('CheckoutCart');
             $page->resetCart();
             $page->fillCartWithProducts([['number' => $article, 'quantity' => 1]]);
-            $page->open();
-        } catch (UnexpectedPageException $unexpectedPageException) {
+        } catch (\Exception $unexpectedPageException) {
         }
     }
 
@@ -180,7 +178,7 @@ class CheckoutContext extends SubContext
         }
 
         if ($this->getDriver() instanceof Selenium2Driver) {
-            $detailPage->toBasket();
+//            $detailPage->toBasket();
         }
     }
 
@@ -874,8 +872,6 @@ EOD;
      */
     public function iCheckoutUsingGet($path = '/checkout/finish')
     {
-        /** @var CheckoutConfirm $page */
-        $page = $this->getPage('CheckoutConfirm');
-        $page->checkoutUsingGet($path);
+        $this->getSession()->executeScript(sprintf('window.location.href = \'%s\'', $path));
     }
 }

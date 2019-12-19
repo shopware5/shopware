@@ -74,10 +74,7 @@ class Shopware extends Enlight_Application
         trigger_error('Shopware()->' . $name . '() is deprecated since version 4.2 and will be removed in 6.0. Use the Container instead. Called by ' . $caller, E_USER_DEPRECATED);
 
         if (!$this->container->has($name)) {
-            throw new Enlight_Exception(
-                sprintf('Method "%s::%s" not found failure', get_class($this), $name),
-                Enlight_Exception::METHOD_NOT_FOUND
-            );
+            throw new Enlight_Exception(sprintf('Method "%s::%s" not found failure', get_class($this), $name), Enlight_Exception::METHOD_NOT_FOUND);
         }
 
         return $this->container->get($name);

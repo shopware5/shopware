@@ -4,7 +4,7 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-
+        <defaults public="true"/>
         <!-- Subscriber to update the totals of the order when a order detail will be added, updated, removed. -->
         <service id="Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface" class="Shopware\Bundle\OrderBundle\Service\CalculationService" >
             <argument type="service" id="shopware.cart.net_rounding"/>

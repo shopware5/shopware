@@ -118,7 +118,7 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
      */
     public function onStartDispatch($args)
     {
-        $parameters = $this->get('service_container')->getParameter('shopware.errorHandler');
+        $parameters = $this->get('service_container')->getParameter('shopware.errorhandler');
 
         $this->throwOnRecoverableError = $parameters['throwOnRecoverableError'];
         $this->ignoredExceptionClasses = $parameters['ignoredExceptionClasses'];

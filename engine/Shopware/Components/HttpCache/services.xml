@@ -5,6 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true"/>
         <service id="http_cache_warmer" class="Shopware\Components\HttpCache\CacheWarmer">
             <argument type="service" id="corelogger" />
             <argument type="service" id="guzzle_http_client_factory" />

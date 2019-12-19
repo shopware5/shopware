@@ -5,6 +5,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true"/>
+
         <service id="shopware_controllers_api_addresses" class="Shopware_Controllers_Api_Addresses">
             <argument type="service" id="Shopware\Components\Api\Resource\Address"/>
 

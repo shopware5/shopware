@@ -263,14 +263,7 @@ class User extends Resource
         $role = $this->getRole();
 
         if (!$this->getAcl()->isAllowed($role, $resource, $privilege)) {
-            throw new ApiException\PrivilegeException(
-                sprintf(
-                    'Role "%s" is not allowed to "%s" on resource "%s"',
-                    is_string($role) ? $role : $role->getRoleId(),
-                    $privilege,
-                    is_string($resource) ? $resource : $resource->getResourceId()
-                )
-            );
+            throw new ApiException\PrivilegeException(sprintf('Role "%s" is not allowed to "%s" on resource "%s"', is_string($role) ? $role : $role->getRoleId(), $privilege, is_string($resource) ? $resource : $resource->getResourceId()));
         }
     }
 

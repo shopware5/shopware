@@ -125,13 +125,13 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
         $originalCategory = $this->getCategoryFromInput($input->getArgument('category'));
 
         if ($originalCategory === null) {
-            return null;
+            return 1;
         }
 
         if ((int) $originalCategory->getId() === 1) {
             $output->writeln('<error>Cannot duplicate root category</error>');
 
-            return null;
+            return 1;
         }
 
         $parent = $input->getArgument('target');
@@ -140,7 +140,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
         } else {
             $parent = $this->getCategoryFromInput($parent);
             if ($parent === null) {
-                return null;
+                return 1;
             }
         }
 
@@ -158,7 +158,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
         } catch (\RuntimeException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
 
-            return null;
+            return 1;
         }
 
         $this->progressBar->finish();

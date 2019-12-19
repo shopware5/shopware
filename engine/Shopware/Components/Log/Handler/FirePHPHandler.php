@@ -85,7 +85,7 @@ class FirePHPHandler extends BaseFirePHPHandler
     /**
      * {@inheritdoc}
      */
-    protected function sendHeader($header, $content)
+    protected function sendHeader(string $header, string $content): void
     {
         if (!$this->sendHeaders) {
             return;
@@ -102,10 +102,8 @@ class FirePHPHandler extends BaseFirePHPHandler
      * Creates message header from record
      *
      * @see createHeader()
-     *
-     * @return array
      */
-    protected function createRecordHeader(array $record)
+    protected function createRecordHeader(array $record): array
     {
         $chunkSize = 5000;
         $length = strlen($record['formatted']);
@@ -155,7 +153,7 @@ class FirePHPHandler extends BaseFirePHPHandler
      * @see sendHeader()
      * @see sendInitHeaders()
      */
-    protected function write(array $record)
+    protected function write(array $record): void
     {
         // WildFire-specific headers must be sent prior to any messages
         if (!self::$initialized) {
@@ -184,7 +182,7 @@ class FirePHPHandler extends BaseFirePHPHandler
     /**
      * Override default behavior since we check the user agent in onKernelResponse
      */
-    protected function headersAccepted()
+    protected function headersAccepted(): bool
     {
         return true;
     }

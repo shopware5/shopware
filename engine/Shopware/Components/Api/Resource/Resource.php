@@ -429,9 +429,7 @@ abstract class Resource implements ContainerAwareInterface
             $method = 'get' . ucfirst($property);
 
             if (!method_exists($entity, $method)) {
-                throw new RuntimeException(
-                    sprintf('Method %s not found on entity %s', $method, get_class($entity))
-                );
+                throw new RuntimeException(sprintf('Method %s not found on entity %s', $method, get_class($entity)));
                 continue;
             }
             if ($entity->$method() === $value) {
@@ -518,9 +516,7 @@ abstract class Resource implements ContainerAwareInterface
             $item = $this->getCollectionElementByProperty($collection, $property, $data[$property]);
 
             if (!$item) {
-                throw new ApiException\CustomValidationException(
-                    sprintf('%s by %s %s not found', $entityType, $property, $data[$property])
-                );
+                throw new ApiException\CustomValidationException(sprintf('%s by %s %s not found', $entityType, $property, $data[$property]));
             }
 
             return $item;
@@ -571,9 +567,7 @@ abstract class Resource implements ContainerAwareInterface
             $item = $repo->findOneBy([$property => $data[$property]]);
 
             if (!$item) {
-                throw new ApiException\CustomValidationException(
-                    sprintf('%s by %s %s not found', $entityType, $property, $data[$property])
-                );
+                throw new ApiException\CustomValidationException(sprintf('%s by %s %s not found', $entityType, $property, $data[$property]));
             }
 
             $collection->add($item);

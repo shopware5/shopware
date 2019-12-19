@@ -264,7 +264,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
         Path to project specific plugins, see [Composer project](https://github.com/shopware/composer-project)
     - `shopware.template.templatedir`
         Path to the themes folder
-    - `shopware.app.rootdir`
+    - `shopware.app.rootDir`
         Path to the root of your project
     - `shopware.app.downloadsdir`
         Path to the downloads folder

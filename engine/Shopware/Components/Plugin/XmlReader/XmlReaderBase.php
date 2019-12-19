@@ -187,10 +187,7 @@ abstract class XmlReaderBase implements XmlReaderInterface
 
         if (count($children) === 0) {
             if ($throwException) {
-                throw new InvalidArgumentException(sprintf(
-                    'Element with %s not found',
-                    $name
-                ));
+                throw new InvalidArgumentException(sprintf('Element with %s not found', $name));
             }
 
             return null;

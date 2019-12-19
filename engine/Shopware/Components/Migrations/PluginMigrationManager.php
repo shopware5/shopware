@@ -227,11 +227,7 @@ ENGINE=InnoDB
         } catch (\Exception $e) {
             $this->markMigrationAsFailed($migration, $e);
 
-            throw new \RuntimeException(sprintf(
-                'Could not revert migration (%s). Error: %s ',
-                get_class($migration),
-                $e->getMessage()
-            ));
+            throw new \RuntimeException(sprintf('Could not revert migration (%s). Error: %s ', get_class($migration), $e->getMessage()));
         }
 
         $this->removeMigration($migration);

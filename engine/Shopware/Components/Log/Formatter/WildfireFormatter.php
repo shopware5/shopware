@@ -75,7 +75,7 @@ class WildfireFormatter extends BaseWildfireFormatter
     /**
      * {@inheritdoc}
      */
-    public function format(array $record)
+    public function format(array $record): string
     {
         // Retrieve the line and file if set and remove them from the formatted extra
         $file = $line = '';

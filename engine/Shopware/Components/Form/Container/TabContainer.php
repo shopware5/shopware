@@ -46,9 +46,7 @@ class TabContainer extends Container
     public function addElement(Element $element)
     {
         if (!$element instanceof Tab) {
-            throw new \InvalidArgumentException(
-                '$element must be instance of Shopware\Components\Form\Container\Tab'
-            );
+            throw new \InvalidArgumentException('$element must be instance of Shopware\Components\Form\Container\Tab');
         }
 
         return $this->addTab($element);

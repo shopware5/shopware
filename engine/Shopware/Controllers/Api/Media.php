@@ -156,7 +156,6 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
                 $file->getPathname(),
                 $params['name'],
                 $file->getClientMimeType(),
-                $file->getClientSize(),
                 $file->getError()
             );
         }

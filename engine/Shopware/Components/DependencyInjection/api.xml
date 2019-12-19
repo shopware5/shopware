@@ -5,6 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true"/>
         <service id="shopware.api.resource" class="Shopware\Components\Api\Resource\Resource" shared="false"
                  abstract="true"/>
 
@@ -101,16 +102,16 @@
 
         <!-- Necessary because of implementation in \Shopware\Components\Api\Manager::getResource() -->
         <service id="shopware.api.customerstream" alias="shopware.api.customer_stream">
-            <deprecated>use shopware.api.customer_stream instead</deprecated>
+            <deprecated>%alias_id% is deprecated, use shopware.api.customer_stream instead</deprecated>
         </service>
         <service id="shopware.api.customergroup" alias="shopware.api.customer_group">
-            <deprecated>use shopware.api.customer_group instead</deprecated>
+            <deprecated>%alias_id% is deprecated, use shopware.api.customer_group instead</deprecated>
         </service>
         <service id="shopware.api.propertygroup" alias="shopware.api.property_group">
-            <deprecated>use shopware.api.property_group instead</deprecated>
+            <deprecated>%alias_id% is deprecated, use shopware.api.property_group instead</deprecated>
         </service>
         <service id="shopware.api.emotionpreset" alias="shopware.api.emotion_preset">
-            <deprecated>use shopware.api.emotion_preset instead</deprecated>
+            <deprecated>%alias_id% is deprecated, use shopware.api.emotion_preset instead</deprecated>
         </service>
     </services>
 </container>

@@ -170,10 +170,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         }
 
         if (!$form) {
-            throw new \Enlight_Controller_Exception(
-                'Form not found',
-                Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found
-            );
+            throw new \Enlight_Controller_Exception('Form not found', Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found);
         }
 
         /* @var Field $field */

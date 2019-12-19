@@ -50,7 +50,7 @@ class ThemeDumpConfigurationCommand extends ShopwareCommand
         $repository = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class);
         $shops = $repository->getShopsWithThemes()->getResult();
         $compiler = $this->container->get('theme_compiler');
-        $rootDir = $this->container->getParameter('shopware.app.rootdir');
+        $rootDir = $this->container->getParameter('shopware.app.rootDir');
 
         /** @var Shop $shop */
         foreach ($shops as $shop) {

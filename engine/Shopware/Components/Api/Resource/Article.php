@@ -525,7 +525,7 @@ class Article extends Resource implements BatchInterface
         foreach ($article->getImages() as $image) {
             $media = $image->getMedia();
 
-            $projectDir = $this->getContainer()->getParameter('shopware.app.rootdir');
+            $projectDir = $this->getContainer()->getParameter('shopware.app.rootDir');
             if (!$force && $mediaService->has($projectDir . $media->getPath())) {
                 continue;
             }
@@ -1353,9 +1353,7 @@ class Article extends Resource implements BatchInterface
                     $category = $categoryResource->findCategoryByPath($categoryData['path'], true);
 
                     if (!$category) {
-                        throw new ApiException\CustomValidationException(
-                            sprintf('Could not find or create category by path: %s.', $categoryData['path'])
-                        );
+                        throw new ApiException\CustomValidationException(sprintf('Could not find or create category by path: %s.', $categoryData['path']));
                     }
 
                     if (isset($categoryIds[$category->getId()])) {
@@ -1410,18 +1408,14 @@ class Article extends Resource implements BatchInterface
                 );
 
                 if (!$shop) {
-                    throw new ApiException\CustomValidationException(
-                        sprintf('Could not find shop by id: %s.', $categoryData['shopId'])
-                    );
+                    throw new ApiException\CustomValidationException(sprintf('Could not find shop by id: %s.', $categoryData['shopId']));
                 }
 
                 $seoCategory->setShop($shop);
             }
 
             if (!$seoCategory->getShop()) {
-                throw new ApiException\CustomValidationException(
-                    sprintf('An product seo category requires a configured shop')
-                );
+                throw new ApiException\CustomValidationException(sprintf('An product seo category requires a configured shop'));
             }
 
             if (isset($categoryData['categoryId'])) {
@@ -1432,9 +1426,7 @@ class Article extends Resource implements BatchInterface
                 );
 
                 if (!$category) {
-                    throw new ApiException\CustomValidationException(
-                        sprintf('Could not find category by id: %s.', $categoryData['categoryId'])
-                    );
+                    throw new ApiException\CustomValidationException(sprintf('Could not find category by id: %s.', $categoryData['categoryId']));
                 }
 
                 $seoCategory->setCategory($category);
@@ -1446,9 +1438,7 @@ class Article extends Resource implements BatchInterface
                     true
                 );
                 if (!$category) {
-                    throw new ApiException\CustomValidationException(
-                        sprintf('Could not find category by path: %s.', $categoryData['categoryPath'])
-                    );
+                    throw new ApiException\CustomValidationException(sprintf('Could not find category by path: %s.', $categoryData['categoryPath']));
                 }
                 $seoCategory->setCategory($category);
             }
@@ -1460,9 +1450,7 @@ class Article extends Resource implements BatchInterface
             );
 
             if (!$existing) {
-                throw new ApiException\CustomValidationException(
-                    sprintf('Seo category isn\'t assigned as normal product category. Only assigned categories can be used as seo category')
-                );
+                throw new ApiException\CustomValidationException(sprintf('Seo category isn\'t assigned as normal product category. Only assigned categories can be used as seo category'));
             }
 
             $seoCategory->setArticle($article);
@@ -1548,9 +1536,7 @@ class Article extends Resource implements BatchInterface
             //no valid entity found, throw exception!
             if (!$relatedProduct) {
                 $property = $relatedData['number'] ?: $relatedData['id'];
-                throw new ApiException\CustomValidationException(
-                    sprintf('Related product by number/id "%s" not found', $property)
-                );
+                throw new ApiException\CustomValidationException(sprintf('Related product by number/id "%s" not found', $property));
             }
 
             /* @var ProductModel $relatedProduct */
@@ -1611,9 +1597,7 @@ class Article extends Resource implements BatchInterface
             // No valid entity found, throw exception!
             if (!$similarProduct) {
                 $property = $similarData['number'] ?: $similarData['id'];
-                throw new ApiException\CustomValidationException(
-                    sprintf('Similar product by number/id "%s" not found', $property)
-                );
+                throw new ApiException\CustomValidationException(sprintf('Similar product by number/id "%s" not found', $property));
             }
 
             /* @var ProductModel $similarProduct */
@@ -1840,9 +1824,7 @@ class Article extends Resource implements BatchInterface
     protected function createImageMappings(Image $image, ProductModel $article, array $mappings)
     {
         if (!$article->getConfiguratorSet()) {
-            throw new ApiException\CustomValidationException(
-                'Product is no configurator product. Image mapping can only be created on configurator products'
-            );
+            throw new ApiException\CustomValidationException('Product is no configurator product. Image mapping can only be created on configurator products');
         }
 
         $configuratorOptions = $article->getConfiguratorSet()->getOptions();
@@ -1863,9 +1845,7 @@ class Article extends Resource implements BatchInterface
 
                 if (!$available) {
                     $property = $option['id'] ?: $option['name'];
-                    throw new ApiException\CustomValidationException(
-                        sprintf('Passed option "%s" does not exist in the configurator set of the product', $property)
-                    );
+                    throw new ApiException\CustomValidationException(sprintf('Passed option "%s" does not exist in the configurator set of the product', $property));
                 }
 
                 $options->add($available);
@@ -2292,9 +2272,7 @@ class Article extends Resource implements BatchInterface
                 try { //persist the model into the model manager
                     $this->getManager()->persist($media);
                 } catch (ORMException $e) {
-                    throw new ApiException\CustomValidationException(
-                        sprintf('Some error occured while loading your image from link "%s"', $downloadData['link'])
-                    );
+                    throw new ApiException\CustomValidationException(sprintf('Some error occured while loading your image from link "%s"', $downloadData['link']));
                 }
 
                 $download->setFile($media->getPath());

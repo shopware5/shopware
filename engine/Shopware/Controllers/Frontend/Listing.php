@@ -157,10 +157,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         );
 
         if ($manufacturer === null) {
-            throw new Enlight_Controller_Exception(
-                'Manufacturer missing, non-existent or invalid',
-                404
-            );
+            throw new Enlight_Controller_Exception('Manufacturer missing, non-existent or invalid', 404);
         }
 
         $facets = [];
@@ -289,10 +286,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         if (!empty($categoryContent['external'])) {
             $location = $categoryContent['external'];
         } elseif (empty($categoryContent)) {
-            throw new \Enlight_Controller_Exception(
-                'Category not found',
-                Enlight_Controller_Exception::PROPERTY_NOT_FOUND
-            );
+            throw new \Enlight_Controller_Exception('Category not found', Enlight_Controller_Exception::PROPERTY_NOT_FOUND);
         } elseif ($this->isShopsBaseCategoryPage($categoryContent['id'])) {
             $location = ['controller' => 'index'];
         } elseif ($checkRedirect && $this->get(\Shopware_Components_Config::class)->get('categoryDetailLink')) {
@@ -580,19 +574,13 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     private function loadCategoryContent($requestCategoryId)
     {
         if (empty($requestCategoryId) || !$this->isValidCategoryPath($requestCategoryId)) {
-            throw new Enlight_Controller_Exception(
-                'Listing category missing, non-existent or invalid for the current shop',
-                404
-            );
+            throw new Enlight_Controller_Exception('Listing category missing, non-existent or invalid for the current shop', 404);
         }
 
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($requestCategoryId);
         // Check if the requested category-id belongs to a blog category
         if ($categoryContent['blog']) {
-            throw new Enlight_Controller_Exception(
-                'Listing category missing, non-existent or invalid for the current shop',
-                404
-            );
+            throw new Enlight_Controller_Exception('Listing category missing, non-existent or invalid for the current shop', 404);
         }
 
         Shopware()->System()->_GET['sCategory'] = $requestCategoryId;

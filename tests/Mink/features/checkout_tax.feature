@@ -24,7 +24,6 @@ Feature: Check that cart value for tax is calculated correctly
         | shipping      | 24,99 € |
         | total         | 67,64 € |
         | sumWithoutVat | 50,86 € |
-        | 33 %          | 16,78 € |
 
       When  I change my shipping address:
         | field   | address     |
@@ -40,4 +39,3 @@ Feature: Check that cart value for tax is calculated correctly
         | shipping      | 3,90 €  |
         | total         | 41,85 € |
         | sumWithoutVat | 35,17 € |
-        | 19 %          | 6,68 €  |

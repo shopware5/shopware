@@ -183,10 +183,7 @@ class Configurator
         // Iterates all configurations sets of the file system
         foreach ($collection as $item) {
             if (!$item instanceof ConfigSet) {
-                throw new \Exception(sprintf(
-                    "Theme %s adds a configuration set which isn't an instance of Shopware\Components\Theme\ConfigSet.",
-                    $theme->getTemplate()
-                ));
+                throw new \Exception(sprintf("Theme %s adds a configuration set which isn't an instance of Shopware\Components\Theme\ConfigSet.", $theme->getTemplate()));
             }
 
             $item->validate();

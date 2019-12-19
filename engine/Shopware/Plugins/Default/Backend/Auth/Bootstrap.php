@@ -254,10 +254,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
             }
 
             if (!$this->isAllowed($test)) {
-                throw new Enlight_Controller_Exception(
-                    $test['errorMessage'] ?: 'Permission denied',
-                    401
-                );
+                throw new Enlight_Controller_Exception($test['errorMessage'] ?: 'Permission denied', 401);
             }
 
             return $auth;

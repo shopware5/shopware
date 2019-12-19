@@ -97,7 +97,7 @@ class StoreListCommand extends StoreCommand implements CompletionAwareInterface
                 'message' => $e->getMessage(),
             ]);
 
-            return null;
+            return 0;
         }
 
         $result = null;
@@ -118,5 +118,7 @@ class StoreListCommand extends StoreCommand implements CompletionAwareInterface
               ->setRows($result);
 
         $table->render();
+
+        return 0;
     }
 }

@@ -24,6 +24,7 @@
 
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\TableMappingInterface;
+use Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface;
 use Shopware\Components\Model\ModelManager;
 
 class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backend_ExtJs
@@ -43,8 +44,8 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
 
     public function getTypesAction()
     {
-        /** @var TableMappingInterface $mapping */
-        $mapping = $this->get(\Shopware\Bundle\AttributeBundle\Service\TableMappingInterface::class);
+        /** @var TypeMappingInterface $mapping */
+        $mapping = $this->get(\Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface::class);
 
         $this->View()->assign([
             'success' => true,
@@ -54,8 +55,8 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
 
     public function getEntitiesAction()
     {
-        /** @var TableMappingInterface $mapping */
-        $mapping = $this->get(\Shopware\Bundle\AttributeBundle\Service\TableMappingInterface::class);
+        /** @var TypeMappingInterface $mapping */
+        $mapping = $this->get(\Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface::class);
 
         $this->View()->assign([
             'success' => true,

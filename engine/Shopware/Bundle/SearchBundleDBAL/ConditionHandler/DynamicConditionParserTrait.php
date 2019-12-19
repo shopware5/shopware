@@ -94,10 +94,7 @@ trait DynamicConditionParserTrait
          * When an operator is not specified, by default, return all results that are not null
          */
         if (empty($operator)) {
-            throw new \InvalidArgumentException(
-                sprintf('Must specify an operator, please use one of: %s', implode(', ', $validOperators)),
-                3
-            );
+            throw new \InvalidArgumentException(sprintf('Must specify an operator, please use one of: %s', implode(', ', $validOperators)), 3);
         }
 
         //Identify each field placeholder value with table alias and a hash of condition properties
@@ -193,10 +190,7 @@ trait DynamicConditionParserTrait
                 break;
 
             default:
-                throw new \InvalidArgumentException(
-                    sprintf('Invalid operator specified, please use one of: %s', implode(', ', $validOperators)),
-                    3
-                );
+                throw new \InvalidArgumentException(sprintf('Invalid operator specified, please use one of: %s', implode(', ', $validOperators)), 3);
                 break;
         }
     }

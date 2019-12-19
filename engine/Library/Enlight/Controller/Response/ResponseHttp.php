@@ -340,7 +340,7 @@ class Enlight_Controller_Response_ResponseHttp extends Response implements Enlig
         return true;
     }
 
-    public function isRedirect($location = null)
+    public function isRedirect(string $location = null): bool
     {
         return \in_array($this->statusCode, [self::HTTP_MOVED_PERMANENTLY, self::HTTP_FOUND, self::HTTP_SEE_OTHER, self::HTTP_TEMPORARY_REDIRECT, self::HTTP_PERMANENTLY_REDIRECT]) && ($location === null ?: $location == $this->headers->get('Location'));
     }

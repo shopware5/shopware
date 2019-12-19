@@ -1047,7 +1047,7 @@ class Media extends ModelEntity
     private function uploadFile()
     {
         $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
-        $projectDir = Shopware()->Container()->getParameter('shopware.app.rootdir');
+        $projectDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
 
         // Move the file to the upload directory
         if ($this->file !== null) {
@@ -1139,7 +1139,7 @@ class Media extends ModelEntity
     private function getUploadDir()
     {
         // The absolute directory path where uploaded documents should be saved
-        $projectDir = Shopware()->Container()->getParameter('shopware.app.rootdir');
+        $projectDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
 
         return $projectDir . 'media' . DIRECTORY_SEPARATOR . strtolower($this->type) . DIRECTORY_SEPARATOR;
     }
@@ -1256,7 +1256,7 @@ class Media extends ModelEntity
         $this->name = $this->removeSpecialCharacters($name);
         $this->extension = str_replace('jpeg', 'jpg', $extension);
 
-        $projectDir = Shopware()->Container()->getParameter('shopware.app.rootdir');
+        $projectDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
         $this->path = str_replace($projectDir, '', $this->getUploadDir() . $this->getFileName());
 
         if (DIRECTORY_SEPARATOR !== '/') {

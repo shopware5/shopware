@@ -64,11 +64,11 @@ class StoreTest extends TestCase
             ],
             [
                 'original' => 'http://example.com/?a=a&a=1',
-                'compare' => 'http://example.com/?a=a',
+                'compare' => 'http://example.com/?a=1',
             ],
             [
                 'original' => 'http://example.com/category/?a=a&a=1',
-                'compare' => 'http://example.com/category/?a=a',
+                'compare' => 'http://example.com/category/?a=1',
             ],
             [
                 'original' => 'http://example.com?z=a&a=a',

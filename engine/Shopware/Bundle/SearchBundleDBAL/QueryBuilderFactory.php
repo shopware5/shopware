@@ -268,13 +268,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     {
         foreach ($objects as $object) {
             if (!$object instanceof $class) {
-                throw new \RuntimeException(
-                    sprintf(
-                        'Object of class "%s" must be instance of "%s".',
-                        get_class($object),
-                        $class
-                    )
-                );
+                throw new \RuntimeException(sprintf('Object of class "%s" must be instance of "%s".', get_class($object), $class));
             }
         }
     }

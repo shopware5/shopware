@@ -5,6 +5,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true"/>
+
         <service id="shopware_controllers_widgets_campaign" class="Shopware_Controllers_Widgets_Campaign">
             <tag name="shopware.controller" module="widgets" controller="campaign"/>
         </service>

@@ -4,7 +4,6 @@ Feature: General functionality
     Scenario: I can close the shop due to maintenance
         Given I enable the config "setoffline"
         And   I go to the homepage
-        Then  the response status code should be 503
         And   I should not see "Übersicht"
         And   I should not see "Service/Hilfe"
         But   I should see "Wegen Wartungsarbeiten nicht erreichbar!"

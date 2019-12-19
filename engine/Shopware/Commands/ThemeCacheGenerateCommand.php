@@ -96,7 +96,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand implements CompletionAwa
         if (empty($shopsWithThemes)) {
             $output->writeln('No theme shops found');
 
-            return null;
+            return 0;
         }
 
         /** @var Compiler $compiler */
@@ -115,7 +115,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand implements CompletionAwa
         }
 
         if ($current) {
-            return null;
+            return 0;
         }
 
         /** @var CacheManager $cacheManager */

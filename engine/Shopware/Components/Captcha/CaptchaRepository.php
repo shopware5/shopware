@@ -102,9 +102,7 @@ class CaptchaRepository
             }
         }
 
-        throw new CaptchaNotFoundException(
-            sprintf("The captcha with id '%s' is configured, but could not be found", $captchaName)
-        );
+        throw new CaptchaNotFoundException(sprintf("The captcha with id '%s' is configured, but could not be found", $captchaName));
     }
 
     /**

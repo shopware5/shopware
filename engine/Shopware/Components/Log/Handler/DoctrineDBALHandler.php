@@ -64,7 +64,7 @@ class DoctrineDBALHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    protected function write(array $record)
+    protected function write(array $record): void
     {
         if ($this->columnMap === null) {
             $dataToInsert = $record;

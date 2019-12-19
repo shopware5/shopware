@@ -49,7 +49,7 @@ class AuthTest extends Enlight_Components_Test_TestCase
     private $auth;
 
     /**
-     * @var PasswordEncoderInterface
+     * @var passwordencoderInterface
      */
     private $encoder;
 
@@ -62,8 +62,8 @@ class AuthTest extends Enlight_Components_Test_TestCase
         $this->auth = Shopware_Components_Auth::getInstance();
 
         /** @var \Shopware\Components\Password\Manager $passworEncoderRegistry */
-        $passworEncoderRegistry = Shopware()->Container()->get('PasswordEncoder');
-        $defaultEncoderName = $passworEncoderRegistry->getDefaultPasswordEncoderName();
+        $passworEncoderRegistry = Shopware()->Container()->get('passwordencoder');
+        $defaultEncoderName = $passworEncoderRegistry->getDefaultpasswordencoderName();
         $this->encoder = $passworEncoderRegistry->getEncoderByName($defaultEncoderName);
     }
 

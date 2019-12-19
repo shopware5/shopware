@@ -49,7 +49,7 @@ class EnlightMailHandler extends MailHandler
     /**
      * {@inheritdoc}
      */
-    protected function send($content, array $records)
+    protected function send($content, array $records): void
     {
         $mailer = clone $this->mailer;
 

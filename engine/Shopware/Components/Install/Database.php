@@ -66,9 +66,7 @@ class Database
     {
         $parts = parse_url($url);
         if ($parts === false || !array_key_exists('host', $parts)) {
-            throw new \InvalidArgumentException(
-                sprintf('Invalid Shop URL (%s)', $url)
-            );
+            throw new \InvalidArgumentException(sprintf('Invalid Shop URL (%s)', $url));
         }
 
         $isSecure = $parts['scheme'] === 'https';

@@ -141,7 +141,7 @@ class ManagerTest extends TestCase
         copy($sourcePath, $imagePath);
 
         $file = new \Symfony\Component\HttpFoundation\File\File($imagePath);
-        $projectDir = Shopware()->Container()->getParameter('shopware.app.rootdir');
+        $projectDir = Shopware()->Container()->getParameter('shopware.app.rootDir');
 
         $media->setFile($file);
         $media->setPath(str_replace($projectDir, '', $imagePath));

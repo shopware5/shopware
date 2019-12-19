@@ -393,7 +393,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
     private function getFormErrors(FormInterface $form): array
     {
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             return [];
         }
         $errors = [

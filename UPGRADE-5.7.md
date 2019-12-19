@@ -7,6 +7,11 @@ This changelog references changes done in Shopware 5.7 patch versions.
 ### Breaks
 
 * Added new required methods `saveCustomUrls` and `saveExcludedUrls` to interface `Shopware\Bundle\SitemapBundle\ConfigHandler\ConfigHandlerInterface`
+* Changed Symfony version to 4.4
+* Changed Slugify version to 3.2
+* Changed Doctrine ORM version to 2.7.0
+* Changed Guzzle version to 6.4.1
+* Changed Monolog version to 2.0.1
 
 ### Additions
 
@@ -91,6 +96,18 @@ This changelog references changes done in Shopware 5.7 patch versions.
     * `Shopware.apps.Config.view.element.Text`
     * `Shopware.apps.Config.view.element.TextArea`
     * `Shopware.apps.Config.view.element.Time`
+* Removed following unused dependencies
+    * `egulias/email-validator`
+    * `symfony/translation`
+    * `php-http/curl-client`
+    * `psr/link`
+    * `symfony/polyfill-ctype`
+    * `symfony/polyfill-iconv`
+    * `symfony/polyfill-iconv`
+    * `symfony/polyfill-php56`
+    * `symfony/polyfill-php70`
+    * `symfony/polyfill-php71`
+    * `symfony/polyfill-php72`
 
 ### Deprecations
 

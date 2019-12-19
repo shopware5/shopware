@@ -171,9 +171,7 @@ class EmotionImporter implements EmotionImporterInterface
         }
 
         if ($missingPlugins) {
-            throw new EmotionImportException(
-                sprintf('The following plugins are required to use this shopping world: <br>%s', implode('<br>', $missingPlugins))
-            );
+            throw new EmotionImportException(sprintf('The following plugins are required to use this shopping world: <br>%s', implode('<br>', $missingPlugins)));
         }
     }
 

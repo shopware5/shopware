@@ -367,11 +367,7 @@ class Installer
             ]);
 
             if (!$parent instanceof Shop\Template) {
-                throw new \Exception(sprintf(
-                    'Parent %s of theme %s not found',
-                    $theme->getExtend(),
-                    $theme->getTemplate()
-                ));
+                throw new \Exception(sprintf('Parent %s of theme %s not found', $theme->getExtend(), $theme->getTemplate()));
             }
 
             $template->setParent($parent);

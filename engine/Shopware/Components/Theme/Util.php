@@ -87,10 +87,7 @@ class Util
         $file = $directory . DIRECTORY_SEPARATOR . 'Theme.php';
 
         if (!file_exists($file)) {
-            throw new \Exception(sprintf(
-                'Theme directory %s contains no Theme.php',
-                $directory
-            ));
+            throw new \Exception(sprintf('Theme directory %s contains no Theme.php', $directory));
         }
 
         require_once $file;
@@ -114,20 +111,13 @@ class Util
         $file = $directory->getPathname() . DIRECTORY_SEPARATOR . 'Theme.php';
 
         if (!file_exists($file)) {
-            throw new \Exception(sprintf(
-                'Theme directory %s contains no Theme.php',
-                $directory->getPathname()
-            ));
+            throw new \Exception(sprintf('Theme directory %s contains no Theme.php', $directory->getPathname()));
         }
 
         require_once $file;
 
         if (!class_exists($class)) {
-            throw new \Exception(sprintf(
-                'Theme file %s contains unexpected class %s',
-                $file,
-                $class
-            ));
+            throw new \Exception(sprintf('Theme file %s contains unexpected class %s', $file, $class));
         }
 
         return new $class();
