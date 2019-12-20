@@ -518,7 +518,7 @@ class Article extends Resource implements BatchInterface
         /** @var \Shopware\Components\Thumbnail\Manager $generator */
         $generator = $this->getContainer()->get('thumbnail_manager');
 
-        /** @var \Shopware\Bundle\MediaBundle\MediaService $mediaService */
+        /** @var \Shopware\Bundle\MediaBundle\MediaServiceInterface $mediaService */
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         /** @var Image $image */
