@@ -419,13 +419,14 @@ More precise designations are commented inside the document.
 
     // Loading indicator for non css animations supported browsers
 .has--no-cssanimations .form--ajax-loader {
+    @hash-loading-indicator: swhash('../../img/icons/loading-indicator.gif');
     .unitize(top, 24);
     .unitize(right, 55);
     .unitize-width(16);
     .unitize-height(16);
     position: absolute;
     display: none;
-    background-image: url('../../img/icons/loading-indicator.gif');
+    background-image: url('../../img/icons/loading-indicator.gif@{hash-loading-indicator}');
 }
 
     // Search results modal

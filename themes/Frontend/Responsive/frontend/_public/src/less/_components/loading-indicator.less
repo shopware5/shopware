@@ -89,10 +89,11 @@ The functionality is provided by the `jquery.loading-indicator.js` file.
         }
 
         .icon--default {
+            @hash-loading-indicator: swhash('../../img/icons/loading-indicator.gif');
             .unitize-height(16, 16);
             .unitize-width(16, 16);
 
-            background-image: url(../../img/icons/loading-indicator.gif);
+            background-image: url('../../img/icons/loading-indicator.gif?@{hash-loading-indicator}');
         }
     }
 }

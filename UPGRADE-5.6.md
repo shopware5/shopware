@@ -21,6 +21,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `Media`
     * `Country`
 * Added new config option to also show technical urls in hreflang
+* Added new less function `swhash` to get file hash for cache busting
 
 ### Changes
 
