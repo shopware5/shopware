@@ -104,7 +104,9 @@
 
                         {* Cookie consent manager*}
                         {block name='frontend_index_cookie_consent_manager'}
-                            {include file='frontend/index/cookie_consent.tpl'}
+                            {if {config name=cookie_note_mode} == 1 && {config name=show_cookie_note}}
+                                {include file='frontend/index/cookie_consent.tpl'}
+                            {/if}
                         {/block}
 
                         {* Sidebar left *}
