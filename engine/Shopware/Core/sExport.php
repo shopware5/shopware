@@ -24,7 +24,7 @@
 
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
-use Shopware\Bundle\MediaBundle\MediaService;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
@@ -526,7 +526,7 @@ class sExport implements \Enlight_Hook
             return '';
         }
 
-        /** @var MediaService $mediaService */
+        /** @var MediaServiceInterface $mediaService */
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         /** @var Manager $thumbnailManager */
@@ -1436,7 +1436,7 @@ class sExport implements \Enlight_Hook
             LEFT JOIN s_user_addresses as ub
             ON ub.id=u.default_billing_address_id
             AND ub.user_id=u.id
-              
+
             LEFT JOIN s_user_addresses as us
             ON us.id=u.default_shipping_address_id
             AND us.user_id=u.id
