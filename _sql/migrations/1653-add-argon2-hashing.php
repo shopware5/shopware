@@ -63,7 +63,7 @@ class Migrations_Migration1653 extends AbstractMigration
         $sql .= sprintf(
             "(@parentFormId, '%s', '%s', '%s', '%s', 'number', 1, 0, 0, '%s');",
             'argon2Threads',
-            serialize(PASSWORD_ARGON2_DEFAULT_MEMORY_COST),
+            serialize(PASSWORD_ARGON2_DEFAULT_THREADS),
             'Argon2-Threads',
             'Anzahl paralleler Threads zur Erzeugung nutzen',
             serialize(['minValue' => '1', 'maxValue' => '32'])
@@ -99,5 +99,8 @@ class Migrations_Migration1653 extends AbstractMigration
         );
 
         $this->addSql($sql);
+
+        $this->addSql('UPDATE s_core_config_elements SET description = "Beachte, dass manche Hashfunktionen nur angezeigt werden, wenn die dafür benötigte PHP-Version installiert ist<br>Wenn \“Auto\” gewählt ist, wird bcrypt verwendet. Sollte bcrypt nicht verfügbar sein, wird sha256 verwendet." WHERE name = "defaultPasswordEncoder" AND form_id = @parentFormId');
+        $this->addSql('UPDATE s_core_config_element_translations SET description = "Note that some hashing functions are only displayed if the required PHP version is installed <br>If \"Auto\" is selected, bcrypt is used. If bcrypt is not available, sha256 is used." WHERE element_id = (SELECT id FROM s_core_config_elements WHERE name = "defaultPasswordEncoder" AND form_id = @parentFormId)');
     }
 }
