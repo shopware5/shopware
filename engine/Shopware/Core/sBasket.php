@@ -126,6 +126,11 @@ class sBasket implements \Enlight_Hook
     private $proportionalTaxCalculation;
 
     /**
+     * @var StoreFrontBundle\Gateway\DBAL\FieldHelper
+     */
+    private $fieldHelper;
+
+    /**
      * @throws \Exception
      */
     public function __construct(
@@ -166,6 +171,8 @@ class sBasket implements \Enlight_Hook
         }
 
         $this->proportionalTaxCalculation = $this->config->get('proportionalTaxCalculation');
+
+        $this->fieldHelper = Shopware()->Container()->get('shopware_storefront.field_helper_dbal');
     }
 
     /**
@@ -2813,6 +2820,8 @@ SQL;
      */
     private function loadBasketProducts()
     {
+        $attrs = $this->fieldHelper->getTableFields('s_order_basket_attributes', 's_order_basket_attributes');
+
         $sql = "
         SELECT
             s_order_basket.*,
@@ -2838,7 +2847,8 @@ SQL;
             s_order_basket_attributes.attribute3 as ob_attr3,
             s_order_basket_attributes.attribute4 as ob_attr4,
             s_order_basket_attributes.attribute5 as ob_attr5,
-            s_order_basket_attributes.attribute6 as ob_attr6
+            s_order_basket_attributes.attribute6 as ob_attr6,
+           " . implode(',', $attrs) . '
         FROM s_order_basket
         LEFT JOIN s_articles_details AS ad ON ad.ordernumber = s_order_basket.ordernumber
         LEFT JOIN s_articles a ON (a.id = ad.articleID)
@@ -2846,7 +2856,7 @@ SQL;
         LEFT JOIN s_order_basket_attributes ON s_order_basket.id = s_order_basket_attributes.basketID
         WHERE sessionID=?
         ORDER BY id ASC, datum DESC
-        ";
+        ';
         $sql = $this->eventManager->filter(
             'Shopware_Modules_Basket_GetBasket_FilterSQL',
             $sql,
