@@ -228,7 +228,21 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
     },
 
     createPaymentField: function() {
-        var me = this;
+        var me = this,
+            displayTpl = Ext.create('Ext.XTemplate',
+                '<tpl for=".">',
+                '<div class="x-boundlist-item">' +
+                //active renderer
+                '<tpl if="active"">' +
+                '<i class="sprite-tick-small" style="width:12px;height:12px;display:inline-block;margin:0 6px 5px 0;vertical-align:middle;"></i>' +
+                '<tpl else>' +
+                '<i class="sprite-cross-small" style="width:12px;height:12px;display:inline-block;margin:0 6px 5px 0;vertical-align:middle;"></i>' +
+                '</tpl>' +
+
+                ' {literal}{description}{/literal}' +
+                '</div>',
+                '</tpl>'
+            );
 
         return Ext.create('Ext.form.field.ComboBox', {
             name: 'orders.paymentId',
@@ -249,7 +263,7 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
                 }]
             }),
             valueField: 'id',
-            displayField: 'description',
+            tpl: displayTpl,
             emptyText: me.snippets.empty,
             fieldLabel: me.snippets.paymentName
         });
