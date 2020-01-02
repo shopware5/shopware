@@ -50,5 +50,7 @@ class ThemeSynchronizeCommand extends ShopwareCommand
         $themeService->synchronize();
 
         $output->writeln('Themes synchronized');
+
+        return 0;
     }
 }

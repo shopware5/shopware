@@ -575,10 +575,6 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     /**
      * Creates the deny or allow mail from the db and assigns it to
      * the view.
-     *
-     * @public
-     *
-     * @return bool
      */
     public function requestMerchantFormAction()
     {
@@ -655,10 +651,6 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     /**
      * Sends the mail to the merchant if the inquiry was
      * successful or was declined.
-     *
-     * @public
-     *
-     * @return bool
      */
     public function sendMailToMerchantAction()
     {

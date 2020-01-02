@@ -57,12 +57,14 @@ class AdditionalTextService implements AdditionalTextServiceInterface
      */
     public function buildAdditionalTextLists($products, ShopContextInterface $context)
     {
+        /** @var ListProduct[] $required */
         $required = [];
         foreach ($products as &$product) {
             if (!$product->getAdditional()) {
                 $required[] = $product;
             }
         }
+        unset($product);
 
         if (empty($required)) {
             return $products;
@@ -73,7 +75,6 @@ class AdditionalTextService implements AdditionalTextServiceInterface
             $context
         );
 
-        /** @var ListProduct[] $required */
         foreach ($required as &$product) {
             if (!array_key_exists($product->getNumber(), $configurations)) {
                 continue;

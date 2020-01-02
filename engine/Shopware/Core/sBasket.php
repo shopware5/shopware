@@ -1262,7 +1262,7 @@ SQL;
         );
 
         if ($notifyUntilBeforeAdd) {
-            return;
+            return null;
         }
 
         if ($this->proportionalTaxCalculation && !$this->session->get('taxFree')) {
@@ -1279,10 +1279,12 @@ SQL;
                 )
             );
 
-            return;
+            return null;
         }
 
         $this->db->insert('s_order_basket', $params);
+
+        return null;
     }
 
     /**
@@ -1652,7 +1654,7 @@ SQL;
      * @throws Enlight_Exception
      * @throws Zend_Db_Adapter_Exception
      *
-     * @return bool
+     * @return bool|null
      */
     public function updateCartItems(array $cartItems)
     {
@@ -1785,6 +1787,8 @@ SQL;
         if ($errors) {
             return false;
         }
+
+        return null;
     }
 
     /**
@@ -1812,7 +1816,7 @@ SQL;
      * Used on sAdmin tests and SwagBonusSystem
      * See @ticket PT-1845
      *
-     * @return void|false False on no session, null otherwise
+     * @return false|null False on no session, null otherwise
      */
     public function sDeleteBasket()
     {
@@ -1830,6 +1834,8 @@ SQL;
             'subject' => $this,
             'sessionId' => $this->session->get('sessionId'),
         ]);
+
+        return null;
     }
 
     /**

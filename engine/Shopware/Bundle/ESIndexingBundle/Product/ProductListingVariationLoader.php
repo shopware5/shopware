@@ -128,15 +128,17 @@ class ProductListingVariationLoader
             if (!array_key_exists($context->getCurrentCustomerGroup()->getKey(), $combinationPrices)) {
                 continue;
             }
+
+            /** @var array[] $customerPrices */
             $customerPrices = $combinationPrices[$context->getCurrentCustomerGroup()->getKey()];
 
             $key = $context->getCurrentCustomerGroup()->getKey() . '_' . $context->getCurrency()->getId();
 
-            /** @var array[] $customerPrices */
             foreach ($customerPrices as $number => $productPrices) {
                 foreach ($productPrices as &$price) {
                     $price = $price * $context->getCurrency()->getFactor();
                 }
+                unset($price);
 
                 $calculated[$number][$key] = $productPrices;
             }
@@ -440,9 +442,9 @@ class ProductListingVariationLoader
             $query->setParameter(':currentCustomerGroup', $context->getCurrentCustomerGroup()->getKey());
         }
 
+        /** @var array[] $prices */
         $prices = $query->execute()->fetchAll(\PDO::FETCH_GROUP);
 
-        /** @var array[] $prices */
         foreach ($prices as &$productPrices) {
             $priceResult = [];
             foreach ($productPrices as &$price) {
@@ -452,8 +454,10 @@ class ProductListingVariationLoader
                 $priceResult[$price['variant_id']]['options'][] = (int) $price['option_id'];
                 $priceResult[$price['variant_id']]['groups'][] = (int) $price['group_id'];
             }
+            unset($price);
             $productPrices = array_values($priceResult);
         }
+        unset($productPrices);
 
         foreach ($prices as &$productPrices) {
             foreach ($productPrices as &$price) {
@@ -488,9 +492,9 @@ class ProductListingVariationLoader
         $query->andWhere('availableVariant.active = 1');
         $query->andWhere('availableVariant.id IN (:variants)');
 
+        /** @var array[] $availability */
         $availability = $query->execute()->fetchAll(\PDO::FETCH_GROUP);
 
-        /** @var array[] $availability */
         foreach ($availability as &$productAvailability) {
             $availabilityResult = [];
             foreach ($productAvailability as &$currentAvailability) {

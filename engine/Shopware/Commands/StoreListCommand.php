@@ -118,5 +118,7 @@ class StoreListCommand extends StoreCommand implements CompletionAwareInterface
               ->setRows($result);
 
         $table->render();
+
+        return 0;
     }
 }

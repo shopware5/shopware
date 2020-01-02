@@ -26,7 +26,6 @@ namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 
 use ONGR\ElasticsearchDSL\Aggregation\Bucketing\TermsAggregation;
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\SearchBundle\Condition\ManufacturerCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Facet\ManufacturerFacet;
@@ -129,7 +128,6 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
     private function createListItems(Criteria $criteria, $manufacturers)
     {
         $actives = [];
-        /** @var ManufacturerCondition $condition */
         if ($condition = $criteria->getCondition('manufacturer')) {
             $actives = $condition->getManufacturerIds();
         }

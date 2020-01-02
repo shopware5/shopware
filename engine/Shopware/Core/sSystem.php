@@ -191,13 +191,10 @@ class sSystem implements \Enlight_Hook
         switch ($property) {
             case '_POST':
                 return $this->postWrapper;
-                break;
             case '_GET':
                 return $this->getWrapper;
-                break;
             case '_COOKIE':
                 return $this->cookieWrapper;
-                break;
         }
 
         return null;

@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
-use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet;
@@ -121,7 +120,6 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
         $activeMin = $min;
         $activeMax = $max;
 
-        /** @var PriceCondition $condition */
         if ($condition = $criteria->getCondition($facet->getName())) {
             $activeMin = $condition->getMinPrice();
             $activeMax = $condition->getMaxPrice();

@@ -125,5 +125,7 @@ class SwitchAliasCommand extends ShopwareCommand implements CompletionAwareInter
             $actions[] = ['remove' => ['index' => $value, 'alias' => $index->getName()]];
         }
         $client->indices()->updateAliases(['body' => ['actions' => $actions]]);
+
+        return 0;
     }
 }

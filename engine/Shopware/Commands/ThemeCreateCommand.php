@@ -159,6 +159,8 @@ EOF
         $themeGenerator->generateTheme($arguments, $parent);
 
         $output->writeln(sprintf('Theme "%s" has been created successfully.', $arguments['name']));
+
+        return 0;
     }
 
     /**

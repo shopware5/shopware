@@ -127,6 +127,8 @@ class SnippetsToDbCommand extends ShopwareCommand implements CompletionAwareInte
             }
             $output->writeln('<info>Plugin snippets processed correctly</info>');
         }
+
+        return 0;
     }
 
     /**

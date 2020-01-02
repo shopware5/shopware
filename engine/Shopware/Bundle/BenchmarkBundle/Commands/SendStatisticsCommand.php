@@ -107,7 +107,7 @@ class SendStatisticsCommand extends ShopwareCommand
                 $batchSize = null;
 
                 if ($input->getOption('batch')) {
-                    $batchSize = $input->getOption('batch');
+                    $batchSize = (int) $input->getOption('batch');
 
                     if ($batchSize > $this::MAX_BATCH_SIZE) {
                         $batchSize = $this::MAX_BATCH_SIZE;
@@ -123,12 +123,11 @@ class SendStatisticsCommand extends ShopwareCommand
                 $benchmarkRepository->unlockShop($shopId);
             }
         }
+
+        return 0;
     }
 
-    /**
-     * @return bool
-     */
-    private function isShopValid(BenchmarkConfig $shopConfig)
+    private function isShopValid(BenchmarkConfig $shopConfig): bool
     {
         return $shopConfig->isActive()
             && $shopConfig->getLastSent()->add(new \DateInterval('P1D')) < new \DateTime('now', new \DateTimeZone('UTC'));

@@ -61,7 +61,7 @@ class PaymentMethods extends Resource
         $filters = [['property' => 'payment.id', 'expression' => '=', 'value' => $id]];
         $query = $this->getRepository()->getListQuery($filters, [], 0, 1);
 
-        /** @var PaymentModel $media */
+        /** @var PaymentModel|null $payment */
         $payment = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$payment) {

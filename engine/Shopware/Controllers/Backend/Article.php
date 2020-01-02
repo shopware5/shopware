@@ -2190,8 +2190,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * Remote validator for the product order number field.
      * The passed value must be set and the number must be unique
-     *
-     * @return string|void returns the string "true" if valid, nothing otherwise
      */
     public function validateNumberAction()
     {

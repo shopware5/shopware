@@ -76,6 +76,8 @@ class MigrateArticleAttributeTranslationsCommand extends ShopwareCommand
             ->fetch(\PDO::FETCH_ASSOC);
 
         $this->migrate($io->createProgressBar($result['count']), $result['maxId']);
+
+        return 0;
     }
 
     /**

@@ -39,7 +39,6 @@ class OrderedWithDeliveryConditionHandler implements ConditionHandlerInterface
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
         $wheres = [];
-        /** @var OrderedWithDeliveryCondition $condition */
         foreach ($condition->getDispatchIds() as $i => $number) {
             $wheres[] = 'customer.ordered_with_deliveries LIKE :delivery' . $i;
             $query->setParameter(':delivery' . $i, '%|' . $number . '|%');

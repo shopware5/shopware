@@ -128,6 +128,8 @@ class MediaService implements MediaServiceInterface
         }
 
         $this->filesystem->put($path, $contents);
+
+        return true;
     }
 
     /**
@@ -142,6 +144,8 @@ class MediaService implements MediaServiceInterface
         }
 
         $this->filesystem->putStream($path, $resource);
+
+        return true;
     }
 
     /**

@@ -1184,6 +1184,8 @@ class sAdmin implements \Enlight_Hook
         );
 
         $mail->send();
+
+        return null;
     }
 
     /**
@@ -1889,7 +1891,7 @@ class sAdmin implements \Enlight_Hook
      * @param array $order Order data
      * @param mixed $value Value to compare against
      *
-     * @return bool|void Rule validation result
+     * @return bool|null Rule validation result
      */
     public function sRiskATTRIS($user, $order, $value)
     {
@@ -1897,11 +1899,13 @@ class sAdmin implements \Enlight_Hook
             $value = explode('|', $value);
 
             if (!isset($value[0], $value[1])) {
-                return;
+                return null;
             }
 
             return $this->hasProductAttributeMatch($value[0], $value[1], '=');
         }
+
+        return null;
     }
 
     /**
@@ -1911,7 +1915,7 @@ class sAdmin implements \Enlight_Hook
      * @param array $order Order data
      * @param mixed $value Value to compare against
      *
-     * @return bool|void Rule validation result
+     * @return bool|null Rule validation result
      */
     public function sRiskATTRISNOT($user, $order, $value)
     {
@@ -1919,11 +1923,13 @@ class sAdmin implements \Enlight_Hook
             $value = explode('|', $value);
 
             if (!isset($value[0], $value[1])) {
-                return;
+                return null;
             }
 
             return $this->hasProductAttributeMatch($value[0], $value[1], '!=');
         }
+
+        return null;
     }
 
     /**

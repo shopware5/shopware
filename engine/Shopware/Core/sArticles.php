@@ -1433,7 +1433,7 @@ class sArticles implements \Enlight_Hook
         static $articleAlbum;
         if ($articleAlbum === null) {
             // Now we search for the default product album of the media manager, this album contains the thumbnail configuration.
-            /** @var Album $model */
+            /** @var Album $articleAlbum */
             $articleAlbum = $this->getMediaRepository()
                 ->getAlbumWithSettingsQuery(-1)
                 ->getOneOrNullResult();

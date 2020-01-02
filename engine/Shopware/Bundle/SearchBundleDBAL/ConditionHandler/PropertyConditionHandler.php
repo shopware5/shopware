@@ -58,7 +58,6 @@ class PropertyConditionHandler implements ConditionHandlerInterface
         $query->addState('property_' . $tableKey);
 
         $where = [];
-        /** @var PropertyCondition $condition */
         foreach ($condition->getValueIds() as $valueId) {
             $valueKey = ':' . $tableKey . '_' . $valueId . '_' . $suffix;
             $where[] = $tableKey . '.valueID = ' . $valueKey;

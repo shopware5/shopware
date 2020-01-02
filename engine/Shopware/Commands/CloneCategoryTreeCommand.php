@@ -164,6 +164,8 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
         $this->progressBar->finish();
 
         $output->writeln('<info>Category tree duplicated successfully</info>');
+
+        return 0;
     }
 
     /**

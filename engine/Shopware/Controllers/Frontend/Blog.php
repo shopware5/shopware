@@ -383,6 +383,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     public function ratingAction()
     {
         $blogArticleId = (int) $this->Request()->getParam('blogArticle');
+        /** @var bool|array $sErrorFlag */
         $sErrorFlag = null;
 
         if (!empty($blogArticleId)) {

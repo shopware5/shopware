@@ -70,5 +70,7 @@ class FirstRunWizardDisableCommand extends ShopwareCommand
         $cacheManager->clearConfigCache();
 
         $output->writeln('<info>First Run Wizard disabled</info>');
+
+        return 0;
     }
 }

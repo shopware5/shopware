@@ -737,9 +737,9 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     public function getTemplatesAction()
     {
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Template::class);
+        /** @var \Shopware\Models\Shop\Template[] $templates */
         $templates = $repository->findAll();
 
-        /** @var \Shopware\Models\Shop\Template $template */
         $result = [];
         foreach ($templates as $template) {
             $data = [
@@ -909,7 +909,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
     public function getAvailableCaptchasAction()
     {
-        /** @var \Shopware\Components\Captcha\CaptchaRepository $captchaManager */
+        /** @var \Shopware\Components\Captcha\CaptchaRepository $captchaRepository */
         $captchaRepository = $this->get('shopware.captcha.repository');
         /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = $namespace = Shopware()->Snippets()->getNamespace('backend/captcha/display_names');

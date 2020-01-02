@@ -67,6 +67,8 @@ class SearchIndexPopulateCommand extends ShopwareCommand
         );
 
         $helper->finish();
+
+        return 0;
     }
 
     private function createQuery()

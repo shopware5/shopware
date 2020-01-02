@@ -74,6 +74,8 @@ class MediaCleanupCommand extends ShopwareCommand
         }
 
         $io->success(sprintf('%d item(s) in recycle bin.', $total));
+
+        return 0;
     }
 
     /**

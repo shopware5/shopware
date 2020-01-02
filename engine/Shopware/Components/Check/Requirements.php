@@ -166,7 +166,8 @@ class Requirements
             return true;
         }
 
-        if (($value = ini_get($name)) !== null) {
+        $value = ini_get($name);
+        if ($value !== '') {
             if (strtolower($value) === 'off' || (is_numeric($value) && $value == 0)) {
                 return false;
             }
@@ -234,7 +235,7 @@ class Requirements
     /**
      * Checks the php version
      *
-     * @return bool|string
+     * @return string
      */
     private function checkPhp()
     {
@@ -372,7 +373,7 @@ class Requirements
     /**
      * Checks the gd jpg support
      *
-     * @return bool|string
+     * @return bool
      */
     private function checkGdJpg()
     {
@@ -388,7 +389,7 @@ class Requirements
     /**
      * Checks the freetype support
      *
-     * @return bool|string
+     * @return bool
      */
     private function checkFreetype()
     {
@@ -404,13 +405,15 @@ class Requirements
     /**
      * Checks the session save path config
      *
-     * @return bool|string
+     * @return bool
      */
     private function checkSessionSavePath()
     {
         if (function_exists('session_save_path')) {
             return (bool) session_save_path();
-        } elseif (ini_get('session.save_path')) {
+        }
+
+        if (ini_get('session.save_path')) {
             return true;
         }
 

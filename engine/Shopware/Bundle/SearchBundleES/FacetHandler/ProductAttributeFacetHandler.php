@@ -32,7 +32,6 @@ use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\AttributeBundle\Service\ConfigurationStruct;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface;
-use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Facet\ProductAttributeFacet;
@@ -263,7 +262,6 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
 
         $actives = [];
 
-        /** @var ProductAttributeCondition $condition */
         if ($condition = $criteria->getCondition($criteriaPart->getName())) {
             $actives = $condition->getValue();
 
@@ -332,7 +330,6 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
         $activeMin = $min;
         $activeMax = $max;
 
-        /** @var ProductAttributeCondition $condition */
         if ($condition = $criteria->getCondition($criteriaPart->getName())) {
             $data = $condition->getValue();
             $activeMin = $data['min'];

@@ -423,8 +423,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      * Send a mail asking the customer, if he actually wants to reset his password
      *
      * @param string $email
-     *
-     * @return array
      */
     public function sendResetPasswordConfirmationMail($email)
     {

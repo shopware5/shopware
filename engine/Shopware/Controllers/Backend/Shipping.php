@@ -92,8 +92,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
 
     /**
      * Returns all Shipping Costs with basic data
-     *
-     * @return array
      */
     public function getListAction()
     {
@@ -608,7 +606,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
                     'minChange' => 0.01,
                     'startValue' => 0,
                 ];
-                break;
 
             case 2:
             case 3:
@@ -617,7 +614,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
                     'minChange' => 1,
                     'startValue' => 1,
                 ];
-                break;
 
             case 0:
             default:
@@ -626,7 +622,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
                     'minChange' => 0.001,
                     'startValue' => 0,
                 ];
-                break;
         }
     }
 

@@ -78,5 +78,7 @@ class CacheClearCommand extends ShopwareCommand
         }
 
         $io->success(sprintf('Cache for the "%s" environment was successfully cleared.', $kernel->getEnvironment()));
+
+        return 0;
     }
 }

@@ -26,10 +26,6 @@ namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 
 use ONGR\ElasticsearchDSL\Aggregation\Metric\StatsAggregation;
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\SearchBundle\Condition\HeightCondition;
-use Shopware\Bundle\SearchBundle\Condition\LengthCondition;
-use Shopware\Bundle\SearchBundle\Condition\WeightCondition;
-use Shopware\Bundle\SearchBundle\Condition\WidthCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Facet\HeightFacet;
@@ -114,7 +110,6 @@ class ProductDimensionsFacetHandler implements HandlerInterface, ResultHydratorI
         $activeMin = $min;
         $activeMax = $max;
 
-        /** @var WeightCondition|WidthCondition|LengthCondition|HeightCondition $condition */
         if ($condition = $criteria->getCondition($name)) {
             $method = 'get' . ucfirst($minField);
             $activeMin = $condition->$method();

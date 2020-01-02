@@ -113,7 +113,7 @@ class SnippetsFindMissingCommand extends ShopwareCommand implements CompletionAw
         if (!$locale) {
             $output->writeln('<error>Provided locale not found</error>');
 
-            return null;
+            return 1;
         }
 
         $filteredQueryBuilder = $this->container->get('models')->getDBALQueryBuilder();
@@ -150,7 +150,7 @@ class SnippetsFindMissingCommand extends ShopwareCommand implements CompletionAw
             if (!$targetLocale) {
                 $output->writeln('<error>Provided fallback locale not found</error>');
 
-                return null;
+                return 1;
             }
 
             $statement
@@ -194,5 +194,7 @@ class SnippetsFindMissingCommand extends ShopwareCommand implements CompletionAw
         foreach ($data as $namespace) {
             $outputAdapter->write($namespace, true);
         }
+
+        return 0;
     }
 }
