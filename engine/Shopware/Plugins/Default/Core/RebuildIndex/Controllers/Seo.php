@@ -193,7 +193,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
             $shop
         );
 
-        $this->SeoIndex()->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);
+        $this->SeoIndex()->setCachedTime($currentTime->format('Y-m-d H:i:s'), $elementId, $shopId);
 
         $this->View()->assign([
             'success' => true,
