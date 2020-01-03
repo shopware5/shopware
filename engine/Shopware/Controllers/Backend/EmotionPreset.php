@@ -24,7 +24,7 @@
 
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
-use Shopware\Bundle\MediaBundle\MediaService;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
 use Shopware\Components\Emotion\Preset\Exception\PresetAssetImportException;
 use Shopware\Models\Emotion\Preset;
@@ -248,7 +248,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
             return $path;
         }
 
-        /** @var MediaService $mediaService */
+        /** @var MediaServiceInterface $mediaService */
         $mediaService = $this->container->get('shopware_media.media_service');
 
         if (strpos($path, 'media') === 0) {
