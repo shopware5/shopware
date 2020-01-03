@@ -198,7 +198,6 @@ class DataPersister implements DataPersisterInterface
      */
     private function filter($table, $data)
     {
-        /** @var TableMapping $mapping */
         $columns = $this->mapping->getTableColumns($table);
         $readOnly = $this->getReadOnlyColumns($table);
 

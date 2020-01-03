@@ -280,10 +280,13 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             $this->View()->assign('sVoucherError', $voucherErrors);
         }
 
+        $activeBillingAddressId = null;
         /** @var array<array<array>> $activeBillingAddressId */
         if (empty($activeBillingAddressId = $this->session->offsetGet('checkoutBillingAddressId'))) {
             $activeBillingAddressId = $userData['additional']['user']['default_billing_address_id'];
         }
+
+        $activeShippingAddressId = null;
         /** @var array<array<array>> $activeShippingAddressId */
         if (empty($activeShippingAddressId = $this->session->offsetGet('checkoutShippingAddressId'))) {
             $activeShippingAddressId = $userData['additional']['user']['default_shipping_address_id'];

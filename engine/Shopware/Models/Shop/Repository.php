@@ -477,7 +477,7 @@ class Repository extends ModelRepository
      * @param array[] $shops
      * @param string  $requestPath
      *
-     * @return array
+     * @return array|null
      */
     protected function findShopForRequest($shops, $requestPath)
     {

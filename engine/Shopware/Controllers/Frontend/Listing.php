@@ -118,7 +118,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         if (!$this->Request()->getParam('sCategory')) {
-            /** @var \Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface $service */
+            /** @var \Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface $sortingService */
             $sortingService = $this->get('shopware_storefront.custom_sorting_service');
 
             $categoryId = $context->getShop()->getCategory()->getId();
@@ -363,7 +363,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     {
         $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
 
-        /** @var \Shopware\Models\Category\Repository $repository */
+        /** @var \Shopware\Models\Category\Repository $categoryRepository */
         $categoryRepository = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class);
         $categoryPath = $categoryRepository->getPathById($categoryId);
 

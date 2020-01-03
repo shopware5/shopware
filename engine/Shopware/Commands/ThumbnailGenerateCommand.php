@@ -142,6 +142,8 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
         }
 
         $this->printExitMessage();
+
+        return 0;
     }
 
     /**

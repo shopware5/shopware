@@ -178,5 +178,7 @@ class AnalyzeCommand extends ShopwareCommand implements CompletionAwareInterface
         $table->setHeaders(['Token', 'Start', 'End', 'Type', 'position'])
             ->setRows($tokens)
             ->render();
+
+        return 0;
     }
 }

@@ -113,7 +113,6 @@ EOF
         /** @var ModelManager $em */
         $em = $this->container->get('models');
 
-        /** @var Shop[] $shop */
         $shops = null;
         $shopId = null;
 
@@ -145,5 +144,7 @@ EOF
             $output->writeln(sprintf('Plugin configuration for Plugin %s and shop %s:', $pluginName, $shop->getName()));
             $output->writeln(print_r($config, true));
         }
+
+        return 0;
     }
 }

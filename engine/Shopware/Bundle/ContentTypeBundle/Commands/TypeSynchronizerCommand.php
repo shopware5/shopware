@@ -50,5 +50,7 @@ class TypeSynchronizerCommand extends ShopwareCommand
         $io = new SymfonyStyle($input, $output);
 
         $io->success(sprintf('Synchronized %d type(s)', count($types)));
+
+        return 0;
     }
 }

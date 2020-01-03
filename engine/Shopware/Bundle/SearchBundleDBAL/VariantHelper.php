@@ -176,7 +176,6 @@ class VariantHelper implements VariantHelperInterface
 
         $where = [];
 
-        /** @var VariantCondition $condition */
         foreach ($condition->getOptionIds() as $valueId) {
             $valueKey = ':' . $tableKey . '_' . $valueId . '_' . $suffix;
             $where[] = $tableKey . '.option_id = ' . $valueKey;

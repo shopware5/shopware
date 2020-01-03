@@ -206,6 +206,8 @@ class WarmUpHttpCacheCommand extends ShopwareCommand implements CompletionAwareI
         }
         $io->newLine();
         $io->success('The HttpCache is now warmed up');
+
+        return 0;
     }
 
     /**

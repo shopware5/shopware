@@ -215,5 +215,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
         }
 
         $output->writeln('The SEO index was rebuild successfully.');
+
+        return 0;
     }
 }

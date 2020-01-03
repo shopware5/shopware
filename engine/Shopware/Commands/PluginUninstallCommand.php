@@ -122,5 +122,7 @@ EOF
         $output->writeln(sprintf('Plugin %s has been uninstalled successfully.', $pluginName));
 
         $this->clearCachesIfRequested($input, $output, $uninstallationContext);
+
+        return 0;
     }
 }

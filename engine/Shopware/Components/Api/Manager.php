@@ -45,9 +45,9 @@ class Manager
 
         $container = Shopware()->Container();
         try {
-            /** @var Resource\Resource $resource */
             $serviceId = 'shopware.api.' . (new CamelCaseToSnakeCaseNameConverter())->normalize($name);
             if ($container->has($serviceId)) {
+                /** @var Resource\Resource $resource */
                 $resource = $container->get($serviceId);
             } else {
                 trigger_error(sprintf('The requested service with id %s is deprecated. Please use CamelCased service id instead.', $name), E_USER_DEPRECATED);

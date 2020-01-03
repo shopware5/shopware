@@ -213,6 +213,8 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
 
         $pluginManager->saveConfigElement($plugin, $input->getArgument('key'), $value, $shop);
         $output->writeln(sprintf('Plugin configuration for Plugin %s saved.', $pluginName));
+
+        return 0;
     }
 
     /**

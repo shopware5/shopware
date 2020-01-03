@@ -111,6 +111,8 @@ class AdminCreateCommand extends ShopwareCommand
         $this->persistUser($user);
 
         $io->success(sprintf('Adminuser "%s" was successfully created.', $user->getUsername()));
+
+        return 0;
     }
 
     /**

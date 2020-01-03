@@ -103,3 +103,4 @@ parameters:
         # We manually check if the class exists before instantiating / using it
         - '#Instantiated class SwagPaymentPayPalUnified\\Setup\\FirstRunWizardInstaller not found#'
         - '#Call to method saveConfiguration\(\) on an unknown class SwagPaymentPayPalUnified\\Setup\\FirstRunWizardInstaller#'
+        - '#PHPDoc tag \@var for variable \$payPalInstaller contains unknown class SwagPaymentPayPalUnified\\Setup\\FirstRunWizardInstaller#'

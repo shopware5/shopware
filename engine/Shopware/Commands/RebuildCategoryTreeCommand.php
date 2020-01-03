@@ -57,14 +57,14 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $progress = $input->getOption('offset');
+        $progress = (int) $input->getOption('offset');
         $limit = $input->getOption('limit') ?: 1000;
 
         /** @var CategoryDenormalization $component */
         $component = Shopware()->Container()->get('categorydenormalization');
 
         // Cleanup before the first call
-        if ($progress == 0) {
+        if ($progress === 0) {
             $output->writeln('Removing orphans');
             $component->removeOrphanedAssignments();
             $output->writeln('Rebuild path info');
@@ -90,5 +90,7 @@ EOF
         $progressHelper->finish();
 
         $output->writeln("\nDone");
+
+        return 0;
     }
 }

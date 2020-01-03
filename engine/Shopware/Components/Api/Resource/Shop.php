@@ -64,7 +64,7 @@ class Shop extends Resource
         $query = $builder->getQuery();
         $query->setHydrationMode($this->getResultMode());
 
-        /** @var \Shopware\Models\Shop\Shop $category */
+        /** @var \Shopware\Models\Shop\Shop|null $shop */
         $shop = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$shop) {

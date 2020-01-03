@@ -47,7 +47,7 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
     {
         $pluginCheck = new \ShopwarePlugins\SwagUpdate\Components\PluginCheck($this->container);
 
-        /** @var PluginLicenceService $service */
+        /** @var PluginLicenceService $licenceService */
         $licenceService = $this->get('shopware_plugininstaller.plugin_licence_service');
 
         /** @var AccountManagerService $accountService */

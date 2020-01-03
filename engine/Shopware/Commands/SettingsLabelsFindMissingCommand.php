@@ -88,7 +88,9 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand implements Comple
         $dir = $this->container->get('application')->DocPath($input->getOption('target'));
         if (!file_exists($dir) || !is_writable($dir)) {
             $old = umask(0);
-            mkdir($dir, 0777, true);
+            if (!mkdir($dir, 0777, true) && !is_dir($dir)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
+            }
             chmod($dir, 0777);
             umask($old);
         }
@@ -111,6 +113,8 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand implements Comple
         $this->exportFormLabels($output, $locale, $dir);
 
         $this->exportElementLabels($output, $locale, $dir);
+
+        return 0;
     }
 
     /**

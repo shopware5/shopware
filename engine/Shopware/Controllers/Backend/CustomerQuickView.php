@@ -52,7 +52,8 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
         if (!$this->_isAllowed('save', 'customer')) {
             throw new Enlight_Controller_Exception('You do not have sufficient rights to update a customer.', 401);
         }
-        parent::save($data);
+
+        return parent::save($data);
     }
 
     /**

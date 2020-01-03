@@ -51,5 +51,7 @@ class PluginRefreshCommand extends ShopwareCommand
         $pluginManager->refreshPluginList();
 
         $output->writeln(sprintf('Successfully refreshed'));
+
+        return 0;
     }
 }

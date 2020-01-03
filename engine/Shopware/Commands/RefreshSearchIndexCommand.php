@@ -68,5 +68,7 @@ class RefreshSearchIndexCommand extends ShopwareCommand
         $indexer->build();
 
         $output->writeln('The search index was created successfully.');
+
+        return 0;
     }
 }

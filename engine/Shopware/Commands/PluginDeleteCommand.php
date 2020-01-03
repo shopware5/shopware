@@ -145,5 +145,7 @@ EOF
             return 1;
         }
         $output->writeln(sprintf('Plugin %s has been deleted successfully.', $pluginName));
+
+        return 0;
     }
 }

@@ -662,16 +662,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $data['number'] = $order->getNumber();
 
         $data = $this->getPositionAssociatedData($data);
-        // If $data === null, the product was not found
-        if ($data === null) {
-            $this->View()->assign([
-                'success' => false,
-                'data' => [],
-                'message' => 'The productnumber "' . $this->Request()->getParam('articleNumber', '') . '" is not valid',
-            ]);
-
-            return;
-        }
 
         $position->fromArray($data);
         $position->setOrder($order);
@@ -1549,8 +1539,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
     /**
      * Simple helper function which actually merges a given array of document-paths
-     *
-     * @return string The created document's url
      */
     private function mergeDocuments(array $paths)
     {
@@ -1897,7 +1885,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      *
      * @param array $data
      *
-     * @return array|null
+     * @return array
      */
     private function getPositionAssociatedData($data)
     {
@@ -2073,7 +2061,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $templateName = $this->getTemplateNameForDocumentTypeId($documentTypeId);
         }
 
-        /** @var Enlight_Components_Mail $mail */
+        /** @var Enlight_Components_Mail|null $mail */
         $mail = Shopware()->Modules()->Order()->createStatusMail($orderId, (int) $statusId, $templateName);
 
         if ($mail instanceof Enlight_Components_Mail) {

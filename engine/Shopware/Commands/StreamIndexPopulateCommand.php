@@ -96,6 +96,8 @@ class StreamIndexPopulateCommand extends ShopwareCommand implements CompletionAw
             $output->writeln("\n## Indexing Customer Stream: " . $stream->getName() . ' ##');
             $this->container->get('shopware.api.customer_stream')->indexStream($stream);
         }
+
+        return 0;
     }
 
     /**

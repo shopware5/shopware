@@ -65,7 +65,7 @@ class CustomerGroup extends Resource
         $query = $builder->getQuery();
         $query->setHydrationMode($this->getResultMode());
 
-        /** @var \Shopware\Models\Customer\Group $category */
+        /** @var \Shopware\Models\Customer\Group|null $result */
         $result = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$result) {

@@ -237,9 +237,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         foreach ($data as $date => &$row) {
             $row['date'] = strtotime($date);
-            $orders = $row['orderCount'];
-            $visitors = $row['visits'];
-            $cancelledOrders = $row['cancelledOrders'];
+            $orders = (int) $row['orderCount'];
+            $visitors = (int) $row['visits'];
+            $cancelledOrders = (int) $row['cancelledOrders'];
 
             if (($cancelledOrders + $orders) != 0) {
                 $row['basketConversion'] = round($orders / ($cancelledOrders + $orders) * 100, 2);
@@ -256,9 +256,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             }
 
             foreach ($shopIds as $shopId) {
-                $orders = $row['orderCount' . $shopId];
-                $visitors = $row['visits' . $shopId];
-                $cancelledOrders = $row['cancelledOrders' . $shopId];
+                $orders = (int) $row['orderCount' . $shopId];
+                $visitors = (int) $row['visits' . $shopId];
+                $cancelledOrders = (int) $row['cancelledOrders' . $shopId];
 
                 if (($cancelledOrders + $orders) != 0) {
                     $row['basketConversion' . $shopId] = round($orders / ($cancelledOrders + $orders) * 100, 2);

@@ -170,7 +170,6 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
 
         $tableKeys = [];
         $joinCondition = '';
-        /** @var VariantCondition $condition */
         foreach ($condition->getOptionIds() as $valueId) {
             $valueKey = ':' . $tableKey . '_' . $valueId . '_' . $suffix;
             $where[] = $tableKey . '.option_id = ' . $valueKey;
@@ -232,7 +231,7 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
             'IF (prices.id IS NULL, defaultPrices.id, prices.id) as id,
              IF (prices.articleID IS NULL, defaultPrices.articleID, prices.articleID) as articleID,
              IF (prices.price IS NULL, defaultPrices.price, prices.price) as price,
-            
+
             variant.minpurchase'
         )
             ->from('s_articles_details', 'variant');

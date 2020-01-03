@@ -115,12 +115,14 @@ class ThemeCacheGenerateCommand extends ShopwareCommand implements CompletionAwa
         }
 
         if ($current) {
-            return null;
+            return 0;
         }
 
         /** @var CacheManager $cacheManager */
         $cacheManager = $this->container->get('shopware.cache_manager');
         $output->writeln('Clearing HTTP cache ...');
         $cacheManager->clearHttpCache();
+
+        return 0;
     }
 }

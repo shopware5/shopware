@@ -169,10 +169,10 @@ abstract class ModelEntity
      * <li>So the parameter expect <b>"customer"</b></li>
      * </ul>
      *
-     * @param array[]|ModelEntity[]|iterable|null $data      Model data, example: an array of \Shopware\Models\Order\Order
-     * @param string                              $model     Full namespace of the association model, example: '\Shopware\Models\Order\Order'
-     * @param string                              $property  Name of the association property, example: 'orders'
-     * @param string                              $reference Name of the reference property, example: 'customer'
+     * @param array[]|ModelEntity[]|ArrayCollection<ModelEntity>|null $data      Model data, example: an array of \Shopware\Models\Order\Order
+     * @param string                                                  $model     Full namespace of the association model, example: '\Shopware\Models\Order\Order'
+     * @param string                                                  $property  Name of the association property, example: 'orders'
+     * @param string                                                  $reference Name of the reference property, example: 'customer'
      *
      * @return $this
      */
@@ -199,7 +199,6 @@ abstract class ModelEntity
         $updated = new ArrayCollection();
 
         // Iterate all passed items
-        /** @var array[]|ModelEntity[]|ArrayCollection<ModelEntity> $data */
         foreach ($data as $item) {
             // To get the right collection item use the internal helper function
             if (is_array($item) && isset($item['id']) && $item['id'] !== null) {

@@ -30,12 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 class PropertyMapping implements MappingInterface
 {
-    const TYPE = 'property';
-
-    /**
-     * @var bool
-     */
-    protected $isDebug;
+    public const TYPE = 'property';
 
     /**
      * @var FieldMappingInterface
@@ -49,12 +44,10 @@ class PropertyMapping implements MappingInterface
 
     public function __construct(
         FieldMappingInterface $fieldMapping,
-        bool $isDynamic = true,
-        bool $isDebug = false
+        bool $isDynamic = true
     ) {
         $this->fieldMapping = $fieldMapping;
         $this->isDynamic = $isDynamic;
-        $this->isDebug = $isDebug;
     }
 
     /**
@@ -70,7 +63,7 @@ class PropertyMapping implements MappingInterface
      */
     public function get(Shop $shop)
     {
-        $mapping = [
+        return [
             'dynamic' => $this->isDynamic,
             'properties' => [
                 'id' => ['type' => 'long'],
@@ -85,11 +78,5 @@ class PropertyMapping implements MappingInterface
                 ],
             ],
         ];
-
-        if ($this->isDebug) {
-            unset($mapping['_source']);
-        }
-
-        return $mapping;
     }
 }

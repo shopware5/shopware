@@ -61,7 +61,6 @@ class CombinedConditionHandler implements ConditionHandlerInterface
     ) {
         $query->addState($condition->getName());
 
-        /** @var CombinedCondition $condition */
         foreach ($condition->getConditions() as $innerCondition) {
             $handler = $this->getConditionHandler($innerCondition);
             $handler->generateCondition($innerCondition, $query, $context);

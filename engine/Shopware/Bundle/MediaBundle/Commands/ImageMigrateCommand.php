@@ -82,5 +82,7 @@ class ImageMigrateCommand extends ShopwareCommand implements CompletionAwareInte
 
         $mediaMigration = $this->getContainer()->get('shopware_media.media_migration');
         $mediaMigration->migrate($fromFileSystem, $toFileSystem, $output, $skipScan);
+
+        return 0;
     }
 }

@@ -93,6 +93,8 @@ class SitemapWriter implements SitemapWriterInterface
             ++$this->files[$shop->getId()]['urlCount'];
             $this->write($this->files[$shop->getId()]['fileHandle'], (string) $url);
         }
+
+        return true;
     }
 
     /**

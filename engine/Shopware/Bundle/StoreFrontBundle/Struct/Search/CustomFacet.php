@@ -103,7 +103,7 @@ class CustomFacet extends Extendable
     }
 
     /**
-     * @return FacetInterface
+     * @return FacetInterface|null
      */
     public function getFacet()
     {

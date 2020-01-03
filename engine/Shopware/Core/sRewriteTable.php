@@ -542,7 +542,6 @@ class sRewriteTable implements \Enlight_Hook
             $context = $this->contextService->getShopContext();
         }
 
-        /** @var \Shopware\Models\Blog\Repository $repository */
         $blogArticlesQuery = $this->modelManager->getRepository(\Shopware\Models\Blog\Blog::class)
             ->getListQuery($blogCategoryIds, $offset, $limit);
         $blogArticlesQuery->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);

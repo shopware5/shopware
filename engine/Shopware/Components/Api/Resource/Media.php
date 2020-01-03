@@ -503,7 +503,7 @@ class Media extends Resource
      * @param string $oldPath
      * @param string $filename
      *
-     * @return string|bool
+     * @return string
      */
     private function prepareFilePath($oldPath, $filename)
     {

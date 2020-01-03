@@ -88,7 +88,9 @@ class SnippetsToIniCommand extends ShopwareCommand implements CompletionAwareInt
         $dir = $this->container->get('application')->DocPath($input->getOption('target'));
         if (!file_exists($dir) || !is_writable($dir)) {
             $old = umask(0);
-            mkdir($dir, 0777, true);
+            if (!mkdir($dir, 0777, true) && !is_dir($dir)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
+            }
             chmod($dir, 0777);
             umask($old);
         }
@@ -102,5 +104,7 @@ class SnippetsToIniCommand extends ShopwareCommand implements CompletionAwareInt
         $databaseLoader = $this->container->get('shopware.snippet_database_handler');
         $databaseLoader->setOutput($output);
         $databaseLoader->dumpFromDatabase($input->getOption('target'), $input->getArgument('locale'));
+
+        return 0;
     }
 }

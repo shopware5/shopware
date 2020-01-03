@@ -151,7 +151,7 @@ abstract class XmlReaderBase implements XmlReaderInterface
 
         $type = $storeItem->getAttribute('type') ?: 'xml';
 
-        /** @var StoreValueParserInterface $storeValueParser */
+        /** @var StoreValueParserInterface $parser */
         $parser = StoreValueParserFactory::create($type);
 
         return $parser->parse($storeItem);

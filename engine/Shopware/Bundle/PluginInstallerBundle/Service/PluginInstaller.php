@@ -139,7 +139,6 @@ class PluginInstaller
      */
     public function installPlugin(Plugin $plugin)
     {
-        /** @var Kernel $kernel */
         $pluginBootstrap = $this->getPluginByName($plugin->getName());
 
         $context = new InstallContext($plugin, $this->release->getVersion(), $plugin->getVersion());
@@ -400,7 +399,6 @@ class PluginInstaller
      */
     public function getPluginPath(Plugin $plugin)
     {
-        /** @var Kernel $kernel */
         $pluginBootstrap = $this->getPluginByName($plugin->getName());
 
         return $pluginBootstrap->getPath();

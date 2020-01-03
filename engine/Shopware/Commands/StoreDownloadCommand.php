@@ -134,29 +134,27 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
 
             $token = $this->checkAuthentication();
 
-            if ($token) {
-                $context = new LicenceRequest('', $version, $domain, $token);
+            $context = new LicenceRequest('', $version, $domain, $token);
 
-                try {
-                    /** @var PluginStoreService $pluginStoreService */
-                    $pluginStoreService = $this->container->get(
-                        'shopware_plugininstaller.plugin_service_store_production'
-                    );
-                    $licences = $pluginStoreService->getLicences($context);
-                    $licences = array_filter(
-                        $licences,
-                        function (LicenceStruct $license) use ($technicalName) {
-                            return strtolower($license->getTechnicalName()) === strtolower($technicalName);
-                        }
-                    );
+            try {
+                /** @var PluginStoreService $pluginStoreService */
+                $pluginStoreService = $this->container->get(
+                    'shopware_plugininstaller.plugin_service_store_production'
+                );
+                $licences = $pluginStoreService->getLicences($context);
+                $licences = array_filter(
+                    $licences,
+                    function (LicenceStruct $license) use ($technicalName) {
+                        return strtolower($license->getTechnicalName()) === strtolower($technicalName);
+                    }
+                );
 
-                    /** @var LicenceStruct $plugin */
-                    $plugin = array_shift($licences);
-                } catch (\Exception $e) {
-                    $io->error('An error occured: ' . $e->getMessage());
+                /** @var LicenceStruct|null $plugin */
+                $plugin = array_shift($licences);
+            } catch (\Exception $e) {
+                $io->error('An error occured: ' . $e->getMessage());
 
-                    return 1;
-                }
+                return 1;
             }
         }
 
@@ -203,6 +201,8 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
             $this->io->success('Process completed successfully.');
         } catch (\Exception $e) {
         }
+
+        return 0;
     }
 
     /**
@@ -328,10 +328,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
         return $version;
     }
 
-    /**
-     * @return AccessTokenStruct|null
-     */
-    private function checkAuthentication()
+    private function checkAuthentication(): AccessTokenStruct
     {
         $username = $this->input->getOption('username');
         $password = $this->input->getOption('password');
@@ -391,33 +388,29 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
             return $plugin;
         }
 
-        if ($plugin instanceof LicenceStruct) {
-            $struct = new PluginStruct($plugin->getTechnicalName());
+        $struct = new PluginStruct($plugin->getTechnicalName());
 
-            $struct->setLabel($plugin->getLabel());
-            $struct->setLicenceCheck($plugin->isLicenseCheckEnabled());
-            $struct->setAvailableVersion($plugin->getBinaryVersion());
+        $struct->setLabel($plugin->getLabel());
+        $struct->setLicenceCheck($plugin->isLicenseCheckEnabled());
+        $struct->setAvailableVersion($plugin->getBinaryVersion());
 
-            $localPlugin = $this->getPluginModel($plugin->getTechnicalName());
+        $localPlugin = $this->getPluginModel($plugin->getTechnicalName());
 
-            if ($localPlugin) {
-                $struct->setId($localPlugin->getId());
+        if ($localPlugin) {
+            $struct->setId($localPlugin->getId());
 
-                preg_match('/(\d\.\d\.\d)/', $localPlugin->getVersion(), $matches);
+            preg_match('/(\d\.\d\.\d)/', $localPlugin->getVersion(), $matches);
 
-                $localVersion = array_shift($matches);
-                if ($localVersion) {
-                    $updateAvailable = version_compare($plugin->getBinaryVersion(), $localVersion);
+            $localVersion = array_shift($matches);
+            if ($localVersion) {
+                $updateAvailable = version_compare($plugin->getBinaryVersion(), $localVersion);
 
-                    $struct->setUpdateAvailable($updateAvailable === 1);
-                    $struct->setVersion($localVersion);
-                }
+                $struct->setUpdateAvailable($updateAvailable === 1);
+                $struct->setVersion($localVersion);
             }
-
-            return $struct;
         }
 
-        throw new \RuntimeException('Unknown plugin source: ' . get_class($plugin));
+        return $struct;
     }
 
     /**

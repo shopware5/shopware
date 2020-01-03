@@ -91,5 +91,7 @@ class MigrationsMigrateCommand extends ShopwareCommand implements CompletionAwar
 
         $migrationManger = new Manager($connection, $rootDir . '/_sql/migrations');
         $migrationManger->run($mode);
+
+        return 0;
     }
 }

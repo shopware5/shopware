@@ -69,8 +69,8 @@ class SitemapIndexXml extends \Enlight_Controller_Action
     {
         $sitemaps = $this->sitemapLister->getSitemaps($this->get('shop')->getId());
 
-        $lastGenerated = $this->config->get('sitemapLastRefresh');
-        $refreshInterval = $this->config->get('sitemapRefreshTime');
+        $lastGenerated = (int) $this->config->get('sitemapLastRefresh');
+        $refreshInterval = (int) $this->config->get('sitemapRefreshTime');
 
         // If there are no sitemaps yet (or they are too old) and the generation strategy is "live", generate sitemaps
         if ((empty($sitemaps) || time() > $refreshInterval + $lastGenerated)

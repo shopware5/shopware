@@ -157,8 +157,9 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
         }
 
         $actives = [];
-        /** @var ProductAttributeCondition $condition */
-        if ($condition = $criteria->getCondition($facet->getName())) {
+        /** @var ProductAttributeCondition|null $condition */
+        $condition = $criteria->getCondition($facet->getName());
+        if ($condition !== null) {
             $actives = $condition->getValue();
         }
 
@@ -228,8 +229,9 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
         $activeMin = $result['minValues'];
         $activeMax = $result['maxValues'];
 
-        /** @var ProductAttributeCondition $condition */
-        if ($condition = $criteria->getCondition($facet->getName())) {
+        /** @var ProductAttributeCondition|null $condition */
+        $condition = $criteria->getCondition($facet->getName());
+        if ($condition !== null) {
             $data = $condition->getValue();
             $activeMin = $data['min'];
             $activeMax = $data['max'];
