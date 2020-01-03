@@ -273,5 +273,13 @@
         <service id="shopware_controllers_backend_manual_sorting" class="Shopware\Controllers\Backend\ManualSorting">
             <tag name="shopware.controller" module="backend" controller="manualsorting"/>
         </service>
+
+        <service id="Shopware\Controllers\Backend\PluginManager">
+            <tag name="shopware.controller" module="backend" controller="pluginmanager"/>
+        </service>
+
+        <service id="Shopware\Controllers\Backend\PluginInstaller">
+            <tag name="shopware.controller" module="backend" controller="plugininstaller"/>
+        </service>
     </services>
 </container>
