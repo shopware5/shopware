@@ -181,7 +181,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
 
             list($cachedTime, $elementId, $shopId) = $this->seoIndex->getCachedTime();
 
-            $this->seoIndex->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);
+            $this->seoIndex->setCachedTime($currentTime->format('Y-m-d H:i:s'), $elementId, $shopId);
             $this->rewriteTable->baseSetup();
 
             $limit = 10000;
@@ -193,7 +193,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
                 $lastId = $this->rewriteTable->getRewriteArticleslastId();
             } while ($lastId !== null);
 
-            $this->seoIndex->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);
+            $this->seoIndex->setCachedTime($currentTime->format('Y-m-d H:i:s'), $elementId, $shopId);
 
             $context = $this->container->get('shopware_storefront.context_service')->createShopContext($shopId);
 
