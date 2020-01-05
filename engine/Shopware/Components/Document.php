@@ -23,6 +23,8 @@
  */
 
 use Mpdf\Mpdf;
+use Shopware\Bundle\OrderBundle\Service\ProductServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\NumberRangeIncrementerInterface;
 
 /**
@@ -493,12 +495,23 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
         $positions = $order->positions->getArrayCopy();
 
-        $articleModule = Shopware()->Modules()->Articles();
-        foreach ($positions as &$position) {
-            if ($position['modus'] == 0) {
-                $position['meta'] = $articleModule->sGetPromotionById('fix', 0, $position['articleordernumber']);
+        $numbers = [];
+        foreach ($positions as $product) {
+            if (empty($product['modus'])) {
+                $numbers[] = $product['articleordernumber'];
             }
         }
+
+        $container = Shopware()->Container();
+        /** @var ContextServiceInterface $context */
+        $context = $container->get('shopware_storefront.context_service');
+        $additionalDetails = $container->get(ProductServiceInterface::class)->getList($context->getShopContext(), $numbers);
+        foreach ($positions as &$product) {
+            if (empty($product['modus'])) {
+                $product['meta'] = $additionalDetails[$product['articleordernumber']];
+            }
+        }
+        unset($product);
 
         if ($this->_config['_previewForcePagebreak']) {
             $positions = array_merge($positions, $positions);
