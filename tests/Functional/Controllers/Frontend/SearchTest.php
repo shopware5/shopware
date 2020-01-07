@@ -50,6 +50,14 @@ class SearchTest extends \Enlight_Components_Test_Controller_TestCase
             ' alt="iPadtasche mit Stiftmappe" class="media--image"> </span> <span class="entry--name block"> iPadtasche mit Stiftmappe </span> <span class="entry--price block"> <div class="product--price"> <span class="price--default is--nowrap"> 39,99&nbsp;&euro; * </span> </div> <div class="price--unit" title="Inhalt"> </div> </span> </a> </li> <li class="entry--all-results block-group result--item">',
             $this->Response()->getBody()
         );
+
+        $this->Response()->clearBody();
+        $this->dispatch('ajax_search?sSearch=1234%a5%27%20having%201=1--%20');
+        static::assertContains('Keine Suchergebnisse gefunden', $this->Response()->getBody());
+        //search for an emoji, might not be displayed correctly in IDE
+        $this->Response()->clearBody();
+        $this->dispatch('ajax_search?sSearch=👨‍🚒');
+        static::assertContains('Keine Suchergebnisse gefunden', $this->Response()->getBody());
     }
 
     /**
