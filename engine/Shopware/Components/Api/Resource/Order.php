@@ -312,6 +312,7 @@ class Order extends Resource
             'invoiceAmountNet',
             'invoiceShipping',
             'invoiceShippingNet',
+            'invoiceShippingTaxRate',
             'languageIso',
             'net',
             'number',
