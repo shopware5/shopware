@@ -751,6 +751,8 @@ class sArticles implements \Enlight_Hook
         $context = $this->contextService->getShopContext();
 
         $criteria = $this->createProductNavigationCriteria($categoryId, $context, $request);
+        // Elasticsearch default max_result_window
+        $criteria->limit(10000);
 
         $searchResult = $this->productNumberSearch->search($criteria, $context);
 
