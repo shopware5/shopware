@@ -172,6 +172,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $this->View()->assign('sInquiryLink', $this->getInquiryLink());
 
         $this->View()->assign('sTargetAction', 'cart');
+
+        $this->View()->assign('sBasketInfo', $this->session->offsetGet('sErrorMessages'));
+        $this->session->offsetUnset('sErrorMessages');
     }
 
     /**
@@ -568,6 +571,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             if (Shopware()->Config()->get('alsoBoughtShow', true)) {
                 $this->View()->assign('sCrossBoughtToo', $this->getBoughtToo($productId));
             }
+        } else {
+            $this->session->offsetSet('sErrorMessages', $this->container->get('snippets')->getNamespace('frontend/basket/internalMessages')->get('WrongArticleNumberMessage', 'Please enter a valid article number'));
         }
 
         if ($this->Request()->getParam('isXHR') || !empty($this->Request()->callback)) {
