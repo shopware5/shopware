@@ -12,6 +12,9 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Changed Doctrine ORM version to 2.7.0
 * Changed Guzzle version to 6.4.1
 * Changed Monolog version to 2.0.1
+* Changed FPDF version to 1.8.2
+* Changed FPDI version to 2.2.0
+* Changed mPDF version to 8.0.4
 
 ### Additions
 
