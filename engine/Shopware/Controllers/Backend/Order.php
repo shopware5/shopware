@@ -24,6 +24,7 @@
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\AbstractQuery;
+use setasign\Fpdi\Fpdi;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
 use Shopware\Components\CSRFWhitelistAware;
@@ -1559,7 +1560,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     private function mergeDocuments(array $paths)
     {
-        $pdf = new FPDI();
+        $pdf = new Fpdi();
 
         foreach ($paths as $path) {
             $numPages = $pdf->setSourceFile($path);
