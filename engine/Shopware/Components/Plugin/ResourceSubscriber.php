@@ -26,7 +26,9 @@ namespace Shopware\Components\Plugin;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Enlight\Event\SubscriberInterface;
+use Enlight_Controller_ActionEventArgs;
 use Enlight_Event_EventArgs;
+use Enlight_Exception;
 use Shopware\Components\Theme\LessDefinition;
 use Symfony\Component\Finder\Finder;
 
@@ -58,6 +60,7 @@ class ResourceSubscriber implements SubscriberInterface
             'Theme_Compiler_Collect_Plugin_Css' => 'onCollectCss',
             'Theme_Compiler_Collect_Plugin_Javascript' => 'onCollectJavascript',
             'Theme_Inheritance_Template_Directories_Collected' => 'onRegisterTemplate',
+            'Enlight_Controller_Action_PreDispatch_Backend' => 'onRegisterControllerTemplate',
         ];
     }
 
@@ -115,11 +118,33 @@ class ResourceSubscriber implements SubscriberInterface
             return;
         }
 
-        $templates = (array)$args->getReturn();
+        $templates = (array) $args->getReturn();
 
         if (!in_array($viewsDirectory, $templates, true)) {
             $templates[] = $viewsDirectory;
             $args->setReturn($templates);
+        }
+    }
+
+    public function onRegisterControllerTemplate(Enlight_Controller_ActionEventArgs $args): void
+    {
+        if (!$this->loadViewsDirectory) {
+            return;
+        }
+
+        $viewsDirectory = $this->pluginPath . '/Resources/views';
+
+        if (!(@is_dir($viewsDirectory))) {
+            return;
+        }
+
+        $controller = $args->getSubject();
+
+        try {
+            if (($view = $controller->View()) !== null) {
+                $view->Template()->Engine()->addTemplateDir($viewsDirectory);
+            }
+        } catch (Enlight_Exception $ignored) {
         }
     }
 
