@@ -184,6 +184,10 @@ class Application extends BaseApplication
             if ($command instanceof Command) {
                 $this->add($command);
             }
+
+            if ($command instanceof ContainerAwareInterface) {
+                $command->setContainer($this->getKernel()->getContainer());
+            }
         }
     }
 
