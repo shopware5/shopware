@@ -743,7 +743,10 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 case 'document':
                     $exceptionMessage = $ex->getMessage();
                     if (strpos($exceptionMessage, '1062 Duplicate entry') !== false
-                        && strpos($exceptionMessage, 'for key \'key\'') !== false
+                        && (
+                            strpos($exceptionMessage, 'for key \'key\'') !== false
+                            || strpos($exceptionMessage, 'for key \'s_core_documents.key\'') !== false // Since MySQL 8.0.19
+                        )
                     ) {
                         $this->View()->assign([
                             'success' => false,
