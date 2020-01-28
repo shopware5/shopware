@@ -33,23 +33,23 @@ class CookieHandler implements CookieHandlerInterface
     public const PREFERENCES_COOKIE_NAME = 'cookiePreferences';
 
     /**
-     * @var CookieCollector
+     * @var CookieGroupCollection
      */
-    private $cookieCollector;
+    protected $cookieGroupCollection;
 
-    public function __construct(CookieCollector $cookieCollector)
+    public function __construct(CookieGroupCollection $cookieGroupCollection)
     {
-        $this->cookieCollector = $cookieCollector;
+        $this->cookieGroupCollection = $cookieGroupCollection;
     }
 
     public function getCookies(): CookieGroupCollection
     {
-        return $this->cookieCollector->collect();
+        return $this->cookieGroupCollection;
     }
 
     public function getTechnicallyRequiredCookies(): CookieCollection
     {
-        return $this->cookieCollector->collect()->getGroupByName(CookieGroupStruct::TECHNICAL)->getCookies();
+        return $this->cookieGroupCollection->getGroupByName(CookieGroupStruct::TECHNICAL)->getCookies();
     }
 
     public function isCookieAllowedByPreferences(string $cookieName, array $preferences): bool
@@ -66,7 +66,7 @@ class CookieHandler implements CookieHandlerInterface
                     continue;
                 }
 
-                $cookieGroupStruct = $this->cookieCollector->collectCookieGroups()->getGroupByName($cookieGroup['name']);
+                $cookieGroupStruct = $this->cookieGroupCollection->getGroupByName($cookieGroup['name']);
 
                 return $cookieGroupStruct->isRequired() ?: $cookie['active'];
             }

@@ -196,7 +196,7 @@ class CookieHandlerTest extends TestCase
     private function getCookieHandler(): CookieHandler
     {
         return new CookieHandler(
-            Shopware()->Container()->get(CookieCollector::class)
+            Shopware()->Container()->get(CookieCollector::class)->collect()
         );
     }
 }

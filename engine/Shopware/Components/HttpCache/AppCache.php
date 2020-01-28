@@ -24,6 +24,9 @@
 
 namespace Shopware\Components\HttpCache;
 
+use Shopware\Bundle\CookieBundle;
+use Shopware\Bundle\CookieBundle\CookieGroupCollection;
+use Shopware\Components\Privacy\CookieRemoveSubscriber;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpCache\Esi;
@@ -100,7 +103,7 @@ class AppCache extends HttpCache
         }
 
         if (strpos($request->getPathInfo(), '/widgets/index/refreshStatistic') === 0) {
-            return $this->pass($request, $catch);
+            return $this->handleCookies($request, $this->pass($request, $catch));
         }
 
         if (strpos($request->getPathInfo(), '/captcha/index/rand/') === 0) {
@@ -111,6 +114,8 @@ class AppCache extends HttpCache
 
         $response->headers->remove('cache-control');
         $response->headers->addCacheControlDirective('no-cache');
+
+        $response = $this->handleCookies($request, $response);
 
         $this->filterHttp2ServerPushHeader($request, $response);
 
@@ -350,5 +355,48 @@ class AppCache extends HttpCache
                 return;
             }
         }
+    }
+
+    private function handleCookies(Request $request, Response $response): Response
+    {
+        $response = $this->removeCookies($request, $response);
+
+        $response->headers->remove(CookieBundle\Services\CookieRemoveHandler::COOKIE_CONFIG_KEY);
+        $response->headers->remove(CookieBundle\Services\CookieRemoveHandler::COOKIE_GROUP_COLLECTION_KEY);
+
+        return $response;
+    }
+
+    private function removeCookies(Request $request, Response $response): Response
+    {
+        $allowCookie = $request->cookies->getInt('allowCookie');
+
+        if ($allowCookie === 1) {
+            return $response;
+        }
+
+        $responseHeaders = $response->headers;
+        if (!$responseHeaders->has(CookieBundle\Services\CookieRemoveHandler::COOKIE_CONFIG_KEY)) {
+            return $response;
+        }
+
+        $cookieConfig = json_decode($responseHeaders->get(CookieBundle\Services\CookieRemoveHandler::COOKIE_CONFIG_KEY), true);
+
+        if ($cookieConfig['cookieNoteMode'] === CookieRemoveSubscriber::COOKIE_MODE_ALL) {
+            return $response;
+        }
+
+        /** @var CookieGroupCollection $cookieGroupCollection */
+        $cookieGroupCollection = unserialize(base64_decode($responseHeaders->get(CookieBundle\Services\CookieRemoveHandler::COOKIE_GROUP_COLLECTION_KEY)), ['allowed_classes' => [
+            CookieBundle\CookieGroupCollection::class,
+            CookieBundle\CookieCollection::class,
+            CookieBundle\Structs\CookieGroupStruct::class,
+            CookieBundle\Structs\CookieStruct::class,
+        ]]);
+
+        $cookieRemoveHandler = new CookieBundle\Services\CookieRemoveHandler($cookieGroupCollection);
+        $cookieRemoveHandler->removeCookiesFromPreferences($request, $response);
+
+        return $response;
     }
 }
