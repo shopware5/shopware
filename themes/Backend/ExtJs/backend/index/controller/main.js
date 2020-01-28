@@ -579,7 +579,7 @@ createShopwareVersionMessage = function() {
             html: '<p>' +
                     '<strong>Shopware {$SHOPWARE_VERSION} {$SHOPWARE_VERSION_TEXT}</strong>' +
                     '<span>Build Rev {$SHOPWARE_REVISION}</span></p>' +
-                    '{if $product == "CE"}<p><strong>Community Edition under <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL license</a></strong><span>No support included in this shopware package.</span></p>{else}' +
+                    '{if $product == "CE"}<p><strong>Community Edition under <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank">AGPL license</a></strong><span>No support included in this shopware package.</span></p>{else}' +
                     '<p><strong>{if $product == "PE"}Professional Edition{elseif $product == "PP"}Professional Plus Edition{elseif $product == "EE"}Enterprise Edition{elseif $product == "EB"}Enterprise Business Edition{elseif $product == "EC"}Enterprise Cluster Edition{/if} under commercial / proprietary license</strong><span>See <a href="https://api.shopware.com/gtc/en_GB.html" target="_blank">TOS</a> for details</span></p>{/if}' +
 
                     '<p><strong>Shopware 5 uses the following components</strong></p>' +
@@ -587,7 +587,7 @@ createShopwareVersionMessage = function() {
                     '<p><strong>Zend Framework</strong><span>New BSD License</span><span>&nbsp;Origin: Zend Technologies</span></p>' +
                     '<p><strong>ExtJS 4</strong><span>GPL v3 License</span><span>&nbsp;Origin: Sencha Corp.</span></p>' +
                     '<p>If you want to develop proprietary extensions that makes use of ExtJS (ie extensions that are not licensed under the GNU Affero General Public License, version 3, or a compatible license), you´ll need to license shopware SDK to get the necessary rights for the distribution of your extensions / plugins.</p>' +
-                    '<p><strong>Doctrine 2</strong><span>MIT License</span><span>&nbsp;Origin: http://www.doctrine-project.org/</span></p>' +
+                    '<p><strong>Doctrine 2</strong><span>MIT License</span><span>&nbsp;Origin: https://www.doctrine-project.org/</span></p>' +
                     '<p><strong>TinyMCE 3</strong><span>LGPL 2.1 License</span><span>&nbsp;Origin: Moxiecode Systems AB.</span></p>' +
                     '<p><strong>Symfony 3</strong><span>MIT License</span><span>&nbsp;Origin: SensioLabs</span></p>' +
                     '<p><strong>Smarty 3</strong><span>LGPL 2.1 License</span><span>&nbsp;Origin: New Digital Group, Inc.</span></p>' +
@@ -595,12 +595,12 @@ createShopwareVersionMessage = function() {
                     '<p><strong>MPDF</strong><span>GPL License</span><span>&nbsp;Origin: https://mpdf.github.io</span></p>' +
                     '<p><strong>FPDF</strong><span>License</span><span>&nbsp;Origin: http://www.fpdf.org/</span></p>' +
                     '<p><strong>Guzzle</strong><span>MIT License</span><span>&nbsp;Origin: http://guzzlephp.org</span></p>' +
-                    '<p><strong>Less.php</strong><span>Apache-2.0</span><span>&nbsp;Origin: http://lessphp.gpeasy.com</span></p>' +
+                    '<p><strong>Less.php</strong><span>Apache-2.0</span><span>&nbsp;Origin: https://www.typesettercms.com/</span></p>' +
                     '<p><strong>Monolog</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/Seldaek/monolog</span></p>' +
                     '<p><strong>ElasticSearch</strong><span>LGPL License</span><span>&nbsp;Origin: https://github.com/elastic/elasticsearch-php</span></p>' +
                     '<p><strong>ongr/elasticsearch-dsl</strong><span>License</span><span>&nbsp;Origin: https://github.com/ongr-io/ElasticsearchDSL</span></p>' +
                     '<p><strong>egulias/email-validator</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/egulias/EmailValidator</span></p>' +
-                    '<p><strong>Flysystem</strong><span>MIT License</span><span>&nbsp;Origin: http://flysystem.thephpleague.com</span></p>' +
+                    '<p><strong>Flysystem</strong><span>MIT License</span><span>&nbsp;Origin: https://flysystem.thephpleague.com/v1/docs/</span></p>' +
                     '<p><strong>paragonie/random_compat</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/paragonie/random_compat</span></p>' +
                     '<p><strong>beberlei/assert</strong><span>License</span><span>&nbsp;Origin: https://github.com/beberlei/assert</span></p>' +
                 "</p>"

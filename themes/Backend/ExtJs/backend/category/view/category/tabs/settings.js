@@ -118,7 +118,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
 
         defaultSettingsNameLabel : '{s name=view/settings_default_settings_name_label}Description{/s}',
         defaultSettingsLinkExternalPageLabel : '{s name=view/settings_default_settings_link_external_page_label}Link to an external site{/s}',
-        defaultSettingsLinkExternalPageHelp : '{s name=view/settings_default_settings_link_external_page_help}The URL must begin with: http://{/s}',
+        defaultSettingsLinkExternalPageHelp : '{s name=view/settings_default_settings_link_external_page_help}The URL must begin with: https://{/s}',
         defaultSettingsLinkExternalPageTarget : '{s name=view/settings_default_settings_link_external_page_target}Target for external site{/s}',
         defaultSettingsLinkExternalPageTargetSelf : '{s name=view/settings_default_settings_link_external_page_target_self}Same window (default){/s}',
         defaultSettingsLinkExternalPageTargetBlank : '{s name=view/settings_default_settings_link_external_page_target_blank}New window{/s}',

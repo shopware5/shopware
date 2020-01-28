@@ -98,7 +98,7 @@ Ext.define('Shopware.apps.Banner.view.main.BannerForm', {
             labelWidth: 155,
             fieldLabel  : '{s name=form_add/link}Link{/s}',
             supportText : '{s name=form_add/link_support}Link which will be called up if the banner has been clicked.{/s}',
-            emptyText   : 'http://'
+            emptyText   : 'https://'
         });
 
         var store = Ext.create('Ext.data.Store', {

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0">
+<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9/">
 {strip}
     {block name="frontend_sitemap_mobile_xml_homepage"}
         {include file="frontend/sitemap_mobile_xml/entry.tpl" urlParams = ['controller' => 'index']}

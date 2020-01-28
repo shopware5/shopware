@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="{encoding}" ?>
-<feed xmlns="http://www.w3.org/2005/Atom">
+<feed xmlns="https://www.w3.org/2005/Atom">
 <link href="{$sCategoryContent.atomFeed|escape}" rel="self" type="application/atom+xml" />
 <author>
     <name>{$sShopname|escapeHtml}</name>

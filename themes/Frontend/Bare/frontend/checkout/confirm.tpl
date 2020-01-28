@@ -8,7 +8,7 @@
         <a href="{url controller='index'}"
            class="btn is--small btn--back-top-shop is--icon-left"
            title="{$snippetFinishButtonBackToShop|escape}"
-           xmlns="http://www.w3.org/1999/html">
+           xmlns="https://www.w3.org/1999/xhtml/">
             <i class="icon--arrow-left"></i>
             {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish"}{/s}
         </a>
