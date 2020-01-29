@@ -58,7 +58,7 @@
 
         {* Product data *}
         {block name='frontend_detail_index_buy_container_inner'}
-            <div itemprop="offers" itemscope itemtype="{if $sArticle.sBlockPrices}http://schema.org/AggregateOffer{else}http://schema.org/Offer{/if}" class="buybox--inner">
+            <div itemprop="offers" itemscope itemtype="{if $sArticle.sBlockPrices}https://schema.org/AggregateOffer{else}https://schema.org/Offer{/if}" class="buybox--inner">
 
                 {block name='frontend_detail_index_data'}
                     {if $sArticle.sBlockPrices}
@@ -82,7 +82,7 @@
                     {/block}
 
                     {block name="frontend_detail_index_data_pricespecification"}
-                        <span itemprop="priceSpecification" itemscope itemtype="http://schema.org/PriceSpecification">
+                        <span itemprop="priceSpecification" itemscope itemtype="https://schema.org/PriceSpecification">
                             {if $sOutputNet}
                                 <meta itemprop="valueAddedTaxIncluded" content="false"/>
                             {else}
