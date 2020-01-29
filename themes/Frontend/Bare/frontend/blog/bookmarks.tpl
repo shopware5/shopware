@@ -17,7 +17,7 @@
                 {* Facebook *}
                 {block name='frontend_blog_bookmarks_facebook'}
                     {s name="BookmarkFacebookShare" assign="snippetBookmarkFacebookShare"}{/s}
-                    <a href="http://www.facebook.com/share.php?v=4&amp;src=bm&amp;u={url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}&amp;t={$sArticle.title|escape:'url'}"
+                    <a href="https://www.facebook.com/share.php?v=4&amp;src=bm&amp;u={url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}&amp;t={$sArticle.title|escape:'url'}"
                         title="{$snippetBookmarkFacebookShare|escape}"
                         class="blog--bookmark icon--facebook2"
                         rel="nofollow"

@@ -1,6 +1,6 @@
 {namespace name="frontend/detail/comment"}
 
-<div class="review--entry{if $isLast} is--last{/if}{if $vote.answer} has--answer{/if}" itemprop="review" itemscope itemtype="http://schema.org/Review">
+<div class="review--entry{if $isLast} is--last{/if}{if $vote.answer} has--answer{/if}" itemprop="review" itemscope itemtype="https://schema.org/Review">
 
     {* Review content - Title and content *}
     {block name='frontend_detail_comment_header'}

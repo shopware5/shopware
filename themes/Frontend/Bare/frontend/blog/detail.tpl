@@ -19,9 +19,9 @@
                     <meta itemprop="description" content="{$sArticle.shortDescription}">
                     <meta itemprop="mainEntityOfPage" content="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}">
 
-                    <div itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+                    <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
                         <meta itemprop="name" content="{{config name=sShopname}|escapeHtml}">
-                        <div itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+                        <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
                             <meta itemprop="url" content="{link file=$theme.desktopLogo fullPath}">
                         </div>
                     </div>
