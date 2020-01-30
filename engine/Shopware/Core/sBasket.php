@@ -2843,7 +2843,12 @@ SQL;
             ad.purchaseunit,
             COALESCE (ad.unitID, mad.unitID) AS unitID,
             ad.laststock,
-            ad.shippingtime,
+            COALESCE(
+                coreTransArticle.objectdata,
+                coreTransDetail.objectdata,
+                transDetail.shippingtime,
+                transArticle.shippingtime
+            ) AS shippingtime,
             ad.releasedate,
             ad.releasedate AS sReleaseDate,
             COALESCE (ad.ean, mad.ean) AS ean,
@@ -2859,17 +2864,62 @@ SQL;
         LEFT JOIN s_articles_details AS ad ON ad.ordernumber = s_order_basket.ordernumber
         LEFT JOIN s_articles a ON (a.id = ad.articleID)
         LEFT JOIN s_articles_details AS mad ON mad.id = a.main_detail_id
-        LEFT JOIN s_order_basket_attributes ON s_order_basket.id = s_order_basket_attributes.basketID
+        LEFT JOIN s_order_basket_attributes ON s_order_basket.id = s_order_basket_attributes.basketID'
+            // article shipping time translation stuff below:
+        .'
+        LEFT JOIN s_articles_translations AS transArticle ON transArticle.articleID = ad.articleID
+            AND a.main_detail_id = ad.id
+            AND transArticle.languageID = ?
+        LEFT JOIN s_articles_translations AS transDetail ON transDetail.articleID = ad.id
+            AND a.main_detail_id <> ad.id
+            AND transDetail.languageID = ?
+        LEFT JOIN s_core_translations AS coreTransArticle ON coreTransArticle.objectkey = a.id
+            AND a.main_detail_id = ad.id
+            AND coreTransArticle.objecttype = \'article\'
+            AND coreTransArticle.objectlanguage = ?
+        LEFT JOIN s_core_translations AS coreTransDetail ON coreTransDetail.objectkey = ad.id
+            AND a.main_detail_id <> ad.id
+            AND coreTransDetail.objecttype = \'variant\'
+            AND coreTransDetail.objectlanguage = ?
         WHERE sessionID=?
         ORDER BY id ASC, datum DESC
         ';
+        $sessionId = $this->session->get('sessionId');
+        $shopId = Shopware()->Shop()->getId();
         $sql = $this->eventManager->filter(
             'Shopware_Modules_Basket_GetBasket_FilterSQL',
             $sql,
-            ['subject' => $this]
+            [
+                'subject' => $this,
+                'sessionId' => &$sessionId,
+                'shopID' => &$shopId
+            ]
         );
 
-        return $this->db->fetchAll($sql, [$this->session->get('sessionId')]);
+        $basketItems = $this->db->fetchAll(
+            $sql,
+            [
+                $shopId,
+                $shopId,
+                $shopId,
+                $shopId,
+                $sessionId
+            ]
+        );
+
+        foreach ($basketItems as $basketPosition => $basketItem) {
+            $shippingTime = @unserialize($basketItem['shippingtime']);
+
+            if (
+                $shippingTime !== false
+                && is_array($shippingTime)
+                && isset($shippingTime['txtshippingtime'])
+            ) {
+                $basketItems[$basketPosition]['shippingtime'] = $shippingTime['txtshippingtime'];
+            }
+        }
+
+        return $basketItems;
     }
 
     /**
