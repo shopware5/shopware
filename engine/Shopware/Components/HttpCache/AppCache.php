@@ -102,7 +102,7 @@ class AppCache extends HttpCache
             return $this->pass($request, $catch);
         }
 
-        if (strpos($request->getPathInfo(), '/widgets/index/refreshStatistic') === 0) {
+        if (stripos($request->getPathInfo(), '/widgets/index/refreshStatistic') === 0) {
             return $this->handleCookies($request, $this->pass($request, $catch));
         }
 
