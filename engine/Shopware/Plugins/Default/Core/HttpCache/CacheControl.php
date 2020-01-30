@@ -101,7 +101,9 @@ class CacheControl
             return false;
         }
 
-        if (strpos($request->getPathInfo(), '/widgets/index/refreshStatistic') !== false) {
+        /** @noinspection StringCaseManipulationInspection */
+        /** @noinspection SpellCheckingInspection */
+        if (strpos(strtolower($request->getPathInfo()), '/widgets/index/refreshstatistic') !== false) {
             return false;
         }
 

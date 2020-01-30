@@ -99,7 +99,9 @@ class AppCache extends HttpCache
             return $this->pass($request, $catch);
         }
 
-        if (strpos($request->getPathInfo(), '/widgets/index/refreshStatistic') === 0) {
+        /** @noinspection StringCaseManipulationInspection */
+        /** @noinspection SpellCheckingInspection */
+        if (strpos(strtolower($request->getPathInfo()), '/widgets/index/refreshstatistic') === 0) {
             return $this->pass($request, $catch);
         }
 
