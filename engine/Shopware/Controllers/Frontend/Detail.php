@@ -78,7 +78,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $this->View()->assign('userLoggedIn', Shopware()->Modules()->Admin()->sCheckUser());
 
         if (!empty(Shopware()->Session()->sUserId) && empty($this->Request()->sVoteName)
-          && $this->Request()->getParam('__cache') !== null) {
+            && $this->Request()->getParam('__cache') !== null) {
             $userData = Shopware()->Modules()->Admin()->sGetUserData();
             $this->View()->assign('sFormData', [
                 'sVoteMail' => $userData['additional']['user']['email'],
@@ -163,9 +163,23 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             throw new \InvalidArgumentException('Argument ordernumber missing');
         }
 
-        /** @var sArticles $articleModule */
-        $articleModule = Shopware()->Modules()->Articles();
-        $this->View()->assign('sArticle', $articleModule->sGetProductByOrdernumber($orderNumber));
+        $productService = $this->get('shopware_storefront.list_product_service');
+        $context = $this->get('shopware_storefront.context_service')->getContext();
+
+        $product = $productService->get($orderNumber, $context);
+        if (!$product) {
+            $dbal = $this->get('dbal_connection');
+            $productOrderNumber = $dbal->fetchColumn(
+                'SELECT ordernumber FROM s_addon_premiums WHERE ordernumber_export = :ordernumber',
+                [':ordernumber' => $orderNumber]
+            );
+            if ($productOrderNumber) {
+                $product = $productService->get($productOrderNumber, $context);
+            }
+        }
+        if ($product) {
+            $this->View()->assign('sArticle', $this->get('legacy_struct_converter')->convertListProductStruct($product));
+        }
     }
 
     /**
