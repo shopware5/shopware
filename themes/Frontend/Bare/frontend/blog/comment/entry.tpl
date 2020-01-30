@@ -7,7 +7,7 @@
         <ul class="comments--list list--unstyled">
 
             {foreach $sArticle.comments as $vote}
-                <li class="list--entry" itemscope itemtype="http://schema.org/UserComments">
+                <li class="list--entry" itemscope itemtype="https://schema.org/UserComments">
 
                     {* Comment meta data *}
                     {block name='frontend_blog_comments_comment_meta'}

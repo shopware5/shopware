@@ -81,9 +81,9 @@
 {* Microdata depending on type *}
 {block name='frontend_rating_microdata_type'}
     {if $isType === 'single'}
-        {$data='itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating"'}
+        {$data='itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating"'}
     {else}
-        {$data='itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating"'}
+        {$data='itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating"'}
     {/if}
 {/block}
 
