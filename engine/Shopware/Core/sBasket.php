@@ -2847,7 +2847,8 @@ SQL;
                 coreTransArticle.objectdata,
                 coreTransDetail.objectdata,
                 transDetail.shippingtime,
-                transArticle.shippingtime
+                transArticle.shippingtime,
+                ad.shippingtime
             ) AS shippingtime,
             ad.releasedate,
             ad.releasedate AS sReleaseDate,
@@ -2908,14 +2909,19 @@ SQL;
         );
 
         foreach ($basketItems as $basketPosition => $basketItem) {
-            $shippingTime = @unserialize($basketItem['shippingtime']);
-
             if (
-                $shippingTime !== false
-                && is_array($shippingTime)
-                && isset($shippingTime['txtshippingtime'])
+                $basketItem['shippingtime'] !== null
+                && $basketItem['shippingtime']
             ) {
-                $basketItems[$basketPosition]['shippingtime'] = $shippingTime['txtshippingtime'];
+                $shippingTime = @unserialize($basketItem['shippingtime']);
+
+                if (
+                    $shippingTime !== false
+                    && is_array($shippingTime)
+                    && isset($shippingTime['txtshippingtime'])
+                ) {
+                    $basketItems[$basketPosition]['shippingtime'] = $shippingTime['txtshippingtime'];
+                }
             }
         }
 
