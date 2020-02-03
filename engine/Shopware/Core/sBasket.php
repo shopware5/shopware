@@ -2843,13 +2843,14 @@ SQL;
             ad.purchaseunit,
             COALESCE (ad.unitID, mad.unitID) AS unitID,
             ad.laststock,
+            ad.shippingtime,
             COALESCE(
                 coreTransArticle.objectdata,
                 coreTransDetail.objectdata,
                 transDetail.shippingtime,
                 transArticle.shippingtime,
                 ad.shippingtime
-            ) AS shippingtime,
+            ) AS transShippingTime,
             ad.releasedate,
             ad.releasedate AS sReleaseDate,
             COALESCE (ad.ean, mad.ean) AS ean,
@@ -2909,18 +2910,13 @@ SQL;
         );
 
         foreach ($basketItems as $basketPosition => $basketItem) {
-            if (
-                $basketItem['shippingtime'] !== null
-                && $basketItem['shippingtime']
-            ) {
-                $shippingTime = @unserialize($basketItem['shippingtime']);
+            if (!empty($basketItem['transShippingTime'])) {
+                $shippingTime = @unserialize($basketItem['transShippingTime']);
 
-                if (
-                    $shippingTime !== false
-                    && is_array($shippingTime)
-                    && isset($shippingTime['txtshippingtime'])
-                ) {
+                if (!empty($shippingTime)) {
                     $basketItems[$basketPosition]['shippingtime'] = $shippingTime['txtshippingtime'];
+                    // unset the origin one, since we don't need it anymore, to free memory:
+                    unset($basketItems[$basketPosition]['transShippingTime']);
                 }
             }
         }
