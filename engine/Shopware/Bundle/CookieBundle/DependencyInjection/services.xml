@@ -12,7 +12,17 @@
         </service>
 
         <service id="Shopware\Bundle\CookieBundle\Services\CookieHandler">
-            <argument id="Shopware\Bundle\CookieBundle\Services\CookieCollector" type="service" />
+            <argument type="expression">service('Shopware\\Bundle\\CookieBundle\\Services\\CookieCollector').collect()</argument>
+        </service>
+
+        <service id="Shopware\Bundle\CookieBundle\Services\CookieRemoveHandler">
+            <argument type="expression">service('Shopware\\Bundle\\CookieBundle\\Services\\CookieCollector').collect()</argument>
+        </service>
+
+        <service id="Shopware\Bundle\CookieBundle\Controllers\CookieController">
+            <argument type="service" id="config" />
+            <argument type="service" id="Shopware\Bundle\CookieBundle\Services\CookieRemoveHandler" />
+            <tag name="shopware.controller" module="widgets" controller="cookiecontroller" />
         </service>
     </services>
 </container>

@@ -267,6 +267,16 @@
         {if !{config name=disableShopwareStatistics} }
             {include file='widgets/index/statistic_include.tpl'}
         {/if}
+
+        {if !$httpCacheEnabled}
+            <script type="text/javascript">
+                document.asyncReady(function () {
+                    $.ajax({
+                        url: '{url module=widgets controller=CookieController}'
+                    });
+                });
+            </script>
+        {/if}
     {/block}
 
     {* Include jQuery and all other javascript files at the bottom of the page *}
