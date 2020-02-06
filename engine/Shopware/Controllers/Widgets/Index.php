@@ -31,8 +31,7 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
     {
         $this->Response()->setHeader('x-robots-tag', 'noindex');
 
-        /** @noinspection SpellCheckingInspection */
-        if ( strtolower($this->Request()->getActionName()) === 'refreshstatistic') {
+        if ( stripos($this->Request()->getActionName(),'refreshStatistic') !== false ) {
             $this->Front()->Plugins()->ViewRenderer()->setNoRender();
         }
     }

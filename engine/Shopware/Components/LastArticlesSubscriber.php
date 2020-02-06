@@ -63,8 +63,7 @@ class LastArticlesSubscriber implements SubscriberInterface
     {
         $request = $args->getRequest();
 
-        /** @noinspection SpellCheckingInspection */
-        if (strtolower($request->getActionName()) !== 'refreshstatistic') {
+        if (stripos($request->getActionName(),'refreshStatistic') !== false) {
             return;
         }
 
