@@ -113,10 +113,6 @@ class Application extends BaseApplication
      */
     protected function doRunCommand(Command $command, InputInterface $input, OutputInterface $output)
     {
-        if ($command instanceof ContainerAwareInterface) {
-            $command->setContainer($this->kernel->getContainer());
-        }
-
         /** @var \Enlight_Event_EventManager $eventManager */
         $eventManager = $this->kernel->getContainer()->get('events');
 
@@ -187,6 +183,10 @@ class Application extends BaseApplication
         foreach ($collection as $command) {
             if ($command instanceof Command) {
                 $this->add($command);
+            }
+
+            if ($command instanceof ContainerAwareInterface) {
+                $command->setContainer($this->getKernel()->getContainer());
             }
         }
     }
