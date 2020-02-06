@@ -63,7 +63,7 @@
             var hasSource = me.opts.src.length > 0,
                 isHoneypot = me.opts.src.indexOf('honeypot') >= 0;
 
-            if (!hasSource || isHoneypot || !StateManager.hasCookiesAllowed()) {
+            if (!hasSource || isHoneypot || (!StateManager.hasCookiesAllowed() && window.cookieRemoval !== 1)) {
                 return;
             }
 
