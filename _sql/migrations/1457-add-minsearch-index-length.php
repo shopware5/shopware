@@ -47,12 +47,12 @@ SQL;
 
         if ($modus === self::MODUS_UPDATE) {
             $sql = "INSERT INTO `s_core_config_values` (`element_id`, `shop_id`, `value`)
-                    SELECT 
-                      @elementId,
+                    SELECT
+                      @element_id,
                       `id`,
                       'i:0;'
                     FROM s_core_shops
-                    WHERE id NOT IN (SELECT `shop_id` FROM `s_core_config_values` WHERE `element_id` = @elementId)";
+                    WHERE id NOT IN (SELECT `shop_id` FROM `s_core_config_values` WHERE `element_id` = @element_id)";
             $this->addSql($sql);
         }
     }
