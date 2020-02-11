@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Mpdf\Mpdf;
 use Shopware\Components\NumberRangeIncrementerInterface;
 
 /**
@@ -297,14 +298,14 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 ]
             );
             if ($this->_preview == true || !$this->_documentHash) {
-                $mpdf = new \Mpdf\Mpdf($mpdfConfig);
+                $mpdf = new Mpdf($mpdfConfig);
                 $mpdf->WriteHTML($html);
                 $mpdf->Output();
                 exit;
             }
 
             $tmpFile = tempnam(sys_get_temp_dir(), 'document');
-            $mpdf = new \Mpdf\Mpdf($mpdfConfig);
+            $mpdf = new Mpdf($mpdfConfig);
             $mpdf->WriteHTML($html);
             $mpdf->Output($tmpFile, 'F');
 

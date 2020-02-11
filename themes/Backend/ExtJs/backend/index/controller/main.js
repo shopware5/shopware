@@ -593,7 +593,8 @@ createShopwareVersionMessage = function() {
                     '<p><strong>Smarty 3</strong><span>LGPL 2.1 License</span><span>&nbsp;Origin: New Digital Group, Inc.</span></p>' +
                     '<p><strong>Ace</strong><span>BSD License</span><span>&nbsp;Origin: https://ace.c9.io/</span></p>' +
                     '<p><strong>MPDF</strong><span>GPL License</span><span>&nbsp;Origin: https://mpdf.github.io</span></p>' +
-                    '<p><strong>FPDF</strong><span>License</span><span>&nbsp;Origin: http://www.fpdf.org/</span></p>' +
+                    '<p><strong>FPDF</strong><span>MIT License</span><span>&nbsp;Origin: http://www.fpdf.org/</span></p>' +
+                    '<p><strong>FPDI</strong><span>MIT License</span><span>&nbsp;Origin: https://www.setasign.com/products/fpdi/about</span></p>' +
                     '<p><strong>Guzzle</strong><span>MIT License</span><span>&nbsp;Origin: http://guzzlephp.org</span></p>' +
                     '<p><strong>Less.php</strong><span>Apache-2.0</span><span>&nbsp;Origin: http://lessphp.gpeasy.com</span></p>' +
                     '<p><strong>Monolog</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/Seldaek/monolog</span></p>' +

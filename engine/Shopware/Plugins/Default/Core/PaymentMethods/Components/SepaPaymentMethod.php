@@ -25,6 +25,7 @@
 namespace ShopwarePlugin\PaymentMethods\Components;
 
 use Doctrine\ORM\AbstractQuery;
+use Mpdf\Mpdf;
 use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
 
 /**
@@ -266,7 +267,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
         $data = Shopware()->Template()->fetch('frontend/plugins/sepa/email.tpl');
 
         $mpdfConfig = Shopware()->Container()->getParameter('shopware.mpdf.defaultConfig');
-        $mpdf = new \Mpdf\Mpdf($mpdfConfig);
+        $mpdf = new Mpdf($mpdfConfig);
         $mpdf->WriteHTML($data);
         $pdfFileContent = $mpdf->Output('', 'S');
 
