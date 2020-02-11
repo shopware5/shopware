@@ -30,29 +30,24 @@ use Shopware\Components\Theme\LessDefinition;
 
 class ResourceSubscriberTest extends TestCase
 {
-    public function testEmptyPlugin()
+    public function testEmptyPlugin(): void
     {
-        $subscriber = new ResourceSubscriber(__DIR__ . '/examples/EmptyPlugin', false);
+        $subscriber = new ResourceSubscriber(__DIR__ . '/examples/EmptyPlugin');
 
         static::assertNull($subscriber->onCollectCss());
         static::assertNull($subscriber->onCollectJavascript());
         static::assertNull($subscriber->onCollectLess());
-        $templateEventArgs = new \Enlight_Event_EventArgs();
-        $templateEventArgs->setReturn([]);
-        $subscriber->onRegisterTemplate($templateEventArgs);
-        static::assertTrue(is_array($templateEventArgs->getReturn()));
-        static::assertEmpty($templateEventArgs->getReturn());
 
-        $subscriberWithViews = new ResourceSubscriber(__DIR__ . '/examples/EmptyPlugin', true);
-        $templateEventArgs->setReturn([]);
+        $subscriberWithViews = new ResourceSubscriber(__DIR__ . '/examples/EmptyPlugin');
+        $templateEventArgs = new \Enlight_Event_EventArgs();
         $subscriberWithViews->onRegisterTemplate($templateEventArgs);
-        static::assertTrue(is_array($templateEventArgs->getReturn()));
-        static::assertEmpty($templateEventArgs->getReturn());
+        static::assertIsArray($templateEventArgs->getReturn());
+        static::assertNotEmpty($templateEventArgs->getReturn());
     }
 
-    public function testFoo()
+    public function testFoo(): void
     {
-        $subscriber = new ResourceSubscriber(__DIR__ . '/examples/TestPlugin', false);
+        $subscriber = new ResourceSubscriber(__DIR__ . '/examples/TestPlugin');
 
         static::assertSame(
             [
@@ -76,14 +71,9 @@ class ResourceSubscriberTest extends TestCase
             ]),
             $subscriber->onCollectLess()
         );
-        $templateEventArgs = new \Enlight_Event_EventArgs();
-        $templateEventArgs->setReturn([]);
-        $subscriber->onRegisterTemplate($templateEventArgs);
-        static::assertTrue(is_array($templateEventArgs->getReturn()));
-        static::assertEmpty($templateEventArgs->getReturn());
 
-        $subscriberWithViews = new ResourceSubscriber(__DIR__ . '/examples/TestPlugin', true);
-        $templateEventArgs->setReturn([]);
+        $subscriberWithViews = new ResourceSubscriber(__DIR__ . '/examples/TestPlugin');
+        $templateEventArgs = new \Enlight_Event_EventArgs();
         $subscriberWithViews->onRegisterTemplate($templateEventArgs);
         static::assertTrue(is_array($templateEventArgs->getReturn()));
         static::assertSame(

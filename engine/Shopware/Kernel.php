@@ -64,6 +64,7 @@ use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\LegacyApiResourcesPass;
 use Shopware\Components\DependencyInjection\Compiler\PluginLoggerCompilerPass;
+use Shopware\Components\DependencyInjection\Compiler\PluginResourceCompilerPass;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\DependencyInjection\LegacyPhpDumper;
 use Shopware\Components\Plugin;
@@ -255,10 +256,6 @@ class Kernel extends SymfonyKernel
             }
 
             $this->container->get('events')->addSubscriber($bundle);
-            $this->container->get('events')->addSubscriber(new Plugin\ResourceSubscriber(
-                $bundle->getPath(),
-                $bundle instanceof Plugin && $bundle->hasAutoloadViews()
-            ));
         }
 
         $this->booted = true;
@@ -802,6 +799,7 @@ class Kernel extends SymfonyKernel
 
         $container->addCompilerPass(new RegisterControllerCompilerPass($activePlugins));
         $container->addCompilerPass(new PluginLoggerCompilerPass($activePlugins));
+        $container->addCompilerPass(new PluginResourceCompilerPass($activePlugins));
 
         $extensions = [];
 

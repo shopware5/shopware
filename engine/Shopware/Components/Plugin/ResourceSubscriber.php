@@ -25,43 +25,25 @@
 namespace Shopware\Components\Plugin;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Enlight\Event\SubscriberInterface;
 use Enlight_Controller_ActionEventArgs;
 use Enlight_Event_EventArgs;
 use Enlight_Exception;
 use Shopware\Components\Theme\LessDefinition;
 use Symfony\Component\Finder\Finder;
 
-class ResourceSubscriber implements SubscriberInterface
+class ResourceSubscriber
 {
     /**
      * @var string
      */
     private $pluginPath;
 
-    private $loadViewsDirectory = false;
-
     /**
      * @param string $pluginPath
      */
-    public function __construct($pluginPath, bool $loadViewsDirectory)
+    public function __construct($pluginPath)
     {
         $this->pluginPath = $pluginPath;
-        $this->loadViewsDirectory = $loadViewsDirectory;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents()
-    {
-        return [
-            'Theme_Compiler_Collect_Plugin_Less' => 'onCollectLess',
-            'Theme_Compiler_Collect_Plugin_Css' => 'onCollectCss',
-            'Theme_Compiler_Collect_Plugin_Javascript' => 'onCollectJavascript',
-            'Theme_Inheritance_Template_Directories_Collected' => 'onRegisterTemplate',
-            'Enlight_Controller_Action_PreDispatch_Backend' => 'onRegisterControllerTemplate',
-        ];
     }
 
     /**
@@ -108,15 +90,7 @@ class ResourceSubscriber implements SubscriberInterface
 
     public function onRegisterTemplate(Enlight_Event_EventArgs $args): void
     {
-        if (!$this->loadViewsDirectory) {
-            return;
-        }
-
         $viewsDirectory = $this->pluginPath . '/Resources/views';
-
-        if (!(@is_dir($viewsDirectory))) {
-            return;
-        }
 
         $templates = (array) $args->getReturn();
 
@@ -128,15 +102,7 @@ class ResourceSubscriber implements SubscriberInterface
 
     public function onRegisterControllerTemplate(Enlight_Controller_ActionEventArgs $args): void
     {
-        if (!$this->loadViewsDirectory) {
-            return;
-        }
-
         $viewsDirectory = $this->pluginPath . '/Resources/views';
-
-        if (!(@is_dir($viewsDirectory))) {
-            return;
-        }
 
         $controller = $args->getSubject();
 
