@@ -177,13 +177,11 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
 
         if ($this->Request()->isDispatched() && !$this->Response()->isRedirect()) {
             $action_name = $this->Front()->Dispatcher()->getFullActionName($this->Request());
-            if (!$event = Shopware()->Events()->notifyUntil(
-                __CLASS__ . '_' . $action_name,
-                ['subject' => $this]
-            )
-            ) {
+
+            if (!$event = Shopware()->Events()->notifyUntil(__CLASS__ . '_' . $action_name, $args)) {
                 $this->$action(...$this->getActionArguments($action));
             }
+            
             $this->postDispatch();
         }
 
