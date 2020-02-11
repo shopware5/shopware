@@ -1567,7 +1567,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             for ($i = 1; $i <= $numPages; ++$i) {
                 $template = $pdf->importPage($i);
                 $size = $pdf->getTemplateSize($template);
-                $pdf->AddPage('P', [$size['w'], $size['h']]);
+                $pdf->AddPage('P', [$size['width'], $size['height']]);
                 $pdf->useTemplate($template);
             }
         }
