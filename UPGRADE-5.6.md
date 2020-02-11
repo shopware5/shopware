@@ -22,6 +22,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `Country`
 * Added new config option to also show technical urls in hreflang
 * Added new less function `swhash` to get file hash for cache busting
+* Added new event `Shopware_Modules_Admin_SaveRegister_BeforeRegister` to cancel customer registration
 
 ### Changes
 

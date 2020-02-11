@@ -185,7 +185,6 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             'Shopware_Modules_Admin_SaveRegister_BeforeRegister',
             $errors,
             [
-                'subject' => $this,
                 'customer' => $customer,
                 'billing' => $billing,
                 'shipping' => $shipping,
