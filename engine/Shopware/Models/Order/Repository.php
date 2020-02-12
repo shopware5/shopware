@@ -793,8 +793,6 @@ class Repository extends ModelRepository
             $query->setParameter(':exclude', $excludeOrders, Connection::PARAM_INT_ARRAY);
         }
 
-        $query->setMaxResults(self::SEARCH_TERM_LIMIT);
-
         return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
     }
 
