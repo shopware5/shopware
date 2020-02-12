@@ -23,6 +23,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added new config option to also show technical urls in hreflang
 * Added new less function `swhash` to get file hash for cache busting
 * Added new event `Shopware_Modules_Admin_SaveRegister_BeforeRegister` to cancel customer registration
+* Added new property to plugin base class `$autoloadViews` which allows pre registration of template folder
+    * Its still required on backend extensions to call `extendsTemplate`
 
 ### Changes
 
