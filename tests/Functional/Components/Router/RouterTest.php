@@ -135,24 +135,4 @@ class RouterTest extends Enlight_Components_Test_TestCase
             static::assertEquals(array_intersect($match, $params), $params);
         }
     }
-
-    /**
-     * tests for passing an object to assembly (will be returned as array)
-     */
-    public function testArrayParamsWithObject(): void
-    {
-        $router = Shopware()->Container()->get('router');
-        $localRouter = clone $router;
-
-        $context = new Context();
-        $context->setShopId(1);
-        $localRouter->setContext($context);
-
-        $cls = new \stdClass();
-        $cls->test = 'It\'s a class';
-
-        $url = $localRouter->assemble([$cls]);
-        $match = $localRouter->match($url);
-        static::assertEquals(array_intersect($match, [(array) $cls]), [(array) $cls]);
-    }
 }
