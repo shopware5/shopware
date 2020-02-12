@@ -43,7 +43,7 @@ interface CacheInterface
      * @param int    $lifeTime the cache lifetime.
      *                         If != 0, sets a specific lifetime for this cache entry (0 => infinite lifeTime)
      *
-     * @return bool tRUE if the entry was successfully stored in the cache, FALSE otherwise
+     * @return bool TRUE if the entry was successfully stored in the cache, FALSE otherwise
      */
     public function save($id, $data, $lifeTime = 0);
 }
