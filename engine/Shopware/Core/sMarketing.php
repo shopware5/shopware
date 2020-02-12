@@ -55,8 +55,6 @@ class sMarketing implements \Enlight_Hook
     public $customerGroupId;
 
     /**
-     * @deprecated in Shopware 5.5.4, to be removed in 6.0
-     *
      * @var \Shopware\Models\Category\Category
      */
     private $category;

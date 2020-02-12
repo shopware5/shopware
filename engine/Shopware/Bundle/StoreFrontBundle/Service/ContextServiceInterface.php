@@ -29,7 +29,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface ContextServiceInterface
 {
     /**
-     * @deprecated since version 5.2, to be removed in 6.0 - Use getShopContext instead
      * The \Shopware\Bundle\StoreFrontBundle\Struct\Context class contains
      * all information about the current state.
      *
@@ -62,7 +61,6 @@ interface ContextServiceInterface
     public function getShopContext();
 
     /**
-     * @deprecated since version 5.2, to be removed in 6.0 - Use `getShopContext` instead
      * Requires the following data:
      * - Current shop
      * - Current customer group
@@ -76,7 +74,6 @@ interface ContextServiceInterface
     public function getProductContext();
 
     /**
-     * @deprecated since version 5.2, to be removed in 6.0 - Use `getShopContext` instead
      * Requires the following data:
      * - Location data of the current state. (area, country, state)
      *
@@ -85,8 +82,6 @@ interface ContextServiceInterface
     public function getLocationContext();
 
     /**
-     * @deprecated since version 5.2, to be removed in 6.0 - Use `initializeShopContext` instead
-     *
      * Initials a global context class which contains
      * all information about the current request state.
      */
@@ -99,24 +94,18 @@ interface ContextServiceInterface
     public function initializeShopContext();
 
     /**
-     * @deprecated since version 5.2, to be removed in 6.0 - Use `initializeShopContext` instead
-     *
      * Initials a location context class which contains
      * the information about the country state
      */
     public function initializeLocationContext();
 
     /**
-     * @deprecated since version 5.2, to be removed in 6.0 - Use `initializeShopContext` instead
-     *
      * Initials a product context class which contains
      * all required information to calculate a product.
      */
     public function initializeProductContext();
 
     /**
-     * @deprecated since version 5.2, to be removed in 6.0 - Use createShopContext instead
-     *
      * @param int         $shopId
      * @param int|null    $currencyId
      * @param string|null $customerGroupKey

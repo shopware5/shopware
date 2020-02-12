@@ -24,7 +24,6 @@
  * the configuration automatically. It loads the different resources, for example classes, loader or the
  * managers for the different packages (Hook, Plugin, Event).
  *
- * @deprecated since 5.2, to be removed in 6.0
  * @category   Enlight
  * @package    Enlight_Application
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
@@ -33,19 +32,16 @@
 class Enlight_Application
 {
     /**
-     * @deprecated since 5.2, to be removed in 6.0
      * @var string
      */
     protected $path;
 
     /**
-     * @deprecated since 5.2, to be removed in 6.0
      * @var string
      */
     protected $core_path;
 
     /**
-     * @deprecated since 5.2, to be removed in 6.0
      * @var Enlight_Application Instance of the Enlight application.
      * Will be set in the class constructor.
      */
@@ -61,7 +57,7 @@ class Enlight_Application
 
     /**
      * Returns directory separator
-     * @deprecated since 5.2, to be removed in 6.0
+     *
      * @return string
      */
     public static function DS()
@@ -74,7 +70,6 @@ class Enlight_Application
     /**
      * Returns the instance of the application
      *
-     * @deprecated since 5.2, to be removed in 6.0
      * @return Enlight_Application
      */
     public static function Instance()
@@ -87,7 +82,6 @@ class Enlight_Application
     /**
      * Returns the enlight path: <projectroot>/engine/Library/Enlight/
      *
-     * @deprecated since 5.2, to be removed in 6.0
      * @param string $path
      * @return string
      */
@@ -101,7 +95,6 @@ class Enlight_Application
     /**
      * Returns the enlight components path: <projectroot>/engine/Library/Enlight/Components/
      *
-     * @deprecated since 5.2, to be removed in 6.0
      * @param string $path
      * @return string
      */
@@ -116,7 +109,6 @@ class Enlight_Application
     /**
      * Returns the library path: <projectroot>/engine/Library/
      *
-     * @deprecated since 5.2, to be removed in 6.0
      * @param string $path
      * @return string
      */
@@ -147,7 +139,6 @@ class Enlight_Application
 /**
  * Proxy to Shopware()
  *
- * @deprecated since 5.2, to be removed in 6.0
  * @param   Enlight_Application $newInstance
  * @return  Enlight_Application
  */
