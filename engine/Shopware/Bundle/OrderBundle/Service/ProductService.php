@@ -64,7 +64,7 @@ class ProductService implements ProductServiceInterface
         $this->variantCoverService = $variantCoverService;
     }
 
-    public function getList(ShopContextInterface $context, array $numbers): array
+    public function getList(array $numbers, ShopContextInterface $context): array
     {
         $products = $this->listProductService->getList($numbers, $context);
         $propertySets = $this->propertyService->getList($products, $context);

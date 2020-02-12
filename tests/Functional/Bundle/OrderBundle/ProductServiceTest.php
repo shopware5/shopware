@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 
 class ProductServiceTest extends \Enlight_Components_Test_TestCase
 {
-    public function testGetAdditionalDetails()
+    public function testGetAdditionalDetails(): void
     {
         $productNumbers = ['SW10002.3', 'SW10161.1', 'SW10011', 'SW10012', 'SW10123.1', 'SW10214.1', 'SW10002.2'];
 
@@ -42,7 +42,7 @@ class ProductServiceTest extends \Enlight_Components_Test_TestCase
         // Product service should always return variant images
         Shopware()->Config()->offsetSet('forceArticleMainImageInListing', 1);
 
-        $result = $productService->getList($context->getShopContext(), $productNumbers);
+        $result = $productService->getList($productNumbers, $context->getShopContext());
 
         static::assertCount(count($productNumbers), $result);
 
@@ -78,5 +78,21 @@ class ProductServiceTest extends \Enlight_Components_Test_TestCase
         $images = array_column($images, 'source');
 
         static::assertEquals($testImages, $images);
+    }
+
+    public function testEqualsToCoreClass(): void
+    {
+        $someProductNumber = Shopware()->Container()->get('dbal_connection')->fetchColumn('SELECT ordernumber FROM s_articles_details WHERE active = 1 LIMIT 1');
+
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getContext();
+
+        $productData = Shopware()->Container()->get('modules')->Articles()->sGetPromotionById('fix', 0, $someProductNumber);
+        $products = Shopware()->Container()->get(ProductServiceInterface::class)->getList([$someProductNumber], $context);
+        $newProduct = array_shift($products);
+
+        // attributes contains object. assertSame shows is that the same instance. Also properties is a new key. It's okay
+        unset($newProduct['attributes'], $productData['attributes'], $newProduct['properties']);
+
+        static::assertSame($productData, $newProduct);
     }
 }

@@ -2521,7 +2521,7 @@ SQL;
                 $numbers[] = $product['ordernumber'];
             }
         }
-        $additionalDetails = $this->productService->getList($this->contextService->getShopContext(), $numbers);
+        $additionalDetails = $this->productService->getList($numbers, $this->contextService->getShopContext());
 
         foreach (array_keys($getProducts) as $key) {
             $getProducts[$key] = $this->eventManager->filter(
@@ -2805,7 +2805,7 @@ SELECT s_order_basket.id,
        IFNULL(catRo.id, 0) as hasCategory,
        s_articles_details.ordernumber
 FROM s_articles, s_order_basket, s_articles_details
-LEFT JOIN s_articles_avoid_customergroups avoid 
+LEFT JOIN s_articles_avoid_customergroups avoid
   ON avoid.articleID = s_articles_details.articleID
 LEFT JOIN s_articles_categories_ro catRo ON(catRo.articleID = s_articles_details.articleID AND catRo.categoryID = :mainCategoryId)
 WHERE s_order_basket.articleID = s_articles.id

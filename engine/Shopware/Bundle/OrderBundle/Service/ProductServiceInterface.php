@@ -28,5 +28,5 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface ProductServiceInterface
 {
-    public function getList(ShopContextInterface $context, array $numbers): array;
+    public function getList(array $numbers, ShopContextInterface $context): array;
 }

@@ -505,7 +505,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         $container = Shopware()->Container();
         /** @var ContextServiceInterface $context */
         $context = $container->get('shopware_storefront.context_service');
-        $additionalDetails = $container->get(ProductServiceInterface::class)->getList($context->getShopContext(), $numbers);
+        $additionalDetails = $container->get(ProductServiceInterface::class)->getList($numbers, $context->getShopContext());
         foreach ($positions as &$product) {
             if (empty($product['modus'])) {
                 $product['meta'] = $additionalDetails[$product['articleordernumber']];
