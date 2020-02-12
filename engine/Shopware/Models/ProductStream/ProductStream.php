@@ -74,8 +74,6 @@ class ProductStream extends ModelEntity
     private $type;
 
     /**
-     * @deprecated since version 5.3, to be removed in 6.0 - Use \Shopware\Models\ProductStream\ProductStream::$sortingId instead
-     *
      * @var string
      *
      * @ORM\Column(name="sorting", type="string", nullable=false)
@@ -168,17 +166,12 @@ class ProductStream extends ModelEntity
         $this->type = $type;
     }
 
-    /**
-     * @deprecated since version 5.3, to be removed in 6.0 - Use \Shopware\Models\ProductStream\ProductStream::$sortingId instead
-     */
     public function getSorting()
     {
         return $this->sorting;
     }
 
     /**
-     * @deprecated since version 5.3, to be removed in 6.0 - Use \Shopware\Models\ProductStream\ProductStream::$sortingId instead
-     *
      * @param string $sorting
      */
     public function setSorting($sorting)
