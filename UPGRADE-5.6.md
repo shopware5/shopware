@@ -30,6 +30,9 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Changed `\Shopware_Controllers_Backend_Base::getPaymentsAction` to optionally list all payment methods
 * Changed `\Shopware\Components\Cart\CartPersistService` to also persist cart item attributes
 * Changed blog statistics to work also with active http cache
+* Changed `\Shopware\Components\Routing\Router::assemble` and `\Shopware\Components\Routing\Router::match` default implementation handling arrays and encoded strings
+    * `Shopware\Components\Routing\Generators\DefaultGenerator::generate` will encode arrays as strings with `http_build_query`; objects result in an user error in 5.6 and Exception in 5.7
+    * `Shopware\Components\Routing\Matchers\DefaultMatcher::match` will try to convert encoded string values back to array representation
 
 ### Removals
 

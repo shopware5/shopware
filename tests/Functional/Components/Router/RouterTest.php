@@ -24,17 +24,20 @@
 
 namespace Shopware\Tests\Components\Router;
 
-class RouterTest extends \Enlight_Components_Test_TestCase
+use Enlight_Components_Test_TestCase;
+use Shopware\Components\Routing\Context;
+
+class RouterTest extends Enlight_Components_Test_TestCase
 {
     /**
      * Tests if a generated SEO route is the same with or without the _seo parameters
      */
-    public function testSeoRouteGeneration()
+    public function testSeoRouteGeneration(): void
     {
         $router = Shopware()->Container()->get('router');
         $localRouter = clone $router;
 
-        $context = new \Shopware\Components\Routing\Context();
+        $context = new Context();
         $context->setShopId(1);
         $localRouter->setContext($context);
 
@@ -47,12 +50,12 @@ class RouterTest extends \Enlight_Components_Test_TestCase
     /**
      * Tests that the seo route generation can be deactivated
      */
-    public function testDeactivatingSeoRouteGeneration()
+    public function testDeactivatingSeoRouteGeneration(): void
     {
         $router = Shopware()->Container()->get('router');
         $localRouter = clone $router;
 
-        $context = new \Shopware\Components\Routing\Context();
+        $context = new Context();
         $context->setShopId(1);
         $localRouter->setContext($context);
 
@@ -65,12 +68,12 @@ class RouterTest extends \Enlight_Components_Test_TestCase
     /**
      * Tests if a nonexisting seo route is the same with or without the _seo parameters
      */
-    public function testNoneExistingSeoRouteGeneration()
+    public function testNoneExistingSeoRouteGeneration(): void
     {
         $router = Shopware()->Container()->get('router');
         $localRouter = clone $router;
 
-        $context = new \Shopware\Components\Routing\Context();
+        $context = new Context();
         $context->setShopId(1);
         $localRouter->setContext($context);
 
@@ -88,12 +91,12 @@ class RouterTest extends \Enlight_Components_Test_TestCase
     /**
      * Tests if the default action is being ignored
      */
-    public function testDefaultActionDoesntMatter()
+    public function testDefaultActionDoesntMatter(): void
     {
         $router = Shopware()->Container()->get('router');
         $localRouter = clone $router;
 
-        $context = new \Shopware\Components\Routing\Context();
+        $context = new Context();
         $context->setShopId(1);
         $localRouter->setContext($context);
 
@@ -101,5 +104,38 @@ class RouterTest extends \Enlight_Components_Test_TestCase
         $withoutAction = $localRouter->assemble(['controller' => 'doesnotexist']);
 
         static::assertEquals($withAction, $withoutAction);
+    }
+
+    /**
+     * tests for complex arrays.
+     *
+     * @dataProvider getTestParamsProvider
+     */
+    public function testArrayParams(array $params): void
+    {
+        $router = Shopware()->Container()->get('router');
+        $localRouter = clone $router;
+
+        $context = new Context();
+        $context->setShopId(1);
+        $localRouter->setContext($context);
+
+        $url = $localRouter->assemble($params);
+        $match = $localRouter->match($url);
+        static::assertEquals(array_intersect($match, $params), $params);
+    }
+
+    public function getTestParamsProvider(): array
+    {
+        return [
+            [['foo' => 'bar']],
+            [['foo' => ['bar' => 'baz']]],
+            [['foo' => ['1', '2']]],
+            [['foo' => ['1', '3' => '2', '2' => '1']]],
+            [['param1', 'param2' => ['an', 'array']]],
+            [[0 => 1, 'foo']],
+            [['test' => ['often'], 'tests', 'moreTests' => 'value']],
+            [['go' => ['deeper' => ['and' => ['even' => 'deeper']]]]],
+        ];
     }
 }
