@@ -589,14 +589,14 @@ createShopwareVersionMessage = function() {
                     '<p>If you want to develop proprietary extensions that makes use of ExtJS (ie extensions that are not licensed under the GNU Affero General Public License, version 3, or a compatible license), you´ll need to license shopware SDK to get the necessary rights for the distribution of your extensions / plugins.</p>' +
                     '<p><strong>Doctrine 2</strong><span>MIT License</span><span>&nbsp;Origin: http://www.doctrine-project.org/</span></p>' +
                     '<p><strong>TinyMCE 3</strong><span>LGPL 2.1 License</span><span>&nbsp;Origin: Moxiecode Systems AB.</span></p>' +
-                    '<p><strong>Symfony 3</strong><span>MIT License</span><span>&nbsp;Origin: SensioLabs</span></p>' +
+                    '<p><strong>Symfony 4</strong><span>MIT License</span><span>&nbsp;Origin: SensioLabs</span></p>' +
                     '<p><strong>Smarty 3</strong><span>LGPL 2.1 License</span><span>&nbsp;Origin: New Digital Group, Inc.</span></p>' +
                     '<p><strong>Ace</strong><span>BSD License</span><span>&nbsp;Origin: https://ace.c9.io/</span></p>' +
                     '<p><strong>MPDF</strong><span>GPL License</span><span>&nbsp;Origin: https://mpdf.github.io</span></p>' +
                     '<p><strong>FPDF</strong><span>MIT License</span><span>&nbsp;Origin: http://www.fpdf.org/</span></p>' +
                     '<p><strong>FPDI</strong><span>MIT License</span><span>&nbsp;Origin: https://www.setasign.com/products/fpdi/about</span></p>' +
                     '<p><strong>Guzzle</strong><span>MIT License</span><span>&nbsp;Origin: http://guzzlephp.org</span></p>' +
-                    '<p><strong>Less.php</strong><span>Apache-2.0</span><span>&nbsp;Origin: http://lessphp.gpeasy.com</span></p>' +
+                    '<p><strong>Less.php</strong><span>Apache-2.0</span><span>&nbsp;Origin: https://github.com/wikimedia/less.php</span></p>' +
                     '<p><strong>Monolog</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/Seldaek/monolog</span></p>' +
                     '<p><strong>ElasticSearch</strong><span>LGPL License</span><span>&nbsp;Origin: https://github.com/elastic/elasticsearch-php</span></p>' +
                     '<p><strong>ongr/elasticsearch-dsl</strong><span>License</span><span>&nbsp;Origin: https://github.com/ongr-io/ElasticsearchDSL</span></p>' +

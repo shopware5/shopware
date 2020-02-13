@@ -58,7 +58,7 @@
         "doctrine/cache": "1.9.1",
         "doctrine/persistence": "1.2.0",
         "beberlei/assert": "3.2.6",
-        "oyejorge/less.php": "1.7.0.14",
+        "wikimedia/less.php": "2.0.0",
         "guzzlehttp/guzzle": "6.4.1",
         "elasticsearch/elasticsearch": "6.7.1",
         "ongr/elasticsearch-dsl": "6.0.3",
