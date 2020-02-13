@@ -79,7 +79,9 @@ class DefaultMatcher implements MatcherInterface
             $chunks = array_chunk($params, 2, false);
             foreach ($chunks as $chunk) {
                 if (isset($chunk[1])) {
-                    $query[$chunk[0]] = $chunk[1];
+                    // check if the parameter is a valid array or just a simple value
+                    parse_str($chunk[1], $parsed);
+                    $query[$chunk[0]] = (count($parsed) === 1 && reset($parsed) === '') ? $chunk[1] : $parsed;
                 } else {
                     $query[$chunk[0]] = '';
                 }

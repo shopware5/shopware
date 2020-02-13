@@ -63,17 +63,9 @@ class DefaultGenerator implements GeneratorInterface
             unset($params['_seo']);
         }
 
-        $module = isset($params[$context->getModuleKey()])
-            ? $params[$context->getModuleKey()]
-            : $this->dispatcher->getDefaultModule();
-
-        $controller = isset($params[$context->getControllerKey()])
-            ? $params[$context->getControllerKey()]
-            : $this->dispatcher->getDefaultControllerName();
-
-        $action = isset($params[$context->getActionKey()])
-            ? $params[$context->getActionKey()]
-            : $this->dispatcher->getDefaultAction();
+        $module = $params[$context->getModuleKey()] ?? $this->dispatcher->getDefaultModule();
+        $controller = $params[$context->getControllerKey()] ?? $this->dispatcher->getDefaultControllerName();
+        $action = $params[$context->getActionKey()] ?? $this->dispatcher->getDefaultAction();
 
         unset($params[$context->getModuleKey()],
             $params[$context->getControllerKey()],
@@ -93,8 +85,12 @@ class DefaultGenerator implements GeneratorInterface
         }
 
         foreach ($params as $key => $value) {
+            if (is_object($value)) {
+                trigger_error(sprintf('Using objects as params in %s:%s is deprecated since Shopware 5.6 and will result in an exception with 5.7.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+            }
+
             $route[] = $key;
-            $route[] = $value;
+            $route[] = is_array($value) ? http_build_query($value) : $value;
         }
 
         $route = array_map('urlencode', $route);
