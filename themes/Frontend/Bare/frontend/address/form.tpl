@@ -154,7 +154,7 @@
                                type="text"
                                required="required"
                                aria-required="true"
-                               placeholder="{s name='RegisterBillingPlaceholderStreet' namespace="frontend/register/billing_fieldset"}}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
+                               placeholder="{s name='RegisterBillingPlaceholderStreet' namespace="frontend/register/billing_fieldset"}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
                                id="street"
                                value="{$formData.street|escape}"
                                class="address--field address--field-street is--required{if $error_flags.street} has--error{/if}"/>
