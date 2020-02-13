@@ -57,7 +57,7 @@ class Zend_Config_Xml extends Zend_Config
      *
      * Note that the keys in $section will override any keys of the same
      * name in the sections that have been included via "extends".
-     * 
+     *
      * The $options parameter may be provided as either a boolean or an array.
      * If provided as a boolean, this sets the $allowModifications option of
      * Zend_Config. If provided as an array, there are two configuration
@@ -70,7 +70,7 @@ class Zend_Config_Xml extends Zend_Config
      *
      * @param  string        $xml     XML file or string to process
      * @param  mixed         $section Section to process
-     * @param  array|boolean $options 
+     * @param  array|boolean $options
      * @throws Zend_Config_Exception When xml is not set or cannot be loaded
      * @throws Zend_Config_Exception When section $sectionName cannot be found in $xml
      */

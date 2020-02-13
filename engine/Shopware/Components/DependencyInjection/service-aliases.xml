@@ -127,7 +127,7 @@
         <service id="Shopware\Components\Model\CategorySubscriber" alias="categorysubscriber" />
         <service id="Shopware\Components\CategoryHandling\CategoryDuplicator" alias="categoryduplicator" />
         <service id="Shopware\Components\HolidayTableUpdater" alias="shopware.holiday_table_updater" />
-        <service id="Zend\Escaper\Escaper" alias="zend.escaper" />
+        <service id="Laminas\Escaper\Escaper" alias="zend.escaper" />
         <service id="Shopware\Components\Escaper\Escaper" alias="shopware.escaper" />
         <service id="Shopware\Components\Snippet\DatabaseHandler" alias="shopware.snippet_database_handler" />
         <service id="Shopware\Components\Snippet\SnippetValidator" alias="shopware.snippet_validator" />

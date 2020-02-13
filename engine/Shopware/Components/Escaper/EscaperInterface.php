@@ -25,7 +25,7 @@
 namespace Shopware\Components\Escaper;
 
 /**
- * @see https://github.com/zendframework/zend-escaper/blob/master/src/Escaper.php
+ * @see https://github.com/laminas/laminas-escaper/blob/master/src/Escaper.php
  */
 interface EscaperInterface
 {

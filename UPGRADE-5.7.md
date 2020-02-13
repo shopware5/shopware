@@ -15,6 +15,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Changed FPDF version to 1.8.2
 * Changed FPDI version to 2.2.0
 * Changed mPDF version to 8.0.4
+* Migrated Zend components to new Laminas
 
 ### Additions
 

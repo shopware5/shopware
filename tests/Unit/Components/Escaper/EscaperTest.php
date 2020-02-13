@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Components\Escaper;
 
+use Laminas\Escaper\Escaper as LaminasEscaper;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Escaper\Escaper;
 
@@ -31,7 +32,7 @@ class EscaperTest extends TestCase
 {
     public function testItCastsNullToEmptyStrings()
     {
-        $escaper = new Escaper(new \Zend\Escaper\Escaper('UTF-8'));
+        $escaper = new Escaper(new LaminasEscaper('UTF-8'));
 
         static::assertEquals('', $escaper->escapeHtml(null));
         static::assertEquals('', $escaper->escapeHtmlAttr(null));
