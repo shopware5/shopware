@@ -315,12 +315,12 @@
             <argument type="service" id="Doctrine\DBAL\Connection" />
         </service>
 
-        <service id="zend.escaper" class="Zend\Escaper\Escaper" public="false">
+        <service id="zend.escaper" class="Laminas\Escaper\Escaper" public="false">
             <argument type="string">utf-8</argument>
         </service>
 
         <service id="shopware.escaper" class="Shopware\Components\Escaper\Escaper">
-            <argument type="service" id="Zend\Escaper\Escaper" />
+            <argument type="service" id="Laminas\Escaper\Escaper" />
         </service>
 
         <service id="shopware.snippet_database_handler" class="Shopware\Components\Snippet\DatabaseHandler">

@@ -25,16 +25,16 @@
 namespace Shopware\Components\Escaper;
 
 /**
- * @see https://github.com/zendframework/zend-escaper/blob/master/src/Escaper.php
+ * @see https://github.com/laminas/laminas-escaper/blob/master/src/Escaper.php
  */
 class Escaper implements EscaperInterface
 {
     /**
-     * @var \Zend\Escaper\Escaper
+     * @var \Laminas\Escaper\Escaper
      */
     private $escaper;
 
-    public function __construct(\Zend\Escaper\Escaper $escaper)
+    public function __construct(\Laminas\Escaper\Escaper $escaper)
     {
         $this->escaper = $escaper;
     }
