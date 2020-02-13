@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\VariantCoverServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 
-class ProductService implements ProductServiceInterface
+class OrderListProductService implements OrderListProductServiceInterface
 {
     /**
      * @var ListProductServiceInterface

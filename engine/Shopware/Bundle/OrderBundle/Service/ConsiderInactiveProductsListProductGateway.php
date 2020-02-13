@@ -27,7 +27,7 @@ namespace Shopware\Bundle\OrderBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ListProductGateway;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class InactiveProductListProductGateway extends ListProductGateway
+class ConsiderInactiveProductsListProductGateway extends ListProductGateway
 {
     protected function getQuery(array $numbers, ShopContextInterface $context)
     {

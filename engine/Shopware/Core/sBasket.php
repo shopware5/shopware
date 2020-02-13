@@ -23,7 +23,7 @@
  */
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\OrderBundle\Service\ProductServiceInterface;
+use Shopware\Bundle\OrderBundle\Service\OrderListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Components\Cart\BasketHelperInterface;
@@ -127,9 +127,9 @@ class sBasket implements \Enlight_Hook
     private $proportionalTaxCalculation;
 
     /**
-     * @var ProductServiceInterface
+     * @var OrderListProductServiceInterface
      */
-    private $productService;
+    private $orderListProductService;
 
     /**
      * @throws \Exception
@@ -144,8 +144,7 @@ class sBasket implements \Enlight_Hook
         Shopware_Components_Modules $moduleManager = null,
         \sSystem $systemModule = null,
         StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
-        StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null,
-        ProductServiceInterface $productService = null
+        StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null
     ) {
         $this->db = $db ?: Shopware()->Db();
         $this->eventManager = $eventManager ?: Shopware()->Events();
@@ -173,7 +172,7 @@ class sBasket implements \Enlight_Hook
         }
 
         $this->proportionalTaxCalculation = $this->config->get('proportionalTaxCalculation');
-        $this->productService = $productService ?: Shopware()->Container()->get(ProductServiceInterface::class);
+        $this->orderListProductService = Shopware()->Container()->get(OrderListProductServiceInterface::class);
     }
 
     /**
@@ -2521,7 +2520,7 @@ SQL;
                 $numbers[] = $product['ordernumber'];
             }
         }
-        $additionalDetails = $this->productService->getList($numbers, $this->contextService->getShopContext());
+        $additionalDetails = $this->orderListProductService->getList($numbers, $this->contextService->getShopContext());
 
         foreach (array_keys($getProducts) as $key) {
             $getProducts[$key] = $this->eventManager->filter(

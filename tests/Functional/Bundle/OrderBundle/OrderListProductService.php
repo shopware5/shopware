@@ -24,10 +24,11 @@
 
 namespace Shopware\Tests\Functional\Bundle\OrderBundle;
 
-use Shopware\Bundle\OrderBundle\Service\ProductServiceInterface;
+use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\OrderBundle\Service\OrderListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 
-class ProductServiceTest extends \Enlight_Components_Test_TestCase
+class OrderListProductService extends TestCase
 {
     public function testGetAdditionalDetails(): void
     {
@@ -36,8 +37,8 @@ class ProductServiceTest extends \Enlight_Components_Test_TestCase
         /** @var ContextServiceInterface $context */
         $context = Shopware()->Container()->get('shopware_storefront.context_service');
 
-        /** @var ProductServiceInterface $productService */
-        $productService = Shopware()->Container()->get(ProductServiceInterface::class);
+        /** @var OrderListProductServiceInterface $productService */
+        $productService = Shopware()->Container()->get(OrderListProductServiceInterface::class);
 
         // Product service should always return variant images
         Shopware()->Config()->offsetSet('forceArticleMainImageInListing', 1);
@@ -87,7 +88,7 @@ class ProductServiceTest extends \Enlight_Components_Test_TestCase
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getContext();
 
         $productData = Shopware()->Container()->get('modules')->Articles()->sGetPromotionById('fix', 0, $someProductNumber);
-        $products = Shopware()->Container()->get(ProductServiceInterface::class)->getList([$someProductNumber], $context);
+        $products = Shopware()->Container()->get(OrderListProductServiceInterface::class)->getList([$someProductNumber], $context);
         $newProduct = array_shift($products);
 
         // attributes contains object. assertSame shows is that the same instance. Also properties is a new key. It's okay

@@ -23,7 +23,7 @@
  */
 
 use Mpdf\Mpdf;
-use Shopware\Bundle\OrderBundle\Service\ProductServiceInterface;
+use Shopware\Bundle\OrderBundle\Service\OrderListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\NumberRangeIncrementerInterface;
 
@@ -505,7 +505,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         $container = Shopware()->Container();
         /** @var ContextServiceInterface $context */
         $context = $container->get('shopware_storefront.context_service');
-        $additionalDetails = $container->get(ProductServiceInterface::class)->getList($numbers, $context->getShopContext());
+        $additionalDetails = $container->get(OrderListProductServiceInterface::class)->getList($numbers, $context->getShopContext());
         foreach ($positions as &$product) {
             if (empty($product['modus'])) {
                 $product['meta'] = $additionalDetails[$product['articleordernumber']];

@@ -26,7 +26,7 @@ namespace Shopware\Bundle\OrderBundle\Service;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-interface ProductServiceInterface
+interface OrderListProductServiceInterface
 {
     public function getList(array $numbers, ShopContextInterface $context): array;
 }
