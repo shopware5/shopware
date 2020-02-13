@@ -201,5 +201,15 @@ Ext.define('Shopware.form.field.SingleSelection', {
                 me.combo.setValue(records);
             }
         });
+    },
+
+    enable: function () {
+        this.callParent(arguments);
+        this.combo.enable();
+    },
+
+    disable: function () {
+        this.callParent(arguments);
+        this.combo.disable();
     }
 });
