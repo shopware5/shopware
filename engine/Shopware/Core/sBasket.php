@@ -2651,6 +2651,7 @@ SQL;
             // Get additional basket meta data for each product
             if ($getProducts[$key]['modus'] == 0) {
                 $getProducts[$key]['additional_details'] = $additionalDetails[$getProducts[$key]['ordernumber']];
+                $getProducts[$key]['shippingtime'] = $additionalDetails[$getProducts[$key]['ordernumber']]['shippingtime'];
             }
 
             $getUnitData = [];
@@ -2843,14 +2844,7 @@ SQL;
             ad.purchaseunit,
             COALESCE (ad.unitID, mad.unitID) AS unitID,
             ad.laststock,
-            COALESCE(
-                transArticle.shippingtime,
-                ad.shippingtime
-            ) AS shippingtime,
-            COALESCE(
-                coreTransDetail.objectdata,
-                coreTransArticle.objectdata
-            ) AS transShippingTime,
+            ad.shippingtime,
             ad.releasedate,
             ad.releasedate AS sReleaseDate,
             COALESCE (ad.ean, mad.ean) AS ean,
@@ -2866,63 +2860,17 @@ SQL;
         LEFT JOIN s_articles_details AS ad ON ad.ordernumber = s_order_basket.ordernumber
         LEFT JOIN s_articles a ON (a.id = ad.articleID)
         LEFT JOIN s_articles_details AS mad ON mad.id = a.main_detail_id
-        LEFT JOIN s_order_basket_attributes ON s_order_basket.id = s_order_basket_attributes.basketID'
-            // article shipping time translation stuff below:
-        .'
-        LEFT JOIN s_articles_translations AS transArticle ON transArticle.articleID = ad.articleID
-            AND a.main_detail_id = ad.id
-            AND transArticle.languageID = ?
-        LEFT JOIN s_articles_translations AS transDetail ON transDetail.articleID = ad.id
-            AND a.main_detail_id <> ad.id
-            AND transDetail.languageID = ?
-        LEFT JOIN s_core_translations AS coreTransArticle ON coreTransArticle.objectkey = a.id
-            AND a.main_detail_id = ad.id
-            AND coreTransArticle.objecttype = \'article\'
-            AND coreTransArticle.objectlanguage = ?
-        LEFT JOIN s_core_translations AS coreTransDetail ON coreTransDetail.objectkey = ad.id
-            AND a.main_detail_id <> ad.id
-            AND coreTransDetail.objecttype = \'variant\'
-            AND coreTransDetail.objectlanguage = ?
+        LEFT JOIN s_order_basket_attributes ON s_order_basket.id = s_order_basket_attributes.basketID
         WHERE sessionID=?
         ORDER BY id ASC, datum DESC
         ';
-        $sessionId = $this->session->get('sessionId');
-        $shopId = Shopware()->Shop()->getId();
         $sql = $this->eventManager->filter(
             'Shopware_Modules_Basket_GetBasket_FilterSQL',
             $sql,
-            [
-                'subject' => $this,
-                'sessionId' => &$sessionId,
-                'shopID' => &$shopId
-            ]
+            ['subject' => $this]
         );
 
-        $basketItems = $this->db->fetchAll(
-            $sql,
-            [
-                $shopId,
-                $shopId,
-                $shopId,
-                $shopId,
-                $sessionId
-            ]
-        );
-
-        foreach ($basketItems as $basketPosition => $basketItem) {
-            if (!empty($basketItem['transShippingTime'])) {
-                $shippingTime = @unserialize($basketItem['transShippingTime']);
-
-                if (!empty($shippingTime)) {
-                    $basketItems[$basketPosition]['shippingtime'] = $shippingTime['txtshippingtime'];
-                }
-            }
-
-            // unset the origin one, since we don't need it anymore, to free memory:
-            unset($basketItems[$basketPosition]['transShippingTime']);
-        }
-
-        return $basketItems;
+        return $this->db->fetchAll($sql, [$this->session->get('sessionId')]);
     }
 
     /**
