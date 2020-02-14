@@ -39,12 +39,8 @@ function smarty_function_compileLess($params, $template)
         \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT
     );
 
-    /** @var Enlight_Controller_Front $front */
-    $front = Shopware()->Front();
-    $secure = $front->Request()->isSecure();
-
     $file = $pathResolver->getCssFilePath($shop, $time);
-    $url = $pathResolver->formatPathToUrl($file, $shop, $secure);
+    $url = $pathResolver->formatPathToUrl($file, $shop);
 
     if (!$settings->getForceCompile() && file_exists($file)) {
         // see: http://stackoverflow.com/a/9473886
