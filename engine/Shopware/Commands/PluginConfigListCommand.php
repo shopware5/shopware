@@ -69,7 +69,6 @@ class PluginConfigListCommand extends ShopwareCommand implements CompletionAware
         $this
             ->setName('sw:plugin:config:list')
             ->setDescription('Lists plugin configuration.')
-            /* @deprecated since 5.6, to be removed in 6.0 */
             ->addOption(
                 'shop',
                 null,

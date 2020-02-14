@@ -119,7 +119,6 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
         $this
             ->setName('sw:rebuild:seo:index')
             ->setDescription('Rebuild the SEO index')
-            /* @deprecated since 5.6, to be removed in 6.0 */
             ->addArgument('shopId', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The Id of the shop (deprecated)')
             ->addOption('shopId', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'The Id of the shop (multiple Ids -> shopId={1,2})')
             ->setHelp('The <info>%command.name%</info> rebuilds the SEO index')

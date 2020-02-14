@@ -86,8 +86,6 @@ class Shopware extends Enlight_Application
     /**
      * Returns the name of the application
      *
-     * @deprecated since 5.2, to be removed in 6.0
-     *
      * @return string
      */
     public function App()
@@ -100,8 +98,6 @@ class Shopware extends Enlight_Application
     /**
      * Returns the application environment method
      *
-     * @deprecated since 5.2, to be removed in 6.0
-     *
      * @return string
      */
     public function Environment()
@@ -112,8 +108,6 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * @deprecated since 5.2, to be removed in 6.0. Use Shopware()->DocPath() instead.
-     *
      * @param string $path
      *
      * @return string
@@ -319,8 +313,6 @@ class Shopware extends Enlight_Application
      * plugin specified event manager.
      * The passed manager has to be an instance of the Enlight_Event_EventManager,
      * otherwise the function throws an exception.
-     *
-     * @deprecated since 5.2, to be removed in 6.0
      */
     public function setEventManager(Enlight_Event_EventManager $manager)
     {
@@ -331,8 +323,6 @@ class Shopware extends Enlight_Application
 
     /**
      * Returns the instance of the application bootstrap
-     *
-     * @deprecated since 5.2, to be removed in 6.0
      *
      * @return Shopware_Bootstrap
      */

@@ -74,7 +74,6 @@ class WarmUpHttpCacheCommand extends ShopwareCommand implements CompletionAwareI
         $this
             ->setName('sw:warm:http:cache')
             ->setDescription('Warm up http cache (everything by default)')
-            /* @deprecated since 5.6, to be removed in 6.0 */
             ->addArgument('shopId', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The Id of the shop (deprecated)')
             ->addOption('shopId', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'The Id of the shop (multiple Ids -> shopId={1,2})')
             ->addOption('clear-cache', 'c', InputOption::VALUE_NONE, 'Clear complete httpcache before warmup')
