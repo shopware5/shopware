@@ -23,6 +23,7 @@
  */
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\OrderBundle\Service\OrderListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Components\Cart\BasketHelperInterface;
@@ -126,6 +127,11 @@ class sBasket implements \Enlight_Hook
     private $proportionalTaxCalculation;
 
     /**
+     * @var OrderListProductServiceInterface
+     */
+    private $orderListProductService;
+
+    /**
      * @throws \Exception
      */
     public function __construct(
@@ -166,6 +172,7 @@ class sBasket implements \Enlight_Hook
         }
 
         $this->proportionalTaxCalculation = $this->config->get('proportionalTaxCalculation');
+        $this->orderListProductService = Shopware()->Container()->get(OrderListProductServiceInterface::class);
     }
 
     /**
@@ -2463,61 +2470,6 @@ SQL;
     }
 
     /**
-     * @param string[] $numbers Product numbers
-     *
-     * @throws \Exception
-     *
-     * @return array Basket item details
-     */
-    private function getBasketAdditionalDetails(array $numbers)
-    {
-        $container = Shopware()->Container();
-        /** @var \Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface $listProduct */
-        $listProduct = $container->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class);
-        /** @var \Shopware\Bundle\StoreFrontBundle\Service\PropertyServiceInterface $propertyService */
-        $propertyService = $container->get(\Shopware\Bundle\StoreFrontBundle\Service\PropertyServiceInterface::class);
-        /** @var \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface $context */
-        $context = $container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class);
-        /** @var \Shopware\Components\Compatibility\LegacyStructConverter $legacyStructConverter */
-        $legacyStructConverter = $container->get(\Shopware\Components\Compatibility\LegacyStructConverter::class);
-
-        $products = $listProduct->getList($numbers, $context->getShopContext());
-        $propertySets = $propertyService->getList($products, $context->getShopContext());
-
-        $covers = $container->get(\Shopware\Bundle\StoreFrontBundle\Service\VariantCoverServiceInterface::class)
-            ->getList($products, $context->getShopContext());
-
-        $details = [];
-        foreach ($products as $product) {
-            $promotion = $legacyStructConverter->convertListProductStruct($product);
-
-            if ($product->hasConfigurator()) {
-                /** @var StoreFrontBundle\Struct\Product\Price $variantPrice */
-                $variantPrice = $product->getVariantPrice();
-                $promotion['referenceprice'] = $variantPrice->getCalculatedReferencePrice();
-            }
-
-            if (isset($covers[$product->getNumber()])) {
-                $promotion['image'] = $legacyStructConverter->convertMediaStruct($covers[$product->getNumber()]);
-            }
-
-            if ($product->hasProperties() && isset($propertySets[$product->getNumber()])) {
-                $propertySet = $propertySets[$product->getNumber()];
-
-                $promotion['sProperties'] = $legacyStructConverter->convertPropertySetStruct($propertySet);
-                $promotion['filtergroupID'] = $propertySet->getId();
-                $promotion['properties'] = array_map(function ($property) {
-                    return $property['name'] . ':&nbsp;' . $property['value'];
-                }, $promotion['sProperties']);
-                $promotion['properties'] = implode(',&nbsp;', $promotion['properties']);
-            }
-            $details[$product->getNumber()] = $promotion;
-        }
-
-        return $details;
-    }
-
-    /**
      * @param array $image
      *
      * @return array
@@ -2568,7 +2520,7 @@ SQL;
                 $numbers[] = $product['ordernumber'];
             }
         }
-        $additionalDetails = $this->getBasketAdditionalDetails($numbers);
+        $additionalDetails = $this->orderListProductService->getList($numbers, $this->contextService->getShopContext());
 
         foreach (array_keys($getProducts) as $key) {
             $getProducts[$key] = $this->eventManager->filter(
@@ -2852,7 +2804,7 @@ SELECT s_order_basket.id,
        IFNULL(catRo.id, 0) as hasCategory,
        s_articles_details.ordernumber
 FROM s_articles, s_order_basket, s_articles_details
-LEFT JOIN s_articles_avoid_customergroups avoid 
+LEFT JOIN s_articles_avoid_customergroups avoid
   ON avoid.articleID = s_articles_details.articleID
 LEFT JOIN s_articles_categories_ro catRo ON(catRo.articleID = s_articles_details.articleID AND catRo.categoryID = :mainCategoryId)
 WHERE s_order_basket.articleID = s_articles.id

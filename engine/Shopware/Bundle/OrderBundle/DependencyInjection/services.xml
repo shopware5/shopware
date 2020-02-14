@@ -30,5 +30,24 @@
             <tag name="shopware.event_subscriber"/>
         </service>
 
+        <service id="Shopware\Bundle\OrderBundle\Service\OrderListProductServiceInterface"
+                 class="Shopware\Bundle\OrderBundle\Service\OrderListProductService">
+            <argument type="service" id="shopware_order.consider_inactive_list_product_service"/>
+            <argument type="service" id="shopware_storefront.property_service"/>
+            <argument type="service" id="legacy_struct_converter"/>
+            <argument type="service" id="shopware_storefront.variant_cover_service"/>
+        </service>
+
+        <service id="shopware_order.consider_inactive_list_product_service"
+                 parent="shopware_storefront.list_product_service"
+                 class="Shopware\Bundle\StoreFrontBundle\Service\Core\ListProductService"
+                 public="true">
+            <argument type="service" index="0" id="Shopware\Bundle\OrderBundle\Service\ConsiderInactiveProductsListProductGateway"/>
+        </service>
+
+        <service id="Shopware\Bundle\OrderBundle\Service\ConsiderInactiveProductsListProductGateway"
+                 parent="shopware_storefront.list_product_gateway"
+                 public="true">
+        </service>
     </services>
 </container>
