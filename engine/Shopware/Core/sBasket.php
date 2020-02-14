@@ -2651,6 +2651,7 @@ SQL;
             // Get additional basket meta data for each product
             if ($getProducts[$key]['modus'] == 0) {
                 $getProducts[$key]['additional_details'] = $additionalDetails[$getProducts[$key]['ordernumber']];
+                $getProducts[$key]['shippingtime'] = $additionalDetails[$getProducts[$key]['ordernumber']]['shippingtime'];
             }
 
             $getUnitData = [];
