@@ -4063,7 +4063,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             // If the "to" value isn't numeric, set the place holder "beliebig"
             if ($priceData['to'] <= 0) {
-                $priceData['to'] = 'beliebig';
+                $priceData['to'] = Price::NO_PRICE_LIMIT;
             }
 
             if ($customerGroup->getTaxInput()) {

@@ -26,6 +26,7 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Models\Article\Price;
 use Shopware_Components_Config;
 
 class PriceHelper implements PriceHelperInterface
@@ -106,7 +107,8 @@ class PriceHelper implements PriceHelperInterface
 
         $graduation = 'customerPrice.from = 1';
         if ($this->config->get('useLastGraduationForCheapestPrice')) {
-            $graduation = "IF(priceGroup.id IS NOT NULL, customerPrice.from = 1, customerPrice.to = 'beliebig')";
+            $graduation = 'IF(priceGroup.id IS NOT NULL, customerPrice.from = 1, customerPrice.to = :toPrice)';
+            $query->setParameter(':toPrice', Price::NO_PRICE_LIMIT);
         }
 
         $query->leftJoin(
@@ -136,7 +138,8 @@ class PriceHelper implements PriceHelperInterface
         $graduation = 'defaultPrice.from = 1';
         $discountStart = '1';
         if ($this->config->get('useLastGraduationForCheapestPrice')) {
-            $graduation = "IF(priceGroup.id IS NOT NULL, defaultPrice.from = 1, defaultPrice.to = 'beliebig')";
+            $graduation = 'IF(priceGroup.id IS NOT NULL, defaultPrice.from = 1, defaultPrice.to = :toPrice)';
+            $query->setParameter(':toPrice', Price::NO_PRICE_LIMIT);
             $discountStart = '(SELECT MAX(discountstart) FROM s_core_pricegroups_discounts subPriceGroup WHERE subPriceGroup.id = priceGroup.id AND subPriceGroup.customergroupID = :priceGroupCustomerGroup)';
         }
 
@@ -177,8 +180,8 @@ class PriceHelper implements PriceHelperInterface
         if ($this->config->get('hideNoInStock')) {
             $stockCondition = <<< SQL
 AND (
-      (availableVariant.laststock * availableVariant.instock) 
-      >= 
+      (availableVariant.laststock * availableVariant.instock)
+      >=
       (availableVariant.laststock * availableVariant.minpurchase)
 )
 SQL;

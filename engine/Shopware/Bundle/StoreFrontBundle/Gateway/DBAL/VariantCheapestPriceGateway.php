@@ -31,6 +31,7 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Models\Article\Price;
 
 class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGatewayInterface
 {
@@ -307,11 +308,12 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
         $countSubQuery = clone $cheapestPriceQuery;
         $graduation = 'IF(prices.id IS NOT NULL, prices.from = 1, defaultPrices.from = 1)';
         if ($this->config->get('useLastGraduationForCheapestPrice')) {
-            $graduation = "CASE WHEN prices.id IS NOT NULL THEN
-                                (IF(priceGroup.id IS NOT NULL, prices.from = 1, prices.to = 'beliebig'))
+            $graduation = 'CASE WHEN prices.id IS NOT NULL THEN
+                                (IF(priceGroup.id IS NOT NULL, prices.from = 1, prices.to = :toPrice))
                            ELSE
-                                (IF(priceGroup.id IS NOT NULL, defaultPrices.from = 1, defaultPrices.to = 'beliebig'))
-                           END";
+                                (IF(priceGroup.id IS NOT NULL, defaultPrices.from = 1, defaultPrices.to = :toPrice))
+                           END';
+            $cheapestPriceQuery->setParameter(':toPrice', Price::NO_PRICE_LIMIT);
         }
         $cheapestPriceQuery->andWhere($graduation);
 
@@ -350,6 +352,10 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
         $baseQuery->select('mainDetail.ordernumber, (' . $cheapestPriceIdQuery->getSQL() . ') as id, ( ' . $countQuery->getSQL() . ' ) as different_price_count');
         $baseQuery->from('s_articles_details', 'mainDetail');
         $baseQuery->where('mainDetail.id IN (:variants)');
+
+        if ($this->config->get('useLastGraduationForCheapestPrice')) {
+            $baseQuery->setParameter(':toPrice', Price::NO_PRICE_LIMIT);
+        }
 
         return $baseQuery;
     }

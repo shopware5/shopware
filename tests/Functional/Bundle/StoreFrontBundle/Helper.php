@@ -852,7 +852,7 @@ class Helper
             ],
             [
                 'from' => 21,
-                'to' => 'beliebig',
+                'to' => Models\Article\Price::NO_PRICE_LIMIT,
                 'price' => $priceOffset + 50.00,
                 'customerGroupKey' => $group,
                 'pseudoPrice' => $priceOffset + 60,

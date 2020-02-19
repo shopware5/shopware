@@ -28,6 +28,7 @@ use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Article\Configurator\Group;
+use Shopware\Models\Article\Price;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
@@ -339,7 +340,7 @@ class VariantConditionWithPriceGroupTest extends TestCase
     {
         return [
             'from' => 1,
-            'to' => 'beliebig',
+            'to' => Price::NO_PRICE_LIMIT,
             'price' => $price,
             'customerGroupKey' => $group,
             'pseudoPrice' => $price + 10,

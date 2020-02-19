@@ -26,6 +26,7 @@ namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Models\Article\Price;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
@@ -219,7 +220,7 @@ class PriceConditionTest extends TestCase
 
             $product['mainDetail']['prices'][] = [
                  'from' => 1,
-                 'to' => 'beliebig',
+                 'to' => Price::NO_PRICE_LIMIT,
                  'price' => $price,
                  'customerGroupKey' => $customerGroup,
             ];

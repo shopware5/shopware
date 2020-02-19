@@ -35,6 +35,8 @@ use Shopware\Models\Customer\Group as CustomerGroup;
  */
 class Price extends LazyFetchModelEntity
 {
+    public const NO_PRICE_LIMIT = 'beliebig';
+
     /**
      * OWNING SIDE
      *
@@ -107,7 +109,7 @@ class Price extends LazyFetchModelEntity
      *
      * @ORM\Column(name="`to`", type="string", nullable=true)
      */
-    private $to = 'beliebig';
+    private $to = self::NO_PRICE_LIMIT;
 
     /**
      * @var float
@@ -217,7 +219,7 @@ class Price extends LazyFetchModelEntity
     public function setTo($to)
     {
         if ($to === null) {
-            $to = 'beliebig';
+            $to = static::NO_PRICE_LIMIT;
         }
         $this->to = $to;
 

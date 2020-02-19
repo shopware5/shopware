@@ -899,7 +899,7 @@ class Variant extends Resource implements BatchInterface
             $priceData['to'] = (int) $priceData['to'];
             // if the "to" value isn't numeric, set the place holder "beliebig"
             if ($priceData['to'] <= 0) {
-                $priceData['to'] = 'beliebig';
+                $priceData['to'] = Price::NO_PRICE_LIMIT;
             }
         }
 

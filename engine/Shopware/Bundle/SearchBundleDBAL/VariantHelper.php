@@ -32,6 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomListingHydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\ReflectionHelper;
+use Shopware\Models\Article\Price;
 
 class VariantHelper implements VariantHelperInterface
 {
@@ -379,7 +380,8 @@ class VariantHelper implements VariantHelperInterface
         }
 
         if ($this->config->get('useLastGraduationForCheapestPrice')) {
-            $query->andWhere("IF(priceGroup.id IS NOT NULL, prices.from = 1, prices.to = 'beliebig')");
+            $query->andWhere('IF(priceGroup.id IS NOT NULL, prices.from = 1, prices.to = :toPrice)');
+            $query->setParameter(':toPrice', Price::NO_PRICE_LIMIT);
         } else {
             $query->andWhere('prices.from = 1');
         }

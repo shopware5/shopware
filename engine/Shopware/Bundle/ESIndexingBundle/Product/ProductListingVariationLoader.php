@@ -35,6 +35,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Option;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Models\Article\Price;
 use Shopware_Components_Config;
 
 class ProductListingVariationLoader
@@ -401,7 +402,7 @@ class ProductListingVariationLoader
 
         $priceListingQuery->innerJoin('availableVariant', '(' . $priceTable . ')', 'prices', 'availableVariant.id = prices.articledetailsID');
         if ($this->config->get('useLastGraduationForCheapestPrice')) {
-            $priceListingQuery->andWhere("prices.to = 'beliebig'");
+            $priceListingQuery->andWhere('prices.to = :toPrice');
         } else {
             $priceListingQuery->andWhere('prices.from = 1');
         }
@@ -410,7 +411,7 @@ class ProductListingVariationLoader
 
         $onSalePriceTable = $this->listingPriceHelper->getPriceTable($context);
         $onSalePriceTable->andWhere('defaultPrice.articledetailsID IN (:variants)');
-        $onSalePriceListingQuery->innerJoin('availableVariant', '(' . $onSalePriceTable . ')', 'prices', 'availableVariant.id = prices.articledetailsID');
+        $onSalePriceListingQuery->innerJoin('availableVariant', '(' . $onSalePriceTable->getSQL() . ')', 'prices', 'availableVariant.id = prices.articledetailsID');
         $onSalePriceListingQuery->andWhere('prices.from = 1');
 
         $subPriceQuery = $this->connection->createQueryBuilder();
@@ -418,11 +419,11 @@ class ProductListingVariationLoader
         $subPriceQuery->addSelect('IFNULL(prices.articledetailsID, onsalePriceList.articledetailsID) as articledetailsID');
         $subPriceQuery->addSelect('IFNULL(prices.price, onsalePriceList.price) as price');
         $subPriceQuery->from('s_articles_details', 'details');
-        $subPriceQuery->leftJoin('details', '(' . $priceListingQuery . ')', 'prices', 'details.id = prices.articledetailsID');
-        $subPriceQuery->leftJoin('details', '(' . $onSalePriceListingQuery . ')', 'onsalePriceList', 'details.id = onsalePriceList.articledetailsID');
+        $subPriceQuery->leftJoin('details', '(' . $priceListingQuery->getSQL() . ')', 'prices', 'details.id = prices.articledetailsID');
+        $subPriceQuery->leftJoin('details', '(' . $onSalePriceListingQuery->getSQL() . ')', 'onsalePriceList', 'details.id = onsalePriceList.articledetailsID');
         $subPriceQuery->andWhere('details.id IN (:variants)');
 
-        $query->innerJoin('availableVariant', '(' . $subPriceQuery . ')', 'prices', 'availableVariant.id = prices.articledetailsID');
+        $query->innerJoin('availableVariant', '(' . $subPriceQuery->getSQL() . ')', 'prices', 'availableVariant.id = prices.articledetailsID');
 
         if ($this->config->get('hideNoInStock')) {
             $query->andWhere('availableVariant.laststock * availableVariant.instock >= availableVariant.laststock * availableVariant.minpurchase');
@@ -431,9 +432,12 @@ class ProductListingVariationLoader
         $query->andWhere('availableVariant.active = 1');
         $query->andWhere('prices.articleID IN (:products)');
 
-        $query->setParameter('to', 'beliebig');
         $query->setParameter('products', $ids, Connection::PARAM_INT_ARRAY);
         $query->setParameter('variants', $variantIds, Connection::PARAM_INT_ARRAY);
+
+        if ($this->config->get('useLastGraduationForCheapestPrice')) {
+            $priceListingQuery->setParameter(':toPrice', Price::NO_PRICE_LIMIT);
+        }
 
         $query->setParameter(':fallbackCustomerGroup', $context->getFallbackCustomerGroup()->getKey());
         $query->setParameter(':priceGroupCustomerGroup', $context->getCurrentCustomerGroup()->getId());

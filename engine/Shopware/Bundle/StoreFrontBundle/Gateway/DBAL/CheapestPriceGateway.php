@@ -27,6 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Models\Article\Price;
 
 class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
 {
@@ -184,7 +185,7 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
 
         $graduation = 'prices.from = 1';
         if ($this->config->get('useLastGraduationForCheapestPrice')) {
-            $graduation = "IF(priceGroup.id IS NOT NULL, prices.from = 1, prices.to = 'beliebig')";
+            $graduation = 'IF(priceGroup.id IS NOT NULL, prices.from = 1, prices.to = :toPrice)';
         }
 
         $subQuery->where('prices.pricegroup = :customerGroup')
@@ -226,6 +227,10 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
          */
         $query = $this->connection->createQueryBuilder();
         $query->setParameter(':customerGroup', $customerGroup->getKey());
+
+        if ($this->config->get('useLastGraduationForCheapestPrice')) {
+            $query->setParameter(':toPrice', Price::NO_PRICE_LIMIT);
+        }
 
         $query->select('(' . $subQuery->getSQL() . ') as priceId')
             ->from('s_articles_prices', 'outerPrices')

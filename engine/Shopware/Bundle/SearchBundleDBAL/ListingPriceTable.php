@@ -26,6 +26,7 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Models\Article\Price;
 
 class ListingPriceTable implements ListingPriceTableInterface
 {
@@ -76,7 +77,8 @@ class ListingPriceTable implements ListingPriceTableInterface
         $query->andWhere('prices.articledetailsID = availableVariant.id');
 
         if ($this->config->get('useLastGraduationForCheapestPrice')) {
-            $query->andWhere("IF(priceGroup.id IS NOT NULL, prices.from = 1, prices.to = 'beliebig')");
+            $query->andWhere('IF(priceGroup.id IS NOT NULL, prices.from = 1, prices.to = :toPrice)');
+            $query->setParameter(':toPrice', Price::NO_PRICE_LIMIT);
         } else {
             $query->andWhere('prices.from = 1');
         }

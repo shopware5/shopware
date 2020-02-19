@@ -26,6 +26,7 @@ namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Models\Article\Price;
 
 class CheapestPriceTest extends TestCase
 {
@@ -439,7 +440,7 @@ class CheapestPriceTest extends TestCase
             foreach ($data['variants'] as &$variant) {
                 $variant['prices'] = [[
                     'from' => 1,
-                    'to' => 'beliebig',
+                    'to' => Price::NO_PRICE_LIMIT,
                     'price' => 100,
                     'customerGroupKey' => $context->getCurrentCustomerGroup()->getKey(),
                     'pseudoPrice' => 10,
@@ -448,7 +449,7 @@ class CheapestPriceTest extends TestCase
             $last = array_pop($data['variants']);
             $last['prices'] = [[
                 'from' => 1,
-                'to' => 'beliebig',
+                'to' => Price::NO_PRICE_LIMIT,
                 'price' => $cheapestVariantPrice,
                 'customerGroupKey' => $context->getCurrentCustomerGroup()->getKey(),
                 'pseudoPrice' => 10,

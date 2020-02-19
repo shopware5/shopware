@@ -89,7 +89,7 @@ class Price extends LazyFetchModelEntity
      *
      * @ORM\Column(name="`to`", type="string", nullable=true)
      */
-    private $to = 'beliebig';
+    private $to = \Shopware\Models\Article\Price::NO_PRICE_LIMIT;
 
     /**
      * @var float
@@ -179,7 +179,7 @@ class Price extends LazyFetchModelEntity
     public function setTo($to)
     {
         if ($to === null) {
-            $to = 'beliebig';
+            $to = \Shopware\Models\Article\Price::NO_PRICE_LIMIT;
         }
         $this->to = $to;
 

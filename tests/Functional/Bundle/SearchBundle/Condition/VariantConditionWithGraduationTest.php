@@ -29,6 +29,7 @@ use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Article\Configurator\Group;
+use Shopware\Models\Article\Price;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
@@ -602,7 +603,7 @@ class VariantConditionWithGraduationTest extends TestCase
                         ];
                         $priceCount += 9;
                     }
-                    $variant['prices'][count($variant['prices']) - 1]['to'] = 'beliebig';
+                    $variant['prices'][count($variant['prices']) - 1]['to'] = Price::NO_PRICE_LIMIT;
                 }
 
                 ++$variantCount;

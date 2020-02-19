@@ -27,6 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Models\Article\Price;
 
 class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
 {
@@ -100,11 +101,12 @@ class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
             ->leftJoin('price', 's_articles_prices_attributes', 'priceAttribute', 'priceAttribute.priceID = price.id')
             ->where('price.articledetailsID IN (:products)')
             ->andWhere('price.pricegroup = :customerGroup')
-            ->andWhere($query->expr()->orX('price.to >= variants.minpurchase', 'price.to = "beliebig"'))
+            ->andWhere($query->expr()->orX('price.to >= variants.minpurchase', 'price.to = :toPrice'))
             ->orderBy('price.articledetailsID', 'ASC')
             ->addOrderBy('price.from', 'ASC')
             ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY)
-            ->setParameter(':customerGroup', $customerGroup->getKey());
+            ->setParameter(':customerGroup', $customerGroup->getKey())
+            ->setParameter(':toPrice', Price::NO_PRICE_LIMIT);
 
         $this->fieldHelper->addPriceTranslation($query, $context);
 

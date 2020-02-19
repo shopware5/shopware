@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Models\Article\Price;
 
 class PriceHydrator extends Hydrator
 {
@@ -72,7 +73,7 @@ class PriceHydrator extends Hydrator
         $price->setPrice((float) $data['__price_price']);
         $price->setPseudoPrice((float) $data['__price_pseudoprice']);
 
-        if (strtolower($data['__price_to']) == 'beliebig') {
+        if (strtolower($data['__price_to']) === Price::NO_PRICE_LIMIT) {
             $price->setTo(null);
         } else {
             $price->setTo((int) $data['__price_to']);
