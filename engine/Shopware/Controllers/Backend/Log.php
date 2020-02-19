@@ -188,13 +188,22 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         $files = $this->getLogFiles($logDir);
         $defaultFile = $this->getDefaultLogFile($files);
 
-        $files = array_map(function ($file) use ($defaultFile) {
+        // filter against input
+        $query = $this->Request()->getParam('query');
+        if (!empty($query)) {
+            $query = trim($query);
+            $files = array_filter($files, static function ($file) use ($query) {
+                return mb_stripos($file[0], $query) !== false;
+            });
+        }
+
+        $files = array_map(static function ($file) use ($defaultFile) {
             return [
                 'name' => $file[0],
                 'channel' => $file['channel'],
                 'environment' => $file['environment'],
                 'date' => $file['date'],
-                'default' => $file[0] == $defaultFile,
+                'default' => $file[0] === $defaultFile,
             ];
         }, $files);
 
