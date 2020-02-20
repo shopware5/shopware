@@ -7,6 +7,12 @@
     <services>
         <defaults public="true" />
 
+        <service id="Shopware\Bundle\PluginInstallerBundle\Commands\PluginZipImportCommand">
+            <tag name="console.command" command="sw:plugin:zip-import"/>
+            <argument id="shopware_plugininstaller.plugin_download_service" type="service"/>
+            <argument id="shopware_plugininstaller.plugin_manager" type="service"/>
+        </service>
+
         <service id="shopware_plugininstaller.http_client" class="Shopware\Components\HttpClient\GuzzleHttpClient">
             <argument type="service" id="guzzle_http_client_factory"/>
             <argument type="collection">
