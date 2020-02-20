@@ -389,6 +389,7 @@
 
             this.assignCookieData();
 
+            this.$el.removeClass('block-transition');
             this.$el.show();
             this.$el.addClass(this.opts.openClass);
 
