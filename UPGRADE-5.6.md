@@ -25,6 +25,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 * Added new event `Shopware_Modules_Admin_SaveRegister_BeforeRegister` to cancel customer registration
 * Added new property to plugin base class `$autoloadViews` which allows pre registration of template folder
     * Its still required on backend extensions to call `extendsTemplate`
+* Added new option `metadata` to GCP Storage Adapter for e.g. per object Cache-Control header
 
 ### Changes
 

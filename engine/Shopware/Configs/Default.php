@@ -114,6 +114,9 @@ return array_replace_recursive([
                 'keyFilePath' => '',
                 'bucket' => '',
                 'root' => '',
+                'metadata' => [
+                    'Cache-Control' => 'public, max-age=604800'
+                ],
             ],
         ],
     ],
