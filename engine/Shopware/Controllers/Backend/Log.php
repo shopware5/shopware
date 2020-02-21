@@ -191,7 +191,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         // filter against input
         $query = trim($this->Request()->getParam('query', ''));
         foreach ($files as $k => $file) {
-            if (!empty($query) && mb_stripos($file[0], $query) === false) {
+            if ($query !== '' && mb_stripos($file[0], $query) === false) {
                 continue;
             }
             $files[$k] = [
