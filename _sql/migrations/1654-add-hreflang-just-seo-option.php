@@ -9,7 +9,7 @@ class Migrations_Migration1654 extends AbstractMigration
         $this->addSql('SET @formId = (SELECT id FROM s_core_config_forms WHERE name = "Frontend100")');
 
         $sql = "INSERT INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `options`)
-                    VALUES (@formId, 'hrefLangJustSeoUrl', 'b:1;', 'nur SEO-Urls in href-lang ausgeben', 'Wenn aktiv, werden in den Meta Tags \"href-lang\" nur SEO-Urls ausgegeben', 'boolean', '0', '0', '0', NULL);";
+                    VALUES (@formId, 'hrefLangJustSeoUrl', 'b:1;', 'Nur SEO-Urls in href-lang ausgeben', 'Wenn aktiv, werden in den Meta Tags \"href-lang\" nur SEO-Urls ausgegeben', 'boolean', '0', '200', '0', NULL);";
         $this->addSql($sql);
 
         $this->addSql('SET @elementId = LAST_INSERT_ID();');
