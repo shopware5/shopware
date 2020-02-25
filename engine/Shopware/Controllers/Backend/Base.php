@@ -194,11 +194,31 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             'groups.taxInput as taxInput',
             'groups.mode as mode',
         ]);
-        $builder->addFilter($this->Request()->getParam('filter', []));
-        $builder->addOrderBy($this->Request()->getParam('sort', []));
 
-        $builder->setFirstResult($this->Request()->getParam('start'))
-            ->setMaxResults($this->Request()->getParam('limit'));
+        $request = $this->Request();
+        $filter = $request->getParam('filter', []);
+        if ($request->getParam('query')) {
+            $query = '%' . trim($request->getParam('query')) . '%';
+            $filter[] = [
+                'property' => 'groups.key',
+                'value' => $query,
+                'expression' => 'LIKE',
+                'operator' => 'OR',
+            ];
+            $filter[] = [
+                'property' => 'groups.name',
+                'value' => $query,
+                'expression' => 'LIKE',
+                'operator' => 'OR',
+            ];
+        }
+
+        $builder->addFilter($filter);
+        $builder->addOrderBy($request->getParam('sort', []));
+
+        $builder
+            ->setFirstResult($request->getParam('start'))
+            ->setMaxResults($request->getParam('limit'));
 
         $query = $builder->getQuery();
 
@@ -679,14 +699,24 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         /** @var \Shopware\Models\Shop\Repository $repository */
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
 
+        $request = $this->Request();
+        $filter = $request->getParam('filter', []);
+        if ($request->getParam('query')) {
+            $query = '%' . trim($request->getParam('query')) . '%';
+            $filter[] = [
+                'property' => 'shop.name',
+                'expression' => 'LIKE',
+                'value' => $query,
+            ];
+        }
+
         $query = $repository->getBaseListQuery(
-            $filter = $this->Request()->getParam('filter', []),
-            $order = $this->Request()->getParam('sort', []),
-            $offset = $this->Request()->getParam('start'),
-            $limit = $this->Request()->getParam('limit'),
+            $filter,
+            $order = $request->getParam('sort', []),
+            $offset = $request->getParam('start'),
+            $limit = $request->getParam('limit'),
             true
         );
-
         // Get total result of the query
         $total = Shopware()->Models()->getQueryCount($query);
 
