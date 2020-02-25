@@ -183,9 +183,10 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $request = $this->Request();
         $id = $request->getParam('id');
 
-        $model = Shopware()->Container()->get('models')->find('Shopware\Models\Widget\View', $id);
-        Shopware()->Container()->get('models')->remove($model);
-        Shopware()->Container()->get('models')->flush();
+        if ($model = Shopware()->Container()->get('models')->find(View::class, $id)) {
+            Shopware()->Container()->get('models')->remove($model);
+            Shopware()->Container()->get('models')->flush();
+        }
 
         $this->View()->assign(['success' => true]);
     }
