@@ -322,6 +322,7 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
         $cheapestPriceIdQuery->from('s_articles_details', 'details');
         $cheapestPriceIdQuery->innerJoin('details', '(' . $cheapestPriceQuery->getSQL() . ')', 'cheapestPrices', $joinCondition);
         $cheapestPriceIdQuery->where('details.id = mainDetail.id');
+        $cheapestPriceIdQuery->setParameter(':toPrice', Price::NO_PRICE_LIMIT);
 
         if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
             /*
@@ -353,8 +354,11 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
         $baseQuery->from('s_articles_details', 'mainDetail');
         $baseQuery->where('mainDetail.id IN (:variants)');
 
-        if ($this->config->get('useLastGraduationForCheapestPrice')) {
-            $baseQuery->setParameter(':toPrice', Price::NO_PRICE_LIMIT);
+        foreach ($countSubQuery->getParameters() as $key => $parameter) {
+            $baseQuery->setParameter($key, $parameter, $countSubQuery->getParameterType($key));
+        }
+        foreach ($cheapestPriceIdQuery->getParameters() as $key => $parameter) {
+            $baseQuery->setParameter($key, $parameter, $cheapestPriceIdQuery->getParameterType($key));
         }
 
         return $baseQuery;

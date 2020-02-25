@@ -423,6 +423,13 @@ class ProductListingVariationLoader
         $subPriceQuery->leftJoin('details', '(' . $onSalePriceListingQuery->getSQL() . ')', 'onsalePriceList', 'details.id = onsalePriceList.articledetailsID');
         $subPriceQuery->andWhere('details.id IN (:variants)');
 
+        foreach ($priceListingQuery->getParameters() as $key => $parameter) {
+            $subPriceQuery->setParameter($key, $parameter, $priceListingQuery->getParameterType($key));
+        }
+        foreach ($onSalePriceListingQuery->getParameters() as $key => $parameter) {
+            $subPriceQuery->setParameter($key, $parameter, $priceListingQuery->getParameterType($key));
+        }
+
         $query->innerJoin('availableVariant', '(' . $subPriceQuery->getSQL() . ')', 'prices', 'availableVariant.id = prices.articledetailsID');
 
         if ($this->config->get('hideNoInStock')) {
@@ -432,13 +439,12 @@ class ProductListingVariationLoader
         $query->andWhere('availableVariant.active = 1');
         $query->andWhere('prices.articleID IN (:products)');
 
-        $query->setParameter('products', $ids, Connection::PARAM_INT_ARRAY);
-        $query->setParameter('variants', $variantIds, Connection::PARAM_INT_ARRAY);
-
-        if ($this->config->get('useLastGraduationForCheapestPrice')) {
-            $priceListingQuery->setParameter(':toPrice', Price::NO_PRICE_LIMIT);
+        foreach ($subPriceQuery->getParameters() as $key => $parameter) {
+            $query->setParameter($key, $parameter, $subPriceQuery->getParameterType($key));
         }
 
+        $query->setParameter('products', $ids, Connection::PARAM_INT_ARRAY);
+        $query->setParameter('variants', $variantIds, Connection::PARAM_INT_ARRAY);
         $query->setParameter(':fallbackCustomerGroup', $context->getFallbackCustomerGroup()->getKey());
         $query->setParameter(':priceGroupCustomerGroup', $context->getCurrentCustomerGroup()->getId());
 

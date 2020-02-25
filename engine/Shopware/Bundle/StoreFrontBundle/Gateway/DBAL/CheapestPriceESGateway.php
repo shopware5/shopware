@@ -111,6 +111,7 @@ class CheapestPriceESGateway extends CheapestPriceGateway
         $graduation = 'prices.from = 1';
         if ($this->config->get('useLastGraduationForCheapestPrice')) {
             $graduation = 'IF(priceGroup.id IS NOT NULL, prices.from = 1, prices.to = :toPrice)';
+            $subQuery->setParameter(':toPrice', Price::NO_PRICE_LIMIT);
         }
 
         $subQuery
@@ -138,11 +139,11 @@ class CheapestPriceESGateway extends CheapestPriceGateway
          * select multiple cheapest product prices.
          */
         $query = $this->connection->createQueryBuilder();
-        $query->setParameter(':customerGroup', $customerGroup->getKey());
-
-        if ($this->config->get('useLastGraduationForCheapestPrice')) {
-            $query->setParameter(':toPrice', Price::NO_PRICE_LIMIT);
+        foreach ($subQuery->getParameters() as $key => $parameter) {
+            $query->setParameter($key, $parameter, $subQuery->getParameterType($key));
         }
+
+        $query->setParameter(':customerGroup', $customerGroup->getKey());
 
         $query->select('(' . $subQuery->getSQL() . ') as priceId')
             ->from('s_articles_prices', 'outerPrices')
