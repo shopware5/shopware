@@ -37,6 +37,8 @@ This changelog references changes done in Shopware 5.6 patch versions.
     * `Shopware\Components\Routing\Generators\DefaultGenerator::generate` will encode arrays as strings with `http_build_query`; objects result in an user error in 5.6 and Exception in 5.7
     * `Shopware\Components\Routing\Matchers\DefaultMatcher::match` will try to convert encoded string values back to array representation
 * Changed `Shopware.form.field.SingleSelection` to forward `enable` and `disable` calls
+* Changed the following templates to include the `custom_captcha.tpl` template, if any other captcha method than "legacy" is active:
+    * `themes/Frontend/Bare/frontend/forms/form-elements.tpl`
 
 ### Removals
 
