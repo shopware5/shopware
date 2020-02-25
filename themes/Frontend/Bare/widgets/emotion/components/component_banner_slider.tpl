@@ -34,7 +34,7 @@
                                             {block name="frontend_widgets_banner_slider_banner_picture"}
                                                 {$srcSet = ''}
                                                 {$itemSize = ''}
-                                                
+
                                                 {if $banner.thumbnails}
                                                     {$baseSource = $banner.thumbnails[0].source}
 
@@ -97,7 +97,7 @@
 
                 {block name="frontend_widgets_banner_slider_navigation"}
                     {if $Data.banner_slider_numbers}
-                        <div class="image-slider--dots">
+                        <div class="image-slider--dots force--3d">
                             {foreach $Data.values as $link}
                                 <div class="dot--link">{$link@iteration}</div>
                             {/foreach}
