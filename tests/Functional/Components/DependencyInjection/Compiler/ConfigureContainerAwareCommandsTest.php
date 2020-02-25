@@ -35,7 +35,7 @@ class ConfigureContainerAwareCommandsTest extends TestCase
      */
     public function testCompilerAwareIsInitialized(ShopwareCommand $containerAwareCommand): void
     {
-        $this->assertNotNull($containerAwareCommand->getContainer());
+        static::assertNotNull($containerAwareCommand->getContainer());
     }
 
     public function getShopwareCommands(): array
