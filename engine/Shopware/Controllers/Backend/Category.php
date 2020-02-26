@@ -535,6 +535,10 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         } else {
             $categoryModel = $this->getRepository()->find($categoryId);
         }
+        
+        if (!$categoryModel) {
+            $this->View()->assign(['success' => false, 'message' => 'Invalid categoryId']);
+        }
 
         $categoryModel->setStream(null);
         if ($params['streamId']) {
