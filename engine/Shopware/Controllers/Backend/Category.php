@@ -536,6 +536,12 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $categoryModel = $this->getRepository()->find($categoryId);
         }
 
+        if (!$categoryModel) {
+            $this->View()->assign(['success' => false, 'message' => 'Invalid categoryId']);
+
+            return;
+        }
+
         $categoryModel->setStream(null);
         if ($params['streamId']) {
             $params['stream'] = Shopware()->Models()->find(\Shopware\Models\ProductStream\ProductStream::class, (int) $params['streamId']);
