@@ -197,8 +197,9 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         $request = $this->Request();
         $filter = $request->getParam('filter', []);
-        if ($request->getParam('query')) {
-            $query = '%' . trim($request->getParam('query')) . '%';
+        $query = trim($request->getParam('query', ''));
+        if ($query !== '') {
+            $query = '%' . $query . '%';
             $filter[] = [
                 'property' => 'groups.key',
                 'value' => $query,
@@ -701,8 +702,9 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         $request = $this->Request();
         $filter = $request->getParam('filter', []);
-        if ($request->getParam('query')) {
-            $query = '%' . trim($request->getParam('query')) . '%';
+        $query = trim($request->getParam('query', ''));
+        if ($query !== '') {
+            $query = '%' . $query . '%';
             $filter[] = [
                 'property' => 'shop.name',
                 'expression' => 'LIKE',
