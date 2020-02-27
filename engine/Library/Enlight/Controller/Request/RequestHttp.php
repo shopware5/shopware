@@ -685,7 +685,7 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
      */
     public function setBasePath($basePath = null)
     {
-        if ($basePath) {
+        if ($basePath !== null) {
             $this->basePath = $basePath;
 
             return $this;
