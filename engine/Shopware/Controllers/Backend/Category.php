@@ -23,6 +23,8 @@
  */
 
 use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\ORM\AbstractQuery;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Media\Media;
@@ -42,7 +44,25 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     /**
      * @var \Shopware\Models\Customer\Repository
      */
-    protected $customerRepository = null;
+    protected $customerRepository;
+
+    /**
+     * @var ModelManager
+     */
+    private $em;
+
+    /**
+     * @var Shopware_Components_Snippet_Manager
+     */
+    private $translation;
+
+    public function __construct(ModelManager $em, \Shopware_Components_Snippet_Manager $translation)
+    {
+        $this->em = $em;
+        $this->translation = $translation;
+
+        parent::__construct();
+    }
 
     /**
      * @deprecated in 5.6, will be private in 5.8
@@ -524,7 +544,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $parentCategory = $this->getRepository()->find($params['parentId']);
             $categoryModel->setParent($parentCategory);
 
-            // If Leaf-Category gets childcategory move all assignments to new childcategory
+            // If Leaf-Category gets child category move all assignments to new child category
             if ($parentCategory->getChildren()->count() === 0 && $parentCategory->getArticles()->count() > 0) {
                 /** @var Article $product */
                 foreach ($parentCategory->getArticles() as $product) {
@@ -535,9 +555,18 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         } else {
             $categoryModel = $this->getRepository()->find($categoryId);
         }
-        
+
+        // check if a category could be found
         if (!$categoryModel) {
-            $this->View()->assign(['success' => false, 'message' => 'Invalid categoryId']);
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translation->getNamespace('backend/category/main')->get(
+                    'saveDetailInvalidCategoryId',
+                    'Invalid categoryId'
+                ),
+            ]);
+
+            return;
         }
 
         $categoryModel->setStream(null);

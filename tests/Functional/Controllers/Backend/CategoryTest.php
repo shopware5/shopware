@@ -206,6 +206,24 @@ class CategoryTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals(null, $categoryModel);
     }
 
+    public function testUpdatingInvalidCategory(): void
+    {
+        $params = $this->dummyData;
+        unset($params['parentId']);
+        $params['id'] = -10000;
+        $params['articles'] = [];
+        $params['customerGroups'] = [];
+
+        // Test new category
+        $this->Request()->setParams($params);
+        $this->dispatch('backend/Category/createDetail');
+        static::assertFalse($this->View()->success);
+        static::assertNotEmpty($this->View()->message);
+
+        $snippet = Shopware()->Container()->get('snippets')->getNamespace('backend/category/main');
+        static::assertEquals($snippet->get('saveDetailInvalidCategoryId', 'Invalid categoryId'), $this->View()->message);
+    }
+
     /**
      * Creates the dummy data
      *
