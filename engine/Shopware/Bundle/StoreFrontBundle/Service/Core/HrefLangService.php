@@ -31,7 +31,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Routing\Context;
-use Shopware\Components\Routing\PreFilterInterface;
 use Shopware\Components\Routing\RouterInterface;
 use Shopware\Models\Shop\Shop as ShopModel;
 use Shopware_Components_Config as Config;
@@ -46,7 +45,12 @@ class HrefLangService implements HrefLangServiceInterface
     /**
      * @var RouterInterface
      */
-    private $router;
+    private $rewriteRouter;
+
+    /**
+     * @var RouterInterface
+     */
+    private $defaultRouter;
 
     /**
      * @var Config
@@ -63,18 +67,13 @@ class HrefLangService implements HrefLangServiceInterface
      */
     private $modelManager;
 
-    /**
-     * @var PreFilterInterface[]
-     */
-    private $preFilters;
-
-    public function __construct(Connection $connection, RouterInterface $router, Config $config, ModelManager $modelManager, \IteratorAggregate $preFilters)
+    public function __construct(Connection $connection, RouterInterface $rewriteRouter, RouterInterface $defaultRouter, Config $config, ModelManager $modelManager)
     {
         $this->connection = $connection;
-        $this->router = $router;
+        $this->rewriteRouter = $rewriteRouter;
         $this->config = $config;
         $this->modelManager = $modelManager;
-        $this->preFilters = iterator_to_array($preFilters, false);
+        $this->defaultRouter = $defaultRouter;
     }
 
     /**
@@ -100,7 +99,7 @@ class HrefLangService implements HrefLangServiceInterface
             $href->setShopId($languageShop['id']);
             $href->setLocale($languageShop['locale']);
             $routingContext = $this->getContext($shop, $config);
-            $href->setLink($this->filterUrl($this->router->assemble($parameters, $routingContext), $parameters));
+            $href->setLink($this->filterUrl($this->rewriteRouter->assemble($parameters, $routingContext), $parameters));
 
             if (!$config->get('hrefLangCountry')) {
                 $href->setLocale(explode('-', $languageShop['locale'])[0]);
@@ -131,11 +130,13 @@ class HrefLangService implements HrefLangServiceInterface
      */
     protected function isSeoUrl(array $parameters, $url, Context $context)
     {
-        foreach ($this->preFilters as $preFilter) {
-            $parameters = $preFilter->preFilter($parameters, $context);
+        if ($this->isUrlHome($parameters)) {
+            return true;
         }
 
-        if (strpos($url, $parameters['controller']) !== false && strpos($url, $parameters['action']) !== false) {
+        $defaultUrl = $this->defaultRouter->assemble($parameters, $context);
+
+        if ($defaultUrl === $url) {
             return false;
         }
 
@@ -209,5 +210,18 @@ class HrefLangService implements HrefLangServiceInterface
     private function getDetachedShop(int $languageShopId): ShopModel
     {
         return $this->modelManager->getRepository(ShopModel::class)->getById($languageShopId);
+    }
+
+    private function isUrlHome(array $parameters): bool
+    {
+        if (!$parameters) {
+            return true;
+        }
+
+        if ($parameters['controller'] === 'index' && $parameters['action'] === 'index') {
+            return true;
+        }
+
+        return false;
     }
 }
