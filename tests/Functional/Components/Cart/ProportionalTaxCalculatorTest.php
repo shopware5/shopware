@@ -168,4 +168,43 @@ class ProportionalTaxCalculatorTest extends \Enlight_Components_Test_TestCase
             static::assertEquals($item->getPrice(), $item->getNetPrice());
         }
     }
+
+    /**
+     * @dataProvider calculate_thereIsNoPriceWith_NAN_test_dataProvider
+     */
+    public function testCalculate_thereIsNoPriceWith_NAN(Price $price): void
+    {
+        $messageTemplate = 'The %s with value: %s is NAN';
+
+        /** @var Price $result */
+        $result = array_shift($this->taxCalculator->calculate(0, [$price], false));
+
+        static::assertFalse(
+            is_nan($result->getPrice()),
+            sprintf($messageTemplate, 'Price', $result->getPrice())
+        );
+
+        static::assertFalse(
+            is_nan($result->getNetPrice()),
+            sprintf($messageTemplate, 'NetPrice', $result->getNetPrice())
+        );
+
+        static::assertFalse(
+            is_nan($result->getTax()),
+            sprintf($messageTemplate, 'Tax', $result->getTax())
+        );
+    }
+
+    public function calculate_thereIsNoPriceWith_NAN_test_dataProvider()
+    {
+        return [
+            [new Price(0, 0, 6, 0)],
+            [new Price(0.0, 0.0, 7, 0.0)],
+            [new Price('0', '0', 9, '0')],
+            [new Price('0.0', '0.0', '10', '0.0')],
+            [new Price('5,5', '4,0', 11, '1,1')],
+            [new Price('0.51954864', '0.41954864', 13, '0.1')],
+            [new Price('Foo', 'Bar', 'PHP', 'UNIT')],
+        ];
+    }
 }
