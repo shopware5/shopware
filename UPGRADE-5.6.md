@@ -2,6 +2,14 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
+## 5.6.6
+
+[View all changes from v5.6.5...v5.6.6](https://github.com/shopware/shopware/compare/v5.6.5...v5.6.6)
+
+### Changes
+
+* Changed `\Shopware\Components\DependencyInjection\Compiler\PluginResourceCompilerPass` to work correctly with multiple plugins
+
 ## 5.6.5
 
 [View all changes from v5.6.4...v5.6.5](https://github.com/shopware/shopware/compare/v5.6.4...v5.6.5)

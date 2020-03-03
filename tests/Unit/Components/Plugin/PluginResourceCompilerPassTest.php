@@ -27,6 +27,7 @@ namespace Shopware\Tests\Unit\Components\Plugin;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\DependencyInjection\Compiler\PluginResourceCompilerPass;
 use Shopware\Components\Plugin;
+use Shopware\Components\Plugin\ResourceSubscriber;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class PluginResourceCompilerPassTest extends TestCase
@@ -106,5 +107,40 @@ class PluginResourceCompilerPassTest extends TestCase
 
         // JS, CSS, LESS, FRONTEND TPL, BACKEND TPL
         static::assertCount(5, $tags);
+    }
+
+    public function testTwoPlugins(): void
+    {
+        $emptyPlugin = $this->createMock(Plugin::class);
+        $emptyPlugin->method('getPath')
+            ->willReturn(__DIR__ . '/examples/EmptyPlugin');
+
+        $emptyPlugin
+            ->method('hasAutoloadViews')
+            ->willReturn(true);
+
+        $emptyPlugin
+            ->method('getContainerPrefix')
+            ->willReturn('empty_plugin');
+
+        $filledPlugin = $this->createMock(Plugin::class);
+        $filledPlugin->method('getPath')
+            ->willReturn(__DIR__ . '/examples/TestPlugin');
+
+        $filledPlugin
+            ->method('hasAutoloadViews')
+            ->willReturn(true);
+
+        $filledPlugin
+            ->method('getContainerPrefix')
+            ->willReturn('filled_plugin');
+
+        $container = new ContainerBuilder();
+        $container->addCompilerPass(new PluginResourceCompilerPass([$emptyPlugin, $filledPlugin]));
+        $container->compile();
+
+        static::assertCount(2, $container->getDefinitions());
+
+        static::assertInstanceOf(ResourceSubscriber::class, $container->get('filled_plugin.internal.resource_subscriber'));
     }
 }

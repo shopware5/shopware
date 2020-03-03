@@ -84,7 +84,7 @@ class PluginResourceCompilerPass implements CompilerPassInterface
             }
 
             if (!$definition->hasTag('shopware.event_listener')) {
-                return;
+                continue;
             }
 
             $container->setDefinition($plugin->getContainerPrefix() . '.internal.resource_subscriber', $definition);
