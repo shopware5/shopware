@@ -55,6 +55,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         { ref: 'variantTab', selector: 'article-detail-window panel[name=variant-tab]' },
         { ref: 'esdTab', selector: 'article-detail-window panel[name=esd-tab]' },
         { ref: 'esdListing', selector: 'article-detail-window article-esd-list' },
+        { ref: 'propertyPanel', selector: 'article-properties-panel' },
         { ref: 'propertyGrid', selector: 'article-detail-window grid[name=property-grid]' },
         { ref: 'priceFieldSet', selector: 'article-detail-window article-prices-field-set' }
     ],
@@ -400,6 +401,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         mainWindow.detailForm.loadRecord(article);
 
         me.loadPropertyStore(article);
+        me.getPropertyPanel().article = article;
 
         esdTab.setDisabled(article.get('id') === null);
         esdListing.esdStore.getProxy().extraParams.articleId = article.get('id');
