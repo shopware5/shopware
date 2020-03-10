@@ -350,7 +350,7 @@ Ext.define('Shopware.apps.Order.view.mail.Attachment', {
         var spec = {
             tag: 'a',
             html: name,
-            href: '{url action="openPdf"}?id=' + record.get('hash'),
+            href: '{url action="openPdf"}/?id=' + record.get('hash'),
             target: '_blank'
         };
 
