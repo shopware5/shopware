@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
      * Set css class for this component
      * @string
      */
-    cls: Ext.baseCSSPrefix + 'article-esd-list',
+    cls: Ext.baseCSSPrefix + 'article-properties-panel',
 
     style: 'background: #ebedef',
 
