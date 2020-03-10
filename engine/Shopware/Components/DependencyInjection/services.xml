@@ -130,6 +130,17 @@
             <argument type="tagged" tag="router.post_filter"/>
         </service>
 
+        <service id="default_router" class="Shopware\Components\Routing\Router">
+            <factory service="router_factory" method="factory" />
+            <argument type="service" id="events"/>
+            <argument type="tagged" tag="router.matcher"/>
+            <argument type="collection">
+                <argument key="default" type="service" id="shopware.routing.generators.default_generator" />
+            </argument>
+            <argument type="tagged" tag="router.pre_filter"/>
+            <argument type="tagged" tag="router.post_filter"/>
+        </service>
+
         <service id="dispatcher" class="Enlight_Controller_Dispatcher_Default">
             <argument>%shopware.controllers%</argument>
             <argument type="service" id="service_container"/>
