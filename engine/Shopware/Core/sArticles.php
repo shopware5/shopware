@@ -2439,9 +2439,6 @@ class sArticles implements \Enlight_Hook
                 $product['linkDetails'] .= "&sCategory=$categoryId";
             }
 
-            if ($this->config->get('useShortDescriptionInListing') && strlen($product['description']) > 5) {
-                $product['description_long'] = $product['description'];
-            }
             $product['description_long'] = $this->sOptimizeText($product['description_long']);
 
             $products[$product['ordernumber']] = $product;
