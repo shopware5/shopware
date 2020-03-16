@@ -115,7 +115,7 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
     /**
      * @param ConfigurationStruct[] $columns
      */
-    private function translateColumns($columns)
+    private function translateColumns(array $columns): void
     {
         $snippets = $this->container->get('snippets')->getNamespace('backend/attribute_columns');
 
@@ -130,6 +130,16 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
             }
             if ($snippet = $snippets->get($key . 'helpText')) {
                 $column->setHelpText($snippet);
+            }
+
+            $arrayStore = json_decode($column->getArrayStore(), true);
+            if (!empty($arrayStore)) {
+                foreach ($arrayStore as &$option) {
+                    $optionKey = sprintf('%s_options_store_%s', $key, strtolower($option['key']));
+                    $option['value'] = $snippets->get($optionKey, $option['value'], true);
+                }
+                unset($option);
+                $column->setArrayStore(json_encode($arrayStore));
             }
         }
     }
