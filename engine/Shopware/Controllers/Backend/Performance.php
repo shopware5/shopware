@@ -571,6 +571,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                 'disableArticleNavigation',
                 'http2Push',
                 'minifyHtml',
+                'seoremovecomments',
             ]),
             'customer' => $this->genericConfigLoader([
                 'alsoBoughtShow',

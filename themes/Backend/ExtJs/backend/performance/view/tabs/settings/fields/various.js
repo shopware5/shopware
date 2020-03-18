@@ -125,6 +125,14 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
+                    },
+                    {
+                        fieldLabel: '{s name=fieldset/various/seoRemoveComments}{/s}',
+                        helpText: '{s name=fieldset/various/seoRemoveComments/help}{/s}',
+                        name: 'various[seoremovecomments]',
+                        xtype: 'checkbox',
+                        uncheckedValue: false,
+                        inputValue: true
                     }
                 ]}
         ];

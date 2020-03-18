@@ -176,12 +176,13 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
         /** @var Enlight_Controller_Action $controller */
         $controller = $args->get('subject')->Action();
 
-        if (!empty($config['minifyHtml']) && $this->canBeMinified($controller)) {
-            $source = $this->get('shopware.components.template.html_minifier')->minify($source);
+        if (!$this->canBeMinified($controller)) {
+            return $source;
         }
 
-        if (strpos($source, '<html') === false) {
-            return $source;
+        // The cart page can become very slow very fast due to many html tags for amount selections
+        if (!empty($config['minifyHtml']) && $controller->Request()->getControllerName() !== 'checkout') {
+            return $this->get('shopware.components.template.html_minifier')->minify($source);
         }
 
         // Remove comments
@@ -231,7 +232,6 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             return false;
         }
 
-        // The cart page can become very slow very fast due to many html tags for amount selections
-        return $controller->Front()->Request()->getControllerName() !== 'checkout';
+        return true;
     }
 }
