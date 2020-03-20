@@ -80,6 +80,7 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
         partner: '{s name=filter/partner}Partner{/s}',
         shipping: '{s name=filter/shipping}Shipping country{/s}',
         billing: '{s name=filter/billing}Billing country{/s}',
+        supplier: '{s name=filter/supplier}Supplier{/s}',
         document: {
             title: '{s name=document/title}Documents{/s}',
             date: '{s name=document/date}Date{/s}',
@@ -175,7 +176,8 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
                 me.createShopField(),
                 me.createPartnerField(),
                 me.createDeliveryCountrySelection(),
-                me.createBillingCountrySelection()
+                me.createBillingCountrySelection(),
+                me.createSupplierSelectionField()
             ]
         });
         return me.filterForm;
@@ -387,6 +389,17 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
         });
     },
 
+    createSupplierSelectionField: function() {
+        return Ext.create('Ext.form.field.ComboBox', {
+            name: 'article.supplierId',
+            fieldLabel: this.snippets.supplier,
+            store: this.getSupplierStore(),
+            displayField: 'name',
+            valueField: 'id',
+            allowBlank: true,
+        });
+    },
+
     getCountryStore: function() {
         var selectionFactory = Ext.create('Shopware.attribute.SelectionFactory', {});
         var store = selectionFactory.createEntitySearchStore("Shopware\\Models\\Country\\Country");
@@ -404,6 +417,10 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
         return store;
     },
 
+    getSupplierStore: function () {
+        var store = Ext.data.StoreManager.get('supplierStore');
+        return store ? store : Ext.create('Shopware.apps.Supplier.store.Supplier');
+    },
 
     /**
      * Creates the "reset filters" and "perform filters" button
