@@ -138,4 +138,70 @@ class LogTest extends \Enlight_Components_Test_Controller_TestCase
 
         Shopware()->Container()->get('dbal_connection')->rollBack();
     }
+
+    public function testSystemLogList(): void
+    {
+        $container = Shopware()->Container();
+        $pluginLogger = $container->get('pluginlogger');
+        $coreLogger = $container->get('corelogger');
+
+        // making sure that at least 1 entry for pluginlogger & corelogger are available
+        $pluginLogger->info('Running test...');
+        $coreLogger->info('Running test...');
+
+        // general settings
+        $this->Request()->setMethod('GET');
+        $this->dispatch('backend/log/getLogFileList');
+        $jsonBody = $this->View()->getAssign();
+
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
+        static::assertTrue($jsonBody['success']);
+        static::assertArrayHasKey('total', $jsonBody);
+        static::assertGreaterThanOrEqual(2, $jsonBody['total']);
+    }
+
+    public function testSystemLogListWithLimit(): void
+    {
+        $container = Shopware()->Container();
+        $pluginLogger = $container->get('pluginlogger');
+        $coreLogger = $container->get('corelogger');
+
+        // making sure that at least 1 entry for pluginlogger & corelogger are available
+        $pluginLogger->info('Running test...');
+        $coreLogger->info('Running test...');
+
+        // test against limit
+        $this->Request()->setMethod('GET')->setParams([
+            'limit' => 1,
+        ]);
+        $this->dispatch('backend/log/getLogFileList');
+        $jsonBody = $this->View()->getAssign();
+
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertCount(1, $jsonBody['data']);
+    }
+
+    public function testSystemLogListWithFilter(): void
+    {
+        $container = Shopware()->Container();
+        $pluginLogger = $container->get('pluginlogger');
+        $coreLogger = $container->get('corelogger');
+
+        // making sure that at least 1 entry for pluginlogger & corelogger are available
+        $pluginLogger->info('Running test...');
+        $coreLogger->info('Running test...');
+
+        // test filtering
+        $file = sprintf('core_%s', $container->getParameter('kernel.environment'));
+        $this->Request()->setParams([
+            'limit' => 1,
+            'query' => $file,
+        ]);
+        $this->dispatch('backend/log/getLogFileList');
+        $jsonBody = $this->View()->getAssign();
+
+        static::assertCount(1, $jsonBody['data']);
+        static::assertNotFalse(stripos($jsonBody['data'][0]['name'], $file));
+    }
 }
