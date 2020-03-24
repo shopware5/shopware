@@ -1,34 +1,90 @@
 language: php
+os: linux
+services:
+    - docker
 
-php:
-  - 7.2
-  - 7.3
-  - 7.4
+php: 7.2
+addons:
+    hosts:
+        - mysql
+        - elasticsearch
+        - selenium
+        - shopwaretest.de
 
-services: mysql
-
-sudo: false
+env:
+    global:
+        - DB_IMAGE="mysql:5.7"
 
 cache:
-   directories:
-     - $HOME/.composer/cache/files
+    directories:
+        - $HOME/.composer/cache/files
 
-before_script:
+before_install:
     - if [[ "$(php --version | grep -cim1 xdebug)" -ge 1 ]]; then phpenv config-rm xdebug.ini; fi
+    - ./.travis/setup-db.sh
+    - ./.travis/setup-es.sh
+
+install:
+    - ./psh.phar init --DB_HOST=mysql --DB_USER=travis --DB_PASSWORD=travis --SW_HOST=localhost
 
 script:
-    - ./psh.phar init --DB_HOST=localhost --DB_USER=travis --DB_PASSWORD= --SW_HOST=localhost
-    - ./psh.phar unit-fast --SW_HOST="localhost"
+    - ./psh.phar unit-fast --DB_HOST=mysql --DB_USER=travis --DB_PASSWORD=travis --SW_HOST=localhost
 
 notifications:
     email: false
 
 jobs:
+    fast_finish: true
     include:
-    - stage: lint
-      php: 7.3
-      install:
-      - ./psh.phar init --DB_HOST=localhost --DB_USER=travis --DB_PASSWORD= --SW_HOST=localhost
-      script:
-      # Static analyzer check
-      - ./psh.phar check-code
+        # Code-Style
+        - stage: lint
+          php: 7.3
+          script:
+              - ./psh.phar check-code
+
+        # Run Unit Tests
+        - stage: PHP
+          php: 7.2
+        - stage: PHP
+          php: 7.3
+        - stage: PHP
+          php: 7.4
+
+        # Run Database Tests
+        - stage: Database
+          php: 7.2
+          env:
+              - DB_IMAGE="mysql:8.0"
+        - stage: Database
+          php: 7.4
+          env:
+              - DB_IMAGE="mariadb:10.1"
+        - stage: Database
+          php: 7.4
+          env:
+              - DB_IMAGE="mariadb:10.3"
+
+        # Run Elasticsearch Tests
+        - stage: Elasticsearch
+          php: 7.2
+          env:
+              - ES_IMAGE="elastic/elasticsearch:6.3.0"
+          script:
+              - ./psh.phar unit-elasticsearch --DB_HOST=mysql --DB_USER=travis --DB_PASSWORD=travis --SW_HOST=localhost
+        - stage: Elasticsearch
+          php: 7.2
+          env:
+              - ES_IMAGE="elastic/elasticsearch:7.0.0"
+          script:
+              - ./psh.phar unit-elasticsearch --DB_HOST=mysql --DB_USER=travis --DB_PASSWORD=travis --SW_HOST=localhost
+
+        # Run Mink, Currently broken. Uncomment when its fixed
+#        - stage: Mink
+#          php: 7.4
+#          install:
+#              - docker run --name=web -e SHOPWARE_ENV=production -v $(pwd):/var/www/html -p80:80 --link=mysqld:mysql -d shyim/shopware-travis:php74
+#              - docker run --name=selenium -p4444:4444 --link web:sw5.local -d selenium/standalone-chrome:3.8.1
+#              - ./psh.phar init --DB_HOST=mysql --DB_USER=travis --DB_PASSWORD=travis --SW_HOST=shopwaretest.de
+#          script:
+#              - chmod 777 -R web var files
+#              - ./psh.phar mink --DB_HOST=mysql --DB_USER=travis --DB_PASSWORD=travis --SW_HOST=shopwaretest.de
