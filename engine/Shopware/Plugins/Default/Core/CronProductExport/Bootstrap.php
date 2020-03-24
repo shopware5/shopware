@@ -79,9 +79,10 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
             /** @var Shopware\Models\ProductFeed\ProductFeed $feedModel */
             $fileName = $feedModel->getHash() . '_' . $feedModel->getFileName();
             $filePath = $cacheDir . $fileName;
+
             if ($feedModel->getInterval() === 0) {
                 continue;
-            }elseif($feedModel->getInterval() > 0) {
+            } elseif ($feedModel->getInterval() > 0) {
                 $diffInterval = time();
                 if ($feedModel->getCacheRefreshed()) {
                     $diffInterval = $diffInterval - $feedModel->getCacheRefreshed()->getTimestamp();
