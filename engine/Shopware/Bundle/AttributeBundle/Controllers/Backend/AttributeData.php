@@ -135,8 +135,8 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
             $arrayStore = json_decode($column->getArrayStore(), true);
             if (!empty($arrayStore)) {
                 foreach ($arrayStore as &$option) {
-                    $optionKey = sprintf('%s_options_store_%s', $key, strtolower($option['key']));
-                    $option['value'] = $snippets->get($optionKey, $option['value'], true);
+                    $optionKey = sprintf('%soptions_store_%s', $key, strtolower($option['key']));
+                    $option['value'] = $snippets->get($optionKey, $option['value']);
                 }
                 unset($option);
                 $column->setArrayStore(json_encode($arrayStore));
