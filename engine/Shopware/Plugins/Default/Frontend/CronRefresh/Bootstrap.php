@@ -83,7 +83,7 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
 
         // Delete all entries from s_statistics_pool not from the current day
         $sql = 'DELETE FROM s_statistics_pool WHERE datum != CURDATE()';
-        $result = Shopware()->Db()->query($sql);
+        $result = $connection->executeQuery($sql);
         $data['statistics_pool']['rows'] = $result->rowCount();
 
         // Delete all entries from s_order_notes, which are older than a year and have no userID set
