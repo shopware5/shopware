@@ -29,6 +29,7 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Models\Article\Article;
 use Shopware\Models\Document\Document;
 
 /**
@@ -642,6 +643,11 @@ class Repository extends ModelRepository
                     $builder->setParameter('articleNumber', $filter['value']);
                     break;
 
+                case 'article.supplierId':
+                    $builder->andWhere('article.supplierId = :supplierId');
+                    $builder->setParameter('supplierId', $filter['value']);
+                    break;
+
                 default:
                     $builder->addFilter([$filter]);
             }
@@ -655,7 +661,7 @@ class Repository extends ModelRepository
      */
     protected function addAliasJoin(QueryBuilder $builder, $alias)
     {
-        if (in_array($alias, $builder->getAllAliases())) {
+        if (in_array($alias, $builder->getAllAliases(), true)) {
             return;
         }
 
@@ -670,6 +676,11 @@ class Repository extends ModelRepository
 
             case 'details':
                 $builder->leftJoin('orders.details', 'details');
+                break;
+
+            case 'article':
+                $this->addAliasJoin($builder, 'details');
+                $builder->leftJoin(Article::class, 'article', 'WITH', 'article.id = details.articleId');
                 break;
 
             case 'payment':

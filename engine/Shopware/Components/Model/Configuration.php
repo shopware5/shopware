@@ -36,6 +36,7 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration as BaseConfiguration;
 use Doctrine\ORM\Repository\RepositoryFactory;
 use DoctrineExtensions\Query\Mysql\DateFormat;
+use DoctrineExtensions\Query\Mysql\GroupConcat;
 use DoctrineExtensions\Query\Mysql\IfElse;
 use DoctrineExtensions\Query\Mysql\IfNull;
 use DoctrineExtensions\Query\Mysql\Regexp;
@@ -93,6 +94,7 @@ class Configuration extends BaseConfiguration
         $this->addCustomStringFunction('IF', IfElse::class);
         $this->addCustomStringFunction('RegExp', Regexp::class);
         $this->addCustomStringFunction('Replace', Replace::class);
+        $this->addCustomStringFunction('GroupConcat', GroupConcat::class);
 
         $this->release = $release;
 
