@@ -2163,6 +2163,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 $condition['property'] = 'orderTime';
                 $condition['expression'] = '>=';
             }
+
             $mapped[] = $condition;
         }
 
