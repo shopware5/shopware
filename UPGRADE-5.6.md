@@ -9,6 +9,29 @@ This changelog references changes done in Shopware 5.6 patch versions.
 ### Changes
 
 * Changed `\Shopware\Components\DependencyInjection\Compiler\PluginResourceCompilerPass` to work correctly with multiple plugins
+* Changed `\Shopware_Controllers_Backend_AttributeData` to support translating attribute store values
+    * Example:
+        ```php
+      $crudService->update(
+          's_articles_attributes',
+          'my_column',
+          'combobox',
+          [
+              'displayInBackend' => true,
+              'arrayStore' => [
+                  ['key' => 1, 'value' => 'Value 1'],
+              ],
+          ]
+      );  
+        ```
+     * Translation
+     ```ini
+    [en_GB]
+    s_articles_attributes_my_column_options_store_1 = "Item 1 EN"
+    
+    [de_DE]
+    s_articles_attributes_my_column_options_store_1 = "Item 1 DE"
+    ``` 
 
 ## 5.6.5
 
