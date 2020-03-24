@@ -192,8 +192,6 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         if ((rand() % 10) === 0) {
             $sql = 'DELETE FROM s_statistics_currentusers WHERE time < DATE_SUB(NOW(), INTERVAL 3 MINUTE)';
             Shopware()->Db()->query($sql);
-            $sql = 'DELETE FROM s_statistics_pool WHERE datum != CURDATE()';
-            Shopware()->Db()->query($sql);
         }
     }
 
