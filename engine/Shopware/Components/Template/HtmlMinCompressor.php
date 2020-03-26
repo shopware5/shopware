@@ -49,8 +49,8 @@ class HtmlMinCompressor implements HtmlCompressorInterface
             $content
         );
 
-        // Remove whitespace (spaces, newlines and tabs)
-        $content = trim(preg_replace('/[ \n\t]{2,}|[\n\t]/m', ' ', $content));
+        // Remove whitespace (spaces, newlines and tabs) at the beginning of a line and complete empty lines
+        $content = trim(preg_replace('!^[ \t]*\r?\n|^[ \t]+!m', '', $content));
 
         // Replace the placeholders with the original content.
         $content = preg_replace_callback(
