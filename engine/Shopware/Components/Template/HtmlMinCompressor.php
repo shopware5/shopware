@@ -28,6 +28,43 @@ class HtmlMinCompressor implements HtmlCompressorInterface
 {
     public function minify(string $content): string
     {
-        return preg_replace('#(?ix)(?>[^\S ]\s*|\s{2,})(?=(?:(?:[^<]++|<(?!/?(?:textarea|pre|script)\b))*+)(?:<(?>textarea|pre|script)\b|\z))#', ' ', $content);
+        // List of untouchable HTML-tags.
+        $unchanged = 'script|pre|textarea';
+        // It is assumed that this placeholder could not appear organically in your
+        // output. If it can, you may have an XSS problem.
+        $placeholder = "@@<'-pLaChLdR-'>@@";
+
+        // Some helper variables.
+        $unchangedBlocks  = [];
+        $unchangedRegex   = "!<($unchanged)[^>]*?>.*?</\\1>!is";
+        $placeholderRegex = "!$placeholder!";
+
+        // Replace all the tags (including their content) with a placeholder, and keep their contents for later.
+        $content = preg_replace_callback(
+            $unchangedRegex,
+            function ($match) use (&$unchangedBlocks, $placeholder) {
+                array_push($unchangedBlocks, $match[0]);
+                return $placeholder;
+            },
+            $content
+        );
+
+        // Remove whitespace (spaces, newlines and tabs)
+        $content = trim(preg_replace('/[ \n\t]{2,}|[\n\t]/m', ' ', $content));
+
+        // Replace the placeholders with the original content.
+        $content = preg_replace_callback(
+            $placeholderRegex,
+            function ($match) use (&$unchangedBlocks) {
+                // I am a paranoid.
+                if (count($unchangedBlocks) == 0) {
+                    throw new \RuntimeException("Found too many placeholders in input string");
+                }
+                return array_shift($unchangedBlocks);
+            },
+            $content
+        );
+
+        return $content;
     }
 }
