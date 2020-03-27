@@ -77,7 +77,7 @@
         /**
          * @property {string} eventSuffix - Suffix which will be appended to the eventType to get namespaced events
          */
-        me.eventSuffix = '.' + name;
+        me.eventSuffix = '.' + name + '-' + $.guid++;
 
         /**
          * @property {Array} _events Registered events listeners. See {@link PluginBase._on} for registration
