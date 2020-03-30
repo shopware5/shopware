@@ -50,11 +50,12 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
      */
     private $tags;
 
-    /**
-     * @param string $prefix
-     */
-    public function __construct(\Zend_Cache_Core $cache, $prefix = null, array $tags = [])
+    public function __construct(\Zend_Cache_Core $cache, string $prefix = 'Shopware_Modules', array $tags)
     {
+        if (\count($tags) === 0) {
+            throw new \InvalidArgumentException('This Adapter requires at least one tag to work correctly');
+        }
+
         $this->tags = $tags;
         $this->prefix = $prefix;
         $this->cache = $cache;
@@ -81,7 +82,7 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
      */
     protected function doContains($id)
     {
-        return $this->cache->test($this->prefix . md5($id));
+        return is_int($this->cache->test($this->prefix . md5($id)));
     }
 
     /**
@@ -107,11 +108,11 @@ class Cache extends \Doctrine\Common\Cache\CacheProvider
      *
      * @param string $id cache id
      *
-     * @return bool tRUE if the cache entry was successfully deleted, FALSE otherwise
+     * @return bool TRUE if the cache entry was successfully deleted, FALSE otherwise
      */
     protected function doDelete($id)
     {
-        return $this->cache->remove(md5($id));
+        return $this->cache->remove($this->prefix . md5($id));
     }
 
     /**
