@@ -5,7 +5,7 @@
         <atom:link href="{$sCategoryContent.rssFeed}" rel="self" type="application/rss+xml"/>
         <title>{block name='frontend_atom_title'}{s name="BlogRssFeedHeader"}{$sCategoryContent.description|escape:'hexentity'}{/s}{/block}</title>
         <link>{url controller='index'}</link>
-        <description>{$sShopname|escapeHtml} - {$sCategoryContent.description}</description>
+        <description>{$sShopname|escapeHtml} - {$sCategoryContent.description|escape}</description>
         <language>{$rssChannelLanguage|strtolower}</language>
         <lastBuildDate>{time()|date:rss}</lastBuildDate>
         {foreach from=$sBlogArticles item=sArticle key=key name="counter"}
@@ -14,7 +14,7 @@
                 <guid>{block name='frontend_blog_listing_rss_guid'}{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}{/block}</guid>
                 <link>{block name='frontend_blog_listing_rss_link'}{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}{/block}</link>
                 <description>{block name='frontend_blog_listing_rss_description'}{$sArticle.shortDescription|strip_tags|strip|truncate:280:"...":true|escape}{/block}</description>
-                <category>{block name='frontend_blog_listing_rss_category'}{$sCategoryContent.description}{/block}</category>
+                <category>{block name='frontend_blog_listing_rss_category'}{$sCategoryContent.description|escape}{/block}</category>
                 {if $sArticle.displayDate}
                     <pubDate>{block name='frontend_blog_listing_rss_date'}{$sArticle.displayDate|date:rss}{/block}</pubDate>
                 {/if}
