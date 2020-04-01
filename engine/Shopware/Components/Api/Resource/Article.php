@@ -2350,9 +2350,17 @@ class Article extends Resource implements BatchInterface
             );
 
             if (isset($imageData['link'])) {
+
+                $albumId = -1;
+                if (isset($imageData['albumId']))
+                {
+                    $albumId = $imageData['albumId'];
+                }
+                
                 /** @var MediaModel $media */
                 $media = $this->getMediaResource()->internalCreateMediaByFileLink(
-                    $imageData['link']
+                    $imageData['link'],
+                    $albumId
                 );
 
                 $image = $this->updateArticleImageWithMedia(
