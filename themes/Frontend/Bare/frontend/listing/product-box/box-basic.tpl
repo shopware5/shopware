@@ -10,7 +10,7 @@
             <div class="box--content is--rounded">
 
                 {* Product box badges - highlight, newcomer, ESD product and discount *}
-                {block name='frontend_listing_box_article_badges'}
+                {block name='frontend_listing_box_article_badges_container'}
                     {include file="frontend/listing/product-box/product-badges.tpl"}
                 {/block}
 
