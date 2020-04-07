@@ -1478,7 +1478,9 @@ SQL;
                     'sUniqueID',
                     $uniqueId,
                     time() + (86400 * 360),
-                    $basePath
+                    $basePath,
+                    null,
+                    $this->front->Request()->isSecure()
                 )
             );
         }

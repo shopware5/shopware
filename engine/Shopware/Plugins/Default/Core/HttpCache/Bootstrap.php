@@ -544,7 +544,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
         if (isset($newCacheTags)) {
             $this->response->headers->setCookie(
-                new Cookie('nocache', implode(', ', $newCacheTags), 0, $this->request->getBasePath() . '/')
+                new Cookie('nocache', implode(', ', $newCacheTags), 0, $this->request->getBasePath() . '/', null, $this->request->isSecure())
             );
         }
     }

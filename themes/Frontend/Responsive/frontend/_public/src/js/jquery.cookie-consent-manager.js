@@ -302,7 +302,8 @@
             preferences.hash = window.btoa(JSON.stringify(uniqueNames));
 
             date.setTime(date.getTime() + (180 * 24 * 60 * 60 * 1000));
-            document.cookie = this.preferenceCookieName + '=' + JSON.stringify(preferences) + ';path=' + this.getBasePath() + ';expires=' + date.toGMTString() + ';';
+
+            document.cookie = this.preferenceCookieName + '=' + JSON.stringify(preferences) + ';path=' + this.getBasePath() + ';expires=' + date.toGMTString() + ';' + ($.isSecure() ? ' secure;' : '');
 
             $.publish('plugin/swCookieConsentManager/onBuildCookiePreferences', [this, preferences]);
         },

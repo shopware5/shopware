@@ -36,6 +36,10 @@
             return cookiesAllowed && document.cookie.indexOf('"name":"x-ua-device","active":true') !== -1;
         }
 
+        function isSecure() {
+            return window.secureShop !== undefined && window.secureShop === true;
+        }
+
         (function(window, document) {
             var par = document.location.search.match(/sPartner=([^&])+/g),
                 pid = (par && par[0]) ? par[0].substring(9) : null,
@@ -73,7 +77,7 @@
                     }
                 }
 
-                document.cookie = 'x-ua-device=' + device + '; path=/';
+                document.cookie = 'x-ua-device=' + device + '; path=/' + (isSecure() ? '; secure;' : '');
             }
 
             document

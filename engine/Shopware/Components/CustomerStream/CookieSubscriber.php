@@ -153,7 +153,7 @@ class CookieSubscriber implements SubscriberInterface
         $session->offsetSet('userInfo', null);
 
         $controller->Response()->headers->setCookie(
-            new Cookie('slt', $token, $expire, $controller->Request()->getBasePath() . '/')
+            new Cookie('slt', $token, $expire, $controller->Request()->getBasePath() . '/', null, $controller->Request()->isSecure())
         );
 
         $this->connection->update('s_user', ['login_token' => $token], ['id' => $id]);
