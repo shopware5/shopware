@@ -39,6 +39,7 @@ use Shopware\Recovery\Install\Service\LocalLicenseUnpackService;
 use Shopware\Recovery\Install\Service\ThemeService;
 use Shopware\Recovery\Install\Service\TranslationService;
 use Shopware\Recovery\Install\Service\WebserverCheck;
+use Shopware\Recovery\Update\Utils;
 
 class ContainerProvider implements ServiceProviderInterface
 {
@@ -209,6 +210,12 @@ class ContainerProvider implements ServiceProviderInterface
                 $c['uniqueid.generator']->getUniqueId(),
                 $c['http-client']
             );
+        };
+        
+        $container['db'] = function ($c) {
+            $conn = Utils::getConnection(SW_PATH);
+
+            return $conn;
         };
     }
 }
