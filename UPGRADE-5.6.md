@@ -32,6 +32,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
     [de_DE]
     s_articles_attributes_my_column_options_store_1 = "Item 1 DE"
     ``` 
+* Changed cookie consent manager to work correctly when accepting all cookies
 
 ## 5.6.5
 
