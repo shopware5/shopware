@@ -282,6 +282,11 @@ class Enlight_Components_Cron_Manager
             }
 
             $this->endJob($job);
+            $this->eventManager->notify('Shopware_CronJob_Finished_' . $job->getAction(), [
+                'subject' => $this,
+                'job' => $job,
+            ]);
+
             $this->eventManager->notify('Shopware_CronJob_Finished', [
                 'subject' => $this,
                 'job' => $job,
@@ -296,6 +301,11 @@ class Enlight_Components_Cron_Manager
             } else {
                 $this->endJob($job);
             }
+
+            $this->eventManager->notify('Shopware_CronJob_Error_' . $action, [
+                'subject' => $this,
+                'job' => $job,
+            ]);
 
             $this->eventManager->notify('Shopware_CronJob_Error', [
                 'subject' => $this,
