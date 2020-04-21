@@ -201,7 +201,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 constructedItem.inputValue = constructedItem.value;
                 radios[constructedItem.name].items.push(constructedItem);
                 return;
-            } else if ((xtype === 'checkbox' || xtype === 'checkboxfield') && constructedItem.value) {
+            } else if ((xtype === 'checkbox' || xtype === 'checkboxfield') && (constructedItem.value === '1')) {
                 constructedItem.checked = true;
             }
 
