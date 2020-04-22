@@ -311,7 +311,7 @@
             var d = new Date();
             d.setTime(d.getTime() + (180 * 24 * 60 * 60 * 1000));
 
-            document.cookie = 'allowCookie=1; path=' + this.getBasePath() + ';expires=' + d.toGMTString() + ';';
+            document.cookie = 'allowCookie=1; path=' + this.getBasePath() + ';expires=' + d.toGMTString() + ';' + ($.isSecure() ? ' secure;' : '');
 
             this.hideElement();
 
@@ -327,7 +327,7 @@
         onDeclineButtonClick: function(event) {
             event.preventDefault();
 
-            document.cookie = 'cookieDeclined=1; path=' + this.getBasePath() + ';';
+            document.cookie = 'cookieDeclined=1; path=' + this.getBasePath() + ';' + ($.isSecure() ? ' secure;' : '');
 
             this.hideElement();
 

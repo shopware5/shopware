@@ -16,6 +16,10 @@
         return undefined;
     };
 
+    $.isSecure = function() {
+        return window.secureShop !== undefined && window.secureShop === true;
+    };
+
     /**
      * Remove a cookie with the provided name
      * @param name
@@ -185,7 +189,7 @@
             var me = this,
                 basePath = window.csrfConfig.basePath || '/';
 
-            document.cookie = me.storageKey + '=' + token + '; path=' + basePath;
+            document.cookie = me.storageKey + '=' + token + '; path=' + basePath + ($.isSecure() ? '; secure;' : '');
         },
 
         /**

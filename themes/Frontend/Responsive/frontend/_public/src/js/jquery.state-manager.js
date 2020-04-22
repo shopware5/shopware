@@ -1366,10 +1366,10 @@
             }
 
             var device = this._getCurrentDevice(),
-                cookieString = 'x-ua-device=' + device + '; path=/';
+                cookieString = 'x-ua-device=' + device + '; path=/;';
 
-            if (window.secureShop !== undefined && window.secureShop === true) {
-                cookieString = 'x-ua-device=' + device + ';secure; path=/';
+            if ($.isSecure()) {
+                cookieString += '; secure;';
             }
             document.cookie = cookieString;
         },
