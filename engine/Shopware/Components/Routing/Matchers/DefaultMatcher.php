@@ -62,9 +62,9 @@ class DefaultMatcher implements MatcherInterface
         $query = [];
         $params = [];
 
-        foreach (explode($this->separator, $path) as $routePart) {
+        foreach (explode($this->separator, $path) as $i => $routePart) {
             $routePart = urldecode($routePart);
-            if (empty($query[$context->getModuleKey()]) && $this->dispatcher->isValidModule($routePart)) {
+            if ($i === 0 && empty($query[$context->getModuleKey()]) && $this->dispatcher->isValidModule($routePart)) {
                 $query[$context->getModuleKey()] = $routePart;
             } elseif (empty($query[$context->getControllerKey()])) {
                 $query[$context->getControllerKey()] = $routePart;
