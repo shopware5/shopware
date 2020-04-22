@@ -1,4 +1,4 @@
-(function ($, window, undefined) {
+(function ($, window, location, undefined) {
     'use strict';
 
     $.getCookiePreference = function(cookieName) {
@@ -363,6 +363,9 @@
             $.overlay.close();
 
             $.publish('plugin/swCookieConsentManager/onSave', [this]);
+
+            // Necessary for the partner cookie to be set properly
+            location.reload();
         },
 
         onGroupToggleChanged: function (event) {
@@ -430,7 +433,7 @@
             return window.csrfConfig.basePath || '/';
         }
     });
-})(jQuery, window);
+})(jQuery, window, location);
 
 function openCookieConsentManager () {
     var plugin = $('*[data-cookie-consent-manager="true"]').data('plugin_swCookieConsentManager');
