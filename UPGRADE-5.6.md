@@ -66,6 +66,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
             // Your code here
         }
         ```
+* Renamed duplicated smarty block `frontend_listing_box_article_badges` in the files `frontend/listing/product-box/box-basic.tpl` and `frontend/listing/product-box/box-emotion.tpl`
 
 ## 5.6.6
 
