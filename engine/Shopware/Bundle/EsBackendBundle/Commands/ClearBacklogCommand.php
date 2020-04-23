@@ -44,5 +44,7 @@ class ClearBacklogCommand extends ShopwareCommand
         $io = new SymfonyStyle($input, $output);
 
         $io->success('Backlog has been cleared');
+
+        return 0;
     }
 }

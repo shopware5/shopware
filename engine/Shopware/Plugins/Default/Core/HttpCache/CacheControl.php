@@ -101,7 +101,7 @@ class CacheControl
             return false;
         }
 
-        if (strpos($request->getPathInfo(), '/widgets/index/refreshStatistic') !== false) {
+        if (stripos($request->getPathInfo(), '/widgets/index/refreshStatistic') !== false) {
             return false;
         }
 
@@ -365,7 +365,7 @@ class CacheControl
         ]);
 
         $response->headers->setCookie(
-            new Cookie('x-cache-context-hash', sha1($hash), 0, $request->getBasePath() . '/')
+            new Cookie('x-cache-context-hash', sha1($hash), 0, $request->getBasePath() . '/', null, $request->isSecure())
         );
     }
 }

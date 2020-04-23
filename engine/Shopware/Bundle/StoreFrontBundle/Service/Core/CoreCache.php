@@ -55,6 +55,6 @@ class CoreCache implements CacheInterface
      */
     public function save($id, $data, $lifeTime = 0)
     {
-        $this->cache->save($id, $data, $lifeTime);
+        return $this->cache->save($id, $data, $lifeTime);
     }
 }

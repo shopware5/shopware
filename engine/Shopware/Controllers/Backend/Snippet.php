@@ -437,6 +437,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
 
         if ($extension === 'xml') {
             $xml = simplexml_load_string(@file_get_contents($filePath), 'SimpleXMLElement', LIBXML_NOCDATA);
+            /** @var array $snippets */
             $snippets = $xml->Worksheet->Table->Row;
             $headers = $this->readXmlRow(current($snippets));
         } else {
@@ -576,7 +577,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
                 $header[] = 'dirty-' . $locale['locale'] . '-' . $locale['shopId'];
             }
 
-            echo implode($header, ';');
+            echo implode(';', $header);
             echo "\r\n";
 
             $encoding = null;

@@ -50,5 +50,7 @@ class IndexCleanupCommand extends ShopwareCommand
         /** @var ShopIndexerInterface $indexer */
         $indexer = $this->container->get('shopware_elastic_search.shop_indexer');
         $indexer->cleanupIndices();
+
+        return 0;
     }
 }

@@ -90,12 +90,16 @@ class SnippetsValidateCommand extends ShopwareCommand implements CompletionAware
 
         if (empty($invalidPaths)) {
             $output->writeln('<info>All snippets are correctly defined</info>');
-        } else {
-            $output->writeln('<error>The following errors occurred:</error>');
-            foreach ($invalidPaths as $error) {
-                $output->writeln('<error>' . $error . '</error>');
-            }
+
+            return 0;
         }
+
+        $output->writeln('<error>The following errors occurred:</error>');
+        foreach ($invalidPaths as $error) {
+            $output->writeln('<error>' . $error . '</error>');
+        }
+
+        return 1;
     }
 
     /**

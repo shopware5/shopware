@@ -25,7 +25,6 @@
 namespace Shopware\Components\DependencyInjection\Bridge;
 
 use Enlight_Event_EventManager as EnlightEventManager;
-use IteratorAggregate;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\Router as RoutingRouter;
@@ -38,17 +37,17 @@ class Router
      */
     public function factory(
         EnlightEventManager $eventManager,
-        IteratorAggregate $matchers,
-        IteratorAggregate $generators,
-        IteratorAggregate $preFilters,
-        IteratorAggregate $postFilters
+        iterable $matchers,
+        iterable $generators,
+        iterable $preFilters,
+        iterable $postFilters
     ) {
         $router = new RoutingRouter(
             Context::createEmpty(), // Request object will created on dispatch :/
-            iterator_to_array($matchers, false),
-            iterator_to_array($generators, false),
-            iterator_to_array($preFilters, false),
-            iterator_to_array($postFilters, false)
+            $this->convertIteratorToArray($matchers),
+            $this->convertIteratorToArray($generators),
+            $this->convertIteratorToArray($preFilters),
+            $this->convertIteratorToArray($postFilters)
         );
 
         /* Still better than @see \Shopware\Models\Shop\Shop::registerResources */
@@ -104,5 +103,14 @@ class Router
         // Fix context on forward
         $context = $router->getContext();
         $context->setGlobalParams($context::getGlobalParamsFromRequest($request));
+    }
+
+    private function convertIteratorToArray(iterable $iterator): array
+    {
+        if (is_array($iterator)) {
+            return $iterator;
+        }
+
+        return iterator_to_array($iterator, false);
     }
 }

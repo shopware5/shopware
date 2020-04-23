@@ -110,7 +110,6 @@
                  class="Shopware\Bundle\ESIndexingBundle\Property\PropertyMapping">
             <argument type="service" id="Shopware\Bundle\ESIndexingBundle\FieldMapping"/>
             <argument>%shopware.es.dynamic_mapping_enabled%</argument>
-            <argument>%shopware.es.debug%</argument>
 
             <tag name="shopware_elastic_search.mapping"/>
         </service>

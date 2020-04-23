@@ -69,7 +69,6 @@ class PluginConfigListCommand extends ShopwareCommand implements CompletionAware
         $this
             ->setName('sw:plugin:config:list')
             ->setDescription('Lists plugin configuration.')
-            /* @deprecated since 5.6, to be removed in 6.0 */
             ->addOption(
                 'shop',
                 null,
@@ -113,7 +112,6 @@ EOF
         /** @var ModelManager $em */
         $em = $this->container->get(\Shopware\Components\Model\ModelManager::class);
 
-        /** @var Shop[] $shop */
         $shops = null;
         $shopId = null;
 
@@ -145,5 +143,7 @@ EOF
             $output->writeln(sprintf('Plugin configuration for Plugin %s and shop %s:', $pluginName, $shop->getName()));
             $output->writeln(print_r($config, true));
         }
+
+        return 0;
     }
 }

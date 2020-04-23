@@ -67,5 +67,7 @@ class StoreListDomainsCommand extends StoreCommand
               ->setRows($domains);
 
         $table->render();
+
+        return 0;
     }
 }

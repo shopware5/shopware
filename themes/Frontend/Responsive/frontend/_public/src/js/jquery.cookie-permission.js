@@ -1,4 +1,4 @@
-;(function($, window) {
+(function($, window) {
     'use strict';
 
     var $body = $('body');
@@ -311,17 +311,11 @@
             var d = new Date();
             d.setTime(d.getTime() + (180 * 24 * 60 * 60 * 1000));
 
-            document.cookie = 'allowCookie=1; path=' + this.getBasePath() + ';expires=' + d.toGMTString() + ';';
+            document.cookie = 'allowCookie=1; path=' + this.getBasePath() + ';expires=' + d.toGMTString() + ';' + ($.isSecure() ? ' secure;' : '');
 
             this.hideElement();
-            this.applyActiveToPreferences();
-            
-            $.publish('plugin/swCookiePermission/onAcceptButtonClick', [this, event]);
-        },
 
-        applyActiveToPreferences: function () {
-            var cookieConsentPlugin = $(this.opts.cookieConsentManagerSelector).data('plugin_swCookieConsentManager');
-            cookieConsentPlugin.buildCookiePreferences(true);
+            $.publish('plugin/swCookiePermission/onAcceptButtonClick', [this, event]);
         },
 
         /**
@@ -333,10 +327,10 @@
         onDeclineButtonClick: function(event) {
             event.preventDefault();
 
-            document.cookie = 'cookieDeclined=1; path=' + this.getBasePath() + ';';
+            document.cookie = 'cookieDeclined=1; path=' + this.getBasePath() + ';' + ($.isSecure() ? ' secure;' : '');
 
             this.hideElement();
-            
+
             $.publish('plugin/swCookiePermission/onDeclineButtonClick', [this, event]);
         },
 

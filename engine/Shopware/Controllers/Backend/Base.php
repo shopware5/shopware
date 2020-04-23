@@ -143,9 +143,18 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         // Load shop repository
         /** @var \Shopware\Models\Payment\Repository $repository */
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Payment\Payment::class);
+        $filter = $this->Request()->getParam('filter', []);
+        $hasActiveFilter = in_array('active', array_column($filter, 'property'), true);
 
-        $query = $repository->getActivePaymentsQuery(
-            $this->Request()->getParam('filter', []),
+        if (!$hasActiveFilter) {
+            $filter[] = [
+                'property' => 'active',
+                'value' => true,
+            ];
+        }
+
+        $query = $repository->getAllPaymentsQuery(
+            $filter,
             $this->Request()->getParam('sort', []),
             $this->Request()->getParam('start'),
             $this->Request()->getParam('limit')
@@ -192,11 +201,32 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             'groups.taxInput as taxInput',
             'groups.mode as mode',
         ]);
-        $builder->addFilter($this->Request()->getParam('filter', []));
-        $builder->addOrderBy($this->Request()->getParam('sort', []));
 
-        $builder->setFirstResult($this->Request()->getParam('start'))
-            ->setMaxResults($this->Request()->getParam('limit'));
+        $request = $this->Request();
+        $filter = $request->getParam('filter', []);
+        $query = trim($request->getParam('query', ''));
+        if ($query !== '') {
+            $query = '%' . $query . '%';
+            $filter[] = [
+                'property' => 'groups.key',
+                'value' => $query,
+                'expression' => 'LIKE',
+                'operator' => 'OR',
+            ];
+            $filter[] = [
+                'property' => 'groups.name',
+                'value' => $query,
+                'expression' => 'LIKE',
+                'operator' => 'OR',
+            ];
+        }
+
+        $builder->addFilter($filter);
+        $builder->addOrderBy($request->getParam('sort', []));
+
+        $builder
+            ->setFirstResult($request->getParam('start'))
+            ->setMaxResults($request->getParam('limit'));
 
         $query = $builder->getQuery();
 
@@ -677,14 +707,25 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         /** @var \Shopware\Models\Shop\Repository $repository */
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Shop::class);
 
+        $request = $this->Request();
+        $filter = $request->getParam('filter', []);
+        $query = trim($request->getParam('query', ''));
+        if ($query !== '') {
+            $query = '%' . $query . '%';
+            $filter[] = [
+                'property' => 'shop.name',
+                'expression' => 'LIKE',
+                'value' => $query,
+            ];
+        }
+
         $query = $repository->getBaseListQuery(
-            $filter = $this->Request()->getParam('filter', []),
-            $order = $this->Request()->getParam('sort', []),
-            $offset = $this->Request()->getParam('start'),
-            $limit = $this->Request()->getParam('limit'),
+            $filter,
+            $order = $request->getParam('sort', []),
+            $offset = $request->getParam('start'),
+            $limit = $request->getParam('limit'),
             true
         );
-
         // Get total result of the query
         $total = Shopware()->Models()->getQueryCount($query);
 
@@ -735,9 +776,9 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     public function getTemplatesAction()
     {
         $repository = Shopware()->Models()->getRepository(\Shopware\Models\Shop\Template::class);
+        /** @var \Shopware\Models\Shop\Template[] $templates */
         $templates = $repository->findAll();
 
-        /** @var \Shopware\Models\Shop\Template $template */
         $result = [];
         foreach ($templates as $template) {
             $data = [
@@ -907,7 +948,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
     public function getAvailableCaptchasAction()
     {
-        /** @var \Shopware\Components\Captcha\CaptchaRepository $captchaManager */
+        /** @var \Shopware\Components\Captcha\CaptchaRepository $captchaRepository */
         $captchaRepository = $this->get('shopware.captcha.repository');
         /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = $namespace = Shopware()->Snippets()->getNamespace('backend/captcha/display_names');

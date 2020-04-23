@@ -113,5 +113,7 @@ class IndexPopulateCommand extends ShopwareCommand implements CompletionAwareInt
             $output->writeln("\n## Indexing shop " . $shop->getName() . ' ##');
             $indexer->index($shop, $helper, $input->getOption('index'));
         }
+
+        return 0;
     }
 }

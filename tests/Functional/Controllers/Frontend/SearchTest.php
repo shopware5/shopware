@@ -36,20 +36,29 @@ class SearchTest extends \Enlight_Components_Test_Controller_TestCase
         $this->dispatch('ajax_search?sSearch=ipad');
 
         // Check for valid markup
-        static::assertStringContainsString(
+        // Ignore whitespace, since this testcase checks wether the list is structured correctly (li following ul)
+        static::assertStringContainsStringIgnoringWhitespace(
             ' <ul class="results--list"> <li class="list--entry block-group result--item">',
             $this->Response()->getBody()
         );
         // Check for expected search link and number of results
-        static::assertStringContainsString(
+        static::assertStringContainsStringIgnoringWhitespace(
             '/search?sSearch=ipad" class="search-result--link entry--all-results-link block"> <i class="icon--arrow-right"></i> Alle Ergebnisse anzeigen </a> <span class="entry--all-results-number block"> 1 Treffer </span>',
             $this->Response()->getBody()
         );
         // Check for expected name and price
-        static::assertStringContainsString(
+        static::assertStringContainsStringIgnoringWhitespace(
             ' alt="iPadtasche mit Stiftmappe" class="media--image"> </span> <span class="entry--name block"> iPadtasche mit Stiftmappe </span> <span class="entry--price block"> <div class="product--price"> <span class="price--default is--nowrap"> 39,99&nbsp;&euro; * </span> </div> <div class="price--unit" title="Inhalt"> </div> </span> </a> </li> <li class="entry--all-results block-group result--item">',
             $this->Response()->getBody()
         );
+
+        $this->Response()->clearBody();
+        $this->dispatch('ajax_search?sSearch=1234%a5%27%20having%201=1--%20');
+        static::assertStringContainsString('Keine Suchergebnisse gefunden', $this->Response()->getBody());
+        //search for an emoji, might not be displayed correctly in IDE
+        $this->Response()->clearBody();
+        $this->dispatch('ajax_search?sSearch=👨‍🚒');
+        static::assertStringContainsString('Keine Suchergebnisse gefunden', $this->Response()->getBody());
     }
 
     /**
@@ -77,5 +86,14 @@ x='<%'
 alert(2)
 </script>", "r _x='"],
         ];
+    }
+
+    private static function assertStringContainsStringIgnoringWhitespace(string $needle, string $haystack, string $message = ''): void
+    {
+        static::assertStringContainsString(
+            preg_replace('/\s/', '', $needle),
+            preg_replace('/\s/', '', $haystack),
+            $message
+        );
     }
 }

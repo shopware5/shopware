@@ -25,13 +25,13 @@
 namespace Shopware\Bundle\ContentTypeBundle\FieldResolver;
 
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\MediaService;
+use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 
 class MediaResolver extends AbstractResolver
 {
     /**
-     * @var MediaService
+     * @var MediaServiceInterface
      */
     private $mediaService;
 
@@ -45,7 +45,7 @@ class MediaResolver extends AbstractResolver
      */
     private $contextService;
 
-    public function __construct(MediaService $mediaService, LegacyStructConverter $structConverter, ContextServiceInterface $contextService)
+    public function __construct(MediaServiceInterface $mediaService, LegacyStructConverter $structConverter, ContextServiceInterface $contextService)
     {
         $this->mediaService = $mediaService;
         $this->structConverter = $structConverter;

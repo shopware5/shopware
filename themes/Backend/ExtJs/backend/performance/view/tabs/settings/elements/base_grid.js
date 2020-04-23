@@ -73,6 +73,10 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.BaseGrid', {
         me.on('canceledit', function(editor, e) {
             var record = e.record;
 
+            if (!record.phantom) {
+                return;
+            }
+
             me.store.remove(record);
         });
 

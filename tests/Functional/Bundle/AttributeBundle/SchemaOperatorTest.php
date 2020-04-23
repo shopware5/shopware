@@ -24,9 +24,16 @@
 
 namespace Shopware\Tests\Functional\Bundle\AttributeBundle;
 
-class SchemaOperatorTest extends \PHPUnit\Framework\TestCase
+use Exception;
+use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\AttributeBundle\Service\ConfigurationStruct;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+
+class SchemaOperatorTest extends TestCase
 {
-    public function testDefaultValues()
+    use DatabaseTransactionBehaviour;
+
+    public function testDefaultValues(): void
     {
         $types = [
             'string' => 'test123',
@@ -45,7 +52,7 @@ class SchemaOperatorTest extends \PHPUnit\Framework\TestCase
         $this->iterateTypeArray($types);
     }
 
-    public function testNullDefaultValues()
+    public function testNullDefaultValues(): void
     {
         $types = [
             'string' => null,
@@ -64,7 +71,7 @@ class SchemaOperatorTest extends \PHPUnit\Framework\TestCase
         $this->iterateTypeArray($types);
     }
 
-    public function testNullStringDefaultValues()
+    public function testNullStringDefaultValues(): void
     {
         $types = [
             'string' => 'NULL',
@@ -84,9 +91,9 @@ class SchemaOperatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    public function testDefaultValuesBoolean()
+    public function testDefaultValuesBoolean(): void
     {
         $this->iterateTypeArray(['boolean' => 1]);
         $this->iterateTypeArray(['boolean' => 0]);
@@ -100,12 +107,43 @@ class SchemaOperatorTest extends \PHPUnit\Framework\TestCase
         $this->iterateTypeArray(['boolean' => 'null']);
     }
 
+    public function testUpdateConfiguration(): void
+    {
+        $service = Shopware()->Container()->get('shopware_attribute.crud_service');
+        $tableMapping = Shopware()->Container()->get('shopware_attribute.table_mapping');
+        $table = 's_articles_attributes';
+        $columnName = 'attr_' . uniqid(mt_rand(), false);
+
+        $service->update($table, $columnName, 'bool');
+        static::assertTrue($tableMapping->isTableColumn($table, $columnName));
+        $service->update($table, $columnName, 'date');
+        static::assertTrue($tableMapping->isTableColumn($table, $columnName));
+
+        /** @var ConfigurationStruct|null $column */
+        $column = $service->get($table, $columnName);
+        static::assertInstanceOf(ConfigurationStruct::class, $column);
+        static::assertEquals('date', $column->getColumnType());
+    }
+
+    public function testReinsertColumnConfigurationShouldFail(): void
+    {
+        $this->expectException(\Doctrine\DBAL\DBALException::class);
+        $connection = Shopware()->Container()->get('dbal_connection');
+        $attributeData = [
+            'table_name' => 's_articles_attributes',
+            'column_name' => 'attr_' . uniqid(mt_rand(), false),
+            'column_type' => 'bool',
+        ];
+        $connection->insert('s_attribute_configuration', $attributeData);
+        $connection->insert('s_attribute_configuration', $attributeData);
+    }
+
     /**
      * @param array $types
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    private function iterateTypeArray($types)
+    private function iterateTypeArray($types): void
     {
         $service = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class);
         $tableMapping = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\TableMapping::class);
@@ -118,7 +156,7 @@ class SchemaOperatorTest extends \PHPUnit\Framework\TestCase
                 $service->delete($table, $name);
             }
 
-            $service->update('s_articles_attributes', $name, $type, [], null, false, $default);
+            $service->update($table, $name, $type, [], null, false, $default);
 
             static::assertTrue($tableMapping->isTableColumn($table, $name));
             $service->delete($table, $name);

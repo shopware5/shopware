@@ -162,7 +162,7 @@ Ext.define('Shopware.apps.Log.view.system.List', {
 
         combo.store.load();
 
-        combo.on('change', function () {
+        combo.on('select', function () {
             var value = combo.getValue();
             if (value) {
                 me.downloadButton.enable();

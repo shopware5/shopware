@@ -245,7 +245,7 @@ class WildfireFormatter extends BaseWildfireFormatter
                 } else {
                     if ($property->isProtected()) {
                         $name = 'protected:' . $name;
-                        $raw_name = "\0" . '*' . "\0" . $raw_name;
+                        $raw_name = "\0*\0" . $raw_name;
                     }
                 }
 

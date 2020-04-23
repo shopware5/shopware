@@ -37,7 +37,7 @@ class MemoryLimit
         }
 
         if ($currentLimit < $bytes) {
-            @ini_set('memory_limit', $bytes);
+            @ini_set('memory_limit', (string) $bytes);
         }
     }
 

@@ -83,6 +83,7 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
                 'status' => ['type' => 'long'],
                 'cleared' => ['type' => 'long'],
                 'customerId' => ['type' => 'long'],
+                'supplierId' => $this->textMapping->getTextField(),
                 'billingCountryId' => ['type' => 'long'],
                 'shippingCountryId' => ['type' => 'long'],
                 'groupKey' => $this->textMapping->getKeywordField(),

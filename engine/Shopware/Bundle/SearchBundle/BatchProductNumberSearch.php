@@ -140,10 +140,11 @@ class BatchProductNumberSearch
      */
     private function getOptimizedCriteriaList(array $criteriaList)
     {
+        /** @var array{criteria: Criteria, request: array{criteria: Criteria, key: int}} $optimizedCriteriaList */
         $optimizedCriteriaList = [];
 
         foreach ($criteriaList as $key => $originalCriteria) {
-            /** @var int $criteriaPosition */
+            /** @var int|bool $criteriaPosition */
             $criteriaPosition = $this->getOptimizedCriteriaListPosition($originalCriteria, $optimizedCriteriaList);
 
             if ($criteriaPosition !== false) {

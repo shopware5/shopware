@@ -742,7 +742,7 @@ EOT;
         ];
 
         $hint = 'For PE/EB/EC a Commercial License key is required)';
-        $question = new ChoiceQuestion('Please select your edition' . "\n" . $hint, $choices);
+        $question = new ChoiceQuestion("Please select your edition\n" . $hint, $choices);
         $question->setErrorMessage('Edition %s is invalid.');
         $edition = $this->IOHelper->ask($question);
 
@@ -764,7 +764,7 @@ EOT;
     private function askLicence()
     {
         return $this->IOHelper->askMultiLineQuestion(
-            new Question('Please provide licence. An empty line will exit the input: ' . "\n")
+            new Question("Please provide licence. An empty line will exit the input: \n")
         );
     }
 

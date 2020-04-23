@@ -143,17 +143,21 @@ class GenerateProductFeedCommand extends ShopwareCommand implements CompletionAw
                 $this->generateFeed($export, $feedModel);
             }
         } else {
-            /** @var ProductFeed $productFeed */
+            /** @var ProductFeed|null $productFeed */
             $productFeed = $productFeedRepository->find((int) $feedId);
-            if (empty($productFeed)) {
+            if ($productFeed === null) {
                 throw new \RuntimeException(sprintf("Unable to load feed with id %s\n", $feedId));
-            } elseif ($productFeed->getActive() !== 1) {
+            }
+
+            if ($productFeed->getActive() !== 1) {
                 throw new \RuntimeException(sprintf("The feed with id %s is not active\n", $feedId));
             }
             $this->generateFeed($export, $productFeed);
         }
 
         $this->output->writeln(sprintf('Product feed cache successfully refreshed'));
+
+        return 0;
     }
 
     /**

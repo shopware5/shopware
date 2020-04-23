@@ -58,11 +58,13 @@ use Shopware\Bundle\StaticContentBundle\StaticContentBundle;
 use Shopware\Bundle\StoreFrontBundle\StoreFrontBundle;
 use Shopware\Components\ConfigLoader;
 use Shopware\Components\DependencyInjection\Compiler\ConfigureApiResourcesPass;
+use Shopware\Components\DependencyInjection\Compiler\ConfigureContainerAwareCommands;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\LegacyApiResourcesPass;
 use Shopware\Components\DependencyInjection\Compiler\PluginLoggerCompilerPass;
+use Shopware\Components\DependencyInjection\Compiler\PluginResourceCompilerPass;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\DependencyInjection\LegacyPhpDumper;
 use Shopware\Components\Plugin;
@@ -212,7 +214,7 @@ class Kernel extends SymfonyKernel
 
         $enlightRequest = EnlightRequest::createFromGlobals();
         $enlightRequest->setContent($request->getContent());
-        $enlightRequest->files->replace($request->files->all());
+        $enlightRequest->setFiles($request->files->all());
 
         return $enlightRequest;
     }
@@ -255,7 +257,6 @@ class Kernel extends SymfonyKernel
             }
 
             $this->container->get('events')->addSubscriber($bundle);
-            $this->container->get('events')->addSubscriber(new Plugin\ResourceSubscriber($bundle->getPath()));
         }
 
         $this->booted = true;
@@ -662,6 +663,7 @@ class Kernel extends SymfonyKernel
         $container->addCompilerPass(new AddConstraintValidatorsPass());
         $container->addCompilerPass(new StaticResourcesCompilerPass());
         $container->addCompilerPass(new AddConsoleCommandPass());
+        $container->addCompilerPass(new ConfigureContainerAwareCommands());
         $container->addCompilerPass(new MatcherCompilerPass());
         $container->addCompilerPass(new LegacyApiResourcesPass());
         $container->addCompilerPass(new ConfigureApiResourcesPass(), PassConfig::TYPE_OPTIMIZE, -500);
@@ -798,6 +800,7 @@ class Kernel extends SymfonyKernel
 
         $container->addCompilerPass(new RegisterControllerCompilerPass($activePlugins));
         $container->addCompilerPass(new PluginLoggerCompilerPass($activePlugins));
+        $container->addCompilerPass(new PluginResourceCompilerPass($activePlugins));
 
         $extensions = [];
 

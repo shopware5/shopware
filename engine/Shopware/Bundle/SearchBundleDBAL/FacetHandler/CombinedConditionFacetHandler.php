@@ -56,7 +56,6 @@ class CombinedConditionFacetHandler implements PartialFacetHandlerInterface
         $own = clone $reverted;
 
         if (!$criteria->hasCondition($facet->getName())) {
-            /** @var CombinedConditionFacet $facet */
             foreach ($facet->getConditions() as $condition) {
                 $own->addCondition($condition);
             }

@@ -150,11 +150,15 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
             foreach ($val as $k => $v) {
                 unset($process[$key][$k]);
                 $stripTags = in_array($k, $whiteList) ? false : $stripTagsConf;
+                $filteredKey = self::filterValue($k, $regex, $stripTags);
+                if ($filteredKey === '' || $filteredKey === null) {
+                    continue;
+                }
                 if (is_array($v)) {
-                    $process[$key][self::filterValue($k, $regex, $stripTags)] = $v;
+                    $process[$key][$filteredKey] = $v;
                     $process[] = &$process[$key][self::filterValue($k, $regex, $stripTags)];
                 } else {
-                    $process[$key][self::filterValue($k, $regex, $stripTags)] = self::filterValue($v, $regex, $stripTags);
+                    $process[$key][$filteredKey] = self::filterValue($v, $regex, $stripTags);
                 }
             }
         }

@@ -56,15 +56,16 @@ class CustomerGroup extends Resource
         }
 
         $builder = $this->getRepository()->createQueryBuilder('customerGroup')
-                ->select('customerGroup', 'd')
+                ->select('customerGroup', 'd', 'attribute')
                 ->leftJoin('customerGroup.discounts', 'd')
+                ->leftJoin('customerGroup.attribute', 'attribute')
                 ->where('customerGroup.id = :id')
                 ->setParameter(':id', $id);
 
         $query = $builder->getQuery();
         $query->setHydrationMode($this->getResultMode());
 
-        /** @var \Shopware\Models\Customer\Group $category */
+        /** @var \Shopware\Models\Customer\Group|null $result */
         $result = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$result) {

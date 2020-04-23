@@ -79,12 +79,12 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         } elseif ($this->isCategoryListing($request)) {
             $categoryId = (int) $request->getParam('sCategory');
             $customFacets = $this->facetService->getFacetsOfCategories([$categoryId], $context);
+            /** @var CustomFacet[] $customFacets */
             $customFacets = array_shift($customFacets);
         } else {
             $customFacets = $this->facetService->getAllCategoryFacets($context);
         }
 
-        /** @var CustomFacet[] $customFacets */
         foreach ($customFacets as $customFacet) {
             if (!$customFacet->getFacet()) {
                 continue;

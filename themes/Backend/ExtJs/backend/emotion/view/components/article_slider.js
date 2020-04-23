@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
             me.streamSelection.allowBlank = true;
             me.categoryFilter.allowBlank = true;
         } else if (me.articleType.getValue() == 'product_stream') {
-            me.maxCountField.hide();
+            me.maxCountField.show();
             me.categoryFilter.hide();
             me.articleGrid.hide();
             me.variantGrid.hide();
@@ -175,7 +175,7 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
             me.streamSelection.allowBlank = true;
             me.categoryFilter.allowBlank = true;
         } else if (newValue == 'product_stream') {
-            me.maxCountField.hide();
+            me.maxCountField.show();
             me.categoryFilter.hide();
             me.articleGrid.hide();
             me.variantGrid.hide();

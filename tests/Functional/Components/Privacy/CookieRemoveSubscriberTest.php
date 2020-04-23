@@ -27,6 +27,7 @@ namespace Shopware\Tests\Functional\Components\Privacy;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CookieBundle\CookieCollection;
 use Shopware\Bundle\CookieBundle\Services\CookieHandler;
+use Shopware\Bundle\CookieBundle\Services\CookieRemoveHandler;
 use Shopware\Bundle\CookieBundle\Structs\CookieGroupStruct;
 use Shopware\Bundle\CookieBundle\Structs\CookieStruct;
 use Shopware\Components\Privacy\CookieRemoveSubscriber;
@@ -76,159 +77,69 @@ class CookieRemoveSubscriberTest extends TestCase
         static::assertNotEmpty($controller->Response()->getCookies());
     }
 
-    public function testPostDispatchShouldRemoveAllCookiesFromResponse(): void
+    public function testPostDispatchAddsConfigHeaderHttpCacheEnabled(): void
     {
         Shopware()->Config()->offsetSet('cookie_note_mode', CookieRemoveSubscriber::COOKIE_MODE_ALL);
         Shopware()->Config()->offsetSet('show_cookie_note', 1);
 
         $controller = $this->getController();
 
-        $controller->Response()->setCookie('removed', 'foo');
-
         $cookieRemoveSubscriber = $this->getCookieRemoveSubscriber();
         $cookieRemoveSubscriber->onPostDispatch($this->getEventArgs($controller));
 
-        static::assertEmpty($controller->Response()->getCookies());
+        static::assertNotNull($controller->Response()->headers->get(CookieRemoveHandler::COOKIE_CONFIG_KEY));
     }
 
-    public function testPostDispatchShouldPreserveTechnicallyRequiredCookiesFromBeingRemovedDueToMode(): void
+    public function testPostDispatchDoesNotAddConfigHeaderHttpCacheDisabled(): void
     {
-        $cookieRemoveSubscriber = $this->getCookieRemoveSubscriber();
-
         Shopware()->Config()->offsetSet('cookie_note_mode', CookieRemoveSubscriber::COOKIE_MODE_ALL);
         Shopware()->Config()->offsetSet('show_cookie_note', 1);
 
         $controller = $this->getController();
 
-        $controller->Response()->setCookie('removed', 'foo');
+        $cookieRemoveSubscriber = $this->getCookieRemoveSubscriber(false);
         $cookieRemoveSubscriber->onPostDispatch($this->getEventArgs($controller));
-        static::assertEmpty($controller->Response()->getCookies());
 
-        $controller->Response()->setCookie('session-1', 'foo');
-        $cookieRemoveSubscriber->onPostDispatch($this->getEventArgs($controller));
-        static::assertNotEmpty($controller->Response()->getCookies());
+        static::assertNull($controller->Response()->headers->get(CookieRemoveHandler::COOKIE_CONFIG_KEY));
     }
 
-    public function testPostDispatchShouldRemoveFromAllPaths(): void
+    public function testPostDispatchAddsCookieCollectionHeaderHttpCacheEnabled(): void
     {
-        $cookieRemoveSubscriber = $this->getCookieRemoveSubscriber();
-
-        Shopware()->Config()->offsetSet('cookie_note_mode', CookieRemoveSubscriber::COOKIE_MODE_ALL);
-        Shopware()->Config()->offsetSet('show_cookie_note', 1);
-
-        $controller = $this->getController();
-        $controller->Request()->setBasePath('foo');
-
-        $controller->Response()->setCookie('removed', 'foo', 0, '/');
-        $cookieRemoveSubscriber->onPostDispatch($this->getEventArgs($controller));
-        static::assertEmpty($controller->Response()->getCookies());
-
-        $controller->Response()->setCookie('removed', 'foo', 0, 'foo');
-        $cookieRemoveSubscriber->onPostDispatch($this->getEventArgs($controller));
-        static::assertEmpty($controller->Response()->getCookies());
-
-        $controller->Response()->setCookie('removed', 'foo', 0, 'foo/');
-        $cookieRemoveSubscriber->onPostDispatch($this->getEventArgs($controller));
-        static::assertEmpty($controller->Response()->getCookies());
-    }
-
-    public function testPostDispatchShouldRemoveAlreadySetCookies(): void
-    {
-        $cookieRemoveSubscriber = $this->getCookieRemoveSubscriber();
-
-        Shopware()->Config()->offsetSet('cookie_note_mode', CookieRemoveSubscriber::COOKIE_MODE_ALL);
-        Shopware()->Config()->offsetSet('show_cookie_note', 1);
-
-        $cookieName = 'removeMe';
-
-        $_COOKIE[$cookieName] = 1;
-        $controller = $this->getController();
-
-        $cookieRemoveSubscriber->onPostDispatch($this->getEventArgs($controller));
-        static::assertNotEmpty($controller->Response()->getCookies());
-
-        static::assertSame(0, $controller->Response()->getCookies()[$cookieName . '-']['expire']);
-    }
-
-    public function testPostDispatchShouldRemoveAlreadySetCookiesFromAllPaths(): void
-    {
-        $cookieRemoveSubscriber = $this->getCookieRemoveSubscriber();
-
-        Shopware()->Config()->offsetSet('cookie_note_mode', CookieRemoveSubscriber::COOKIE_MODE_ALL);
-        Shopware()->Config()->offsetSet('show_cookie_note', 1);
-
-        $cookieName = 'removeMe';
-
-        $_COOKIE[$cookieName] = 1;
-        $controller = $this->getController();
-        $controller->Request()->setBasePath('foo');
-
-        $cookieRemoveSubscriber->onPostDispatch($this->getEventArgs($controller));
-        $responseCookies = $controller->Response()->getCookies();
-
-        static::assertCount(4, $responseCookies);
-        static::assertSame(0, array_sum(array_column($responseCookies, 'expire')));
-    }
-
-    public function testPostDispatchShouldRemoveCookiesDueToPreferences(): void
-    {
-        $cookieRemoveSubscriber = $this->getCookieRemoveSubscriber();
-
         Shopware()->Config()->offsetSet('cookie_note_mode', CookieRemoveSubscriber::COOKIE_MODE_TECHNICAL);
         Shopware()->Config()->offsetSet('show_cookie_note', 1);
 
-        $_COOKIE[CookieHandler::PREFERENCES_COOKIE_NAME] = json_encode([
-            'groups' => [
-                [
-                    'name' => 'foo',
-                    'cookies' => [
-                        [
-                            'name' => 'removeMe',
-                            'active' => false,
-                        ],
-                    ],
-                ],
-            ],
-        ]);
         $controller = $this->getController();
-        $controller->Response()->setCookie('removeMe', 'foo');
-
-        $cookieRemoveSubscriber->onPostDispatch($this->getEventArgs($controller));
-        $responseCookies = $controller->Response()->getCookies();
-        static::assertEmpty($responseCookies);
-    }
-
-    public function testPostDispatchShouldPreserveCookiesAllowedByPreferences(): void
-    {
-        Shopware()->Container()->get('events')->addListener(
-            'CookieCollector_Collect_Cookies',
-            [PreserveCookieFromRemovingSubscriber::class, 'addCookie']
-        );
 
         $cookieRemoveSubscriber = $this->getCookieRemoveSubscriber();
+        $cookieRemoveSubscriber->onPostDispatch($this->getEventArgs($controller));
 
+        static::assertNotNull($controller->Response()->headers->get(CookieRemoveHandler::COOKIE_GROUP_COLLECTION_KEY));
+    }
+
+    public function testPostDispatchDoesNotAddCookieCollectionHeaderHttpCacheDisabled(): void
+    {
         Shopware()->Config()->offsetSet('cookie_note_mode', CookieRemoveSubscriber::COOKIE_MODE_TECHNICAL);
         Shopware()->Config()->offsetSet('show_cookie_note', 1);
 
-        $_COOKIE[CookieHandler::PREFERENCES_COOKIE_NAME] = json_encode([
-            'groups' => [
-                [
-                    'name' => 'foo',
-                    'cookies' => [
-                        [
-                            'name' => 'keepMe',
-                            'active' => true,
-                        ],
-                    ],
-                ],
-            ],
-        ]);
         $controller = $this->getController();
-        $controller->Response()->setCookie('keepMe', 'foo');
 
+        $cookieRemoveSubscriber = $this->getCookieRemoveSubscriber(false);
         $cookieRemoveSubscriber->onPostDispatch($this->getEventArgs($controller));
-        $responseCookies = $controller->Response()->getCookies();
-        static::assertNotEmpty($responseCookies);
+
+        static::assertNull($controller->Response()->headers->get(CookieRemoveHandler::COOKIE_GROUP_COLLECTION_KEY));
+    }
+
+    public function testPostDispatchAddsCookieGroupsViewVariableTechnicallyRequired(): void
+    {
+        Shopware()->Config()->offsetSet('cookie_note_mode', CookieRemoveSubscriber::COOKIE_MODE_TECHNICAL);
+        Shopware()->Config()->offsetSet('show_cookie_note', 1);
+
+        $controller = $this->getController();
+
+        $cookieRemoveSubscriber = $this->getCookieRemoveSubscriber(false);
+        $cookieRemoveSubscriber->onPostDispatch($this->getEventArgs($controller));
+
+        static::assertNotNull($controller->View()->getAssign('cookieGroups'));
     }
 
     private function getEventArgs(\Enlight_Controller_Action $controller = null): \Enlight_Controller_ActionEventArgs
@@ -249,11 +160,12 @@ class CookieRemoveSubscriberTest extends TestCase
         return $controller;
     }
 
-    private function getCookieRemoveSubscriber(): CookieRemoveSubscriber
+    private function getCookieRemoveSubscriber(bool $httpCacheEnabled = true): CookieRemoveSubscriber
     {
         return new CookieRemoveSubscriber(
             Shopware()->Config(),
-            Shopware()->Container()->get(CookieHandler::class)
+            Shopware()->Container()->get(CookieHandler::class),
+            $httpCacheEnabled
         );
     }
 }

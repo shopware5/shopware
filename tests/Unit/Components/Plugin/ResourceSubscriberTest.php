@@ -30,16 +30,22 @@ use Shopware\Components\Theme\LessDefinition;
 
 class ResourceSubscriberTest extends TestCase
 {
-    public function testEmptyPlugin()
+    public function testEmptyPlugin(): void
     {
         $subscriber = new ResourceSubscriber(__DIR__ . '/examples/EmptyPlugin');
 
         static::assertNull($subscriber->onCollectCss());
         static::assertNull($subscriber->onCollectJavascript());
         static::assertNull($subscriber->onCollectLess());
+
+        $subscriberWithViews = new ResourceSubscriber(__DIR__ . '/examples/EmptyPlugin');
+        $templateEventArgs = new \Enlight_Event_EventArgs();
+        $subscriberWithViews->onRegisterTemplate($templateEventArgs);
+        static::assertIsArray($templateEventArgs->getReturn());
+        static::assertNotEmpty($templateEventArgs->getReturn());
     }
 
-    public function testFoo()
+    public function testFoo(): void
     {
         $subscriber = new ResourceSubscriber(__DIR__ . '/examples/TestPlugin');
 
@@ -64,6 +70,17 @@ class ResourceSubscriberTest extends TestCase
                 __DIR__ . '/examples/TestPlugin/Resources/frontend/less/all.less',
             ]),
             $subscriber->onCollectLess()
+        );
+
+        $subscriberWithViews = new ResourceSubscriber(__DIR__ . '/examples/TestPlugin');
+        $templateEventArgs = new \Enlight_Event_EventArgs();
+        $subscriberWithViews->onRegisterTemplate($templateEventArgs);
+        static::assertTrue(is_array($templateEventArgs->getReturn()));
+        static::assertSame(
+            [
+                __DIR__ . '/examples/TestPlugin/Resources/views',
+            ],
+            $templateEventArgs->getReturn()
         );
     }
 }

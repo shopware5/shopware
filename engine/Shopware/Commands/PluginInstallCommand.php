@@ -137,5 +137,7 @@ EOF
         }
 
         $this->clearCachesIfRequested($input, $output, $installationContext, $activationContext);
+
+        return 0;
     }
 }

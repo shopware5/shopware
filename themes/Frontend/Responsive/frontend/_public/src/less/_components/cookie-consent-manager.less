@@ -1,6 +1,6 @@
 #cookie-consent:extend(.sidebar-main.off-canvas) {
     .unitize-width(280);
-    .transition(all 0.45s cubic-bezier(.3,0,.15,1));
+    .transition(transform 0.45s cubic-bezier(.3,0,.15,1));
 
     &.off-canvas {
         position: fixed;
@@ -8,21 +8,18 @@
         background: @body-bg;
     }
 
+    &.block-transition {
+        transition: none;
+    }
+
     .cookie-consent--header {
-        .unitize-padding(15, 10);
+        &:extend(.navigation--smartphone .entry--close-off-canvas);
+        &:extend(.navigation--smartphone .entry--close-off-canvas .navigation--link);
 
-        background: #fff;
-        border-bottom: 2px solid @border-color;
-        font-weight: @font-bold-weight;
-        position: relative;
+        cursor: pointer;
 
-        .cookie-consent--header-cross {
-            .unitize(right, 15);
-            .unitize(top, 15);
-
-            cursor: pointer;
-            font-weight: normal;
-            position: absolute;
+        .icon--arrow-right {
+            &:extend(.navigation--smartphone .entry--close-off-canvas .icon--arrow-right);
         }
     }
 
@@ -70,8 +67,8 @@
 
         position: relative;
 
-        &:last-child {
-            padding-bottom: 0;
+        .cookie--label {
+            cursor: pointer;
         }
     }
 
@@ -110,6 +107,7 @@
 
 // State input
 .cookie-consent--state-input {
+    display: block;
     position: absolute;
 
     &.cookie-consent--cookie-state {
@@ -138,7 +136,7 @@
         display: none;
 
         &:checked + .cookie-consent--state-input-element {
-            background: @highlight-success;
+            background: darken(@gray-dark, 20%);
 
             &::after {
                 .unitize-width(10);
@@ -157,7 +155,7 @@
         }
 
         &:indeterminate + .cookie-consent--state-input-element {
-            background: #5f7285;
+            background: darken(@gray-dark, 20%);
 
             &::after {
                 .unitize-width(10);

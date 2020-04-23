@@ -289,8 +289,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
 
         $addresses = $this->translateCountries($addresses);
 
-        /** @var string $data */
-        $extraData = array_map(function ($data) {
+        $extraData = array_map(static function ($data) {
             // only allow alphanumeric characters, commas and spaces
             return preg_replace('/[^A-Za-z0-9 ,]/', '', $data);
         }, $extraData);

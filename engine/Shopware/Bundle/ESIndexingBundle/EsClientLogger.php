@@ -42,7 +42,7 @@ class EsClientLogger extends Client implements EsClientInterface
 
     public function __call($name, $arguments)
     {
-        parent::$name(...$arguments);
+        return parent::$name(...$arguments);
     }
 
     /**

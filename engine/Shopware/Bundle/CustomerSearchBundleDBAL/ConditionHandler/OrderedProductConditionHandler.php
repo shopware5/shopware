@@ -39,7 +39,6 @@ class OrderedProductConditionHandler implements ConditionHandlerInterface
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
         $wheres = [];
-        /** @var OrderedProductCondition $condition */
         foreach ($condition->getNumbers() as $i => $number) {
             $wheres[] = 'customer.ordered_products LIKE :product' . $i;
             $query->setParameter(':product' . $i, '%|' . $number . '|%');

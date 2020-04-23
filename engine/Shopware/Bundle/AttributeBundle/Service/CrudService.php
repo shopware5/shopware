@@ -351,7 +351,7 @@ class CrudService implements CrudServiceInterface
      * @param string                $type
      * @param string|int|float|null $defaultValue
      *
-     * @return string|int|float|null
+     * @return string|int|float
      */
     private function parseDefaultValue($type, $defaultValue)
     {
@@ -364,7 +364,7 @@ class CrudService implements CrudServiceInterface
         if (!$type['allowDefaultValue'] || $defaultValue === null) {
             return CrudServiceInterface::NULL_STRING;
         }
-        if ($defaultValue == CrudServiceInterface::NULL_STRING) {
+        if ($defaultValue === CrudServiceInterface::NULL_STRING) {
             return $defaultValue;
         }
         if ($type['quoteDefaultValue'] && $defaultValue !== null) {

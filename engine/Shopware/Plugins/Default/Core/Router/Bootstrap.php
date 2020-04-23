@@ -231,7 +231,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
                 // If shop is main, remove the cookie
                 $cookieTime = $newShop->getMain() === null ? time() - 3600 : 0;
 
-                $response->headers->setCookie(new Cookie($cookieKey, $cookieValue, $cookieTime, $cookiePath));
+                $response->headers->setCookie(new Cookie($cookieKey, $cookieValue, $cookieTime, $cookiePath, null, $request->isSecure()));
 
                 $this->refreshCart($newShop);
 
@@ -242,7 +242,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         //currency switch
         if ($cookieKey === 'currency') {
             $path = rtrim($shop->getBasePath(), '/') . '/';
-            $response->headers->setCookie(new Cookie($cookieKey, $cookieValue, 0, $path));
+            $response->headers->setCookie(new Cookie($cookieKey, $cookieValue, 0, $path, null, $request->isSecure()));
             $url = sprintf(
                 '%s://%s%s',
                 $request->getScheme(),

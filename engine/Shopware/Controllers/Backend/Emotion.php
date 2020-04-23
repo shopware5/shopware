@@ -1532,7 +1532,20 @@ EOD;
      */
     private function getElementIdentifier(Element $el)
     {
-        return $el->getStartCol() . $el->getStartRow() . $el->getEndCol() . $el->getEndRow();
+        $identifier = '';
+
+        foreach ($el->getViewports() as $viewport) {
+            /* @var \Shopware\Models\Emotion\ElementViewport $viewport */
+            $identifier .= $viewport->getAlias()
+                . $viewport->getStartRow()
+                . $viewport->getStartCol()
+                . $viewport->getEndRow()
+                . $viewport->getEndCol();
+        }
+
+        $identifier .= $el->getStartCol() . $el->getStartRow() . $el->getEndCol() . $el->getEndRow();
+
+        return $identifier;
     }
 
     private function generateEmotionSeoUrls(Emotion $emotion)

@@ -141,7 +141,6 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
                 InputArgument::REQUIRED,
                 'Configuration value. Can be true, false, null, an integer or an array specified with brackets: [value,anothervalue]. Everything else will be interpreted as string.'
             )
-            /* @deprecated since 5.6, to be removed in 6.0 */
             ->addOption(
                 'shop',
                 null,
@@ -213,6 +212,8 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
 
         $pluginManager->saveConfigElement($plugin, $input->getArgument('key'), $value, $shop);
         $output->writeln(sprintf('Plugin configuration for Plugin %s saved.', $pluginName));
+
+        return 0;
     }
 
     /**

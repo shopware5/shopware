@@ -97,7 +97,7 @@
                         <div class="register--additional-line1">
                             <input autocomplete="section-shipping shipping address-line2"
                                    name="register[shipping][additionalAddressLine1]"
-                                   type="text"{if {config name=requireAdditionAddressLine2}} required="required" aria-required="true"{/if}
+                                   type="text"{if {config name=requireAdditionAddressLine1}} required="required" aria-required="true"{/if}
                                    placeholder="{s name='RegisterLabelAdditionalAddressLine1'}{/s}{if {config name=requireAdditionAddressLine1}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
                                    id="additionalAddressLine21"
                                    value="{$form_data.additionalAddressLine1|escape}"

@@ -75,7 +75,7 @@ class LocalLicenseUnpackService implements LicenseUnpackServiceInterface
         $license = preg_replace('#--.+?--#', '', (string) $license);
         $license = preg_replace('#[^A-Za-z0-9+/=]#', '', $license);
 
-        $info = base64_decode($license);
+        $info = base64_decode($license, true);
         if ($info === false) {
             throw new LicenseInvalidException('License key seems to be incorrect');
         }

@@ -1,4 +1,4 @@
-;(function ($) {
+(function ($) {
     /*! Tiny Pub/Sub - v0.7.0 - 2013-01-29
      * https://github.com/cowboy/jquery-tiny-pubsub
      * Copyright (c) 2014 "Cowboy" Ben Alman; Licensed MIT */
@@ -16,7 +16,7 @@
     };
 }(jQuery));
 
-;(function ($, window) {
+(function ($, window) {
     'use strict';
 
     var numberRegex = /^-?\d*\.?\d*$/,

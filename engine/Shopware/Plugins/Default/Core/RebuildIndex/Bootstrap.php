@@ -152,7 +152,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
             Shopware()->Modules()->Categories()->baseId = $shop->getCategory()->getId();
 
             list($cachedTime, $elementId, $shopId) = $this->SeoIndex()->getCachedTime();
-            $this->SeoIndex()->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);
+            $this->SeoIndex()->setCachedTime($currentTime->format('Y-m-d H:i:s'), $elementId, $shopId);
 
             $this->RewriteTable()->baseSetup();
 
@@ -165,7 +165,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
                 $lastId = $this->RewriteTable()->getRewriteArticleslastId();
             } while ($lastId !== null);
 
-            $this->SeoIndex()->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);
+            $this->SeoIndex()->setCachedTime($currentTime->format('Y-m-d H:i:s'), $elementId, $shopId);
 
             $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext($shopId);
 

@@ -92,7 +92,6 @@ class ReleaseDateConditionHandler implements PartialConditionHandlerInterface
                     'lte' => $date->format('Y-m-d'),
                     'gt' => $dateNow->format('Y-m-d'),
                 ]);
-                break;
 
             case ReleaseDateCondition::DIRECTION_PAST:
                 $date->sub($interval);

@@ -25,8 +25,10 @@
 namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\Query\Expr\Join;
 use PDO;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Article\Article;
 use Shopware\Models\Order\Order;
 
 class OrderReader extends GenericReader
@@ -58,6 +60,7 @@ class OrderReader extends GenericReader
         foreach ($data as &$row) {
             $row['orderStateName'] = $namespace->get($row['orderStateKey']);
             $row['orderDocuments'] = $this->getOrderDocuments($documents, $row);
+            $row['supplierId'] = explode(',', $row['supplierId']);
         }
 
         return $data;
@@ -79,6 +82,7 @@ class OrderReader extends GenericReader
             'entity.transactionId',
             'entity.orderTime',
             'entity.cleared',
+            'GroupConcat(DISTINCT supplier.id) as supplierId',
             'customer.id as customerId',
             'customer.email as email',
             'customer.groupKey as groupKey',
@@ -104,6 +108,9 @@ class OrderReader extends GenericReader
             'orderStatus.name as orderStateKey',
         ]);
         $query->from(Order::class, 'entity', $this->getIdentifierField());
+        $query->leftJoin('entity.details', 'orderDetails');
+        $query->leftJoin(Article::class, 'product', Join::WITH, 'orderDetails.articleId = product.id');
+        $query->leftJoin('product.supplier', 'supplier');
         $query->leftJoin('entity.payment', 'payment');
         $query->leftJoin('entity.orderStatus', 'orderStatus');
         $query->leftJoin('entity.dispatch', 'dispatch');
@@ -114,6 +121,7 @@ class OrderReader extends GenericReader
         $query->leftJoin('billing.country', 'billingCountry');
         $query->andWhere('entity.number IS NOT NULL');
         $query->andWhere('entity.status != :cancelStatus');
+        $query->groupBy('entity.id');
         $query->setParameter(':cancelStatus', -1);
 
         return $query;

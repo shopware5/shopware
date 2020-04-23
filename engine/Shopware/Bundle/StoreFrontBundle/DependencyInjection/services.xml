@@ -550,11 +550,11 @@
         </service>
 
         <service id="shopware_storefront.href_lang_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\HrefLangService">
-            <argument type="service" id="Doctrine\DBAL\Connection"/>
-            <argument type="service" id="Shopware\Components\Routing\RouterInterface"/>
-            <argument type="service" id="Shopware_Components_Config"/>
-            <argument type="service" id="Shopware\Components\Model\ModelManager"/>
-            <argument type="tagged" tag="router.pre_filter"/>
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="router"/>
+            <argument type="service" id="default_router"/>
+            <argument type="service" id="config"/>
+            <argument type="service" id="models"/>
         </service>
 
         <service id="shopware_storefront.cached_href_lang_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CachedHrefLangService">

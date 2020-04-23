@@ -158,7 +158,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
             $result = Shopware()->Models()->toArray($result);
 
             if (!empty($result) && $params['shopId'] == $result[0]['shopId']) {
-                $this->View()->assign(['success' => false, 'errorMsg' => 'The product is already a premium-product.']);
+                $this->View()->assign(['success' => false, 'errorMsg' => 'The product already is a premium-product.']);
 
                 return;
             }

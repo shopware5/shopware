@@ -2,6 +2,95 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
+## 5.6.6
+
+[View all changes from v5.6.5...v5.6.6](https://github.com/shopware/shopware/compare/v5.6.5...v5.6.6)
+
+### Changes
+
+* Changed `\Shopware\Components\DependencyInjection\Compiler\PluginResourceCompilerPass` to work correctly with multiple plugins
+* Changed `\Shopware_Controllers_Backend_AttributeData` to support translating attribute store values
+    * Example:
+        ```php
+      $crudService->update(
+          's_articles_attributes',
+          'my_column',
+          'combobox',
+          [
+              'displayInBackend' => true,
+              'arrayStore' => [
+                  ['key' => 1, 'value' => 'Value 1'],
+              ],
+          ]
+      );  
+        ```
+     * Translation
+     ```ini
+    [en_GB]
+    s_articles_attributes_my_column_options_store_1 = "Item 1 EN"
+    
+    [de_DE]
+    s_articles_attributes_my_column_options_store_1 = "Item 1 DE"
+    ``` 
+* Changed cookie consent manager to work correctly when accepting all cookies
+
+## 5.6.5
+
+[View all changes from v5.6.4...v5.6.5](https://github.com/shopware/shopware/compare/v5.6.4...v5.6.5)
+
+### Additions
+
+* Added PHP 7.4 support
+* Added new option `metaOptions` to S3 Adapter to set S3 options
+* Added a filter event 'Shopware_Modules_Basket_AddVoucher_FilterSqlParams' to `sBasket::sAddVoucher` to modify sql params
+* Added a notify event 'Shopware_Modules_Basket_AddVoucher_Inserted' to `sBasket::sAddVoucher` to execute code after a voucher was inserted
+* Added new product fields to product exports: `metaTitle`, `pseudosales`, `notification`, `available_from`, `available_to`, `pricegroupActive`, `pricegroupID`
+* Added `intl` extension to required php extensions
+* Added unique index to `s_attribute_configuration` with columns `table_name` and `column_name`
+* Added new Argon2 password encoder
+* Added attributes to the following API resources
+    * `CustomerGroup`
+    * `Media`
+    * `Country`
+* Added new config option to also show technical urls in hreflang
+* Added new less function `swhash` to get file hash for cache busting
+* Added new event `Shopware_Modules_Admin_SaveRegister_BeforeRegister` to cancel customer registration
+* Added new property to plugin base class `$autoloadViews` which allows pre registration of template folder
+    * Its still required on backend extensions to call `extendsTemplate`
+
+### Changes
+
+* The `\Shopware\Components\StateTranslatorService` works case insensitive now
+* Changed `Shopware.apps.Emotion.view.components.Base` to properly handle a checkbox default value
+* Changed `\Shopware_Controllers_Backend_Base::getPaymentsAction` to optionally list all payment methods
+* Changed `\Shopware\Components\Cart\CartPersistService` to also persist cart item attributes
+* Changed blog statistics to work also with active http cache
+* Changed `\Shopware\Components\Routing\Router::assemble` and `\Shopware\Components\Routing\Router::match` default implementation handling arrays and encoded strings
+    * `Shopware\Components\Routing\Generators\DefaultGenerator::generate` will encode arrays as strings with `http_build_query`; objects result in an user error in 5.6 and Exception in 5.7
+    * `Shopware\Components\Routing\Matchers\DefaultMatcher::match` will try to convert encoded string values back to array representation
+* Changed `Shopware.form.field.SingleSelection` to forward `enable` and `disable` calls
+* Changed the following templates to include the `custom_captcha.tpl` template, if any other captcha method than "legacy" is active:
+    * `themes/Frontend/Bare/frontend/forms/form-elements.tpl`
+
+### Removals
+
+ * Removed usage of column `baseprice` in `engine/Shopware/Bundle/SearchBundleDBAL/ListingPriceHelper.php` 
+ 
+### Deprecations
+
+* Deprecated following methods of class `\Shopware\Components\CacheManager`
+    * `getCoreCache`
+    * `getDirectoryInfo`
+    * `encodeSize`
+
+## 5.6.4
+
+[View all changes from v5.6.3...v5.6.4](https://github.com/shopware/shopware/compare/v5.6.3...v5.6.4)
+
+### Changes
+
+* Changed status of SLT-cookie from 'Comfort' feature to 'Technically required' when feature is active
+
 ## 5.6.3
 
 [View all changes from v5.6.2...v5.6.3](https://github.com/shopware/shopware/compare/v5.6.2...v5.6.3)
@@ -44,7 +133,8 @@ to read [this documentation](https://developers.shopware.com/developers-guide/co
 * Changed `Shopware\Models\Customer\Customer`, set correct return type for `getregisterOptInId`
 * Changed the `TemplateMail_CreateMail_MailContext` filter to work correctly.
 * Changed `ProductServiceInterface` to extend from `ListProductServiceInterface`
-* Changed `\sArticles::sGetArticlePictures` to correctly return image thumbnail urls again
+* Changed additionAddressLine1 in `themes/Frontend/Bare/frontend/register/shipping_fieldset.tpl` to fix a typo
+* Changed `\sArticles::sGetArticlePictures` to correctly return image thumbnail URLs again
 
 ### Removals
 
@@ -609,7 +699,7 @@ return [
 ```
 Providing this value via config makes it unnecessary for Doctrine to figure the version out by itself, thus reducing the number of database calls Shopware makes per request by one.
 
-If you are running a MariaDB database, you should prefix the `serverVersion` with `mariadb`- (e.g.: `mariadb-10.2.12`).
+If you are running a MariaDB database, you should suffix the `serverVersion` with `-MariaDB` (e.g.: `10.3.18-MariaDB`).
 
 ### Payment Token
 

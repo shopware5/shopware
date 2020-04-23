@@ -94,7 +94,6 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         $categories = $this->getList($ids, $context);
 
         $result = [];
-        /** @var Struct\BaseProduct[] $products */
         foreach ($products as $product) {
             $id = $product->getId();
             if (!isset($mapping[$id])) {

@@ -24,7 +24,7 @@
 
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
-use Shopware\Bundle\MediaBundle\MediaService;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
 use Shopware\Components\Emotion\Preset\Exception\PresetAssetImportException;
 use Shopware\Models\Emotion\Preset;
@@ -203,15 +203,16 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
      */
     private function getLocale()
     {
-        /** @var Shopware_Components_Auth $auth */
         if (!$auth = $this->container->get('auth')) {
             return 'de_DE';
         }
+        /** @var Shopware_Components_Auth $auth */
         if (!$identity = $auth->getIdentity()) {
             return 'de_DE';
         }
-        /** @var \Shopware\Models\Shop\Locale $locale */
-        if (!$locale = $identity->locale) {
+        /** @var \Shopware\Models\Shop\Locale|null $locale */
+        $locale = $identity->locale;
+        if (!$locale) {
             return 'de_DE';
         }
 
@@ -247,7 +248,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
             return $path;
         }
 
-        /** @var MediaService $mediaService */
+        /** @var MediaServiceInterface $mediaService */
         $mediaService = $this->container->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
         if (strpos($path, 'media') === 0) {

@@ -80,6 +80,7 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
         partner: '{s name=filter/partner}Partner{/s}',
         shipping: '{s name=filter/shipping}Shipping country{/s}',
         billing: '{s name=filter/billing}Billing country{/s}',
+        supplier: '{s name=filter/supplier}Supplier{/s}',
         document: {
             title: '{s name=document/title}Documents{/s}',
             date: '{s name=document/date}Date{/s}',
@@ -175,7 +176,8 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
                 me.createShopField(),
                 me.createPartnerField(),
                 me.createDeliveryCountrySelection(),
-                me.createBillingCountrySelection()
+                me.createBillingCountrySelection(),
+                me.createSupplierSelectionField()
             ]
         });
         return me.filterForm;
@@ -228,15 +230,42 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
     },
 
     createPaymentField: function() {
-        var me = this;
+        var me = this,
+            displayTpl = Ext.create('Ext.XTemplate',
+                '<tpl for=".">',
+                '<div class="x-boundlist-item">' +
+                //active renderer
+                '<tpl if="active"">' +
+                '<i class="sprite-tick-small" style="width:12px;height:12px;display:inline-block;margin:0 6px 5px 0;vertical-align:middle;"></i>' +
+                '<tpl else>' +
+                '<i class="sprite-cross-small" style="width:12px;height:12px;display:inline-block;margin:0 6px 5px 0;vertical-align:middle;"></i>' +
+                '</tpl>' +
+
+                ' {literal}{description}{/literal}' +
+                '</div>',
+                '</tpl>'
+            );
 
         return Ext.create('Ext.form.field.ComboBox', {
             name: 'orders.paymentId',
             pageSize: 7,
             queryMode: 'remote',
-            store: Ext.create('Shopware.store.Payment', { pageSize: 7 }),
+            store: Ext.create('Shopware.store.Payment', {
+                pageSize: 7,
+                filters: [{
+                    property: 'active',
+                    value: [true, false]
+                }],
+                sorters: [{
+                    property: 'active',
+                    direction: 'DESC'
+                }, {
+                    property: 'position',
+                    direction: 'ASC'
+                }]
+            }),
             valueField: 'id',
-            displayField: 'description',
+            tpl: displayTpl,
             emptyText: me.snippets.empty,
             fieldLabel: me.snippets.paymentName
         });
@@ -360,6 +389,17 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
         });
     },
 
+    createSupplierSelectionField: function() {
+        return Ext.create('Ext.form.field.ComboBox', {
+            name: 'article.supplierId',
+            fieldLabel: this.snippets.supplier,
+            store: this.getSupplierStore(),
+            displayField: 'name',
+            valueField: 'id',
+            allowBlank: true,
+        });
+    },
+
     getCountryStore: function() {
         var selectionFactory = Ext.create('Shopware.attribute.SelectionFactory', {});
         var store = selectionFactory.createEntitySearchStore("Shopware\\Models\\Country\\Country");
@@ -377,6 +417,10 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
         return store;
     },
 
+    getSupplierStore: function () {
+        var store = Ext.data.StoreManager.get('supplierStore');
+        return store ? store : Ext.create('Shopware.apps.Supplier.store.Supplier');
+    },
 
     /**
      * Creates the "reset filters" and "perform filters" button

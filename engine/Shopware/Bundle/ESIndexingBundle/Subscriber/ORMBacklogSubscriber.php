@@ -184,6 +184,8 @@ class ORMBacklogSubscriber implements EventSubscriber
             case $entity instanceof PropertyOptionModel:
                 return new Backlog(self::EVENT_PROPERTY_OPTION_DELETED, ['id' => $entity->getId(), 'groupId' => $entity->getOption()->getId()]);
         }
+
+        return null;
     }
 
     private function getInsertBacklog($entity)
@@ -208,6 +210,8 @@ class ORMBacklogSubscriber implements EventSubscriber
             case $entity instanceof PropertyOptionModel:
                 return new Backlog(self::EVENT_PROPERTY_OPTION_INSERTED, ['id' => $entity->getId(), 'groupId' => $entity->getOption()->getId()]);
         }
+
+        return null;
     }
 
     /**
@@ -237,5 +241,7 @@ class ORMBacklogSubscriber implements EventSubscriber
             case $entity instanceof PropertyOptionModel:
                 return new Backlog(self::EVENT_PROPERTY_OPTION_UPDATED, ['id' => $entity->getId(), 'groupId' => $entity->getOption()->getId()]);
         }
+
+        return null;
     }
 }

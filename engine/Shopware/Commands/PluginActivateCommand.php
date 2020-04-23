@@ -120,5 +120,7 @@ EOF
         $output->writeln(sprintf('Plugin %s has been activated.', $pluginName));
 
         $this->clearCachesIfRequested($input, $output, $activationContext);
+
+        return 0;
     }
 }

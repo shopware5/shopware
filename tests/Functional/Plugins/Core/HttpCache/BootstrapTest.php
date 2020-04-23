@@ -32,10 +32,13 @@ use Shopware\Components\HttpCache\DefaultCacheTimeService;
 use Shopware\Components\HttpCache\DefaultRouteService;
 use Shopware\Components\HttpCache\DynamicCacheTimeService;
 use Shopware\Components\Plugin\CachedConfigReader;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use ShopwarePlugins\HttpCache\CacheControl;
 
 class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
 {
+    use DatabaseTransactionBehaviour;
+
     /**
      * @var Connection
      */
@@ -45,11 +48,6 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
      * @var InstallerService
      */
     private $pluginManager;
-
-    /**
-     * @var array
-     */
-    private $previousConfig;
 
     /**
      * @var CacheManager
@@ -72,23 +70,12 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
         $this->pluginManager->installPlugin($plugin);
         $this->pluginManager->activatePlugin($plugin);
 
-        $this->previousConfig = $this->pluginManager->getPluginConfig($plugin);
+        Shopware()->Container()->reset('plugins')->load('plugins');
 
         parent::setUp();
     }
 
-    protected function tearDown(): void
-    {
-        $plugin = $this->pluginManager->getPluginByName('HttpCache');
-
-        foreach ($this->previousConfig as $key => $value) {
-            $this->pluginManager->saveConfigElement($plugin, $key, $value);
-        }
-
-        parent::tearDown();
-    }
-
-    public function testCacheableRoute()
+    public function testCacheableRoute(): void
     {
         $this->resetHttpCache([
             'cacheControllers' => "frontend/index 100\r\n",
@@ -104,7 +91,7 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
         );
     }
 
-    public function testNotCacheableRoute()
+    public function testNotCacheableRoute(): void
     {
         $this->resetHttpCache([
             'cacheControllers' => "frontend/sitemap 500\r\n",
@@ -121,7 +108,7 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertNotContains('X-Shopware-Cache-Id', $headers);
     }
 
-    public function testAdminSessionShouldNotBeCached()
+    public function testAdminSessionShouldNotBeCached(): void
     {
         $this->resetHttpCache([
             'cacheControllers' => "frontend/index 100\r\n",
@@ -140,7 +127,7 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Container()->get('session')->Admin = false;
     }
 
-    public function testNoCacheCookieForCacheableRoute()
+    public function testNoCacheCookieForCacheableRoute(): void
     {
         $this->resetHttpCache([
             'cacheControllers' => "frontend/index 100\r\n",
@@ -158,7 +145,7 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
         );
     }
 
-    public function testNoCacheCookieForCacheableRouteButWithOtherShop()
+    public function testNoCacheCookieForCacheableRouteButWithOtherShop(): void
     {
         $this->resetHttpCache([
             'cacheControllers' => "frontend/index 100\r\n",
@@ -176,7 +163,7 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
         );
     }
 
-    public function testAddArticleAddsCheckoutNoCacheCookie()
+    public function testAddArticleAddsCheckoutNoCacheCookie(): void
     {
         $this->resetHttpCache([
             'cacheControllers' => "frontend/index 100\r\n",
@@ -191,7 +178,7 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertSame('checkout-1', $this->getCookie($response, 'nocache'));
     }
 
-    public function testClearBasketResetsNoCacheCookie()
+    public function testClearBasketResetsNoCacheCookie(): void
     {
         $this->resetHttpCache([
             'cacheControllers' => "frontend/index 100\r\n",
@@ -226,7 +213,7 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
         return null;
     }
 
-    private function resetHttpCache($overrideConfig)
+    private function resetHttpCache($overrideConfig): void
     {
         $configReader = $this->createMock(CachedConfigReader::class);
         $configReader->method('getByPluginName')->willReturn($overrideConfig);
@@ -270,7 +257,7 @@ class BootstrapTest extends \Enlight_Components_Test_Controller_TestCase
     private function getHeader($name, \Enlight_Controller_Response_Response $response)
     {
         foreach ($response->getHeaders() as $header) {
-            if ($header['name'] == $name) {
+            if ($header['name'] === $name) {
                 return $header['value'];
             }
         }

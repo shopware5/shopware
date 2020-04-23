@@ -72,6 +72,8 @@ class ListProductFeedCommand extends ShopwareCommand
             ->setRows($rows);
 
         $table->render();
+
+        return 0;
     }
 
     private function formatInterval($interval)

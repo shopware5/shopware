@@ -40,7 +40,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
      */
     public function getMailsAction()
     {
-        /** @var Enlight_Components_Snippet_Namespace $namespace */
+        /** @var Enlight_Components_Snippet_Namespace $snippet */
         $snippet = Shopware()->Snippets()->getNamespace('backend/mail/view/navigation');
 
         // If id is provided return a single mail instead of a collection
@@ -268,8 +268,6 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
      * Validate name action
      *
      * Validates whether or not the provided value exists in the database
-     *
-     * @return void|string
      */
     public function validateNameAction()
     {
@@ -527,7 +525,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         $nodes = [];
 
-        /** @var Shop $shop */
+        /** @var Shop[] $shops */
         $shops = Shopware()->Models()->getRepository(Shop::class)->findAll();
         foreach ($shops as $shop) {
             $shopNode = [

@@ -1,4 +1,4 @@
-;(function ($, window, undefined) {
+(function ($, window, undefined) {
     'use strict';
 
     $.getCookiePreference = function(cookieName) {
@@ -55,7 +55,7 @@
              * @property closeModalSelector
              * @type {String}
              */
-            closeModalSelector: '.cookie-consent--header-cross',
+            closeModalSelector: '.cookie-consent--close',
 
             /**
              * Selector of the element that wraps around each group.
@@ -106,6 +106,14 @@
             cookieActiveInputSelector: '.cookie-consent--cookie-state-input',
 
             /**
+             * Selector of the label element for the active input.
+             *
+             * @property cookieActiveInputLabelSelector
+             * @type {String}
+             */
+            cookieActiveInputLabelSelector: '.cookie-consent--cookie-state',
+
+            /**
              * Selector of the button which should save the configured preferences.
              *
              * @property saveButtonSelector
@@ -120,6 +128,22 @@
              * @type {string}
              */
             openConsentManagerButton: '*[data-openConsentManager=true]',
+
+            /**
+             * Selector of the element which can be clicked as well to toggle a cookies state.
+             *
+             * @property cookieLabelSelector
+             * @type {string}
+             */
+            cookieLabelSelector: '.cookie--label',
+
+            /**
+             * The class which marks a group as "required".
+             *
+             * @property requiredClass
+             * @type {string}
+             */
+            requiredClass: 'cookie-consent--required'
         },
 
         /**
@@ -166,8 +190,13 @@
             this.$el.find(this.opts.cookieGroupToggleInputSelector).on('change', $.proxy(this.onGroupToggleChanged, this));
             this.$el.find(this.opts.cookieActiveInputSelector).on('change', $.proxy(this.onCookieToggleChanged, this));
             this.$el.find(this.opts.saveButtonSelector).on('click', $.proxy(this.onSave, this));
+            this.$el.find(this.opts.cookieLabelSelector).on('click', $.proxy(this.onClickCookieName, this));
 
             this._on(this.opts.openConsentManagerButton, 'click', $.proxy(this.openConsentManager, this));
+
+            if (window.cookieRemoval === 1) {
+                $.subscribe('plugin/swCookiePermission/onAcceptButtonClick', $.proxy(this.acceptAll, this));
+            }
         },
 
         assignCookieData: function () {
@@ -179,25 +208,32 @@
             this.parsePreferences();
         },
 
+        acceptAll: function () {
+            this.toggleAllCookiesFromGroup(this.$el.find(this.opts.cookieContainerSelector), true);
+            this.buildCookiePreferences();
+        },
+
         parsePreferences: function () {
             var me = this,
-                groupNames = Object.keys(this.preferences['groups']),
+                groupNames = Object.keys(me.preferences['groups']),
                 group,
+                groupRequired,
                 cookieNames,
                 cookie;
 
             $.each(groupNames, function (groupIndex, groupName) {
                 group = me.findGroupByName(groupName);
-                me.toggleGroup(group, me.preferences['groups'][groupName].active);
+                groupRequired = group.find(me.opts.cookieActiveInputLabelSelector).hasClass(me.opts.requiredClass);
+                me.toggleGroup(group, groupRequired || me.preferences['groups'][groupName].active);
 
                 cookieNames = Object.keys(me.preferences['groups'][groupName].cookies);
 
                 $.each(cookieNames, function (cookieIndex, cookieName) {
                     cookie = me.findCookieByName(cookieName);
-                    me.toggleCookie(cookie, me.preferences['groups'][groupName].cookies[cookieName].active);
+                    me.toggleCookie(cookie, groupRequired || me.preferences['groups'][groupName].cookies[cookieName].active);
 
-                    me.checkActiveStateForAllCookiesOfGroup(group, me.preferences['groups'][groupName].cookies[cookieName].active);
-                })
+                    me.checkActiveStateForAllCookiesOfGroup(group, groupRequired || me.preferences['groups'][groupName].cookies[cookieName].active);
+                });
             });
         },
 
@@ -215,13 +251,16 @@
 
         openConsentManager: function () {
             this.open();
-            this.cookiePermissionPlugin.hideElement();
+
+            if (window.cookieRemoval !== 2) {
+                this.cookiePermissionPlugin.hideElement();
+            }
         },
 
         buildCookiePreferences: function (allTrue) {
             var opts = this.opts,
                 cookieGroups = this.$el.find(this.opts.cookieGroupSelector),
-                preferences = { 'groups': {}},
+                preferences = { groups: {} },
                 date = new Date(),
                 uniqueNames = [];
 
@@ -229,7 +268,7 @@
 
             cookieGroups.each(function (index, cookieGroup) {
                 var groupName = $(cookieGroup).find(opts.cookieGroupNameSelector).val(),
-                    isActive = allTrue ? allTrue : $(cookieGroup).find(opts.cookieGroupToggleInputSelector).is(':checked'),
+                    isActive = allTrue || $(cookieGroup).find(opts.cookieGroupToggleInputSelector).is(':checked'),
                     cookies = $(cookieGroup).find(opts.cookieContainerSelector);
 
                 uniqueNames.push(groupName);
@@ -245,7 +284,7 @@
 
                 cookies.each(function (cookieIndex, cookie) {
                     var cookieName = $(cookie).find(opts.cookieNameSelector).val(),
-                        isCookieActive = allTrue ? allTrue : $(cookie).find(opts.cookieActiveInputSelector).is(':checked');
+                        isCookieActive = allTrue || $(cookie).find(opts.cookieActiveInputSelector).is(':checked');
 
                     uniqueNames.push(cookieName);
 
@@ -263,9 +302,18 @@
             preferences.hash = window.btoa(JSON.stringify(uniqueNames));
 
             date.setTime(date.getTime() + (180 * 24 * 60 * 60 * 1000));
-            document.cookie = this.preferenceCookieName + '=' + JSON.stringify(preferences) + ';path=' + this.getBasePath() +';expires=' + date.toGMTString() + ';';
 
-            $.publish('plugin/swCookieConsentManager/onBuildCookiePreferences', [ this, preferences ]);
+            document.cookie = this.preferenceCookieName + '=' + JSON.stringify(preferences) + ';path=' + this.getBasePath() + ';expires=' + date.toGMTString() + ';' + ($.isSecure() ? ' secure;' : '');
+
+            $.publish('plugin/swCookieConsentManager/onBuildCookiePreferences', [this, preferences]);
+        },
+
+        onClickCookieName: function (event) {
+            var cookieNameEl = $(event.currentTarget),
+                cookieCt = cookieNameEl.parent(this.opts.cookieContainerSelector),
+                inputEl = cookieCt.find(this.opts.cookieActiveInputSelector);
+
+            inputEl.click();
         },
 
         toggleAllCookiesFromGroup: function (cookies, active) {
@@ -314,18 +362,18 @@
             this.removeDeclinedAndAcceptedCookie();
             $.overlay.close();
 
-            $.publish('plugin/swCookieConsentManager/onSave', [ this ]);
+            $.publish('plugin/swCookieConsentManager/onSave', [this]);
         },
 
         onGroupToggleChanged: function (event) {
             var opts = this.opts,
-                groupToggle =  $(event.currentTarget),
+                groupToggle = $(event.currentTarget),
                 group = groupToggle.parents(opts.cookieGroupSelector),
                 cookies = group.find(opts.cookieContainerSelector);
 
             this.toggleAllCookiesFromGroup(cookies, groupToggle.is(':checked'));
 
-            $.publish('plugin/swCookieConsentManager/onGroupToggleChanged', [ this, groupToggle ]);
+            $.publish('plugin/swCookieConsentManager/onGroupToggleChanged', [this, groupToggle]);
         },
 
         onCookieToggleChanged: function (event) {
@@ -336,7 +384,7 @@
 
             this.checkActiveStateForAllCookiesOfGroup(group, cookieToggle.is(':checked'));
 
-            $.publish('plugin/swCookieConsentManager/onCookieToggleChanged', [ this, cookieToggle ]);
+            $.publish('plugin/swCookieConsentManager/onCookieToggleChanged', [this, cookieToggle]);
         },
 
         onCloseClicked: function () {
@@ -351,6 +399,7 @@
 
             this.assignCookieData();
 
+            this.$el.removeClass('block-transition');
             this.$el.show();
             this.$el.addClass(this.opts.openClass);
 

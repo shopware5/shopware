@@ -30,10 +30,12 @@ if (!file_exists(__DIR__ . '/vendor/autoload.php')) {
     }
 
     echo sprintf($template, 'Error');
-    echo "Please execute \"composer install\" from the command line to install the required dependencies for Shopware 5\n";
+    echo 'Please execute "composer install --working-dir=' . __DIR__ . '" or "composer install" in the directory ' .
+        __DIR__ . " from the command line to install the required dependencies for the install/update application for Shopware 5\n";
 
     echo sprintf($template, 'Fehler');
-    echo "Bitte führen Sie zuerst \"composer install\" aus um alle von Shopware 5 benötigten Abhängigkeiten zu installieren.\n";
+    echo 'Bitte führen Sie zuerst "composer install --working-dir=' . __DIR__ . '" oder "composer install" im Verzeichnis ' .
+        __DIR__ . " aus um alle von der Shopware 5 Installations-/Aktualisierungsanwendung benötigten Abhängigkeiten zu installieren.\n";
 
     exit(1);
 }

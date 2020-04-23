@@ -198,7 +198,7 @@ class PluginInstaller extends \Shopware_Controllers_Backend_ExtJs
 
     public function uploadAction()
     {
-        /** @var DownloadService $service */
+        /** @var DownloadService $pluginDownloadService */
         $pluginDownloadService = Shopware()->Container()->get('shopware_plugininstaller.plugin_download_service');
 
         try {

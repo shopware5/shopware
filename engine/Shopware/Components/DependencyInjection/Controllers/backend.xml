@@ -64,6 +64,8 @@
         </service>
 
         <service id="shopware_controllers_backend_category" class="Shopware_Controllers_Backend_Category">
+            <argument type="service" id="models" />
+            <argument type="service" id="snippets" />
             <tag name="shopware.controller" module="backend" controller="category"/>
         </service>
 

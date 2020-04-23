@@ -245,7 +245,9 @@ class LogEntryBuilder implements LogEntryBuilderInterface
             );
         }
 
-        $logEntry->setRecipients(new ArrayCollection($associatedContacts));
+        /** @var ArrayCollection<Contact> $collection */
+        $collection = new ArrayCollection($associatedContacts);
+        $logEntry->setRecipients($collection);
     }
 
     protected function getKnownRecipients(array $recipients): array

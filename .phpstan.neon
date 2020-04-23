@@ -85,7 +85,7 @@ parameters:
         - '#expects Shopware\\Components\\Form\\Container\\[a-zA-Z]+, Shopware\\Components\\Form\\Interfaces\\Container given#'
         - '#expects Doctrine\\ORM\\PersistentCollection, Doctrine\\Common\\Collections\\ArrayCollection&iterable<Shopware\\Models\\Shop\\TemplateConfig\\[a-zA-Z]+> given#'
         - '#Parameter \#1 \$em of method Doctrine\\ORM\\EntityRepository::__construct\(\) expects Doctrine\\ORM\\EntityManager, Doctrine\\ORM\\EntityManagerInterface given#'
-        - '#Parameter \#1 \$sort of method Doctrine\\ORM\\QueryBuilder::addOrderBy\(\) expects Doctrine\\ORM\\Query\\Expr\\OrderBy|string, array given#'
+        - '#Parameter \#1 \$sort of method Doctrine\\ORM\\QueryBuilder::addOrderBy\(\) expects Doctrine\\ORM\\Query\\Expr\\OrderBy\|string, array given#'
         - '#Parameter \#3 \$type of method Doctrine\\ORM\\QueryBuilder::setParameter\(\) expects string\|null, int given#'
         - '#Parameter \#3 \$type of method Doctrine\\DBAL\\Query\\QueryBuilder::setParameter\(\) expects string\|null, int given#'
         - '#Parameter \#1 \$reader of class Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver constructor expects Doctrine\\Common\\Annotations\\AnnotationReader, Doctrine\\Common\\Annotations\\Reader given#'
@@ -103,3 +103,4 @@ parameters:
         # We manually check if the class exists before instantiating / using it
         - '#Instantiated class SwagPaymentPayPalUnified\\Setup\\FirstRunWizardInstaller not found#'
         - '#Call to method saveConfiguration\(\) on an unknown class SwagPaymentPayPalUnified\\Setup\\FirstRunWizardInstaller#'
+        - '#PHPDoc tag \@var for variable \$payPalInstaller contains unknown class SwagPaymentPayPalUnified\\Setup\\FirstRunWizardInstaller#'

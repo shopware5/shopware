@@ -26,7 +26,6 @@ namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 
 use ONGR\ElasticsearchDSL\Aggregation\Metric\StatsAggregation;
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
@@ -132,7 +131,6 @@ class PriceFacetHandler implements HandlerInterface, ResultHydratorInterface
         $activeMin = $min;
         $activeMax = $max;
 
-        /** @var PriceCondition $condition */
         if ($condition = $criteria->getCondition('price')) {
             $activeMin = $condition->getMinPrice();
             $activeMax = $condition->getMaxPrice();

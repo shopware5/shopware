@@ -4,7 +4,7 @@
 {/block}
 
 {block name='frontend_index_html'}
-<html class="no-js" lang="{s name='IndexXmlLang'}{/s}" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+<html class="no-js" lang="{s name='IndexXmlLang'}{/s}" itemscope="itemscope" itemtype="https://schema.org/WebPage">
 {/block}
 
 {block name='frontend_index_header'}
@@ -104,7 +104,9 @@
 
                         {* Cookie consent manager*}
                         {block name='frontend_index_cookie_consent_manager'}
-                            {include file='frontend/index/cookie_consent.tpl'}
+                            {if {config name=cookie_note_mode} == 1 && {config name=show_cookie_note}}
+                                {include file='frontend/index/cookie_consent.tpl'}
+                            {/if}
                         {/block}
 
                         {* Sidebar left *}
@@ -264,6 +266,16 @@
         {* Add the partner statistics widget, if configured *}
         {if !{config name=disableShopwareStatistics} }
             {include file='widgets/index/statistic_include.tpl'}
+        {/if}
+
+        {if !$httpCacheEnabled}
+            <script type="text/javascript">
+                document.asyncReady(function () {
+                    $.ajax({
+                        url: '{url module=widgets controller=CookieController}'
+                    });
+                });
+            </script>
         {/if}
     {/block}
 

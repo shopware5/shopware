@@ -78,5 +78,7 @@ class SnippetsRemoveCommand extends ShopwareCommand implements CompletionAwareIn
         $databaseLoader = $this->container->get(\Shopware\Components\Snippet\DatabaseHandler::class);
         $databaseLoader->setOutput($output);
         $databaseLoader->removeFromDatabase($folder);
+
+        return 0;
     }
 }

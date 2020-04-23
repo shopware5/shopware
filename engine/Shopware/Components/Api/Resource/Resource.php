@@ -430,7 +430,6 @@ abstract class Resource implements ContainerAwareInterface
 
             if (!method_exists($entity, $method)) {
                 throw new RuntimeException(sprintf('Method %s not found on entity %s', $method, get_class($entity)));
-                continue;
             }
             if ($entity->$method() === $value) {
                 return $entity;

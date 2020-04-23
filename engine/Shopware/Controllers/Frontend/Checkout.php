@@ -144,7 +144,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function cartAction()
     {
-        $this->View()->assign('sCountry', $this->getSelectedCountry());
+        $country = $this->getSelectedCountry();
+        $this->View()->assign('sCountry', $country);
         $this->View()->assign('sPayment', $this->getSelectedPayment());
         $this->View()->assign('sDispatch', $this->getSelectedDispatch());
         $this->View()->assign('sCountryList', $this->getCountryList());
@@ -171,6 +172,13 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $this->View()->assign('sInquiryLink', $this->getInquiryLink());
 
         $this->View()->assign('sTargetAction', 'cart');
+
+        $this->View()->assign('sBasketInfo', $this->session->offsetGet('sErrorMessages'));
+        $this->session->offsetUnset('sErrorMessages');
+
+        if (!$this->isShippingAllowed((int) $country['id'])) {
+            $this->View()->assign('countryNotAllowedForShipping', true);
+        }
     }
 
     /**
@@ -279,10 +287,13 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             $this->View()->assign('sVoucherError', $voucherErrors);
         }
 
+        $activeBillingAddressId = null;
         /** @var array<array<array>> $activeBillingAddressId */
         if (empty($activeBillingAddressId = $this->session->offsetGet('checkoutBillingAddressId'))) {
             $activeBillingAddressId = $userData['additional']['user']['default_billing_address_id'];
         }
+
+        $activeShippingAddressId = null;
         /** @var array<array<array>> $activeShippingAddressId */
         if (empty($activeShippingAddressId = $this->session->offsetGet('checkoutShippingAddressId'))) {
             $activeShippingAddressId = $userData['additional']['user']['default_shipping_address_id'];
@@ -565,6 +576,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             if (Shopware()->Config()->get('alsoBoughtShow', true)) {
                 $this->View()->assign('sCrossBoughtToo', $this->getBoughtToo($productId));
             }
+        } else {
+            $this->session->offsetSet('sErrorMessages', $this->container->get('snippets')->getNamespace('frontend/basket/internalMessages')->get('WrongArticleNumberMessage', 'Please enter a valid article number'));
         }
 
         if ($this->Request()->getParam('isXHR') || !empty($this->Request()->callback)) {
@@ -676,7 +689,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function calculateShippingCostsAction()
     {
-        if ($this->Request()->getPost('sCountry')) {
+        if ($countryId = $this->Request()->getPost('sCountry')) {
+            if (!$this->isShippingAllowed((int) $countryId)) {
+                $this->View()->assign('countryNotAllowedForShipping', true);
+            }
+
             $this->session['sCountry'] = (int) $this->Request()->getPost('sCountry');
             $this->session['sState'] = 0;
             $this->session['sArea'] = Shopware()->Db()->fetchOne('
@@ -1710,6 +1727,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $accountMode = (int) $this->View()->sUserData['additional']['user']['accountmode'];
         $view->assign('sDispatchNoOrder', ($accountMode === 0 && $this->getDispatchNoOrder()));
         $view->assign('showShippingCalculation', (bool) $this->Request()->getParam('openShippingCalculations'));
+        $view->assign('sMinimumSurcharge', $this->getMinimumCharge());
     }
 
     /**
@@ -2148,5 +2166,29 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         }
 
         return $products;
+    }
+
+    private function isShippingAllowed(int $countryId): bool
+    {
+        $queryBuilder = $this->get('dbal_connection')->createQueryBuilder();
+
+        $allowedByDefault = (bool) $queryBuilder->select('allow_shipping')
+            ->from('s_core_countries', 'countries')
+            ->where('countries.id = :countryId')
+            ->setParameter(':countryId', $countryId)
+            ->execute()
+            ->fetchColumn();
+
+        $countryTranslations = $this->get('modules')->sAdmin()->sGetCountryTranslation();
+
+        if (!$countryTranslations) {
+            return $allowedByDefault;
+        }
+
+        if (!array_key_exists($countryId, $countryTranslations)) {
+            return $allowedByDefault;
+        }
+
+        return $countryTranslations[$countryId]['allow_shipping'];
     }
 }

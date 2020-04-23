@@ -59,13 +59,27 @@ Ext.define('Shopware.apps.Payment.view.payment.FormPanel', {
         translationMerge: true
     }],
 
+    snippets: {
+        fieldsetTitleFormatEmpty: '{s name=formpanel_title_empty}{/s}',
+        fieldsetTitleFormat: '{s name=formpanel_title}{/s}'
+    },
+
     /**
      * This function is called, when the component is initiated
      * It creates the columns of the grid
      */
     initComponent: function(){
         var me = this;
-        me.items = me.getItems();
+        this.fieldsetWrapper = Ext.create('Ext.form.FieldSet', {
+            title: me.snippets.fieldsetTitleFormatEmpty,
+            anchor: '100%',
+            defaults: {
+                anchor: '100%',
+                labelWidth: 155
+            },
+            items: me.getItems()
+        });
+        me.items = [ this.fieldsetWrapper ];
         me.callParent(arguments);
     },
 
@@ -83,10 +97,6 @@ Ext.define('Shopware.apps.Payment.view.payment.FormPanel', {
             xtype: 'textfield',
             fieldLabel: '{s name=formpanel_name_label}Name{/s}',
             name: 'name'
-        },{
-            xtype: 'textfield',
-            hidden: true,
-            name: 'id'
         },{
             xtype: 'textfield',
             fieldLabel: '{s name=formpanel_template_label}Template{/s}',

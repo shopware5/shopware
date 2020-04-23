@@ -191,7 +191,6 @@ trait DynamicConditionParserTrait
 
             default:
                 throw new \InvalidArgumentException(sprintf('Invalid operator specified, please use one of: %s', implode(', ', $validOperators)), 3);
-                break;
         }
     }
 }

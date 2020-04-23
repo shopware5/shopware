@@ -95,7 +95,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
     {
         $cache = $this->Request()->getPost('cache', []);
 
-        $cacheInstance = $this->cacheManager->getCoreCache();
+        $cacheInstance = $this->container->get('cache');
 
         $capabilities = $cacheInstance->getBackend()->getCapabilities();
 
@@ -118,7 +118,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             if ($cache['proxy'] === 'on') {
                 $tags[] = CacheManager::ITEM_TAG_MODELS;
             }
-            if (!empty($tags) && $tags < 7) {
+            if (!empty($tags)) {
                 $cacheInstance->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $tags);
             } else {
                 $cacheInstance->clean();

@@ -1,4 +1,4 @@
-;(function ($, StateManager, window) {
+(function ($, StateManager, window) {
     'use strict';
 
     var msPointerEnabled = window.navigator.msPointerEnabled,

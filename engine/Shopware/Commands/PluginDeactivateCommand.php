@@ -114,5 +114,7 @@ EOF
         $output->writeln(sprintf('Plugin %s has been deactivated', $pluginName));
 
         $this->clearCachesIfRequested($input, $output, $deactivationContext);
+
+        return 0;
     }
 }

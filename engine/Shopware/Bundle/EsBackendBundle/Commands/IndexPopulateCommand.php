@@ -61,5 +61,7 @@ class IndexPopulateCommand extends ShopwareCommand
             ->setStopOnError($input->getOption('stop-on-error'));
 
         $indexer->index($helper);
+
+        return 0;
     }
 }

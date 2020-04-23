@@ -30,47 +30,4 @@ return [
         'host' => '__DB_HOST__',
         'port' => '__DB_PORT__',
     ],
-
-    'csrfProtection' => [
-        'frontend' => false,
-        'backend' => false,
-    ],
-
-    'store' => [
-        'apiEndpoint' => 'http://172.16.0.61:8000',
-    ],
-
-    'front' => [
-        'showException' => true,
-    ],
-
-    'phpsettings' => [
-        'display_errors' => 1,
-    ],
-
-    // Backend-Cache
-    'cache' => [
-        'backend' => 'Black-Hole',
-        'backendOptions' => [],
-        'frontendOptions' => [
-            'write_control' => false,
-        ],
-    ],
-
-    // Model-Cache
-    'model' => [
-        'cacheProvider' => 'Array', // supports Apc, Array, Wincache and Xcache
-    ],
-
-    // Http-Cache
-    'httpCache' => [
-        'enabled' => false,
-        'debug' => true,
-    ],
-
-    'mail' => [
-        'type' => 'smtp',
-        'host' => 'smtp',
-        'port' => 1025,
-    ],
 ];

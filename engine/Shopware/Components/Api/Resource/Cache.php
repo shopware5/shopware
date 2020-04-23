@@ -24,10 +24,16 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Enlight_Controller_Request_Request;
+use Exception;
 use Shopware\Components\Api\BatchInterface;
-use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\CacheManager;
 use Shopware\Components\DependencyInjection\Container;
+use Zend_Cache;
+use Zend_Cache_Core;
+use Zend_Cache_Exception;
 
 /**
  * Cache API Resource
@@ -38,7 +44,7 @@ use Shopware\Components\DependencyInjection\Container;
 class Cache extends Resource implements BatchInterface
 {
     /**
-     * @var \Enlight_Controller_Request_Request
+     * @var Enlight_Controller_Request_Request
      */
     private $request;
 
@@ -46,6 +52,11 @@ class Cache extends Resource implements BatchInterface
      * @var CacheManager
      */
     private $cacheManager;
+
+    /**
+     * @var Zend_Cache_Core
+     */
+    private $cache;
 
     /**
      * Sets the Container.
@@ -56,7 +67,8 @@ class Cache extends Resource implements BatchInterface
     {
         if ($container) {
             $this->request = $container->get('front')->Request();
-            $this->cacheManager = $container->get(\Shopware\Components\CacheManager::class);
+            $this->cacheManager = $container->get('shopware.cache_manager');
+            $this->cache = $container->get('cache');
         }
         parent::setContainer($container);
     }
@@ -64,8 +76,7 @@ class Cache extends Resource implements BatchInterface
     /**
      * @param string $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws ParameterMissingException
      *
      * @return array
      */
@@ -74,7 +85,7 @@ class Cache extends Resource implements BatchInterface
         $this->checkPrivilege('read');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
         return $this->getCacheInfo($id);
@@ -102,8 +113,7 @@ class Cache extends Resource implements BatchInterface
     /**
      * @param string $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws ParameterMissingException
      *
      * @return true
      */
@@ -112,7 +122,7 @@ class Cache extends Resource implements BatchInterface
         $this->checkPrivilege('delete');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
         $this->clearCache($id);
@@ -125,11 +135,7 @@ class Cache extends Resource implements BatchInterface
      */
     public function getIdByData($data)
     {
-        if (isset($data['id'])) {
-            return $data['id'];
-        }
-
-        return false;
+        return $data['id'] ?? false;
     }
 
     /**
@@ -162,7 +168,7 @@ class Cache extends Resource implements BatchInterface
                     'operation' => 'delete',
                     'data' => $this->delete((string) $id),
                 ];
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $message = $e->getMessage();
 
                 $results[$key] = [
@@ -179,7 +185,7 @@ class Cache extends Resource implements BatchInterface
     /**
      * @deprecated in 5.6, will be removed without a replacement
      *
-     * @return \Enlight_Controller_Request_Request
+     * @return Enlight_Controller_Request_Request
      */
     protected function getRequest()
     {
@@ -193,14 +199,15 @@ class Cache extends Resource implements BatchInterface
      *
      * @param string $cache
      *
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws NotFoundException
+     * @throws Zend_Cache_Exception
      */
     protected function clearCache($cache)
     {
-        $capabilities = $this->cacheManager->getCoreCache()->getBackend()->getCapabilities();
+        $capabilities = $this->cache->getBackend()->getCapabilities();
 
         if ($cache === 'all') {
-            $this->cacheManager->getCoreCache()->clean();
+            $this->cache->clean();
 
             $this->cacheManager->clearHttpCache();
             $this->cacheManager->clearConfigCache();
@@ -247,14 +254,14 @@ class Cache extends Resource implements BatchInterface
                 $this->cacheManager->clearOpCache();
                 break;
             default:
-                throw new ApiException\NotFoundException(sprintf('Cache "%s" is not a valid cache id.', $cache));
+                throw new NotFoundException(sprintf('Cache "%s" is not a valid cache id.', $cache));
         }
 
         if (!empty($capabilities['tags'])) {
             if (!empty($tags)) {
-                $this->cacheManager->getCoreCache()->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $tags);
+                $this->cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $tags);
             } else {
-                $this->cacheManager->getCoreCache()->clean();
+                $this->cache->clean();
             }
         }
     }
@@ -264,11 +271,9 @@ class Cache extends Resource implements BatchInterface
      *
      * @param string $cache
      *
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     *
-     * @return array
+     * @throws NotFoundException
      */
-    private function getCacheInfo($cache)
+    private function getCacheInfo($cache): array
     {
         switch ($cache) {
             case 'http':
@@ -290,7 +295,7 @@ class Cache extends Resource implements BatchInterface
                 $cacheInfo = $this->cacheManager->getOpCacheCacheInfo();
                 break;
             default:
-                throw new ApiException\NotFoundException(sprintf('Cache "%s" is not a valid cache id.', $cache));
+                throw new NotFoundException(sprintf('Cache "%s" is not a valid cache id.', $cache));
         }
 
         $cacheInfo['id'] = $cache;

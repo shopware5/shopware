@@ -184,7 +184,7 @@ class PluginLocalService
                         $changelog[] = [
                             'version' => $version,
                             // The implode concatenates multiple entries for one language
-                            'text' => $this->parseChangeLog(trim(implode($item[$lang], ''))),
+                            'text' => $this->parseChangeLog(trim(implode('', $item[$lang]))),
                         ];
                     }
                 }

@@ -69,5 +69,7 @@ EOF
         session_destroy();
 
         $io->success(sprintf('Successfully removed %d expired sessions', $count));
+
+        return 0;
     }
 }

@@ -59,7 +59,6 @@ class DataLoader implements DataLoaderInterface
             throw new \Exception('No foreign key provided');
         }
 
-        /** @var TableMapping $mapping */
         $foreignKeyColumn = $this->mapping->getTableForeignKey($table);
 
         $query = $this->connection->createQueryBuilder();

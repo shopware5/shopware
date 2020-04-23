@@ -1,7 +1,7 @@
 {block name='frontend_index_navigation_categories'}
     <div class="navigation--list-wrapper">
         {block name='frontend_index_navigation_categories_navigation_list'}
-            <ul class="navigation--list container" role="menubar" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
+            <ul class="navigation--list container" role="menubar" itemscope="itemscope" itemtype="https://schema.org/SiteNavigationElement">
                 {strip}
                     {block name='frontend_index_navigation_categories_top_home'}
                         <li class="navigation--entry{if $sCategoryCurrent == $sCategoryStart && $Controller == 'index'} is--active{/if} is--home" role="menuitem">
