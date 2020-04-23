@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,21 +24,15 @@
 
 namespace Shopware\Tests\Unit\Bundle\SitemapBundle\UrlFilter;
 
-use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\SitemapBundle\UrlFilter\Base;
 
-class BaseTest extends TestCase
+class Example extends Base
 {
-    public function testIsFilteredShouldReturnTrueIdentifierAvailable()
+    /**
+     * {@inheritdoc}
+     */
+    public function supports($resourceName)
     {
-        $example = new Example();
-
-        static::assertTrue($example->isFiltered(5, [5]));
-    }
-
-    public function testIsFilteredShouldReturnFalse()
-    {
-        $example = new Example();
-
-        static::assertFalse($example->isFiltered(5, [4]));
+        return $resourceName === 'example';
     }
 }

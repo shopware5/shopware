@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\ESIndexingBundle\Product;
+namespace Shopware\Tests\Functional\Bundle\SearchBundle;
 
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
