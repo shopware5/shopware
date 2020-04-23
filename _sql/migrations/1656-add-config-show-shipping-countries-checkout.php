@@ -21,27 +21,26 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-class Migrations_Migration1648 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration1656 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
-        // Get Privacy formId
-        $this->addSql("SET @formId = ( SELECT id FROM `s_core_config_forms` WHERE name = 'Privacy' LIMIT 1 );");
+        // Get shopping card formId
+        $this->addSql("SET @formId = ( SELECT id FROM `s_core_config_forms` WHERE name = 'Frontend79' LIMIT 1 );");
 
         $sql = "INSERT IGNORE INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `options`)
-            VALUES (@formId, 'cookie_show_button', 'b:0;', '\"Alle akzeptieren\" Button in Cookie Hinweis anzeigen', 'Gilt nur für den Modus \"Technisch notwendige Cookies\". Bevor Du diese Einstellung änderst, solltest du die Verwendung vorab von Deiner Rechtsberatung prüfen lassen.', 'boolean', '0', '22', '0', NULL )";
+            VALUES (@formId, 'show_all_countries', 'b:0;', 'Alle Länder im Lieferland-Dropdown anzeigen', '', 'boolean', '0', '23', '0', NULL)";
         $this->addSql($sql);
 
         $sql = <<<SQL
             SET @lastInsertId = (SELECT LAST_INSERT_ID());
-            SET @elementId = (SELECT IF(@lastInsertId, @lastInsertId, (SELECT id FROM s_core_config_elements element WHERE name='cookie_show_button')));
+            SET @elementId = (SELECT IF(@lastInsertId, @lastInsertId, (SELECT id FROM s_core_config_elements element WHERE name='show_all_countries')));
 SQL;
         $this->addSql($sql);
 
         // Translation
         $sql = "INSERT IGNORE INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`, `description`)
-                VALUES (@elementId, 2, 'Show \"Accept all\" button in cookie hint', 'Only counts for the mode \"Technically necessary cookies\". Before you change this setting, you should first have your legal advisor check the use of this setting.')";
+                VALUES (@elementId, 2, 'Show all countries in the delivery country dropdown', '')";
         $this->addSql($sql);
     }
 }

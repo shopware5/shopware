@@ -145,7 +145,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function cartAction()
     {
-        $this->View()->assign('sCountry', $this->getSelectedCountry());
+        $country = $this->getSelectedCountry();
+        $this->View()->assign('sCountry', $country);
         $this->View()->assign('sPayment', $this->getSelectedPayment());
         $this->View()->assign('sDispatch', $this->getSelectedDispatch());
         $this->View()->assign('sCountryList', $this->getCountryList());
@@ -175,6 +176,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $this->View()->assign('sBasketInfo', $this->session->offsetGet('sErrorMessages'));
         $this->session->offsetUnset('sErrorMessages');
+
+        if (!$this->isShippingAllowed((int) $country['id'])) {
+            $this->View()->assign('countryNotAllowedForShipping', true);
+        }
     }
 
     /**
@@ -684,7 +689,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function calculateShippingCostsAction()
     {
-        if ($this->Request()->getPost('sCountry')) {
+        if ($countryId = $this->Request()->getPost('sCountry')) {
+            if (!$this->isShippingAllowed((int) $countryId)) {
+                $this->View()->assign('countryNotAllowedForShipping', true);
+            }
+
             $this->session['sCountry'] = (int) $this->Request()->getPost('sCountry');
             $this->session['sState'] = 0;
             $this->session['sArea'] = Shopware()->Db()->fetchOne('
@@ -2157,5 +2166,29 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         }
 
         return $products;
+    }
+
+    private function isShippingAllowed(int $countryId): bool
+    {
+        $queryBuilder = $this->get('dbal_connection')->createQueryBuilder();
+
+        $allowedByDefault = (bool) $queryBuilder->select('allow_shipping')
+            ->from('s_core_countries', 'countries')
+            ->where('countries.id = :countryId')
+            ->setParameter(':countryId', $countryId)
+            ->execute()
+            ->fetchColumn();
+
+        $countryTranslations = $this->get('modules')->sAdmin()->sGetCountryTranslation();
+
+        if (!$countryTranslations) {
+            return $allowedByDefault;
+        }
+
+        if (!array_key_exists($countryId, $countryTranslations)) {
+            return $allowedByDefault;
+        }
+
+        return $countryTranslations[$countryId]['allow_shipping'];
     }
 }
