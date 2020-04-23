@@ -2,13 +2,13 @@
 
 This changelog references changes done in Shopware 5.6 patch versions.
 
-## 5.6.6
+## 5.6.7
 
-[View all changes from v5.6.5...v5.6.6](https://github.com/shopware/shopware/compare/v5.6.5...v5.6.6)
+[View all changes from v5.6.6...v5.6.7](https://github.com/shopware/shopware/compare/v5.6.6...v5.6.7)
 
 ### Changes
 
-* Changed `\Shopware\Components\DependencyInjection\Compiler\PluginResourceCompilerPass` to work correctly with multiple plugins
+* Changed Symfony library to version 3.4.39
 * Changed `\Shopware_Controllers_Backend_AttributeData` to support translating attribute store values
     * Example:
         ```php
@@ -33,6 +33,14 @@ This changelog references changes done in Shopware 5.6 patch versions.
     s_articles_attributes_my_column_options_store_1 = "Item 1 DE"
     ``` 
 * Changed cookie consent manager to work correctly when accepting all cookies
+
+## 5.6.6
+
+[View all changes from v5.6.5...v5.6.6](https://github.com/shopware/shopware/compare/v5.6.5...v5.6.6)
+
+### Changes
+
+* Changed `\Shopware\Components\DependencyInjection\Compiler\PluginResourceCompilerPass` to work correctly with multiple plugins
 
 ## 5.6.5
 
