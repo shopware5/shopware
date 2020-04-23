@@ -6,6 +6,10 @@ This changelog references changes done in Shopware 5.6 patch versions.
 
 [View all changes from v5.6.6...v5.6.7](https://github.com/shopware/shopware/compare/v5.6.6...v5.6.7)
 
+### Additions
+
+* Added "albumId" to the Article API resource. This way you can determine in which album a product image is saved when creating or updating a product via REST API
+
 ### Changes
 
 * Changed Symfony library to version 3.4.39
