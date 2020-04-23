@@ -33,6 +33,35 @@ This changelog references changes done in Shopware 5.6 patch versions.
     s_articles_attributes_my_column_options_store_1 = "Item 1 DE"
     ``` 
 * Changed cookie consent manager to work correctly when accepting all cookies
+* Added `Shopware_CronJob_Error` and `Shopware_CronJob_Finished` events to support all crojobs
+    * Example:
+        ```php
+        public static function getSubscribedEvents()
+        {
+            return [
+                'Shopware_CronJob_Error' => 'onCronJobError',
+                'Shopware_CronJob_Finished' => 'onCronJobFinal'
+            ];
+        }
+
+        public function onCronJobError(\Enlight_Event_EventArgs $args)
+        {
+            /** @var \Shopware_Components_Cron_CronJob $job */
+            $job = $args->get('job');
+            $action = $job->getAction();
+            
+            // Your code here
+        }
+        
+        public function onCronJobFinal(\Enlight_Event_EventArgs $args)
+        {
+            /** @var \Shopware_Components_Cron_CronJob $job */
+            $job = $args->get('job');
+            $action = $job->getAction();
+            
+            // Your code here
+        }
+        ```
 
 ## 5.6.6
 
