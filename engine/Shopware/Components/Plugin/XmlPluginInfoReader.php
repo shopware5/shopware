@@ -47,7 +47,7 @@ class XmlPluginInfoReader
     }
 
     /**
-     * @return array|void
+     * @return array|null
      */
     private function parseInfo(\DOMDocument $xml)
     {
@@ -56,7 +56,7 @@ class XmlPluginInfoReader
         /** @var \DOMNodeList|false $entries */
         $entries = $xpath->query('//plugin');
         if ($entries === false) {
-            return;
+            return null;
         }
 
         $entry = $entries[0];

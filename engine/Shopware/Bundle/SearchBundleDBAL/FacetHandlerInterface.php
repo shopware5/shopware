@@ -29,9 +29,6 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-/**
- * @deprecated since version 5.3, to be removed in 6.0 - Use \Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface instead
- */
 interface FacetHandlerInterface
 {
     /**

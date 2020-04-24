@@ -59,6 +59,8 @@ class ThemeDumpConfigurationCommand extends ShopwareCommand
             $file = str_replace($rootDir, '', $file);
             $output->writeln('file: ' . $file . ' generated');
         }
+
+        return 0;
     }
 
     /**

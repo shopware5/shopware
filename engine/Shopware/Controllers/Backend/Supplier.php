@@ -66,17 +66,26 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
      */
     public function getSuppliersAction()
     {
+        $request = $this->Request();
         // if id is provided return a single form instead of a collection
-        if ($id = $this->Request()->getParam('id')) {
+        if ($id = $request->getParam('id')) {
             $this->getSingleSupplier($id);
 
             return;
         }
 
-        $filter = $this->Request()->getParam('filter');
-        $sort = $this->Request()->getParam('sort', [['property' => 'name']]);
-        $limit = $this->Request()->getParam('limit', 20);
-        $offset = $this->Request()->getParam('start', 0);
+        $filter = $request->getParam('filter', []);
+        $sort = $request->getParam('sort', [['property' => 'name']]);
+        $limit = $request->getParam('limit', 20);
+        $offset = $request->getParam('start', 0);
+
+        $query = trim($request->getParam('query', ''));
+        if ($query !== '') {
+            $filter[] = [
+                'property' => 'name',
+                'value' => $query,
+            ];
+        }
 
         $query = $this->getRepository()->getSupplierListQuery($filter, $sort, $limit, $offset);
         $total = Shopware()->Models()->getQueryCount($query);
@@ -88,6 +97,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
             $supplier['description'] = strip_tags($supplier['description']);
             $supplier['image'] = $mediaService->getUrl($supplier['image']);
         }
+        unset($supplier);
 
         $this->View()->assign([
             'success' => !empty($suppliers),

@@ -3128,6 +3128,106 @@ class ArticleTest extends TestCase
         static::assertTrue(Shopware()->Models()->isOpen());
     }
 
+    public function testDeletingPricesWorksOnReplace()
+    {
+        $testData = [
+            'name' => 'Testartikel',
+            'description' => 'Test description',
+            'descriptionLong' => 'Test descriptionLong',
+            'active' => true,
+            'mainDetail' => [
+                'number' => 'swTEST' . uniqid(rand()),
+                'prices' => [
+                    [
+                        'customerGroupKey' => 'EK',
+                        'to' => 20,
+                        'price' => 500,
+                    ],
+                ],
+            ],
+            'configuratorSet' => [
+                'name' => 'MeinKonf',
+                'groups' => [
+                    [
+                        'name' => 'Farbe',
+                        'options' => [
+                            ['name' => 'Gelb'],
+                            ['name' => 'grün'],
+                        ],
+                    ],
+                    [
+                        'name' => 'Gräße',
+                        'options' => [
+                            ['name' => 'L'],
+                            ['name' => 'XL'],
+                        ],
+                    ],
+                ],
+            ],
+            'variants' => [
+                [
+                    'number' => 'swTEST.variant.' . uniqid(rand()),
+                    'inStock' => 17,
+                    // create a new unit
+                    'unit' => [
+                        'unit' => 'xyz',
+                        'name' => 'newUnit',
+                    ],
+                    'attribute' => [
+                        'attr3' => 'Freitext3',
+                        'attr4' => 'Freitext4',
+                    ],
+                    'configuratorOptions' => [
+                        [
+                            'option' => 'Gelb',
+                            'group' => 'Farbe',
+                        ],
+                        [
+                            'option' => 'XL',
+                            'group' => 'Größe',
+                        ],
+                    ],
+                    'minPurchase' => 5,
+                    'purchaseSteps' => 2,
+                    'prices' => [
+                        [
+                            'customerGroupKey' => 'H',
+                            'to' => 20,
+                            'price' => 500,
+                        ],
+                        [
+                            'customerGroupKey' => 'H',
+                            'from' => 21,
+                            'to' => '-',
+                            'price' => 400,
+                        ],
+                    ],
+                ],
+            ],
+            'taxId' => 1,
+            'supplierId' => 2,
+            'categories' => [
+                ['id' => 3],
+            ],
+        ];
+
+        $article = $this->resource->create($testData);
+
+        static::assertInstanceOf('\Shopware\Models\Article\Article', $article);
+        static::assertGreaterThan(0, $article->getId());
+
+        $countOfPrices = (int) Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_articles_prices');
+
+        $testData['__options_variants']['replace'] = true;
+
+        $this->resource->update($article->getId(), $testData);
+
+        $currentCountOfPrices = (int) Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_articles_prices');
+
+        static::assertEquals($countOfPrices, $currentCountOfPrices);
+        $this->resource->delete($article->getId());
+    }
+
     /**
      * Combinations merge the result of dimensional arrays not perfectly
      * so we have to clean up the first array level.

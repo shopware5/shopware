@@ -100,6 +100,8 @@ class SyncBacklogCommand extends ShopwareCommand
         $ids = array_column($backlogs, 'id');
 
         $backlogService->cleanup($ids);
+
+        return 0;
     }
 
     private function indexArticle($id)

@@ -147,8 +147,9 @@ class ProductDimensionsFacetHandler implements PartialFacetHandlerInterface
         $activeMin = $min;
         $activeMax = $max;
 
-        /** @var WeightCondition|WidthCondition|LengthCondition|HeightCondition $condition */
-        if ($condition = $criteria->getCondition($name)) {
+        /** @var WeightCondition|WidthCondition|LengthCondition|HeightCondition|null $condition */
+        $condition = $criteria->getCondition($name);
+        if ($condition !== null) {
             $method = 'get' . ucfirst($minField);
             $activeMin = $condition->$method();
 

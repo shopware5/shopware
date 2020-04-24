@@ -23,9 +23,18 @@
  */
 
 use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\ORM\AbstractQuery;
+use Shopware\Components\CategoryHandling\CategoryDuplicator;
+use Shopware\Components\Model\CategoryDenormalization;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Article;
+use Shopware\Models\Article\Repository;
 use Shopware\Models\Category\Category;
+use Shopware\Models\Customer\Customer;
+use Shopware\Models\Customer\Group;
 use Shopware\Models\Media\Media;
+use Shopware\Models\ProductStream\ProductStream;
+use Shopware_Components_Snippet_Manager as SnippetManager;
 
 /**
  * Backend Controller for the category backend module.
@@ -45,6 +54,24 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     protected $customerRepository;
 
     /**
+     * @var ModelManager
+     */
+    private $em;
+
+    /**
+     * @var SnippetManager
+     */
+    private $translation;
+
+    public function __construct(ModelManager $em, SnippetManager $translation)
+    {
+        $this->em = $em;
+        $this->translation = $translation;
+
+        parent::__construct();
+    }
+
+    /**
      * @deprecated in 5.6, will be private in 5.8
      *
      * Helper Method to get access to the category repository.
@@ -56,7 +83,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         if ($this->repository === null) {
-            $this->repository = Shopware()->Models()->getRepository(Category::class);
+            $this->repository = $this->em->getRepository(Category::class);
         }
 
         return $this->repository;
@@ -65,7 +92,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     /**
      * @deprecated in 5.6, will be private in 5.8
      *
-     * @return \Shopware\Components\Model\CategoryDenormalization
+     * @return CategoryDenormalization
      */
     public function getCategoryComponent()
     {
@@ -96,7 +123,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $this->Request()->getParam('start')
         )->getQuery();
 
-        $count = Shopware()->Models()->getQueryCount($query);
+        $count = $this->em->getQueryCount($query);
 
         $data = $query->getArrayResult();
 
@@ -157,7 +184,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $filter[] = ['property' => 'c.parentId', 'value' => $node];
         }
         $query = $this->getRepository()->getBackendDetailQuery($node)->getQuery();
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
         $paginator = $this->getModelManager()->createPaginator($query);
         $data = $paginator->getIterator()->getArrayCopy();
         $data = $data[0];
@@ -280,7 +307,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $categoryTemplates = array_filter(explode(';', Shopware()->Config()->categoryTemplates));
         $data = [];
         foreach ($categoryTemplates as $templateConfigRaw) {
-            list($template, $name) = explode(':', $templateConfigRaw);
+            [$template, $name] = explode(':', $templateConfigRaw);
             $data[] = ['template' => $template, 'name' => $name];
         }
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => count($data)]);
@@ -359,7 +386,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $limit = (int) $this->Request()->getParam('limit', 20);
         $search = $this->Request()->getParam('search', '');
 
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = $this->em->createQueryBuilder();
         $builder->select([
             'articles.id as articleId',
             'articles.name',
@@ -383,7 +410,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
         $query = $builder->getQuery();
 
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
 
         $paginator = $this->getModelManager()->createPaginator($query);
 
@@ -411,7 +438,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $customerRepository = $this->getCustomerRepository();
         $dataQuery = $customerRepository->getCustomerGroupsWithoutIdsQuery($usedIds, $offset, $limit);
 
-        $total = Shopware()->Models()->getQueryCount($dataQuery);
+        $total = $this->em->getQueryCount($dataQuery);
         $data = $dataQuery->getArrayResult();
 
         // Return the data and total count
@@ -473,7 +500,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
                 $needsRebuild = true;
             }
 
-            Shopware()->Models()->flush($item);
+            $this->em->flush($item);
         }
 
         $this->View()->assign([
@@ -490,10 +517,10 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $ids = json_decode($this->Request()->getParam('ids'));
         foreach ($ids as $key => $categoryId) {
             /** @var Category $category */
-            $category = Shopware()->Models()->getReference(Category::class, (int) $categoryId);
+            $category = $this->em->getReference(Category::class, (int) $categoryId);
             $category->setPosition($key);
         }
-        Shopware()->Models()->flush();
+        $this->em->flush();
 
         $this->View()->assign(['success' => true]);
     }
@@ -514,17 +541,19 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $params = $this->Request()->getParams();
         $categoryId = (int) $params['id'];
 
+        $repo = $this->em->getRepository(Category::class);
+
         if (empty($categoryId)) {
             $categoryModel = new Category();
-            Shopware()->Models()->persist($categoryModel);
+            $this->em->persist($categoryModel);
 
             // Find parent for newly created category
             $params['parentId'] = is_numeric($params['parentId']) ? (int) $params['parentId'] : 1;
             /** @var Category $parentCategory */
-            $parentCategory = $this->getRepository()->find($params['parentId']);
+            $parentCategory = $repo->find($params['parentId']);
             $categoryModel->setParent($parentCategory);
 
-            // If Leaf-Category gets childcategory move all assignments to new childcategory
+            // If Leaf-Category gets child category move all assignments to new child category
             if ($parentCategory->getChildren()->count() === 0 && $parentCategory->getArticles()->count() > 0) {
                 /** @var Article $product */
                 foreach ($parentCategory->getArticles() as $product) {
@@ -533,12 +562,25 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
                 }
             }
         } else {
-            $categoryModel = $this->getRepository()->find($categoryId);
+            $categoryModel = $repo->find($categoryId);
+        }
+
+        // check if a category could be found
+        if (!$categoryModel) {
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translation->getNamespace('backend/category/main')->get(
+                    'saveDetailInvalidCategoryId',
+                    'Invalid categoryId'
+                ),
+            ]);
+
+            return;
         }
 
         $categoryModel->setStream(null);
         if ($params['streamId']) {
-            $params['stream'] = Shopware()->Models()->find(\Shopware\Models\ProductStream\ProductStream::class, (int) $params['streamId']);
+            $params['stream'] = $this->em->find(ProductStream::class, (int) $params['streamId']);
         }
 
         $params = $this->prepareCustomerGroupsAssociatedData($params);
@@ -550,15 +592,15 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $params['template'] = null;
         }
 
-        $params['changed'] = new \DateTime();
+        $params['changed'] = new DateTime();
         $categoryModel->fromArray($params);
         $categoryModel->setShops($this->Request()->getParam('shops'));
-        Shopware()->Models()->flush();
+        $this->em->flush();
 
         $categoryId = $categoryModel->getId();
-        $query = $this->getRepository()->getBackendDetailQuery($categoryId)->getQuery();
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $paginator = $this->getModelManager()->createPaginator($query);
+        $query = $repo->getBackendDetailQuery($categoryId)->getQuery();
+        $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
+        $paginator = $this->em->createPaginator($query);
         $data = $paginator->getIterator()->getArrayCopy();
         $data = $data[0];
         $data['imagePath'] = $data['media']['path'];
@@ -584,8 +626,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         }
 
         // Doctrine removes all child-categories and assignments of parent and child categories
-        Shopware()->Models()->remove($result);
-        Shopware()->Models()->flush();
+        $this->em->remove($result);
+        $this->em->flush();
 
         $this->View()->assign(['success' => true]);
     }
@@ -708,8 +750,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     public function duplicateCategoryAction()
     {
-        /** @var \Shopware\Components\CategoryHandling\CategoryDuplicator $categoryDuplicator */
-        $categoryDuplicator = $this->get(\Shopware\Components\CategoryHandling\CategoryDuplicator::class);
+        /** @var CategoryDuplicator $categoryDuplicator */
+        $categoryDuplicator = $this->get(CategoryDuplicator::class);
 
         $copyProductAssociations = $this->Request()->getParam('reassignArticleAssociations');
         $categoryIds = $this->Request()->getParam('children');
@@ -729,7 +771,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
             $childrenStmt = $this->get('db')->prepare('SELECT id FROM s_categories WHERE parent = :parent');
             $childrenStmt->execute([':parent' => $categoryId]);
-            $children = $childrenStmt->fetchAll(\PDO::FETCH_COLUMN);
+            $children = $childrenStmt->fetchAll(PDO::FETCH_COLUMN);
 
             if (count($children)) {
                 $result[] = [
@@ -795,7 +837,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         }
 
         /** @var Category $category */
-        $category = Shopware()->Models()->getReference(Category::class, (int) $categoryId);
+        $category = $this->em->getReference(Category::class, (int) $categoryId);
 
         $counter = 0;
         foreach ($articleIds as $productId) {
@@ -804,13 +846,13 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             }
 
             /** @var Article $product */
-            $product = Shopware()->Models()->getReference(Article::class, (int) $productId);
+            $product = $this->em->getReference(Article::class, (int) $productId);
             $product->removeCategory($category);
 
             ++$counter;
         }
 
-        Shopware()->Models()->flush();
+        $this->em->flush();
 
         return ['success' => true, 'counter' => $counter];
     }
@@ -834,7 +876,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         }
 
         /** @var Category $category */
-        $category = Shopware()->Models()->getReference(Category::class, (int) $categoryId);
+        $category = $this->em->getReference(Category::class, (int) $categoryId);
 
         $counter = 0;
         foreach ($articleIds as $productId) {
@@ -843,13 +885,13 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             }
 
             /** @var Article $product */
-            $product = Shopware()->Models()->getReference(Article::class, (int) $productId);
+            $product = $this->em->getReference(Article::class, (int) $productId);
             $product->addCategory($category);
 
             ++$counter;
         }
 
-        Shopware()->Models()->flush();
+        $this->em->flush();
 
         return ['success' => true, 'counter' => $counter];
     }
@@ -875,12 +917,12 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     /**
      * Helper Method to get access to the customer repository.
      *
-     * @return \Shopware\Models\Article\Repository
+     * @return Repository
      */
     private function getCustomerRepository()
     {
         if ($this->customerRepository === null) {
-            $this->customerRepository = Shopware()->Models()->getRepository(\Shopware\Models\Customer\Customer::class);
+            $this->customerRepository = $this->em->getRepository(Customer::class);
         }
 
         return $this->customerRepository;
@@ -898,7 +940,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $customerGroups = [];
         foreach ($data['customerGroups'] as $customerGroupData) {
             if (!empty($customerGroupData['id'])) {
-                $model = Shopware()->Models()->find(\Shopware\Models\Customer\Group::class, $customerGroupData['id']);
+                $model = $this->em->find(Group::class, $customerGroupData['id']);
                 $customerGroups[] = $model;
             }
         }

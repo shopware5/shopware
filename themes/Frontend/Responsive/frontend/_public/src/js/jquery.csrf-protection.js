@@ -1,4 +1,4 @@
-;(function($, window, document) {
+(function($, window, document) {
     'use strict';
 
     /**
@@ -14,6 +14,10 @@
             return parts.pop().split(';').shift();
         }
         return undefined;
+    };
+
+    $.isSecure = function() {
+        return window.secureShop !== undefined && window.secureShop === true;
     };
 
     /**
@@ -185,7 +189,7 @@
             var me = this,
                 basePath = window.csrfConfig.basePath || '/';
 
-            document.cookie = me.storageKey + '=' + token + '; path=' + basePath;
+            document.cookie = me.storageKey + '=' + token + '; path=' + basePath + ($.isSecure() ? '; secure;' : '');
         },
 
         /**

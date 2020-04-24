@@ -60,6 +60,8 @@ class ThemeInitializeCommand extends ShopwareCommand
         $this->updateDefaultTemplateId($templateId);
 
         $output->writeln('Themes initialized');
+
+        return 0;
     }
 
     /**

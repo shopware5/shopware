@@ -56,7 +56,7 @@ class TypeResolver extends AbstractResolver
                 return;
             }
 
-            $this->resolveIds[$type][] = $value;
+            $this->resolveIds[$type][$value] = $value;
         }
     }
 

@@ -1,4 +1,4 @@
-<ul class="breadcrumb--list" role="menu" itemscope itemtype="http://schema.org/BreadcrumbList">
+<ul class="breadcrumb--list" role="menu" itemscope itemtype="https://schema.org/BreadcrumbList">
 
     {* Prefix for the breadcrumb e.g. the configured shop name *}
     {block name="frontend_index_breadcrumb_prefix"}{/block}
@@ -6,7 +6,7 @@
     {block name="frontend_index_breadcrumb_content"}
         {foreach $sBreadcrumb as $breadcrumb}
             {block name="frontend_index_breadcrumb_entry"}
-                <li role="menuitem" class="breadcrumb--entry{if $breadcrumb@last} is--active{/if}" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                <li role="menuitem" class="breadcrumb--entry{if $breadcrumb@last} is--active{/if}" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
                     {if $breadcrumb.name}
                         {block name="frontend_index_breadcrumb_entry_inner"}
                             {if $breadcrumb.link}

@@ -53,6 +53,7 @@ class PropertyHydrator extends Hydrator
     {
         $this->sortGroups($data);
 
+        /** @var Struct\Property\Set[] $sets */
         $sets = [];
 
         foreach ($data as $row) {
@@ -84,7 +85,6 @@ class PropertyHydrator extends Hydrator
             $set->setGroups($groups);
         }
 
-        /** @var Struct\Property\Set[] $sets */
         foreach ($sets as $set) {
             foreach ($set->getGroups() as $group) {
                 $options = $group->getOptions();

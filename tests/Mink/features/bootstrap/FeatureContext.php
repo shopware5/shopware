@@ -388,7 +388,7 @@ EOD;
             return null;
         }
         try {
-            return 'Request:' . "\n" . print_r($driver->getClient()->getRequest(), true) . "\n";
+            return "Request:\n" . print_r($driver->getClient()->getRequest(), true) . "\n";
         } catch (MinkException $exception) {
             return null;
         }
@@ -400,7 +400,7 @@ EOD;
     private function getResponseHeadersLogMessage(Session $session)
     {
         try {
-            return 'Response headers:' . "\n" . print_r($session->getResponseHeaders(), true) . "\n";
+            return "Response headers:\n" . print_r($session->getResponseHeaders(), true) . "\n";
         } catch (MinkException $exception) {
             return null;
         }
@@ -412,7 +412,7 @@ EOD;
     private function getRequestContentLogMessage(Session $session)
     {
         try {
-            return 'Response content:' . "\n" . $session->getPage()->getContent() . "\n";
+            return "Response content:\n" . $session->getPage()->getContent() . "\n";
         } catch (MinkException $exception) {
             return null;
         }

@@ -42,7 +42,9 @@
                                 <input type="text" required="required" aria-required="true" name="sCaptcha"{if $sSupport.sErrors.e.sCaptcha} class="has--error"{/if} />
                             </div>
                         {else}
-                            <div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=index}"{if $sSupport.sErrors.e || $sSupport.sErrors.v} data-hasError="true"{/if}></div>
+                            {$captchaName = {config name=captchaMethod}}
+                            {$captchaHasError = $sSupport.sErrors.e || $sSupport.sErrors.v}
+                            {include file="widgets/captcha/custom_captcha.tpl" captchaName=$captchaName captchaHasError=$captchaHasError}
                         {/if}
                     </div>
                 {/block}

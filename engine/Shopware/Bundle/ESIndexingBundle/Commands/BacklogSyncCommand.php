@@ -94,5 +94,7 @@ class BacklogSyncCommand extends ShopwareCommand
         }
 
         $io->success(sprintf('Synchronized %d items', count($backlogs)));
+
+        return 0;
     }
 }

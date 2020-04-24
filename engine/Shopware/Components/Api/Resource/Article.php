@@ -908,7 +908,10 @@ class Article extends Resource implements BatchInterface
             $query->execute();
 
             $sql = 'DELETE FROM s_article_configurator_option_relations WHERE article_id = ?';
-            Shopware()->Db()->query($sql, [$detail['id']]);
+            $this->getManager()->getConnection()->executeQuery($sql, [$detail['id']]);
+
+            $sql = 'DELETE FROM s_articles_prices WHERE articledetailsID = ?';
+            $this->getManager()->getConnection()->executeQuery($sql, [$detail['id']]);
 
             $query = $this->getRepository()->getRemoveVariantTranslationsQuery($detail['id']);
             $query->execute();

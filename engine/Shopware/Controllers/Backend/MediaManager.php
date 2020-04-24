@@ -462,8 +462,6 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      * </code>
      *
      * @throws Exception
-     *
-     * @return bool
      */
     public function saveAlbumAction()
     {
@@ -884,8 +882,6 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\TransactionRequiredException
-     *
-     * @return bool
      */
     private function removeAlbum(array $params)
     {

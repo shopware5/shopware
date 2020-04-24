@@ -163,5 +163,7 @@ class PluginListCommand extends ShopwareCommand implements CompletionAwareInterf
               ->setRows($rows);
 
         $table->render();
+
+        return 0;
     }
 }

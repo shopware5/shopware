@@ -1,4 +1,4 @@
-;(function ($, window) {
+(function ($, window) {
     /**
      * Shopware AJAX variant
      *

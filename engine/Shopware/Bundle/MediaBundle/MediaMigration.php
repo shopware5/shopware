@@ -56,7 +56,7 @@ class MediaMigration
         }
 
         $progressBar = new ProgressBar($output, $filesToMigrate);
-        $progressBar->setFormat(' %current%/%max% [%bar%] %percent%%,  %migrated% migrated, %skipped% skipped, %moved% moved, Elapsed: %elapsed%' . "\n" . ' Current file: %filename%');
+        $progressBar->setFormat(" %current%/%max% [%bar%] %percent%%,  %migrated% migrated, %skipped% skipped, %moved% moved, Elapsed: %elapsed%\n Current file: %filename%");
         $progressBar->setMessage('', 'filename');
         $this->migrateFilesIn('media', $fromFilesystem, $toFileSystem, $progressBar);
         $progressBar->finish();

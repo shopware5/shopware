@@ -23,6 +23,7 @@
  */
 
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Shopware Statistics Plugin
@@ -131,6 +132,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
             $this->refreshLog($request);
             $this->refreshReferer($request);
             $this->refreshArticleImpression($request);
+            $this->refreshBlog($request);
             $this->refreshCurrentUsers($request);
             $this->refreshPartner($request, $response);
         }
@@ -189,8 +191,6 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     {
         if ((rand() % 10) === 0) {
             $sql = 'DELETE FROM s_statistics_currentusers WHERE time < DATE_SUB(NOW(), INTERVAL 3 MINUTE)';
-            Shopware()->Db()->query($sql);
-            $sql = 'DELETE FROM s_statistics_pool WHERE datum != CURDATE()';
             Shopware()->Db()->query($sql);
         }
     }
@@ -369,7 +369,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
                         $basePath = '/';
                     }
                     $response->headers->setCookie(
-                        new Cookie('partner', $row['idcode'], $valid, $basePath)
+                        new Cookie('partner', $row['idcode'], $valid, $basePath, null, $request->isSecure())
                     );
                 }
                 Shopware()->Session()->sPartner = $partner;
@@ -383,5 +383,33 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
                 Shopware()->Session()->sPartner = $partner;
             }
         }
+    }
+
+    private function refreshBlog(Request $request)
+    {
+        $blogArticleId = $request->query->getInt('blogId');
+        if (empty($blogArticleId)) {
+            return;
+        }
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = $this->get('dbal_connection');
+        /** @var Enlight_Components_Session_Namespace $session */
+        $session = $this->get('session');
+
+        // Count the views of this blog item
+        $visitedBlogItems = $session->get('visitedBlogItems');
+        if (in_array($blogArticleId, $visitedBlogItems, true)) {
+            return;
+        }
+        // Use plain sql, because the http cache should no be cleared
+        $query = $connection->createQueryBuilder()
+            ->update('s_blog', 'b')
+            ->set('b.views', 'IFNULL(b.views, 0) + 1')
+            ->where('b.id = :id')
+            ->setParameter('id', $blogArticleId);
+        $query->execute();
+
+        $visitedBlogItems[] = $blogArticleId;
+        $session->offsetSet('visitedBlogItems', $visitedBlogItems);
     }
 }

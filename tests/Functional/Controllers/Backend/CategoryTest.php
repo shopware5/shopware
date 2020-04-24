@@ -62,7 +62,7 @@ class CategoryTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
-    public function testGetList()
+    public function testGetList(): void
     {
         // Delete old data
         $repositoryData = $this->repository->findBy(['name' => $this->dummyData['name']]);
@@ -83,11 +83,11 @@ class CategoryTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertGreaterThan(0, $this->View()->total);
         $foundDummy = [];
         foreach ($returnData as $dummyData) {
-            if ($dummyData['name'] == $dummy->getName()) {
+            if ($dummyData['name'] === $dummy->getName()) {
                 $foundDummy = $dummyData;
             }
         }
-        static::assertTrue(!empty($foundDummy));
+        static::assertNotEmpty($foundDummy);
         $this->manager->remove($dummy);
         $this->manager->flush();
     }
@@ -95,7 +95,7 @@ class CategoryTest extends \Enlight_Components_Test_Controller_TestCase
     /**
      * @return int The id of the new category
      */
-    public function testSaveDetail()
+    public function testSaveDetail(): int
     {
         $params = $this->dummyData;
         unset($params['parentId']);
@@ -126,7 +126,7 @@ class CategoryTest extends \Enlight_Components_Test_Controller_TestCase
      *
      * @return string the id to for the testGetDetail Method
      */
-    public function testGetDetail($id)
+    public function testGetDetail($id): string
     {
         $params['node'] = $id;
         $this->Request()->setParams($params);
@@ -137,8 +137,8 @@ class CategoryTest extends \Enlight_Components_Test_Controller_TestCase
 
         static::assertEquals($dummyData['parentId'], $returningData['parentId']);
         static::assertEquals($dummyData['name'], $returningData['name']);
-        static::assertTrue($returningData['changed'] instanceof \DateTime);
-        static::assertTrue($returningData['added'] instanceof \DateTime);
+        static::assertInstanceOf(\DateTime::class, $returningData['changed']);
+        static::assertInstanceOf(\DateTime::class, $returningData['added']);
 
         return $id;
     }
@@ -148,15 +148,15 @@ class CategoryTest extends \Enlight_Components_Test_Controller_TestCase
      *
      * @depends testGetDetail
      */
-    public function testGetIdPath($id)
+    public function testGetIdPath($id): void
     {
         $params['categoryIds'] = $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/getIdPath');
         static::assertTrue($this->View()->success);
         $categoryPath = $this->View()->data;
-        static::assertTrue(!empty($categoryPath));
-        static::assertEquals(2, count(explode('/', $categoryPath[0])));
+        static::assertNotEmpty($categoryPath);
+        static::assertCount(2, explode('/', $categoryPath[0]));
     }
 
     /**
@@ -164,7 +164,7 @@ class CategoryTest extends \Enlight_Components_Test_Controller_TestCase
      *
      * @depends testGetDetail
      */
-    public function testMoveTreeItem($id)
+    public function testMoveTreeItem($id): void
     {
         // Test move to another position
         $params['id'] = $id;
@@ -192,12 +192,12 @@ class CategoryTest extends \Enlight_Components_Test_Controller_TestCase
      *
      * @param string $id
      */
-    public function testDelete($id)
+    public function testDelete($id): void
     {
         $params['id'] = $id;
         $categoryModel = $this->repository->find($id);
         $categoryName = $categoryModel->getName();
-        static::assertTrue(!empty($categoryName));
+        static::assertNotEmpty($categoryName);
 
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/delete');
@@ -206,12 +206,28 @@ class CategoryTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals(null, $categoryModel);
     }
 
+    public function testUpdatingInvalidCategory(): void
+    {
+        $params = $this->dummyData;
+        unset($params['parentId']);
+        $params['id'] = -10000;
+        $params['articles'] = [];
+        $params['customerGroups'] = [];
+
+        // Test new category
+        $this->Request()->setParams($params);
+        $this->dispatch('backend/Category/createDetail');
+        static::assertFalse($this->View()->success);
+        static::assertNotEmpty($this->View()->message);
+
+        $snippet = Shopware()->Container()->get('snippets')->getNamespace('backend/category/main');
+        static::assertEquals($snippet->get('saveDetailInvalidCategoryId', 'Invalid categoryId'), $this->View()->message);
+    }
+
     /**
      * Creates the dummy data
-     *
-     * @return Category
      */
-    private function getDummyData()
+    private function getDummyData(): Category
     {
         $dummyModel = new Category();
         $dummyData = $this->dummyData;
@@ -226,10 +242,8 @@ class CategoryTest extends \Enlight_Components_Test_Controller_TestCase
 
     /**
      * Helper method to create the dummy object
-     *
-     * @return Category
      */
-    private function createDummy()
+    private function createDummy(): Category
     {
         $dummyData = $this->getDummyData();
         $this->manager->persist($dummyData);

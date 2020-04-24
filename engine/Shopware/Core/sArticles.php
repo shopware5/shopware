@@ -751,6 +751,8 @@ class sArticles implements \Enlight_Hook
         $context = $this->contextService->getShopContext();
 
         $criteria = $this->createProductNavigationCriteria($categoryId, $context, $request);
+        // Elasticsearch default max_result_window
+        $criteria->limit(10000);
 
         $searchResult = $this->productNumberSearch->search($criteria, $context);
 
@@ -1433,7 +1435,7 @@ class sArticles implements \Enlight_Hook
         static $articleAlbum;
         if ($articleAlbum === null) {
             // Now we search for the default product album of the media manager, this album contains the thumbnail configuration.
-            /** @var Album $model */
+            /** @var Album $articleAlbum */
             $articleAlbum = $this->getMediaRepository()
                 ->getAlbumWithSettingsQuery(-1)
                 ->getOneOrNullResult();
@@ -2437,9 +2439,6 @@ class sArticles implements \Enlight_Hook
                 $product['linkDetails'] .= "&sCategory=$categoryId";
             }
 
-            if ($this->config->get('useShortDescriptionInListing') && strlen($product['description']) > 5) {
-                $product['description_long'] = $product['description'];
-            }
             $product['description_long'] = $this->sOptimizeText($product['description_long']);
 
             $products[$product['ordernumber']] = $product;

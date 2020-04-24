@@ -112,13 +112,13 @@
         {if ($sArticle.sConfiguratorSettings.type != 1 && $sArticle.sConfiguratorSettings.type != 2) || $activeConfiguratorSelection == true}
             {include file="frontend/plugins/index/delivery_informations.tpl" sArticle=$sArticle}
         {elseif $sArticle.sReleaseDate && $sArticle.sReleaseDate|date_format:"%Y%m%d" > $smarty.now|date_format:"%Y%m%d"}
-            <link itemprop="availability" href="http://schema.org/PreOrder" />
+            <link itemprop="availability" href="https://schema.org/PreOrder" />
         {elseif $sArticle.esd}
-            <link itemprop="availability" href="http://schema.org/InStock" />
+            <link itemprop="availability" href="https://schema.org/InStock" />
         {elseif $sArticle.instock >= $sArticle.minpurchase}
-            <link itemprop="availability" href="http://schema.org/InStock" />
+            <link itemprop="availability" href="https://schema.org/InStock" />
         {else}
-            <link itemprop="availability" href="http://schema.org/LimitedAvailability" />
+            <link itemprop="availability" href="https://schema.org/LimitedAvailability" />
         {/if}
     {/block}
 {/block}

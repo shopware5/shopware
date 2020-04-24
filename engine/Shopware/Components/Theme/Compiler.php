@@ -26,6 +26,7 @@ namespace Shopware\Components\Theme;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
+use Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGeneratorInterface;
 use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Components\Theme\Compressor\CompressorInterface;
 use Shopware\Components\Theme\Compressor\Js;
@@ -93,6 +94,11 @@ class Compiler
     private $release;
 
     /**
+     * @var UniqueIdGeneratorInterface
+     */
+    private $uniqueIdGenerator;
+
+    /**
      * @param string $rootDir
      */
     public function __construct(
@@ -104,7 +110,8 @@ class Compiler
         CompressorInterface $jsCompressor,
         \Enlight_Event_EventManager $eventManager,
         TimestampPersistor $timestampPersistor,
-        ShopwareReleaseStruct $release
+        ShopwareReleaseStruct $release,
+        UniqueIdGeneratorInterface $uniqueIdGenerator
     ) {
         $this->rootDir = $rootDir;
         $this->compiler = $compiler;
@@ -115,6 +122,7 @@ class Compiler
         $this->jsCompressor = $jsCompressor;
         $this->timestampPersistor = $timestampPersistor;
         $this->release = $release;
+        $this->uniqueIdGenerator = $uniqueIdGenerator;
 
         $this->lessCollector = new LessCollector(
             $pathResolver,
@@ -290,7 +298,7 @@ class Compiler
         $javascriptFiles = $this->javascriptCollector->collectJavascriptFiles($template, $shop);
         $content = '';
         foreach ($javascriptFiles as $jsFile) {
-            $content .= file_get_contents($jsFile) . "\n";
+            $content .= file_get_contents($jsFile) . ";\n";
         }
 
         if ($settings->getCompressJs()) {
@@ -402,7 +410,7 @@ class Compiler
     private function getConfig(Shop\Template $template, Shop\Shop $shop)
     {
         $config = $this->inheritance->buildConfig($template, $shop);
-        $config['shopware-revision'] = $this->release->getRevision();
+        $config['shopware-revision'] = md5($this->release->getRevision() . $this->uniqueIdGenerator->getUniqueId());
 
         $collection = new ArrayCollection();
 

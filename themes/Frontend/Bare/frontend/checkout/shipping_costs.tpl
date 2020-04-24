@@ -11,7 +11,12 @@
                 <div class="select-field">
                     <select id="basket_country_list" name="sCountry" data-auto-submit="true">
                         {foreach $sCountryList as $country}
-                            {if $country.allow_shipping}
+                            {$isCountryAllowed = $country.allow_shipping}
+                            {if {config name='show_all_countries'}}
+                                {$isCountryAllowed = true}
+                            {/if}
+
+                            {if $isCountryAllowed}
                                 <option value="{$country.id}"{if $country.id eq $sCountry.id} selected="selected"{/if}>
                                     {$country.countryname}
                                 </option>
@@ -79,19 +84,24 @@
                 <label for="basket_dispatch_list">{s name="ShipppingLabelDispatch"}{/s}</label>
             {/block}
 
-            {block name='frontend_checkout_shipping_costs_dispatch_selection'}
-                <div class="select-field">
-                    <select id="basket_dispatch_list" name="sDispatch" data-auto-submit="true">
-                    {if $sDispatches}
-                        {foreach $sDispatches as $dispatch}
-                            <option value="{$dispatch.id}"{if $dispatch.id eq $sDispatch.id} selected="selected"{/if}>
-                                {$dispatch.name}
-                            </option>
-                        {/foreach}
-                    {/if}
-                    </select>
-                </div>
-            {/block}
+            {if $countryNotAllowedForShipping}
+                {s name="CountryNotAllowedForShipping" assign="countryNotAllowedForShippingMessage"}{/s}
+                {include file="frontend/_includes/messages.tpl" type='warning' content=$countryNotAllowedForShippingMessage}
+            {else}
+                {block name='frontend_checkout_shipping_costs_dispatch_selection'}
+                    <div class="select-field">
+                        <select id="basket_dispatch_list" name="sDispatch" data-auto-submit="true">
+                            {if $sDispatches}
+                                {foreach $sDispatches as $dispatch}
+                                    <option value="{$dispatch.id}"{if $dispatch.id eq $sDispatch.id} selected="selected"{/if}>
+                                        {$dispatch.name}
+                                    </option>
+                                {/foreach}
+                            {/if}
+                        </select>
+                    </div>
+                {/block}
+            {/if}
         </div>
     {/block}
 

@@ -194,5 +194,7 @@ class SnippetsFindMissingCommand extends ShopwareCommand implements CompletionAw
         foreach ($data as $namespace) {
             $outputAdapter->write($namespace, true);
         }
+
+        return 0;
     }
 }

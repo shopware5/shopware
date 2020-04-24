@@ -52,5 +52,7 @@ class RefreshTopsellerCommand extends ShopwareCommand
         $topseller->updateElapsedTopSeller();
 
         $output->writeln('The topseller index was refreshed successfully.');
+
+        return 0;
     }
 }

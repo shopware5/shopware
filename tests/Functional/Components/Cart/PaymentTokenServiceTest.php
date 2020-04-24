@@ -65,9 +65,76 @@ class PaymentTokenServiceTest extends \Enlight_Components_Test_Controller_TestCa
         $this->dispatch('/?swPaymentToken=' . $hash);
 
         $cookies = $this->Response()->getCookies();
+        $key = session_name() . '-';
 
-        static::assertArrayHasKey(session_name() . '-', $cookies);
+        static::assertArrayHasKey($key, $cookies);
         static::assertNotNull($this->Response()->getHeader('Location'));
+        static::assertEquals(ini_get('session.cookie_path'), $cookies[$key]['path']);
+
+        $path = Shopware()->Front()->Request()->getBasePath();
+        if ($path === '') {
+            $path = '/';
+        }
+
+        static::assertEquals($path, $cookies[$key]['path']);
+    }
+
+    public function paymentTokenProviders(): array
+    {
+        return [
+            // Language shops
+            [
+                '/de',
+                '/',
+            ],
+            [
+                '/en',
+                '/',
+            ],
+            // Language Shop in subfolder
+            [
+                '/foo/de',
+                '/foo',
+            ],
+            // Shop in subfolder
+            [
+                '',
+                '/foo',
+            ],
+            // Shop at
+            [
+                '',
+                '/',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider paymentTokenProviders
+     */
+    public function testPaymentTokenPath(string $virtualUrl, string $path): void
+    {
+        session_destroy();
+        Shopware()->Container()->reset('session');
+
+        $currentUrl = Shopware()->Shop()->getBaseUrl();
+        $currentPath = Shopware()->Shop()->getBasePath();
+
+        Shopware()->Shop()->setBaseUrl($virtualUrl);
+        Shopware()->Shop()->setBasePath($path);
+
+        $hash = $this->service->generate();
+
+        $this->dispatch('/?swPaymentToken=' . $hash);
+        $cookies = $this->Response()->getCookies();
+        $key = session_name() . '-';
+
+        static::assertArrayHasKey($key, $cookies);
+        static::assertNotNull($this->Response()->getHeader('Location'));
+        static::assertEquals(ini_get('session.cookie_path'), $cookies[$key]['path']);
+
+        Shopware()->Shop()->setBaseUrl($currentUrl);
+        Shopware()->Shop()->setBasePath($currentPath);
     }
 
     public function testPaymentTokenInvalidRequest(): void

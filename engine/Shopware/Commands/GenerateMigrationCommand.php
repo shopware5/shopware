@@ -66,6 +66,8 @@ class GenerateMigrationCommand extends ShopwareCommand
         $io = new SymfonyStyle($input, $output);
 
         $io->success(sprintf('Generated file "%s/%s"', $migrationDirectory, $fileName));
+
+        return 0;
     }
 
     private function findMigrationDirectory(?string $pluginName): ?string

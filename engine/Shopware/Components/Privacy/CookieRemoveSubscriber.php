@@ -25,19 +25,16 @@
 namespace Shopware\Components\Privacy;
 
 use Enlight\Event\SubscriberInterface;
-use Enlight_Controller_Request_RequestHttp as Request;
-use Enlight_Controller_Response_ResponseHttp as Response;
 use Shopware\Bundle\CookieBundle\CookieGroupCollection;
-use Shopware\Bundle\CookieBundle\Services\CookieHandler;
 use Shopware\Bundle\CookieBundle\Services\CookieHandlerInterface;
+use Shopware\Bundle\CookieBundle\Services\CookieRemoveHandler;
 use Shopware_Components_Config as Config;
-use Symfony\Component\HttpFoundation\Cookie;
 
 class CookieRemoveSubscriber implements SubscriberInterface
 {
-    const COOKIE_MODE_NOTICE = 0;
-    const COOKIE_MODE_TECHNICAL = 1;
-    const COOKIE_MODE_ALL = 2;
+    public const COOKIE_MODE_NOTICE = 0;
+    public const COOKIE_MODE_TECHNICAL = 1;
+    public const COOKIE_MODE_ALL = 2;
 
     /**
      * @var bool
@@ -54,11 +51,17 @@ class CookieRemoveSubscriber implements SubscriberInterface
      */
     private $cookieHandler;
 
-    public function __construct(Config $config, CookieHandlerInterface $cookieHandler)
+    /**
+     * @var bool
+     */
+    private $httpCacheEnabled;
+
+    public function __construct(Config $config, CookieHandlerInterface $cookieHandler, bool $httpCacheEnabled)
     {
         $this->cookieRemovalActive = $config->get('cookie_note_mode') && $config->get('show_cookie_note');
         $this->config = $config;
         $this->cookieHandler = $cookieHandler;
+        $this->httpCacheEnabled = $httpCacheEnabled;
     }
 
     public static function getSubscribedEvents(): array
@@ -71,98 +74,45 @@ class CookieRemoveSubscriber implements SubscriberInterface
 
     public function onPostDispatch(\Enlight_Controller_ActionEventArgs $args): void
     {
+        $controller = $args->getSubject();
+        $controller->View()->assign('httpCacheEnabled', $this->httpCacheEnabled);
+
         if (!$this->cookieRemovalActive) {
             return;
         }
 
-        $controller = $args->getSubject();
+        if ($this->httpCacheEnabled) {
+            $controller->Response()->headers->set(
+                CookieRemoveHandler::COOKIE_CONFIG_KEY,
+                json_encode([
+                    'cookieNoteMode' => $this->config->get('cookie_note_mode'),
+                    'showCookieNote' => $this->config->get('show_cookie_note'),
+                ])
+            );
+        }
 
-        $allowCookie = (int) $controller->Request()->getCookie('allowCookie');
-
-        if ($this->config->get('cookie_note_mode') === self::COOKIE_MODE_ALL) {
+        $allowCookie = (int) $controller->Request()->cookies->getInt('allowCookie');
+        if ($this->config->get('cookie_note_mode') !== self::COOKIE_MODE_TECHNICAL) {
             if ($allowCookie === 1) {
                 return;
             }
 
             header_remove('Set-Cookie');
 
-            $this->removeAllCookies($controller->Request(), $controller->Response());
-
             return;
         }
 
-        if ($this->config->get('cookie_note_mode') === self::COOKIE_MODE_TECHNICAL) {
-            $controller->View()->assign(
-                'cookieGroups',
-                $this->convertToArray($this->cookieHandler->getCookies())
+        if ($this->httpCacheEnabled) {
+            $controller->Response()->headers->set(
+                CookieRemoveHandler::COOKIE_GROUP_COLLECTION_KEY,
+                base64_encode(serialize($this->cookieHandler->getCookies()))
             );
-
-            if ($allowCookie === 1) {
-                return;
-            }
-
-            $this->removeCookiesFromPreferences($controller->Request(), $controller->Response());
-        }
-    }
-
-    private function removeCookiesFromPreferences(Request $request, Response $response): void
-    {
-        $preferences = $request->getCookie(CookieHandler::PREFERENCES_COOKIE_NAME);
-
-        if ($preferences === null) {
-            $this->removeAllCookies($request, $response);
-
-            return;
         }
 
-        $preferences = json_decode($preferences, true);
-
-        $this->removeCookies($request, $response, function (string $cookieName) use ($preferences) {
-            return $this->cookieHandler->isCookieAllowedByPreferences($cookieName, $preferences);
-        });
-    }
-
-    private function removeAllCookies(Request $request, Response $response): void
-    {
-        $technicallyRequiredCookies = $this->cookieHandler->getTechnicallyRequiredCookies();
-
-        $this->removeCookies($request, $response, static function (string $cookieKey) use ($technicallyRequiredCookies) {
-            return $technicallyRequiredCookies->hasCookieWithName($cookieKey);
-        });
-    }
-
-    private function removeCookies(Request $request, Response $response, callable $validationFunction): void
-    {
-        $requestCookies = $request->getCookie();
-        $cookieBasePath = $request->getBasePath();
-
-        $cookiePath = $cookieBasePath . '/';
-        $currentPath = $cookieBasePath . $request->getPathInfo();
-        $currentPathWithoutSlash = trim($currentPath, '/');
-
-        foreach ($response->getCookies() as $responseCookie) {
-            if (!$validationFunction($responseCookie['name'])) {
-                if (array_key_exists($responseCookie['name'], $requestCookies)) {
-                    continue;
-                }
-
-                $response->headers->removeCookie($responseCookie['name']);
-                $response->headers->removeCookie($responseCookie['name'], $cookieBasePath);
-                $response->headers->removeCookie($responseCookie['name'], $cookiePath);
-                $response->headers->removeCookie($responseCookie['name'], $currentPath);
-                $response->headers->removeCookie($responseCookie['name'], $currentPathWithoutSlash);
-            }
-        }
-
-        foreach ($requestCookies as $cookieKey => $cookieName) {
-            if (!$validationFunction($cookieKey)) {
-                $response->headers->setCookie(new Cookie($cookieKey, null, 0));
-                $response->headers->setCookie(new Cookie($cookieKey, null, 0, $cookieBasePath));
-                $response->headers->setCookie(new Cookie($cookieKey, null, 0, $cookiePath));
-                $response->headers->setCookie(new Cookie($cookieKey, null, 0, $currentPath));
-                $response->headers->setCookie(new Cookie($cookieKey, null, 0, $currentPathWithoutSlash));
-            }
-        }
+        $controller->View()->assign(
+            'cookieGroups',
+            $this->convertToArray($this->cookieHandler->getCookies())
+        );
     }
 
     private function convertToArray(CookieGroupCollection $cookieGroupCollection): array

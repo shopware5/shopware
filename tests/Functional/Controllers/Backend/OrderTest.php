@@ -26,9 +26,12 @@ namespace Shopware\Tests\Functional\Controllers\Backend;
 
 use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Locale;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class OrderTest extends \Enlight_Components_Test_Controller_TestCase
 {
+    use DatabaseTransactionBehaviour;
+
     /**
      * Test to delete the position
      *
@@ -60,14 +63,6 @@ class OrderTest extends \Enlight_Components_Test_Controller_TestCase
                 ->setPost('orderID', '15315351');
         $this->dispatch('backend/Order/deletePosition');
         static::assertEquals('106.87', $this->getInvoiceAmount());
-
-        // Remove test data
-        $sql = '
-            DELETE FROM `s_order` WHERE `id` = :orderId;
-            DELETE FROM `s_order_details` WHERE `orderID` = :orderId;
-        ';
-
-        Shopware()->Db()->query($sql, ['orderId' => '15315351']);
     }
 
     /**
@@ -110,12 +105,6 @@ class OrderTest extends \Enlight_Components_Test_Controller_TestCase
         );
 
         static::assertCount(1, $documents);
-
-        // Remove test data
-        Shopware()->Db()->query(
-            'DELETE FROM `s_order_documents` WHERE `orderID` = :orderID;',
-            ['orderID' => $orderId]
-        );
     }
 
     /**
@@ -129,7 +118,7 @@ class OrderTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Db()->query(
             "INSERT IGNORE INTO `s_order` (`id`, `ordernumber`, `userID`, `invoice_amount`, `invoice_amount_net`, `invoice_shipping`, `invoice_shipping_net`, `ordertime`, `status`, `cleared`, `paymentID`, `transactionID`, `comment`, `customercomment`, `internalcomment`, `net`, `taxfree`, `partnerID`, `temporaryID`, `referer`, `cleareddate`, `trackingcode`, `language`, `dispatchID`, `currency`, `currencyFactor`, `subshopID`, `remote_addr`, `changed`) VALUES
             (:orderId, '29996', 1, 126.82, 106.57, 3.9, 3.28, '2013-07-10 08:17:20', 0, 17, 5, '', '', '', '', 0, 0, '', '', '', NULL, '', '1', 9, 'EUR', 1, 1, '172.16.10.71', NOW());
-            
+
             INSERT IGNORE INTO `s_order_details` (`id`, `orderID`, `ordernumber`, `articleID`, `articleordernumber`, `price`, `quantity`, `name`, `status`, `shipped`, `shippedgroup`, `releasedate`, `modus`, `esdarticle`, `taxID`, `tax_rate`, `config`) VALUES
             (16548454, :orderId, '20003', 178, 'SW10178', 19.95, 1, 'Strandtuch Ibiza', 0, 0, 0, NULL, 0, 0, 1, 19, '')",
             ['orderId' => $orderId]
@@ -328,6 +317,62 @@ class OrderTest extends \Enlight_Components_Test_Controller_TestCase
 
         $this->assertElementWithKeyValuePairExists('Invoice', 'name', 1, $data['documentTypes']);
         $this->assertElementWithKeyValuePairExists('Credit', 'name', 3, $data['documentTypes']);
+    }
+
+    public function testFilterOrdersBySupplier()
+    {
+        $sql = "
+            INSERT IGNORE INTO `s_articles_supplier` (`id`, `name`, `img`, `link`, `changed`) VALUES (:supplierId, 'TestSupplier', '', '', '2019-12-09 10:42:10');
+
+            INSERT INTO `s_articles` (`id`, `supplierID`, `name`, `datum`, `taxID`, `changetime`, `pricegroupID`, `pricegroupActive`, `filtergroupID`, `laststock`, `crossbundlelook`, `notification`, `template`, `mode`) VALUES
+            (:articleId, :supplierId, 'SwagTest', '2020-03-20', '1', '2020-03-20 10:42:10', NULL, '0', NULL, '0', '0', '0', '', '0');
+
+            INSERT IGNORE INTO `s_order` (`id`, `ordernumber`, `userID`, `invoice_amount`, `invoice_amount_net`, `invoice_shipping`, `invoice_shipping_net`, `ordertime`, `status`, `cleared`, `paymentID`, `transactionID`, `comment`, `customercomment`, `internalcomment`, `net`, `taxfree`, `partnerID`, `temporaryID`, `referer`, `cleareddate`, `trackingcode`, `language`, `dispatchID`, `currency`, `currencyFactor`, `subshopID`, `remote_addr`) VALUES
+            (:orderId, '29996', 1, 126.82, 106.57, 3.9, 3.28, '2013-07-10 08:17:20', 0, 17, 5, '', '', '', '', 0, 0, '', '', '', NULL, '', '1', 9, 'EUR', 1, 1, '172.16.10.71');
+
+            INSERT IGNORE INTO `s_order_details` (`id`, `orderID`, `ordernumber`, `articleID`, `articleordernumber`, `price`, `quantity`, `name`, `status`, `shipped`, `shippedgroup`, `releasedate`, `modus`, `esdarticle`, `taxID`, `tax_rate`, `config`) VALUES
+            (15315352, :orderId, '20003', :articleId, 'SW10178', 19.95, 1, 'Strandtuch Ibiza', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
+            (15315353, :orderId, '20003', 177, 'SW10177', 34.99, 1, 'Strandtuch Stripes für Kinder', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
+            (15315354, :orderId, '20003', 173, 'SW10173', 39.99, 1, 'Strandkleid Flower Power', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
+            (15315355, :orderId, '20003', 160, 'SW10160.1', 29.99, 1, 'Sommer Sandale Ocean Blue 36', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
+            (15315356, :orderId, '20003', 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, '');
+        ";
+
+        $supplierId = '81729';
+        $articleId = '91829002';
+        $orderId = '15315351';
+        Shopware()->Db()->query($sql, ['orderId' => $orderId, 'articleId' => $articleId, 'supplierId' => $supplierId]);
+
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        // prevent breaking date formating
+        Shopware()->Front()->Plugins()->Json()->setFormatDateTime(false);
+
+        $filter = [[
+            'property' => 'article.supplierId',
+            'operator' => null,
+            'expression' => null,
+            'value' => $supplierId,
+        ]];
+        $this->Request()
+            ->setMethod('GET')
+            ->setPost('filter', json_encode($filter));
+        $response = $this->dispatch('backend/Order/getList');
+        $data = json_decode($response->getBody(), true);
+
+        static::assertIsArray($data);
+        static::assertTrue($data['success']);
+        static::assertEquals(1, $data['total']);
+        static::assertCount($data['total'], $data['data']);
+
+        $order = $data['data'][0];
+        static::assertEquals($orderId, $order['id']);
+        static::assertCount(5, $order['details']);
+
+        $orderArticleIds = array_map(static function ($detail) {
+            return $detail['articleId'];
+        }, $order['details']);
+        static::assertContains($articleId, $orderArticleIds);
     }
 
     /**

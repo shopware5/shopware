@@ -150,6 +150,7 @@ EOF
             $builder->andWhere('plugin.installed is NULL');
         }
 
+        /** @var \Shopware\Models\Plugin\Plugin[] $plugins */
         $plugins = $builder->getQuery()->execute();
 
         if (empty($plugins)) {
@@ -159,7 +160,6 @@ EOF
         }
 
         $allPluginsUpToDate = true;
-        /** @var \Shopware\Models\Plugin\Plugin[] $plugins */
         foreach ($plugins as $plugin) {
             if (!$plugin->getUpdateVersion()) {
                 continue;

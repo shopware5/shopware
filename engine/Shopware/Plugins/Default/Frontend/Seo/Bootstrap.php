@@ -147,7 +147,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             $view->assign('SeoMetaDescription', $metaDescription);
         }
 
-        if ($this->get(\Shopware_Components_Config::class)->get('hrefLangEnabled')) {
+        if (!$request->getParam('error_handler') && $this->get(\Shopware_Components_Config::class)->get('hrefLangEnabled')) {
             $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
 
             $params = $request->getParams();

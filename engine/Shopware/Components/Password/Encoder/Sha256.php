@@ -79,7 +79,7 @@ class Sha256 implements PasswordEncoderInterface
      */
     public function encodePassword($password)
     {
-        /** @var int $interations */
+        /** @var int $iterations */
         $iterations = $this->options['iterations'];
         $salt = $this->getSalt();
 

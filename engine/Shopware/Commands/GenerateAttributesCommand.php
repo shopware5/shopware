@@ -50,5 +50,7 @@ class GenerateAttributesCommand extends ShopwareCommand
         $em = $this->container->get(\Shopware\Components\Model\ModelManager::class);
 
         $em->generateAttributeModels();
+
+        return 0;
     }
 }

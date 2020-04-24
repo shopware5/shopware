@@ -72,5 +72,7 @@ EOF
               ->setRows($rows);
 
         $table->render();
+
+        return 0;
     }
 }

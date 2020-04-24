@@ -74,8 +74,6 @@ class LandingPageUrlProvider extends BaseUrlProvider
             $urls[] = new Url($routes[$i], $campaigns[$i]['changed'], 'weekly', Emotion::class, $campaigns[$i]['id']);
         }
 
-        unset($campaign);
-
         $this->allExported = true;
 
         return $urls;

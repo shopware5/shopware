@@ -24,8 +24,8 @@
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
-use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Translation\ObjectTranslator;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Shopware Translation Component
@@ -47,7 +47,7 @@ class Shopware_Components_Translation
      */
     private $fallbackLocaleId;
 
-    public function __construct(Connection $connection, Container $container)
+    public function __construct(Connection $connection, ContainerInterface $container)
     {
         $this->connection = $connection;
 

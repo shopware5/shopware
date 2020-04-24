@@ -81,6 +81,11 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
         $data['referrer']['rows'] = $this->deleteOldReferrerData($this->get(\Shopware_Components_Config::class)->get('maximumReferrerAge'));
         $data['article_impression']['rows'] = $this->deleteOldArticleImpressionData($this->get(\Shopware_Components_Config::class)->get('maximumImpressionAge'));
 
+        // Delete all entries from s_statistics_pool not from the current day
+        $sql = 'DELETE FROM s_statistics_pool WHERE datum != CURDATE()';
+        $result = $connection->executeQuery($sql);
+        $data['statistics_pool']['rows'] = $result->rowCount();
+
         // Delete all entries from s_order_notes, which are older than a year and have no userID set
         $sql = 'DELETE FROM s_order_notes WHERE datum < DATE_SUB(NOW(), INTERVAL 1 YEAR) AND userID = 0';
         $noteResult = $connection->executeQuery($sql);

@@ -123,11 +123,11 @@
         <service id="plugin_manager" alias="plugins" />
         <service id="plugins" class="Enlight_Plugin_PluginManager">
             <factory service="plugins_factory" method="factory" />
-            <argument type="service" id="service_container"/>
             <argument type="service" id="Enlight_Loader"/>
             <argument type="service" id="Shopware\Components\ContainerAwareEventManager"/>
             <argument type="service" id="application"/>
             <argument>%shopware.plugin_directories%</argument>
+            <argument type="service" id="Shopware\Components\Plugin\Configuration\CachedReader" />
         </service>
 
         <service id="router_factory" class="Shopware\Components\DependencyInjection\Bridge\Router" />
@@ -136,6 +136,17 @@
             <argument type="service" id="events"/>
             <argument type="tagged" tag="router.matcher"/>
             <argument type="tagged" tag="router.generator"/>
+            <argument type="tagged" tag="router.pre_filter"/>
+            <argument type="tagged" tag="router.post_filter"/>
+        </service>
+
+        <service id="default_router" class="Shopware\Components\Routing\Router">
+            <factory service="router_factory" method="factory" />
+            <argument type="service" id="events"/>
+            <argument type="tagged" tag="router.matcher"/>
+            <argument type="collection">
+                <argument key="default" type="service" id="shopware.routing.generators.default_generator" />
+            </argument>
             <argument type="tagged" tag="router.pre_filter"/>
             <argument type="tagged" tag="router.post_filter"/>
         </service>
@@ -337,7 +348,19 @@
             <argument>%kernel.root_dir%/snippets/</argument>
         </service>
         <service id="shopware.cache_manager" class="Shopware\Components\CacheManager">
-            <argument type="service" id="service_container" />
+            <argument type="service" id="cache" />
+            <argument type="service" id="modelconfig" />
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="config" />
+            <argument type="service" id="events"/>
+            <argument type="service" id="theme_path_resolver" />
+
+            <argument>%shopware.httpcache%</argument>
+            <argument>%shopware.cache%</argument>
+            <argument>%shopware.template%</argument>
+            <argument>%shopware.app.rootDir%</argument>
+            <argument>%shopware.hook.proxyDir%</argument>
+            <argument>%shopware.model.proxyDir%</argument>
         </service>
 
         <service id="mediasubscriber" class="Shopware\Models\Media\MediaSubscriber">
@@ -945,6 +968,7 @@
         <service id="shopware.components.privacy.cookie_remove_subscriber" class="Shopware\Components\Privacy\CookieRemoveSubscriber" >
             <argument type="service" id="Shopware_Components_Config"/>
             <argument type="service" id="Shopware\Bundle\CookieBundle\Services\CookieHandler"/>
+            <argument>%shopware.httpcache.enabled%</argument>
 
             <tag name="shopware.event_subscriber" />
         </service>

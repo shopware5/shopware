@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Theme\LessCompiler;
 
+use Less_Tree_Quoted;
 use Shopware\Components\Theme\LessCompiler;
 
 class Oyejorge implements LessCompiler
@@ -36,6 +37,13 @@ class Oyejorge implements LessCompiler
     public function __construct(\Less_Parser $compiler)
     {
         $this->compiler = $compiler;
+        $this->compiler->registerFunction('swhash', function (Less_Tree_Quoted $filename) {
+            $absPath = $filename->currentFileInfo['currentDirectory'] . $filename->value;
+            $shopwareRevision = $this->compiler->findValueOf('shopware-revision');
+            $filename->value = md5($shopwareRevision . md5_file($absPath));
+
+            return $filename;
+        });
     }
 
     /**

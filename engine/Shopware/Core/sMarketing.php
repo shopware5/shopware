@@ -55,8 +55,6 @@ class sMarketing implements \Enlight_Hook
     public $customerGroupId;
 
     /**
-     * @deprecated in Shopware 5.5.4, to be removed in 6.0
-     *
      * @var \Shopware\Models\Category\Category
      */
     private $category;
@@ -272,9 +270,8 @@ class sMarketing implements \Enlight_Hook
                 $getAffectedBanners['media'] = $media;
             }
 
-            // count views.
-            /** @var \Shopware\Models\Tracking\Repository $shopRepository */
-            $statRepository = Shopware()->Models()->getRepository(\Shopware\Models\Tracking\Banner::class);
+            /** @var \Shopware\Models\Tracking\Repository $statRepository */
+            $statRepository = Shopware()->Models()->getRepository('\Shopware\Models\Tracking\Banner');
             $bannerStatistics = $statRepository->getOrCreateBannerStatsModel($getAffectedBanners['id']);
             $bannerStatistics->increaseViews();
             Shopware()->Models()->persist($bannerStatistics);
@@ -509,111 +506,111 @@ class sMarketing implements \Enlight_Hook
         $limit = empty($limit) ? 6 : (int) $limit;
         $productId = empty($articleId) ? (int) $this->sSYSTEM->_GET['sArticle'] : (int) $articleId;
         $sql = <<<SQL
-SELECT u.articleID, u.articleName, u.Rel 
+SELECT u.articleID, u.articleName, u.Rel
   FROM (
-    
-    ( 
+
+    (
     SELECT DISTINCT
-   
-      a.id as articleID, 
-      a.name as articleName, 
+
+      a.id as articleID,
+      a.name as articleName,
       3 as Rel
-      
+
     FROM s_articles a
-    
-      INNER JOIN s_articles_categories_ro ac 
-        ON ac.articleID = a.id 
+
+      INNER JOIN s_articles_categories_ro ac
+        ON ac.articleID = a.id
         AND ac.categoryID = {$this->categoryId}
-        
-      INNER JOIN s_categories c 
-        ON c.id = ac.categoryID 
+
+      INNER JOIN s_categories c
+        ON c.id = ac.categoryID
         AND c.active = 1
-      
-      LEFT JOIN s_articles_avoid_customergroups ag 
-        ON ag.articleID = a.id 
+
+      LEFT JOIN s_articles_avoid_customergroups ag
+        ON ag.articleID = a.id
         AND ag.customergroupID = {$this->customerGroupId}
-      
-      INNER JOIN s_articles_similar s 
-        ON s.articleID = a.id 
+
+      INNER JOIN s_articles_similar s
+        ON s.articleID = a.id
         AND s.relatedarticle = a.id
-        
-      INNER JOIN s_articles_categories_ro s1 
+
+      INNER JOIN s_articles_categories_ro s1
         ON s1.articleID = a.id
-        
-      INNER JOIN s_articles_categories_ro s2 
-        ON s2.categoryID = s1.categoryID 
+
+      INNER JOIN s_articles_categories_ro s2
+        ON s2.categoryID = s1.categoryID
         AND s2.articleID = a.id
-        
+
       WHERE a.active = 1
         AND ag.articleID IS NULL
         AND a.id != {$productId}
-        
+
     LIMIT {$limit}
-  ) 
+  )
   UNION ( SELECT DISTINCT
-   
-      a.id as articleID, 
-      a.name as articleName, 
+
+      a.id as articleID,
+      a.name as articleName,
       2 as Rel
-      
+
     FROM s_articles a
-    
-      INNER JOIN s_articles_categories_ro ac 
-        ON ac.articleID = a.id 
+
+      INNER JOIN s_articles_categories_ro ac
+        ON ac.articleID = a.id
         AND ac.categoryID = {$this->categoryId}
-        
-      INNER JOIN s_categories c 
-        ON c.id = ac.categoryID 
+
+      INNER JOIN s_categories c
+        ON c.id = ac.categoryID
         AND c.active = 1
-      
-      LEFT JOIN s_articles_avoid_customergroups ag 
-        ON ag.articleID = a.id 
+
+      LEFT JOIN s_articles_avoid_customergroups ag
+        ON ag.articleID = a.id
         AND ag.customergroupID = {$this->customerGroupId}
-      
-      INNER JOIN s_articles_similar s 
-        ON s.articleID = a.id 
+
+      INNER JOIN s_articles_similar s
+        ON s.articleID = a.id
         AND s.relatedarticle = a.id
-        
+
       WHERE a.active = 1
         AND ag.articleID IS NULL
         AND a.id != {$productId}
-        
+
     LIMIT {$limit}
-  
+
   ) UNION ( SELECT DISTINCT
-   
-      a.id as articleID, 
-      a.name as articleName, 
+
+      a.id as articleID,
+      a.name as articleName,
       1 as Rel
-              
+
     FROM s_articles a
-    
-      INNER JOIN s_articles_categories_ro ac 
-        ON ac.articleID = a.id 
+
+      INNER JOIN s_articles_categories_ro ac
+        ON ac.articleID = a.id
         AND ac.categoryID = {$this->categoryId}
-        
-      INNER JOIN s_categories c 
-        ON c.id = ac.categoryID 
+
+      INNER JOIN s_categories c
+        ON c.id = ac.categoryID
         AND c.active = 1
-      
-      LEFT JOIN s_articles_avoid_customergroups ag 
-        ON ag.articleID = a.id 
+
+      LEFT JOIN s_articles_avoid_customergroups ag
+        ON ag.articleID = a.id
         AND ag.customergroupID = {$this->customerGroupId}
-        
-      INNER JOIN s_articles_categories_ro s1 
+
+      INNER JOIN s_articles_categories_ro s1
         ON s1.articleID = a.id
-        
-      INNER JOIN s_articles_categories_ro s2 
-        ON s2.categoryID = s1.categoryID 
+
+      INNER JOIN s_articles_categories_ro s2
+        ON s2.categoryID = s1.categoryID
         AND s2.articleID = a.id
-        
+
       WHERE a.active = 1
         AND ag.articleID IS NULL
         AND a.id != {$productId}
-    
+
     LIMIT {$limit}
-  ) 
-) AS u    
+  )
+) AS u
 GROUP BY u.articleID
 ORDER BY u.Rel DESC
 

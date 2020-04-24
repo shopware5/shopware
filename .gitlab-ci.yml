@@ -6,8 +6,8 @@ variables:
     MYSQL_USER: app
     MYSQL_PASSWORD: app
     MYSQL_DATABASE: shopware
-    WEB_DOCUMENT_ROOT: $CI_PROJECT_DIR/
     GIT_STRATEGY: clone
+    GIT_DEPTH: 1
 
 stages:
     - Static analysis
@@ -17,9 +17,12 @@ stages:
     - Security
 
 default:
-    image: shopware/5-continuous:7.3
+    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.3
     before_script:
-        - /entrypoint supervisord &>/dev/null &
+        - sed -i -e "s;__ROOT__;$CI_PROJECT_DIR;g" /etc/nginx/sites-enabled/shopware.conf
+        - cat /etc/nginx/sites-enabled/shopware.conf
+        - /usr/bin/supervisord -c /etc/supervisord.conf &>/dev/null &
+        - sleep 1
 
 # Stage: static
 
@@ -27,7 +30,7 @@ PHP analyze:
     stage: Static analysis
     script:
         - ./psh.phar init
-        - chown -R 1000:1000 .
+        - chown -R www-data:www-data .
         - ./psh.phar check-code
     services:
         -   name: mysql:5.7
@@ -40,7 +43,7 @@ Code Coverage:
     stage: Static analysis
     script:
         - ./psh.phar init --SW_HOST="localhost"
-        - chown -R 1000:1000 .
+        - chown -R www-data:www-data .
         - php -d pcov.enabled=1 -d pcov.directory=$CI_PROJECT_DIR
             vendor/bin/phpunit
             --configuration tests/phpunit.xml.dist
@@ -69,7 +72,7 @@ Code Coverage:
             alias: mysql
     script:
         - ./psh.phar init --SW_HOST="localhost"
-        - chown -R 1000:1000 .
+        - chown -R www-data:www-data .
         - ./psh.phar unit-fast --SW_HOST="localhost"
 
     artifacts:
@@ -81,7 +84,7 @@ Code Coverage:
     stage: Elasticsearch
     script:
         - ./psh.phar init --SW_HOST="localhost"
-        - chown -R 1000:1000 .
+        - chown -R www-data:www-data .
         - ./psh.phar unit-elasticsearch --SW_HOST="localhost"
 
     artifacts:
@@ -90,7 +93,7 @@ Code Coverage:
 
 PHP 7.2:
     extends: .phpunit_base
-    image: shopware/5-continuous:7.2
+    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.2
     stage: Unit
     services:
         -   name: mysql:5.7
@@ -98,7 +101,7 @@ PHP 7.2:
 
 PHP 7.3:
     extends: .phpunit_base
-    image: shopware/5-continuous:7.3
+    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.3
     stage: Unit
     services:
         -   name: mysql:5.7
@@ -106,7 +109,7 @@ PHP 7.3:
 
 PHP 7.4:
     extends: .phpunit_base
-    image: shopware/5-continuous:7.4
+    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.4
     stage: Unit
     services:
         -   name: mysql:5.7
@@ -144,7 +147,7 @@ MariaDB 10.4:
 # stage: Elasticsearch
 Elasticsearch 6:
     extends: .phpunit_es_base
-    image: shopware/5-continuous:7.2
+    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.2
     stage: Elasticsearch
     services:
         -   name: mysql:8.0
@@ -156,7 +159,7 @@ Elasticsearch 6:
 
 Elasticsearch 7:
     extends: .phpunit_es_base
-    image: shopware/5-continuous:7.3
+    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.3
     stage: Elasticsearch
     services:
         -   name: mysql:8.0
@@ -168,7 +171,7 @@ Elasticsearch 7:
 
 Mink:
     extends: .phpunit_base
-    image: shopware/5-continuous:7.3
+    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.3
     stage: E2E
     artifacts:
         when: always
@@ -178,8 +181,9 @@ Mink:
         reports:
             junit: build/artifacts/mink/*.xml
     script:
+        - curl -v localhost
         - ./psh.phar init --SW_HOST="$(hostname -i)"
-        - chown -R 1000:1000 .
+        - chown -R www-data:www-data .
         - ./psh.phar mink --SW_HOST="$(hostname -i)"
     services:
         -   name: selenium/standalone-chrome:3.8.1

@@ -25,11 +25,13 @@
 namespace Shopware\Components\Plugin;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Enlight\Event\SubscriberInterface;
+use Enlight_Controller_ActionEventArgs;
+use Enlight_Event_EventArgs;
+use Enlight_Exception;
 use Shopware\Components\Theme\LessDefinition;
 use Symfony\Component\Finder\Finder;
 
-class ResourceSubscriber implements SubscriberInterface
+class ResourceSubscriber
 {
     /**
      * @var string
@@ -42,18 +44,6 @@ class ResourceSubscriber implements SubscriberInterface
     public function __construct($pluginPath)
     {
         $this->pluginPath = $pluginPath;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents()
-    {
-        return [
-            'Theme_Compiler_Collect_Plugin_Less' => 'onCollectLess',
-            'Theme_Compiler_Collect_Plugin_Css' => 'onCollectCss',
-            'Theme_Compiler_Collect_Plugin_Javascript' => 'onCollectJavascript',
-        ];
     }
 
     /**
@@ -96,6 +86,32 @@ class ResourceSubscriber implements SubscriberInterface
             [],
             [$file]
         );
+    }
+
+    public function onRegisterTemplate(Enlight_Event_EventArgs $args): void
+    {
+        $viewsDirectory = $this->pluginPath . '/Resources/views';
+
+        $templates = (array) $args->getReturn();
+
+        if (!in_array($viewsDirectory, $templates, true)) {
+            $templates[] = $viewsDirectory;
+            $args->setReturn($templates);
+        }
+    }
+
+    public function onRegisterControllerTemplate(Enlight_Controller_ActionEventArgs $args): void
+    {
+        $viewsDirectory = $this->pluginPath . '/Resources/views';
+
+        $controller = $args->getSubject();
+
+        try {
+            if (($view = $controller->View()) !== null) {
+                $view->Template()->Engine()->addTemplateDir($viewsDirectory);
+            }
+        } catch (Enlight_Exception $ignored) {
+        }
     }
 
     /**

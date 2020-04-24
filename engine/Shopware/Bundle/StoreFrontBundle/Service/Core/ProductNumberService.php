@@ -76,6 +76,7 @@ class ProductNumberService implements ProductNumberServiceInterface
     public function getAvailableNumber($number, ShopContextInterface $context, $selection = [])
     {
         $productId = $this->getProductIdByNumber($number);
+
         if (!$productId) {
             throw new \RuntimeException(sprintf('No valid product id found for product with number "%s"', $number));
         }
@@ -97,12 +98,24 @@ class ProductNumberService implements ProductNumberServiceInterface
             return $number;
         }
 
+        if ($this->hasNotificationsActive($productId)) {
+            return $number;
+        }
+
         $selected = $this->findFallbackById($productId);
         if (!$selected) {
             throw new \RuntimeException(sprintf('No active product variant found for product with number "%s" and id "%s"', $number, $productId));
         }
 
         return $selected;
+    }
+
+    private function hasNotificationsActive(int $productId): bool
+    {
+        $pluginActive = $this->connection->fetchColumn("SELECT `active` FROM s_core_plugins WHERE name = 'Notification'");
+        $notificationEnabled = $this->connection->fetchColumn('SELECT `notification` FROM s_articles WHERE id = :productId', [':productId' => $productId]);
+
+        return $pluginActive && $notificationEnabled;
     }
 
     /**

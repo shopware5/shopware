@@ -80,6 +80,8 @@ class ReceiveStatisticsCommand extends ShopwareCommand
             $businessIntelligenceService->transmit($shopConfig);
             $output->writeln('<info>Done!</info>');
         }
+
+        return 0;
     }
 
     /**

@@ -547,7 +547,7 @@ class DqlHelper
      *
      * @param string $entity
      *
-     * @return string
+     * @return string|null
      */
     public function getAssociationForEntity($entity)
     {
@@ -555,11 +555,9 @@ class DqlHelper
         switch ($entity) {
             case Category::class:
                 return 'article.allCategories';
-                break;
 
             case Image::class:
                 return 'article.images';
-                break;
         }
 
         // Some generic searching for the association
@@ -590,6 +588,8 @@ class DqlHelper
                 return 'propertySet.' . $mapping['fieldName'];
             }
         }
+
+        return null;
     }
 
     /**

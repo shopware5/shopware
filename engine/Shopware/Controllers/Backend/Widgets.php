@@ -183,9 +183,10 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $request = $this->Request();
         $id = $request->getParam('id');
 
-        $model = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->find('Shopware\Models\Widget\View', $id);
-        Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->remove($model);
-        Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->flush();
+        if ($model = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->find(View::class, $id)) {
+            Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->remove($model);
+            Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->flush();
+        }
 
         $this->View()->assign(['success' => true]);
     }
@@ -428,7 +429,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $sql = '
         SELECT s_order.id AS id, currency,currencyFactor,firstname,lastname, company, subshopID, paymentID,  ordernumber AS orderNumber, transactionID, s_order.userID AS customerId, invoice_amount,invoice_shipping, ordertime AS `date`, status, cleared
         FROM s_order
-        LEFT JOIN s_order_billingaddress ON s_order_billingaddress.userID = s_order.userID
+        LEFT JOIN s_order_billingaddress ON s_order_billingaddress.orderID = s_order.id
         WHERE
             s_order.status != -1
         AND
@@ -575,10 +576,6 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     /**
      * Creates the deny or allow mail from the db and assigns it to
      * the view.
-     *
-     * @public
-     *
-     * @return bool
      */
     public function requestMerchantFormAction()
     {
@@ -655,10 +652,6 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     /**
      * Sends the mail to the merchant if the inquiry was
      * successful or was declined.
-     *
-     * @public
-     *
-     * @return bool
      */
     public function sendMailToMerchantAction()
     {

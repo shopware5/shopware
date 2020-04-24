@@ -72,11 +72,13 @@ class CartPersistService implements CartPersistServiceInterface
 
         $ids = array_keys($this->cart);
 
+        $qb = $this->connection->createQueryBuilder();
         $this->cartAttributes = $qb->from('s_order_basket_attributes', 'cartAttributes')
             ->addSelect('cartAttributes.basketID')
             ->addSelect('cartAttributes.*')
-            ->andWhere('cartAttributes.basketID IN(:ids)')
-            ->setParameter('ids', $ids)
+            ->andWhere(
+                $qb->expr()->in('cartAttributes.basketID', $ids)
+            )
             ->execute()
             ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
     }

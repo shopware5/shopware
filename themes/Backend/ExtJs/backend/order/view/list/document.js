@@ -242,7 +242,7 @@ Ext.define('Shopware.apps.Order.view.list.Document', {
         var spec = {
             tag: 'a',
             html: display,
-            href: '{url action="openPdf"}?id=' + record.get('hash'),
+            href: '{url action="openPdf"}/?id=' + record.get('hash'),
             target: '_blank'
         };
 

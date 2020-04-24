@@ -355,22 +355,6 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $avgVoteQuery = $this->repository->getAverageVoteQuery($blogArticleId, $shop->getId());
         $blogArticleData['sVoteAverage'] = $avgVoteQuery->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
 
-        // Count the views of this blog item
-        $visitedBlogItems = Shopware()->Session()->visitedBlogItems;
-        if (!Shopware()->Session()->Bot && !in_array($blogArticleId, $visitedBlogItems)) {
-            // Update the views count
-            /* @var Shopware\Models\Blog\Blog $blogModel */
-            $blogModel = $this->getRepository()->find($blogArticleId);
-            if ($blogModel) {
-                $blogModel->setViews($blogModel->getViews() + 1);
-                Shopware()->Models()->flush($blogModel);
-
-                // Save it to the session
-                $visitedBlogItems[] = $blogArticleId;
-                Shopware()->Session()->visitedBlogItems = $visitedBlogItems;
-            }
-        }
-
         // Generate breadcrumb
         $breadcrumb = $this->getCategoryBreadcrumb($blogArticleData['categoryId']);
         $blogDetailLink = $this->Front()->Router()->assemble([
@@ -391,6 +375,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     public function ratingAction()
     {
         $blogArticleId = (int) $this->Request()->getParam('blogArticle');
+        /** @var bool|array $sErrorFlag */
         $sErrorFlag = null;
 
         if (!empty($blogArticleId)) {

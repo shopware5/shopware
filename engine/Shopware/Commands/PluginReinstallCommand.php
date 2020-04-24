@@ -113,5 +113,7 @@ class PluginReinstallCommand extends PluginCommand implements CompletionAwareInt
         $output->writeln(sprintf('Plugin %s has been reinstalled successfully.', $pluginName));
 
         $this->clearCachesIfRequested($input, $output, $uninstallationContext, $installationContext, $activationContext);
+
+        return 0;
     }
 }

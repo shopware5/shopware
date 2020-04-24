@@ -26,6 +26,9 @@ namespace Shopware\Tests\Functional\Api;
 
 use Shopware\Models\Payment\Payment;
 
+/**
+ * @covers \Shopware_Controllers_Api_PaymentMethods
+ */
 class PaymentMethodsTest extends AbstractApiTestCase
 {
     public function testRequestWithoutAuthenticationShouldReturnError(): void

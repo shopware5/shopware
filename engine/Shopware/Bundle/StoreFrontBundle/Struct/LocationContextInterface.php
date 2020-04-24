@@ -27,9 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
 
-/**
- * @deprecated since version 5.2, to be removed in 6.0 - Use ShopContextInterface instead
- */
 interface LocationContextInterface
 {
     /**

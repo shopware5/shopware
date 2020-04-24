@@ -66,6 +66,8 @@ class ThumbnailCleanupCommand extends ShopwareCommand
         $io = new SymfonyStyle($input, $output);
 
         $this->removeThumbnails($io);
+
+        return 0;
     }
 
     private function removeThumbnails(SymfonyStyle $io)

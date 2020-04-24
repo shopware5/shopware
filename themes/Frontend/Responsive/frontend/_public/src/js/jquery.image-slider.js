@@ -1,4 +1,4 @@
-;(function ($, Modernizr, window, Math) {
+(function ($, Modernizr, window, Math) {
     'use strict';
 
     var transitionProperty = StateManager.getVendorProperty('transition'),
@@ -1355,7 +1355,7 @@
              * @type {jQuery}
              */
             me._$arrowLeft = $('<a>', {
-                'class': opts.leftArrowCls + ((opts.loopSlides || me._slideIndex > 0) && me._itemCount > 1 ? '' : hiddenClass)
+                'class': 'force--3d ' + opts.leftArrowCls + ((opts.loopSlides || me._slideIndex > 0) && me._itemCount > 1 ? '' : hiddenClass)
             }).appendTo(me._$slideContainer);
 
             /**
@@ -1366,7 +1366,7 @@
              * @type {jQuery}
              */
             me._$arrowRight = $('<a>', {
-                'class': opts.rightArrowCls + ((opts.loopSlides || me._slideIndex < me._itemCount - 1) && me._itemCount > 1 ? '' : hiddenClass)
+                'class': 'force--3d ' + opts.rightArrowCls + ((opts.loopSlides || me._slideIndex < me._itemCount - 1) && me._itemCount > 1 ? '' : hiddenClass)
             }).appendTo(me._$slideContainer);
 
             $.publish('plugin/swImageSlider/onCreateArrows', [ me, me._$arrowLeft, me._$arrowRight ]);
@@ -1667,7 +1667,7 @@
 
             if (!$slide) {
                 return;
-            } 
+            }
 
             pos = $slide.position();
             orientation = me.getThumbnailOrientation();

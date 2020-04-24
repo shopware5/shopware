@@ -77,7 +77,7 @@ class CurrentPasswordValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         /** @var CurrentPassword $constraint */
-        if ($constraint instanceof CurrentPassword === false) {
+        if (!$constraint instanceof CurrentPassword) {
             return;
         }
 

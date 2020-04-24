@@ -20,6 +20,8 @@
 
 {* Description *}
 {block name="frontend_index_header_meta_description"}{if $seo_description}{$seo_description|escapeHtml}{/if}{/block}
+{block name="frontend_index_header_meta_description_og"}{if $seo_description}{$seo_description|escapeHtml}{/if}{/block}
+{block name="frontend_index_header_meta_description_twitter"}{if $seo_description}{$seo_description|escapeHtml}{/if}{/block}
 
 {* Promotion *}
 {block name='frontend_home_index_promotions'}

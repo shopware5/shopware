@@ -517,18 +517,18 @@ class Media extends ModelEntity
      */
     public function getFormattedFileSize()
     {
+        /** @var int $size */
         $size = $this->fileSize;
-        $filesize = 'unknown';
 
         if ($size < 1024) {
-            $filesize = $size . ' bytes';
-        } elseif ($size >= 1024 && $size < 1048576) {
-            $filesize = round($size / 1024, 2) . ' KB';
-        } elseif ($size >= 1048576) {
-            $filesize = round($size / 1048576, 2) . ' MB';
+            return $size . ' bytes';
         }
 
-        return $filesize;
+        if ($size < 1048576) {
+            return round($size / 1024, 2) . ' KB';
+        }
+
+        return round($size / 1048576, 2) . ' MB';
     }
 
     /**

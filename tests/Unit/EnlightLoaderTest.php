@@ -34,7 +34,7 @@ class EnlightLoaderTest extends TestCase
     public function testEnlightLoaderCheckFile()
     {
         static::assertTrue(\Enlight_Loader::checkFile('H:\Apache Group\Apache\htdocs\shopware.php'));
-        static::assertFalse(\Enlight_Loader::checkFile('H:\Apache Group\Apache\htdocs\shopware.php' . "\0"));
+        static::assertFalse(\Enlight_Loader::checkFile("H:\Apache Group\Apache\htdocs\shopware.php\0"));
     }
 
     /**

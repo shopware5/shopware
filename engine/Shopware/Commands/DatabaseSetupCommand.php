@@ -181,6 +181,8 @@ class DatabaseSetupCommand extends ShopwareCommand implements CompletionAwareInt
         }
 
         $io->success('Database was successfully created.');
+
+        return 0;
     }
 
     /**

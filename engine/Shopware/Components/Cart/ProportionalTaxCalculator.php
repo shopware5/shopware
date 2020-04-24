@@ -40,6 +40,11 @@ class ProportionalTaxCalculator implements ProportionalTaxCalculatorInterface
         $taxes = [];
 
         foreach ($sumByTaxes as $taxRate => $price) {
+            if ((float) $price === 0.0) {
+                $taxes[] = new Price(0.0, 0.0, $taxRate, 0.0);
+                continue;
+            }
+
             $proportion = $price / $total * 100;
 
             $priceForTax = $discount / 100 * $proportion;
@@ -66,10 +71,10 @@ class ProportionalTaxCalculator implements ProportionalTaxCalculatorInterface
 
             if (!array_key_exists($key, $discounts)) {
                 $discounts[$key] = [
-                     'price' => 0,
-                     'netPrice' => 0,
-                     'taxRate' => $price->getTaxRate(),
-                 ];
+                    'price' => 0,
+                    'netPrice' => 0,
+                    'taxRate' => $price->getTaxRate(),
+                ];
             }
 
             $newPrice = round($price->getPrice() * ($percentage / 100), 2);
@@ -107,12 +112,11 @@ class ProportionalTaxCalculator implements ProportionalTaxCalculatorInterface
         $sum = [];
         foreach ($prices as $price) {
             $key = (string) $price->getTaxRate();
-
+            $taxPrice = 0;
             if (array_key_exists($key, $sum)) {
                 $taxPrice = $sum[$key];
-            } else {
-                $taxPrice = 0;
             }
+
             $taxPrice += $price->getNetPrice();
 
             $sum[$key] = $taxPrice;

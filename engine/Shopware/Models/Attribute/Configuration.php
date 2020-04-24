@@ -28,7 +28,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
 /**
- * @ORM\Table(name="s_attribute_configuration")
+ * @ORM\Table(name="s_attribute_configuration",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="table_column_unique", columns={"table_name", "column_name"})}
+ * )
  * @ORM\Entity()
  */
 class Configuration extends ModelEntity

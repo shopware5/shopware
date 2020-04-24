@@ -29,7 +29,6 @@ class Migrations_Migration1648 extends Shopware\Components\Migrations\AbstractMi
         // Get Privacy formId
         $this->addSql("SET @formId = ( SELECT id FROM `s_core_config_forms` WHERE name = 'Privacy' LIMIT 1 );");
 
-        // Add Double-Opt-In optin in Backend
         $sql = "INSERT IGNORE INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `options`)
             VALUES (@formId, 'cookie_show_button', 'b:0;', '\"Alle akzeptieren\" Button in Cookie Hinweis anzeigen', 'Gilt nur für den Modus \"Technisch notwendige Cookies\". Bevor Du diese Einstellung änderst, solltest du die Verwendung vorab von Deiner Rechtsberatung prüfen lassen.', 'boolean', '0', '22', '0', NULL )";
         $this->addSql($sql);

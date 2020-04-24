@@ -103,5 +103,7 @@ class SitemapGenerateCommand extends ShopwareCommand
         }
 
         $output->writeln('Done!');
+
+        return 0;
     }
 }

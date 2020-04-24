@@ -122,5 +122,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand implements CompletionAwa
         $cacheManager = $this->container->get(\Shopware\Components\CacheManager::class);
         $output->writeln('Clearing HTTP cache ...');
         $cacheManager->clearHttpCache();
+
+        return 0;
     }
 }

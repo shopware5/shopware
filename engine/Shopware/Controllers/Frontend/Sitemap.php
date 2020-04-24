@@ -47,10 +47,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         $this->View()->assign('sCategoryTree', $categoryTree);
     }
 
-    /**
-     * @return array
-     */
-    private function getCategoryTree()
+    private function getCategoryTree(): array
     {
         $shop = $this->container->get('shop');
         $categoryTree = $this->container->get('modules')->sCategories()->sGetWholeCategoryTree(null, null, $shop->getId());
@@ -64,16 +61,17 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         return $this->translateCategoryTree($categoryTree, $categoryTranslations);
     }
 
-    /**
-     * @return array
-     */
-    private function translateCategoryTree(array $categoryTree, array $translations)
+    private function translateCategoryTree(array $categoryTree, array $translations): array
     {
         foreach ($categoryTree as $key => $category) {
             $translation = $this->fetchTranslation($category['id'], $translations);
 
             if (!empty($translation['description'])) {
                 $translation['name'] = $translation['description'];
+            }
+
+            if (!empty($translation['external'])) {
+                $translation['link'] = $translation['external'];
             }
 
             $categoryTree[$key] = array_merge($category, $translation);
@@ -145,7 +143,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
             $translationkeys[] = $data[$keyField];
 
             if (!empty($data[$recursiveField])) {
-                $translationkeys += $this->getTranslationKeys($data[$recursiveField], $keyField, $recursiveField);
+                $translationkeys = array_merge($translationkeys, $this->getTranslationKeys($data[$recursiveField], $keyField, $recursiveField));
             }
         }
 

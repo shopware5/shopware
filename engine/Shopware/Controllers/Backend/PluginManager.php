@@ -878,7 +878,7 @@ class PluginManager extends \Shopware_Controllers_Backend_ExtJs
      */
     private function registerShutdown()
     {
-        register_shutdown_function(function () {
+        register_shutdown_function(function (): void {
             $lasterror = error_get_last();
             if (!$lasterror) {
                 return;

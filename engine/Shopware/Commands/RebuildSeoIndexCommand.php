@@ -119,7 +119,6 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
         $this
             ->setName('sw:rebuild:seo:index')
             ->setDescription('Rebuild the SEO index')
-            /* @deprecated since 5.6, to be removed in 6.0 */
             ->addArgument('shopId', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The Id of the shop (deprecated)')
             ->addOption('shopId', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'The Id of the shop (multiple Ids -> shopId={1,2})')
             ->setHelp('The <info>%command.name%</info> rebuilds the SEO index')
@@ -181,7 +180,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
 
             list($cachedTime, $elementId, $shopId) = $this->seoIndex->getCachedTime();
 
-            $this->seoIndex->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);
+            $this->seoIndex->setCachedTime($currentTime->format('Y-m-d H:i:s'), $elementId, $shopId);
             $this->rewriteTable->baseSetup();
 
             $limit = 10000;
@@ -193,7 +192,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
                 $lastId = $this->rewriteTable->getRewriteArticleslastId();
             } while ($lastId !== null);
 
-            $this->seoIndex->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);
+            $this->seoIndex->setCachedTime($currentTime->format('Y-m-d H:i:s'), $elementId, $shopId);
 
             $context = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext($shopId);
 
@@ -215,5 +214,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand implements CompletionAwareI
         }
 
         $output->writeln('The SEO index was rebuild successfully.');
+
+        return 0;
     }
 }

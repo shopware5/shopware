@@ -410,7 +410,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         $role = $this->Request()->getParam('role');
         $resourceAdmins = [];
 
-        /** @var \Shopware\Models\User\Role $role */
+        /** @var \Shopware\Models\User\Role|int $role */
         if ($role !== null && is_numeric($role)) {
             $role = $this->modelManager->find(Role::class, $role);
 
