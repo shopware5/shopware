@@ -265,6 +265,7 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
                 }]
             }),
             valueField: 'id',
+            displayField: 'description',
             tpl: displayTpl,
             emptyText: me.snippets.empty,
             fieldLabel: me.snippets.paymentName
