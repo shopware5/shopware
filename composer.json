@@ -77,7 +77,8 @@
         "superbalist/flysystem-google-storage": "7.2.2",
         "stecman/symfony-console-completion": "0.10.1",
         "beberlei/doctrineextensions": "1.2.3",
-        "laminas/laminas-escaper": "2.6.1"
+        "laminas/laminas-escaper": "2.6.1",
+        "composer/package-versions-deprecated": "^1.8"
     },
     "replace": {
         "paragonie/random_compat": "2.*",
@@ -119,11 +120,11 @@
             "Zend": "engine/Library/",
             "JSMin": "engine/Library/minify/"
         },
+        "files": ["engine/Shopware/Shopware.php"],
         "classmap": [
-            "engine/Shopware/Core/",
+            "engine/Shopware/",
             "engine/Library/Smarty/"
         ],
-        "files": ["engine/Shopware/Application.php"],
         "exclude-from-classmap": [
             "engine/Shopware/Plugins/Community/",
             "engine/Shopware/Plugins/Local/",

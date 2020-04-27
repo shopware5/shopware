@@ -22,52 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\Components;
+namespace Shopware\Tests\Unit\Components\Hook;
 
 use PHPUnit\Framework\TestCase;
-
-interface MyInterface
-{
-    public function myPublic($bar, $foo = 'bar', array $barBar = [], MyInterface $fooFoo = null);
-}
-
-interface MyReferenceInterface
-{
-    public function myPublic(&$bar, $foo);
-}
-
-class MyBasicTestClass implements MyInterface
-{
-    public function myPublic($bar, $foo = 'bar', array $barBar = [], MyInterface $fooFoo = null)
-    {
-        return $bar . $foo;
-    }
-
-    public function myVoid(): void
-    {
-    }
-
-    protected function myProtected($bar)
-    {
-    }
-}
-
-class MyReferenceTestClass implements MyReferenceInterface
-{
-    public function myPublic(&$bar, $foo)
-    {
-        return $bar . $foo;
-    }
-}
-
-class TestProxyFactory extends \Enlight_Hook_ProxyFactory
-{
-    public function __construct(\Enlight_Hook_HookManager $hookManager, $proxyNamespace)
-    {
-        $this->hookManager = $hookManager;
-        $this->proxyNamespace = $proxyNamespace;
-    }
-}
 
 class EnlightHookProxyFactoryTest extends TestCase
 {
@@ -88,7 +45,7 @@ class EnlightHookProxyFactoryTest extends TestCase
         $generatedClass = $this->invokeMethod($this->proxyFactory, 'generateProxyClass', [MyBasicTestClass::class]);
         $expectedClass = <<<'EOT'
 <?php
-class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends \Shopware\Tests\Unit\Components\MyBasicTestClass implements Enlight_Hook_Proxy
+class ShopwareTests_ShopwareTestsUnitComponentsHookMyBasicTestClassProxy extends \Shopware\Tests\Unit\Components\Hook\MyBasicTestClass implements Enlight_Hook_Proxy
 {
 
     private $__hookProxyExecutionContexts = null;
@@ -171,7 +128,7 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends \Sh
     /**
      * @inheritdoc
      */
-    public function myPublic($bar, $foo = 'bar', array $barBar = [], ?\Shopware\Tests\Unit\Components\MyInterface $fooFoo = null)
+    public function myPublic($bar, $foo = 'bar', array $barBar = [], ?\Shopware\Tests\Unit\Components\Hook\MyInterface $fooFoo = null)
     {
         return $this->__getActiveHookManager(__FUNCTION__)->executeHooks(
             $this,
@@ -216,7 +173,7 @@ EOT;
         $generatedClass = $this->invokeMethod($this->proxyFactory, 'generateProxyClass', [MyReferenceTestClass::class]);
         $expectedClass = <<<'EOT'
 <?php
-class ShopwareTests_ShopwareTestsUnitComponentsMyReferenceTestClassProxy extends \Shopware\Tests\Unit\Components\MyReferenceTestClass implements Enlight_Hook_Proxy
+class ShopwareTests_ShopwareTestsUnitComponentsHookMyReferenceTestClassProxy extends \Shopware\Tests\Unit\Components\Hook\MyReferenceTestClass implements Enlight_Hook_Proxy
 {
 
     private $__hookProxyExecutionContexts = null;

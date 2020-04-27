@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a2d18f06e3684730056c9c996e08bdb4",
+    "content-hash": "16298e4c5c3458b8b2da101eb7befd29",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.135.2",
+            "version": "3.135.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "1810725052836683d0cfd2907d515173058e710e"
+                "reference": "0f6f6e8f4a44193908e18b8c7b8530b02f5bc428"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/1810725052836683d0cfd2907d515173058e710e",
-                "reference": "1810725052836683d0cfd2907d515173058e710e",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/0f6f6e8f4a44193908e18b8c7b8530b02f5bc428",
+                "reference": "0f6f6e8f4a44193908e18b8c7b8530b02f5bc428",
                 "shasum": ""
             },
             "require": {
@@ -88,7 +88,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2020-04-22T18:11:15+00:00"
+            "time": "2020-04-23T18:18:24+00:00"
         },
         {
             "name": "bcremer/line-reader",

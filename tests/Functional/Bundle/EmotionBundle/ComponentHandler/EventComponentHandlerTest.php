@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\EmotionBundle;
+namespace Shopware\Tests\Functional\Bundle\EmotionBundle\ComponentHandler;
 
 use Shopware\Bundle\EmotionBundle\Service\EmotionElementService;
 

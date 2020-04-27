@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,23 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\Bundle\SitemapBundle\UrlFilter;
+namespace Shopware\Tests\Unit\Components\Hook;
 
-use PHPUnit\Framework\TestCase;
-
-class BaseTest extends TestCase
+class MyReferenceTestClass implements MyReferenceInterface
 {
-    public function testIsFilteredShouldReturnTrueIdentifierAvailable()
+    public function myPublic(&$bar, $foo)
     {
-        $example = new Example();
-
-        static::assertTrue($example->isFiltered(5, [5]));
-    }
-
-    public function testIsFilteredShouldReturnFalse()
-    {
-        $example = new Example();
-
-        static::assertFalse($example->isFiltered(5, [4]));
+        return $bar . $foo;
     }
 }

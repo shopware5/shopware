@@ -51,7 +51,7 @@ class Shopware extends Enlight_Application
 
         $this->container = $container;
         $this->appPath = __DIR__ . DIRECTORY_SEPARATOR;
-        $this->docPath = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR;
+        $this->docPath = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR;
 
         parent::__construct();
     }
@@ -74,7 +74,10 @@ class Shopware extends Enlight_Application
         trigger_error('Shopware()->' . $name . '() is deprecated since version 4.2 and will be removed in 6.0. Use the Container instead. Called by ' . $caller, E_USER_DEPRECATED);
 
         if (!$this->container->has($name)) {
-            throw new Enlight_Exception(sprintf('Method "%s::%s" not found failure', get_class($this), $name), Enlight_Exception::METHOD_NOT_FOUND);
+            throw new Enlight_Exception(
+                sprintf('Method "%s::%s" not found failure', get_class($this), $name),
+                Enlight_Exception::METHOD_NOT_FOUND
+            );
         }
 
         return $this->container->get($name);
@@ -237,7 +240,7 @@ class Shopware extends Enlight_Application
      */
     public function Models()
     {
-        return $this->container->get(\Shopware\Components\Model\ModelManager::class);
+        return $this->container->get('models');
     }
 
     /**
@@ -363,7 +366,9 @@ function Shopware($newInstance = null)
         $instance = $newInstance;
 
         return $oldInstance;
-    } elseif (!isset($instance)) {
+    }
+
+    if (!isset($instance)) {
         throw new RuntimeException('Shopware Kernel not booted');
     }
 
