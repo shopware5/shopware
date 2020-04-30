@@ -103,7 +103,7 @@
         "symfony/yaml": "3.4.39",
         "kubawerlos/php-cs-fixer-custom-fixers": "^1.17",
         "jakub-onderka/php-var-dump-check": "^0.3.0",
-        "phpstan/phpstan": "0.12.8"
+        "phpstan/phpstan": "0.12.19"
     },
     "include-path": [
         "engine/Library/"

@@ -35,7 +35,7 @@ use Behat\Mink\Element\NodeElement;
  */
 class SitemapGroup extends MultipleElement
 {
-    /** @var array $selector */
+    /** @var array */
     protected $selector = ['css' => '.sitemap--navigation-head'];
 
     /**

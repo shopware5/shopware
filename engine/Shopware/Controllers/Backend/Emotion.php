@@ -1517,15 +1517,15 @@ EOD;
         $identifier = '';
 
         foreach ($el->getViewports() as $viewport) {
-            /** @var \Shopware\Models\Emotion\ElementViewport $viewport */
+            /* @var \Shopware\Models\Emotion\ElementViewport $viewport */
             $identifier .= $viewport->getAlias()
-                .$viewport->getStartRow()
-                .$viewport->getStartCol()
-                .$viewport->getEndRow()
-                .$viewport->getEndCol();
+                . $viewport->getStartRow()
+                . $viewport->getStartCol()
+                . $viewport->getEndRow()
+                . $viewport->getEndCol();
         }
 
-        $identifier .= $el->getStartCol().$el->getStartRow().$el->getEndCol().$el->getEndRow();
+        $identifier .= $el->getStartCol() . $el->getStartRow() . $el->getEndCol() . $el->getEndRow();
 
         return $identifier;
     }

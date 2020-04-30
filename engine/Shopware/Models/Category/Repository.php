@@ -389,7 +389,10 @@ class Repository extends ModelRepository
         $query = $builder->getQuery();
         $children = $query->getArrayResult();
         $categories = [];
-        --$depth;
+
+        if ($depth) {
+            --$depth;
+        }
 
         foreach ($children as &$child) {
             $category = $child['category'];
@@ -428,7 +431,10 @@ class Repository extends ModelRepository
 
         $children = $builder->getQuery()->getArrayResult();
         $categories = [];
-        --$depth;
+
+        if ($depth) {
+            --$depth;
+        }
 
         foreach ($children as &$child) {
             $category = $child['category'];
