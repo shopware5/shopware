@@ -13,6 +13,7 @@ This changelog references changes done in Shopware 5.6 patch versions.
 ### Changes
 
 * Changed Symfony library to version 3.4.39
+* Changed jQuery library to version 3.5.0
 * Changed `\Shopware_Controllers_Backend_AttributeData` to support translating attribute store values
     * Example:
         ```php

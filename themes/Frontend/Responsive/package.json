@@ -30,7 +30,7 @@
     "homepage": "https://github.com/shopware/shopware#readme",
     "dependencies": {
         "flatpickr": "2.6.3",
-        "jquery": "3.4.1",
+        "jquery": "3.5.0",
         "jquery.event.move": "git+https://github.com/stephband/jquery.event.move.git",
         "jquery.event.swipe": "0.5.4",
         "jquery.transit": "0.9.12",
