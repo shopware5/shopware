@@ -54,7 +54,7 @@ jobs:
         - stage: Database
           php: 7.2
           env:
-              - DB_IMAGE="mysql:8.0"
+              - DB_IMAGE="mysql:8.0.19"
         - stage: Database
           php: 7.4
           env:
