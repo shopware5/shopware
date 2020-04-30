@@ -28,7 +28,7 @@ use Shopware\Recovery\Install\Struct\LicenseInformation;
 
 class LicenseHostException extends \RuntimeException
 {
-    /** @var LicenseInformation $licenseInformation */
+    /** @var LicenseInformation */
     private $licenseInformation;
 
     public function __construct(LicenseInformation $licenseInformation, $message = '')

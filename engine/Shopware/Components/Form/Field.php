@@ -45,8 +45,6 @@ class Field extends Base implements FieldInterface, Validate
 
     /**
      * @optional
-     *
-     * @var mixed
      */
     protected $defaultValue;
 

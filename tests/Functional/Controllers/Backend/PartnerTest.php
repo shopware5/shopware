@@ -26,7 +26,7 @@ namespace Shopware\Tests\Controllers\Backend;
 
 class PartnerTest extends \Enlight_Components_Test_Controller_TestCase
 {
-    /** @var \Shopware\Models\Partner\Partner $repository */
+    /** @var \Shopware\Models\Partner\Partner */
     protected $repository;
 
     /**

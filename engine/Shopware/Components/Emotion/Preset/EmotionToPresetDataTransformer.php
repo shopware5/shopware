@@ -32,7 +32,7 @@ use Shopware\Models\Emotion\Emotion;
 
 class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerInterface
 {
-    /** @var ModelManager $modelManager */
+    /** @var ModelManager */
     private $modelManager;
 
     public function __construct(ModelManager $modelManager)
