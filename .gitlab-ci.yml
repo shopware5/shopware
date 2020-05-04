@@ -91,14 +91,6 @@ Code Coverage:
         reports:
             junit: build/artifacts/test-log.xml
 
-PHP 7.2:
-    extends: .phpunit_base
-    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.2
-    stage: Unit
-    services:
-        -   name: mysql:5.7
-            alias: mysql
-
 PHP 7.3:
     extends: .phpunit_base
     image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.3
@@ -126,7 +118,7 @@ MySQL 8.0:
     extends: .phpunit_base
     stage: Unit
     services:
-        -   name: mysql:8.0
+        -   name: mysql:8.0.19
             alias: mysql
             command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-authentication-plugin=mysql_native_password"]
 
@@ -147,10 +139,10 @@ MariaDB 10.4:
 # stage: Elasticsearch
 Elasticsearch 6:
     extends: .phpunit_es_base
-    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.2
+    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.3
     stage: Elasticsearch
     services:
-        -   name: mysql:8.0
+        -   name: mysql:8.0.19
             alias: mysql
             command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-authentication-plugin=mysql_native_password"]
         -   name: elastic/elasticsearch:6.3.0
@@ -159,10 +151,10 @@ Elasticsearch 6:
 
 Elasticsearch 7:
     extends: .phpunit_es_base
-    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.3
+    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.4
     stage: Elasticsearch
     services:
-        -   name: mysql:8.0
+        -   name: mysql:8.0.19
             alias: mysql
             command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-authentication-plugin=mysql_native_password"]
         -   name: elastic/elasticsearch:7.0.0
@@ -190,7 +182,7 @@ Mink:
             alias: selenium
         -   name: mailhog/mailhog
             alias: smtp
-        -   name: mysql:8.0
+        -   name: mysql:8.0.19
             alias: mysql
             command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-authentication-plugin=mysql_native_password"]
 

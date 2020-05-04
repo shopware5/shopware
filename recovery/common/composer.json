@@ -1,7 +1,7 @@
 {
     "minimum-stability": "stable",
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "slim/slim": "2.6.3",
         "symfony/console": "3.4.22",
         "pimple/pimple": "3.2.3",
@@ -20,7 +20,7 @@
     "config": {
         "autoloader-suffix": "ShopwareRecovery",
         "platform": {
-            "php": "7.2.0"
+            "php": "7.3.0"
         }
     }
 }

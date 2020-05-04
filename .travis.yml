@@ -44,17 +44,15 @@ jobs:
 
         # Run Unit Tests
         - stage: PHP
-          php: 7.2
-        - stage: PHP
           php: 7.3
         - stage: PHP
           php: 7.4
 
         # Run Database Tests
         - stage: Database
-          php: 7.2
+          php: 7.3
           env:
-              - DB_IMAGE="mysql:8.0"
+              - DB_IMAGE="mysql:8.0.19"
         - stage: Database
           php: 7.4
           env:
@@ -66,13 +64,13 @@ jobs:
 
         # Run Elasticsearch Tests
         - stage: Elasticsearch
-          php: 7.2
+          php: 7.3
           env:
               - ES_IMAGE="elastic/elasticsearch:6.3.0"
           script:
               - ./psh.phar unit-elasticsearch --DB_HOST=mysql --DB_USER=travis --DB_PASSWORD=travis --SW_HOST=localhost
         - stage: Elasticsearch
-          php: 7.2
+          php: 7.4
           env:
               - ES_IMAGE="elastic/elasticsearch:7.0.0"
           script:
